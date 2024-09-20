@@ -280,6 +280,44 @@ if (foobarPred(foobar)) {
   foobar.foo;
 }
 
+type X = { type: 'A'; a: string } | { type: 'B'; b: string };
+let xs: X[] = [];
+const filtered1: { type: 'A'; a: string }[] = xs.filter(({ type }) => type === 'A');
+const filtered2: { type: 'A'; a: string }[] = xs.filter(x => x.type === 'A');
+
+function isA1({ type }: X) {
+  return type === 'A';
+}
+function isA2(x: X) {
+  return x.type === 'A';
+}
+function isA3({ type }: X, arg_0: string,) {
+  return type === 'A';
+}
+function isA4({ type }: X, arg_0: string, arg_0_: string) {
+  return type === 'A';
+}
+function isA5({ type }: X) {
+  const arg_0 = 1;
+  return type === 'A';
+}
+
+interface AInferrer {
+  isA(x: X): x is { type: 'A'; a: string };
+}
+
+class AInferrerImpl implements AInferrer {
+  isA({type}: X) {
+    return type === 'A';
+  }
+}
+
+const aInf = new AInferrerImpl();
+if (aInf.isA(xs[0])) {
+  let t: 'A' = xs[0].type;  // should ok
+} else {
+  let t: 'B' = xs[0].type;  // should ok
+}
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -538,6 +576,48 @@ var foobarPred = function (fb) { return fb.type === "foo"; };
 if (foobarPred(foobar)) {
     foobar.foo;
 }
+var xs = [];
+var filtered1 = xs.filter(function (_a) {
+    var type = _a.type;
+    return type === 'A';
+});
+var filtered2 = xs.filter(function (x) { return x.type === 'A'; });
+function isA1(_a) {
+    var type = _a.type;
+    return type === 'A';
+}
+function isA2(x) {
+    return x.type === 'A';
+}
+function isA3(_a, arg_0) {
+    var type = _a.type;
+    return type === 'A';
+}
+function isA4(_a, arg_0, arg_0_) {
+    var type = _a.type;
+    return type === 'A';
+}
+function isA5(_a) {
+    var type = _a.type;
+    var arg_0 = 1;
+    return type === 'A';
+}
+var AInferrerImpl = /** @class */ (function () {
+    function AInferrerImpl() {
+    }
+    AInferrerImpl.prototype.isA = function (_a) {
+        var type = _a.type;
+        return type === 'A';
+    };
+    return AInferrerImpl;
+}());
+var aInf = new AInferrerImpl();
+if (aInf.isA(xs[0])) {
+    var t = xs[0].type; // should ok
+}
+else {
+    var t = xs[0].type; // should ok
+}
 
 
 //// [inferTypePredicates.d.ts]
@@ -630,3 +710,52 @@ declare const foobarPred: (fb: typeof foobar) => fb is {
     type: "foo";
     foo: number;
 };
+type X = {
+    type: 'A';
+    a: string;
+} | {
+    type: 'B';
+    b: string;
+};
+declare let xs: X[];
+declare const filtered1: {
+    type: 'A';
+    a: string;
+}[];
+declare const filtered2: {
+    type: 'A';
+    a: string;
+}[];
+declare function isA1(arg_0: X): arg_0 is {
+    type: "A";
+    a: string;
+};
+declare function isA2(x: X): x is {
+    type: "A";
+    a: string;
+};
+declare function isA3(arg_0_: X, arg_0: string): arg_0_ is {
+    type: "A";
+    a: string;
+};
+declare function isA4(arg_0__: X, arg_0: string, arg_0_: string): arg_0__ is {
+    type: "A";
+    a: string;
+};
+declare function isA5(arg_0_: X): arg_0_ is {
+    type: "A";
+    a: string;
+};
+interface AInferrer {
+    isA(x: X): x is {
+        type: 'A';
+        a: string;
+    };
+}
+declare class AInferrerImpl implements AInferrer {
+    isA(arg_0: X): arg_0 is {
+        type: "A";
+        a: string;
+    };
+}
+declare const aInf: AInferrerImpl;

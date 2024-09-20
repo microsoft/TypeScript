@@ -7663,7 +7663,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const assertsModifier = typePredicate.kind === TypePredicateKind.AssertsThis || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
                 factory.createToken(SyntaxKind.AssertsKeyword) :
                 undefined;
-            const parameterName = typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
+            const parameterName = typePredicate.kind === TypePredicateKind.Identifier && typePredicate.isDestructuringParameter ?
+                generateParameterName(context.enclosingDeclaration!, typePredicate.parameterIndex)
+                : typePredicate.kind === TypePredicateKind.Identifier || typePredicate.kind === TypePredicateKind.AssertsIdentifier ?
                 setEmitFlags(factory.createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
                 factory.createThisTypeNode();
             const typeNode = typePredicate.type && typeToTypeNodeHelper(typePredicate.type, context);
@@ -15622,8 +15624,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isPropertyDeclaration(node) && !hasAccessorModifier(node) && node.questionToken;
     }
 
-    function createTypePredicate(kind: TypePredicateKind, parameterName: string | undefined, parameterIndex: number | undefined, type: Type | undefined): TypePredicate {
-        return { kind, parameterName, parameterIndex, type } as TypePredicate;
+    function createTypePredicate(kind: TypePredicateKind, parameterName: string | undefined, parameterIndex: number | undefined, type: Type | undefined, isDestructuringParameter?: boolean): TypePredicate {
+        return { kind, parameterName, parameterIndex, type, isDestructuringParameter } as TypePredicate;
     }
 
     /**
@@ -38698,13 +38700,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         return forEach(func.parameters, (param, i) => {
             const initType = getTypeOfSymbol(param.symbol);
-            if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol) || isRestParameter(param)) {
+            if (!initType || initType.flags & TypeFlags.Boolean || isSymbolAssigned(param.symbol) || isRestParameter(param)) {
                 // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
                 return;
             }
             const trueType = checkIfExpressionRefinesParameter(func, expr, param, initType);
             if (trueType) {
-                return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, trueType);
+                return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(isIdentifier(param.name) ? param.name.escapedText : (`arg_${i}`) as __String), i, trueType, /**isDestructuringParameter*/ !isIdentifier(param.name));
             }
         });
     }
@@ -49751,6 +49753,39 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
+    function getDestructuringParameterIndexFromTypePredicate(nodeIn: FunctionLikeDeclaration): number | undefined {
+        const node = getParseTreeNode(nodeIn, isFunctionLikeDeclaration);
+        if (!node) {
+            return;
+        }
+        const signature = getSignatureFromDeclaration(node);
+        const typePredicate = getTypePredicateOfSignature(signature);
+        return typePredicate?.kind === TypePredicateKind.Identifier && typePredicate.isDestructuringParameter ? typePredicate.parameterIndex : undefined;
+    }
+
+    function generateNameForDestructuringParameter(nodeIn: FunctionLikeDeclaration): string {
+        const node = getParseTreeNode(nodeIn, isFunctionLikeDeclaration);
+        Debug.assertIsDefined(node);
+        const signature = getSignatureFromDeclaration(node);
+        const typePredicate = getTypePredicateOfSignature(signature);
+        Debug.assert(typePredicate?.kind === TypePredicateKind.Identifier && typePredicate.isDestructuringParameter && typePredicate.parameterIndex !== undefined);
+        return generateParameterName(node, typePredicate.parameterIndex);
+    }
+
+    function generateParameterName(node: Node, index: number): string {
+        Debug.assert(canHaveLocals(node));
+        const locals = node.locals;
+
+        let rawText = `arg_${index}` as __String;
+
+        while (true) {
+            if (!locals?.get(rawText)) {
+                return rawText as string;
+            }
+            rawText = (rawText + "_") as __String;
+        }
+    }
+
     function declaredParameterTypeContainsUndefined(parameter: ParameterDeclaration | JSDocParameterTag) {
         const typeNode = getNonlocalEffectiveTypeAnnotationNode(parameter);
         if (!typeNode) return false;
@@ -50368,6 +50403,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             },
             isTopLevelValueImportEqualsWithEntityName,
             isDeclarationVisible,
+            getDestructuringParameterIndexFromTypePredicate,
+            generateNameForDestructuringParameter,
             isImplementationOfOverload,
             requiresAddingImplicitUndefined,
             isExpandoFunctionDeclaration,

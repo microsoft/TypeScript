@@ -279,3 +279,42 @@ const foobarPred = (fb: typeof foobar) => fb.type === "foo";
 if (foobarPred(foobar)) {
   foobar.foo;
 }
+
+type X = { type: 'A'; a: string } | { type: 'B'; b: string };
+let xs: X[] = [];
+const filtered1: { type: 'A'; a: string }[] = xs.filter(({ type }) => type === 'A');
+const filtered2: { type: 'A'; a: string }[] = xs.filter(x => x.type === 'A');
+
+function isA1({ type }: X) {
+  return type === 'A';
+}
+function isA2(x: X) {
+  return x.type === 'A';
+}
+function isA3({ type }: X, arg_0: string,) {
+  return type === 'A';
+}
+function isA4({ type }: X, arg_0: string, arg_0_: string) {
+  return type === 'A';
+}
+function isA5({ type }: X) {
+  const arg_0 = 1;
+  return type === 'A';
+}
+
+interface AInferrer {
+  isA(x: X): x is { type: 'A'; a: string };
+}
+
+class AInferrerImpl implements AInferrer {
+  isA({type}: X) {
+    return type === 'A';
+  }
+}
+
+const aInf = new AInferrerImpl();
+if (aInf.isA(xs[0])) {
+  let t: 'A' = xs[0].type;  // should ok
+} else {
+  let t: 'B' = xs[0].type;  // should ok
+}
