@@ -1,11 +1,11 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /target.ts
+// @Filename: /home/src/workspaces/project/target.ts
 //// const a = 10;
 //// const b = 10;[||]
 //// const c = 10;
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{ "files": ["target.ts"] }
 
 verify.pasteEdits({

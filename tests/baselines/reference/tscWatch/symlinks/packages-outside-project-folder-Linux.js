@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/b/2/b-impl/b useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/b/2/b-impl/b useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/c/3/c-impl/c/src/c.ts] Inode:: 9
 export const c: string = 'test';
@@ -54,6 +54,7 @@ export * from 'c';
 }
 
 //// [/home/src/projects/a/1/a-impl/a/node_modules/c] symlink(/home/src/projects/c/3/c-impl/c) Inode:: 26
+
 //// [/home/src/projects/a/2/unrelated/somefile.ts] Inode:: 29
 export const a: string = 'test';
 
@@ -71,7 +72,8 @@ import { a } from 'a';
 }
 
 //// [/home/src/projects/b/2/b-impl/b/node_modules/a] symlink(/home/src/projects/a/1/a-impl/a) Inode:: 38
-//// [/a/lib/lib.d.ts] Inode:: 41
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 42
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -87,7 +89,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w -p . --extendedDiagnostics --explainFiles --traceResolution
+/home/src/tslibs/TS/Lib/tsc.js --w -p . --extendedDiagnostics --explainFiles --traceResolution
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -163,7 +165,7 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'a' was not resolved. ========
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules 1 undefined Failed Lookup Locations
@@ -194,7 +196,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
 [7m1[0m import { a } from 'a';
 [7m [0m [91m                  ~~~[0m
 
-../../../../../../../a/lib/lib.d.ts
+../../../../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 src/index.ts
   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
@@ -204,7 +206,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 unde
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Wild card directory
 
 
-//// [/home/src/projects/b/2/b-impl/b/lib/index.js] Inode:: 43
+//// [/home/src/projects/b/2/b-impl/b/lib/index.js] Inode:: 134
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -231,8 +233,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {"inode":41}
 /home/src/projects/a/1/a-impl/a: *new*
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/node_modules: *new*
@@ -251,6 +251,8 @@ FsWatches::
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json: *new*
   {"inode":36}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"inode":42}
 
 Program root files: [
   "/home/src/projects/b/2/b-impl/b/src/index.ts"
@@ -266,15 +268,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/b/2/b-impl/b/src/index.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -282,7 +284,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in a
 
 Input::
-//// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 44
+//// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 135
 export const a = 10;
 
 
@@ -300,7 +302,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in c
 
 Input::
-//// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 45
+//// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 136
 export const a = 10;
 
 
@@ -318,18 +320,18 @@ exitCode:: ExitStatus.undefined
 Change:: Build dependencies
 
 Input::
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 47
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 138
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = 'test';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 48
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 139
 export declare const c: string;
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 49
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 140
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -349,14 +351,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./c"), exports);
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 50
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 141
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 51
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 142
 {"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 52
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 143
 {
   "root": [
     "../src/c.ts",
@@ -366,18 +368,18 @@ export * from './c';
   "size": 68
 }
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 54
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 145
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 'test';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 55
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 146
 export declare const a: string;
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 56
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 147
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -398,15 +400,15 @@ __exportStar(require("./a"), exports);
 __exportStar(require("c"), exports);
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 57
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 148
 export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 58
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 149
 {"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 59
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 150
 {
   "root": [
     "../src/a.ts",
@@ -455,12 +457,10 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":41}
 /home/src/projects/a/1/a-impl/a:
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/lib: *new*
-  {"inode":53}
+  {"inode":144}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
@@ -477,6 +477,8 @@ FsWatches::
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":42}
 
 Timeout callback:: count: 1
 4: timerToInvalidateFailedLookupResolutions *new*
@@ -575,7 +577,7 @@ DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-../../../../../../../a/lib/lib.d.ts
+../../../../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
@@ -591,7 +593,7 @@ src/index.ts
 
 
 
-//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 43
+//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 134
 
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
@@ -618,14 +620,12 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":41}
 /home/src/projects/a/1/a-impl/a/lib:
-  {"inode":53}
+  {"inode":144}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
-  {"inode":55}
+  {"inode":146}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-  {"inode":57}
+  {"inode":148}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
@@ -639,13 +639,15 @@ FsWatches::
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/lib: *new*
-  {"inode":46}
+  {"inode":137}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
-  {"inode":48}
+  {"inode":139}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-  {"inode":50}
+  {"inode":141}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":42}
 
 FsWatches *deleted*::
 /home/src/projects/a/1/a-impl/a:
@@ -670,7 +672,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts
@@ -696,7 +698,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in a
 
 Input::
-//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 60
+//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 151
 export const a = 10;
 
 
@@ -714,7 +716,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in c
 
 Input::
-//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 61
+//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 152
 export const a = 10;
 
 
@@ -835,8 +837,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":41}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
@@ -851,20 +851,22 @@ FsWatches::
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/package.json:
   {"inode":12}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":42}
 
 FsWatches *deleted*::
 /home/src/projects/a/1/a-impl/a/lib:
-  {"inode":53}
+  {"inode":144}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
-  {"inode":55}
+  {"inode":146}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts:
-  {"inode":57}
+  {"inode":148}
 /home/src/projects/c/3/c-impl/c/lib:
-  {"inode":46}
+  {"inode":137}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts:
-  {"inode":48}
+  {"inode":139}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts:
-  {"inode":50}
+  {"inode":141}
 
 Timeout callback:: count: 2
 18: timerToUpdateProgram *new*
@@ -974,7 +976,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 20
 [7m1[0m import { a } from 'a';
 [7m [0m [91m                  ~~~[0m
 
-../../../../../../../a/lib/lib.d.ts
+../../../../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 src/index.ts
   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
@@ -982,7 +984,7 @@ src/index.ts
 
 
 
-//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 43
+//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 134
 
 PolledWatches::
 /home/src/projects/b/2/b-impl/b/node_modules/@types:
@@ -1021,8 +1023,6 @@ PolledWatches *deleted*::
   {"pollingInterval":250}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":41}
 /home/src/projects/a/1/a-impl/a: *new*
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/node_modules:
@@ -1041,6 +1041,8 @@ FsWatches::
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":42}
 
 FsWatches *deleted*::
 /home/src/projects/c/3/c-impl/c/package.json:
@@ -1064,7 +1066,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -1097,18 +1099,18 @@ exitCode:: ExitStatus.undefined
 Change:: Build dependencies
 
 Input::
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 63
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 154
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = 'test';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 64
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 155
 export declare const c: string;
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 65
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 156
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1128,14 +1130,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./c"), exports);
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 66
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 157
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 67
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 158
 {"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 68
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 159
 {
   "root": [
     "../src/c.ts",
@@ -1145,18 +1147,18 @@ export * from './c';
   "size": 68
 }
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 70
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 161
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 'test';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 71
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 162
 export declare const a: string;
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 72
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 163
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1177,15 +1179,15 @@ __exportStar(require("./a"), exports);
 __exportStar(require("c"), exports);
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 73
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 164
 export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 74
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 165
 {"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 75
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 166
 {
   "root": [
     "../src/a.ts",
@@ -1234,12 +1236,10 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":41}
 /home/src/projects/a/1/a-impl/a:
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/lib: *new*
-  {"inode":69}
+  {"inode":160}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
@@ -1256,6 +1256,8 @@ FsWatches::
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":42}
 
 Timeout callback:: count: 1
 27: timerToInvalidateFailedLookupResolutions *new*
@@ -1352,7 +1354,7 @@ DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-../../../../../../../a/lib/lib.d.ts
+../../../../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
@@ -1368,7 +1370,7 @@ src/index.ts
 
 
 
-//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 43
+//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 134
 
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
@@ -1395,14 +1397,12 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":41}
 /home/src/projects/a/1/a-impl/a/lib:
-  {"inode":69}
+  {"inode":160}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
-  {"inode":71}
+  {"inode":162}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-  {"inode":73}
+  {"inode":164}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
@@ -1416,13 +1416,15 @@ FsWatches::
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/lib: *new*
-  {"inode":62}
+  {"inode":153}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
-  {"inode":64}
+  {"inode":155}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-  {"inode":66}
+  {"inode":157}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {"inode":42}
 
 FsWatches *deleted*::
 /home/src/projects/a/1/a-impl/a:
@@ -1447,7 +1449,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts

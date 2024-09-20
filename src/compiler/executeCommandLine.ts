@@ -81,6 +81,7 @@ import {
     toPath,
     toSorted,
     tracing,
+    tscBuildOption,
     validateLocaleAndSetLanguage,
     version,
     WatchCompilerHost,
@@ -170,8 +171,8 @@ function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
 function getOptionsForHelp(commandLine: ParsedCommandLine) {
     // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
     return !!commandLine.options.all ?
-        toSorted(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
-        filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
+        toSorted(optionDeclarations.concat(tscBuildOption), (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
+        filter(optionDeclarations.concat(tscBuildOption), v => !!v.showInSimplifiedHelpView);
 }
 
 function printVersion(sys: System) {
@@ -507,7 +508,7 @@ function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[]
     let output: string[] = [...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
     output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.ALL_COMPILER_OPTIONS), compilerOptions, /*subCategory*/ true, /*beforeOptionsDescription*/ undefined, formatMessage(Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"))];
     output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.WATCH_OPTIONS), watchOptions, /*subCategory*/ false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), filter(buildOptions, option => option !== tscBuildOption), /*subCategory*/ false, formatMessage(Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
     for (const line of output) {
         sys.write(line);
     }
@@ -515,7 +516,7 @@ function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[]
 
 function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[]) {
     let output: string[] = [...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), filter(buildOptions, option => option !== tscBuildOption), /*subCategory*/ false, formatMessage(Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
     for (const line of output) {
         sys.write(line);
     }
@@ -559,11 +560,6 @@ function executeCommandLineWorker(
     commandLine: ParsedCommandLine,
 ) {
     let reportDiagnostic = createDiagnosticReporter(sys);
-    if (commandLine.options.build) {
-        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_build_must_be_the_first_command_line_argument));
-        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-    }
-
     // Configuration file name (if any)
     let configFileName: string | undefined;
     if (commandLine.options.locale) {
@@ -732,11 +728,11 @@ function executeCommandLineWorker(
     }
 }
 
-/** @internal */
-export function isBuild(commandLineArgs: readonly string[]) {
+/** Returns true if commandline is --build and needs to be parsed useing parseBuildCommand */
+export function isBuildCommand(commandLineArgs: readonly string[]): boolean {
     if (commandLineArgs.length > 0 && commandLineArgs[0].charCodeAt(0) === CharacterCodes.minus) {
         const firstOption = commandLineArgs[0].slice(commandLineArgs[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
-        return firstOption === "build" || firstOption === "b";
+        return firstOption === tscBuildOption.name || firstOption === tscBuildOption.shortName;
     }
     return false;
 }
@@ -749,8 +745,8 @@ export function executeCommandLine(
     cb: ExecuteCommandLineCallbacks,
     commandLineArgs: readonly string[],
 ): void | SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram> | WatchOfConfigFile<EmitAndSemanticDiagnosticsBuilderProgram> {
-    if (isBuild(commandLineArgs)) {
-        const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs.slice(1));
+    if (isBuildCommand(commandLineArgs)) {
+        const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs);
         if (buildOptions.generateCpuProfile && system.enableCPUProfiler) {
             system.enableCPUProfiler(buildOptions.generateCpuProfile, () =>
                 performBuild(

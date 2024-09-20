@@ -1,6 +1,19 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts] Inode:: 3
+//// [/user/username/projects/project/commonFile1.ts] Inode:: 5
+let x = 1
+
+//// [/user/username/projects/project/commonFile2.ts] Inode:: 6
+let y = 1
+
+//// [/user/username/projects/project/tsconfig.json] Inode:: 7
+{
+  "watchOptions": {
+    "fallbackPolling": "PriorityInterval"
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 13
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -12,79 +25,71 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/a/b/commonFile1.ts] Inode:: 5
-let x = 1
-
-//// [/a/b/commonFile2.ts] Inode:: 6
-let y = 1
-
-//// [/a/b/tsconfig.json] Inode:: 7
-{
-  "watchOptions": {
-    "fallbackPolling": "PriorityInterval"
-  }
-}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-sysLog:: /a/b/tsconfig.json:: Changing to watchFile
-sysLog:: /a/b/commonFile1.ts:: Changing to watchFile
-sysLog:: /a/b/commonFile2.ts:: Changing to watchFile
-sysLog:: /a/lib/lib.d.ts:: Changing to watchFile
+sysLog:: /user/username/projects/project/tsconfig.json:: Changing to watchFile
+sysLog:: /user/username/projects/project/commonFile1.ts:: Changing to watchFile
+sysLog:: /user/username/projects/project/commonFile2.ts:: Changing to watchFile
+sysLog:: /home/src/tslibs/TS/Lib/lib.d.ts:: Changing to watchFile
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-sysLog:: /a/b:: Changing to watchFile
+sysLog:: /user/username/projects/project:: Changing to watchFile
 
 
-//// [/a/b/commonFile1.js] Inode:: 8
+//// [/user/username/projects/project/commonFile1.js] Inode:: 104
 var x = 1;
 
 
-//// [/a/b/commonFile2.js] Inode:: 9
+//// [/user/username/projects/project/commonFile2.js] Inode:: 105
 var y = 1;
 
 
 
 PolledWatches::
-/a/b: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {"pollingInterval":250}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/commonFile1.ts: *new*
+/user/username/projects/project: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/commonFile1.ts: *new*
   {"pollingInterval":250}
-/a/b/commonFile2.ts: *new*
+/user/username/projects/project/commonFile2.ts: *new*
   {"pollingInterval":250}
-/a/b/tsconfig.json: *new*
+/user/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":250}
 
 Program root files: [
-  "/a/b/commonFile1.ts",
-  "/a/b/commonFile2.ts"
+  "/user/username/projects/project/commonFile1.ts",
+  "/user/username/projects/project/commonFile2.ts"
 ]
 Program options: {
   "watch": true,
-  "project": "/a/b/tsconfig.json",
-  "configFilePath": "/a/b/tsconfig.json"
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/project/commonFile1.ts
+/user/username/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/projects/project/commonFile1.ts
+/user/username/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/commonfile1.ts (used version)
-/a/b/commonfile2.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/projects/project/commonfile1.ts (used version)
+/user/username/projects/project/commonfile2.ts (used version)
 
 exitCode:: ExitStatus.undefined

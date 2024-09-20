@@ -1,9 +1,9 @@
-currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/users/username/projects/project/foo.ts]
 import * as fs from "fs";
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,9 +15,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w /users/username/projects/project/foo.ts
+/home/src/tslibs/TS/Lib/tsc.js -w /users/username/projects/project/foo.ts
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -48,7 +50,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/foo.ts: *new*
   {}
@@ -61,15 +63,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/foo.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/foo.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /users/username/projects/project/foo.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -111,7 +113,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /users/username/projects/project/foo.ts:
   {}
@@ -149,7 +151,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /users/username/projects/project/foo.ts:
   {}
@@ -176,7 +178,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /users/username/projects/project/foo.ts
 /users/username/projects/project/node_modules/@types/node/index.d.ts
 

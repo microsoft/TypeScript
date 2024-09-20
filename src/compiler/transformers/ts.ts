@@ -190,6 +190,7 @@ import {
     takeWhile,
     TextRange,
     TransformationContext,
+    Transformer,
     TransformFlags,
     VariableDeclaration,
     VariableStatement,
@@ -208,6 +209,7 @@ import {
 const USE_NEW_TYPE_METADATA_FORMAT = false;
 
 const enum TypeScriptSubstitutionFlags {
+    None = 0,
     /** Enables substitutions for namespace exports. */
     NamespaceExports = 1 << 1,
     /* Enables substitutions for unqualified enum members */
@@ -230,7 +232,7 @@ const enum ClassFacts {
 }
 
 /** @internal */
-export function transformTypeScript(context: TransformationContext) {
+export function transformTypeScript(context: TransformationContext): Transformer<SourceFile | Bundle> {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -270,7 +272,7 @@ export function transformTypeScript(context: TransformationContext) {
      * Keeps track of whether expression substitution has been enabled for specific edge cases.
      * They are persisted between each SourceFile transformation and should not be reset.
      */
-    let enabledSubstitutions: TypeScriptSubstitutionFlags;
+    let enabledSubstitutions = TypeScriptSubstitutionFlags.None;
 
     /**
      * Keeps track of whether we are within any containing namespaces when performing

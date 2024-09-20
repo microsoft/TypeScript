@@ -6,6 +6,7 @@ import {
     addRange,
     addRelatedInfo,
     addSyntheticLeadingComment,
+    addSyntheticTrailingComment,
     AliasDeclarationNode,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
@@ -1449,7 +1450,7 @@ export function getSymbolId(symbol: Symbol): SymbolId {
 }
 
 /** @internal */
-export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
+export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean {
     const moduleState = getModuleInstanceState(node);
     return moduleState === ModuleInstanceState.Instantiated ||
         (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
@@ -1640,6 +1641,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getBaseTypeOfLiteralType,
         getWidenedType,
         getWidenedLiteralType,
+        fillMissingTypeArguments,
         getTypeFromTypeNode: nodeIn => {
             const node = getParseTreeNode(nodeIn, isTypeNode);
             return node ? getTypeFromTypeNode(node) : errorType;
@@ -4677,14 +4679,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             if (ext === Extension.Ts || ext === Extension.Js || ext === Extension.Tsx || ext === Extension.Jsx) {
                                 diagnosticDetails = createModeMismatchDetails(currentSourceFile);
                             }
+
+                            const message = overrideHost?.kind === SyntaxKind.ImportDeclaration && overrideHost.importClause?.isTypeOnly ? Diagnostics.Type_only_import_of_an_ECMAScript_module_from_a_CommonJS_module_must_have_a_resolution_mode_attribute :
+                                overrideHost?.kind === SyntaxKind.ImportType ? Diagnostics.Type_import_of_an_ECMAScript_module_from_a_CommonJS_module_must_have_a_resolution_mode_attribute :
+                                Diagnostics.The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_referenced_file_is_an_ECMAScript_module_and_cannot_be_imported_with_require_Consider_writing_a_dynamic_import_0_call_instead;
                             diagnostics.add(createDiagnosticForNodeFromMessageChain(
                                 getSourceFileOfNode(errorNode),
                                 errorNode,
-                                chainDiagnosticMessages(
-                                    diagnosticDetails,
-                                    Diagnostics.The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_referenced_file_is_an_ECMAScript_module_and_cannot_be_imported_with_require_Consider_writing_a_dynamic_import_0_call_instead,
-                                    moduleReference,
-                                ),
+                                chainDiagnosticMessages(diagnosticDetails, message, moduleReference),
                             ));
                         }
                     }
@@ -7054,6 +7056,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
                 if (checkTruncationLength(context)) {
+                    if (context.flags & NodeBuilderFlags.NoTruncation) {
+                        return [addSyntheticTrailingComment(factory.createNotEmittedTypeElement(), SyntaxKind.MultiLineCommentTrivia, "elided")];
+                    }
                     return [factory.createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined)];
                 }
                 const typeElements: TypeElement[] = [];
@@ -7085,7 +7090,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
-                        typeElements.push(factory.createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined));
+                        if (context.flags & NodeBuilderFlags.NoTruncation) {
+                            const typeElement = typeElements.pop()!;
+                            typeElements.push(addSyntheticTrailingComment(typeElement, SyntaxKind.MultiLineCommentTrivia, `... ${properties.length - i} more elided ...`));
+                        }
+                        else {
+                            typeElements.push(factory.createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined));
+                        }
                         addPropertyToElementList(properties[properties.length - 1], context, typeElements);
                         break;
                     }
@@ -7100,7 +7111,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
                 return factory.createTypeReferenceNode(factory.createIdentifier("..."), /*typeArguments*/ undefined);
             }
-            return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+            return addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided");
         }
 
         function shouldUsePlaceholderForProperty(propertySymbol: Symbol, context: NodeBuilderContext) {
@@ -7260,12 +7271,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (some(types)) {
                 if (checkTruncationLength(context)) {
                     if (!isBareList) {
-                        return [factory.createTypeReferenceNode("...", /*typeArguments*/ undefined)];
+                        return [
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided")
+                                : factory.createTypeReferenceNode("...", /*typeArguments*/ undefined),
+                        ];
                     }
                     else if (types.length > 2) {
                         return [
                             typeToTypeNodeHelper(types[0], context),
-                            factory.createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - 2} more elided ...`)
+                                : factory.createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
                             typeToTypeNodeHelper(types[types.length - 1], context),
                         ];
                     }
@@ -7278,7 +7295,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 for (const type of types) {
                     i++;
                     if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
-                        result.push(factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
+                        result.push(
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - i} more elided ...`)
+                                : factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined),
+                        );
                         const typeNode = typeToTypeNodeHelper(types[types.length - 1], context);
                         if (typeNode) {
                             result.push(typeNode);
@@ -22057,7 +22078,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let generalizedSource = source;
             let generalizedSourceType = sourceType;
 
-            if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
+            // Don't generalize on 'never' - we really want the original type
+            // to be displayed for use-cases like 'assertNever'.
+            if (!(target.flags & TypeFlags.Never) && isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
                 generalizedSource = getBaseTypeOfLiteralType(source);
                 Debug.assert(!isTypeAssignableTo(generalizedSource, target), "generalized source shouldn't be assignable");
                 generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
@@ -29602,7 +29625,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             node.kind === SyntaxKind.PropertyDeclaration)!;
     }
 
-    // Check if a parameter or catch variable is assigned anywhere
+    // Check if a parameter, catch variable, or mutable local variable is assigned anywhere definitely
+    function isSymbolAssignedDefinitely(symbol: Symbol) {
+        if (symbol.lastAssignmentPos !== undefined) {
+            return symbol.lastAssignmentPos < 0;
+        }
+        return isSymbolAssigned(symbol) && symbol.lastAssignmentPos !== undefined && symbol.lastAssignmentPos < 0;
+    }
+
+    // Check if a parameter, catch variable, or mutable local variable is assigned anywhere
     function isSymbolAssigned(symbol: Symbol) {
         return !isPastLastAssignment(symbol, /*location*/ undefined);
     }
@@ -29621,7 +29652,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 markNodeAssignments(parent);
             }
         }
-        return !symbol.lastAssignmentPos || location && symbol.lastAssignmentPos < location.pos;
+        return !symbol.lastAssignmentPos || location && Math.abs(symbol.lastAssignmentPos) < location.pos;
     }
 
     // Check if a parameter or catch variable (or their bindings elements) is assigned anywhere
@@ -29655,12 +29686,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function markNodeAssignments(node: Node) {
         switch (node.kind) {
             case SyntaxKind.Identifier:
-                if (isAssignmentTarget(node)) {
+                const assigmentTarget = getAssignmentTargetKind(node);
+                if (assigmentTarget !== AssignmentKind.None) {
                     const symbol = getResolvedSymbol(node as Identifier);
-                    if (isParameterOrMutableLocalVariable(symbol) && symbol.lastAssignmentPos !== Number.MAX_VALUE) {
-                        const referencingFunction = findAncestor(node, isFunctionOrSourceFile);
-                        const declaringFunction = findAncestor(symbol.valueDeclaration, isFunctionOrSourceFile);
-                        symbol.lastAssignmentPos = referencingFunction === declaringFunction ? extendAssignmentPosition(node, symbol.valueDeclaration!) : Number.MAX_VALUE;
+                    const hasDefiniteAssignment = assigmentTarget === AssignmentKind.Definite || (symbol.lastAssignmentPos !== undefined && symbol.lastAssignmentPos < 0);
+                    if (isParameterOrMutableLocalVariable(symbol)) {
+                        if (symbol.lastAssignmentPos === undefined || Math.abs(symbol.lastAssignmentPos) !== Number.MAX_VALUE) {
+                            const referencingFunction = findAncestor(node, isFunctionOrSourceFile);
+                            const declaringFunction = findAncestor(symbol.valueDeclaration, isFunctionOrSourceFile);
+                            symbol.lastAssignmentPos = referencingFunction === declaringFunction ? extendAssignmentPosition(node, symbol.valueDeclaration!) : Number.MAX_VALUE;
+                        }
+                        if (hasDefiniteAssignment && symbol.lastAssignmentPos > 0) {
+                            symbol.lastAssignmentPos *= -1;
+                        }
                     }
                 }
                 return;
@@ -29670,7 +29708,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!(node as ExportSpecifier).isTypeOnly && !exportDeclaration.isTypeOnly && !exportDeclaration.moduleSpecifier && name.kind !== SyntaxKind.StringLiteral) {
                     const symbol = resolveEntityName(name, SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
                     if (symbol && isParameterOrMutableLocalVariable(symbol)) {
-                        symbol.lastAssignmentPos = Number.MAX_VALUE;
+                        const sign = symbol.lastAssignmentPos !== undefined && symbol.lastAssignmentPos < 0 ? -1 : 1;
+                        symbol.lastAssignmentPos = sign * Number.MAX_VALUE;
                     }
                 }
                 return;
@@ -30414,6 +30453,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
         let declaration = localOrExportSymbol.valueDeclaration;
+        const immediateDeclaration = declaration;
 
         // If the identifier is declared in a binding pattern for which we're currently computing the implied type and the
         // reference occurs with the same binding pattern, return the non-inferrable any type. This for example occurs in
@@ -30503,7 +30543,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
         // the entire control flow graph from the variable's declaration (i.e. when the flow container and
         // declaration container are the same).
-        const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
+        const isNeverInitialized = immediateDeclaration && isVariableDeclaration(immediateDeclaration) && !immediateDeclaration.initializer && !immediateDeclaration.exclamationToken && isMutableLocalVariableDeclaration(immediateDeclaration) && !isSymbolAssignedDefinitely(symbol);
+        const assumeInitialized = isParameter || isAlias ||
+            (isOuterVariable && !isNeverInitialized) ||
+            isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
             type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
                     isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
             node.parent.kind === SyntaxKind.NonNullExpression ||
@@ -39798,6 +39841,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NewExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.YieldExpression:
+            case SyntaxKind.ThisKeyword:
                 return PredicateSemantics.Sometimes;
             case SyntaxKind.BinaryExpression:
                 // List of operators that can produce null/undefined:
@@ -41104,7 +41148,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const modifiers = getTypeParameterModifiers(typeParameter) & (ModifierFlags.In | ModifierFlags.Out);
             if (modifiers) {
                 const symbol = getSymbolOfDeclaration(node.parent);
-                if (isTypeAliasDeclaration(node.parent) && !(getObjectFlags(getDeclaredTypeOfSymbol(symbol)) & (ObjectFlags.Reference | ObjectFlags.Anonymous | ObjectFlags.Mapped))) {
+                if (isTypeAliasDeclaration(node.parent) && !(getObjectFlags(getDeclaredTypeOfSymbol(symbol)) & (ObjectFlags.Anonymous | ObjectFlags.Mapped))) {
                     error(node, Diagnostics.Variance_annotations_are_only_supported_in_type_aliases_for_object_function_constructor_and_mapped_types);
                 }
                 else if (modifiers === ModifierFlags.In || modifiers === ModifierFlags.Out) {
@@ -43495,7 +43539,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    if (node.body) { // Don't report unused parameters in overloads
+                    // Only report unused parameters on the implementation, not overloads.
+                    if (node.body) {
                         checkUnusedLocalsAndParameters(node, addDiagnostic);
                     }
                     checkUnusedTypeParameters(node, addDiagnostic);
@@ -52665,7 +52710,7 @@ function getIterationTypesKeyFromIterationTypeKind(typeKind: IterationTypeKind) 
 }
 
 /** @internal */
-export function signatureHasRestParameter(s: Signature) {
+export function signatureHasRestParameter(s: Signature): boolean {
     return !!(s.flags & SignatureFlags.HasRestParameter);
 }
 
@@ -52688,6 +52733,7 @@ function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHo
         readFile: host.readFile ? (fileName => host.readFile!(fileName)) : undefined,
         getDefaultResolutionModeForFile: file => host.getDefaultResolutionModeForFile(file),
         getModeForResolutionAtIndex: (file, index) => host.getModeForResolutionAtIndex(file, index),
+        getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
     };
 }
 

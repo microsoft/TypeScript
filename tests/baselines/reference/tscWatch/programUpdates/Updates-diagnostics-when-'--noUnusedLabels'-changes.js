@@ -1,6 +1,16 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/user/username/workspace/solution/projects/project/a.ts]
+label: while (1) {}
+
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "allowUnusedLabels": true
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -12,19 +22,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/a.ts]
-label: while (1) {}
-
-//// [/tsconfig.json]
-{
-  "compilerOptions": {
-    "allowUnusedLabels": true
-  }
-}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p /tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w -p /user/username/workspace/solution/projects/project/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -33,52 +35,61 @@ Output::
 
 
 
-//// [/a.js]
+//// [/user/username/workspace/solution/projects/project/a.js]
 label: while (1) { }
 
 
 
+PolledWatches::
+/user/username/workspace/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/a.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/workspace/solution/projects/project/a.ts: *new*
   {}
-/tsconfig.json: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/: *new*
+/user/username/workspace/solution/projects/project: *new*
   {}
 
 Program root files: [
-  "/a.ts",
-  "/a/lib/lib.d.ts"
+  "/user/username/workspace/solution/projects/project/a.ts"
 ]
 Program options: {
   "allowUnusedLabels": true,
   "watch": true,
-  "project": "/tsconfig.json",
-  "configFilePath": "/tsconfig.json"
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
-/a.ts (used version)
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/workspace/solution/projects/project/a.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: Disable  allowUnsusedLabels
 
 Input::
-//// [/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "allowUnusedLabels": false
@@ -110,23 +121,22 @@ Output::
 
 
 Program root files: [
-  "/a.ts",
-  "/a/lib/lib.d.ts"
+  "/user/username/workspace/solution/projects/project/a.ts"
 ]
 Program options: {
   "allowUnusedLabels": false,
   "watch": true,
-  "project": "/tsconfig.json",
-  "configFilePath": "/tsconfig.json"
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 No shapes updated in the builder::
 
@@ -135,7 +145,7 @@ exitCode:: ExitStatus.undefined
 Change:: Enable  allowUnsusedLabels
 
 Input::
-//// [/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "allowUnusedLabels": true
@@ -162,23 +172,22 @@ Output::
 
 
 Program root files: [
-  "/a.ts",
-  "/a/lib/lib.d.ts"
+  "/user/username/workspace/solution/projects/project/a.ts"
 ]
 Program options: {
   "allowUnusedLabels": true,
   "watch": true,
-  "project": "/tsconfig.json",
-  "configFilePath": "/tsconfig.json"
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/a.ts
 
 No shapes updated in the builder::
 
