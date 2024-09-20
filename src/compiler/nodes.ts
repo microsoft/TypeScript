@@ -52,6 +52,7 @@ import {
     FunctionExpression,
     FunctionTypeNode,
     GetAccessorDeclaration,
+    HasJSDoc,
     HasLocals,
     HasName,
     HeritageClause,
@@ -232,6 +233,14 @@ import {
     type _ = [
         __Expect<HasName, Extract<Nodes, { name: any }>>,
         __Expect<Extract<Nodes, { name: any }>, HasName>,
+    ];
+}
+
+{
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    type _ = [
+        __Expect<HasJSDoc, Extract<Nodes, { jsDoc: any }>>,
+        __Expect<Extract<Nodes, { jsDoc: any }>, HasJSDoc>,
     ];
 }
 

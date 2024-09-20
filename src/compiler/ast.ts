@@ -17,6 +17,7 @@ import {
     AssertKeyword,
     AssertsKeyword,
     AsteriskToken,
+    astHasJSDocNodes,
     AsyncKeyword,
     AwaitExpression,
     AwaitKeyword,
@@ -236,6 +237,7 @@ import {
     LiteralToken,
     LiteralTypeNode,
     MappedTypeNode,
+    MatchingKeys,
     MemberExpression,
     MemberName,
     MetaProperty,
@@ -554,7 +556,7 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
     /** @internal */ get transformFlags(): TransformFlags {
         const extra = this.extra;
         if (extra.transformFlags === (-1 as TransformFlags)) {
-            extra.transformFlags = this.data.computeTransformFlags(this);
+            extra.transformFlags = computeTransformFlags(this);
         }
         return extra.transformFlags;
     }
@@ -1434,6 +1436,8 @@ export type AstLiteralExpression = AstNode<LiteralExpression>;
 export interface AstLiteralExpressionData extends AstLiteralLikeNodeData {
 }
 
+export type AstToken<K extends TokenSyntaxKind = TokenSyntaxKind> = AstNode<Token<K>>;
+
 // dprint-ignore
 export class AstTokenData extends AstData {
     /** @internal */ override computeTransformFlags(node: AstNode): TransformFlags {
@@ -1479,21 +1483,31 @@ export class AstTokenData extends AstData {
     }
 }
 
+export type AstEndOfFileToken = AstNode<EndOfFileToken>;
+
 // dprint-ignore
 export class AstEndOfFileTokenData extends AstTokenData {
     /** @internal */ jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
 }
+
+export type AstThisExpression = AstNode<ThisExpression>;
 
 // dprint-ignore
 export class AstThisExpressionData extends AstTokenData {
     /** @internal */ flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 }
 
+export type AstSuperExpression = AstNode<SuperExpression>;
+
 // dprint-ignore
 export class AstSuperExpressionData extends AstTokenData {
     /** @internal */ flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
 }
 
+export type AstImportExpression = AstNode<ImportExpression>;
+export type AstNullLiteral = AstNode<NullLiteral>;
+export type AstTrueLiteral = AstNode<TrueLiteral>;
+export type AstFalseLiteral = AstNode<FalseLiteral>;
 export type AstBooleanLiteral = AstNodeOneOf<BooleanLiteral>;
 
 // Punctuation
@@ -1543,6 +1557,8 @@ export type AstStaticKeyword = AstNode<StaticKeyword>;
 export type AstModifier = AstNodeOneOf<Modifier>;
 export type AstModifierLike = AstNodeOneOf<ModifierLike>;
 
+export type AstIdentifier = AstNode<Identifier>;
+
 // dprint-ignore
 export class AstIdentifierData extends AstTokenData {
     escapedText: __String = undefined!;
@@ -1565,6 +1581,8 @@ export class AstIdentifierData extends AstTokenData {
     }
 }
 
+export type AstQualifiedName = AstNode<QualifiedName>;
+
 // dprint-ignore
 export class AstQualifiedNameData extends AstData {
     left: AstEntityName = undefined!;
@@ -1583,6 +1601,7 @@ export type AstBindingName = AstNodeOneOf<BindingName>;
 export type AstPropertyName = AstNodeOneOf<PropertyName>;
 export type AstMemberName = AstNodeOneOf<MemberName>;
 export type AstDeclarationName = AstNodeOneOf<DeclarationName>;
+export type AstComputedPropertyName = AstNode<ComputedPropertyName>;
 
 // dprint-ignore
 export class AstComputedPropertyNameData extends AstData {
@@ -1595,6 +1614,8 @@ export class AstComputedPropertyNameData extends AstData {
     }
 }
 
+export type AstPrivateIdentifier = AstNode<PrivateIdentifier>;
+
 // dprint-ignore
 export class AstPrivateIdentifierData extends AstTokenData {
     escapedText: __String = undefined!;
@@ -1603,6 +1624,8 @@ export class AstPrivateIdentifierData extends AstTokenData {
         return TransformFlags.ContainsClassFields;
     }
 }
+
+export type AstTypeParameterDeclaration = AstNode<TypeParameterDeclaration>;
 
 // dprint-ignore
 export class AstTypeParameterDeclarationData extends AstTypeScriptNodeData {
@@ -1617,6 +1640,7 @@ export class AstTypeParameterDeclarationData extends AstTypeScriptNodeData {
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
 }
 
+export type AstParameterDeclaration = AstNode<ParameterDeclaration>;
 
 // dprint-ignore
 export class AstParameterDeclarationData extends AstData {
@@ -1648,6 +1672,8 @@ export class AstParameterDeclarationData extends AstData {
     }
 }
 
+export type AstDecorator = AstNode<Decorator>;
+
 // dprint-ignore
 export class AstDecoratorData extends AstData {
     expression: AstLeftHandSideExpression = undefined!;
@@ -1659,6 +1685,8 @@ export class AstDecoratorData extends AstData {
             TransformFlags.ContainsDecorators;
     }
 }
+
+export type AstPropertySignature = AstNode<PropertySignature>;
 
 // dprint-ignore
 export class AstPropertySignatureData extends AstTypeScriptNodeData {
@@ -1674,6 +1702,7 @@ export class AstPropertySignatureData extends AstTypeScriptNodeData {
 }
 
 export type AstSignatureDeclaration = AstNodeOneOf<SignatureDeclaration>;
+export type AstCallSignatureDeclaration = AstNode<CallSignatureDeclaration>;
 
 // dprint-ignore
 export class AstCallSignatureDeclarationData extends AstTypeScriptNodeData {
@@ -1689,6 +1718,8 @@ export class AstCallSignatureDeclarationData extends AstTypeScriptNodeData {
     /** @internal */ jsDoc: JSDocArray | undefined = undefined;     // initialized by parser (JSDocContainer)
 }
 
+export type AstConstructSignatureDeclaration = AstNode<ConstructSignatureDeclaration>;
+
 // dprint-ignore
 export class AstConstructSignatureDeclarationData extends AstTypeScriptNodeData {
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> | undefined = undefined;
@@ -1702,6 +1733,8 @@ export class AstConstructSignatureDeclarationData extends AstTypeScriptNodeData 
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
 }
+
+export type AstVariableDeclaration = AstNode<VariableDeclaration>;
 
 // dprint-ignore
 export class AstVariableDeclarationData extends AstData {
@@ -1721,6 +1754,8 @@ export class AstVariableDeclarationData extends AstData {
     }
 }
 
+export type AstVariableDeclarationList = AstNode<VariableDeclarationList>;
+
 // dprint-ignore
 export class AstVariableDeclarationListData extends AstData {
     declarations: AstNodeArray<AstVariableDeclaration> = undefined!;
@@ -1738,6 +1773,8 @@ export class AstVariableDeclarationListData extends AstData {
         return transformFlags;
     }
 }
+
+export type AstBindingElement = AstNode<BindingElement>;
 
 // dprint-ignore
 export class AstBindingElementData extends AstData {
@@ -1759,6 +1796,8 @@ export class AstBindingElementData extends AstData {
             TransformFlags.ContainsES2015;
     }
 }
+
+export type AstPropertyDeclaration = AstNode<PropertyDeclaration>;
 
 // dprint-ignore
 export class AstPropertyDeclarationData extends AstData {
@@ -1786,6 +1825,8 @@ export class AstPropertyDeclarationData extends AstData {
     }
 }
 
+export type AstPropertyAssignment = AstNode<PropertyAssignment>;
+
 // dprint-ignore
 export class AstPropertyAssignmentData extends AstData {
     modifiers: AstNodeArray<AstModifierLike> | undefined = undefined;   // initialized by parser (grammar error)
@@ -1803,6 +1844,8 @@ export class AstPropertyAssignmentData extends AstData {
             propagateChildFlags(this.initializer);
     }
 }
+
+export type AstShorthandPropertyAssignment = AstNode<ShorthandPropertyAssignment>;
 
 // dprint-ignore
 export class AstShorthandPropertyAssignmentData extends AstData {
@@ -1826,6 +1869,8 @@ export class AstShorthandPropertyAssignmentData extends AstData {
     }
 }
 
+export type AstSpreadAssignment = AstNode<SpreadAssignment>;
+
 // dprint-ignore
 export class AstSpreadAssignmentData extends AstData {
     expression: AstExpression = undefined!;
@@ -1842,7 +1887,7 @@ export class AstSpreadAssignmentData extends AstData {
 }
 
 export type AstBindingPattern = AstNodeOneOf<BindingPattern>;
-export type AstArrayBindingElement = AstNodeOneOf<ArrayBindingElement>;
+export type AstObjectBindingPattern = AstNode<ObjectBindingPattern>;
 
 // dprint-ignore
 export class AstObjectBindingPatternData extends AstData {
@@ -1859,6 +1904,9 @@ export class AstObjectBindingPatternData extends AstData {
     }
 }
 
+export type AstArrayBindingElement = AstNodeOneOf<ArrayBindingElement>;
+export type AstArrayBindingPattern = AstNode<ArrayBindingPattern>;
+
 // dprint-ignore
 export class AstArrayBindingPatternData extends AstData {
     elements: AstNodeArray<AstArrayBindingElement> = undefined!;
@@ -1869,6 +1917,8 @@ export class AstArrayBindingPatternData extends AstData {
             TransformFlags.ContainsBindingPattern;
     }
 }
+
+export type AstFunctionDeclaration = AstNode<FunctionDeclaration>;
 
 // dprint-ignore
 export class AstFunctionDeclarationData extends AstData {
@@ -2755,6 +2805,8 @@ export class AstObjectLiteralExpressionData extends AstData {
     }
 }
 
+export type AstPropertyAccessExpression = AstNode<PropertyAccessExpression>;
+
 // dprint-ignore
 export class AstPropertyAccessExpressionData extends AstData {
     expression: AstLeftHandSideExpression = undefined!;
@@ -2786,13 +2838,6 @@ export class AstPropertyAccessExpressionData extends AstData {
 }
 
 export type AstPropertyAccessEntityNameExpression = AstNode<PropertyAccessEntityNameExpression>;
-
-export interface AstPropertyAccessEntityNameExpressionData extends AstPropertyAccessExpressionData {
-    expression: AstEntityNameExpression;
-    name: AstIdentifier;
-}
-
-
 export type AstEntityNameExpression = AstNodeOneOf<EntityNameExpression>;
 export type AstPropertyAccessChain = AstNode<PropertyAccessChain>;
 /** @internal */
@@ -4524,34 +4569,7 @@ export class AstSourceFileData extends AstData {
     }
 }
 
-export type AstToken<K extends TokenSyntaxKind = TokenSyntaxKind> = AstNode<Token<K>>;
-export type AstEndOfFileToken = AstNode<EndOfFileToken>;
-export type AstThisExpression = AstNode<ThisExpression>;
-export type AstSuperExpression = AstNode<SuperExpression>;
-export type AstImportExpression = AstNode<ImportExpression>;
-export type AstNullLiteral = AstNode<NullLiteral>;
-export type AstTrueLiteral = AstNode<TrueLiteral>;
-export type AstFalseLiteral = AstNode<FalseLiteral>;
-export type AstIdentifier = AstNode<Identifier>;
-export type AstQualifiedName = AstNode<QualifiedName>;
-export type AstComputedPropertyName = AstNode<ComputedPropertyName>;
-export type AstPrivateIdentifier = AstNode<PrivateIdentifier>;
-export type AstTypeParameterDeclaration = AstNode<TypeParameterDeclaration>;
-export type AstParameterDeclaration = AstNode<ParameterDeclaration>;
-export type AstDecorator = AstNode<Decorator>;
-export type AstPropertySignature = AstNode<PropertySignature>;
-export type AstCallSignatureDeclaration = AstNode<CallSignatureDeclaration>;
-export type AstConstructSignatureDeclaration = AstNode<ConstructSignatureDeclaration>;
-export type AstVariableDeclaration = AstNode<VariableDeclaration>;
-export type AstVariableDeclarationList = AstNode<VariableDeclarationList>;
-export type AstBindingElement = AstNode<BindingElement>;
-export type AstPropertyDeclaration = AstNode<PropertyDeclaration>;
-export type AstPropertyAssignment = AstNode<PropertyAssignment>;
-export type AstShorthandPropertyAssignment = AstNode<ShorthandPropertyAssignment>;
-export type AstSpreadAssignment = AstNode<SpreadAssignment>;
-export type AstObjectBindingPattern = AstNode<ObjectBindingPattern>;
-export type AstArrayBindingPattern = AstNode<ArrayBindingPattern>;
-export type AstFunctionDeclaration = AstNode<FunctionDeclaration>;
+// TODO(rbuckton): Move these closer to their associated data properties
 export type AstMethodSignature = AstNode<MethodSignature>;
 export type AstMethodDeclaration = AstNode<MethodDeclaration>;
 export type AstConstructorDeclaration = AstNode<ConstructorDeclaration>;
@@ -4610,7 +4628,6 @@ export type AstParenthesizedExpression = AstNode<ParenthesizedExpression>;
 export type AstArrayLiteralExpression = AstNode<ArrayLiteralExpression>;
 export type AstSpreadElement = AstNode<SpreadElement>;
 export type AstObjectLiteralExpression = AstNode<ObjectLiteralExpression>;
-export type AstPropertyAccessExpression = AstNode<PropertyAccessExpression>;
 export type AstElementAccessExpression = AstNode<ElementAccessExpression>;
 export type AstCallExpression = AstNode<CallExpression>;
 export type AstExpressionWithTypeArguments = AstNode<ExpressionWithTypeArguments>;
@@ -4759,6 +4776,110 @@ export interface AstJsonSourceFileData extends AstSourceFileData {
     statements: AstNodeArray<AstJsonObjectExpressionStatement>;
 }
 
+// /**
+//  * Constraint used to pick out keys of an `AstData` subtype that match the constraint.
+//  */
+// type AstDataValue = AstNode | { readonly items: readonly AstNode[] } | JSDocArray | FlowNode | string | number | boolean | null | undefined;
+
+// /**
+//  * Constraint limiting what props can be applied to an AstNode refinement.
+//  * For ease of use, tuples can be used to constrain `AstNodeArray` without needing to also specify `{ items: [] }`.
+//  */
+// type AstDataProps<A extends AstNode> = {
+//     [K in keyof A["data"] & keyof A["node"] as A["data"][K] extends AstDataValue ? K : never]?:
+//         A["data"][K] extends AstNodeArray<infer C> ? { readonly items: readonly C[] } | readonly C[] :
+//         A["data"][K];
+// };
+
+// /**
+//  * Converts `AstDataProps` into an actual `AstData` refinement.
+//  */
+// type RefinedDataProps<A extends AstNode, D extends AstDataProps<A>> = {
+//     [K in keyof D & keyof A["data"] & keyof A["node"]]:
+//         D[K] extends infer C extends readonly AstNode[] ? { readonly items: C } :
+//         D[K];
+// };
+
+// /**
+//  * Converts `AstDataProps` into an actual `Node` refinement.
+//  */
+// type RefinedNodeProps<A extends AstNode, D extends AstDataProps<A>> = {
+//     [K in keyof D & keyof A["data"] & keyof A["node"]]:
+//         D[K] extends AstNode<infer N> ? N : // Convert AstNode to Node
+//         D[K] extends infer C extends readonly AstNode[] ? RefinedNodeArray<C> : // Convert AstNode[] to Node[]
+//         D[K] extends { readonly items: infer C extends readonly AstNode[] } ? RefinedNodeArray<C> : // Convert AstNodeArray to Node[]
+//         D[K]; // primitive value
+// };
+
+// /**
+//  * Converts `AstNode[]` to `Node[]`
+//  */
+// type RefinedNodeArray<A extends readonly AstNode[]> = { [P in keyof A]: A[P]["node"] };
+
+// /**
+//  * Subset of `Node` into which to inject refinements for `ast` and `data`.
+//  */
+// interface RefinedNode<A extends AstNode, D extends AstDataProps<A>> {
+//     readonly ast: AstNode<A["node"] & this>;
+//     readonly data: A["data"] & RefinedDataProps<A, D>;
+// }
+
+// /**
+//  * Refines an `AstNode` based on a set of specific data properties.
+//  */
+// export type RefineAstNode<A extends AstNode, D extends AstDataProps<A>, Brand extends string = never> = Branded<
+//     & A["node"]
+//     & RefinedNode<A, D>
+//     & RefinedNodeProps<A, D>,
+//     Brand>;
+
+/**
+ * Constraint limiting what props can be applied to a Node refinement.
+ */
+export type NodeProps<N extends Node> = {
+    [K in keyof N["data"] & keyof N as Exclude<K, keyof AstData>]?:
+        N["data"][K] extends infer P ?
+            P extends AstNodeArray<infer C> ? readonly C["node"][] :
+            P extends AstNode<infer C> ? C :
+            P :
+        never;
+};
+
+/**
+ * Converts `Node[]` to `AstNodeArray`
+ */
+export type RefineAstNodeArray<A extends readonly Node[]> =
+    & AstNodeArray<A[number]["ast"]>
+    // only intersect with elements if `A` is a tuple (i.e., has a more specific `length` than `number`)
+    & (number extends A["length"] ? unknown : { readonly items: { +readonly [P in keyof A]-?: A[P]["ast"] } });
+
+/**
+ * Converts the supplied node properties to AST form.
+ */
+export type RefineNodeData<N extends Node, D extends NodeProps<N>> = {
+    [K in keyof D]:
+        // Convert arrays/tuples to AstNodeArray
+        D[K] extends infer C extends readonly Node[] ? RefineAstNodeArray<C> :
+        // Convert nodes to their ast form
+        D[K] extends Node ? D[K]["ast"] :
+        // Use primitives as-is
+        D[K];
+};
+
+/**
+ * Refines a `Node` based on a set of specific node properties.
+ */
+export type RefineNode<N extends Node, D extends NodeProps<N>> =
+    N & D & { readonly data: RefineNodeData<N, D>; };
+
+/**
+ * Refines a `Node` with specific required properties.
+ */
+export type RequiredNodeProp<N extends Node, K extends keyof any> =
+    N extends Node ?
+        RefineNode<N, Extract<{ readonly [P in K & keyof NodeProps<N>]-?: NonNullable<NodeProps<N>[P]> }, NodeProps<N>>> :
+    never;
+
 function propagateNameFlags(node: AstPropertyName | AstBindingPattern | AstNoSubstitutionTemplateLiteral | undefined) {
     return node?.kind === SyntaxKind.Identifier ? propagateIdentifierNameFlags(node) : propagateChildFlags(node);
 }
@@ -4775,7 +4896,8 @@ function propagatePropertyNameFlagsOfChild(node: AstPropertyName, transformFlags
 function propagateChildFlags(child: AstNode | undefined): TransformFlags {
     if (!child) return TransformFlags.None;
     const childFlags = child.transformFlags & ~getTransformFlagsSubtreeExclusions(child.kind);
-    return astCanHaveName(child) && child.data.name && isAstPropertyName(child.data.name) ? propagatePropertyNameFlagsOfChild(child.data.name, childFlags) : childFlags;
+    const name = astGetName(child);
+    return name && isAstPropertyName(name) ? propagatePropertyNameFlagsOfChild(name, childFlags) : childFlags;
 }
 
 function propagateChildrenFlags(children: AstNodeArray<AstNode> | undefined): TransformFlags {
@@ -4801,7 +4923,8 @@ export type AstNamedDeclaration = AstNodeOneOf<NamedDeclaration>;
 /** @internal */
 export type AstHasName = AstNodeOneOf<HasName>;
 
-function astCanHaveName(node: AstNode): node is AstHasName {
+/** @internal */
+export function astCanHaveName(node: AstNode): node is AstHasName {
     switch (node.kind) {
         case SyntaxKind.BindingElement:
         case SyntaxKind.ClassDeclaration:
@@ -4850,6 +4973,612 @@ function astCanHaveName(node: AstNode): node is AstHasName {
             return true;
     }
     return false;
+}
+
+/** @internal */
+export function astHasName(node: AstNode): node is AstNodeOneOf<RequiredNodeProp<HasName, "name">> {
+    return !!astGetName(node);
+}
+
+/** @internal */
+export function astGetName<T extends AstNode>(node: T): T extends AstHasName ? T["data"]["name"] : undefined;
+export function astGetName(node: AstNode) {
+    Debug.type<AstHasName>(node);
+    // NOTE: each branch is monomorphic
+    switch (node.kind) {
+        case SyntaxKind.BindingElement: return node.data.name;
+        case SyntaxKind.ClassDeclaration: return node.data.name;
+        case SyntaxKind.ClassExpression: return node.data.name;
+        case SyntaxKind.EnumDeclaration: return node.data.name;
+        case SyntaxKind.EnumMember: return node.data.name;
+        case SyntaxKind.ExportSpecifier: return node.data.name;
+        case SyntaxKind.FunctionDeclaration: return node.data.name;
+        case SyntaxKind.FunctionExpression: return node.data.name;
+        case SyntaxKind.GetAccessor: return node.data.name;
+        case SyntaxKind.ImportAttribute: return node.data.name;
+        case SyntaxKind.ImportClause: return node.data.name;
+        case SyntaxKind.ImportEqualsDeclaration: return node.data.name;
+        case SyntaxKind.ImportSpecifier: return node.data.name;
+        case SyntaxKind.InterfaceDeclaration: return node.data.name;
+        case SyntaxKind.JSDocCallbackTag: return node.data.name;
+        case SyntaxKind.JSDocLink: return node.data.name;
+        case SyntaxKind.JSDocLinkCode: return node.data.name;
+        case SyntaxKind.JSDocLinkPlain: return node.data.name;
+        case SyntaxKind.JSDocNameReference: return node.data.name;
+        case SyntaxKind.JSDocParameterTag: return node.data.name;
+        case SyntaxKind.JSDocPropertyTag: return node.data.name;
+        case SyntaxKind.JSDocSeeTag: return node.data.name;
+        case SyntaxKind.JSDocTypedefTag: return node.data.name;
+        case SyntaxKind.JsxAttribute: return node.data.name;
+        case SyntaxKind.JsxNamespacedName: return node.data.name;
+        case SyntaxKind.MetaProperty: return node.data.name;
+        case SyntaxKind.MethodDeclaration: return node.data.name;
+        case SyntaxKind.MethodSignature: return node.data.name;
+        case SyntaxKind.MissingDeclaration: return node.data.name;
+        case SyntaxKind.ModuleDeclaration: return node.data.name;
+        case SyntaxKind.NamedTupleMember: return node.data.name;
+        case SyntaxKind.NamespaceExport: return node.data.name;
+        case SyntaxKind.NamespaceExportDeclaration: return node.data.name;
+        case SyntaxKind.NamespaceImport: return node.data.name;
+        case SyntaxKind.Parameter: return node.data.name;
+        case SyntaxKind.PropertyAccessExpression: return node.data.name;
+        case SyntaxKind.PropertyAssignment: return node.data.name;
+        case SyntaxKind.PropertyDeclaration: return node.data.name;
+        case SyntaxKind.PropertySignature: return node.data.name;
+        case SyntaxKind.SetAccessor: return node.data.name;
+        case SyntaxKind.ShorthandPropertyAssignment: return node.data.name;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.name;
+        case SyntaxKind.TypeParameter: return node.data.name;
+        case SyntaxKind.VariableDeclaration: return node.data.name;
+        default: return undefined;
+    }
+}
+
+/** @internal */
+export function astCanHaveJSDoc(node: AstNode): node is AstHasJSDoc {
+    switch (node.kind) {
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.BinaryExpression:
+        case SyntaxKind.Block:
+        case SyntaxKind.BreakStatement:
+        case SyntaxKind.CallSignature:
+        case SyntaxKind.CaseClause:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.ClassStaticBlockDeclaration:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.ConstructSignature:
+        case SyntaxKind.ContinueStatement:
+        case SyntaxKind.DebuggerStatement:
+        case SyntaxKind.DoStatement:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.EmptyStatement:
+        case SyntaxKind.EndOfFileToken:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.EnumMember:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.ExportSpecifier:
+        case SyntaxKind.ExpressionStatement:
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+        case SyntaxKind.ForStatement:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.FunctionType:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.Identifier:
+        case SyntaxKind.IfStatement:
+        case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.JSDocFunctionType:
+        case SyntaxKind.JSDocSignature:
+        case SyntaxKind.LabeledStatement:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.NamedTupleMember:
+        case SyntaxKind.NamespaceExportDeclaration:
+        case SyntaxKind.ObjectLiteralExpression:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.ParenthesizedExpression:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.ReturnStatement:
+        case SyntaxKind.SemicolonClassElement:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.SpreadAssignment:
+        case SyntaxKind.SwitchStatement:
+        case SyntaxKind.ThrowStatement:
+        case SyntaxKind.TryStatement:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.VariableStatement:
+        case SyntaxKind.WhileStatement:
+        case SyntaxKind.WithStatement:
+        case SyntaxKind.ModuleBlock:
+        case SyntaxKind.MissingDeclaration:
+        case SyntaxKind.NotEmittedStatement:
+            return true;
+        default:
+            return false;
+    }
+}
+
+/** @internal */
+export function astHasJSDoc(node: AstNode): node is AstNodeOneOf<RequiredNodeProp<HasJSDoc, "jsDoc">> {
+    return !!astGetJSDoc(node);
+}
+
+/** @internal */
+export function astGetJSDoc(node: AstNode): JSDocArray | undefined {
+    // each branch is monomorphic
+    Debug.type<AstHasJSDoc>(node);
+    switch (node.kind) {
+        case SyntaxKind.ArrowFunction: return node.data.jsDoc;
+        case SyntaxKind.BinaryExpression: return node.data.jsDoc;
+        case SyntaxKind.Block: return node.data.jsDoc;
+        case SyntaxKind.BreakStatement: return node.data.jsDoc;
+        case SyntaxKind.CallSignature: return node.data.jsDoc;
+        case SyntaxKind.CaseClause: return node.data.jsDoc;
+        case SyntaxKind.ClassDeclaration: return node.data.jsDoc;
+        case SyntaxKind.ClassExpression: return node.data.jsDoc;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.jsDoc;
+        case SyntaxKind.Constructor: return node.data.jsDoc;
+        case SyntaxKind.ConstructorType: return node.data.jsDoc;
+        case SyntaxKind.ConstructSignature: return node.data.jsDoc;
+        case SyntaxKind.ContinueStatement: return node.data.jsDoc;
+        case SyntaxKind.DebuggerStatement: return node.data.jsDoc;
+        case SyntaxKind.DoStatement: return node.data.jsDoc;
+        case SyntaxKind.ElementAccessExpression: return node.data.jsDoc;
+        case SyntaxKind.EmptyStatement: return node.data.jsDoc;
+        case SyntaxKind.EndOfFileToken: return node.data.jsDoc;
+        case SyntaxKind.EnumDeclaration: return node.data.jsDoc;
+        case SyntaxKind.EnumMember: return node.data.jsDoc;
+        case SyntaxKind.ExportAssignment: return node.data.jsDoc;
+        case SyntaxKind.ExportDeclaration: return node.data.jsDoc;
+        case SyntaxKind.ExportSpecifier: return node.data.jsDoc;
+        case SyntaxKind.ExpressionStatement: return node.data.jsDoc;
+        case SyntaxKind.ForInStatement: return node.data.jsDoc;
+        case SyntaxKind.ForOfStatement: return node.data.jsDoc;
+        case SyntaxKind.ForStatement: return node.data.jsDoc;
+        case SyntaxKind.FunctionDeclaration: return node.data.jsDoc;
+        case SyntaxKind.FunctionExpression: return node.data.jsDoc;
+        case SyntaxKind.FunctionType: return node.data.jsDoc;
+        case SyntaxKind.GetAccessor: return node.data.jsDoc;
+        case SyntaxKind.Identifier: return node.data.jsDoc;
+        case SyntaxKind.IfStatement: return node.data.jsDoc;
+        case SyntaxKind.ImportDeclaration: return node.data.jsDoc;
+        case SyntaxKind.ImportEqualsDeclaration: return node.data.jsDoc;
+        case SyntaxKind.IndexSignature: return node.data.jsDoc;
+        case SyntaxKind.InterfaceDeclaration: return node.data.jsDoc;
+        case SyntaxKind.JSDocFunctionType: return node.data.jsDoc;
+        case SyntaxKind.JSDocSignature: return node.data.jsDoc;
+        case SyntaxKind.LabeledStatement: return node.data.jsDoc;
+        case SyntaxKind.MethodDeclaration: return node.data.jsDoc;
+        case SyntaxKind.MethodSignature: return node.data.jsDoc;
+        case SyntaxKind.ModuleDeclaration: return node.data.jsDoc;
+        case SyntaxKind.NamedTupleMember: return node.data.jsDoc;
+        case SyntaxKind.NamespaceExportDeclaration: return node.data.jsDoc;
+        case SyntaxKind.ObjectLiteralExpression: return node.data.jsDoc;
+        case SyntaxKind.Parameter: return node.data.jsDoc;
+        case SyntaxKind.ParenthesizedExpression: return node.data.jsDoc;
+        case SyntaxKind.PropertyAccessExpression: return node.data.jsDoc;
+        case SyntaxKind.PropertyAssignment: return node.data.jsDoc;
+        case SyntaxKind.PropertyDeclaration: return node.data.jsDoc;
+        case SyntaxKind.PropertySignature: return node.data.jsDoc;
+        case SyntaxKind.ReturnStatement: return node.data.jsDoc;
+        case SyntaxKind.SemicolonClassElement: return node.data.jsDoc;
+        case SyntaxKind.SetAccessor: return node.data.jsDoc;
+        case SyntaxKind.ShorthandPropertyAssignment: return node.data.jsDoc;
+        case SyntaxKind.SpreadAssignment: return node.data.jsDoc;
+        case SyntaxKind.SwitchStatement: return node.data.jsDoc;
+        case SyntaxKind.ThrowStatement: return node.data.jsDoc;
+        case SyntaxKind.TryStatement: return node.data.jsDoc;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.jsDoc;
+        case SyntaxKind.TypeParameter: return node.data.jsDoc;
+        case SyntaxKind.VariableDeclaration: return node.data.jsDoc;
+        case SyntaxKind.VariableStatement: return node.data.jsDoc;
+        case SyntaxKind.WhileStatement: return node.data.jsDoc;
+        case SyntaxKind.WithStatement: return node.data.jsDoc;
+        case SyntaxKind.ModuleBlock: return node.data.jsDoc;
+        case SyntaxKind.MissingDeclaration: return node.data.jsDoc;
+        case SyntaxKind.NotEmittedStatement: return node.data.jsDoc;
+        default: Debug.assertNever(node);
+    }
+}
+
+/** @internal */
+export function astSetJSDoc(node: AstHasJSDoc, value: JSDocArray | undefined): void {
+    // each branch is monomorphic
+    switch (node.kind) {
+        case SyntaxKind.ArrowFunction:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.BinaryExpression:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.Block:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.BreakStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.CallSignature:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.CaseClause:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ClassDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ClassExpression:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ClassStaticBlockDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.Constructor:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ConstructorType:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ConstructSignature:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ContinueStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.DebuggerStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.DoStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ElementAccessExpression:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.EmptyStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.EndOfFileToken:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.EnumDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.EnumMember:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ExportAssignment:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ExportDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ExportSpecifier:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ExpressionStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ForInStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ForOfStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ForStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.FunctionDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.FunctionExpression:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.FunctionType:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.GetAccessor:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.Identifier:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.IfStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ImportDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ImportEqualsDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.IndexSignature:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.InterfaceDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.JSDocFunctionType:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.JSDocSignature:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.LabeledStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.MethodDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.MethodSignature:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ModuleDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.NamedTupleMember:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.NamespaceExportDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ObjectLiteralExpression:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.Parameter:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ParenthesizedExpression:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.PropertyAccessExpression:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.PropertyAssignment:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.PropertyDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.PropertySignature:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ReturnStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.SemicolonClassElement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.SetAccessor:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ShorthandPropertyAssignment:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.SpreadAssignment:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.SwitchStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ThrowStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.TryStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.TypeAliasDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.TypeParameter:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.VariableDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.VariableStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.WhileStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.WithStatement:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.ModuleBlock:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.MissingDeclaration:
+            node.data.jsDoc = value;
+            break;
+        case SyntaxKind.NotEmittedStatement:
+            node.data.jsDoc = value;
+            break;
+        default: Debug.assertNever(node);
+    }
+}
+
+// NOTE: each branch is monomorphic
+const computeTransformFlagsMap: Partial<Record<SyntaxKind, (node: AstNode) => TransformFlags>> = {
+    [SyntaxKind.EndOfFileToken]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ThisKeyword]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.SuperKeyword]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.Identifier]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.PrivateIdentifier]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.QualifiedName]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ComputedPropertyName]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TypeParameter]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.Parameter]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.Decorator]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.PropertySignature]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.CallSignature]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ConstructSignature]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.VariableDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.VariableDeclarationList]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.BindingElement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.PropertyDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.PropertyAssignment]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ShorthandPropertyAssignment]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.SpreadAssignment]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ObjectBindingPattern]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ArrayBindingPattern]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.FunctionDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.MethodSignature]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.MethodDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.Constructor]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.SemicolonClassElement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.GetAccessor]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.SetAccessor]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.IndexSignature]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ClassStaticBlockDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ImportTypeAssertionContainer]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ImportType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ThisType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.FunctionType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ConstructorType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TypeReference]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TypePredicate]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TypeQuery]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TypeLiteral]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ArrayType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TupleType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NamedTupleMember]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.OptionalType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.RestType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.UnionType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.IntersectionType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ConditionalType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.InferType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ParenthesizedType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TypeOperator]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.IndexedAccessType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.MappedType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.LiteralType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.StringLiteral]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TemplateLiteralType]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TemplateLiteralTypeSpan]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.OmittedExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.PrefixUnaryExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.PostfixUnaryExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.DeleteExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TypeOfExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.VoidExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.AwaitExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.YieldExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.BinaryExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ConditionalExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.FunctionExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ArrowFunction]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.RegularExpressionLiteral]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NoSubstitutionTemplateLiteral]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NumericLiteral]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.BigIntLiteral]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TemplateHead]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TemplateMiddle]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TemplateTail]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TemplateExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TemplateSpan]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ParenthesizedExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ArrayLiteralExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.SpreadElement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ObjectLiteralExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.PropertyAccessExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ElementAccessExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.CallExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ExpressionWithTypeArguments]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NewExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TaggedTemplateExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.AsExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TypeAssertionExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.SatisfiesExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NonNullExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.MetaProperty]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxElement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxAttributes]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxNamespacedName]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxOpeningElement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxSelfClosingElement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxFragment]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxOpeningFragment]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxClosingFragment]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxAttribute]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxSpreadAttribute]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxClosingElement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.JsxText]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.EmptyStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.DebuggerStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.MissingDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.Block]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.VariableStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ExpressionStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.IfStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.DoStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.WhileStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ForStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ForInStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ForOfStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.BreakStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ContinueStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ReturnStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.WithStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.SwitchStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.CaseBlock]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.CaseClause]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.DefaultClause]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.LabeledStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ThrowStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TryStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.CatchClause]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ClassDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ClassExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.InterfaceDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.HeritageClause]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.TypeAliasDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.EnumMember]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.EnumDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ModuleDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ModuleBlock]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ImportEqualsDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ExternalModuleReference]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ImportDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ImportClause]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ImportAttribute]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ImportAttributes]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NamespaceImport]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NamespaceExport]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NamespaceExportDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ExportDeclaration]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NamedImports]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NamedExports]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ImportSpecifier]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ExportSpecifier]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.ExportAssignment]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.SourceFile]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.SyntheticExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.Bundle]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.SyntaxList]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NotEmittedStatement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.NotEmittedTypeElement]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.PartiallyEmittedExpression]: node => node.data.computeTransformFlags(node),
+    [SyntaxKind.CommaListExpression]: node => node.data.computeTransformFlags(node),
+};
+
+function computeTransformFlags(node: AstNode) {
+    const fn = computeTransformFlagsMap[node.kind];
+    return fn !== undefined ? fn(node) : node.data.computeTransformFlags(node);
 }
 
 function isAstPropertyName(node: AstNode): node is AstPropertyName {

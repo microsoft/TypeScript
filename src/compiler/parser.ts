@@ -59,6 +59,7 @@ import {
     AstFunctionExpression,
     AstFunctionOrConstructorTypeNode,
     AstHasJSDoc,
+    astHasJSDoc,
     astHasJSDocNodes,
     AstHasModifiers,
     AstHeritageClause,
@@ -183,6 +184,7 @@ import {
     AstReadonlyKeyword,
     AstReturnStatement,
     AstSatisfiesExpression,
+    astSetJSDoc,
     AstShorthandPropertyAssignment,
     AstSourceFile,
     AstStatement,
@@ -938,12 +940,12 @@ namespace Parser {
             return node;
         }
 
-        Debug.assert(!node.data.jsDoc); // Should only be called once per node
+        Debug.assert(!astHasJSDoc(node)); // Should only be called once per node
         const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos)?.node); // TODO(rbuckton): do not instantiate .node
-        if (jsDoc.length) node.data.jsDoc = jsDoc;
+        if (jsDoc.length) astSetJSDoc(node, jsDoc);
         if (hasDeprecatedTag) {
             hasDeprecatedTag = false;
-            (node as Mutable<T>).flags |= NodeFlags.Deprecated;
+            node.flags |= NodeFlags.Deprecated;
         }
         return node;
     }

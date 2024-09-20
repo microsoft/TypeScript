@@ -334,6 +334,8 @@ import {
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
     PartialSourceFile,
+    PackageJsonInfo,
+    JSDocParsingMode,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
 
@@ -3724,9 +3726,19 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const result = getImpliedNodeFormatForFileWorker(getNormalizedAbsolutePath(fileName, currentDirectory), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
         const languageVersion = getEmitScriptTarget(options);
         const setExternalModuleIndicator = getSetExternalModuleIndicator(options);
-        return typeof result === "object" ?
-            { ...result, languageVersion, setExternalModuleIndicator, jsDocParsingMode: host.jsDocParsingMode } :
-            { languageVersion, impliedNodeFormat: result, setExternalModuleIndicator, jsDocParsingMode: host.jsDocParsingMode };
+        const jsDocParsingMode = host.jsDocParsingMode;
+        let impliedNodeFormat: ResolutionMode | undefined;
+        let packageJsonLocations: readonly string[] | undefined;
+        let packageJsonScope: PackageJsonInfo | undefined;
+        if (typeof result === "object") {
+            impliedNodeFormat = result.impliedNodeFormat;
+            packageJsonLocations = result.packageJsonLocations;
+            packageJsonScope = result.packageJsonScope;
+        }
+        else {
+            impliedNodeFormat = result;
+        }
+        return { languageVersion, impliedNodeFormat, setExternalModuleIndicator, packageJsonLocations, packageJsonScope, jsDocParsingMode };
     }
 
     function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
