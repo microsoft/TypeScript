@@ -28,7 +28,8 @@ export function oops(json: string): any;
 {}
 
 // @Filename: /node_modules/actually-json/typed.d.json.ts
-export default {};
+declare const _default: {};
+export default _default;
 
 // @Filename: /config.json
 {

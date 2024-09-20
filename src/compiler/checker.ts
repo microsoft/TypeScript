@@ -163,7 +163,6 @@ import {
     EmitResolver,
     EmitTextWriter,
     emptyArray,
-    endsWith,
     EntityName,
     EntityNameExpression,
     EntityNameOrEntityNameExpression,
@@ -265,6 +264,7 @@ import {
     getContainingClassStaticBlock,
     getContainingFunction,
     getContainingFunctionOrClassStaticBlock,
+    getDeclarationFileExtension,
     getDeclarationModifierFlagsFromSymbol,
     getDeclarationOfKind,
     getDeclarationsOfKind,
@@ -3700,11 +3700,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return usageMode === ModuleKind.ESNext && targetMode === ModuleKind.CommonJS;
     }
 
-    function isOnlyImportableAsDefault(usage: Expression) {
+    function isOnlyImportableAsDefault(usage: Expression, resolvedModule?: Symbol) {
         // In Node.js, JSON modules don't get named exports
         if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
             const usageMode = getEmitSyntaxForModuleSpecifierExpression(usage);
-            return usageMode === ModuleKind.ESNext && endsWith((usage as StringLiteralLike).text, Extension.Json);
+            if (usageMode === ModuleKind.ESNext) {
+                resolvedModule ??= resolveExternalModuleName(usage, usage, /*ignoreErrors*/ true);
+                const targetFile = resolvedModule && getSourceFileOfModule(resolvedModule);
+                return targetFile && (isJsonSourceFile(targetFile) || getDeclarationFileExtension(targetFile.fileName) === ".d.json.ts");
+            }
         }
         return false;
     }
@@ -3774,7 +3778,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!specifier) {
             return exportDefaultSymbol;
         }
-        const hasDefaultOnly = isOnlyImportableAsDefault(specifier);
+        const hasDefaultOnly = isOnlyImportableAsDefault(specifier, moduleSymbol);
         const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, specifier);
         if (!exportDefaultSymbol && !hasSyntheticDefault && !hasDefaultOnly) {
             if (hasExportAssignmentSymbol(moduleSymbol) && !allowSyntheticDefaultImports) {
@@ -3959,7 +3963,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let symbolFromModule = getExportOfModule(targetSymbol, nameText, specifier, dontResolveAlias);
                 if (symbolFromModule === undefined && nameText === InternalSymbolName.Default) {
                     const file = moduleSymbol.declarations?.find(isSourceFile);
-                    if (isOnlyImportableAsDefault(moduleSpecifier) || canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, moduleSpecifier)) {
+                    if (isOnlyImportableAsDefault(moduleSpecifier, moduleSymbol) || canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, moduleSpecifier)) {
                         symbolFromModule = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                     }
                 }
@@ -3968,7 +3972,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                     symbolFromModule || symbolFromVariable;
 
-                if (isImportOrExportSpecifier(specifier) && isOnlyImportableAsDefault(moduleSpecifier) && nameText !== InternalSymbolName.Default) {
+                if (isImportOrExportSpecifier(specifier) && isOnlyImportableAsDefault(moduleSpecifier, moduleSymbol) && nameText !== InternalSymbolName.Default) {
                     error(name, Diagnostics.Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0, ModuleKind[moduleKind]);
                 }
                 else if (!symbol) {
@@ -47679,6 +47683,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
         }
         if (checkExternalImportOrExportDeclaration(node)) {
+            let resolvedModule;
             const importClause = node.importClause;
             if (importClause && !checkGrammarImportClause(importClause)) {
                 if (importClause.name) {
@@ -47693,11 +47698,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     else {
-                        const moduleExisted = resolveExternalModuleName(node, node.moduleSpecifier);
-                        if (moduleExisted) {
+                        resolvedModule = resolveExternalModuleName(node, node.moduleSpecifier);
+                        if (resolvedModule) {
                             forEach(importClause.namedBindings.elements, checkImportBinding);
                         }
                     }
+                }
+
+                if (isOnlyImportableAsDefault(node.moduleSpecifier, resolvedModule) && !hasTypeJsonImportAttribute(node)) {
+                    error(node.moduleSpecifier, Diagnostics.Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_import_attribute_when_module_is_set_to_0, ModuleKind[moduleKind]);
                 }
             }
             else if (noUncheckedSideEffectImports && !importClause) {
@@ -47705,6 +47714,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         checkImportAttributes(node);
+    }
+
+    function hasTypeJsonImportAttribute(node: ImportDeclaration) {
+        return !!node.attributes && node.attributes.elements.some(attr => getTextOfIdentifierOrLiteral(attr.name) === "type" && tryCast(attr.value, isStringLiteralLike)?.text === "json");
     }
 
     function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
