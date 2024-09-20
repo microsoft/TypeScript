@@ -1,0 +1,147 @@
+//// [tests/cases/compiler/specialPropertyBlockShadowing2.ts] ////
+
+=== src/index.js ===
+export function X() { };
+>X : typeof X
+>  : ^^^^^^^^
+
+if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+  const X = function () { };
+>X : typeof X
+>  : ^^^^^^^^
+>function () { } : typeof X
+>                : ^^^^^^^^
+
+  X.prototype.method = function () { this.test = 1 };
+>X.prototype.method = function () { this.test = 1 } : () => void
+>                                                   : ^^^^^^^^^^
+>X.prototype.method : any
+>                   : ^^^
+>X.prototype : any
+>            : ^^^
+>X : typeof X
+>  : ^^^^^^^^
+>prototype : any
+>          : ^^^
+>method : any
+>       : ^^^
+>function () { this.test = 1 } : () => void
+>                              : ^^^^^^^^^^
+>this.test = 1 : 1
+>              : ^
+>this.test : any
+>          : ^^^
+>this : this
+>     : ^^^^
+>test : any
+>     : ^^^
+>1 : 1
+>  : ^
+}
+
+export function Y() { };
+>Y : typeof Y
+>  : ^^^^^^^^
+
+Y.prototype.method = function () { this.test = "foo" };
+>Y.prototype.method = function () { this.test = "foo" } : () => void
+>                                                       : ^^^^^^^^^^
+>Y.prototype.method : any
+>                   : ^^^
+>Y.prototype : any
+>            : ^^^
+>Y : typeof Y
+>  : ^^^^^^^^
+>prototype : any
+>          : ^^^
+>method : any
+>       : ^^^
+>function () { this.test = "foo" } : () => void
+>                                  : ^^^^^^^^^^
+>this.test = "foo" : "foo"
+>                  : ^^^^^
+>this.test : string | number | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>test : string | number | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const AliasTopY = Y;
+>AliasTopY : typeof Y
+>          : ^^^^^^^^
+>Y : typeof Y
+>  : ^^^^^^^^
+
+if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+  const Y = function () { };
+>Y : typeof Y
+>  : ^^^^^^^^
+>function () { } : typeof Y
+>                : ^^^^^^^^
+
+  Y.prototype.method = function () { this.test = 42 };
+>Y.prototype.method = function () { this.test = 42 } : () => void
+>                                                    : ^^^^^^^^^^
+>Y.prototype.method : any
+>                   : ^^^
+>Y.prototype : any
+>            : ^^^
+>Y : typeof Y
+>  : ^^^^^^^^
+>prototype : any
+>          : ^^^
+>method : any
+>       : ^^^
+>function () { this.test = 42 } : () => void
+>                               : ^^^^^^^^^^
+>this.test = 42 : 42
+>               : ^^
+>this.test : any
+>          : ^^^
+>this : this
+>     : ^^^^
+>test : any
+>     : ^^^
+>42 : 42
+>   : ^^
+
+  /** @type {{ test: string }} */
+  const topYcheck = new AliasTopY();
+>topYcheck : { test: string; }
+>          : ^^^^^^^^      ^^^
+>new AliasTopY() : import("src/index").Y
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>AliasTopY : typeof import("src/index").Y
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  /** @type {{ test: number }} */
+  const blockYcheck = new Y();
+>blockYcheck : { test: number; }
+>            : ^^^^^^^^      ^^^
+>new Y() : Y
+>        : ^
+>Y : typeof Y
+>  : ^^^^^^^^
+}
+
