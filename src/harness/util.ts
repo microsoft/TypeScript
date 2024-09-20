@@ -21,14 +21,14 @@ const replaceTypesVersionsMessage = createDiagnosticMessageReplacer(
     ([entry, , moduleName], compilerVersion) => [entry, compilerVersion, moduleName],
 );
 
-export function sanitizeTraceResolutionLogEntry(text: string) {
+export function sanitizeTraceResolutionLogEntry(text: string): string {
     return text && replaceTypesVersionsMessage(text, "3.1.0-dev");
 }
 
 /**
  * Removes leading indentation from a template literal string.
  */
-export function dedent(array: TemplateStringsArray, ...args: any[]) {
+export function dedent(array: TemplateStringsArray, ...args: any[]): string {
     let text = array[0];
     for (let i = 0; i < args.length; i++) {
         text += args[i];
@@ -97,11 +97,11 @@ export function removeByteOrderMark(text: string): string {
     return length ? text.slice(length) : text;
 }
 
-export function addUTF8ByteOrderMark(text: string) {
+export function addUTF8ByteOrderMark(text: string): string {
     return getByteOrderMarkLength(text) === 0 ? "\u00EF\u00BB\u00BF" + text : text;
 }
 
-export function theory<T extends any[]>(name: string, cb: (...args: T) => void, data: T[]) {
+export function theory<T extends any[]>(name: string, cb: (...args: T) => void, data: T[]): void {
     for (const entry of data) {
         it(`${name}(${entry.map(formatTheoryDatum).join(", ")})`, () => cb(...entry));
     }

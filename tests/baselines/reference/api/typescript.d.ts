@@ -363,6 +363,10 @@ declare namespace ts {
                  * Indicate if the file name list of the project is needed
                  */
                 needFileNameList: boolean;
+                /**
+                 * if true returns details about default configured project calculation
+                 */
+                needDefaultConfiguredProjectInfo?: boolean;
             }
             /**
              * A request to get the project information of the current file.
@@ -387,6 +391,17 @@ declare namespace ts {
                 projectFileName: string;
             }
             /**
+             * Details about the default project for the file if tsconfig file is found
+             */
+            export interface DefaultConfiguredProjectInfo {
+                /** List of config files looked and did not match because file was not part of root file names */
+                notMatchedByConfig?: readonly string[];
+                /** List of projects which were loaded but file was not part of the project or is file from referenced project */
+                notInProject?: readonly string[];
+                /** Configured project used as default */
+                defaultProject?: string;
+            }
+            /**
              * Response message body for "projectInfo" request
              */
             export interface ProjectInfo {
@@ -403,6 +418,10 @@ declare namespace ts {
                  * Indicates if the project has a active language service instance
                  */
                 languageServiceDisabled?: boolean;
+                /**
+                 * Information about default project
+                 */
+                configuredProjectInfo?: DefaultConfiguredProjectInfo;
             }
             /**
              * Represents diagnostic info that includes location of diagnostic in two forms
@@ -2831,7 +2850,6 @@ declare namespace ts {
             private lastReportedFileNames;
             private lastReportedVersion;
             protected projectErrors: Diagnostic[] | undefined;
-            protected isInitialLoadPending: () => boolean;
             private typingsCache;
             private typingWatchers;
             private readonly cancellationToken;
@@ -2845,14 +2863,14 @@ declare namespace ts {
             readonly jsDocParsingMode: JSDocParsingMode | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
-            getCompilationSettings(): ts.CompilerOptions;
-            getCompilerOptions(): ts.CompilerOptions;
+            getCompilationSettings(): CompilerOptions;
+            getCompilerOptions(): CompilerOptions;
             getNewLine(): string;
             getProjectVersion(): string;
             getProjectReferences(): readonly ProjectReference[] | undefined;
             getScriptFileNames(): string[];
             private getOrCreateScriptInfoAndAttachToProject;
-            getScriptKind(fileName: string): ts.ScriptKind;
+            getScriptKind(fileName: string): ScriptKind;
             getScriptVersion(filename: string): string;
             getScriptSnapshot(filename: string): IScriptSnapshot | undefined;
             getCancellationToken(): HostCancellationToken;
@@ -2888,16 +2906,16 @@ declare namespace ts {
             getProjectName(): string;
             protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition;
             getExternalFiles(updateLevel?: ProgramUpdateLevel): SortedReadonlyArray<string>;
-            getSourceFile(path: Path): ts.SourceFile | undefined;
+            getSourceFile(path: Path): SourceFile | undefined;
             close(): void;
             private detachScriptInfoIfNotRoot;
             isClosed(): boolean;
             hasRoots(): boolean;
             getRootFiles(): NormalizedPath[];
-            getRootScriptInfos(): ts.server.ScriptInfo[];
+            getRootScriptInfos(): ScriptInfo[];
             getScriptInfos(): ScriptInfo[];
             getExcludedFiles(): readonly NormalizedPath[];
-            getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): ts.server.NormalizedPath[];
+            getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): NormalizedPath[];
             hasConfigFile(configFilePath: NormalizedPath): boolean;
             containsScriptInfo(info: ScriptInfo): boolean;
             containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean;
@@ -2922,12 +2940,12 @@ declare namespace ts {
             private isValidGeneratedFileWatcher;
             private clearGeneratedFileWatch;
             getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
-            getScriptInfo(uncheckedFileName: string): ts.server.ScriptInfo | undefined;
+            getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
             filesToString(writeProjectFileNames: boolean): string;
             private filesToStringWorker;
             setCompilerOptions(compilerOptions: CompilerOptions): void;
             setTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): void;
-            getTypeAcquisition(): ts.TypeAcquisition;
+            getTypeAcquisition(): TypeAcquisition;
             protected removeRoot(info: ScriptInfo): void;
             protected enableGlobalPlugins(options: CompilerOptions): void;
             protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
@@ -2960,7 +2978,7 @@ declare namespace ts {
             getScriptFileNames(): string[];
             getLanguageService(): never;
             getHostForAutoImportProvider(): never;
-            getProjectReferences(): readonly ts.ProjectReference[] | undefined;
+            getProjectReferences(): readonly ProjectReference[] | undefined;
         }
         /**
          * If a file is opened, the server will look for a tsconfig (or jsconfig)
@@ -2977,7 +2995,7 @@ declare namespace ts {
              * @returns: true if set of files in the project stays the same and false - otherwise.
              */
             updateGraph(): boolean;
-            getConfigFilePath(): ts.server.NormalizedPath;
+            getConfigFilePath(): NormalizedPath;
             getProjectReferences(): readonly ProjectReference[] | undefined;
             updateReferences(refs: readonly ProjectReference[] | undefined): void;
             /**
@@ -3001,14 +3019,14 @@ declare namespace ts {
             compileOnSaveEnabled: boolean;
             excludedFiles: readonly NormalizedPath[];
             updateGraph(): boolean;
-            getExcludedFiles(): readonly ts.server.NormalizedPath[];
+            getExcludedFiles(): readonly NormalizedPath[];
         }
         function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings;
         function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
         function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions, currentDirectory?: string): WatchOptionsAndErrors | undefined;
         function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined;
         function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
-        function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
+        function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind;
         const maxProgramSizeForNonTsFiles: number;
         const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
         interface ProjectsUpdatedInBackgroundEvent {
@@ -3279,6 +3297,7 @@ declare namespace ts {
             private deleteScriptInfo;
             private configFileExists;
             private createConfigFileWatcherForParsedConfig;
+            private ensureConfigFileWatcherForProject;
             private forEachConfigFileLocation;
             private getConfigFileNameForFileFromCache;
             private setConfigFileNameForFileInCache;
@@ -3292,6 +3311,7 @@ declare namespace ts {
             private updateNonInferredProjectFiles;
             private updateRootAndOptionsOfNonInferredProject;
             private reloadFileNamesOfParsedConfig;
+            private setProjectForReload;
             private clearSemanticCache;
             private getOrCreateInferredProjectForProjectRootPathIfEnabled;
             private getOrCreateSingleInferredProjectIfEnabled;
@@ -3338,6 +3358,8 @@ declare namespace ts {
             private getOrCreateOpenScriptInfo;
             private assignProjectToOpenedScriptInfo;
             private tryFindDefaultConfiguredProjectForOpenScriptInfo;
+            private isMatchedByConfig;
+            private tryFindDefaultConfiguredProjectForOpenScriptInfoOrClosedFileInfo;
             private tryFindDefaultConfiguredProjectAndLoadAncestorsForOpenScriptInfo;
             private ensureProjectChildren;
             private cleanupConfiguredProjects;
@@ -3485,6 +3507,7 @@ declare namespace ts {
             private setCompilerOptionsForInferredProjects;
             private getProjectInfo;
             private getProjectInfoWorker;
+            private getDefaultConfiguredProjectInfo;
             private getRenameInfo;
             private getProjects;
             private getDefaultProject;

@@ -102,32 +102,32 @@ function validateComponents(components: string[], flags: ValidationFlags, hasTra
     return true;
 }
 
-export function validate(path: string, flags: ValidationFlags = ValidationFlags.RelativeOrAbsolute) {
+export function validate(path: string, flags: ValidationFlags = ValidationFlags.RelativeOrAbsolute): string {
     const components = parse(path);
     const trailing = hasTrailingSeparator(path);
     if (!validateComponents(components, flags, trailing)) throw vfs.createIOError("ENOENT");
     return components.length > 1 && trailing ? format(reduce(components)) + sep : format(reduce(components));
 }
 
-export function isDeclaration(path: string) {
+export function isDeclaration(path: string): boolean {
     return ts.isDeclarationFileName(path);
 }
 
-export function isSourceMap(path: string) {
+export function isSourceMap(path: string): boolean {
     return extname(path, ".map", /*ignoreCase*/ false).length > 0;
 }
 
 const javaScriptSourceMapExtensions: readonly string[] = [".js.map", ".jsx.map"];
 
-export function isJavaScriptSourceMap(path: string) {
+export function isJavaScriptSourceMap(path: string): boolean {
     return extname(path, javaScriptSourceMapExtensions, /*ignoreCase*/ false).length > 0;
 }
 
-export function isJson(path: string) {
+export function isJson(path: string): boolean {
     return extname(path, ".json", /*ignoreCase*/ false).length > 0;
 }
 
-export function isDefaultLibrary(path: string) {
+export function isDefaultLibrary(path: string): boolean {
     return isDeclaration(path)
         && basename(path).startsWith("lib.");
 }

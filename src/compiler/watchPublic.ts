@@ -103,7 +103,7 @@ export interface ReadBuildProgramHost {
     /** @internal */
     getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
 }
-export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
+export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined {
     const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
     if (!buildInfoPath) return undefined;
     let buildInfo;
@@ -120,7 +120,7 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
     return createBuilderProgramUsingIncrementalBuildInfo(buildInfo, buildInfoPath, host);
 }
 
-export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
+export function createIncrementalCompilerHost(options: CompilerOptions, system: System = sys): CompilerHost {
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
     host.createHash = maybeBind(system, system.createHash);
     host.storeSignatureInfo = system.storeSignatureInfo;
@@ -925,7 +925,15 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
         updateLevel = ProgramUpdateLevel.Update;
         rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
-        if (updateErrorForNoInputFiles(rootFileNames, getNormalizedAbsolutePath(configFileName, currentDirectory), compilerOptions.configFile!.configFileSpecs!, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
+        if (
+            updateErrorForNoInputFiles(
+                rootFileNames,
+                getNormalizedAbsolutePath(configFileName, currentDirectory),
+                compilerOptions.configFile!.configFileSpecs!,
+                configFileParsingDiagnostics!,
+                canConfigFileJsonReportNoInputFiles,
+            )
+        ) {
             hasChangedConfigFileParsingErrors = true;
         }
 

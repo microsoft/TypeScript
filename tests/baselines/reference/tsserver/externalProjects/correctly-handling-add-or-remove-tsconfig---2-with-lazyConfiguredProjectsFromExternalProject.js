@@ -269,10 +269,12 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 /home/src/projects/project/a/b/d/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 /home/src/projects/project/a/b/proj1 (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -561,10 +563,12 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
 /home/src/projects/project/a/b/d/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
 
 ScriptInfos::
 /home/src/projects/project/a/b/app.ts
@@ -942,10 +946,12 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 /home/src/projects/project/a/b/d/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 /home/src/projects/project/a/b/proj1 (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1156,10 +1162,12 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
 /home/src/projects/project/a/b/d/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
 
 ScriptInfos::
 /home/src/projects/project/a/b/app.ts

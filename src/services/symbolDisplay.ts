@@ -889,7 +889,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(
     sourceFile: SourceFile,
     enclosingDeclaration: Node | undefined,
     location: Node,
-    semanticMeaning = getMeaningFromLocation(location),
+    semanticMeaning: SemanticMeaning = getMeaningFromLocation(location),
     alias?: Symbol,
     verbosityLevel?: number,
 ): SymbolDisplayPartsDocumentationAndSymbolKind {

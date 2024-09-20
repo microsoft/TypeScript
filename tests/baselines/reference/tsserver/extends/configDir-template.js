@@ -127,16 +127,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/myproject/src/secondary.ts ProjectRootPath: undefined:: Result: /home/src/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/myproject/tsconfig.json, currentDirectory: /home/src/projects/myproject
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["/home/src/projects/myproject/node_modules"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/projects/myproject/tsconfig.json",
-        "reason": "Creating possible configured project for /home/src/projects/myproject/src/secondary.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/myproject/tsconfig.json : {
  "rootNames": [
   "/home/src/projects/myproject/main.ts",
@@ -175,6 +165,16 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/myp
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/configs/first/tsconfig.json 2000 {"excludeDirectories":["/home/src/Vscode/Projects/bin/node_modules"]} Config: /home/src/projects/myproject/tsconfig.json WatchType: Extended config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/configs/second/tsconfig.json 2000 {"excludeDirectories":["/home/src/Vscode/Projects/bin/node_modules"]} Config: /home/src/projects/myproject/tsconfig.json WatchType: Extended config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/myproject/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/myproject/src/secondary.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Config: /home/src/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeDirectories":["/home/src/projects/myproject/node_modules"],"excludeFiles":["/home/src/projects/myproject/main.ts"]} Config: /home/src/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/main.ts 500 {"excludeDirectories":["/home/src/Vscode/Projects/bin/node_modules"]} WatchType: Closed Script info
