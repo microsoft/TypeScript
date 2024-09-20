@@ -6,6 +6,7 @@ import {
     closeFilesForSession,
     createHostWithSolutionBuild,
     openFilesForSession,
+    protocolFileLocationFromSubstring,
     TestSession,
     TestSessionRequest,
 } from "../helpers/tsserver.js";
@@ -592,7 +593,7 @@ fn5();
             openFilesForSession([mainTs], session);
             session.executeCommandSeq<ts.server.protocol.DefinitionAndBoundSpanRequest>({
                 command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
-                arguments: { file: mainTs.path, line: 3, offset: "caller.foo".length - 2 },
+                arguments: protocolFileLocationFromSubstring(mainTs, "foo"),
             });
             baselineTsserverLogs("projectReferencesSourcemap", `dependencyAndUsage/${type}/goto Definition in usage of a property with mapped type origin`, session);
         });
