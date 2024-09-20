@@ -188,6 +188,21 @@ interface I2 {
     fooWithOverloads(a: number): number;
 }
 
+class C3 {
+    constructor(/** comment for a */ public a: string, /** comment for b */ private b: number) {}
+}
+
+class C4 {
+    /** This is a public method. */
+    public publicMethod() {}
+  
+    /** This is a private method, and will be stripped in the declaration file. */
+    private privateMethod() {}
+  
+    /** @author foo */
+    private jsdoc() {}
+}
+
 
 //// [declFileMethods_0.js]
 "use strict";
@@ -357,6 +372,24 @@ var c2 = /** @class */ (function () {
     };
     return c2;
 }());
+var C3 = /** @class */ (function () {
+    function C3(/** comment for a */ a, /** comment for b */ b) {
+        this.a = a;
+        this.b = b;
+    }
+    return C3;
+}());
+var C4 = /** @class */ (function () {
+    function C4() {
+    }
+    /** This is a public method. */
+    C4.prototype.publicMethod = function () { };
+    /** This is a private method, and will be stripped in the declaration file. */
+    C4.prototype.privateMethod = function () { };
+    /** @author foo */
+    C4.prototype.jsdoc = function () { };
+    return C4;
+}());
 
 
 //// [declFileMethods_0.d.ts]
@@ -370,9 +403,7 @@ export declare class c1 {
     fooWithRestParameters(a: string, ...rests: string[]): string;
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
-    /** This comment should appear for privateFoo*/
     private privateFoo;
-    /** This is comment for function signature*/
     private privateFooWithParameters;
     private privateFooWithRestParameters;
     private privateFooWithOverloads;
@@ -385,9 +416,7 @@ export declare class c1 {
     static staticFooWithRestParameters(a: string, ...rests: string[]): string;
     static staticFooWithOverloads(a: string): string;
     static staticFooWithOverloads(a: number): number;
-    /** This comment should appear for privateStaticFoo*/
     private static privateStaticFoo;
-    /** This is comment for function signature*/
     private static privateStaticFooWithParameters;
     private static privateStaticFooWithRestParameters;
     private static privateStaticFooWithOverloads;
@@ -414,9 +443,7 @@ declare class c2 {
     fooWithRestParameters(a: string, ...rests: string[]): string;
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
-    /** This comment should appear for privateFoo*/
     private privateFoo;
-    /** This is comment for function signature*/
     private privateFooWithParameters;
     private privateFooWithRestParameters;
     private privateFooWithOverloads;
@@ -429,9 +456,7 @@ declare class c2 {
     static staticFooWithRestParameters(a: string, ...rests: string[]): string;
     static staticFooWithOverloads(a: string): string;
     static staticFooWithOverloads(a: number): number;
-    /** This comment should appear for privateStaticFoo*/
     private static privateStaticFoo;
-    /** This is comment for function signature*/
     private static privateStaticFooWithParameters;
     private static privateStaticFooWithRestParameters;
     private static privateStaticFooWithOverloads;
@@ -446,4 +471,15 @@ interface I2 {
     fooWithRestParameters(a: string, ...rests: string[]): string;
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
+}
+declare class C3 {
+    a: string;
+    private b;
+    constructor(/** comment for a */ a: string, /** comment for b */ b: number);
+}
+declare class C4 {
+    /** This is a public method. */
+    publicMethod(): void;
+    private privateMethod;
+    private jsdoc;
 }

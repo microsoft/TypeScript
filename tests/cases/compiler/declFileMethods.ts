@@ -190,3 +190,18 @@ interface I2 {
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
 }
+
+class C3 {
+    constructor(/** comment for a */ public a: string, /** comment for b */ private b: number) {}
+}
+
+class C4 {
+    /** This is a public method. */
+    public publicMethod() {}
+  
+    /** This is a private method, and will be stripped in the declaration file. */
+    private privateMethod() {}
+  
+    /** @author foo */
+    private jsdoc() {}
+}

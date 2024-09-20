@@ -642,3 +642,34 @@ interface I2 {
 >  : ^^^^^^
 }
 
+class C3 {
+>C3 : C3
+>   : ^^
+
+    constructor(/** comment for a */ public a: string, /** comment for b */ private b: number) {}
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+}
+
+class C4 {
+>C4 : C4
+>   : ^^
+
+    /** This is a public method. */
+    public publicMethod() {}
+>publicMethod : () => void
+>             : ^^^^^^^^^^
+  
+    /** This is a private method, and will be stripped in the declaration file. */
+    private privateMethod() {}
+>privateMethod : () => void
+>              : ^^^^^^^^^^
+  
+    /** @author foo */
+    private jsdoc() {}
+>jsdoc : () => void
+>      : ^^^^^^^^^^
+}
+
