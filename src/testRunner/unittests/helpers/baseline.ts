@@ -401,7 +401,7 @@ export function baselineBuildInfo(
     options: ts.CompilerOptions,
     sys: TestServerHost,
     originalReadCall?: ts.System["readFile"],
-) {
+): void {
     const buildInfoPath = ts.getTsBuildInfoEmitOutputFilePath(options);
     if (!buildInfoPath || !sys.writtenFiles!.has(toPathWithSystem(sys, buildInfoPath))) return;
     if (!sys.fileExists(buildInfoPath)) return;
@@ -411,7 +411,7 @@ export function baselineBuildInfo(
     generateBuildInfoBaseline(sys, buildInfoPath, buildInfo);
 }
 
-export function isWatch(commandLineArgs: readonly string[]) {
+export function isWatch(commandLineArgs: readonly string[]): boolean | undefined {
     return ts.forEach(commandLineArgs, arg => {
         if (arg.charCodeAt(0) !== ts.CharacterCodes.minus) return false;
         const option = arg.slice(arg.charCodeAt(1) === ts.CharacterCodes.minus ? 2 : 1).toLowerCase();
@@ -440,7 +440,7 @@ export interface Baseline extends BaselineBase, CommandLineCallbacks {
 
 export const fakeTsVersion = "FakeTSVersion";
 
-export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T) {
+export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T): T {
     const originalReadFile = sys.readFile;
     sys.readFile = (path, encoding) => {
         const value = originalReadFile.call(sys, path, encoding);
@@ -454,7 +454,7 @@ export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T) {
     return patchHostForBuildInfoWrite(sys, fakeTsVersion);
 }
 
-export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version: string) {
+export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version: string): T {
     const originalWrite = sys.write;
     sys.write = msg => originalWrite.call(sys, msg.replace(ts.version, version));
     const originalWriteFile = sys.writeFile;
@@ -492,7 +492,7 @@ export function applyEdit(
     baseline: BaselineBase["baseline"],
     edit: (sys: TscWatchSystem) => void,
     caption?: string,
-) {
+): void {
     baseline.push(`Change::${caption ? " " + caption : ""}`, "");
     edit(sys);
     baseline.push("Input::");
@@ -507,7 +507,7 @@ export function baselineAfterTscCompile(
     baselineSourceMap: boolean | undefined,
     shouldBaselinePrograms: boolean | undefined,
     baselineDependencies: boolean | undefined,
-) {
+): readonly CommandLineProgram[] {
     if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
     const programs = getPrograms();
     sys.writtenFiles.forEach((value, key) => {

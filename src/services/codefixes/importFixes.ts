@@ -857,7 +857,7 @@ export function getImportCompletionAction(
 }
 
 /** @internal */
-export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbolToken: Identifier, program: Program, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences) {
+export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbolToken: Identifier, program: Program, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): CodeAction | undefined {
     const compilerOptions = program.getCompilerOptions();
     const symbolName = single(getSymbolNamesToImport(sourceFile, program.getTypeChecker(), symbolToken, compilerOptions));
     const fix = getTypeOnlyPromotionFix(sourceFile, symbolToken, symbolName, program);

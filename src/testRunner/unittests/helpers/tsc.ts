@@ -32,7 +32,7 @@ export const noChangeRun: TestTscEdit = {
     caption: "no-change-run",
     edit: ts.noop,
 };
-export const noChangeOnlyRuns = [noChangeRun];
+export const noChangeOnlyRuns: TestTscEdit[] = [noChangeRun];
 
 export interface TestTscCompile {
     commandLineArgs: readonly string[];
@@ -461,7 +461,7 @@ export interface VerifyTscWithEditsInput extends Omit<TestTscCompile, "computeDt
 /**
  * Verify non watch tsc invokcation after each edit
  */
-export function verifyTsc(input: VerifyTscWithEditsInput) {
+export function verifyTsc(input: VerifyTscWithEditsInput): void {
     describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario}`, () => {
         let snaps: TestServerHostSnapshot[] | undefined;
         after(() => {

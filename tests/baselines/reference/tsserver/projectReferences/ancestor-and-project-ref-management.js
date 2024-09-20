@@ -234,16 +234,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/container/compositeExec/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/container/compositeExec/tsconfig.json, currentDirectory: /user/username/projects/container/compositeExec
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/container/compositeExec/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/container/compositeExec/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/container/compositeExec/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/container/compositeExec/index.ts"
@@ -261,6 +251,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/container/compositeExec
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/container/compositeExec/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/container/compositeExec/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/container/lib/tsconfig.json : {
  "rootNames": [
@@ -420,6 +420,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts *new*
@@ -537,6 +538,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts *changed*
@@ -662,7 +664,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/username/projects/container/lib/tsconfig.json",
+        "triggerFile": "/user/username/projects/container/lib/index.ts",
         "configFile": "/user/username/projects/container/lib/tsconfig.json",
         "diagnostics": []
       }
@@ -1022,6 +1024,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts *changed*

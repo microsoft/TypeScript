@@ -32,7 +32,7 @@ export interface TestCompilerHost extends ts.CompilerHost {
 export class SourceText implements ts.IScriptSnapshot {
     private fullText: string | undefined;
 
-    constructor(private references: string, private importsAndExports: string, private program: string, private changedPart = ChangedPart.none, private version = 0) {
+    constructor(private references: string, private importsAndExports: string, private program: string, private changedPart: ChangedPart = ChangedPart.none, private version = 0) {
     }
 
     static New(references: string, importsAndExports: string, program: string): SourceText {
@@ -59,7 +59,7 @@ export class SourceText implements ts.IScriptSnapshot {
         return new SourceText(this.references, this.importsAndExports, newProgram, this.changedPart | ChangedPart.program, this.version + 1);
     }
 
-    public getFullText() {
+    public getFullText(): string {
         return this.fullText || (this.fullText = this.references + this.importsAndExports + this.program);
     }
 
@@ -103,7 +103,7 @@ function createSourceFileWithText(fileName: string, sourceText: SourceText, targ
     return file;
 }
 
-export function createTestCompilerHost(texts: readonly NamedSourceText[], target: ts.ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean, useCaseSensitiveFileNames?: boolean) {
+export function createTestCompilerHost(texts: readonly NamedSourceText[], target: ts.ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean, useCaseSensitiveFileNames?: boolean): TestCompilerHost {
     const files = ts.arrayToMap(texts, t => t.name, t => {
         if (oldProgram) {
             let oldFile = oldProgram.getSourceFile(t.name) as SourceFileWithText;
@@ -163,7 +163,7 @@ function programToProgramWithSourceTexts(program: ts.Program, texts: NamedSource
     return result;
 }
 
-export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: readonly string[], options: ts.CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[], useGetSourceFileByPath?: boolean, useCaseSensitiveFileNames?: boolean) {
+export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: readonly string[], options: ts.CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[], useGetSourceFileByPath?: boolean, useCaseSensitiveFileNames?: boolean): ProgramWithSourceTexts {
     if (!newTexts) {
         newTexts = oldProgram.sourceTexts!.slice(0);
     }
@@ -177,11 +177,11 @@ export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: rea
     );
 }
 
-export function updateProgramText(files: readonly NamedSourceText[], fileName: string, newProgramText: string) {
+export function updateProgramText(files: readonly NamedSourceText[], fileName: string, newProgramText: string): void {
     const file = ts.find(files, f => f.name === fileName)!;
     file.text = file.text.updateProgram(newProgramText);
 }
 
-export function jsonToReadableText(json: any) {
+export function jsonToReadableText(json: any): string {
     return JSON.stringify(json, undefined, 2);
 }

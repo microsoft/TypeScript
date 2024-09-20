@@ -70,7 +70,7 @@ export function forEachDeclarationEmitWithErrorsScenario(
         sys: () => TestServerHost,
     ) => void,
     withComposite: boolean,
-) {
+): void {
     for (const outFile of [false, true]) {
         for (const incremental of [undefined, true] as const) {
             action(

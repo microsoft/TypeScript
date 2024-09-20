@@ -229,16 +229,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/main/tsconfig.json, currentDirectory: /user/username/projects/myproject/main
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/main/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/myproject/main/main.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/main/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/main/main.ts"
@@ -255,6 +245,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/main/tsconfig
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/main/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/main/main.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
@@ -534,7 +534,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/username/projects/myproject/dependency/tsconfig.json",
+        "triggerFile": "/user/username/projects/myproject/dependency/FnS.ts",
         "configFile": "/user/username/projects/myproject/dependency/tsconfig.json",
         "diagnostics": []
       }
@@ -1106,6 +1106,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/random/tsconfig.json, currentDirectory: /user/username/projects/myproject/random
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/random/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/myproject/random/random.ts"
+ ],
+ "options": {
+  "configFilePath": "/user/username/projects/myproject/random/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1116,14 +1124,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /user/username/projects/myproject/random/random.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/random/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/random/random.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/random/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random 1 undefined Config: /user/username/projects/myproject/random/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random 1 undefined Config: /user/username/projects/myproject/random/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json
@@ -3513,14 +3513,6 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/dependency/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/dependency/FnS.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/dependency/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
@@ -4875,14 +4867,6 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/dependency/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/dependency/FnS.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/dependency/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
@@ -5072,7 +5056,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/random/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -5117,6 +5100,8 @@ FsWatches::
   {}
 /user/username/projects/myproject/decls/fns.d.ts:
   {}
+/user/username/projects/myproject/dependency/FnS.ts:
+  {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
 /user/username/projects/myproject/main/tsconfig.json:
@@ -5125,8 +5110,6 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/dependency/FnS.ts:
-  {}
 /user/username/projects/myproject/random/random.ts:
   {}
 
@@ -5167,7 +5150,7 @@ ScriptInfos::
     version: Text-4
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
-/user/username/projects/myproject/dependency/FnS.ts *deleted*
+/user/username/projects/myproject/dependency/FnS.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
@@ -5235,6 +5218,8 @@ FsWatches::
   {}
 /user/username/projects/myproject/decls/fns.d.ts:
   {}
+/user/username/projects/myproject/dependency/FnS.ts:
+  {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
 /user/username/projects/myproject/main/tsconfig.json:
@@ -5281,6 +5266,10 @@ ScriptInfos::
     version: Text-4
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -5350,12 +5339,11 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/dependency/ts
 }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json projectStateVersion: 10 projectProgramVersion: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/user/username/projects/myproject/dependency/FnS.ts Text-2 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
+	/user/username/projects/myproject/dependency/FnS.ts Text-1 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 	/user/username/projects/myproject/main/main.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n"
 
 
@@ -5390,19 +5378,8 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json projectStateVersion: 4 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/user/username/projects/myproject/dependency/FnS.ts Text-2 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
-
-
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
-	FnS.ts
-	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json projectStateVersion: 4 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -5487,7 +5464,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/decls/fns.d.ts:
   {}
-/user/username/projects/myproject/dependency/FnS.ts: *new*
+/user/username/projects/myproject/dependency/FnS.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -5537,11 +5514,11 @@ ScriptInfos::
     version: Text-4
     containingProjects: 0 *changed*
         /user/username/projects/myproject/main/tsconfig.json *deleted*
-/user/username/projects/myproject/dependency/FnS.ts *new*
-    version: Text-2
-    containingProjects: 2
-        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
         /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *new*
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -5659,10 +5636,10 @@ ScriptInfos::
     version: Text-4
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts
-    version: Text-2
+    version: Text-1
     containingProjects: 2
-        /user/username/projects/myproject/main/tsconfig.json
         /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -5770,10 +5747,10 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts
-    version: Text-2
+    version: Text-1
     containingProjects: 2
-        /user/username/projects/myproject/main/tsconfig.json
         /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -5845,7 +5822,7 @@ Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/pr
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	/user/username/projects/myproject/dependency/FnS.ts Text-2 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
+	/user/username/projects/myproject/dependency/FnS.ts Text-1 "export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 	/user/username/projects/myproject/main/main.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -5861,7 +5838,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json projectStateVersion: 5 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json projectStateVersion: 5 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -6050,10 +6027,10 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts
-    version: Text-2
+    version: Text-1
     containingProjects: 2
-        /user/username/projects/myproject/main/tsconfig.json
         /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -6161,10 +6138,10 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts
-    version: Text-2
+    version: Text-1
     containingProjects: 2
-        /user/username/projects/myproject/main/tsconfig.json
         /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1

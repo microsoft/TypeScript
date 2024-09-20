@@ -44,16 +44,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/username/workspace/project/src/index.ts ProjectRootPath: undefined:: Result: /a/username/workspace/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /a/username/workspace/project/tsconfig.json, currentDirectory: /a/username/workspace/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/workspace/project/tsconfig.json 2000 undefined Project: /a/username/workspace/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/a/username/workspace/project/tsconfig.json",
-        "reason": "Creating possible configured project for /a/username/workspace/project/src/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /a/username/workspace/project/tsconfig.json : {
  "rootNames": [
   "/a/username/workspace/project/src/file1.ts",
@@ -68,6 +58,16 @@ Info seq  [hh:mm:ss:mss] Config: /a/username/workspace/project/tsconfig.json : {
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/username/workspace/project/tsconfig.json 2000 undefined Project: /a/username/workspace/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/workspace/project/tsconfig.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/a/username/workspace/project/tsconfig.json",
+        "reason": "Creating possible configured project for /a/username/workspace/project/src/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project 1 {"synchronousWatchDirectory":true} Config: /a/username/workspace/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project 1 {"synchronousWatchDirectory":true} Config: /a/username/workspace/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/workspace/project/src/file1.ts 500 undefined WatchType: Closed Script info
