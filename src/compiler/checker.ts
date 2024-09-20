@@ -49022,15 +49022,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return resolveJSDocMemberName(name);
             }
         }
-        else if (isTypeReferenceIdentifier(name as EntityName)) {
+        else if (isEntityName(name) && isTypeReferenceIdentifier(name)) {
             const meaning = name.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
-            const symbol = resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
-            return symbol && symbol !== unknownSymbol ? symbol : getUnresolvedSymbolForEntityName(name as EntityName);
+            const symbol = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
+            return symbol && symbol !== unknownSymbol ? symbol : getUnresolvedSymbolForEntityName(name);
         }
         if (name.parent.kind === SyntaxKind.TypePredicate) {
             return resolveEntityName(name as Identifier, /*meaning*/ SymbolFlags.FunctionScopedVariable);
         }
-
         return undefined;
     }
 
