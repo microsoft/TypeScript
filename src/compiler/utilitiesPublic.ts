@@ -9,7 +9,6 @@ import {
     AssertionExpression,
     AssignmentDeclarationKind,
     AssignmentPattern,
-    ast,
     AutoAccessorPropertyDeclaration,
     BinaryExpression,
     BindableObjectDefinePropertyCall,
@@ -227,6 +226,7 @@ import {
     ModuleDeclaration,
     ModuleReference,
     NamedDeclaration,
+    HasName,
     NamedExportBindings,
     NamedImportBindings,
     NamespaceBody,
@@ -291,6 +291,10 @@ import {
     TypeReferenceType,
     UnaryExpression,
     VariableDeclaration,
+    HasQuestionToken,
+    HasAsteriskToken,
+    AsteriskToken,
+    AstNode,
 } from "./_namespaces/ts.js";
 
 export function isExternalModuleNameRelative(moduleName: string): boolean {
@@ -780,7 +784,7 @@ interface AncestorTraversable<T extends AncestorTraversable<T>> {
  * At that point findAncestor returns undefined.
  * @internal
  */
-export function findAncestor<T extends ast.AstNode>(node: ast.AstNode | undefined, callback: (element: ast.AstNode) => element is T): T | undefined;
+export function findAncestor<T extends AstNode>(node: AstNode | undefined, callback: (element: AstNode) => element is T): T | undefined;
 /**
  * Iterates through the parent chain of a node and performs the callback on each parent until the callback
  * returns a truthy value, then returns that value.
@@ -789,7 +793,7 @@ export function findAncestor<T extends ast.AstNode>(node: ast.AstNode | undefine
  */
 export function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
 /** @internal */
-export function findAncestor(node: ast.AstNode | undefined, callback: (element: ast.AstNode) => boolean | "quit"): ast.AstNode | undefined;
+export function findAncestor(node: AstNode | undefined, callback: (element: AstNode) => boolean | "quit"): AstNode | undefined;
 export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
 export function findAncestor<T extends AncestorTraversable<T>>(node: T | T | undefined, callback: (element: T) => boolean | "quit"): T | undefined {
     while (node) {
@@ -812,8 +816,8 @@ export function findAncestor<T extends AncestorTraversable<T>>(node: T | T | und
  */
 export function isParseTreeNode(node: Node): boolean;
 /** @internal */
-export function isParseTreeNode(node: Node | ast.AstNode<ast.Node>): boolean; // eslint-disable-line @typescript-eslint/unified-signatures
-export function isParseTreeNode(node: Node | ast.AstNode<ast.Node>): boolean {
+export function isParseTreeNode(node: Node | AstNode<Node>): boolean; // eslint-disable-line @typescript-eslint/unified-signatures
+export function isParseTreeNode(node: Node | AstNode<Node>): boolean {
     return (node.flags & NodeFlags.Synthesized) === 0;
 }
 
@@ -954,6 +958,98 @@ export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier 
 /** @internal */
 export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName; } {
     return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
+}
+
+/** @internal */
+export function canHaveName(node: Node): node is HasName {
+    switch (node.kind) {
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.EnumMember:
+        case SyntaxKind.ExportSpecifier:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.ImportAttribute:
+        case SyntaxKind.ImportClause:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ImportSpecifier:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.JSDocCallbackTag:
+        case SyntaxKind.JSDocLink:
+        case SyntaxKind.JSDocLinkCode:
+        case SyntaxKind.JSDocLinkPlain:
+        case SyntaxKind.JSDocNameReference:
+        case SyntaxKind.JSDocParameterTag:
+        case SyntaxKind.JSDocPropertyTag:
+        case SyntaxKind.JSDocSeeTag:
+        case SyntaxKind.JSDocTypedefTag:
+        case SyntaxKind.JsxAttribute:
+        case SyntaxKind.JsxNamespacedName:
+        case SyntaxKind.MetaProperty:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.MissingDeclaration:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.NamedTupleMember:
+        case SyntaxKind.NamespaceExport:
+        case SyntaxKind.NamespaceExportDeclaration:
+        case SyntaxKind.NamespaceImport:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.VariableDeclaration:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export function hasName(node: Node): node is HasName & { name: DeclarationName } {
+    return canHaveName(node) && !!node.name;
+}
+
+/** @internal */
+export function canHaveQuestionToken(node: Node): node is HasQuestionToken {
+    switch (node.kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.MappedType:
+        case SyntaxKind.NamedTupleMember:
+        case SyntaxKind.ConditionalExpression:
+        case SyntaxKind.PropertyAssignment:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export function canHaveAsteriskToken(node: Node): node is HasAsteriskToken {
+    switch (node.kind) {
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.YieldExpression:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export function hasAsteriskToken(node: Node): node is HasAsteriskToken & { asteriskToken: AsteriskToken } {
+    return canHaveAsteriskToken(node) && !!node.asteriskToken;
 }
 
 /** @internal */
@@ -1494,7 +1590,7 @@ export function isToken(n: Node): boolean {
 
 /** @internal */
 export function isNodeArray<T extends Node>(array: readonly T[]): array is NodeArray<T> {
-    return hasProperty(array, "pos") && hasProperty(array, "end") || array instanceof ast.NodeArray;
+    return hasProperty(array, "pos") && hasProperty(array, "end") || array instanceof NodeArray;
 }
 
 // Literals
@@ -2558,6 +2654,7 @@ export function hasJSDocNodes(node: Node): node is HasJSDoc {
  * @internal
  */
 export function hasType(node: Node): node is HasType {
+    // TODO: switch on kind
     return !!(node as HasType).type;
 }
 
@@ -2567,6 +2664,7 @@ export function hasType(node: Node): node is HasType {
  * @internal
  */
 export function hasInitializer(node: Node): node is HasInitializer {
+    // TODO: switch on kind
     return !!(node as HasInitializer).initializer;
 }
 

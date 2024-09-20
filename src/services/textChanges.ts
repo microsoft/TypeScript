@@ -1,7 +1,6 @@
 import {
     addToSeen,
     ArrowFunction,
-    ast,
     BindingElement,
     CharacterCodes,
     ClassElement,
@@ -67,6 +66,7 @@ import {
     group,
     HasJSDoc,
     hasJSDocNodes,
+    hasName,
     ImportClause,
     ImportSpecifier,
     indexOfNode,
@@ -163,6 +163,7 @@ import {
     TextRange,
     textSpanEnd,
     Token,
+    TokenSyntaxKind,
     tokenToString,
     toSorted,
     TransformationContext,
@@ -681,11 +682,11 @@ export class ChangeTracker {
         this.insertNodesAt(sourceFile, getAdjustedStartPosition(sourceFile, before, options), newNodes, this.getOptionsForInsertNodeBefore(before, first(newNodes), blankLineBetween));
     }
 
-    public insertModifierAt(sourceFile: SourceFile, pos: number, modifier: SyntaxKind, options: InsertNodeOptions = {}): void {
+    public insertModifierAt(sourceFile: SourceFile, pos: number, modifier: TokenSyntaxKind, options: InsertNodeOptions = {}): void {
         this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), options);
     }
 
-    public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
+    public insertModifierBefore(sourceFile: SourceFile, modifier: TokenSyntaxKind, before: Node): void {
         return this.insertModifierAt(sourceFile, before.getStart(sourceFile), modifier, { suffix: " " });
     }
 
@@ -980,7 +981,7 @@ export class ChangeTracker {
     }
 
     public insertName(sourceFile: SourceFile, node: FunctionExpression | ClassExpression | ArrowFunction, name: string): void {
-        Debug.assert(!node.name);
+        Debug.assert(!hasName(node));
         if (node.kind === SyntaxKind.ArrowFunction) {
             const arrow = findChildOfKind(node, SyntaxKind.EqualsGreaterThanToken, sourceFile)!;
             const lparen = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile);
@@ -1384,7 +1385,7 @@ const textChangesTransformationContext: TransformationContext = {
 export function assignPositionsToNode(node: Node): Node {
     const visited = visitEachChild(node, assignPositionsToNode, textChangesTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
     // create proxy node for non synthesized nodes
-    const newNode = nodeIsSynthesized(visited) ? visited : (visited as ast.Node).ast.shadow().node;
+    const newNode = nodeIsSynthesized(visited) ? visited : visited.ast.shadow().node;
     setTextRangePosEnd(newNode, getPos(node), getEnd(node));
     return newNode;
 }

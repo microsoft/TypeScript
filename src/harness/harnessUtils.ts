@@ -175,8 +175,8 @@ function convertDiagnostic(diagnostic: ts.Diagnostic) {
 
 export function sourceFileToJSON(file: ts.Node): string {
     const s = JSON.stringify(file, (_, v) => {
-        if (v instanceof ts.ast.AstNode) v = v.node;
-        if (v instanceof ts.ast.AstNodeArray) v = v.nodes;
+        if (v instanceof ts.AstNode) v = v.node;
+        if (v instanceof ts.AstNodeArray) v = v.nodes;
         return isNodeOrArray(v) ? serializeNode(v) : v;
     }, "    ");
     return s;
@@ -267,8 +267,8 @@ export function sourceFileToJSON(file: ts.Node): string {
 
                 default: {
                     let value = obj[propertyName];
-                    if (value instanceof ts.ast.AstNode) value = value.node;
-                    if (value instanceof ts.ast.AstNodeArray) value = value.nodes;
+                    if (value instanceof ts.AstNode) value = value.node;
+                    if (value instanceof ts.AstNodeArray) value = value.nodes;
                     o[propertyName] = value;
                 }
             }
@@ -282,7 +282,7 @@ export function sourceFileToJSON(file: ts.Node): string {
             if (ts.containsParseError(n)) {
                 o.containsParseError = true;
             }
-            if (n instanceof ts.ast.Node) {
+            if (n instanceof ts.Node) {
                 serializeProperties(o, n, n, ["pos", "end", "flags", "modifierFlagsCache", "transformFlags"]);
                 serializeProperties(o, n, n.ast.data, Object.getOwnPropertyNames(n.ast.data));
             }
@@ -292,7 +292,7 @@ export function sourceFileToJSON(file: ts.Node): string {
         }
         else {
             serializeProperties(o, /*n*/ undefined, n, Object.getOwnPropertyNames(n));
-            if (n instanceof ts.ast.NodeArray) {
+            if (n instanceof ts.NodeArray) {
                 serializeProperties(o, /*n*/ undefined, n, ["pos", "end", "hasTrailingComma", "transformFlags"]);
             }
         }
@@ -376,10 +376,10 @@ function assertArrayStructuralEquals(array1: ts.NodeArray<ts.Node>, array2: ts.N
 }
 
 function findChildName(parent: any, child: any) {
-    if (parent instanceof ts.ast.Node) {
+    if (parent instanceof ts.Node) {
         parent = parent.ast.data;
     }
-    if (child instanceof ts.ast.Node || child instanceof ts.ast.NodeArray) {
+    if (child instanceof ts.Node || child instanceof ts.NodeArray) {
         child = child.ast;
     }
     for (const name in parent) {

@@ -24,7 +24,14 @@ import {
     AssignmentDeclarationKind,
     AssignmentExpression,
     AssignmentOperatorToken,
-    ast,
+    AstBinaryExpression,
+    AstExpression,
+    AstHasJSDoc,
+    AstModifierLike,
+    AstNewExpression,
+    AstNode,
+    AstPostfixUnaryExpression,
+    AstPrefixUnaryExpression,
     BarBarEqualsToken,
     BinaryExpression,
     binarySearch,
@@ -253,6 +260,7 @@ import {
     isArrayLiteralExpression,
     isArrowFunction,
     isAssertionExpression,
+    isAstJSDocTypeExpression,
     isAutoAccessorPropertyDeclaration,
     isBigIntLiteral,
     isBinaryExpression,
@@ -488,6 +496,7 @@ import {
     QuestionQuestionEqualsToken,
     ReadonlyCollection,
     ReadonlyTextRange,
+    RegularExpressionLiteral,
     removeTrailingDirectorySeparator,
     RequireOrImportCall,
     RequireVariableStatement,
@@ -508,6 +517,7 @@ import {
     shouldAllowImportingTsExtension,
     Signature,
     SignatureDeclaration,
+    SignatureDeclarationBase,
     SignatureFlags,
     singleElementArray,
     singleOrUndefined,
@@ -525,6 +535,7 @@ import {
     Statement,
     StringLiteral,
     StringLiteralLike,
+    StringLiteralLikeNode,
     StringLiteralType,
     stringToToken,
     SuperCall,
@@ -561,7 +572,7 @@ import {
     TupleTypeNode,
     Type,
     TypeAliasDeclaration,
-    TypeAssertion,
+    TypeAssertionExpression,
     TypeChecker,
     TypeCheckerHost,
     TypeElement,
@@ -777,7 +788,7 @@ export function usingSingleLineStringWriter(action: (writer: EmitTextWriter) => 
 }
 
 /** @internal */
-export function getFullWidth(node: Node | ast.AstNode): number {
+export function getFullWidth(node: Node | AstNode): number {
     return node.end - node.pos;
 }
 
@@ -933,8 +944,8 @@ export function hasChangesInResolutions<K, V>(
 
 // Returns true if this node contains a parse error anywhere underneath it.
 /** @internal */
-export function containsParseError(node: Node | ast.AstNode): boolean {
-    aggregateChildData(node instanceof ast.AstNode ? node.node : node); // TODO(rbuckton): do not instantiate node
+export function containsParseError(node: Node | AstNode): boolean {
+    aggregateChildData(node instanceof AstNode ? node.node : node); // TODO(rbuckton): do not instantiate node
     return (node.flags & NodeFlags.ThisNodeOrAnySubNodesHasError) !== 0;
 }
 
@@ -1058,7 +1069,7 @@ export function isFileLevelUniqueName(sourceFile: SourceFile, name: string, hasG
 // However, this node will be 'missing' in the sense that no actual source-code/tokens are
 // contained within it.
 /** @internal */
-export function nodeIsMissing(node: Node | ast.AstNode | undefined): boolean {
+export function nodeIsMissing(node: Node | AstNode | undefined): boolean {
     if (node === undefined) {
         return true;
     }
@@ -1067,7 +1078,7 @@ export function nodeIsMissing(node: Node | ast.AstNode | undefined): boolean {
 }
 
 /** @internal */
-export function nodeIsPresent(node: Node | ast.AstNode | undefined): boolean {
+export function nodeIsPresent(node: Node | AstNode | undefined): boolean {
     return !nodeIsMissing(node);
 }
 
@@ -1279,9 +1290,9 @@ export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: 
     return getTextOfNodeFromSourceText(sourceFile.text, node, includeTrivia);
 }
 
-function isJSDocTypeExpressionOrChild(node: Node | ast.AstNode): boolean {
-    return node instanceof ast.AstNode ?
-        !!findAncestor(node, ast.isAstJSDocTypeExpression) :
+function isJSDocTypeExpressionOrChild(node: Node | AstNode): boolean {
+    return node instanceof AstNode ?
+        !!findAncestor(node, isAstJSDocTypeExpression) :
         !!findAncestor(node, isJSDocTypeExpression);
 }
 
@@ -1312,7 +1323,7 @@ export function moduleExportNameIsDefault(node: ModuleExportName): boolean {
 }
 
 /** @internal */
-export function getTextOfNodeFromSourceText(sourceText: string, node: Node | ast.AstNode, includeTrivia = false): string {
+export function getTextOfNodeFromSourceText(sourceText: string, node: Node | AstNode, includeTrivia = false): string {
     if (nodeIsMissing(node)) {
         return "";
     }
@@ -1880,7 +1891,7 @@ export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile | u
         case SyntaxKind.BigIntLiteral:
             return node.text;
         case SyntaxKind.RegularExpressionLiteral:
-            if (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) {
+            if (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && (node as RegularExpressionLiteral).isUnterminated) {
                 return node.text + (node.text.charCodeAt(node.text.length - 1) === CharacterCodes.backslash ? " /" : "/");
             }
             return node.text;
@@ -1890,7 +1901,7 @@ export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile | u
 }
 
 function canUseOriginalText(node: LiteralLikeNode, flags: GetLiteralTextFlags): boolean {
-    if (nodeIsSynthesized(node) || !node.parent || (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated)) {
+    if (nodeIsSynthesized(node) || !node.parent || (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && (node as StringLiteralLikeNode).isUnterminated)) {
         return false;
     }
 
@@ -2610,7 +2621,7 @@ export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: Sour
 }
 
 /** @internal */
-export function getJSDocCommentRanges(node: Node | ast.AstNode, text: string): CommentRange[] | undefined {
+export function getJSDocCommentRanges(node: Node | AstNode, text: string): CommentRange[] | undefined {
     const commentRanges = (node.kind === SyntaxKind.Parameter ||
             node.kind === SyntaxKind.TypeParameter ||
             node.kind === SyntaxKind.FunctionExpression ||
@@ -2719,7 +2730,7 @@ export function isPartOfTypeNode(node: Node): boolean {
                 case SyntaxKind.IndexSignature:
                     return node === (parent as SignatureDeclaration).type;
                 case SyntaxKind.TypeAssertionExpression:
-                    return node === (parent as TypeAssertion).type;
+                    return node === (parent as TypeAssertionExpression).type;
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.TaggedTemplateExpression:
@@ -2789,7 +2800,7 @@ export function forEachYieldExpression(body: Block, visitor: (expr: YieldExpress
                 return;
             default:
                 if (isFunctionLike(node)) {
-                    if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
+                    if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.ComputedPropertyName) {
                         // Note that we will not include methods/accessors of a class because they would require
                         // first descending into the class. This is by design.
                         traverse(node.name.expression);
@@ -4394,8 +4405,8 @@ export function canHaveFlowNode(node: Node): node is HasFlowNode {
 /** @internal */
 export function canHaveJSDoc(node: Node): node is HasJSDoc;
 /** @internal */
-export function canHaveJSDoc(node: ast.AstNode): node is ast.AstHasJSDoc;
-export function canHaveJSDoc(node: Node | ast.AstNode) {
+export function canHaveJSDoc(node: AstNode): node is AstHasJSDoc;
+export function canHaveJSDoc(node: Node | AstNode) {
     switch (node.kind) {
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.BinaryExpression:
@@ -4672,6 +4683,7 @@ export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { par
 
 /** @internal @knipignore */
 export function hasTypeArguments(node: Node): node is HasTypeArguments {
+    // TODO: switch on kind
     return !!(node as HasTypeArguments).typeArguments;
 }
 
@@ -5183,13 +5195,16 @@ export function getFunctionFlags(node: SignatureDeclaration | undefined): Functi
 
 /** @internal */
 export function isAsyncFunction(node: Node): boolean {
+    Debug.type<FunctionLikeDeclaration>(node);
     switch (node.kind) {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.FunctionExpression:
-        case SyntaxKind.ArrowFunction:
         case SyntaxKind.MethodDeclaration:
-            return (node as FunctionLikeDeclaration).body !== undefined
-                && (node as FunctionLikeDeclaration).asteriskToken === undefined
+            return node.body !== undefined
+                && node.asteriskToken === undefined
+                && hasSyntacticModifier(node, ModifierFlags.Async);
+        case SyntaxKind.ArrowFunction:
+            return node.body !== undefined
                 && hasSyntacticModifier(node, ModifierFlags.Async);
     }
     return false;
@@ -5471,9 +5486,9 @@ export const enum Associativity {
 }
 
 /** @internal */
-export function getExpressionAssociativity(expression: Expression | ast.AstExpression): Associativity {
+export function getExpressionAssociativity(expression: Expression | AstExpression): Associativity {
     const operator = getOperator(expression);
-    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression instanceof ast.AstNode ? (expression as ast.AstNewExpression).data.arguments !== undefined : (expression as NewExpression).arguments !== undefined);
+    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression instanceof AstNode ? (expression as AstNewExpression).data.arguments !== undefined : (expression as NewExpression).arguments !== undefined);
     return getOperatorAssociativity(expression.kind, operator, hasArguments);
 }
 
@@ -5518,18 +5533,18 @@ export function getOperatorAssociativity(kind: SyntaxKind, operator: SyntaxKind,
 }
 
 /** @internal */
-export function getExpressionPrecedence(expression: Expression | ast.AstExpression): OperatorPrecedence {
+export function getExpressionPrecedence(expression: Expression | AstExpression): OperatorPrecedence {
     const operator = getOperator(expression);
-    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression instanceof ast.AstNode ? (expression as ast.AstNewExpression).data.arguments !== undefined : (expression as NewExpression).arguments !== undefined);
+    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression instanceof AstNode ? (expression as AstNewExpression).data.arguments !== undefined : (expression as NewExpression).arguments !== undefined);
     return getOperatorPrecedence(expression.kind, operator, hasArguments);
 }
 
-function getOperator(expression: Expression | ast.AstExpression): SyntaxKind {
+function getOperator(expression: Expression | AstExpression): SyntaxKind {
     if (expression.kind === SyntaxKind.BinaryExpression) {
-        return expression instanceof ast.AstNode ? (expression as ast.AstBinaryExpression).data.operatorToken.kind : (expression as BinaryExpression).operatorToken.kind;
+        return expression instanceof AstNode ? (expression as AstBinaryExpression).data.operatorToken.kind : (expression as BinaryExpression).operatorToken.kind;
     }
     else if (expression.kind === SyntaxKind.PrefixUnaryExpression || expression.kind === SyntaxKind.PostfixUnaryExpression) {
-        return expression instanceof ast.AstNode ? (expression as ast.AstPrefixUnaryExpression | ast.AstPostfixUnaryExpression).data.operator : (expression as PrefixUnaryExpression | PostfixUnaryExpression).operator;
+        return expression instanceof AstNode ? (expression as AstPrefixUnaryExpression | AstPostfixUnaryExpression).data.operator : (expression as PrefixUnaryExpression | PostfixUnaryExpression).operator;
     }
     else {
         return expression.kind;
@@ -7172,7 +7187,7 @@ export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
 }
 
 /** @internal */
-export function modifiersToFlags(modifiers: readonly ModifierLike[] | readonly ast.AstModifierLike[] | undefined): ModifierFlags {
+export function modifiersToFlags(modifiers: readonly ModifierLike[] | readonly AstModifierLike[] | undefined): ModifierFlags {
     let flags = ModifierFlags.None;
     if (modifiers) {
         for (const modifier of modifiers) {
@@ -10424,11 +10439,11 @@ export function setNodeFlags<T extends Node>(node: T | undefined, newFlags: Node
  *
  * @internal
  */
-export function setParent<T extends Node | ast.AstNode>(child: T, parent: T["parent"] | undefined): T;
+export function setParent<T extends Node | AstNode>(child: T, parent: T["parent"] | undefined): T;
 /** @internal */
-export function setParent<T extends Node | ast.AstNode>(child: T | undefined, parent: T["parent"] | undefined): T | undefined;
+export function setParent<T extends Node | AstNode>(child: T | undefined, parent: T["parent"] | undefined): T | undefined;
 /** @internal */
-export function setParent<T extends Node | ast.AstNode>(child: T | undefined, parent: T["parent"] | undefined): T | undefined {
+export function setParent<T extends Node | AstNode>(child: T | undefined, parent: T["parent"] | undefined): T | undefined {
     if (child && parent) {
         (child as Mutable<T>).parent = parent;
     }
@@ -11700,13 +11715,16 @@ export function createNameResolver({
             return isTypeQueryNode(location) || ((
                 isFunctionLikeDeclaration(location) ||
                 (location.kind === SyntaxKind.PropertyDeclaration && !isStatic(location))
-            ) && (!lastLocation || lastLocation !== (location as SignatureDeclaration | PropertyDeclaration).name)); // A name is evaluated within the enclosing scope - so it shouldn't count as deferred
+                // TODO(rbuckton): unchecked cast can result in wrong map deopt for missing `name` property
+            ) && (!lastLocation || lastLocation !== (location as SignatureDeclarationBase | PropertyDeclaration).name)); // A name is evaluated within the enclosing scope - so it shouldn't count as deferred
         }
-        if (lastLocation && lastLocation === (location as FunctionExpression | ArrowFunction).name) {
+        // TODO(rbuckton): unchecked cast can result in wrong map deopt for missing `name` property
+        if (lastLocation && lastLocation === (location as FunctionExpression).name) {
             return false;
         }
         // generator functions and async functions are not inlined in control flow when immediately invoked
-        if ((location as FunctionExpression | ArrowFunction).asteriskToken || hasSyntacticModifier(location, ModifierFlags.Async)) {
+        // TODO(rbuckton): unchecked cast can result in wrong map deopt for missing `asteriskToken` property
+        if ((location as FunctionExpression).asteriskToken || hasSyntacticModifier(location, ModifierFlags.Async)) {
             return true;
         }
         return !getImmediatelyInvokedFunctionExpression(location);

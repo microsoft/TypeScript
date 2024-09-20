@@ -13,7 +13,9 @@ import {
     AstDeclareKeyword,
     AstElementAccessChain,
     AsteriskToken,
+    AstHasDecorators,
     AstHasJSDoc,
+    AstHasModifiers,
     AstLeftHandSideExpression,
     AstNode,
     AstNonNullChain,
@@ -33,6 +35,7 @@ import {
     Bundle,
     CallExpression,
     CallSignatureDeclaration,
+    canHaveJSDoc,
     CaseBlock,
     CaseClause,
     CaseKeyword,
@@ -93,6 +96,8 @@ import {
     InferTypeNode,
     InterfaceDeclaration,
     IntersectionTypeNode,
+    isLeftHandSideExpressionKind,
+    JSDoc,
     JSDocAllType,
     JSDocAugmentsTag,
     JSDocAuthorTag,
@@ -109,7 +114,6 @@ import {
     JSDocMemberName,
     JSDocNamepathType,
     JSDocNameReference,
-    JSDoc,
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
@@ -167,6 +171,7 @@ import {
     NamespaceImport,
     NewExpression,
     Node,
+    NodeFlags,
     NonNullExpression,
     NoSubstitutionTemplateLiteral,
     NotEmittedStatement,
@@ -175,6 +180,7 @@ import {
     ObjectLiteralExpression,
     OmittedExpression,
     OptionalTypeNode,
+    OuterExpressionKinds,
     OverrideKeyword,
     ParameterDeclaration,
     ParenthesizedExpression,
@@ -207,6 +213,7 @@ import {
     StringLiteral,
     SuperExpression,
     SwitchStatement,
+    SyntaxKind,
     SyntaxList,
     SyntheticExpression,
     SyntheticReferenceExpression,
@@ -224,7 +231,7 @@ import {
     TryStatement,
     TupleTypeNode,
     TypeAliasDeclaration,
-    TypeAssertion,
+    TypeAssertionExpression,
     TypeLiteralNode,
     TypeOfExpression,
     TypeOperatorNode,
@@ -240,15 +247,6 @@ import {
     WhileStatement,
     WithStatement,
     YieldExpression,
-    AstHasModifiers,
-    AstHasDecorators,
-} from "../_namespaces/ts.ast.js";
-import {
-    canHaveJSDoc,
-    isLeftHandSideExpressionKind,
-    NodeFlags,
-    OuterExpressionKinds,
-    SyntaxKind,
 } from "../_namespaces/ts.js";
 
 // Literals
@@ -700,7 +698,7 @@ export function isAstTaggedTemplateExpression(node: AstNode): node is AstNode<Ta
 }
 
 /** @internal */
-export function isAstTypeAssertionExpression(node: AstNode): node is AstNode<TypeAssertion> {
+export function isAstTypeAssertionExpression(node: AstNode): node is AstNode<TypeAssertionExpression> {
     return node.kind === SyntaxKind.TypeAssertionExpression;
 }
 

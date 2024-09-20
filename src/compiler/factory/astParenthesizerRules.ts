@@ -36,10 +36,7 @@ import {
     isAstTypeOperatorNode,
     isAstUnionTypeNode,
     skipAstOuterExpressions,
-} from "../_namespaces/ts.ast.js";
-import {
     Associativity,
-    ast,
     BinaryOperator,
     compareValues,
     Comparison,
@@ -75,7 +72,7 @@ export interface AstParenthesizerRules {
     parenthesizeLeftSideOfAccess(expression: AstExpression, optionalChain?: boolean): AstLeftHandSideExpression;
     parenthesizeOperandOfPostfixUnary(operand: AstExpression): AstLeftHandSideExpression;
     parenthesizeOperandOfPrefixUnary(operand: AstExpression): AstUnaryExpression;
-    parenthesizeExpressionsOfCommaDelimitedList(elements: AstNodeArrayLike<AstExpression>): AstNodeArray<ast.AstExpression>;
+    parenthesizeExpressionsOfCommaDelimitedList(elements: AstNodeArrayLike<AstExpression>): AstNodeArray<AstExpression>;
     parenthesizeExpressionForDisallowedComma(expression: AstExpression): AstExpression;
     parenthesizeExpressionOfExpressionStatement(expression: AstExpression): AstExpression;
     parenthesizeConciseBodyOfArrowFunction(body: AstExpression): AstExpression;
@@ -487,7 +484,7 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
                     emittedExpression,
                     setTextRange(factory.createParenthesizedExpression(callee), callee),
                     emittedExpression.data.typeArguments,
-                    emittedExpression.data.arguments!,
+                    emittedExpression.data.arguments,
                 );
                 return factory.restoreOuterExpressions(expression, updated, OuterExpressionKinds.PartiallyEmittedExpressions);
             }
@@ -667,8 +664,8 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
         if (isAstNamedTupleMember(type)) return hasJSDocPostfixQuestion(type.data.type);
         if (isAstFunctionTypeNode(type) || isAstConstructorTypeNode(type) || isAstTypeOperatorNode(type)) return hasJSDocPostfixQuestion(type.data.type);
         if (isAstConditionalTypeNode(type)) return hasJSDocPostfixQuestion(type.data.falseType);
-        if (isAstUnionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.data.types!.items));
-        if (isAstIntersectionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.data.types!.items));
+        if (isAstUnionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.data.types.items));
+        if (isAstIntersectionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.data.types.items));
         if (isAstInferTypeNode(type)) return !!type.data.typeParameter.data.constraint && hasJSDocPostfixQuestion(type.data.typeParameter.data.constraint);
         return false;
     }

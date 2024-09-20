@@ -28,6 +28,7 @@ import {
     getNameOfDeclaration,
     getQuotePreference,
     getTokenAtPosition,
+    hasName,
     idText,
     isAccessExpression,
     isArrowFunction,
@@ -315,7 +316,7 @@ function getModifierKindFromSource(source: Node, kind: Modifier["kind"]): readon
 }
 
 function isConstructorAssignment(x: ObjectLiteralElementLike | PropertyAccessExpression) {
-    if (!x.name) return false;
+    if (!hasName(x)) return false;
     if (isIdentifier(x.name) && x.name.text === "constructor") return true;
     return false;
 }

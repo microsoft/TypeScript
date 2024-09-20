@@ -333,6 +333,7 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
+    PartialSourceFile,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
 
@@ -888,7 +889,7 @@ export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: 
 export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number, compilerOptions?: CompilerOptions): ResolutionMode {
     // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
     // so it's safe to use them even pre-bind
-    return getModeForUsageLocationWorker(file, getModuleNameStringLiteralAt(file, index), compilerOptions);
+    return getModeForUsageLocationWorker(file as PartialSourceFile<"impliedNodeFormat" | "packageJsonScope">, getModuleNameStringLiteralAt(file, index), compilerOptions);
 }
 
 /** @internal */
@@ -944,7 +945,7 @@ export function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLi
     return getModeForUsageLocationWorker(file, usage, compilerOptions);
 }
 
-function getModeForUsageLocationWorker(file: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, usage: StringLiteralLike, compilerOptions?: CompilerOptions) {
+function getModeForUsageLocationWorker(file: PartialSourceFile<"impliedNodeFormat" | "packageJsonScope">, usage: StringLiteralLike, compilerOptions?: CompilerOptions) {
     if (isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent) || isJSDocImportTag(usage.parent)) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
         if (isTypeOnly) {
@@ -966,7 +967,7 @@ function getModeForUsageLocationWorker(file: Pick<SourceFile, "fileName" | "impl
     }
 }
 
-function getEmitSyntaxForUsageLocationWorker(file: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, usage: StringLiteralLike, compilerOptions?: CompilerOptions): ResolutionMode {
+function getEmitSyntaxForUsageLocationWorker(file: PartialSourceFile<"impliedNodeFormat" | "packageJsonScope">, usage: StringLiteralLike, compilerOptions?: CompilerOptions): ResolutionMode {
     if (!compilerOptions) {
         // This should always be provided, but we try to fail somewhat
         // gracefully to allow projects like ts-node time to update.
@@ -5204,7 +5205,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 }
 
-function shouldTransformImportCallWorker(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): boolean {
+function shouldTransformImportCallWorker(sourceFile: PartialSourceFile<"impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): boolean {
     const moduleKind = getEmitModuleKind(options);
     if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext || moduleKind === ModuleKind.Preserve) {
         return false;
@@ -5212,11 +5213,11 @@ function shouldTransformImportCallWorker(sourceFile: Pick<SourceFile, "fileName"
     return getEmitModuleFormatOfFileWorker(sourceFile, options) < ModuleKind.ES2015;
 }
 /** @internal Prefer `program.getEmitModuleFormatOfFile` when possible. */
-export function getEmitModuleFormatOfFileWorker(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ModuleKind {
+export function getEmitModuleFormatOfFileWorker(sourceFile: PartialSourceFile<"impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ModuleKind {
     return getImpliedNodeFormatForEmitWorker(sourceFile, options) ?? getEmitModuleKind(options);
 }
 /** @internal Prefer `program.getImpliedNodeFormatForEmit` when possible. */
-export function getImpliedNodeFormatForEmitWorker(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
+export function getImpliedNodeFormatForEmitWorker(sourceFile: PartialSourceFile<"impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
     const moduleKind = getEmitModuleKind(options);
     if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
         return sourceFile.impliedNodeFormat;
@@ -5238,7 +5239,7 @@ export function getImpliedNodeFormatForEmitWorker(sourceFile: Pick<SourceFile, "
     return undefined;
 }
 /** @internal Prefer `program.getDefaultResolutionModeForFile` when possible. */
-export function getDefaultResolutionModeForFileWorker(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
+export function getDefaultResolutionModeForFileWorker(sourceFile: PartialSourceFile<"impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
     return importSyntaxAffectsModuleResolution(options) ? getImpliedNodeFormatForEmitWorker(sourceFile, options) : undefined;
 }
 

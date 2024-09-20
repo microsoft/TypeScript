@@ -212,7 +212,7 @@ import {
     TryStatement,
     TupleTypeNode,
     TypeAliasDeclaration,
-    TypeAssertion,
+    TypeAssertionExpression,
     TypeLiteralNode,
     TypeOfExpression,
     TypeOperatorNode,
@@ -601,7 +601,7 @@ export function isTaggedTemplateExpression(node: Node): node is TaggedTemplateEx
     return node.kind === SyntaxKind.TaggedTemplateExpression;
 }
 
-export function isTypeAssertionExpression(node: Node): node is TypeAssertion {
+export function isTypeAssertionExpression(node: Node): node is TypeAssertionExpression {
     return node.kind === SyntaxKind.TypeAssertionExpression;
 }
 

@@ -6,6 +6,7 @@ import {
     Block,
     CallExpression,
     CancellationToken,
+    canHaveName,
     codefix,
     compilerOptionsIndicateEsModules,
     createDiagnosticForNode,
@@ -24,6 +25,7 @@ import {
     getAssignmentDeclarationKind,
     getFunctionFlags,
     hasInitializer,
+    hasName,
     hasPropertyAccessExpressionWithName,
     Identifier,
     importFromModuleSpecifier,
@@ -55,6 +57,7 @@ import {
     some,
     SourceFile,
     SyntaxKind,
+    tryCast,
     TypeChecker,
     VariableStatement,
 } from "./_namespaces/ts.js";
@@ -125,7 +128,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
             }
 
             if (codefix.parameterShouldGetTypeFromJSDoc(node)) {
-                diags.push(createDiagnosticForNode(node.name || node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
+                diags.push(createDiagnosticForNode(tryCast(node, canHaveName)?.name ?? node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
             }
         }
 
@@ -176,7 +179,7 @@ function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, che
     // need to check function before checking map so that deeper levels of nested callbacks are checked
     if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
         diags.push(createDiagnosticForNode(
-            !node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node,
+            !hasName(node) && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node,
             Diagnostics.This_may_be_converted_to_an_async_function,
         ));
     }

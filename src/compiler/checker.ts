@@ -1065,7 +1065,7 @@ import {
     TupleTypeReference,
     Type,
     TypeAliasDeclaration,
-    TypeAssertion,
+    TypeAssertionExpression,
     TypeChecker,
     TypeCheckerHost,
     TypeComparer,
@@ -1121,6 +1121,10 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    canHaveName,
+    hasName,
+    canHaveQuestionToken,
+    hasAsteriskToken,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -14639,7 +14643,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean {
         const list = obj.properties as NodeArray<ObjectLiteralElementLike | JsxAttributeLike>;
         return list.some(property => {
-            const nameType = property.name && (isJsxNamespacedName(property.name) ? getStringLiteralType(getTextOfJsxAttributeName(property.name)) : getLiteralTypeFromPropertyName(property.name));
+            const nameType = !isSpreadAssignment(property) && !isJsxSpreadAttribute(property) && (isJsxNamespacedName(property.name) ? getStringLiteralType(getTextOfJsxAttributeName(property.name)) : getLiteralTypeFromPropertyName(property.name));
             const name = nameType && isTypeUsableAsPropertyName(nameType) ? getPropertyNameFromType(nameType) : undefined;
             const expected = name === undefined ? undefined : getTypeOfPropertyOfType(contextualType, name);
             return !!expected && isLiteralType(expected) && !isTypeAssignableTo(getTypeOfNode(property), expected);
@@ -22477,8 +22481,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 if (prop.valueDeclaration && findAncestor(prop.valueDeclaration, d => d === objectLiteralDeclaration) && getSourceFileOfNode(objectLiteralDeclaration) === getSourceFileOfNode(errorNode)) {
                                     const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
                                     Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
+                                    Debug.assertNotNode(propDeclaration, isSpreadAssignment);
+                                    Debug.assertNotNode(propDeclaration, isJsxSpreadAttribute);
 
-                                    const name = propDeclaration.name!;
+                                    const name = propDeclaration.name;
                                     errorNode = name;
 
                                     if (isIdentifier(name)) {
@@ -31852,7 +31858,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            if (element.name) {
+            if (!isSpreadAssignment(element) && !isJsxSpreadAttribute(element)) {
                 const nameType = getLiteralTypeFromPropertyName(element.name);
                 // We avoid calling getApplicableIndexInfo here because it performs potentially expensive intersection reduction.
                 return mapType(type, t => findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType)?.type, /*noReductions*/ true);
@@ -32847,7 +32853,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // As otherwise they may not be checked until exports for the type at this position are retrieved,
         // which may never occur.
         for (const elem of node.properties) {
-            if (elem.name && isComputedPropertyName(elem.name)) {
+            if (canHaveName(elem) && isComputedPropertyName(elem.name)) {
                 checkComputedPropertyName(elem.name);
             }
         }
@@ -32855,7 +32861,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let offset = 0;
         for (const memberDecl of node.properties) {
             let member = getSymbolOfDeclaration(memberDecl);
-            const computedNameType = memberDecl.name && memberDecl.name.kind === SyntaxKind.ComputedPropertyName ?
+            const computedNameType = canHaveName(memberDecl) && memberDecl.name.kind === SyntaxKind.ComputedPropertyName ?
                 checkComputedPropertyName(memberDecl.name) : undefined;
             if (
                 memberDecl.kind === SyntaxKind.PropertyAssignment ||
@@ -34980,9 +34986,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If the template didn't end in a backtick, or its beginning occurred right prior to EOF,
                 // then this might actually turn out to be a TemplateHead in the future;
                 // so we consider the call to be incomplete.
-                const templateLiteral = node.template as LiteralExpression;
-                Debug.assert(templateLiteral.kind === SyntaxKind.NoSubstitutionTemplateLiteral);
-                callIsIncomplete = !!templateLiteral.isUnterminated;
+                Debug.assert(node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral);
+                callIsIncomplete = !!node.template.isUnterminated;
             }
         }
         else if (node.kind === SyntaxKind.Decorator) {
@@ -37989,9 +37994,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createClassMemberDecoratorContextTypeForNode(node: MethodDeclaration | AccessorDeclaration | PropertyDeclaration, thisType: Type, valueType: Type) {
+        const name = node.name;
         const isStatic = hasStaticModifier(node);
-        const isPrivate = isPrivateIdentifier(node.name);
-        const nameType = isPrivate ? getStringLiteralType(idText(node.name)) : getLiteralTypeFromPropertyName(node.name);
+        const isPrivate = isPrivateIdentifier(name);
+        const nameType = isPrivate ? getStringLiteralType(idText(name)) : getLiteralTypeFromPropertyName(name);
         const contextType = isMethodDeclaration(node) ? createClassMethodDecoratorContextType(thisType, valueType) :
             isGetAccessorDeclaration(node) ? createClassGetterDecoratorContextType(thisType, valueType) :
             isSetAccessorDeclaration(node) ? createClassSetterDecoratorContextType(thisType, valueType) :
@@ -40901,7 +40907,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
         }
         else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
-            return getTypeFromTypeNode((expr as TypeAssertion).type);
+            return getTypeFromTypeNode((expr as TypeAssertionExpression).type);
         }
         else if (isLiteralExpression(node) || isBooleanLiteral(node)) {
             return checkExpression(node);
@@ -42241,7 +42247,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
 
         function reportImplementationExpectedError(node: SignatureDeclaration): void {
-            if (node.name && nodeIsMissing(node.name)) {
+            if (canHaveName(node) && node.name && nodeIsMissing(node.name)) {
                 return;
             }
 
@@ -42258,10 +42264,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In this case the subsequent node is not really consecutive (.pos !== node.end), and we must ignore it here.
             if (subsequentNode && subsequentNode.pos === node.end) {
                 if (subsequentNode.kind === node.kind) {
-                    const errorNode: Node = (subsequentNode as FunctionLikeDeclaration).name || subsequentNode;
-                    const subsequentName = (subsequentNode as FunctionLikeDeclaration).name;
+                    const subsequentName = tryCast(subsequentNode, canHaveName)?.name;
+                    const errorNode: Node = subsequentName ?? subsequentNode;
                     if (
-                        node.name && subsequentName && (
+                        hasName(node) && subsequentName && (
                             // both are private identifiers
                             isPrivateIdentifier(node.name) && isPrivateIdentifier(subsequentName) && node.name.escapedText === subsequentName.escapedText ||
                             // Both are computed property names
@@ -42284,12 +42290,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return;
                     }
                     if (nodeIsPresent((subsequentNode as FunctionLikeDeclaration).body)) {
-                        error(errorNode, Diagnostics.Function_implementation_name_must_be_0, declarationNameToString(node.name));
+                        error(errorNode, Diagnostics.Function_implementation_name_must_be_0, declarationNameToString(canHaveName(node) ? node.name : undefined));
                         return;
                     }
                 }
             }
-            const errorNode: Node = node.name || node;
+            const errorNode: Node = tryCast(node, canHaveName)?.name ?? node;
             if (isConstructor) {
                 error(errorNode, Diagnostics.Constructor_implementation_is_missing);
             }
@@ -42405,7 +42411,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Abstract methods can't have an implementation -- in particular, they don't need one.
         if (
             lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
-            !hasSyntacticModifier(lastSeenNonAmbientDeclaration, ModifierFlags.Abstract) && !lastSeenNonAmbientDeclaration.questionToken
+            !hasSyntacticModifier(lastSeenNonAmbientDeclaration, ModifierFlags.Abstract) &&
+            !(canHaveQuestionToken(lastSeenNonAmbientDeclaration) && lastSeenNonAmbientDeclaration.questionToken)
         ) {
             reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
         }
@@ -44221,7 +44228,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Don't validate for-in initializer as it is already an error
                 const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
                 if (needCheckInitializer) {
-                    const initializerType = checkExpressionCached(node.initializer);
+                    const initializerType = checkExpressionCached(node.initializer!);
                     if (strictNullChecks && needCheckWidenedType) {
                         checkNonNullNonVoidType(initializerType, node);
                     }
@@ -47634,7 +47641,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             const validForTypeAttributes = isExclusivelyTypeOnlyImportOrExport(declaration);
             const override = getResolutionModeOverride(node, validForTypeAttributes ? grammarErrorOnNode : undefined);
-            const isImportAttributes = declaration.attributes.token === SyntaxKind.WithKeyword;
+            const isImportAttributes = node.token === SyntaxKind.WithKeyword;
             if (validForTypeAttributes && override) {
                 return; // Other grammar checks do not apply to type-only imports with resolution mode assertions
             }
@@ -51477,7 +51484,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarForGenerator(node: FunctionLikeDeclaration) {
-        if (node.asteriskToken) {
+        if (hasAsteriskToken(node)) {
             Debug.assert(
                 node.kind === SyntaxKind.FunctionDeclaration ||
                     node.kind === SyntaxKind.FunctionExpression ||

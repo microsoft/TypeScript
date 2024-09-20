@@ -120,6 +120,7 @@ import {
     HasFlowNode,
     hasJSDocNodes,
     HasLocals,
+    hasName,
     hasSyntacticModifier,
     Identifier,
     identifierToKeywordKind,
@@ -1012,7 +1013,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const isImmediatelyInvoked = (
                 containerFlags & ContainerFlags.IsFunctionExpression &&
                 !hasSyntacticModifier(node, ModifierFlags.Async) &&
-                !(node as FunctionLikeDeclaration).asteriskToken &&
+                // TODO(rbuckton): unchecked cast can result in wrong map deopt due to missing `asteriskToken` property
+                !(node as Extract<FunctionLikeDeclaration, { asteriskToken: any }>).asteriskToken &&
                 !!getImmediatelyInvokedFunctionExpression(node)
             ) || node.kind === SyntaxKind.ClassStaticBlockDeclaration;
             // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
@@ -2646,7 +2648,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function checkStrictModeFunctionName(node: FunctionLikeDeclaration) {
         if (inStrictMode && !(node.flags & NodeFlags.Ambient)) {
             // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a strict mode FunctionDeclaration or FunctionExpression (13.1))
-            checkStrictModeEvalOrArguments(node, node.name);
+            checkStrictModeEvalOrArguments(node, isNamedDeclaration(node) ? node.name : undefined); 
         }
     }
 
@@ -3720,7 +3722,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             node.flowNode = currentFlow;
         }
         checkStrictModeFunctionName(node);
-        const bindingName = node.name ? node.name.escapedText : InternalSymbolName.Function;
+        const bindingName = hasName(node) ? node.name.escapedText : InternalSymbolName.Function;
         return bindAnonymousDeclaration(node, SymbolFlags.Function, bindingName);
     }
 

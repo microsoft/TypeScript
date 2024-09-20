@@ -126,7 +126,6 @@ import {
     MethodDeclaration,
     MinusToken,
     Modifier,
-    ModifiersArray,
     ModuleKind,
     ModuleName,
     MultiplicativeOperator,
@@ -463,7 +462,7 @@ function createExpressionForMethodDeclaration(factory: NodeFactory, method: Meth
 
 /** @internal */
 export function createExpressionForObjectLiteralElementLike(factory: NodeFactory, node: ObjectLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression | undefined {
-    if (property.name && isPrivateIdentifier(property.name)) {
+    if (!isSpreadAssignment(property) && property.name && isPrivateIdentifier(property.name)) {
         Debug.failBadSyntaxKind(property.name, "Private identifiers are not allowed in object literals.");
     }
     switch (property.kind) {
@@ -1048,10 +1047,13 @@ export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: B
 
         case SyntaxKind.SpreadAssignment:
             // `a` in `({ ...a } = ...)`
-            if (bindingElement.name && isPrivateIdentifier(bindingElement.name)) {
-                return Debug.failBadSyntaxKind(bindingElement.name);
+            if (isPropertyName(bindingElement.expression)) {
+                if (isPrivateIdentifier(bindingElement.expression)) {
+                    return Debug.failBadSyntaxKind(bindingElement.expression);
+                }
+                return bindingElement.expression;
             }
-            return bindingElement.name;
+            break;
     }
 
     const target = getTargetOfBindingOrAssignmentElement(bindingElement);
@@ -1606,7 +1608,7 @@ export function formatGeneratedName(privateName: boolean, prefix: string | Gener
  *
  * @internal
  */
-export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, initializer: Expression | undefined): PropertyDeclaration {
+export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: NodeArray<Modifier> | undefined, initializer: Expression | undefined): PropertyDeclaration {
     return factory.updatePropertyDeclaration(
         node,
         modifiers,

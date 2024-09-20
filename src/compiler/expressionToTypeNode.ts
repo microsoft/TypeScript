@@ -59,7 +59,7 @@ import {
     SyntacticTypeNodeBuilderContext,
     SyntacticTypeNodeBuilderResolver,
     SyntaxKind,
-    TypeAssertion,
+    TypeAssertionExpression,
     TypeNode,
     TypeParameterDeclaration,
     UnionTypeNode,
@@ -263,7 +263,7 @@ export function createSyntacticTypeNodeBuilder(
                 return typeFromFunctionLikeExpression(node as ArrowFunction | FunctionExpression, context);
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
-                const asExpression = node as AsExpression | TypeAssertion;
+                const asExpression = node as AsExpression | TypeAssertionExpression;
                 return typeFromTypeAssertion(asExpression.expression, asExpression.type, context, requiresAddingUndefined);
             case SyntaxKind.PrefixUnaryExpression:
                 const unaryExpression = node as PrefixUnaryExpression;

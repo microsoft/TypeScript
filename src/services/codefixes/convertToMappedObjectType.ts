@@ -79,7 +79,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { 
         hasEffectiveReadonlyModifier(indexSignature) ? factory.createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
         mappedTypeParameter,
         /*nameType*/ undefined,
-        indexSignature.questionToken,
+        /*questionToken*/ undefined,
         indexSignature.type,
         /*members*/ undefined,
     );

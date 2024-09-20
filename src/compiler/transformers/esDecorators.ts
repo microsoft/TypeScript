@@ -131,7 +131,6 @@ import {
     Modifier,
     ModifierFlags,
     ModifierLike,
-    ModifiersArray,
     moveRangePastDecorators,
     moveRangePastModifiers,
     Node,
@@ -1238,7 +1237,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     >(
         member: TNode,
         classInfo: ClassInfo | undefined,
-        createDescriptor?: (node: TNode & { readonly name: PrivateIdentifier; }, modifiers: ModifiersArray | undefined) => Expression,
+        createDescriptor?: (node: TNode & { readonly name: PrivateIdentifier; }, modifiers: NodeArray<Modifier> | undefined) => Expression,
     ) {
         let referencedName: Expression | undefined;
         let name: PropertyName | undefined;
@@ -2273,7 +2272,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     /**
      * Creates a `value`, `get`, or `set` method for a pseudo-{@link PropertyDescriptor} object created for a private element.
      */
-    function createDescriptorMethod(original: Node, name: PrivateIdentifier, modifiers: ModifiersArray | undefined, asteriskToken: AsteriskToken | undefined, kind: "value" | "get" | "set", parameters: readonly ParameterDeclaration[], body: Block | undefined) {
+    function createDescriptorMethod(original: Node, name: PrivateIdentifier, modifiers: NodeArray<Modifier> | undefined, asteriskToken: AsteriskToken | undefined, kind: "value" | "get" | "set", parameters: readonly ParameterDeclaration[], body: Block | undefined) {
         const func = factory.createFunctionExpression(
             modifiers,
             asteriskToken,
@@ -2300,7 +2299,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     /**
      * Creates a pseudo-{@link PropertyDescriptor} object used when decorating a private {@link MethodDeclaration}.
      */
-    function createMethodDescriptorObject(node: PrivateIdentifierMethodDeclaration, modifiers: ModifiersArray | undefined) {
+    function createMethodDescriptorObject(node: PrivateIdentifierMethodDeclaration, modifiers: NodeArray<Modifier> | undefined) {
         return factory.createObjectLiteralExpression([
             createDescriptorMethod(
                 node,
@@ -2317,7 +2316,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     /**
      * Creates a pseudo-{@link PropertyDescriptor} object used when decorating a private {@link GetAccessorDeclaration}.
      */
-    function createGetAccessorDescriptorObject(node: PrivateIdentifierGetAccessorDeclaration, modifiers: ModifiersArray | undefined) {
+    function createGetAccessorDescriptorObject(node: PrivateIdentifierGetAccessorDeclaration, modifiers: NodeArray<Modifier> | undefined) {
         return factory.createObjectLiteralExpression([
             createDescriptorMethod(
                 node,
@@ -2334,7 +2333,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     /**
      * Creates a pseudo-{@link PropertyDescriptor} object used when decorating a private {@link SetAccessorDeclaration}.
      */
-    function createSetAccessorDescriptorObject(node: PrivateIdentifierSetAccessorDeclaration, modifiers: ModifiersArray | undefined) {
+    function createSetAccessorDescriptorObject(node: PrivateIdentifierSetAccessorDeclaration, modifiers: NodeArray<Modifier> | undefined) {
         return factory.createObjectLiteralExpression([
             createDescriptorMethod(
                 node,
@@ -2351,7 +2350,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     /**
      * Creates a pseudo-{@link PropertyDescriptor} object used when decorating an `accessor` {@link PropertyDeclaration} with a private name.
      */
-    function createAccessorPropertyDescriptorObject(node: PrivateIdentifierPropertyDeclaration, modifiers: ModifiersArray | undefined) {
+    function createAccessorPropertyDescriptorObject(node: PrivateIdentifierPropertyDeclaration, modifiers: NodeArray<Modifier> | undefined) {
         //  {
         //      get() { return this.${privateName}; },
         //      set(value) { this.${privateName} = value; },
@@ -2406,7 +2405,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
      * @param name The name for the resulting declaration.
      * @param descriptorName The name of the descriptor variable.
      */
-    function createMethodDescriptorForwarder(modifiers: ModifiersArray | undefined, name: PropertyName, descriptorName: Identifier) {
+    function createMethodDescriptorForwarder(modifiers: NodeArray<Modifier> | undefined, name: PropertyName, descriptorName: Identifier) {
         // strip off all but the `static` modifier
         modifiers = visitNodes(modifiers, node => isStaticModifier(node) ? node : undefined, isModifier);
         return factory.createGetAccessorDeclaration(
@@ -2431,7 +2430,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
      * @param name The name for the resulting declaration.
      * @param descriptorName The name of the descriptor variable.
      */
-    function createGetAccessorDescriptorForwarder(modifiers: ModifiersArray | undefined, name: PropertyName, descriptorName: Identifier) {
+    function createGetAccessorDescriptorForwarder(modifiers: NodeArray<Modifier> | undefined, name: PropertyName, descriptorName: Identifier) {
         // strip off all but the `static` modifier
         modifiers = visitNodes(modifiers, node => isStaticModifier(node) ? node : undefined, isModifier);
         return factory.createGetAccessorDeclaration(
@@ -2460,7 +2459,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
      * @param name The name for the resulting declaration.
      * @param descriptorName The name of the descriptor variable.
      */
-    function createSetAccessorDescriptorForwarder(modifiers: ModifiersArray | undefined, name: PropertyName, descriptorName: Identifier) {
+    function createSetAccessorDescriptorForwarder(modifiers: NodeArray<Modifier> | undefined, name: PropertyName, descriptorName: Identifier) {
         // strip off all but the `static` modifier
         modifiers = visitNodes(modifiers, node => isStaticModifier(node) ? node : undefined, isModifier);
         return factory.createSetAccessorDeclaration(

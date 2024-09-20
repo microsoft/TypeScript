@@ -101,7 +101,7 @@ import {
     TaggedTemplateExpression,
     TextRange,
     TextSpan,
-    TypeAssertion,
+    TypeAssertionExpression,
     TypeChecker,
     usingSingleLineStringWriter,
     VariableDeclaration,
@@ -538,7 +538,7 @@ function createCallSiteCollector(program: Program, callSites: CallSite[]): (node
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
                 // do not descend into the type side of an assertion
-                collect((node as TypeAssertion | AsExpression).expression);
+                collect((node as TypeAssertionExpression | AsExpression).expression);
                 return;
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.Parameter:

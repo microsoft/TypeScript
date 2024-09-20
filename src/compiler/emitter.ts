@@ -401,7 +401,7 @@ import {
     TryStatement,
     TupleTypeNode,
     TypeAliasDeclaration,
-    TypeAssertion,
+    TypeAssertionExpression,
     TypeLiteralNode,
     TypeNode,
     TypeOfExpression,
@@ -1935,7 +1935,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 case SyntaxKind.TaggedTemplateExpression:
                     return emitTaggedTemplateExpression(node as TaggedTemplateExpression);
                 case SyntaxKind.TypeAssertionExpression:
-                    return emitTypeAssertionExpression(node as TypeAssertion);
+                    return emitTypeAssertionExpression(node as TypeAssertionExpression);
                 case SyntaxKind.ParenthesizedExpression:
                     return emitParenthesizedExpression(node as ParenthesizedExpression);
                 case SyntaxKind.FunctionExpression:
@@ -2718,7 +2718,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitExpression(node.template);
     }
 
-    function emitTypeAssertionExpression(node: TypeAssertion) {
+    function emitTypeAssertionExpression(node: TypeAssertionExpression) {
         writePunctuation("<");
         emit(node.type);
         writePunctuation(">");

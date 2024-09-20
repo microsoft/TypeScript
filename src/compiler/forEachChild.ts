@@ -162,7 +162,7 @@ import {
     TryStatement,
     TupleTypeNode,
     TypeAliasDeclaration,
-    TypeAssertion,
+    TypeAssertionExpression,
     TypeLiteralNode,
     TypeOfExpression,
     TypeOperatorNode,
@@ -307,7 +307,6 @@ const forEachChildTable: ForEachChildTable = {
     },
     [SyntaxKind.Constructor]: function forEachChildInConstructor<T>(node: ConstructorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
             visitNode(cbNode, node.type) ||
@@ -450,7 +449,7 @@ const forEachChildTable: ForEachChildTable = {
             visitNodes(cbNode, cbNodes, node.typeArguments) ||
             visitNode(cbNode, node.template);
     },
-    [SyntaxKind.TypeAssertionExpression]: function forEachChildInTypeAssertionExpression<T>(node: TypeAssertion, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.TypeAssertionExpression]: function forEachChildInTypeAssertionExpression<T>(node: TypeAssertionExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.type) ||
             visitNode(cbNode, node.expression);
     },

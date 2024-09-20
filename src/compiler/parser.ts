@@ -1,4 +1,8 @@
 import {
+    addRange,
+    addRelatedInfo,
+    append,
+    AssertionLevel,
     AstAccessorDeclaration,
     AstArrayBindingElement,
     AstArrayBindingPattern,
@@ -17,6 +21,7 @@ import {
     AstBooleanLiteral,
     AstBreakOrContinueStatement,
     AstCallSignatureDeclaration,
+    astCanHaveModifiers,
     AstCaseBlock,
     AstCaseClause,
     AstCaseOrDefaultClause,
@@ -46,6 +51,7 @@ import {
     AstExpression,
     AstExpressionStatement,
     AstExpressionWithTypeArguments,
+    astForEachChild,
     AstForInitializer,
     AstForInOrOfStatement,
     AstForStatement,
@@ -53,6 +59,8 @@ import {
     AstFunctionExpression,
     AstFunctionOrConstructorTypeNode,
     AstHasJSDoc,
+    astHasJSDocNodes,
+    AstHasModifiers,
     AstHeritageClause,
     AstIdentifier,
     AstIfStatement,
@@ -67,6 +75,7 @@ import {
     AstInferTypeNode,
     AstInterfaceDeclaration,
     AstIterationStatement,
+    AstJSDoc,
     AstJSDocAllType,
     AstJSDocAugmentsTag,
     AstJSDocAuthorTag,
@@ -80,7 +89,6 @@ import {
     AstJSDocMemberName,
     AstJSDocNameReference,
     AstJSDocNamespaceDeclaration,
-    AstJSDoc,
     AstJSDocNullableType,
     AstJSDocOptionalType,
     AstJSDocOverloadTag,
@@ -213,47 +221,8 @@ import {
     AstWhileStatement,
     AstWithStatement,
     AstYieldExpression,
-    createAstNodeFactory,
-    astHasJSDocNodes,
-    isAstAsyncModifier,
-    isAstDeclareKeyword,
-    isAstExportModifier,
-    isAstExpressionWithTypeArguments,
-    isAstFunctionTypeNode,
-    isAstIdentifier,
-    isAstJSDocFunctionType,
-    isAstJSDocNullableType,
-    isAstJSDocReturnTag,
-    isAstJSDocTypeTag,
-    isAstJsxNamespacedName,
-    isAstJsxOpeningElement,
-    isAstJsxOpeningFragment,
-    isAstLeftHandSideExpression,
-    isAstNonNullExpression,
-    isAstPrivateIdentifier,
-    isAstSetAccessorDeclaration,
-    isAstStringOrNumericLiteralLike,
-    isAstTaggedTemplateExpression,
-    isAstTypeReferenceNode,
-    astForEachChild,
-    isAstMetaProperty,
-    astCanHaveModifiers,
-    AstHasModifiers,
-    isAstImportEqualsDeclaration,
-    isAstImportDeclaration,
-    isAstExportAssignment,
-    isAstExportDeclaration,
-    isAstExternalModuleReference,
-} from "./_namespaces/ts.ast.js";
-import {
-    addRange,
-    addRelatedInfo,
-    append,
-    AssertionLevel,
-    ast,
     attachFileToDiagnostics,
     canHaveJSDoc,
-    canHaveModifiers,
     CharacterCodes,
     CommentDirective,
     commentPragmas,
@@ -261,6 +230,7 @@ import {
     concatenate,
     containsParseError,
     convertToJson,
+    createAstNodeFactory,
     createDetachedDiagnostic,
     createNodeFactory,
     createScanner,
@@ -281,7 +251,6 @@ import {
     findIndex,
     firstOrUndefined,
     forEach,
-    forEachChild,
     getAnyExtensionFromPath,
     getBaseFileName,
     getBinaryOperatorPrecedence,
@@ -292,21 +261,40 @@ import {
     getLeadingCommentRanges,
     getSpellingSuggestion,
     getTextOfNodeFromSourceText,
-    HasModifiers,
     identity,
     isArray,
     isAssignmentOperator,
+    isAstAsyncModifier,
+    isAstDeclareKeyword,
+    isAstExportAssignment,
+    isAstExportDeclaration,
+    isAstExportModifier,
+    isAstExpressionWithTypeArguments,
+    isAstExternalModuleReference,
+    isAstFunctionTypeNode,
+    isAstIdentifier,
+    isAstImportDeclaration,
+    isAstImportEqualsDeclaration,
+    isAstJSDocFunctionType,
+    isAstJSDocNullableType,
+    isAstJSDocReturnTag,
+    isAstJSDocTypeTag,
+    isAstJsxNamespacedName,
+    isAstJsxOpeningElement,
+    isAstJsxOpeningFragment,
+    isAstLeftHandSideExpression,
+    isAstMetaProperty,
+    isAstNonNullExpression,
+    isAstPrivateIdentifier,
+    isAstSetAccessorDeclaration,
+    isAstStringOrNumericLiteralLike,
+    isAstTaggedTemplateExpression,
+    isAstTypeReferenceNode,
     isClassMemberModifier,
-    isExportAssignment,
-    isExportDeclaration,
-    isExternalModuleReference,
     isIdentifierText,
-    isImportDeclaration,
-    isImportEqualsDeclaration,
     isKeyword,
     isKeywordOrPunctuation,
     isLiteralKind,
-    isMetaProperty,
     isModifierKind,
     isTemplateLiteralKind,
     JSDoc,
@@ -325,7 +313,6 @@ import {
     ModuleKind,
     Mutable,
     Node,
-    NodeArray,
     NodeFactory,
     NodeFactoryFlags,
     NodeFlags,
@@ -411,7 +398,7 @@ export function isFileProbablyExternalModule(sourceFile: SourceFile): Node | und
     // Try to use the first top-level import/export when available, then
     // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
     // TODO(rbuckton): do not instantiate .node
-    return forEach((sourceFile as AstSourceFile["node"]).ast.data.statements.items, isAnExternalModuleIndicatorNode)?.node ||
+    return forEach(sourceFile.ast.data.statements.items, isAnExternalModuleIndicatorNode)?.node ||
         getImportMetaIfNecessary(sourceFile)?.node;
 }
 
@@ -425,7 +412,7 @@ function isAnExternalModuleIndicatorNode(node: AstNode) {
 
 function getImportMetaIfNecessary(sourceFile: SourceFile) {
     return sourceFile.flags & NodeFlags.PossiblyContainsImportMeta ?
-        walkTreeForImportMeta((sourceFile as AstSourceFile["node"]).ast) :
+        walkTreeForImportMeta(sourceFile.ast) :
         undefined;
 }
 
@@ -521,7 +508,7 @@ export function isExternalModule(file: SourceFile): boolean {
 // becoming detached from any SourceFile).  It is recommended that this SourceFile not
 // be used once 'update' is called on it.
 export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks = false): SourceFile {
-    const newSourceFile = IncrementalParser.updateSourceFile((sourceFile as AstSourceFile["node"]).ast, newText, textChangeRange, aggressiveChecks);
+    const newSourceFile = IncrementalParser.updateSourceFile(sourceFile.ast, newText, textChangeRange, aggressiveChecks);
     // Because new source file node is created, it may not have the flag PossiblyContainDynamicImport. This is the case if there is no new edit to add dynamic import.
     // We will manually port the flag to the new source file.
     newSourceFile.flags |= sourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags;
@@ -540,7 +527,7 @@ export function parseIsolatedJSDocComment(content: string, start?: number, lengt
     if (result && result.jsDoc) {
         // because the jsDocComment was parsed out of the source file, it might
         // not be covered by the fixupParentReferences.
-        Parser.fixupParentReferences((result.jsDoc as AstJSDoc["node"]).ast);
+        Parser.fixupParentReferences(result.jsDoc.ast);
     }
 
     return result;
@@ -9173,7 +9160,7 @@ namespace IncrementalParser {
             astForEachChild(node, visitNode, visitArray);
             if (astHasJSDocNodes(node)) {
                 for (const jsDocComment of node.data.jsDoc!) {
-                    visitNode((jsDocComment as AstJSDoc["node"]).ast); // TODO(rbuckton): have JSDocArray store AstJSDoc entries
+                    visitNode(jsDocComment.ast); // TODO(rbuckton): have JSDocArray store AstJSDoc entries
                 }
             }
             checkNodePositions(node, aggressiveChecks);
@@ -9283,7 +9270,7 @@ namespace IncrementalParser {
             };
             if (astHasJSDocNodes(node)) {
                 for (const jsDocComment of node.data.jsDoc!) {
-                    visitNode((jsDocComment as AstJSDoc["node"]).ast); // TODO(rbuckton): have JSDocArray store AstJSDoc entries
+                    visitNode(jsDocComment.ast); // TODO(rbuckton): have JSDocArray store AstJSDoc entries
                 }
             }
             astForEachChild(node, visitNode);
@@ -9326,7 +9313,7 @@ namespace IncrementalParser {
                 astForEachChild(child, visitNode, visitArray);
                 if (astHasJSDocNodes(child)) {
                     for (const jsDocComment of child.data.jsDoc!) {
-                        visitNode((jsDocComment as AstJSDoc["node"]).ast);
+                        visitNode(jsDocComment.ast);
                     }
                 }
                 checkNodePositions(child, aggressiveChecks);
@@ -9417,7 +9404,7 @@ namespace IncrementalParser {
             while (true) {
                 const lastChild = getLastChild(node.node); // TODO(rbuckton): do not instantiate .node
                 if (lastChild) {
-                    node = (lastChild as AstNode["node"]).ast;
+                    node = lastChild.ast;
                 }
                 else {
                     return node;
@@ -9858,9 +9845,9 @@ function getNamedPragmaArguments(pragma: PragmaDefinition, text: string | undefi
 }
 
 /** @internal */
-export function tagNamesAreEquivalent(lhs: JsxTagNameExpression | ast.AstJsxTagNameExpression, rhs: JsxTagNameExpression | ast.AstJsxTagNameExpression): boolean {
-    if (!(lhs instanceof AstNode)) lhs = (lhs as AstJsxTagNameExpression["node"]).ast;
-    if (!(rhs instanceof AstNode)) rhs = (rhs as AstJsxTagNameExpression["node"]).ast;
+export function tagNamesAreEquivalent(lhs: JsxTagNameExpression | AstJsxTagNameExpression, rhs: JsxTagNameExpression | AstJsxTagNameExpression): boolean {
+    if (!(lhs instanceof AstNode)) lhs = lhs.ast;
+    if (!(rhs instanceof AstNode)) rhs = rhs.ast;
     if (lhs.kind !== rhs.kind) {
         return false;
     }

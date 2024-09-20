@@ -37,6 +37,7 @@ import {
     getTextOfPropertyName,
     getTouchingPropertyName,
     getTouchingToken,
+    hasAsteriskToken,
     hasEffectiveModifier,
     hasInitializer,
     hasStaticModifier,
@@ -167,7 +168,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
 
     if (node.kind === SyntaxKind.YieldKeyword) {
         const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n));
-        const isGeneratorFunction = functionDeclaration && functionDeclaration.asteriskToken;
+        const isGeneratorFunction = functionDeclaration && hasAsteriskToken(functionDeclaration);
         return isGeneratorFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
     }
 

@@ -138,7 +138,7 @@ export const enum ImportExport {
 }
 
 interface AmbientModuleDeclaration extends ModuleDeclaration {
-    body?: ModuleBlock;
+    body: ModuleBlock | undefined;
 }
 type SourceFileLike = SourceFile | AmbientModuleDeclaration;
 // Identifier for the case of `const x = require("y")`.

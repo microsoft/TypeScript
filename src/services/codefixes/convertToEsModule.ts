@@ -9,6 +9,7 @@ import {
     BinaryExpression,
     BindingElement,
     BindingName,
+    canHaveAsteriskToken,
     ClassDeclaration,
     ClassExpression,
     concatenate,
@@ -35,6 +36,7 @@ import {
     getSynthesizedDeepClones,
     getSynthesizedDeepClonesWithReplacements,
     getSynthesizedDeepCloneWithReplacements,
+    hasName,
     Identifier,
     ImportDeclaration,
     importFromModuleSpecifier,
@@ -77,6 +79,7 @@ import {
     SymbolFlags,
     SyntaxKind,
     textChanges,
+    tryCast,
     TypeChecker,
     VariableStatement,
 } from "../_namespaces/ts.js";
@@ -411,11 +414,11 @@ function reExportDefault(moduleSpecifier: string): ExportDeclaration {
 
 function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression; }, sourceFile: SourceFile, changes: textChanges.ChangeTracker): void {
     const name = left.name.text;
-    if ((isFunctionExpression(right) || isArrowFunction(right) || isClassExpression(right)) && (!right.name || right.name.text === name)) {
+    if ((isFunctionExpression(right) || isArrowFunction(right) || isClassExpression(right)) && (!hasName(right) || right.name.text === name)) {
         // `exports.f = function() {}` -> `export function f() {}` -- Replace `exports.f = ` with `export `, and insert the name after `function`.
         changes.replaceRange(sourceFile, { pos: left.getStart(sourceFile), end: right.getStart(sourceFile) }, factory.createToken(SyntaxKind.ExportKeyword), { suffix: " " });
 
-        if (!right.name) changes.insertName(sourceFile, right, name);
+        if (!hasName(right)) changes.insertName(sourceFile, right, name);
 
         const semi = findChildOfKind(parent, SyntaxKind.SemicolonToken, sourceFile);
         if (semi) changes.delete(sourceFile, semi);
@@ -631,7 +634,7 @@ function isFreeIdentifier(node: Identifier): boolean {
 function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], fn: FunctionExpression | ArrowFunction | MethodDeclaration, useSitesToUnqualify: Map<Node, Node> | undefined): FunctionDeclaration {
     return factory.createFunctionDeclaration(
         concatenate(additionalModifiers, getSynthesizedDeepClones(fn.modifiers)),
-        getSynthesizedDeepClone(fn.asteriskToken),
+        getSynthesizedDeepClone(tryCast(fn, canHaveAsteriskToken)?.asteriskToken),
         name,
         getSynthesizedDeepClones(fn.typeParameters),
         getSynthesizedDeepClones(fn.parameters),

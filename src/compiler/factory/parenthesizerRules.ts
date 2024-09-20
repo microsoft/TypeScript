@@ -1,36 +1,21 @@
 import {
-    ast,
     BinaryOperator,
-    CallChain,
     cast,
-    ClassElement,
     ConciseBody,
-    ElementAccessChain,
     Expression,
     identity,
     isLeftHandSideExpression,
     isNodeArray,
     isUnaryExpression,
-    JSDocClassReference,
-    JSDocNamespaceDeclaration,
-    JSDocPropertyLikeTag,
-    JsxNamespacedName,
     LeftHandSideExpression,
-    LiteralExpression,
-    ModuleBody,
     NamedTupleMember,
     Node,
     NodeArray,
     NodeFactory,
-    NonNullChain,
-    ObjectLiteralElement,
     ParenthesizerRules,
-    PropertyAccessChain,
-    Statement,
     SyntaxKind,
-    TypeElement,
     TypeNode,
-    UnaryExpression,
+    UnaryExpression
 } from "../_namespaces/ts.js";
 
 /** @internal */
@@ -94,43 +79,43 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     }
 
     function parenthesizeLeftSideOfBinary(binaryOperator: SyntaxKind, leftSide: Expression): Expression {
-        return astRules.parenthesizeLeftSideOfBinary(binaryOperator, asNode(leftSide).ast).node;
+        return astRules.parenthesizeLeftSideOfBinary(binaryOperator, leftSide.ast).node;
     }
 
     function parenthesizeRightSideOfBinary(binaryOperator: SyntaxKind, leftSide: Expression | undefined, rightSide: Expression): Expression {
-        return astRules.parenthesizeRightSideOfBinary(binaryOperator, asNode(leftSide)?.ast, asNode(rightSide).ast).node;
+        return astRules.parenthesizeRightSideOfBinary(binaryOperator, leftSide?.ast, rightSide.ast).node;
     }
 
     function parenthesizeExpressionOfComputedPropertyName(expression: Expression): Expression {
-        return astRules.parenthesizeExpressionOfComputedPropertyName(asNode(expression).ast).node;
+        return astRules.parenthesizeExpressionOfComputedPropertyName(expression.ast).node;
     }
 
     function parenthesizeConditionOfConditionalExpression(condition: Expression): Expression {
-        return astRules.parenthesizeConditionOfConditionalExpression(asNode(condition).ast).node;
+        return astRules.parenthesizeConditionOfConditionalExpression(condition.ast).node;
     }
 
     function parenthesizeBranchOfConditionalExpression(branch: Expression): Expression {
-        return astRules.parenthesizeBranchOfConditionalExpression(asNode(branch).ast).node;
+        return astRules.parenthesizeBranchOfConditionalExpression(branch.ast).node;
     }
 
     function parenthesizeExpressionOfExportDefault(expression: Expression): Expression {
-        return astRules.parenthesizeExpressionOfExportDefault(asNode(expression).ast).node;
+        return astRules.parenthesizeExpressionOfExportDefault(expression.ast).node;
     }
 
     function parenthesizeExpressionOfNew(expression: Expression): LeftHandSideExpression {
-        return astRules.parenthesizeExpressionOfNew(asNode(expression).ast).node;
+        return astRules.parenthesizeExpressionOfNew(expression.ast).node;
     }
 
     function parenthesizeLeftSideOfAccess(expression: Expression, optionalChain?: boolean): LeftHandSideExpression {
-        return astRules.parenthesizeLeftSideOfAccess(asNode(expression).ast, optionalChain).node;
+        return astRules.parenthesizeLeftSideOfAccess(expression.ast, optionalChain).node;
     }
 
     function parenthesizeOperandOfPostfixUnary(operand: Expression): LeftHandSideExpression {
-        return astRules.parenthesizeOperandOfPostfixUnary(asNode(operand).ast).node;
+        return astRules.parenthesizeOperandOfPostfixUnary(operand.ast).node;
     }
 
     function parenthesizeOperandOfPrefixUnary(operand: Expression): UnaryExpression {
-        return astRules.parenthesizeOperandOfPrefixUnary(asNode(operand).ast).node;
+        return astRules.parenthesizeOperandOfPrefixUnary(operand.ast).node;
     }
 
     function parenthesizeExpressionsOfCommaDelimitedList(elements: NodeArray<Expression>): NodeArray<Expression> {
@@ -138,29 +123,29 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     }
 
     function parenthesizeExpressionForDisallowedComma(expression: Expression): Expression {
-        return astRules.parenthesizeExpressionForDisallowedComma(asNode(expression).ast).node;
+        return astRules.parenthesizeExpressionForDisallowedComma(expression.ast).node;
     }
 
     function parenthesizeExpressionOfExpressionStatement(expression: Expression): Expression {
-        return astRules.parenthesizeExpressionOfExpressionStatement(asNode(expression).ast).node;
+        return astRules.parenthesizeExpressionOfExpressionStatement(expression.ast).node;
     }
 
     function parenthesizeConciseBodyOfArrowFunction(body: Expression): Expression;
     function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody;
     function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody {
-        return astRules.parenthesizeConciseBodyOfArrowFunction(asNode(body).ast).node;
+        return astRules.parenthesizeConciseBodyOfArrowFunction(body.ast).node;
     }
 
     function parenthesizeCheckTypeOfConditionalType(checkType: TypeNode): TypeNode {
-        return astRules.parenthesizeCheckTypeOfConditionalType(asNode(checkType).ast).node;
+        return astRules.parenthesizeCheckTypeOfConditionalType(checkType.ast).node;
     }
 
     function parenthesizeExtendsTypeOfConditionalType(extendsType: TypeNode): TypeNode {
-        return astRules.parenthesizeExtendsTypeOfConditionalType(asNode(extendsType).ast).node;
+        return astRules.parenthesizeExtendsTypeOfConditionalType(extendsType.ast).node;
     }
 
     function parenthesizeConstituentTypeOfUnionType(type: TypeNode): TypeNode {
-        return astRules.parenthesizeConstituentTypeOfUnionType(asNode(type).ast).node;
+        return astRules.parenthesizeConstituentTypeOfUnionType(type.ast).node;
     }
 
     function parenthesizeConstituentTypesOfUnionType(members: readonly TypeNode[]): NodeArray<TypeNode> {
@@ -168,7 +153,7 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     }
 
     function parenthesizeConstituentTypeOfIntersectionType(type: TypeNode): TypeNode {
-        return astRules.parenthesizeConstituentTypeOfIntersectionType(asNode(type).ast).node;
+        return astRules.parenthesizeConstituentTypeOfIntersectionType(type.ast).node;
     }
 
     function parenthesizeConstituentTypesOfIntersectionType(members: readonly TypeNode[]): NodeArray<TypeNode> {
@@ -176,15 +161,15 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     }
 
     function parenthesizeOperandOfTypeOperator(type: TypeNode) {
-        return astRules.parenthesizeOperandOfTypeOperator(asNode(type).ast).node;
+        return astRules.parenthesizeOperandOfTypeOperator(type.ast).node;
     }
 
     function parenthesizeOperandOfReadonlyTypeOperator(type: TypeNode) {
-        return astRules.parenthesizeOperandOfReadonlyTypeOperator(asNode(type).ast).node;
+        return astRules.parenthesizeOperandOfReadonlyTypeOperator(type.ast).node;
     }
 
     function parenthesizeNonArrayTypeOfPostfixType(type: TypeNode) {
-        return astRules.parenthesizeNonArrayTypeOfPostfixType(asNode(type).ast).node;
+        return astRules.parenthesizeNonArrayTypeOfPostfixType(type.ast).node;
     }
 
     function parenthesizeElementTypesOfTupleType(types: readonly (TypeNode | NamedTupleMember)[]): NodeArray<TypeNode> {
@@ -192,49 +177,25 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     }
 
     function parenthesizeElementTypeOfTupleType(type: TypeNode | NamedTupleMember): TypeNode {
-        return astRules.parenthesizeElementTypeOfTupleType(asNode(type).ast).node;
+        return astRules.parenthesizeElementTypeOfTupleType(type.ast).node;
     }
 
     function parenthesizeTypeOfOptionalType(type: TypeNode): TypeNode {
-        return astRules.parenthesizeTypeOfOptionalType(asNode(type).ast).node;
+        return astRules.parenthesizeTypeOfOptionalType(type.ast).node;
     }
 
     function parenthesizeLeadingTypeArgument(node: TypeNode) {
-        return astRules.parenthesizeLeadingTypeArgument(asNode(node).ast).node;
+        return astRules.parenthesizeLeadingTypeArgument(node.ast).node;
     }
 
     function parenthesizeTypeArguments(typeArguments: NodeArray<TypeNode> | undefined): NodeArray<TypeNode> | undefined {
         return astRules.parenthesizeTypeArguments(asNodeArray(typeArguments)?.ast)?.nodes;
     }
 
-    type ToNode<T extends Node> = Expression extends T ? ast.Expression :
-        Statement extends T ? ast.Statement :
-        TypeNode extends T ? ast.TypeNode :
-        TypeElement extends T ? ast.TypeElement :
-        ClassElement extends T ? ast.ClassElement :
-        ObjectLiteralElement extends T ? ast.ObjectLiteralElement :
-        PropertyAccessChain extends T ? ast.PropertyAccessChain :
-        ElementAccessChain extends T ? ast.ElementAccessChain :
-        CallChain extends T ? ast.CallChain :
-        NonNullChain extends T ? ast.NonNullChain :
-        ModuleBody extends T ? ast.ModuleBody :
-        LiteralExpression extends T ? ast.LiteralExpression :
-        JSDocNamespaceDeclaration extends T ? ast.JSDocNamespaceDeclaration :
-        JSDocPropertyLikeTag extends T ? ast.JSDocPropertyLikeTag :
-        JSDocClassReference extends T ? ast.JSDocClassReference :
-        JsxNamespacedName extends T ? ast.JsxNamespacedName :
-        ast.NodeType[T["kind"]];
-
-    function asNode<T extends Node>(node: T): ToNode<T>;
-    function asNode<T extends Node>(node: T | undefined): ToNode<T> | undefined;
-    function asNode(node: Node | undefined): ast.Node | undefined {
-        return node as ast.Node | undefined;
-    }
-
-    function asNodeArray<T extends Node>(array: readonly T[]): ast.NodeArray<ToNode<T>>;
-    function asNodeArray<T extends Node>(array: readonly T[] | undefined): ast.NodeArray<ToNode<T>> | undefined;
-    function asNodeArray(array: readonly Node[] | undefined): ast.NodeArray<ast.Node> | undefined {
-        return array ? factory.createNodeArray(array) as ast.NodeArray<ast.Node> : undefined;
+    function asNodeArray<T extends Node>(array: readonly T[]): NodeArray<T>;
+    function asNodeArray<T extends Node>(array: readonly T[] | undefined): NodeArray<T> | undefined;
+    function asNodeArray(array: readonly Node[] | undefined): NodeArray<Node> | undefined {
+        return array ? factory.createNodeArray(array) : undefined;
     }
 }
 

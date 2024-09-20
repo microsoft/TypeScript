@@ -1,4 +1,3 @@
-import * as ast from "../_namespaces/ts.ast.js";
 import {
     AccessorDeclaration,
     addRange,
@@ -15,6 +14,7 @@ import {
     AssertionKey,
     AssertsKeyword,
     AsteriskToken,
+    AstNodeArray,
     AwaitExpression,
     AwaitKeyword,
     BigIntLiteral,
@@ -24,6 +24,7 @@ import {
     BindingElement,
     BindingName,
     Block,
+    BooleanLiteral,
     BreakStatement,
     Bundle,
     CallBinding,
@@ -48,6 +49,7 @@ import {
     ConstructorTypeNode,
     ConstructSignatureDeclaration,
     ContinueStatement,
+    createAstNodeFactory,
     createNodeConverters,
     createParenthesizerRules,
     Debug,
@@ -245,7 +247,6 @@ import {
     KeywordTypeSyntaxKind,
     LabeledStatement,
     LeftHandSideExpression,
-    LiteralExpression,
     LiteralToken,
     LiteralTypeNode,
     MappedTypeNode,
@@ -292,7 +293,6 @@ import {
     NumericLiteral,
     objectAllocator,
     ObjectBindingPattern,
-    ObjectLiteralElement,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     OmittedExpression,
@@ -382,7 +382,7 @@ import {
     TupleTypeNode,
     Type,
     TypeAliasDeclaration,
-    TypeAssertion,
+    TypeAssertionExpression,
     TypeElement,
     TypeLiteralNode,
     TypeNode,
@@ -436,7 +436,7 @@ export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void): void 
  * @internal
  */
 export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node: Node) => void): NodeFactory {
-    const astFactory = ast.createAstNodeFactory(flags, onFinishNode && (ast => onFinishNode(ast.node)));
+    const astFactory = createAstNodeFactory(flags, onFinishNode && (ast => onFinishNode(ast.node)));
 
     // Lazily load the parenthesizer, node converters, and some factory methods until they are used.
     const parenthesizerRules = memoize(() => flags & NodeFactoryFlags.NoParenthesizerRules ? nullParenthesizerRules : createParenthesizerRules(factory));
@@ -1023,11 +1023,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T> {
-        if (elements instanceof ast.NodeArray) {
+        if (elements instanceof NodeArray) {
             return elements;
         }
 
-        return new ast.AstNodeArray(elements?.map(element => (element as Node as ast.Node).ast) ?? [], hasTrailingComma).nodes as readonly Node[] as NodeArray<T>;
+        return new AstNodeArray(elements?.map(element => element.ast) ?? [], hasTrailingComma).nodes as NodeArray<T>;
     }
 
     //
@@ -1052,7 +1052,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
     // @api
     function createStringLiteralFromNode(sourceNode: PropertyNameLiteral | PrivateIdentifier): StringLiteral {
         const node = astFactory.createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode), /*isSingleQuote*/ undefined).node;
-        node.textSourceNode = sourceNode as ast.PropertyNameLiteral | ast.PrivateIdentifier;
+        node.textSourceNode = sourceNode;
         return node;
     }
 
@@ -1264,22 +1264,22 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createQualifiedName(left: EntityName, right: string | Identifier): QualifiedName {
-        return astFactory.createQualifiedName(asNode(left).ast, typeof right === "string" ? right : asNode(right).ast).node;
+        return astFactory.createQualifiedName(left.ast, typeof right === "string" ? right : right.ast).node;
     }
 
     // @api
     function updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier): QualifiedName {
-        return astFactory.updateQualifiedName(asNode(node).ast, asNode(left).ast, asNode(right).ast).node;
+        return astFactory.updateQualifiedName(node.ast, left.ast, right.ast).node;
     }
 
     // @api
     function createComputedPropertyName(expression: Expression): ComputedPropertyName {
-        return astFactory.createComputedPropertyName(asNode(expression).ast).node;
+        return astFactory.createComputedPropertyName(expression.ast).node;
     }
 
     // @api
     function updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName {
-        return astFactory.updateComputedPropertyName(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateComputedPropertyName(node.ast, expression.ast).node;
     }
 
     //
@@ -1288,12 +1288,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration {
-        return astFactory.createTypeParameterDeclaration(asNodeArray(modifiers)?.ast, asName(name).ast, asNode(constraint)?.ast, asNode(defaultType)?.ast).node;
+        return astFactory.createTypeParameterDeclaration(asNodeArray(modifiers)?.ast, asName(name).ast, constraint?.ast, defaultType?.ast).node;
     }
 
     // @api
     function updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration {
-        return astFactory.updateTypeParameterDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(name).ast, asNode(constraint)?.ast, asNode(defaultType)?.ast).node;
+        return astFactory.updateTypeParameterDeclaration(node.ast, asNodeArray(modifiers)?.ast, name.ast, constraint?.ast, defaultType?.ast).node;
     }
 
     // @api
@@ -1306,7 +1306,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         initializer?: Expression,
     ): ParameterDeclaration {
         // NOTE: JSDoc parameters don't have names and we currently passed `undefined!`
-        return astFactory.createParameterDeclaration(asNodeArray(modifiers)?.ast, asNode(dotDotDotToken)?.ast, asName(name)?.ast, asNode(questionToken)?.ast, asNode(type)?.ast, asNode(initializer)?.ast).node;
+        return astFactory.createParameterDeclaration(asNodeArray(modifiers)?.ast, dotDotDotToken?.ast, asName(name)?.ast, questionToken?.ast, type?.ast, initializer?.ast).node;
     }
 
     // @api
@@ -1319,17 +1319,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         type: TypeNode | undefined,
         initializer: Expression | undefined,
     ): ParameterDeclaration {
-        return astFactory.updateParameterDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(dotDotDotToken)?.ast, asName(name)?.ast, asNode(questionToken)?.ast, asNode(type)?.ast, asNode(initializer)?.ast).node;
+        return astFactory.updateParameterDeclaration(node.ast, asNodeArray(modifiers)?.ast, dotDotDotToken?.ast, asName(name)?.ast, questionToken?.ast, type?.ast, initializer?.ast).node;
     }
 
     // @api
     function createDecorator(expression: Expression): Decorator {
-        return astFactory.createDecorator(asNode(expression).ast).node;
+        return astFactory.createDecorator(expression.ast).node;
     }
 
     // @api
     function updateDecorator(node: Decorator, expression: Expression): Decorator {
-        return astFactory.updateDecorator((node as ast.Decorator).ast, asNode(expression).ast).node;
+        return astFactory.updateDecorator(node.ast, expression.ast).node;
     }
 
     //
@@ -1343,7 +1343,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         questionToken: QuestionToken | undefined,
         type: TypeNode | undefined,
     ): PropertySignature {
-        return astFactory.createPropertySignature(asNodeArray(modifiers)?.ast, asName(name).ast, asNode(questionToken)?.ast, asNode(type)?.ast).node;
+        return astFactory.createPropertySignature(asNodeArray(modifiers)?.ast, asName(name).ast, questionToken?.ast, type?.ast).node;
     }
 
     // @api
@@ -1354,7 +1354,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         questionToken: QuestionToken | undefined,
         type: TypeNode | undefined,
     ): PropertySignature {
-        return astFactory.updatePropertySignature(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(name).ast, asNode(questionToken)?.ast, asNode(type)?.ast).node;
+        return astFactory.updatePropertySignature(node.ast, asNodeArray(modifiers)?.ast, name.ast, questionToken?.ast, type?.ast).node;
     }
 
     // @api
@@ -1365,7 +1365,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         type: TypeNode | undefined,
         initializer: Expression | undefined,
     ): PropertyDeclaration {
-        return astFactory.createPropertyDeclaration(asNodeArray(modifiers)?.ast, asName(name).ast, asNode(questionOrExclamationToken)?.ast, asNode(type)?.ast, asNode(initializer)?.ast).node;
+        return astFactory.createPropertyDeclaration(asNodeArray(modifiers)?.ast, asName(name).ast, questionOrExclamationToken?.ast, type?.ast, initializer?.ast).node;
     }
 
     // @api
@@ -1377,7 +1377,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         type: TypeNode | undefined,
         initializer: Expression | undefined,
     ): PropertyDeclaration {
-        return astFactory.updatePropertyDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asName(name).ast, asNode(questionOrExclamationToken)?.ast, asNode(type)?.ast, asNode(initializer)?.ast).node;
+        return astFactory.updatePropertyDeclaration(node.ast, asNodeArray(modifiers)?.ast, asName(name).ast, questionOrExclamationToken?.ast, type?.ast, initializer?.ast).node;
     }
 
     // @api
@@ -1389,7 +1389,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         type: TypeNode | undefined,
     ): MethodSignature {
-        return astFactory.createMethodSignature(asNodeArray(modifiers)?.ast, asName(name).ast, asNode(questionToken)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast).node;
+        return astFactory.createMethodSignature(asNodeArray(modifiers)?.ast, asName(name).ast, questionToken?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast).node;
     }
 
     // @api
@@ -1402,7 +1402,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: NodeArray<ParameterDeclaration>,
         type: TypeNode | undefined,
     ): MethodSignature {
-        return astFactory.updateMethodSignature(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(name).ast, asNode(questionToken)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast).node;
+        return astFactory.updateMethodSignature(node.ast, asNodeArray(modifiers)?.ast, name.ast, questionToken?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast).node;
     }
 
     // @api
@@ -1416,7 +1416,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         type: TypeNode | undefined,
         body: Block | undefined,
     ): MethodDeclaration {
-        return astFactory.createMethodDeclaration(asNodeArray(modifiers)?.ast, asNode(asteriskToken)?.ast, asName(name).ast, asNode(questionToken)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast, asNode(body)?.ast).node;
+        return astFactory.createMethodDeclaration(asNodeArray(modifiers)?.ast, asteriskToken?.ast, asName(name).ast, questionToken?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast, body?.ast).node;
     }
 
     // @api
@@ -1431,14 +1431,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         type: TypeNode | undefined,
         body: Block | undefined,
     ): MethodDeclaration {
-        return astFactory.updateMethodDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(asteriskToken)?.ast, asNode(name).ast, asNode(questionToken)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast, asNode(body)?.ast).node;
+        return astFactory.updateMethodDeclaration(node.ast, asNodeArray(modifiers)?.ast, asteriskToken?.ast, name.ast, questionToken?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast, body?.ast).node;
     }
 
     // @api
     function createClassStaticBlockDeclaration(
         body: Block,
     ): ClassStaticBlockDeclaration {
-        return astFactory.createClassStaticBlockDeclaration(asNode(body).ast).node;
+        return astFactory.createClassStaticBlockDeclaration(body.ast).node;
     }
 
     // @api
@@ -1446,7 +1446,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         node: ClassStaticBlockDeclaration,
         body: Block,
     ): ClassStaticBlockDeclaration {
-        return astFactory.updateClassStaticBlockDeclaration(asNode(node).ast, asNode(body).ast).node;
+        return astFactory.updateClassStaticBlockDeclaration(node.ast, body.ast).node;
     }
 
     // @api
@@ -1455,7 +1455,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         body: Block | undefined,
     ): ConstructorDeclaration {
-        return astFactory.createConstructorDeclaration(asNodeArray(modifiers)?.ast, asNodeArray(parameters).ast, asNode(body)?.ast).node;
+        return astFactory.createConstructorDeclaration(asNodeArray(modifiers)?.ast, asNodeArray(parameters).ast, body?.ast).node;
     }
 
     // @api
@@ -1465,7 +1465,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         body: Block | undefined,
     ): ConstructorDeclaration {
-        return astFactory.updateConstructorDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNodeArray(parameters).ast, asNode(body)?.ast).node;
+        return astFactory.updateConstructorDeclaration(node.ast, asNodeArray(modifiers)?.ast, asNodeArray(parameters).ast, body?.ast).node;
     }
 
     // @api
@@ -1476,7 +1476,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         type: TypeNode | undefined,
         body: Block | undefined,
     ): GetAccessorDeclaration {
-        return astFactory.createGetAccessorDeclaration(asNodeArray(modifiers)?.ast, asName(name)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast, asNode(body)?.ast).node;
+        return astFactory.createGetAccessorDeclaration(asNodeArray(modifiers)?.ast, asName(name)?.ast, asNodeArray(parameters).ast, type?.ast, body?.ast).node;
     }
 
     // @api
@@ -1488,7 +1488,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         type: TypeNode | undefined,
         body: Block | undefined,
     ): GetAccessorDeclaration {
-        return astFactory.updateGetAccessorDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(name).ast, asNodeArray(parameters).ast, asNode(type)?.ast, asNode(body)?.ast).node;
+        return astFactory.updateGetAccessorDeclaration(node.ast, asNodeArray(modifiers)?.ast, name.ast, asNodeArray(parameters).ast, type?.ast, body?.ast).node;
     }
 
     // @api
@@ -1498,7 +1498,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         body: Block | undefined,
     ): SetAccessorDeclaration {
-        return astFactory.createSetAccessorDeclaration(asNodeArray(modifiers)?.ast, asName(name)?.ast, asNodeArray(parameters).ast, asNode(body)?.ast).node;
+        return astFactory.createSetAccessorDeclaration(asNodeArray(modifiers)?.ast, asName(name)?.ast, asNodeArray(parameters).ast, body?.ast).node;
     }
 
     // @api
@@ -1509,7 +1509,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         body: Block | undefined,
     ): SetAccessorDeclaration {
-        return astFactory.updateSetAccessorDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(name).ast, asNodeArray(parameters).ast, asNode(body)?.ast).node;
+        return astFactory.updateSetAccessorDeclaration(node.ast, asNodeArray(modifiers)?.ast, name.ast, asNodeArray(parameters).ast, body?.ast).node;
     }
 
     // @api
@@ -1518,7 +1518,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         type: TypeNode | undefined,
     ): CallSignatureDeclaration {
-        return astFactory.createCallSignature(asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast).node;
+        return astFactory.createCallSignature(asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast).node;
     }
 
     // @api
@@ -1528,7 +1528,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: NodeArray<ParameterDeclaration>,
         type: TypeNode | undefined,
     ): CallSignatureDeclaration {
-        return astFactory.updateCallSignature(asNode(node).ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast).node;
+        return astFactory.updateCallSignature(node.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast).node;
     }
 
     // @api
@@ -1537,7 +1537,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         type: TypeNode | undefined,
     ): ConstructSignatureDeclaration {
-        return astFactory.createConstructSignature(asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast).node;
+        return astFactory.createConstructSignature(asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast).node;
     }
 
     // @api
@@ -1547,7 +1547,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: NodeArray<ParameterDeclaration>,
         type: TypeNode | undefined,
     ): ConstructSignatureDeclaration {
-        return astFactory.updateConstructSignature(asNode(node).ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast).node;
+        return astFactory.updateConstructSignature(node.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast).node;
     }
 
     // @api
@@ -1556,7 +1556,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         type: TypeNode | undefined,
     ): IndexSignatureDeclaration {
-        return astFactory.createIndexSignature(asNodeArray(modifiers)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast).node;
+        return astFactory.createIndexSignature(asNodeArray(modifiers)?.ast, asNodeArray(parameters).ast, type?.ast).node;
     }
 
     // @api
@@ -1566,17 +1566,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         type: TypeNode,
     ): IndexSignatureDeclaration {
-        return astFactory.updateIndexSignature(asNode(node).ast, asNodeArray(modifiers)?.ast, asNodeArray(parameters).ast, asNode(type).ast).node;
+        return astFactory.updateIndexSignature(node.ast, asNodeArray(modifiers)?.ast, asNodeArray(parameters).ast, type.ast).node;
     }
 
     // @api
     function createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan {
-        return astFactory.createTemplateLiteralTypeSpan(asNode(type).ast, asNode(literal).ast).node;
+        return astFactory.createTemplateLiteralTypeSpan(type.ast, literal.ast).node;
     }
 
     // @api
     function updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan {
-        return astFactory.updateTemplateLiteralTypeSpan(asNode(node).ast, asNode(type).ast, asNode(literal).ast).node;
+        return astFactory.updateTemplateLiteralTypeSpan(node.ast, type.ast, literal.ast).node;
     }
 
     //
@@ -1590,12 +1590,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createTypePredicateNode(assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined): TypePredicateNode {
-        return astFactory.createTypePredicateNode(asNode(assertsModifier)?.ast, asName(parameterName).ast, asNode(type)?.ast).node;
+        return astFactory.createTypePredicateNode(assertsModifier?.ast, asName(parameterName).ast, type?.ast).node;
     }
 
     // @api
     function updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined): TypePredicateNode {
-        return astFactory.updateTypePredicateNode(asNode(node).ast, asNode(assertsModifier)?.ast, asName(parameterName).ast, asNode(type)?.ast).node;
+        return astFactory.updateTypePredicateNode(node.ast, assertsModifier?.ast, asName(parameterName).ast, type?.ast).node;
     }
 
     // @api
@@ -1605,7 +1605,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeNode> | undefined): TypeReferenceNode {
-        return astFactory.updateTypeReferenceNode(asNode(node).ast, asNode(typeName).ast, asNodeArray(typeArguments)?.ast).node;
+        return astFactory.updateTypeReferenceNode(node.ast, typeName.ast, asNodeArray(typeArguments)?.ast).node;
     }
 
     // @api
@@ -1614,7 +1614,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         type: TypeNode,
     ): FunctionTypeNode {
-        return astFactory.createFunctionTypeNode(asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type).ast).node;
+        return astFactory.createFunctionTypeNode(asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type.ast).node;
     }
 
     // @api
@@ -1624,7 +1624,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: NodeArray<ParameterDeclaration>,
         type: TypeNode,
     ): FunctionTypeNode {
-        return astFactory.updateFunctionTypeNode(asNode(node).ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type).ast).node;
+        return astFactory.updateFunctionTypeNode(node.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type.ast).node;
     }
 
     // @api
@@ -1640,7 +1640,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: readonly ParameterDeclaration[],
         type: TypeNode,
     ): ConstructorTypeNode {
-        return astFactory.createConstructorTypeNode(asNodeArray(modifiers)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type).ast).node;
+        return astFactory.createConstructorTypeNode(asNodeArray(modifiers)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type.ast).node;
     }
 
     /** @deprecated */
@@ -1666,7 +1666,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         parameters: NodeArray<ParameterDeclaration>,
         type: TypeNode,
     ): ConstructorTypeNode {
-        return astFactory.updateConstructorTypeNode(asNode(node).ast, asNodeArray(modifiers)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type).ast).node;
+        return astFactory.updateConstructorTypeNode(node.ast, asNodeArray(modifiers)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type.ast).node;
     }
 
     /** @deprecated */
@@ -1681,12 +1681,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createTypeQueryNode(exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode {
-        return astFactory.createTypeQueryNode(asNode(exprName).ast, asNodeArray(typeArguments)?.ast).node;
+        return astFactory.createTypeQueryNode(exprName.ast, asNodeArray(typeArguments)?.ast).node;
     }
 
     // @api
     function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode {
-        return astFactory.updateTypeQueryNode(asNode(node).ast, asNode(exprName).ast, asNodeArray(typeArguments)?.ast).node;
+        return astFactory.updateTypeQueryNode(node.ast, exprName.ast, asNodeArray(typeArguments)?.ast).node;
     }
 
     // @api
@@ -1696,17 +1696,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>): TypeLiteralNode {
-        return astFactory.updateTypeLiteralNode(asNode(node).ast, asNodeArray(members).ast).node;
+        return astFactory.updateTypeLiteralNode(node.ast, asNodeArray(members).ast).node;
     }
 
     // @api
     function createArrayTypeNode(elementType: TypeNode): ArrayTypeNode {
-        return astFactory.createArrayTypeNode(asNode(elementType).ast).node;
+        return astFactory.createArrayTypeNode(elementType.ast).node;
     }
 
     // @api
     function updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode {
-        return astFactory.updateArrayTypeNode(asNode(node).ast, asNode(elementType).ast).node;
+        return astFactory.updateArrayTypeNode(node.ast, elementType.ast).node;
     }
 
     // @api
@@ -1716,37 +1716,37 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[]): TupleTypeNode {
-        return astFactory.updateTupleTypeNode(asNode(node).ast, asNodeArray(elements).ast).node;
+        return astFactory.updateTupleTypeNode(node.ast, asNodeArray(elements).ast).node;
     }
 
     // @api
     function createNamedTupleMember(dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode): NamedTupleMember {
-        return astFactory.createNamedTupleMember(asNode(dotDotDotToken)?.ast, asNode(name).ast, asNode(questionToken)?.ast, asNode(type).ast).node;
+        return astFactory.createNamedTupleMember(dotDotDotToken?.ast, name.ast, questionToken?.ast, type.ast).node;
     }
 
     // @api
     function updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode): NamedTupleMember {
-        return astFactory.updateNamedTupleMember(asNode(node).ast, asNode(dotDotDotToken)?.ast, asNode(name).ast, asNode(questionToken)?.ast, asNode(type).ast).node;
+        return astFactory.updateNamedTupleMember(node.ast, dotDotDotToken?.ast, name.ast, questionToken?.ast, type.ast).node;
     }
 
     // @api
     function createOptionalTypeNode(type: TypeNode): OptionalTypeNode {
-        return astFactory.createOptionalTypeNode(asNode(type).ast).node;
+        return astFactory.createOptionalTypeNode(type.ast).node;
     }
 
     // @api
     function updateOptionalTypeNode(node: OptionalTypeNode, type: TypeNode): OptionalTypeNode {
-        return astFactory.updateOptionalTypeNode(asNode(node).ast, asNode(type).ast).node;
+        return astFactory.updateOptionalTypeNode(node.ast, type.ast).node;
     }
 
     // @api
     function createRestTypeNode(type: TypeNode): RestTypeNode {
-        return astFactory.createRestTypeNode(asNode(type).ast).node;
+        return astFactory.createRestTypeNode(type.ast).node;
     }
 
     // @api
     function updateRestTypeNode(node: RestTypeNode, type: TypeNode): RestTypeNode {
-        return astFactory.updateRestTypeNode(asNode(node).ast, asNode(type).ast).node;
+        return astFactory.updateRestTypeNode(node.ast, type.ast).node;
     }
 
     // @api
@@ -1756,7 +1756,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateUnionTypeNode(node: UnionTypeNode, types: NodeArray<TypeNode>): UnionTypeNode {
-        return astFactory.updateUnionTypeNode(asNode(node).ast, asNodeArray(types).ast).node;
+        return astFactory.updateUnionTypeNode(node.ast, asNodeArray(types).ast).node;
     }
 
     // @api
@@ -1766,37 +1766,37 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateIntersectionTypeNode(node: IntersectionTypeNode, types: NodeArray<TypeNode>): IntersectionTypeNode {
-        return astFactory.updateIntersectionTypeNode(asNode(node).ast, asNodeArray(types).ast).node;
+        return astFactory.updateIntersectionTypeNode(node.ast, asNodeArray(types).ast).node;
     }
 
     // @api
     function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode {
-        return astFactory.createConditionalTypeNode(asNode(checkType).ast, asNode(extendsType).ast, asNode(trueType).ast, asNode(falseType).ast).node;
+        return astFactory.createConditionalTypeNode(checkType.ast, extendsType.ast, trueType.ast, falseType.ast).node;
     }
 
     // @api
     function updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode {
-        return astFactory.updateConditionalTypeNode(asNode(node).ast, asNode(checkType).ast, asNode(extendsType).ast, asNode(trueType).ast, asNode(falseType).ast).node;
+        return astFactory.updateConditionalTypeNode(node.ast, checkType.ast, extendsType.ast, trueType.ast, falseType.ast).node;
     }
 
     // @api
     function createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode {
-        return astFactory.createInferTypeNode(asNode(typeParameter).ast).node;
+        return astFactory.createInferTypeNode(typeParameter.ast).node;
     }
 
     // @api
     function updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode {
-        return astFactory.updateInferTypeNode(asNode(node).ast, asNode(typeParameter).ast).node;
+        return astFactory.updateInferTypeNode(node.ast, typeParameter.ast).node;
     }
 
     // @api
     function createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode {
-        return astFactory.createTemplateLiteralType(asNode(head).ast, asNodeArray(templateSpans).ast).node;
+        return astFactory.createTemplateLiteralType(head.ast, asNodeArray(templateSpans).ast).node;
     }
 
     // @api
     function updateTemplateLiteralType(node: TemplateLiteralTypeNode, head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode {
-        return astFactory.updateTemplateLiteralType(asNode(node).ast, asNode(head).ast, asNodeArray(templateSpans).ast).node;
+        return astFactory.updateTemplateLiteralType(node.ast, head.ast, asNodeArray(templateSpans).ast).node;
     }
 
     // @api
@@ -1807,7 +1807,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         typeArguments?: readonly TypeNode[],
         isTypeOf = false,
     ): ImportTypeNode {
-        return astFactory.createImportTypeNode(asNode(argument).ast, asNode(attributes)?.ast, asNode(qualifier)?.ast, asNodeArray(typeArguments)?.ast, isTypeOf).node;
+        return astFactory.createImportTypeNode(argument.ast, attributes?.ast, qualifier?.ast, asNodeArray(typeArguments)?.ast, isTypeOf).node;
     }
 
     // @api
@@ -1819,17 +1819,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         typeArguments: readonly TypeNode[] | undefined,
         isTypeOf: boolean = node.isTypeOf,
     ): ImportTypeNode {
-        return astFactory.updateImportTypeNode(asNode(node).ast, asNode(argument).ast, asNode(attributes)?.ast, asNode(qualifier)?.ast, asNodeArray(typeArguments)?.ast, isTypeOf).node;
+        return astFactory.updateImportTypeNode(node.ast, argument.ast, attributes?.ast, qualifier?.ast, asNodeArray(typeArguments)?.ast, isTypeOf).node;
     }
 
     // @api
     function createParenthesizedType(type: TypeNode): ParenthesizedTypeNode {
-        return astFactory.createParenthesizedType(asNode(type).ast).node;
+        return astFactory.createParenthesizedType(type.ast).node;
     }
 
     // @api
     function updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode {
-        return astFactory.updateParenthesizedType(asNode(node).ast, asNode(type).ast).node;
+        return astFactory.updateParenthesizedType(node.ast, type.ast).node;
     }
 
     // @api
@@ -1839,42 +1839,42 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode {
-        return astFactory.createTypeOperatorNode(operator, asNode(type).ast).node;
+        return astFactory.createTypeOperatorNode(operator, type.ast).node;
     }
 
     // @api
     function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode {
-        return astFactory.updateTypeOperatorNode(asNode(node).ast, asNode(type).ast).node;
+        return astFactory.updateTypeOperatorNode(node.ast, type.ast).node;
     }
 
     // @api
     function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode {
-        return astFactory.createIndexedAccessTypeNode(asNode(objectType).ast, asNode(indexType).ast).node;
+        return astFactory.createIndexedAccessTypeNode(objectType.ast, indexType.ast).node;
     }
 
     // @api
     function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode {
-        return astFactory.updateIndexedAccessTypeNode(asNode(node).ast, asNode(objectType).ast, asNode(indexType).ast).node;
+        return astFactory.updateIndexedAccessTypeNode(node.ast, objectType.ast, indexType.ast).node;
     }
 
     // @api
     function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: readonly TypeElement[] | undefined): MappedTypeNode {
-        return astFactory.createMappedTypeNode(asNode(readonlyToken)?.ast, asNode(typeParameter).ast, asNode(nameType)?.ast, asNode(questionToken)?.ast, asNode(type)?.ast, asNodeArray(members)?.ast).node;
+        return astFactory.createMappedTypeNode(readonlyToken?.ast, typeParameter.ast, nameType?.ast, questionToken?.ast, type?.ast, asNodeArray(members)?.ast).node;
     }
 
     // @api
     function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: readonly TypeElement[] | undefined): MappedTypeNode {
-        return astFactory.updateMappedTypeNode(asNode(node).ast, asNode(readonlyToken)?.ast, asNode(typeParameter).ast, asNode(nameType)?.ast, asNode(questionToken)?.ast, asNode(type)?.ast, asNodeArray(members)?.ast).node;
+        return astFactory.updateMappedTypeNode(node.ast, readonlyToken?.ast, typeParameter.ast, nameType?.ast, questionToken?.ast, type?.ast, asNodeArray(members)?.ast).node;
     }
 
     // @api
     function createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode {
-        return astFactory.createLiteralTypeNode(asNode(literal).ast).node;
+        return astFactory.createLiteralTypeNode(literal.ast).node;
     }
 
     // @api
     function updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode {
-        return astFactory.updateLiteralTypeNode(asNode(node).ast, asNode(literal).ast).node;
+        return astFactory.updateLiteralTypeNode(node.ast, literal.ast).node;
     }
 
     //
@@ -1888,7 +1888,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateObjectBindingPattern(node: ObjectBindingPattern, elements: readonly BindingElement[]): ObjectBindingPattern {
-        return astFactory.updateObjectBindingPattern(asNode(node).ast, asNodeArray(elements).ast).node;
+        return astFactory.updateObjectBindingPattern(node.ast, asNodeArray(elements).ast).node;
     }
 
     // @api
@@ -1898,17 +1898,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateArrayBindingPattern(node: ArrayBindingPattern, elements: readonly ArrayBindingElement[]): ArrayBindingPattern {
-        return astFactory.updateArrayBindingPattern(asNode(node).ast, asNodeArray(elements).ast).node;
+        return astFactory.updateArrayBindingPattern(node.ast, asNodeArray(elements).ast).node;
     }
 
     // @api
     function createBindingElement(dotDotDotToken: DotDotDotToken | undefined, propertyName: string | PropertyName | undefined, name: string | BindingName, initializer?: Expression): BindingElement {
-        return astFactory.createBindingElement(asNode(dotDotDotToken)?.ast, asName(propertyName)?.ast, asName(name).ast, asNode(initializer)?.ast).node;
+        return astFactory.createBindingElement(dotDotDotToken?.ast, asName(propertyName)?.ast, asName(name).ast, initializer?.ast).node;
     }
 
     // @api
     function updateBindingElement(node: BindingElement, dotDotDotToken: DotDotDotToken | undefined, propertyName: PropertyName | undefined, name: BindingName, initializer: Expression | undefined): BindingElement {
-        return astFactory.updateBindingElement(asNode(node).ast, asNode(dotDotDotToken)?.ast, asNode(propertyName)?.ast, asNode(name).ast, asNode(initializer)?.ast).node;
+        return astFactory.updateBindingElement(node.ast, dotDotDotToken?.ast, propertyName?.ast, name.ast, initializer?.ast).node;
     }
 
     //
@@ -1922,7 +1922,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateArrayLiteralExpression(node: ArrayLiteralExpression, elements: readonly Expression[]): ArrayLiteralExpression {
-        return astFactory.updateArrayLiteralExpression(asNode(node).ast, asNodeArray(elements).ast).node;
+        return astFactory.updateArrayLiteralExpression(node.ast, asNodeArray(elements).ast).node;
     }
 
     // @api
@@ -1932,107 +1932,107 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateObjectLiteralExpression(node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]): ObjectLiteralExpression {
-        return astFactory.updateObjectLiteralExpression(asNode(node).ast, asNodeArray(properties).ast).node;
+        return astFactory.updateObjectLiteralExpression(node.ast, asNodeArray(properties).ast).node;
     }
 
     // @api
     function createPropertyAccessExpression(expression: Expression, name: string | Identifier | PrivateIdentifier): PropertyAccessExpression {
-        return astFactory.createPropertyAccessExpression(asNode(expression).ast, asName(name).ast).node;
+        return astFactory.createPropertyAccessExpression(expression.ast, asName(name).ast).node;
     }
 
     // @api
     function updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier): PropertyAccessExpression {
-        return astFactory.updatePropertyAccessExpression(asNode(node).ast, asNode(expression).ast, asNode(name).ast).node;
+        return astFactory.updatePropertyAccessExpression(node.ast, expression.ast, name.ast).node;
     }
 
     // @api
     function createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier): PropertyAccessChain {
-        return astFactory.createPropertyAccessChain(asNode(expression).ast, asNode(questionDotToken)?.ast, asName(name).ast).node;
+        return astFactory.createPropertyAccessChain(expression.ast, questionDotToken?.ast, asName(name).ast).node;
     }
 
     // @api
     function updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateIdentifier): PropertyAccessChain {
-        return astFactory.updatePropertyAccessChain(asNode(node).ast, asNode(expression).ast, asNode(questionDotToken)?.ast, asNode(name).ast).node;
+        return astFactory.updatePropertyAccessChain(node.ast, expression.ast, questionDotToken?.ast, name.ast).node;
     }
 
     // @api
     function createElementAccessExpression(expression: Expression, index: number | Expression): ElementAccessExpression {
-        return astFactory.createElementAccessExpression(asNode(expression).ast, asExpression(index).ast).node;
+        return astFactory.createElementAccessExpression(expression.ast, asExpression(index).ast).node;
     }
 
     // @api
     function updateElementAccessExpression(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression {
-        return astFactory.updateElementAccessExpression(asNode(node).ast, asNode(expression).ast, asNode(argumentExpression).ast).node;
+        return astFactory.updateElementAccessExpression(node.ast, expression.ast, argumentExpression.ast).node;
     }
 
     // @api
     function createElementAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, index: number | Expression): ElementAccessChain {
-        return astFactory.createElementAccessChain(asNode(expression).ast, asNode(questionDotToken)?.ast, asExpression(index).ast).node;
+        return astFactory.createElementAccessChain(expression.ast, questionDotToken?.ast, asExpression(index).ast).node;
     }
 
     // @api
     function updateElementAccessChain(node: ElementAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, argumentExpression: Expression): ElementAccessChain {
-        return astFactory.updateElementAccessChain(asNode(node).ast, asNode(expression).ast, asNode(questionDotToken)?.ast, asNode(argumentExpression).ast).node;
+        return astFactory.updateElementAccessChain(node.ast, expression.ast, questionDotToken?.ast, argumentExpression.ast).node;
     }
 
     // @api
     function createCallExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): CallExpression {
-        return astFactory.createCallExpression(asNode(expression).ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray)?.ast).node;
+        return astFactory.createCallExpression(expression.ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray)?.ast).node;
     }
 
     // @api
     function updateCallExpression(node: CallExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]): CallExpression {
-        return astFactory.updateCallExpression(asNode(node).ast, asNode(expression).ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray).ast).node;
+        return astFactory.updateCallExpression(node.ast, expression.ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray).ast).node;
     }
 
     // @api
     function createCallChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): CallChain {
-        return astFactory.createCallChain(asNode(expression).ast, asNode(questionDotToken)?.ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray)?.ast).node;
+        return astFactory.createCallChain(expression.ast, questionDotToken?.ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray)?.ast).node;
     }
 
     // @api
     function updateCallChain(node: CallChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]): CallChain {
-        return astFactory.updateCallChain(asNode(node).ast, asNode(expression).ast, asNode(questionDotToken)?.ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray).ast).node;
+        return astFactory.updateCallChain(node.ast, expression.ast, questionDotToken?.ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray).ast).node;
     }
 
     // @api
     function createNewExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): NewExpression {
-        return astFactory.createNewExpression(asNode(expression).ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray)?.ast).node;
+        return astFactory.createNewExpression(expression.ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray)?.ast).node;
     }
 
     // @api
     function updateNewExpression(node: NewExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): NewExpression {
-        return astFactory.updateNewExpression(asNode(node).ast, asNode(expression).ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray)?.ast).node;
+        return astFactory.updateNewExpression(node.ast, expression.ast, asNodeArray(typeArguments)?.ast, asNodeArray(argumentsArray)?.ast).node;
     }
 
     // @api
     function createTaggedTemplateExpression(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression {
-        return astFactory.createTaggedTemplateExpression(asNode(tag).ast, asNodeArray(typeArguments)?.ast, asNode(template).ast).node;
+        return astFactory.createTaggedTemplateExpression(tag.ast, asNodeArray(typeArguments)?.ast, template.ast).node;
     }
 
     // @api
     function updateTaggedTemplateExpression(node: TaggedTemplateExpression, tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression {
-        return astFactory.updateTaggedTemplateExpression(asNode(node).ast, asNode(tag).ast, asNodeArray(typeArguments)?.ast, asNode(template).ast).node;
+        return astFactory.updateTaggedTemplateExpression(node.ast, tag.ast, asNodeArray(typeArguments)?.ast, template.ast).node;
     }
 
     // @api
-    function createTypeAssertion(type: TypeNode, expression: Expression): TypeAssertion {
-        return astFactory.createTypeAssertion(asNode(type).ast, asNode(expression).ast).node;
+    function createTypeAssertion(type: TypeNode, expression: Expression): TypeAssertionExpression {
+        return astFactory.createTypeAssertion(type.ast, expression.ast).node;
     }
 
     // @api
-    function updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: Expression): TypeAssertion {
-        return astFactory.updateTypeAssertion(asNode(node).ast, asNode(type).ast, asNode(expression).ast).node;
+    function updateTypeAssertion(node: TypeAssertionExpression, type: TypeNode, expression: Expression): TypeAssertionExpression {
+        return astFactory.updateTypeAssertion(node.ast, type.ast, expression.ast).node;
     }
 
     // @api
     function createParenthesizedExpression(expression: Expression): ParenthesizedExpression {
-        return astFactory.createParenthesizedExpression(asNode(expression).ast).node;
+        return astFactory.createParenthesizedExpression(expression.ast).node;
     }
 
     // @api
     function updateParenthesizedExpression(node: ParenthesizedExpression, expression: Expression): ParenthesizedExpression {
-        return astFactory.updateParenthesizedExpression(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateParenthesizedExpression(node.ast, expression.ast).node;
     }
 
     // @api
@@ -2045,7 +2045,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         type: TypeNode | undefined,
         body: Block,
     ): FunctionExpression {
-        return astFactory.createFunctionExpression(asNodeArray(modifiers)?.ast, asNode(asteriskToken)?.ast, asName(name)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters)?.ast, asNode(type)?.ast, asNode(body).ast).node;
+        return astFactory.createFunctionExpression(asNodeArray(modifiers)?.ast, asteriskToken?.ast, asName(name)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters)?.ast, type?.ast, body.ast).node;
     }
 
     // @api
@@ -2059,7 +2059,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         type: TypeNode | undefined,
         body: Block,
     ): FunctionExpression {
-        return astFactory.updateFunctionExpression(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(asteriskToken)?.ast, asNode(name)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast, asNode(body).ast).node;
+        return astFactory.updateFunctionExpression(node.ast, asNodeArray(modifiers)?.ast, asteriskToken?.ast, name?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast, body.ast).node;
     }
 
     // @api
@@ -2071,7 +2071,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         equalsGreaterThanToken: EqualsGreaterThanToken | undefined,
         body: ConciseBody,
     ): ArrowFunction {
-        return astFactory.createArrowFunction(asNodeArray(modifiers)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast, asNode(equalsGreaterThanToken)?.ast, asNode(body).ast).node;
+        return astFactory.createArrowFunction(asNodeArray(modifiers)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast, equalsGreaterThanToken?.ast, body.ast).node;
     }
 
     // @api
@@ -2084,82 +2084,82 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         equalsGreaterThanToken: EqualsGreaterThanToken,
         body: ConciseBody,
     ): ArrowFunction {
-        return astFactory.updateArrowFunction(asNode(node).ast, asNodeArray(modifiers)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast, asNode(equalsGreaterThanToken).ast, asNode(body).ast).node;
+        return astFactory.updateArrowFunction(node.ast, asNodeArray(modifiers)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast, equalsGreaterThanToken.ast, body.ast).node;
     }
 
     // @api
     function createDeleteExpression(expression: Expression): DeleteExpression {
-        return astFactory.createDeleteExpression(asNode(expression).ast).node;
+        return astFactory.createDeleteExpression(expression.ast).node;
     }
 
     // @api
     function updateDeleteExpression(node: DeleteExpression, expression: Expression): DeleteExpression {
-        return astFactory.updateDeleteExpression(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateDeleteExpression(node.ast, expression.ast).node;
     }
 
     // @api
     function createTypeOfExpression(expression: Expression): TypeOfExpression {
-        return astFactory.createTypeOfExpression(asNode(expression).ast).node;
+        return astFactory.createTypeOfExpression(expression.ast).node;
     }
 
     // @api
     function updateTypeOfExpression(node: TypeOfExpression, expression: Expression): TypeOfExpression {
-        return astFactory.updateTypeOfExpression(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateTypeOfExpression(node.ast, expression.ast).node;
     }
 
     // @api
     function createVoidExpression(expression: Expression): VoidExpression {
-        return astFactory.createVoidExpression(asNode(expression).ast).node;
+        return astFactory.createVoidExpression(expression.ast).node;
     }
 
     // @api
     function updateVoidExpression(node: VoidExpression, expression: Expression): VoidExpression {
-        return astFactory.updateVoidExpression(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateVoidExpression(node.ast, expression.ast).node;
     }
 
     // @api
     function createAwaitExpression(expression: Expression): AwaitExpression {
-        return astFactory.createAwaitExpression(asNode(expression).ast).node;
+        return astFactory.createAwaitExpression(expression.ast).node;
     }
 
     // @api
     function updateAwaitExpression(node: AwaitExpression, expression: Expression): AwaitExpression {
-        return astFactory.updateAwaitExpression(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateAwaitExpression(node.ast, expression.ast).node;
     }
 
     // @api
     function createPrefixUnaryExpression(operator: PrefixUnaryOperator, operand: Expression): PrefixUnaryExpression {
-        return astFactory.createPrefixUnaryExpression(operator, asNode(operand).ast).node;
+        return astFactory.createPrefixUnaryExpression(operator, operand.ast).node;
     }
 
     // @api
     function updatePrefixUnaryExpression(node: PrefixUnaryExpression, operand: Expression): PrefixUnaryExpression {
-        return astFactory.updatePrefixUnaryExpression(asNode(node).ast, asNode(operand).ast).node;
+        return astFactory.updatePrefixUnaryExpression(node.ast, operand.ast).node;
     }
 
     // @api
     function createPostfixUnaryExpression(operand: Expression, operator: PostfixUnaryOperator): PostfixUnaryExpression {
-        return astFactory.createPostfixUnaryExpression(asNode(operand).ast, operator).node;
+        return astFactory.createPostfixUnaryExpression(operand.ast, operator).node;
     }
 
     // @api
     function updatePostfixUnaryExpression(node: PostfixUnaryExpression, operand: Expression): PostfixUnaryExpression {
-        return astFactory.updatePostfixUnaryExpression(asNode(node).ast, asNode(operand).ast).node;
+        return astFactory.updatePostfixUnaryExpression(node.ast, operand.ast).node;
     }
 
     // @api
     function createBinaryExpression(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression): BinaryExpression {
-        return astFactory.createBinaryExpression(asNode(left).ast, asToken(operator).ast, asNode(right).ast).node;
+        return astFactory.createBinaryExpression(left.ast, asToken(operator).ast, right.ast).node;
     }
 
     // @api
     function updateBinaryExpression(node: BinaryExpression, left: Expression, operator: BinaryOperatorToken, right: Expression): BinaryExpression {
-        return astFactory.updateBinaryExpression(asNode(node).ast, asNode(left).ast, asNode(operator).ast, asNode(right).ast).node;
+        return astFactory.updateBinaryExpression(node.ast, left.ast, operator.ast, right.ast).node;
     }
 
     // @api
     function createConditionalExpression(condition: Expression, questionToken: QuestionToken | undefined, whenTrue: Expression, colonToken: ColonToken | undefined, whenFalse: Expression): ConditionalExpression {
-        return astFactory.createConditionalExpression(asNode(condition).ast, asNode(questionToken)?.ast, asNode(whenTrue).ast, asNode(colonToken)?.ast, asNode(whenFalse).ast).node;
+        return astFactory.createConditionalExpression(condition.ast, questionToken?.ast, whenTrue.ast, colonToken?.ast, whenFalse.ast).node;
     }
 
     // @api
@@ -2171,17 +2171,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         colonToken: Token<SyntaxKind.ColonToken>,
         whenFalse: Expression,
     ): ConditionalExpression {
-        return astFactory.updateConditionalExpression(asNode(node).ast, asNode(condition).ast, asNode(questionToken).ast, asNode(whenTrue).ast, asNode(colonToken).ast, asNode(whenFalse).ast).node;
+        return astFactory.updateConditionalExpression(node.ast, condition.ast, questionToken.ast, whenTrue.ast, colonToken.ast, whenFalse.ast).node;
     }
 
     // @api
     function createTemplateExpression(head: TemplateHead, templateSpans: readonly TemplateSpan[]): TemplateExpression {
-        return astFactory.createTemplateExpression(asNode(head).ast, asNodeArray(templateSpans).ast).node;
+        return astFactory.createTemplateExpression(head.ast, asNodeArray(templateSpans).ast).node;
     }
 
     // @api
     function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: readonly TemplateSpan[]): TemplateExpression {
-        return astFactory.updateTemplateExpression(asNode(node).ast, asNode(head).ast, asNodeArray(templateSpans).ast).node;
+        return astFactory.updateTemplateExpression(node.ast, head.ast, asNodeArray(templateSpans).ast).node;
     }
 
     // @api
@@ -2211,22 +2211,22 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createYieldExpression(asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression {
-        return astFactory.createYieldExpression(asNode(asteriskToken)?.ast, asNode(expression)?.ast).node;
+        return astFactory.createYieldExpression(asteriskToken?.ast, expression?.ast).node;
     }
 
     // @api
     function updateYieldExpression(node: YieldExpression, asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression {
-        return astFactory.updateYieldExpression(asNode(node).ast, asNode(asteriskToken)?.ast, asNode(expression)?.ast).node;
+        return astFactory.updateYieldExpression(node.ast, asteriskToken?.ast, expression?.ast).node;
     }
 
     // @api
     function createSpreadElement(expression: Expression): SpreadElement {
-        return astFactory.createSpreadElement(asNode(expression).ast).node;
+        return astFactory.createSpreadElement(expression.ast).node;
     }
 
     // @api
     function updateSpreadElement(node: SpreadElement, expression: Expression): SpreadElement {
-        return astFactory.updateSpreadElement(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateSpreadElement(node.ast, expression.ast).node;
     }
 
     // @api
@@ -2249,7 +2249,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         heritageClauses: readonly HeritageClause[] | undefined,
         members: readonly ClassElement[],
     ): ClassExpression {
-        return astFactory.updateClassExpression(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(name)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(heritageClauses)?.ast, asNodeArray(members).ast).node;
+        return astFactory.updateClassExpression(node.ast, asNodeArray(modifiers)?.ast, name?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(heritageClauses)?.ast, asNodeArray(members).ast).node;
     }
 
     // @api
@@ -2259,62 +2259,62 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments {
-        return astFactory.createExpressionWithTypeArguments(asNode(expression).ast, asNodeArray(typeArguments)?.ast).node;
+        return astFactory.createExpressionWithTypeArguments(expression.ast, asNodeArray(typeArguments)?.ast).node;
     }
 
     // @api
     function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments {
-        return astFactory.updateExpressionWithTypeArguments(asNode(node).ast, asNode(expression).ast, asNodeArray(typeArguments)?.ast).node;
+        return astFactory.updateExpressionWithTypeArguments(node.ast, expression.ast, asNodeArray(typeArguments)?.ast).node;
     }
 
     // @api
     function createAsExpression(expression: Expression, type: TypeNode): AsExpression {
-        return astFactory.createAsExpression(asNode(expression).ast, asNode(type).ast).node;
+        return astFactory.createAsExpression(expression.ast, type.ast).node;
     }
 
     // @api
     function updateAsExpression(node: AsExpression, expression: Expression, type: TypeNode): AsExpression {
-        return astFactory.updateAsExpression(asNode(node).ast, asNode(expression).ast, asNode(type).ast).node;
+        return astFactory.updateAsExpression(node.ast, expression.ast, type.ast).node;
     }
 
     // @api
     function createNonNullExpression(expression: Expression): NonNullExpression {
-        return astFactory.createNonNullExpression(asNode(expression).ast).node;
+        return astFactory.createNonNullExpression(expression.ast).node;
     }
 
     // @api
     function updateNonNullExpression(node: NonNullExpression, expression: Expression): NonNullExpression {
-        return astFactory.updateNonNullExpression(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateNonNullExpression(node.ast, expression.ast).node;
     }
 
     // @api
     function createSatisfiesExpression(expression: Expression, type: TypeNode): SatisfiesExpression {
-        return astFactory.createSatisfiesExpression(asNode(expression).ast, asNode(type).ast).node;
+        return astFactory.createSatisfiesExpression(expression.ast, type.ast).node;
     }
 
     // @api
     function updateSatisfiesExpression(node: SatisfiesExpression, expression: Expression, type: TypeNode): SatisfiesExpression {
-        return astFactory.updateSatisfiesExpression(asNode(node).ast, asNode(expression).ast, asNode(type).ast).node;
+        return astFactory.updateSatisfiesExpression(node.ast, expression.ast, type.ast).node;
     }
 
     // @api
     function createNonNullChain(expression: Expression): NonNullChain {
-        return astFactory.createNonNullChain(asNode(expression).ast).node;
+        return astFactory.createNonNullChain(expression.ast).node;
     }
 
     // @api
     function updateNonNullChain(node: NonNullChain, expression: Expression): NonNullChain {
-        return astFactory.updateNonNullChain(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateNonNullChain(node.ast, expression.ast).node;
     }
 
     // @api
     function createMetaProperty(keywordToken: MetaProperty["keywordToken"], name: Identifier): MetaProperty {
-        return astFactory.createMetaProperty(keywordToken, asNode(name).ast).node;
+        return astFactory.createMetaProperty(keywordToken, name.ast).node;
     }
 
     // @api
     function updateMetaProperty(node: MetaProperty, name: Identifier): MetaProperty {
-        return astFactory.updateMetaProperty(asNode(node).ast, asNode(name).ast).node;
+        return astFactory.updateMetaProperty(node.ast, name.ast).node;
     }
 
     //
@@ -2323,12 +2323,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createTemplateSpan(expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan {
-        return astFactory.createTemplateSpan(asNode(expression).ast, asNode(literal).ast).node;
+        return astFactory.createTemplateSpan(expression.ast, literal.ast).node;
     }
 
     // @api
     function updateTemplateSpan(node: TemplateSpan, expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan {
-        return astFactory.updateTemplateSpan(asNode(node).ast, asNode(expression).ast, asNode(literal).ast).node;
+        return astFactory.updateTemplateSpan(node.ast, expression.ast, literal.ast).node;
     }
 
     // @api
@@ -2347,17 +2347,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateBlock(node: Block, statements: readonly Statement[]): Block {
-        return astFactory.updateBlock(asNode(node).ast, asNodeArray(statements).ast).node;
+        return astFactory.updateBlock(node.ast, asNodeArray(statements).ast).node;
     }
 
     // @api
     function createVariableStatement(modifiers: readonly ModifierLike[] | undefined, declarationList: VariableDeclarationList | readonly VariableDeclaration[]): VariableStatement {
-        return astFactory.createVariableStatement(asNodeArray(modifiers)?.ast, isArray(declarationList) ? asNodeArray(declarationList).ast : asNode(declarationList).ast).node;
+        return astFactory.createVariableStatement(asNodeArray(modifiers)?.ast, isArray(declarationList) ? asNodeArray(declarationList).ast : declarationList.ast).node;
     }
 
     // @api
     function updateVariableStatement(node: VariableStatement, modifiers: readonly ModifierLike[] | undefined, declarationList: VariableDeclarationList): VariableStatement {
-        return astFactory.updateVariableStatement(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(declarationList).ast).node;
+        return astFactory.updateVariableStatement(node.ast, asNodeArray(modifiers)?.ast, declarationList.ast).node;
     }
 
     // @api
@@ -2367,72 +2367,72 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createExpressionStatement(expression: Expression): ExpressionStatement {
-        return astFactory.createExpressionStatement(asNode(expression).ast).node;
+        return astFactory.createExpressionStatement(expression.ast).node;
     }
 
     // @api
     function updateExpressionStatement(node: ExpressionStatement, expression: Expression): ExpressionStatement {
-        return astFactory.updateExpressionStatement(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateExpressionStatement(node.ast, expression.ast).node;
     }
 
     // @api
     function createIfStatement(expression: Expression, thenStatement: Statement, elseStatement?: Statement): IfStatement {
-        return astFactory.createIfStatement(asNode(expression).ast, asNode(thenStatement).ast, asNode(elseStatement)?.ast).node;
+        return astFactory.createIfStatement(expression.ast, thenStatement.ast, elseStatement?.ast).node;
     }
 
     // @api
     function updateIfStatement(node: IfStatement, expression: Expression, thenStatement: Statement, elseStatement: Statement | undefined): IfStatement {
-        return astFactory.updateIfStatement(asNode(node).ast, asNode(expression).ast, asNode(thenStatement).ast, asNode(elseStatement)?.ast).node;
+        return astFactory.updateIfStatement(node.ast, expression.ast, thenStatement.ast, elseStatement?.ast).node;
     }
 
     // @api
     function createDoStatement(statement: Statement, expression: Expression): DoStatement {
-        return astFactory.createDoStatement(asNode(statement).ast, asNode(expression).ast).node;
+        return astFactory.createDoStatement(statement.ast, expression.ast).node;
     }
 
     // @api
     function updateDoStatement(node: DoStatement, statement: Statement, expression: Expression): DoStatement {
-        return astFactory.updateDoStatement(asNode(node).ast, asNode(statement).ast, asNode(expression).ast).node;
+        return astFactory.updateDoStatement(node.ast, statement.ast, expression.ast).node;
     }
 
     // @api
     function createWhileStatement(expression: Expression, statement: Statement): WhileStatement {
-        return astFactory.createWhileStatement(asNode(expression).ast, asNode(statement).ast).node;
+        return astFactory.createWhileStatement(expression.ast, statement.ast).node;
     }
 
     // @api
     function updateWhileStatement(node: WhileStatement, expression: Expression, statement: Statement): WhileStatement {
-        return astFactory.updateWhileStatement(asNode(node).ast, asNode(expression).ast, asNode(statement).ast).node;
+        return astFactory.updateWhileStatement(node.ast, expression.ast, statement.ast).node;
     }
 
     // @api
     function createForStatement(initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement): ForStatement {
-        return astFactory.createForStatement(asNode(initializer)?.ast, asNode(condition)?.ast, asNode(incrementor)?.ast, asNode(statement).ast).node;
+        return astFactory.createForStatement(initializer?.ast, condition?.ast, incrementor?.ast, statement.ast).node;
     }
 
     // @api
     function updateForStatement(node: ForStatement, initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement): ForStatement {
-        return astFactory.updateForStatement(asNode(node).ast, asNode(initializer)?.ast, asNode(condition)?.ast, asNode(incrementor)?.ast, asNode(statement).ast).node;
+        return astFactory.updateForStatement(node.ast, initializer?.ast, condition?.ast, incrementor?.ast, statement.ast).node;
     }
 
     // @api
     function createForInStatement(initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement {
-        return astFactory.createForInStatement(asNode(initializer).ast, asNode(expression).ast, asNode(statement).ast).node;
+        return astFactory.createForInStatement(initializer.ast, expression.ast, statement.ast).node;
     }
 
     // @api
     function updateForInStatement(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement {
-        return astFactory.updateForInStatement(asNode(node).ast, asNode(initializer).ast, asNode(expression).ast, asNode(statement).ast).node;
+        return astFactory.updateForInStatement(node.ast, initializer.ast, expression.ast, statement.ast).node;
     }
 
     // @api
     function createForOfStatement(awaitModifier: AwaitKeyword | undefined, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement {
-        return astFactory.createForOfStatement(asNode(awaitModifier)?.ast, asNode(initializer).ast, asNode(expression).ast, asNode(statement).ast).node;
+        return astFactory.createForOfStatement(awaitModifier?.ast, initializer.ast, expression.ast, statement.ast).node;
     }
 
     // @api
     function updateForOfStatement(node: ForOfStatement, awaitModifier: AwaitKeyword | undefined, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement {
-        return astFactory.updateForOfStatement(asNode(node).ast, asNode(awaitModifier)?.ast, asNode(initializer).ast, asNode(expression).ast, asNode(statement).ast).node;
+        return astFactory.updateForOfStatement(node.ast, awaitModifier?.ast, initializer.ast, expression.ast, statement.ast).node;
     }
 
     // @api
@@ -2442,7 +2442,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateContinueStatement(node: ContinueStatement, label: Identifier | undefined): ContinueStatement {
-        return astFactory.updateContinueStatement(asNode(node).ast, asNode(label)?.ast).node;
+        return astFactory.updateContinueStatement(node.ast, label?.ast).node;
     }
 
     // @api
@@ -2452,67 +2452,67 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateBreakStatement(node: BreakStatement, label: Identifier | undefined): BreakStatement {
-        return astFactory.updateBreakStatement(asNode(node).ast, asNode(label)?.ast).node;
+        return astFactory.updateBreakStatement(node.ast, label?.ast).node;
     }
 
     // @api
     function createReturnStatement(expression?: Expression): ReturnStatement {
-        return astFactory.createReturnStatement(asNode(expression)?.ast).node;
+        return astFactory.createReturnStatement(expression?.ast).node;
     }
 
     // @api
     function updateReturnStatement(node: ReturnStatement, expression: Expression | undefined): ReturnStatement {
-        return astFactory.updateReturnStatement(asNode(node).ast, asNode(expression)?.ast).node;
+        return astFactory.updateReturnStatement(node.ast, expression?.ast).node;
     }
 
     // @api
     function createWithStatement(expression: Expression, statement: Statement): WithStatement {
-        return astFactory.createWithStatement(asNode(expression).ast, asNode(statement).ast).node;
+        return astFactory.createWithStatement(expression.ast, statement.ast).node;
     }
 
     // @api
     function updateWithStatement(node: WithStatement, expression: Expression, statement: Statement): WithStatement {
-        return astFactory.updateWithStatement(asNode(node).ast, asNode(expression).ast, asNode(statement).ast).node;
+        return astFactory.updateWithStatement(node.ast, expression.ast, statement.ast).node;
     }
 
     // @api
     function createSwitchStatement(expression: Expression, caseBlock: CaseBlock): SwitchStatement {
-        return astFactory.createSwitchStatement(asNode(expression).ast, asNode(caseBlock).ast).node;
+        return astFactory.createSwitchStatement(expression.ast, caseBlock.ast).node;
     }
 
     // @api
     function updateSwitchStatement(node: SwitchStatement, expression: Expression, caseBlock: CaseBlock): SwitchStatement {
-        return astFactory.updateSwitchStatement(asNode(node).ast, asNode(expression).ast, asNode(caseBlock).ast).node;
+        return astFactory.updateSwitchStatement(node.ast, expression.ast, caseBlock.ast).node;
     }
 
     // @api
     function createLabeledStatement(label: string | Identifier, statement: Statement): LabeledStatement {
-        return astFactory.createLabeledStatement(asName(label).ast, asNode(statement).ast).node;
+        return astFactory.createLabeledStatement(asName(label).ast, statement.ast).node;
     }
 
     // @api
     function updateLabeledStatement(node: LabeledStatement, label: Identifier, statement: Statement): LabeledStatement {
-        return astFactory.updateLabeledStatement(asNode(node).ast, asNode(label).ast, asNode(statement).ast).node;
+        return astFactory.updateLabeledStatement(node.ast, label.ast, statement.ast).node;
     }
 
     // @api
     function createThrowStatement(expression: Expression): ThrowStatement {
-        return astFactory.createThrowStatement(asNode(expression).ast).node;
+        return astFactory.createThrowStatement(expression.ast).node;
     }
 
     // @api
     function updateThrowStatement(node: ThrowStatement, expression: Expression): ThrowStatement {
-        return astFactory.updateThrowStatement(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateThrowStatement(node.ast, expression.ast).node;
     }
 
     // @api
     function createTryStatement(tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined): TryStatement {
-        return astFactory.createTryStatement(asNode(tryBlock).ast, asNode(catchClause)?.ast, asNode(finallyBlock)?.ast).node;
+        return astFactory.createTryStatement(tryBlock.ast, catchClause?.ast, finallyBlock?.ast).node;
     }
 
     // @api
     function updateTryStatement(node: TryStatement, tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined): TryStatement {
-        return astFactory.updateTryStatement(asNode(node).ast, asNode(tryBlock).ast, asNode(catchClause)?.ast, asNode(finallyBlock)?.ast).node;
+        return astFactory.updateTryStatement(node.ast, tryBlock.ast, catchClause?.ast, finallyBlock?.ast).node;
     }
 
     // @api
@@ -2522,12 +2522,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createVariableDeclaration(name: string | BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration {
-        return astFactory.createVariableDeclaration(asName(name).ast, asNode(exclamationToken)?.ast, asNode(type)?.ast, asNode(initializer)?.ast).node;
+        return astFactory.createVariableDeclaration(asName(name).ast, exclamationToken?.ast, type?.ast, initializer?.ast).node;
     }
 
     // @api
     function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration {
-        return astFactory.updateVariableDeclaration(asNode(node).ast, asNode(name).ast, asNode(exclamationToken)?.ast, asNode(type)?.ast, asNode(initializer)?.ast).node;
+        return astFactory.updateVariableDeclaration(node.ast, name.ast, exclamationToken?.ast, type?.ast, initializer?.ast).node;
     }
 
     // @api
@@ -2537,7 +2537,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]): VariableDeclarationList {
-        return astFactory.updateVariableDeclarationList(asNode(node).ast, asNodeArray(declarations).ast).node;
+        return astFactory.updateVariableDeclarationList(node.ast, asNodeArray(declarations).ast).node;
     }
 
     // @api
@@ -2550,7 +2550,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         type: TypeNode | undefined,
         body: Block | undefined,
     ): FunctionDeclaration {
-        return astFactory.createFunctionDeclaration(asNodeArray(modifiers)?.ast, asNode(asteriskToken)?.ast, asName(name)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast, asNode(body)?.ast).node;
+        return astFactory.createFunctionDeclaration(asNodeArray(modifiers)?.ast, asteriskToken?.ast, asName(name)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast, body?.ast).node;
     }
 
     // @api
@@ -2564,7 +2564,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         type: TypeNode | undefined,
         body: Block | undefined,
     ): FunctionDeclaration {
-        return astFactory.updateFunctionDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(asteriskToken)?.ast, asNode(name)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast, asNode(body)?.ast).node;
+        return astFactory.updateFunctionDeclaration(node.ast, asNodeArray(modifiers)?.ast, asteriskToken?.ast, name?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast, body?.ast).node;
     }
 
     // @api
@@ -2587,7 +2587,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         heritageClauses: readonly HeritageClause[] | undefined,
         members: readonly ClassElement[],
     ): ClassDeclaration {
-        return astFactory.updateClassDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(name)?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(heritageClauses)?.ast, asNodeArray(members).ast).node;
+        return astFactory.updateClassDeclaration(node.ast, asNodeArray(modifiers)?.ast, name?.ast, asNodeArray(typeParameters)?.ast, asNodeArray(heritageClauses)?.ast, asNodeArray(members).ast).node;
     }
 
     // @api
@@ -2610,7 +2610,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         heritageClauses: readonly HeritageClause[] | undefined,
         members: readonly TypeElement[],
     ): InterfaceDeclaration {
-        return astFactory.updateInterfaceDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(name).ast, asNodeArray(typeParameters)?.ast, asNodeArray(heritageClauses)?.ast, asNodeArray(members).ast).node;
+        return astFactory.updateInterfaceDeclaration(node.ast, asNodeArray(modifiers)?.ast, name.ast, asNodeArray(typeParameters)?.ast, asNodeArray(heritageClauses)?.ast, asNodeArray(members).ast).node;
     }
 
     // @api
@@ -2620,7 +2620,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         typeParameters: readonly TypeParameterDeclaration[] | undefined,
         type: TypeNode,
     ): TypeAliasDeclaration {
-        return astFactory.createTypeAliasDeclaration(asNodeArray(modifiers)?.ast, asName(name).ast, asNodeArray(typeParameters)?.ast, asNode(type).ast).node;
+        return astFactory.createTypeAliasDeclaration(asNodeArray(modifiers)?.ast, asName(name).ast, asNodeArray(typeParameters)?.ast, type.ast).node;
     }
 
     // @api
@@ -2631,7 +2631,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         typeParameters: readonly TypeParameterDeclaration[] | undefined,
         type: TypeNode,
     ): TypeAliasDeclaration {
-        return astFactory.updateTypeAliasDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(name).ast, asNodeArray(typeParameters)?.ast, asNode(type).ast).node;
+        return astFactory.updateTypeAliasDeclaration(node.ast, asNodeArray(modifiers)?.ast, name.ast, asNodeArray(typeParameters)?.ast, type.ast).node;
     }
 
     // @api
@@ -2650,7 +2650,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         name: Identifier,
         members: readonly EnumMember[],
     ): EnumDeclaration {
-        return astFactory.updateEnumDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(name).ast, asNodeArray(members).ast).node;
+        return astFactory.updateEnumDeclaration(node.ast, asNodeArray(modifiers)?.ast, name.ast, asNodeArray(members).ast).node;
     }
 
     // @api
@@ -2660,7 +2660,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         body: ModuleBody | undefined,
         flags = NodeFlags.None,
     ): ModuleDeclaration {
-        return astFactory.createModuleDeclaration(asNodeArray(modifiers)?.ast, asNode(name).ast, asNode(body)?.ast, flags).node;
+        return astFactory.createModuleDeclaration(asNodeArray(modifiers)?.ast, name.ast, body?.ast, flags).node;
     }
 
     // @api
@@ -2670,7 +2670,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         name: ModuleName,
         body: ModuleBody | undefined,
     ): ModuleDeclaration {
-        return astFactory.updateModuleDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(name).ast, asNode(body)?.ast).node;
+        return astFactory.updateModuleDeclaration(node.ast, asNodeArray(modifiers)?.ast, name.ast, body?.ast).node;
     }
 
     // @api
@@ -2680,7 +2680,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateModuleBlock(node: ModuleBlock, statements: readonly Statement[]) {
-        return astFactory.updateModuleBlock(asNode(node).ast, asNodeArray(statements).ast).node;
+        return astFactory.updateModuleBlock(node.ast, asNodeArray(statements).ast).node;
     }
 
     // @api
@@ -2690,7 +2690,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateCaseBlock(node: CaseBlock, clauses: readonly CaseOrDefaultClause[]): CaseBlock {
-        return astFactory.updateCaseBlock(asNode(node).ast, asNodeArray(clauses).ast).node;
+        return astFactory.updateCaseBlock(node.ast, asNodeArray(clauses).ast).node;
     }
 
     // @api
@@ -2700,7 +2700,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration {
-        return astFactory.updateNamespaceExportDeclaration(asNode(node).ast, asNode(name).ast).node;
+        return astFactory.updateNamespaceExportDeclaration(node.ast, name.ast).node;
     }
 
     // @api
@@ -2710,7 +2710,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         name: string | Identifier,
         moduleReference: ModuleReference,
     ): ImportEqualsDeclaration {
-        return astFactory.createImportEqualsDeclaration(asNodeArray(modifiers)?.ast, isTypeOnly, asName(name).ast, asNode(moduleReference).ast).node;
+        return astFactory.createImportEqualsDeclaration(asNodeArray(modifiers)?.ast, isTypeOnly, asName(name).ast, moduleReference.ast).node;
     }
 
     // @api
@@ -2721,7 +2721,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         name: Identifier,
         moduleReference: ModuleReference,
     ): ImportEqualsDeclaration {
-        return astFactory.updateImportEqualsDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, isTypeOnly, asNode(name).ast, asNode(moduleReference).ast).node;
+        return astFactory.updateImportEqualsDeclaration(node.ast, asNodeArray(modifiers)?.ast, isTypeOnly, name.ast, moduleReference.ast).node;
     }
 
     // @api
@@ -2731,7 +2731,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         moduleSpecifier: Expression,
         attributes: ImportAttributes | undefined,
     ): ImportDeclaration {
-        return astFactory.createImportDeclaration(asNodeArray(modifiers)?.ast, asNode(importClause)?.ast, asNode(moduleSpecifier).ast, asNode(attributes)?.ast).node;
+        return astFactory.createImportDeclaration(asNodeArray(modifiers)?.ast, importClause?.ast, moduleSpecifier.ast, attributes?.ast).node;
     }
 
     // @api
@@ -2742,17 +2742,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         moduleSpecifier: Expression,
         attributes: ImportAttributes | undefined,
     ): ImportDeclaration {
-        return astFactory.updateImportDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(importClause)?.ast, asNode(moduleSpecifier).ast, asNode(attributes)?.ast).node;
+        return astFactory.updateImportDeclaration(node.ast, asNodeArray(modifiers)?.ast, importClause?.ast, moduleSpecifier.ast, attributes?.ast).node;
     }
 
     // @api
     function createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
-        return astFactory.createImportClause(isTypeOnly, asNode(name)?.ast, asNode(namedBindings)?.ast).node;
+        return astFactory.createImportClause(isTypeOnly, name?.ast, namedBindings?.ast).node;
     }
 
     // @api
     function updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
-        return astFactory.updateImportClause(asNode(node).ast, isTypeOnly, asNode(name)?.ast, asNode(namedBindings)?.ast).node;
+        return astFactory.updateImportClause(node.ast, isTypeOnly, name?.ast, namedBindings?.ast).node;
     }
 
     // @api
@@ -2762,27 +2762,27 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateAssertClause(node: AssertClause, elements: readonly AssertEntry[], multiLine?: boolean): AssertClause {
-        return astFactory.updateAssertClause(asNode(node).ast, asNodeArray(elements).ast, multiLine).node;
+        return astFactory.updateAssertClause(node.ast, asNodeArray(elements).ast, multiLine).node;
     }
 
     // @api
     function createAssertEntry(name: AssertionKey, value: Expression) {
-        return astFactory.createAssertEntry(asNode(name).ast, asNode(value).ast).node;
+        return astFactory.createAssertEntry(name.ast, value.ast).node;
     }
 
     // @api
     function updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression) {
-        return astFactory.updateAssertEntry(asNode(node).ast, asNode(name).ast, asNode(value).ast).node;
+        return astFactory.updateAssertEntry(node.ast, name.ast, value.ast).node;
     }
 
     // @api
     function createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer {
-        return astFactory.createImportTypeAssertionContainer(asNode(clause).ast, multiLine).node;
+        return astFactory.createImportTypeAssertionContainer(clause.ast, multiLine).node;
     }
 
     // @api
     function updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer {
-        return astFactory.updateImportTypeAssertionContainer(asNode(node).ast, asNode(clause).ast, multiLine).node;
+        return astFactory.updateImportTypeAssertionContainer(node.ast, clause.ast, multiLine).node;
     }
 
     // @api
@@ -2794,37 +2794,37 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateImportAttributes(node: ImportAttributes, elements: readonly ImportAttribute[], multiLine?: boolean): ImportAttributes {
-        return astFactory.updateImportAttributes(asNode(node).ast, asNodeArray(elements).ast, multiLine).node;
+        return astFactory.updateImportAttributes(node.ast, asNodeArray(elements).ast, multiLine).node;
     }
 
     // @api
     function createImportAttribute(name: ImportAttributeName, value: Expression) {
-        return astFactory.createImportAttribute(asNode(name).ast, asNode(value).ast).node;
+        return astFactory.createImportAttribute(name.ast, value.ast).node;
     }
 
     // @api
     function updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression) {
-        return astFactory.updateImportAttribute(asNode(node).ast, asNode(name).ast, asNode(value).ast).node;
+        return astFactory.updateImportAttribute(node.ast, name.ast, value.ast).node;
     }
 
     // @api
     function createNamespaceImport(name: Identifier): NamespaceImport {
-        return astFactory.createNamespaceImport(asNode(name).ast).node;
+        return astFactory.createNamespaceImport(name.ast).node;
     }
 
     // @api
     function updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport {
-        return astFactory.updateNamespaceImport(asNode(node).ast, asNode(name).ast).node;
+        return astFactory.updateNamespaceImport(node.ast, name.ast).node;
     }
 
     // @api
     function createNamespaceExport(name: ModuleExportName): NamespaceExport {
-        return astFactory.createNamespaceExport(asNode(name).ast).node;
+        return astFactory.createNamespaceExport(name.ast).node;
     }
 
     // @api
     function updateNamespaceExport(node: NamespaceExport, name: ModuleExportName): NamespaceExport {
-        return astFactory.updateNamespaceExport(asNode(node).ast, asNode(name).ast).node;
+        return astFactory.updateNamespaceExport(node.ast, name.ast).node;
     }
 
     // @api
@@ -2834,17 +2834,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports {
-        return astFactory.updateNamedImports(asNode(node).ast, asNodeArray(elements).ast).node;
+        return astFactory.updateNamedImports(node.ast, asNodeArray(elements).ast).node;
     }
 
     // @api
     function createImportSpecifier(isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier): ImportSpecifier {
-        return astFactory.createImportSpecifier(isTypeOnly, asNode(propertyName)?.ast, asNode(name).ast).node;
+        return astFactory.createImportSpecifier(isTypeOnly, propertyName?.ast, name.ast).node;
     }
 
     // @api
     function updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier): ImportSpecifier {
-        return astFactory.updateImportSpecifier(asNode(node).ast, isTypeOnly, asNode(propertyName)?.ast, asNode(name).ast).node;
+        return astFactory.updateImportSpecifier(node.ast, isTypeOnly, propertyName?.ast, name.ast).node;
     }
 
     // @api
@@ -2853,7 +2853,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         isExportEquals: boolean | undefined,
         expression: Expression,
     ): ExportAssignment {
-        return astFactory.createExportAssignment(asNodeArray(modifiers)?.ast, isExportEquals, asNode(expression).ast).node;
+        return astFactory.createExportAssignment(asNodeArray(modifiers)?.ast, isExportEquals, expression.ast).node;
     }
 
     // @api
@@ -2862,7 +2862,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         modifiers: readonly ModifierLike[] | undefined,
         expression: Expression,
     ): ExportAssignment {
-        return astFactory.updateExportAssignment(asNode(node).ast, asNodeArray(modifiers)?.ast, asNode(expression).ast).node;
+        return astFactory.updateExportAssignment(node.ast, asNodeArray(modifiers)?.ast, expression.ast).node;
     }
 
     // @api
@@ -2873,7 +2873,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         moduleSpecifier?: Expression,
         attributes?: ImportAttributes,
     ): ExportDeclaration {
-        return astFactory.createExportDeclaration(asNodeArray(modifiers)?.ast, isTypeOnly, asNode(exportClause)?.ast, asNode(moduleSpecifier)?.ast, asNode(attributes)?.ast).node;
+        return astFactory.createExportDeclaration(asNodeArray(modifiers)?.ast, isTypeOnly, exportClause?.ast, moduleSpecifier?.ast, attributes?.ast).node;
     }
 
     // @api
@@ -2885,7 +2885,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         moduleSpecifier: Expression | undefined,
         attributes: ImportAttributes | undefined,
     ): ExportDeclaration {
-        return astFactory.updateExportDeclaration(asNode(node).ast, asNodeArray(modifiers)?.ast, isTypeOnly, asNode(exportClause)?.ast, asNode(moduleSpecifier)?.ast, asNode(attributes)?.ast).node;
+        return astFactory.updateExportDeclaration(node.ast, asNodeArray(modifiers)?.ast, isTypeOnly, exportClause?.ast, moduleSpecifier?.ast, attributes?.ast).node;
     }
 
     // @api
@@ -2895,7 +2895,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports {
-        return astFactory.updateNamedExports(asNode(node).ast, asNodeArray(elements).ast).node;
+        return astFactory.updateNamedExports(node.ast, asNodeArray(elements).ast).node;
     }
 
     // @api
@@ -2905,7 +2905,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: ModuleExportName): ExportSpecifier {
-        return astFactory.updateExportSpecifier(asNode(node).ast, isTypeOnly, asNode(propertyName)?.ast, asNode(name).ast).node;
+        return astFactory.updateExportSpecifier(node.ast, isTypeOnly, propertyName?.ast, name.ast).node;
     }
 
     // @api
@@ -2919,12 +2919,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createExternalModuleReference(expression: Expression): ExternalModuleReference {
-        return astFactory.createExternalModuleReference(asNode(expression).ast).node;
+        return astFactory.createExternalModuleReference(expression.ast).node;
     }
 
     // @api
     function updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference {
-        return astFactory.updateExternalModuleReference(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateExternalModuleReference(node.ast, expression.ast).node;
     }
 
     //
@@ -2943,63 +2943,63 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createJSDocNonNullableType(type: TypeNode, postfix = false): JSDocNonNullableType {
-        return astFactory.createJSDocNonNullableType(asNode(type).ast, postfix).node;
+        return astFactory.createJSDocNonNullableType(type.ast, postfix).node;
     }
 
     // @api
     function updateJSDocNonNullableType(node: JSDocNonNullableType, type: TypeNode): JSDocNonNullableType {
-        return astFactory.updateJSDocNonNullableType(asNode(node).ast, asNode(type).ast).node;
+        return astFactory.updateJSDocNonNullableType(node.ast, type.ast).node;
     }
 
     // @api
     function createJSDocNullableType(type: TypeNode, postfix = false): JSDocNullableType {
-        return astFactory.createJSDocNullableType(asNode(type).ast, postfix).node;
+        return astFactory.createJSDocNullableType(type.ast, postfix).node;
     }
 
     // @api
     function updateJSDocNullableType(node: JSDocNullableType, type: TypeNode): JSDocNullableType {
-        return astFactory.updateJSDocNullableType(asNode(node).ast, asNode(type).ast).node;
+        return astFactory.updateJSDocNullableType(node.ast, type.ast).node;
     }
 
     // @api
     function createJSDocOptionalType(type: TypeNode): JSDocOptionalType {
-        return astFactory.createJSDocOptionalType(asNode(type).ast).node;
+        return astFactory.createJSDocOptionalType(type.ast).node;
     }
 
     // @api
     function updateJSDocOptionalType(node: JSDocOptionalType, type: TypeNode): JSDocOptionalType {
-        return astFactory.updateJSDocOptionalType(asNode(node).ast, asNode(type).ast).node;
+        return astFactory.updateJSDocOptionalType(node.ast, type.ast).node;
     }
 
     // @api
     function createJSDocVariadicType(type: TypeNode): JSDocVariadicType {
-        return astFactory.createJSDocVariadicType(asNode(type).ast).node;
+        return astFactory.createJSDocVariadicType(type.ast).node;
     }
 
     // @api
     function updateJSDocVariadicType(node: JSDocVariadicType, type: TypeNode): JSDocVariadicType {
-        return astFactory.updateJSDocVariadicType(asNode(node).ast, asNode(type).ast).node;
+        return astFactory.updateJSDocVariadicType(node.ast, type.ast).node;
     }
 
     // @api
     function createJSDocNamepathType(type: TypeNode): JSDocNamepathType {
         // NOTE: 'type' can be undefined when this is called by parser.
-        return astFactory.createJSDocNamepathType(asNode(type)?.ast).node;
+        return astFactory.createJSDocNamepathType(type?.ast).node;
     }
 
     // @api
     function updateJSDocNamepathType(node: JSDocNamepathType, type: TypeNode): JSDocNamepathType {
-        return astFactory.updateJSDocNamepathType(asNode(node).ast, asNode(type).ast).node;
+        return astFactory.updateJSDocNamepathType(node.ast, type.ast).node;
     }
 
     // @api
     function createJSDocFunctionType(parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): JSDocFunctionType {
-        return astFactory.createJSDocFunctionType(asNodeArray(parameters).ast, asNode(type)?.ast).node;
+        return astFactory.createJSDocFunctionType(asNodeArray(parameters).ast, type?.ast).node;
     }
 
     // @api
     function updateJSDocFunctionType(node: JSDocFunctionType, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): JSDocFunctionType {
-        return astFactory.updateJSDocFunctionType(asNode(node).ast, asNodeArray(parameters).ast, asNode(type)?.ast).node;
+        return astFactory.updateJSDocFunctionType(node.ast, asNodeArray(parameters).ast, type?.ast).node;
     }
 
     // @api
@@ -3009,266 +3009,266 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateJSDocTypeLiteral(node: JSDocTypeLiteral, propertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean): JSDocTypeLiteral {
-        return astFactory.updateJSDocTypeLiteral(asNode(node).ast, asNodeArray(propertyTags)?.ast, isArrayType).node;
+        return astFactory.updateJSDocTypeLiteral(node.ast, asNodeArray(propertyTags)?.ast, isArrayType).node;
     }
 
     // @api
     function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
-        return astFactory.createJSDocTypeExpression(asNode(type).ast).node;
+        return astFactory.createJSDocTypeExpression(type.ast).node;
     }
 
     // @api
     function updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression {
-        return astFactory.updateJSDocTypeExpression(asNode(node).ast, asNode(type).ast).node;
+        return astFactory.updateJSDocTypeExpression(node.ast, type.ast).node;
     }
 
     // @api
     function createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature {
-        return astFactory.createJSDocSignature(asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast).node;
+        return astFactory.createJSDocSignature(asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast).node;
     }
 
     // @api
     function updateJSDocSignature(node: JSDocSignature, typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type: JSDocReturnTag | undefined): JSDocSignature {
-        return astFactory.updateJSDocSignature(asNode(node).ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, asNode(type)?.ast).node;
+        return astFactory.updateJSDocSignature(node.ast, asNodeArray(typeParameters)?.ast, asNodeArray(parameters).ast, type?.ast).node;
     }
 
     // @api
     function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string | NodeArray<JSDocComment>): JSDocTemplateTag {
-        return astFactory.createJSDocTemplateTag(asNode(tagName)?.ast, asNode(constraint)?.ast, asNodeArray(typeParameters).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocTemplateTag(tagName?.ast, constraint?.ast, asNodeArray(typeParameters).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: string | NodeArray<JSDocComment> | undefined): JSDocTemplateTag {
-        return astFactory.updateJSDocTemplateTag(asNode(node).ast, asNode(tagName)?.ast, asNode(constraint)?.ast, asNodeArray(typeParameters).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocTemplateTag(node.ast, tagName?.ast, constraint?.ast, asNodeArray(typeParameters).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocTypedefTag {
-        return astFactory.createJSDocTypedefTag(asNode(tagName)?.ast, asNode(typeExpression)?.ast, asNode(fullName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocTypedefTag(tagName?.ast, typeExpression?.ast, fullName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocTypedefTag {
-        return astFactory.updateJSDocTypedefTag(asNode(node).ast, asNode(tagName)?.ast, asNode(typeExpression)?.ast, asNode(fullName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocTypedefTag(node.ast, tagName?.ast, typeExpression?.ast, fullName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocComment>): JSDocParameterTag {
-        return astFactory.createJSDocParameterTag(asNode(tagName)?.ast, asNode(name).ast, isBracketed, asNode(typeExpression)?.ast, isNameFirst, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocParameterTag(tagName?.ast, name.ast, isBracketed, typeExpression?.ast, isNameFirst, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | NodeArray<JSDocComment> | undefined): JSDocParameterTag {
-        return astFactory.updateJSDocParameterTag(asNode(node).ast, asNode(tagName)?.ast, asNode(name).ast, isBracketed, asNode(typeExpression)?.ast, isNameFirst, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocParameterTag(node.ast, tagName?.ast, name.ast, isBracketed, typeExpression?.ast, isNameFirst, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocComment>): JSDocPropertyTag {
-        return astFactory.createJSDocPropertyTag(asNode(tagName)?.ast, asNode(name).ast, isBracketed, asNode(typeExpression)?.ast, isNameFirst, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocPropertyTag(tagName?.ast, name.ast, isBracketed, typeExpression?.ast, isNameFirst, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | NodeArray<JSDocComment> | undefined): JSDocPropertyTag {
-        return astFactory.updateJSDocPropertyTag(asNode(node).ast, asNode(tagName)?.ast, asNode(name).ast, isBracketed, asNode(typeExpression)?.ast, isNameFirst, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocPropertyTag(node.ast, tagName?.ast, name.ast, isBracketed, typeExpression?.ast, isNameFirst, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocCallbackTag {
-        return astFactory.createJSDocCallbackTag(asNode(tagName)?.ast, asNode(typeExpression).ast, asNode(fullName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocCallbackTag(tagName?.ast, typeExpression.ast, fullName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocCallbackTag {
-        return astFactory.updateJSDocCallbackTag(asNode(node).ast, asNode(tagName)?.ast, asNode(typeExpression).ast, asNode(fullName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocCallbackTag(node.ast, tagName?.ast, typeExpression.ast, fullName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocOverloadTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, comment?: string | NodeArray<JSDocComment>): JSDocOverloadTag {
-        return astFactory.createJSDocOverloadTag(asNode(tagName)?.ast, asNode(typeExpression).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocOverloadTag(tagName?.ast, typeExpression.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocOverloadTag(node: JSDocOverloadTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, comment: string | NodeArray<JSDocComment> | undefined): JSDocOverloadTag {
-        return astFactory.updateJSDocOverloadTag(asNode(node).ast, asNode(tagName)?.ast, asNode(typeExpression).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocOverloadTag(node.ast, tagName?.ast, typeExpression.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocClassReference, comment?: string | NodeArray<JSDocComment>): JSDocAugmentsTag {
-        return astFactory.createJSDocAugmentsTag(asNode(tagName)?.ast, asNode(className).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocAugmentsTag(tagName?.ast, className.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier | undefined, className: JSDocClassReference, comment: string | NodeArray<JSDocComment> | undefined): JSDocAugmentsTag {
-        return astFactory.updateJSDocAugmentsTag(asNode(node).ast, asNode(tagName)?.ast, asNode(className).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocAugmentsTag(node.ast, tagName?.ast, className.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocClassReference, comment?: string | NodeArray<JSDocComment>): JSDocImplementsTag {
-        return astFactory.createJSDocImplementsTag(asNode(tagName)?.ast, asNode(className).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocImplementsTag(tagName?.ast, className.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocSeeTag(tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment>): JSDocSeeTag {
-        return astFactory.createJSDocSeeTag(asNode(tagName)?.ast, asNode(name)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocSeeTag(tagName?.ast, name?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment>): JSDocSeeTag {
-        return astFactory.updateJSDocSeeTag(asNode(node).ast, asNode(tagName)?.ast, asNode(name)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocSeeTag(node.ast, tagName?.ast, name?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocNameReference(name: EntityName | JSDocMemberName): JSDocNameReference {
-        return astFactory.createJSDocNameReference(asNode(name).ast).node;
+        return astFactory.createJSDocNameReference(name.ast).node;
     }
 
     // @api
     function updateJSDocNameReference(node: JSDocNameReference, name: EntityName | JSDocMemberName): JSDocNameReference {
-        return astFactory.updateJSDocNameReference(asNode(node).ast, asNode(name).ast).node;
+        return astFactory.updateJSDocNameReference(node.ast, name.ast).node;
     }
 
     // @api
     function createJSDocMemberName(left: EntityName | JSDocMemberName, right: Identifier): JSDocMemberName {
-        return astFactory.createJSDocMemberName(asNode(left).ast, asNode(right).ast).node;
+        return astFactory.createJSDocMemberName(left.ast, right.ast).node;
     }
 
     // @api
     function updateJSDocMemberName(node: JSDocMemberName, left: EntityName | JSDocMemberName, right: Identifier): JSDocMemberName {
-        return astFactory.updateJSDocMemberName(asNode(node).ast, asNode(left).ast, asNode(right).ast).node;
+        return astFactory.updateJSDocMemberName(node.ast, left.ast, right.ast).node;
     }
 
     // @api
     function createJSDocLink(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink {
-        return astFactory.createJSDocLink(asNode(name)?.ast, text).node;
+        return astFactory.createJSDocLink(name?.ast, text).node;
     }
 
     // @api
     function updateJSDocLink(node: JSDocLink, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink {
-        return astFactory.updateJSDocLink(asNode(node).ast, asNode(name)?.ast, text).node;
+        return astFactory.updateJSDocLink(node.ast, name?.ast, text).node;
     }
 
     // @api
     function createJSDocLinkCode(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkCode {
-        return astFactory.createJSDocLinkCode(asNode(name)?.ast, text).node;
+        return astFactory.createJSDocLinkCode(name?.ast, text).node;
     }
 
     // @api
     function updateJSDocLinkCode(node: JSDocLinkCode, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkCode {
-        return astFactory.updateJSDocLinkCode(asNode(node).ast, asNode(name)?.ast, text).node;
+        return astFactory.updateJSDocLinkCode(node.ast, name?.ast, text).node;
     }
 
     // @api
     function createJSDocLinkPlain(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkPlain {
-        return astFactory.createJSDocLinkPlain(asNode(name)?.ast, text).node;
+        return astFactory.createJSDocLinkPlain(name?.ast, text).node;
     }
 
     // @api
     function updateJSDocLinkPlain(node: JSDocLinkPlain, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkPlain {
-        return astFactory.updateJSDocLinkPlain(asNode(node).ast, asNode(name)?.ast, text).node;
+        return astFactory.updateJSDocLinkPlain(node.ast, name?.ast, text).node;
     }
 
     // @api
     function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier | undefined, className: JSDocClassReference, comment: string | NodeArray<JSDocComment> | undefined): JSDocImplementsTag {
-        return astFactory.updateJSDocImplementsTag(asNode(node).ast, asNode(tagName)?.ast, asNode(className).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocImplementsTag(node.ast, tagName?.ast, className.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocAuthorTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocAuthorTag {
-        return astFactory.createJSDocAuthorTag(asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocAuthorTag(tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocAuthorTag(node: JSDocAuthorTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocAuthorTag {
-        return astFactory.updateJSDocAuthorTag(asNode(node).ast, asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocAuthorTag(node.ast, tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocClassTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocClassTag {
-        return astFactory.createJSDocClassTag(asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocClassTag(tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocClassTag(node: JSDocClassTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocClassTag {
-        return astFactory.updateJSDocClassTag(asNode(node).ast, asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocClassTag(node.ast, tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocPublicTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocPublicTag {
-        return astFactory.createJSDocPublicTag(asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocPublicTag(tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocPublicTag(node: JSDocPublicTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocPublicTag {
-        return astFactory.updateJSDocPublicTag(asNode(node).ast, asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocPublicTag(node.ast, tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocPrivateTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocPrivateTag {
-        return astFactory.createJSDocPrivateTag(asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocPrivateTag(tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocPrivateTag(node: JSDocPrivateTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocPrivateTag {
-        return astFactory.updateJSDocPrivateTag(asNode(node).ast, asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocPrivateTag(node.ast, tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocProtectedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocProtectedTag {
-        return astFactory.createJSDocProtectedTag(asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocProtectedTag(tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocProtectedTag(node: JSDocProtectedTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocProtectedTag {
-        return astFactory.updateJSDocProtectedTag(asNode(node).ast, asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocProtectedTag(node.ast, tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocReadonlyTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocReadonlyTag {
-        return astFactory.createJSDocReadonlyTag(asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocReadonlyTag(tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocReadonlyTag(node: JSDocReadonlyTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocReadonlyTag {
-        return astFactory.updateJSDocReadonlyTag(asNode(node).ast, asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocReadonlyTag(node.ast, tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocOverrideTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag {
-        return astFactory.createJSDocOverrideTag(asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocOverrideTag(tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocOverrideTag {
-        return astFactory.updateJSDocOverrideTag(asNode(node).ast, asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocOverrideTag(node.ast, tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocDeprecatedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag {
-        return astFactory.createJSDocDeprecatedTag(asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocDeprecatedTag(tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag {
-        return astFactory.updateJSDocDeprecatedTag(asNode(node).ast, asNode(tagName)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocDeprecatedTag(node.ast, tagName?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocUnknownTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocUnknownTag {
-        return astFactory.createJSDocUnknownTag(asNode(tagName).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocUnknownTag(tagName.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined): JSDocUnknownTag {
-        return astFactory.updateJSDocUnknownTag(asNode(node).ast, asNode(tagName).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocUnknownTag(node.ast, tagName.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes, comment?: string | NodeArray<JSDocComment>): JSDocImportTag {
-        return astFactory.createJSDocImportTag(asNode(tagName)?.ast, asNode(importClause)?.ast, asNode(moduleSpecifier).ast, asNode(attributes)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocImportTag(tagName?.ast, importClause?.ast, moduleSpecifier.ast, attributes?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     function updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag {
-        return astFactory.updateJSDocImportTag(asNode(node).ast, asNode(tagName)?.ast, asNode(importClause)?.ast, asNode(moduleSpecifier).ast, asNode(attributes)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocImportTag(node.ast, tagName?.ast, importClause?.ast, moduleSpecifier.ast, attributes?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
@@ -3278,7 +3278,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateJSDocText(node: JSDocText, text: string): JSDocText {
-        return astFactory.updateJSDocText(asNode(node).ast, text).node;
+        return astFactory.updateJSDocText(node.ast, text).node;
     }
 
     // @api
@@ -3288,67 +3288,67 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateJSDocComment(node: JSDoc, comment: string | NodeArray<JSDocComment> | undefined, tags: readonly JSDocTag[] | undefined): JSDoc {
-        return astFactory.updateJSDocComment(asNode(node).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast, asNodeArray(tags)?.ast).node;
+        return astFactory.updateJSDocComment(node.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast, asNodeArray(tags)?.ast).node;
     }
 
     // @api
     function createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocTypeTag {
-        return astFactory.createJSDocTypeTag(asNode(tagName)?.ast, asNode(typeExpression).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocTypeTag(tagName?.ast, typeExpression.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocTypeTag {
-        return astFactory.updateJSDocTypeTag(asNode(node).ast, asNode(tagName)?.ast, asNode(typeExpression).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocTypeTag(node.ast, tagName?.ast, typeExpression.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocReturnTag {
-        return astFactory.createJSDocReturnTag(asNode(tagName)?.ast, asNode(typeExpression)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocReturnTag(tagName?.ast, typeExpression?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocReturnTag {
-        return astFactory.updateJSDocReturnTag(asNode(node).ast, asNode(tagName)?.ast, asNode(typeExpression)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocReturnTag(node.ast, tagName?.ast, typeExpression?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocThisTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocThisTag {
-        return astFactory.createJSDocThisTag(asNode(tagName)?.ast, asNode(typeExpression).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocThisTag(tagName?.ast, typeExpression.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocThisTag(node: JSDocThisTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocThisTag {
-        return astFactory.updateJSDocThisTag(asNode(node).ast, asNode(tagName)?.ast, asNode(typeExpression)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocThisTag(node.ast, tagName?.ast, typeExpression?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocThrowsTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag {
-        return astFactory.createJSDocThrowsTag(asNode(tagName)?.ast, asNode(typeExpression)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocThrowsTag(tagName?.ast, typeExpression?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag {
-        return astFactory.updateJSDocThrowsTag(asNode(node).ast, asNode(tagName)?.ast, asNode(typeExpression)?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocThrowsTag(node.ast, tagName?.ast, typeExpression?.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocEnumTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>) {
-        return astFactory.createJSDocEnumTag(asNode(tagName)?.ast, asNode(typeExpression).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocEnumTag(tagName?.ast, typeExpression.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined) {
-        return astFactory.updateJSDocEnumTag(asNode(node).ast, asNode(tagName)?.ast, asNode(typeExpression).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocEnumTag(node.ast, tagName?.ast, typeExpression.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>) {
-        return astFactory.createJSDocSatisfiesTag(asNode(tagName)?.ast, asNode(typeExpression).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.createJSDocSatisfiesTag(tagName?.ast, typeExpression.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     // @api
     function updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined) {
-        return astFactory.updateJSDocSatisfiesTag(asNode(node).ast, asNode(tagName)?.ast, asNode(typeExpression).ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
+        return astFactory.updateJSDocSatisfiesTag(node.ast, tagName?.ast, typeExpression.ast, typeof comment === "string" ? comment : asNodeArray(comment)?.ast).node;
     }
 
     //
@@ -3357,52 +3357,52 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createJsxElement(openingElement: JsxOpeningElement, children: readonly JsxChild[], closingElement: JsxClosingElement): JsxElement {
-        return astFactory.createJsxElement(asNode(openingElement).ast, asNodeArray(children).ast, asNode(closingElement).ast).node;
+        return astFactory.createJsxElement(openingElement.ast, asNodeArray(children).ast, closingElement.ast).node;
     }
 
     // @api
     function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: readonly JsxChild[], closingElement: JsxClosingElement): JsxElement {
-        return astFactory.updateJsxElement(asNode(node).ast, asNode(openingElement).ast, asNodeArray(children).ast, asNode(closingElement).ast).node;
+        return astFactory.updateJsxElement(node.ast, openingElement.ast, asNodeArray(children).ast, closingElement.ast).node;
     }
 
     // @api
     function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes): JsxSelfClosingElement {
-        return astFactory.createJsxSelfClosingElement(asNode(tagName).ast, asNodeArray(typeArguments)?.ast, asNode(attributes).ast).node;
+        return astFactory.createJsxSelfClosingElement(tagName.ast, asNodeArray(typeArguments)?.ast, attributes.ast).node;
     }
 
     // @api
     function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes): JsxSelfClosingElement {
-        return astFactory.updateJsxSelfClosingElement(asNode(node).ast, asNode(tagName).ast, asNodeArray(typeArguments)?.ast, asNode(attributes).ast).node;
+        return astFactory.updateJsxSelfClosingElement(node.ast, tagName.ast, asNodeArray(typeArguments)?.ast, attributes.ast).node;
     }
 
     // @api
     function createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes): JsxOpeningElement {
-        return astFactory.createJsxOpeningElement(asNode(tagName).ast, asNodeArray(typeArguments)?.ast, asNode(attributes).ast).node;
+        return astFactory.createJsxOpeningElement(tagName.ast, asNodeArray(typeArguments)?.ast, attributes.ast).node;
     }
 
     // @api
     function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes): JsxOpeningElement {
-        return astFactory.updateJsxOpeningElement(asNode(node).ast, asNode(tagName).ast, asNodeArray(typeArguments)?.ast, asNode(attributes).ast).node;
+        return astFactory.updateJsxOpeningElement(node.ast, tagName.ast, asNodeArray(typeArguments)?.ast, attributes.ast).node;
     }
 
     // @api
     function createJsxClosingElement(tagName: JsxTagNameExpression): JsxClosingElement {
-        return astFactory.createJsxClosingElement(asNode(tagName).ast).node;
+        return astFactory.createJsxClosingElement(tagName.ast).node;
     }
 
     // @api
     function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement {
-        return astFactory.updateJsxClosingElement(asNode(node).ast, asNode(tagName).ast).node;
+        return astFactory.updateJsxClosingElement(node.ast, tagName.ast).node;
     }
 
     // @api
     function createJsxFragment(openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment {
-        return astFactory.createJsxFragment(asNode(openingFragment).ast, asNodeArray(children).ast, asNode(closingFragment).ast).node;
+        return astFactory.createJsxFragment(openingFragment.ast, asNodeArray(children).ast, closingFragment.ast).node;
     }
 
     // @api
     function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment {
-        return astFactory.updateJsxFragment(asNode(node).ast, asNode(openingFragment).ast, asNodeArray(children).ast, asNode(closingFragment).ast).node;
+        return astFactory.updateJsxFragment(node.ast, openingFragment.ast, asNodeArray(children).ast, closingFragment.ast).node;
     }
 
     // @api
@@ -3412,7 +3412,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateJsxText(node: JsxText, text: string, containsOnlyTriviaWhiteSpaces?: boolean): JsxText {
-        return astFactory.updateJsxText(asNode(node).ast, text, containsOnlyTriviaWhiteSpaces).node;
+        return astFactory.updateJsxText(node.ast, text, containsOnlyTriviaWhiteSpaces).node;
     }
 
     // @api
@@ -3427,12 +3427,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute {
-        return astFactory.createJsxAttribute(asNode(name).ast, asNode(initializer)?.ast).node;
+        return astFactory.createJsxAttribute(name.ast, initializer?.ast).node;
     }
 
     // @api
     function updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute {
-        return astFactory.updateJsxAttribute(asNode(node).ast, asNode(name).ast, asNode(initializer)?.ast).node;
+        return astFactory.updateJsxAttribute(node.ast, name.ast, initializer?.ast).node;
     }
 
     // @api
@@ -3442,37 +3442,37 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes {
-        return astFactory.updateJsxAttributes(asNode(node).ast, asNodeArray(properties).ast).node;
+        return astFactory.updateJsxAttributes(node.ast, asNodeArray(properties).ast).node;
     }
 
     // @api
     function createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute {
-        return astFactory.createJsxSpreadAttribute(asNode(expression).ast).node;
+        return astFactory.createJsxSpreadAttribute(expression.ast).node;
     }
 
     // @api
     function updateJsxSpreadAttribute(node: JsxSpreadAttribute, expression: Expression): JsxSpreadAttribute {
-        return astFactory.updateJsxSpreadAttribute(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateJsxSpreadAttribute(node.ast, expression.ast).node;
     }
 
     // @api
     function createJsxExpression(dotDotDotToken: DotDotDotToken | undefined, expression: Expression | undefined): JsxExpression {
-        return astFactory.createJsxExpression(asNode(dotDotDotToken)?.ast, asNode(expression)?.ast).node;
+        return astFactory.createJsxExpression(dotDotDotToken?.ast, expression?.ast).node;
     }
 
     // @api
     function updateJsxExpression(node: JsxExpression, expression: Expression | undefined): JsxExpression {
-        return astFactory.updateJsxExpression(asNode(node).ast, asNode(expression)?.ast).node;
+        return astFactory.updateJsxExpression(node.ast, expression?.ast).node;
     }
 
     // @api
     function createJsxNamespacedName(namespace: Identifier, name: Identifier): JsxNamespacedName {
-        return astFactory.createJsxNamespacedName(asNode(namespace).ast, asNode(name).ast).node;
+        return astFactory.createJsxNamespacedName(namespace.ast, name.ast).node;
     }
 
     // @api
     function updateJsxNamespacedName(node: JsxNamespacedName, namespace: Identifier, name: Identifier): JsxNamespacedName {
-        return astFactory.updateJsxNamespacedName(asNode(node).ast, asNode(namespace).ast, asNode(name).ast).node;
+        return astFactory.updateJsxNamespacedName(node.ast, namespace.ast, name.ast).node;
     }
 
     //
@@ -3481,12 +3481,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createCaseClause(expression: Expression, statements: readonly Statement[]): CaseClause {
-        return astFactory.createCaseClause(asNode(expression).ast, asNodeArray(statements).ast).node;
+        return astFactory.createCaseClause(expression.ast, asNodeArray(statements).ast).node;
     }
 
     // @api
     function updateCaseClause(node: CaseClause, expression: Expression, statements: readonly Statement[]): CaseClause {
-        return astFactory.updateCaseClause(asNode(node).ast, asNode(expression).ast, asNodeArray(statements).ast).node;
+        return astFactory.updateCaseClause(node.ast, expression.ast, asNodeArray(statements).ast).node;
     }
 
     // @api
@@ -3496,7 +3496,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateDefaultClause(node: DefaultClause, statements: readonly Statement[]): DefaultClause {
-        return astFactory.updateDefaultClause(asNode(node).ast, asNodeArray(statements).ast).node;
+        return astFactory.updateDefaultClause(node.ast, asNodeArray(statements).ast).node;
     }
 
     // @api
@@ -3506,17 +3506,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateHeritageClause(node: HeritageClause, types: readonly ExpressionWithTypeArguments[]): HeritageClause {
-        return astFactory.updateHeritageClause(asNode(node).ast, asNodeArray(types).ast).node;
+        return astFactory.updateHeritageClause(node.ast, asNodeArray(types).ast).node;
     }
 
     // @api
     function createCatchClause(variableDeclaration: string | BindingName | VariableDeclaration | undefined, block: Block): CatchClause {
-        return astFactory.createCatchClause(asVariableDeclaration(variableDeclaration)?.ast, asNode(block).ast).node;
+        return astFactory.createCatchClause(asVariableDeclaration(variableDeclaration)?.ast, block.ast).node;
     }
 
     // @api
     function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block): CatchClause {
-        return astFactory.updateCatchClause(asNode(node).ast, asNode(variableDeclaration)?.ast, asNode(block).ast).node;
+        return astFactory.updateCatchClause(node.ast, variableDeclaration?.ast, block.ast).node;
     }
 
     //
@@ -3525,32 +3525,32 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createPropertyAssignment(name: string | PropertyName, initializer: Expression): PropertyAssignment {
-        return astFactory.createPropertyAssignment(asName(name)?.ast, asNode(initializer).ast).node;
+        return astFactory.createPropertyAssignment(asName(name)?.ast, initializer.ast).node;
     }
 
     // @api
     function updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression): PropertyAssignment {
-        return astFactory.updatePropertyAssignment(asNode(node).ast, asNode(name).ast, asNode(initializer).ast).node;
+        return astFactory.updatePropertyAssignment(node.ast, name.ast, initializer.ast).node;
     }
 
     // @api
     function createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer?: Expression): ShorthandPropertyAssignment {
-        return astFactory.createShorthandPropertyAssignment(asName(name).ast, asNode(objectAssignmentInitializer)?.ast).node;
+        return astFactory.createShorthandPropertyAssignment(asName(name).ast, objectAssignmentInitializer?.ast).node;
     }
 
     // @api
     function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression | undefined): ShorthandPropertyAssignment {
-        return astFactory.updateShorthandPropertyAssignment(asNode(node).ast, asNode(name).ast, asNode(objectAssignmentInitializer)?.ast).node;
+        return astFactory.updateShorthandPropertyAssignment(node.ast, name.ast, objectAssignmentInitializer?.ast).node;
     }
 
     // @api
     function createSpreadAssignment(expression: Expression): SpreadAssignment {
-        return astFactory.createSpreadAssignment(asNode(expression).ast).node;
+        return astFactory.createSpreadAssignment(expression.ast).node;
     }
 
     // @api
     function updateSpreadAssignment(node: SpreadAssignment, expression: Expression): SpreadAssignment {
-        return astFactory.updateSpreadAssignment(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updateSpreadAssignment(node.ast, expression.ast).node;
     }
 
     //
@@ -3559,12 +3559,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createEnumMember(name: string | PropertyName, initializer?: Expression): EnumMember {
-        return astFactory.createEnumMember(asName(name).ast, asNode(initializer)?.ast).node;
+        return astFactory.createEnumMember(asName(name).ast, initializer?.ast).node;
     }
 
     // @api
     function updateEnumMember(node: EnumMember, name: PropertyName, initializer: Expression | undefined): EnumMember {
-        return astFactory.updateEnumMember(asNode(node).ast, asNode(name).ast, asNode(initializer)?.ast).node;
+        return astFactory.updateEnumMember(node.ast, name.ast, initializer?.ast).node;
     }
 
     //
@@ -3577,7 +3577,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         endOfFileToken: EndOfFileToken,
         flags: NodeFlags,
     ): SourceFile {
-        return astFactory.createSourceFile(asNodeArray(statements).ast, asNode(endOfFileToken).ast, flags).node;
+        return astFactory.createSourceFile(asNodeArray(statements).ast, endOfFileToken.ast, flags).node;
     }
 
     // @api
@@ -3596,7 +3596,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         libReferenceDirectives = node.libReferenceDirectives,
     ): SourceFile {
         return astFactory.updateSourceFile(
-            asNode(node).ast,
+            node.ast,
             asNodeArray(statements).ast,
             isDeclarationFile,
             referencedFiles,
@@ -3608,12 +3608,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createBundle(sourceFiles: readonly SourceFile[]): Bundle {
-        return astFactory.createBundle(sourceFiles as readonly ast.SourceFile[]).node;
+        return astFactory.createBundle(sourceFiles).node;
     }
 
     // @api
     function updateBundle(node: Bundle, sourceFiles: readonly SourceFile[]): Bundle {
-        return astFactory.updateBundle(asNode(node).ast, sourceFiles as readonly ast.SourceFile[]).node;
+        return astFactory.updateBundle(node.ast, sourceFiles).node;
     }
 
     //
@@ -3622,12 +3622,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function createSyntheticExpression(type: Type, isSpread = false, tupleNameSource?: ParameterDeclaration | NamedTupleMember): SyntheticExpression {
-        return astFactory.createSyntheticExpression(type, isSpread, asNode(tupleNameSource)?.ast).node;
+        return astFactory.createSyntheticExpression(type, isSpread, tupleNameSource?.ast).node;
     }
 
     // @api
     function createSyntaxList(children: readonly Node[]): SyntaxList {
-        return astFactory.createSyntaxList(children as readonly ast.Node[]).node;
+        return astFactory.createSyntaxList(children).node;
     }
 
     //
@@ -3642,7 +3642,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
      */
     // @api
     function createNotEmittedStatement(original: Node): NotEmittedStatement {
-        return astFactory.createNotEmittedStatement(asNode(original).ast).node;
+        return astFactory.createNotEmittedStatement(original.ast).node;
     }
 
     /**
@@ -3654,12 +3654,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
      */
     // @api
     function createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression {
-        return astFactory.createPartiallyEmittedExpression(asNode(expression).ast, asNode(original)?.ast).node;
+        return astFactory.createPartiallyEmittedExpression(expression.ast, original?.ast).node;
     }
 
     // @api
     function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression {
-        return astFactory.updatePartiallyEmittedExpression(asNode(node).ast, asNode(expression).ast).node;
+        return astFactory.updatePartiallyEmittedExpression(node.ast, expression.ast).node;
     }
 
     // @api
@@ -3674,23 +3674,23 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
 
     // @api
     function updateCommaListExpression(node: CommaListExpression, elements: readonly Expression[]): CommaListExpression {
-        return astFactory.updateCommaListExpression(asNode(node).ast, asNodeArray(elements).ast).node;
+        return astFactory.updateCommaListExpression(node.ast, asNodeArray(elements).ast).node;
     }
 
     // @api
     function createSyntheticReferenceExpression(expression: Expression, thisArg: Expression): SyntheticReferenceExpression {
-        return astFactory.createSyntheticReferenceExpression(asNode(expression).ast, asNode(thisArg).ast).node;
+        return astFactory.createSyntheticReferenceExpression(expression.ast, thisArg.ast).node;
     }
 
     // @api
     function updateSyntheticReferenceExpression(node: SyntheticReferenceExpression, expression: Expression, thisArg: Expression): SyntheticReferenceExpression {
-        return astFactory.updateSyntheticReferenceExpression(asNode(node).ast, asNode(expression).ast, asNode(thisArg).ast).node;
+        return astFactory.updateSyntheticReferenceExpression(node.ast, expression.ast, thisArg.ast).node;
     }
 
     // @api
     function cloneNode<T extends Node | undefined>(node: T): T;
     function cloneNode(node: Node | undefined) {
-        return node && astFactory.cloneNode(asNode(node).ast).node as Node | undefined;
+        return node && astFactory.cloneNode(node.ast).node as Node | undefined;
     }
 
     // compound nodes
@@ -4418,54 +4418,29 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
         }
     }
 
-    type ToNode<T extends Node> = Expression extends T ? ast.Expression :
-        Statement extends T ? ast.Statement :
-        TypeNode extends T ? ast.TypeNode :
-        TypeElement extends T ? ast.TypeElement :
-        ClassElement extends T ? ast.ClassElement :
-        ObjectLiteralElement extends T ? ast.ObjectLiteralElement :
-        PropertyAccessChain extends T ? ast.PropertyAccessChain :
-        ElementAccessChain extends T ? ast.ElementAccessChain :
-        CallChain extends T ? ast.CallChain :
-        NonNullChain extends T ? ast.NonNullChain :
-        ModuleBody extends T ? ast.ModuleBody :
-        LiteralExpression extends T ? ast.LiteralExpression :
-        JSDocNamespaceDeclaration extends T ? ast.JSDocNamespaceDeclaration :
-        JSDocPropertyLikeTag extends T ? ast.JSDocPropertyLikeTag :
-        JSDocClassReference extends T ? ast.JSDocClassReference :
-        JsxNamespacedName extends T ? ast.JsxNamespacedName :
-        ast.NodeType[T["kind"]];
-
-    function asNode<T extends Node>(node: T): ToNode<T>;
-    function asNode<T extends Node>(node: T | undefined): ToNode<T> | undefined;
-    function asNode(node: Node | undefined): ast.Node | undefined {
-        return node as ast.Node | undefined;
+    function asNodeArray<T extends Node>(array: readonly T[]): NodeArray<T>;
+    function asNodeArray<T extends Node>(array: readonly T[] | undefined): NodeArray<T> | undefined;
+    function asNodeArray(array: readonly Node[] | undefined): NodeArray<Node> | undefined {
+        return array ? createNodeArray(array) : undefined;
     }
 
-    function asNodeArray<T extends Node>(array: readonly T[]): ast.NodeArray<ToNode<T>>;
-    function asNodeArray<T extends Node>(array: readonly T[] | undefined): ast.NodeArray<ToNode<T>> | undefined;
-    function asNodeArray(array: readonly Node[] | undefined): ast.NodeArray<ast.Node> | undefined {
-        return array ? createNodeArray(array) as ast.NodeArray<ast.Node> : undefined;
-    }
-
-    function asName<T extends DeclarationName | Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode>(name: string | T): ToNode<T> | ast.Identifier;
-    function asName<T extends DeclarationName | Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode>(name: string | T | undefined): ToNode<T> | ast.Identifier | undefined;
+    function asName<T extends DeclarationName | Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode>(name: string | T): T | Identifier;
+    function asName<T extends DeclarationName | Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode>(name: string | T | undefined): T | Identifier | undefined;
     function asName(name: string | DeclarationName | Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode | undefined) {
-        return typeof name === "string" ? createIdentifier(name) as ast.Identifier :
-            name as Node as ast.Node as ToNode<Node>;
+        return typeof name === "string" ? createIdentifier(name) : name;
     }
 
-    function asExpression<T extends Expression>(value: string | number | boolean | T): ToNode<T> | ast.StringLiteral | ast.NumericLiteral | ast.BooleanLiteral;
-    function asExpression<T extends Expression>(value: string | number | boolean | T | undefined): ToNode<T> | ast.StringLiteral | ast.NumericLiteral | ast.BooleanLiteral | undefined;
-    function asExpression(value: string | number | boolean | Expression | undefined): ast.Expression | undefined | ast.StringLiteral | ast.NumericLiteral | ast.BooleanLiteral | undefined {
-        return typeof value === "string" ? createStringLiteral(value) as ast.StringLiteral :
-            typeof value === "number" ? createNumericLiteral(value) as ast.NumericLiteral :
-            typeof value === "boolean" ? value ? createTrue() as ast.TrueLiteral : createFalse() as ast.FalseLiteral :
-            value as ast.Expression;
+    function asExpression<T extends Expression>(value: string | number | boolean | T): T | StringLiteral | NumericLiteral | BooleanLiteral;
+    function asExpression<T extends Expression>(value: string | number | boolean | T | undefined): T | StringLiteral | NumericLiteral | BooleanLiteral | undefined;
+    function asExpression(value: string | number | boolean | Expression | undefined): Expression | undefined | StringLiteral | NumericLiteral | BooleanLiteral | undefined {
+        return typeof value === "string" ? createStringLiteral(value) :
+            typeof value === "number" ? createNumericLiteral(value) :
+            typeof value === "boolean" ? value ? createTrue() : createFalse() :
+            value as Expression;
     }
 
-    function asToken<TKind extends TokenSyntaxKind>(value: TKind | Token<TKind>): ast.Token<TKind> {
-        return (typeof value === "number" ? createToken(value) : value) as ast.Token<TKind>;
+    function asToken<TKind extends TokenSyntaxKind>(value: TKind | Token<TKind>): Token<TKind> {
+        return typeof value === "number" ? createToken(value) : value;
     }
 
     function asVariableDeclaration(variableDeclaration: string | BindingName | VariableDeclaration | undefined) {
@@ -4475,9 +4450,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
                 /*exclamationToken*/ undefined,
                 /*type*/ undefined,
                 /*initializer*/ undefined,
-            ) as ast.VariableDeclaration;
+            );
         }
-        return variableDeclaration as ast.BindingName | ast.VariableDeclaration | undefined;
+        return variableDeclaration;
     }
 }
 

@@ -34,6 +34,7 @@ import {
     getNonAssignmentOperatorForCompoundAssignment,
     getOriginalNode,
     getOriginalNodeId,
+    hasAsteriskToken,
     Identifier,
     idText,
     IfStatement,
@@ -422,7 +423,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
         else if (inGeneratorFunctionBody) {
             return visitJavaScriptInGeneratorFunctionBody(node);
         }
-        else if (isFunctionLikeDeclaration(node) && node.asteriskToken) {
+        else if (isFunctionLikeDeclaration(node) && hasAsteriskToken(node)) {
             return visitGenerator(node);
         }
         else if (transformFlags & TransformFlags.ContainsGenerator) {

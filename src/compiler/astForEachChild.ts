@@ -38,6 +38,7 @@ import {
     AstExpressionStatement,
     AstExpressionWithTypeArguments,
     AstExternalModuleReference,
+    AstForEachChildNodes,
     AstForInStatement,
     AstForOfStatement,
     AstForStatement,
@@ -174,12 +175,8 @@ import {
     AstWhileStatement,
     AstWithStatement,
     AstYieldExpression,
-    AstForEachChildNodes
-} from "./_namespaces/ts.ast.js";
-import {
     forEach,
     SyntaxKind,
-    isArray,
 } from "./_namespaces/ts.js";
 
 function visitNode<T>(cbNode: (node: AstNode) => T, node: AstNode | undefined): T | undefined {
