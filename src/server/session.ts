@@ -921,6 +921,7 @@ const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.ProvideCallHierarchyIncomingCalls,
     protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls,
     protocol.CommandTypes.GetPasteEdits,
+    protocol.CommandTypes.CopilotRelated,
 ];
 
 const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
@@ -2034,9 +2035,10 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private getCopilotRelatedInfo(args: protocol.FileRequestArgs): protocol.CopilotRelatedItems {
-        const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+        const { file, project } = this.getFileAndProject(args);
+        
         return {
-             relatedFiles: languageService.getImports(file),
+             relatedFiles: project.getLanguageService().getImports(file),
              traits: []
         }
     }
