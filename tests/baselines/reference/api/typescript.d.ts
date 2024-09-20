@@ -122,6 +122,7 @@ declare namespace ts {
                 ProvideInlayHints = "provideInlayHints",
                 WatchChange = "watchChange",
                 MapCode = "mapCode",
+                CopilotRelated = "copilotRelated",
             }
             /**
              * A TypeScript Server message
@@ -1796,6 +1797,20 @@ declare namespace ts {
             }
             export interface MapCodeResponse extends Response {
                 body: readonly FileCodeEdits[];
+            }
+            export interface CopilotRelatedRequest extends FileRequest {
+                command: CommandTypes.CopilotRelated;
+                arguments: FileRequestArgs;
+            }
+            export interface CopilotRelatedItems {
+                relatedFiles: readonly string[];
+                traits: {
+                    name: string;
+                    value: string;
+                }[];
+            }
+            export interface CopilotRelatedResponse extends Response {
+                body: CopilotRelatedItems;
             }
             /**
              * Synchronous request for semantic diagnostics of one file.
@@ -3478,6 +3493,7 @@ declare namespace ts {
             private getDocumentHighlights;
             private provideInlayHints;
             private mapCode;
+            private getCopilotRelatedInfo;
             private setCompilerOptionsForInferredProjects;
             private getProjectInfo;
             private getProjectInfoWorker;
