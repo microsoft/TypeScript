@@ -57,7 +57,6 @@ import {
     isStringLiteral,
     isTypeNode,
     isTypeReferenceNode,
-    isTypeUsableAsPropertyName,
     isYieldExpression,
     LanguageServiceHost,
     length,
