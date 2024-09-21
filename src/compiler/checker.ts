@@ -18997,7 +18997,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // (T | U)[K] -> T[K] & U[K] (writing)
         // (T & U)[K] -> T[K] & U[K]
         if (objectType.flags & TypeFlags.Union || objectType.flags & TypeFlags.Intersection && !shouldDeferIndexType(objectType)) {
-            const types = map((objectType as UnionOrIntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType), writing));
+            const types = map((objectType as UnionOrIntersectionType).types, t => getSimplifiedType(getIndexedAccessType(getSimplifiedType(t, writing), indexType), writing));
             return objectType.flags & TypeFlags.Intersection || writing ? getIntersectionType(types) : getUnionType(types);
         }
     }
@@ -19148,20 +19148,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // In noUncheckedIndexedAccess mode, indexed access operations that occur in an expression in a read position and resolve to
         // an index signature have 'undefined' included in their type.
         if (compilerOptions.noUncheckedIndexedAccess && accessFlags & AccessFlags.ExpressionPosition) accessFlags |= AccessFlags.IncludeUndefined;
-
-        if (!isGenericIndexType(indexType) && isGenericObjectType(objectType) && objectType.flags & TypeFlags.UnionOrIntersection) {
-            const newTypes = sameMap((objectType as UnionOrIntersectionType).types, t => {
-                if (!(t.flags & TypeFlags.IndexedAccess)) {
-                    return t;
-                }
-                const indexedAccessType = t as IndexedAccessType;
-                return isGenericMappedType(indexedAccessType.objectType) ? substituteIndexedMappedType(indexedAccessType.objectType, indexedAccessType.indexType) : t;
-            });
-            if (newTypes !== (objectType as UnionOrIntersectionType).types) {
-                objectType = objectType.flags & TypeFlags.Union ? getUnionType(newTypes) : getIntersectionType(newTypes);
-            }
-        }
-
         // If the index type is generic, or if the object type is generic and doesn't originate in an expression and
         // the operation isn't exclusively indexing the fixed (non-variadic) portion of a tuple type, we are performing
         // a higher-order index access where we cannot meaningfully access the properties of the object type. Note that
