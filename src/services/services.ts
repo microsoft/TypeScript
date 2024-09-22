@@ -735,6 +735,7 @@ class SymbolObject implements Symbol {
         if (context) {
             if (isGetAccessor(context)) {
                 if (!this.contextualGetAccessorDocumentationComment) {
+                    this.contextualGetAccessorDocumentationComment = emptyArray;
                     this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                 }
                 if (length(this.contextualGetAccessorDocumentationComment)) {
@@ -743,6 +744,7 @@ class SymbolObject implements Symbol {
             }
             if (isSetAccessor(context)) {
                 if (!this.contextualSetAccessorDocumentationComment) {
+                    this.contextualSetAccessorDocumentationComment = emptyArray;
                     this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                 }
                 if (length(this.contextualSetAccessorDocumentationComment)) {
@@ -766,6 +768,7 @@ class SymbolObject implements Symbol {
         if (context) {
             if (isGetAccessor(context)) {
                 if (!this.contextualGetAccessorTags) {
+                    this.contextualGetAccessorTags = emptyArray;
                     this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
                 }
                 if (length(this.contextualGetAccessorTags)) {
@@ -774,6 +777,7 @@ class SymbolObject implements Symbol {
             }
             if (isSetAccessor(context)) {
                 if (!this.contextualSetAccessorTags) {
+                    this.contextualSetAccessorTags = emptyArray;
                     this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
                 }
                 if (length(this.contextualSetAccessorTags)) {
