@@ -3355,18 +3355,7 @@ export function createLanguageService(
         const imports: Set<string> = new Set();
         let specifiers = file.imports;
         if (specifiers.length === 0) return [];
-        // skip tslib
-        if (nodeIsSynthesized(specifiers[0]) && specifiers[0].text === "tslib") {
-            specifiers = specifiers.slice(1);
-        }
-        // skip jsx factory
-        if (nodeIsSynthesized(specifiers[0])) {
-            const compilerOptions = program.getCompilerOptions();
-            const runtimeImportSpecifier = getJSXRuntimeImport(getJSXImplicitImportBase(compilerOptions, file), compilerOptions);
-            if (runtimeImportSpecifier === specifiers[0].text) {
-                specifiers = specifiers.slice(1);
-            }
-        }
+        specifiers = specifiers.slice(specifiers.findIndex(nodeIsSynthesized) + 1);
         for (const specifier of specifiers) {
             const name = program.getResolvedModuleFromModuleSpecifier(specifier, file)?.resolvedModule?.resolvedFileName;
             if (name && !imports.has(name)) imports.add(name);
