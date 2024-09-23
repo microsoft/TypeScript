@@ -50731,6 +50731,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return ["__propKey"];
             case ExternalEmitHelpers.AddDisposableResourceAndDisposeResources:
                 return ["__addDisposableResource", "__disposeResources"];
+            case ExternalEmitHelpers.RewriteRelativeImportExtension:
+                return ["__rewriteRelativeImportExtension"];
             default:
                 return Debug.fail("Unrecognized helper");
         }

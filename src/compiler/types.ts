@@ -8463,6 +8463,7 @@ export const enum ExternalEmitHelpers {
     SetFunctionName = 1 << 22,      // __setFunctionName (used by class fields and ECMAScript decorators)
     PropKey = 1 << 23,              // __propKey (used by class fields and ECMAScript decorators)
     AddDisposableResourceAndDisposeResources = 1 << 24, // __addDisposableResource and __disposeResources (used by ESNext transformations)
+    RewriteRelativeImportExtension = 1 << 25, // __rewriteRelativeImportExtension (used by --rewriteRelativeImportExtensions)
 
     FirstEmitHelper = Extends,
     LastEmitHelper = AddDisposableResourceAndDisposeResources,
