@@ -1056,7 +1056,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
  *
  * @internal
  */
-export function createSuperAccessVariableStatement(factory: NodeFactory, resolver: EmitResolver, node: FunctionLikeDeclaration, names: Set<__String>) {
+export function createSuperAccessVariableStatement(factory: NodeFactory, resolver: EmitResolver, node: FunctionLikeDeclaration, names: Set<__String>): VariableStatement {
     // Create a variable declaration with a getter/setter (if binding) definition for each name:
     //   const _super = Object.create(null, { x: { get: () => super.x, set: (v) => super.x = v }, ... });
     const hasBinding = resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);

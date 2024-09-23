@@ -41,6 +41,15 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/b.ts ProjectRootPath: /users/username/projects/project:: Result: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /users/username/projects/project/tsconfig.json, currentDirectory: /users/username/projects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/tsconfig.json : {
+ "rootNames": [
+  "/users/username/projects/project/b.ts",
+  "/users/username/projects/project/sub/a.ts"
+ ],
+ "options": {
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -51,15 +60,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /users/username/projects/project/b.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/tsconfig.json : {
- "rootNames": [
-  "/users/username/projects/project/b.ts",
-  "/users/username/projects/project/sub/a.ts"
- ],
- "options": {
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/sub/a.ts 500 undefined WatchType: Closed Script info

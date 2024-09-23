@@ -390,7 +390,7 @@ export function getModuleSpecifiersWithCacheInfo(
     importingSourceFile: SourceFile | FutureSourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
-    options: ModuleSpecifierOptions = {},
+    options: ModuleSpecifierOptions | undefined = {},
     forAutoImport: boolean,
 ): ModuleSpecifierResult {
     let computedWithoutCache = false;
@@ -1412,7 +1412,7 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
 }
 
 /** @internal */
-export function tryGetRealFileNameForNonJsDeclarationFileName(fileName: string) {
+export function tryGetRealFileNameForNonJsDeclarationFileName(fileName: string): string | undefined {
     const baseName = getBaseFileName(fileName);
     if (!endsWith(fileName, Extension.Ts) || !baseName.includes(".d.") || fileExtensionIsOneOf(baseName, [Extension.Dts])) return undefined;
     const noExtension = removeExtension(fileName, Extension.Ts);

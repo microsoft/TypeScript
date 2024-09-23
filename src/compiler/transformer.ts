@@ -222,12 +222,12 @@ function wrapDeclarationTransformerFactory(transformer: TransformerFactory<Bundl
 }
 
 /** @internal */
-export function noEmitSubstitution(_hint: EmitHint, node: Node) {
+export function noEmitSubstitution(_hint: EmitHint, node: Node): Node {
     return node;
 }
 
 /** @internal */
-export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: EmitHint, node: Node) => void) {
+export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: EmitHint, node: Node) => void): void {
     callback(hint, node);
 }
 

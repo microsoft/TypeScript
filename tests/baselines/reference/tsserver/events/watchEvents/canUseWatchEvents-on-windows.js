@@ -57,16 +57,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Custom watchFile:: Added:: {"id":1,"path":"c:/projects/myproject/tsconfig.json"}
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "c:/projects/myproject/tsconfig.json",
-        "reason": "Creating possible configured project for c:/projects/myproject/a.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: c:/projects/myproject/tsconfig.json : {
  "rootNames": [
   "c:/projects/myproject/a.ts",
@@ -77,6 +67,16 @@ Info seq  [hh:mm:ss:mss] Config: c:/projects/myproject/tsconfig.json : {
   "configFilePath": "c:/projects/myproject/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "c:/projects/myproject/tsconfig.json",
+        "reason": "Creating possible configured project for c:/projects/myproject/a.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject 1 undefined Config: c:/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] event:
     {

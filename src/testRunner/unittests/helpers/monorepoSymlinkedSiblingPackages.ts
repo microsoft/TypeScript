@@ -276,7 +276,7 @@ export function forEachMonorepoSymlinkScenario(
         indexFile: string,
         currentDirectory: string,
     ) => void,
-) {
+): void {
     describe("monorepoSymlinkedSiblingPackages:: monorepo style sibling packages symlinked", () => {
         forEachMonorepoSymlinkedSiblingPackagesSys(forTsserver, action);
     });

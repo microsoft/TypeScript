@@ -100,7 +100,7 @@ export function forConfigDirExtendsSysScenario(
         sys: () => TestServerHost,
         edits: () => readonly TscWatchCompileChange[],
     ) => void,
-) {
+): void {
     action(
         "configDir template",
         () => getConfigDirExtendsSys(forTsserver),

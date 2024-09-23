@@ -287,7 +287,7 @@ export class ScriptVersionCache {
     }
 
     // REVIEW: can optimize by coalescing simple edits
-    edit(pos: number, deleteLen: number, insertedText?: string) {
+    edit(pos: number, deleteLen: number, insertedText?: string): void {
         this.changes.push(new TextChange(pos, deleteLen, insertedText));
         if (
             this.changes.length > ScriptVersionCache.changeNumberThreshold ||
@@ -345,7 +345,7 @@ export class ScriptVersionCache {
         return createTextSpan(absolutePosition, len);
     }
 
-    getTextChangesBetweenVersions(oldVersion: number, newVersion: number) {
+    getTextChangesBetweenVersions(oldVersion: number, newVersion: number): TextChangeRange | undefined {
         if (oldVersion < newVersion) {
             if (oldVersion >= this.minVersion) {
                 const textChangeRanges: TextChangeRange[] = [];
@@ -366,11 +366,11 @@ export class ScriptVersionCache {
         }
     }
 
-    getLineCount() {
+    getLineCount(): number {
         return this._getSnapshot().index.getLineCount();
     }
 
-    static fromString(script: string) {
+    static fromString(script: string): ScriptVersionCache {
         const svc = new ScriptVersionCache();
         const snap = new LineIndexSnapshot(0, svc, new LineIndex());
         svc.versions[svc.currentVersion] = snap;
@@ -423,7 +423,7 @@ export class LineIndex {
         return this.root.charOffsetToLineInfo(1, position);
     }
 
-    getLineCount() {
+    getLineCount(): number {
         return this.root.lineCount();
     }
 
@@ -438,7 +438,7 @@ export class LineIndex {
         }
     }
 
-    load(lines: string[]) {
+    load(lines: string[]): void {
         if (lines.length > 0) {
             const leaves: LineLeaf[] = [];
             for (let i = 0; i < lines.length; i++) {
@@ -451,11 +451,11 @@ export class LineIndex {
         }
     }
 
-    walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker) {
+    walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker): void {
         this.root.walk(rangeStart, rangeLength, walkFns);
     }
 
-    getText(rangeStart: number, rangeLength: number) {
+    getText(rangeStart: number, rangeLength: number): string {
         let accum = "";
         if ((rangeLength > 0) && (rangeStart < this.root.charCount())) {
             this.walk(rangeStart, rangeLength, {
@@ -473,7 +473,7 @@ export class LineIndex {
         return this.root.charCount();
     }
 
-    every(f: (ll: LineLeaf, s: number, len: number) => boolean, rangeStart: number, rangeEnd?: number) {
+    every(f: (ll: LineLeaf, s: number, len: number) => boolean, rangeStart: number, rangeEnd?: number): boolean {
         if (!rangeEnd) {
             rangeEnd = this.root.charCount();
         }
@@ -559,7 +559,10 @@ export class LineIndex {
         return this.buildTreeFromBottom(interiorNodes);
     }
 
-    static linesFromText(text: string) {
+    static linesFromText(text: string): {
+        lines: string[];
+        lineMap: number[];
+    } {
         const lineMap = computeLineStarts(text);
 
         if (lineMap.length === 0) {
@@ -595,7 +598,7 @@ export class LineNode implements LineCollection {
         return false;
     }
 
-    updateCounts() {
+    updateCounts(): void {
         this.totalChars = 0;
         this.totalLines = 0;
         for (const child of this.children) {
@@ -627,7 +630,7 @@ export class LineNode implements LineCollection {
         }
     }
 
-    walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker) {
+    walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker): void {
         // assume (rangeStart < this.totalChars) && (rangeLength <= this.totalChars)
         let childIndex = 0;
         let childCharCount = this.children[childIndex].charCount();
@@ -748,7 +751,7 @@ export class LineNode implements LineCollection {
         return splitNode;
     }
 
-    remove(child: LineCollection) {
+    remove(child: LineCollection): void {
         const childIndex = this.findChildIndex(child);
         const clen = this.children.length;
         if (childIndex < (clen - 1)) {
@@ -765,7 +768,7 @@ export class LineNode implements LineCollection {
         return childIndex;
     }
 
-    insertAt(child: LineCollection, nodes: LineCollection[]) {
+    insertAt(child: LineCollection, nodes: LineCollection[]): LineNode[] {
         let childIndex = this.findChildIndex(child);
         const clen = this.children.length;
         const nodeCount = nodes.length;
@@ -825,11 +828,11 @@ export class LineNode implements LineCollection {
         Debug.assert(this.children.length <= lineCollectionCapacity);
     }
 
-    charCount() {
+    charCount(): number {
         return this.totalChars;
     }
 
-    lineCount() {
+    lineCount(): number {
         return this.totalLines;
     }
 }
@@ -843,11 +846,11 @@ export class LineLeaf implements LineCollection {
         return true;
     }
 
-    walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker) {
+    walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker): void {
         walkFns.leaf(rangeStart, rangeLength, this);
     }
 
-    charCount() {
+    charCount(): number {
         return this.text.length;
     }
 

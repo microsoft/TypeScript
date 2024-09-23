@@ -153,7 +153,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         );
     }
 
-    sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes | ts.server.WatchTypingLocations | ts.server.PackageInstalledResponse) {
+    sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes | ts.server.WatchTypingLocations | ts.server.PackageInstalledResponse): void {
         this.log.writeLine(`Sending response:${stringifyIndented(response)}`);
         this.testTypingInstaller.handleMessage(response);
     }
@@ -228,6 +228,6 @@ export function createTypesRegistryFileContent(list: readonly string[]): TypesRe
     return { entries };
 }
 
-export function createTypesRegistry(...list: string[]) {
+export function createTypesRegistry(...list: string[]): Map<string, ts.MapLike<string>> {
     return new Map(Object.entries(createTypesRegistryFileContent(list).entries));
 }
