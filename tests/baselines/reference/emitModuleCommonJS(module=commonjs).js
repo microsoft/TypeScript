@@ -23,6 +23,7 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
             if (dot >= 0 && (path.substring(dot - 2, dot) === ".d" || path.substring(dot, dot + 2) === ".d")) {
                 return path;
             }
+            return path.substring(0, path.length - 3) + ".js";
         }
         return path.replace(/(?<!\.d)\.[cm]ts$/, function (ext) { return ext === ".mts" ? ".mjs" : ".cjs"; });
     }
@@ -43,6 +44,7 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
             if (dot >= 0 && (path.substring(dot - 2, dot) === ".d" || path.substring(dot, dot + 2) === ".d")) {
                 return path;
             }
+            return path.substring(0, path.length - 3) + ".js";
         }
         return path.replace(/(?<!\.d)\.[cm]ts$/, function (ext) { return ext === ".mts" ? ".mjs" : ".cjs"; });
     }
