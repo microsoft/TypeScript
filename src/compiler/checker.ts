@@ -37401,9 +37401,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (exprType === silentNeverType || isErrorType(exprType) || !some(typeArguments)) {
             return exprType;
         }
+        const links = getNodeLinks(node);
+        if (!links.instantiationExpressionTypes) {
+            links.instantiationExpressionTypes = new Map();
+        }
+        if (links.instantiationExpressionTypes.has(exprType.id)) {
+            return links.instantiationExpressionTypes.get(exprType.id)!;
+        }
         let hasSomeApplicableSignature = false;
         let nonApplicableType: Type | undefined;
         const result = getInstantiatedType(exprType);
+        links.instantiationExpressionTypes.set(exprType.id, result);
         const errorType = hasSomeApplicableSignature ? nonApplicableType : exprType;
         if (errorType) {
             diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable, typeToString(errorType)));
