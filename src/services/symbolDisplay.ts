@@ -108,6 +108,7 @@ import {
     TypeParameter,
     typeToDisplayParts,
     VariableDeclaration,
+    WriterContextOut,
 } from "./_namespaces/ts.js";
 
 const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
@@ -254,6 +255,7 @@ export interface SymbolDisplayPartsDocumentationAndSymbolKind {
     documentation: SymbolDisplayPart[];
     symbolKind: ScriptElementKind;
     tags: JSDocTagInfo[] | undefined;
+    canIncreaseVerbosityLevel?: boolean;
 }
 
 function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
@@ -277,6 +279,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
+    const typeWriterOut: WriterContextOut = { couldUnfoldMore: false };
 
     if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
         return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
@@ -472,7 +475,17 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
-        addRange(displayParts, typeToDisplayParts(typeChecker, location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
+        addRange(
+            displayParts,
+            typeToDisplayParts(
+                typeChecker,
+                location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol),
+                enclosingDeclaration,
+                TypeFormatFlags.InTypeAlias,
+                verbosityLevel,
+                typeWriterOut,
+            ),
+        );
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();
@@ -673,7 +686,17 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                         addRange(displayParts, typeParameterParts);
                     }
                     else {
-                        addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration, /*flags*/ undefined, verbosityLevel));
+                        addRange(
+                            displayParts,
+                            typeToDisplayParts(
+                                typeChecker,
+                                type,
+                                enclosingDeclaration,
+                                /*flags*/ undefined,
+                                verbosityLevel,
+                                typeWriterOut,
+                            ),
+                        );
                     }
                     if (isTransientSymbol(symbol) && symbol.links.target && isTransientSymbol(symbol.links.target) && symbol.links.target.links.tupleLabelDeclaration) {
                         const labelDecl = symbol.links.target.links.tupleLabelDeclaration;
@@ -759,7 +782,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         tags = tagsFromAlias;
     }
 
-    return { displayParts, documentation, symbolKind, tags: tags.length === 0 ? undefined : tags };
+    return { displayParts, documentation, symbolKind, tags: tags.length === 0 ? undefined : tags, canIncreaseVerbosityLevel: typeWriterOut.couldUnfoldMore };
 
     function getPrinter() {
         return createPrinterWithRemoveComments();

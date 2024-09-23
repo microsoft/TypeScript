@@ -1325,6 +1325,7 @@ export interface QuickInfo {
     displayParts?: SymbolDisplayPart[];
     documentation?: SymbolDisplayPart[];
     tags?: JSDocTagInfo[];
+    canIncreaseVerbosityLevel?: boolean;
 }
 
 export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;

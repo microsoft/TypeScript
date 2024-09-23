@@ -2403,6 +2403,7 @@ export class Session<TMessage = string> implements EventSender {
                 displayString,
                 documentation: useDisplayParts ? this.mapDisplayParts(quickInfo.documentation, project) : displayPartsToString(quickInfo.documentation),
                 tags: this.mapJSDocTagInfo(quickInfo.tags, project, useDisplayParts),
+                canIncreaseVerbosityLevel: quickInfo.canIncreaseVerbosityLevel,
             };
         }
         else {

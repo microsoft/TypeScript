@@ -71,6 +71,7 @@
         }
       ],
       "documentation": [],
+      "canIncreaseVerbosityLevel": true,
       "verbosityLevel": 0
     }
   },
@@ -130,6 +131,7 @@
         }
       ],
       "documentation": [],
+      "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 1
     }
   },
@@ -173,6 +175,7 @@
         }
       ],
       "documentation": [],
+      "canIncreaseVerbosityLevel": true,
       "verbosityLevel": 0
     }
   },
@@ -232,6 +235,7 @@
         }
       ],
       "documentation": [],
+      "canIncreaseVerbosityLevel": true,
       "verbosityLevel": 1
     }
   },
@@ -315,6 +319,7 @@
         }
       ],
       "documentation": [],
+      "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 2
     }
   }

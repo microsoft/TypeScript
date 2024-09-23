@@ -2032,6 +2032,11 @@ export interface QuickInfoResponseBody {
      * JSDoc tags associated with symbol.
      */
     tags: JSDocTagInfo[];
+
+    /**
+     * TODO
+     */
+    canIncreaseVerbosityLevel?: boolean;
 }
 
 /**

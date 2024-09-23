@@ -2289,7 +2289,7 @@ export function createLanguageService(
             };
         }
 
-        const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(
+        const { symbolKind, displayParts, documentation, tags, canIncreaseVerbosityLevel } = typeChecker.runWithCancellationToken(
             cancellationToken,
             typeChecker =>
                 SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
@@ -2310,6 +2310,7 @@ export function createLanguageService(
             displayParts,
             documentation,
             tags,
+            canIncreaseVerbosityLevel,
         };
     }
 

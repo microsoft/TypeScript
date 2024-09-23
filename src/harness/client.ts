@@ -268,6 +268,7 @@ export class SessionClient implements LanguageService {
             displayParts: [{ kind: "text", text: body.displayString }],
             documentation: typeof body.documentation === "string" ? [{ kind: "text", text: body.documentation }] : body.documentation,
             tags: this.decodeLinkDisplayParts(body.tags),
+            canIncreaseVerbosityLevel: body.canIncreaseVerbosityLevel,
         };
     }
 
