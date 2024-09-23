@@ -74,7 +74,7 @@ export class Condition extends Tagged(SharedStructBase, Tag.Condition) {
                 mutex["_locked"] = false; // eslint-disable-line dot-notation -- declared `private`
                 Atomics.Condition.notify(nativeCondition);
                 try {
-                    const remainingTimeout = isFinite(absoluteTimeout) ? Date.now() - absoluteTimeout : undefined;
+                    const remainingTimeout = isFinite(absoluteTimeout) ? absoluteTimeout - Date.now() : undefined;
                     const result = Atomics.Condition.wait(self._condition, nativeMutex, remainingTimeout) ? "ok" : "timed-out";
                     if (result === "timed-out") {
                         return stopWaiting ? stopWaiting() : result;
