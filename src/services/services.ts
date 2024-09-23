@@ -345,6 +345,9 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
+    nodeIsSynthesized,
+    getJSXRuntimeImport,
+    getJSXImplicitImportBase,
 } from "./_namespaces/ts.js";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo.js";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar.js";
@@ -3348,8 +3351,28 @@ export function createLanguageService(
 
     function getImports(fileName: string): readonly string[] {
         synchronizeHostData();
-        const file = getValidSourceFile(fileName)
-        return mapDefined(file.imports, i => program.getResolvedModuleFromModuleSpecifier(i, file)?.resolvedModule?.resolvedFileName);
+        const file = getValidSourceFile(fileName);
+        const imports: Set<string> = new Set()
+        let specifiers = file.imports
+        if (specifiers.length === 0) return []
+        // skip tslib
+        if (nodeIsSynthesized(specifiers[0]) && specifiers[0].text === "tslib") {
+            specifiers = specifiers.slice(1)
+        }
+        // skip jsx factory
+        if (nodeIsSynthesized(specifiers[0])) {
+            const compilerOptions = program.getCompilerOptions()
+            const runtimeImportSpecifier = getJSXRuntimeImport(getJSXImplicitImportBase(compilerOptions, file), compilerOptions);
+            if (runtimeImportSpecifier === specifiers[0].text) {
+                specifiers = specifiers.slice(1)
+            }
+        }
+        for (const specifier of specifiers) {
+            const name = program.getResolvedModuleFromModuleSpecifier(specifier, file)?.resolvedModule?.resolvedFileName;
+            if (name && !imports.has(name))
+                imports.add(name);
+        }
+        return Array.from(imports)
     }
 
     const ls: LanguageService = {
