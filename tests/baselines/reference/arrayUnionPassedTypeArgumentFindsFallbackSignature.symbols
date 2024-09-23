@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/arrayUnionPassedTypeArgumentFindsFallbackSignature.ts] ////
+
+=== arrayUnionPassedTypeArgumentFindsFallbackSignature.ts ===
+export function groupBy<T>(array: Array<T> | ReadonlyArray<T>) {
+>groupBy : Symbol(groupBy, Decl(arrayUnionPassedTypeArgumentFindsFallbackSignature.ts, 0, 0))
+>T : Symbol(T, Decl(arrayUnionPassedTypeArgumentFindsFallbackSignature.ts, 0, 24))
+>array : Symbol(array, Decl(arrayUnionPassedTypeArgumentFindsFallbackSignature.ts, 0, 27))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(arrayUnionPassedTypeArgumentFindsFallbackSignature.ts, 0, 24))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(arrayUnionPassedTypeArgumentFindsFallbackSignature.ts, 0, 24))
+
+    array.reduce<any>((acc, element) => {
+>array.reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>array : Symbol(array, Decl(arrayUnionPassedTypeArgumentFindsFallbackSignature.ts, 0, 27))
+>reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>acc : Symbol(acc, Decl(arrayUnionPassedTypeArgumentFindsFallbackSignature.ts, 1, 23))
+>element : Symbol(element, Decl(arrayUnionPassedTypeArgumentFindsFallbackSignature.ts, 1, 27))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    }, {});
+}
+

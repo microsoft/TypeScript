@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/arrayUnionPassedTypeArgumentFindsFallbackSignature.ts] ////
+
+=== arrayUnionPassedTypeArgumentFindsFallbackSignature.ts ===
+export function groupBy<T>(array: Array<T> | ReadonlyArray<T>) {
+>groupBy : <T>(array: Array<T> | ReadonlyArray<T>) => void
+>        : ^ ^^     ^^                           ^^^^^^^^^
+>array : T[] | readonly T[]
+>      : ^^^^^^^^^^^^^^^^^^
+
+    array.reduce<any>((acc, element) => {
+>array.reduce<any>((acc, element) => {        throw new Error();    }, {}) : any
+>array.reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T, initialValue: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: readonly T[]) => U, initialValue: U): U; }
+>             : ^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
+>array : T[] | readonly T[]
+>      : ^^^^^^^^^^^^^^^^^^
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T, initialValue: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: readonly T[]) => U, initialValue: U): U; }
+>       : ^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
+>(acc, element) => {        throw new Error();    } : (acc: any, element: T) => never
+>                                                   : ^   ^^^^^^^       ^^^^^^^^^^^^^
+>acc : any
+>element : T
+>        : ^
+
+        throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+
+    }, {});
+>{} : {}
+>   : ^^
+}
+

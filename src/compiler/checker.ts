@@ -36399,7 +36399,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return silentNeverSignature;
         }
 
-        const apparentType = getApparentType(funcType);
+        let apparentType = getApparentType(funcType);
         if (isErrorType(apparentType)) {
             // Another error has already been reported
             return resolveErrorCall(node);
@@ -36409,7 +36409,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // but we are not including call signatures that may have been added to the Object or
         // Function interface, since they have none by default. This is a bit of a leap of faith
         // that the user will not add any.
-        const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+        let callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
         const numConstructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct).length;
 
         // TS 1.0 Spec: 4.12
@@ -36441,6 +36441,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 invocationError(node.expression, apparentType, SignatureKind.Call, relatedInformation);
             }
             return resolveErrorCall(node);
+        }
+        if (callSignatures.length && node.typeArguments && apparentType.flags & TypeFlags.Union) {
+            // TODO: Apply fallback logic to decorators, tagged templates, and jsx tags?
+            let hasPassingSignature = false;
+            for (const sig of callSignatures) {
+                if (hasCorrectTypeArgumentArity(sig, node.typeArguments)) {
+                    hasPassingSignature = true;
+                    break;
+                }
+            }
+            if (!hasPassingSignature) {
+                // No signature worked at a first pass. Try to subtype reduce the union to uncover a common type-argument-bearing signature.
+                const reduced = getUnionType((apparentType as UnionOrIntersectionType).types, UnionReduction.Subtype);
+                const reducedCallSignatures = getSignaturesOfType(reduced, SignatureKind.Call);
+                for (const sig of reducedCallSignatures) {
+                    if (hasCorrectTypeArgumentArity(sig, node.typeArguments)) {
+                        hasPassingSignature = true;
+                        break;
+                    }
+                }
+                if (hasPassingSignature) {
+                    // Reduced type provides a matching type argument list, use it
+                    apparentType = reduced;
+                    callSignatures = reducedCallSignatures;
+                }
+            }
         }
         // When a call to a generic function is an argument to an outer call to a generic function for which
         // inference is in process, we have a choice to make. If the inner call relies on inferences made from
