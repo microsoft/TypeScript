@@ -28,3 +28,15 @@ export class NewAjax {
 >case5_unexpectedlyResolvesPathToNodeModules : Symbol(NewAjax.case5_unexpectedlyResolvesPathToNodeModules, Decl(index.js, 4, 22))
 >init : Symbol(init, Decl(index.js, 8, 48))
 }
+
+/**
+ * @type {(init?: LionRequestInit) => void}
+ */
+// @ts-expect-error
+NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules;
+>NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules : Symbol(NewAjax.case6_unexpectedlyResolvesPathToNodeModules, Decl(index.js, 9, 1))
+>NewAjax.prototype : Symbol(NewAjax.prototype)
+>NewAjax : Symbol(NewAjax, Decl(index.js, 0, 0))
+>prototype : Symbol(NewAjax.prototype)
+>case6_unexpectedlyResolvesPathToNodeModules : Symbol(NewAjax.case6_unexpectedlyResolvesPathToNodeModules, Decl(index.js, 9, 1))
+

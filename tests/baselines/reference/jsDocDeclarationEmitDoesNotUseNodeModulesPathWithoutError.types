@@ -29,3 +29,20 @@ export class NewAjax {
 >init : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit | undefined
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
+
+/**
+ * @type {(init?: LionRequestInit) => void}
+ */
+// @ts-expect-error
+NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules;
+>NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
+>                                                              : ^    ^^^               ^^^^^    
+>NewAjax.prototype : NewAjax
+>                  : ^^^^^^^
+>NewAjax : typeof NewAjax
+>        : ^^^^^^^^^^^^^^
+>prototype : NewAjax
+>          : ^^^^^^^
+>case6_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
+>                                            : ^    ^^^               ^^^^^    
+

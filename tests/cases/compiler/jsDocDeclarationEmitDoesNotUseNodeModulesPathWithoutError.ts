@@ -44,3 +44,9 @@ export class NewAjax {
      */
     case5_unexpectedlyResolvesPathToNodeModules(init) {}
 }
+
+/**
+ * @type {(init?: LionRequestInit) => void}
+ */
+// @ts-expect-error
+NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules;
