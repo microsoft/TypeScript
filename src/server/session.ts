@@ -2052,11 +2052,11 @@ export class Session<TMessage = string> implements EventSender {
 
     private getCopilotRelatedInfo(args: protocol.FileRequestArgs): protocol.CopilotRelatedItems {
         const { file, project } = this.getFileAndProject(args);
-        
+
         return {
-             relatedFiles: project.getLanguageService().getImports(file),
-             traits: []
-        }
+            relatedFiles: project.getLanguageService().getImports(file),
+            traits: [],
+        };
     }
 
     private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
