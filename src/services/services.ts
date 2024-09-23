@@ -3354,8 +3354,8 @@ export function createLanguageService(
         const file = getValidSourceFile(fileName);
         const imports: Set<string> = new Set();
         let specifiers = file.imports;
-        if (specifiers.length === 0) return [];
         specifiers = specifiers.slice(specifiers.findIndex(nodeIsSynthesized) + 1);
+        if (specifiers.length === 0) return [];
         for (const specifier of specifiers) {
             const name = program.getResolvedModuleFromModuleSpecifier(specifier, file)?.resolvedModule?.resolvedFileName;
             if (name && !imports.has(name)) imports.add(name);
