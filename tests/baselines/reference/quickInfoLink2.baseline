@@ -115,7 +115,8 @@
           "text": ".",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   }
 ]

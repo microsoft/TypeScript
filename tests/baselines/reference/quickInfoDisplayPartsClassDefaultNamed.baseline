@@ -58,7 +58,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -88,7 +89,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -118,7 +120,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {

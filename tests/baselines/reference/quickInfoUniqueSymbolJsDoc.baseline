@@ -68,7 +68,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   }
 ]

@@ -55,7 +55,8 @@
           "kind": "functionName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   }
 ]

@@ -267,7 +267,8 @@ Info seq  [hh:mm:ss:mss] response:
         },
         "displayString": "var x: number",
         "documentation": "{@link C}",
-        "tags": []
+        "tags": [],
+        "canIncreaseVerbosityLevel": false
       },
       "responseRequired": true
     }

@@ -209,7 +209,8 @@
           "text": "lambdaFoo var comment",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -316,7 +317,8 @@
           "text": "this is lambda multiplication",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -382,7 +384,8 @@
           "kind": "keyword"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -500,7 +503,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -574,7 +578,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -624,7 +629,8 @@
           "kind": "keyword"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -674,7 +680,8 @@
           "kind": "keyword"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -748,7 +755,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -866,7 +874,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1011,7 +1020,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1156,7 +1166,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   }
 ]

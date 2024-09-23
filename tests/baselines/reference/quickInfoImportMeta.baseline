@@ -31,7 +31,8 @@
         "length": 6
       },
       "displayParts": [],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -53,7 +54,8 @@
           "text": "The type of `import.meta`.\n\nIf you need to declare that a given property exists on `import.meta`,\nthis type may be augmented via interface merging.",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   }
 ]

@@ -187,7 +187,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   }
 ]

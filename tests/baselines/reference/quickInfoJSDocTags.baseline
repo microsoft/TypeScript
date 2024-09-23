@@ -213,7 +213,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -266,7 +267,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -348,7 +350,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -426,7 +429,8 @@
         {
           "name": "mytag"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -510,7 +514,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -630,7 +635,8 @@
         {
           "name": "mytag"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -699,7 +705,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -783,7 +790,8 @@
         {
           "name": "mytag"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -854,7 +862,8 @@
         {
           "name": "mytag"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {

@@ -222,7 +222,8 @@
             }
           ]
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   }
 ]

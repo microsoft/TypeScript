@@ -225,7 +225,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -291,7 +292,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -381,7 +383,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -431,7 +434,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -497,7 +501,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -627,7 +632,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -773,7 +779,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -823,7 +830,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -969,7 +977,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1019,7 +1028,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1085,7 +1095,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1135,7 +1146,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1189,7 +1201,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   },
   {
@@ -1279,7 +1292,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1329,7 +1343,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1371,7 +1386,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1425,7 +1441,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   },
   {
@@ -1555,7 +1572,8 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1625,7 +1643,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1719,7 +1738,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1761,7 +1781,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1879,7 +1900,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1957,7 +1979,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -2051,7 +2074,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -2237,7 +2261,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -2439,7 +2464,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -2481,7 +2507,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -2559,7 +2586,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -2761,7 +2789,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -2839,7 +2868,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -2933,7 +2963,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -3011,7 +3042,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -3077,7 +3109,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   },
   {
@@ -3203,7 +3236,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -3257,7 +3291,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   },
   {
@@ -3307,7 +3342,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -3377,7 +3413,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -3443,7 +3480,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   },
   {
@@ -3633,7 +3671,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -3687,7 +3726,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   },
   {
@@ -3741,7 +3781,8 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   }
 ]

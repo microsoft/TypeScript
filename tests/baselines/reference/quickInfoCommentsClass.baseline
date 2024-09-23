@@ -209,7 +209,8 @@
           "text": "This is class c2 without constructor",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -251,7 +252,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   },
   {
@@ -306,7 +308,8 @@
           "text": "This is class c2 without constructor",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -356,7 +359,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -391,7 +395,8 @@
           "text": "This is class c2 without constructor",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -421,7 +426,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -463,7 +469,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   },
   {
@@ -518,7 +525,8 @@
           "text": "Constructor comment",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -568,7 +576,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -598,7 +607,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -633,7 +643,8 @@
           "text": "Class comment",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -675,7 +686,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   },
   {
@@ -730,7 +742,8 @@
           "text": "Constructor comment",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -780,7 +793,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -815,7 +829,8 @@
           "text": "Class comment",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -850,7 +865,8 @@
           "text": "Class with statics",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -892,7 +908,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   },
   {
@@ -947,7 +964,8 @@
           "text": "Class with statics",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -997,7 +1015,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1032,7 +1051,8 @@
           "text": "Class with statics",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1067,7 +1087,8 @@
           "text": "class with statics and constructor",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1109,7 +1130,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": true
     }
   },
   {
@@ -1164,7 +1186,8 @@
           "text": "constructor comment",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1214,7 +1237,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1249,7 +1273,8 @@
           "text": "class with statics and constructor",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   },
   {
@@ -1336,7 +1361,8 @@
           "text": "constructor comment",
           "kind": "text"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   }
 ]

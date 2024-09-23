@@ -216,7 +216,8 @@
         {
           "name": "inheritDoc"
         }
-      ]
+      ],
+      "canIncreaseVerbosityLevel": false
     }
   }
 ]

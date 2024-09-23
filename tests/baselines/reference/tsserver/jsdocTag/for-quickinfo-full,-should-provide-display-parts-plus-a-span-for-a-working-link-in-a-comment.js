@@ -311,7 +311,8 @@ Info seq  [hh:mm:ss:mss] response:
             "text": "}",
             "kind": "link"
           }
-        ]
+        ],
+        "canIncreaseVerbosityLevel": false
       },
       "responseRequired": true
     }
