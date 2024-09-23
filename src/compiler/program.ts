@@ -2504,7 +2504,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const seenPackageNames = new Map<string, SeenPackageName>();
 
         for (const oldSourceFile of oldSourceFiles) {
-            const sourceFileOptions = getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options);
+            const sourceFileOptions = getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options, oldProgram.getResolvedProjectReferenceToRedirect(oldSourceFile.fileName));
             let newSourceFile = host.getSourceFileByPath
                 ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile)
                 : host.getSourceFile(oldSourceFile.fileName, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
@@ -3705,11 +3705,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return result;
     }
 
-    function getCreateSourceFileOptions(fileName: string, moduleResolutionCache: ModuleResolutionCache | undefined, host: CompilerHost, options: CompilerOptions): CreateSourceFileOptions {
+    function getCreateSourceFileOptions(fileName: string, moduleResolutionCache: ModuleResolutionCache | undefined, host: CompilerHost, options: CompilerOptions, redirectedReference: ResolvedProjectReference | undefined): CreateSourceFileOptions {
         // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
         // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
         // to the check and emit steps would be bad - so we much prefer detecting and storing the format information on the source file node upfront.
-        const result = getImpliedNodeFormatForFileWorker(getNormalizedAbsolutePath(fileName, currentDirectory), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
+        const result = getImpliedNodeFormatForFileWorker(getNormalizedAbsolutePath(fileName, currentDirectory), moduleResolutionCache?.getPackageJsonInfoCache(), host, redirectedReference?.commandLine.options ?? options);
         const languageVersion = getEmitScriptTarget(options);
         const setExternalModuleIndicator = getSetExternalModuleIndicator(options);
         return typeof result === "object" ?
@@ -3790,26 +3790,24 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         let redirectedPath: Path | undefined;
-        if (!useSourceOfProjectReferenceRedirect) {
-            const redirectProject = getProjectReferenceRedirectProject(fileName);
-            if (redirectProject) {
-                if (redirectProject.commandLine.options.outFile) {
-                    // Shouldnt create many to 1 mapping file in --out scenario
-                    return undefined;
-                }
-                const redirect = getProjectReferenceOutputName(redirectProject, fileName);
-                fileName = redirect;
-                // Once we start redirecting to a file, we can potentially come back to it
-                // via a back-reference from another file in the .d.ts folder. If that happens we'll
-                // end up trying to add it to the program *again* because we were tracking it via its
-                // original (un-redirected) name. So we have to map both the original path and the redirected path
-                // to the source file we're about to find/create
-                redirectedPath = toPath(redirect);
+        const redirectProject = getProjectReferenceRedirectProject(fileName);
+        if (!useSourceOfProjectReferenceRedirect && redirectProject) {
+            if (redirectProject.commandLine.options.outFile) {
+                // Shouldnt create many to 1 mapping file in --out scenario
+                return undefined;
             }
+            const redirect = getProjectReferenceOutputName(redirectProject, fileName);
+            fileName = redirect;
+            // Once we start redirecting to a file, we can potentially come back to it
+            // via a back-reference from another file in the .d.ts folder. If that happens we'll
+            // end up trying to add it to the program *again* because we were tracking it via its
+            // original (un-redirected) name. So we have to map both the original path and the redirected path
+            // to the source file we're about to find/create
+            redirectedPath = toPath(redirect);
         }
 
         // We haven't looked for this file, do so now and cache result
-        const sourceFileOptions = getCreateSourceFileOptions(fileName, moduleResolutionCache, host, options);
+        const sourceFileOptions = getCreateSourceFileOptions(fileName, moduleResolutionCache, host, options, redirectProject);
         const file = host.getSourceFile(
             fileName,
             sourceFileOptions,

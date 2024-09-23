@@ -282,6 +282,8 @@ Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 depe
 Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /home/src/workspaces/solution/packages/web
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/packages/utils/src/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/packages/utils/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/packages/utils/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -290,6 +292,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 	../utils/src/index.ts
 	  Root file specified for compilation
+	  File is CommonJS module because '../utils/package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -354,8 +357,12 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/solution/package.json:
   {"pollingInterval":250}
+/home/src/workspaces/solution/packages/utils/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/solution/packages/utils/src/index.ts: *new*
   {"pollingInterval":500}
+/home/src/workspaces/solution/packages/utils/src/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/solution/packages/utils/tsconfig.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/solution/packages/web/package.json: *new*
@@ -611,8 +618,12 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/solution/package.json:
   {"pollingInterval":250}
+/home/src/workspaces/solution/packages/utils/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/solution/packages/utils/src/index.ts:
   {"pollingInterval":500}
+/home/src/workspaces/solution/packages/utils/src/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/solution/packages/utils/tsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/solution/packages/web/package.json:
