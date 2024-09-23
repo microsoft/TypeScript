@@ -102,16 +102,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/api/src/server.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/api/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/solution/api/tsconfig.json, currentDirectory: /user/username/projects/solution/api
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/api/tsconfig.json 2000 undefined Project: /user/username/projects/solution/api/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/solution/api/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/solution/api/src/server.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/solution/api/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/solution/api/src/server.ts"
@@ -129,6 +119,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/solution/api/tsconfig.j
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/solution/api/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/solution/api/src/server.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/api/src 1 undefined Config: /user/username/projects/solution/api/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/api/src 1 undefined Config: /user/username/projects/solution/api/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/solution/api/tsconfig.json
@@ -302,6 +302,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts *new*
@@ -423,7 +424,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/username/projects/solution/shared/tsconfig.json",
+        "triggerFile": "/user/username/projects/solution/shared/src/index.ts",
         "configFile": "/user/username/projects/solution/shared/tsconfig.json",
         "diagnostics": []
       }
@@ -525,6 +526,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts *changed*

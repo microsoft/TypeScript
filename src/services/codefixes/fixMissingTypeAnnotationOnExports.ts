@@ -4,8 +4,9 @@ import {
     createImportAdder,
     eachDiagnostic,
     registerCodeFix,
+    typeNodeToAutoImportableTypeNode,
     typePredicateToAutoImportableTypeNode,
-    typeToAutoImportableTypeNode,
+    typeToMinimizedReferenceType,
 } from "../_namespaces/ts.codefix.js";
 import {
     ArrayBindingPattern,
@@ -1096,9 +1097,9 @@ function withContext<T>(
         return emptyInferenceResult;
     }
 
-    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None) {
+    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
-        const result = typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
+        const minimizedTypeNode = typeToMinimizedReferenceType(typeChecker, type, enclosingDeclaration, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
             trackSymbol() {
                 return true;
@@ -1107,6 +1108,10 @@ function withContext<T>(
                 isTruncated = true;
             },
         });
+        if (!minimizedTypeNode) {
+            return undefined;
+        }
+        const result = typeNodeToAutoImportableTypeNode(minimizedTypeNode, importAdder, scriptTarget);
         return isTruncated ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword) : result;
     }
 

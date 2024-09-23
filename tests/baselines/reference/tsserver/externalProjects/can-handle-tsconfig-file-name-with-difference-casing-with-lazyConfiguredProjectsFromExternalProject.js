@@ -91,6 +91,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 Before request
 
@@ -104,6 +105,12 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/a/b/app.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Config: /HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json : {
+ "rootNames": [],
+ "options": {
+  "configFilePath": "/HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -114,12 +121,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating configured project in external project: /home/src/projects/project/a/b/project.csproj"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json : {
- "rootNames": [],
- "options": {
-  "configFilePath": "/HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /HOME/SRC/PROJECTS/PROJECT/A/B/node_modules/@types 1 undefined Project: /HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /HOME/SRC/PROJECTS/PROJECT/A/B/node_modules/@types 1 undefined Project: /HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json WatchType: Type roots
@@ -201,6 +202,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /HOME/SRC/PROJECTS/PROJECT/A/B/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/projects/project/a/b
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -285,6 +287,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

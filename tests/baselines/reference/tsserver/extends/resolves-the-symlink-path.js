@@ -58,16 +58,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/user/projects/myproject/src/index.ts ProjectRootPath: undefined:: Result: /users/user/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /users/user/projects/myproject/src/tsconfig.json, currentDirectory: /users/user/projects/myproject/src
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/myproject/src/tsconfig.json 2000 undefined Project: /users/user/projects/myproject/src/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/users/user/projects/myproject/src/tsconfig.json",
-        "reason": "Creating possible configured project for /users/user/projects/myproject/src/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /users/user/projects/myproject/src/tsconfig.json : {
  "rootNames": [
   "/users/user/projects/myproject/src/index.ts"
@@ -80,6 +70,16 @@ Info seq  [hh:mm:ss:mss] Config: /users/user/projects/myproject/src/tsconfig.jso
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/myconfigs/node_modules/@something/tsconfig-node/tsconfig.json 2000 undefined Config: /users/user/projects/myproject/src/tsconfig.json WatchType: Extended config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/myconfigs/node_modules/@something/tsconfig-base/tsconfig.json 2000 undefined Config: /users/user/projects/myproject/src/tsconfig.json WatchType: Extended config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/users/user/projects/myproject/src/tsconfig.json",
+        "reason": "Creating possible configured project for /users/user/projects/myproject/src/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/myproject/src 1 undefined Config: /users/user/projects/myproject/src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/myproject/src 1 undefined Config: /users/user/projects/myproject/src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/user/projects/myproject/src/tsconfig.json

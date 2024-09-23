@@ -46,7 +46,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
         // project should throw.
         const bJsScriptInfo = ts.Debug.checkDefined(session.getProjectService().getScriptInfo(bJs.path));
         assert(bJsScriptInfo.isOrphan());
-        assert(bJsScriptInfo.isContainedByBackgroundProject());
+        assert(ts.server.scriptInfoIsContainedByBackgroundProject(bJsScriptInfo));
         assert.deepEqual(bJsScriptInfo.containingProjects, [auxProject]);
         assert.throws(() => bJsScriptInfo.getDefaultProject());
 
@@ -54,7 +54,7 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
         // even though it's still contained by the AuxiliaryProject.
         openFilesForSession([bJs], session);
         assert(!bJsScriptInfo.isOrphan());
-        assert(bJsScriptInfo.isContainedByBackgroundProject());
+        assert(ts.server.scriptInfoIsContainedByBackgroundProject(bJsScriptInfo));
         assert.equal(bJsScriptInfo.getDefaultProject().projectKind, ts.server.ProjectKind.Inferred);
         baselineTsserverLogs("auxiliaryProject", "does not remove scrips from InferredProject", session);
     });

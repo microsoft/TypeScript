@@ -1,4 +1,4 @@
-/// <reference path="../fourslash.ts" />
+ /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
 //// { "files": [], "references": [{ "path": "packages/server" }, { "path": "packages/client" }] }
