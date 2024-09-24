@@ -1,3 +1,4 @@
+index.tsx(3,1): error TS2304: Cannot find name 'React'.
 index.tsx(3,1): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 index.tsx(3,1): error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
 reacty.tsx(3,1): error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
@@ -19,10 +20,12 @@ reacty.tsx(3,1): error TS17017: An @jsxFrag pragma is required when using an @js
     <><h></h></>
     ~~~~~~~~~~~~
 !!! error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
-==== index.tsx (2 errors) ====
+==== index.tsx (3 errors) ====
     /** @jsx dom */
     import { dom } from "./renderer";
     <><h></h></>
+    ~~
+!!! error TS2304: Cannot find name 'React'.
     ~~
 !!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
     ~~~~~~~~~~~~
