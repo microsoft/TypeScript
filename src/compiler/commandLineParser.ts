@@ -1038,7 +1038,6 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             bundler: ModuleResolutionKind.Bundler,
         })),
         deprecatedKeys: new Set(["node"]),
-        affectsSourceFile: true,
         affectsModuleResolution: true,
         paramType: Diagnostics.STRATEGY,
         category: Diagnostics.Modules,
