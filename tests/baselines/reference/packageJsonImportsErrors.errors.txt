@@ -1,4 +1,4 @@
-/index.ts(2,16): error TS2875: This import uses a '.ts' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.
+/index.ts(2,16): error TS2877: This import uses a '.ts' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.
 
 
 ==== /package.json (0 errors) ====
@@ -27,5 +27,5 @@
     import {} from "#foo.ts"; // Ok
     import {} from "#internal/foo.ts"; // Error
                    ~~~~~~~~~~~~~~~~~~
-!!! error TS2875: This import uses a '.ts' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.
+!!! error TS2877: This import uses a '.ts' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.
     import {} from "pkg/foo.ts"; // Ok

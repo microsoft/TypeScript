@@ -696,7 +696,7 @@ Info seq  [hh:mm:ss:mss] response:
           "start": 15,
           "length": 27,
           "category": "error",
-          "code": 2876,
+          "code": 2878,
           "startLocation": {
             "line": 1,
             "offset": 16

@@ -19,8 +19,8 @@ if (ArrayBuffer.isView(obj)) {
 
     // isView should be a guard that narrows type to ArrayBufferView.
     var ab: ArrayBufferView = obj;
->ab : ArrayBufferView
->   : ^^^^^^^^^^^^^^^
->obj : ArrayBufferView
->    : ^^^^^^^^^^^^^^^
+>ab : ArrayBufferView<ArrayBuffer>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : ArrayBufferView<ArrayBuffer>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

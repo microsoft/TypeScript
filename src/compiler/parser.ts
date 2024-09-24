@@ -10517,9 +10517,10 @@ export function getDeclarationFileExtension(fileName: string): string | undefine
         return standardExtension;
     }
     if (fileExtensionIs(fileName, Extension.Ts)) {
-        const index = getBaseFileName(fileName).lastIndexOf(".d.");
+        const baseName = getBaseFileName(fileName);
+        const index = baseName.lastIndexOf(".d.");
         if (index >= 0) {
-            return fileName.substring(index);
+            return baseName.substring(index);
         }
     }
     return undefined;

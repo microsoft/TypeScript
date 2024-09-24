@@ -4228,7 +4228,9 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
         case SyntaxKind.CallExpression:
             return isImportCall(node.parent) || isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false) ? node.parent as RequireOrImportCall : undefined;
         case SyntaxKind.LiteralType:
-            Debug.assert(isStringLiteral(node));
+            if (!isStringLiteral(node)) {
+                break;
+            }
             return tryCast(node.parent.parent, isImportTypeNode) as ValidImportTypeNode | undefined;
         default:
             return undefined;

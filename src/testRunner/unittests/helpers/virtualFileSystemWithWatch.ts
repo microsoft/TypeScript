@@ -1158,7 +1158,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
         // base folder has to be present
         const base = getDirectoryPath(file.path);
-        const folder = Debug.checkDefined(this.getRealFolder(base));
+        const folder = this.getRealFolder(base);
+
+        if (!folder) {
+            throw new Error(`Directory not found: ${base}`);
+        }
 
         if (folder.path === base) {
             if (!this.fs.has(file.path)) {

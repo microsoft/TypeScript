@@ -8,7 +8,7 @@ Syntactic Diagnostics for file '/tests/cases/fourslash/server/rewriteRelativeImp
     import {} from "../../common/src/index.ts";
 
 Semantic Diagnostics for file '/tests/cases/fourslash/server/rewriteRelativeImportExtensionsProjectReferences1.ts':
-/tests/cases/fourslash/server/packages/main/src/index.ts(1,16): error TS2876: This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.
+/tests/cases/fourslash/server/packages/main/src/index.ts(1,16): error TS2878: This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.
 
 
 ==== /tests/cases/fourslash/server/packages/common/src/index.ts (0 errors) ====
@@ -16,4 +16,4 @@ Semantic Diagnostics for file '/tests/cases/fourslash/server/rewriteRelativeImpo
 ==== /tests/cases/fourslash/server/packages/main/src/index.ts (1 errors) ====
     import {} from "../../common/src/index.ts";
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2876: This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.
+!!! error TS2878: This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.
