@@ -33438,7 +33438,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isClassic = getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic;
         const errorMessage = isClassic
             ? Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option
-            : Diagnostics.This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_the_appropriate_package_installed;
+            : Diagnostics.This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_types_for_the_appropriate_package_installed;
         const specifier = getJSXRuntimeImportSpecifier(file, runtimeImportSpecifier);
         const mod = resolveExternalModule(specifier || location!, runtimeImportSpecifier, errorMessage, location);
         const result = mod && mod !== unknownSymbol ? getMergedSymbol(resolveSymbol(mod)) : undefined;

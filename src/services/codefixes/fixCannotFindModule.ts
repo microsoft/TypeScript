@@ -23,7 +23,7 @@ const fixName = "fixCannotFindModule";
 const fixIdInstallTypesPackage = "installTypesPackage";
 
 const errorCodeCannotFindModule = Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations.code;
-const errorCannotFindImplicitJsxImport = Diagnostics.This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_the_appropriate_package_installed.code;
+const errorCannotFindImplicitJsxImport = Diagnostics.This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_types_for_the_appropriate_package_installed.code;
 const errorCodes = [
     errorCodeCannotFindModule,
     Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type.code,
