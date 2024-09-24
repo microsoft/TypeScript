@@ -104,8 +104,6 @@ import {
     getFileEmitOutput,
     getImpliedNodeFormatForFile,
     getJSDocTags,
-    getJSXImplicitImportBase,
-    getJSXRuntimeImport,
     getLineAndCharacterOfPosition,
     getLineStarts,
     getMappedDocumentSpan,
