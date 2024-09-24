@@ -76,7 +76,7 @@ import {
     first,
     firstDefined,
     firstOrUndefined,
-    forEachAncestorDirectory,
+    forEachAncestorDirectoryStoppingAtGlobalCache,
     forEachChild,
     forEachLeadingCommentRange,
     forEachTrailingCommentRange,
@@ -525,7 +525,7 @@ function getMeaningFromRightHandSideOfImportEquals(node: Node): SemanticMeaning 
 }
 
 /** @internal */
-export function isInRightSideOfInternalImportEqualsDeclaration(node: Node) {
+export function isInRightSideOfInternalImportEqualsDeclaration(node: Node): boolean {
     while (node.parent.kind === SyntaxKind.QualifiedName) {
         node = node.parent;
     }
@@ -645,7 +645,7 @@ function isCalleeWorker<T extends CallExpression | NewExpression | TaggedTemplat
 }
 
 /** @internal */
-export function climbPastPropertyAccess(node: Node) {
+export function climbPastPropertyAccess(node: Node): Node {
     return isRightSideOfPropertyAccess(node) ? node.parent : node;
 }
 
@@ -694,22 +694,22 @@ export function isTagName(node: Node): boolean {
 }
 
 /** @internal */
-export function isRightSideOfQualifiedName(node: Node) {
+export function isRightSideOfQualifiedName(node: Node): boolean {
     return tryCast(node.parent, isQualifiedName)?.right === node;
 }
 
 /** @internal */
-export function isRightSideOfPropertyAccess(node: Node) {
+export function isRightSideOfPropertyAccess(node: Node): boolean {
     return tryCast(node.parent, isPropertyAccessExpression)?.name === node;
 }
 
 /** @internal */
-export function isArgumentExpressionOfElementAccess(node: Node) {
+export function isArgumentExpressionOfElementAccess(node: Node): boolean {
     return tryCast(node.parent, isElementAccessExpression)?.argumentExpression === node;
 }
 
 /** @internal */
-export function isNameOfModuleDeclaration(node: Node) {
+export function isNameOfModuleDeclaration(node: Node): boolean {
     return tryCast(node.parent, isModuleDeclaration)?.name === node;
 }
 
@@ -743,7 +743,7 @@ export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: StringLite
 }
 
 /** @internal */
-export function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node) {
+export function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node): boolean {
     return isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
         getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;
 }
@@ -933,7 +933,7 @@ export function rangeContainsPosition(r: TextRange, pos: number): boolean {
 }
 
 /** @internal */
-export function rangeContainsPositionExclusive(r: TextRange, pos: number) {
+export function rangeContainsPositionExclusive(r: TextRange, pos: number): boolean {
     return r.pos < pos && pos < r.end;
 }
 
@@ -948,17 +948,17 @@ export function rangeContainsStartEnd(range: TextRange, start: number, end: numb
 }
 
 /** @internal */
-export function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number) {
+export function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number): boolean {
     return startEndOverlapsWithStartEnd(r1.pos, r1.end, start, end);
 }
 
 /** @internal */
-export function nodeOverlapsWithStartEnd(node: Node, sourceFile: SourceFile, start: number, end: number) {
+export function nodeOverlapsWithStartEnd(node: Node, sourceFile: SourceFile, start: number, end: number): boolean {
     return startEndOverlapsWithStartEnd(node.getStart(sourceFile), node.end, start, end);
 }
 
 /** @internal */
-export function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number) {
+export function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number): boolean {
     const start = Math.max(start1, start2);
     const end = Math.min(end1, end2);
     return start < end;
@@ -1849,7 +1849,7 @@ function findRightmostChildNodeWithTokens(children: readonly Node[], exclusiveSt
 }
 
 /** @internal */
-export function isInString(sourceFile: SourceFile, position: number, previousToken = findPrecedingToken(position, sourceFile)): boolean {
+export function isInString(sourceFile: SourceFile, position: number, previousToken: Node | undefined = findPrecedingToken(position, sourceFile)): boolean {
     if (previousToken && isStringTextContainingNode(previousToken)) {
         const start = previousToken.getStart(sourceFile);
         const end = previousToken.getEnd();
@@ -1873,7 +1873,7 @@ export function isInString(sourceFile: SourceFile, position: number, previousTok
 /**
  * @internal
  */
-export function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: number) {
+export function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: number): boolean {
     const token = getTokenAtPosition(sourceFile, position);
 
     if (!token) {
@@ -1914,13 +1914,13 @@ function isWhiteSpaceOnlyJsxText(node: Node): boolean {
 }
 
 /** @internal */
-export function isInTemplateString(sourceFile: SourceFile, position: number) {
+export function isInTemplateString(sourceFile: SourceFile, position: number): boolean {
     const token = getTokenAtPosition(sourceFile, position);
     return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
 }
 
 /** @internal */
-export function isInJSXText(sourceFile: SourceFile, position: number) {
+export function isInJSXText(sourceFile: SourceFile, position: number): boolean {
     const token = getTokenAtPosition(sourceFile, position);
     if (isJsxText(token)) {
         return true;
@@ -1967,7 +1967,7 @@ export function isInsideJsxElement(sourceFile: SourceFile, position: number): bo
 }
 
 /** @internal */
-export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken, sourceFile: SourceFile) {
+export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken, sourceFile: SourceFile): Node | undefined {
     const closeTokenText = tokenToString(token.kind)!;
     const matchingTokenText = tokenToString(matchingTokenKind);
     const tokenFullStart = token.getFullStart();
@@ -2171,7 +2171,7 @@ function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {
 }
 
 /** @internal */
-export function getNodeModifiers(node: Node, excludeFlags = ModifierFlags.None): string {
+export function getNodeModifiers(node: Node, excludeFlags: ModifierFlags = ModifierFlags.None): string {
     const result: string[] = [];
     const flags = isDeclaration(node)
         ? getCombinedNodeFlagsAlwaysIncludeJSDoc(node) & ~excludeFlags
@@ -2225,7 +2225,7 @@ function areIntersectedTypesAvoidingStringReduction(checker: TypeChecker, t1: Ty
 }
 
 /** @internal */
-export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
+export function isStringAndEmptyAnonymousObjectIntersection(type: Type): boolean {
     if (!type.isIntersection()) {
         return false;
     }
@@ -2242,7 +2242,7 @@ export function isInsideTemplateLiteral(node: TemplateLiteralToken, position: nu
 }
 
 /** @internal */
-export function isAccessibilityModifier(kind: SyntaxKind) {
+export function isAccessibilityModifier(kind: SyntaxKind): boolean {
     switch (kind) {
         case SyntaxKind.PublicKeyword:
         case SyntaxKind.PrivateKeyword:
@@ -2261,7 +2261,7 @@ export function cloneCompilerOptions(options: CompilerOptions): CompilerOptions 
 }
 
 /** @internal */
-export function isArrayLiteralOrObjectLiteralDestructuringPattern(node: Node) {
+export function isArrayLiteralOrObjectLiteralDestructuringPattern(node: Node): boolean {
     if (
         node.kind === SyntaxKind.ArrayLiteralExpression ||
         node.kind === SyntaxKind.ObjectLiteralExpression
@@ -2313,7 +2313,7 @@ function isInReferenceCommentWorker(sourceFile: SourceFile, position: number, sh
 }
 
 /** @internal */
-export function getReplacementSpanForContextToken(contextToken: Node | undefined, position: number) {
+export function getReplacementSpanForContextToken(contextToken: Node | undefined, position: number): TextSpan | undefined {
     if (!contextToken) return undefined;
 
     switch (contextToken.kind) {
@@ -2331,7 +2331,7 @@ export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endN
 }
 
 /** @internal */
-export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike, position: number) {
+export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike, position: number): TextSpan | undefined {
     let replacementEnd = node.getEnd() - 1;
     if (node.isUnterminated) {
         // we return no replacement range only if unterminated string is empty
@@ -2400,7 +2400,7 @@ function isTypeKeywordToken(node: Node): node is Token<SyntaxKind.TypeKeyword> {
 }
 
 /** @internal */
-export function isTypeKeywordTokenOrIdentifier(node: Node) {
+export function isTypeKeywordTokenOrIdentifier(node: Node): boolean {
     return isTypeKeywordToken(node) || isIdentifier(node) && node.text === "type";
 }
 
@@ -2772,7 +2772,7 @@ export function getMappedContextSpan(documentSpan: DocumentSpan, sourceMapper: S
 // Display-part writer helpers
 // #region
 /** @internal */
-export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
+export function isFirstDeclarationOfSymbolParameter(symbol: Symbol): boolean {
     const declaration = symbol.declarations ? firstOrUndefined(symbol.declarations) : undefined;
     return !!findAncestor(declaration, n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
 }
@@ -2903,37 +2903,37 @@ export function displayPart(text: string, kind: SymbolDisplayPartKind): SymbolDi
 }
 
 /** @internal */
-export function spacePart() {
+export function spacePart(): SymbolDisplayPart {
     return displayPart(" ", SymbolDisplayPartKind.space);
 }
 
 /** @internal */
-export function keywordPart(kind: SyntaxKind) {
+export function keywordPart(kind: SyntaxKind): SymbolDisplayPart {
     return displayPart(tokenToString(kind)!, SymbolDisplayPartKind.keyword);
 }
 
 /** @internal */
-export function punctuationPart(kind: SyntaxKind) {
+export function punctuationPart(kind: SyntaxKind): SymbolDisplayPart {
     return displayPart(tokenToString(kind)!, SymbolDisplayPartKind.punctuation);
 }
 
 /** @internal */
-export function operatorPart(kind: SyntaxKind) {
+export function operatorPart(kind: SyntaxKind): SymbolDisplayPart {
     return displayPart(tokenToString(kind)!, SymbolDisplayPartKind.operator);
 }
 
 /** @internal */
-export function parameterNamePart(text: string) {
+export function parameterNamePart(text: string): SymbolDisplayPart {
     return displayPart(text, SymbolDisplayPartKind.parameterName);
 }
 
 /** @internal */
-export function propertyNamePart(text: string) {
+export function propertyNamePart(text: string): SymbolDisplayPart {
     return displayPart(text, SymbolDisplayPartKind.propertyName);
 }
 
 /** @internal */
-export function textOrKeywordPart(text: string) {
+export function textOrKeywordPart(text: string): SymbolDisplayPart {
     const kind = stringToToken(text);
     return kind === undefined
         ? textPart(text)
@@ -2941,17 +2941,17 @@ export function textOrKeywordPart(text: string) {
 }
 
 /** @internal */
-export function textPart(text: string) {
+export function textPart(text: string): SymbolDisplayPart {
     return displayPart(text, SymbolDisplayPartKind.text);
 }
 
 /** @internal */
-export function typeAliasNamePart(text: string) {
+export function typeAliasNamePart(text: string): SymbolDisplayPart {
     return displayPart(text, SymbolDisplayPartKind.aliasName);
 }
 
 /** @internal */
-export function typeParameterNamePart(text: string) {
+export function typeParameterNamePart(text: string): SymbolDisplayPart {
     return displayPart(text, SymbolDisplayPartKind.typeParameterName);
 }
 
@@ -3040,14 +3040,14 @@ const lineFeed = "\n";
  *
  * @internal
  */
-export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings: FormatCodeSettings | undefined) {
+export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings: FormatCodeSettings | undefined): string {
     return formatSettings?.newLineCharacter ||
         host.getNewLine?.() ||
         lineFeed;
 }
 
 /** @internal */
-export function lineBreakPart() {
+export function lineBreakPart(): SymbolDisplayPart {
     return displayPart("\n", SymbolDisplayPartKind.lineBreak);
 }
 
@@ -3115,12 +3115,12 @@ function isAliasSymbol(symbol: Symbol): boolean {
 }
 
 /** @internal */
-export function getUniqueSymbolId(symbol: Symbol, checker: TypeChecker) {
+export function getUniqueSymbolId(symbol: Symbol, checker: TypeChecker): number {
     return getSymbolId(skipAlias(symbol, checker));
 }
 
 /** @internal */
-export function getFirstNonSpaceCharacterPosition(text: string, position: number) {
+export function getFirstNonSpaceCharacterPosition(text: string, position: number): number {
     while (isWhiteSpaceLike(text.charCodeAt(position))) {
         position += 1;
     }
@@ -3128,7 +3128,7 @@ export function getFirstNonSpaceCharacterPosition(text: string, position: number
 }
 
 /** @internal */
-export function getPrecedingNonSpaceCharacterPosition(text: string, position: number) {
+export function getPrecedingNonSpaceCharacterPosition(text: string, position: number): number {
     while (position > -1 && isWhiteSpaceSingleLine(text.charCodeAt(position))) {
         position -= 1;
     }
@@ -3219,7 +3219,7 @@ export function getSynthesizedDeepClonesWithReplacements<T extends Node>(
  *
  * @internal
  */
-export function suppressLeadingAndTrailingTrivia(node: Node) {
+export function suppressLeadingAndTrailingTrivia(node: Node): void {
     suppressLeadingTrivia(node);
     suppressTrailingTrivia(node);
 }
@@ -3229,7 +3229,7 @@ export function suppressLeadingAndTrailingTrivia(node: Node) {
  *
  * @internal
  */
-export function suppressLeadingTrivia(node: Node) {
+export function suppressLeadingTrivia(node: Node): void {
     addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
 }
 
@@ -3238,12 +3238,12 @@ export function suppressLeadingTrivia(node: Node) {
  *
  * @internal @knipignore
  */
-export function suppressTrailingTrivia(node: Node) {
+export function suppressTrailingTrivia(node: Node): void {
     addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
 }
 
 /** @internal */
-export function copyComments(sourceNode: Node, targetNode: Node) {
+export function copyComments(sourceNode: Node, targetNode: Node): void {
     const sourceFile = sourceNode.getSourceFile();
     const text = sourceFile.text;
     if (hasLeadingLineBreak(sourceNode, text)) {
@@ -3317,12 +3317,12 @@ export function getRenameLocation(edits: readonly FileTextChanges[], renameFilen
 }
 
 /** @internal */
-export function copyLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+export function copyLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean): void {
     forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
 }
 
 /** @internal */
-export function copyTrailingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+export function copyTrailingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean): void {
     forEachTrailingCommentRange(sourceFile.text, sourceNode.end, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticTrailingComment));
 }
 
@@ -3335,7 +3335,7 @@ export function copyTrailingComments(sourceNode: Node, targetNode: Node, sourceF
  *
  * @internal
  */
-export function copyTrailingAsLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+export function copyTrailingAsLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean): void {
     forEachTrailingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
 }
 
@@ -3638,30 +3638,35 @@ function tryIOAndConsumeErrors<T>(host: unknown, toApply: ((...a: any[]) => T) |
 }
 
 /** @internal */
-export function findPackageJsons(startDirectory: string, host: Pick<LanguageServiceHost, "fileExists">, stopDirectory?: string): string[] {
+export function findPackageJsons(startDirectory: string, host: LanguageServiceHost): string[] {
     const paths: string[] = [];
-    forEachAncestorDirectory(startDirectory, ancestor => {
-        if (ancestor === stopDirectory) {
-            return true;
-        }
-        const currentConfigPath = combinePaths(ancestor, "package.json");
-        if (tryFileExists(host, currentConfigPath)) {
-            paths.push(currentConfigPath);
-        }
-    });
+    forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        startDirectory,
+        ancestor => {
+            const currentConfigPath = combinePaths(ancestor, "package.json");
+            if (tryFileExists(host, currentConfigPath)) {
+                paths.push(currentConfigPath);
+            }
+        },
+    );
     return paths;
 }
 
 /** @internal */
 export function findPackageJson(directory: string, host: LanguageServiceHost): string | undefined {
     let packageJson: string | undefined;
-    forEachAncestorDirectory(directory, ancestor => {
-        if (ancestor === "node_modules") return true;
-        packageJson = findConfigFile(ancestor, f => tryFileExists(host, f), "package.json");
-        if (packageJson) {
-            return true; // break out
-        }
-    });
+    forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        directory,
+        ancestor => {
+            if (ancestor === "node_modules") return true;
+            packageJson = findConfigFile(ancestor, f => tryFileExists(host, f), "package.json");
+            if (packageJson) {
+                return true; // break out
+            }
+        },
+    );
     return packageJson;
 }
 
@@ -3671,15 +3676,19 @@ function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHos
     }
 
     const packageJsons: ProjectPackageJsonInfo[] = [];
-    forEachAncestorDirectory(getDirectoryPath(fileName), ancestor => {
-        const packageJsonFileName = combinePaths(ancestor, "package.json");
-        if (host.fileExists(packageJsonFileName)) {
-            const info = createPackageJsonInfo(packageJsonFileName, host);
-            if (info) {
-                packageJsons.push(info);
+    forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        getDirectoryPath(fileName),
+        ancestor => {
+            const packageJsonFileName = combinePaths(ancestor, "package.json");
+            if (host.fileExists(packageJsonFileName)) {
+                const info = createPackageJsonInfo(packageJsonFileName, host);
+                if (info) {
+                    packageJsons.push(info);
+                }
             }
-        }
-    });
+        },
+    );
 
     return packageJsons;
 }
@@ -3999,7 +4008,7 @@ export function firstOrOnly<T>(valueOrArray: T | readonly T[]): T {
  * instead, which searches for names of re-exported defaults/namespaces in target files.
  * @internal
  */
-export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, preferCapitalized?: boolean) {
+export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, preferCapitalized?: boolean): string {
     if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
         // Names for default exports:
         // - export default foo => foo
@@ -4102,7 +4111,7 @@ export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target
  *
  * @internal
  */
-export function stringContainsAt(haystack: string, needle: string, startIndex: number) {
+export function stringContainsAt(haystack: string, needle: string, startIndex: number): boolean {
     const needleLength = needle.length;
     if (needleLength + startIndex > haystack.length) {
         return false;
@@ -4119,7 +4128,7 @@ export function startsWithUnderscore(name: string): boolean {
 }
 
 /** @internal */
-export function isDeprecatedDeclaration(decl: Declaration) {
+export function isDeprecatedDeclaration(decl: Declaration): boolean {
     return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
 }
 
@@ -4168,12 +4177,12 @@ export function getFormatCodeSettingsForWriting({ options }: formatting.FormatCo
 }
 
 /** @internal */
-export function jsxModeNeedsExplicitImport(jsx: JsxEmit | undefined) {
+export function jsxModeNeedsExplicitImport(jsx: JsxEmit | undefined): jsx is JsxEmit.React | JsxEmit.ReactNative {
     return jsx === JsxEmit.React || jsx === JsxEmit.ReactNative;
 }
 
 /** @internal */
-export function isSourceFileFromLibrary(program: Program, node: SourceFile) {
+export function isSourceFileFromLibrary(program: Program, node: SourceFile): boolean {
     return program.isSourceFileFromExternalLibrary(node) || program.isSourceFileDefaultLibrary(node);
 }
 
@@ -4249,7 +4258,7 @@ export function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (Ca
 }
 
 /** @internal */
-export function fileShouldUseJavaScriptRequire(file: SourceFile | string, program: Program, host: LanguageServiceHost, preferRequire?: boolean) {
+export function fileShouldUseJavaScriptRequire(file: SourceFile | string, program: Program, host: LanguageServiceHost, preferRequire?: boolean): boolean | undefined {
     const fileName = typeof file === "string" ? file : file.fileName;
     if (!hasJSFileExtension(fileName)) {
         return false;

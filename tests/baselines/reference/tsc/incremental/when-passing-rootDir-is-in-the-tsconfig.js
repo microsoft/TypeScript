@@ -1,6 +1,18 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/workspaces/project/src/main.ts]
+export const x = 10;
+
+//// [/home/src/workspaces/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "incremental": true,
+    "outDir": "./built",
+    "rootDir": "./"
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,43 +27,29 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/project/src/main.ts]
-export const x = 10;
 
-//// [/src/project/tsconfig.json]
-{
-    "compilerOptions": {
-        "incremental": true,
-        "outDir": "./built",
-        "rootDir": "./"
-    },
-}
-
-
-
+/home/src/tslibs/TS/Lib/tsc.js 
 Output::
-/lib/tsc --p src/project
-exitCode:: ExitStatus.Success
 
 
-//// [/src/project/built/src/main.js]
+//// [/home/src/workspaces/project/built/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
-//// [/src/project/built/tsconfig.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","../src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"options":{"outDir":"./","rootDir":".."},"version":"FakeTSVersion"}
+//// [/home/src/workspaces/project/built/tsconfig.tsbuildinfo]
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"options":{"outDir":"./","rootDir":".."},"version":"FakeTSVersion"}
 
-//// [/src/project/built/tsconfig.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/project/built/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.d.ts",
     "../src/main.ts"
   ],
   "fileInfos": {
-    "../../../lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -76,17 +74,19 @@ exports.x = 10;
     "rootDir": ".."
   },
   "version": "FakeTSVersion",
-  "size": 663
+  "size": 673
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/lib/tsc --p src/project
 exitCode:: ExitStatus.Success
 
+Change:: no-change-run
 
+Input::
+
+/home/src/tslibs/TS/Lib/tsc.js 
+Output::
+
+
+
+exitCode:: ExitStatus.Success

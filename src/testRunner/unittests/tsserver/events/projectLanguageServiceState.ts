@@ -6,30 +6,29 @@ import {
     TestSession,
 } from "../../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
+    TestServerHost,
 } from "../../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () => {
+describe("unittests:: tsserver:: events:: projectLanguageServiceState::", () => {
     it("language service disabled events are triggered", () => {
         const f1 = {
-            path: "/a/app.js",
+            path: "/user/username/projects/project/app.js",
             content: "let x = 1;",
         };
         const f2 = {
-            path: "/a/largefile.js",
+            path: "/user/username/projects/project/largefile.js",
             content: "",
         };
         const config = {
-            path: "/a/jsconfig.json",
+            path: "/user/username/projects/project/jsconfig.json",
             content: "{}",
         };
         const configWithExclude = {
             path: config.path,
             content: jsonToReadableText({ exclude: ["largefile.js"] }),
         };
-        const host = createServerHost([f1, f2, config]);
+        const host = TestServerHost.createServerHost([f1, f2, config]);
         const originalGetFileSize = host.getFileSize;
         host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
@@ -45,24 +44,24 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
 
     it("Large file size is determined correctly", () => {
         const f1: File = {
-            path: "/a/app.js",
+            path: "/user/username/projects/project/app.js",
             content: "let x = 1;",
         };
         const f2: File = {
-            path: "/a/largefile.js",
+            path: "/user/username/projects/project/largefile.js",
             content: "",
             fileSize: ts.server.maxProgramSizeForNonTsFiles + 1,
         };
         const f3: File = {
-            path: "/a/extremlylarge.d.ts",
+            path: "/user/username/projects/project/extremlylarge.d.ts",
             content: "",
             fileSize: ts.server.maxProgramSizeForNonTsFiles + 100,
         };
         const config = {
-            path: "/a/jsconfig.json",
+            path: "/user/username/projects/project/jsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, f2, f3, libFile, config]);
+        const host = TestServerHost.createServerHost([f1, f2, f3, config]);
         const session = new TestSession(host);
         openFilesForSession([f1], session);
         const project = session.getProjectService().configuredProjects.get(config.path)!;

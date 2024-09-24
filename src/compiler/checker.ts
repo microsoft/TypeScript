@@ -6,6 +6,7 @@ import {
     addRange,
     addRelatedInfo,
     addSyntheticLeadingComment,
+    addSyntheticTrailingComment,
     AliasDeclarationNode,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
@@ -582,6 +583,7 @@ import {
     isImportTypeNode,
     isInCompoundLikeAssignment,
     isIndexedAccessTypeNode,
+    isIndexSignatureDeclaration,
     isInExpressionContext,
     isInfinityOrNaNString,
     isInitializedProperty,
@@ -877,6 +879,7 @@ import {
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
     Mutable,
+    MutableNodeArray,
     NamedDeclaration,
     NamedExports,
     NamedImportsOrExports,
@@ -1449,7 +1452,7 @@ export function getSymbolId(symbol: Symbol): SymbolId {
 }
 
 /** @internal */
-export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
+export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean {
     const moduleState = getModuleInstanceState(node);
     return moduleState === ModuleInstanceState.Instantiated ||
         (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
@@ -1640,6 +1643,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getBaseTypeOfLiteralType,
         getWidenedType,
         getWidenedLiteralType,
+        fillMissingTypeArguments,
         getTypeFromTypeNode: nodeIn => {
             const node = getParseTreeNode(nodeIn, isTypeNode);
             return node ? getTypeFromTypeNode(node) : errorType;
@@ -7054,6 +7058,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
                 if (checkTruncationLength(context)) {
+                    if (context.flags & NodeBuilderFlags.NoTruncation) {
+                        return [addSyntheticTrailingComment(factory.createNotEmittedTypeElement(), SyntaxKind.MultiLineCommentTrivia, "elided")];
+                    }
                     return [factory.createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined)];
                 }
                 const typeElements: TypeElement[] = [];
@@ -7085,7 +7092,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
-                        typeElements.push(factory.createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined));
+                        if (context.flags & NodeBuilderFlags.NoTruncation) {
+                            const typeElement = typeElements.pop()!;
+                            typeElements.push(addSyntheticTrailingComment(typeElement, SyntaxKind.MultiLineCommentTrivia, `... ${properties.length - i} more elided ...`));
+                        }
+                        else {
+                            typeElements.push(factory.createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined));
+                        }
                         addPropertyToElementList(properties[properties.length - 1], context, typeElements);
                         break;
                     }
@@ -7100,7 +7113,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
                 return factory.createTypeReferenceNode(factory.createIdentifier("..."), /*typeArguments*/ undefined);
             }
-            return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+            return addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided");
         }
 
         function shouldUsePlaceholderForProperty(propertySymbol: Symbol, context: NodeBuilderContext) {
@@ -7260,12 +7273,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (some(types)) {
                 if (checkTruncationLength(context)) {
                     if (!isBareList) {
-                        return [factory.createTypeReferenceNode("...", /*typeArguments*/ undefined)];
+                        return [
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided")
+                                : factory.createTypeReferenceNode("...", /*typeArguments*/ undefined),
+                        ];
                     }
                     else if (types.length > 2) {
                         return [
                             typeToTypeNodeHelper(types[0], context),
-                            factory.createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - 2} more elided ...`)
+                                : factory.createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
                             typeToTypeNodeHelper(types[types.length - 1], context),
                         ];
                     }
@@ -7278,7 +7297,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 for (const type of types) {
                     i++;
                     if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
-                        result.push(factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
+                        result.push(
+                            context.flags & NodeBuilderFlags.NoTruncation
+                                ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - i} more elided ...`)
+                                : factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined),
+                        );
                         const typeNode = typeToTypeNodeHelper(types[types.length - 1], context);
                         if (typeNode) {
                             result.push(typeNode);
@@ -13324,12 +13347,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * - The type of its expression is a string or numeric literal type, or is a `unique symbol` type.
      */
     function isLateBindableName(node: DeclarationName): node is LateBoundName {
+        return isLateBindableAST(node)
+            && isTypeUsableAsPropertyName(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached((node as ElementAccessExpression).argumentExpression));
+    }
+
+    function isLateBindableIndexSignature(node: DeclarationName): node is LateBoundName {
+        return isLateBindableAST(node)
+            && isTypeUsableAsIndexSignature(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached((node as ElementAccessExpression).argumentExpression));
+    }
+
+    function isLateBindableAST(node: DeclarationName) {
         if (!isComputedPropertyName(node) && !isElementAccessExpression(node)) {
             return false;
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
-        return isEntityNameExpression(expr)
-            && isTypeUsableAsPropertyName(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached(expr));
+        return isEntityNameExpression(expr);
+    }
+
+    function isTypeUsableAsIndexSignature(type: Type): boolean {
+        return isTypeAssignableTo(type, stringNumberSymbolType);
     }
 
     function isLateBoundName(name: __String): boolean {
@@ -13344,6 +13380,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function hasLateBindableName(node: Declaration): node is LateBoundDeclaration | LateBoundBinaryExpressionDeclaration {
         const name = getNameOfDeclaration(node);
         return !!name && isLateBindableName(name);
+    }
+
+    function hasLateBindableIndexSignature(node: Declaration) {
+        const name = getNameOfDeclaration(node);
+        return !!name && isLateBindableIndexSignature(name);
     }
 
     /**
@@ -13453,6 +13494,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedSymbol;
     }
 
+    function lateBindIndexSignature(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: Map<__String, TransientSymbol>, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
+        // First, late bind the index symbol itself, if needed
+        let indexSymbol = lateSymbols.get(InternalSymbolName.Index);
+        if (!indexSymbol) {
+            const early = earlySymbols?.get(InternalSymbolName.Index);
+            if (!early) {
+                indexSymbol = createSymbol(SymbolFlags.None, InternalSymbolName.Index, CheckFlags.Late);
+            }
+            else {
+                indexSymbol = cloneSymbol(early);
+                indexSymbol.links.checkFlags |= CheckFlags.Late;
+            }
+            lateSymbols.set(InternalSymbolName.Index, indexSymbol);
+        }
+        // Then just add the computed name as a late bound declaration
+        // (note: unlike `addDeclarationToLateBoundSymbol` we do not set up a `.lateSymbol` on `decl`'s links,
+        // since that would point at an index symbol and not a single property symbol, like most consumers would expect)
+        if (!indexSymbol.declarations) {
+            indexSymbol.declarations = [decl];
+        }
+        else if (!decl.symbol.isReplaceableByMethod) {
+            indexSymbol.declarations.push(decl);
+        }
+    }
+
     function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: MembersOrExportsResolutionKind): Map<__String, Symbol> {
         const links = getSymbolLinks(symbol);
         if (!links[resolutionKind]) {
@@ -13475,6 +13541,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (isStatic === hasStaticModifier(member)) {
                             if (hasLateBindableName(member)) {
                                 lateBindMember(symbol, earlySymbols, lateSymbols, member);
+                            }
+                            else if (hasLateBindableIndexSignature(member)) {
+                                lateBindIndexSignature(symbol, earlySymbols, lateSymbols, member as Node as LateBoundDeclaration | LateBoundBinaryExpressionDeclaration);
                             }
                         }
                     }
@@ -14139,7 +14208,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const indexSymbol = getIndexSymbolFromSymbolTable(members);
         if (indexSymbol) {
-            indexInfos = getIndexInfosOfIndexSymbol(indexSymbol);
+            indexInfos = getIndexInfosOfIndexSymbol(indexSymbol, arrayFrom(members.values()));
         }
         else {
             if (baseConstructorIndexInfo) {
@@ -16171,7 +16240,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getIndexSymbol(symbol: Symbol): Symbol | undefined {
-        return symbol.members ? getIndexSymbolFromSymbolTable(symbol.members) : undefined;
+        return symbol.members ? getIndexSymbolFromSymbolTable(getMembersOfSymbol(symbol)) : undefined;
     }
 
     function getIndexSymbolFromSymbolTable(symbolTable: SymbolTable): Symbol | undefined {
@@ -16184,24 +16253,67 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getIndexInfosOfSymbol(symbol: Symbol): IndexInfo[] {
         const indexSymbol = getIndexSymbol(symbol);
-        return indexSymbol ? getIndexInfosOfIndexSymbol(indexSymbol) : emptyArray;
+        return indexSymbol ? getIndexInfosOfIndexSymbol(indexSymbol, arrayFrom(getMembersOfSymbol(symbol).values())) : emptyArray;
     }
 
-    function getIndexInfosOfIndexSymbol(indexSymbol: Symbol): IndexInfo[] {
+    // note intentional similarities to index signature building in `checkObjectLiteral` for parity
+    function getIndexInfosOfIndexSymbol(indexSymbol: Symbol, siblingSymbols: Symbol[] | undefined = indexSymbol.parent ? arrayFrom(getMembersOfSymbol(indexSymbol.parent).values()) : undefined): IndexInfo[] {
         if (indexSymbol.declarations) {
             const indexInfos: IndexInfo[] = [];
-            for (const declaration of (indexSymbol.declarations as IndexSignatureDeclaration[])) {
-                if (declaration.parameters.length === 1) {
-                    const parameter = declaration.parameters[0];
-                    if (parameter.type) {
-                        forEachType(getTypeFromTypeNode(parameter.type), keyType => {
-                            if (isValidIndexKeyType(keyType) && !findIndexInfo(indexInfos, keyType)) {
-                                indexInfos.push(createIndexInfo(keyType, declaration.type ? getTypeFromTypeNode(declaration.type) : anyType, hasEffectiveModifier(declaration, ModifierFlags.Readonly), declaration));
+            let hasComputedNumberProperty = false;
+            let readonlyComputedNumberProperty = true;
+            let hasComputedSymbolProperty = false;
+            let readonlyComputedSymbolProperty = true;
+            let hasComputedStringProperty = false;
+            let readonlyComputedStringProperty = true;
+            const computedPropertySymbols: Symbol[] = [];
+            for (const declaration of indexSymbol.declarations) {
+                if (isIndexSignatureDeclaration(declaration)) {
+                    if (declaration.parameters.length === 1) {
+                        const parameter = declaration.parameters[0];
+                        if (parameter.type) {
+                            forEachType(getTypeFromTypeNode(parameter.type), keyType => {
+                                if (isValidIndexKeyType(keyType) && !findIndexInfo(indexInfos, keyType)) {
+                                    indexInfos.push(createIndexInfo(keyType, declaration.type ? getTypeFromTypeNode(declaration.type) : anyType, hasEffectiveModifier(declaration, ModifierFlags.Readonly), declaration));
+                                }
+                            });
+                        }
+                    }
+                }
+                else if (hasLateBindableIndexSignature(declaration)) {
+                    const declName = isBinaryExpression(declaration) ? declaration.left as ElementAccessExpression : (declaration as LateBoundDeclaration).name;
+                    const keyType = isElementAccessExpression(declName) ? checkExpressionCached(declName.argumentExpression) : checkComputedPropertyName(declName);
+                    if (findIndexInfo(indexInfos, keyType)) {
+                        continue; // Explicit index for key type takes priority
+                    }
+                    if (isTypeAssignableTo(keyType, stringNumberSymbolType)) {
+                        if (isTypeAssignableTo(keyType, numberType)) {
+                            hasComputedNumberProperty = true;
+                            if (!hasEffectiveReadonlyModifier(declaration)) {
+                                readonlyComputedNumberProperty = false;
                             }
-                        });
+                        }
+                        else if (isTypeAssignableTo(keyType, esSymbolType)) {
+                            hasComputedSymbolProperty = true;
+                            if (!hasEffectiveReadonlyModifier(declaration)) {
+                                readonlyComputedSymbolProperty = false;
+                            }
+                        }
+                        else {
+                            hasComputedStringProperty = true;
+                            if (!hasEffectiveReadonlyModifier(declaration)) {
+                                readonlyComputedStringProperty = false;
+                            }
+                        }
+                        computedPropertySymbols.push(declaration.symbol);
                     }
                 }
             }
+            const allPropertySymbols = concatenate(computedPropertySymbols, filter(siblingSymbols, s => s !== indexSymbol));
+            // aggregate similar index infos implied to be the same key to the same combined index info
+            if (hasComputedStringProperty && !findIndexInfo(indexInfos, stringType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedStringProperty, 0, allPropertySymbols, stringType));
+            if (hasComputedNumberProperty && !findIndexInfo(indexInfos, numberType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedNumberProperty, 0, allPropertySymbols, numberType));
+            if (hasComputedSymbolProperty && !findIndexInfo(indexInfos, esSymbolType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedSymbolProperty, 0, allPropertySymbols, esSymbolType));
             return indexInfos;
         }
         return emptyArray;
@@ -22057,7 +22169,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let generalizedSource = source;
             let generalizedSourceType = sourceType;
 
-            if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
+            // Don't generalize on 'never' - we really want the original type
+            // to be displayed for use-cases like 'assertNever'.
+            if (!(target.flags & TypeFlags.Never) && isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
                 generalizedSource = getBaseTypeOfLiteralType(source);
                 Debug.assert(!isTypeAssignableTo(generalizedSource, target), "generalized source shouldn't be assignable");
                 generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
@@ -32767,7 +32881,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isTypeAssignableToKind(checkComputedPropertyName(firstDecl.name), TypeFlags.ESSymbol));
     }
 
-    function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
+    // NOTE: currently does not make pattern literal indexers, eg `${number}px`
+    function getObjectLiteralIndexInfo(isReadonly: boolean, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
         const propTypes: Type[] = [];
         for (let i = offset; i < properties.length; i++) {
             const prop = properties[i];
@@ -32780,7 +32895,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         const unionType = propTypes.length ? getUnionType(propTypes, UnionReduction.Subtype) : undefinedType;
-        return createIndexInfo(keyType, unionType, isConstContext(node));
+        return createIndexInfo(keyType, unionType, isReadonly);
     }
 
     function getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined {
@@ -32985,9 +33100,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function createObjectLiteralType() {
             const indexInfos = [];
-            if (hasComputedStringProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, stringType));
-            if (hasComputedNumberProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, numberType));
-            if (hasComputedSymbolProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, esSymbolType));
+            const isReadonly = isConstContext(node);
+            if (hasComputedStringProperty) indexInfos.push(getObjectLiteralIndexInfo(isReadonly, offset, propertiesArray, stringType));
+            if (hasComputedNumberProperty) indexInfos.push(getObjectLiteralIndexInfo(isReadonly, offset, propertiesArray, numberType));
+            if (hasComputedSymbolProperty) indexInfos.push(getObjectLiteralIndexInfo(isReadonly, offset, propertiesArray, esSymbolType));
             const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, indexInfos);
             result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
             if (isJSObjectLiteral) {
@@ -37378,9 +37494,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (exprType === silentNeverType || isErrorType(exprType) || !some(typeArguments)) {
             return exprType;
         }
+        const links = getNodeLinks(node);
+        if (!links.instantiationExpressionTypes) {
+            links.instantiationExpressionTypes = new Map();
+        }
+        if (links.instantiationExpressionTypes.has(exprType.id)) {
+            return links.instantiationExpressionTypes.get(exprType.id)!;
+        }
         let hasSomeApplicableSignature = false;
         let nonApplicableType: Type | undefined;
         const result = getInstantiatedType(exprType);
+        links.instantiationExpressionTypes.set(exprType.id, result);
         const errorType = hasSomeApplicableSignature ? nonApplicableType : exprType;
         if (errorType) {
             diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable, typeToString(errorType)));
@@ -39828,6 +39952,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NewExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.YieldExpression:
+            case SyntaxKind.ThisKeyword:
                 return PredicateSemantics.Sometimes;
             case SyntaxKind.BinaryExpression:
                 // List of operators that can produce null/undefined:
@@ -41134,7 +41259,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const modifiers = getTypeParameterModifiers(typeParameter) & (ModifierFlags.In | ModifierFlags.Out);
             if (modifiers) {
                 const symbol = getSymbolOfDeclaration(node.parent);
-                if (isTypeAliasDeclaration(node.parent) && !(getObjectFlags(getDeclaredTypeOfSymbol(symbol)) & (ObjectFlags.Reference | ObjectFlags.Anonymous | ObjectFlags.Mapped))) {
+                if (isTypeAliasDeclaration(node.parent) && !(getObjectFlags(getDeclaredTypeOfSymbol(symbol)) & (ObjectFlags.Anonymous | ObjectFlags.Mapped))) {
                     error(node, Diagnostics.Variance_annotations_are_only_supported_in_type_aliases_for_object_function_constructor_and_mapped_types);
                 }
                 else if (modifiers === ModifierFlags.In || modifiers === ModifierFlags.Out) {
@@ -41553,18 +41678,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const indexSymbol = getIndexSymbol(getSymbolOfDeclaration(node));
         if (indexSymbol?.declarations) {
             const indexSignatureMap = new Map<TypeId, { type: Type; declarations: IndexSignatureDeclaration[]; }>();
-            for (const declaration of (indexSymbol.declarations as IndexSignatureDeclaration[])) {
-                if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
-                    forEachType(getTypeFromTypeNode(declaration.parameters[0].type), type => {
-                        const entry = indexSignatureMap.get(getTypeId(type));
-                        if (entry) {
-                            entry.declarations.push(declaration);
-                        }
-                        else {
-                            indexSignatureMap.set(getTypeId(type), { type, declarations: [declaration] });
-                        }
-                    });
+            for (const declaration of indexSymbol.declarations) {
+                if (isIndexSignatureDeclaration(declaration)) {
+                    if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
+                        forEachType(getTypeFromTypeNode(declaration.parameters[0].type), type => {
+                            const entry = indexSignatureMap.get(getTypeId(type));
+                            if (entry) {
+                                entry.declarations.push(declaration);
+                            }
+                            else {
+                                indexSignatureMap.set(getTypeId(type), { type, declarations: [declaration] });
+                            }
+                        });
+                    }
                 }
+                // Do nothing for late-bound index signatures: allow these to duplicate one another and explicit indexes
             }
             indexSignatureMap.forEach(entry => {
                 if (entry.declarations.length > 1) {
@@ -50411,6 +50539,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             },
             isImportRequiredByAugmentation,
             isDefinitelyReferenceToGlobalSymbolObject,
+            createLateBoundIndexSignatures: (cls, enclosing, flags, internalFlags, tracker) => {
+                const sym = cls.symbol;
+                const staticInfos = getIndexInfosOfType(getTypeOfSymbol(sym));
+                const instanceIndexSymbol = getIndexSymbol(sym);
+                const instanceInfos = instanceIndexSymbol && getIndexInfosOfIndexSymbol(instanceIndexSymbol, arrayFrom(getMembersOfSymbol(sym).values()));
+                let result;
+                for (const infoList of [staticInfos, instanceInfos]) {
+                    if (!length(infoList)) continue;
+                    result ||= [];
+                    for (const info of infoList!) {
+                        if (info.declaration) continue;
+                        const node = nodeBuilder.indexInfoToIndexSignatureDeclaration(info, enclosing, flags, internalFlags, tracker);
+                        if (node && infoList === staticInfos) {
+                            (((node as Mutable<typeof node>).modifiers ||= factory.createNodeArray()) as MutableNodeArray<Modifier>).unshift(factory.createModifier(SyntaxKind.StaticKeyword));
+                        }
+                        if (node) {
+                            result.push(node);
+                        }
+                    }
+                }
+                return result;
+            },
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {
@@ -52696,7 +52846,7 @@ function getIterationTypesKeyFromIterationTypeKind(typeKind: IterationTypeKind) 
 }
 
 /** @internal */
-export function signatureHasRestParameter(s: Signature) {
+export function signatureHasRestParameter(s: Signature): boolean {
     return !!(s.flags & SignatureFlags.HasRestParameter);
 }
 
@@ -52719,6 +52869,7 @@ function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHo
         readFile: host.readFile ? (fileName => host.readFile!(fileName)) : undefined,
         getDefaultResolutionModeForFile: file => host.getDefaultResolutionModeForFile(file),
         getModeForResolutionAtIndex: (file, index) => host.getModeForResolutionAtIndex(file, index),
+        getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
     };
 }
 

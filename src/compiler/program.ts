@@ -8,7 +8,6 @@ import {
     AsExpression,
     BuilderProgram,
     CancellationToken,
-    canEmitTsBuildInfo,
     canHaveDecorators,
     canHaveIllegalDecorators,
     chainDiagnosticMessages,
@@ -517,11 +516,22 @@ export interface CompilerHostLikeForCache {
 }
 
 /** @internal */
+export interface CompilerHostLikeWithCache {
+    originalReadFile: (fileName: string, encoding?: string) => string | undefined;
+    originalFileExists: (fileName: string) => boolean;
+    originalDirectoryExists: ((directory: string) => boolean) | undefined;
+    originalCreateDirectory: ((directory: string) => void) | undefined;
+    originalWriteFile: WriteFileCallback | undefined;
+    getSourceFileWithCache: ((fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean) => SourceFile | undefined) | undefined;
+    readFileWithCache: (fileName: string) => string | undefined;
+}
+
+/** @internal */
 export function changeCompilerHostLikeToUseCache(
     host: CompilerHostLikeForCache,
     toPath: (fileName: string) => Path,
     getSourceFile?: CompilerHost["getSourceFile"],
-) {
+): CompilerHostLikeWithCache {
     const originalReadFile = host.readFile;
     const originalFileExists = host.fileExists;
     const originalDirectoryExists = host.directoryExists;
@@ -704,7 +714,7 @@ function getCategoryFormat(category: DiagnosticCategory): ForegroundColorEscapeS
 }
 
 /** @internal */
-export function formatColorAndReset(text: string, formatStyle: string) {
+export function formatColorAndReset(text: string, formatStyle: string): string {
     return formatStyle + text + resetEscapeSequence;
 }
 
@@ -763,7 +773,7 @@ function formatCodeSpan(file: SourceFile, start: number, length: number, indent:
 }
 
 /** @internal */
-export function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color = formatColorAndReset) {
+export function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color: typeof formatColorAndReset = formatColorAndReset): string {
     const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start); // TODO: GH#18217
     const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
 
@@ -854,7 +864,7 @@ export interface SourceFileImportsList {
  * Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
  * provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
  */
-export function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode) {
+export function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode): ResolutionMode {
     return (isString(ref) ? containingFileMode : ref.resolutionMode) || containingFileMode;
 }
 
@@ -881,7 +891,7 @@ export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: 
 }
 
 /** @internal */
-export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | ExportDeclaration | JSDocImportTag) {
+export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | ExportDeclaration | JSDocImportTag): boolean {
     if (isExportDeclaration(decl)) {
         return decl.isTypeOnly;
     }
@@ -929,7 +939,7 @@ export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | Ex
  * should be the options of the referenced project, not the referencing project.
  * @returns The final resolution mode of the import
  */
-export function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike, compilerOptions: CompilerOptions) {
+export function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike, compilerOptions: CompilerOptions): ResolutionMode {
     return getModeForUsageLocationWorker(file, usage, compilerOptions);
 }
 
@@ -982,7 +992,7 @@ function getEmitSyntaxForUsageLocationWorker(file: Pick<SourceFile, "fileName" |
 }
 
 /** @internal */
-export function getResolutionModeOverride(node: ImportAttributes | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void) {
+export function getResolutionModeOverride(node: ImportAttributes | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => void): ResolutionMode | undefined {
     if (!node) return undefined;
     if (length(node.elements) !== 1) {
         grammarErrorOnNode?.(
@@ -1139,7 +1149,11 @@ export function forEachResolvedProjectReference<T>(
     resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
     cb: (resolvedProjectReference: ResolvedProjectReference, parent: ResolvedProjectReference | undefined) => T | undefined,
 ): T | undefined {
-    return forEachProjectReference(/*projectReferences*/ undefined, resolvedProjectReferences, (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent));
+    return forEachProjectReference(
+        /*projectReferences*/ undefined,
+        resolvedProjectReferences,
+        (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent),
+    );
 }
 
 function forEachProjectReference<T>(
@@ -1149,7 +1163,6 @@ function forEachProjectReference<T>(
     cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined,
 ): T | undefined {
     let seenResolvedRefs: Set<Path> | undefined;
-
     return worker(projectReferences, resolvedProjectReferences, /*parent*/ undefined);
 
     function worker(
@@ -1162,19 +1175,26 @@ function forEachProjectReference<T>(
             const result = cbRef(projectReferences, parent);
             if (result) return result;
         }
-
-        return forEach(resolvedProjectReferences, (resolvedRef, index) => {
-            if (resolvedRef && seenResolvedRefs?.has(resolvedRef.sourceFile.path)) {
-                // ignore recursives
-                return undefined;
-            }
-
-            const result = cbResolvedRef(resolvedRef, parent, index);
-            if (result || !resolvedRef) return result;
-
-            (seenResolvedRefs ||= new Set()).add(resolvedRef.sourceFile.path);
-            return worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef);
-        });
+        let skipChildren: Set<ResolvedProjectReference> | undefined;
+        return forEach(
+            resolvedProjectReferences,
+            (resolvedRef, index) => {
+                if (resolvedRef && seenResolvedRefs?.has(resolvedRef.sourceFile.path)) {
+                    (skipChildren ??= new Set()).add(resolvedRef);
+                    // ignore recursives
+                    return undefined;
+                }
+                const result = cbResolvedRef(resolvedRef, parent, index);
+                if (result || !resolvedRef) return result;
+                (seenResolvedRefs ||= new Set()).add(resolvedRef.sourceFile.path);
+            },
+        ) || forEach(
+            resolvedProjectReferences,
+            resolvedRef =>
+                resolvedRef && !skipChildren?.has(resolvedRef) ?
+                    worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef) :
+                    undefined,
+        );
     }
 }
 
@@ -1182,13 +1202,13 @@ function forEachProjectReference<T>(
 export const inferredTypesContainingFile = "__inferred type names__.ts";
 
 /** @internal */
-export function getInferredLibraryNameResolveFrom(options: CompilerOptions, currentDirectory: string, libFileName: string) {
+export function getInferredLibraryNameResolveFrom(options: CompilerOptions, currentDirectory: string, libFileName: string): string {
     const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
     return combinePaths(containingDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
 }
 
 /** @internal */
-export function getLibraryNameFromLibFileName(libFileName: string) {
+export function getLibraryNameFromLibFileName(libFileName: string): string {
     // Support resolving to lib.dom.d.ts -> @typescript/lib-dom, and
     //                      lib.dom.iterable.d.ts -> @typescript/lib-dom/iterable
     //                      lib.es2015.symbol.wellknown.d.ts -> @typescript/lib-es2015/symbol-wellknown
@@ -1356,7 +1376,14 @@ export function isProgramUptoDate(
             (seenResolvedRefs || (seenResolvedRefs = [])).push(oldResolvedRef);
 
             // If child project references are upto date, this project reference is uptodate
-            return !forEach(oldResolvedRef.references, (childResolvedRef, index) => !resolvedProjectReferenceUptoDate(childResolvedRef, oldResolvedRef.commandLine.projectReferences![index]));
+            return !forEach(
+                oldResolvedRef.references,
+                (childResolvedRef, index) =>
+                    !resolvedProjectReferenceUptoDate(
+                        childResolvedRef,
+                        oldResolvedRef.commandLine.projectReferences![index],
+                    ),
+            );
         }
 
         // In old program, not able to resolve project reference path,
@@ -1393,7 +1420,7 @@ export function getImpliedNodeFormatForFileWorker(
     packageJsonInfoCache: PackageJsonInfoCache | undefined,
     host: ModuleResolutionHost,
     options: CompilerOptions,
-) {
+): ResolutionMode | Partial<CreateSourceFileOptions> | undefined {
     const moduleResolution = getEmitModuleResolutionKind(options);
     const shouldLookupFromPackageJson = ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext
         || pathContainsNodeModules(fileName);
@@ -2016,6 +2043,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getFileIncludeReasons: () => fileReasons,
         structureIsReused,
         writeFile,
+        getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
     };
 
     onProgramCreateComplete();
@@ -2741,6 +2769,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createHash: maybeBind(host, host.createHash),
             getModuleResolutionCache: () => program.getModuleResolutionCache(),
             trace: maybeBind(host, host.trace),
+            getGlobalTypingsCacheLocation: program.getGlobalTypingsCacheLocation,
         };
     }
 
@@ -4311,12 +4340,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         const outputFile = options.outFile;
-        if (options.tsBuildInfoFile) {
-            if (!canEmitTsBuildInfo(options)) {
-                createDiagnosticForOptionName(Diagnostics.Option_tsBuildInfoFile_cannot_be_specified_without_specifying_option_incremental_or_composite_or_if_not_running_tsc_b, "tsBuildInfoFile");
-            }
-        }
-        else if (options.incremental && !outputFile && !options.configFilePath) {
+        if (!options.tsBuildInfoFile && options.incremental && !outputFile && !options.configFilePath) {
             programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
         }
 
@@ -4892,7 +4916,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             case FileIncludeKind.SourceFromProjectReference:
             case FileIncludeKind.OutputFromProjectReference:
                 const referencedResolvedRef = Debug.checkDefined(resolvedProjectReferences?.[reason.index]);
-                const referenceInfo = forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, parent, index) => resolvedRef === referencedResolvedRef ? { sourceFile: parent?.sourceFile || options.configFile!, index } : undefined);
+                const referenceInfo = forEachProjectReference(
+                    projectReferences,
+                    resolvedProjectReferences,
+                    (resolvedRef, parent, index) =>
+                        resolvedRef === referencedResolvedRef ?
+                            { sourceFile: parent?.sourceFile || options.configFile!, index } :
+                            undefined,
+                );
                 if (!referenceInfo) return undefined;
                 const { sourceFile, index } = referenceInfo;
                 const referencesSyntax = forEachTsConfigPropArray(sourceFile as TsConfigSourceFile, "references", property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
@@ -4932,28 +4963,32 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function verifyProjectReferences() {
         const buildInfoPath = !options.suppressOutputPathCheck ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
-        forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, parent, index) => {
-            const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
-            const parentFile = parent && parent.sourceFile as JsonSourceFile;
-            verifyDeprecatedProjectReference(ref, parentFile, index);
-            if (!resolvedRef) {
-                createDiagnosticForReference(parentFile, index, Diagnostics.File_0_not_found, ref.path);
-                return;
-            }
-            const options = resolvedRef.commandLine.options;
-            if (!options.composite || options.noEmit) {
-                // ok to not have composite if the current program is container only
-                const inputs = parent ? parent.commandLine.fileNames : rootNames;
-                if (inputs.length) {
-                    if (!options.composite) createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
-                    if (options.noEmit) createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_may_not_disable_emit, ref.path);
+        forEachProjectReference(
+            projectReferences,
+            resolvedProjectReferences,
+            (resolvedRef, parent, index) => {
+                const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
+                const parentFile = parent && parent.sourceFile as JsonSourceFile;
+                verifyDeprecatedProjectReference(ref, parentFile, index);
+                if (!resolvedRef) {
+                    createDiagnosticForReference(parentFile, index, Diagnostics.File_0_not_found, ref.path);
+                    return;
                 }
-            }
-            if (!parent && buildInfoPath && buildInfoPath === getTsBuildInfoEmitOutputFilePath(options)) {
-                createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, buildInfoPath, ref.path);
-                hasEmitBlockingDiagnostics.set(toPath(buildInfoPath), true);
-            }
-        });
+                const options = resolvedRef.commandLine.options;
+                if (!options.composite || options.noEmit) {
+                    // ok to not have composite if the current program is container only
+                    const inputs = parent ? parent.commandLine.fileNames : rootNames;
+                    if (inputs.length) {
+                        if (!options.composite) createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
+                        if (options.noEmit) createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_may_not_disable_emit, ref.path);
+                    }
+                }
+                if (!parent && buildInfoPath && buildInfoPath === getTsBuildInfoEmitOutputFilePath(options)) {
+                    createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, buildInfoPath, ref.path);
+                    hasEmitBlockingDiagnostics.set(toPath(buildInfoPath), true);
+                }
+            },
+        );
     }
 
     function createDiagnosticForOptionPathKeyValue(key: string, valueIndex: number, message: DiagnosticMessage, ...args: DiagnosticArguments) {

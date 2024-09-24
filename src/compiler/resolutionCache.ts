@@ -193,7 +193,6 @@ export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
     scheduleInvalidateResolutionsOfFailedLookupLocations(): void;
     getCachedDirectoryStructureHost(): CachedDirectoryStructureHost | undefined;
     projectName?: string;
-    getGlobalCache?(): string | undefined;
     globalCacheResolutionModuleName?(externalModuleName: string): string;
     writeLog(s: string): void;
     getCurrentProgram(): Program | undefined;
@@ -304,7 +303,7 @@ function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathCompo
  *
  * @internal
  */
-export function canWatchDirectoryOrFile(pathComponents: Readonly<PathPathComponents>, length?: number) {
+export function canWatchDirectoryOrFile(pathComponents: Readonly<PathPathComponents>, length?: number): boolean {
     if (length === undefined) length = pathComponents.length;
     // Ignore "/", "c:/"
     // ignore "/user", "c:/users" or "c:/folderAtRoot"
@@ -314,7 +313,12 @@ export function canWatchDirectoryOrFile(pathComponents: Readonly<PathPathCompone
 }
 
 /** @internal */
-export function canWatchAtTypes(atTypes: Path) {
+export function canWatchDirectoryOrFilePath(path: Path): boolean {
+    return canWatchDirectoryOrFile(getPathComponents(path));
+}
+
+/** @internal */
+export function canWatchAtTypes(atTypes: Path): boolean {
     // Otherwise can watch directory only if we can watch the parent directory of node_modules/@types
     return canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(getDirectoryPath(atTypes));
 }
@@ -328,11 +332,11 @@ function isInDirectoryPath(dirComponents: Readonly<PathPathComponents>, fileOrDi
 }
 
 function canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(fileOrDirPath: Path) {
-    return canWatchDirectoryOrFile(getPathComponents(fileOrDirPath));
+    return canWatchDirectoryOrFilePath(fileOrDirPath);
 }
 
 /** @internal */
-export function canWatchAffectingLocation(filePath: Path) {
+export function canWatchAffectingLocation(filePath: Path): boolean {
     return canWatchAffectedPackageJsonOrNodeModulesOfAtTypes(filePath);
 }
 
@@ -343,6 +347,7 @@ export function getDirectoryToWatchFailedLookupLocation(
     rootDir: string,
     rootPath: Path,
     rootPathComponents: Readonly<PathPathComponents>,
+    isRootWatchable: boolean,
     getCurrentDirectory: () => string | undefined,
     preferNonRecursiveWatch: boolean | undefined,
 ): DirectoryOfFailedLookupWatch | undefined {
@@ -356,7 +361,7 @@ export function getDirectoryToWatchFailedLookupLocation(
     const nodeModulesIndex = failedLookupPathComponents.indexOf("node_modules" as Path);
     if (nodeModulesIndex !== -1 && nodeModulesIndex + 1 <= perceivedOsRootLength + 1) return undefined; // node_modules not at position where it can be watched
     const lastNodeModulesIndex = failedLookupPathComponents.lastIndexOf("node_modules" as Path);
-    if (isInDirectoryPath(rootPathComponents, failedLookupPathComponents)) {
+    if (isRootWatchable && isInDirectoryPath(rootPathComponents, failedLookupPathComponents)) {
         if (failedLookupPathComponents.length > rootPathComponents.length + 1) {
             // Instead of watching root, watch directory in root to avoid watching excluded directories not needed for module resolution
             return getDirectoryOfFailedLookupWatch(
@@ -461,12 +466,13 @@ export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
     typeRootPath: Path,
     rootPath: Path,
     rootPathComponents: Readonly<PathPathComponents>,
+    isRootWatchable: boolean,
     getCurrentDirectory: () => string | undefined,
     preferNonRecursiveWatch: boolean | undefined,
     filterCustomPath: (path: Path) => boolean, // Return true if this path can be used
 ): Path | undefined {
     const typeRootPathComponents = getPathComponents(typeRootPath);
-    if (isInDirectoryPath(rootPathComponents, typeRootPathComponents)) {
+    if (isRootWatchable && isInDirectoryPath(rootPathComponents, typeRootPathComponents)) {
         // Because this is called when we are watching typeRoot, we dont need additional check whether typeRoot is not say c:/users/node_modules/@types when root is c:/
         return rootPath;
     }
@@ -485,7 +491,7 @@ export function getDirectoryToWatchFailedLookupLocationFromTypeRoot(
 }
 
 /** @internal */
-export function getRootDirectoryOfResolutionCache(rootDirForResolution: string, getCurrentDirectory: () => string | undefined) {
+export function getRootDirectoryOfResolutionCache(rootDirForResolution: string, getCurrentDirectory: () => string | undefined): string {
     const normalized = getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory());
     return !isDiskPathRoot(normalized) ?
         removeTrailingDirectorySeparator(normalized) :
@@ -531,12 +537,12 @@ function resolveModuleNameUsingGlobalCache(
     const host = getModuleResolutionHost(resolutionHost);
     const primaryResult = ts_resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference, mode);
     // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
-    if (!resolutionHost.getGlobalCache) {
+    if (!resolutionHost.getGlobalTypingsCacheLocation) {
         return primaryResult;
     }
 
     // otherwise try to load typings from @types
-    const globalCache = resolutionHost.getGlobalCache();
+    const globalCache = resolutionHost.getGlobalTypingsCacheLocation();
     if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))) {
         // create different collection of failed lookup locations for second pass
         // if it will fail and we've already found something during the first pass - we don't want to pollute its results
@@ -620,6 +626,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     const rootDir = getRootDirectoryOfResolutionCache(rootDirForResolution, getCurrentDirectory);
     const rootPath = resolutionHost.toPath(rootDir);
     const rootPathComponents = getPathComponents(rootPath);
+    const isRootWatchable = canWatchDirectoryOrFile(rootPathComponents);
 
     const isSymlinkCache = new Map<Path, boolean>();
     const packageDirWatchers = new Map<Path, PackageDirWatcher>(); // Watching packageDir if symlink otherwise watching dirPath
@@ -1118,6 +1125,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             rootDir,
             rootPath,
             rootPathComponents,
+            isRootWatchable,
             getCurrentDirectory,
             resolutionHost.preferNonRecursiveWatch,
         );
@@ -1328,6 +1336,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             rootDir,
             rootPath,
             rootPathComponents,
+            isRootWatchable,
             getCurrentDirectory,
             resolutionHost.preferNonRecursiveWatch,
         );
@@ -1528,6 +1537,10 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created
                 (failedLookupChecks ||= new Set()).add(fileOrDirectoryPath);
 
+                // Also any path that starts with this path should be added just in case if this is directory notification
+                // and we dont get any notification for file
+                (startsWithPathChecks ||= new Set()).add(fileOrDirectoryPath);
+
                 // If the invalidated file is from a node_modules package, invalidate everything else
                 // in the package since we might not get notifications for other files in the package.
                 // This hardens our logic against unreliable file watchers.
@@ -1629,6 +1642,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     resolutionHost.toPath(typeRoot),
                     rootPath,
                     rootPathComponents,
+                    isRootWatchable,
                     getCurrentDirectory,
                     resolutionHost.preferNonRecursiveWatch,
                     dirPath => directoryWatchesOfFailedLookups.has(dirPath) || dirPathToSymlinkPackageRefCount.has(dirPath),

@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /apps/app1/tsconfig.json
+// @Filename: /home/src/workspaces/project/apps/app1/tsconfig.json
 //// {
 ////   "compilerOptions": {
 ////     "module": "commonjs",
@@ -11,19 +11,19 @@
 ////   "include": ["src", "../../shared"]
 //// }
 
-// @Filename: /apps/app1/src/index.ts
+// @Filename: /home/src/workspaces/project/apps/app1/src/index.ts
 //// shared/*internal2external*/
 
-// @Filename: /apps/app1/src/app.ts
+// @Filename: /home/src/workspaces/project/apps/app1/src/app.ts
 //// utils/*internal2internal*/
 
-// @Filename: /apps/app1/src/utils.ts
+// @Filename: /home/src/workspaces/project/apps/app1/src/utils.ts
 //// export const utils = 0;
 
-// @Filename: /shared/constants.ts
+// @Filename: /home/src/workspaces/project/shared/constants.ts
 //// export const shared = 0;
 
-// @Filename: /shared/data.ts
+// @Filename: /home/src/workspaces/project/shared/data.ts
 //// shared/*external2external*/
 
 format.setOption("newline", "\n");

@@ -1,24 +1,24 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/a/b useCaseSensitiveFileNames:: false
 Input::
-//// [/a/b/moduleFile1.ts]
+//// [/home/src/projects/a/b/moduleFile1.ts]
 export function Foo() { };
 
-//// [/a/b/file1Consumer1.ts]
+//// [/home/src/projects/a/b/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;
 
-//// [/a/b/file1Consumer2.ts]
+//// [/home/src/projects/a/b/file1Consumer2.ts]
 import {Foo} from "./moduleFile1"; let z = 10;
 
-//// [/a/b/globalFile3.ts]
+//// [/home/src/projects/a/b/globalFile3.ts]
 interface GlobalFoo { age: number }
 
-//// [/a/b/moduleFile2.ts]
+//// [/home/src/projects/a/b/moduleFile2.ts]
 export var Foo4 = 10;
 
-//// [/a/b/tsconfig.json]
+//// [/home/src/projects/a/b/tsconfig.json]
 {}
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -30,9 +30,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w -p /a/b/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -41,7 +43,7 @@ Output::
 
 
 
-//// [/a/b/moduleFile1.js]
+//// [/home/src/projects/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = Foo;
@@ -49,23 +51,23 @@ function Foo() { }
 ;
 
 
-//// [/a/b/file1Consumer1.js]
+//// [/home/src/projects/a/b/file1Consumer1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 
 
-//// [/a/b/file1Consumer2.js]
+//// [/home/src/projects/a/b/file1Consumer2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var z = 10;
 
 
-//// [/a/b/globalFile3.js]
+//// [/home/src/projects/a/b/globalFile3.js]
 
 
-//// [/a/b/moduleFile2.js]
+//// [/home/src/projects/a/b/moduleFile2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo4 = void 0;
@@ -73,69 +75,76 @@ exports.Foo4 = 10;
 
 
 
+PolledWatches::
+/home/src/projects/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/a/b/file1Consumer1.ts: *new*
+/home/src/projects/a/b/file1Consumer1.ts: *new*
   {}
-/a/b/file1Consumer2.ts: *new*
+/home/src/projects/a/b/file1Consumer2.ts: *new*
   {}
-/a/b/globalFile3.ts: *new*
+/home/src/projects/a/b/globalFile3.ts: *new*
   {}
-/a/b/moduleFile1.ts: *new*
+/home/src/projects/a/b/moduleFile1.ts: *new*
   {}
-/a/b/moduleFile2.ts: *new*
+/home/src/projects/a/b/moduleFile2.ts: *new*
   {}
-/a/b/tsconfig.json: *new*
+/home/src/projects/a/b/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b: *new*
+/home/src/projects/a/b: *new*
   {}
 
 Program root files: [
-  "/a/b/file1Consumer1.ts",
-  "/a/b/file1Consumer2.ts",
-  "/a/b/globalFile3.ts",
-  "/a/b/moduleFile1.ts",
-  "/a/b/moduleFile2.ts"
+  "/home/src/projects/a/b/file1Consumer1.ts",
+  "/home/src/projects/a/b/file1Consumer2.ts",
+  "/home/src/projects/a/b/globalFile3.ts",
+  "/home/src/projects/a/b/moduleFile1.ts",
+  "/home/src/projects/a/b/moduleFile2.ts"
 ]
 Program options: {
   "watch": true,
-  "project": "/a/b/tsconfig.json",
-  "configFilePath": "/a/b/tsconfig.json"
+  "configFilePath": "/home/src/projects/a/b/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-/a/b/globalFile3.ts
-/a/b/moduleFile2.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/b/moduleFile1.ts
+/home/src/projects/a/b/file1Consumer1.ts
+/home/src/projects/a/b/file1Consumer2.ts
+/home/src/projects/a/b/globalFile3.ts
+/home/src/projects/a/b/moduleFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-/a/b/globalFile3.ts
-/a/b/moduleFile2.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/b/moduleFile1.ts
+/home/src/projects/a/b/file1Consumer1.ts
+/home/src/projects/a/b/file1Consumer2.ts
+/home/src/projects/a/b/globalFile3.ts
+/home/src/projects/a/b/moduleFile2.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/modulefile1.ts (used version)
-/a/b/file1consumer1.ts (used version)
-/a/b/file1consumer2.ts (used version)
-/a/b/globalfile3.ts (used version)
-/a/b/modulefile2.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/projects/a/b/modulefile1.ts (used version)
+/home/src/projects/a/b/file1consumer1.ts (used version)
+/home/src/projects/a/b/file1consumer2.ts (used version)
+/home/src/projects/a/b/globalfile3.ts (used version)
+/home/src/projects/a/b/modulefile2.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: change shape of global file
 
 Input::
-//// [/a/b/globalFile3.ts]
+//// [/home/src/projects/a/b/globalFile3.ts]
 interface GlobalFoo { age: number }var T2: string;
 
 
@@ -155,50 +164,49 @@ Output::
 
 
 
-//// [/a/b/moduleFile1.js] file written with same contents
-//// [/a/b/file1Consumer1.js] file written with same contents
-//// [/a/b/file1Consumer2.js] file written with same contents
-//// [/a/b/globalFile3.js]
+//// [/home/src/projects/a/b/moduleFile1.js] file written with same contents
+//// [/home/src/projects/a/b/file1Consumer1.js] file written with same contents
+//// [/home/src/projects/a/b/file1Consumer2.js] file written with same contents
+//// [/home/src/projects/a/b/globalFile3.js]
 var T2;
 
 
-//// [/a/b/moduleFile2.js] file written with same contents
+//// [/home/src/projects/a/b/moduleFile2.js] file written with same contents
 
 
 Program root files: [
-  "/a/b/file1Consumer1.ts",
-  "/a/b/file1Consumer2.ts",
-  "/a/b/globalFile3.ts",
-  "/a/b/moduleFile1.ts",
-  "/a/b/moduleFile2.ts"
+  "/home/src/projects/a/b/file1Consumer1.ts",
+  "/home/src/projects/a/b/file1Consumer2.ts",
+  "/home/src/projects/a/b/globalFile3.ts",
+  "/home/src/projects/a/b/moduleFile1.ts",
+  "/home/src/projects/a/b/moduleFile2.ts"
 ]
 Program options: {
   "watch": true,
-  "project": "/a/b/tsconfig.json",
-  "configFilePath": "/a/b/tsconfig.json"
+  "configFilePath": "/home/src/projects/a/b/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-/a/b/globalFile3.ts
-/a/b/moduleFile2.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/b/moduleFile1.ts
+/home/src/projects/a/b/file1Consumer1.ts
+/home/src/projects/a/b/file1Consumer2.ts
+/home/src/projects/a/b/globalFile3.ts
+/home/src/projects/a/b/moduleFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-/a/b/globalFile3.ts
-/a/b/moduleFile2.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/b/moduleFile1.ts
+/home/src/projects/a/b/file1Consumer1.ts
+/home/src/projects/a/b/file1Consumer2.ts
+/home/src/projects/a/b/globalFile3.ts
+/home/src/projects/a/b/moduleFile2.ts
 
 Shape signatures in builder refreshed for::
-/a/b/globalfile3.ts (computed .d.ts)
-/a/b/modulefile1.ts (computed .d.ts)
-/a/b/file1consumer1.ts (computed .d.ts)
-/a/b/file1consumer2.ts (computed .d.ts)
-/a/b/modulefile2.ts (computed .d.ts)
+/home/src/projects/a/b/globalfile3.ts (computed .d.ts)
+/home/src/projects/a/b/modulefile1.ts (computed .d.ts)
+/home/src/projects/a/b/file1consumer1.ts (computed .d.ts)
+/home/src/projects/a/b/file1consumer2.ts (computed .d.ts)
+/home/src/projects/a/b/modulefile2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

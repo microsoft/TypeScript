@@ -12,10 +12,10 @@ export let shards = 1;
 export let shardId = 1;
 
 // The following have setters as while they're read here in the harness, they're only set in the runner
-export function setShards(count: number) {
+export function setShards(count: number): void {
     shards = count;
 }
-export function setShardId(id: number) {
+export function setShardId(id: number): void {
     shardId = id;
 }
 
@@ -24,7 +24,7 @@ export abstract class RunnerBase {
     public tests: string[] = [];
 
     /** Add a source file to the runner's list of tests that need to be initialized with initializeTests */
-    public addTest(fileName: string) {
+    public addTest(fileName: string): void {
         this.tests.push(fileName);
     }
 
@@ -53,7 +53,7 @@ export abstract class RunnerBase {
     public abstract initializeTests(): void;
 
     /** Replaces instances of full paths with fileNames only */
-    static removeFullPaths(path: string) {
+    static removeFullPaths(path: string): string {
         // If its a full path (starts with "C:" or "/") replace with just the filename
         let fixedPath = /^(?:\w:|\/)/.test(path) ? ts.getBaseFileName(path) : path;
 

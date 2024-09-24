@@ -33,7 +33,7 @@ import {
     flatMap,
     flatten,
     forEach,
-    forEachAncestorDirectory,
+    forEachAncestorDirectoryStoppingAtGlobalCache,
     FutureSourceFile,
     getBaseFileName,
     GetCanonicalFileName,
@@ -390,7 +390,7 @@ export function getModuleSpecifiersWithCacheInfo(
     importingSourceFile: SourceFile | FutureSourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
-    options: ModuleSpecifierOptions = {},
+    options: ModuleSpecifierOptions | undefined = {},
     forAutoImport: boolean,
 ): ModuleSpecifierResult {
     let computedWithoutCache = false;
@@ -701,9 +701,14 @@ function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolut
     if (host.getNearestAncestorDirectoryWithPackageJson) {
         return host.getNearestAncestorDirectoryWithPackageJson(fileName);
     }
-    return forEachAncestorDirectory(fileName, directory => {
-        return host.fileExists(combinePaths(directory, "package.json")) ? directory : undefined;
-    });
+    return forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        fileName,
+        directory =>
+            host.fileExists(combinePaths(directory, "package.json")) ?
+                directory :
+                undefined,
+    );
 }
 
 /** @internal */
@@ -732,29 +737,33 @@ export function forEachFileNameOfModule<T>(
 
     const symlinkedDirectories = host.getSymlinkCache?.().getSymlinkedDirectoriesByRealpath();
     const fullImportedFileName = getNormalizedAbsolutePath(importedFileName, cwd);
-    const result = symlinkedDirectories && forEachAncestorDirectory(getDirectoryPath(fullImportedFileName), realPathDirectory => {
-        const symlinkDirectories = symlinkedDirectories.get(ensureTrailingDirectorySeparator(toPath(realPathDirectory, cwd, getCanonicalFileName)));
-        if (!symlinkDirectories) return undefined; // Continue to ancestor directory
+    const result = symlinkedDirectories && forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        getDirectoryPath(fullImportedFileName),
+        realPathDirectory => {
+            const symlinkDirectories = symlinkedDirectories.get(ensureTrailingDirectorySeparator(toPath(realPathDirectory, cwd, getCanonicalFileName)));
+            if (!symlinkDirectories) return undefined; // Continue to ancestor directory
 
-        // Don't want to a package to globally import from itself (importNameCodeFix_symlink_own_package.ts)
-        if (startsWithDirectory(importingFileName, realPathDirectory, getCanonicalFileName)) {
-            return false; // Stop search, each ancestor directory will also hit this condition
-        }
-
-        return forEach(targets, target => {
-            if (!startsWithDirectory(target, realPathDirectory, getCanonicalFileName)) {
-                return;
+            // Don't want to a package to globally import from itself (importNameCodeFix_symlink_own_package.ts)
+            if (startsWithDirectory(importingFileName, realPathDirectory, getCanonicalFileName)) {
+                return false; // Stop search, each ancestor directory will also hit this condition
             }
 
-            const relative = getRelativePathFromDirectory(realPathDirectory, target, getCanonicalFileName);
-            for (const symlinkDirectory of symlinkDirectories) {
-                const option = resolvePath(symlinkDirectory, relative);
-                const result = cb(option, target === referenceRedirect);
-                shouldFilterIgnoredPaths = true; // We found a non-ignored path in symlinks, so we can reject ignored-path realpaths
-                if (result) return result;
-            }
-        });
-    });
+            return forEach(targets, target => {
+                if (!startsWithDirectory(target, realPathDirectory, getCanonicalFileName)) {
+                    return;
+                }
+
+                const relative = getRelativePathFromDirectory(realPathDirectory, target, getCanonicalFileName);
+                for (const symlinkDirectory of symlinkDirectories) {
+                    const option = resolvePath(symlinkDirectory, relative);
+                    const result = cb(option, target === referenceRedirect);
+                    shouldFilterIgnoredPaths = true; // We found a non-ignored path in symlinks, so we can reject ignored-path realpaths
+                    if (result) return result;
+                }
+            });
+        },
+    );
     return result || (preferSymlinks
         ? forEach(targets, p => shouldFilterIgnoredPaths && containsIgnoredPath(p) ? undefined : cb(p, p === referenceRedirect))
         : undefined);
@@ -1403,7 +1412,7 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
 }
 
 /** @internal */
-export function tryGetRealFileNameForNonJsDeclarationFileName(fileName: string) {
+export function tryGetRealFileNameForNonJsDeclarationFileName(fileName: string): string | undefined {
     const baseName = getBaseFileName(fileName);
     if (!endsWith(fileName, Extension.Ts) || !baseName.includes(".d.") || fileExtensionIsOneOf(baseName, [Extension.Dts])) return undefined;
     const noExtension = removeExtension(fileName, Extension.Ts);

@@ -24,8 +24,8 @@ module M {
 >         : ^^^
     }
     (new C)[Symbol.iterator];
->(new C)[Symbol.iterator] : any
->                         : ^^^
+>(new C)[Symbol.iterator] : () => void
+>                         : ^^^^^^^^^^
 >(new C) : C
 >        : ^
 >new C : C
@@ -41,8 +41,8 @@ module M {
 }
 
 (new M.C)[Symbol.iterator];
->(new M.C)[Symbol.iterator] : any
->                           : ^^^
+>(new M.C)[Symbol.iterator] : () => void
+>                           : ^^^^^^^^^^
 >(new M.C) : M.C
 >          : ^^^
 >new M.C : M.C

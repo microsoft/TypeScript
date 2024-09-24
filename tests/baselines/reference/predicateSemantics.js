@@ -41,6 +41,10 @@ while ((({}))) { }
 // Should be OK
 console.log((cond || undefined) && 1 / cond);
 
+function foo(this: Object | undefined) {
+    // Should be OK
+    return this ?? 0;
+}
 
 //// [predicateSemantics.js]
 var _a, _b, _c, _d, _e, _f;
@@ -80,3 +84,7 @@ while (({})) { }
 while ((({}))) { }
 // Should be OK
 console.log((cond || undefined) && 1 / cond);
+function foo() {
+    // Should be OK
+    return this !== null && this !== void 0 ? this : 0;
+}

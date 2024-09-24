@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
@@ -11,7 +11,7 @@ const a = class { private p = 10; };
   }
 }
 
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -27,23 +27,24 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -56,32 +57,33 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: no-change-run
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -94,22 +96,23 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Fix error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = "hello";
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -122,19 +125,20 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -147,51 +151,53 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.Success
 
 Change:: Emit after fixing error
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p .
 Output::
-/lib/tsc -p /home/src/projects/project
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "declaration": true,
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
-
-
-//// [/home/src/projects/outFile.d.ts]
-declare const a = "hello";
 
 
 //// [/home/src/projects/outFile.js]
 var a = "hello";
 
 
+//// [/home/src/projects/outFile.d.ts]
+declare const a = "hello";
 
+
+
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "declaration": true,
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+exitCode:: ExitStatus.Success
 
 Change:: no-change-run
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-exitCode:: ExitStatus.Success
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -204,35 +210,36 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.Success
 
 Change:: Introduce error
+
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = class { private p = 10; };
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -245,45 +252,30 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 Change:: Emit when error
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p .
 Output::
-/lib/tsc -p /home/src/projects/project
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: [
-  "/home/src/projects/project/a.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "declaration": true,
-  "project": "/home/src/projects/project",
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
 
 
 //// [/home/src/projects/outFile.js]
@@ -296,27 +288,44 @@ var a = /** @class */ (function () {
 
 
 
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "declaration": true,
+  "project": "/home/src/projects/project",
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/a.ts
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: no-change-run
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js -p . --noEmit
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96ma.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
 
-  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+  [96ma.ts[0m:[93m1[0m:[93m7[0m
     [7m1[0m const a = class { private p = 10; };
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
 
-Found 1 error in home/src/projects/project/a.ts[90m:1[0m
+Found 1 error in a.ts[90m:1[0m
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+
 Program root files: [
   "/home/src/projects/project/a.ts"
 ]
@@ -329,7 +338,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 
-
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
