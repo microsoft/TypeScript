@@ -186,11 +186,8 @@ function implicitThis(n: number): number {
 
     return this.m + n + 12;
 >this.m + n + 12 : any
->                : ^^^
 >this.m + n : any
->           : ^^^
 >this.m : any
->       : ^^^
 >this : any
 >     : ^^^
 >m : any
@@ -218,7 +215,6 @@ let impl: I = {
 >() => this.a : () => any
 >             : ^^^^^^^^^
 >this.a : any
->       : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >a : any
@@ -705,11 +701,9 @@ let unboundToSpecified: (this: { y: number }, x: number) => number = x => x + th
 >x : number
 >  : ^^^^^^
 >x + this.y : any
->           : ^^^
 >x : number
 >  : ^^^^^^
 >this.y : any
->       : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >y : any
@@ -983,11 +977,9 @@ c.explicitC = m => m + this.n;
 >m : number
 >  : ^^^^^^
 >m + this.n : any
->           : ^^^
 >m : number
 >  : ^^^^^^
 >this.n : any
->       : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >n : any
@@ -1007,11 +999,9 @@ c.explicitThis = m => m + this.n;
 >m : number
 >  : ^^^^^^
 >m + this.n : any
->           : ^^^
 >m : number
 >  : ^^^^^^
 >this.n : any
->       : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >n : any
@@ -1031,11 +1021,9 @@ c.explicitProperty = m => m + this.n;
 >m : number
 >  : ^^^^^^
 >m + this.n : any
->           : ^^^
 >m : number
 >  : ^^^^^^
 >this.n : any
->       : ^^^
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 >n : any
@@ -1499,13 +1487,11 @@ function AnyThis(this: any) {
 >AnyThis : (this: any) => void
 >        : ^    ^^   ^^^^^^^^^
 >this : any
->     : ^^^
 
     this.x = "ok";
 >this.x = "ok" : "ok"
 >              : ^^^^
 >this.x : any
->       : ^^^
 >this : any
 >     : ^^^
 >x : any
@@ -1515,25 +1501,19 @@ function AnyThis(this: any) {
 }
 let interfaceThis = new InterfaceThis();
 >interfaceThis : any
->              : ^^^
 >new InterfaceThis() : any
->                    : ^^^
 >InterfaceThis : (this: I) => void
 >              : ^    ^^ ^^^^^^^^^
 
 let literalTypeThis = new LiteralTypeThis();
 >literalTypeThis : any
->                : ^^^
 >new LiteralTypeThis() : any
->                      : ^^^
 >LiteralTypeThis : (this: { x: string; }) => void
 >                : ^    ^^              ^^^^^^^^^
 
 let anyThis = new AnyThis();
 >anyThis : any
->        : ^^^
 >new AnyThis() : any
->              : ^^^
 >AnyThis : (this: any) => void
 >        : ^    ^^   ^^^^^^^^^
 
@@ -1577,13 +1557,10 @@ function missingTypeIsImplicitAny(this, a: number) { return this.anything + a; }
 >missingTypeIsImplicitAny : (this: any, a: number) => any
 >                         : ^    ^^^^^^^ ^^      ^^^^^^^^
 >this : any
->     : ^^^
 >a : number
 >  : ^^^^^^
 >this.anything + a : any
->                  : ^^^
 >this.anything : any
->              : ^^^
 >this : any
 >     : ^^^
 >anything : any
