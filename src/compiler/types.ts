@@ -6219,11 +6219,11 @@ export interface NodeLinks {
     hasReportedStatementInAmbientContext?: boolean; // Cache boolean if we report statements in ambient context
     jsxFlags: JsxFlags;                 // flags for knowing what kind of element/attributes we're dealing with
     resolvedJsxElementAttributesType?: Type; // resolved element attributes type of a JSX openinglike element
-    resolvedJsxElementAllAttributesType?: Type; // resolved all element attributes type of a JSX openinglike element
     resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
     switchTypes?: Type[];               // Cached array of switch case expression types
     jsxNamespace?: Symbol | false;      // Resolved jsx namespace symbol for this node
     jsxImplicitImportContainer?: Symbol | false; // Resolved module symbol the implicit jsx import of this file should refer to
+    jsxFragmentType?: Type;             // Type of the JSX fragment element, set per SourceFile if a jsxFragment is checked in the file
     contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
     deferredNodes?: Set<Node>;          // Set of nodes whose checking has been deferred
     capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement

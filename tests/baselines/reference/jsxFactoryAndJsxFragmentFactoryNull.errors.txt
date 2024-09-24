@@ -1,16 +1,10 @@
 jsxFactoryAndJsxFragmentFactoryNull.tsx(3,1): error TS2304: Cannot find name 'null'.
-jsxFactoryAndJsxFragmentFactoryNull.tsx(4,1): error TS2304: Cannot find name 'null'.
-jsxFactoryAndJsxFragmentFactoryNull.tsx(4,17): error TS2304: Cannot find name 'null'.
 
 
-==== jsxFactoryAndJsxFragmentFactoryNull.tsx (3 errors) ====
+==== jsxFactoryAndJsxFragmentFactoryNull.tsx (1 errors) ====
     declare var h: any;
     
     <></>;
     ~~
 !!! error TS2304: Cannot find name 'null'.
     <><span>1</span><><span>2.1</span><span>2.2</span></></>;
-    ~~
-!!! error TS2304: Cannot find name 'null'.
-                    ~~
-!!! error TS2304: Cannot find name 'null'.

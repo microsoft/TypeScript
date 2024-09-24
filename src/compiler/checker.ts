@@ -33168,7 +33168,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
                     if (attributesTable.size > 0) {
-                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, objectFlags, /*readonly*/ false);
+                        spread = getSpreadType(spread, createJsxAttributesTypeHelper(), attributes.symbol, objectFlags, /*readonly*/ false);
                         attributesTable = createSymbolTable();
                     }
                     const exprType = getReducedType(checkExpression(attributeDecl.expression, checkMode & CheckMode.Inferential));
@@ -33190,7 +33190,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (!hasSpreadAnyType) {
                 if (attributesTable.size > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, objectFlags, /*readonly*/ false);
+                    spread = getSpreadType(spread, createJsxAttributesTypeHelper(), attributes.symbol, objectFlags, /*readonly*/ false);
                 }
             }
         }
@@ -33235,19 +33235,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (typeToIntersect && spread !== emptyJsxObjectType) {
             return getIntersectionType([typeToIntersect, spread]);
         }
-        return typeToIntersect || (spread === emptyJsxObjectType ? createJsxAttributesType() : spread);
+        return typeToIntersect || (spread === emptyJsxObjectType ? createJsxAttributesTypeHelper() : spread);
 
-        /**
-         * Create anonymous type from given attributes symbol table.
-         * @param symbol a symbol of JsxAttributes containing attributes corresponding to attributesTable
-         * @param attributesTable a symbol table of attributes property
-         */
-        function createJsxAttributesType() {
+        function createJsxAttributesTypeHelper() {
             objectFlags |= ObjectFlags.FreshLiteral;
-            const result = createAnonymousType(attributesSymbol, attributesTable, emptyArray, emptyArray, emptyArray);
-            result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
-            return result;
+            return createJsxAttributesType(objectFlags, attributesSymbol, attributesTable);
         }
+    }
+    /**
+     * Create anonymous type from given attributes symbol table.
+     * @param symbol a symbol of JsxAttributes containing attributes corresponding to attributesTable
+     * @param attributesTable a symbol table of attributes property
+     */
+    function createJsxAttributesType(objectFlags: ObjectFlags, attributesSymbol: Symbol | undefined, attributesTable: SymbolTable): Type {
+        const result = createAnonymousType(attributesSymbol, attributesTable, emptyArray, emptyArray, emptyArray);
+        result.objectFlags |= objectFlags | ObjectFlags.FreshLiteral | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
+        return result;
+    }
+
+    function createEmptyJsxFragmentsAttributesType(): Type {
+        // Used to synthesize type for `getEffectiveCallArgument`. This attributes Type does not include a children property yet.
+        return createJsxAttributesType(ObjectFlags.JsxAttributes, /*attributesSymbol*/ undefined, createSymbolTable());
     }
 
     function checkJsxChildren(node: JsxElement | JsxFragment, checkMode?: CheckMode) {
@@ -35562,7 +35570,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Returns the effective arguments for an expression that works like a function invocation.
      */
     function getEffectiveCallArguments(node: CallLikeExpression): readonly Expression[] {
-        if (isJsxOpeningFragment(node)) return emptyArray;
+        if (isJsxOpeningFragment(node)) return [createSyntheticExpression(node, createEmptyJsxFragmentsAttributesType())];
 
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             const template = node.template;
@@ -36798,27 +36806,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getJSXFragmentType(node: JsxOpeningFragment): Type {
         // An opening fragment is required in order for `getJsxNamespace` to give the fragment factory
+        const sourceFileLinks = getNodeLinks(getSourceFileOfNode(node));
+        if (sourceFileLinks.jsxFragmentType !== undefined) return sourceFileLinks.jsxFragmentType;
+
         const jsxFragmentFactoryName = getJsxNamespace(node);
         const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
         const jsxFactorySymbol = getJsxNamespaceContainerForImplicitImport(node) ??
             resolveName(node, jsxFragmentFactoryName, SymbolFlags.Value, /*nameNotFoundMessage*/ jsxFactoryRefErr, /*isUse*/ true);
-        if (jsxFactorySymbol === undefined) {
-            return errorType;
-        }
-        if (jsxFactorySymbol.escapedName === ReactNames.Fragment) {
-            return getTypeOfSymbol(jsxFactorySymbol);
-        }
+
+        if (jsxFactorySymbol === undefined) return sourceFileLinks.jsxFragmentType = errorType;
+        if (jsxFactorySymbol.escapedName === ReactNames.Fragment) return sourceFileLinks.jsxFragmentType = getTypeOfSymbol(jsxFactorySymbol);
 
         const resolvedAlias = (jsxFactorySymbol.flags & SymbolFlags.Alias) === 0 ? jsxFactorySymbol : resolveAlias(jsxFactorySymbol);
-
         const reactExports = jsxFactorySymbol && getExportsOfSymbol(resolvedAlias);
         const typeSymbol = reactExports && getSymbol(reactExports, ReactNames.Fragment, SymbolFlags.BlockScopedVariable);
-
         const type = typeSymbol && getTypeOfSymbol(typeSymbol);
-        if (type === undefined) {
-            return errorType;
-        }
-        return type;
+        return sourceFileLinks.jsxFragmentType = type === undefined ? errorType : type;
     }
 
     function resolveJsxOpeningLikeElement(node: JsxCallLike, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
