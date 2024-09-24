@@ -65,6 +65,15 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/commonFile1.ts ProjectRootPath: /a/b:: Result: /user/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/project/tsconfig.json, currentDirectory: /user/username/projects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 {"watchDirectory":0} Project: /user/username/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/project/commonFile1.ts",
+  "/user/username/projects/project/commonFile2.ts"
+ ],
+ "options": {
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -75,15 +84,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /user/username/projects/project/commonFile1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/project/commonFile1.ts",
-  "/user/username/projects/project/commonFile2.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/project/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 {"watchDirectory":0} Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 {"watchDirectory":0} Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/commonFile2.ts 500 {"watchDirectory":0} WatchType: Closed Script info

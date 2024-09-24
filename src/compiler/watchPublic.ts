@@ -925,7 +925,15 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
         updateLevel = ProgramUpdateLevel.Update;
         rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
-        if (updateErrorForNoInputFiles(rootFileNames, getNormalizedAbsolutePath(configFileName, currentDirectory), compilerOptions.configFile!.configFileSpecs!, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
+        if (
+            updateErrorForNoInputFiles(
+                rootFileNames,
+                getNormalizedAbsolutePath(configFileName, currentDirectory),
+                compilerOptions.configFile!.configFileSpecs!,
+                configFileParsingDiagnostics!,
+                canConfigFileJsonReportNoInputFiles,
+            )
+        ) {
             hasChangedConfigFileParsingErrors = true;
         }
 

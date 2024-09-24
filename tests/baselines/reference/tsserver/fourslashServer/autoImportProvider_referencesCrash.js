@@ -61,6 +61,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/a/package.json ProjectRootPath: undefined:: Result: /home/src/workspaces/project/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/a/tsconfig.json, currentDirectory: /home/src/workspaces/project/a
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/a/tsconfig.json : {
+ "rootNames": [
+  "/home/src/workspaces/project/a/index.ts"
+ ],
+ "options": {
+  "configFilePath": "/home/src/workspaces/project/a/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -71,14 +79,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /home/src/workspaces/project/a/package.json to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/a/tsconfig.json : {
- "rootNames": [
-  "/home/src/workspaces/project/a/index.ts"
- ],
- "options": {
-  "configFilePath": "/home/src/workspaces/project/a/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a 1 undefined Config: /home/src/workspaces/project/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a 1 undefined Config: /home/src/workspaces/project/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/index.ts 500 undefined WatchType: Closed Script info
@@ -137,6 +137,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/a/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project/a
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -286,16 +287,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/c/index.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/c/tsconfig.json, currentDirectory: /home/src/workspaces/project/c
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/workspaces/project/c/tsconfig.json",
-        "reason": "Creating possible configured project for /home/src/workspaces/project/c/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/c/tsconfig.json : {
  "rootNames": [
   "/home/src/workspaces/project/c/index.ts"
@@ -310,6 +301,16 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/c/tsconfig.json : 
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/workspaces/project/c/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspaces/project/c/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c 1 undefined Config: /home/src/workspaces/project/c/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c 1 undefined Config: /home/src/workspaces/project/c/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/c/tsconfig.json
@@ -559,16 +560,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/b/b.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/b/tsconfig.json, currentDirectory: /home/src/workspaces/project/b
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/workspaces/project/b/tsconfig.json",
-        "reason": "Creating possible configured project for /home/src/workspaces/project/b/b.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/b/tsconfig.json : {
  "rootNames": [
   "/home/src/workspaces/project/b/b.ts"
@@ -584,6 +575,16 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/b/tsconfig.json : 
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/workspaces/project/b/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspaces/project/b/b.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b 1 undefined Config: /home/src/workspaces/project/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b 1 undefined Config: /home/src/workspaces/project/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/b/tsconfig.json

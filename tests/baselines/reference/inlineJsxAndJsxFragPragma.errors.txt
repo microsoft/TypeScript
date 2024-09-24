@@ -4,6 +4,8 @@ snabbdomy-only-fragment-no-jsx.tsx(4,1): error TS2304: Cannot find name 'jsx'.
 snabbdomy-only-fragment-no-jsx.tsx(4,1): error TS2304: Cannot find name 'null'.
 snabbdomy-only-fragment.tsx(4,1): error TS2304: Cannot find name 'null'.
 snabbdomy.tsx(4,1): error TS2304: Cannot find name 'null'.
+preacty-only-fragment-no-jsx.tsx(6,1): error TS2874: This JSX tag requires 'h' to be in scope, but it could not be found.
+snabbdomy-only-fragment-no-jsx.tsx(4,1): error TS2874: This JSX tag requires 'jsx' to be in scope, but it could not be found.
 
 
 ==== renderer.d.ts (0 errors) ====
@@ -58,7 +60,7 @@ snabbdomy.tsx(4,1): error TS2304: Cannot find name 'null'.
     import {Fragment} from "./renderer";
     <></>
     ~~
-!!! error TS2304: Cannot find name 'h'.
+!!! error TS2874: This JSX tag requires 'h' to be in scope, but it could not be found.
     
 ==== snabbdomy-only-fragment-no-jsx.tsx (2 errors) ====
     /* @jsx jsx */
@@ -67,8 +69,6 @@ snabbdomy.tsx(4,1): error TS2304: Cannot find name 'null'.
     <></>
     ~~
 !!! error TS2304: Cannot find name 'jsx'.
-    ~~
-!!! error TS2304: Cannot find name 'null'.
     
 ==== preacty-no-fragment.tsx (1 errors) ====
     /**

@@ -69,16 +69,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/a/b/controllers/vessels/client.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/project/a/b/tsconfig.json, currentDirectory: /user/username/projects/project/a/b
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/tsconfig.json 2000 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/project/a/b/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/project/a/b/controllers/vessels/client.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/a/b/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/project/a/b/controllers/vessels/client.ts",
@@ -98,6 +88,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/a/b/tsconfig.js
   "configFilePath": "/user/username/projects/project/a/b/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/project/a/b/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/project/a/b/controllers/vessels/client.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b 1 undefined Config: /user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b 1 undefined Config: /user/username/projects/project/a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/models/vessel.ts 500 undefined WatchType: Closed Script info

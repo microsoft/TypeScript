@@ -8,6 +8,7 @@ import {
     arrayToMap,
     BuilderState,
     CachedDirectoryStructureHost,
+    canJsonReportNoInputFiles,
     canWatchDirectoryOrFilePath,
     changeExtension,
     changesAffectModuleResolution,
@@ -111,7 +112,6 @@ import {
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     resolvePackageNameToPackageJson,
     returnFalse,
-    returnTrue,
     ScriptKind,
     some,
     sortAndDeduplicate,
@@ -439,7 +439,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     protected projectErrors: Diagnostic[] | undefined;
 
-    protected isInitialLoadPending: () => boolean = returnFalse;
+    /** @internal */
+    initialLoadPending = false;
 
     /** @internal */
     dirty = false;
@@ -1915,7 +1916,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     private filesToStringWorker(writeProjectFileNames: boolean, writeFileExplaination: boolean, writeFileVersionAndText: boolean) {
-        if (this.isInitialLoadPending()) return "\tFiles (0) InitialLoadPending\n";
+        if (this.initialLoadPending) return "\tFiles (0) InitialLoadPending\n";
         if (!this.program) return "\tFiles (0) NoProgram\n";
         const sourceFiles = this.program.getSourceFiles();
         let strBuilder = `\tFiles (${sourceFiles.length})\n`;
@@ -1995,7 +1996,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             : (files: Map<string, boolean>) => arrayFrom(files.keys());
 
         // Update the graph only if initial configured project load is not pending
-        if (!this.isInitialLoadPending()) {
+        if (!this.initialLoadPending) {
             updateProjectIfDirty(this);
         }
 
@@ -2871,7 +2872,9 @@ export class ConfiguredProject extends Project {
     openFileWatchTriggered: Map<string, ProgramUpdateLevel> = new Map();
 
     /** @internal */
-    canConfigFileJsonReportNoInputFiles = false;
+    parsedCommandLine: ParsedCommandLine | undefined;
+    /** @internal */
+    resolvedChildConfigs?: Set<NormalizedPath>;
 
     private projectReferences: readonly ProjectReference[] | undefined;
 
@@ -2886,7 +2889,7 @@ export class ConfiguredProject extends Project {
     projectOptions?: ProjectOptions | true;
 
     /** @internal */
-    override isInitialLoadPending: () => boolean = returnTrue;
+    override initialLoadPending = true;
 
     /** @internal */
     sendLoadingProjectFinish = false;
@@ -2943,7 +2946,7 @@ export class ConfiguredProject extends Project {
 
     /** @internal */
     override getParsedCommandLine(fileName: string): ParsedCommandLine | undefined {
-        const configFileName = asNormalizedPath(normalizePath(fileName));
+        const configFileName = toNormalizedPath(fileName);
         const canonicalConfigFilePath = asNormalizedPath(this.projectService.toCanonicalFileName(configFileName));
         // Ensure the config file existience info is cached
         let configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(canonicalConfigFilePath);
@@ -2961,7 +2964,7 @@ export class ConfiguredProject extends Project {
 
     /** @internal */
     onReleaseParsedCommandLine(fileName: string): void {
-        this.releaseParsedConfig(asNormalizedPath(this.projectService.toCanonicalFileName(asNormalizedPath(normalizePath(fileName)))));
+        this.releaseParsedConfig(asNormalizedPath(this.projectService.toCanonicalFileName(toNormalizedPath(fileName))));
     }
 
     private releaseParsedConfig(canonicalConfigFilePath: NormalizedPath) {
@@ -2976,7 +2979,7 @@ export class ConfiguredProject extends Project {
     override updateGraph(): boolean {
         if (this.deferredClose) return false;
         const isDirty = this.dirty;
-        this.isInitialLoadPending = returnFalse;
+        this.initialLoadPending = false;
         const updateLevel = this.pendingUpdateLevel;
         this.pendingUpdateLevel = ProgramUpdateLevel.Update;
         let result: boolean;
@@ -3036,7 +3039,7 @@ export class ConfiguredProject extends Project {
 
     /** @internal */
     setPotentialProjectReference(canonicalConfigPath: NormalizedPath): void {
-        Debug.assert(this.isInitialLoadPending());
+        Debug.assert(this.initialLoadPending);
         (this.potentialProjectReferences || (this.potentialProjectReferences = new Set())).add(canonicalConfigPath);
     }
 
@@ -3113,12 +3116,6 @@ export class ConfiguredProject extends Project {
     }
 
     /** @internal */
-    isSolution(): boolean {
-        return this.getRootFilesMap().size === 0 &&
-            !this.canConfigFileJsonReportNoInputFiles;
-    }
-
-    /** @internal */
     override isOrphan(): boolean {
         return !!this.deferredClose;
     }
@@ -3128,8 +3125,15 @@ export class ConfiguredProject extends Project {
     }
 
     /** @internal */
-    updateErrorOnNoInputFiles(fileNames: string[]): void {
-        updateErrorForNoInputFiles(fileNames, this.getConfigFilePath(), this.getCompilerOptions().configFile!.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
+    updateErrorOnNoInputFiles(parsedCommandLine: ParsedCommandLine): void {
+        this.parsedCommandLine = parsedCommandLine;
+        updateErrorForNoInputFiles(
+            parsedCommandLine.fileNames,
+            this.getConfigFilePath(),
+            this.getCompilerOptions().configFile!.configFileSpecs!,
+            this.projectErrors!,
+            canJsonReportNoInputFiles(parsedCommandLine.raw),
+        );
     }
 }
 

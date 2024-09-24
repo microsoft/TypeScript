@@ -499,8 +499,7 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): stri
     return buildInfoExtensionLess + Extension.TsBuildInfo;
 }
 
-/** @internal */
-export function canEmitTsBuildInfo(options: CompilerOptions): boolean {
+function canEmitTsBuildInfo(options: CompilerOptions) {
     return isIncrementalCompilation(options) || !!options.tscBuild;
 }
 
@@ -1168,6 +1167,7 @@ export const notImplementedResolver: EmitResolver = {
     getDeclarationStatementsForSourceFile: notImplemented,
     isImportRequiredByAugmentation: notImplemented,
     isDefinitelyReferenceToGlobalSymbolObject: notImplemented,
+    createLateBoundIndexSignatures: notImplemented,
 };
 
 const enum PipelinePhase {
