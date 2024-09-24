@@ -258,8 +258,8 @@ export class VerifyNegatable {
         this.state.baselineMapCode(ranges, changes);
     }
 
-    public getImports(filename: string, imports: string[]): void {
-        return this.state.verifyGetImports(filename, imports);
+    public getImports(fileName: string, imports: string[]): void {
+        return this.state.verifyGetImports(fileName, imports);
     }
 }
 
@@ -2045,6 +2045,6 @@ export interface RenameOptions {
 }
 
 export interface VerifyGetImportsOptions {
-    filename: string;
+    fileName: string;
     imports: string[];
 }

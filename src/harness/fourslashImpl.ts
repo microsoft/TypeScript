@@ -4632,10 +4632,10 @@ ${after}`;
         this.baseline("mapCode", baseline, ".mapCode.ts");
     }
 
-    public verifyGetImports(filename: string, expectedImports: string[]): void {
-        const actualImports = this.languageService.getImports(filename);
+    public verifyGetImports(fileName: string, expectedImports: string[]): void {
+        const actualImports = this.languageService.getImports(fileName);
         if (actualImports.length !== expectedImports.length) {
-            throw new Error(`Expected ${expectedImports.length} imports for ${filename}, got ${actualImports.length}
+            throw new Error(`Expected ${expectedImports.length} imports for ${fileName}, got ${actualImports.length}
     Expected:
 ${expectedImports}
     Actual:
@@ -4644,7 +4644,7 @@ ${actualImports}
         }
         for (let i = 0; i < expectedImports.length; i++) {
             if (actualImports[i] !== expectedImports[i]) {
-                throw new Error(`Expected at ${filename} index ${i}: ${expectedImports[i]}, got ${actualImports[i]}
+                throw new Error(`Expected at ${fileName} index ${i}: ${expectedImports[i]}, got ${actualImports[i]}
     Expected:
 ${expectedImports}
     Actual:
