@@ -73,7 +73,7 @@ export { default as ConstantNumber } from "./constants";
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./class1.ts","./constants.ts","./reexport.ts","./types.d.ts"],"fileIdsList":[[3],[4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"4085502068-const a: MagicNumber = 1;\nconsole.log(a);","signature":"-3664763344-declare const a = 1;\n","affectsGlobalScope":true},{"version":"-2659799048-export default 1;","signature":"-183154784-declare const _default: 1;\nexport default _default;\n"},{"version":"-1476032387-export { default as ConstantNumber } from \"./constants\"","signature":"-1081498782-export { default as ConstantNumber } from \"./constants\";\n"},{"version":"2093085814-type MagicNumber = typeof import('./reexport').ConstantNumber","affectsGlobalScope":true}],"root":[[2,5]],"options":{"composite":true},"referencedMap":[[4,1],[5,2]],"latestChangedDtsFile":"./reexport.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./class1.ts","./constants.ts","./reexport.ts","./types.d.ts"],"fileIdsList":[[3],[4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"4085502068-const a: MagicNumber = 1;\nconsole.log(a);","signature":"-3664763344-declare const a = 1;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-2659799048-export default 1;","signature":"-183154784-declare const _default: 1;\nexport default _default;\n","impliedFormat":1},{"version":"-1476032387-export { default as ConstantNumber } from \"./constants\"","signature":"-1081498782-export { default as ConstantNumber } from \"./constants\";\n","impliedFormat":1},{"version":"2093085814-type MagicNumber = typeof import('./reexport').ConstantNumber","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,5]],"options":{"composite":true},"referencedMap":[[4,1],[5,2]],"latestChangedDtsFile":"./reexport.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -96,46 +96,56 @@ export { default as ConstantNumber } from "./constants";
     "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./class1.ts": {
       "original": {
         "version": "4085502068-const a: MagicNumber = 1;\nconsole.log(a);",
         "signature": "-3664763344-declare const a = 1;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "4085502068-const a: MagicNumber = 1;\nconsole.log(a);",
       "signature": "-3664763344-declare const a = 1;\n",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./constants.ts": {
       "original": {
         "version": "-2659799048-export default 1;",
-        "signature": "-183154784-declare const _default: 1;\nexport default _default;\n"
+        "signature": "-183154784-declare const _default: 1;\nexport default _default;\n",
+        "impliedFormat": 1
       },
       "version": "-2659799048-export default 1;",
-      "signature": "-183154784-declare const _default: 1;\nexport default _default;\n"
+      "signature": "-183154784-declare const _default: 1;\nexport default _default;\n",
+      "impliedFormat": "commonjs"
     },
     "./reexport.ts": {
       "original": {
         "version": "-1476032387-export { default as ConstantNumber } from \"./constants\"",
-        "signature": "-1081498782-export { default as ConstantNumber } from \"./constants\";\n"
+        "signature": "-1081498782-export { default as ConstantNumber } from \"./constants\";\n",
+        "impliedFormat": 1
       },
       "version": "-1476032387-export { default as ConstantNumber } from \"./constants\"",
-      "signature": "-1081498782-export { default as ConstantNumber } from \"./constants\";\n"
+      "signature": "-1081498782-export { default as ConstantNumber } from \"./constants\";\n",
+      "impliedFormat": "commonjs"
     },
     "./types.d.ts": {
       "original": {
         "version": "2093085814-type MagicNumber = typeof import('./reexport').ConstantNumber",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "2093085814-type MagicNumber = typeof import('./reexport').ConstantNumber",
       "signature": "2093085814-type MagicNumber = typeof import('./reexport').ConstantNumber",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -165,7 +175,7 @@ export { default as ConstantNumber } from "./constants";
   },
   "latestChangedDtsFile": "./reexport.d.ts",
   "version": "FakeTSVersion",
-  "size": 1317
+  "size": 1407
 }
 
 
@@ -207,7 +217,7 @@ export default _default;
 
 //// [/home/src/workspaces/project/reexport.js] file written with same contents
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./class1.ts","./constants.ts","./reexport.ts","./types.d.ts"],"fileIdsList":[[3],[4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"4085502068-const a: MagicNumber = 1;\nconsole.log(a);","signature":"-3664762255-declare const a = 2;\n","affectsGlobalScope":true},{"version":"-2659799015-export default 2;","signature":"-10876795135-declare const _default: 2;\nexport default _default;\n"},{"version":"-1476032387-export { default as ConstantNumber } from \"./constants\"","signature":"-1081498782-export { default as ConstantNumber } from \"./constants\";\n"},{"version":"2093085814-type MagicNumber = typeof import('./reexport').ConstantNumber","affectsGlobalScope":true}],"root":[[2,5]],"options":{"composite":true},"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[[2,[{"start":6,"length":1,"code":2322,"category":1,"messageText":"Type '1' is not assignable to type '2'."}]]],"latestChangedDtsFile":"./class1.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./class1.ts","./constants.ts","./reexport.ts","./types.d.ts"],"fileIdsList":[[3],[4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"4085502068-const a: MagicNumber = 1;\nconsole.log(a);","signature":"-3664762255-declare const a = 2;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-2659799015-export default 2;","signature":"-10876795135-declare const _default: 2;\nexport default _default;\n","impliedFormat":1},{"version":"-1476032387-export { default as ConstantNumber } from \"./constants\"","signature":"-1081498782-export { default as ConstantNumber } from \"./constants\";\n","impliedFormat":1},{"version":"2093085814-type MagicNumber = typeof import('./reexport').ConstantNumber","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,5]],"options":{"composite":true},"referencedMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[[2,[{"start":6,"length":1,"code":2322,"category":1,"messageText":"Type '1' is not assignable to type '2'."}]]],"latestChangedDtsFile":"./class1.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -230,46 +240,56 @@ export default _default;
     "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./class1.ts": {
       "original": {
         "version": "4085502068-const a: MagicNumber = 1;\nconsole.log(a);",
         "signature": "-3664762255-declare const a = 2;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "4085502068-const a: MagicNumber = 1;\nconsole.log(a);",
       "signature": "-3664762255-declare const a = 2;\n",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./constants.ts": {
       "original": {
         "version": "-2659799015-export default 2;",
-        "signature": "-10876795135-declare const _default: 2;\nexport default _default;\n"
+        "signature": "-10876795135-declare const _default: 2;\nexport default _default;\n",
+        "impliedFormat": 1
       },
       "version": "-2659799015-export default 2;",
-      "signature": "-10876795135-declare const _default: 2;\nexport default _default;\n"
+      "signature": "-10876795135-declare const _default: 2;\nexport default _default;\n",
+      "impliedFormat": "commonjs"
     },
     "./reexport.ts": {
       "original": {
         "version": "-1476032387-export { default as ConstantNumber } from \"./constants\"",
-        "signature": "-1081498782-export { default as ConstantNumber } from \"./constants\";\n"
+        "signature": "-1081498782-export { default as ConstantNumber } from \"./constants\";\n",
+        "impliedFormat": 1
       },
       "version": "-1476032387-export { default as ConstantNumber } from \"./constants\"",
-      "signature": "-1081498782-export { default as ConstantNumber } from \"./constants\";\n"
+      "signature": "-1081498782-export { default as ConstantNumber } from \"./constants\";\n",
+      "impliedFormat": "commonjs"
     },
     "./types.d.ts": {
       "original": {
         "version": "2093085814-type MagicNumber = typeof import('./reexport').ConstantNumber",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "2093085814-type MagicNumber = typeof import('./reexport').ConstantNumber",
       "signature": "2093085814-type MagicNumber = typeof import('./reexport').ConstantNumber",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -313,7 +333,7 @@ export default _default;
   ],
   "latestChangedDtsFile": "./class1.d.ts",
   "version": "FakeTSVersion",
-  "size": 1458
+  "size": 1548
 }
 
 

@@ -57,6 +57,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/foo/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/foo/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -110,6 +113,12 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/foo/jsconfig.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/foo/tsconfig.json: *new*
@@ -178,7 +187,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/foo/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/foo/types/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
@@ -201,6 +215,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
 	node_modules/foo/types/a.d.ts
 	  Imported via 'foo/a' from file 'b.ts' with packageId 'foo/types/a.d.ts@1.2.3'
+	  File is CommonJS module because 'node_modules/foo/package.json' does not have field "type"
 	b.ts
 	  Root file specified for compilation
 
@@ -237,6 +252,17 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
+/home/src/workspaces/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/foo/jsconfig.json:
@@ -252,6 +278,8 @@ watchedFiles::
 /home/src/workspaces/project/node_modules/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -364,6 +392,17 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/foo/jsconfig.json:
@@ -383,6 +422,8 @@ watchedFiles::
 /home/src/workspaces/project/node_modules/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}

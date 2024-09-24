@@ -32,6 +32,7 @@ Output::
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/user/username/projects/myproject/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/user/username/projects/myproject/src/struct.d.ts'
+  File is CommonJS module because 'package.json' was not found
 
 [7m2[0m import * as xs2 from "fp-ts/lib/struct";
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~[0m
@@ -60,6 +61,7 @@ Output::
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/struct.d.ts'
   Imported via "fp-ts/lib/struct" from file 'src/struct.d.ts'
+  File is CommonJS module because 'package.json' was not found
 src/struct.d.ts
   Root file specified for compilation
   Imported via "./Struct" from file 'src/struct.d.ts'

@@ -53,10 +53,22 @@ myapp.component("hello");
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/lib/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -115,8 +127,20 @@ sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to Pr
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/lib/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules:
@@ -167,10 +191,22 @@ Output::
 //// [/user/username/projects/myproject/lib/app.js] file written with same contents
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/lib/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json:
   {"pollingInterval":2000}
 /user/username/projects/node_modules:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

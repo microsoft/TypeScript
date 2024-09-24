@@ -63,6 +63,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project1/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/node_modules/minimatch/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project1/src/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
@@ -91,10 +94,13 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	../../../../../user/username/projects/project1/src/node_modules/minimatch/index.js
 	  Imported via "minimatch" from file '../../../../../user/username/projects/project1/src/node_modules/glob/index.js'
 	  Imported via 'minimatch' from file '../../../../../user/username/projects/project1/src/file1.js'
+	  File is CommonJS module because 'package.json' was not found
 	../../../../../user/username/projects/project1/src/node_modules/glob/index.js
 	  Imported via 'glob' from file '../../../../../user/username/projects/project1/src/file1.js'
+	  File is CommonJS module because 'package.json' was not found
 	../../../../../user/username/projects/project1/src/node_modules/path/index.js
 	  Imported via "path" from file '../../../../../user/username/projects/project1/src/node_modules/minimatch/index.js'
+	  File is CommonJS module because 'package.json' was not found
 	../../../../../user/username/projects/project1/src/file1.js
 	  Root file specified for compilation
 
@@ -108,6 +114,12 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/package.json: *new*
@@ -345,6 +357,12 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/node_modules/@types:
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules:
   {"pollingInterval":500}
 /user/username/projects/package.json:

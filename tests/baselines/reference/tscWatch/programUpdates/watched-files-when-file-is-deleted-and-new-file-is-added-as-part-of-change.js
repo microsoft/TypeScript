@@ -37,10 +37,22 @@ var a = 10;
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /home/username/workspaces/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/username/workspaces/package.json: *new*
+  {"pollingInterval":2000}
 /home/username/workspaces/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/username/workspaces/project/package.json: *new*
+  {"pollingInterval":2000}
+/home/username/workspaces/project/src/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -106,10 +118,22 @@ var a = 10;
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /home/username/workspaces/node_modules/@types:
   {"pollingInterval":500}
+/home/username/workspaces/package.json:
+  {"pollingInterval":2000}
 /home/username/workspaces/project/node_modules/@types:
   {"pollingInterval":500}
+/home/username/workspaces/project/package.json:
+  {"pollingInterval":2000}
+/home/username/workspaces/project/src/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

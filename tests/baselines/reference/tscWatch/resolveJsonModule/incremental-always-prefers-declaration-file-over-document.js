@@ -54,7 +54,7 @@ var x = data_json_1.default;
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./data.d.json.ts","./main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"2718060498-declare var val: string; export default val;","6961905452-import data from \"./data.json\"; let x: string = data;"],"root":[2,3],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":17,"length":13,"messageText":"Module './data.json' was resolved to '/home/src/projects/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.","category":1,"code":6263}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./data.d.json.ts","./main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"2718060498-declare var val: string; export default val;","impliedFormat":1},{"version":"6961905452-import data from \"./data.json\"; let x: string = data;","impliedFormat":1}],"root":[2,3],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":17,"length":13,"messageText":"Module './data.json' was resolved to '/home/src/projects/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.","category":1,"code":6263}]]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -72,19 +72,31 @@ var x = data_json_1.default;
     "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./data.d.json.ts": {
+      "original": {
+        "version": "2718060498-declare var val: string; export default val;",
+        "impliedFormat": 1
+      },
       "version": "2718060498-declare var val: string; export default val;",
-      "signature": "2718060498-declare var val: string; export default val;"
+      "signature": "2718060498-declare var val: string; export default val;",
+      "impliedFormat": "commonjs"
     },
     "./main.ts": {
+      "original": {
+        "version": "6961905452-import data from \"./data.json\"; let x: string = data;",
+        "impliedFormat": 1
+      },
       "version": "6961905452-import data from \"./data.json\"; let x: string = data;",
-      "signature": "6961905452-import data from \"./data.json\"; let x: string = data;"
+      "signature": "6961905452-import data from \"./data.json\"; let x: string = data;",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -117,15 +129,25 @@ var x = data_json_1.default;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1010
+  "size": 1088
 }
 
 
 PolledWatches::
 /home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/project/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/data.d.json.ts: *new*

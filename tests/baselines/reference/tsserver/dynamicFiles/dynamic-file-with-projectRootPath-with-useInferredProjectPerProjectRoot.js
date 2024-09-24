@@ -39,6 +39,17 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^walkThroughSnippet:/U
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/someProject/out/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/someProject/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/^walkThroughSnippet:/Users/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/^walkThroughSnippet:/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -59,10 +70,32 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/someProject/out/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/someProject/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -226,14 +259,36 @@ After request
 PolledWatches::
 /home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/UserName: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/someProject/out/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/someProject/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/myproject/bower_components: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -278,6 +333,18 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject2*, currentDirectory: /home/src/Vscode/Projects/bin
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/UserName/projects/someProject/out/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/UserName/projects/someProject/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/UserName/projects/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/UserName/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/^walkThroughSnippet:/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
@@ -426,24 +493,64 @@ After request
 PolledWatches::
 /home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/UserName:
   {"pollingInterval":500}
+/home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/UserName/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/UserName/projects/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/UserName/projects/someProject/out/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/UserName/projects/someProject/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/^walkThroughSnippet:/Users/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/^walkThroughSnippet:/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/Vscode/Projects/bin/bower_components: *new*
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules: *new*
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/Vscode/Projects/bin/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/Vscode/Projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/Vscode/Projects/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/Vscode/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/Vscode/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/someProject/out/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/someProject/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/Users/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/^walkThroughSnippet:/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/myproject/bower_components:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

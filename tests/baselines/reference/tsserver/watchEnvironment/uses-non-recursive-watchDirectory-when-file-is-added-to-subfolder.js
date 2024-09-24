@@ -75,6 +75,12 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/username/worksp
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/workspace/project/src/package.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/workspace/project/package.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/workspace/package.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Type roots
@@ -180,8 +186,20 @@ After request
 PolledWatches::
 /a/username/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
+/a/username/workspace/package.json: *new*
+  {"pollingInterval":2000}
 /a/username/workspace/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/a/username/workspace/project/package.json: *new*
+  {"pollingInterval":2000}
+/a/username/workspace/project/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/username/workspace/project: *new*
@@ -332,8 +350,20 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /a/username/workspace/node_modules/@types:
   {"pollingInterval":500}
+/a/username/workspace/package.json:
+  {"pollingInterval":2000}
 /a/username/workspace/project/node_modules/@types:
   {"pollingInterval":500}
+/a/username/workspace/project/package.json:
+  {"pollingInterval":2000}
+/a/username/workspace/project/src/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/username/workspace/project:

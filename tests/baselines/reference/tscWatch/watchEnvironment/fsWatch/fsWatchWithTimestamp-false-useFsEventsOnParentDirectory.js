@@ -38,6 +38,11 @@ CreatingProgramWith::
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":5} Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"watchFile":5} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 {"watchFile":5} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 {"watchFile":5} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 {"watchFile":5} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 {"watchFile":5} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 {"watchFile":5} File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":5} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":5} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":5} Type roots
@@ -61,7 +66,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/tslibs: *new*
+  {}
+/home/src/tslibs/TS: *new*
+  {}
 /home/src/tslibs/TS/Lib: *new*
+  {}
+/user/username/projects: *new*
   {}
 /user/username/projects/myproject: *new*
   {}

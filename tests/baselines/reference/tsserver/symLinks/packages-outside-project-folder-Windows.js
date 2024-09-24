@@ -142,6 +142,15 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/b/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
@@ -251,22 +260,40 @@ After request
 PolledWatches::
 /home/src/projects/b/2/b-impl/b/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/b/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/b/2/b-impl/b/src/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/b/2/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/b/2/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/b/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/b/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/a/1/a-impl/a/package.json: *new*
@@ -839,6 +866,8 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -908,16 +937,38 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
   {"pollingInterval":500}
+/home/src/projects/a/1/a-impl/a/lib/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/b/2/b-impl/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/c/3/c-impl/c/lib/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/b/2/b-impl/node_modules:
@@ -1494,6 +1545,8 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/b/2/b-impl/b/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/b/2/b-impl/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -1541,26 +1594,48 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /home/src/projects/b/2/b-impl/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/b/2/b-impl/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/a/1/a-impl/a/lib/node_modules:
   {"pollingInterval":500}
+/home/src/projects/a/1/a-impl/a/lib/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/c/3/c-impl/c/lib/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
@@ -1927,6 +2002,8 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -1996,16 +2073,38 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
   {"pollingInterval":500}
+/home/src/projects/a/1/a-impl/a/lib/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/b/2/b-impl/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/c/3/c-impl/c/lib/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/b/2/b-impl/node_modules:

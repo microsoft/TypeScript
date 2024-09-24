@@ -53,6 +53,11 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
   options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+File '/users/username/projects/project/package.json' does not exist.
+File '/users/username/projects/package.json' does not exist.
+File '/users/username/package.json' does not exist.
+File '/users/package.json' does not exist.
+File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/fileWithImports.ts 250 undefined Source file
 ======== Resolving module 'pkg0' from '/users/username/projects/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -90,12 +95,17 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
 File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/package.json' does not exist.
-File '/users/username/projects/project/package.json' does not exist.
-File '/users/username/projects/package.json' does not exist.
-File '/users/username/package.json' does not exist.
-File '/users/package.json' does not exist.
-File '/package.json' does not exist.
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg0/index.d.ts 250 undefined Source file
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/fileWithTypeRefs.ts 250 undefined Source file
 ======== Resolving type reference directive 'pkg2', containing file '/users/username/projects/project/fileWithTypeRefs.ts', root directory '/users/username/projects/project/node_modules/@types,/users/username/projects/node_modules/@types,/users/username/node_modules/@types,/users/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/users/username/projects/project/node_modules/@types, /users/username/projects/node_modules/@types, /users/username/node_modules/@types, /users/node_modules/@types, /node_modules/@types'.
@@ -139,7 +149,16 @@ File '/users/username/package.json' does not exist according to earlier cached l
 File '/users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg2/index.d.ts 250 undefined Source file
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg0/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/package.json 2000 undefined File location affecting resolution
@@ -168,6 +187,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/nod
   Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
+  File is CommonJS module because 'package.json' was not found
 fileWithImports.ts
   Matched by default include pattern '**/*'
 node_modules/pkg2/index.d.ts
@@ -201,7 +221,7 @@ export {};
 
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileIdsList":[[2],[4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[3,5],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1],[5,2]],"semanticDiagnosticsPerFile":[[3,[{"start":66,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[5,[{"start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552,"canonicalHead":{"code":2304,"messageText":"Cannot find name 'Import3'."}}]]],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileIdsList":[[2],[4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[3,5],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1],[5,2]],"semanticDiagnosticsPerFile":[[3,[{"start":66,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[5,[{"start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552,"canonicalHead":{"code":2304,"messageText":"Cannot find name 'Import3'."}}]]],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts","version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -224,11 +244,13 @@ export {};
     "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "../node_modules/pkg0/index.d.ts": {
       "original": {
@@ -242,10 +264,12 @@ export {};
     "../filewithimports.ts": {
       "original": {
         "version": "-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-3531856636-export {};\n",
+        "impliedFormat": 1
       },
       "version": "-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n",
-      "signature": "-3531856636-export {};\n"
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "commonjs"
     },
     "../node_modules/pkg2/index.d.ts": {
       "original": {
@@ -261,10 +285,12 @@ export {};
     "../filewithtyperefs.ts": {
       "original": {
         "version": "-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-3531856636-export {};\n",
+        "impliedFormat": 1
       },
       "version": "-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n",
-      "signature": "-3531856636-export {};\n"
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -321,11 +347,17 @@ export {};
   ],
   "latestChangedDtsFile": "./fileWithTypeRefs.d.ts",
   "version": "FakeTSVersion",
-  "size": 1734
+  "size": 1788
 }
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
@@ -454,6 +486,12 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
   options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
@@ -461,8 +499,23 @@ File '/users/username/projects/package.json' does not exist according to earlier
 File '/users/username/package.json' does not exist according to earlier cached lookups.
 File '/users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/pkg2/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/users/username/package.json' does not exist according to earlier cached lookups.
@@ -497,6 +550,11 @@ File '/users/username/package.json' does not exist according to earlier cached l
 File '/users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg1/index.d.ts 250 undefined Source file
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of type reference directive 'pkg2' from '/users/username/projects/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/users/username/projects/project/node_modules/pkg2/index.d.ts'.
 Reusing resolution of type reference directive 'pkg3' from '/users/username/projects/project/fileWithTypeRefs.ts' of old program, it was not resolved.
 File '/users/username/projects/project/node_modules/pkg2/package.json' does not exist according to earlier cached lookups.
@@ -505,6 +563,12 @@ File '/users/username/projects/project/package.json' does not exist according to
 File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/users/username/package.json' does not exist according to earlier cached lookups.
 File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg1/package.json 2000 undefined File location affecting resolution
 [96mfileWithTypeRefs.ts[0m:[93m2[0m:[93m23[0m - [91merror[0m[90m TS2688: [0mCannot find type definition file for 'pkg3'.
@@ -521,8 +585,10 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/p
   Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
+  File is CommonJS module because 'package.json' was not found
 node_modules/pkg1/index.d.ts
   Imported via "pkg1" from file 'fileWithImports.ts'
+  File is CommonJS module because 'package.json' was not found
 fileWithImports.ts
   Matched by default include pattern '**/*'
 node_modules/pkg2/index.d.ts
@@ -535,7 +601,7 @@ fileWithTypeRefs.ts
 
 //// [/users/username/projects/project/outDir/fileWithImports.js] file written with same contents
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileIdsList":[[2,3],[5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-8124720484-export interface Import1 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[4,6],"options":{"composite":true,"outDir":"./"},"referencedMap":[[4,1],[6,2]],"semanticDiagnosticsPerFile":[[6,[{"start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552,"canonicalHead":{"code":2304,"messageText":"Cannot find name 'Import3'."}}]]],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileIdsList":[[2,3],[5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-8124720484-export interface Import1 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[4,6],"options":{"composite":true,"outDir":"./"},"referencedMap":[[4,1],[6,2]],"semanticDiagnosticsPerFile":[[6,[{"start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552,"canonicalHead":{"code":2304,"messageText":"Cannot find name 'Import3'."}}]]],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts","version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -560,11 +626,13 @@ fileWithTypeRefs.ts
     "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "../node_modules/pkg0/index.d.ts": {
       "original": {
@@ -587,10 +655,12 @@ fileWithTypeRefs.ts
     "../filewithimports.ts": {
       "original": {
         "version": "-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-3531856636-export {};\n",
+        "impliedFormat": 1
       },
       "version": "-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n",
-      "signature": "-3531856636-export {};\n"
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "commonjs"
     },
     "../node_modules/pkg2/index.d.ts": {
       "original": {
@@ -606,10 +676,12 @@ fileWithTypeRefs.ts
     "../filewithtyperefs.ts": {
       "original": {
         "version": "-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-3531856636-export {};\n",
+        "impliedFormat": 1
       },
       "version": "-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n",
-      "signature": "-3531856636-export {};\n"
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -655,11 +727,17 @@ fileWithTypeRefs.ts
   ],
   "latestChangedDtsFile": "./fileWithTypeRefs.d.ts",
   "version": "FakeTSVersion",
-  "size": 1705
+  "size": 1759
 }
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/node_modules:
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
@@ -788,6 +866,12 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
   options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
@@ -802,8 +886,23 @@ File '/users/username/projects/package.json' does not exist according to earlier
 File '/users/username/package.json' does not exist according to earlier cached lookups.
 File '/users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/pkg2/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/users/username/package.json' does not exist according to earlier cached lookups.
@@ -820,6 +919,11 @@ File '/users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/pkg1/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/users/username/package.json' does not exist according to earlier cached lookups.
@@ -855,6 +959,12 @@ File '/users/username/package.json' does not exist according to earlier cached l
 File '/users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg3/index.d.ts 250 undefined Source file
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg3/package.json 2000 undefined File location affecting resolution
 [96mfileWithTypeRefs.ts[0m:[93m3[0m:[93m43[0m - [91merror[0m[90m TS2552: [0mCannot find name 'Import3'. Did you mean 'Import2'?
 
@@ -865,14 +975,17 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/p
   Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
+  File is CommonJS module because 'package.json' was not found
 node_modules/pkg1/index.d.ts
   Imported via "pkg1" from file 'fileWithImports.ts'
+  File is CommonJS module because 'package.json' was not found
 fileWithImports.ts
   Matched by default include pattern '**/*'
 node_modules/pkg2/index.d.ts
   Type library referenced via 'pkg2' from file 'fileWithTypeRefs.ts'
 node_modules/pkg3/index.d.ts
   Type library referenced via 'pkg3' from file 'fileWithTypeRefs.ts'
+  File is CommonJS module because 'package.json' was not found
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
@@ -881,7 +994,7 @@ fileWithTypeRefs.ts
 
 //// [/users/username/projects/project/outDir/fileWithTypeRefs.js] file written with same contents
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../node_modules/pkg3/index.d.ts","../filewithtyperefs.ts"],"fileIdsList":[[2,3],[5,6]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-8124720484-export interface Import1 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124648610-export interface Import3 {}","impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[4,7],"options":{"composite":true,"outDir":"./"},"referencedMap":[[4,1],[7,2]],"semanticDiagnosticsPerFile":[[7,[{"start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552,"canonicalHead":{"code":2304,"messageText":"Cannot find name 'Import3'."}}]]],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../node_modules/pkg3/index.d.ts","../filewithtyperefs.ts"],"fileIdsList":[[2,3],[5,6]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124756421-export interface Import0 {}","impliedFormat":1},{"version":"-8124720484-export interface Import1 {}","impliedFormat":1},{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8124648610-export interface Import3 {}","impliedFormat":1},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[4,7],"options":{"composite":true,"outDir":"./"},"referencedMap":[[4,1],[7,2]],"semanticDiagnosticsPerFile":[[7,[{"start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552,"canonicalHead":{"code":2304,"messageText":"Cannot find name 'Import3'."}}]]],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts","version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -908,11 +1021,13 @@ fileWithTypeRefs.ts
     "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "../node_modules/pkg0/index.d.ts": {
       "original": {
@@ -935,10 +1050,12 @@ fileWithTypeRefs.ts
     "../filewithimports.ts": {
       "original": {
         "version": "-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-3531856636-export {};\n",
+        "impliedFormat": 1
       },
       "version": "-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n",
-      "signature": "-3531856636-export {};\n"
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "commonjs"
     },
     "../node_modules/pkg2/index.d.ts": {
       "original": {
@@ -963,10 +1080,12 @@ fileWithTypeRefs.ts
     "../filewithtyperefs.ts": {
       "original": {
         "version": "-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-3531856636-export {};\n",
+        "impliedFormat": 1
       },
       "version": "-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n",
-      "signature": "-3531856636-export {};\n"
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -1013,11 +1132,17 @@ fileWithTypeRefs.ts
   ],
   "latestChangedDtsFile": "./fileWithTypeRefs.d.ts",
   "version": "FakeTSVersion",
-  "size": 1813
+  "size": 1867
 }
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/node_modules:
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:

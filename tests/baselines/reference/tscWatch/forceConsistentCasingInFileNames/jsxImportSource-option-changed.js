@@ -61,6 +61,7 @@ Output::
   The file is in the program because:
     Part of 'files' list in tsconfig.json
     Imported via "react/jsx-runtime" from file '/user/username/projects/myproject/index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
+  File is CommonJS module because '/user/username/projects/myproject/node_modules/react/package.json' does not have field "type"
 
   [96mtsconfig.json[0m:[93m8[0m:[93m5[0m
     [7m8[0m     "node_modules/react/Jsx-Runtime/index.d.ts",
@@ -72,6 +73,7 @@ Output::
 node_modules/react/Jsx-Runtime/index.d.ts
   Part of 'files' list in tsconfig.json
   Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
+  File is CommonJS module because 'node_modules/react/package.json' does not have field "type"
 index.tsx
   Part of 'files' list in tsconfig.json
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
@@ -89,12 +91,22 @@ exports.App = App;
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/react/Jsx-runtime/package.json: *new*
   {"pollingInterval":2000}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*

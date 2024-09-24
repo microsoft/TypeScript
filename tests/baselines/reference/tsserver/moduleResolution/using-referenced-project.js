@@ -200,6 +200,8 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/packages/package-a/t
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/tsconfig.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/src 1 undefined Config: /home/src/projects/project/packages/package-a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/src 1 undefined Config: /home/src/projects/project/packages/package-a/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/src/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/packages/package-b/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package-a' from '/home/src/projects/project/packages/package-b/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Bundler'.
 Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
@@ -212,8 +214,8 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/pac
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/package-a.js' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/package-a.jsx' does not exist.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package-b/package-a' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/src/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/packages/package-b/package.json'.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'package-a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package-b/src/node_modules' does not exist, skipping all lookups in it.
@@ -228,6 +230,8 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/package-a/build/index.d.ts', result '/home/src/projects/project/packages/package-a/build/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package-a' was successfully resolved to '/home/src/projects/project/packages/package-a/build/index.d.ts' with Package ID 'package-a/build/index.d.ts@1.0.0'. ========
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/packages/package-a/package.json'.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] ======== Resolving module './subfolder' from '/home/src/projects/project/packages/package-a/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Using compiler options of project reference redirect '/home/src/projects/project/packages/package-a/tsconfig.json'.
@@ -244,6 +248,9 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src
 Info seq  [hh:mm:ss:mss] ======== Module name './subfolder' was successfully resolved to '/home/src/projects/project/packages/package-a/src/subfolder/index.ts'. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/subfolder/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/src/subfolder/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-es2021' from '/home/src/projects/project/packages/package-b/__lib_node_modules_lookup_lib.es2021.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
@@ -280,6 +287,12 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2021.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
@@ -291,6 +304,12 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b 0 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/src/subfolder/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/src/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/src/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Type roots
@@ -430,12 +449,24 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/project/packages/package-a/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/packages/package-a/src/subfolder/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/project/packages/package-b/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/package-b/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/package-b/package-a: *new*
   {"pollingInterval":500}
+/home/src/projects/project/packages/package-b/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/packages/package-a/package.json: *new*
@@ -663,6 +694,21 @@ Before running Timeout callback:: count: 1
 2: checkOne
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/subfolder/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package-aX' from '/home/src/projects/project/packages/package-b/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Bundler'.
 Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
@@ -702,6 +748,12 @@ Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package-aX' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2021' from '/home/src/projects/project/packages/package-b/__lib_node_modules_lookup_lib.es2021.d.ts__.ts' of old program, it was not resolved.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-aX 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-aX 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
@@ -711,6 +763,8 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-a/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-a/src/subfolder/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-a/src/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package-b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -753,8 +807,20 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/package-b/package-aX: *new*
   {"pollingInterval":500}
+/home/src/projects/project/packages/package-b/src/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
+/home/src/projects/project/packages/package-a/src/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/packages/package-a/src/subfolder/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/packages/package-b/package-a:
   {"pollingInterval":500}
 
@@ -967,6 +1033,16 @@ Before running Timeout callback:: count: 1
 3: checkOne
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-b/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package-a' from '/home/src/projects/project/packages/package-b/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Bundler'.
 Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
@@ -994,6 +1070,8 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a/build/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/package-a/build/index.d.ts', result '/home/src/projects/project/packages/package-a/build/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package-a' was successfully resolved to '/home/src/projects/project/packages/package-a/build/index.d.ts' with Package ID 'package-a/build/index.d.ts@1.0.0'. ========
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module './subfolder' from '/home/src/projects/project/packages/package-a/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Using compiler options of project reference redirect '/home/src/projects/project/packages/package-a/tsconfig.json'.
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Bundler'.
@@ -1009,12 +1087,23 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src
 Info seq  [hh:mm:ss:mss] ======== Module name './subfolder' was successfully resolved to '/home/src/projects/project/packages/package-a/src/subfolder/index.ts'. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/subfolder/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es2021' from '/home/src/projects/project/packages/package-b/__lib_node_modules_lookup_lib.es2021.d.ts__.ts' of old program, it was not resolved.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/src/subfolder/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a/src/package.json 2000 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-b/package-aX 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package-b/package-aX 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package-b/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -1059,12 +1148,24 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/packages/package-a/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/packages/package-a/src/subfolder/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/project/packages/package-b/node_modules:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package-b/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package-b/package-a: *new*
   {"pollingInterval":500}
+/home/src/projects/project/packages/package-b/src/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/project/packages/package-b/package-aX:

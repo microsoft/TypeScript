@@ -44,6 +44,11 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -68,13 +73,23 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /home/src/projects/project/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -243,6 +258,8 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/bower_components: *new*
   {"pollingInterval":500}
 /home/src/projects/project/jsconfig.json:
@@ -251,7 +268,15 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
   {"pollingInterval":2000}
 
 FsWatches::
@@ -421,11 +446,14 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	../../Library/Caches/typescript/node_modules/@types/node/index.d.ts
 	  Imported via "fs" from file 'app.js'
 	  Root file specified for compilation
+	  File is CommonJS module because '../../Library/Caches/typescript/package.json' does not have field "type"
 	../../Library/Caches/typescript/node_modules/@types/commander/index.d.ts
 	  Imported via "commander" from file 'app.js'
 	  Root file specified for compilation
+	  File is CommonJS module because '../../Library/Caches/typescript/package.json' does not have field "type"
 	../../Library/Caches/typescript/node_modules/@types/ember__component/index.d.ts
 	  Imported via "@ember/component" from file 'app.js'
+	  File is CommonJS module because '../../Library/Caches/typescript/package.json' does not have field "type"
 	app.js
 	  Root file specified for compilation
 
@@ -537,6 +565,8 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/bower_components:
   {"pollingInterval":500}
 /home/src/projects/project/jsconfig.json:
@@ -545,7 +575,15 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
   {"pollingInterval":2000}
 
 FsWatches::

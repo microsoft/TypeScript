@@ -68,6 +68,15 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/lib/module2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/B/lib/package.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/package.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/package.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/src/package.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
@@ -176,12 +185,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/project/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/lib/module2.ts: *new*
@@ -245,12 +272,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/lib/module2.ts:
@@ -322,12 +367,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/lib/module2.ts:
@@ -397,12 +460,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/lib/module2.ts:
@@ -474,12 +555,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/lib/module2.ts:
@@ -549,12 +648,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/lib/module2.ts:
@@ -626,12 +743,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/src/app.ts:
@@ -701,12 +836,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/lib/module2.ts: *new*
@@ -778,12 +931,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/src/app.ts:
@@ -853,12 +1024,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/lib/module2.ts: *new*
@@ -930,12 +1119,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/src/app.ts:
@@ -1005,12 +1212,30 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/B/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/a/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/a/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/a/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/a/b/lib/module2.ts: *new*

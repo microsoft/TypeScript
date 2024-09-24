@@ -46,6 +46,12 @@ var x = 1;
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/workspace/package.json: *new*
   {"pollingInterval":2000}
 /user/username/workspace/solution/package.json: *new*

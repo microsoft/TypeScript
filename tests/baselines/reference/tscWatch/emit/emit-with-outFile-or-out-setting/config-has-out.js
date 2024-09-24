@@ -56,8 +56,18 @@ var y = 1;
 PolledWatches::
 /home/src/projects/a/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/a/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/a/a.ts: *new*

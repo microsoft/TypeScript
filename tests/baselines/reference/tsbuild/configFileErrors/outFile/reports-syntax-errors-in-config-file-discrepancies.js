@@ -5,9 +5,18 @@ TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/outfil
 CleanBuild:
 {
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./project/a.ts": "4646078106-export function foo() { }",
-    "./project/b.ts": "1045484683-export function bar() { }"
+    "../tslibs/ts/lib/lib.d.ts": {
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./project/a.ts": {
+      "version": "4646078106-export function foo() { }",
+      "impliedFormat": "commonjs"
+    },
+    "./project/b.ts": {
+      "version": "1045484683-export function bar() { }",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -33,9 +42,18 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./project/a.ts": "4646078106-export function foo() { }",
-    "./project/b.ts": "1045484683-export function bar() { }"
+    "../tslibs/ts/lib/lib.d.ts": {
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./project/a.ts": {
+      "version": "4646078106-export function foo() { }",
+      "impliedFormat": "commonjs"
+    },
+    "./project/b.ts": {
+      "version": "1045484683-export function bar() { }",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [

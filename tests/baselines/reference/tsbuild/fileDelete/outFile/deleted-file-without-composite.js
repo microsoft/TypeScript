@@ -45,10 +45,28 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/child/tsconfig.json'...
 
+File '/home/src/workspaces/solution/child/package.json' does not exist.
+File '/home/src/workspaces/solution/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 ======== Resolving module '../child/child2' from '/home/src/workspaces/solution/child/child.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/home/src/workspaces/solution/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/home/src/workspaces/solution/child/child2.ts'. ========
+File '/home/src/workspaces/solution/child/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/solution/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 child/child2.ts
@@ -106,6 +124,12 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/child/tsconfig.json'...
 
+File '/home/src/workspaces/solution/child/package.json' does not exist.
+File '/home/src/workspaces/solution/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 ======== Resolving module '../child/child2' from '/home/src/workspaces/solution/child/child.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/home/src/workspaces/solution/child/child2.ts' does not exist.
@@ -114,6 +138,12 @@ File '/home/src/workspaces/solution/child/child2.d.ts' does not exist.
 File '/home/src/workspaces/solution/child/child2.js' does not exist.
 File '/home/src/workspaces/solution/child/child2.jsx' does not exist.
 ======== Module name '../child/child2' was not resolved. ========
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 [96mchild/child.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS2792: [0mCannot find module '../child/child2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 [7m1[0m import { child2 } from "../child/child2";

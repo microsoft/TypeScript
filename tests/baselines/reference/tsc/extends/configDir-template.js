@@ -88,6 +88,11 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js --explainFiles
 Output::
+File '/home/src/projects/myproject/package.json' does not exist.
+File '/home/src/projects/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
@@ -97,6 +102,18 @@ Trying substitution '/home/src/projects/myproject/types/*', candidate module loc
 Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, Declaration.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
+File '/home/src/projects/myproject/types/package.json' does not exist.
+File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/myproject/src/package.json' does not exist.
+File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'other/sometype2' from '/home/src/projects/myproject/src/secondary.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name 'other/sometype2'.
@@ -118,6 +135,20 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
+File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/myproject/root2/other/package.json' does not exist.
+File '/home/src/projects/myproject/root2/package.json' does not exist.
+File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts

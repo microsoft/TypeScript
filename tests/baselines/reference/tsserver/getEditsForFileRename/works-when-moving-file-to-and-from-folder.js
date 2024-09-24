@@ -99,6 +99,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/whatever/alert.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/whatever/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
@@ -214,8 +221,22 @@ After request
 PolledWatches::
 /home/src/myprojects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/myprojects/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/myprojects/project/components/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/myprojects/project/components/whatever/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/myprojects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/myprojects/project/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/myprojects/project/components/whatever/alert.ts: *new*
@@ -318,6 +339,10 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myproje
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/functions/whatever/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/functions/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components/whatever/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -362,10 +387,30 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/myprojects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/myprojects/package.json:
+  {"pollingInterval":2000}
+/home/src/myprojects/project/functions/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/myprojects/project/functions/whatever/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
 /home/src/myprojects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/myprojects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/home/src/myprojects/project/components/package.json:
+  {"pollingInterval":2000}
+/home/src/myprojects/project/components/whatever/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/myprojects/project/tsconfig.json:
@@ -588,8 +633,22 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /home/src/myprojects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/myprojects/package.json:
+  {"pollingInterval":2000}
+/home/src/myprojects/project/functions/package.json:
+  {"pollingInterval":2000}
+/home/src/myprojects/project/functions/whatever/package.json:
+  {"pollingInterval":2000}
 /home/src/myprojects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/myprojects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/myprojects/node_modules:
@@ -677,6 +736,10 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myproje
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/whatever/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/functions/whatever/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/myprojects/project/functions/package.json 2000 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -717,10 +780,30 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/myprojects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/myprojects/package.json:
+  {"pollingInterval":2000}
+/home/src/myprojects/project/components/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/myprojects/project/components/whatever/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
 /home/src/myprojects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/myprojects/project/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/home/src/myprojects/project/functions/package.json:
+  {"pollingInterval":2000}
+/home/src/myprojects/project/functions/whatever/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/myprojects/project/tsconfig.json:

@@ -177,6 +177,8 @@ Info seq  [hh:mm:ss:mss] event:
 Custom watchDirectory:: Added:: {"id":2,"path":"/home/src/projects/project/packages/package2","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Config: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/packages/package2/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -199,6 +201,8 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package1/dist/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/packages/package1/package.json'.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -211,6 +215,12 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Custom watchFile:: Added:: {"id":3,"path":"/home/src/projects/project/packages/package1/dist/index.d.ts"}
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -307,6 +317,78 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Custom watchFile:: Added:: {"id":10,"path":"/home/src/projects/project/packages/package1/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 11,
+        "path": "/home/src/tslibs/TS/Lib/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":11,"path":"/home/src/tslibs/TS/Lib/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 12,
+        "path": "/home/src/tslibs/TS/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":12,"path":"/home/src/tslibs/TS/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 13,
+        "path": "/home/src/tslibs/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":13,"path":"/home/src/tslibs/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 14,
+        "path": "/home/src/projects/project/packages/package1/dist/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":14,"path":"/home/src/projects/project/packages/package1/dist/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 15,
+        "path": "/home/src/projects/project/packages/package2/src/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":15,"path":"/home/src/projects/project/packages/package2/src/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 16,
+        "path": "/home/src/projects/project/packages/package2/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":16,"path":"/home/src/projects/project/packages/package2/package.json"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -314,13 +396,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 11,
+        "id": 17,
         "path": "/home/src/projects/project/packages/package2/node_modules/@types",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":11,"path":"/home/src/projects/project/packages/package2/node_modules/@types","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":17,"path":"/home/src/projects/project/packages/package2/node_modules/@types","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
@@ -329,13 +411,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 12,
+        "id": 18,
         "path": "/home/src/projects/project/packages/node_modules/@types",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":12,"path":"/home/src/projects/project/packages/node_modules/@types","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":18,"path":"/home/src/projects/project/packages/node_modules/@types","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
@@ -344,13 +426,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 13,
+        "id": 19,
         "path": "/home/src/projects/project/node_modules/@types",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":13,"path":"/home/src/projects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":19,"path":"/home/src/projects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
@@ -359,13 +441,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 14,
+        "id": 20,
         "path": "/home/src/projects/node_modules/@types",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":14,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":20,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
@@ -384,17 +466,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createFileWatcher",
-      "body": {
-        "id": 15,
-        "path": "/home/src/projects/project/packages/package2/package.json"
-      }
-    }
-Custom watchFile:: Added:: {"id":15,"path":"/home/src/projects/project/packages/package2/package.json"}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -490,34 +561,44 @@ After request
 PolledWatches::
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"event":{"id":3,"path":"/home/src/projects/project/packages/package1/dist/index.d.ts"}}
+/home/src/projects/project/packages/package1/dist/package.json: *new*
+  {"event":{"id":14,"path":"/home/src/projects/project/packages/package1/dist/package.json"}}
 /home/src/projects/project/packages/package1/package.json: *new*
   {"event":{"id":10,"path":"/home/src/projects/project/packages/package1/package.json"}}
 /home/src/projects/project/packages/package2/package.json: *new*
-  {"event":{"id":15,"path":"/home/src/projects/project/packages/package2/package.json"}}
+  {"event":{"id":16,"path":"/home/src/projects/project/packages/package2/package.json"}}
+/home/src/projects/project/packages/package2/src/package.json: *new*
+  {"event":{"id":15,"path":"/home/src/projects/project/packages/package2/src/package.json"}}
 /home/src/projects/project/packages/package2/tsconfig.json: *new*
   {"event":{"id":1,"path":"/home/src/projects/project/packages/package2/tsconfig.json"}}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts: *new*
   {"event":{"id":4,"path":"/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts"}}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"event":{"id":11,"path":"/home/src/tslibs/TS/Lib/package.json"}}
+/home/src/tslibs/TS/package.json: *new*
+  {"event":{"id":12,"path":"/home/src/tslibs/TS/package.json"}}
+/home/src/tslibs/package.json: *new*
+  {"event":{"id":13,"path":"/home/src/tslibs/package.json"}}
 
 FsWatchesRecursive::
 /home/src/projects/node_modules/@types: *new*
-  {"event":{"id":14,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":20,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/node_modules: *new*
   {"event":{"id":8,"path":"/home/src/projects/project/node_modules","recursive":true}}
 /home/src/projects/project/node_modules/@types: *new*
-  {"event":{"id":13,"path":"/home/src/projects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":19,"path":"/home/src/projects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/node_modules/package1: *new*
   {"event":{"id":9,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/node_modules: *new*
   {"event":{"id":7,"path":"/home/src/projects/project/packages/node_modules","recursive":true}}
 /home/src/projects/project/packages/node_modules/@types: *new*
-  {"event":{"id":12,"path":"/home/src/projects/project/packages/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":18,"path":"/home/src/projects/project/packages/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/package2: *new*
   {"event":{"id":2,"path":"/home/src/projects/project/packages/package2","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/package2/node_modules: *new*
   {"event":{"id":6,"path":"/home/src/projects/project/packages/package2/node_modules","recursive":true}}
 /home/src/projects/project/packages/package2/node_modules/@types: *new*
-  {"event":{"id":11,"path":"/home/src/projects/project/packages/package2/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":17,"path":"/home/src/projects/project/packages/package2/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/package2/src: *new*
   {"event":{"id":5,"path":"/home/src/projects/project/packages/package2/src","recursive":true,"ignoreUpdate":true}}
 
@@ -740,6 +821,16 @@ Before running Timeout callback:: count: 3
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package1/dist/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package1/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -809,6 +900,12 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package1' was not resolved. ========
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -816,13 +913,24 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 16,
+        "id": 21,
         "path": "/home/src/projects/node_modules",
         "recursive": true
       }
     }
-Custom watchDirectory:: Added:: {"id":16,"path":"/home/src/projects/node_modules","recursive":true}
+Custom watchDirectory:: Added:: {"id":21,"path":"/home/src/projects/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "closeFileWatcher",
+      "body": {
+        "id": 14
+      }
+    }
+Custom watchFile:: Close:: {"id":14,"path":"/home/src/projects/project/packages/package1/dist/package.json"}
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -873,33 +981,45 @@ PolledWatches::
 /home/src/projects/project/packages/package1/package.json:
   {"event":{"id":10,"path":"/home/src/projects/project/packages/package1/package.json"}}
 /home/src/projects/project/packages/package2/package.json:
-  {"event":{"id":15,"path":"/home/src/projects/project/packages/package2/package.json"}}
+  {"event":{"id":16,"path":"/home/src/projects/project/packages/package2/package.json"}}
+/home/src/projects/project/packages/package2/src/package.json:
+  {"event":{"id":15,"path":"/home/src/projects/project/packages/package2/src/package.json"}}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"event":{"id":1,"path":"/home/src/projects/project/packages/package2/tsconfig.json"}}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {"event":{"id":4,"path":"/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts"}}
+/home/src/tslibs/TS/Lib/package.json:
+  {"event":{"id":11,"path":"/home/src/tslibs/TS/Lib/package.json"}}
+/home/src/tslibs/TS/package.json:
+  {"event":{"id":12,"path":"/home/src/tslibs/TS/package.json"}}
+/home/src/tslibs/package.json:
+  {"event":{"id":13,"path":"/home/src/tslibs/package.json"}}
+
+PolledWatches *deleted*::
+/home/src/projects/project/packages/package1/dist/package.json:
+  {"event":{"id":14,"path":"/home/src/projects/project/packages/package1/dist/package.json"}}
 
 FsWatchesRecursive::
 /home/src/projects/node_modules: *new*
-  {"event":{"id":16,"path":"/home/src/projects/node_modules","recursive":true}}
+  {"event":{"id":21,"path":"/home/src/projects/node_modules","recursive":true}}
 /home/src/projects/node_modules/@types:
-  {"event":{"id":14,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":20,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/node_modules:
   {"event":{"id":8,"path":"/home/src/projects/project/node_modules","recursive":true}}
 /home/src/projects/project/node_modules/@types:
-  {"event":{"id":13,"path":"/home/src/projects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":19,"path":"/home/src/projects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/node_modules/package1:
   {"event":{"id":9,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/node_modules:
   {"event":{"id":7,"path":"/home/src/projects/project/packages/node_modules","recursive":true}}
 /home/src/projects/project/packages/node_modules/@types:
-  {"event":{"id":12,"path":"/home/src/projects/project/packages/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":18,"path":"/home/src/projects/project/packages/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/package2:
   {"event":{"id":2,"path":"/home/src/projects/project/packages/package2","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/package2/node_modules:
   {"event":{"id":6,"path":"/home/src/projects/project/packages/package2/node_modules","recursive":true}}
 /home/src/projects/project/packages/package2/node_modules/@types:
-  {"event":{"id":11,"path":"/home/src/projects/project/packages/package2/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":17,"path":"/home/src/projects/project/packages/package2/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/package2/src:
   {"event":{"id":5,"path":"/home/src/projects/project/packages/package2/src","recursive":true,"ignoreUpdate":true}}
 
@@ -1156,6 +1276,16 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'package1' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1178,6 +1308,26 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package1/dist/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package1/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 22,
+        "path": "/home/src/projects/project/packages/package1/dist/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":22,"path":"/home/src/projects/project/packages/package1/dist/package.json"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1185,10 +1335,10 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "closeFileWatcher",
       "body": {
-        "id": 16
+        "id": 21
       }
     }
-Custom watchDirectory:: Close:: {"id":16,"path":"/home/src/projects/node_modules","recursive":true}
+Custom watchDirectory:: Close:: {"id":21,"path":"/home/src/projects/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
@@ -1240,40 +1390,50 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /home/src/projects/project/packages/package1/dist/index.d.ts:
   {"event":{"id":3,"path":"/home/src/projects/project/packages/package1/dist/index.d.ts"}}
+/home/src/projects/project/packages/package1/dist/package.json: *new*
+  {"event":{"id":22,"path":"/home/src/projects/project/packages/package1/dist/package.json"}}
 /home/src/projects/project/packages/package1/package.json:
   {"event":{"id":10,"path":"/home/src/projects/project/packages/package1/package.json"}}
 /home/src/projects/project/packages/package2/package.json:
-  {"event":{"id":15,"path":"/home/src/projects/project/packages/package2/package.json"}}
+  {"event":{"id":16,"path":"/home/src/projects/project/packages/package2/package.json"}}
+/home/src/projects/project/packages/package2/src/package.json:
+  {"event":{"id":15,"path":"/home/src/projects/project/packages/package2/src/package.json"}}
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"event":{"id":1,"path":"/home/src/projects/project/packages/package2/tsconfig.json"}}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {"event":{"id":4,"path":"/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts"}}
+/home/src/tslibs/TS/Lib/package.json:
+  {"event":{"id":11,"path":"/home/src/tslibs/TS/Lib/package.json"}}
+/home/src/tslibs/TS/package.json:
+  {"event":{"id":12,"path":"/home/src/tslibs/TS/package.json"}}
+/home/src/tslibs/package.json:
+  {"event":{"id":13,"path":"/home/src/tslibs/package.json"}}
 
 FsWatchesRecursive::
 /home/src/projects/node_modules/@types:
-  {"event":{"id":14,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":20,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/node_modules:
   {"event":{"id":8,"path":"/home/src/projects/project/node_modules","recursive":true}}
 /home/src/projects/project/node_modules/@types:
-  {"event":{"id":13,"path":"/home/src/projects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":19,"path":"/home/src/projects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/node_modules/package1:
   {"event":{"id":9,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/node_modules:
   {"event":{"id":7,"path":"/home/src/projects/project/packages/node_modules","recursive":true}}
 /home/src/projects/project/packages/node_modules/@types:
-  {"event":{"id":12,"path":"/home/src/projects/project/packages/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":18,"path":"/home/src/projects/project/packages/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/package2:
   {"event":{"id":2,"path":"/home/src/projects/project/packages/package2","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/package2/node_modules:
   {"event":{"id":6,"path":"/home/src/projects/project/packages/package2/node_modules","recursive":true}}
 /home/src/projects/project/packages/package2/node_modules/@types:
-  {"event":{"id":11,"path":"/home/src/projects/project/packages/package2/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":17,"path":"/home/src/projects/project/packages/package2/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/project/packages/package2/src:
   {"event":{"id":5,"path":"/home/src/projects/project/packages/package2/src","recursive":true,"ignoreUpdate":true}}
 
 FsWatchesRecursive *deleted*::
 /home/src/projects/node_modules:
-  {"event":{"id":16,"path":"/home/src/projects/node_modules","recursive":true}}
+  {"event":{"id":21,"path":"/home/src/projects/node_modules","recursive":true}}
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*

@@ -63,7 +63,7 @@ declare function foo(): number;
 
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5450201652-function foo() { return 10; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"517738360-declare function foo(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"5450201652-function foo() { return 10; }","impliedFormat":1}],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"517738360-declare function foo(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -72,8 +72,22 @@ declare function foo(): number;
     "./index.ts"
   ],
   "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./index.ts": "5450201652-function foo() { return 10; }"
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./index.ts": {
+      "original": {
+        "version": "5450201652-function foo() { return 10; }",
+        "impliedFormat": 1
+      },
+      "version": "5450201652-function foo() { return 10; }",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -89,7 +103,7 @@ declare function foo(): number;
   "outSignature": "517738360-declare function foo(): number;\n",
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 785
+  "size": 845
 }
 
 //// [/user/username/workspaces/solution/sample1/logic/index.js]
@@ -102,7 +116,7 @@ declare function bar(): number;
 
 
 //// [/user/username/workspaces/solution/sample1/logic/index.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","517738360-declare function foo(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"1113083433-declare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"517738360-declare function foo(): number;\n","impliedFormat":1},{"version":"5542925109-function bar() { return foo() + 1 };","impliedFormat":1}],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"1113083433-declare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/workspaces/solution/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -112,9 +126,30 @@ declare function bar(): number;
     "./index.ts"
   ],
   "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "../core/index.d.ts": "517738360-declare function foo(): number;\n",
-    "./index.ts": "5542925109-function bar() { return foo() + 1 };"
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "../core/index.d.ts": {
+      "original": {
+        "version": "517738360-declare function foo(): number;\n",
+        "impliedFormat": 1
+      },
+      "version": "517738360-declare function foo(): number;\n",
+      "impliedFormat": "commonjs"
+    },
+    "./index.ts": {
+      "original": {
+        "version": "5542925109-function bar() { return foo() + 1 };",
+        "impliedFormat": 1
+      },
+      "version": "5542925109-function bar() { return foo() + 1 };",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -130,9 +165,37 @@ declare function bar(): number;
   "outSignature": "1113083433-declare function bar(): number;\n",
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 860
+  "size": 950
 }
 
+
+PolledWatches::
+/home/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
+/package.json: *new*
+  {"pollingInterval":2000}
+/user/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/workspaces/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/workspaces/solution/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/workspaces/solution/sample1/core/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/workspaces/solution/sample1/logic/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/workspaces/solution/sample1/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/workspaces/solution/sample1/core/index.ts: *new*
@@ -231,7 +294,7 @@ declare function myFunc(): number;
 
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }","impliedFormat":1}],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -240,8 +303,22 @@ declare function myFunc(): number;
     "./index.ts"
   ],
   "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./index.ts": "-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }"
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./index.ts": {
+      "original": {
+        "version": "-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }",
+        "impliedFormat": 1
+      },
+      "version": "-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -257,7 +334,7 @@ declare function myFunc(): number;
   "outSignature": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 857
+  "size": 917
 }
 
 
@@ -305,7 +382,7 @@ Output::
 
 //// [/user/username/workspaces/solution/sample1/logic/index.js] file written with same contents
 //// [/user/username/workspaces/solution/sample1/logic/index.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"1113083433-declare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","impliedFormat":1},{"version":"5542925109-function bar() { return foo() + 1 };","impliedFormat":1}],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"1113083433-declare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/workspaces/solution/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -315,9 +392,30 @@ Output::
     "./index.ts"
   ],
   "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "../core/index.d.ts": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
-    "./index.ts": "5542925109-function bar() { return foo() + 1 };"
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "../core/index.d.ts": {
+      "original": {
+        "version": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+        "impliedFormat": 1
+      },
+      "version": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+      "impliedFormat": "commonjs"
+    },
+    "./index.ts": {
+      "original": {
+        "version": "5542925109-function bar() { return foo() + 1 };",
+        "impliedFormat": 1
+      },
+      "version": "5542925109-function bar() { return foo() + 1 };",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -333,7 +431,7 @@ Output::
   "outSignature": "1113083433-declare function bar(): number;\n",
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 897
+  "size": 987
 }
 
 
@@ -394,7 +492,7 @@ function myFunc() { return 100; }
 
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }"],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }","impliedFormat":1}],"root":[2],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/workspaces/solution/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -403,8 +501,22 @@ function myFunc() { return 100; }
     "./index.ts"
   ],
   "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./index.ts": "-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }"
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./index.ts": {
+      "original": {
+        "version": "-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }",
+        "impliedFormat": 1
+      },
+      "version": "-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -420,7 +532,7 @@ function myFunc() { return 100; }
   "outSignature": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 858
+  "size": 918
 }
 
 //// [/user/username/workspaces/solution/sample1/logic/index.tsbuildinfo] file changed its modified time

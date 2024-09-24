@@ -67,6 +67,10 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/f1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/d 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/d 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/d/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/d/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/d/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -111,22 +115,30 @@ After request
 PolledWatches::
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/project/c/d/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/c/d/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/project/c/d/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/project/c/d/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/c/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/c/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/project/c/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/project/c/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -519,22 +531,30 @@ Before request
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/project/c/d/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/c/d/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/project/c/d/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/project/c/d/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/c/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/c/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/project/c/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/project/c/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/project/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/project/tsconfig.json:
   {"pollingInterval":2000}
 

@@ -99,6 +99,15 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/projects/b/2/b-impl/b/src/index.ts"]
   options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist.
+File '/home/src/projects/b/2/package.json' does not exist.
+File '/home/src/projects/b/package.json' does not exist.
+File '/home/src/projects/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src/index.ts 250 undefined Source file
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -165,6 +174,12 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'a' was not resolved. ========
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
@@ -181,6 +196,15 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_mo
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/projects/b/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules/@types 1 undefined Type roots
@@ -215,22 +239,40 @@ Object.defineProperty(exports, "__esModule", { value: true });
 PolledWatches::
 /home/src/projects/b/2/b-impl/b/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/b/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/b/2/b-impl/b/src/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/b/2/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/b/2/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/b/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/b/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/a/1/a-impl/a: *new*
@@ -439,22 +481,40 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/
 PolledWatches::
 /home/src/projects/b/2/b-impl/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/b/2/b-impl/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/node_modules:
   {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/node_modules:
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/node_modules:
   {"pollingInterval":500}
 /home/src/projects/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/node_modules:
   {"pollingInterval":500}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/a/1/a-impl/a:
@@ -508,6 +568,30 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/projects/b/2/b-impl/b/src/index.ts"]
   options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -524,6 +608,8 @@ File '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts' exists - us
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts', result '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'.
 ======== Module name 'a' was successfully resolved to '/home/src/projects/a/1/a-impl/a/lib/index.d.ts' with Package ID 'a/lib/index.d.ts@1.0.0'. ========
+File '/home/src/projects/a/1/a-impl/a/lib/package.json' does not exist.
+Found 'package.json' at '/home/src/projects/a/1/a-impl/a/package.json'.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './a' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -550,7 +636,11 @@ File '/home/src/projects/a/1/a-impl/a/node_modules/c/lib/index.d.ts' exists - us
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/a/1/a-impl/a/node_modules/c/lib/index.d.ts', result '/home/src/projects/c/3/c-impl/c/lib/index.d.ts'.
 ======== Module name 'c' was successfully resolved to '/home/src/projects/c/3/c-impl/c/lib/index.d.ts' with Package ID 'c/lib/index.d.ts@1.0.0'. ========
+File '/home/src/projects/a/1/a-impl/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/a/1/a-impl/a/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/a.d.ts 250 undefined Source file
+File '/home/src/projects/c/3/c-impl/c/lib/package.json' does not exist.
+Found 'package.json' at '/home/src/projects/c/3/c-impl/c/package.json'.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './c' from '/home/src/projects/c/3/c-impl/c/lib/index.d.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -561,12 +651,22 @@ File '/home/src/projects/c/3/c-impl/c/lib/c.d.ts' exists - use it as a name reso
 ======== Module name './c' was successfully resolved to '/home/src/projects/c/3/c-impl/c/lib/c.d.ts'. ========
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+File '/home/src/projects/c/3/c-impl/c/lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/c/3/c-impl/c/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/c.d.ts 250 undefined Source file
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules 1 undefined Failed Lookup Locations
@@ -598,16 +698,38 @@ src/index.ts
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
   {"pollingInterval":500}
+/home/src/projects/a/1/a-impl/a/lib/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/b/2/b-impl/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/c/3/c-impl/c/lib/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/b/2/b-impl/node_modules:
@@ -819,22 +941,44 @@ PolledWatches::
   {"pollingInterval":250}
 /home/src/projects/a/1/a-impl/a/lib/node_modules:
   {"pollingInterval":500}
+/home/src/projects/a/1/a-impl/a/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/b/2/b-impl/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/c/3/c-impl/c/lib: *new*
   {"pollingInterval":500}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
   {"pollingInterval":250}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
   {"pollingInterval":250}
+/home/src/projects/c/3/c-impl/c/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/a/1/a-impl/a/node_modules:
@@ -884,7 +1028,23 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/projects/b/2/b-impl/b/src/index.ts"]
   options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/a/1/a-impl/a/package.json' exists according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/a.d.ts 250 undefined Source file
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -949,6 +1109,12 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'a' was not resolved. ========
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/c.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/index.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 250 undefined Source file
@@ -971,6 +1137,8 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-imp
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/package.json 2000 undefined File location affecting resolution
 [96msrc/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
 
 [7m1[0m import { a } from 'a';
@@ -989,22 +1157,40 @@ src/index.ts
 PolledWatches::
 /home/src/projects/b/2/b-impl/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/b/2/b-impl/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/a/1/a-impl/a/lib:
@@ -1015,12 +1201,16 @@ PolledWatches *deleted*::
   {"pollingInterval":250}
 /home/src/projects/a/1/a-impl/a/lib/node_modules:
   {"pollingInterval":500}
+/home/src/projects/a/1/a-impl/a/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/c/3/c-impl/c/lib:
   {"pollingInterval":500}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts:
   {"pollingInterval":250}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts:
   {"pollingInterval":250}
+/home/src/projects/c/3/c-impl/c/lib/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/a/1/a-impl/a: *new*
@@ -1218,22 +1408,40 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/
 PolledWatches::
 /home/src/projects/b/2/b-impl/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/b/2/b-impl/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/node_modules:
   {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/node_modules:
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/node_modules:
   {"pollingInterval":500}
 /home/src/projects/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/node_modules:
   {"pollingInterval":500}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/a/1/a-impl/a:
@@ -1287,6 +1495,30 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/projects/b/2/b-impl/b/src/index.ts"]
   options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1303,6 +1535,7 @@ File '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts' exists - us
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts', result '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'.
 ======== Module name 'a' was successfully resolved to '/home/src/projects/a/1/a-impl/a/lib/index.d.ts' with Package ID 'a/lib/index.d.ts@1.0.0'. ========
+File '/home/src/projects/a/1/a-impl/a/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './a' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -1327,7 +1560,10 @@ File '/home/src/projects/a/1/a-impl/a/node_modules/c.d.ts' does not exist.
 File '/home/src/projects/a/1/a-impl/a/node_modules/c/lib/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/a/1/a-impl/a/node_modules/c/lib/index.d.ts', result '/home/src/projects/c/3/c-impl/c/lib/index.d.ts'.
 ======== Module name 'c' was successfully resolved to '/home/src/projects/c/3/c-impl/c/lib/index.d.ts' with Package ID 'c/lib/index.d.ts@1.0.0'. ========
+File '/home/src/projects/a/1/a-impl/a/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/a.d.ts 250 undefined Source file
+File '/home/src/projects/c/3/c-impl/c/lib/package.json' does not exist.
+File '/home/src/projects/c/3/c-impl/c/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './c' from '/home/src/projects/c/3/c-impl/c/lib/index.d.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -1338,12 +1574,22 @@ File '/home/src/projects/c/3/c-impl/c/lib/c.d.ts' exists - use it as a name reso
 ======== Module name './c' was successfully resolved to '/home/src/projects/c/3/c-impl/c/lib/c.d.ts'. ========
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
+File '/home/src/projects/c/3/c-impl/c/lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/c/3/c-impl/c/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/c.d.ts 250 undefined Source file
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules 1 undefined Failed Lookup Locations
@@ -1375,16 +1621,38 @@ src/index.ts
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
   {"pollingInterval":500}
+/home/src/projects/a/1/a-impl/a/lib/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/b/2/b-impl/b/src/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/b-impl/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/2/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/2/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/b/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/b/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/c/3/c-impl/c/lib/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/projects/b/2/b-impl/node_modules:

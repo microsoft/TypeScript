@@ -56,6 +56,7 @@ Output::
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/Struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/home/src/projects/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 
 [7m2[0m import * as xs2 from "fp-ts/lib/struct";
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~[0m
@@ -157,6 +158,7 @@ Output::
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/Struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/home/src/projects/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 
 [7m2[0m import * as xs2 from "fp-ts/lib/struct";
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~[0m
@@ -224,6 +226,7 @@ Output::
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/Struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/home/src/projects/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 
 [7m2[0m import * as xs2 from "fp-ts/lib/struct";
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~[0m
@@ -292,6 +295,7 @@ node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/struct" from file 'src/Struct.d.ts'
   Imported via "fp-ts/lib/Struct" from file 'src/oneMore.ts'
   Imported via "fp-ts/lib/struct" from file 'src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 src/Struct.d.ts
   Imported via "./Struct" from file 'src/anotherFile.ts'
   Imported via "./Struct" from file 'src/Struct.d.ts'
@@ -333,6 +337,14 @@ PolledWatches::
 /home/src/projects/project/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /home/src/projects/project/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -422,6 +434,7 @@ Output::
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/Struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/home/src/projects/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 
 [7m2[0m import * as xs2 from "fp-ts/lib/struct";
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~[0m
@@ -523,6 +536,7 @@ Output::
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/Struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/home/src/projects/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 
 [7m2[0m import * as xs2 from "fp-ts/lib/struct";
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~[0m
@@ -590,6 +604,7 @@ Output::
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/Struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/home/src/projects/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 
 [7m2[0m import * as xs2 from "fp-ts/lib/struct";
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~[0m
@@ -658,6 +673,7 @@ node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/struct" from file 'src/Struct.d.ts'
   Imported via "fp-ts/lib/Struct" from file 'src/oneMore.ts'
   Imported via "fp-ts/lib/struct" from file 'src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 src/Struct.d.ts
   Imported via "./Struct" from file 'src/anotherFile.ts'
   Imported via "./Struct" from file 'src/Struct.d.ts'
@@ -738,6 +754,7 @@ Output::
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/Struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/home/src/projects/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 
 [7m2[0m import * as xs2 from "fp-ts/lib/struct";
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~[0m
@@ -829,6 +846,7 @@ Output::
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/Struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/home/src/projects/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 
 [7m2[0m import * as xs2 from "fp-ts/lib/struct";
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~[0m
@@ -891,6 +909,7 @@ Output::
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/Struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/home/src/projects/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/home/src/projects/project/src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 
 [7m2[0m import * as xs2 from "fp-ts/lib/struct";
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~~[0m
@@ -925,6 +944,7 @@ node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/struct" from file 'src/Struct.d.ts'
   Imported via "fp-ts/lib/Struct" from file 'src/oneMore.ts'
   Imported via "fp-ts/lib/struct" from file 'src/oneMore.ts'
+  File is CommonJS module because 'package.json' was not found
 src/Struct.d.ts
   Imported via "./Struct" from file 'src/anotherFile.ts'
   Imported via "./Struct" from file 'src/Struct.d.ts'

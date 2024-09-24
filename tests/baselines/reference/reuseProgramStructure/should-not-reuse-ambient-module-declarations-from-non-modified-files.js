@@ -70,6 +70,13 @@ File: /home/src/workspaces/project/a/b/node.d.ts
 
 declare module 'fs' {}
 
+File '/home/src/workspaces/project/a/b/package.json' does not exist.
+File '/home/src/workspaces/project/a/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 ======== Resolving module 'fs' from '/home/src/workspaces/project/a/b/app.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/home/src/workspaces/project/a/b/fs.ts' does not exist.
@@ -130,6 +137,14 @@ File '/home/fs.jsx' does not exist.
 File '/fs.js' does not exist.
 File '/fs.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
+File '/home/src/workspaces/project/a/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/a/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 
 MissingPaths:: [
   "lib.d.ts"
@@ -210,6 +225,20 @@ File: /home/src/workspaces/project/a/b/node.d.ts
 
 declare module 'fs' {}
 
+File '/home/src/workspaces/project/a/b/package.json' does not exist.
+File '/home/src/workspaces/project/a/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+File '/home/src/workspaces/project/a/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/a/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'fs' from '/home/src/workspaces/project/a/b/app.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/home/src/workspaces/project/a/b/fs.ts' does not exist.
@@ -350,6 +379,20 @@ File: /home/src/workspaces/project/a/b/node.d.ts
 
 declare var process: any
 
+File '/home/src/workspaces/project/a/b/package.json' does not exist.
+File '/home/src/workspaces/project/a/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+File '/home/src/workspaces/project/a/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/a/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'fs' from '/home/src/workspaces/project/a/b/app.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/home/src/workspaces/project/a/b/fs.ts' does not exist.

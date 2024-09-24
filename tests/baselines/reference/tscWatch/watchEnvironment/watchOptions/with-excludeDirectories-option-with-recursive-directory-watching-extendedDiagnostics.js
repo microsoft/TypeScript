@@ -61,10 +61,14 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Type roots
@@ -84,6 +88,12 @@ var bar_1 = require("bar");
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/bar/package.json: *new*
@@ -91,6 +101,8 @@ PolledWatches::
 /user/username/projects/myproject/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}

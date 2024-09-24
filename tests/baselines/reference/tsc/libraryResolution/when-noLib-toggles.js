@@ -48,7 +48,7 @@ declare const b = 10;
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2015.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-5371488691-declare const a = \"hello\";","affectsGlobalScope":true},{"version":"2387014439-const b = 10;","signature":"-1009346399-declare const b = 10;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"declaration":true},"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2015.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5371488691-declare const a = \"hello\";","affectsGlobalScope":true,"impliedFormat":1},{"version":"2387014439-const b = 10;","signature":"-1009346399-declare const b = 10;\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[2,3],"options":{"declaration":true},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -61,30 +61,36 @@ declare const b = 10;
     "../../tslibs/ts/lib/lib.es2015.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./a.d.ts": {
       "original": {
         "version": "-5371488691-declare const a = \"hello\";",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "-5371488691-declare const a = \"hello\";",
       "signature": "-5371488691-declare const a = \"hello\";",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./b.ts": {
       "original": {
         "version": "2387014439-const b = 10;",
         "signature": "-1009346399-declare const b = 10;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "2387014439-const b = 10;",
       "signature": "-1009346399-declare const b = 10;\n",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -101,7 +107,7 @@ declare const b = 10;
     "declaration": true
   },
   "version": "FakeTSVersion",
-  "size": 832
+  "size": 886
 }
 
 
@@ -170,7 +176,7 @@ Found 9 errors in the same file, starting at: tsconfig.json[90m:5[0m
 //// [/home/src/workspaces/project/b.js] file written with same contents
 //// [/home/src/workspaces/project/b.d.ts] file written with same contents
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["./a.d.ts","./b.ts"],"fileInfos":[{"version":"-5371488691-declare const a = \"hello\";","affectsGlobalScope":true},{"version":"2387014439-const b = 10;","signature":"-1009346399-declare const b = 10;\n","affectsGlobalScope":true}],"root":[1,2],"options":{"declaration":true},"semanticDiagnosticsPerFile":[1,2],"version":"FakeTSVersion"}
+{"fileNames":["./a.d.ts","./b.ts"],"fileInfos":[{"version":"-5371488691-declare const a = \"hello\";","affectsGlobalScope":true,"impliedFormat":1},{"version":"2387014439-const b = 10;","signature":"-1009346399-declare const b = 10;\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[1,2],"options":{"declaration":true},"semanticDiagnosticsPerFile":[1,2],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -182,21 +188,25 @@ Found 9 errors in the same file, starting at: tsconfig.json[90m:5[0m
     "./a.d.ts": {
       "original": {
         "version": "-5371488691-declare const a = \"hello\";",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "-5371488691-declare const a = \"hello\";",
       "signature": "-5371488691-declare const a = \"hello\";",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./b.ts": {
       "original": {
         "version": "2387014439-const b = 10;",
         "signature": "-1009346399-declare const b = 10;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "2387014439-const b = 10;",
       "signature": "-1009346399-declare const b = 10;\n",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -223,7 +233,7 @@ Found 9 errors in the same file, starting at: tsconfig.json[90m:5[0m
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 350
+  "size": 386
 }
 
 

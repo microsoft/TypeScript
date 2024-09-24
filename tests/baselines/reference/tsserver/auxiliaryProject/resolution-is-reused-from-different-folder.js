@@ -92,6 +92,13 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Li
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules/yargs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -113,11 +120,13 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	../node_modules/@types/yargs/callback.d.ts
 	  Imported via "yargs/callback" from file '../folder/random.ts' with packageId '@types/yargs/callback.d.ts@1.0.0'
 	  Imported via "./callback" from file '../node_modules/@types/yargs/index.d.ts' with packageId '@types/yargs/callback.d.ts@1.0.0'
+	  File is CommonJS module because '../node_modules/@types/yargs/package.json' does not have field "type"
 	../folder/random.ts
 	  Imported via "../folder/random" from file 'index.ts'
 	../node_modules/@types/yargs/index.d.ts
 	  Imported via "yargs" from file 'index.ts' with packageId '@types/yargs/index.d.ts@1.0.0'
 	  Entry point for implicit type library 'yargs' with packageId '@types/yargs/index.d.ts@1.0.0'
+	  File is CommonJS module because '../node_modules/@types/yargs/package.json' does not have field "type"
 	index.ts
 	  Root file specified for compilation
 
@@ -143,9 +152,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/users/projects/myproject/folder/node_modules: *new*
   {"pollingInterval":500}
+/user/users/projects/myproject/folder/package.json: *new*
+  {"pollingInterval":2000}
 /user/users/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/users/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
 /user/users/projects/myproject/some/jsconfig.json: *new*
   {"pollingInterval":2000}
@@ -153,12 +172,16 @@ PolledWatches::
   {"pollingInterval":500}
 /user/users/projects/myproject/some/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/users/projects/myproject/some/package.json: *new*
+  {"pollingInterval":2000}
 /user/users/projects/myproject/some/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/users/projects/myproject/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/users/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/users/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -228,6 +251,10 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules/yargs/package.json 2000 undefined Project: /dev/null/auxiliaryProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/package.json 2000 undefined Project: /dev/null/auxiliaryProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/package.json 2000 undefined Project: /dev/null/auxiliaryProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/package.json 2000 undefined Project: /dev/null/auxiliaryProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/package.json 2000 undefined Project: /dev/null/auxiliaryProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/auxiliaryProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/auxiliaryProject1*' (Auxiliary)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -239,10 +266,12 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 	../node_modules/yargs/callback.js
 	  Imported via "yargs/callback" from file '../folder/random.ts' with packageId 'yargs/callback.js@1.0.0'
+	  File is CommonJS module because '../node_modules/yargs/package.json' does not have field "type"
 	../folder/random.ts
 	  Imported via "../folder/random" from file 'index.ts'
 	../node_modules/yargs/index.js
 	  Imported via "yargs" from file 'index.ts' with packageId 'yargs/index.js@1.0.0'
+	  File is CommonJS module because '../node_modules/yargs/package.json' does not have field "type"
 	index.ts
 	  Root file specified for compilation
 
@@ -279,9 +308,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/users/projects/myproject/folder/node_modules:
   {"pollingInterval":500}
+/user/users/projects/myproject/folder/package.json:
+  {"pollingInterval":2000}
 /user/users/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/users/projects/myproject/package.json:
   {"pollingInterval":2000}
 /user/users/projects/myproject/some/jsconfig.json:
   {"pollingInterval":2000}
@@ -289,6 +328,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/users/projects/myproject/some/node_modules/@types:
   {"pollingInterval":500}
+/user/users/projects/myproject/some/package.json:
+  {"pollingInterval":2000}
 /user/users/projects/myproject/some/tsconfig.json:
   {"pollingInterval":2000}
 /user/users/projects/myproject/tsconfig.json:
@@ -297,6 +338,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/users/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/users/projects/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

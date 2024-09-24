@@ -5,20 +5,24 @@ Incremental:: {
   "original": {
     "version": "2464268576-const a = \"hello",
     "signature": "-5460434953-declare const a = \"hello\";\n",
-    "affectsGlobalScope": true
+    "affectsGlobalScope": true,
+    "impliedFormat": 1
   },
   "version": "2464268576-const a = \"hello",
   "signature": "-5460434953-declare const a = \"hello\";\n",
-  "affectsGlobalScope": true
+  "affectsGlobalScope": true,
+  "impliedFormat": "commonjs"
 }
 Clean:: {
   "original": {
     "version": "2464268576-const a = \"hello",
     "signature": false,
-    "affectsGlobalScope": true
+    "affectsGlobalScope": true,
+    "impliedFormat": 1
   },
   "version": "2464268576-const a = \"hello",
-  "affectsGlobalScope": true
+  "affectsGlobalScope": true,
+  "impliedFormat": "commonjs"
 }
 Dts Signature:: undefined
 7:: no-change-run
@@ -28,19 +32,23 @@ Incremental:: {
   "original": {
     "version": "2464268576-const a = \"hello",
     "signature": "-5460434953-declare const a = \"hello\";\n",
-    "affectsGlobalScope": true
+    "affectsGlobalScope": true,
+    "impliedFormat": 1
   },
   "version": "2464268576-const a = \"hello",
   "signature": "-5460434953-declare const a = \"hello\";\n",
-  "affectsGlobalScope": true
+  "affectsGlobalScope": true,
+  "impliedFormat": "commonjs"
 }
 Clean:: {
   "original": {
     "version": "2464268576-const a = \"hello",
     "signature": false,
-    "affectsGlobalScope": true
+    "affectsGlobalScope": true,
+    "impliedFormat": 1
   },
   "version": "2464268576-const a = \"hello",
-  "affectsGlobalScope": true
+  "affectsGlobalScope": true,
+  "impliedFormat": "commonjs"
 }
 Dts Signature:: undefined

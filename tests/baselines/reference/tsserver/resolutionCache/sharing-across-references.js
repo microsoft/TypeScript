@@ -118,6 +118,11 @@ Info seq  [hh:mm:ss:mss] Config: /users/username/projects/common/tsconfig.json :
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/common/tsconfig.json 2000 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/common 1 undefined Config: /users/username/projects/common/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/common 1 undefined Config: /users/username/projects/common/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/app/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/users/username/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'moduleX' from '/users/username/projects/app/appA.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'moduleX' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -134,17 +139,27 @@ Info seq  [hh:mm:ss:mss] Resolving real path for '/users/username/projects/node_
 Info seq  [hh:mm:ss:mss] ======== Module name 'moduleX' was successfully resolved to '/users/username/projects/node_modules/moduleX/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/app/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Resolving module '../common/moduleB' from '/users/username/projects/app/appB.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/users/username/projects/common/moduleB', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/common/moduleB.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name '../common/moduleB' was successfully resolved to '/users/username/projects/common/moduleB.ts'. ========
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/common/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/common/moduleB.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'moduleX' from '/users/username/projects/common/moduleB.ts'. ========
 Info seq  [hh:mm:ss:mss] Using compiler options of project reference redirect '/users/username/projects/common/tsconfig.json'.
@@ -154,6 +169,12 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for pre
 Info seq  [hh:mm:ss:mss] Directory '/users/username/projects/common/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Resolution for module 'moduleX' was found in cache from location '/users/username/projects'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'moduleX' was successfully resolved to '/users/username/projects/node_modules/moduleX/index.d.ts'. ========
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
@@ -161,9 +182,14 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/common/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/common/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /users/username/projects/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /users/username/projects/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /users/username/projects/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/moduleX/package.json 2000 undefined Project: /users/username/projects/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/package.json 2000 undefined Project: /users/username/projects/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/package.json 2000 undefined Project: /users/username/projects/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/app/package.json 2000 undefined Project: /users/username/projects/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/common/package.json 2000 undefined Project: /users/username/projects/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules/@types 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules/@types 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Type roots
@@ -183,6 +209,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	../node_modules/moduleX/index.d.ts
 	  Imported via "moduleX" from file 'appA.ts'
 	  Imported via "moduleX" from file '../common/moduleB.ts'
+	  File is CommonJS module because 'package.json' was not found
 	appA.ts
 	  Matched by default include pattern '**/*'
 	../common/moduleB.ts
@@ -277,12 +304,22 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/app/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/app/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/app/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/common/node_modules: *new*
   {"pollingInterval":500}
+/users/username/projects/common/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/moduleX/package.json: *new*
