@@ -1,0 +1,195 @@
+//// [tests/cases/compiler/classExpressionInClassInstantiationEmit1.ts] ////
+
+=== classExpressionInClassInstantiationEmit1.ts ===
+class A1<T> {
+>A1 : Symbol(A1, Decl(classExpressionInClassInstantiationEmit1.ts, 0, 0))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 0, 9))
+
+  child!: InstanceType<typeof A1.B<T>>;
+>child : Symbol(A1.child, Decl(classExpressionInClassInstantiationEmit1.ts, 0, 13))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>A1.B : Symbol(A1.B, Decl(classExpressionInClassInstantiationEmit1.ts, 1, 39))
+>A1 : Symbol(A1, Decl(classExpressionInClassInstantiationEmit1.ts, 0, 0))
+>B : Symbol(A1.B, Decl(classExpressionInClassInstantiationEmit1.ts, 1, 39))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 0, 9))
+
+  static B = class B<T> {
+>B : Symbol(A1.B, Decl(classExpressionInClassInstantiationEmit1.ts, 1, 39))
+>B : Symbol(B, Decl(classExpressionInClassInstantiationEmit1.ts, 2, 12))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 2, 21))
+
+    parent!: T;
+>parent : Symbol(B.parent, Decl(classExpressionInClassInstantiationEmit1.ts, 2, 25))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 2, 21))
+
+  };
+};
+
+const A2 = class<T> {
+>A2 : Symbol(A2, Decl(classExpressionInClassInstantiationEmit1.ts, 7, 5))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 7, 17))
+
+  child!: InstanceType<typeof A2.B<T>>;
+>child : Symbol(A2.child, Decl(classExpressionInClassInstantiationEmit1.ts, 7, 21))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>A2.B : Symbol(A2.B, Decl(classExpressionInClassInstantiationEmit1.ts, 8, 39))
+>A2 : Symbol(A2, Decl(classExpressionInClassInstantiationEmit1.ts, 7, 5))
+>B : Symbol(A2.B, Decl(classExpressionInClassInstantiationEmit1.ts, 8, 39))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 7, 17))
+
+  static B = class B<T> {
+>B : Symbol(A2.B, Decl(classExpressionInClassInstantiationEmit1.ts, 8, 39))
+>B : Symbol(B, Decl(classExpressionInClassInstantiationEmit1.ts, 9, 12))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 9, 21))
+
+    parent!: T;
+>parent : Symbol(B.parent, Decl(classExpressionInClassInstantiationEmit1.ts, 9, 25))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 9, 21))
+
+  };
+};
+
+const A3 = class A3<T> {
+>A3 : Symbol(A3, Decl(classExpressionInClassInstantiationEmit1.ts, 14, 5))
+>A3 : Symbol(A3, Decl(classExpressionInClassInstantiationEmit1.ts, 14, 10))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 14, 20))
+
+  child!: InstanceType<typeof A3.B<T>>;
+>child : Symbol(A3.child, Decl(classExpressionInClassInstantiationEmit1.ts, 14, 24))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>A3.B : Symbol(A3.B, Decl(classExpressionInClassInstantiationEmit1.ts, 15, 39))
+>A3 : Symbol(A3, Decl(classExpressionInClassInstantiationEmit1.ts, 14, 10))
+>B : Symbol(A3.B, Decl(classExpressionInClassInstantiationEmit1.ts, 15, 39))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 14, 20))
+
+  static B = class B<T> {
+>B : Symbol(A3.B, Decl(classExpressionInClassInstantiationEmit1.ts, 15, 39))
+>B : Symbol(B, Decl(classExpressionInClassInstantiationEmit1.ts, 16, 12))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 16, 21))
+
+    parent!: T;
+>parent : Symbol(B.parent, Decl(classExpressionInClassInstantiationEmit1.ts, 16, 25))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 16, 21))
+
+  };
+};
+
+const A4 = class C<T> {
+>A4 : Symbol(A4, Decl(classExpressionInClassInstantiationEmit1.ts, 21, 5))
+>C : Symbol(C, Decl(classExpressionInClassInstantiationEmit1.ts, 21, 10))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 21, 19))
+
+  child!: InstanceType<typeof C.B<T>>;
+>child : Symbol(C.child, Decl(classExpressionInClassInstantiationEmit1.ts, 21, 23))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>C.B : Symbol(C.B, Decl(classExpressionInClassInstantiationEmit1.ts, 22, 38))
+>C : Symbol(C, Decl(classExpressionInClassInstantiationEmit1.ts, 21, 10))
+>B : Symbol(C.B, Decl(classExpressionInClassInstantiationEmit1.ts, 22, 38))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 21, 19))
+
+  static B = class B<T> {
+>B : Symbol(C.B, Decl(classExpressionInClassInstantiationEmit1.ts, 22, 38))
+>B : Symbol(B, Decl(classExpressionInClassInstantiationEmit1.ts, 23, 12))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 23, 21))
+
+    parent!: T;
+>parent : Symbol(B.parent, Decl(classExpressionInClassInstantiationEmit1.ts, 23, 25))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 23, 21))
+
+  };
+};
+
+class A5<T> {
+>A5 : Symbol(A5, Decl(classExpressionInClassInstantiationEmit1.ts, 26, 2))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 28, 9))
+
+  child!: typeof A5.B<T>;
+>child : Symbol(A5.child, Decl(classExpressionInClassInstantiationEmit1.ts, 28, 13))
+>A5.B : Symbol(A5.B, Decl(classExpressionInClassInstantiationEmit1.ts, 29, 25))
+>A5 : Symbol(A5, Decl(classExpressionInClassInstantiationEmit1.ts, 26, 2))
+>B : Symbol(A5.B, Decl(classExpressionInClassInstantiationEmit1.ts, 29, 25))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 28, 9))
+
+  static B = class B<T> {
+>B : Symbol(A5.B, Decl(classExpressionInClassInstantiationEmit1.ts, 29, 25))
+>B : Symbol(B, Decl(classExpressionInClassInstantiationEmit1.ts, 30, 12))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 30, 21))
+
+    parent!: T;
+>parent : Symbol(B.parent, Decl(classExpressionInClassInstantiationEmit1.ts, 30, 25))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 30, 21))
+
+  };
+};
+
+const A6 = class<T> {
+>A6 : Symbol(A6, Decl(classExpressionInClassInstantiationEmit1.ts, 35, 5))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 35, 17))
+
+  child!: typeof A6.B<T>;
+>child : Symbol(A6.child, Decl(classExpressionInClassInstantiationEmit1.ts, 35, 21))
+>A6.B : Symbol(A6.B, Decl(classExpressionInClassInstantiationEmit1.ts, 36, 25))
+>A6 : Symbol(A6, Decl(classExpressionInClassInstantiationEmit1.ts, 35, 5))
+>B : Symbol(A6.B, Decl(classExpressionInClassInstantiationEmit1.ts, 36, 25))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 35, 17))
+
+  static B = class B<T> {
+>B : Symbol(A6.B, Decl(classExpressionInClassInstantiationEmit1.ts, 36, 25))
+>B : Symbol(B, Decl(classExpressionInClassInstantiationEmit1.ts, 37, 12))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 37, 21))
+
+    parent!: T;
+>parent : Symbol(B.parent, Decl(classExpressionInClassInstantiationEmit1.ts, 37, 25))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 37, 21))
+
+  };
+};
+
+const A7 = class A7<T> {
+>A7 : Symbol(A7, Decl(classExpressionInClassInstantiationEmit1.ts, 42, 5))
+>A7 : Symbol(A7, Decl(classExpressionInClassInstantiationEmit1.ts, 42, 10))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 42, 20))
+
+  child!: typeof A7.B<T>;
+>child : Symbol(A7.child, Decl(classExpressionInClassInstantiationEmit1.ts, 42, 24))
+>A7.B : Symbol(A7.B, Decl(classExpressionInClassInstantiationEmit1.ts, 43, 25))
+>A7 : Symbol(A7, Decl(classExpressionInClassInstantiationEmit1.ts, 42, 10))
+>B : Symbol(A7.B, Decl(classExpressionInClassInstantiationEmit1.ts, 43, 25))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 42, 20))
+
+  static B = class B<T> {
+>B : Symbol(A7.B, Decl(classExpressionInClassInstantiationEmit1.ts, 43, 25))
+>B : Symbol(B, Decl(classExpressionInClassInstantiationEmit1.ts, 44, 12))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 44, 21))
+
+    parent!: T;
+>parent : Symbol(B.parent, Decl(classExpressionInClassInstantiationEmit1.ts, 44, 25))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 44, 21))
+
+  };
+};
+
+const A8 = class C<T> {
+>A8 : Symbol(A8, Decl(classExpressionInClassInstantiationEmit1.ts, 49, 5))
+>C : Symbol(C, Decl(classExpressionInClassInstantiationEmit1.ts, 49, 10))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 49, 19))
+
+  child!: typeof C.B<T>;
+>child : Symbol(C.child, Decl(classExpressionInClassInstantiationEmit1.ts, 49, 23))
+>C.B : Symbol(C.B, Decl(classExpressionInClassInstantiationEmit1.ts, 50, 24))
+>C : Symbol(C, Decl(classExpressionInClassInstantiationEmit1.ts, 49, 10))
+>B : Symbol(C.B, Decl(classExpressionInClassInstantiationEmit1.ts, 50, 24))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 49, 19))
+
+  static B = class B<T> {
+>B : Symbol(C.B, Decl(classExpressionInClassInstantiationEmit1.ts, 50, 24))
+>B : Symbol(B, Decl(classExpressionInClassInstantiationEmit1.ts, 51, 12))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 51, 21))
+
+    parent!: T;
+>parent : Symbol(B.parent, Decl(classExpressionInClassInstantiationEmit1.ts, 51, 25))
+>T : Symbol(T, Decl(classExpressionInClassInstantiationEmit1.ts, 51, 21))
+
+  };
+};
+

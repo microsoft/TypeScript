@@ -6169,7 +6169,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             host = context.enclosingDeclaration,
             annotationType = getTypeFromTypeNode(context, existing, /*noMappedTypes*/ true),
         ) {
-            if (annotationType && typeNodeIsEquivalentToType(host, type, annotationType) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type)) {
+            if (annotationType && !context.notReusableNodes?.has(existing) && typeNodeIsEquivalentToType(host, type, annotationType) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type)) {
                 const result = tryReuseExistingTypeNodeHelper(context, existing);
                 if (result) {
                     return result;
@@ -6223,6 +6223,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeParameterNamesByText: undefined,
                 typeParameterNamesByTextNextNameCount: undefined,
                 mapper: undefined,
+                notReusableNodes: undefined,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -8621,7 +8622,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
                 cancellationToken.throwIfCancellationRequested();
             }
-            let hadError = false;
+            let erroredNode: Node | undefined;
+            let unreportedErrors: (() => void)[] | undefined;
             const { finalizeBoundary, startRecoveryScope } = createRecoveryBoundary();
             const transformed = visitNode(existing, visitExistingNodeTreeSymbols, isTypeNode);
             if (!finalizeBoundary()) {
@@ -8630,16 +8632,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             context.approximateLength += existing.end - existing.pos;
             return transformed;
 
+            function hasError() {
+                return !!erroredNode || !!unreportedErrors;
+            }
+
             function visitExistingNodeTreeSymbols(node: Node): Node | undefined {
                 // If there was an error in a sibling node bail early, the result will be discarded anyway
-                if (hadError) return node;
+                if (hasError()) return node;
                 const recover = startRecoveryScope();
                 const onExitNewScope = isNewScopeNode(node) ? onEnterNewScope(node) : undefined;
                 const result = visitExistingNodeTreeSymbolsWorker(node);
                 onExitNewScope?.();
 
                 // If there was an error, maybe we can recover by serializing the actual type of the node
-                if (hadError) {
+                if (hasError()) {
+                    if (erroredNode) {
+                        context.notReusableNodes ??= new Set();
+                        context.notReusableNodes.add(erroredNode);
+
+                        while (erroredNode.parent && erroredNode.parent !== existing) {
+                            context.notReusableNodes.add(erroredNode);
+                            erroredNode = erroredNode.parent;
+                        }
+                    }
+
                     if (isTypeNode(node) && !isTypePredicateNode(node)) {
                         recover();
                         return serializeExistingTypeNode(context, node);
@@ -8657,7 +8673,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function createRecoveryBoundary() {
                 let trackedSymbols: TrackedSymbol[];
-                let unreportedErrors: (() => void)[];
+                unreportedErrors = undefined;
                 const oldTracker = context.tracker;
                 const oldTrackedSymbols = context.trackedSymbols;
                 context.trackedSymbols = undefined;
@@ -8692,7 +8708,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 };
 
                 function markError(unreportedError: () => void) {
-                    hadError = true;
                     (unreportedErrors ??= []).push(unreportedError);
                 }
 
@@ -8700,7 +8715,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const trackedSymbolsTop = trackedSymbols?.length ?? 0;
                     const unreportedErrorsTop = unreportedErrors?.length ?? 0;
                     return () => {
-                        hadError = false;
+                        erroredNode = undefined;
                         // Reset the tracked symbols to before the error
                         if (trackedSymbols) {
                             trackedSymbols.length = trackedSymbolsTop;
@@ -8717,7 +8732,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.encounteredError = oldEncounteredError;
 
                     unreportedErrors?.forEach(fn => fn());
-                    if (hadError) {
+                    if (hasError()) {
                         return false;
                     }
                     trackedSymbols?.forEach(
@@ -8900,7 +8915,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (canReuseTypeNode(context, node)) {
                         return node;
                     }
-                    hadError = true;
+                    erroredNode = node;
                     return node;
                 }
                 if (isTypeParameterDeclaration(node)) {
@@ -8916,7 +8931,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isIndexedAccessTypeNode(node)) {
                     const result = tryVisitIndexedAccess(node);
                     if (!result) {
-                        hadError = true;
+                        erroredNode = node;
                         return node;
                     }
                     return result;
@@ -8927,7 +8942,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (result) {
                         return result;
                     }
-                    hadError = true;
+                    erroredNode = node;
                     return node;
                 }
                 if (isLiteralImportTypeNode(node)) {
@@ -8980,7 +8995,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isTypeQueryNode(node)) {
                     const result = tryVisitTypeQuery(node);
                     if (!result) {
-                        hadError = true;
+                        erroredNode = node;
                         return node;
                     }
                     return result;
@@ -9023,10 +9038,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let parameterName;
                     if (isIdentifier(node.parameterName)) {
                         const { node: result, introducesError } = trackExistingEntityName(node.parameterName, context);
-                        // Should not usually happen the only case is when a type predicate comes from a JSDoc type annotation with it's own parameter symbol definition.
-                        // /** @type {(v: unknown) => v is undefined} */
-                        // const isUndef = v => v === undefined;
-                        hadError = hadError || introducesError;
+                        if (introducesError) {
+                            // Should not usually happen the only case when erroredNode might already be set is when a type predicate comes from a JSDoc type annotation with it's own parameter symbol definition.
+                            // /** @type {(v: unknown) => v is undefined} */
+                            // const isUndef = v => v === undefined;
+                            erroredNode ??= node.parameterName;
+                        }
                         parameterName = result;
                     }
                     else {
@@ -9067,14 +9084,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isTypeOperatorNode(node)) {
                     if (node.operator === SyntaxKind.UniqueKeyword && node.type.kind === SyntaxKind.SymbolKeyword) {
                         if (!canReuseTypeNode(context, node)) {
-                            hadError = true;
+                            erroredNode = node;
                             return node;
                         }
                     }
                     else if (node.operator === SyntaxKind.KeyOfKeyword) {
                         const result = tryVisitKeyOf(node);
                         if (!result) {
-                            hadError = true;
+                            erroredNode = node;
                             return node;
                         }
                         return result;
@@ -52899,6 +52916,7 @@ interface NodeBuilderContext {
     reverseMappedStack: ReverseMappedSymbol[] | undefined;
     bundled: boolean;
     mapper: TypeMapper | undefined;
+    notReusableNodes: Set<Node> | undefined;
 }
 
 class SymbolTrackerImpl implements SymbolTracker {

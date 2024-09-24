@@ -1,0 +1,255 @@
+//// [tests/cases/compiler/classExpressionInClassInstantiationEmit1.ts] ////
+
+=== classExpressionInClassInstantiationEmit1.ts ===
+class A1<T> {
+>A1 : A1<T>
+>   : ^^^^^
+
+  child!: InstanceType<typeof A1.B<T>>;
+>child : B<T>
+>      : ^^^^
+>A1.B : typeof B
+>     : ^^^^^^^^
+>A1 : typeof A1
+>   : ^^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+  static B = class B<T> {
+>B : typeof B
+>  : ^^^^^^^^
+>class B<T> {    parent!: T;  } : typeof B
+>                               : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+    parent!: T;
+>parent : T
+>       : ^
+
+  };
+};
+
+const A2 = class<T> {
+>A2 : typeof A2
+>   : ^^^^^^^^^
+>class<T> {  child!: InstanceType<typeof A2.B<T>>;  static B = class B<T> {    parent!: T;  };} : typeof A2
+>                                                                                               : ^^^^^^^^^
+
+  child!: InstanceType<typeof A2.B<T>>;
+>child : B<T>
+>      : ^^^^
+>A2.B : typeof B
+>     : ^^^^^^^^
+>A2 : typeof A2
+>   : ^^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+  static B = class B<T> {
+>B : typeof B
+>  : ^^^^^^^^
+>class B<T> {    parent!: T;  } : typeof B
+>                               : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+    parent!: T;
+>parent : T
+>       : ^
+
+  };
+};
+
+const A3 = class A3<T> {
+>A3 : typeof A3
+>   : ^^^^^^^^^
+>class A3<T> {  child!: InstanceType<typeof A3.B<T>>;  static B = class B<T> {    parent!: T;  };} : typeof A3
+>                                                                                                  : ^^^^^^^^^
+>A3 : typeof A3
+>   : ^^^^^^^^^
+
+  child!: InstanceType<typeof A3.B<T>>;
+>child : B<T>
+>      : ^^^^
+>A3.B : typeof B
+>     : ^^^^^^^^
+>A3 : typeof A3
+>   : ^^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+  static B = class B<T> {
+>B : typeof B
+>  : ^^^^^^^^
+>class B<T> {    parent!: T;  } : typeof B
+>                               : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+    parent!: T;
+>parent : T
+>       : ^
+
+  };
+};
+
+const A4 = class C<T> {
+>A4 : typeof C
+>   : ^^^^^^^^
+>class C<T> {  child!: InstanceType<typeof C.B<T>>;  static B = class B<T> {    parent!: T;  };} : typeof C
+>                                                                                                : ^^^^^^^^
+>C : typeof C
+>  : ^^^^^^^^
+
+  child!: InstanceType<typeof C.B<T>>;
+>child : B<T>
+>      : ^^^^
+>C.B : typeof B
+>    : ^^^^^^^^
+>C : typeof C
+>  : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+  static B = class B<T> {
+>B : typeof B
+>  : ^^^^^^^^
+>class B<T> {    parent!: T;  } : typeof B
+>                               : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+    parent!: T;
+>parent : T
+>       : ^
+
+  };
+};
+
+class A5<T> {
+>A5 : A5<T>
+>   : ^^^^^
+
+  child!: typeof A5.B<T>;
+>child : typeof A5.B<T>
+>      :               
+>A5.B : typeof B
+>     : ^^^^^^^^
+>A5 : typeof A5
+>   : ^^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+  static B = class B<T> {
+>B : typeof B
+>  : ^^^^^^^^
+>class B<T> {    parent!: T;  } : typeof B
+>                               : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+    parent!: T;
+>parent : T
+>       : ^
+
+  };
+};
+
+const A6 = class<T> {
+>A6 : typeof A6
+>   : ^^^^^^^^^
+>class<T> {  child!: typeof A6.B<T>;  static B = class B<T> {    parent!: T;  };} : typeof A6
+>                                                                                 : ^^^^^^^^^
+
+  child!: typeof A6.B<T>;
+>child : typeof A6.B<T>
+>      :               
+>A6.B : typeof B
+>     : ^^^^^^^^
+>A6 : typeof A6
+>   : ^^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+  static B = class B<T> {
+>B : typeof B
+>  : ^^^^^^^^
+>class B<T> {    parent!: T;  } : typeof B
+>                               : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+    parent!: T;
+>parent : T
+>       : ^
+
+  };
+};
+
+const A7 = class A7<T> {
+>A7 : typeof A7
+>   : ^^^^^^^^^
+>class A7<T> {  child!: typeof A7.B<T>;  static B = class B<T> {    parent!: T;  };} : typeof A7
+>                                                                                    : ^^^^^^^^^
+>A7 : typeof A7
+>   : ^^^^^^^^^
+
+  child!: typeof A7.B<T>;
+>child : { new (): B<T>; prototype: A7<any>.B<any>; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>A7.B : typeof B
+>     : ^^^^^^^^
+>A7 : typeof A7
+>   : ^^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+  static B = class B<T> {
+>B : typeof B
+>  : ^^^^^^^^
+>class B<T> {    parent!: T;  } : typeof B
+>                               : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+    parent!: T;
+>parent : T
+>       : ^
+
+  };
+};
+
+const A8 = class C<T> {
+>A8 : typeof C
+>   : ^^^^^^^^
+>class C<T> {  child!: typeof C.B<T>;  static B = class B<T> {    parent!: T;  };} : typeof C
+>                                                                                  : ^^^^^^^^
+>C : typeof C
+>  : ^^^^^^^^
+
+  child!: typeof C.B<T>;
+>child : { new (): B<T>; prototype: C<any>.B<any>; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>C.B : typeof B
+>    : ^^^^^^^^
+>C : typeof C
+>  : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+  static B = class B<T> {
+>B : typeof B
+>  : ^^^^^^^^
+>class B<T> {    parent!: T;  } : typeof B
+>                               : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+    parent!: T;
+>parent : T
+>       : ^
+
+  };
+};
+
