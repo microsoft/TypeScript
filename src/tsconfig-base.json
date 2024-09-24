@@ -15,6 +15,7 @@
         "sourceMap": true,
         "composite": true,
         "emitDeclarationOnly": true,
+        "isolatedDeclarations": true,
 
         "strict": true,
         "strictBindCallApply": false,

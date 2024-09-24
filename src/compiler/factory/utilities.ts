@@ -40,6 +40,7 @@ import {
     Expression,
     ExpressionStatement,
     externalHelpersModuleNameText,
+    filter,
     first,
     firstOrUndefined,
     ForInitializer,
@@ -131,7 +132,6 @@ import {
     MultiplicativeOperator,
     MultiplicativeOperatorOrHigher,
     Mutable,
-    NamedImportBindings,
     Node,
     NodeArray,
     NodeFactory,
@@ -173,13 +173,14 @@ import {
     Token,
     TransformFlags,
     TypeNode,
+    UnscopedEmitHelper,
     WrappedExpression,
 } from "../_namespaces/ts.js";
 
 // Compound nodes
 
 /** @internal */
-export function createEmptyExports(factory: NodeFactory) {
+export function createEmptyExports(factory: NodeFactory): ExportDeclaration {
     return factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
 }
 
@@ -512,7 +513,13 @@ export function createExpressionForObjectLiteralElementLike(factory: NodeFactory
  *
  * @internal
  */
-export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFactory, node: PrefixUnaryExpression | PostfixUnaryExpression, expression: Expression, recordTempVariable: (node: Identifier) => void, resultVariable: Identifier | undefined) {
+export function expandPreOrPostfixIncrementOrDecrementExpression(
+    factory: NodeFactory,
+    node: PrefixUnaryExpression | PostfixUnaryExpression,
+    expression: Expression,
+    recordTempVariable: (node: Identifier) => void,
+    resultVariable: Identifier | undefined,
+): Expression {
     const operator = node.operator;
     Debug.assert(operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken, "Expected 'node' to be a pre- or post-increment or pre- or post-decrement expression");
 
@@ -546,7 +553,7 @@ export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFa
  *
  * @internal
  */
-export function isInternalName(node: Identifier) {
+export function isInternalName(node: Identifier): boolean {
     return (getEmitFlags(node) & EmitFlags.InternalName) !== 0;
 }
 
@@ -555,7 +562,7 @@ export function isInternalName(node: Identifier) {
  *
  * @internal
  */
-export function isLocalName(node: Identifier) {
+export function isLocalName(node: Identifier): boolean {
     return (getEmitFlags(node) & EmitFlags.LocalName) !== 0;
 }
 
@@ -565,7 +572,7 @@ export function isLocalName(node: Identifier) {
  *
  * @internal
  */
-export function isExportName(node: Identifier) {
+export function isExportName(node: Identifier): boolean {
     return (getEmitFlags(node) & EmitFlags.ExportName) !== 0;
 }
 
@@ -589,7 +596,7 @@ export function findUseStrictPrologue(statements: readonly Statement[]): Stateme
 }
 
 /** @internal */
-export function startsWithUseStrict(statements: readonly Statement[]) {
+export function startsWithUseStrict(statements: readonly Statement[]): boolean {
     const firstStatement = firstOrUndefined(statements);
     return firstStatement !== undefined
         && isPrologueDirective(firstStatement)
@@ -621,7 +628,7 @@ export function getJSDocTypeAssertionType(node: JSDocTypeAssertion): TypeNode {
 }
 
 /** @internal */
-export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All): node is OuterExpression {
+export function isOuterExpression(node: Node, kinds: OuterExpressionKinds = OuterExpressionKinds.All): node is OuterExpression {
     switch (node.kind) {
         case SyntaxKind.ParenthesizedExpression:
             if (kinds & OuterExpressionKinds.ExcludeJSDocTypeAssertion && isJSDocTypeAssertion(node)) {
@@ -657,7 +664,7 @@ export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.Al
 }
 
 /** @internal */
-export function walkUpOuterExpressions(node: Expression, kinds = OuterExpressionKinds.All): Node {
+export function walkUpOuterExpressions(node: Expression, kinds: OuterExpressionKinds = OuterExpressionKinds.All): Node {
     let parent = node.parent;
     while (isOuterExpression(parent, kinds)) {
         parent = parent.parent;
@@ -672,42 +679,45 @@ export function startOnNewLine<T extends Node>(node: T): T {
 }
 
 /** @internal */
-export function getExternalHelpersModuleName(node: SourceFile) {
+export function getExternalHelpersModuleName(node: SourceFile): Identifier | undefined {
     const parseNode = getOriginalNode(node, isSourceFile);
     const emitNode = parseNode && parseNode.emitNode;
     return emitNode && emitNode.externalHelpersModuleName;
 }
 
 /** @internal */
-export function hasRecordedExternalHelpers(sourceFile: SourceFile) {
+export function hasRecordedExternalHelpers(sourceFile: SourceFile): boolean {
     const parseNode = getOriginalNode(sourceFile, isSourceFile);
     const emitNode = parseNode && parseNode.emitNode;
     return !!emitNode && (!!emitNode.externalHelpersModuleName || !!emitNode.externalHelpers);
 }
 
 /** @internal */
-export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: NodeFactory, helperFactory: EmitHelperFactory, sourceFile: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean) {
+export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: NodeFactory, helperFactory: EmitHelperFactory, sourceFile: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean): ImportDeclaration | ImportEqualsDeclaration | undefined {
     if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
-        let namedBindings: NamedImportBindings | undefined;
         const moduleKind = getEmitModuleKind(compilerOptions);
-        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || getImpliedNodeFormatForEmitWorker(sourceFile, compilerOptions) === ModuleKind.ESNext) {
-            // use named imports
-            const helpers = getEmitHelpers(sourceFile);
+        const impliedModuleKind = getImpliedNodeFormatForEmitWorker(sourceFile, compilerOptions);
+        const helpers = getImportedHelpers(sourceFile);
+        if (
+            (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) ||
+            impliedModuleKind === ModuleKind.ESNext ||
+            impliedModuleKind === undefined && moduleKind === ModuleKind.Preserve
+        ) {
+            // When we emit as an ES module, generate an `import` declaration that uses named imports for helpers.
+            // If we cannot determine the implied module kind under `module: preserve` we assume ESM.
             if (helpers) {
                 const helperNames: string[] = [];
                 for (const helper of helpers) {
-                    if (!helper.scoped) {
-                        const importName = helper.importName;
-                        if (importName) {
-                            pushIfUnique(helperNames, importName);
-                        }
+                    const importName = helper.importName;
+                    if (importName) {
+                        pushIfUnique(helperNames, importName);
                     }
                 }
                 if (some(helperNames)) {
                     helperNames.sort(compareStringsCaseSensitive);
                     // Alias the imports if the names are used somewhere in the file.
                     // NOTE: We don't need to care about global import collisions as this is a module.
-                    namedBindings = nodeFactory.createNamedImports(
+                    const namedBindings = nodeFactory.createNamedImports(
                         map(helperNames, name =>
                             isFileLevelUniqueName(sourceFile, name)
                                 ? nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, nodeFactory.createIdentifier(name))
@@ -716,55 +726,53 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
                     const parseNode = getOriginalNode(sourceFile, isSourceFile);
                     const emitNode = getOrCreateEmitNode(parseNode);
                     emitNode.externalHelpers = true;
+
+                    const externalHelpersImportDeclaration = nodeFactory.createImportDeclaration(
+                        /*modifiers*/ undefined,
+                        nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
+                        nodeFactory.createStringLiteral(externalHelpersModuleNameText),
+                        /*attributes*/ undefined,
+                    );
+                    addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);
+                    return externalHelpersImportDeclaration;
                 }
             }
         }
         else {
-            // use a namespace import
-            const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(nodeFactory, sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar || hasImportDefault);
+            // When we emit to a non-ES module, generate a synthetic `import tslib = require("tslib")` to be further transformed.
+            const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(nodeFactory, sourceFile, compilerOptions, helpers, hasExportStarsToExportValues, hasImportStar || hasImportDefault);
             if (externalHelpersModuleName) {
-                namedBindings = nodeFactory.createNamespaceImport(externalHelpersModuleName);
+                const externalHelpersImportDeclaration = nodeFactory.createImportEqualsDeclaration(
+                    /*modifiers*/ undefined,
+                    /*isTypeOnly*/ false,
+                    externalHelpersModuleName,
+                    nodeFactory.createExternalModuleReference(nodeFactory.createStringLiteral(externalHelpersModuleNameText)),
+                );
+                addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);
+                return externalHelpersImportDeclaration;
             }
-        }
-        if (namedBindings) {
-            const externalHelpersImportDeclaration = nodeFactory.createImportDeclaration(
-                /*modifiers*/ undefined,
-                nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
-                nodeFactory.createStringLiteral(externalHelpersModuleNameText),
-                /*attributes*/ undefined,
-            );
-            addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);
-            return externalHelpersImportDeclaration;
         }
     }
 }
 
-function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactory, node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
-    if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
-        const externalHelpersModuleName = getExternalHelpersModuleName(node);
-        if (externalHelpersModuleName) {
-            return externalHelpersModuleName;
-        }
+function getImportedHelpers(sourceFile: SourceFile) {
+    return filter(getEmitHelpers(sourceFile), helper => !helper.scoped);
+}
 
-        let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
+function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactory, node: SourceFile, compilerOptions: CompilerOptions, helpers: UnscopedEmitHelper[] | undefined, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
+    const externalHelpersModuleName = getExternalHelpersModuleName(node);
+    if (externalHelpersModuleName) {
+        return externalHelpersModuleName;
+    }
+
+    const create = some(helpers)
+        || (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
             && getEmitModuleFormatOfFileWorker(node, compilerOptions) < ModuleKind.System;
-        if (!create) {
-            const helpers = getEmitHelpers(node);
-            if (helpers) {
-                for (const helper of helpers) {
-                    if (!helper.scoped) {
-                        create = true;
-                        break;
-                    }
-                }
-            }
-        }
 
-        if (create) {
-            const parseNode = getOriginalNode(node, isSourceFile);
-            const emitNode = getOrCreateEmitNode(parseNode);
-            return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = factory.createUniqueName(externalHelpersModuleNameText));
-        }
+    if (create) {
+        const parseNode = getOriginalNode(node, isSourceFile);
+        const emitNode = getOrCreateEmitNode(parseNode);
+        return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = factory.createUniqueName(externalHelpersModuleNameText));
     }
 }
 
@@ -801,7 +809,7 @@ export function getLocalNameForExternalImport(factory: NodeFactory, node: Import
  *
  * @internal
  */
-export function getExternalModuleNameLiteral(factory: NodeFactory, importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
+export function getExternalModuleNameLiteral(factory: NodeFactory, importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions): StringLiteral | undefined {
     const moduleName = getExternalModuleName(importNode);
     if (moduleName && isStringLiteral(moduleName)) {
         return tryGetModuleNameFromDeclaration(importNode, host, factory, resolver, compilerOptions)
@@ -1079,7 +1087,7 @@ export function getElementsOfBindingOrAssignmentPattern(name: BindingOrAssignmen
 }
 
 /** @internal */
-export function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) {
+export function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined): Identifier | undefined {
     if (fullName) {
         let rightNode = fullName;
         while (true) {
@@ -1505,7 +1513,7 @@ export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArra
  *
  * @internal
  */
-export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
+export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier): Node | GeneratedIdentifier | GeneratedPrivateIdentifier {
     const autoGenerate = name.emitNode.autoGenerate;
     if (autoGenerate.flags & GeneratedIdentifierFlags.Node) {
         const autoGenerateId = autoGenerate.id;
@@ -1598,7 +1606,7 @@ export function formatGeneratedName(privateName: boolean, prefix: string | Gener
  *
  * @internal
  */
-export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, initializer: Expression | undefined) {
+export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, initializer: Expression | undefined): PropertyDeclaration {
     return factory.updatePropertyDeclaration(
         node,
         modifiers,
@@ -1712,7 +1720,7 @@ function flattenCommaListWorker(node: Expression, expressions: Expression[]) {
  *
  * @internal
  */
-export function flattenCommaList(node: Expression) {
+export function flattenCommaList(node: Expression): Expression[] {
     const expressions: Expression[] = [];
     flattenCommaListWorker(node, expressions);
     return expressions;

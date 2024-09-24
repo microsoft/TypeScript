@@ -1,24 +1,24 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /a/package.json
+// @Filename: /home/src/workspaces/project/a/package.json
 //// { "dependencies": { "b": "*" } }
 
-// @Filename: /a/tsconfig.json
+// @Filename: /home/src/workspaces/project/a/tsconfig.json
 //// { "compilerOptions": { "module": "commonjs", "target": "esnext" }, "references": [{ "path": "../b" }] }
 
-// @Filename: /a/index.ts
+// @Filename: /home/src/workspaces/project/a/index.ts
 //// new Shape/**/
 
-// @Filename: /b/package.json
+// @Filename: /home/src/workspaces/project/b/package.json
 //// { "types": "out/index.d.ts" }
 
-// @Filename: /b/tsconfig.json
+// @Filename: /home/src/workspaces/project/b/tsconfig.json
 //// { "compilerOptions": { "outDir": "out", "composite": true } }
 
-// @Filename: /b/index.ts
+// @Filename: /home/src/workspaces/project/b/index.ts
 //// export class Shape {}
 
-// @link: /b -> /a/node_modules/b
+// @link: /home/src/workspaces/project/b -> /home/src/workspaces/project/a/node_modules/b
 
 goTo.marker();
 verify.importFixAtPosition([`import { Shape } from "b";\r\n\r\nnew Shape`]);

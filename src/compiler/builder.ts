@@ -8,6 +8,7 @@ import {
     BuilderProgramHost,
     BuilderState,
     BuildInfo,
+    BuildInfoFileVersionMap,
     CancellationToken,
     CommandLineOption,
     compareStringsCaseSensitive,
@@ -277,7 +278,7 @@ function toBuilderProgramStateWithDefinedProgram(state: ReusableBuilderProgramSt
  *
  * @internal
  */
-export function getBuilderFileEmit(options: CompilerOptions) {
+export function getBuilderFileEmit(options: CompilerOptions): BuilderFileEmit {
     let result = BuilderFileEmit.Js;
     if (options.sourceMap) result = result | BuilderFileEmit.JsMap;
     if (options.inlineSourceMap) result = result | BuilderFileEmit.JsInlineMap;
@@ -733,7 +734,7 @@ export function getPendingEmitKindWithSeen(
     seenOldOptionsOrEmitKind: CompilerOptions | BuilderFileEmit | undefined,
     emitOnlyDtsFiles: boolean | undefined,
     isForDtsErrors: boolean,
-) {
+): BuilderFileEmit {
     let pendingKind = getPendingEmitKind(optionsOrEmitKind, seenOldOptionsOrEmitKind);
     if (emitOnlyDtsFiles) pendingKind = pendingKind & BuilderFileEmit.AllDts;
     if (isForDtsErrors) pendingKind = pendingKind & BuilderFileEmit.DtsErrors;
@@ -1623,7 +1624,7 @@ export function computeSignatureWithDiagnostics(
     text: string,
     host: HostForComputeHash,
     data: WriteFileCallbackData | undefined,
-) {
+): string {
     text = getTextHandlingSourceMapForSignature(text, data);
     let sourceFileDirectory: string | undefined;
     if (data?.diagnostics?.length) {
@@ -2395,7 +2396,7 @@ export function getBuildInfoFileVersionMap(
     program: IncrementalBuildInfo,
     buildInfoPath: string,
     host: Pick<ReadBuildProgramHost, "useCaseSensitiveFileNames" | "getCurrentDirectory">,
-) {
+): BuildInfoFileVersionMap {
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     const fileInfos = new Map<Path, string>();
@@ -2440,7 +2441,7 @@ export function getNonIncrementalBuildInfoRoots(
     buildInfo: BuildInfo,
     buildInfoPath: string,
     host: Pick<ReadBuildProgramHost, "useCaseSensitiveFileNames" | "getCurrentDirectory">,
-) {
+): Path[] | undefined {
     if (!isNonIncrementalBuildInfo(buildInfo)) return undefined;
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());

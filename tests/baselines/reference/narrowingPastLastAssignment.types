@@ -731,3 +731,35 @@ function f12() {
 >  : ^^^^^^
 }
 
+function f13() {
+>f13 : () => () => void
+>    : ^^^^^^^^^^^^^^^^
+
+    // Test for captured 'var' declaration (as opposed to parameters, let, const).
+    var foo: string | undefined;
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+    foo = '';
+>foo = '' : ""
+>         : ^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+
+    return () => {
+>() => {        foo.toLocaleLowerCase();    } : () => void
+>                                             : ^^^^^^^^^^
+
+        foo.toLocaleLowerCase();
+>foo.toLocaleLowerCase() : string
+>                        : ^^^^^^
+>foo.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                      : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                  : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+    }
+}
