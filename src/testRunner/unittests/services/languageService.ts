@@ -3,12 +3,12 @@ import { expect } from "chai";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
-    createServerHost,
     File,
     libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: services:: languageService", () => {
+describe("unittests:: services:: languageService::", () => {
     const files: { [index: string]: string; } = {
         "foo.ts": `import Vue from "./vue";
 import Component from "./vue-class-component";
@@ -183,7 +183,7 @@ export function Component(x: Config): any;`,
                 path: `/user/username/projects/myproject/projects/project2/class2.ts`,
                 content: `class class2 {}`,
             };
-            const system = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
+            const system = TestServerHost.createServerHost([config1, class1, class1Dts, config2, class2]);
             const result = ts.getParsedCommandLineOfConfigFile(`/user/username/projects/myproject/projects/project2/tsconfig.json`, /*optionsToExtend*/ undefined, {
                 useCaseSensitiveFileNames: true,
                 fileExists: path => system.fileExists(path),

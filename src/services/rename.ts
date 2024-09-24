@@ -16,7 +16,6 @@ import {
     getTextOfIdentifierOrLiteral,
     getTextOfNode,
     getTouchingPropertyName,
-    ImportSpecifier,
     isExternalModuleNameRelative,
     isIdentifier,
     isImportOrExportSpecifierName,
@@ -136,7 +135,7 @@ function wouldRenameInOtherNodeModules(
 ): DiagnosticMessage | undefined {
     if (!preferences.providePrefixAndSuffixTextForRename && symbol.flags & SymbolFlags.Alias) {
         const importSpecifier = symbol.declarations && find(symbol.declarations, decl => isImportSpecifier(decl));
-        if (importSpecifier && !(importSpecifier as ImportSpecifier).propertyName) {
+        if (importSpecifier && !importSpecifier.propertyName) {
             symbol = checker.getAliasedSymbol(symbol);
         }
     }

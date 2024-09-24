@@ -105,11 +105,11 @@ wm.get(s);
 >wm.get(s) : boolean | undefined
 >          : ^^^^^^^^^^^^^^^^^^^
 >wm.get : (key: symbol) => boolean | undefined
->       : ^   ^^^^^^^^^^^^^^^^^^^^            
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >wm : WeakMap<symbol, boolean>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >get : (key: symbol) => boolean | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^            
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : symbol
 >  : ^^^^^^
 
@@ -139,11 +139,11 @@ wr.deref();
 >wr.deref() : symbol | undefined
 >           : ^^^^^^^^^^^^^^^^^^
 >wr.deref : () => symbol | undefined
->         : ^^^^^^^^^^^^            
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >wr : WeakRef<symbol>
 >   : ^^^^^^^^^^^^^^^
 >deref : () => symbol | undefined
->      : ^^^^^^^^^^^^            
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 const f = new FinalizationRegistry(() => {});
 >f : FinalizationRegistry<unknown>

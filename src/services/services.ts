@@ -457,9 +457,9 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
         return this.getChildren(sourceFile)[index];
     }
 
-    public getChildren(sourceFile?: SourceFileLike): readonly Node[] {
+    public getChildren(sourceFile: SourceFileLike = getSourceFileOfNode(this)): readonly Node[] {
         this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-        return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
+        return getNodeChildren(this, sourceFile) ?? setNodeChildren(this, sourceFile, createChildren(this, sourceFile));
     }
 
     public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
@@ -558,7 +558,7 @@ function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
         pos = node.end;
     }
     addSyntheticNodes(children, pos, nodes.end, parent);
-    setNodeChildren(list, children);
+    list._children = children;
     return list;
 }
 
@@ -1363,7 +1363,7 @@ function isCamelCase(s: string) {
     return !s.length || s.charAt(0) === s.charAt(0).toLowerCase();
 }
 
-export function displayPartsToString(displayParts: SymbolDisplayPart[] | undefined) {
+export function displayPartsToString(displayParts: SymbolDisplayPart[] | undefined): string {
     if (displayParts) {
         return map(displayParts, displayPart => displayPart.text).join("");
     }
@@ -1379,7 +1379,7 @@ export function getDefaultCompilerOptions(): CompilerOptions {
     };
 }
 
-export function getSupportedCodeFixes() {
+export function getSupportedCodeFixes(): readonly string[] {
     return codefix.getSupportedErrorCodes();
 }
 
@@ -1763,6 +1763,7 @@ export function createLanguageService(
             useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             getParsedCommandLine,
             jsDocParsingMode: host.jsDocParsingMode,
+            getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
         };
 
         const originalGetSourceFile = compilerHost.getSourceFile;
@@ -1866,15 +1867,20 @@ export function createLanguageService(
                 host.onReleaseParsedCommandLine?.(configFileName, oldResolvedRef, oldOptions);
             }
             else if (oldResolvedRef) {
-                onReleaseOldSourceFile(oldResolvedRef.sourceFile, oldOptions);
+                releaseOldSourceFile(oldResolvedRef.sourceFile, oldOptions);
             }
         }
 
         // Release any files we have acquired in the old program but are
         // not part of the new program.
-        function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
+        function releaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
             const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
             documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
+        }
+
+        function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean, newSourceFileByResolvedPath: SourceFile | undefined) {
+            releaseOldSourceFile(oldSourceFile, oldOptions);
+            host.onReleaseOldSourceFile?.(oldSourceFile, oldOptions, hasSourceFileByPath, newSourceFileByResolvedPath);
         }
 
         function getOrCreateSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
@@ -2669,8 +2675,9 @@ export function createLanguageService(
         synchronizeHostData();
         Debug.assert(args.type === "file");
         const sourceFile = getValidSourceFile(args.fileName);
-        const formatContext = formatting.getFormatContext(formatOptions, host);
+        if (containsParseError(sourceFile)) return emptyArray;
 
+        const formatContext = formatting.getFormatContext(formatOptions, host);
         const mode = args.mode ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : OrganizeImportsMode.All);
         return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, mode);
     }
@@ -3160,7 +3167,7 @@ export function createLanguageService(
             //
             // The following three regexps are used to match the start of the text up to the TODO
             // comment portion.
-            const singleLineCommentStart = /(?:\/\/+\s*)/.source;
+            const singleLineCommentStart = /(?:\/{2,}\s*)/.source;
             const multiLineCommentStart = /(?:\/\*+\s*)/.source;
             const anyNumberOfSpacesAndAsterisksAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
 

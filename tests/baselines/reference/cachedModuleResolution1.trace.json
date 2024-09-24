@@ -1,4 +1,8 @@
 [
+    "File '/a/b/node_modules/package.json' does not exist.",
+    "File '/a/b/package.json' does not exist.",
+    "File '/a/package.json' does not exist.",
+    "File '/package.json' does not exist.",
     "======== Resolving module 'foo' from '/a/b/c/d/e/app.ts'. ========",
     "Explicitly specified module resolution kind: 'Node10'.",
     "Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.",

@@ -53,8 +53,8 @@ try {
 >  : ^^^^^^
 >1 : 1
 >  : ^
->{ } : { e?: number | undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ } : {}
+>    : ^^
 
 } catch {
     console.error("error");

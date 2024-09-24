@@ -33,7 +33,6 @@ export const obj = {
 >this as {} : {}
 >           : ^^
 >this : any
->     : ^^^
 
         return dis.a != null && dis.b != null && dis.c != null;
 >dis.a != null && dis.b != null && dis.c != null : boolean

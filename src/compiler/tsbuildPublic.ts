@@ -4,6 +4,7 @@ import {
     assertType,
     BuilderProgram,
     BuildInfo,
+    BuildInfoFileVersionMap,
     CancellationToken,
     canJsonReportNoInputFiles,
     changeCompilerHostLikeToUseCache,
@@ -66,7 +67,7 @@ import {
     getNonIncrementalBuildInfoRoots,
     getNormalizedAbsolutePath,
     getParsedCommandLineOfConfigFile,
-    getPendingEmitKind,
+    getPendingEmitKindWithSeen,
     getSourceFileVersionAsHashFromText,
     getTsBuildInfoEmitOutputFilePath,
     getWatchErrorSummaryDiagnosticMessage,
@@ -79,6 +80,7 @@ import {
     isIncrementalBuildInfo,
     isIncrementalCompilation,
     isPackageJsonInfo,
+    isSolutionConfig,
     loadWithModeAwareCache,
     maybeBind,
     missingFileModifiedTime,
@@ -135,6 +137,7 @@ export interface BuildOptions {
     dry?: boolean;
     force?: boolean;
     verbose?: boolean;
+    stopBuildOnErrors?: boolean;
 
     /** @internal */ clean?: boolean;
     /** @internal */ watch?: boolean;
@@ -198,10 +201,8 @@ function getOrCreateValueMapFromConfigFileMap<K extends string, V>(configFileMap
 
 /**
  * Helper to use now method instead of current date for testing purposes to get consistent baselines
- *
- * @internal
  */
-export function getCurrentTime(host: { now?(): Date; }) {
+function getCurrentTime(host: { now?(): Date; }) {
     return host.now ? host.now() : new Date();
 }
 
@@ -302,13 +303,25 @@ function createSolutionBuilderHostBase<T extends BuilderProgram>(system: System,
     return host;
 }
 
-export function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary) {
+export function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(
+    system: System = sys,
+    createProgram?: CreateProgram<T>,
+    reportDiagnostic?: DiagnosticReporter,
+    reportSolutionBuilderStatus?: DiagnosticReporter,
+    reportErrorSummary?: ReportEmitErrorSummary,
+): SolutionBuilderHost<T> {
     const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost<T>;
     host.reportErrorSummary = reportErrorSummary;
     return host;
 }
 
-export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
+export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(
+    system: System = sys,
+    createProgram?: CreateProgram<T>,
+    reportDiagnostic?: DiagnosticReporter,
+    reportSolutionBuilderStatus?: DiagnosticReporter,
+    reportWatchStatus?: WatchStatusReporter,
+): SolutionBuilderWithWatchHost<T> {
     const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost<T>;
     const watchHost = createWatchHost(system, reportWatchStatus);
     copyProperties(host, watchHost);
@@ -1224,7 +1237,13 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
         else if (updateLevel === ProgramUpdateLevel.RootNamesAndUpdate) {
             // Update file names
             config.fileNames = getFileNamesFromConfigSpecs(config.options.configFile!.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
-            updateErrorForNoInputFiles(config.fileNames, project, config.options.configFile!.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
+            updateErrorForNoInputFiles(
+                config.fileNames,
+                project,
+                config.options.configFile!.configFileSpecs!,
+                config.errors,
+                canJsonReportNoInputFiles(config.raw),
+            );
             watchInputFiles(state, project, projectPath, config);
             watchPackageJsonFiles(state, project, projectPath, config);
         }
@@ -1254,6 +1273,23 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
                     config,
                 };
             }
+        }
+
+        if (status.type === UpToDateStatusType.UpstreamBlocked) {
+            verboseReportProjectStatus(state, project, status);
+            reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
+            projectPendingBuild.delete(projectPath);
+            if (options.verbose) {
+                reportStatus(
+                    state,
+                    status.upstreamProjectBlocked ?
+                        Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_was_not_built :
+                        Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors,
+                    project,
+                    status.upstreamProjectName,
+                );
+            }
+            continue;
         }
 
         if (status.type === UpToDateStatusType.ContainerOnly) {
@@ -1432,11 +1468,7 @@ function checkConfigFileUpToDateStatus<T extends BuilderProgram>(state: Solution
 
 function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, project: ParsedCommandLine, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
     // Container if no files are specified in the project
-    if (!project.fileNames.length && !canJsonReportNoInputFiles(project.raw)) {
-        return {
-            type: UpToDateStatusType.ContainerOnly,
-        };
-    }
+    if (isSolutionConfig(project)) return { type: UpToDateStatusType.ContainerOnly };
 
     // Fast check to see if reference projects are upto date and error free
     let referenceStatuses;
@@ -1455,6 +1487,20 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 refStatus.type === UpToDateStatusType.ContainerOnly
             ) { // Container only ignore this project
                 continue;
+            }
+
+            // An upstream project is blocked
+            if (
+                state.options.stopBuildOnErrors && (
+                    refStatus.type === UpToDateStatusType.Unbuildable ||
+                    refStatus.type === UpToDateStatusType.UpstreamBlocked
+                )
+            ) {
+                return {
+                    type: UpToDateStatusType.UpstreamBlocked,
+                    upstreamProjectName: ref.path,
+                    upstreamProjectBlocked: refStatus.type === UpToDateStatusType.UpstreamBlocked,
+                };
             }
 
             if (!force) (referenceStatuses ||= []).push({ ref, refStatus, resolvedRefPath, resolvedConfig });
@@ -1513,8 +1559,14 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         // If there are errors, we need to build project again to report it
         if (
             !project.options.noCheck &&
-            (incrementalBuildInfo.semanticDiagnosticsPerFile?.length ||
-                (!project.options.noEmit && getEmitDeclarations(project.options) && incrementalBuildInfo.emitDiagnosticsPerFile?.length))
+            (
+                incrementalBuildInfo.changeFileSet?.length ||
+                incrementalBuildInfo.semanticDiagnosticsPerFile?.length ||
+                (
+                    getEmitDeclarations(project.options) &&
+                    incrementalBuildInfo.emitDiagnosticsPerFile?.length
+                )
+            )
         ) {
             return {
                 type: UpToDateStatusType.OutOfDateBuildInfoWithErrors,
@@ -1525,8 +1577,11 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         // If there are pending changes that are not emitted, project is out of date
         if (
             !project.options.noEmit &&
-            ((incrementalBuildInfo as IncrementalMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
-                (incrementalBuildInfo as IncrementalBundleEmitBuildInfo).pendingEmit !== undefined)
+            (
+                incrementalBuildInfo.changeFileSet?.length ||
+                (incrementalBuildInfo as IncrementalMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
+                (incrementalBuildInfo as IncrementalBundleEmitBuildInfo).pendingEmit !== undefined
+            )
         ) {
             return {
                 type: UpToDateStatusType.OutOfDateBuildInfoWithPendingEmit,
@@ -1535,7 +1590,18 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         }
 
         // Has not emitted some of the files, project is out of date
-        if (!project.options.noEmit && getPendingEmitKind(project.options, incrementalBuildInfo.options || {})) {
+        if (
+            (
+                !project.options.noEmit ||
+                (project.options.noEmit && getEmitDeclarations(project.options))
+            ) &&
+            getPendingEmitKindWithSeen(
+                project.options,
+                incrementalBuildInfo.options || {},
+                /*emitOnlyDtsFiles*/ undefined,
+                !!project.options.noEmit,
+            )
+        ) {
             return {
                 type: UpToDateStatusType.OutOfDateOptions,
                 buildInfoFile: buildInfoPath,
@@ -1551,7 +1617,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     /** True if input file has changed timestamp but text is not changed, we can then do only timestamp updates on output to make it look up-to-date later */
     let pseudoInputUpToDate = false;
     const seenRoots = new Set<Path>();
-    let buildInfoVersionMap: ReturnType<typeof getBuildInfoFileVersionMap> | undefined;
+    let buildInfoVersionMap: BuildInfoFileVersionMap | undefined;
     // Get timestamps of input files
     for (const inputFile of project.fileNames) {
         const inputTime = getModifiedTime(state, inputFile);
@@ -1830,6 +1896,8 @@ function queueReferencingProjects<T extends BuilderProgram>(
     buildOrder: readonly ResolvedConfigFileName[],
     buildResult: BuildResultFlags,
 ) {
+    // Queue only if there are no errors
+    if (state.options.stopBuildOnErrors && (buildResult & BuildResultFlags.AnyErrors)) return;
     // Only composite projects can be referenced by other projects
     if (!config.options.composite) return;
     // Always use build order to queue projects
@@ -1863,6 +1931,12 @@ function queueReferencingProjects<T extends BuilderProgram>(
                                 outOfDateOutputFileName: status.oldestOutputFileName,
                                 newerProjectName: project,
                             });
+                        }
+                        break;
+
+                    case UpToDateStatusType.UpstreamBlocked:
+                        if (toResolvedConfigFilePath(state, resolveProjectName(state, status.upstreamProjectName)) === projectPath) {
+                            clearProjectStatus(state, nextProjectPath);
                         }
                         break;
                 }
@@ -2365,6 +2439,15 @@ function reportUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderSt
             return reportStatus(
                 state,
                 Diagnostics.Project_0_is_out_of_date_because_its_dependency_1_is_out_of_date,
+                relName(state, configFileName),
+                relName(state, status.upstreamProjectName),
+            );
+        case UpToDateStatusType.UpstreamBlocked:
+            return reportStatus(
+                state,
+                status.upstreamProjectBlocked ?
+                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_was_not_built :
+                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
                 relName(state, configFileName),
                 relName(state, status.upstreamProjectName),
             );

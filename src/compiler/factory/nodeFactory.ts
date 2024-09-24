@@ -332,6 +332,7 @@ import {
     NonNullExpression,
     NoSubstitutionTemplateLiteral,
     NotEmittedStatement,
+    NotEmittedTypeElement,
     NullLiteral,
     nullNodeConverters,
     nullParenthesizerRules,
@@ -388,7 +389,6 @@ import {
     setEmitFlags,
     setIdentifierAutoGenerate,
     setIdentifierTypeArguments,
-    setNodeChildren,
     setParent,
     setTextRange,
     ShorthandPropertyAssignment,
@@ -476,8 +476,8 @@ export const enum NodeFactoryFlags {
 
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
 
-/** @internal */
-export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
+/** @internal @knipignore */
+export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void): void {
     nodeFactoryPatchers.push(fn);
 }
 
@@ -1008,6 +1008,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createSyntheticExpression,
         createSyntaxList,
         createNotEmittedStatement,
+        createNotEmittedTypeElement,
         createPartiallyEmittedExpression,
         updatePartiallyEmittedExpression,
         createCommaListExpression,
@@ -1986,10 +1987,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.parameters = createNodeArray(parameters);
         node.body = body;
 
-        node.transformFlags = propagateChildrenFlags(node.modifiers) |
-            propagateChildrenFlags(node.parameters) |
-            (propagateChildFlags(node.body) & ~TransformFlags.ContainsPossibleTopLevelAwait) |
-            TransformFlags.ContainsES2015;
+        if (!node.body) {
+            node.transformFlags = TransformFlags.ContainsTypeScript;
+        }
+        else {
+            node.transformFlags = propagateChildrenFlags(node.modifiers) |
+                propagateChildrenFlags(node.parameters) |
+                (propagateChildFlags(node.body) & ~TransformFlags.ContainsPossibleTopLevelAwait) |
+                TransformFlags.ContainsES2015;
+        }
 
         node.typeParameters = undefined; // initialized by parser for grammar errors
         node.type = undefined; // initialized by parser for grammar errors
@@ -6212,7 +6218,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createSyntaxList(children: readonly Node[]) {
         const node = createBaseNode<SyntaxList>(SyntaxKind.SyntaxList);
-        setNodeChildren(node, children);
+        node._children = children;
         return node;
     }
 
@@ -6257,6 +6263,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node.expression !== expression
             ? update(createPartiallyEmittedExpression(expression, node.original), node)
             : node;
+    }
+
+    // @api
+    function createNotEmittedTypeElement() {
+        return createBaseNode<NotEmittedTypeElement>(SyntaxKind.NotEmittedTypeElement);
     }
 
     function flattenCommaElements(node: Expression): Expression | readonly Expression[] {
@@ -6554,6 +6565,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 return updateSatisfiesExpression(outerExpression, expression, outerExpression.type);
             case SyntaxKind.NonNullExpression:
                 return updateNonNullExpression(outerExpression, expression);
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return updateExpressionWithTypeArguments(outerExpression, expression, outerExpression.typeArguments);
             case SyntaxKind.PartiallyEmittedExpression:
                 return updatePartiallyEmittedExpression(outerExpression, expression);
         }
@@ -7295,10 +7308,8 @@ function aggregateChildrenFlags(children: MutableNodeArray<Node>) {
 
 /**
  * Gets the transform flags to exclude when unioning the transform flags of a subtree.
- *
- * @internal
  */
-export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
+function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
     if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
         return TransformFlags.TypeExcludes;
     }
@@ -7385,7 +7396,7 @@ const syntheticFactory: BaseNodeFactory = {
     createBaseNode: kind => makeSynthetic(baseFactory.createBaseNode(kind)),
 };
 
-export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
+export const factory: NodeFactory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
 
 let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 

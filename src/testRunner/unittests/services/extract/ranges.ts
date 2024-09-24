@@ -1,7 +1,7 @@
 import * as ts from "../../../_namespaces/ts.js";
 import { extractTest } from "./helpers.js";
 
-function testExtractRangeFailed(caption: string, s: string, expectedErrors: string[]) {
+function testExtractRangeFailed(caption: string, s: string, expectedErrors: readonly string[]) {
     return it(caption, () => {
         const t = extractTest(s);
         const file = ts.createSourceFile("a.ts", t.source, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
@@ -12,7 +12,7 @@ function testExtractRangeFailed(caption: string, s: string, expectedErrors: stri
         const result = ts.refactor.extractSymbol.getRangeToExtract(file, ts.createTextSpanFromRange(selectionRange), /*invoked*/ false);
         assert(result.targetRange === undefined, "failure expected");
         const sortedErrors = result.errors.map(e => e.messageText as string).sort();
-        assert.deepEqual(sortedErrors, expectedErrors.sort(), "unexpected errors");
+        assert.deepEqual(sortedErrors, expectedErrors.slice().sort(), "unexpected errors");
     });
 }
 

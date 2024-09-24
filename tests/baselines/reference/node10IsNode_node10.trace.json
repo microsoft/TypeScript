@@ -1,9 +1,11 @@
 [
+    "Found 'package.json' at '/node_modules/fancy-lib/package.json'.",
+    "File '/node_modules/fancy-lib/package.json' exists according to earlier cached lookups.",
     "======== Resolving module 'fancy-lib' from '/main.ts'. ========",
     "Explicitly specified module resolution kind: 'Node10'.",
     "Loading module 'fancy-lib' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.",
-    "Found 'package.json' at '/node_modules/fancy-lib/package.json'.",
+    "File '/node_modules/fancy-lib/package.json' exists according to earlier cached lookups.",
     "File '/node_modules/fancy-lib.ts' does not exist.",
     "File '/node_modules/fancy-lib.tsx' does not exist.",
     "File '/node_modules/fancy-lib.d.ts' does not exist.",

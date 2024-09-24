@@ -1,93 +1,33 @@
+import { emptyArray } from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
-import { forEachNoEmitOnErrorScenario } from "../helpers/noEmitOnError.js";
-import {
-    noChangeRun,
-    TestTscEdit,
-    verifyTsc,
-} from "../helpers/tsc.js";
-import {
-    loadProjectFromFiles,
-    replaceText,
-} from "../helpers/vfs.js";
+import { forEachNoEmitOnErrorScenarioTsc } from "../helpers/noEmitOnError.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: noEmitOnError::", () => {
-    forEachNoEmitOnErrorScenario(
-        (fsContents, cwd, executingFilePath) => loadProjectFromFiles(fsContents, { cwd, executingFilePath }),
-        (scnearioName, fs) => {
-            describe(scnearioName("verify noEmitOnError"), () => {
-                function verifyNoEmitOnError(subScenario: string, fixModifyFs: TestTscEdit["edit"], modifyFs?: TestTscEdit["edit"]) {
-                    verifyTsc({
-                        scenario: "noEmitOnError",
-                        subScenario: scnearioName(subScenario),
-                        fs,
-                        commandLineArgs: [],
-                        modifyFs,
-                        edits: [
-                            noChangeRun,
-                            {
-                                caption: "incremental-declaration-doesnt-change",
-                                edit: fixModifyFs,
-                            },
-                            noChangeRun,
-                        ],
-                        baselinePrograms: true,
-                    });
-                }
-                verifyNoEmitOnError(
-                    "syntax errors",
-                    fs =>
-                        fs.writeFileSync(
-                            "src/main.ts",
-                            `import { A } from "../shared/types/db";
-const a = {
-    lastName: 'sdsd'
-};`,
-                            "utf-8",
-                        ),
-                );
-
-                verifyNoEmitOnError(
-                    "semantic errors",
-                    fs =>
-                        fs.writeFileSync(
-                            "src/main.ts",
-                            `import { A } from "../shared/types/db";
-const a: string = "hello";`,
-                            "utf-8",
-                        ),
-                    fs =>
-                        fs.writeFileSync(
-                            "src/main.ts",
-                            `import { A } from "../shared/types/db";
-const a: string = 10;`,
-                            "utf-8",
-                        ),
-                );
-            });
-        },
-    );
+    forEachNoEmitOnErrorScenarioTsc([]);
 
     verifyTsc({
         scenario: "noEmitOnError",
         subScenario: `multiFile/when declarationMap changes`,
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         noEmitOnError: true,
                         declaration: true,
                         composite: true,
                     },
                 }),
-                "/src/project/a.ts": "const x = 10;",
-                "/src/project/b.ts": "const y = 10;",
+                "/home/src/workspaces/project/a.ts": "const x = 10;",
+                "/home/src/workspaces/project/b.ts": "const y = 10;",
             }),
-        commandLineArgs: ["--p", "/src/project"],
+        commandLineArgs: emptyArray,
         edits: [
             {
                 caption: "error and enable declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
-                commandLineArgs: ["--p", "/src/project", "--declarationMap"],
+                edit: sys => sys.replaceFileText("/home/src/workspaces/project/a.ts", "x", "x: 20"),
+                commandLineArgs: ["--declarationMap"],
                 discrepancyExplanation: () => [
                     `Clean build does not emit any file so will have emitSignatures with all files since they are not emitted`,
                     `Incremental build has emitSignatures from before, so it will have a.ts with signature since file.version isnt same`,
@@ -96,8 +36,8 @@ const a: string = 10;`,
             },
             {
                 caption: "fix error declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
-                commandLineArgs: ["--p", "/src/project", "--declarationMap"],
+                edit: sys => sys.replaceFileText("/home/src/workspaces/project/a.ts", "x: 20", "x"),
+                commandLineArgs: ["--declarationMap"],
             },
         ],
     });
@@ -105,9 +45,9 @@ const a: string = 10;`,
     verifyTsc({
         scenario: "noEmitOnError",
         subScenario: `outFile/when declarationMap changes`,
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         noEmitOnError: true,
                         declaration: true,
@@ -115,15 +55,15 @@ const a: string = 10;`,
                         outFile: "../outFile.js",
                     },
                 }),
-                "/src/project/a.ts": "const x = 10;",
-                "/src/project/b.ts": "const y = 10;",
+                "/home/src/workspaces/project/a.ts": "const x = 10;",
+                "/home/src/workspaces/project/b.ts": "const y = 10;",
             }),
-        commandLineArgs: ["--p", "/src/project"],
+        commandLineArgs: emptyArray,
         edits: [
             {
                 caption: "error and enable declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
-                commandLineArgs: ["--p", "/src/project", "--declarationMap"],
+                edit: sys => sys.replaceFileText("/home/src/workspaces/project/a.ts", "x", "x: 20"),
+                commandLineArgs: ["--declarationMap"],
                 discrepancyExplanation: () => [
                     `Clean build does not emit any file so will not have outSignature`,
                     `Incremental build has outSignature from before`,
@@ -131,8 +71,8 @@ const a: string = 10;`,
             },
             {
                 caption: "fix error declarationMap",
-                edit: fs => replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
-                commandLineArgs: ["--p", "/src/project", "--declarationMap"],
+                edit: sys => sys.replaceFileText("/home/src/workspaces/project/a.ts", "x: 20", "x"),
+                commandLineArgs: ["--declarationMap"],
             },
         ],
     });
@@ -140,21 +80,21 @@ const a: string = 10;`,
     verifyTsc({
         scenario: "noEmitOnError",
         subScenario: "multiFile/file deleted before fixing error with noEmitOnError",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "outDir",
                         noEmitOnError: true,
                     },
                 }),
-                "/src/project/file1.ts": `export const x: 30 = "hello";`,
-                "/src/project/file2.ts": `export class D { }`,
+                "/home/src/workspaces/project/file1.ts": `export const x: 30 = "hello";`,
+                "/home/src/workspaces/project/file2.ts": `export class D { }`,
             }),
-        commandLineArgs: ["--p", "/src/project", "-i"],
+        commandLineArgs: ["-i"],
         edits: [{
             caption: "delete file without error",
-            edit: fs => fs.unlinkSync("/src/project/file2.ts"),
+            edit: sys => sys.deleteFile("/home/src/workspaces/project/file2.ts"),
         }],
         baselinePrograms: true,
     });
@@ -162,22 +102,22 @@ const a: string = 10;`,
     verifyTsc({
         scenario: "noEmitOnError",
         subScenario: "outFile/file deleted before fixing error with noEmitOnError",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outFile: "../outFile.js",
                         module: "amd",
                         noEmitOnError: true,
                     },
                 }),
-                "/src/project/file1.ts": `export const x: 30 = "hello";`,
-                "/src/project/file2.ts": `export class D { }`,
+                "/home/src/workspaces/project/file1.ts": `export const x: 30 = "hello";`,
+                "/home/src/workspaces/project/file2.ts": `export class D { }`,
             }),
-        commandLineArgs: ["--p", "/src/project", "-i"],
+        commandLineArgs: ["-i"],
         edits: [{
             caption: "delete file without error",
-            edit: fs => fs.unlinkSync("/src/project/file2.ts"),
+            edit: sys => sys.deleteFile("/home/src/workspaces/project/file2.ts"),
         }],
         baselinePrograms: true,
     });
