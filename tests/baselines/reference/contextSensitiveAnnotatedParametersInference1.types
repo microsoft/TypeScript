@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/contextSensitiveAnnotatedParametersInference.ts] ////
+//// [tests/cases/compiler/contextSensitiveAnnotatedParametersInference1.ts] ////
 
-=== contextSensitiveAnnotatedParametersInference.ts ===
+=== contextSensitiveAnnotatedParametersInference1.ts ===
 declare function test<T, A, B>(obj: {
 >test : <T, A, B>(obj: { ctx: T; a: (a: A, ctx: T) => void; b: (b: B, ctx: T, a: A) => void; }) => void
 >     : ^ ^^ ^^ ^^   ^^                                                                       ^^^^^    

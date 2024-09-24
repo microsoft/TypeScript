@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/contextSensitiveAnnotatedParametersInference2.ts] ////
+
+=== contextSensitiveAnnotatedParametersInference2.ts ===
+// https://github.com/microsoft/TypeScript/issues/60047
+
+type Map<T> = {
+>Map : Map<T>
+>    : ^^^^^^
+
+  [P in keyof T]: T[P] extends boolean ? "boolean" : "other";
+};
+
+export function buildCommand<F extends Record<string, unknown>>(builderArgs: {
+>buildCommand : <F extends Record<string, unknown>>(builderArgs: { func: (p: F) => void; params: Map<NoInfer<F>>; }) => void
+>             : ^ ^^^^^^^^^                       ^^           ^^                                                  ^^^^^^^^^
+>builderArgs : { func: (p: F) => void; params: Map<NoInfer<F>>; }
+>            : ^^^^^^^^              ^^^^^^^^^^               ^^^
+
+  func: (p: F) => void;
+>func : (p: F) => void
+>     : ^ ^^ ^^^^^    
+>p : F
+>  : ^
+
+  params: Map<NoInfer<F>>;
+>params : Map<NoInfer<F>>
+>       : ^^^^^^^^^^^^^^^
+
+}) {}
+
+type Foo = { foo: boolean };
+>Foo : Foo
+>    : ^^^
+>foo : boolean
+>    : ^^^^^^^
+
+buildCommand({
+>buildCommand({  func: function (p: Foo) {},  params: {    foo: "boolean",  },}) : void
+>                                                                                : ^^^^
+>buildCommand : <F extends Record<string, unknown>>(builderArgs: { func: (p: F) => void; params: Map<NoInfer<F>>; }) => void
+>             : ^ ^^^^^^^^^                       ^^           ^^                                                  ^^^^^^^^^
+>{  func: function (p: Foo) {},  params: {    foo: "boolean",  },} : { func: (p: Foo) => void; params: { foo: "boolean"; }; }
+>                                                                  : ^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  func: function (p: Foo) {},
+>func : (p: Foo) => void
+>     : ^ ^^   ^^^^^^^^^
+>function (p: Foo) {} : (p: Foo) => void
+>                     : ^ ^^   ^^^^^^^^^
+>p : Foo
+>  : ^^^
+
+  params: {
+>params : { foo: "boolean"; }
+>       : ^^^^^^^^^^^^^^^^^^^
+>{    foo: "boolean",  } : { foo: "boolean"; }
+>                        : ^^^^^^^^^^^^^^^^^^^
+
+    foo: "boolean",
+>foo : "boolean"
+>    : ^^^^^^^^^
+>"boolean" : "boolean"
+>          : ^^^^^^^^^
+
+  },
+});
+
+buildCommand({
+>buildCommand({  func(p: Foo) {},  params: {    foo: "boolean",  },}) : void
+>                                                                     : ^^^^
+>buildCommand : <F extends Record<string, unknown>>(builderArgs: { func: (p: F) => void; params: Map<NoInfer<F>>; }) => void
+>             : ^ ^^^^^^^^^                       ^^           ^^                                                  ^^^^^^^^^
+>{  func(p: Foo) {},  params: {    foo: "boolean",  },} : { func(p: Foo): void; params: { foo: "boolean"; }; }
+>                                                       : ^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  func(p: Foo) {},
+>func : (p: Foo) => void
+>     : ^ ^^   ^^^^^^^^^
+>p : Foo
+>  : ^^^
+
+  params: {
+>params : { foo: "boolean"; }
+>       : ^^^^^^^^^^^^^^^^^^^
+>{    foo: "boolean",  } : { foo: "boolean"; }
+>                        : ^^^^^^^^^^^^^^^^^^^
+
+    foo: "boolean",
+>foo : "boolean"
+>    : ^^^^^^^^^
+>"boolean" : "boolean"
+>          : ^^^^^^^^^
+
+  },
+});
+
+buildCommand({
+>buildCommand({  func: (p: Foo) => {},  params: {    foo: "boolean",  },}) : void
+>                                                                          : ^^^^
+>buildCommand : <F extends Record<string, unknown>>(builderArgs: { func: (p: F) => void; params: Map<NoInfer<F>>; }) => void
+>             : ^ ^^^^^^^^^                       ^^           ^^                                                  ^^^^^^^^^
+>{  func: (p: Foo) => {},  params: {    foo: "boolean",  },} : { func: (p: Foo) => void; params: { foo: "boolean"; }; }
+>                                                            : ^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  func: (p: Foo) => {},
+>func : (p: Foo) => void
+>     : ^ ^^   ^^^^^^^^^
+>(p: Foo) => {} : (p: Foo) => void
+>               : ^ ^^   ^^^^^^^^^
+>p : Foo
+>  : ^^^
+
+  params: {
+>params : { foo: "boolean"; }
+>       : ^^^^^^^^^^^^^^^^^^^
+>{    foo: "boolean",  } : { foo: "boolean"; }
+>                        : ^^^^^^^^^^^^^^^^^^^
+
+    foo: "boolean",
+>foo : "boolean"
+>    : ^^^^^^^^^
+>"boolean" : "boolean"
+>          : ^^^^^^^^^
+
+  },
+});
+

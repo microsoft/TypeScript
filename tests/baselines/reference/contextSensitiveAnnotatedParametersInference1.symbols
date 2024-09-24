@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/contextSensitiveAnnotatedParametersInference1.ts] ////
+
+=== contextSensitiveAnnotatedParametersInference1.ts ===
+declare function test<T, A, B>(obj: {
+>test : Symbol(test, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 0))
+>T : Symbol(T, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 22))
+>A : Symbol(A, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 24))
+>B : Symbol(B, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 27))
+>obj : Symbol(obj, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 31))
+
+  ctx: T;
+>ctx : Symbol(ctx, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 37))
+>T : Symbol(T, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 22))
+
+  a: (a: A, ctx: T) => void;
+>a : Symbol(a, Decl(contextSensitiveAnnotatedParametersInference1.ts, 1, 9))
+>a : Symbol(a, Decl(contextSensitiveAnnotatedParametersInference1.ts, 2, 6))
+>A : Symbol(A, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 24))
+>ctx : Symbol(ctx, Decl(contextSensitiveAnnotatedParametersInference1.ts, 2, 11))
+>T : Symbol(T, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 22))
+
+  b: (b: B, ctx: T, a: A) => void;
+>b : Symbol(b, Decl(contextSensitiveAnnotatedParametersInference1.ts, 2, 28))
+>b : Symbol(b, Decl(contextSensitiveAnnotatedParametersInference1.ts, 3, 6))
+>B : Symbol(B, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 27))
+>ctx : Symbol(ctx, Decl(contextSensitiveAnnotatedParametersInference1.ts, 3, 11))
+>T : Symbol(T, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 22))
+>a : Symbol(a, Decl(contextSensitiveAnnotatedParametersInference1.ts, 3, 19))
+>A : Symbol(A, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 24))
+
+}): void;
+
+test({
+>test : Symbol(test, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 0))
+
+  ctx: 'foo',
+>ctx : Symbol(ctx, Decl(contextSensitiveAnnotatedParametersInference1.ts, 6, 6))
+
+  a: (a: string, ctx) => {},
+>a : Symbol(a, Decl(contextSensitiveAnnotatedParametersInference1.ts, 7, 13))
+>a : Symbol(a, Decl(contextSensitiveAnnotatedParametersInference1.ts, 8, 6))
+>ctx : Symbol(ctx, Decl(contextSensitiveAnnotatedParametersInference1.ts, 8, 16))
+
+  b: (b: string, ctx, a) => {},
+>b : Symbol(b, Decl(contextSensitiveAnnotatedParametersInference1.ts, 8, 28))
+>b : Symbol(b, Decl(contextSensitiveAnnotatedParametersInference1.ts, 9, 6))
+>ctx : Symbol(ctx, Decl(contextSensitiveAnnotatedParametersInference1.ts, 9, 16))
+>a : Symbol(a, Decl(contextSensitiveAnnotatedParametersInference1.ts, 9, 21))
+
+});
+
+test({
+>test : Symbol(test, Decl(contextSensitiveAnnotatedParametersInference1.ts, 0, 0))
+
+  ctx: 'foo',
+>ctx : Symbol(ctx, Decl(contextSensitiveAnnotatedParametersInference1.ts, 12, 6))
+
+  b: (b: string, ctx, a) => {},
+>b : Symbol(b, Decl(contextSensitiveAnnotatedParametersInference1.ts, 13, 13))
+>b : Symbol(b, Decl(contextSensitiveAnnotatedParametersInference1.ts, 14, 6))
+>ctx : Symbol(ctx, Decl(contextSensitiveAnnotatedParametersInference1.ts, 14, 16))
+>a : Symbol(a, Decl(contextSensitiveAnnotatedParametersInference1.ts, 14, 21))
+
+  a: (a: string, ctx) => {},
+>a : Symbol(a, Decl(contextSensitiveAnnotatedParametersInference1.ts, 14, 31))
+>a : Symbol(a, Decl(contextSensitiveAnnotatedParametersInference1.ts, 15, 6))
+>ctx : Symbol(ctx, Decl(contextSensitiveAnnotatedParametersInference1.ts, 15, 16))
+
+});
+
