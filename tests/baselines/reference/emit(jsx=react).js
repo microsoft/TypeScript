@@ -78,8 +78,8 @@ const foo = require("./foo.js");
 import "./foo.js";
 export * from "./foo.js";
 //Shim
-import(__rewriteRelativeImportExtension("./foo.ts"));
-import(__rewriteRelativeImportExtension("./foo.ts"), { with: { attr: "value" } });
+import("./foo.js");
+import("./foo.js", { with: { attr: "value" } });
 import(__rewriteRelativeImportExtension("" + "./foo.ts"));
 //// [js.js]
 var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
@@ -106,11 +106,11 @@ import {} from "./foo.js";
 import "./foo.js";
 export * from "./foo.js";
 // Shim
-import(__rewriteRelativeImportExtension("./foo.ts"));
-import(__rewriteRelativeImportExtension("./foo.ts"), { with: { attr: "value" } });
-require(__rewriteRelativeImportExtension("./foo.ts"));
+import("./foo.js");
+import("./foo.js", { with: { attr: "value" } });
+require("./foo.js");
 {
-    require(__rewriteRelativeImportExtension("./foo.ts"));
+    require("./foo.js");
     require(__rewriteRelativeImportExtension(getPath()));
 }
 // No rewrite or shim

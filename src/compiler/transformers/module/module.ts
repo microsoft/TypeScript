@@ -217,7 +217,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
     let currentSourceFile: SourceFile; // The current file.
     let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
-    let importsAndRequiresToShim: CallExpression[] | undefined;
+    let importsAndRequiresToRewriteOrShim: CallExpression[] | undefined;
     const noSubstitution: boolean[] = []; // Set of nodes for which substitution rules should be ignored.
     let needUMDDynamicImportHelper: boolean;
 
@@ -244,7 +244,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         if (compilerOptions.rewriteRelativeImportExtensions) {
             forEachDynamicImportOrRequireCall(node, /*includeTypeSpaceImports*/ false, /*requireStringLiteralLikeArgument*/ false, node => {
                 if (!isStringLiteralLike(node.arguments[0]) || shouldRewriteModuleSpecifier(node.arguments[0].text, compilerOptions)) {
-                    importsAndRequiresToShim = append(importsAndRequiresToShim, node);
+                    importsAndRequiresToRewriteOrShim = append(importsAndRequiresToRewriteOrShim, node);
                 }
             });
         }
@@ -795,7 +795,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function visitorWorker(node: Node, valueIsDiscarded: boolean): VisitResult<Node> {
         // This visitor does not need to descend into the tree if there is no dynamic import, destructuring assignment, or update expression
         // as export/import statements are only transformed at the top level of a file.
-        if (!(node.transformFlags & (TransformFlags.ContainsDynamicImport | TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsUpdateExpressionForIdentifier)) && !importsAndRequiresToShim?.length) {
+        if (!(node.transformFlags & (TransformFlags.ContainsDynamicImport | TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsUpdateExpressionForIdentifier)) && !importsAndRequiresToRewriteOrShim?.length) {
             return node;
         }
 
@@ -809,15 +809,15 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
             case SyntaxKind.CallExpression:
-                const needsShim = node === firstOrUndefined(importsAndRequiresToShim);
-                if (needsShim) {
-                    importsAndRequiresToShim!.shift();
+                const needsRewrite = node === firstOrUndefined(importsAndRequiresToRewriteOrShim);
+                if (needsRewrite) {
+                    importsAndRequiresToRewriteOrShim!.shift();
                 }
                 if (isImportCall(node) && host.shouldTransformImportCall(currentSourceFile)) {
-                    return visitImportCallExpression(node, needsShim);
+                    return visitImportCallExpression(node, needsRewrite);
                 }
-                else if (needsShim) {
-                    return shimImportOrRequireCall(node as CallExpression);
+                else if (needsRewrite) {
+                    return shimOrRewriteImportOrRequireCall(node as CallExpression);
                 }
                 break;
             case SyntaxKind.BinaryExpression:
@@ -1189,21 +1189,23 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return visitEachChild(node, visitor, context);
     }
 
-    function shimImportOrRequireCall(node: CallExpression): CallExpression {
+    function shimOrRewriteImportOrRequireCall(node: CallExpression): CallExpression {
         return factory.updateCallExpression(
             node,
             node.expression,
             /*typeArguments*/ undefined,
             visitNodes(node.arguments, (arg: Expression) => {
                 if (arg === node.arguments[0]) {
-                    return emitHelpers().createRewriteRelativeImportExtensionsHelper(arg);
+                    return isStringLiteralLike(arg)
+                        ? rewriteModuleSpecifier(arg, compilerOptions)
+                        : emitHelpers().createRewriteRelativeImportExtensionsHelper(arg);
                 }
                 return visitor(arg);
             }, isExpression),
         );
     }
 
-    function visitImportCallExpression(node: ImportCall, shim: boolean): Expression {
+    function visitImportCallExpression(node: ImportCall, rewriteOrShim: boolean): Expression {
         if (moduleKind === ModuleKind.None && languageVersion >= ScriptTarget.ES2020) {
             return visitEachChild(node, visitor, context);
         }
@@ -1212,7 +1214,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
         const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text)
             ? externalModuleName
-            : firstArgument && shim ? emitHelpers().createRewriteRelativeImportExtensionsHelper(firstArgument) : firstArgument;
+            : firstArgument && rewriteOrShim
+            ? isStringLiteral(firstArgument) ? rewriteModuleSpecifier(firstArgument, compilerOptions) : emitHelpers().createRewriteRelativeImportExtensionsHelper(firstArgument)
+            : firstArgument;
         const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
         switch (compilerOptions.module) {
             case ModuleKind.AMD:

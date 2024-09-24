@@ -81,7 +81,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     context.enableSubstitution(SyntaxKind.Identifier);
 
     const noSubstitution = new Set<NodeId>();
-    let importsAndRequiresToShim: CallExpression[] | undefined;
+    let importsAndRequiresToRewriteOrShim: CallExpression[] | undefined;
     let helperNameSubstitutions: Map<string, Identifier> | undefined;
     let currentSourceFile: SourceFile | undefined;
     let importRequireStatements: [ImportDeclaration, VariableStatement] | undefined;
@@ -98,7 +98,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             if (compilerOptions.rewriteRelativeImportExtensions && (currentSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport || isInJSFile(node))) {
                 forEachDynamicImportOrRequireCall(node, /*includeTypeSpaceImports*/ false, /*requireStringLiteralLikeArgument*/ false, node => {
                     if (!isStringLiteralLike(node.arguments[0]) || shouldRewriteModuleSpecifier(node.arguments[0].text, compilerOptions)) {
-                        importsAndRequiresToShim = append(importsAndRequiresToShim, node);
+                        importsAndRequiresToRewriteOrShim = append(importsAndRequiresToRewriteOrShim, node);
                     }
                 });
             }
@@ -155,12 +155,12 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             case SyntaxKind.ImportDeclaration:
                 return visitImportDeclaration(node as ImportDeclaration);
             case SyntaxKind.CallExpression:
-                if (node === importsAndRequiresToShim?.[0]) {
-                    return visitImportOrRequireCall(importsAndRequiresToShim.shift()!);
+                if (node === importsAndRequiresToRewriteOrShim?.[0]) {
+                    return visitImportOrRequireCall(importsAndRequiresToRewriteOrShim.shift()!);
                 }
                 break;
             default:
-                if (importsAndRequiresToShim?.length && rangeContainsRange(node, importsAndRequiresToShim[0])) {
+                if (importsAndRequiresToRewriteOrShim?.length && rangeContainsRange(node, importsAndRequiresToRewriteOrShim[0])) {
                     return visitEachChild(node, visitor, context);
                 }
         }
@@ -190,7 +190,12 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             node,
             node.expression,
             node.typeArguments,
-            [emitHelpers().createRewriteRelativeImportExtensionsHelper(node.arguments[0]), ...node.arguments.slice(1)],
+            [
+                isStringLiteralLike(node.arguments[0])
+                    ? rewriteModuleSpecifier(node.arguments[0], compilerOptions)
+                    : emitHelpers().createRewriteRelativeImportExtensionsHelper(node.arguments[0]),
+                ...node.arguments.slice(1),
+            ],
         );
     }
 

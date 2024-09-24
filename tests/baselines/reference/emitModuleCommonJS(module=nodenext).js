@@ -4,11 +4,14 @@
 {
   require("" + "./foo.ts");
   import("" + "./foo.ts");
+  require("./foo.ts");
+  import("./foo.ts");
 }
 
 //// [b.ts]
 {
   import("" + "./foo.ts");
+  import("./foo.ts");
 }
 
 
@@ -33,6 +36,8 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
 {
     require(__rewriteRelativeImportExtension("" + "./foo.ts"));
     import(__rewriteRelativeImportExtension("" + "./foo.ts"));
+    require("./foo.js");
+    import("./foo.js");
 }
 //// [b.js]
 "use strict";
@@ -55,4 +60,5 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
 Object.defineProperty(exports, "__esModule", { value: true });
 {
     import(__rewriteRelativeImportExtension("" + "./foo.ts"));
+    import("./foo.js");
 }
