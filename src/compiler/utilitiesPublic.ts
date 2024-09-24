@@ -1954,13 +1954,16 @@ export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLike
 
 export function isCallLikeExpression(node: Node): node is CallLikeExpression {
     switch (node.kind) {
-        case SyntaxKind.JsxOpeningElement:
-        case SyntaxKind.JsxSelfClosingElement:
         case SyntaxKind.CallExpression:
         case SyntaxKind.NewExpression:
         case SyntaxKind.TaggedTemplateExpression:
         case SyntaxKind.Decorator:
+        case SyntaxKind.JsxOpeningElement:
+        case SyntaxKind.JsxSelfClosingElement:
+        case SyntaxKind.JsxOpeningFragment:
             return true;
+        case SyntaxKind.BinaryExpression:
+            return (node as BinaryExpression).operatorToken.kind === SyntaxKind.InstanceOfKeyword;
         default:
             return false;
     }
