@@ -86,8 +86,7 @@
           "text": "docs - const A: T",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

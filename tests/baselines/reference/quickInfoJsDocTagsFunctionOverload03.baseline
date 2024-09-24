@@ -94,8 +94,7 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -205,8 +204,7 @@
             }
           ]
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

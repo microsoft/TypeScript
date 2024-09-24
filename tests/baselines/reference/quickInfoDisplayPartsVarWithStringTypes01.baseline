@@ -56,8 +56,7 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -99,8 +98,7 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -158,8 +156,7 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   }
 ]

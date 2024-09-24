@@ -119,8 +119,7 @@
             }
           ]
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -210,8 +209,7 @@
             }
           ]
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

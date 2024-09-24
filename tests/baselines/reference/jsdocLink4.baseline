@@ -119,8 +119,7 @@
           "text": "}",
           "kind": "link"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -186,8 +185,7 @@
           "text": "}",
           "kind": "link"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -327,8 +325,7 @@
             }
           ]
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

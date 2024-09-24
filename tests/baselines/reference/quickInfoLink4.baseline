@@ -73,8 +73,7 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   }
 ]

@@ -63,8 +63,7 @@
         {
           "name": "this"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

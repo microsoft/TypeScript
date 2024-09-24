@@ -98,8 +98,7 @@
           "text": "://wat",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -154,8 +153,7 @@
           "text": "://wass",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -226,8 +224,7 @@
           "text": "://vad",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -284,8 +281,7 @@
             }
           ]
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -357,8 +353,7 @@
             }
           ]
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -424,8 +419,7 @@
           "text": "}",
           "kind": "link"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

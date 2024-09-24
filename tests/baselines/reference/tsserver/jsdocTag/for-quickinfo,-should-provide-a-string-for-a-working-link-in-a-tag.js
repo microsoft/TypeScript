@@ -271,8 +271,7 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "wat",
             "text": "{@link C}"
           }
-        ],
-        "canIncreaseVerbosityLevel": false
+        ]
       },
       "responseRequired": true
     }

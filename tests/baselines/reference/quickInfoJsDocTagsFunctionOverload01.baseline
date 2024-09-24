@@ -103,8 +103,7 @@
           "text": "Doc foo",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -214,8 +213,7 @@
             }
           ]
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

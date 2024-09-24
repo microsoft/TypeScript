@@ -295,8 +295,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "link"
           }
         ],
-        "tags": [],
-        "canIncreaseVerbosityLevel": false
+        "tags": []
       },
       "responseRequired": true
     }

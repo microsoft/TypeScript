@@ -88,8 +88,7 @@
           "text": "A description of a",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

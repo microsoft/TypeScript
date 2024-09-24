@@ -95,8 +95,7 @@
           "text": "This comment should appear for foo",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -151,8 +150,7 @@
           "text": "This comment should appear for foo",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -247,8 +245,7 @@
           "text": "This is comment for function signature",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -298,8 +295,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -394,8 +390,7 @@
           "text": "This is comment for function signature",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

@@ -145,8 +145,7 @@
           "text": "Bar comment",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -261,8 +260,7 @@
           "text": "Bar comment",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

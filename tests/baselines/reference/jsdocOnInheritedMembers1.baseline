@@ -88,8 +88,7 @@
           "text": "Method documentation.",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

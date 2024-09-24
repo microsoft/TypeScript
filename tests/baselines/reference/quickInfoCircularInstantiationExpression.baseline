@@ -119,8 +119,7 @@
           "kind": "text"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   }
 ]

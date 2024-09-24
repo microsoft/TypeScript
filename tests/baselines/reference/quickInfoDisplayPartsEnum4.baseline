@@ -79,8 +79,7 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -146,8 +145,7 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   }
 ]

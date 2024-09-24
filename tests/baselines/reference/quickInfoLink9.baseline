@@ -59,8 +59,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   }
 ]

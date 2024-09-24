@@ -69,8 +69,7 @@
           "text": "A description of foo",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

@@ -350,8 +350,7 @@ Info seq  [hh:mm:ss:mss] response:
         },
         "displayString": "var x: number",
         "documentation": "",
-        "tags": [],
-        "canIncreaseVerbosityLevel": false
+        "tags": []
       },
       "responseRequired": true
     }

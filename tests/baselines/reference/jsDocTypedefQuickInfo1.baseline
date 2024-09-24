@@ -95,8 +95,7 @@
             }
           ]
         }
-      ],
-      "canIncreaseVerbosityLevel": true
+      ]
     }
   },
   {
@@ -146,8 +145,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   }
 ]

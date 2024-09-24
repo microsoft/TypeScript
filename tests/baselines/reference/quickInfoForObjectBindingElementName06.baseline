@@ -69,8 +69,7 @@
           "text": "Thing is a baz",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

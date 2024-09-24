@@ -184,8 +184,7 @@
         {
           "name": "returns"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

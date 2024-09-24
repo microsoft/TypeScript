@@ -221,8 +221,7 @@
         {
           "name": "returns"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

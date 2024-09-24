@@ -148,8 +148,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -215,8 +214,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -282,8 +280,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -349,8 +346,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -416,8 +412,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -483,8 +478,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -550,8 +544,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -617,8 +610,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -684,8 +676,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -751,8 +742,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -818,8 +808,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -885,8 +874,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -928,8 +916,7 @@
           "kind": "className"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": true
+      "documentation": []
     }
   },
   {
@@ -995,8 +982,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -1026,8 +1012,7 @@
           "kind": "className"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -1093,8 +1078,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   }
 ]

@@ -103,8 +103,7 @@
         {
           "name": "virtual"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -180,8 +179,7 @@
         {
           "name": "virtual"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

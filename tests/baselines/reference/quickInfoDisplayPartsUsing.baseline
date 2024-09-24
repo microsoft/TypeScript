@@ -55,8 +55,7 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -170,8 +169,7 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": true
+      "documentation": []
     }
   }
 ]

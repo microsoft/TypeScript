@@ -118,8 +118,7 @@
           "text": "A description of 'a'",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -174,8 +173,7 @@
           "text": "A description of 'b'",
           "kind": "text"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

@@ -85,8 +85,7 @@
         {
           "name": "inheritdoc"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

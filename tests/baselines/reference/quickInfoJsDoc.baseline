@@ -194,8 +194,7 @@
         {
           "name": "deprecated"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -263,8 +262,7 @@
         {
           "name": "deprecated"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -340,8 +338,7 @@
         {
           "name": "deprecated"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -393,8 +390,7 @@
         {
           "name": "deprecated"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -434,8 +430,7 @@
         {
           "name": "deprecated"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -510,8 +505,7 @@
         {
           "name": "deprecated"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -579,8 +573,7 @@
         {
           "name": "deprecated"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -656,8 +649,7 @@
         {
           "name": "deprecated"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -709,8 +701,7 @@
         {
           "name": "deprecated"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -750,8 +741,7 @@
         {
           "name": "deprecated"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   },
   {
@@ -811,8 +801,7 @@
         {
           "name": "deprecated"
         }
-      ],
-      "canIncreaseVerbosityLevel": false
+      ]
     }
   }
 ]

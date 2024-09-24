@@ -44,8 +44,7 @@
           "kind": "interfaceName"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   },
   {
@@ -87,8 +86,7 @@
           "kind": "interfaceName"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": true
+      "documentation": []
     }
   },
   {
@@ -118,8 +116,7 @@
           "kind": "interfaceName"
         }
       ],
-      "documentation": [],
-      "canIncreaseVerbosityLevel": false
+      "documentation": []
     }
   }
 ]
