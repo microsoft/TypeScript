@@ -809,7 +809,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
             case SyntaxKind.CallExpression:
-                const needsShim = node === importsAndRequiresToShim?.[0];
+                const needsShim = node === firstOrUndefined(importsAndRequiresToShim);
                 if (needsShim) {
                     importsAndRequiresToShim!.shift();
                 }
