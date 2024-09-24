@@ -230,16 +230,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/main/tsconfig.json, currentDirectory: /user/username/projects/myproject/main
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/main/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/myproject/main/main.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/main/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/main/main.ts"
@@ -257,6 +247,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/main/tsconfig
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/main/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/main/main.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
@@ -539,7 +539,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/username/projects/myproject/dependency/tsconfig.json",
+        "triggerFile": "/user/username/projects/myproject/dependency/FnS.ts",
         "configFile": "/user/username/projects/myproject/dependency/tsconfig.json",
         "diagnostics": []
       }
@@ -1147,6 +1147,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/random/tsconfig.json, currentDirectory: /user/username/projects/myproject/random
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/random/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/myproject/random/random.ts"
+ ],
+ "options": {
+  "configFilePath": "/user/username/projects/myproject/random/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1157,14 +1165,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /user/username/projects/myproject/random/random.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/random/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/random/random.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/random/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random 1 undefined Config: /user/username/projects/myproject/random/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random 1 undefined Config: /user/username/projects/myproject/random/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json
@@ -3712,14 +3712,6 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/dependency/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/dependency/FnS.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/dependency/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json projectStateVersion: 6 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -5084,14 +5076,6 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/dependency/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/myproject/dependency/FnS.ts"
- ],
- "options": {
-  "configFilePath": "/user/username/projects/myproject/dependency/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json projectStateVersion: 9 projectProgramVersion: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms

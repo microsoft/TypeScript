@@ -201,7 +201,7 @@ export function forEachLibResolutionScenario(
     forTsserver: boolean,
     withoutConfig: true | undefined,
     action: (scenario: string, sys: () => TestServerHost, edits: () => readonly TscWatchCompileChange[]) => void,
-) {
+): void {
     [undefined, true].forEach(libRedirection => {
         action(
             `${withoutConfig ? "without" : "with"} config${libRedirection ? " with redirection" : ""}`,
@@ -214,13 +214,13 @@ export function forEachLibResolutionScenario(
     });
 }
 
-export function getCommandLineArgsForLibResolution(withoutConfig: true | undefined) {
+export function getCommandLineArgsForLibResolution(withoutConfig: true | undefined): string[] {
     return withoutConfig ?
         ["project1/core.d.ts", "project1/utils.d.ts", "project1/file.ts", "project1/index.ts", "project1/file2.ts", "--lib", "es5,dom", "--traceResolution", "--explainFiles"] :
         ["-p", "project1", "--explainFiles"];
 }
 
-export function getSysForLibResolutionUnknown() {
+export function getSysForLibResolutionUnknown(): TestServerHost {
     return TestServerHost.createWatchedSystem({
         "/home/src/workspace/projects/project1/utils.d.ts": `export const y = 10;`,
         "/home/src/workspace/projects/project1/file.ts": `export const file = 10;`,

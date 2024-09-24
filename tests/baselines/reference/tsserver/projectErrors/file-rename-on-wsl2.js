@@ -48,16 +48,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/username/workspaces/project/src/a.ts ProjectRootPath: /home/username/workspaces/project:: Result: /home/username/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/username/workspaces/project/tsconfig.json, currentDirectory: /home/username/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/username/workspaces/project/tsconfig.json 2000 undefined Project: /home/username/workspaces/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/username/workspaces/project/tsconfig.json",
-        "reason": "Creating possible configured project for /home/username/workspaces/project/src/a.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/username/workspaces/project/tsconfig.json : {
  "rootNames": [
   "/home/username/workspaces/project/src/a.ts",
@@ -68,6 +58,16 @@ Info seq  [hh:mm:ss:mss] Config: /home/username/workspaces/project/tsconfig.json
   "configFilePath": "/home/username/workspaces/project/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/username/workspaces/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/username/workspaces/project/src/a.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/username/workspaces/project/src 1 undefined Config: /home/username/workspaces/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/username/workspaces/project/src 1 undefined Config: /home/username/workspaces/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/username/workspaces/project/src/b.ts 500 undefined WatchType: Closed Script info
