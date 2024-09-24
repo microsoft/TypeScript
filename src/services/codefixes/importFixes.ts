@@ -180,6 +180,7 @@ const errorCodes: readonly number[] = [
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode.code,
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig.code,
     Diagnostics.Cannot_find_namespace_0_Did_you_mean_1.code,
+    Diagnostics.This_JSX_tag_requires_0_to_be_in_scope_but_it_could_not_be_found.code,
 ];
 
 registerCodeFix({

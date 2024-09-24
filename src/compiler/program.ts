@@ -2117,7 +2117,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeRef: FileReference, sourceFile: SourceFile) {
-        return getResolvedTypeReferenceDirective(sourceFile, typeRef.fileName, typeRef.resolutionMode || sourceFile.impliedNodeFormat);
+        return getResolvedTypeReferenceDirective(
+            sourceFile,
+            typeRef.fileName,
+            getModeForTypeReferenceDirectiveInFile(typeRef, sourceFile),
+        );
     }
 
     function forEachResolvedModule(
@@ -2645,11 +2649,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const moduleNames = getModuleNames(newSourceFile);
             const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
             (resolvedModulesProcessing ??= new Map()).set(newSourceFile.path, resolutions);
+            const optionsForFile = getCompilerOptionsForFile(newSourceFile);
             // ensure that module resolution results are still correct
             const resolutionsChanged = hasChangesInResolutions(
                 moduleNames,
                 resolutions,
-                name => oldProgram.getResolvedModule(newSourceFile, name.text, getModeForUsageLocation(newSourceFile, name)),
+                name => oldProgram.getResolvedModule(newSourceFile, name.text, getModeForUsageLocationWorker(newSourceFile, name, optionsForFile)),
                 moduleResolutionIsEqualTo,
             );
             if (resolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
@@ -2660,7 +2665,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const typeReferenceResolutionsChanged = hasChangesInResolutions(
                 typesReferenceDirectives,
                 typeReferenceResolutions,
-                name => oldProgram.getResolvedTypeReferenceDirective(newSourceFile, getTypeReferenceResolutionName(name), getModeForFileReference(name, newSourceFile.impliedNodeFormat)),
+                name =>
+                    oldProgram.getResolvedTypeReferenceDirective(
+                        newSourceFile,
+                        getTypeReferenceResolutionName(name),
+                        getModeForTypeReferenceDirectiveInFile(name, newSourceFile),
+                    ),
                 typeDirectiveIsEqualTo,
             );
             if (typeReferenceResolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
@@ -4039,8 +4049,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const resolvedTypeReferenceDirective = resolutions[index];
             // store resolved type directive on the file
             const fileName = ref.fileName;
-            resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), resolvedTypeReferenceDirective);
-            const mode = ref.resolutionMode || getDefaultResolutionModeForFile(file);
+            const mode = getModeForTypeReferenceDirectiveInFile(ref, file);
+            resolutionsInFile.set(fileName, mode, resolvedTypeReferenceDirective);
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
         }
     }
@@ -5218,6 +5228,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function shouldTransformImportCall(sourceFile: SourceFile): boolean {
         return shouldTransformImportCallWorker(sourceFile, getCompilerOptionsForFile(sourceFile));
+    }
+
+    function getModeForTypeReferenceDirectiveInFile(ref: FileReference, sourceFile: SourceFile) {
+        return ref.resolutionMode || getDefaultResolutionModeForFile(sourceFile);
     }
 }
 
