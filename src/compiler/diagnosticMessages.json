@@ -3948,6 +3948,15 @@
         "category": "Error",
         "code": 2873
     },
+    "This JSX tag requires '{0}' to be in scope, but it could not be found.": {
+        "category": "Error",
+        "code": 2874
+    },
+    "This JSX tag requires the module path '{0}' to exist, but none could be found. Make sure you have types for the appropriate package installed.": {
+        "category": "Error",
+        "code": 2875
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
