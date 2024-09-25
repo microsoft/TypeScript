@@ -987,6 +987,7 @@ import {
     setNodeFlags,
     setOriginalNode,
     setParent,
+    setSourceMapRange,
     setSyntheticLeadingComments,
     setTextRange as setTextRangeWorker,
     setTextRangePosEnd,
@@ -7180,7 +7181,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             context.enclosingDeclaration = propertyDeclaration || saveEnclosingDeclaration;
             const propertyName = getPropertyNameNodeForSymbol(propertySymbol, context);
             if (propertyDeclaration && (isPropertyAssignment(propertyDeclaration) || isShorthandPropertyAssignment(propertyDeclaration) || isMethodDeclaration(propertyDeclaration) || isMethodSignature(propertyDeclaration) || isPropertySignature(propertyDeclaration) || isPropertyDeclaration(propertyDeclaration) || isGetOrSetAccessorDeclaration(propertyDeclaration))) {
-                setTextRangeWorker(propertyName, propertyDeclaration.name);
+                setSourceMapRange(propertyName, propertyDeclaration.name);
             }
             context.enclosingDeclaration = saveEnclosingDeclaration;
             context.approximateLength += symbolName(propertySymbol).length + 1;
