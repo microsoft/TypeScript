@@ -745,7 +745,8 @@ class SymbolObject implements Symbol {
             }
             if (isSetAccessor(context)) {
                 if (!this.contextualSetAccessorDocumentationComment) {
-                    this.contextualSetAccessorDocumentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding
+                    this.contextualSetAccessorDocumentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                 }
                 if (length(this.contextualSetAccessorDocumentationComment)) {
