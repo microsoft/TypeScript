@@ -5,6 +5,7 @@ import {
     AssignmentDeclarationKind,
     BaseType,
     BinaryExpression,
+    bindSourceFile,
     BlockLike,
     BreakpointResolver,
     CallHierarchy,
@@ -258,6 +259,7 @@ import {
     positionIsSynthesized,
     PossibleProgramFileInfo,
     PragmaMap,
+    PreparePasteEdits,
     PrivateIdentifier,
     Program,
     PropertyName,
@@ -1593,6 +1595,7 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "provideInlayHints",
     "getSupportedCodeFixes",
     "getPasteEdits",
+    "preparePasteEditsForFile",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -2298,6 +2301,16 @@ export function createLanguageService(
             documentation,
             tags,
         };
+    }
+
+    function preparePasteEditsForFile(fileName: string, copiedTextRange: TextRange[]): boolean {
+        const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+        bindSourceFile(sourceFile, getDefaultCompilerOptions());
+        return PreparePasteEdits.preparePasteEdits(
+            sourceFile,
+            copiedTextRange,
+            getDefaultCompilerOptions(),
+        );
     }
 
     function getPasteEdits(
@@ -3416,6 +3429,7 @@ export function createLanguageService(
         uncommentSelection,
         provideInlayHints,
         getSupportedCodeFixes,
+        preparePasteEditsForFile,
         getPasteEdits,
         mapCode,
     };

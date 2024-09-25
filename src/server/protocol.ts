@@ -169,6 +169,7 @@ export const enum CommandTypes {
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
     GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+    PreparePasteEdits = "preparePasteEdits",
     GetPasteEdits = "getPasteEdits",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
@@ -651,6 +652,16 @@ export interface GetMoveToRefactoringFileSuggestions extends Response {
     };
 }
 
+export interface PreparePasteEditsRequest extends FileRequest {
+    command: CommandTypes.PreparePasteEdits;
+    arguments: PreparePasteEditsRequestArgs;
+}
+export interface PreparePasteEditsRequestArgs extends FileRequestArgs {
+    copiedTextSpan: TextSpan[];
+}
+export interface PreparePasteEditsResponse extends Response {
+    body: boolean;
+}
 /**
  * Request refactorings at a given position post pasting text from some other location.
  */
