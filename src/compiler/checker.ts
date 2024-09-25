@@ -7177,12 +7177,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.tracker.reportNonSerializableProperty(symbolToString(propertySymbol));
                 }
             }
-            const propertyDeclaration = propertySymbol.valueDeclaration || propertySymbol.declarations?.[0];
-            context.enclosingDeclaration = propertyDeclaration || saveEnclosingDeclaration;
+            context.enclosingDeclaration = propertySymbol.valueDeclaration || propertySymbol.declarations?.[0] || saveEnclosingDeclaration;
             const propertyName = getPropertyNameNodeForSymbol(propertySymbol, context);
-            if (propertyDeclaration && (isPropertyAssignment(propertyDeclaration) || isShorthandPropertyAssignment(propertyDeclaration) || isMethodDeclaration(propertyDeclaration) || isMethodSignature(propertyDeclaration) || isPropertySignature(propertyDeclaration) || isPropertyDeclaration(propertyDeclaration) || isGetOrSetAccessorDeclaration(propertyDeclaration))) {
-                setSourceMapRange(propertyName, propertyDeclaration.name);
-            }
             context.enclosingDeclaration = saveEnclosingDeclaration;
             context.approximateLength += symbolName(propertySymbol).length + 1;
 
@@ -8280,12 +8276,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
             const singleQuote = !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
             const isMethod = !!(symbol.flags & SymbolFlags.Method);
-            const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote, stringNamed, isMethod);
-            if (fromNameType) {
-                return fromNameType;
+            let propertyNameNode = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote, stringNamed, isMethod);
+            if (!propertyNameNode) {
+                const rawName = unescapeLeadingUnderscores(symbol.escapedName);
+                propertyNameNode = createPropertyNameNodeForIdentifierOrLiteral(rawName, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed, isMethod);
             }
-            const rawName = unescapeLeadingUnderscores(symbol.escapedName);
-            return createPropertyNameNodeForIdentifierOrLiteral(rawName, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed, isMethod);
+            const declaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+            if (declaration && (isPropertyAssignment(declaration) || isShorthandPropertyAssignment(declaration) || isMethodDeclaration(declaration) || isMethodSignature(declaration) || isPropertySignature(declaration) || isPropertyDeclaration(declaration) || isGetOrSetAccessorDeclaration(declaration))) {
+                setSourceMapRange(propertyNameNode, declaration.name);
+            }
+            return propertyNameNode;
         }
 
         // See getNameForSymbolFromNameType for a stringy equivalent
