@@ -25535,7 +25535,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         errorOrSuggestion(noImplicitAny, declaration, diagnostic, declarationNameToString(getNameOfDeclaration(declaration)), typeAsString);
     }
 
-    function reportErrorsFromWideningWithContextualSignature(declaration: FunctionLikeDeclaration, wideningKind: WideningKind) {
+    function shouldReportErrorsFromWideningWithContextualSignature(declaration: FunctionLikeDeclaration, wideningKind: WideningKind) {
         const signature = getContextualSignatureForFunctionLikeDeclaration(declaration);
         if (!signature) {
             return true;
@@ -25564,7 +25564,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function reportErrorsFromWidening(declaration: Declaration, type: Type, wideningKind?: WideningKind) {
         addLazyDiagnostic(() => {
             if (noImplicitAny && getObjectFlags(type) & ObjectFlags.ContainsWideningType) {
-                if (!wideningKind || isFunctionLikeDeclaration(declaration) && reportErrorsFromWideningWithContextualSignature(declaration, wideningKind)) {
+                if (!wideningKind || isFunctionLikeDeclaration(declaration) && shouldReportErrorsFromWideningWithContextualSignature(declaration, wideningKind)) {
                     // Report implicit any error within type if possible, otherwise report error on declaration
                     if (!reportWideningErrorsInType(type)) {
                         reportImplicitAny(declaration, type, wideningKind);

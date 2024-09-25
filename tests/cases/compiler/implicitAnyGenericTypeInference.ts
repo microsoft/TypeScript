@@ -26,3 +26,7 @@ f5(async function* () { yield null; });
 
 declare function f6<T>(cb: () => AsyncGenerator<unknown, T>): void;
 f6(async function* () { return null; });
+
+// https://github.com/microsoft/TypeScript/issues/44913
+Promise.resolve().catch(e => null);
+Promise.resolve().then(v => null);

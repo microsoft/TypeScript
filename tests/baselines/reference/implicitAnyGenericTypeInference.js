@@ -27,6 +27,10 @@ f5(async function* () { yield null; });
 declare function f6<T>(cb: () => AsyncGenerator<unknown, T>): void;
 f6(async function* () { return null; });
 
+// https://github.com/microsoft/TypeScript/issues/44913
+Promise.resolve().catch(e => null);
+Promise.resolve().then(v => null);
+
 //// [implicitAnyGenericTypeInference.js]
 var c;
 c = { compareTo: (x, y) => { return y; } };
@@ -37,3 +41,6 @@ f3(function* () { yield null; });
 f4(function* () { return null; });
 f5(async function* () { yield null; });
 f6(async function* () { return null; });
+// https://github.com/microsoft/TypeScript/issues/44913
+Promise.resolve().catch(e => null);
+Promise.resolve().then(v => null);
