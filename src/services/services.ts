@@ -2,6 +2,7 @@ import {
     __String,
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
+    arrayFrom,
     AssignmentDeclarationKind,
     BaseType,
     BinaryExpression,
@@ -3350,15 +3351,16 @@ export function createLanguageService(
     function getImports(fileName: string): readonly string[] {
         synchronizeHostData();
         const file = getValidSourceFile(fileName);
-        const imports: Set<string> = new Set();
-        let specifiers = file.imports;
-        specifiers = specifiers.slice(specifiers.findIndex(nodeIsSynthesized) + 1);
-        if (specifiers.length === 0) return [];
-        for (const specifier of specifiers) {
+        let imports: Set<string> | undefined;
+        for (const specifier of file.imports) {
+            if (nodeIsSynthesized(specifier)) continue;
             const name = program.getResolvedModuleFromModuleSpecifier(specifier, file)?.resolvedModule?.resolvedFileName;
-            if (name && !imports.has(name)) imports.add(name);
+            if (name) {
+                if (!imports) imports = new Set();
+                imports.add(name);
+            }
         }
-        return Array.from(imports);
+        return imports ? arrayFrom(imports) : [];
     }
 
     const ls: LanguageService = {
