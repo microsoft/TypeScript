@@ -163,7 +163,6 @@ import {
     EmitResolver,
     EmitTextWriter,
     emptyArray,
-    endsWith,
     EntityName,
     EntityNameExpression,
     EntityNameOrEntityNameExpression,
@@ -265,6 +264,7 @@ import {
     getContainingClassStaticBlock,
     getContainingFunction,
     getContainingFunctionOrClassStaticBlock,
+    getDeclarationFileExtension,
     getDeclarationModifierFlagsFromSymbol,
     getDeclarationOfKind,
     getDeclarationsOfKind,
@@ -584,6 +584,7 @@ import {
     isImportTypeNode,
     isInCompoundLikeAssignment,
     isIndexedAccessTypeNode,
+    isIndexSignatureDeclaration,
     isInExpressionContext,
     isInfinityOrNaNString,
     isInitializedProperty,
@@ -871,6 +872,7 @@ import {
     ModuleKind,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
+    MutableNodeArray,
     NamedDeclaration,
     NamedExports,
     NamedImportsOrExports,
@@ -1116,6 +1118,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    Mutable,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -3685,11 +3688,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return usageMode === ModuleKind.ESNext && targetMode === ModuleKind.CommonJS;
     }
 
-    function isOnlyImportableAsDefault(usage: Expression) {
+    function isOnlyImportableAsDefault(usage: Expression, resolvedModule?: Symbol) {
         // In Node.js, JSON modules don't get named exports
         if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
             const usageMode = getEmitSyntaxForModuleSpecifierExpression(usage);
-            return usageMode === ModuleKind.ESNext && endsWith((usage as StringLiteralLike).text, Extension.Json);
+            if (usageMode === ModuleKind.ESNext) {
+                resolvedModule ??= resolveExternalModuleName(usage, usage, /*ignoreErrors*/ true);
+                const targetFile = resolvedModule && getSourceFileOfModule(resolvedModule);
+                return targetFile && (isJsonSourceFile(targetFile) || getDeclarationFileExtension(targetFile.fileName) === ".d.json.ts");
+        }
         }
         return false;
     }
@@ -3759,7 +3766,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!specifier) {
             return exportDefaultSymbol;
         }
-        const hasDefaultOnly = isOnlyImportableAsDefault(specifier);
+        const hasDefaultOnly = isOnlyImportableAsDefault(specifier, moduleSymbol);
         const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, specifier);
         if (!exportDefaultSymbol && !hasSyntheticDefault && !hasDefaultOnly) {
             if (hasExportAssignmentSymbol(moduleSymbol) && !allowSyntheticDefaultImports) {
@@ -3944,7 +3951,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let symbolFromModule = getExportOfModule(targetSymbol, nameText, specifier, dontResolveAlias);
                 if (symbolFromModule === undefined && nameText === InternalSymbolName.Default) {
                     const file = moduleSymbol.declarations?.find(isSourceFile);
-                    if (isOnlyImportableAsDefault(moduleSpecifier) || canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, moduleSpecifier)) {
+                    if (isOnlyImportableAsDefault(moduleSpecifier, moduleSymbol) || canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, moduleSpecifier)) {
                         symbolFromModule = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                     }
                 }
@@ -3952,7 +3959,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const symbol = symbolFromModule && symbolFromVariable && symbolFromModule !== symbolFromVariable ?
                     combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                     symbolFromModule || symbolFromVariable;
-                if (!symbol) {
+
+                if (isImportOrExportSpecifier(specifier) && isOnlyImportableAsDefault(moduleSpecifier, moduleSymbol) && nameText !== InternalSymbolName.Default) {
+                    error(name, Diagnostics.Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0, ModuleKind[moduleKind]);
+                }
+                else if (!symbol) {
                     errorNoModuleMemberSymbol(moduleSymbol, targetSymbol, node, name);
                 }
                 return symbol;
@@ -12988,12 +12999,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * - The type of its expression is a string or numeric literal type, or is a `unique symbol` type.
      */
     function isLateBindableName(node: DeclarationName): node is LateBoundName {
+        return isLateBindableAST(node)
+            && isTypeUsableAsPropertyName(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached((node as ElementAccessExpression).argumentExpression));
+    }
+
+    function isLateBindableIndexSignature(node: DeclarationName): node is LateBoundName {
+        return isLateBindableAST(node)
+            && isTypeUsableAsIndexSignature(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached((node as ElementAccessExpression).argumentExpression));
+    }
+
+    function isLateBindableAST(node: DeclarationName) {
         if (!isComputedPropertyName(node) && !isElementAccessExpression(node)) {
             return false;
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
-        return isEntityNameExpression(expr)
-            && isTypeUsableAsPropertyName(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached(expr));
+        return isEntityNameExpression(expr);
+    }
+
+    function isTypeUsableAsIndexSignature(type: Type): boolean {
+        return isTypeAssignableTo(type, stringNumberSymbolType);
     }
 
     function isLateBoundName(name: __String): boolean {
@@ -13008,6 +13032,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function hasLateBindableName(node: Declaration): node is LateBoundDeclaration | LateBoundBinaryExpressionDeclaration {
         const name = getNameOfDeclaration(node);
         return !!name && isLateBindableName(name);
+    }
+
+    function hasLateBindableIndexSignature(node: Declaration) {
+        const name = getNameOfDeclaration(node);
+        return !!name && isLateBindableIndexSignature(name);
     }
 
     /**
@@ -13117,6 +13146,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedSymbol;
     }
 
+    function lateBindIndexSignature(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: Map<__String, TransientSymbol>, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
+        // First, late bind the index symbol itself, if needed
+        let indexSymbol = lateSymbols.get(InternalSymbolName.Index);
+        if (!indexSymbol) {
+            const early = earlySymbols?.get(InternalSymbolName.Index);
+            if (!early) {
+                indexSymbol = createSymbol(SymbolFlags.None, InternalSymbolName.Index, CheckFlags.Late);
+            }
+            else {
+                indexSymbol = cloneSymbol(early);
+                indexSymbol.links.checkFlags |= CheckFlags.Late;
+            }
+            lateSymbols.set(InternalSymbolName.Index, indexSymbol);
+        }
+        // Then just add the computed name as a late bound declaration
+        // (note: unlike `addDeclarationToLateBoundSymbol` we do not set up a `.lateSymbol` on `decl`'s links,
+        // since that would point at an index symbol and not a single property symbol, like most consumers would expect)
+        if (!indexSymbol.declarations) {
+            indexSymbol.declarations = [decl];
+        }
+        else if (!decl.symbol.isReplaceableByMethod) {
+            indexSymbol.declarations.push(decl);
+        }
+    }
+
     function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: MembersOrExportsResolutionKind): Map<__String, Symbol> {
         const links = getSymbolLinks(symbol);
         if (!links[resolutionKind]) {
@@ -13140,9 +13194,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             if (hasLateBindableName(member)) {
                                 lateBindMember(symbol, earlySymbols, lateSymbols, member);
                             }
+                            else if (hasLateBindableIndexSignature(member)) {
+                                lateBindIndexSignature(symbol, earlySymbols, lateSymbols, member as Node as LateBoundDeclaration | LateBoundBinaryExpressionDeclaration);
                         }
                     }
                 }
+            }
             }
             const assignments = getFunctionExpressionParentSymbolOrSymbol(symbol).assignmentDeclarationMembers;
 
@@ -13803,7 +13860,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const indexSymbol = getIndexSymbolFromSymbolTable(members);
         if (indexSymbol) {
-            indexInfos = getIndexInfosOfIndexSymbol(indexSymbol);
+            indexInfos = getIndexInfosOfIndexSymbol(indexSymbol, arrayFrom(members.values()));
         }
         else {
             if (baseConstructorIndexInfo) {
@@ -15835,7 +15892,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getIndexSymbol(symbol: Symbol): Symbol | undefined {
-        return symbol.members ? getIndexSymbolFromSymbolTable(symbol.members) : undefined;
+        return symbol.members ? getIndexSymbolFromSymbolTable(getMembersOfSymbol(symbol)) : undefined;
     }
 
     function getIndexSymbolFromSymbolTable(symbolTable: SymbolTable): Symbol | undefined {
@@ -15848,13 +15905,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getIndexInfosOfSymbol(symbol: Symbol): IndexInfo[] {
         const indexSymbol = getIndexSymbol(symbol);
-        return indexSymbol ? getIndexInfosOfIndexSymbol(indexSymbol) : emptyArray;
+        return indexSymbol ? getIndexInfosOfIndexSymbol(indexSymbol, arrayFrom(getMembersOfSymbol(symbol).values())) : emptyArray;
     }
 
-    function getIndexInfosOfIndexSymbol(indexSymbol: Symbol): IndexInfo[] {
+    // note intentional similarities to index signature building in `checkObjectLiteral` for parity
+    function getIndexInfosOfIndexSymbol(indexSymbol: Symbol, siblingSymbols: Symbol[] | undefined = indexSymbol.parent ? arrayFrom(getMembersOfSymbol(indexSymbol.parent).values()) : undefined): IndexInfo[] {
         if (indexSymbol.declarations) {
             const indexInfos: IndexInfo[] = [];
-            for (const declaration of (indexSymbol.declarations as IndexSignatureDeclaration[])) {
+            let hasComputedNumberProperty = false;
+            let readonlyComputedNumberProperty = true;
+            let hasComputedSymbolProperty = false;
+            let readonlyComputedSymbolProperty = true;
+            let hasComputedStringProperty = false;
+            let readonlyComputedStringProperty = true;
+            const computedPropertySymbols: Symbol[] = [];
+            for (const declaration of indexSymbol.declarations) {
+                if (isIndexSignatureDeclaration(declaration)) {
                 if (declaration.parameters.length === 1) {
                     const parameter = declaration.parameters[0];
                     if (parameter.type) {
@@ -15866,6 +15932,40 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
+                else if (hasLateBindableIndexSignature(declaration)) {
+                    const declName = isBinaryExpression(declaration) ? declaration.left as ElementAccessExpression : (declaration as LateBoundDeclaration).name;
+                    const keyType = isElementAccessExpression(declName) ? checkExpressionCached(declName.argumentExpression) : checkComputedPropertyName(declName);
+                    if (findIndexInfo(indexInfos, keyType)) {
+                        continue; // Explicit index for key type takes priority
+                    }
+                    if (isTypeAssignableTo(keyType, stringNumberSymbolType)) {
+                        if (isTypeAssignableTo(keyType, numberType)) {
+                            hasComputedNumberProperty = true;
+                            if (!hasEffectiveReadonlyModifier(declaration)) {
+                                readonlyComputedNumberProperty = false;
+                            }
+                        }
+                        else if (isTypeAssignableTo(keyType, esSymbolType)) {
+                            hasComputedSymbolProperty = true;
+                            if (!hasEffectiveReadonlyModifier(declaration)) {
+                                readonlyComputedSymbolProperty = false;
+                            }
+                        }
+                        else {
+                            hasComputedStringProperty = true;
+                            if (!hasEffectiveReadonlyModifier(declaration)) {
+                                readonlyComputedStringProperty = false;
+                            }
+                        }
+                        computedPropertySymbols.push(declaration.symbol);
+                    }
+                }
+            }
+            const allPropertySymbols = concatenate(computedPropertySymbols, filter(siblingSymbols, s => s !== indexSymbol));
+            // aggregate similar index infos implied to be the same key to the same combined index info
+            if (hasComputedStringProperty && !findIndexInfo(indexInfos, stringType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedStringProperty, 0, allPropertySymbols, stringType));
+            if (hasComputedNumberProperty && !findIndexInfo(indexInfos, numberType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedNumberProperty, 0, allPropertySymbols, numberType));
+            if (hasComputedSymbolProperty && !findIndexInfo(indexInfos, esSymbolType)) indexInfos.push(getObjectLiteralIndexInfo(readonlyComputedSymbolProperty, 0, allPropertySymbols, esSymbolType));
             return indexInfos;
         }
         return emptyArray;
@@ -29684,7 +29784,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!getJsxNamespaceContainerForImplicitImport(node)) {
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
-            const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.This_JSX_tag_requires_0_to_be_in_scope_but_it_could_not_be_found : undefined;
             const jsxFactoryNamespace = getJsxNamespace(node);
             const jsxFactoryLocation = isJsxOpeningLikeElement(node) ? node.tagName : node;
 
@@ -32433,7 +32533,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isTypeAssignableToKind(checkComputedPropertyName(firstDecl.name), TypeFlags.ESSymbol));
     }
 
-    function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
+    // NOTE: currently does not make pattern literal indexers, eg `${number}px`
+    function getObjectLiteralIndexInfo(isReadonly: boolean, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
         const propTypes: Type[] = [];
         for (let i = offset; i < properties.length; i++) {
             const prop = properties[i];
@@ -32446,7 +32547,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         const unionType = propTypes.length ? getUnionType(propTypes, UnionReduction.Subtype) : undefinedType;
-        return createIndexInfo(keyType, unionType, isConstContext(node));
+        return createIndexInfo(keyType, unionType, isReadonly);
     }
 
     function getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined {
@@ -32651,9 +32752,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function createObjectLiteralType() {
             const indexInfos = [];
-            if (hasComputedStringProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, stringType));
-            if (hasComputedNumberProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, numberType));
-            if (hasComputedSymbolProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, esSymbolType));
+            const isReadonly = isConstContext(node);
+            if (hasComputedStringProperty) indexInfos.push(getObjectLiteralIndexInfo(isReadonly, offset, propertiesArray, stringType));
+            if (hasComputedNumberProperty) indexInfos.push(getObjectLiteralIndexInfo(isReadonly, offset, propertiesArray, numberType));
+            if (hasComputedSymbolProperty) indexInfos.push(getObjectLiteralIndexInfo(isReadonly, offset, propertiesArray, esSymbolType));
             const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, indexInfos);
             result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
             if (isJSObjectLiteral) {
@@ -32988,7 +33090,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isClassic = getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic;
         const errorMessage = isClassic
             ? Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option
-            : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations;
+            : Diagnostics.This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_types_for_the_appropriate_package_installed;
         const specifier = getJSXRuntimeImportSpecifier(file, runtimeImportSpecifier);
         const mod = resolveExternalModule(specifier || location!, runtimeImportSpecifier, errorMessage, location);
         const result = mod && mod !== unknownSymbol ? getMergedSymbol(resolveSymbol(mod)) : undefined;
@@ -37044,9 +37146,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (exprType === silentNeverType || isErrorType(exprType) || !some(typeArguments)) {
             return exprType;
         }
+        const links = getNodeLinks(node);
+        if (!links.instantiationExpressionTypes) {
+            links.instantiationExpressionTypes = new Map();
+        }
+        if (links.instantiationExpressionTypes.has(exprType.id)) {
+            return links.instantiationExpressionTypes.get(exprType.id)!;
+        }
         let hasSomeApplicableSignature = false;
         let nonApplicableType: Type | undefined;
         const result = getInstantiatedType(exprType);
+        links.instantiationExpressionTypes.set(exprType.id, result);
         const errorType = hasSomeApplicableSignature ? nonApplicableType : exprType;
         if (errorType) {
             diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable, typeToString(errorType)));
@@ -41210,7 +41320,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const indexSymbol = getIndexSymbol(getSymbolOfDeclaration(node));
         if (indexSymbol?.declarations) {
             const indexSignatureMap = new Map<TypeId, { type: Type; declarations: IndexSignatureDeclaration[]; }>();
-            for (const declaration of (indexSymbol.declarations as IndexSignatureDeclaration[])) {
+            for (const declaration of indexSymbol.declarations) {
+                if (isIndexSignatureDeclaration(declaration)) {
                 if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
                     forEachType(getTypeFromTypeNode(declaration.parameters[0].type), type => {
                         const entry = indexSignatureMap.get(getTypeId(type));
@@ -41222,6 +41333,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     });
                 }
+            }
+                // Do nothing for late-bound index signatures: allow these to duplicate one another and explicit indexes
             }
             indexSignatureMap.forEach(entry => {
                 if (entry.declarations.length > 1) {
@@ -47318,6 +47431,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
         }
         if (checkExternalImportOrExportDeclaration(node)) {
+            let resolvedModule;
             const importClause = node.importClause;
             if (importClause && !checkGrammarImportClause(importClause)) {
                 if (importClause.name) {
@@ -47332,18 +47446,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     else {
-                        const moduleExisted = resolveExternalModuleName(node, node.moduleSpecifier);
-                        if (moduleExisted) {
+                        resolvedModule = resolveExternalModuleName(node, node.moduleSpecifier);
+                        if (resolvedModule) {
                             forEach(importClause.namedBindings.elements, checkImportBinding);
                         }
                     }
                 }
+
+                if (isOnlyImportableAsDefault(node.moduleSpecifier, resolvedModule) && !hasTypeJsonImportAttribute(node)) {
+                    error(node.moduleSpecifier, Diagnostics.Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_import_attribute_when_module_is_set_to_0, ModuleKind[moduleKind]);
+            }
             }
             else if (noUncheckedSideEffectImports && !importClause) {
                 void resolveExternalModuleName(node, node.moduleSpecifier);
             }
         }
         checkImportAttributes(node);
+    }
+
+    function hasTypeJsonImportAttribute(node: ImportDeclaration) {
+        return !!node.attributes && node.attributes.elements.some(attr => getTextOfIdentifierOrLiteral(attr.name) === "type" && tryCast(attr.value, isStringLiteralLike)?.text === "json");
     }
 
     function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
@@ -48665,15 +48787,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return resolveJSDocMemberName(name);
             }
         }
-        else if (isTypeReferenceIdentifier(name as EntityName)) {
+        else if (isEntityName(name) && isTypeReferenceIdentifier(name)) {
             const meaning = name.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
-            const symbol = resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
-            return symbol && symbol !== unknownSymbol ? symbol : getUnresolvedSymbolForEntityName(name as EntityName);
+            const symbol = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
+            return symbol && symbol !== unknownSymbol ? symbol : getUnresolvedSymbolForEntityName(name);
         }
         if (name.parent.kind === SyntaxKind.TypePredicate) {
             return resolveEntityName(name as Identifier, /*meaning*/ SymbolFlags.FunctionScopedVariable);
         }
-
         return undefined;
     }
 
@@ -49998,6 +50119,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             },
             isImportRequiredByAugmentation,
             isDefinitelyReferenceToGlobalSymbolObject,
+            createLateBoundIndexSignatures: (cls, enclosing, flags, internalFlags, tracker) => {
+                const sym = cls.symbol;
+                const staticInfos = getIndexInfosOfType(getTypeOfSymbol(sym));
+                const instanceIndexSymbol = getIndexSymbol(sym);
+                const instanceInfos = instanceIndexSymbol && getIndexInfosOfIndexSymbol(instanceIndexSymbol, arrayFrom(getMembersOfSymbol(sym).values()));
+                let result;
+                for (const infoList of [staticInfos, instanceInfos]) {
+                    if (!length(infoList)) continue;
+                    result ||= [];
+                    for (const info of infoList!) {
+                        if (info.declaration) continue;
+                        const node = nodeBuilder.indexInfoToIndexSignatureDeclaration(info, enclosing, flags, internalFlags, tracker);
+                        if (node && infoList === staticInfos) {
+                            (((node as Mutable<typeof node>).modifiers ||= factory.createNodeArray()) as MutableNodeArray<Modifier>).unshift(factory.createModifier(SyntaxKind.StaticKeyword));
+                        }
+                        if (node) {
+                            result.push(node);
+                        }
+                    }
+                }
+                return result;
+            },
         };
 
         function isImportRequiredByAugmentation(node: ImportDeclaration) {
