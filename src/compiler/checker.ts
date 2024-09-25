@@ -2116,6 +2116,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var emptyObjectType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var emptyJsxObjectType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     emptyJsxObjectType.objectFlags |= ObjectFlags.JsxAttributes;
+    var emptyFreshJsxObjectType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
+    emptyFreshJsxObjectType.objectFlags |= ObjectFlags.JsxAttributes | ObjectFlags.FreshLiteral | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
 
     var emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
     emptyTypeLiteralSymbol.members = createSymbolTable();
@@ -33346,11 +33348,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function createEmptyJsxFragmentsAttributesType(): Type {
-        // Used to synthesize type for `getEffectiveCallArgument`. This attributes Type does not include a children property yet.
-        return createJsxAttributesType(ObjectFlags.JsxAttributes, /*attributesSymbol*/ undefined, createSymbolTable());
-    }
-
     function checkJsxChildren(node: JsxElement | JsxFragment, checkMode?: CheckMode) {
         const childrenTypes: Type[] = [];
         for (const child of node.children) {
@@ -35663,7 +35660,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Returns the effective arguments for an expression that works like a function invocation.
      */
     function getEffectiveCallArguments(node: CallLikeExpression): readonly Expression[] {
-        if (isJsxOpeningFragment(node)) return [createSyntheticExpression(node, createEmptyJsxFragmentsAttributesType())];
+        if (isJsxOpeningFragment(node)) {
+            // This attributes Type does not include a children property yet, the same way a fragment created with <React.Fragment> does not at this stage
+            return [createSyntheticExpression(node, emptyFreshJsxObjectType)];
+        }
 
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             const template = node.template;
