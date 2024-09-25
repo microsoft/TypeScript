@@ -515,6 +515,9 @@ declare namespace ts {
                     files: string[];
                 };
             }
+            /**
+             * Request to check if `pasteEdits` should be provided for a given location post copying text from that location.
+             */
             export interface PreparePasteEditsRequest extends FileRequest {
                 command: CommandTypes.PreparePasteEdits;
                 arguments: PreparePasteEditsRequestArgs;

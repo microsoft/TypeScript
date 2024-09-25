@@ -5,7 +5,6 @@ import {
     AssignmentDeclarationKind,
     BaseType,
     BinaryExpression,
-    bindSourceFile,
     BlockLike,
     BreakpointResolver,
     CallHierarchy,
@@ -1595,7 +1594,6 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "provideInlayHints",
     "getSupportedCodeFixes",
     "getPasteEdits",
-    "preparePasteEditsForFile",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -1616,6 +1614,7 @@ const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
     "getRenameInfo",
     "findRenameLocations",
     "getApplicableRefactors",
+    "preparePasteEditsForFile",
 ];
 export function createLanguageService(
     host: LanguageServiceHost,
@@ -2304,12 +2303,11 @@ export function createLanguageService(
     }
 
     function preparePasteEditsForFile(fileName: string, copiedTextRange: TextRange[]): boolean {
-        const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-        bindSourceFile(sourceFile, getDefaultCompilerOptions());
+        synchronizeHostData();
         return PreparePasteEdits.preparePasteEdits(
-            sourceFile,
+            getValidSourceFile(fileName),
             copiedTextRange,
-            getDefaultCompilerOptions(),
+            program.getTypeChecker(),
         );
     }
 

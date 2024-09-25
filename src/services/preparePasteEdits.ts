@@ -1,10 +1,4 @@
 import {
-    __String,
-    CompilerOptions,
-    createNameResolver,
-    createSymbolTable,
-    Declaration,
-    escapeLeadingUnderscores,
     findAncestor,
     forEachChild,
     getTokenAtPosition,
@@ -13,9 +7,8 @@ import {
     rangeContainsRange,
     SourceFile,
     SymbolFlags,
-    SymbolTable,
     TextRange,
-    TransientSymbol,
+    TypeChecker,
 } from "./_namespaces/ts.js";
 import { isInImport } from "./refactors/moveToFile.js";
 
@@ -23,30 +16,9 @@ import { isInImport } from "./refactors/moveToFile.js";
 export function preparePasteEdits(
     sourceFile: SourceFile,
     copiedFromRange: TextRange[],
-    compilerOptions: CompilerOptions,
+    checker: TypeChecker,
 ): boolean {
     let shouldProvidePasteEdits = false;
-    const symbol: TransientSymbol = {} as TransientSymbol;
-    const globals = createSymbolTable();
-    const nameResolver = createNameResolver({
-        compilerOptions,
-        globals,
-        getSymbolOfDeclaration(node: Declaration) {
-            return node.symbol;
-        },
-        error: () => {},
-        getRequiresScopeChangeCache() {
-            return undefined;
-        },
-        setRequiresScopeChangeCache() {
-            return undefined;
-        },
-        lookup(symbols: SymbolTable, name: __String, _meaning: SymbolFlags) {
-            return symbols.get(name);
-        },
-        requireSymbol: symbol,
-        argumentsSymbol: symbol,
-    });
     copiedFromRange.forEach(range => {
         const enclosingNode = findAncestor(
             getTokenAtPosition(sourceFile, range.pos),
@@ -56,7 +28,7 @@ export function preparePasteEdits(
         forEachChild(enclosingNode, function checkNameResolution(node) {
             if (shouldProvidePasteEdits) return;
             if (isIdentifier(node) && rangeContainsPosition(range, node.getStart(sourceFile))) {
-                const resolvedSymbol = nameResolver(node, escapeLeadingUnderscores(node.text), SymbolFlags.All, /*nameNotFoundMessage*/ undefined, /*isUse*/ false, /*excludeGlobals*/ true);
+                const resolvedSymbol = checker.resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false);
                 if (resolvedSymbol && resolvedSymbol.declarations) {
                     for (const decl of resolvedSymbol.declarations) {
                         if (isInImport(decl) || !!(node.text && sourceFile.symbol && sourceFile.symbol.exports?.has(node.escapedText))) {

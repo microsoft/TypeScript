@@ -966,6 +966,7 @@ const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.NavtoFull,
     protocol.CommandTypes.DocumentHighlights,
     protocol.CommandTypes.DocumentHighlightsFull,
+    protocol.CommandTypes.PreparePasteEdits,
 ];
 
 export interface SessionOptions {
@@ -2967,8 +2968,8 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private preparePasteEdits(args: protocol.PreparePasteEditsRequestArgs): boolean {
-        const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-        return languageService.preparePasteEditsForFile(file, args.copiedTextSpan.map(copies => this.getRange({ file, startLine: copies.start.line, startOffset: copies.start.offset, endLine: copies.end.line, endOffset: copies.end.offset }, this.projectService.getScriptInfoForNormalizedPath(file)!)));
+        const { file, project } = this.getFileAndProject(args);
+        return project.getLanguageService().preparePasteEditsForFile(file, args.copiedTextSpan.map(copies => this.getRange({ file, startLine: copies.start.line, startOffset: copies.start.offset, endLine: copies.end.line, endOffset: copies.end.offset }, this.projectService.getScriptInfoForNormalizedPath(file)!)));
     }
     private getPasteEdits(args: protocol.GetPasteEditsRequestArgs): protocol.PasteEditsAction | undefined {
         const { file, project } = this.getFileAndProject(args);
