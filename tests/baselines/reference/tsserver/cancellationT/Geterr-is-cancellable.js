@@ -40,6 +40,14 @@ TestServerCancellationToken:: Cancellation Request id:: 1
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/myproject/app.ts ProjectRootPath: undefined:: Result: /home/src/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/myproject/tsconfig.json, currentDirectory: /home/src/projects/myproject
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/tsconfig.json 2000 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/myproject/tsconfig.json : {
+ "rootNames": [
+  "/home/src/projects/myproject/app.ts"
+ ],
+ "options": {
+  "configFilePath": "/home/src/projects/myproject/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -50,14 +58,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /home/src/projects/myproject/app.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /home/src/projects/myproject/tsconfig.json : {
- "rootNames": [
-  "/home/src/projects/myproject/app.ts"
- ],
- "options": {
-  "configFilePath": "/home/src/projects/myproject/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 1 undefined Config: /home/src/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 1 undefined Config: /home/src/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json
@@ -258,7 +258,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "projectInfo",
       "arguments": {
         "file": "/home/src/projects/myproject/app.ts",
-        "needFileNameList": false
+        "needFileNameList": false,
+        "needDefaultConfiguredProjectInfo": true
       },
       "seq": 4,
       "type": "request"
@@ -269,7 +270,10 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "configFileName": "/home/src/projects/myproject/tsconfig.json",
-        "languageServiceDisabled": false
+        "languageServiceDisabled": false,
+        "configuredProjectInfo": {
+          "defaultProject": "/home/src/projects/myproject/tsconfig.json"
+        }
       },
       "responseRequired": true
     }

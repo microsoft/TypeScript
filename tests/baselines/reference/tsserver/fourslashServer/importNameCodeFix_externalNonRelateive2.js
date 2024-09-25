@@ -50,16 +50,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/apps/app1/tsconfig.json ProjectRootPath: undefined:: Result: /home/src/workspaces/project/apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/apps/app1/tsconfig.json, currentDirectory: /home/src/workspaces/project/apps/app1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/apps/app1/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/apps/app1/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/workspaces/project/apps/app1/tsconfig.json",
-        "reason": "Creating possible configured project for /home/src/workspaces/project/apps/app1/tsconfig.json to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/apps/app1/tsconfig.json : {
  "rootNames": [
   "/home/src/workspaces/project/apps/app1/src/app.ts",
@@ -79,6 +69,16 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/apps/app1/tsconfig
   "configFilePath": "/home/src/workspaces/project/apps/app1/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/workspaces/project/apps/app1/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspaces/project/apps/app1/tsconfig.json to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/apps/app1/src 1 undefined Config: /home/src/workspaces/project/apps/app1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/apps/app1/src 1 undefined Config: /home/src/workspaces/project/apps/app1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/shared 1 undefined Config: /home/src/workspaces/project/apps/app1/tsconfig.json WatchType: Wild card directory
@@ -159,6 +159,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/apps/app1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project/apps/app1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/apps/app1/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/apps/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root

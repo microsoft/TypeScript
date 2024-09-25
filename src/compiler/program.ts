@@ -8,7 +8,6 @@ import {
     AsExpression,
     BuilderProgram,
     CancellationToken,
-    canEmitTsBuildInfo,
     canHaveDecorators,
     canHaveIllegalDecorators,
     chainDiagnosticMessages,
@@ -1150,7 +1149,11 @@ export function forEachResolvedProjectReference<T>(
     resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
     cb: (resolvedProjectReference: ResolvedProjectReference, parent: ResolvedProjectReference | undefined) => T | undefined,
 ): T | undefined {
-    return forEachProjectReference(/*projectReferences*/ undefined, resolvedProjectReferences, (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent));
+    return forEachProjectReference(
+        /*projectReferences*/ undefined,
+        resolvedProjectReferences,
+        (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent),
+    );
 }
 
 function forEachProjectReference<T>(
@@ -1160,7 +1163,6 @@ function forEachProjectReference<T>(
     cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined,
 ): T | undefined {
     let seenResolvedRefs: Set<Path> | undefined;
-
     return worker(projectReferences, resolvedProjectReferences, /*parent*/ undefined);
 
     function worker(
@@ -1173,19 +1175,26 @@ function forEachProjectReference<T>(
             const result = cbRef(projectReferences, parent);
             if (result) return result;
         }
-
-        return forEach(resolvedProjectReferences, (resolvedRef, index) => {
-            if (resolvedRef && seenResolvedRefs?.has(resolvedRef.sourceFile.path)) {
-                // ignore recursives
-                return undefined;
-            }
-
-            const result = cbResolvedRef(resolvedRef, parent, index);
-            if (result || !resolvedRef) return result;
-
-            (seenResolvedRefs ||= new Set()).add(resolvedRef.sourceFile.path);
-            return worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef);
-        });
+        let skipChildren: Set<ResolvedProjectReference> | undefined;
+        return forEach(
+            resolvedProjectReferences,
+            (resolvedRef, index) => {
+                if (resolvedRef && seenResolvedRefs?.has(resolvedRef.sourceFile.path)) {
+                    (skipChildren ??= new Set()).add(resolvedRef);
+                    // ignore recursives
+                    return undefined;
+                }
+                const result = cbResolvedRef(resolvedRef, parent, index);
+                if (result || !resolvedRef) return result;
+                (seenResolvedRefs ||= new Set()).add(resolvedRef.sourceFile.path);
+            },
+        ) || forEach(
+            resolvedProjectReferences,
+            resolvedRef =>
+                resolvedRef && !skipChildren?.has(resolvedRef) ?
+                    worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef) :
+                    undefined,
+        );
     }
 }
 
@@ -1367,7 +1376,14 @@ export function isProgramUptoDate(
             (seenResolvedRefs || (seenResolvedRefs = [])).push(oldResolvedRef);
 
             // If child project references are upto date, this project reference is uptodate
-            return !forEach(oldResolvedRef.references, (childResolvedRef, index) => !resolvedProjectReferenceUptoDate(childResolvedRef, oldResolvedRef.commandLine.projectReferences![index]));
+            return !forEach(
+                oldResolvedRef.references,
+                (childResolvedRef, index) =>
+                    !resolvedProjectReferenceUptoDate(
+                        childResolvedRef,
+                        oldResolvedRef.commandLine.projectReferences![index],
+                    ),
+            );
         }
 
         // In old program, not able to resolve project reference path,
@@ -2104,7 +2120,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeRef: FileReference, sourceFile: SourceFile) {
-        return getResolvedTypeReferenceDirective(sourceFile, typeRef.fileName, typeRef.resolutionMode || sourceFile.impliedNodeFormat);
+        return getResolvedTypeReferenceDirective(
+            sourceFile,
+            typeRef.fileName,
+            getModeForTypeReferenceDirectiveInFile(typeRef, sourceFile),
+        );
     }
 
     function forEachResolvedModule(
@@ -2632,11 +2652,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const moduleNames = getModuleNames(newSourceFile);
             const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
             (resolvedModulesProcessing ??= new Map()).set(newSourceFile.path, resolutions);
+            const optionsForFile = getCompilerOptionsForFile(newSourceFile);
             // ensure that module resolution results are still correct
             const resolutionsChanged = hasChangesInResolutions(
                 moduleNames,
                 resolutions,
-                name => oldProgram.getResolvedModule(newSourceFile, name.text, getModeForUsageLocation(newSourceFile, name)),
+                name => oldProgram.getResolvedModule(newSourceFile, name.text, getModeForUsageLocationWorker(newSourceFile, name, optionsForFile)),
                 moduleResolutionIsEqualTo,
             );
             if (resolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
@@ -2647,7 +2668,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const typeReferenceResolutionsChanged = hasChangesInResolutions(
                 typesReferenceDirectives,
                 typeReferenceResolutions,
-                name => oldProgram.getResolvedTypeReferenceDirective(newSourceFile, getTypeReferenceResolutionName(name), getModeForFileReference(name, newSourceFile.impliedNodeFormat)),
+                name =>
+                    oldProgram.getResolvedTypeReferenceDirective(
+                        newSourceFile,
+                        getTypeReferenceResolutionName(name),
+                        getModeForTypeReferenceDirectiveInFile(name, newSourceFile),
+                    ),
                 typeDirectiveIsEqualTo,
             );
             if (typeReferenceResolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
@@ -4028,8 +4054,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const resolvedTypeReferenceDirective = resolutions[index];
             // store resolved type directive on the file
             const fileName = ref.fileName;
-            resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), resolvedTypeReferenceDirective);
-            const mode = ref.resolutionMode || getDefaultResolutionModeForFile(file);
+            const mode = getModeForTypeReferenceDirectiveInFile(ref, file);
+            resolutionsInFile.set(fileName, mode, resolvedTypeReferenceDirective);
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
         }
     }
@@ -4324,12 +4350,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         const outputFile = options.outFile;
-        if (options.tsBuildInfoFile) {
-            if (!canEmitTsBuildInfo(options)) {
-                createDiagnosticForOptionName(Diagnostics.Option_tsBuildInfoFile_cannot_be_specified_without_specifying_option_incremental_or_composite_or_if_not_running_tsc_b, "tsBuildInfoFile");
-            }
-        }
-        else if (options.incremental && !outputFile && !options.configFilePath) {
+        if (!options.tsBuildInfoFile && options.incremental && !outputFile && !options.configFilePath) {
             programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
         }
 
@@ -4905,7 +4926,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             case FileIncludeKind.SourceFromProjectReference:
             case FileIncludeKind.OutputFromProjectReference:
                 const referencedResolvedRef = Debug.checkDefined(resolvedProjectReferences?.[reason.index]);
-                const referenceInfo = forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, parent, index) => resolvedRef === referencedResolvedRef ? { sourceFile: parent?.sourceFile || options.configFile!, index } : undefined);
+                const referenceInfo = forEachProjectReference(
+                    projectReferences,
+                    resolvedProjectReferences,
+                    (resolvedRef, parent, index) =>
+                        resolvedRef === referencedResolvedRef ?
+                            { sourceFile: parent?.sourceFile || options.configFile!, index } :
+                            undefined,
+                );
                 if (!referenceInfo) return undefined;
                 const { sourceFile, index } = referenceInfo;
                 const referencesSyntax = forEachTsConfigPropArray(sourceFile as TsConfigSourceFile, "references", property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
@@ -4945,28 +4973,32 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function verifyProjectReferences() {
         const buildInfoPath = !options.suppressOutputPathCheck ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
-        forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, parent, index) => {
-            const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
-            const parentFile = parent && parent.sourceFile as JsonSourceFile;
-            verifyDeprecatedProjectReference(ref, parentFile, index);
-            if (!resolvedRef) {
-                createDiagnosticForReference(parentFile, index, Diagnostics.File_0_not_found, ref.path);
-                return;
-            }
-            const options = resolvedRef.commandLine.options;
-            if (!options.composite || options.noEmit) {
-                // ok to not have composite if the current program is container only
-                const inputs = parent ? parent.commandLine.fileNames : rootNames;
-                if (inputs.length) {
-                    if (!options.composite) createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
-                    if (options.noEmit) createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_may_not_disable_emit, ref.path);
+        forEachProjectReference(
+            projectReferences,
+            resolvedProjectReferences,
+            (resolvedRef, parent, index) => {
+                const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
+                const parentFile = parent && parent.sourceFile as JsonSourceFile;
+                verifyDeprecatedProjectReference(ref, parentFile, index);
+                if (!resolvedRef) {
+                    createDiagnosticForReference(parentFile, index, Diagnostics.File_0_not_found, ref.path);
+                    return;
                 }
-            }
-            if (!parent && buildInfoPath && buildInfoPath === getTsBuildInfoEmitOutputFilePath(options)) {
-                createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, buildInfoPath, ref.path);
-                hasEmitBlockingDiagnostics.set(toPath(buildInfoPath), true);
-            }
-        });
+                const options = resolvedRef.commandLine.options;
+                if (!options.composite || options.noEmit) {
+                    // ok to not have composite if the current program is container only
+                    const inputs = parent ? parent.commandLine.fileNames : rootNames;
+                    if (inputs.length) {
+                        if (!options.composite) createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
+                        if (options.noEmit) createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_may_not_disable_emit, ref.path);
+                    }
+                }
+                if (!parent && buildInfoPath && buildInfoPath === getTsBuildInfoEmitOutputFilePath(options)) {
+                    createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, buildInfoPath, ref.path);
+                    hasEmitBlockingDiagnostics.set(toPath(buildInfoPath), true);
+                }
+            },
+        );
     }
 
     function createDiagnosticForOptionPathKeyValue(key: string, valueIndex: number, message: DiagnosticMessage, ...args: DiagnosticArguments) {
@@ -5201,6 +5233,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function shouldTransformImportCall(sourceFile: SourceFile): boolean {
         return shouldTransformImportCallWorker(sourceFile, getCompilerOptionsForFile(sourceFile));
+    }
+
+    function getModeForTypeReferenceDirectiveInFile(ref: FileReference, sourceFile: SourceFile) {
+        return ref.resolutionMode || getDefaultResolutionModeForFile(sourceFile);
     }
 }
 

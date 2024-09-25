@@ -254,43 +254,43 @@ interface ArrayBuffer {
     readonly [Symbol.toStringTag]: string;
 }
 
-interface DataView {
+interface DataView<TArrayBuffer extends ArrayBufferLike> {
     readonly [Symbol.toStringTag]: string;
 }
 
-interface Int8Array {
+interface Int8Array<TArrayBuffer extends ArrayBufferLike> {
     readonly [Symbol.toStringTag]: "Int8Array";
 }
 
-interface Uint8Array {
+interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
     readonly [Symbol.toStringTag]: "Uint8Array";
 }
 
-interface Uint8ClampedArray {
+interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike> {
     readonly [Symbol.toStringTag]: "Uint8ClampedArray";
 }
 
-interface Int16Array {
+interface Int16Array<TArrayBuffer extends ArrayBufferLike> {
     readonly [Symbol.toStringTag]: "Int16Array";
 }
 
-interface Uint16Array {
+interface Uint16Array<TArrayBuffer extends ArrayBufferLike> {
     readonly [Symbol.toStringTag]: "Uint16Array";
 }
 
-interface Int32Array {
+interface Int32Array<TArrayBuffer extends ArrayBufferLike> {
     readonly [Symbol.toStringTag]: "Int32Array";
 }
 
-interface Uint32Array {
+interface Uint32Array<TArrayBuffer extends ArrayBufferLike> {
     readonly [Symbol.toStringTag]: "Uint32Array";
 }
 
-interface Float32Array {
+interface Float32Array<TArrayBuffer extends ArrayBufferLike> {
     readonly [Symbol.toStringTag]: "Float32Array";
 }
 
-interface Float64Array {
+interface Float64Array<TArrayBuffer extends ArrayBufferLike> {
     readonly [Symbol.toStringTag]: "Float64Array";
 }
 

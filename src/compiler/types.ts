@@ -5048,7 +5048,7 @@ export interface TypeChecker {
     /** @internal */ getTypeOfPropertyOfType(type: Type, propertyName: string): Type | undefined;
     getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
     getIndexInfosOfType(type: Type): readonly IndexInfo[];
-    getIndexInfosOfIndexSymbol: (indexSymbol: Symbol) => IndexInfo[];
+    getIndexInfosOfIndexSymbol: (indexSymbol: Symbol, siblingSymbols?: Symbol[] | undefined) => IndexInfo[];
     getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
     getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
     /** @internal */ getIndexType(type: Type): Type;
@@ -5421,6 +5421,7 @@ export interface TypeChecker {
     /** @internal */ isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node): boolean;
     /** @internal */ typeHasCallOrConstructSignatures(type: Type): boolean;
     /** @internal */ getSymbolFlags(symbol: Symbol): SymbolFlags;
+    /** @internal */ fillMissingTypeArguments(typeArguments: readonly Type[], typeParameters: readonly TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[];
 }
 
 /** @internal */
@@ -5866,6 +5867,7 @@ export interface EmitResolver {
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
+    createLateBoundIndexSignatures(cls: ClassLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): IndexSignatureDeclaration[] | undefined;
 }
 
 // dprint-ignore
@@ -6238,6 +6240,7 @@ export interface NodeLinks {
     potentialReflectCollisions?: Node[];
     potentialUnusedRenamedBindingElementsInTypes?: BindingElement[];
     externalHelpersModule?: Symbol;     // Resolved symbol for the external helpers module
+    instantiationExpressionTypes?: Map<number, Type>; // Cache of instantiation expression types for the node
 }
 
 /** @internal */

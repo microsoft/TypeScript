@@ -82,6 +82,7 @@ import { protocol } from "./_namespaces/ts.server.js";
 
 export interface SessionClientHost extends LanguageServiceHost {
     writeMessage(message: string): void;
+    openFile(fileName: string): void;
 }
 
 interface RenameEntry {
@@ -480,6 +481,7 @@ export class SessionClient implements LanguageService {
     }
 
     getFileReferences(fileName: string): ReferenceEntry[] {
+        this.host.openFile(fileName);
         const request = this.processRequest<protocol.FileReferencesRequest>(protocol.CommandTypes.FileReferences, { file: fileName });
         const response = this.processResponse<protocol.FileReferencesResponse>(request);
 
