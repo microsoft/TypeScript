@@ -770,7 +770,8 @@ class SymbolObject implements Symbol {
         if (context) {
             if (isGetAccessor(context)) {
                 if (!this.contextualGetAccessorTags) {
-                    this.contextualGetAccessorTags = emptyArray; // Set temporarily to avoid an infinite loop finding
+                    this.contextualGetAccessorTags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
                 }
                 if (length(this.contextualGetAccessorTags)) {
