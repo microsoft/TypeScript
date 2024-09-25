@@ -3360,7 +3360,7 @@ export function createLanguageService(
                 imports.add(name);
             }
         }
-        return imports ? arrayFrom(imports) : [];
+        return imports ? arrayFrom(imports) : emptyArray;
     }
 
     const ls: LanguageService = {
