@@ -672,6 +672,9 @@ export interface GetMoveToRefactoringFileSuggestions extends Response {
     };
 }
 
+/**
+ * Request to check if `pasteEdits` should be provided for a given location post copying text from that location.
+ */
 export interface PreparePasteEditsRequest extends FileRequest {
     command: CommandTypes.PreparePasteEdits;
     arguments: PreparePasteEditsRequestArgs;
@@ -682,6 +685,7 @@ export interface PreparePasteEditsRequestArgs extends FileRequestArgs {
 export interface PreparePasteEditsResponse extends Response {
     body: boolean;
 }
+
 /**
  * Request refactorings at a given position post pasting text from some other location.
  */

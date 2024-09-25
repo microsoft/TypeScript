@@ -107,6 +107,7 @@ declare namespace ts {
                 GetApplicableRefactors = "getApplicableRefactors",
                 GetEditsForRefactor = "getEditsForRefactor",
                 GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+                PreparePasteEdits = "preparePasteEdits",
                 GetPasteEdits = "getPasteEdits",
                 OrganizeImports = "organizeImports",
                 GetEditsForFileRename = "getEditsForFileRename",
@@ -513,6 +514,16 @@ declare namespace ts {
                     newFileName: string;
                     files: string[];
                 };
+            }
+            export interface PreparePasteEditsRequest extends FileRequest {
+                command: CommandTypes.PreparePasteEdits;
+                arguments: PreparePasteEditsRequestArgs;
+            }
+            export interface PreparePasteEditsRequestArgs extends FileRequestArgs {
+                copiedTextSpan: TextSpan[];
+            }
+            export interface PreparePasteEditsResponse extends Response {
+                body: boolean;
             }
             /**
              * Request refactorings at a given position post pasting text from some other location.
@@ -3556,6 +3567,7 @@ declare namespace ts {
             private getApplicableRefactors;
             private getEditsForRefactor;
             private getMoveToRefactoringFileSuggestions;
+            private preparePasteEdits;
             private getPasteEdits;
             private organizeImports;
             private getEditsForFileRename;
@@ -10211,6 +10223,7 @@ declare namespace ts {
         uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         getSupportedCodeFixes(fileName?: string): readonly string[];
         dispose(): void;
+        preparePasteEditsForFile(fileName: string, copiedTextRanges: TextRange[]): boolean;
         getPasteEdits(args: PasteEditsArgs, formatOptions: FormatCodeSettings): PasteEdits;
     }
     interface JsxClosingTagInfo {
