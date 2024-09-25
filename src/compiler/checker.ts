@@ -44413,10 +44413,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function bothHelper(condExpr: Expression, condType: Type, body: Expression | Statement | undefined) {
             condExpr = skipParentheses(condExpr);
-            while (isPrefixUnaryExpression(condExpr)) {
-                condExpr = skipParentheses(condExpr.operand)
-                condType = checkTruthinessExpression(condExpr)
-            }
             helper(condExpr, condType, body);
             while (isBinaryExpression(condExpr) && (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.QuestionQuestionToken)) {
                 condExpr = skipParentheses(condExpr.left);
@@ -44425,7 +44421,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function helper(condExpr: Expression, condType: Type, body: Expression | Statement | undefined) {
-            const location = isLogicalOrCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
+            let location = condExpr
+            let checkAwaitOnly = false;
+            while (isPrefixUnaryExpression(location)) {
+                location = skipParentheses(location.operand)
+                checkAwaitOnly = true;
+            }
+            location = isLogicalOrCoalescingBinaryExpression(location) ? skipParentheses(location.right) : location;
             if (isModuleExportsAccessExpression(location)) {
                 return;
             }
@@ -44472,7 +44474,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getTypeNameForErrorDisplay(type),
                     );
                 }
-                else {
+                else if (!checkAwaitOnly) {
                     error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead);
                 }
             }
