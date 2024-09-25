@@ -8415,7 +8415,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (typeFromTypeNode === type) {
                 return true;
             }
-            if (annotatedDeclaration && (isParameter(annotatedDeclaration) || isPropertySignature(annotatedDeclaration) || isPropertyDeclaration(annotatedDeclaration)) && annotatedDeclaration.questionToken) {
+            if (!annotatedDeclaration) {
+                return false;
+            }
+            if ((isPropertySignature(annotatedDeclaration) || isPropertyDeclaration(annotatedDeclaration)) && annotatedDeclaration.questionToken) {
+                return getTypeWithFacts(type, TypeFacts.NEUndefined) === typeFromTypeNode;
+            }
+            if (isParameter(annotatedDeclaration) && hasEffectiveQuestionToken(annotatedDeclaration)) {
                 return getTypeWithFacts(type, TypeFacts.NEUndefined) === typeFromTypeNode;
             }
             return false;
@@ -9420,7 +9426,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const skipMembershipCheck = !isPrivate; // We only call this on exported symbols when we know they're in the correct scope
                 if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
                     const scopeCleanup = cloneNodeBuilderContext(context);
+                    context.tracker.pushErrorFallbackNode(find(symbol.declarations, d => getSourceFileOfNode(d) === context.enclosingFile));
                     serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
+                    context.tracker.popErrorFallbackNode();
                     scopeCleanup();
                 }
             }
@@ -53021,5 +53029,13 @@ class SymbolTrackerImpl implements SymbolTracker {
         if (this.inner?.reportInferenceFallback) {
             this.inner.reportInferenceFallback(node);
         }
+    }
+
+    pushErrorFallbackNode(node: Declaration | undefined): void {
+        return this.inner?.pushErrorFallbackNode?.(node);
+    }
+
+    popErrorFallbackNode(): void {
+        return this.inner?.popErrorFallbackNode?.();
     }
 }
