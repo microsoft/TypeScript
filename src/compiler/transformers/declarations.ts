@@ -12,6 +12,7 @@ import {
     canHaveModifiers,
     canProduceDiagnostics,
     ClassDeclaration,
+    ClassElement,
     compact,
     concatenate,
     ConditionalTypeNode,
@@ -1652,7 +1653,8 @@ export function transformDeclarations(context: TransformationContext): Transform
                         /*initializer*/ undefined,
                     ),
                 ] : undefined;
-                const memberNodes = concatenate(concatenate(privateIdentifier, parameterProperties), visitNodes(input.members, visitDeclarationSubtree, isClassElement));
+                const lateIndexes = resolver.createLateBoundIndexSignatures(input, enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, symbolTracker);
+                const memberNodes = concatenate(concatenate(concatenate<ClassElement>(privateIdentifier, lateIndexes), parameterProperties), visitNodes(input.members, visitDeclarationSubtree, isClassElement));
                 const members = factory.createNodeArray(memberNodes);
 
                 const extendsClause = getEffectiveBaseTypeNode(input);
