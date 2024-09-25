@@ -5999,7 +5999,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         verbosityLevel?: number,
         out?: WriterContextOut,
     ): string {
-        const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
+        const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation || verbosityLevel !== undefined;
         const typeNode = nodeBuilder.typeToTypeNode(
             type,
             enclosingDeclaration,
