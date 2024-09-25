@@ -872,6 +872,7 @@ import {
     ModuleKind,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
+    Mutable,
     MutableNodeArray,
     NamedDeclaration,
     NamedExports,
@@ -1118,7 +1119,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    Mutable,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -3696,7 +3696,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 resolvedModule ??= resolveExternalModuleName(usage, usage, /*ignoreErrors*/ true);
                 const targetFile = resolvedModule && getSourceFileOfModule(resolvedModule);
                 return targetFile && (isJsonSourceFile(targetFile) || getDeclarationFileExtension(targetFile.fileName) === ".d.json.ts");
-        }
+            }
         }
         return false;
     }
@@ -13196,10 +13196,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                             else if (hasLateBindableIndexSignature(member)) {
                                 lateBindIndexSignature(symbol, earlySymbols, lateSymbols, member as Node as LateBoundDeclaration | LateBoundBinaryExpressionDeclaration);
+                            }
                         }
                     }
                 }
-            }
             }
             const assignments = getFunctionExpressionParentSymbolOrSymbol(symbol).assignmentDeclarationMembers;
 
@@ -15921,17 +15921,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const computedPropertySymbols: Symbol[] = [];
             for (const declaration of indexSymbol.declarations) {
                 if (isIndexSignatureDeclaration(declaration)) {
-                if (declaration.parameters.length === 1) {
-                    const parameter = declaration.parameters[0];
-                    if (parameter.type) {
-                        forEachType(getTypeFromTypeNode(parameter.type), keyType => {
-                            if (isValidIndexKeyType(keyType) && !findIndexInfo(indexInfos, keyType)) {
-                                indexInfos.push(createIndexInfo(keyType, declaration.type ? getTypeFromTypeNode(declaration.type) : anyType, hasEffectiveModifier(declaration, ModifierFlags.Readonly), declaration));
-                            }
-                        });
+                    if (declaration.parameters.length === 1) {
+                        const parameter = declaration.parameters[0];
+                        if (parameter.type) {
+                            forEachType(getTypeFromTypeNode(parameter.type), keyType => {
+                                if (isValidIndexKeyType(keyType) && !findIndexInfo(indexInfos, keyType)) {
+                                    indexInfos.push(createIndexInfo(keyType, declaration.type ? getTypeFromTypeNode(declaration.type) : anyType, hasEffectiveModifier(declaration, ModifierFlags.Readonly), declaration));
+                                }
+                            });
+                        }
                     }
                 }
-            }
                 else if (hasLateBindableIndexSignature(declaration)) {
                     const declName = isBinaryExpression(declaration) ? declaration.left as ElementAccessExpression : (declaration as LateBoundDeclaration).name;
                     const keyType = isElementAccessExpression(declName) ? checkExpressionCached(declName.argumentExpression) : checkComputedPropertyName(declName);
@@ -41322,18 +41322,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const indexSignatureMap = new Map<TypeId, { type: Type; declarations: IndexSignatureDeclaration[]; }>();
             for (const declaration of indexSymbol.declarations) {
                 if (isIndexSignatureDeclaration(declaration)) {
-                if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
-                    forEachType(getTypeFromTypeNode(declaration.parameters[0].type), type => {
-                        const entry = indexSignatureMap.get(getTypeId(type));
-                        if (entry) {
-                            entry.declarations.push(declaration);
-                        }
-                        else {
-                            indexSignatureMap.set(getTypeId(type), { type, declarations: [declaration] });
-                        }
-                    });
+                    if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
+                        forEachType(getTypeFromTypeNode(declaration.parameters[0].type), type => {
+                            const entry = indexSignatureMap.get(getTypeId(type));
+                            if (entry) {
+                                entry.declarations.push(declaration);
+                            }
+                            else {
+                                indexSignatureMap.set(getTypeId(type), { type, declarations: [declaration] });
+                            }
+                        });
+                    }
                 }
-            }
                 // Do nothing for late-bound index signatures: allow these to duplicate one another and explicit indexes
             }
             indexSignatureMap.forEach(entry => {
@@ -47455,7 +47455,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 if (isOnlyImportableAsDefault(node.moduleSpecifier, resolvedModule) && !hasTypeJsonImportAttribute(node)) {
                     error(node.moduleSpecifier, Diagnostics.Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_import_attribute_when_module_is_set_to_0, ModuleKind[moduleKind]);
-            }
+                }
             }
             else if (noUncheckedSideEffectImports && !importClause) {
                 void resolveExternalModuleName(node, node.moduleSpecifier);
