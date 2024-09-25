@@ -14032,8 +14032,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             paramMapper = createTypeMapper(right.typeParameters, left.typeParameters);
             // We just use the type parameter defaults from the first signature
         }
+        let flags = (left.flags | right.flags) & (SignatureFlags.PropagatingFlags & ~SignatureFlags.HasRestParameter);
         const declaration = left.declaration;
         const params = combineUnionParameters(left, right, paramMapper);
+        const lastParam = lastOrUndefined(params);
+        if (lastParam && getCheckFlags(lastParam) & CheckFlags.RestParameter) {
+            flags |= SignatureFlags.HasRestParameter;
+        }
         const thisParam = combineUnionThisParam(left.thisParameter, right.thisParameter, paramMapper);
         const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
         const result = createSignature(
@@ -14044,7 +14049,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             /*resolvedReturnType*/ undefined,
             /*resolvedTypePredicate*/ undefined,
             minArgCount,
-            (left.flags | right.flags) & SignatureFlags.PropagatingFlags,
+            flags,
         );
         result.compositeKind = TypeFlags.Union;
         result.compositeSignatures = concatenate(left.compositeKind !== TypeFlags.Intersection && left.compositeSignatures || [left], [right]);
@@ -32545,12 +32550,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const paramSymbol = createSymbol(
                 SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0),
                 paramName || `arg${i}` as __String,
+                isRestParam ? CheckFlags.RestParameter : isOptional ? CheckFlags.OptionalParameter : 0,
             );
             paramSymbol.links.type = isRestParam ? createArrayType(unionParamType) : unionParamType;
             params[i] = paramSymbol;
         }
         if (needsExtraRestElement) {
-            const restParamSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "args" as __String);
+            const restParamSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "args" as __String, CheckFlags.RestParameter);
             restParamSymbol.links.type = createArrayType(getTypeAtPosition(shorter, longestCount));
             if (shorter === right) {
                 restParamSymbol.links.type = instantiateType(restParamSymbol.links.type, mapper);
@@ -32567,8 +32573,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             paramMapper = createTypeMapper(right.typeParameters, left.typeParameters);
             // We just use the type parameter defaults from the first signature
         }
+        let flags = (left.flags | right.flags) & (SignatureFlags.PropagatingFlags & ~SignatureFlags.HasRestParameter);
         const declaration = left.declaration;
         const params = combineIntersectionParameters(left, right, paramMapper);
+        const lastParam = lastOrUndefined(params);
+        if (lastParam && getCheckFlags(lastParam) & CheckFlags.RestParameter) {
+            flags |= SignatureFlags.HasRestParameter;
+        }
         const thisParam = combineIntersectionThisParam(left.thisParameter, right.thisParameter, paramMapper);
         const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
         const result = createSignature(
@@ -32579,7 +32590,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             /*resolvedReturnType*/ undefined,
             /*resolvedTypePredicate*/ undefined,
             minArgCount,
-            (left.flags | right.flags) & SignatureFlags.PropagatingFlags,
+            flags,
         );
         result.compositeKind = TypeFlags.Intersection;
         result.compositeSignatures = concatenate(left.compositeKind === TypeFlags.Intersection && left.compositeSignatures || [left], [right]);
