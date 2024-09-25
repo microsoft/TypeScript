@@ -48,6 +48,8 @@ import {
     createSourceFile,
     CreateSourceFileOptions,
     createSymlinkCache,
+    createTSCommentScanner,
+    createTSSyntaxTracker,
     createTypeChecker,
     createTypeReferenceDirectiveResolutionCache,
     CustomTransformers,
@@ -200,6 +202,7 @@ import {
     isImportTypeNode,
     isInJSFile,
     isJSDocImportTag,
+    isLeafNode,
     isLiteralImportTypeNode,
     isModifier,
     isModuleDeclaration,
@@ -242,6 +245,7 @@ import {
     NodeFlags,
     nodeModulesPathPart,
     NodeWithTypeArguments,
+    NonNullExpression,
     noop,
     normalizePath,
     notImplementedResolver,
@@ -310,6 +314,7 @@ import {
     supportedJSExtensionsFlat,
     SymlinkCache,
     SyntaxKind,
+    SyntaxRangeType,
     sys,
     System,
     toFileNameLowerCase,
@@ -319,7 +324,10 @@ import {
     trace,
     tracing,
     tryCast,
+    TsCommentPosition,
+    TsCommentScanner,
     TsConfigSourceFile,
+    TsSyntaxTracker,
     TypeChecker,
     typeDirectiveIsEqualTo,
     TypeReferenceDirectiveResolutionCache,
@@ -3160,23 +3168,97 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return -1;
     }
 
+    /*
+    The general algorithm works like this.
+
+    We create an instance of a ts-comment-scanner. This scanner is in charge of scanning all of the spaces
+    between nodes, looking for opening TS comments (/*:: or /*:) and their matching, closing pair.
+    It'll keep some internal state, remembering if its current position is inside or outside of a TS comment.
+    For it to work, it must scan all leaf nodes, once each, in order.
+
+    Inside of getJSSyntacticDiagnosticsForFile() we'll recurse into the AST tree.
+    If we reach a leaf node, we make sure to tell the ts-comment-scanner to traverse it (and to check if it was in a TS comment).
+    If we come across a piece of syntax that's TypeScript only, we'll call a scanLeavesCheckingIfInTsComment()
+    which goes and traverses the subtree of our current node, looking for all leaves, then it'll run the scanner
+    across those leaves, asking the scanner at each step if the leaf was inside or outside of a TS comment.
+    If all leaves were inside a TS comment, we'll skip reporting a "this can only be used in JS files" error.
+    */
+
     function getJSSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
         return runWithCancellationToken(() => {
             const diagnostics: DiagnosticWithLocation[] = [];
+            const tsCommentScanner = createTSCommentScanner(sourceFile);
+            const tsSyntaxTracker = createTSSyntaxTracker(sourceFile);
             walk(sourceFile, sourceFile);
             forEachChildRecursively(sourceFile, walk, walkArray);
+            lookForJavaScriptInsideOfTSComments(tsSyntaxTracker, tsCommentScanner.getTSCommentPositions());
 
             return diagnostics;
 
             function walk(node: Node, parent: Node) {
-                // Return directly from the case if the given node doesnt want to visit each child
+                const maybeSkip: 'skip' | undefined = walkHelper(node, parent);
+                if (isLeafNode(node)) {
+                    tsCommentScanner.scanThroughLeafNode(node);
+                }
+                return maybeSkip;
+            }
+
+            function walkHelper(node: Node, parent: Node) {
+                // Return directly from the case if the given node doesn't want to visit each child
                 // Otherwise break to visit each child
 
                 switch (parent.kind) {
+                    case SyntaxKind.AsExpression:
+                        if ((parent as AsExpression).type === node) {
+                            // Move scanner just before "as"
+                            tsCommentScanner.scanTo((parent as AsExpression).expression.end);
+                            // Scan "as" and the type node that follows
+                            if (scanLeavesCheckingIfInTsComment(node, IsTSSyntax.yesAndSoIsEarlierUnscannedContent)) return "skip";
+                            diagnostics.push(createDiagnosticForNode((parent as AsExpression).type, Diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files));
+                            return "skip";
+                        }
+                        break;
+                    case SyntaxKind.SatisfiesExpression:
+                        if ((parent as SatisfiesExpression).type === node) {
+                            // Move scanner just before "satisfies"
+                            tsCommentScanner.scanTo((parent as SatisfiesExpression).expression.end);
+                            // Scan "satisfies" and the type node that follows
+                            if (scanLeavesCheckingIfInTsComment(node, IsTSSyntax.yesAndSoIsEarlierUnscannedContent)) return "skip";
+                            diagnostics.push(createDiagnosticForNode((parent as SatisfiesExpression).type, Diagnostics.Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files));
+                            return "skip";
+                        }
+                        break;
+                    case SyntaxKind.ImportDeclaration:
+                        if ((parent as ImportDeclaration).importClause === node) {
+                            if ((node as ImportClause).isTypeOnly) {
+                                if (scanLeavesCheckingIfInTsComment(parent)) return "skip";
+                                diagnostics.push(createDiagnosticForNode(parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
+                                return "skip";
+                            }
+                        }
+                        break;
                     case SyntaxKind.Parameter:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.MethodDeclaration:
+                        if (
+                            (parent.kind === SyntaxKind.Parameter) &&
+                            (parent as ParameterDeclaration).name === node &&
+                            node.kind === SyntaxKind.Identifier &&
+                            (node as Identifier).escapedText === "this"
+                        ) {
+                            // Using a cloned scanner because the child nodes that haven't yet been processed expect the
+                            // scanner to be at its current position.
+                            const clonedTsCommentScanner = tsCommentScanner.clone();
+                            scanLeavesCheckingIfInTsComment(parent, IsTSSyntax.yes, clonedTsCommentScanner);
+                            // If there's a comma that follows, mark that as needing to be in TS comments as well.
+                            clonedTsCommentScanner.scanUntilAtChar([')', ','], Infinity);
+                            const scannerIndex = clonedTsCommentScanner.getCurrentPos();
+                            if (sourceFile.text[scannerIndex] === ',') {
+                                tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(scannerIndex, scannerIndex + 1);
+                            }
+                        }
                         if ((parent as ParameterDeclaration | PropertyDeclaration | MethodDeclaration).questionToken === node) {
+                            if (scanLeavesCheckingIfInTsComment(node)) return "skip";
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"));
                             return "skip";
                         }
@@ -3189,22 +3271,54 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ArrowFunction:
                     case SyntaxKind.VariableDeclaration:
+                        if (
+                            (parent.kind === SyntaxKind.PropertyDeclaration || parent.kind === SyntaxKind.VariableDeclaration) &&
+                            (parent as PropertyDeclaration).exclamationToken === node
+                        ) {
+                            // Make sure we mark the "!" as being TypeScript syntax.
+                            // If you use a "!", you'll get an error indirectly, because using "!" means you're also using ": ..." type syntax.
+                            // So they don't have to directly report an error for the use of this character.
+                            scanLeavesCheckingIfInTsComment(node);
+                        }
                         // type annotation
                         if ((parent as FunctionLikeDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration).type === node) {
+                            const isFunctionLike = (node: Node): node is FunctionLikeDeclaration => (
+                                node.kind === SyntaxKind.MethodDeclaration ||
+                                node.kind === SyntaxKind.MethodSignature ||
+                                node.kind === SyntaxKind.Constructor ||
+                                node.kind === SyntaxKind.GetAccessor ||
+                                node.kind === SyntaxKind.SetAccessor ||
+                                node.kind === SyntaxKind.FunctionExpression ||
+                                node.kind === SyntaxKind.FunctionDeclaration ||
+                                node.kind === SyntaxKind.ArrowFunction
+                            );
+                            // Move scanner just before the ":"
+                            if (parent.kind === SyntaxKind.Parameter) {
+                                tsCommentScanner.scanTo((parent as ParameterDeclaration).name.end);
+                            }
+                            else if (parent.kind === SyntaxKind.PropertyDeclaration) {
+                                tsCommentScanner.scanTo((parent as PropertyDeclaration).name.end);
+                            }
+                            else if (isFunctionLike(parent)) {
+                                // Moves to the closing parenthesis
+                                tsCommentScanner.scanTo(parent.parameters.end);
+                                // Move past the closing parenthesis so we're right before the colon for the return type.
+                                tsCommentScanner.scanUntilPastChar(')', parent.end);
+                            }
+                            else if (parent.kind === SyntaxKind.VariableDeclaration) {
+                                tsCommentScanner.scanTo((parent as VariableDeclaration).name.end);
+                            }
+                            // Scan the ":" and the type node that follows
+                            if (scanLeavesCheckingIfInTsComment(node, IsTSSyntax.yesAndSoIsEarlierUnscannedContent)) return "skip";
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_annotations_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         }
                 }
 
                 switch (node.kind) {
-                    case SyntaxKind.ImportClause:
-                        if ((node as ImportClause).isTypeOnly) {
-                            diagnostics.push(createDiagnosticForNode(parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
-                            return "skip";
-                        }
-                        break;
                     case SyntaxKind.ExportDeclaration:
                         if ((node as ExportDeclaration).isTypeOnly) {
+                            if (scanLeavesCheckingIfInTsComment(node)) return "skip";
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "export type"));
                             return "skip";
                         }
@@ -3212,15 +3326,55 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.ImportSpecifier:
                     case SyntaxKind.ExportSpecifier:
                         if ((node as ImportOrExportSpecifier).isTypeOnly) {
+                            if (scanLeavesCheckingIfInTsComment(node)) {
+                                return "skip";
+                            }
+                            tsCommentScanner.scanUntilAtChar([',', '}'], node.end);
+                            // Mark the comma as TypeScript syntax as well.
+                            const scannerIndex = tsCommentScanner.getCurrentPos();
+                            if (sourceFile.text[scannerIndex] === ',') {
+                                tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(scannerIndex, scannerIndex + 1);
+                            }
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, isImportSpecifier(node) ? "import...type" : "export...type"));
                             return "skip";
                         }
                         break;
+                    case SyntaxKind.ImportDeclaration: {
+                        const importDeclaration = node as ImportDeclaration;
+                        const importClause = importDeclaration.importClause;
+                        if (
+                            importClause !== undefined &&
+                            !importClause.isTypeOnly &&
+                            !importClause.name &&
+                            importClause.namedBindings !== undefined &&
+                            'elements' in importClause.namedBindings && // eslint-disable-line local/no-in-operator
+                            importClause.namedBindings.elements.every(element => element.isTypeOnly)
+                        ) {
+                            // Using a cloned scanner because the child nodes that haven't yet been processed expect the
+                            // scanner to be at its current position.
+                            const clonedTsCommentScanner = tsCommentScanner.clone();
+                            if (importDeclaration.modifiers) {
+                                scanLeavesCheckingIfInTsComment(importDeclaration.modifiers, IsTSSyntax.no, clonedTsCommentScanner);
+                            }
+                            // Move past the "t" of "import".
+                            clonedTsCommentScanner.scanUntilPastChar('t', importClause.pos);
+                            // We can now scan the `{ ... }` part of the `import { ... } from ...`.
+                            scanLeavesCheckingIfInTsComment(importClause, IsTSSyntax.yes, clonedTsCommentScanner);
+                            const beforeFromPos = clonedTsCommentScanner.getCurrentPos();
+                            // Move past the "m" of "from"
+                            clonedTsCommentScanner.scanUntilPastChar('m', importDeclaration.end);
+                            const afterFromPos = clonedTsCommentScanner.getCurrentPos();
+                            tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(beforeFromPos, afterFromPos);
+                        }
+                        break;
+                    }
                     case SyntaxKind.ImportEqualsDeclaration:
+                        if (scanLeavesCheckingIfInTsComment(node)) return "skip";
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_TypeScript_files));
                         return "skip";
                     case SyntaxKind.ExportAssignment:
                         if ((node as ExportAssignment).isExportEquals) {
+                            if (scanLeavesCheckingIfInTsComment(node)) return "skip";
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         }
@@ -3228,43 +3382,56 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.HeritageClause:
                         const heritageClause = node as HeritageClause;
                         if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
+                            if (scanLeavesCheckingIfInTsComment(node)) return "skip";
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         }
                         break;
                     case SyntaxKind.InterfaceDeclaration:
+                        if (scanLeavesCheckingIfInTsComment(node)) return "skip";
                         const interfaceKeyword = tokenToString(SyntaxKind.InterfaceKeyword);
                         Debug.assertIsDefined(interfaceKeyword);
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, interfaceKeyword));
                         return "skip";
                     case SyntaxKind.ModuleDeclaration:
+                        if (scanLeavesCheckingIfInTsComment(node)) return "skip";
                         const moduleKeyword = node.flags & NodeFlags.Namespace ? tokenToString(SyntaxKind.NamespaceKeyword) : tokenToString(SyntaxKind.ModuleKeyword);
                         Debug.assertIsDefined(moduleKeyword);
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, moduleKeyword));
                         return "skip";
                     case SyntaxKind.TypeAliasDeclaration:
+                        if (scanLeavesCheckingIfInTsComment(node)) return "skip";
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_aliases_can_only_be_used_in_TypeScript_files));
                         return "skip";
                     case SyntaxKind.Constructor:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.FunctionDeclaration:
                         if (!(node as FunctionLikeDeclaration).body) {
+                            if (scanLeavesCheckingIfInTsComment(node)) return "skip";
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.Signature_declarations_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         }
                         return;
                     case SyntaxKind.EnumDeclaration:
+                        if (scanLeavesCheckingIfInTsComment(node)) return "skip";
                         const enumKeyword = Debug.checkDefined(tokenToString(SyntaxKind.EnumKeyword));
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, enumKeyword));
                         return "skip";
                     case SyntaxKind.NonNullExpression:
+                        // We want to use a cloned scanner, because we don't want our real scanner to actually traverse forwards yet.
+                        // We still need to recursively descend into the node's children to see if they're correctly
+                        // using TS comments where they should
+                        const clonedScanner = tsCommentScanner.clone();
+                        // Scan through the non-null assertion node's children (omitting itself)
+                        scanLeavesCheckingIfInTsComment((node as NonNullExpression).expression, IsTSSyntax.no, clonedScanner);
+                        // Now scan to the end of this non-null node, which will cause the "!" to be scanned
+                        tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(clonedScanner.getCurrentPos(), node.end);
+                        const exclamationMarkInTSComment = clonedScanner.scanTo(node.end);
+                        if (exclamationMarkInTSComment) {
+                            // Don't return "skip", we need to descend into the children to check for problems.
+                            return;
+                        }
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.Non_null_assertions_can_only_be_used_in_TypeScript_files));
-                        return "skip";
-                    case SyntaxKind.AsExpression:
-                        diagnostics.push(createDiagnosticForNode((node as AsExpression).type, Diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files));
-                        return "skip";
-                    case SyntaxKind.SatisfiesExpression:
-                        diagnostics.push(createDiagnosticForNode((node as SatisfiesExpression).type, Diagnostics.Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files));
                         return "skip";
                     case SyntaxKind.TypeAssertionExpression:
                         Debug.fail(); // Won't parse these in a JS file anyway, as they are interpreted as JSX.
@@ -3320,6 +3487,18 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.ArrowFunction:
                         // Check type parameters
                         if (nodes === (parent as DeclarationWithTypeParameterChildren).typeParameters) {
+                            const startOfList = nodes[0]?.pos ?? parent.end;
+                            tsCommentScanner.scanUntilAtChar('<', startOfList)
+                            const startOfParameterListPos = tsCommentScanner.getCurrentPos();
+                            // Scan the "<" character
+                            const lessThanInTSComment = tsCommentScanner.scanTo(startOfList);
+                            // Scan between "<" and ">"
+                            const contentInTSComment = scanLeavesCheckingIfInTsComment(nodes);
+                            // Scan until just before ">" (which has the same effect as scanning until just after)
+                            const greaterThanInTSComment = tsCommentScanner.scanUntilNextSignificantChar(parent.end);
+                            const endOfParameterListPos = tsCommentScanner.getCurrentPos() + 1; // + 1 to move past the ">"
+                            tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(startOfParameterListPos, endOfParameterListPos);
+                            if (lessThanInTSComment && contentInTSComment && greaterThanInTSComment) return "skip";
                             diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_parameter_declarations_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         }
@@ -3328,7 +3507,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.VariableStatement:
                         // Check modifiers
                         if (nodes === (parent as VariableStatement).modifiers) {
-                            checkModifiers((parent as VariableStatement).modifiers!, parent.kind === SyntaxKind.VariableStatement);
+                            checkModifiers((parent as VariableStatement).modifiers!, parent.kind === SyntaxKind.VariableStatement, parent);
                             return "skip";
                         }
                         break;
@@ -3336,12 +3515,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         // Check modifiers of property declaration
                         if (nodes === (parent as PropertyDeclaration).modifiers) {
                             for (const modifier of nodes as NodeArray<ModifierLike>) {
-                                if (
-                                    isModifier(modifier)
-                                    && modifier.kind !== SyntaxKind.StaticKeyword
-                                    && modifier.kind !== SyntaxKind.AccessorKeyword
-                                ) {
-                                    diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
+                                try {
+                                    if (
+                                        isModifier(modifier)
+                                        && modifier.kind !== SyntaxKind.StaticKeyword
+                                        && modifier.kind !== SyntaxKind.AccessorKeyword
+                                        && !scanLeavesCheckingIfInTsComment(modifier)
+                                    ) {
+                                        diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
+                                    }
+                                } finally {
+                                    scanLeavesCheckingIfInTsComment(modifier, IsTSSyntax.no);
                                 }
                             }
                             return "skip";
@@ -3350,6 +3534,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.Parameter:
                         // Check modifiers of parameter declaration
                         if (nodes === (parent as ParameterDeclaration).modifiers && some(nodes, isModifier)) {
+                            if (scanLeavesCheckingIfInTsComment(nodes)) return "skip";
                             diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         }
@@ -3362,6 +3547,18 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.TaggedTemplateExpression:
                         // Check type arguments
                         if (nodes === (parent as NodeWithTypeArguments).typeArguments) {
+                            const startOfList = nodes[0]?.pos ?? parent.end;
+                            tsCommentScanner.scanUntilAtChar('<', startOfList)
+                            const startOfParameterListPos = tsCommentScanner.getCurrentPos();
+                            // Scan the "<" character
+                            const lessThanInTSComment = tsCommentScanner.scanTo(startOfList);
+                            // Scan between "<" and ">"
+                            const contentInTSComment = scanLeavesCheckingIfInTsComment(nodes);
+                            // Scan until just before ">" (which has the same effect as scanning until just after)
+                            const greaterThanInTSComment = tsCommentScanner.scanUntilNextSignificantChar(parent.end);
+                            const endOfParameterListPos = tsCommentScanner.getCurrentPos() + 1; // + 1 to move past the ">"
+                            tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(startOfParameterListPos, endOfParameterListPos);
+                            if (lessThanInTSComment && contentInTSComment && greaterThanInTSComment) return "skip";
                             diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_arguments_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         }
@@ -3369,32 +3566,43 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
             }
 
-            function checkModifiers(modifiers: NodeArray<ModifierLike>, isConstValid: boolean) {
+            function checkModifiers(modifiers: NodeArray<ModifierLike>, isConstValid: boolean, parent: Node) {
                 for (const modifier of modifiers) {
-                    switch (modifier.kind) {
-                        case SyntaxKind.ConstKeyword:
-                            if (isConstValid) {
-                                continue;
-                            }
-                        // to report error,
-                        // falls through
-                        case SyntaxKind.PublicKeyword:
-                        case SyntaxKind.PrivateKeyword:
-                        case SyntaxKind.ProtectedKeyword:
-                        case SyntaxKind.ReadonlyKeyword:
-                        case SyntaxKind.DeclareKeyword:
-                        case SyntaxKind.AbstractKeyword:
-                        case SyntaxKind.OverrideKeyword:
-                        case SyntaxKind.InKeyword:
-                        case SyntaxKind.OutKeyword:
-                            diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
-                            break;
+                    try {
+                        switch (modifier.kind) {
+                            case SyntaxKind.ConstKeyword:
+                                if (isConstValid) {
+                                    continue;
+                                }
+                            // to report error,
+                            // falls through
+                            case SyntaxKind.PublicKeyword:
+                            case SyntaxKind.PrivateKeyword:
+                            case SyntaxKind.ProtectedKeyword:
+                            case SyntaxKind.ReadonlyKeyword:
+                            case SyntaxKind.DeclareKeyword:
+                            case SyntaxKind.AbstractKeyword:
+                            case SyntaxKind.OverrideKeyword:
+                            case SyntaxKind.InKeyword:
+                            case SyntaxKind.OutKeyword:
+                                if (modifier.kind === SyntaxKind.DeclareKeyword) {
+                                    // If its a declare keyword, the whole statement should be in a TypeScript comment.
+                                    scanLeavesCheckingIfInTsComment(parent, IsTSSyntax.yes, tsCommentScanner.clone());
+                                }
+                                if (scanLeavesCheckingIfInTsComment(modifier)) {
+                                    break;
+                                }
+                                diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
+                                break;
 
-                        // These are all legal modifiers.
-                        case SyntaxKind.StaticKeyword:
-                        case SyntaxKind.ExportKeyword:
-                        case SyntaxKind.DefaultKeyword:
-                        case SyntaxKind.AccessorKeyword:
+                            // These are all legal modifiers.
+                            case SyntaxKind.StaticKeyword:
+                            case SyntaxKind.ExportKeyword:
+                            case SyntaxKind.DefaultKeyword:
+                            case SyntaxKind.AccessorKeyword:
+                        }
+                    } finally {
+                        scanLeavesCheckingIfInTsComment(modifier, IsTSSyntax.no)
                     }
                 }
             }
@@ -3408,6 +3616,109 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             // this means the sourceFile cannot be infered from the node
             function createDiagnosticForNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
                 return createDiagnosticForNodeInSourceFile(sourceFile, node, message, ...args);
+            }
+
+            const enum IsTSSyntax {
+                /** The node being scanned is not TS syntax */
+                no,
+                /** The node being scanned is TS syntax */
+                yes,
+                /** from the point the scanner currently it as, to the point just after the node is TS syntax. */
+                yesAndSoIsEarlierUnscannedContent,
+            }
+
+            function scanLeavesCheckingIfInTsComment(
+                rootNodes: Node | NodeArray<Node>,
+                isTSSyntax = IsTSSyntax.yes,
+                // By default it uses the comment scanner from the outer scope,
+                // but you can supply an alternative one if, for example, you cloned it.
+                commentScanner: TsCommentScanner = tsCommentScanner
+            ): boolean {
+                const startPos = rootNodes.pos;
+                const endPos = rootNodes.end;
+                const rootNodesArray: Node[] = Array.isArray(rootNodes) ? [...rootNodes] : [rootNodes];
+                let fullyInTsComment = true;
+                if (rootNodesArray.length > 0) {
+                    if (isTSSyntax === IsTSSyntax.yes) {
+                        tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(startPos, endPos);
+                    }
+                    if (isTSSyntax === IsTSSyntax.yesAndSoIsEarlierUnscannedContent) {
+                        tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(commentScanner.getCurrentPos(), endPos);
+                        const significantTextInTypeScriptComment = commentScanner.scanTo(startPos);
+                        fullyInTsComment &&= significantTextInTypeScriptComment;
+                    }
+                }
+
+                for (const rootNode of rootNodesArray) {
+                    if (isLeafNode(rootNode)) {
+                        const nodeWasInTSComment = commentScanner.scanThroughLeafNode(rootNode);
+                        fullyInTsComment &&= nodeWasInTSComment;
+                        continue;
+                    }
+                    forEachChildRecursively(rootNode, node => {
+                        if (isLeafNode(node)) {
+                            const nodeWasInTSComment = commentScanner.scanThroughLeafNode(node);
+                            fullyInTsComment &&= nodeWasInTSComment;
+                        }
+                    });
+                }
+
+                const endInTSComment = commentScanner.scanTo(endPos);
+                fullyInTsComment &&= endInTSComment;
+                return fullyInTsComment;
+            }
+
+            function lookForJavaScriptInsideOfTSComments(
+                tsSyntaxTracker: TsSyntaxTracker,
+                tsCommentPositions: TsCommentPosition[],
+            ) {
+                let tsCommentPositionIndex = 0
+                for (const syntaxRange of tsSyntaxTracker.getSyntaxRanges()) {
+                    if (syntaxRange.type !== SyntaxRangeType.javaScript) continue;
+                    const jsSyntaxStart = syntaxRange.start;
+                    const jsSyntaxEnd = syntaxRange.end;
+                    while (true) {
+                        const tsCommentPosition: TsCommentPosition | undefined = tsCommentPositions[tsCommentPositionIndex];
+                        // If undefined, then there are no more TS comments to check for error with, so we can do an early return.
+                        if (tsCommentPosition === undefined) return;
+                        if (tsCommentPosition.colonPos + tsCommentPosition.colonCount > jsSyntaxEnd) break;
+                        tsCommentPositionIndex++;
+                        if (tsCommentPosition.close < jsSyntaxStart) continue;
+
+                        let startErrorRange = tsCommentPosition.colonPos + tsCommentPosition.colonCount;
+                        let endErrorRange = tsCommentPosition.close;
+                        if (startErrorRange < jsSyntaxStart) startErrorRange = jsSyntaxStart;
+                        if (endErrorRange > jsSyntaxEnd) endErrorRange = jsSyntaxEnd;
+                        if (startErrorRange === endErrorRange) continue;
+
+                        // Ignoring whitespace because the whitespace tracking isn't very accurate.
+                        // Ignoring commas, because whether or not the comma should be there is a fairly difficult question to answer.
+                        // For example, with:
+                        //    import type { a /*::, type b, */ c } from '...';
+                        // it would be a syntax error, because, ignoring the comment, there's no commas between "a" and "c",
+                        // but which of the two commas inside the comment is JavaScript syntax and which is TypeScript?
+                        // TODO: It still would be good to decide on some way to report an error in this kind of scenario.
+                        while (startErrorRange < endErrorRange) {
+                            const char = sourceFile.text[startErrorRange];
+                            if (char === ' ' || char === '\t' || char === '\n' || char === '\r' || char === ',') {
+                                startErrorRange++;
+                            } else {
+                                break;
+                            }
+                        }
+                        while (endErrorRange > startErrorRange) {
+                            const char = sourceFile.text[endErrorRange];
+                            if (char === ' ' || char === '\t' || char === '\n' || char === '\r' || char === ',') {
+                                endErrorRange++;
+                            } else {
+                                break;
+                            }
+                        }
+                        if (startErrorRange === endErrorRange) continue;
+                     
+                        diagnostics.push(createFileDiagnostic(sourceFile, startErrorRange, endErrorRange - startErrorRange, Diagnostics.JavaScript_syntax_can_not_be_used_inside_of_a_TS_comment));
+                    }
+                }
             }
         });
     }

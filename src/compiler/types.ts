@@ -2831,6 +2831,7 @@ export const enum TokenFlags {
     ContainsLeadingZero = 1 << 13,      // e.g. `0888`
     /** @internal */
     ContainsInvalidSeparator = 1 << 14, // e.g. `0_1`
+    enteringTSComment = 1 << 15,        // This bit is set if, just before this token, we entered a TS comment.
     /** @internal */
     PrecedingJSDocLeadingAsterisks = 1 << 15,
     /** @internal */
@@ -10084,6 +10085,25 @@ export const enum ListFormat {
     Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
     IndexSignatureParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | SquareBrackets,
     JSDocComment = MultiLine | AsteriskDelimited,
+}
+
+export const enum BlockCommentDelimiterType {
+    openNonTsComment, // A `/*` not followed by colons
+    openTsCommentWithoutColons, // Just the `/*` part of `/*:` or `/*::`.
+    singleColonForOpenTsComment, // Just the `:` part of `/*:`
+    doubleColonForOpenTsComment, // Just the `::` part of `/*::`
+    close, // Any `*/`, even if it pertains to a non-TS comment.
+}
+
+// Used to record the position of interesting comment-related information.
+// When an openTSCommentWithoutColons is recorded, it will be followed by
+// either a singleColonForOpenTSComment or doubleColonForOpenTSComment.
+export type BlockCommentDelimiterPositions = Map<number, BlockCommentDelimiterType>
+
+export const enum TsCommentScannerState {
+    notInComment,
+    inBlockComment,
+    inTSBlockComment,
 }
 
 /** @internal */

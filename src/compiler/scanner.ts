@@ -2,6 +2,8 @@ import {
     append,
     arrayIsEqualTo,
     binarySearch,
+    BlockCommentDelimiterPositions,
+    BlockCommentDelimiterType,
     CharacterCodes,
     CommentDirective,
     CommentDirectiveType,
@@ -34,6 +36,7 @@ import {
     SyntaxKind,
     TextRange,
     TokenFlags,
+    TsCommentScannerState,
 } from "./_namespaces/ts.js";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
@@ -129,6 +132,44 @@ export interface Scanner {
     // callback returns something truthy, then the scanner state is not rolled back.  The result
     // of invoking the callback is returned from this function.
     tryScan<T>(callback: () => T): T;
+}
+
+export interface TsCommentPosition {
+    open: number;
+    colonPos: number;
+    close: number;
+    colonCount: 1 | 2;
+    // e.g. `/*:: ... /* ... */` contains an inner opening block comment. The `*/` is closing both of them at the same time.
+    // When ejecting something that looks like this, we only want to remove the `/*::`, not the `*/`.
+    containedInnerOpeningBlockComment: boolean;
+}
+
+export interface SyntaxRange {
+    start: number;
+    end: number;
+    type: SyntaxRangeType;
+}
+
+export const enum SyntaxRangeType {
+    typeScript,
+    javaScript,
+    whitespace,
+}
+
+export interface TsCommentScanner {
+    getCurrentPos(): number;
+    clone(): TsCommentScanner;
+    scanThroughLeafNode(node: { kind: SyntaxKind, pos: number, end: number }): boolean;
+    scanTo(end: number): boolean;
+    scanUntilNextSignificantChar(max: number): boolean;
+    scanUntilAtChar(char: string | string[], max: number): void;
+    scanUntilPastChar(char: string | string[], max: number): void;
+    getTSCommentPositions(): TsCommentPosition[];
+}
+
+export interface TsSyntaxTracker {
+    skipWhitespaceThenMarkRangeAsTS(start: number, end: number): void;
+    getSyntaxRanges(): Generator<SyntaxRange>
 }
 
 /** @internal */
@@ -682,6 +723,45 @@ export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boole
                 }
                 if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                     pos += 2;
+                    let isTsComment = false;
+                    while (pos < text.length) {
+                        if (text.charCodeAt(pos) === CharacterCodes.space) {
+                            // continue on
+                        }
+                        else if (text.charCodeAt(pos) === CharacterCodes.colon) {
+                            isTsComment = true;
+                            break;
+                        }
+                        else {
+                            break;
+                        }
+                        pos++;
+                    }
+
+                    if (isTsComment) {
+                        const colonCount =
+                            text.charCodeAt(pos + 1) !== CharacterCodes.colon ? 1 :
+                            text.charCodeAt(pos + 2) !== CharacterCodes.colon ? 2 :
+                            3; // Represents 3 or more
+                        
+                        if (colonCount === 1 || colonCount === 2) {
+                            if (colonCount === 1) { // `/*: ... */`
+                                // Not moving the pos variable.
+                                // Instead, it will stay positioned right before the ":",
+                                // which will let the ":" get treated as its own token.
+                                break;
+                            }
+                            else { // `/*:: ... */`
+                                pos += 2;
+                                continue;
+                            }
+                        }
+                        else { // `/*::: ... */`
+                            // A triple-colon isn't allowed.
+                            // We'll just say that this isn't a recognized TypeScript comment.
+                            pos += 3;
+                        }
+                    }
                     while (pos < text.length) {
                         if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                             pos += 2;
@@ -717,6 +797,10 @@ export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boole
                 if (canConsumeStar) {
                     pos++;
                     canConsumeStar = false;
+                    continue;
+                }
+                if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                    pos += 2;
                     continue;
                 }
                 break;
@@ -881,6 +965,44 @@ function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, 
                         }
                     }
                     else {
+                        let isTsComment = false;
+                        while (pos < text.length) {
+                            if (text.charCodeAt(pos) === CharacterCodes.space) {
+                                // continue on
+                            }
+                            else if (text.charCodeAt(pos) === CharacterCodes.colon) {
+                                isTsComment = true;
+                                break;
+                            }
+                            else {
+                                break;
+                            }
+                            pos++;
+                        }
+
+                        // We will ignore TS comments
+                        if (isTsComment) {
+                            const colonCount =
+                                text.charCodeAt(pos + 1) !== CharacterCodes.colon ? 1 :
+                                text.charCodeAt(pos + 2) !== CharacterCodes.colon ? 2 :
+                                3; // Represents 3 or more
+                            
+                            if (colonCount === 1 || colonCount === 2) {
+                                if (colonCount === 1) { // `/*: ... */`
+                                    // The single ":" counts as a significant token, so break out of the loop.
+                                    break scan;
+                                }
+                                else { // `/*:: ... */`
+                                    pos += 2;
+                                    continue;
+                                }
+                            }
+                            else { // `/*::: ... */`
+                                // A triple-colon isn't allowed.
+                                // We'll just say that this isn't a recognized TypeScript comment.
+                                pos += 3;
+                            }
+                        }
                         while (pos < text.length) {
                             if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                                 pos += 2;
@@ -2000,6 +2122,15 @@ export function createScanner(
                     pos++;
                     return token = SyntaxKind.CloseParenToken;
                 case CharacterCodes.asterisk:
+                    if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                        pos += 2;
+                        // Unset the "enteringTSComment" bit.
+                        // It may be set in the case where we entered and exited a TS comment without
+                        // the comment actually having any body, like this: `/*:: */`.
+                        // In this case, we just want to skip over it as if the comment wasn't there.
+                        tokenFlags &= ~TokenFlags.enteringTSComment;
+                        continue;
+                    }
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
                     }
@@ -2081,6 +2212,47 @@ export function createScanner(
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.asterisk) {
                         pos += 2;
                         const isJSDoc = charCodeUnchecked(pos) === CharacterCodes.asterisk && charCodeUnchecked(pos + 1) !== CharacterCodes.slash;
+
+                        let isTsComment = false;
+                        while (pos < end) {
+                            if (text.charCodeAt(pos) === CharacterCodes.space) {
+                                // continue on
+                            }
+                            else if (text.charCodeAt(pos) === CharacterCodes.colon) {
+                                isTsComment = true;
+                                break;
+                            }
+                            else {
+                                break;
+                            }
+                            pos++;
+                        }
+
+                        if (isTsComment) {
+                            const colonCount =
+                                text.charCodeAt(pos + 1) !== CharacterCodes.colon ? 1 :
+                                text.charCodeAt(pos + 2) !== CharacterCodes.colon ? 2 :
+                                3; // Represents 3 or more
+                            
+                            if (colonCount === 1 || colonCount === 2) {
+                                if (colonCount === 1) { // `/*: ... */`
+                                    // Not moving the pos variable.
+                                    // Instead, it will stay positioned right before the ":",
+                                    // which will let the ":" get parsed later as its own token.
+                                }
+                                else { // `/*:: ... */`
+                                    pos += 2;
+                                }
+
+                                tokenFlags |= TokenFlags.enteringTSComment;
+                                continue;
+                            }
+                            else { // `/*::: ... */`
+                                // A triple-colon isn't allowed.
+                                // We'll just say that this isn't a recognized TypeScript comment.
+                                pos += 3;
+                            }
+                        }
 
                         let commentClosed = false;
                         let lastLineStart = tokenStart;
@@ -4027,6 +4199,393 @@ export function createScanner(
 
     function setSkipJsDocLeadingAsterisks(skip: boolean) {
         skipJsDocLeadingAsterisks += skip ? 1 : -1;
+    }
+}
+
+export function createTSCommentScanner(
+    { text }: SourceFileLike,
+    _pos?: number,
+    _state?: TsCommentScannerState,
+    _delimiterPositions?: BlockCommentDelimiterPositions,
+): TsCommentScanner {
+    let pos = _pos ?? 0;
+    let state = _state ?? TsCommentScannerState.notInComment;
+    // This is a shared value that all clones share and mutate.
+    // Used for converting JS files to TS.
+    const delimiterPositions: BlockCommentDelimiterPositions = _delimiterPositions ?? new Map();
+    const tsCommentScanner: TsCommentScanner = {
+        getCurrentPos() {
+            return pos;
+        },
+        /**
+         * The state of the scanner is cloned, so you can move forwards with the clone to inspect something in the future
+         * without effecting the current scanner.
+         * (with some exceptions for tracking information that's needed for code transformations)
+         */
+        clone() {
+            return createTSCommentScanner({ text }, pos, state, _delimiterPositions);
+        },
+        /**
+         * Scans from where we left off to the start of this node.
+         * Then continues scanning into the node until non-whitespace, non-comments are hit,
+         * at which point the scanner position will just jump to the end of the node.
+         * This is only smart enough to scan through whitespace and comments - if it
+         * were to receive something like `'/*'`, it would get tripped up. This means
+         * that scanToNode() should be called, in order, on every leaf node in a file.
+         *
+         * It is designed to be safe (and do nothing) if you re-scan the same node multiple times.
+         * 
+         * @returns true if the just-scanned node was inside a TS comment, otherwise returns false.
+         *          Also returns false when given a node that couldn't be scanned, because the scanner already passed that point.
+         */
+        scanThroughLeafNode(node: { pos: number, end: number }): boolean {
+            if (node.end < pos) return false;
+            commentScan(text, pos, node.pos, /*stopOnSignificantText*/ false, onCommentDelimiter);
+            commentScan(text, node.pos, node.end, /*stopOnSignificantText*/ true, onCommentDelimiter);
+            pos = node.end;
+            return state === TsCommentScannerState.inTSBlockComment;
+        },
+        /**
+         * Scans to the provided position.
+         * First is scans past any whitespace and normal comments to find where significant text starts, then it'll
+         * scan through the significant text until it reaches the end.
+         * Once it finds significant text, all text going forwards is treated as significant.
+         * 
+         * @returns true if the scanned significant text was in TypeScript comments, otherwise returns false.
+         *          Also returns false when nothing could be scanned, because the scanner already passed that point.
+         */
+        scanTo(end: number): boolean {
+            if (end < pos) return false;
+            const significantTextAt = commentScan(text, pos, end, /*stopOnSignificantText*/ true, onCommentDelimiter);
+            let allInTSComment = state === TsCommentScannerState.inTSBlockComment;
+            commentScan(text, significantTextAt, end, /*stopOnSignificantText*/ false, (pos, commentDelimiterType) => {
+                allInTSComment = false;
+                onCommentDelimiter(pos, commentDelimiterType);
+            });
+            pos = end;
+            return allInTSComment;
+        },
+        /**
+         * Stops scanning as soon as non-whitespace/not-generic-comment character is encountered.
+         * @param max Mostly a failsafe - if something goes wrong, we'll stop jumping at this point.
+         * 
+         * @return true if in TS comment where it stopped at, which typically means the following node is in a TypeScript comment.
+         *         Otherwise, returns false. Also returns false when nothing could be scanned, because the scanner already passed that point.
+         */
+        scanUntilNextSignificantChar(max: number) {
+            if (max < pos) return false;
+            commentScan(text, pos, max, /*stopOnSignificantText*/ true, onCommentDelimiter);
+            return state === TsCommentScannerState.inTSBlockComment;
+        },
+        /**
+         * @param char The character(s) to break on. whitespace and characters found as part of comments won't be matched.
+         * @param max Mostly a failsafe - if something goes wrong, we'll stop jumping at this point.
+         */
+        scanUntilAtChar(char: string | string[], max: number) {
+            const charList: string[] = Array.isArray(char) ? char : [char];
+            while (pos < max) {
+                commentScan(text, pos, max, /*stopOnSignificantText*/ true, onCommentDelimiter)
+                if (charList.includes(text[pos])) return;
+                pos++;
+            }
+        },
+        /**
+         * @param char The character(s) to break on. whitespace and characters found as part of comments won't be matched.
+         * @param max Mostly a failsafe - if something goes wrong, we'll stop jumping at this point.
+         */
+        scanUntilPastChar(char: string | string[], max: number) {
+            const charList: string[] = Array.isArray(char) ? char : [char];
+            while (pos < max) {
+                commentScan(text, pos, max, /*stopOnSignificantText*/ true, onCommentDelimiter)
+                if (charList.includes(text[pos])) {
+                    // Move one past
+                    pos++;
+                    return;
+                }
+                pos++;
+            }
+        },
+        /**
+         * Returns all TS-comment pairs in the file.
+         * Prerequisites:
+         * - The whole source file has been scanned.
+         */
+        getTSCommentPositions(): TsCommentPosition[] {
+            const result: TsCommentPosition[] = [];
+            const delimiters = [...delimiterPositions]
+                .map(([pos, delimiterType]) => ({ pos, type: delimiterType }))
+                .sort((a, b) => a.pos - b.pos);
+            
+            let tsCommentPosition: Partial<TsCommentPosition> = {
+                containedInnerOpeningBlockComment: false
+            };
+            let inTSComment = false;
+            for (const delimiter of delimiters) {
+                if (!inTSComment && delimiter.type === BlockCommentDelimiterType.openTsCommentWithoutColons) {
+                    tsCommentPosition.open = delimiter.pos;
+                    inTSComment = true;
+                }
+                else if (inTSComment && delimiter.type === BlockCommentDelimiterType.singleColonForOpenTsComment) {
+                    tsCommentPosition.colonPos = delimiter.pos;
+                    tsCommentPosition.colonCount = 1;
+                }
+                else if (inTSComment && delimiter.type === BlockCommentDelimiterType.doubleColonForOpenTsComment) {
+                    tsCommentPosition.colonPos = delimiter.pos;
+                    tsCommentPosition.colonCount = 2;
+                }
+                else if (inTSComment && delimiter.type === BlockCommentDelimiterType.openNonTsComment) {
+                    tsCommentPosition.containedInnerOpeningBlockComment = true;
+                }
+                else if (inTSComment && delimiter.type === BlockCommentDelimiterType.close) {
+                    tsCommentPosition.close = delimiter.pos;
+                    result.push(tsCommentPosition as TsCommentPosition);
+                    tsCommentPosition = {
+                        containedInnerOpeningBlockComment: false
+                    };
+                    inTSComment = false;
+                }
+            }
+
+            return result;
+        },
+    };
+
+    function onCommentDelimiter(at: number, commentDelimiterType: BlockCommentDelimiterType) {
+        delimiterPositions.set(at, commentDelimiterType);
+        if (commentDelimiterType === BlockCommentDelimiterType.close) {
+            state = TsCommentScannerState.notInComment;
+        }
+        else if (commentDelimiterType === BlockCommentDelimiterType.openTsCommentWithoutColons) {
+            state = TsCommentScannerState.inTSBlockComment
+        }
+        else if (commentDelimiterType === BlockCommentDelimiterType.openNonTsComment) {
+            state = TsCommentScannerState.inBlockComment;
+        }
+    }
+
+    return tsCommentScanner;
+}
+
+/**
+ * Tracks which spans in a file pertain to TypeScript syntax.
+ * This is used to convert TypeScript files to JavaScript + TS comments.
+ */
+export function createTSSyntaxTracker({ text }: SourceFileLike): TsSyntaxTracker {
+    const whitespaceSyntaxRanges: SyntaxRange[] = [];
+    const tsSyntaxRanges: SyntaxRange[] = [];
+    return {
+        /**
+         * This range is TypeScript syntax, and if we're converting TS to buildless JS files,
+         * this range should be moved into TS comments.
+         * whitespace/comments at the start will get recorded as whitespace.
+         */
+        skipWhitespaceThenMarkRangeAsTS(start: number, end: number) {
+            // Skip past whitespace/comments
+            const realStart = commentScan(text, start, end, /*stopOnSignificantText*/ true);
+            if (start < realStart) {
+                whitespaceSyntaxRanges.push({ start, end: realStart, type: SyntaxRangeType.whitespace });
+            }
+            if (realStart < end) {
+                tsSyntaxRanges.push({ start: realStart, end, type: SyntaxRangeType.typeScript });
+            }
+        },
+        /**
+         * Returns where all TypeScript and JavaScript syntax is located in the file.
+         * The returned ranges will either be marked as a TypeScript range or a JavaScript range.
+         * Ranges of whitespace won't be returned.
+         */
+        *getSyntaxRanges(): Generator<SyntaxRange> {
+            tsSyntaxRanges.sort((a, b) => a.start - b.start);
+            whitespaceSyntaxRanges.sort((a, b) => a.start - b.start);
+
+            let whitespaceRangeIndex = 0;
+            let tsRangeIndex = 0;
+            let pos = 0;
+            while (pos < text.length) {
+                const whitespaceStart = whitespaceSyntaxRanges[whitespaceRangeIndex]?.start ?? Infinity;
+                const tsStart = tsSyntaxRanges[tsRangeIndex]?.start ?? Infinity;
+
+                if (pos === tsStart) {
+                    let end = -Infinity;
+                    // Merge overlapping TS ranges
+                    while (true) {
+                        end = Math.max(end, tsSyntaxRanges[tsRangeIndex].end);
+                        tsRangeIndex++;
+                        if (tsSyntaxRanges[tsRangeIndex] === undefined || tsSyntaxRanges[tsRangeIndex].start > end) {
+                            break;
+                        }
+                    }
+                    yield { start: tsStart, end, type: SyntaxRangeType.typeScript };
+                    pos = end;
+                }
+                // `pos` might be past `whitespaceStart` because we may have found a TS range in
+                // the middle of this whitespace range and TS ranges trump whitespace ranges.
+                // This would eventually place `pos` right after the TS range,
+                // which is in the middle of the whitespace range.
+                else if (pos >= whitespaceStart) {
+                    const whitespaceEnd = whitespaceSyntaxRanges[whitespaceRangeIndex].end;
+                    if (whitespaceEnd < tsStart) {
+                        pos = Math.max(pos, whitespaceEnd);
+                        whitespaceRangeIndex++;
+                    } else {
+                        pos = tsStart;
+                    }
+                }
+                else {
+                    const end = Math.min(tsStart, whitespaceStart, text.length);
+                    yield { start: pos, end, type: SyntaxRangeType.javaScript };
+                    pos = end;
+                }
+            }
+        },
+    };
+}
+
+/**
+ * All characters will be scanned until `end` is reached.
+ * 
+ * @param stopOnSignificantText If a non-whitespace, non-comment character is encountered, stop scanning.
+ * 
+ * @returns the index where it stopped scanning.
+ */
+function commentScan(text: string, start: number, end: number, stopOnSignificantText: boolean, onCommentDelimiter?: (pos: number, commentDelimiterType: BlockCommentDelimiterType) => void) {
+    let pos = start;
+    // A lot of this is copy-pasted from scan(), with some modifications.
+    while (true) {
+        const ch = codePointAt(text, pos);
+        if (pos >= end) {
+            return pos;
+        }
+
+        if (pos === 0) {
+            // Special handling for shebang
+            if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
+                pos = scanShebangTrivia(text, pos);
+                Debug.assertLessThan(pos, end);
+                continue;
+            }
+        }
+
+        switch (ch) {
+            case CharacterCodes.lineFeed:
+            case CharacterCodes.carriageReturn:
+                pos++;
+                continue;
+            case CharacterCodes.tab:
+            case CharacterCodes.verticalTab:
+            case CharacterCodes.formFeed:
+            case CharacterCodes.space:
+            case CharacterCodes.nonBreakingSpace:
+            case CharacterCodes.ogham:
+            case CharacterCodes.enQuad:
+            case CharacterCodes.emQuad:
+            case CharacterCodes.enSpace:
+            case CharacterCodes.emSpace:
+            case CharacterCodes.threePerEmSpace:
+            case CharacterCodes.fourPerEmSpace:
+            case CharacterCodes.sixPerEmSpace:
+            case CharacterCodes.figureSpace:
+            case CharacterCodes.punctuationSpace:
+            case CharacterCodes.thinSpace:
+            case CharacterCodes.hairSpace:
+            case CharacterCodes.zeroWidthSpace:
+            case CharacterCodes.narrowNoBreakSpace:
+            case CharacterCodes.mathematicalSpace:
+            case CharacterCodes.ideographicSpace:
+            case CharacterCodes.byteOrderMark:
+                pos++;
+                continue;
+            case CharacterCodes.asterisk:
+                if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                    onCommentDelimiter?.(pos, BlockCommentDelimiterType.close)
+                    pos += 2;
+                    continue;
+                }
+                else {
+                    pos += 1;
+                    continue;
+                }
+            case CharacterCodes.slash:
+                // Single-line comment
+                if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                    pos += 2;
+
+                    while (pos < end) {
+                        if (isLineBreak(text.charCodeAt(pos))) {
+                            break;
+                        }
+                        pos++;
+                    }
+                    continue;
+                }
+                // Multi-line comment
+                if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
+                    const saveStartPos = pos;
+                    pos += 2;
+
+                    let isTsComment = false;
+                    while (pos < end) {
+                        if (text.charCodeAt(pos) === CharacterCodes.space) {
+                            // continue on
+                        }
+                        else if (text.charCodeAt(pos) === CharacterCodes.colon) {
+                            isTsComment = true;
+                            break;
+                        }
+                        else {
+                            break;
+                        }
+                        pos++;
+                    }
+
+                    if (isTsComment) {
+                        const colonCount =
+                            text.charCodeAt(pos + 1) !== CharacterCodes.colon ? 1 :
+                            text.charCodeAt(pos + 2) !== CharacterCodes.colon ? 2 :
+                            3; // Represents 3 or more
+                        
+                        if (colonCount === 1 || colonCount === 2) {
+                            onCommentDelimiter?.(saveStartPos, BlockCommentDelimiterType.openTsCommentWithoutColons)
+                            onCommentDelimiter?.(
+                                pos,
+                                colonCount === 1
+                                    ? BlockCommentDelimiterType.singleColonForOpenTsComment
+                                    : BlockCommentDelimiterType.doubleColonForOpenTsComment
+                            );
+                            pos += colonCount;
+                            continue;
+                        }
+                        else { // `/*::: ... */`
+                            // A triple-colon isn't allowed.
+                            // We'll just say that this isn't a recognized TypeScript comment.
+                            pos += 3;
+                        }
+                    }
+
+                    onCommentDelimiter?.(saveStartPos, BlockCommentDelimiterType.openNonTsComment)
+                    while (pos < end) {
+                        const ch = text.charCodeAt(pos);
+
+                        if (ch === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                            onCommentDelimiter?.(pos, BlockCommentDelimiterType.close)
+                            pos += 2;
+                            break;
+                        }
+
+                        pos++;
+                    }
+                    continue;
+                }
+
+                pos++;
+                continue;
+            default:
+                if (pos >= end || stopOnSignificantText) {
+                    return pos;
+                }
+                pos++;
+                continue;
+        }
     }
 }
 
