@@ -6166,6 +6166,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             },
             canReuseTypeNodeAnnotation(syntacticContext: SyntacticTypeNodeBuilderContext, node: Declaration, existing: TypeNode, symbol: Symbol, requiresAddingUndefined?: boolean) {
                 const context = syntacticContext as NodeBuilderContext;
+                if (context.enclosingDeclaration === undefined) return false;
+
                 symbol ??= getSymbolOfDeclaration(node);
                 let type = context.enclosingSymbolTypes?.get(getSymbolId(symbol));
                 if (type === undefined) {
