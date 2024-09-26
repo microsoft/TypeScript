@@ -3630,6 +3630,13 @@ export class TestState {
         assert.deepEqual(actualModuleSpecifiers, moduleSpecifiers);
     }
 
+    public verifyPreparePasteEdits(options: FourSlashInterface.PreparePasteEditsOptions): void {
+        const providePasteEdits = this.languageService.preparePasteEditsForFile(options.copiedFromFile, options.copiedTextRange);
+        if (providePasteEdits !== options.providePasteEdits) {
+            this.raiseError(`preparePasteEdits failed - Expected prepare paste edits to return ${options.providePasteEdits}, but got ${providePasteEdits}.`);
+        }
+    }
+
     public verifyPasteEdits(options: FourSlashInterface.PasteEditsOptions): void {
         const editInfo = this.languageService.getPasteEdits({ targetFile: this.activeFile.fileName, pastedText: options.args.pastedText, pasteLocations: options.args.pasteLocations, copiedFrom: options.args.copiedFrom, preferences: options.args.preferences }, this.formatCodeSettings);
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);

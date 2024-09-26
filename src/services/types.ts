@@ -699,6 +699,7 @@ export interface LanguageService {
     /** @internal */ mapCode(fileName: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly FileTextChanges[];
 
     dispose(): void;
+    preparePasteEditsForFile(fileName: string, copiedTextRanges: TextRange[]): boolean;
     getPasteEdits(
         args: PasteEditsArgs,
         formatOptions: FormatCodeSettings,
