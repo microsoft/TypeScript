@@ -2,6 +2,7 @@ import {
     __String,
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
+    arrayFrom,
     AssignmentDeclarationKind,
     BaseType,
     BinaryExpression,
@@ -233,6 +234,7 @@ import {
     Node,
     NodeArray,
     NodeFlags,
+    nodeIsSynthesized,
     noop,
     normalizePath,
     normalizeSpans,
@@ -1602,6 +1604,7 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "provideInlayHints",
     "getSupportedCodeFixes",
     "getPasteEdits",
+    "getImports",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -3364,6 +3367,18 @@ export function createLanguageService(
         );
     }
 
+    function getImports(fileName: string): readonly string[] {
+        synchronizeHostData();
+        const file = getValidSourceFile(fileName);
+        let imports: Set<string> | undefined;
+        for (const specifier of file.imports) {
+            if (nodeIsSynthesized(specifier)) continue;
+            const name = program.getResolvedModuleFromModuleSpecifier(specifier, file)?.resolvedModule?.resolvedFileName;
+            if (name) (imports ??= new Set()).add(name);
+        }
+        return imports ? arrayFrom(imports) : emptyArray;
+    }
+
     const ls: LanguageService = {
         dispose,
         cleanupSemanticCache,
@@ -3438,6 +3453,7 @@ export function createLanguageService(
         preparePasteEditsForFile,
         getPasteEdits,
         mapCode,
+        getImports,
     };
 
     switch (languageServiceMode) {
