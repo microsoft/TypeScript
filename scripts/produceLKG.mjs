@@ -1,6 +1,6 @@
 import fs from "fs";
+import { glob } from "glob";
 import path from "path";
-import { glob } from "tinyglobby";
 import url from "url";
 
 import { localizationDirectories } from "./build/localization.mjs";
@@ -77,7 +77,7 @@ async function copyFromBuiltLocal(fileName) {
  * @param {string} pattern
  */
 async function copyFilesWithGlob(pattern) {
-    const files = (await glob([pattern], { cwd: source })).map(f => path.basename(f));
+    const files = glob.sync(pattern, { cwd: source }).map(f => path.basename(f));
     for (const f of files) {
         await copyFromBuiltLocal(f);
     }

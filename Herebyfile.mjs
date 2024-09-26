@@ -5,10 +5,10 @@ import chokidar from "chokidar";
 import esbuild from "esbuild";
 import { EventEmitter } from "events";
 import fs from "fs";
+import { glob } from "glob";
 import { task } from "hereby";
 import path from "path";
 import pc from "picocolors";
-import { glob } from "tinyglobby";
 
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
@@ -840,13 +840,13 @@ function baselineAcceptTask(localBaseline, refBaseline) {
     }
 
     return async () => {
-        const toCopy = await glob([`${localBaseline}/**`], { onlyFiles: true, ignore: [`${localBaseline}/**/*.delete`] });
+        const toCopy = await glob(`${localBaseline}/**`, { nodir: true, ignore: `${localBaseline}/**/*.delete` });
         for (const p of toCopy) {
             const out = localPathToRefPath(p);
             await fs.promises.mkdir(path.dirname(out), { recursive: true });
             await fs.promises.copyFile(p, out);
         }
-        const toDelete = await glob([`${localBaseline}/**/*.delete`], { onlyFiles: true });
+        const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
         for (const p of toDelete) {
             const out = localPathToRefPath(p).replace(/\.delete$/, "");
             await rimraf(out);

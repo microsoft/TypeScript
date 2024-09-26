@@ -1,6 +1,6 @@
 import fs from "fs";
 import fsPromises from "fs/promises";
-import { glob } from "tinyglobby";
+import { glob } from "glob";
 
 async function checkErrorBaselines() {
     const data = await fsPromises.readFile("src/compiler/diagnosticMessages.json", "utf-8");
@@ -50,7 +50,7 @@ async function checkSourceFiles() {
     }
 
     let allSrc = "";
-    const files = await glob(["./src/**/*.ts"]);
+    const files = await glob("./src/**/*.ts");
     console.log("Reading " + files.length + " source files");
     for (const file of files) {
         if (file.indexOf("diagnosticInformationMap.generated.ts") > 0) {
