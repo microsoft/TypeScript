@@ -302,6 +302,7 @@ export const enum SyntaxKind {
     AsExpression,
     NonNullExpression,
     MetaProperty,
+    ImportMetaResolveExpression,
     SyntheticExpression,
     SatisfiesExpression,
 
@@ -2479,6 +2480,10 @@ export interface ImportExpression extends PrimaryExpression {
     readonly kind: SyntaxKind.ImportKeyword;
 }
 
+export interface ImportMetaResolveExpression extends PrimaryExpression {
+    readonly kind: SyntaxKind.ImportMetaResolveExpression;
+}
+
 export interface DeleteExpression extends UnaryExpression {
     readonly kind: SyntaxKind.DeleteExpression;
     readonly expression: UnaryExpression;
@@ -3095,6 +3100,10 @@ export interface SuperCall extends CallExpression {
 
 export interface ImportCall extends CallExpression {
     readonly expression: ImportExpression;
+}
+
+export interface ImportMetaResolveCall extends CallExpression {
+    readonly expression: ImportMetaResolveExpression;
 }
 
 export interface ExpressionWithTypeArguments extends MemberExpression, NodeWithTypeArguments {

@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "es2022",
+    "moduleResolution": "bundler"
+  },
+  "files": ["./main.ts", "./worker.ts"]
+}

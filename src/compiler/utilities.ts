@@ -234,6 +234,7 @@ import {
     ImportDeclaration,
     ImportEqualsDeclaration,
     ImportMetaProperty,
+    ImportMetaResolveCall,
     ImportSpecifier,
     ImportTypeNode,
     IndexInfo,
@@ -2558,6 +2559,12 @@ export function isSuperCall(n: Node): n is SuperCall {
 /** @internal */
 export function isImportCall(n: Node): n is ImportCall {
     return n.kind === SyntaxKind.CallExpression && (n as CallExpression).expression.kind === SyntaxKind.ImportKeyword;
+}
+
+
+/** @internal */
+export function isImportMetaResolveCall(n: Node): n is ImportMetaResolveCall {
+    return n.kind === SyntaxKind.CallExpression && (n as CallExpression).expression.kind === SyntaxKind.ImportMetaResolveExpression;
 }
 
 /** @internal */

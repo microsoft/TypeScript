@@ -5927,11 +5927,40 @@ namespace Parser {
                 expression = parseTokenNode<PrimaryExpression>();
             }
             else if (lookAhead(nextTokenIsDot)) {
-                // This is an 'import.*' metaproperty (i.e. 'import.meta')
+                // This is either specificallly an `import.meta.resolve(…)` call or more generally an 'import.*' metaproperty (i.e. 'import.meta')
                 nextToken(); // advance past the 'import'
                 nextToken(); // advance past the dot
-                expression = finishNode(factory.createMetaProperty(SyntaxKind.ImportKeyword, parseIdentifierName()), pos);
-                sourceFlags |= NodeFlags.PossiblyContainsImportMeta;
+                const identifierName = parseIdentifierName();
+
+                // TODO: use `parseRightSideOfDot`?
+                const foundImportMetaResolve = tryParse(() => {
+                    // `meta` and `resolve` are not JavaScript keywords, so we attempt to look for the direct string identifiers to recognizer `import.meta.resolve(…)`.
+                    if (identifierName.escapedText === "meta") {
+                        if (token() === SyntaxKind.DotToken) {
+                            nextToken(); // advance past the dot
+                            const nextIdentifierName = lookAhead(parseIdentifierName);
+                            if (nextIdentifierName.escapedText === "resolve") {
+                                if (lookAhead(() => nextToken() === SyntaxKind.OpenParenToken)) {
+                                    return true;
+                                }
+                            }
+                        }
+    
+                    }
+                    return false;
+                });
+
+                if (foundImportMetaResolve) {
+                    sourceFlags |= NodeFlags.PossiblyContainsDynamicImport;
+
+                    expression = {} as any; // TODO: calculate the expression. Here are some failed attempts:
+                    // expression = finishNode(factoryCreateCallExpression(factoryCreateExpressionStatement(), undefined, parseArgumentList()), pos) as any;
+                    // expression = parseTokenNode<PrimaryExpression>();
+                    // expression = finishNode(factoryCreateToken(SyntaxKind.ImportMetaResolveExpression), getNodePos()) as PrimaryExpression;
+                } else {
+                    expression = finishNode(factory.createMetaProperty(SyntaxKind.ImportKeyword, identifierName), pos);
+                    sourceFlags |= NodeFlags.PossiblyContainsImportMeta;
+                }
             }
             else {
                 expression = parseMemberExpressionOrHigher();
