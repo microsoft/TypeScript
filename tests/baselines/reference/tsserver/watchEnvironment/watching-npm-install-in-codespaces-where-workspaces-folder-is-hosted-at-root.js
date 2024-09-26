@@ -41,6 +41,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /workspaces/somerepo/src/main.ts ProjectRootPath: undefined:: Result: /workspaces/somerepo/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /workspaces/somerepo/src/tsconfig.json, currentDirectory: /workspaces/somerepo/src
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/src/tsconfig.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /workspaces/somerepo/src/tsconfig.json : {
+ "rootNames": [
+  "/workspaces/somerepo/src/main.ts"
+ ],
+ "options": {
+  "configFilePath": "/workspaces/somerepo/src/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -51,14 +59,6 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /workspaces/somerepo/src/main.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /workspaces/somerepo/src/tsconfig.json : {
- "rootNames": [
-  "/workspaces/somerepo/src/main.ts"
- ],
- "options": {
-  "configFilePath": "/workspaces/somerepo/src/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src 1 undefined Config: /workspaces/somerepo/src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src 1 undefined Config: /workspaces/somerepo/src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json

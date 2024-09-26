@@ -173,16 +173,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/project1/index.ts ProjectRootPath: undefined:: Result: /home/src/workspace/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspace/projects/project1/tsconfig.json, currentDirectory: /home/src/workspace/projects/project1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/tsconfig.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/workspace/projects/project1/tsconfig.json",
-        "reason": "Creating possible configured project for /home/src/workspace/projects/project1/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/workspace/projects/project1/tsconfig.json : {
  "rootNames": [
   "/home/src/workspace/projects/project1/core.d.ts",
@@ -205,6 +195,16 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspace/projects/project1/tsconfig.
   "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/workspace/projects/project1/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspace/projects/project1/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1 1 undefined Config: /home/src/workspace/projects/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1 1 undefined Config: /home/src/workspace/projects/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/core.d.ts 500 undefined WatchType: Closed Script info

@@ -1,6 +1,6 @@
 import * as ts from "./_namespaces/ts.js";
 
-export function reportDocumentRegistryStats(documentRegistry: ts.DocumentRegistry) {
+export function reportDocumentRegistryStats(documentRegistry: ts.DocumentRegistry): string[] {
     const str: string[] = [];
     documentRegistry.getBuckets().forEach((bucketEntries, key) => {
         str.push(`  Key:: ${key}`);
@@ -193,7 +193,7 @@ function getProgramStructure(program: ts.Program | undefined) {
     return baseline.join("\n");
 }
 
-export function verifyProgramStructure(expectedProgram: ts.Program, actualProgram: ts.Program, projectName: string) {
+export function verifyProgramStructure(expectedProgram: ts.Program, actualProgram: ts.Program, projectName: string): void {
     const actual = getProgramStructure(actualProgram);
     const expected = getProgramStructure(expectedProgram);
     ts.Debug.assert(actual === expected, `Program verification:: ${projectName}`);
@@ -204,7 +204,7 @@ export function verifyResolutionCache(
     actualProgram: ts.Program,
     resolutionHostCacheHost: ts.ResolutionCacheHost,
     projectName: string,
-) {
+): void {
     const currentDirectory = resolutionHostCacheHost.getCurrentDirectory!();
     const expected = ts.createResolutionCache(resolutionHostCacheHost, actual.rootDirForResolution, /*logChangesWhenResolvingModule*/ false);
     expected.startCachingPerDirectoryResolution();
@@ -645,7 +645,7 @@ export interface IncrementalVerifierCallbacks {
     afterVerification?(dataFromBefore: any): void;
 }
 
-export function incrementalVerifier(service: ts.server.ProjectService) {
+export function incrementalVerifier(service: ts.server.ProjectService): void {
     service.verifyDocumentRegistry = withIncrementalVerifierCallbacks(service, verifyDocumentRegistry);
     service.verifyProgram = withIncrementalVerifierCallbacks(service, verifyProgram);
     service.onProjectCreation = onProjectCreation;

@@ -12,6 +12,7 @@ import {
     canHaveModifiers,
     canProduceDiagnostics,
     ClassDeclaration,
+    ClassElement,
     compact,
     concatenate,
     ConditionalTypeNode,
@@ -196,6 +197,7 @@ import {
     SymbolTracker,
     SyntaxKind,
     TransformationContext,
+    Transformer,
     transformNodes,
     tryCast,
     TypeAliasDeclaration,
@@ -253,7 +255,7 @@ const declarationEmitInternalNodeBuilderFlags = InternalNodeBuilderFlags.AllowUn
  *
  * @internal
  */
-export function transformDeclarations(context: TransformationContext) {
+export function transformDeclarations(context: TransformationContext): Transformer<SourceFile | Bundle> {
     const throwDiagnostic = () => Debug.fail("Diagnostic emitted without context");
     let getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic = throwDiagnostic;
     let needsDeclare = true;
@@ -268,6 +270,7 @@ export function transformDeclarations(context: TransformationContext) {
 
     const { factory } = context;
     const host = context.getEmitHost();
+    let restoreFallbackNode = () => void 0;
     const symbolTracker: SymbolTracker = {
         trackSymbol,
         reportInaccessibleThisError,
@@ -280,6 +283,18 @@ export function transformDeclarations(context: TransformationContext) {
         reportNonlocalAugmentation,
         reportNonSerializableProperty,
         reportInferenceFallback,
+        pushErrorFallbackNode(node) {
+            const currentFallback = errorFallbackNode;
+            const currentRestore = restoreFallbackNode;
+            restoreFallbackNode = () => {
+                restoreFallbackNode = currentRestore;
+                errorFallbackNode = currentFallback;
+            };
+            errorFallbackNode = node;
+        },
+        popErrorFallbackNode() {
+            restoreFallbackNode();
+        },
     };
     let errorNameNode: DeclarationName | undefined;
     let errorFallbackNode: Declaration | undefined;
@@ -436,10 +451,7 @@ export function transformDeclarations(context: TransformationContext) {
         return result;
     }
 
-    function transformRoot(node: Bundle): Bundle;
-    function transformRoot(node: SourceFile): SourceFile;
-    function transformRoot(node: SourceFile | Bundle): SourceFile | Bundle;
-    function transformRoot(node: SourceFile | Bundle) {
+    function transformRoot(node: SourceFile | Bundle): SourceFile | Bundle {
         if (node.kind === SyntaxKind.SourceFile && node.isDeclarationFile) {
             return node;
         }
@@ -1654,7 +1666,8 @@ export function transformDeclarations(context: TransformationContext) {
                         /*initializer*/ undefined,
                     ),
                 ] : undefined;
-                const memberNodes = concatenate(concatenate(privateIdentifier, parameterProperties), visitNodes(input.members, visitDeclarationSubtree, isClassElement));
+                const lateIndexes = resolver.createLateBoundIndexSignatures(input, enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, symbolTracker);
+                const memberNodes = concatenate(concatenate(concatenate<ClassElement>(privateIdentifier, lateIndexes), parameterProperties), visitNodes(input.members, visitDeclarationSubtree, isClassElement));
                 const members = factory.createNodeArray(memberNodes);
 
                 const extendsClause = getEffectiveBaseTypeNode(input);

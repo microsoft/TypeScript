@@ -18,7 +18,7 @@ const refactors = new Map<string, Refactor>();
  *
  * @internal
  */
-export function registerRefactor(name: string, refactor: Refactor) {
+export function registerRefactor(name: string, refactor: Refactor): void {
     refactors.set(name, refactor);
 }
 

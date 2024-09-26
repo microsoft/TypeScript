@@ -25,7 +25,7 @@ import {
     TestServerHostTrackingWrittenFiles,
 } from "./virtualFileSystemWithWatch.js";
 
-export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
+export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }): void {
     Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
 }
 
@@ -33,7 +33,7 @@ export function toExternalFile(fileName: string): ts.server.protocol.ExternalFil
     return { fileName };
 }
 
-export function toExternalFiles(fileNames: string[]) {
+export function toExternalFiles(fileNames: string[]): ts.server.protocol.ExternalFile[] {
     return ts.map(fileNames, toExternalFile);
 }
 
@@ -45,7 +45,7 @@ export function patchHostTimeouts(
     inputHost: TestServerHostTrackingWrittenFiles,
     session: TestSession | undefined,
     logger: LoggerWithInMemoryLogs,
-) {
+): TestSessionAndServiceHost {
     const host = inputHost as TestSessionAndServiceHost;
     host.service = session?.getProjectService();
     if (session) patchServiceForStateBaseline(session.getProjectService());
@@ -216,7 +216,7 @@ export class TestSession extends ts.server.Session {
     public override logger!: LoggerWithInMemoryLogs;
     public override readonly typingsInstaller!: TestTypingsInstallerAdapter;
     public serverCancellationToken: TestServerCancellationToken;
-    public watchChanges = new Map<number, ts.server.protocol.WatchChangeRequestArgs>();
+    public watchChanges: Map<number, ts.server.protocol.WatchChangeRequestArgs> = new Map();
 
     constructor(optsOrHost: TestSessionConstructorOptions) {
         const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
@@ -255,19 +255,19 @@ export class TestSession extends ts.server.Session {
         if (opts.canUseWatchEvents) patchSessionToHandleWatchEvents(this);
     }
 
-    getProjectService() {
+    getProjectService(): ts.server.ProjectService {
         return this.projectService;
     }
 
-    public getSeq() {
+    public getSeq(): number {
         return this.seq;
     }
 
-    public getNextSeq() {
+    public getNextSeq(): number {
         return this.seq + 1;
     }
 
-    public override executeCommand(request: ts.server.protocol.Request) {
+    public override executeCommand(request: ts.server.protocol.Request): ts.server.HandlerResponse {
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
             this.host.baselineHost("Before request");
             this.logger.info(`request:${ts.server.stringifyIndented(request)}`);
@@ -280,7 +280,7 @@ export class TestSession extends ts.server.Session {
         return response;
     }
 
-    public executeCommandSeq<T extends ts.server.protocol.Request>(inputRequest: TestSessionRequest<T>) {
+    public executeCommandSeq<T extends ts.server.protocol.Request>(inputRequest: TestSessionRequest<T>): ts.server.HandlerResponse {
         this.seq++;
         const request: T = inputRequest as T;
         request.seq = this.seq;
@@ -288,7 +288,7 @@ export class TestSession extends ts.server.Session {
         return this.executeCommand(request);
     }
 
-    public invokeWatchChanges() {
+    public invokeWatchChanges(): void {
         const changes = ts.singleOrMany(ts.arrayFrom(this.watchChanges.values()));
         this.watchChanges.clear();
         this.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
@@ -301,7 +301,7 @@ export class TestSession extends ts.server.Session {
 export function createSessionWithCustomEventHandler(
     optsOrHost: TestSessionConstructorOptions,
     customAction?: (event: ts.server.ProjectServiceEvent) => void,
-) {
+): TestSession {
     const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
     opts.eventHandler = eventHandler;
     const session = new TestSession(opts);
@@ -402,24 +402,24 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     constructor(private logger: LoggerWithInMemoryLogs, private cancelAfterRequest = 0) {
     }
 
-    setRequest(requestId: number) {
+    setRequest(requestId: number): void {
         this.currentId = requestId;
         this.logger.log(`TestServerCancellationToken:: Cancellation Request id:: ${requestId}`);
     }
 
-    setRequestToCancel(requestId: number) {
+    setRequestToCancel(requestId: number): void {
         this.logger.log(`TestServerCancellationToken:: Setting request to cancel:: ${requestId}`);
         this.resetToken();
         this.requestToCancel = requestId;
     }
 
-    resetRequest(requestId: number) {
+    resetRequest(requestId: number): void {
         this.logger.log(`TestServerCancellationToken:: resetRequest:: ${requestId} is ${requestId === this.currentId ? "as expected" : `expected to be ${this.currentId}`}`);
         assert.equal(requestId, this.currentId, "unexpected request id in cancellation");
         this.currentId = undefined;
     }
 
-    isCancellationRequested() {
+    isCancellationRequested(): boolean {
         this.isCancellationRequestedCount++;
         // If the request id is the request to cancel and isCancellationRequestedCount
         // has been met then cancel the request. Ex: cancel the request if it is a
@@ -429,7 +429,7 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
         return result;
     }
 
-    resetToken() {
+    resetToken(): void {
         this.currentId = -1;
         this.isCancellationRequestedCount = 0;
         this.requestToCancel = -1;
@@ -462,6 +462,20 @@ export function openFilesForSession(
     }
 }
 
+export function projectInfoForSession(
+    session: TestSession,
+    file: string | File,
+) {
+    return session.executeCommandSeq<ts.server.protocol.ProjectInfoRequest>({
+        command: ts.server.protocol.CommandTypes.ProjectInfo,
+        arguments: {
+            file: ts.isString(file) ? file : file.path,
+            needFileNameList: false,
+            needDefaultConfiguredProjectInfo: true,
+        },
+    }).response as ts.server.protocol.ProjectInfo;
+}
+
 export function closeFilesForSession(files: readonly (File | string)[], session: TestSession): void {
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.CloseRequest>({
@@ -471,14 +485,14 @@ export function closeFilesForSession(files: readonly (File | string)[], session:
     }
 }
 
-export function openExternalProjectForSession(project: ts.server.protocol.ExternalProject, session: TestSession) {
+export function openExternalProjectForSession(project: ts.server.protocol.ExternalProject, session: TestSession): void {
     session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
         command: ts.server.protocol.CommandTypes.OpenExternalProject,
         arguments: project,
     });
 }
 
-export function openExternalProjectsForSession(projects: ts.server.protocol.ExternalProject[], session: TestSession) {
+export function openExternalProjectsForSession(projects: ts.server.protocol.ExternalProject[], session: TestSession): void {
     session.executeCommandSeq<ts.server.protocol.OpenExternalProjectsRequest>({
         command: ts.server.protocol.CommandTypes.OpenExternalProjects,
         arguments: { projects },
@@ -488,7 +502,7 @@ export function openExternalProjectsForSession(projects: ts.server.protocol.Exte
 export function setCompilerOptionsForInferredProjectsRequestForSession(
     options: ts.server.protocol.InferredProjectCompilerOptions | ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs,
     session: TestSession,
-) {
+): void {
     session.executeCommandSeq<ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
         command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
         arguments: "options" in options ? // eslint-disable-line local/no-in-operator
@@ -497,7 +511,7 @@ export function setCompilerOptionsForInferredProjectsRequestForSession(
     });
 }
 
-export function logDiagnostics(sessionOrService: TestSession, diagnosticsType: string, project: ts.server.Project, diagnostics: readonly ts.Diagnostic[]) {
+export function logDiagnostics(sessionOrService: TestSession, diagnosticsType: string, project: ts.server.Project, diagnostics: readonly ts.Diagnostic[]): void {
     sessionOrService.logger.info(`${diagnosticsType}:: ${diagnostics.length}`);
     diagnostics.forEach(d => sessionOrService.logger.info(ts.formatDiagnostic(d, project)));
 }
@@ -509,7 +523,7 @@ export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
     files: readonly (string | File | FileRangesRequestArgs)[];
     skip?: CheckAllErrors["skip"];
 }
-export function verifyGetErrRequest(request: VerifyGetErrRequest) {
+export function verifyGetErrRequest(request: VerifyGetErrRequest): void {
     const { session, files } = request;
     session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
         command: ts.server.protocol.CommandTypes.Geterr,
@@ -619,13 +633,13 @@ export interface VerifyGetErrScenario {
     getErrForProjectRequest: () => readonly GetErrForProjectDiagnostics[];
     syncDiagnostics: () => readonly SyncDiagnostics[];
 }
-export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
+export function verifyGetErrScenario(scenario: VerifyGetErrScenario): void {
     verifyErrorsUsingGeterr(scenario);
     verifyErrorsUsingGeterrForProject(scenario);
     verifyErrorsUsingSyncMethods(scenario);
 }
 
-export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
+export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]): TestServerHost {
     const host = TestServerHost.createServerHost(files);
     // ts build should succeed
     ensureErrorFreeBuild(host, rootNames);
@@ -636,7 +650,7 @@ export function forEachTscWatchEdit(
     session: TestSession,
     edits: readonly TscWatchCompileChange[],
     action: () => void,
-) {
+): void {
     edits.forEach(edit => {
         session.logger.log(edit.caption);
         edit.edit(session.host);

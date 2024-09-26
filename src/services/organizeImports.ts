@@ -914,19 +914,19 @@ export function getNamedImportSpecifierComparerWithDetection(importDecl: ImportD
 }
 
 /** @internal */
-export function getImportDeclarationInsertionIndex(sortedImports: readonly AnyImportOrRequireStatement[], newImport: AnyImportOrRequireStatement, comparer: Comparer<string>) {
+export function getImportDeclarationInsertionIndex(sortedImports: readonly AnyImportOrRequireStatement[], newImport: AnyImportOrRequireStatement, comparer: Comparer<string>): number {
     const index = binarySearch(sortedImports, newImport, identity, (a, b) => compareImportsOrRequireStatements(a, b, comparer));
     return index < 0 ? ~index : index;
 }
 
 /** @internal */
-export function getImportSpecifierInsertionIndex(sortedImports: readonly ImportSpecifier[], newImport: ImportSpecifier, comparer: Comparer<ImportSpecifier>) {
+export function getImportSpecifierInsertionIndex(sortedImports: readonly ImportSpecifier[], newImport: ImportSpecifier, comparer: Comparer<ImportSpecifier>): number {
     const index = binarySearch(sortedImports, newImport, identity, comparer);
     return index < 0 ? ~index : index;
 }
 
 /** @internal */
-export function compareImportsOrRequireStatements(s1: AnyImportOrRequireStatement, s2: AnyImportOrRequireStatement, comparer: Comparer<string>) {
+export function compareImportsOrRequireStatements(s1: AnyImportOrRequireStatement, s2: AnyImportOrRequireStatement, comparer: Comparer<string>): Comparison {
     return compareModuleSpecifiersWorker(getModuleSpecifierExpression(s1), getModuleSpecifierExpression(s2), comparer) || compareImportKind(s1, s2);
 }
 
@@ -950,7 +950,7 @@ export function testCoalesceImports(importGroup: readonly ImportDeclaration[], i
  * @deprecated Only used for testing
  * @internal
  */
-export function testCoalesceExports(exportGroup: readonly ExportDeclaration[], ignoreCase: boolean, preferences?: UserPreferences) {
+export function testCoalesceExports(exportGroup: readonly ExportDeclaration[], ignoreCase: boolean, preferences?: UserPreferences): readonly ExportDeclaration[] {
     const comparer = (s1: ExportSpecifier, s2: ExportSpecifier) => compareImportOrExportSpecifiers(s1, s2, getOrganizeImportsOrdinalStringComparer(ignoreCase), { organizeImportsTypeOrder: preferences?.organizeImportsTypeOrder ?? "last" });
     return coalesceExportsWorker(exportGroup, comparer);
 }
@@ -959,7 +959,7 @@ export function testCoalesceExports(exportGroup: readonly ExportDeclaration[], i
  * @deprecated Only used for testing
  * @internal
  */
-export function compareModuleSpecifiers(m1: Expression | undefined, m2: Expression | undefined, ignoreCase?: boolean) {
+export function compareModuleSpecifiers(m1: Expression | undefined, m2: Expression | undefined, ignoreCase?: boolean): Comparison {
     const comparer = getOrganizeImportsOrdinalStringComparer(!!ignoreCase);
     return compareModuleSpecifiersWorker(m1, m2, comparer);
 }
