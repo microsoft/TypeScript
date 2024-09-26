@@ -1,4 +1,5 @@
 preact.tsx(3,11): error TS2875: This JSX tag requires the module path 'preact/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+preact.tsx(3,11): error TS6267: Cannot find name 'React', the fragment factory, which is required to use fragments.
 
 
 ==== react.tsx (0 errors) ====
@@ -12,12 +13,14 @@ preact.tsx(3,11): error TS2875: This JSX tag requires the module path 'preact/js
     </>
     
     export {};
-==== preact.tsx (1 errors) ====
+==== preact.tsx (2 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     /* @jsxImportSource preact */
     const a = <>
               ~~
 !!! error TS2875: This JSX tag requires the module path 'preact/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+              ~~
+!!! error TS6267: Cannot find name 'React', the fragment factory, which is required to use fragments.
       <p></p>
       text
       <div className="foo"></div>

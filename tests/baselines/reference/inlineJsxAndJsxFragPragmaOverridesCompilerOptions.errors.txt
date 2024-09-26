@@ -1,4 +1,4 @@
-snabbdomy.tsx(6,1): error TS2304: Cannot find name 'null'.
+snabbdomy.tsx(6,1): error TS6267: Cannot find name 'null', the fragment factory, which is required to use fragments.
 
 
 ==== react.d.ts (0 errors) ====
@@ -39,7 +39,7 @@ snabbdomy.tsx(6,1): error TS2304: Cannot find name 'null'.
     import {h} from "./snabbdom";
     <><div></div></>
     ~~
-!!! error TS2304: Cannot find name 'null'.
+!!! error TS6267: Cannot find name 'null', the fragment factory, which is required to use fragments.
     
 ==== mix-n-match.tsx (0 errors) ====
     /* @jsx h */

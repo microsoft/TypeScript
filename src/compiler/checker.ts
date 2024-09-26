@@ -36905,7 +36905,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (sourceFileLinks.jsxFragmentType !== undefined) return sourceFileLinks.jsxFragmentType;
 
         const jsxFragmentFactoryName = getJsxNamespace(node);
-        const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+        const jsxFactoryRefErr = diagnostics ? Diagnostics.Cannot_find_name_0_the_fragment_factory_which_is_required_to_use_fragments : undefined;
         const jsxFactorySymbol = getJsxNamespaceContainerForImplicitImport(node) ??
             resolveName(node, jsxFragmentFactoryName, SymbolFlags.Value, /*nameNotFoundMessage*/ jsxFactoryRefErr, /*isUse*/ true);
 

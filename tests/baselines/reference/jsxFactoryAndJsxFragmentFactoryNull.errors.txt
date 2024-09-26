@@ -1,4 +1,4 @@
-jsxFactoryAndJsxFragmentFactoryNull.tsx(3,1): error TS2304: Cannot find name 'null'.
+jsxFactoryAndJsxFragmentFactoryNull.tsx(3,1): error TS6267: Cannot find name 'null', the fragment factory, which is required to use fragments.
 
 
 ==== jsxFactoryAndJsxFragmentFactoryNull.tsx (1 errors) ====
@@ -6,5 +6,5 @@ jsxFactoryAndJsxFragmentFactoryNull.tsx(3,1): error TS2304: Cannot find name 'nu
     
     <></>;
     ~~
-!!! error TS2304: Cannot find name 'null'.
+!!! error TS6267: Cannot find name 'null', the fragment factory, which is required to use fragments.
     <><span>1</span><><span>2.1</span><span>2.2</span></></>;
