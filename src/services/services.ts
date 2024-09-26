@@ -3355,7 +3355,7 @@ export function createLanguageService(
         for (const specifier of file.imports) {
             if (nodeIsSynthesized(specifier)) continue;
             const name = program.getResolvedModuleFromModuleSpecifier(specifier, file)?.resolvedModule?.resolvedFileName;
-           if (name) (imports ??= new Set()).add(name);
+            if (name) (imports ??= new Set()).add(name);
         }
         return imports ? arrayFrom(imports) : emptyArray;
     }
