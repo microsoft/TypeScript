@@ -71,6 +71,12 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/witha/a.ts","/home/src/workspaces/project/withb/b.ts"]
   options: {"noEmit":true,"traceResolution":true,"watch":true,"extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
+File '/home/src/workspaces/project/witha/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha/a.ts 250 undefined Source file
 ======== Resolving module 'mymodule' from '/home/src/workspaces/project/witha/a.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -110,13 +116,19 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'mymoduleutils' was not resolved. ========
 File '/home/src/workspaces/project/witha/node_modules/mymodule/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/witha/node_modules/package.json' does not exist.
-File '/home/src/workspaces/project/witha/package.json' does not exist.
-File '/home/src/workspaces/project/package.json' does not exist.
-File '/home/src/workspaces/package.json' does not exist.
-File '/home/src/package.json' does not exist.
-File '/home/package.json' does not exist.
-File '/package.json' does not exist.
+File '/home/src/workspaces/project/witha/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts 250 undefined Source file
+File '/home/src/workspaces/project/withb/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/b.ts 250 undefined Source file
 ======== Resolving module 'mymodule' from '/home/src/workspaces/project/withb/b.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -143,13 +155,19 @@ Resolution for module 'mymoduleutils' was found in cache from location '/home/sr
 ======== Module name 'mymoduleutils' was not resolved. ========
 File '/home/src/workspaces/project/withb/node_modules/mymodule/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/withb/node_modules/package.json' does not exist.
-File '/home/src/workspaces/project/withb/package.json' does not exist.
+File '/home/src/workspaces/project/withb/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts 250 undefined Source file
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
@@ -159,6 +177,9 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb 1 undefined Failed Lookup Locations
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha/node_modules/mymodule/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha/package.json 2000 undefined File location affecting resolution
@@ -189,6 +210,12 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/node_modules: *new*
   {"pollingInterval":500}
 /home/src/workspaces/node_modules/@types: *new*
@@ -377,8 +404,20 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/witha/a.ts","/home/src/workspaces/project/withb/b.ts"]
   options: {"noEmit":true,"traceResolution":true,"watch":true,"extendedDiagnostics":true,"explainFiles":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/witha/node_modules/mymodule/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/witha/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/witha/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/witha/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
@@ -394,6 +433,12 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts 250 undefined Source file
+File '/home/src/workspaces/project/witha/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module 'mymodule' from '/home/src/workspaces/project/witha/a.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts'.
 ======== Resolving module 'mymoduleutils' from '/home/src/workspaces/project/witha/a.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -426,6 +471,12 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/withb/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'mymoduleutils' from '/home/src/workspaces/project/withb/b.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'mymoduleutils' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -448,6 +499,12 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymoduleutils/index.d.ts 250 undefined Source file
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymoduleutils/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/package.json 2000 undefined File location affecting resolution
 ../../tslibs/TS/Lib/lib.d.ts
@@ -466,6 +523,12 @@ withb/b.ts
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/node_modules:
   {"pollingInterval":500}
 /home/src/workspaces/node_modules/@types:

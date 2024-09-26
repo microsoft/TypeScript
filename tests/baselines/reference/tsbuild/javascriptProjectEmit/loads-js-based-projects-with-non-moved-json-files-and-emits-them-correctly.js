@@ -144,7 +144,7 @@ export = x;
 
 
 //// [/home/src/workspaces/solution/common/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./obj.json","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},"2353615672-{\n  \"val\": 42\n}","-5032674136-import x = require(\"./obj.json\");\nexport = x;\n"],"root":[2,3],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"..","skipLibCheck":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./obj.json","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true,"impliedFormat":1},"2353615672-{\n  \"val\": 42\n}",{"version":"-5032674136-import x = require(\"./obj.json\");\nexport = x;\n","impliedFormat":1}],"root":[2,3],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"..","skipLibCheck":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/common/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -162,19 +162,26 @@ export = x;
     "../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
       "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./obj.json": {
       "version": "2353615672-{\n  \"val\": 42\n}",
       "signature": "2353615672-{\n  \"val\": 42\n}"
     },
     "./index.ts": {
+      "original": {
+        "version": "-5032674136-import x = require(\"./obj.json\");\nexport = x;\n",
+        "impliedFormat": 1
+      },
       "version": "-5032674136-import x = require(\"./obj.json\");\nexport = x;\n",
-      "signature": "-5032674136-import x = require(\"./obj.json\");\nexport = x;\n"
+      "signature": "-5032674136-import x = require(\"./obj.json\");\nexport = x;\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -204,7 +211,7 @@ export = x;
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1148
+  "size": 1196
 }
 
 //// [/home/src/workspaces/out/sub-project/index.js]
@@ -225,7 +232,7 @@ export const m: {
 
 
 //// [/home/src/workspaces/out/sub-project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../../solution/common/obj.json","../../solution/common/index.d.ts","../../solution/sub-project/index.js"],"fileIdsList":[[2],[3]],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},"2353615672-{\n  \"val\": 42\n}","-5032674136-import x = require(\"./obj.json\");\nexport = x;\n",{"version":"-14684157955-import mod from '../common';\n\nexport const m = mod;\n","signature":"-12566182521-export const m: {\n    val: number;\n};\n"}],"root":[4],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../../solution/common/obj.json","../../solution/common/index.d.ts","../../solution/sub-project/index.js"],"fileIdsList":[[2],[3]],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true,"impliedFormat":1},"2353615672-{\n  \"val\": 42\n}",{"version":"-5032674136-import x = require(\"./obj.json\");\nexport = x;\n","impliedFormat":1},{"version":"-14684157955-import mod from '../common';\n\nexport const m = mod;\n","signature":"-12566182521-export const m: {\n    val: number;\n};\n","impliedFormat":1}],"root":[4],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/out/sub-project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -247,27 +254,36 @@ export const m: {
     "../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
       "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "../../solution/common/obj.json": {
       "version": "2353615672-{\n  \"val\": 42\n}",
       "signature": "2353615672-{\n  \"val\": 42\n}"
     },
     "../../solution/common/index.d.ts": {
+      "original": {
+        "version": "-5032674136-import x = require(\"./obj.json\");\nexport = x;\n",
+        "impliedFormat": 1
+      },
       "version": "-5032674136-import x = require(\"./obj.json\");\nexport = x;\n",
-      "signature": "-5032674136-import x = require(\"./obj.json\");\nexport = x;\n"
+      "signature": "-5032674136-import x = require(\"./obj.json\");\nexport = x;\n",
+      "impliedFormat": "commonjs"
     },
     "../../solution/sub-project/index.js": {
       "original": {
         "version": "-14684157955-import mod from '../common';\n\nexport const m = mod;\n",
-        "signature": "-12566182521-export const m: {\n    val: number;\n};\n"
+        "signature": "-12566182521-export const m: {\n    val: number;\n};\n",
+        "impliedFormat": 1
       },
       "version": "-14684157955-import mod from '../common';\n\nexport const m = mod;\n",
-      "signature": "-12566182521-export const m: {\n    val: number;\n};\n"
+      "signature": "-12566182521-export const m: {\n    val: number;\n};\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -296,7 +312,7 @@ export const m: {
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1400
+  "size": 1466
 }
 
 //// [/home/src/workspaces/out/sub-project-2/index.js]
@@ -321,7 +337,7 @@ export function getVar(): {
 
 
 //// [/home/src/workspaces/out/sub-project-2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../sub-project/index.d.ts","../../solution/sub-project-2/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},"-12566182521-export const m: {\n    val: number;\n};\n",{"version":"13545386800-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}\n","signature":"2403991005-export function getVar(): {\n    key: {\n        val: number;\n    };\n};\n"}],"root":[3],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../sub-project/index.d.ts","../../solution/sub-project-2/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12566182521-export const m: {\n    val: number;\n};\n","impliedFormat":1},{"version":"13545386800-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}\n","signature":"2403991005-export function getVar(): {\n    key: {\n        val: number;\n    };\n};\n","impliedFormat":1}],"root":[3],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/out/sub-project-2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -339,23 +355,32 @@ export function getVar(): {
     "../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
       "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "../sub-project/index.d.ts": {
+      "original": {
+        "version": "-12566182521-export const m: {\n    val: number;\n};\n",
+        "impliedFormat": 1
+      },
       "version": "-12566182521-export const m: {\n    val: number;\n};\n",
-      "signature": "-12566182521-export const m: {\n    val: number;\n};\n"
+      "signature": "-12566182521-export const m: {\n    val: number;\n};\n",
+      "impliedFormat": "commonjs"
     },
     "../../solution/sub-project-2/index.js": {
       "original": {
         "version": "13545386800-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}\n",
-        "signature": "2403991005-export function getVar(): {\n    key: {\n        val: number;\n    };\n};\n"
+        "signature": "2403991005-export function getVar(): {\n    key: {\n        val: number;\n    };\n};\n",
+        "impliedFormat": 1
       },
       "version": "13545386800-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}\n",
-      "signature": "2403991005-export function getVar(): {\n    key: {\n        val: number;\n    };\n};\n"
+      "signature": "2403991005-export function getVar(): {\n    key: {\n        val: number;\n    };\n};\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -381,7 +406,7 @@ export function getVar(): {
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1424
+  "size": 1490
 }
 
 

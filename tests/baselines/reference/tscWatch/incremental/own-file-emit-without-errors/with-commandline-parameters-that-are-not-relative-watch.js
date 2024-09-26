@@ -47,7 +47,7 @@ var y = 20;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","affectsGlobalScope":true},{"version":"2026007743-const y = 20;","affectsGlobalScope":true}],"root":[2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"5029505981-const x = 10;","affectsGlobalScope":true,"impliedFormat":1},{"version":"2026007743-const y = 20;","affectsGlobalScope":true,"impliedFormat":1}],"root":[2,3],"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -60,29 +60,35 @@ var y = 20;
     "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./file1.ts": {
       "original": {
         "version": "5029505981-const x = 10;",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "5029505981-const x = 10;",
       "signature": "5029505981-const x = 10;",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./file2.ts": {
       "original": {
         "version": "2026007743-const y = 20;",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "2026007743-const y = 20;",
       "signature": "2026007743-const y = 20;",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -96,15 +102,25 @@ var y = 20;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 749
+  "size": 803
 }
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -156,10 +172,20 @@ const z = 10;
 
 
 PolledWatches *deleted*::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -189,7 +215,7 @@ var z = 10;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","signature":"-4001438729-declare const x = 10;\n","affectsGlobalScope":true},{"version":"3317474623-const z = 10;","signature":"-368931399-declare const z = 10;\n","affectsGlobalScope":true}],"root":[2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"5029505981-const x = 10;","signature":"-4001438729-declare const x = 10;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"3317474623-const z = 10;","signature":"-368931399-declare const z = 10;\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[2,3],"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -202,31 +228,37 @@ var z = 10;
     "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./file1.ts": {
       "original": {
         "version": "5029505981-const x = 10;",
         "signature": "-4001438729-declare const x = 10;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "5029505981-const x = 10;",
       "signature": "-4001438729-declare const x = 10;\n",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./file2.ts": {
       "original": {
         "version": "3317474623-const z = 10;",
         "signature": "-368931399-declare const z = 10;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3317474623-const z = 10;",
       "signature": "-368931399-declare const z = 10;\n",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -240,15 +272,25 @@ var z = 10;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 848
+  "size": 902
 }
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*

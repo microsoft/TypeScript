@@ -50,6 +50,9 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: p WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: p WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: p WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: p WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: p WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/tslib/package.json 2000 undefined Project: p WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/package.json 2000 undefined Project: p WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: p WatchType: File location affecting resolution
@@ -137,6 +140,12 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/node_modules/package.json: *new*

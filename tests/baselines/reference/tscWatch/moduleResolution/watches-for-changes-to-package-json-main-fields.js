@@ -57,6 +57,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
+Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -78,6 +79,8 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
+File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist.
+Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, Declaration.
@@ -86,6 +89,14 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
+File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -99,6 +110,12 @@ exports.theNum = 42;
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules: *new*
@@ -109,6 +126,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/packages/pkg2/build/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
@@ -116,6 +135,8 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg1/package.json: *new*
   {}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
   {}
@@ -199,6 +220,18 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
+Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
+File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -220,6 +253,14 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/other.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/other.d.ts' with Package ID 'pkg2/build/other.d.ts@1.0.0'. ========
+File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS2305: [0mModule '"pkg2"' has no exported member 'TheNum'.
 
 [7m1[0m import type { TheNum } from 'pkg2'
@@ -232,6 +273,12 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
@@ -242,6 +289,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/packages/pkg2/build/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
@@ -249,6 +298,8 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/packages/pkg1/package.json:
   {}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {}
@@ -334,6 +385,16 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
+Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -355,6 +416,8 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
+File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, Declaration.
@@ -363,6 +426,14 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
+File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -370,6 +441,12 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
@@ -380,6 +457,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/packages/pkg2/build/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
@@ -387,6 +466,8 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/packages/pkg1/package.json:
   {}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {}

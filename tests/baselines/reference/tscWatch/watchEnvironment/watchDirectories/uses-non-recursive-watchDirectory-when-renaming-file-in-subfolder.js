@@ -42,8 +42,20 @@ Output::
 PolledWatches::
 /a/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/a/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /a/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/a/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
+/a/username/projects/project/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/username/projects/project: *new*
@@ -94,10 +106,22 @@ sysLog:: /a/username/projects/project/src/file1.ts:: Changing watcher to Missing
 PolledWatches::
 /a/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/a/username/projects/package.json:
+  {"pollingInterval":2000}
 /a/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/a/username/projects/project/package.json:
+  {"pollingInterval":2000}
 /a/username/projects/project/src/file1.ts: *new*
   {"pollingInterval":250}
+/a/username/projects/project/src/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/username/projects/project:
@@ -136,8 +160,20 @@ Output::
 PolledWatches::
 /a/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/a/username/projects/package.json:
+  {"pollingInterval":2000}
 /a/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/a/username/projects/project/package.json:
+  {"pollingInterval":2000}
+/a/username/projects/project/src/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /a/username/projects/project/src/file1.ts:

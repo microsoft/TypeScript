@@ -50,14 +50,28 @@ var y = 1;
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/workspace/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/workspace/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/workspace/solution/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/workspace/solution/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/workspace/solution/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/workspace/solution/projects/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/workspace/solution/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -191,14 +205,28 @@ commonFile1.ts
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/workspace/node_modules/@types:
   {"pollingInterval":500}
+/user/username/workspace/package.json:
+  {"pollingInterval":2000}
 /user/username/workspace/solution/node_modules/@types:
   {"pollingInterval":500}
+/user/username/workspace/solution/package.json:
+  {"pollingInterval":2000}
 /user/username/workspace/solution/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/workspace/solution/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/workspace/solution/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -274,14 +302,28 @@ var y = 1;
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/workspace/node_modules/@types:
   {"pollingInterval":500}
+/user/username/workspace/package.json:
+  {"pollingInterval":2000}
 /user/username/workspace/solution/node_modules/@types:
   {"pollingInterval":500}
+/user/username/workspace/solution/package.json:
+  {"pollingInterval":2000}
 /user/username/workspace/solution/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/workspace/solution/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/workspace/solution/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

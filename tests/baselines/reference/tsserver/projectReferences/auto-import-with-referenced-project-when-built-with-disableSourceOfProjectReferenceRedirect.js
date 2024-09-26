@@ -84,7 +84,7 @@ export declare function foo(): void;
 
 
 //// [/user/username/projects/myproject/shared/bld/library/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../src/library/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"3524703962-export function foo() {}","signature":"-5677608893-export declare function foo(): void;\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../src/library/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"3524703962-export function foo() {}","signature":"-5677608893-export declare function foo(): void;\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/shared/bld/library/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -96,19 +96,23 @@ export declare function foo(): void;
     "../../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "../../src/library/index.ts": {
       "original": {
         "version": "3524703962-export function foo() {}",
-        "signature": "-5677608893-export declare function foo(): void;\n"
+        "signature": "-5677608893-export declare function foo(): void;\n",
+        "impliedFormat": 1
       },
       "version": "3524703962-export function foo() {}",
-      "signature": "-5677608893-export declare function foo(): void;\n"
+      "signature": "-5677608893-export declare function foo(): void;\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -123,7 +127,7 @@ export declare function foo(): void;
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 825
+  "size": 861
 }
 
 //// [/user/username/projects/myproject/app/bld/program/bar.js]
@@ -143,7 +147,7 @@ foo;
 
 
 //// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../../shared/bld/library/index.d.ts","../../src/program/bar.ts","../../src/program/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n",{"version":"-9677035610-import {foo} from \"shared\";","signature":"-3531856636-export {};\n"},{"version":"193491849-foo","signature":"5381-","affectsGlobalScope":true}],"root":[3,4],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[4,[{"start":0,"length":3,"messageText":"Cannot find name 'foo'.","category":1,"code":2304}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../../shared/bld/library/index.d.ts","../../src/program/bar.ts","../../src/program/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5677608893-export declare function foo(): void;\n","impliedFormat":1},{"version":"-9677035610-import {foo} from \"shared\";","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"193491849-foo","signature":"5381-","affectsGlobalScope":true,"impliedFormat":1}],"root":[3,4],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[4,[{"start":0,"length":3,"messageText":"Cannot find name 'foo'.","category":1,"code":2304}]]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/app/bld/program/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -162,33 +166,44 @@ foo;
     "../../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "../../../shared/bld/library/index.d.ts": {
+      "original": {
+        "version": "-5677608893-export declare function foo(): void;\n",
+        "impliedFormat": 1
+      },
       "version": "-5677608893-export declare function foo(): void;\n",
-      "signature": "-5677608893-export declare function foo(): void;\n"
+      "signature": "-5677608893-export declare function foo(): void;\n",
+      "impliedFormat": "commonjs"
     },
     "../../src/program/bar.ts": {
       "original": {
         "version": "-9677035610-import {foo} from \"shared\";",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-3531856636-export {};\n",
+        "impliedFormat": 1
       },
       "version": "-9677035610-import {foo} from \"shared\";",
-      "signature": "-3531856636-export {};\n"
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "commonjs"
     },
     "../../src/program/index.ts": {
       "original": {
         "version": "193491849-foo",
         "signature": "5381-",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "193491849-foo",
       "signature": "5381-",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -226,7 +241,7 @@ foo;
   ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1171
+  "size": 1255
 }
 
 
@@ -298,6 +313,16 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/shared/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/shared/bld/library/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/shared/bld/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/program/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/program/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/program/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app/src/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app/src/program/tsconfig.json WatchType: Type roots
@@ -421,22 +446,42 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/app/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/app/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/app/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/app/src/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/app/src/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/app/src/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/app/src/program/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/app/src/program/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/app/src/program/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/shared/bld/library/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/shared/bld/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*

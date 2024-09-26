@@ -113,6 +113,12 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/pro
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/lib/foo/constants.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/lib/foo/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/lib/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
@@ -154,6 +160,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 	node_modules/mobx/index.d.ts
 	  Root file specified for compilation
+	  File is CommonJS module because 'node_modules/mobx/package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -245,8 +252,18 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/projects/project/lib/foo/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/lib/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/ambient.d.ts: *new*
@@ -344,8 +361,18 @@ After request
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/lib/foo/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/ambient.d.ts:
@@ -465,12 +492,19 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/package.json 1:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/package.json 1:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/package.json 1:: WatchInfo: /home/src/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/package.json 1:: WatchInfo: /home/src/projects/project/package.json 250 undefined WatchType: package.json file
-Before running Timeout callback:: count: 0
+Before running Timeout callback:: count: 1
+1: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/package.json]
 {}
 
+
+Timeout callback:: count: 1
+1: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
@@ -482,7 +516,25 @@ Projects::
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
-After running Timeout callback:: count: 0
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+2: /home/src/projects/project/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/mobx/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
@@ -498,8 +550,18 @@ After getPackageJsonAutoImportProvider
 PolledWatches::
 /home/src/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/projects/project/lib/foo/package.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/lib/package.json:
+  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/ambient.d.ts:
@@ -530,8 +592,9 @@ Projects::
     dirty: false *changed*
     isClosed: true *changed*
 /home/src/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
+    projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::

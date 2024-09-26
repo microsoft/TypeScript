@@ -113,7 +113,7 @@ export declare function f2(): void;
 
 
 //// [/home/src/workspaces/solution/shared/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing"],"root":[2],"options":{"composite":true},"emitSignatures":[[2,"-9393727241-export declare function f1(): void;\nexport declare class c {\n}\nexport declare enum e {\n}\nexport declare function f2(): void;\n"]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing","impliedFormat":1}],"root":[2],"options":{"composite":true},"emitSignatures":[[2,"-9393727241-export declare function f1(): void;\nexport declare class c {\n}\nexport declare enum e {\n}\nexport declare function f2(): void;\n"]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/shared/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -125,15 +125,22 @@ export declare function f2(): void;
     "../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./index.ts": {
+      "original": {
+        "version": "8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing",
+        "impliedFormat": 1
+      },
       "version": "8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing",
-      "signature": "8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing"
+      "signature": "8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -153,7 +160,7 @@ export declare function f2(): void;
   ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 955
+  "size": 1003
 }
 
 //// [/home/src/workspaces/solution/webpack/index.js]
@@ -190,7 +197,7 @@ export declare function f22(): void;
 
 
 //// [/home/src/workspaces/solution/webpack/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing"],"root":[2],"options":{"composite":true},"emitSignatures":[[2,"-2037002130-export declare function f2(): void;\nexport declare class c2 {\n}\nexport declare enum e2 {\n}\nexport declare function f22(): void;\n"]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing","impliedFormat":1}],"root":[2],"options":{"composite":true},"emitSignatures":[[2,"-2037002130-export declare function f2(): void;\nexport declare class c2 {\n}\nexport declare enum e2 {\n}\nexport declare function f22(): void;\n"]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/webpack/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -202,15 +209,22 @@ export declare function f22(): void;
     "../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./index.ts": {
+      "original": {
+        "version": "20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing",
+        "impliedFormat": 1
+      },
       "version": "20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing",
-      "signature": "20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing"
+      "signature": "20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -230,7 +244,7 @@ export declare function f22(): void;
   ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 962
+  "size": 1010
 }
 
 

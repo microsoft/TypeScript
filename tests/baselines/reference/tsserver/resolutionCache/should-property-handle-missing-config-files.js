@@ -44,6 +44,11 @@ Info seq  [hh:mm:ss:mss] Creating ExternalProject: project1, currentDirectory:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: project1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: project1 WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: project1 WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: project1 WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: project1 WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: project1 WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: project1 WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: project1 WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: project1 WatchType: Type roots
@@ -122,6 +127,16 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/Vscode/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -190,6 +205,11 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/tsconfig.json :
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
@@ -281,6 +301,11 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: project1 WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: project1 WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: project1 WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: project1 WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: project1 WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: project1 WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: project1 WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: project1 WatchType: Type roots
@@ -303,10 +328,20 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /home/src/Vscode/Projects/bin/node_modules/@types:

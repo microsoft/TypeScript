@@ -93,6 +93,10 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
@@ -195,6 +199,12 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/project/node_modules/@types: *new*
@@ -230,6 +240,9 @@ ScriptInfos::
 
 After getAutoImportProvider
 
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/project/package.json 1:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/project/package.json 1:: WatchInfo: /user/username/projects/project/package.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/project/package.json 1:: WatchInfo: /user/username/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/project/package.json 1:: WatchInfo: /user/username/projects/project/package.json 250 undefined WatchType: package.json file
 Before getAutoImportProvider
@@ -237,16 +250,41 @@ Before getAutoImportProvider
 { "dependencies": { "@angular/forms": "*", "@angular/core": "*" } }
 
 
+Timeout callback:: count: 1
+1: /user/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Projects::
 /user/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: undefined *changed*
 
-Before running Timeout callback:: count: 0
+Before running Timeout callback:: count: 1
+1: /user/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 
-After running Timeout callback:: count: 0
+Info seq  [hh:mm:ss:mss] Running: /user/username/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
 
+Timeout callback:: count: 2
+2: /user/username/projects/project/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/user/username/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/index.ts SVC-1-0 ""
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /user/username/projects/project
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -261,11 +299,18 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 	node_modules/@angular/forms/forms.d.ts
 	  Root file specified for compilation
+	  File is CommonJS module because 'node_modules/@angular/forms/package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 After getAutoImportProvider
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/node_modules/@types:
@@ -292,8 +337,9 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/username/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1* *changed*
 
 ScriptInfos::

@@ -58,12 +58,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/workspaces/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/workspaces/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/workspaces/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/workspaces/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/workspaces/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/workspaces/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
