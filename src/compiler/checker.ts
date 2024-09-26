@@ -35464,6 +35464,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (getJsxNamespaceContainerForImplicitImport(node)) {
                 return true; // factory is implicitly jsx/jsxdev - assume it fits the bill, since we don't strongly look for the jsx/jsxs/jsxDEV factory APIs anywhere else (at least not yet)
             }
+
+            // We assume fragments have the correct arity since the node does not have attributes
             const tagType = (isJsxOpeningElement(node) || isJsxSelfClosingElement(node)) && !(isJsxIntrinsicTagName(node.tagName) || isJsxNamespacedName(node.tagName)) ? checkExpression(node.tagName) : undefined;
             if (!tagType) {
                 return true;
@@ -35522,12 +35524,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (reportErrors) {
-                const errorNode = isJsxOpeningFragment(node) ? node : node.tagName;
-                const errorEntityName = isJsxOpeningFragment(node) ? "Fragment" : entityNameToString(node.tagName);
-                const diag = createDiagnosticForNode(errorNode, Diagnostics.Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3, errorEntityName, absoluteMinArgCount, entityNameToString(factory), maxParamCount);
-                const tagNameDeclaration = isJsxOpeningFragment(node) ? getJSXFragmentType(node).symbol.valueDeclaration : getSymbolAtLocation(node.tagName)?.valueDeclaration;
+                // We will not report errors in this function for fragments, since we do not check them in this function
+                const tagName = (node as JsxOpeningElement | JsxSelfClosingElement).tagName;
+                const diag = createDiagnosticForNode(tagName, Diagnostics.Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3, entityNameToString(tagName), absoluteMinArgCount, entityNameToString(factory), maxParamCount);
+                const tagNameDeclaration = getSymbolAtLocation(tagName)?.valueDeclaration;
                 if (tagNameDeclaration) {
-                    addRelatedInfo(diag, createDiagnosticForNode(tagNameDeclaration, Diagnostics._0_is_declared_here, errorEntityName));
+                    addRelatedInfo(diag, createDiagnosticForNode(tagNameDeclaration, Diagnostics._0_is_declared_here, entityNameToString(tagName)));
                 }
                 if (errorOutputContainer && errorOutputContainer.skipLogging) {
                     (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
