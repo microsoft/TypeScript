@@ -44551,10 +44551,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function helper(condExpr: Expression, condType: Type, body: Expression | Statement | undefined) {
-            let location = condExpr
+            let location = condExpr;
             // let checkAwaitOnly = false;
             while (isPrefixUnaryExpression(location)) {
-                location = skipParentheses(location.operand)
+                location = skipParentheses(location.operand);
                 // checkAwaitOnly = true;
             }
             location = isLogicalOrCoalescingBinaryExpression(location) ? skipParentheses(location.right) : location;
