@@ -1,6 +1,7 @@
 // @ts-check
 import { CancelToken } from "@esfx/canceltoken";
 import assert from "assert";
+import chalk from "chalk";
 import chokidar from "chokidar";
 import esbuild from "esbuild";
 import { EventEmitter } from "events";
@@ -8,7 +9,6 @@ import fs from "fs";
 import { glob } from "glob";
 import { task } from "hereby";
 import path from "path";
-import pc from "picocolors";
 
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
@@ -369,7 +369,7 @@ function entrypointBuildTask(options) {
             // allowing them to operate as regular tasks, while creating unresolved promises
             // in the background that keep the process running after all tasks have exited.
             if (!printedWatchWarning) {
-                console.error(pc.yellowBright("Warning: watch mode is incomplete and may not work as expected. Use at your own risk."));
+                console.error(chalk.yellowBright("Warning: watch mode is incomplete and may not work as expected. Use at your own risk."));
                 printedWatchWarning = true;
             }
 
@@ -682,7 +682,7 @@ export const runTestsAndWatch = task({
     dependencies: [watchTests],
     run: async () => {
         if (!cmdLineOptions.tests && !cmdLineOptions.failed) {
-            console.log(pc.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
+            console.log(chalk.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
             return;
         }
 
@@ -721,7 +721,7 @@ export const runTestsAndWatch = task({
                 running = false;
             }
             if (watching) {
-                console.log(pc.yellowBright(`[watch] test run complete, waiting for changes...`));
+                console.log(chalk.yellowBright(`[watch] test run complete, waiting for changes...`));
                 await promise;
             }
         }
@@ -758,9 +758,9 @@ export const runTestsAndWatch = task({
          */
         function beginRunTests(path) {
             if (testsChangedDebouncer.empty) {
-                console.log(pc.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
+                console.log(chalk.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
                 if (running) {
-                    console.log(pc.yellowBright("[watch] aborting in-progress test run..."));
+                    console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
                 }
                 testsChangedCancelSource.cancel();
                 testsChangedCancelSource = CancelToken.source();
@@ -778,7 +778,7 @@ export const runTestsAndWatch = task({
         function endWatchMode() {
             if (watching) {
                 watching = false;
-                console.log(pc.yellowBright("[watch] exiting watch mode..."));
+                console.log(chalk.yellowBright("[watch] exiting watch mode..."));
                 testsChangedCancelSource.cancel();
                 testCaseWatcher.close();
                 watchTestsEmitter.off("rebuild", onRebuild);
