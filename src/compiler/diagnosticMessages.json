@@ -3958,7 +3958,7 @@
     },
     "Using JSX fragments requires fragment factory '{0}' to be in scope, but it could not be found.": {
         "category": "Error",
-        "code": 6876
+        "code": 2876
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
