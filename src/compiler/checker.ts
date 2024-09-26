@@ -44422,10 +44422,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function helper(condExpr: Expression, condType: Type, body: Expression | Statement | undefined) {
             let location = condExpr
-            let checkAwaitOnly = false;
+            // let checkAwaitOnly = false;
             while (isPrefixUnaryExpression(location)) {
                 location = skipParentheses(location.operand)
-                checkAwaitOnly = true;
+                // checkAwaitOnly = true;
             }
             location = isLogicalOrCoalescingBinaryExpression(location) ? skipParentheses(location.right) : location;
             if (isModuleExportsAccessExpression(location)) {
@@ -44474,7 +44474,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getTypeNameForErrorDisplay(type),
                     );
                 }
-                else if (!checkAwaitOnly) {
+                // else if (!checkAwaitOnly) {
+                else {
                     error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead);
                 }
             }

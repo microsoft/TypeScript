@@ -1,11 +1,12 @@
 truthinessCallExpressionCoercion1.ts(3,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion1.ts(9,7): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 truthinessCallExpressionCoercion1.ts(19,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 truthinessCallExpressionCoercion1.ts(33,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 truthinessCallExpressionCoercion1.ts(46,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 truthinessCallExpressionCoercion1.ts(76,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 
 
-==== truthinessCallExpressionCoercion1.ts (5 errors) ====
+==== truthinessCallExpressionCoercion1.ts (6 errors) ====
     function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
         // error
         required ? console.log('required') : undefined;
@@ -17,6 +18,8 @@ truthinessCallExpressionCoercion1.ts(76,9): error TS2774: This condition will al
     
         // ok
         !!required ? console.log('not required') : undefined;
+          ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
     
         // ok
         required() ? console.log('required call') : undefined;
