@@ -21,6 +21,7 @@ import {
     KeywordSyntaxKind,
     LanguageFeatureMinimumTarget,
     LanguageVariant,
+    LanugageFeatures,
     LineAndCharacter,
     MapLike,
     parsePseudoBigInt,
@@ -295,7 +296,7 @@ const charCodeToRegExpFlag = new Map<CharacterCodes, RegularExpressionFlags>([
     [CharacterCodes.y, RegularExpressionFlags.Sticky],
 ]);
 
-const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, LanguageFeatureMinimumTarget>([
+const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, typeof LanguageFeatureMinimumTarget[LanugageFeatures]>([
     [RegularExpressionFlags.HasIndices, LanguageFeatureMinimumTarget.RegularExpressionFlagsHasIndices],
     [RegularExpressionFlags.DotAll, LanguageFeatureMinimumTarget.RegularExpressionFlagsDotAll],
     [RegularExpressionFlags.Unicode, LanguageFeatureMinimumTarget.RegularExpressionFlagsUnicode],
@@ -384,7 +385,7 @@ function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
 }
 
 /** @internal */
-export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget | undefined) {
+export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget | undefined): boolean {
     return languageVersion! >= ScriptTarget.ES2015 ?
         lookupInUnicodeMap(code, unicodeESNextIdentifierStart) :
         lookupInUnicodeMap(code, unicodeES5IdentifierStart);
@@ -515,7 +516,7 @@ export function computeLineAndCharacterOfPosition(lineStarts: readonly number[],
  * @internal
  * We assume the first line starts at position 0 and 'position' is non-negative.
  */
-export function computeLineOfPosition(lineStarts: readonly number[], position: number, lowerBound?: number) {
+export function computeLineOfPosition(lineStarts: readonly number[], position: number, lowerBound?: number): number {
     let lineNumber = binarySearch(lineStarts, position, identity, compareValues, lowerBound);
     if (lineNumber < 0) {
         // If the actual position was not found,
@@ -532,7 +533,7 @@ export function computeLineOfPosition(lineStarts: readonly number[], position: n
 }
 
 /** @internal */
-export function getLinesBetweenPositions(sourceFile: SourceFileLike, pos1: number, pos2: number) {
+export function getLinesBetweenPositions(sourceFile: SourceFileLike, pos1: number, pos2: number): number {
     if (pos1 === pos2) return 0;
     const lineStarts = getLineStarts(sourceFile);
     const lower = Math.min(pos1, pos2);
@@ -939,11 +940,11 @@ export function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb:
     return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ true, cb, state!);
 }
 
-export function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U) {
+export function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U): U | undefined {
     return iterateCommentRanges(/*reduce*/ true, text, pos, /*trailing*/ false, cb, state, initial);
 }
 
-export function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U) {
+export function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U): U | undefined {
     return iterateCommentRanges(/*reduce*/ true, text, pos, /*trailing*/ true, cb, state, initial);
 }
 
@@ -1006,7 +1007,7 @@ const enum EscapeSequenceScanningFlags {
     AtomEscape = 1 << 5,
 
     ReportInvalidEscapeErrors = RegularExpression | ReportErrors,
-    ScanExtendedUnicodeEscape = String | AnyUnicodeMode,
+    AllowExtendedUnicodeEscape = String | AnyUnicodeMode,
 }
 
 const enum ClassSetExpressionType {
@@ -1017,7 +1018,15 @@ const enum ClassSetExpressionType {
 }
 
 // Creates a scanner over a (possibly unspecified) range of a piece of text.
-export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant = LanguageVariant.Standard, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner {
+export function createScanner(
+    languageVersion: ScriptTarget,
+    skipTrivia: boolean,
+    languageVariant: LanguageVariant = LanguageVariant.Standard,
+    textInitial?: string,
+    onError?: ErrorCallback,
+    start?: number,
+    length?: number,
+): Scanner {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
@@ -1609,13 +1618,17 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes.doubleQuote:
                 return '"';
             case CharacterCodes.u:
-                if (
-                    flags & EscapeSequenceScanningFlags.ScanExtendedUnicodeEscape &&
-                    pos < end && charCodeUnchecked(pos) === CharacterCodes.openBrace
-                ) {
+                if (pos < end && charCodeUnchecked(pos) === CharacterCodes.openBrace) {
                     // '\u{DDDDDD}'
                     pos -= 2;
-                    return scanExtendedUnicodeEscape(!!(flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors));
+                    const result = scanExtendedUnicodeEscape(!!(flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors));
+                    if (!(flags & EscapeSequenceScanningFlags.AllowExtendedUnicodeEscape)) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
+                            error(Diagnostics.Unicode_escape_sequences_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
+                        }
+                    }
+                    return result;
                 }
                 // '\uDDDD'
                 for (; pos < start + 6; pos++) {
@@ -1640,7 +1653,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     const nextStart = pos;
                     let nextPos = pos + 2;
                     for (; nextPos < nextStart + 6; nextPos++) {
-                        if (!isHexDigit(charCodeUnchecked(pos))) {
+                        if (!isHexDigit(charCodeUnchecked(nextPos))) {
                             // leave the error to the next call
                             return escapedValueString;
                         }
@@ -3552,7 +3565,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
 
         function scanSourceCharacter(): string {
-            const size = anyUnicodeMode ? charSize(charCodeChecked(pos)) : 1;
+            const size = anyUnicodeMode ? charSize(codePointChecked(pos)) : 1;
             pos += size;
             return size > 0 ? text.substring(pos - size, pos) : "";
         }
@@ -3595,7 +3608,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     }
 
     function checkRegularExpressionFlagAvailability(flag: RegularExpressionFlags, size: number) {
-        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
+        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag);
         if (availableFrom && languageVersion < availableFrom) {
             error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, size, getNameOfScriptTarget(availableFrom));
         }
@@ -4049,7 +4062,7 @@ function utf16EncodeAsStringFallback(codePoint: number) {
 const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any).fromCodePoint ? codePoint => (String as any).fromCodePoint(codePoint) : utf16EncodeAsStringFallback;
 
 /** @internal */
-export function utf16EncodeAsString(codePoint: number) {
+export function utf16EncodeAsString(codePoint: number): string {
     return utf16EncodeAsStringWorker(codePoint);
 }
 

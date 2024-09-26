@@ -54,16 +54,16 @@ const C = class {
 >                         : ^^^^^^^^^^^^^
 >this.#baz().next() : IteratorResult<number, void>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->this.#baz().next : (...args: [] | [unknown]) => IteratorResult<number, void>
->                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.#baz().next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
+>                 : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#baz() : Generator<number, void, unknown>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#baz : () => Generator<number, void, unknown>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
 >     : ^^^^^^^^
->next : (...args: [] | [unknown]) => IteratorResult<number, void>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number | void
 >      : ^^^^^^^^^^^^^
 >0 : 0
@@ -80,16 +80,16 @@ const C = class {
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#qux().next() : Promise<IteratorResult<number, void>>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->this.#qux().next : (...args: [] | [unknown]) => Promise<IteratorResult<number, void>>
->                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.#qux().next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number, void>>
+>                 : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#qux() : AsyncGenerator<number, void, unknown>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#qux : () => AsyncGenerator<number, void, unknown>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof C
 >     : ^^^^^^^^
->next : (...args: [] | [unknown]) => Promise<IteratorResult<number, void>>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number, void>>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number | void
 >      : ^^^^^^^^^^^^^
 >0 : 0

@@ -1,4 +1,14 @@
 import {
+    createCodeFixAction,
+    createCombinedCodeActions,
+    createImportAdder,
+    eachDiagnostic,
+    registerCodeFix,
+    typeNodeToAutoImportableTypeNode,
+    typePredicateToAutoImportableTypeNode,
+    typeToMinimizedReferenceType,
+} from "../_namespaces/ts.codefix.js";
+import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     AssertionExpression,
@@ -36,6 +46,7 @@ import {
     hasInitializer,
     hasSyntacticModifier,
     Identifier,
+    InternalNodeBuilderFlags,
     isArrayBindingPattern,
     isArrayLiteralExpression,
     isAssertionExpression,
@@ -91,21 +102,13 @@ import {
     TypeChecker,
     TypeFlags,
     TypeNode,
+    TypePredicate,
     UnionReduction,
     VariableDeclaration,
     VariableStatement,
     walkUpParenthesizedExpressions,
 } from "../_namespaces/ts.js";
-
-import {
-    createCodeFixAction,
-    createCombinedCodeActions,
-    createImportAdder,
-    eachDiagnostic,
-    registerCodeFix,
-    typeToAutoImportableTypeNode,
-} from "../_namespaces/ts.codefix.js";
-import { getIdentifierForNode } from "../refactors/helpers.js";
+import { getIdentifierForNode } from "../_namespaces/ts.refactor.js";
 
 const fixId = "fixMissingTypeAnnotationOnExports";
 
@@ -158,8 +161,9 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     | NodeBuilderFlags.UseStructuralFallback
     | NodeBuilderFlags.AllowEmptyTuple
     | NodeBuilderFlags.GenerateNamesForShadowedTypeParams
-    | NodeBuilderFlags.NoTruncation
-    | NodeBuilderFlags.WriteComputedProps;
+    | NodeBuilderFlags.NoTruncation;
+
+const declarationEmitInternalNodeBuilderFlags = InternalNodeBuilderFlags.WriteComputedProps;
 
 enum TypePrintMode {
     // Prints its fully spelled out type
@@ -872,9 +876,28 @@ function withContext<T>(
             return relativeType(node);
         }
 
-        let type = isValueSignatureDeclaration(node) ?
-            tryGetReturnType(node) :
-            typeChecker.getTypeAtLocation(node);
+        let type: Type | undefined;
+
+        if (isValueSignatureDeclaration(node)) {
+            const signature = typeChecker.getSignatureFromDeclaration(node);
+            if (signature) {
+                const typePredicate = typeChecker.getTypePredicateOfSignature(signature);
+                if (typePredicate) {
+                    if (!typePredicate.type) {
+                        return emptyInferenceResult;
+                    }
+                    return {
+                        typeNode: typePredicateToTypeNode(typePredicate, findAncestor(node, isDeclaration) ?? sourceFile, getFlags(typePredicate.type)),
+                        mutatedTarget: false,
+                    };
+                }
+                type = typeChecker.getReturnTypeOfSignature(signature);
+            }
+        }
+        else {
+            type = typeChecker.getTypeAtLocation(node);
+        }
+
         if (!type) {
             return emptyInferenceResult;
         }
@@ -892,18 +915,22 @@ function withContext<T>(
             type = widenedType;
         }
 
-        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node)) {
+        const enclosingDeclaration = findAncestor(node, isDeclaration) ?? sourceFile;
+        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node, enclosingDeclaration)) {
             type = typeChecker.getUnionType([typeChecker.getUndefinedType(), type], UnionReduction.None);
         }
-        const flags = (
-                isVariableDeclaration(node) ||
-                (isPropertyDeclaration(node) && hasSyntacticModifier(node, ModifierFlags.Static | ModifierFlags.Readonly))
-            ) && type.flags & TypeFlags.UniqueESSymbol ?
-            NodeBuilderFlags.AllowUniqueESSymbolType : NodeBuilderFlags.None;
         return {
-            typeNode: typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile, flags),
+            typeNode: typeToTypeNode(type, enclosingDeclaration, getFlags(type)),
             mutatedTarget: false,
         };
+
+        function getFlags(type: Type) {
+            return (
+                    isVariableDeclaration(node) ||
+                    (isPropertyDeclaration(node) && hasSyntacticModifier(node, ModifierFlags.Static | ModifierFlags.Readonly))
+                ) && type.flags & TypeFlags.UniqueESSymbol ?
+                NodeBuilderFlags.AllowUniqueESSymbolType : NodeBuilderFlags.None;
+        }
     }
 
     function createTypeOfFromEntityNameExpression(node: EntityNameExpression) {
@@ -1070,9 +1097,27 @@ function withContext<T>(
         return emptyInferenceResult;
     }
 
-    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None) {
+    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
-        const result = typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, {
+        const minimizedTypeNode = typeToMinimizedReferenceType(typeChecker, type, enclosingDeclaration, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
+            moduleResolverHost: program,
+            trackSymbol() {
+                return true;
+            },
+            reportTruncationError() {
+                isTruncated = true;
+            },
+        });
+        if (!minimizedTypeNode) {
+            return undefined;
+        }
+        const result = typeNodeToAutoImportableTypeNode(minimizedTypeNode, importAdder, scriptTarget);
+        return isTruncated ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword) : result;
+    }
+
+    function typePredicateToTypeNode(typePredicate: TypePredicate, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
+        let isTruncated = false;
+        const result = typePredicateToAutoImportableTypeNode(typeChecker, importAdder, typePredicate, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
             trackSymbol() {
                 return true;
@@ -1082,13 +1127,6 @@ function withContext<T>(
             },
         });
         return isTruncated ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword) : result;
-    }
-
-    function tryGetReturnType(node: SignatureDeclaration): Type | undefined {
-        const signature = typeChecker.getSignatureFromDeclaration(node);
-        if (signature) {
-            return typeChecker.getReturnTypeOfSignature(signature);
-        }
     }
 
     function addTypeToVariableLike(decl: ParameterDeclaration | VariableDeclaration | PropertyDeclaration): DiagnosticOrDiagnosticAndArguments | undefined {

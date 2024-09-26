@@ -1,15 +1,11 @@
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
-    commonFile1,
-    commonFile2,
     noopChange,
     verifyTscWatch,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
-    libFile,
     SymLink,
     TestServerHost,
     TestServerHostOsFlavor,
@@ -17,21 +13,27 @@ import {
     Tsc_WatchFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
+describe("unittests:: tscWatch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
     const scenario = "watchEnvironment";
     verifyTscWatch({
         scenario,
         subScenario: "watchFile/using dynamic priority polling",
-        commandLineArgs: ["--w", `/a/username/project/typescript.ts`],
+        commandLineArgs: ["--w", "/a/username/projects/project/typescript.ts"],
         sys: () => {
-            const projectFolder = "/a/username/project";
+            const projectFolder = "/a/username/projects/project";
             const file1: File = {
                 path: `${projectFolder}/typescript.ts`,
                 content: "var z = 10;",
             };
             const environmentVariables = new Map<string, string>();
             environmentVariables.set("TSC_WATCHFILE", Tsc_WatchFile.DynamicPolling);
-            return createWatchedSystem([file1, libFile], { environmentVariables });
+            return TestServerHost.createWatchedSystem(
+                [file1],
+                {
+                    environmentVariables,
+                    currentDirectory: projectFolder,
+                },
+            );
         },
         edits: [
             {
@@ -51,7 +53,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             {
                 caption: "Make change to file",
                 // Make a change to file
-                edit: sys => sys.writeFile("/a/username/project/typescript.ts", "var zz30 = 100;"),
+                edit: sys => sys.writeFile("/a/username/projects/project/typescript.ts", "var zz30 = 100;"),
                 // During this timeout the file would be detected as unchanged
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
@@ -86,18 +88,28 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
     verifyTscWatch({
         scenario,
         subScenario: "watchFile/using fixed chunk size polling",
-        commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
+        commandLineArgs: ["-w"],
         sys: () => {
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: "/user/username/projects/project/tsconfig.json",
                 content: jsonToReadableText({
                     watchOptions: {
                         watchFile: "FixedChunkSizePolling",
                     },
                 }),
             };
-            const files = [libFile, commonFile1, commonFile2, configFile];
-            return createWatchedSystem(files);
+            const commonFile1: File = {
+                path: "/user/username/projects/project/commonFile1.ts",
+                content: "let x = 1",
+            };
+            const commonFile2: File = {
+                path: "/user/username/projects/project/commonFile2.ts",
+                content: "let y = 1",
+            };
+            return TestServerHost.createWatchedSystem(
+                [commonFile1, commonFile2, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFile.path) },
+            );
         },
         edits: [
             {
@@ -115,7 +127,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             {
                 caption: "Make change to file but should detect as changed and schedule program update",
                 // Make a change to file
-                edit: sys => sys.writeFile(commonFile1.path, "var zz30 = 100;"),
+                edit: sys => sys.writeFile("/user/username/projects/project/commonFile1.ts", "var zz30 = 100;"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
@@ -139,7 +151,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
 
     describe("tsc-watch when watchDirectories implementation", () => {
         function verifyRenamingFileInSubFolder(subScenario: string, tscWatchDirectory: Tsc_WatchDirectory) {
-            const projectFolder = "/a/username/project";
+            const projectFolder = "/a/username/projects/project";
             const projectSrcFolder = `${projectFolder}/src`;
             const configFile: File = {
                 path: `${projectFolder}/tsconfig.json`,
@@ -156,12 +168,18 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             verifyTscWatch({
                 scenario,
                 subScenario: `watchDirectories/${subScenario}`,
-                commandLineArgs: ["--w", "-p", configFile.path],
+                commandLineArgs: ["--w"],
                 sys: () => {
-                    const files = [file, configFile, libFile];
                     const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
-                    return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables });
+                    return TestServerHost.createWatchedSystem(
+                        [file, configFile],
+                        {
+                            osFlavor: TestServerHostOsFlavor.Linux,
+                            environmentVariables,
+                            currentDirectory: projectFolder,
+                        },
+                    );
                 },
                 edits: [
                     {
@@ -230,10 +248,16 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         path: `${cwd}/node_modules/realb/node_modules/a`,
                         symLink: `${cwd}/node_modules/a`,
                     };
-                    const files = [libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
                     const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-                    return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables, currentDirectory: cwd });
+                    return TestServerHost.createWatchedSystem(
+                        [file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB],
+                        {
+                            osFlavor: TestServerHostOsFlavor.Linux,
+                            environmentVariables,
+                            currentDirectory: cwd,
+                        },
+                    );
                 },
                 edits: [
                     {
@@ -260,7 +284,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         verifyTscWatch({
             scenario,
             subScenario: "watchDirectories/with non synchronous watch directory",
-            commandLineArgs: ["--w", "-p", `/user/username/projects/myproject/tsconfig.json`],
+            commandLineArgs: ["--w"],
             sys: () => {
                 const configFile: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
@@ -274,8 +298,13 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     path: `/user/username/projects/myproject/node_modules/file2/index.d.ts`,
                     content: `export const x = 10;`,
                 };
-                const files = [libFile, file1, file2, configFile];
-                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux });
+                return TestServerHost.createWatchedSystem(
+                    [file1, file2, configFile],
+                    {
+                        currentDirectory: ts.getDirectoryPath(configFile.path),
+                        osFlavor: TestServerHostOsFlavor.Linux,
+                    },
+                );
             },
             edits: [
                 {
@@ -338,7 +367,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         verifyTscWatch({
             scenario,
             subScenario: "watchDirectories/with non synchronous watch directory with outDir and declaration enabled",
-            commandLineArgs: ["--w", "-p", `/user/username/projects/myproject/tsconfig.json`],
+            commandLineArgs: ["--w"],
             sys: () => {
                 const configFile: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
@@ -352,8 +381,13 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     path: `/user/username/projects/myproject/node_modules/file2/index.d.ts`,
                     content: `export const x = 10;`,
                 };
-                const files = [libFile, file1, file2, configFile];
-                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux });
+                return TestServerHost.createWatchedSystem(
+                    [file1, file2, configFile],
+                    {
+                        currentDirectory: ts.getDirectoryPath(configFile.path),
+                        osFlavor: TestServerHostOsFlavor.Linux,
+                    },
+                );
             },
             edits: [
                 noopChange,
@@ -379,7 +413,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         verifyTscWatch({
             scenario,
             subScenario: "watchDirectories/with non synchronous watch directory renaming a file",
-            commandLineArgs: ["--w", "-p", `/user/username/projects/myproject/tsconfig.json`],
+            commandLineArgs: ["--w"],
             sys: () => {
                 const configFile: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
@@ -393,8 +427,13 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     path: `/user/username/projects/myproject/src/file2.ts`,
                     content: `export const x = 10;`,
                 };
-                const files = [libFile, file1, file2, configFile];
-                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux });
+                return TestServerHost.createWatchedSystem(
+                    [file1, file2, configFile],
+                    {
+                        currentDirectory: ts.getDirectoryPath(configFile.path),
+                        osFlavor: TestServerHostOsFlavor.Linux,
+                    },
+                );
             },
             edits: [
                 noopChange,
@@ -421,68 +460,115 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         verifyTscWatch({
             scenario,
             subScenario: "watchOptions/with watchFile option",
-            commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
+            commandLineArgs: ["-w"],
             sys: () => {
                 const configFile: File = {
-                    path: "/a/b/tsconfig.json",
+                    path: "/user/username/projects/project/tsconfig.json",
                     content: jsonToReadableText({
                         watchOptions: {
                             watchFile: "UseFsEvents",
                         },
                     }),
                 };
-                const files = [libFile, commonFile1, commonFile2, configFile];
-                return createWatchedSystem(files);
+                const commonFile1: File = {
+                    path: "/user/username/projects/project/commonFile1.ts",
+                    content: "let x = 1",
+                };
+                const commonFile2: File = {
+                    path: "/user/username/projects/project/commonFile2.ts",
+                    content: "let y = 1",
+                };
+                return TestServerHost.createWatchedSystem(
+                    [commonFile1, commonFile2, configFile],
+                    { currentDirectory: ts.getDirectoryPath(configFile.path) },
+                );
             },
         });
 
         verifyTscWatch({
             scenario,
             subScenario: "watchOptions/with watchDirectory option",
-            commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
+            commandLineArgs: ["-w"],
             sys: () => {
                 const configFile: File = {
-                    path: "/a/b/tsconfig.json",
+                    path: "/user/username/projects/project/tsconfig.json",
                     content: jsonToReadableText({
                         watchOptions: {
                             watchDirectory: "UseFsEvents",
                         },
                     }),
                 };
-                const files = [libFile, commonFile1, commonFile2, configFile];
-                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux });
+                const commonFile1: File = {
+                    path: "/user/username/projects/project/commonFile1.ts",
+                    content: "let x = 1",
+                };
+                const commonFile2: File = {
+                    path: "/user/username/projects/project/commonFile2.ts",
+                    content: "let y = 1",
+                };
+                return TestServerHost.createWatchedSystem(
+                    [commonFile1, commonFile2, configFile],
+                    {
+                        currentDirectory: ts.getDirectoryPath(configFile.path),
+                        osFlavor: TestServerHostOsFlavor.Linux,
+                    },
+                );
             },
         });
 
         verifyTscWatch({
             scenario,
             subScenario: "watchOptions/with fallbackPolling option",
-            commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
+            commandLineArgs: ["-w"],
             sys: () => {
                 const configFile: File = {
-                    path: "/a/b/tsconfig.json",
+                    path: "/user/username/projects/project/tsconfig.json",
                     content: jsonToReadableText({
                         watchOptions: {
                             fallbackPolling: "PriorityInterval",
                         },
                     }),
                 };
-                const files = [libFile, commonFile1, commonFile2, configFile];
-                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux, runWithFallbackPolling: true });
+                const commonFile1: File = {
+                    path: "/user/username/projects/project/commonFile1.ts",
+                    content: "let x = 1",
+                };
+                const commonFile2: File = {
+                    path: "/user/username/projects/project/commonFile2.ts",
+                    content: "let y = 1",
+                };
+                return TestServerHost.createWatchedSystem(
+                    [commonFile1, commonFile2, configFile],
+                    {
+                        currentDirectory: ts.getDirectoryPath(configFile.path),
+                        osFlavor: TestServerHostOsFlavor.Linux,
+                        runWithFallbackPolling: true,
+                    },
+                );
             },
         });
 
         verifyTscWatch({
             scenario,
             subScenario: "watchOptions/with watchFile as watch options to extend",
-            commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json", "--watchFile", "UseFsEvents"],
+            commandLineArgs: ["-w", "--watchFile", "UseFsEvents"],
             sys: () => {
                 const configFile: File = {
-                    path: "/a/b/tsconfig.json",
+                    path: "/user/username/projects/project/tsconfig.json",
                     content: "{}",
                 };
-                const files = [libFile, commonFile1, commonFile2, configFile];
-                return createWatchedSystem(files);
+                const commonFile1: File = {
+                    path: "/user/username/projects/project/commonFile1.ts",
+                    content: "let x = 1",
+                };
+                const commonFile2: File = {
+                    path: "/user/username/projects/project/commonFile2.ts",
+                    content: "let y = 1",
+                };
+                return TestServerHost.createWatchedSystem(
+                    [commonFile1, commonFile2, configFile],
+                    { currentDirectory: ts.getDirectoryPath(configFile.path) },
+                );
             },
         });
 
@@ -512,8 +598,10 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     path: `/user/username/projects/myproject/node_modules/bar/temp/index.d.ts`,
                     content: "export function temp(): string;",
                 };
-                const files = [libFile, main, bar, foo, fooBar, temp, configFile];
-                return createWatchedSystem(files, { currentDirectory: "/user/username/projects/myproject", osFlavor });
+                return TestServerHost.createWatchedSystem(
+                    [main, bar, foo, fooBar, temp, configFile],
+                    { currentDirectory: "/user/username/projects/myproject", osFlavor },
+                );
             }
 
             function verifyWorker(...additionalFlags: string[]) {
@@ -575,9 +663,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         subScenario: `fsWatch/when using file watching thats when rename occurs when file is still on the disk`,
         commandLineArgs: ["-w", "--extendedDiagnostics"],
         sys: () =>
-            createWatchedSystem(
+            TestServerHost.createWatchedSystem(
                 {
-                    [libFile.path]: libFile.content,
                     [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                     [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
                     [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({
@@ -613,9 +700,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             subScenario: `fsWatch/when using file watching thats on inode`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     {
-                        [libFile.path]: libFile.content,
                         [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                         [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
                         [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
@@ -644,9 +730,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             subScenario: `fsWatch/when using file watching thats on inode when rename event ends with tilde`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     {
-                        [libFile.path]: libFile.content,
                         [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                         [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
                         [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
@@ -675,9 +760,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             subScenario: `fsWatch/when using file watching thats on inode when rename occurs when file is still on the disk`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     {
-                        [libFile.path]: libFile.content,
                         [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                         [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
                         [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({
@@ -719,9 +803,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 subScenario: `fsWatch/fsWatchWithTimestamp ${osFlavor === TestServerHostOsFlavor.MacOs}${watchFile ? ` ${watchFile}` : ""}`,
                 commandLineArgs: ["-w", "--extendedDiagnostics", ...(watchFile ? ["--watchFile", watchFile] : [])],
                 sys: () =>
-                    createWatchedSystem(
+                    TestServerHost.createWatchedSystem(
                         {
-                            [libFile.path]: libFile.content,
                             "/user/username/projects/myproject/main.ts": `export const x = 10;`,
                             "/user/username/projects/myproject/tsconfig.json": jsonToReadableText({ files: ["main.ts"] }),
                         },
@@ -755,9 +838,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         subScenario: "fsEvent for change is repeated",
         commandLineArgs: ["-w", "main.ts", "--extendedDiagnostics"],
         sys: () =>
-            createWatchedSystem({
+            TestServerHost.createWatchedSystem({
                 "/user/username/projects/project/main.ts": `let a: string = "Hello"`,
-                [libFile.path]: libFile.content,
             }, { currentDirectory: "/user/username/projects/project" }),
         edits: [
             {

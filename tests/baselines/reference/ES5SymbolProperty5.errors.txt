@@ -1,0 +1,13 @@
+ES5SymbolProperty5.ts(7,26): error TS2554: Expected 0 arguments, but got 1.
+
+
+==== ES5SymbolProperty5.ts (1 errors) ====
+    var Symbol: { iterator: symbol };
+    
+    class C {
+        [Symbol.iterator]() { }
+    }
+    
+    (new C)[Symbol.iterator](0) // Should error
+                             ~
+!!! error TS2554: Expected 0 arguments, but got 1.

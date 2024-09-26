@@ -1,12 +1,12 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{ "compilerOptions": { "module": "esnext" } }
 
-// @Filename: /node_modules/@types/react/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/react/index.d.ts
 ////export function useState(): void;
 
-// @Filename: /a.ts
+// @Filename: /home/src/workspaces/project/a.ts
 ////import 'react';
 ////declare module 'react' {
 ////  export function useBlah(): void;  
@@ -26,7 +26,7 @@ function verifyIncludes(name: string) {
   verify.completions({
       includes: {
           name,
-          source: "/node_modules/@types/react/index",
+          source: "/home/src/workspaces/project/node_modules/@types/react/index",
           hasAction: true,
           sortText: completion.SortText.AutoImportSuggestions,
       },

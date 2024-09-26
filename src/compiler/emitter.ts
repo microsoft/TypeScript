@@ -131,6 +131,7 @@ import {
     getEmitFlags,
     getEmitHelpers,
     getEmitModuleKind,
+    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getExternalModuleName,
     getIdentifierTypeArguments,
@@ -373,7 +374,6 @@ import {
     SourceMapSource,
     SpreadAssignment,
     SpreadElement,
-    stableSort,
     Statement,
     StringLiteral,
     supportedJSExtensionsFlat,
@@ -393,6 +393,7 @@ import {
     ThrowStatement,
     TokenFlags,
     tokenToString,
+    toSorted,
     tracing,
     TransformationResult,
     transformNodes,
@@ -427,7 +428,7 @@ import * as performance from "./_namespaces/ts.performance.js";
 const brackets = createBracketsMap();
 
 /** @internal */
-export function isBuildInfoFile(file: string) {
+export function isBuildInfoFile(file: string): boolean {
     return fileExtensionIs(file, Extension.TsBuildInfo);
 }
 
@@ -449,7 +450,7 @@ export function forEachEmittedFile<T>(
     forceDtsEmit = false,
     onlyBuildInfo?: boolean,
     includeBuildInfo?: boolean,
-) {
+): T | undefined {
     const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile, forceDtsEmit);
     const options = host.getCompilerOptions();
     if (!onlyBuildInfo) {
@@ -477,7 +478,7 @@ export function forEachEmittedFile<T>(
     }
 }
 
-export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
+export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined {
     const configFile = options.configFilePath;
     if (!canEmitTsBuildInfo(options)) return undefined;
     if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
@@ -498,8 +499,7 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
     return buildInfoExtensionLess + Extension.TsBuildInfo;
 }
 
-/** @internal */
-export function canEmitTsBuildInfo(options: CompilerOptions) {
+function canEmitTsBuildInfo(options: CompilerOptions) {
     return isIncrementalCompilation(options) || !!options.tscBuild;
 }
 
@@ -560,12 +560,17 @@ function getOutputPathWithoutChangingExt(
 }
 
 /** @internal */
-export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory = () => getCommonSourceDirectoryOfConfig(configFile, ignoreCase)) {
+export function getOutputDeclarationFileName(
+    inputFileName: string,
+    configFile: ParsedCommandLine,
+    ignoreCase: boolean,
+    getCommonSourceDirectory = (): string => getCommonSourceDirectoryOfConfig(configFile, ignoreCase),
+): string {
     return getOutputDeclarationFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
 }
 
 /** @internal */
-export function getOutputDeclarationFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string) {
+export function getOutputDeclarationFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string): string {
     return changeExtension(
         getOutputPathWithoutChangingExt(inputFileName, ignoreCase, options.declarationDir || options.outDir, getCommonSourceDirectory),
         getDeclarationEmitExtensionForPath(inputFileName),
@@ -721,7 +726,7 @@ export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase:
 }
 
 /** @internal */
-export function emitResolverSkipsTypeChecking(emitOnly: boolean | EmitOnly | undefined, forceDtsEmit: boolean | undefined) {
+export function emitResolverSkipsTypeChecking(emitOnly: boolean | EmitOnly | undefined, forceDtsEmit: boolean | undefined): boolean {
     return !!forceDtsEmit && !!emitOnly;
 }
 
@@ -828,6 +833,7 @@ export function emitFiles(
             newLine: compilerOptions.newLine,
             noEmitHelpers: compilerOptions.noEmitHelpers,
             module: getEmitModuleKind(compilerOptions),
+            moduleResolution: getEmitModuleResolutionKind(compilerOptions),
             target: getEmitScriptTarget(compilerOptions),
             sourceMap: compilerOptions.sourceMap,
             inlineSourceMap: compilerOptions.inlineSourceMap,
@@ -903,8 +909,9 @@ export function emitFiles(
                 newLine: compilerOptions.newLine,
                 noEmitHelpers: true,
                 module: compilerOptions.module,
+                moduleResolution: compilerOptions.moduleResolution,
                 target: compilerOptions.target,
-                sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
+                sourceMap: emitOnly !== EmitOnly.BuilderSignature && compilerOptions.declarationMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
@@ -958,6 +965,7 @@ export function emitFiles(
     }
 
     function markLinkedReferences(file: SourceFile) {
+        if (ts.isSourceFileJS(file)) return; // JS files don't use reference calculations as they don't do import ellision, no need to calculate it
         ts.forEachChildRecursively(file, n => {
             if (isImportEqualsDeclaration(n) && !(ts.getSyntacticModifierFlags(n) & ts.ModifierFlags.Export)) return "skip"; // These are deferred and marked in a chain when referenced
             if (ts.isImportDeclaration(n)) return "skip"; // likewise, these are ultimately what get marked by calls on other nodes - we want to skip them
@@ -1109,7 +1117,7 @@ export function emitFiles(
 }
 
 /** @internal */
-export function getBuildInfoText(buildInfo: BuildInfo) {
+export function getBuildInfoText(buildInfo: BuildInfo): string {
     return JSON.stringify(buildInfo);
 }
 
@@ -1159,6 +1167,7 @@ export const notImplementedResolver: EmitResolver = {
     getDeclarationStatementsForSourceFile: notImplemented,
     isImportRequiredByAugmentation: notImplemented,
     isDefinitelyReferenceToGlobalSymbolObject: notImplemented,
+    createLateBoundIndexSignatures: notImplemented,
 };
 
 const enum PipelinePhase {
@@ -1170,16 +1179,16 @@ const enum PipelinePhase {
 }
 
 /** @internal */
-export const createPrinterWithDefaults = /* @__PURE__ */ memoize(() => createPrinter({}));
+export const createPrinterWithDefaults: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({}));
 
 /** @internal */
-export const createPrinterWithRemoveComments = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true }));
+export const createPrinterWithRemoveComments: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true }));
 
 /** @internal */
-export const createPrinterWithRemoveCommentsNeverAsciiEscape = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
+export const createPrinterWithRemoveCommentsNeverAsciiEscape: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
 
 /** @internal */
-export const createPrinterWithRemoveCommentsOmitTrailingSemicolon = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
+export const createPrinterWithRemoveCommentsOmitTrailingSemicolon: () => Printer = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
 
 export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
@@ -1876,6 +1885,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
                 // Transformation nodes
                 case SyntaxKind.NotEmittedStatement:
+                case SyntaxKind.NotEmittedTypeElement:
                     return;
             }
             if (isExpression(node)) {
@@ -2068,7 +2078,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function getSortedEmitHelpers(node: Node) {
         const helpers = getEmitHelpers(node);
-        return helpers && stableSort(helpers, compareEmitHelpers);
+        return helpers && toSorted(helpers, compareEmitHelpers);
     }
 
     //
@@ -4001,7 +4011,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (node.comment) {
             const text = getTextOfJSDocComment(node.comment);
             if (text) {
-                const lines = text.split(/\r\n?|\n/g);
+                const lines = text.split(/\r\n?|\n/);
                 for (const line of lines) {
                     writeLine();
                     writeSpace();
@@ -4504,7 +4514,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (isFunctionLike(parentNode) && parentNode.typeArguments) { // Quick info uses type arguments in place of type parameters on instantiated signatures
             return emitTypeArguments(parentNode, parentNode.typeArguments);
         }
-        emitList(parentNode, typeParameters, ListFormat.TypeParameters);
+        emitList(parentNode, typeParameters, ListFormat.TypeParameters | (isArrowFunction(parentNode) ? ListFormat.AllowTrailingComma : ListFormat.None));
     }
 
     function emitParameters(parentNode: Node, parameters: NodeArray<ParameterDeclaration>) {
@@ -4876,7 +4886,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function writeLines(text: string): void {
-        const lines = text.split(/\r\n?|\n/g);
+        const lines = text.split(/\r\n?|\n/);
         const indentation = guessIndentation(lines);
         for (const lineText of lines) {
             const line = indentation ? lineText.slice(indentation) : lineText;

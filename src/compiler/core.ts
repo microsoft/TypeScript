@@ -329,7 +329,7 @@ export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) 
 }
 
 /** @internal */
-export function* mapIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U) {
+export function* mapIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U): Generator<U, void, unknown> {
     for (const x of iter) {
         yield mapFn(x);
     }
@@ -396,7 +396,7 @@ export function flatten<T>(array: T[][] | readonly (T | readonly T[] | undefined
  *
  * @internal
  */
-export function flatMap<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): readonly U[] {
+export function flatMap<T, U extends {}>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): readonly U[] {
     let result: U[] | undefined;
     if (array !== undefined) {
         for (let i = 0; i < array.length; i++) {
@@ -434,7 +434,7 @@ export function flatMapToMutable<T, U>(array: readonly T[] | undefined, mapfn: (
 }
 
 /** @internal */
-export function* flatMapIterator<T, U>(iter: Iterable<T>, mapfn: (x: T) => readonly U[] | Iterable<U> | undefined) {
+export function* flatMapIterator<T, U>(iter: Iterable<T>, mapfn: (x: T) => readonly U[] | Iterable<U> | undefined): Generator<U, void, any> {
     for (const x of iter) {
         const iter2 = mapfn(x);
         if (!iter2) continue;
@@ -505,7 +505,8 @@ export function mapDefined<T, U>(array: readonly T[] | undefined, mapFn: (x: T, 
 }
 
 /** @internal */
-export function* mapDefinedIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U | undefined) {
+// eslint-disable-next-line no-restricted-syntax
+export function* mapDefinedIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U | undefined): Generator<U & ({} | null), void, unknown> {
     for (const x of iter) {
         const value = mapFn(x);
         if (value !== undefined) {
@@ -515,7 +516,7 @@ export function* mapDefinedIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U 
 }
 
 /** @internal */
-export function getOrUpdate<K, V>(map: Map<K, V>, key: K, callback: () => V) {
+export function getOrUpdate<K, V>(map: Map<K, V>, key: K, callback: () => V): V {
     if (map.has(key)) {
         return map.get(key)!;
     }
@@ -525,7 +526,7 @@ export function getOrUpdate<K, V>(map: Map<K, V>, key: K, callback: () => V) {
 }
 
 /** @internal */
-export function tryAddToSet<T>(set: Set<T>, value: T) {
+export function tryAddToSet<T>(set: Set<T>, value: T): boolean {
     if (!set.has(value)) {
         set.add(value);
         return true;
@@ -534,7 +535,7 @@ export function tryAddToSet<T>(set: Set<T>, value: T) {
 }
 
 /** @internal */
-export function* singleIterator<T>(value: T) {
+export function* singleIterator<T>(value: T): Generator<T, void, unknown> {
     yield value;
 }
 
@@ -806,7 +807,7 @@ export function sortAndDeduplicate(array: readonly string[]): SortedReadonlyArra
 export function sortAndDeduplicate<T>(array: readonly T[], comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T>;
 /** @internal */
 export function sortAndDeduplicate<T>(array: readonly T[], comparer?: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T> {
-    return deduplicateSorted(sort(array, comparer), equalityComparer ?? comparer ?? compareStringsCaseSensitive as any as Comparer<T>);
+    return deduplicateSorted(toSorted(array, comparer), equalityComparer ?? comparer ?? compareStringsCaseSensitive as any as Comparer<T>);
 }
 
 /** @internal */
@@ -917,18 +918,13 @@ export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | und
  *
  * @internal
  */
-export function append<TArray extends any[] | undefined, TValue extends NonNullable<TArray>[number] | undefined>(to: TArray, value: TValue): [undefined, undefined] extends [TArray, TValue] ? TArray : NonNullable<TArray>[number][];
+export function append<T extends {}>(to: T[], value: T | undefined): T[];
 /** @internal */
-export function append<T>(to: T[], value: T | undefined): T[];
+export function append<T extends {}>(to: T[] | undefined, value: T): T[];
 /** @internal */
-export function append<T>(to: T[] | undefined, value: T): T[];
-/** @internal */
-export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
-/** @internal */
-export function append<T>(to: T[], value: T | undefined): void;
-/** @internal */
-export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
-    if (value === undefined) return to as T[];
+export function append<T extends {}>(to: T[] | undefined, value: T | undefined): T[] | undefined;
+export function append<T extends {}>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+    if (value === undefined) return to;
     if (to === undefined) return [value];
     to.push(value);
     return to;
@@ -948,13 +944,13 @@ export function append<T>(to: T[] | undefined, value: T | undefined): T[] | unde
  *
  * @internal
  */
-export function combine<T>(xs: T[] | undefined, ys: T[] | undefined): T[] | undefined;
+export function combine<T extends {}>(xs: T[] | undefined, ys: T[] | undefined): T[] | undefined;
 /** @internal */
-export function combine<T>(xs: T | readonly T[] | undefined, ys: T | readonly T[] | undefined): T | readonly T[] | undefined;
+export function combine<T extends {}>(xs: T | readonly T[] | undefined, ys: T | readonly T[] | undefined): T | readonly T[] | undefined;
 /** @internal */
-export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined): T | T[] | undefined;
+export function combine<T extends {}>(xs: T | T[] | undefined, ys: T | T[] | undefined): T | T[] | undefined;
 /** @internal */
-export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined) {
+export function combine<T extends {}>(xs: T | T[] | undefined, ys: T | T[] | undefined) {
     if (xs === undefined) return ys;
     if (ys === undefined) return xs;
     if (isArray(xs)) return isArray(ys) ? concatenate(xs, ys) : append(xs, ys);
@@ -1035,34 +1031,23 @@ function stableSortIndices<T>(array: readonly T[], indices: number[], comparer: 
 }
 
 /**
- * Returns a new sorted array.
+ * Returns a new sorted array. This sort is stable, meaning elements equal to each other maintain their relative position in the array.
  *
  * @internal
  */
-export function sort<T>(array: readonly T[], comparer?: Comparer<T>): SortedReadonlyArray<T> {
-    return (array.length === 0 ? array : array.slice().sort(comparer)) as SortedReadonlyArray<T>;
+export function toSorted<T>(array: readonly T[], comparer?: Comparer<T>): SortedReadonlyArray<T> {
+    return (array.length === 0 ? emptyArray : array.slice().sort(comparer)) as readonly T[] as SortedReadonlyArray<T>;
 }
 
 /** @internal */
-export function* arrayReverseIterator<T>(array: readonly T[]) {
+export function* arrayReverseIterator<T>(array: readonly T[]): Generator<T, void, unknown> {
     for (let i = array.length - 1; i >= 0; i--) {
         yield array[i];
     }
 }
 
-/**
- * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
- *
- * @internal
- */
-export function stableSort<T>(array: readonly T[], comparer: Comparer<T>): SortedReadonlyArray<T> {
-    const indices = indicesOf(array);
-    stableSortIndices(array, indices, comparer);
-    return indices.map(i => array[i]) as SortedArray<T> as SortedReadonlyArray<T>;
-}
-
 /** @internal */
-export function rangeEquals<T>(array1: readonly T[], array2: readonly T[], pos: number, end: number) {
+export function rangeEquals<T>(array1: readonly T[], array2: readonly T[], pos: number, end: number): boolean {
     while (pos < end) {
         if (array1[pos] !== array2[pos]) {
             return false;
@@ -1362,7 +1347,7 @@ export function arrayFrom<T, U>(iterator: Iterable<T>, map?: (t: T) => U): (T | 
 }
 
 /** @internal */
-export function assign<T extends object>(t: T, ...args: (T | undefined)[]) {
+export function assign<T extends object>(t: T, ...args: (T | undefined)[]): T {
     for (const arg of args) {
         if (arg === undefined) continue;
         for (const p in arg) {
@@ -1382,7 +1367,7 @@ export function assign<T extends object>(t: T, ...args: (T | undefined)[]) {
  *
  * @internal
  */
-export function equalOwnProperties<T>(left: MapLike<T> | undefined, right: MapLike<T> | undefined, equalityComparer: EqualityComparer<T> = equateValues) {
+export function equalOwnProperties<T>(left: MapLike<T> | undefined, right: MapLike<T> | undefined, equalityComparer: EqualityComparer<T> = equateValues): boolean {
     if (left === right) return true;
     if (!left || !right) return false;
     for (const key in left) {
@@ -1525,7 +1510,7 @@ export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
 }
 
 /** @internal */
-export function copyProperties<T1 extends T2, T2>(first: T1, second: T2) {
+export function copyProperties<T1 extends T2, T2>(first: T1, second: T2): void {
     for (const id in second) {
         if (hasOwnProperty.call(second, id)) {
             (first as any)[id] = second[id];
@@ -1840,7 +1825,7 @@ export function returnUndefined(): undefined {
  *
  * @internal
  */
-export function identity<T>(x: T) {
+export function identity<T>(x: T): T {
     return x;
 }
 
@@ -1887,7 +1872,7 @@ const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_. ]+/g;
  *
  * @internal
  */
-export function toFileNameLowerCase(x: string) {
+export function toFileNameLowerCase(x: string): string {
     return fileNameLowerCaseRegExp.test(x) ?
         x.replace(fileNameLowerCaseRegExp, toLowerCase) :
         x;
@@ -1949,7 +1934,7 @@ export const enum AssertionLevel {
 export type AnyFunction = (...args: never[]) => void;
 
 /** @internal */
-export function equateValues<T>(a: T, b: T) {
+export function equateValues<T>(a: T, b: T): boolean {
     return a === b;
 }
 
@@ -1963,7 +1948,7 @@ export function equateValues<T>(a: T, b: T) {
  *
  * @internal
  */
-export function equateStringsCaseInsensitive(a: string, b: string) {
+export function equateStringsCaseInsensitive(a: string, b: string): boolean {
     return a === b
         || a !== undefined
             && b !== undefined
@@ -1978,7 +1963,7 @@ export function equateStringsCaseInsensitive(a: string, b: string) {
  *
  * @internal
  */
-export function equateStringsCaseSensitive(a: string, b: string) {
+export function equateStringsCaseSensitive(a: string, b: string): boolean {
     return equateValues(a, b);
 }
 
@@ -2042,7 +2027,7 @@ export function min<T>(items: readonly T[], compare: Comparer<T>): T | undefined
  *
  * @internal
  */
-export function compareStringsCaseInsensitive(a: string, b: string) {
+export function compareStringsCaseInsensitive(a: string, b: string): Comparison {
     if (a === b) return Comparison.EqualTo;
     if (a === undefined) return Comparison.LessThan;
     if (b === undefined) return Comparison.GreaterThan;
@@ -2063,7 +2048,7 @@ export function compareStringsCaseInsensitive(a: string, b: string) {
  *
  * @internal
  */
-export function compareStringsCaseInsensitiveEslintCompatible(a: string, b: string) {
+export function compareStringsCaseInsensitiveEslintCompatible(a: string, b: string): Comparison {
     if (a === b) return Comparison.EqualTo;
     if (a === undefined) return Comparison.LessThan;
     if (b === undefined) return Comparison.GreaterThan;
@@ -2089,7 +2074,7 @@ export function compareStringsCaseSensitive(a: string | undefined, b: string | u
 }
 
 /** @internal */
-export function getStringComparer(ignoreCase?: boolean) {
+export function getStringComparer(ignoreCase?: boolean): typeof compareStringsCaseInsensitive {
     return ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
 }
 
@@ -2119,12 +2104,12 @@ let uiComparerCaseSensitive: Comparer<string> | undefined;
 let uiLocale: string | undefined;
 
 /** @internal */
-export function getUILocale() {
+export function getUILocale(): string | undefined {
     return uiLocale;
 }
 
 /** @internal */
-export function setUILocale(value: string | undefined) {
+export function setUILocale(value: string | undefined): void {
     if (uiLocale !== value) {
         uiLocale = value;
         uiComparerCaseSensitive = undefined;
@@ -2143,7 +2128,7 @@ export function setUILocale(value: string | undefined) {
  *
  * @internal
  */
-export function compareStringsCaseSensitiveUI(a: string, b: string) {
+export function compareStringsCaseSensitiveUI(a: string, b: string): Comparison {
     uiComparerCaseSensitive ??= createUIStringComparer(uiLocale);
     return uiComparerCaseSensitive(a, b);
 }
@@ -2281,7 +2266,7 @@ export function tryRemoveSuffix(str: string, suffix: string): string | undefined
  *
  * @internal
  */
-export function removeMinAndVersionNumbers(fileName: string) {
+export function removeMinAndVersionNumbers(fileName: string): string {
     // We used to use the regex /[.-]((min)|(\d+(\.\d+)*))$/ and would just .replace it twice.
     // Unfortunately, that regex has O(n^2) performance because v8 doesn't match from the end of the string.
     // Instead, we now essentially scan the filename (backwards) ourselves.
@@ -2369,7 +2354,7 @@ function unorderedRemoveItemAt<T>(array: T[], index: number): void {
  *
  * @internal
  */
-export function unorderedRemoveItem<T>(array: T[], item: T) {
+export function unorderedRemoveItem<T>(array: T[], item: T): boolean {
     return unorderedRemoveFirstItemWhere(array, element => element === item);
 }
 
@@ -2430,7 +2415,7 @@ export function findBestPatternMatch<T>(values: readonly T[], getPattern: (value
     for (let i = 0; i < values.length; i++) {
         const v = values[i];
         const pattern = getPattern(v);
-        if (isPatternMatch(pattern, candidate) && pattern.prefix.length > longestMatchPrefixLength) {
+        if (pattern.prefix.length > longestMatchPrefixLength && isPatternMatch(pattern, candidate)) {
             longestMatchPrefixLength = pattern.prefix.length;
             matchedValue = v;
         }
@@ -2457,7 +2442,7 @@ export function tryRemovePrefix(str: string, prefix: string, getCanonicalFileNam
 }
 
 /** @internal */
-export function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
+export function isPatternMatch({ prefix, suffix }: Pattern, candidate: string): boolean {
     return candidate.length >= prefix.length + suffix.length &&
         startsWith(candidate, prefix) &&
         endsWith(candidate, suffix);
@@ -2465,7 +2450,7 @@ export function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
 
 /** @internal */
 export function and<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
-    return (arg: T) => f(arg) && g(arg);
+    return (arg: T): boolean => f(arg) && g(arg);
 }
 
 /** @internal */
@@ -2502,7 +2487,7 @@ export function singleElementArray<T>(t: T | undefined): T[] | undefined {
 }
 
 /** @internal */
-export function enumerateInsertsAndDeletes<T, U>(newItems: readonly T[], oldItems: readonly U[], comparer: (a: T, b: U) => Comparison, inserted: (newItem: T) => void, deleted: (oldItem: U) => void, unchanged?: (oldItem: U, newItem: T) => void) {
+export function enumerateInsertsAndDeletes<T, U>(newItems: readonly T[], oldItems: readonly U[], comparer: (a: T, b: U) => Comparison, inserted: (newItem: T) => void, deleted: (oldItem: U) => void, unchanged?: (oldItem: U, newItem: T) => void): boolean {
     unchanged ??= noop;
     let newIndex = 0;
     let oldIndex = 0;
@@ -2541,7 +2526,7 @@ export function enumerateInsertsAndDeletes<T, U>(newItems: readonly T[], oldItem
 }
 
 /** @internal */
-export function cartesianProduct<T>(arrays: readonly T[][]) {
+export function cartesianProduct<T>(arrays: readonly T[][]): T[][] {
     const result: T[][] = [];
     cartesianProductWorker(arrays, result, /*outer*/ undefined, 0);
     return result;
