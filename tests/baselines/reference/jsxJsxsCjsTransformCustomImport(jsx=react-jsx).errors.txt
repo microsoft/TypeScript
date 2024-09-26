@@ -1,5 +1,5 @@
 jsxJsxsCjsTransformCustomImport.tsx(2,11): error TS2875: This JSX tag requires the module path 'preact/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
-jsxJsxsCjsTransformCustomImport.tsx(2,11): error TS6267: Cannot find name 'React', the fragment factory, which is required to use fragments.
+jsxJsxsCjsTransformCustomImport.tsx(2,11): error TS6876: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
 
 
 ==== jsxJsxsCjsTransformCustomImport.tsx (2 errors) ====
@@ -8,7 +8,7 @@ jsxJsxsCjsTransformCustomImport.tsx(2,11): error TS6267: Cannot find name 'React
               ~~
 !!! error TS2875: This JSX tag requires the module path 'preact/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
               ~~
-!!! error TS6267: Cannot find name 'React', the fragment factory, which is required to use fragments.
+!!! error TS6876: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
       <p></p>
       text
       <div className="foo"></div>

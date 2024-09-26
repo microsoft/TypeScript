@@ -1,4 +1,4 @@
-snabbdomy.tsx(6,1): error TS6267: Cannot find name 'null', the fragment factory, which is required to use fragments.
+snabbdomy.tsx(6,1): error TS6876: Using JSX fragments requires fragment factory 'null' to be in scope, but it could not be found.
 
 
 ==== react.d.ts (0 errors) ====
@@ -39,7 +39,7 @@ snabbdomy.tsx(6,1): error TS6267: Cannot find name 'null', the fragment factory,
     import {h} from "./snabbdom";
     <><div></div></>
     ~~
-!!! error TS6267: Cannot find name 'null', the fragment factory, which is required to use fragments.
+!!! error TS6876: Using JSX fragments requires fragment factory 'null' to be in scope, but it could not be found.
     
 ==== mix-n-match.tsx (0 errors) ====
     /* @jsx h */

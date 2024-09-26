@@ -3956,6 +3956,10 @@
         "category": "Error",
         "code": 2875
     },
+    "Using JSX fragments requires fragment factory '{0}' to be in scope, but it could not be found.": {
+        "category": "Error",
+        "code": 6876
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -5601,10 +5605,6 @@
     "Option '{0}' can only be specified on command line.": {
         "category": "Error",
         "code": 6266
-    },
-    "Cannot find name '{0}', the fragment factory, which is required to use fragments.": {
-        "category": "Error",
-        "code": 6267
     },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
