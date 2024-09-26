@@ -278,4 +278,129 @@ new C();`,
             });
         });
     });
+
+    it("when monorepo module gets loaded from other symlinked monorepo module and from a regular node module", () => {
+        const projectRootPath = "/users/username/cal.com";
+
+        const libPkg = `${projectRootPath}/packages/lib`;
+        const getAllUserBookingsFile: File = {
+            path: `${libPkg}/bookings/getAllUserBookings.ts`,
+            content: `export const getAllUserBookings = async () => {};`,
+        };
+        const libPkgJson: File = {
+            path: `${libPkg}/package.json`,
+            content: jsonToReadableText({
+                name: "@calcom/lib",
+                version: "0.0.0", // version field for this package is important for the test
+            }),
+        };
+        const libTsconfig: File = {
+            path: `${libPkg}/tsconfig.json`,
+            content: jsonToReadableText({
+                compilerOptions: {
+                    moduleResolution: "node",
+                },
+            }),
+        };
+        const typesPkg = `${projectRootPath}/packages/types`;
+        const paymentServiceFile: File = {
+            path: `${typesPkg}/PaymentService.d.ts`,
+            content: ``,
+        };
+        const videoApiAdapterFile: File = {
+            path: `${typesPkg}/VideoApiAdapter.d.ts`,
+            content: `import {} from "@calcom/lib/bookings/getAllUserBookings";`,
+        };
+        const typesPkgJson: File = {
+            path: `${typesPkg}/package.json`,
+            content: jsonToReadableText({ name: "@calcom/types" }),
+        };
+        const typesTsconfig: File = {
+            path: `${typesPkg}/tsconfig.json`,
+            content: jsonToReadableText({
+                compilerOptions: {
+                    moduleResolution: "node",
+                },
+            }),
+        };
+        const uiPkg = `${projectRootPath}/packages/ui`;
+        const uiIndexFile: File = {
+            path: `${uiPkg}/index.tsx`,
+            content: `import type {} from "@calcom/platform-libraries";`,
+        };
+        const uiPkgJson: File = {
+            path: `${uiPkg}/package.json`,
+            content: jsonToReadableText({ name: "@calcom/ui" }),
+        };
+        const uiTsconfig: File = {
+            path: `${uiPkg}/tsconfig.json`,
+            content: jsonToReadableText({
+                compilerOptions: {
+                    moduleResolution: "node",
+                },
+                include: [
+                    "../types/*.d.ts", // this includes files from another project
+                    "**/*.tsx",
+                ],
+            }),
+        };
+
+        const libSymLink: SymLink = {
+            path: `${projectRootPath}/node_modules/@calcom/lib`,
+            symLink: "../../packages/lib",
+        };
+
+        const typesSymLink: SymLink = {
+            path: `${projectRootPath}/node_modules/@calcom/types`,
+            symLink: "../../packages/types",
+        };
+
+        const uiSymLink: SymLink = {
+            path: `${projectRootPath}/node_modules/@calcom/ui`,
+            symLink: "../../packages/ui",
+        };
+
+        const platformLibrariesNodeModule = `${projectRootPath}/node_modules/@calcom/platform-libraries`;
+
+        // this non-symlinked node module reaches into a sibling symlinked node module
+        const platformLibrariesIndexDts: File = {
+            path: `${platformLibrariesNodeModule}/dist/index.d.ts`,
+            content: `export { getAllUserBookings } from '../../lib/bookings/getAllUserBookings';`,
+        };
+
+        const platformLibrariesPkgJson: File = {
+            path: `${platformLibrariesNodeModule}/package.json`,
+            content: jsonToReadableText({ name: "@calcom/platform-libraries", types: "./dist/index.d.ts" }),
+        };
+
+        const files = [
+            // monorepo files
+            getAllUserBookingsFile,
+            libPkgJson,
+            libTsconfig,
+            paymentServiceFile,
+            videoApiAdapterFile,
+            typesPkgJson,
+            typesTsconfig,
+            uiIndexFile,
+            uiPkgJson,
+            uiTsconfig,
+
+            // regular monorepo node_modules symlinks
+            libSymLink,
+            typesSymLink,
+            uiSymLink,
+
+            // regular node_modules
+            platformLibrariesIndexDts,
+            platformLibrariesPkgJson,
+        ];
+        const host = TestServerHost.createServerHost(files);
+        const session = new TestSession(host);
+        openFilesForSession([uiIndexFile], session);
+        openFilesForSession([videoApiAdapterFile], session);
+        closeFilesForSession([uiIndexFile], session);
+        openFilesForSession([paymentServiceFile], session);
+        baselineTsserverLogs("symLinks", "when monorepo module gets loaded from other symlinked monorepo module and from a regular node module", session);
+    });
 });
