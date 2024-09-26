@@ -2055,7 +2055,6 @@ export class Session<TMessage = string> implements EventSender {
 
         return {
             relatedFiles: project.getLanguageService().getImports(file),
-            traits: [],
         };
     }
 

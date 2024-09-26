@@ -1823,10 +1823,6 @@ declare namespace ts {
             }
             export interface CopilotRelatedItems {
                 relatedFiles: readonly string[];
-                traits: {
-                    name: string;
-                    value: string;
-                }[];
             }
             export interface CopilotRelatedResponse extends Response {
                 body: CopilotRelatedItems;
