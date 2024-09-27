@@ -807,7 +807,7 @@ export function createSyntacticTypeNodeBuilder(
             result = serializeTypeAnnotationOfDeclaration(declaredType, context, node, symbol);
         }
         const oldSuppressReportInferenceFallback = context.suppressReportInferenceFallback;
-        context.suppressReportInferenceFallback = true
+        context.suppressReportInferenceFallback = true;
         const resultType = result ?? inferTypeOfDeclaration(node, symbol, context, /*reportFallback*/ false);
         context.suppressReportInferenceFallback = oldSuppressReportInferenceFallback;
         return resultType;
