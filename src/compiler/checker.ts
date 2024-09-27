@@ -6088,15 +6088,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             serializeTypeOfDeclaration(syntacticContext, declaration, symbol) {
                 // Get type of the symbol if this is the valid symbol otherwise get type at location
                 const context = syntacticContext as NodeBuilderContext;
-                let type;
-                if (symbol === undefined) {
-                    symbol ??= getSymbolOfDeclaration(declaration);
+                symbol ??= getSymbolOfDeclaration(declaration);
+                let type = context.enclosingSymbolTypes?.get(getSymbolId(symbol));
+                if (type === undefined) {
                     type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
-                        ? instantiateType(getTypeOfSymbol(symbol), context.mapper)
+                        ? instantiateType(getWidenedLiteralType(getTypeOfSymbol(symbol)), context.mapper)
                         : errorType;
-                }
-                else {
-                    type = context.enclosingSymbolTypes?.get(getSymbolId(symbol)) ?? getTypeOfSymbol(symbol);
                 }
                 const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration, context.enclosingDeclaration);
                 if (addUndefinedForParameter) {
