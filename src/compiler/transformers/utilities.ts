@@ -7,11 +7,13 @@ import {
     BindingElement,
     Bundle,
     cast,
+    changeExtension,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
+    CompilerOptions,
     CompoundAssignmentOperator,
     CoreTransformationContext,
     createExternalHelpersImportDeclarationIfNeeded,
@@ -21,6 +23,7 @@ import {
     ExportDeclaration,
     ExportSpecifier,
     Expression,
+    factory,
     filter,
     formatGeneratedName,
     FunctionDeclaration,
@@ -33,6 +36,7 @@ import {
     getNodeForGeneratedName,
     getNodeId,
     getOriginalNode,
+    getOutputExtension,
     hasDecorators,
     hasStaticModifier,
     hasSyntacticModifier,
@@ -61,6 +65,7 @@ import {
     isPrivateIdentifier,
     isPropertyDeclaration,
     isStatic,
+    isStringLiteral,
     isStringLiteralLike,
     isSuperCall,
     isTryStatement,
@@ -83,6 +88,9 @@ import {
     PrivateIdentifierAutoAccessorPropertyDeclaration,
     PrivateIdentifierMethodDeclaration,
     PropertyDeclaration,
+    setOriginalNode,
+    setTextRange,
+    shouldRewriteModuleSpecifier,
     skipParentheses,
     some,
     SourceFile,
@@ -862,4 +870,17 @@ function isSimpleParameter(node: ParameterDeclaration) {
 /** @internal */
 export function isSimpleParameterList(nodes: NodeArray<ParameterDeclaration>): boolean {
     return every(nodes, isSimpleParameter);
+}
+
+/** @internal */
+export function rewriteModuleSpecifier(node: Expression, compilerOptions: CompilerOptions): Expression;
+/** @internal */
+export function rewriteModuleSpecifier(node: Expression | undefined, compilerOptions: CompilerOptions): Expression | undefined;
+/** @internal */
+export function rewriteModuleSpecifier(node: Expression | undefined, compilerOptions: CompilerOptions): Expression | undefined {
+    if (!node || !isStringLiteral(node) || !shouldRewriteModuleSpecifier(node.text, compilerOptions)) {
+        return node;
+    }
+    const updatedText = changeExtension(node.text, getOutputExtension(node.text, compilerOptions));
+    return updatedText !== node.text ? setOriginalNode(setTextRange(factory.createStringLiteral(updatedText, node.singleQuote), node), node) : node;
 }

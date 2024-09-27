@@ -2551,6 +2551,7 @@ declare namespace ts {
                 ES2021 = "es2021",
                 ES2022 = "es2022",
                 ES2023 = "es2023",
+                ES2024 = "es2024",
                 ESNext = "esnext",
                 JSON = "json",
                 Latest = "esnext",
@@ -7074,6 +7075,7 @@ declare namespace ts {
         removeComments?: boolean;
         resolvePackageJsonExports?: boolean;
         resolvePackageJsonImports?: boolean;
+        rewriteRelativeImportExtensions?: boolean;
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;
@@ -7184,6 +7186,7 @@ declare namespace ts {
         ES2021 = 8,
         ES2022 = 9,
         ES2023 = 10,
+        ES2024 = 11,
         ESNext = 99,
         JSON = 100,
         Latest = 99,
@@ -8748,6 +8751,7 @@ declare namespace ts {
     function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration;
     function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportDeclaration;
     function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration;
+    function isPartOfTypeOnlyImportOrExportDeclaration(node: Node): boolean;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
     function isImportAttributeName(node: Node): node is ImportAttributeName;
     function isModifier(node: Node): node is Modifier;

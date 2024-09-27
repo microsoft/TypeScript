@@ -1553,6 +1553,10 @@ export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnl
     return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node);
 }
 
+export function isPartOfTypeOnlyImportOrExportDeclaration(node: Node): boolean {
+    return findAncestor(node, isTypeOnlyImportOrExportDeclaration) !== undefined;
+}
+
 export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
     return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
 }

@@ -1,3 +1,5 @@
+/// <reference lib="es2020.bigint" />
+
 interface Atomics {
     /**
      * Adds a value to the value at the given position in the array, returning the original value.

@@ -146,7 +146,8 @@ export const inverseJsxOptionMap: Map<string, string> = new Map(mapIterator(jsxO
 //       augmented in another lib.
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
+//       lib/esnext.*.d.ts file.
 const libEntries: [string, string][] = [
     // JavaScript only
     ["es5", "lib.es5.d.ts"],
@@ -161,6 +162,7 @@ const libEntries: [string, string][] = [
     ["es2021", "lib.es2021.d.ts"],
     ["es2022", "lib.es2022.d.ts"],
     ["es2023", "lib.es2023.d.ts"],
+    ["es2024", "lib.es2024.d.ts"],
     ["esnext", "lib.esnext.d.ts"],
     // Host only
     ["dom", "lib.dom.d.ts"],
@@ -183,6 +185,7 @@ const libEntries: [string, string][] = [
     ["es2015.symbol.wellknown", "lib.es2015.symbol.wellknown.d.ts"],
     ["es2016.array.include", "lib.es2016.array.include.d.ts"],
     ["es2016.intl", "lib.es2016.intl.d.ts"],
+    ["es2017.arraybuffer", "lib.es2017.arraybuffer.d.ts"],
     ["es2017.date", "lib.es2017.date.d.ts"],
     ["es2017.object", "lib.es2017.object.d.ts"],
     ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"],
@@ -215,12 +218,18 @@ const libEntries: [string, string][] = [
     ["es2022.error", "lib.es2022.error.d.ts"],
     ["es2022.intl", "lib.es2022.intl.d.ts"],
     ["es2022.object", "lib.es2022.object.d.ts"],
-    ["es2022.sharedmemory", "lib.es2022.sharedmemory.d.ts"],
     ["es2022.string", "lib.es2022.string.d.ts"],
     ["es2022.regexp", "lib.es2022.regexp.d.ts"],
     ["es2023.array", "lib.es2023.array.d.ts"],
     ["es2023.collection", "lib.es2023.collection.d.ts"],
     ["es2023.intl", "lib.es2023.intl.d.ts"],
+    ["es2024.arraybuffer", "lib.es2024.arraybuffer.d.ts"],
+    ["es2024.collection", "lib.es2024.collection.d.ts"],
+    ["es2024.object", "lib.es2024.object.d.ts"],
+    ["es2024.promise", "lib.es2024.promise.d.ts"],
+    ["es2024.regexp", "lib.es2024.regexp.d.ts"],
+    ["es2024.sharedmemory", "lib.es2024.sharedmemory.d.ts"],
+    ["es2024.string", "lib.es2024.string.d.ts"],
     ["esnext.array", "lib.es2023.array.d.ts"],
     ["esnext.collection", "lib.esnext.collection.d.ts"],
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
@@ -229,13 +238,13 @@ const libEntries: [string, string][] = [
     ["esnext.disposable", "lib.esnext.disposable.d.ts"],
     ["esnext.bigint", "lib.es2020.bigint.d.ts"],
     ["esnext.string", "lib.es2022.string.d.ts"],
-    ["esnext.promise", "lib.esnext.promise.d.ts"],
+    ["esnext.promise", "lib.es2024.promise.d.ts"],
     ["esnext.weakref", "lib.es2021.weakref.d.ts"],
     ["esnext.decorators", "lib.esnext.decorators.d.ts"],
-    ["esnext.object", "lib.esnext.object.d.ts"],
+    ["esnext.object", "lib.es2024.object.d.ts"],
     ["esnext.array", "lib.esnext.array.d.ts"],
-    ["esnext.regexp", "lib.esnext.regexp.d.ts"],
-    ["esnext.string", "lib.esnext.string.d.ts"],
+    ["esnext.regexp", "lib.es2024.regexp.d.ts"],
+    ["esnext.string", "lib.es2024.string.d.ts"],
     ["esnext.iterator", "lib.esnext.iterator.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
@@ -558,6 +567,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
         es2021: ScriptTarget.ES2021,
         es2022: ScriptTarget.ES2022,
         es2023: ScriptTarget.ES2023,
+        es2024: ScriptTarget.ES2024,
         esnext: ScriptTarget.ESNext,
     })),
     affectsSourceFile: true,
@@ -1166,6 +1176,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_bundler_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
         defaultValueDescription: false,
         transpileOptionValue: undefined,
+    },
+    {
+        name: "rewriteRelativeImportExtensions",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_in_output_files,
+        defaultValueDescription: false,
     },
     {
         name: "resolvePackageJsonExports",
