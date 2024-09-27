@@ -10509,6 +10509,7 @@ export interface SyntacticTypeNodeBuilderContext {
     enclosingDeclaration: Node | undefined;
     approximateLength: number;
     noInferenceFallback?: boolean;
+    suppressReportInferenceFallback: boolean;
 }
 
 /** @internal */

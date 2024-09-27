@@ -806,7 +806,11 @@ export function createSyntacticTypeNodeBuilder(
         if (declaredType) {
             result = serializeTypeAnnotationOfDeclaration(declaredType, context, node, symbol);
         }
-        return result ?? inferTypeOfDeclaration(node, symbol, context, /*reportFallback*/ false);
+        const oldSuppressReportInferenceFallback = context.suppressReportInferenceFallback;
+        context.suppressReportInferenceFallback = true
+        const resultType = result ?? inferTypeOfDeclaration(node, symbol, context, /*reportFallback*/ false);
+        context.suppressReportInferenceFallback = oldSuppressReportInferenceFallback;
+        return resultType;
     }
     function typeFromProperty(node: PropertyDeclaration | PropertySignature | JSDocPropertyTag, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) {
         const declaredType = getEffectiveTypeAnnotationNode(node);
