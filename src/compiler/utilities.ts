@@ -3383,6 +3383,8 @@ export function getInvokedExpression(node: CallLikeExpression): Expression | Jsx
             return node.tagName;
         case SyntaxKind.BinaryExpression:
             return node.right;
+        case SyntaxKind.JsxOpeningFragment:
+            return node;
         default:
             return node.expression;
     }
