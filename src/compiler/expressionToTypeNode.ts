@@ -8,6 +8,7 @@ import {
     ClassExpression,
     CompilerOptions,
     ConditionalTypeNode,
+    countWhere,
     Debug,
     Declaration,
     ElementAccessExpression,
@@ -99,6 +100,7 @@ import {
     isUnionTypeNode,
     isValueSignatureDeclaration,
     isVarConstLike,
+    isVariableDeclaration,
     JSDocParameterTag,
     JSDocPropertyTag,
     JSDocSignature,
@@ -772,7 +774,7 @@ export function createSyntacticTypeNodeBuilder(
         if (declaredType) {
             resultType = syntacticResult(serializeTypeAnnotationOfDeclaration(declaredType, context, node, symbol));
         }
-        else if (node.initializer) {
+        else if (node.initializer && (symbol.declarations?.length === 1 || countWhere(symbol.declarations, isVariableDeclaration) === 1)) {
             if (!resolver.isExpandoFunctionDeclaration(node) && !isContextuallyTyped(node)) {
                 resultType = typeFromExpression(node.initializer, context, /*isConstContext*/ undefined, /*requiresAddingUndefined*/ undefined, isVarConstLike(node));
             }

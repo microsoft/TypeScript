@@ -6742,9 +6742,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             function createAnonymousTypeNode(type: ObjectType): TypeNode {
                 const typeId = type.id;
                 const symbol = type.symbol;
-                // if (checkTruncationLength(context)) {
-                //     return createElidedInformationPlaceholder(context);
-                // }
                 if (symbol) {
                     const isInstantiationExpressionType = !!(getObjectFlags(type) & ObjectFlags.InstantiationExpressionType);
                     if (isInstantiationExpressionType) {
