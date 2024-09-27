@@ -19,3 +19,13 @@ type Hmm<T extends any[]> = T extends number[] ?
     never;
 
 type X = Hmm<[3, 4, 5]>;
+
+type MustHaveFooBar<T extends { foo: unknown; bar: unknown }> = T;
+
+type Hmm2<T> = T extends { foo: string }[]
+  ? T extends { bar: number }[]
+    ? MustBeArray<{ [I in keyof T]: MustHaveFooBar<T[I]> }>
+    : never
+  : never;
+
+type Y = Hmm2<[{ foo: string; bar: number }]>;

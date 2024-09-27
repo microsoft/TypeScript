@@ -50,3 +50,33 @@ type X = Hmm<[3, 4, 5]>;
 >X : [1, 1, 1]
 >  : ^^^^^^^^^
 
+type MustHaveFooBar<T extends { foo: unknown; bar: unknown }> = T;
+>MustHaveFooBar : T
+>               : ^
+>foo : unknown
+>    : ^^^^^^^
+>bar : unknown
+>    : ^^^^^^^
+
+type Hmm2<T> = T extends { foo: string }[]
+>Hmm2 : Hmm2<T>
+>     : ^^^^^^^
+>foo : string
+>    : ^^^^^^
+
+  ? T extends { bar: number }[]
+>bar : number
+>    : ^^^^^^
+
+    ? MustBeArray<{ [I in keyof T]: MustHaveFooBar<T[I]> }>
+    : never
+  : never;
+
+type Y = Hmm2<[{ foo: string; bar: number }]>;
+>Y : [{ foo: string; bar: number; }]
+>  : ^^^^^^^^      ^^^^^^^      ^^^^
+>foo : string
+>    : ^^^^^^
+>bar : number
+>    : ^^^^^^
+
