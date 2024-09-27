@@ -40770,7 +40770,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function widenTypeInferredFromInitializer(declaration: HasExpressionInitializer, type: Type) {
-        const widened = getWidenedLiteralTypeForInitializer(declaration, type)
+        const widened = getWidenedLiteralTypeForInitializer(declaration, type);
         if (isInJSFile(declaration)) {
             if (isEmptyLiteralType(widened)) {
                 reportImplicitAny(declaration, anyType);
