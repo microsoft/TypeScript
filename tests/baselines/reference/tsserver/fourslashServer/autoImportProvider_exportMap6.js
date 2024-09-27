@@ -208,19 +208,9 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/dependency/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -277,13 +267,11 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/dependency/package.json: *new*
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/dependency/lib/package.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/dependency/package.json: *new*
-  {"pollingInterval":2000}
   {"pollingInterval":2000}
 /home/src/workspaces/project/package.json: *new*
   {"pollingInterval":2000}
@@ -298,17 +286,13 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules: *new*
   {}
-  {}
 /home/src/workspaces/node_modules/@types: *new*
-  {}
   {}
 /home/src/workspaces/project: *new*
   {}
 /home/src/workspaces/project/node_modules: *new*
   {}
-  {}
 /home/src/workspaces/project/node_modules/@types: *new*
-  {}
   {}
 
 Projects::
@@ -393,13 +377,11 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/dependency/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/dependency/lib/package.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/dependency/package.json:
-  {"pollingInterval":2000}
   {"pollingInterval":2000}
 /home/src/workspaces/project/package.json:
   {"pollingInterval":2000}
@@ -416,17 +398,13 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
-  {}
 /home/src/workspaces/node_modules/@types:
-  {}
   {}
 /home/src/workspaces/project:
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
 /home/src/workspaces/project/node_modules/@types:
-  {}
   {}
 
 Projects::
@@ -515,8 +493,6 @@ Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 depe
 Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/lib/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/dependency/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -1031,18 +1007,14 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/dependency/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/dependency/lib/index.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/dependency/lib/lol.d.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/dependency/lib/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000} *new*
 /home/src/workspaces/project/node_modules/dependency/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
-  {"pollingInterval":2000} *new*
 /home/src/workspaces/project/package.json:
   {"pollingInterval":2000}
   {"pollingInterval":250}
@@ -1054,18 +1026,14 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
-  {}
 /home/src/workspaces/node_modules/@types:
-  {}
   {}
 /home/src/workspaces/project:
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
   {} *new*
 /home/src/workspaces/project/node_modules/@types:
-  {}
   {}
 
 Projects::

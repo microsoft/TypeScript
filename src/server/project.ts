@@ -639,6 +639,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.resolutionCache = createResolutionCache(
             this,
             this.currentDirectory,
+            this.projectService.sharedResolutionCache,
         );
         this.languageService = createLanguageService(
             this,
@@ -989,7 +990,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     fileIsOpen(filePath: Path): boolean {
-        return this.projectService.openFiles.has(filePath);
+        return this.projectService.fileIsOpen(filePath);
     }
 
     /** @internal */
@@ -2967,11 +2968,6 @@ export class AutoImportProviderProject extends Project {
     /** @internal */
     override getSymlinkCache(): SymlinkCache {
         return this.hostProject.getSymlinkCache();
-    }
-
-    /** @internal */
-    override getModuleResolutionCache(): ModuleResolutionCache | undefined {
-        return this.hostProject.getCurrentProgram()?.getModuleResolutionCache();
     }
 }
 

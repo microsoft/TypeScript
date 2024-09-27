@@ -20,6 +20,7 @@ import {
     createDocumentRegistryInternal,
     createGetCanonicalFileName,
     createMultiMap,
+    createSharedResolutionCache,
     Debug,
     Diagnostic,
     directorySeparator,
@@ -114,6 +115,7 @@ import {
     returnNoopFileWatcher,
     ScriptKind,
     SharedExtendedConfigFileWatcher,
+    SharedResolutionCache,
     some,
     SourceFile,
     SourceFileLike,
@@ -1283,6 +1285,9 @@ export class ProjectService {
     /** @internal */
     readonly documentRegistry: DocumentRegistry;
 
+    /** @internal */
+    readonly sharedResolutionCache: SharedResolutionCache;
+
     /**
      * Container of all known scripts
      *
@@ -1506,7 +1511,19 @@ export class ProjectService {
                 getDetailWatchInfo,
             );
         this.canUseWatchEvents = getCanUseWatchEvents(this, opts.canUseWatchEvents);
+        this.sharedResolutionCache = createSharedResolutionCache({
+            getCurrentDirectory: this.host.getCurrentDirectory.bind(this.host),
+            toPath: this.toPath.bind(this),
+            getCanonicalFileName: this.toCanonicalFileName,
+            preferNonRecursiveWatch: this.canUseWatchEvents || this.host.preferNonRecursiveWatch,
+            fileIsOpen: this.fileIsOpen.bind(this),
+        });
         opts.incrementalVerifier?.(this);
+    }
+
+    /** @internal */
+    fileIsOpen(filePath: Path): boolean {
+        return this.openFiles.has(filePath);
     }
 
     toPath(fileName: string): Path {

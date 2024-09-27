@@ -251,7 +251,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -325,7 +324,6 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000} *new*
 /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json:
   {"pollingInterval":2000}
 /home/src/Library/Caches/typescript/node_modules/@types/tsconfig.json:
@@ -1068,7 +1066,6 @@ watchedFiles::
 /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json:
-  {"pollingInterval":2000}
   {"pollingInterval":2000}
 /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json:
   {"pollingInterval":2000}
