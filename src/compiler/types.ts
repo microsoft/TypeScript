@@ -5020,7 +5020,7 @@ export interface EmitResult {
 }
 
 /** @internal */
-export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
+export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFileMayBeEmittedHost {
     getCompilerOptions(): CompilerOptions;
 
     getSourceFiles(): readonly SourceFile[];
@@ -7402,7 +7402,7 @@ export interface CompilerOptions {
     moduleDetection?: ModuleDetectionKind;
     newLine?: NewLineKind;
     noEmit?: boolean;
-    /** @internal */ noCheck?: boolean;
+    noCheck?: boolean;
     /** @internal */ noEmitForJsFiles?: boolean;
     noEmitHelpers?: boolean;
     noEmitOnError?: boolean;
@@ -7454,6 +7454,7 @@ export interface CompilerOptions {
     removeComments?: boolean;
     resolvePackageJsonExports?: boolean;
     resolvePackageJsonImports?: boolean;
+    rewriteRelativeImportExtensions?: boolean;
     rootDir?: string;
     rootDirs?: string[];
     skipLibCheck?: boolean;
@@ -7580,7 +7581,8 @@ export const enum ScriptKind {
 
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
+//       lib/esnext.*.d.ts file.
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
@@ -7594,6 +7596,7 @@ export const enum ScriptTarget {
     ES2021 = 8,
     ES2022 = 9,
     ES2023 = 10,
+    ES2024 = 11,
     ESNext = 99,
     JSON = 100,
     Latest = ESNext,
@@ -8382,13 +8385,15 @@ export type LanugageFeatures =
     | "RegularExpressionFlagsHasIndices"
     // ES2023 Features
     | "ShebangComments"
+    // ES2024 Features
+    | "RegularExpressionFlagsUnicodeSets"
     // Upcoming Features
     // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
     //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-    //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
-    | "UsingAndAwaitUsing"
-    | "ClassAndClassElementDecorators" // `using x = y`, `await using x = y`
-    | "RegularExpressionFlagsUnicodeSets" // `@dec class C {}`, `class C { @dec m() {} }`
+    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
+    //       lib/esnext.*.d.ts file.
+    | "UsingAndAwaitUsing" // `using x = y`, `await using x = y`
+    | "ClassAndClassElementDecorators" // `@dec class C {}`, `class C { @dec m() {} }`
 ;
 
 /**
@@ -8427,10 +8432,10 @@ export const LanguageFeatureMinimumTarget: Record<LanugageFeatures, ScriptTarget
     ClassFields: ScriptTarget.ES2022,
     PrivateNamesAndClassStaticBlocks: ScriptTarget.ES2022,
     RegularExpressionFlagsHasIndices: ScriptTarget.ES2022,
-    ShebangComments: ScriptTarget.ESNext,
+    ShebangComments: ScriptTarget.ES2023,
+    RegularExpressionFlagsUnicodeSets: ScriptTarget.ES2024,
     UsingAndAwaitUsing: ScriptTarget.ESNext,
     ClassAndClassElementDecorators: ScriptTarget.ESNext,
-    RegularExpressionFlagsUnicodeSets: ScriptTarget.ESNext,
 };
 
 // dprint-ignore
@@ -8467,6 +8472,7 @@ export const enum ExternalEmitHelpers {
     SetFunctionName = 1 << 22,      // __setFunctionName (used by class fields and ECMAScript decorators)
     PropKey = 1 << 23,              // __propKey (used by class fields and ECMAScript decorators)
     AddDisposableResourceAndDisposeResources = 1 << 24, // __addDisposableResource and __disposeResources (used by ESNext transformations)
+    RewriteRelativeImportExtension = 1 << 25, // __rewriteRelativeImportExtension (used by --rewriteRelativeImportExtensions)
 
     FirstEmitHelper = Extends,
     LastEmitHelper = AddDisposableResourceAndDisposeResources,
@@ -9889,7 +9895,7 @@ export interface HasCurrentDirectory {
 
 /** @internal */
 export interface ModuleSpecifierResolutionHost {
-    useCaseSensitiveFileNames?(): boolean;
+    useCaseSensitiveFileNames(): boolean;
     fileExists(path: string): boolean;
     getCurrentDirectory(): string;
     directoryExists?(path: string): boolean;
@@ -9961,6 +9967,8 @@ export interface SymbolTracker {
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     reportNonSerializableProperty?(propertyName: string): void;
     reportInferenceFallback?(node: Node): void;
+    pushErrorFallbackNode?(node: Declaration | undefined): void;
+    popErrorFallbackNode?(): void;
 }
 
 export interface TextSpan {

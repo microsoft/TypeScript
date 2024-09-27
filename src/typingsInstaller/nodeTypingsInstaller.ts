@@ -81,7 +81,7 @@ interface ExecSyncOptions {
     encoding: "utf-8";
 }
 
-export class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
+class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
     private readonly npmPath: string;
     readonly typesRegistry: Map<string, MapLike<string>>;
 

@@ -87,20 +87,20 @@ declare const console: { log(msg: any): void; };
 
 //// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 33
 
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 116
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 120
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 117
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 121
 export type FooType = "foo";
 export type BarType = "bar";
 
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 118
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 122
 {"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 119
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 123
 {
   "root": [
     "./src/index.ts"
@@ -1066,14 +1066,14 @@ Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/p
 Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}:: /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo updated
 Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}:: /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo.readable.baseline.txt updated
 Before request
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 118
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 119
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 121
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 122
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 123
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 125
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 122
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 126
 export type FooType = "foo";
 export type BarType = "bar";
 

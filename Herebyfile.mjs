@@ -303,6 +303,7 @@ let printedWatchWarning = false;
  * @param {string} options.srcEntrypoint
  * @param {string} options.builtEntrypoint
  * @param {string} options.output
+ * @param {boolean} [options.enableCompileCache]
  * @param {Task[]} [options.mainDeps]
  * @param {BundlerTaskOptions} [options.bundlerOptions]
  */
@@ -313,7 +314,37 @@ function entrypointBuildTask(options) {
         run: () => buildProject(options.project),
     });
 
-    const bundler = createBundler(options.srcEntrypoint, options.output, options.bundlerOptions);
+    const mainDeps = options.mainDeps?.slice(0) ?? [];
+
+    let output = options.output;
+    if (options.enableCompileCache) {
+        const originalOutput = output;
+        output = path.join(path.dirname(output), "_" + path.basename(output));
+
+        const compileCacheShim = task({
+            name: `shim-compile-cache-${options.name}`,
+            run: async () => {
+                const outDir = path.dirname(originalOutput);
+                await fs.promises.mkdir(outDir, { recursive: true });
+                const moduleSpecifier = path.relative(outDir, output);
+                const lines = [
+                    `// This file is a shim which defers loading the real module until the compile cache is enabled.`,
+                    `try {`,
+                    `  const { enableCompileCache } = require("node:module");`,
+                    `  if (enableCompileCache) {`,
+                    `    enableCompileCache();`,
+                    `  }`,
+                    `} catch {}`,
+                    `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}");`,
+                ];
+                await fs.promises.writeFile(originalOutput, lines.join("\n") + "\n");
+            },
+        });
+
+        mainDeps.push(compileCacheShim);
+    }
+
+    const bundler = createBundler(options.srcEntrypoint, output, options.bundlerOptions);
 
     // If we ever need to bundle our own output, change this to depend on build
     // and run esbuild on builtEntrypoint.
@@ -336,14 +367,13 @@ function entrypointBuildTask(options) {
     const shim = task({
         name: `shim-${options.name}`,
         run: async () => {
-            const outDir = path.dirname(options.output);
+            const outDir = path.dirname(output);
             await fs.promises.mkdir(outDir, { recursive: true });
             const moduleSpecifier = path.relative(outDir, options.builtEntrypoint);
-            await fs.promises.writeFile(options.output, `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}")`);
+            await fs.promises.writeFile(output, `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}")`);
         },
     });
 
-    const mainDeps = options.mainDeps?.slice(0) ?? [];
     if (cmdLineOptions.bundle) {
         mainDeps.push(bundle);
         if (cmdLineOptions.typecheck) {
@@ -392,6 +422,7 @@ const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     builtEntrypoint: "./built/local/tsc/tsc.js",
     output: "./built/local/tsc.js",
     mainDeps: [generateLibs],
+    enableCompileCache: true,
 });
 export { tsc, watchTsc };
 
@@ -429,6 +460,7 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     output: "./built/local/tsserver.js",
     mainDeps: [generateLibs, services],
     bundlerOptions: { usePublicAPI: true },
+    enableCompileCache: true,
 });
 export { tsserver, watchTsserver };
 
@@ -589,6 +621,7 @@ const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuild
     output: "./built/local/typingsInstaller.js",
     mainDeps: [services],
     bundlerOptions: { usePublicAPI: true },
+    enableCompileCache: true,
 });
 
 const { main: watchGuard, watch: watchWatchGuard } = entrypointBuildTask({
@@ -885,12 +918,15 @@ export const produceLKG = task({
         const expectedFiles = [
             "built/local/cancellationToken.js",
             "built/local/tsc.js",
+            "built/local/_tsc.js",
             "built/local/tsserver.js",
+            "built/local/_tsserver.js",
             "built/local/tsserverlibrary.js",
             "built/local/tsserverlibrary.d.ts",
             "built/local/typescript.js",
             "built/local/typescript.d.ts",
             "built/local/typingsInstaller.js",
+            "built/local/_typingsInstaller.js",
             "built/local/watchGuard.js",
         ].concat(libs().map(lib => lib.target));
         const missingFiles = expectedFiles
