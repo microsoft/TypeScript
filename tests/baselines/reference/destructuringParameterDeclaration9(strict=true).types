@@ -6,8 +6,8 @@
  * @param {Partial<Record<'json' | 'jsonc' | 'json5', string[]>>} [config.additionalFiles]
  */
 export function prepareConfig({
->prepareConfig : ({ additionalFiles: { json } }?: {    additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>> | undefined;}) => void
->              : ^                             ^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>prepareConfig : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>> | undefined; } | undefined) => void
+>              : ^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     additionalFiles: {
 >additionalFiles : any
@@ -97,8 +97,8 @@ export const prepareConfigWithContextualSignature = ({
  * @param {{ a?: { json?: string[] }}} [config]
  */
 function f1({ a: { json = [] } = {} } = {}) { return json }
->f1 : ({ a: { json } }?: { a?: { json?: string[]; }; }) => string[]
->   : ^               ^^^                             ^^^^^^^^^^^^^
+>f1 : ({ a: { json } }?: { a?: { json?: string[]; }; } | undefined) => string[]
+>   : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >json : string[]
@@ -116,8 +116,8 @@ function f1({ a: { json = [] } = {} } = {}) { return json }
  * @param {[[string[]?]?]} [x]
  */
 function f2([[json = []] = []] = []) { return json }
->f2 : ([[json]]?: [[string[]?]?]) => string[]
->   : ^        ^^^              ^^^^^^^^^^^^^
+>f2 : ([[json]]?: [([(string[] | undefined)?] | undefined)?] | undefined) => string[]
+>   : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >json : string[]
 >     : ^^^^^^^^
 >[] : never[]
