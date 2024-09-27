@@ -11906,7 +11906,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // contextual type or, if the element itself is a binding pattern, with the type implied by that binding
             // pattern.
             const contextualType = isBindingPattern(element.name) ? getTypeFromBindingPattern(element.name, /*includePatternInType*/ true, /*reportErrors*/ false) : unknownType;
-            return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, CheckMode.Normal, contextualType)));
+            return addOptionality(getWidenedLiteralTypeForInitializer(element, checkDeclarationInitializer(element, CheckMode.Normal, contextualType)));
         }
         if (isBindingPattern(element.name)) {
             return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
@@ -40500,7 +40500,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function widenTypeInferredFromInitializer(declaration: HasExpressionInitializer, type: Type) {
-        const widened = getCombinedNodeFlagsCached(declaration) & NodeFlags.Constant || isDeclarationReadonly(declaration) ? type : getWidenedLiteralType(type);
+        const widened = getWidenedLiteralTypeForInitializer(declaration, type);
         if (isInJSFile(declaration)) {
             if (isEmptyLiteralType(widened)) {
                 reportImplicitAny(declaration, anyType);
@@ -40512,6 +40512,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return widened;
+    }
+
+    function getWidenedLiteralTypeForInitializer(declaration: HasExpressionInitializer, type: Type) {
+        return getCombinedNodeFlagsCached(declaration) & NodeFlags.Constant || isDeclarationReadonly(declaration) ? type : getWidenedLiteralType(type);
     }
 
     function isLiteralOfContextualType(candidateType: Type, contextualType: Type | undefined): boolean {
