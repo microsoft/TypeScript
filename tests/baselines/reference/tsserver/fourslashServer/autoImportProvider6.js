@@ -50,6 +50,9 @@ lib.es2016.d.ts-Text
 //// [/home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts]
 lib.es2016.intl.d.ts-Text
 
+//// [/home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts]
+lib.es2017.arraybuffer.d.ts-Text
+
 //// [/home/src/tslibs/TS/Lib/lib.es2017.d.ts]
 lib.es2017.d.ts-Text
 
@@ -188,12 +191,13 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Li
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2015.symbol.wellknown.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.array.include.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2017.date.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2017.intl.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2017.object.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2017.sharedmemory.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2017.string.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2017.intl.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2017.typedarrays.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2017.date.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2018.asynciterable.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2018.asyncgenerator.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2018.promise.d.ts 500 undefined WatchType: Closed Script info
@@ -214,7 +218,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (37)
+Info seq  [hh:mm:ss:mss] 	Files (38)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2015.d.ts Text-1 lib.es2015.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2016.d.ts Text-1 lib.es2016.d.ts-Text
@@ -232,6 +236,7 @@ Info seq  [hh:mm:ss:mss] 	Files (37)
 	/home/src/tslibs/TS/Lib/lib.es2015.symbol.wellknown.d.ts Text-1 lib.es2015.symbol.wellknown.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2016.array.include.d.ts Text-1 lib.es2016.array.include.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts Text-1 lib.es2016.intl.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts Text-1 lib.es2017.arraybuffer.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2017.date.d.ts Text-1 lib.es2017.date.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2017.object.d.ts Text-1 lib.es2017.object.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.es2017.sharedmemory.d.ts Text-1 lib.es2017.sharedmemory.d.ts-Text
@@ -296,6 +301,8 @@ Info seq  [hh:mm:ss:mss] 	Files (37)
 	  Library referenced via 'es2016.array.include' from file '../../tslibs/TS/Lib/lib.es2016.d.ts'
 	../../tslibs/TS/Lib/lib.es2016.intl.d.ts
 	  Library referenced via 'es2016.intl' from file '../../tslibs/TS/Lib/lib.es2016.d.ts'
+	../../tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts
+	  Library referenced via 'es2017.arraybuffer' from file '../../tslibs/TS/Lib/lib.es2017.d.ts'
 	../../tslibs/TS/Lib/lib.es2017.date.d.ts
 	  Library referenced via 'es2017.date' from file '../../tslibs/TS/Lib/lib.es2017.d.ts'
 	../../tslibs/TS/Lib/lib.es2017.object.d.ts
@@ -400,7 +407,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (37)
+Info seq  [hh:mm:ss:mss] 	Files (38)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -454,6 +461,8 @@ watchedFiles::
 /home/src/tslibs/TS/Lib/lib.es2016.d.ts: *new*
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts: *new*
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.es2017.d.ts: *new*
   {"pollingInterval":500}
@@ -610,6 +619,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.es2017.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -716,7 +729,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/index.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (37)
+Info seq  [hh:mm:ss:mss] 	Files (38)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -769,6 +782,8 @@ watchedFiles::
 /home/src/tslibs/TS/Lib/lib.es2016.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.es2017.d.ts:
   {"pollingInterval":500}
@@ -924,6 +939,10 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.es2016.intl.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es2017.arraybuffer.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json

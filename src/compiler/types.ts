@@ -7577,7 +7577,8 @@ export const enum ScriptKind {
 
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
+//       lib/esnext.*.d.ts file.
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
@@ -7591,6 +7592,7 @@ export const enum ScriptTarget {
     ES2021 = 8,
     ES2022 = 9,
     ES2023 = 10,
+    ES2024 = 11,
     ESNext = 99,
     JSON = 100,
     Latest = ESNext,
@@ -8379,13 +8381,15 @@ export type LanugageFeatures =
     | "RegularExpressionFlagsHasIndices"
     // ES2023 Features
     | "ShebangComments"
+    // ES2024 Features
+    | "RegularExpressionFlagsUnicodeSets"
     // Upcoming Features
     // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
     //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-    //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
-    | "UsingAndAwaitUsing"
-    | "ClassAndClassElementDecorators" // `using x = y`, `await using x = y`
-    | "RegularExpressionFlagsUnicodeSets" // `@dec class C {}`, `class C { @dec m() {} }`
+    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
+    //       lib/esnext.*.d.ts file.
+    | "UsingAndAwaitUsing" // `using x = y`, `await using x = y`
+    | "ClassAndClassElementDecorators" // `@dec class C {}`, `class C { @dec m() {} }`
 ;
 
 /**
@@ -8424,10 +8428,10 @@ export const LanguageFeatureMinimumTarget: Record<LanugageFeatures, ScriptTarget
     ClassFields: ScriptTarget.ES2022,
     PrivateNamesAndClassStaticBlocks: ScriptTarget.ES2022,
     RegularExpressionFlagsHasIndices: ScriptTarget.ES2022,
-    ShebangComments: ScriptTarget.ESNext,
+    ShebangComments: ScriptTarget.ES2023,
+    RegularExpressionFlagsUnicodeSets: ScriptTarget.ES2024,
     UsingAndAwaitUsing: ScriptTarget.ESNext,
     ClassAndClassElementDecorators: ScriptTarget.ESNext,
-    RegularExpressionFlagsUnicodeSets: ScriptTarget.ESNext,
 };
 
 // dprint-ignore
