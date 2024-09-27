@@ -298,6 +298,7 @@ import {
     isJSDocAugmentsTag,
     isJSDocFunctionType,
     isJSDocImplementsTag,
+    isJSDocImportTag,
     isJSDocLinkLike,
     isJSDocMemberName,
     isJSDocNameReference,
@@ -4303,6 +4304,11 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
 }
 
 /** @internal */
+export function shouldRewriteModuleSpecifier(specifier: string, compilerOptions: CompilerOptions): boolean {
+    return !!compilerOptions.rewriteRelativeImportExtensions && pathIsRelative(specifier) && !isDeclarationFileName(specifier);
+}
+
+/** @internal */
 export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall | ModuleDeclaration | JSDocImportTag): Expression | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
@@ -7854,6 +7860,16 @@ export function getLinesBetweenPositionAndNextNonWhitespaceCharacter(pos: number
     return getLinesBetweenPositions(sourceFile, pos, Math.min(stopPos, nextPos));
 }
 
+/** @internal */
+export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
+    return startEndContainsRange(r1.pos, r1.end, r2);
+}
+
+/** @internal */
+export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
+    return start <= range.pos && end >= range.end;
+}
+
 function getPreviousNonWhitespacePosition(pos: number, stopPos = 0, sourceFile: SourceFile) {
     while (pos-- > stopPos) {
         if (!isWhiteSpaceLike(sourceFile.text.charCodeAt(pos))) {
@@ -8900,6 +8916,12 @@ function createComputedCompilerOptions<T extends Record<string, CompilerOptionKe
 }
 
 const _computedOptions = createComputedCompilerOptions({
+    allowImportingTsExtensions: {
+        dependencies: ["rewriteRelativeImportExtensions"],
+        computeValue: compilerOptions => {
+            return !!(compilerOptions.allowImportingTsExtensions || compilerOptions.rewriteRelativeImportExtensions);
+        },
+    },
     target: {
         dependencies: ["module"],
         computeValue: compilerOptions => {
@@ -9128,6 +9150,8 @@ const _computedOptions = createComputedCompilerOptions({
 /** @internal */
 export const computedOptions: Record<string, { dependencies: readonly string[]; computeValue: (options: CompilerOptions) => CompilerOptionsValue; }> = _computedOptions;
 
+/** @internal */
+export const getAllowImportingTsExtensions: (compilerOptions: CompilerOptions) => boolean = _computedOptions.allowImportingTsExtensions.computeValue;
 /** @internal */
 export const getEmitScriptTarget: (compilerOptions: CompilerOptions) => ScriptTarget = _computedOptions.target.computeValue;
 /** @internal */
@@ -12004,3 +12028,50 @@ export const nodeCoreModules: Set<string> = new Set([
     ...unprefixedNodeCoreModulesList.map(name => `node:${name}`),
     ...exclusivelyPrefixedNodeCoreModules,
 ]);
+
+/** @internal */
+export function forEachDynamicImportOrRequireCall<IncludeTypeSpaceImports extends boolean, RequireStringLiteralLikeArgument extends boolean>(
+    file: SourceFile,
+    includeTypeSpaceImports: IncludeTypeSpaceImports,
+    requireStringLiteralLikeArgument: RequireStringLiteralLikeArgument,
+    cb: (node: CallExpression | (IncludeTypeSpaceImports extends false ? never : JSDocImportTag | ImportTypeNode), argument: RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression) => void,
+): void {
+    const isJavaScriptFile = isInJSFile(file);
+    const r = /import|require/g;
+    while (r.exec(file.text) !== null) { // eslint-disable-line no-restricted-syntax
+        const node = getNodeAtPosition(file, r.lastIndex, /*includeJSDoc*/ includeTypeSpaceImports);
+        if (isJavaScriptFile && isRequireCall(node, requireStringLiteralLikeArgument)) {
+            cb(node, node.arguments[0] as RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression);
+        }
+        else if (isImportCall(node) && node.arguments.length >= 1 && (!requireStringLiteralLikeArgument || isStringLiteralLike(node.arguments[0]))) {
+            cb(node, node.arguments[0] as RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression);
+        }
+        else if (includeTypeSpaceImports && isLiteralImportTypeNode(node)) {
+            (cb as (node: CallExpression | JSDocImportTag | ImportTypeNode, argument: StringLiteralLike) => void)(node, node.argument.literal);
+        }
+        else if (includeTypeSpaceImports && isJSDocImportTag(node)) {
+            const moduleNameExpr = getExternalModuleName(node);
+            if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text) {
+                (cb as (node: CallExpression | JSDocImportTag | ImportTypeNode, argument: StringLiteralLike) => void)(node, moduleNameExpr);
+            }
+        }
+    }
+}
+
+/** Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files */
+function getNodeAtPosition(sourceFile: SourceFile, position: number, includeJSDoc: boolean): Node {
+    const isJavaScriptFile = isInJSFile(sourceFile);
+    let current: Node = sourceFile;
+    const getContainingChild = (child: Node) => {
+        if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
+            return child;
+        }
+    };
+    while (true) {
+        const child = isJavaScriptFile && includeJSDoc && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+        if (!child) {
+            return current;
+        }
+        current = child;
+    }
+}

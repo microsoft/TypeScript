@@ -5016,7 +5016,7 @@ export interface EmitResult {
 }
 
 /** @internal */
-export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
+export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFileMayBeEmittedHost {
     getCompilerOptions(): CompilerOptions;
 
     getSourceFiles(): readonly SourceFile[];
@@ -7451,6 +7451,7 @@ export interface CompilerOptions {
     removeComments?: boolean;
     resolvePackageJsonExports?: boolean;
     resolvePackageJsonImports?: boolean;
+    rewriteRelativeImportExtensions?: boolean;
     rootDir?: string;
     rootDirs?: string[];
     skipLibCheck?: boolean;
@@ -8468,6 +8469,7 @@ export const enum ExternalEmitHelpers {
     SetFunctionName = 1 << 22,      // __setFunctionName (used by class fields and ECMAScript decorators)
     PropKey = 1 << 23,              // __propKey (used by class fields and ECMAScript decorators)
     AddDisposableResourceAndDisposeResources = 1 << 24, // __addDisposableResource and __disposeResources (used by ESNext transformations)
+    RewriteRelativeImportExtension = 1 << 25, // __rewriteRelativeImportExtension (used by --rewriteRelativeImportExtensions)
 
     FirstEmitHelper = Extends,
     LastEmitHelper = AddDisposableResourceAndDisposeResources,
@@ -9890,7 +9892,7 @@ export interface HasCurrentDirectory {
 
 /** @internal */
 export interface ModuleSpecifierResolutionHost {
-    useCaseSensitiveFileNames?(): boolean;
+    useCaseSensitiveFileNames(): boolean;
     fileExists(path: string): boolean;
     getCurrentDirectory(): string;
     directoryExists?(path: string): boolean;

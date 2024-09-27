@@ -7075,6 +7075,7 @@ declare namespace ts {
         removeComments?: boolean;
         resolvePackageJsonExports?: boolean;
         resolvePackageJsonImports?: boolean;
+        rewriteRelativeImportExtensions?: boolean;
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;
@@ -8750,6 +8751,7 @@ declare namespace ts {
     function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration;
     function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportDeclaration;
     function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration;
+    function isPartOfTypeOnlyImportOrExportDeclaration(node: Node): boolean;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
     function isImportAttributeName(node: Node): node is ImportAttributeName;
     function isModifier(node: Node): node is Modifier;

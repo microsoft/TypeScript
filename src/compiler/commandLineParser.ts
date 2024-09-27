@@ -1178,6 +1178,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         transpileOptionValue: undefined,
     },
     {
+        name: "rewriteRelativeImportExtensions",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_in_output_files,
+        defaultValueDescription: false,
+    },
+    {
         name: "resolvePackageJsonExports",
         type: "boolean",
         affectsModuleResolution: true,

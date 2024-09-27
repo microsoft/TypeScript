@@ -1,0 +1,19 @@
+// === Syntax and Semantic Diagnostics ===
+Syntactic Diagnostics for file '/tests/cases/fourslash/server/rewriteRelativeImportExtensionsProjectReferences1.ts':
+
+
+==== /tests/cases/fourslash/server/packages/common/src/index.ts (0 errors) ====
+    export {};
+==== /tests/cases/fourslash/server/packages/main/src/index.ts (0 errors) ====
+    import {} from "../../common/src/index.ts";
+
+Semantic Diagnostics for file '/tests/cases/fourslash/server/rewriteRelativeImportExtensionsProjectReferences1.ts':
+/tests/cases/fourslash/server/packages/main/src/index.ts(1,16): error TS2878: This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.
+
+
+==== /tests/cases/fourslash/server/packages/common/src/index.ts (0 errors) ====
+    export {};
+==== /tests/cases/fourslash/server/packages/main/src/index.ts (1 errors) ====
+    import {} from "../../common/src/index.ts";
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2878: This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.

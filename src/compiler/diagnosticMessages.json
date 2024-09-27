@@ -3964,6 +3964,18 @@
         "category": "Error",
         "code": 2875
     },
+    "This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to \"{0}\".": {
+        "category": "Error",
+        "code": 2876
+    },
+    "This import uses a '{0}' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.": {
+        "category": "Error",
+        "code": 2877
+    },
+    "This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.": {
+        "category": "Error",
+        "code": 2878
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -5946,6 +5958,10 @@
     "Project '{0}' is out of date because {1}.": {
         "category": "Message",
         "code": 6420
+    },
+    "Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files.": {
+        "category": "Message",
+        "code": 6421
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
