@@ -3630,6 +3630,13 @@ export class TestState {
         assert.deepEqual(actualModuleSpecifiers, moduleSpecifiers);
     }
 
+    public verifyPreparePasteEdits(options: FourSlashInterface.PreparePasteEditsOptions): void {
+        const providePasteEdits = this.languageService.preparePasteEditsForFile(options.copiedFromFile, options.copiedTextRange);
+        if (providePasteEdits !== options.providePasteEdits) {
+            this.raiseError(`preparePasteEdits failed - Expected prepare paste edits to return ${options.providePasteEdits}, but got ${providePasteEdits}.`);
+        }
+    }
+
     public verifyPasteEdits(options: FourSlashInterface.PasteEditsOptions): void {
         const editInfo = this.languageService.getPasteEdits({ targetFile: this.activeFile.fileName, pastedText: options.args.pastedText, pasteLocations: options.args.pasteLocations, copiedFrom: options.args.copiedFrom, preferences: options.args.preferences }, this.formatCodeSettings);
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
@@ -4630,6 +4637,28 @@ ${changes.join("\n// ---\n")}
 // === MAPPED ===
 ${after}`;
         this.baseline("mapCode", baseline, ".mapCode.ts");
+    }
+
+    public verifyGetImports(fileName: string, expectedImports: string[]): void {
+        const actualImports = this.languageService.getImports(fileName);
+        if (actualImports.length !== expectedImports.length) {
+            throw new Error(`Expected ${expectedImports.length} imports for ${fileName}, got ${actualImports.length}
+    Expected:
+${expectedImports}
+    Actual:
+${actualImports}
+`);
+        }
+        for (let i = 0; i < expectedImports.length; i++) {
+            if (actualImports[i] !== expectedImports[i]) {
+                throw new Error(`Expected at ${fileName} index ${i}: ${expectedImports[i]}, got ${actualImports[i]}
+    Expected:
+${expectedImports}
+    Actual:
+${actualImports}
+`);
+            }
+        }
     }
 }
 

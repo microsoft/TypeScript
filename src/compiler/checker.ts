@@ -4613,12 +4613,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ? location
             : (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal ||
-                (isInJSFile(location) && isJSDocImportTag(location) ? location.moduleSpecifier : undefined) ||
                 (isVariableDeclaration(location) && location.initializer && isRequireCall(location.initializer, /*requireStringLiteralLikeArgument*/ true) ? location.initializer.arguments[0] : undefined) ||
                 findAncestor(location, isImportCall)?.arguments[0] ||
-                findAncestor(location, isImportDeclaration)?.moduleSpecifier ||
-                findAncestor(location, isExternalModuleImportEqualsDeclaration)?.moduleReference.expression ||
-                findAncestor(location, isExportDeclaration)?.moduleSpecifier;
+                findAncestor(location, or(isImportDeclaration, isJSDocImportTag, isExportDeclaration))?.moduleSpecifier ||
+                findAncestor(location, isExternalModuleImportEqualsDeclaration)?.moduleReference.expression;
         const mode = contextSpecifier && isStringLiteralLike(contextSpecifier)
             ? host.getModeForUsageLocation(currentSourceFile, contextSpecifier)
             : host.getDefaultResolutionModeForFile(currentSourceFile);
@@ -8583,7 +8581,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (typeFromTypeNode === type) {
                 return true;
             }
-            if (annotatedDeclaration && (isParameter(annotatedDeclaration) || isPropertySignature(annotatedDeclaration) || isPropertyDeclaration(annotatedDeclaration)) && annotatedDeclaration.questionToken) {
+            if (!annotatedDeclaration) {
+                return false;
+            }
+            if ((isPropertySignature(annotatedDeclaration) || isPropertyDeclaration(annotatedDeclaration)) && annotatedDeclaration.questionToken) {
+                return getTypeWithFacts(type, TypeFacts.NEUndefined) === typeFromTypeNode;
+            }
+            if (isParameter(annotatedDeclaration) && hasEffectiveQuestionToken(annotatedDeclaration)) {
                 return getTypeWithFacts(type, TypeFacts.NEUndefined) === typeFromTypeNode;
             }
             return false;
@@ -9059,7 +9063,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const skipMembershipCheck = !isPrivate; // We only call this on exported symbols when we know they're in the correct scope
                 if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
                     const scopeCleanup = cloneNodeBuilderContext(context);
+                    context.tracker.pushErrorFallbackNode(find(symbol.declarations, d => getSourceFileOfNode(d) === context.enclosingFile));
                     serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
+                    context.tracker.popErrorFallbackNode();
                     scopeCleanup();
                 }
             }
@@ -13670,8 +13676,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             paramMapper = createTypeMapper(right.typeParameters, left.typeParameters);
             // We just use the type parameter defaults from the first signature
         }
+        let flags = (left.flags | right.flags) & (SignatureFlags.PropagatingFlags & ~SignatureFlags.HasRestParameter);
         const declaration = left.declaration;
         const params = combineUnionParameters(left, right, paramMapper);
+        const lastParam = lastOrUndefined(params);
+        if (lastParam && getCheckFlags(lastParam) & CheckFlags.RestParameter) {
+            flags |= SignatureFlags.HasRestParameter;
+        }
         const thisParam = combineUnionThisParam(left.thisParameter, right.thisParameter, paramMapper);
         const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
         const result = createSignature(
@@ -13682,7 +13693,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             /*resolvedReturnType*/ undefined,
             /*resolvedTypePredicate*/ undefined,
             minArgCount,
-            (left.flags | right.flags) & SignatureFlags.PropagatingFlags,
+            flags,
         );
         result.compositeKind = TypeFlags.Union;
         result.compositeSignatures = concatenate(left.compositeKind !== TypeFlags.Intersection && left.compositeSignatures || [left], [right]);
@@ -25301,7 +25312,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ArrowFunction:
                 if (noImplicitAny && !(declaration as NamedDeclaration).name) {
                     if (wideningKind === WideningKind.GeneratorYield) {
-                        error(declaration, Diagnostics.Generator_implicitly_has_yield_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type_annotation, typeAsString);
+                        error(declaration, Diagnostics.Generator_implicitly_has_yield_type_0_Consider_supplying_a_return_type_annotation, typeAsString);
                     }
                     else {
                         error(declaration, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
@@ -25323,12 +25334,40 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         errorOrSuggestion(noImplicitAny, declaration, diagnostic, declarationNameToString(getNameOfDeclaration(declaration)), typeAsString);
     }
 
+    function shouldReportErrorsFromWideningWithContextualSignature(declaration: FunctionLikeDeclaration, wideningKind: WideningKind) {
+        const signature = getContextualSignatureForFunctionLikeDeclaration(declaration);
+        if (!signature) {
+            return true;
+        }
+        let returnType = getReturnTypeOfSignature(signature);
+        const flags = getFunctionFlags(declaration);
+        switch (wideningKind) {
+            case WideningKind.FunctionReturn:
+                if (flags & FunctionFlags.Generator) {
+                    returnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, !!(flags & FunctionFlags.Async)) ?? returnType;
+                }
+                else if (flags & FunctionFlags.Async) {
+                    returnType = getAwaitedTypeNoAlias(returnType) ?? returnType;
+                }
+                return isGenericType(returnType);
+            case WideningKind.GeneratorYield:
+                const yieldType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, returnType, !!(flags & FunctionFlags.Async));
+                return !!yieldType && isGenericType(yieldType);
+            case WideningKind.GeneratorNext:
+                const nextType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, !!(flags & FunctionFlags.Async));
+                return !!nextType && isGenericType(nextType);
+        }
+        return false;
+    }
+
     function reportErrorsFromWidening(declaration: Declaration, type: Type, wideningKind?: WideningKind) {
         addLazyDiagnostic(() => {
-            if (noImplicitAny && getObjectFlags(type) & ObjectFlags.ContainsWideningType && (!wideningKind || !getContextualSignatureForFunctionLikeDeclaration(declaration as FunctionLikeDeclaration))) {
-                // Report implicit any error within type if possible, otherwise report error on declaration
-                if (!reportWideningErrorsInType(type)) {
-                    reportImplicitAny(declaration, type, wideningKind);
+            if (noImplicitAny && getObjectFlags(type) & ObjectFlags.ContainsWideningType) {
+                if (!wideningKind || isFunctionLikeDeclaration(declaration) && shouldReportErrorsFromWideningWithContextualSignature(declaration, wideningKind)) {
+                    // Report implicit any error within type if possible, otherwise report error on declaration
+                    if (!reportWideningErrorsInType(type)) {
+                        reportImplicitAny(declaration, type, wideningKind);
+                    }
                 }
             }
         });
@@ -32183,12 +32222,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const paramSymbol = createSymbol(
                 SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0),
                 paramName || `arg${i}` as __String,
+                isRestParam ? CheckFlags.RestParameter : isOptional ? CheckFlags.OptionalParameter : 0,
             );
             paramSymbol.links.type = isRestParam ? createArrayType(unionParamType) : unionParamType;
             params[i] = paramSymbol;
         }
         if (needsExtraRestElement) {
-            const restParamSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "args" as __String);
+            const restParamSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "args" as __String, CheckFlags.RestParameter);
             restParamSymbol.links.type = createArrayType(getTypeAtPosition(shorter, longestCount));
             if (shorter === right) {
                 restParamSymbol.links.type = instantiateType(restParamSymbol.links.type, mapper);
@@ -32205,8 +32245,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             paramMapper = createTypeMapper(right.typeParameters, left.typeParameters);
             // We just use the type parameter defaults from the first signature
         }
+        let flags = (left.flags | right.flags) & (SignatureFlags.PropagatingFlags & ~SignatureFlags.HasRestParameter);
         const declaration = left.declaration;
         const params = combineIntersectionParameters(left, right, paramMapper);
+        const lastParam = lastOrUndefined(params);
+        if (lastParam && getCheckFlags(lastParam) & CheckFlags.RestParameter) {
+            flags |= SignatureFlags.HasRestParameter;
+        }
         const thisParam = combineIntersectionThisParam(left.thisParameter, right.thisParameter, paramMapper);
         const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
         const result = createSignature(
@@ -32217,7 +32262,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             /*resolvedReturnType*/ undefined,
             /*resolvedTypePredicate*/ undefined,
             minArgCount,
-            (left.flags | right.flags) & SignatureFlags.PropagatingFlags,
+            flags,
         );
         result.compositeKind = TypeFlags.Intersection;
         result.compositeSignatures = concatenate(left.compositeKind === TypeFlags.Intersection && left.compositeSignatures || [left], [right]);
@@ -52583,5 +52628,13 @@ class SymbolTrackerImpl implements SymbolTracker {
             this.onDiagnosticReported();
             this.inner.reportInferenceFallback(node);
         }
+    }
+
+    pushErrorFallbackNode(node: Declaration | undefined): void {
+        return this.inner?.pushErrorFallbackNode?.(node);
+    }
+
+    popErrorFallbackNode(): void {
+        return this.inner?.popErrorFallbackNode?.();
     }
 }

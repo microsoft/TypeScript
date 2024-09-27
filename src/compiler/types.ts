@@ -7399,7 +7399,7 @@ export interface CompilerOptions {
     moduleDetection?: ModuleDetectionKind;
     newLine?: NewLineKind;
     noEmit?: boolean;
-    /** @internal */ noCheck?: boolean;
+    noCheck?: boolean;
     /** @internal */ noEmitForJsFiles?: boolean;
     noEmitHelpers?: boolean;
     noEmitOnError?: boolean;
@@ -9958,6 +9958,8 @@ export interface SymbolTracker {
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     reportNonSerializableProperty?(propertyName: string): void;
     reportInferenceFallback?(node: Node): void;
+    pushErrorFallbackNode?(node: Declaration | undefined): void;
+    popErrorFallbackNode?(): void;
 }
 
 export interface TextSpan {

@@ -800,6 +800,7 @@ export class SessionClient implements LanguageService {
     }
 
     mapCode: typeof notImplemented = notImplemented;
+    getImports: typeof notImplemented = notImplemented;
 
     private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
         return typeof positionOrRange === "number"
@@ -1018,6 +1019,16 @@ export class SessionClient implements LanguageService {
 
     getSupportedCodeFixes(): readonly string[] {
         return getSupportedCodeFixes();
+    }
+
+    preparePasteEditsForFile(copiedFromFile: string, copiedTextSpan: TextRange[]): boolean {
+        const args: protocol.PreparePasteEditsRequestArgs = {
+            file: copiedFromFile,
+            copiedTextSpan: copiedTextSpan.map(span => ({ start: this.positionToOneBasedLineOffset(copiedFromFile, span.pos), end: this.positionToOneBasedLineOffset(copiedFromFile, span.end) })),
+        };
+        const request = this.processRequest<protocol.PreparePasteEditsRequest>(protocol.CommandTypes.PreparePasteEdits, args);
+        const response = this.processResponse<protocol.PreparePasteEditsResponse>(request);
+        return response.body;
     }
 
     getPasteEdits(

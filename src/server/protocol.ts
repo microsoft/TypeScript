@@ -169,6 +169,7 @@ export const enum CommandTypes {
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
     GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+    PreparePasteEdits = "preparePasteEdits",
     GetPasteEdits = "getPasteEdits",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
@@ -201,6 +202,7 @@ export const enum CommandTypes {
     ProvideInlayHints = "provideInlayHints",
     WatchChange = "watchChange",
     MapCode = "mapCode",
+    CopilotRelated = "copilotRelated",
 }
 
 /**
@@ -669,6 +671,20 @@ export interface GetMoveToRefactoringFileSuggestions extends Response {
         newFileName: string;
         files: string[];
     };
+}
+
+/**
+ * Request to check if `pasteEdits` should be provided for a given location post copying text from that location.
+ */
+export interface PreparePasteEditsRequest extends FileRequest {
+    command: CommandTypes.PreparePasteEdits;
+    arguments: PreparePasteEditsRequestArgs;
+}
+export interface PreparePasteEditsRequestArgs extends FileRequestArgs {
+    copiedTextSpan: TextSpan[];
+}
+export interface PreparePasteEditsResponse extends Response {
+    body: boolean;
 }
 
 /**
@@ -2391,6 +2407,18 @@ export interface MapCodeResponse extends Response {
     body: readonly FileCodeEdits[];
 }
 
+export interface CopilotRelatedRequest extends FileRequest {
+    command: CommandTypes.CopilotRelated;
+    arguments: FileRequestArgs;
+}
+
+export interface CopilotRelatedItems {
+    relatedFiles: readonly string[];
+}
+
+export interface CopilotRelatedResponse extends Response {
+    body: CopilotRelatedItems;
+}
 /**
  * Synchronous request for semantic diagnostics of one file.
  */

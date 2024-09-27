@@ -937,6 +937,7 @@ const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.ProvideCallHierarchyIncomingCalls,
     protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls,
     protocol.CommandTypes.GetPasteEdits,
+    protocol.CommandTypes.CopilotRelated,
 ];
 
 const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
@@ -966,6 +967,7 @@ const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.NavtoFull,
     protocol.CommandTypes.DocumentHighlights,
     protocol.CommandTypes.DocumentHighlightsFull,
+    protocol.CommandTypes.PreparePasteEdits,
 ];
 
 export interface SessionOptions {
@@ -2029,7 +2031,6 @@ export class Session<TMessage = string> implements EventSender {
             };
         });
     }
-
     private mapCode(args: protocol.MapCodeRequestArgs): protocol.FileCodeEdits[] {
         const formatOptions = this.getHostFormatOptions();
         const preferences = this.getHostPreferences();
@@ -2048,6 +2049,14 @@ export class Session<TMessage = string> implements EventSender {
 
         const changes = languageService.mapCode(file, args.mapping.contents, focusLocations, formatOptions, preferences);
         return this.mapTextChangesToCodeEdits(changes);
+    }
+
+    private getCopilotRelatedInfo(args: protocol.FileRequestArgs): protocol.CopilotRelatedItems {
+        const { file, project } = this.getFileAndProject(args);
+
+        return {
+            relatedFiles: project.getLanguageService().getImports(file),
+        };
     }
 
     private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
@@ -2966,6 +2975,10 @@ export class Session<TMessage = string> implements EventSender {
         return project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
     }
 
+    private preparePasteEdits(args: protocol.PreparePasteEditsRequestArgs): boolean {
+        const { file, project } = this.getFileAndProject(args);
+        return project.getLanguageService().preparePasteEditsForFile(file, args.copiedTextSpan.map(copies => this.getRange({ file, startLine: copies.start.line, startOffset: copies.start.offset, endLine: copies.end.line, endOffset: copies.end.offset }, this.projectService.getScriptInfoForNormalizedPath(file)!)));
+    }
     private getPasteEdits(args: protocol.GetPasteEditsRequestArgs): protocol.PasteEditsAction | undefined {
         const { file, project } = this.getFileAndProject(args);
         const copiedFrom = args.copiedFrom
@@ -3716,6 +3729,9 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.GetMoveToRefactoringFileSuggestions]: (request: protocol.GetMoveToRefactoringFileSuggestionsRequest) => {
             return this.requiredResponse(this.getMoveToRefactoringFileSuggestions(request.arguments));
         },
+        [protocol.CommandTypes.PreparePasteEdits]: (request: protocol.PreparePasteEditsRequest) => {
+            return this.requiredResponse(this.preparePasteEdits(request.arguments));
+        },
         [protocol.CommandTypes.GetPasteEdits]: (request: protocol.GetPasteEditsRequest) => {
             return this.requiredResponse(this.getPasteEdits(request.arguments));
         },
@@ -3782,6 +3798,9 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.MapCode]: (request: protocol.MapCodeRequest) => {
             return this.requiredResponse(this.mapCode(request.arguments));
+        },
+        [protocol.CommandTypes.CopilotRelated]: (request: protocol.CopilotRelatedRequest) => {
+            return this.requiredResponse(this.getCopilotRelatedInfo(request.arguments));
         },
     }));
 
