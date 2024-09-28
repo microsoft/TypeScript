@@ -1828,7 +1828,7 @@ export interface TypeParameterDeclaration extends NamedDeclaration, JSDocContain
     /** Note: Consider calling `getEffectiveConstraintOfTypeParameter` */
     readonly constraint?: TypeNode;
     readonly default?: TypeNode;
-    readonly typeParameters?: NodeArray<TypeParameterDeclaration>
+    readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
 
     // For error recovery purposes (see `isGrammarError` in utilities.ts).
     expression?: Expression;
@@ -3522,7 +3522,8 @@ export type DeclarationWithTypeParameterChildren =
     | ClassLikeDeclaration
     | InterfaceDeclaration
     | TypeAliasDeclaration
-    | JSDocTemplateTag;
+    | JSDocTemplateTag
+    | TypeParameterDeclaration;
 
 export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
     readonly kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
@@ -8742,8 +8743,8 @@ export interface NodeFactory {
     // Signature elements
     //
 
-    createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
-    updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+    createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode, typeParameters?: readonly TypeParameterDeclaration[]): TypeParameterDeclaration;
+    updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined): TypeParameterDeclaration;
     createParameterDeclaration(modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
     updateParameterDeclaration(node: ParameterDeclaration, modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
     createDecorator(expression: Expression): Decorator;

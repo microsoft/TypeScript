@@ -1617,14 +1617,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     // @api
-    function createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode, typeParameters? :readonly TypeParameterDeclaration[]): TypeParameterDeclaration {
+    function createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode, typeParameters?: readonly TypeParameterDeclaration[]): TypeParameterDeclaration {
         const node = createBaseDeclaration<TypeParameterDeclaration>(SyntaxKind.TypeParameter);
         node.modifiers = asNodeArray(modifiers);
         node.name = asName(name);
         node.constraint = constraint;
         node.default = defaultType;
         node.transformFlags = TransformFlags.ContainsTypeScript;
-        node.typeParameters = asNodeArray(typeParameters)
+        node.typeParameters = asNodeArray(typeParameters);
 
         node.expression = undefined; // initialized by parser to report grammar errors
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
@@ -7066,7 +7066,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         else {
             modifierArray = modifiers;
         }
-        return isTypeParameterDeclaration(node) ? updateTypeParameterDeclaration(node, modifierArray, node.name, node.constraint, node.default) :
+        return isTypeParameterDeclaration(node) ? updateTypeParameterDeclaration(node, modifierArray, node.name, node.constraint, node.default, node.typeParameters) :
             isParameter(node) ? updateParameterDeclaration(node, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
             isConstructorTypeNode(node) ? updateConstructorTypeNode1(node, modifierArray, node.typeParameters, node.parameters, node.type) :
             isPropertySignature(node) ? updatePropertySignature(node, modifierArray, node.name, node.questionToken, node.type) :

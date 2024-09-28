@@ -125,7 +125,7 @@ function addMissingConstraint(changes: textChanges.ChangeTracker, program: Progr
         const importAdder = createImportAdder(sourceFile, program, preferences, host);
         const typeNode = typeToAutoImportableTypeNode(checker, importAdder, constraint, /*contextNode*/ undefined, scriptTarget, /*flags*/ undefined, /*internalFlags*/ undefined, tracker);
         if (typeNode) {
-            changes.replaceNode(sourceFile, declaration, factory.updateTypeParameterDeclaration(declaration, /*modifiers*/ undefined, declaration.name, typeNode, declaration.default));
+            changes.replaceNode(sourceFile, declaration, factory.updateTypeParameterDeclaration(declaration, /*modifiers*/ undefined, declaration.name, typeNode, declaration.default, declaration.typeParameters));
             importAdder.writeFixes(changes);
         }
     }

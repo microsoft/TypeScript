@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/typeParameterGeneric.ts] ////
+
+=== typeParameterGeneric.ts ===
+// ignore `Generic` so it can't be used inside the expression for `Monad`.
+// ensure `TypeParameter` is called, or provided to another thing that needs it.
+// Fail when the type for self is recursive.
+type Monad<TypeParameter<Generic>> = TypeParameter<string>
+>Monad : Symbol(Monad, Decl(typeParameterGeneric.ts, 0, 0))
+>TypeParameter : Symbol(TypeParameter, Decl(typeParameterGeneric.ts, 3, 11))
+>TypeParameter : Symbol(TypeParameter, Decl(typeParameterGeneric.ts, 3, 11))
+

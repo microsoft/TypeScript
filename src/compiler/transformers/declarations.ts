@@ -1221,7 +1221,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                 }
                 case SyntaxKind.TypeParameter: {
                     if (isPrivateMethodTypeParameter(input) && (input.default || input.constraint)) {
-                        return cleanup(factory.updateTypeParameterDeclaration(input, input.modifiers, input.name, /*constraint*/ undefined, /*defaultType*/ undefined));
+                        return cleanup(factory.updateTypeParameterDeclaration(input, input.modifiers, input.name, /*constraint*/ undefined, /*defaultType*/ undefined, /*typeParameters*/ undefined));
                     }
                     return cleanup(visitEachChild(input, visitDeclarationSubtree, context));
                 }

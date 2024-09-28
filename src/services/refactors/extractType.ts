@@ -341,7 +341,7 @@ function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile,
     const newTypeDeclaration = factory.createTypeAliasDeclaration(
         /*modifiers*/ undefined,
         name,
-        typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined)),
+        typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined, id.typeParameters)),
         newTypeNode,
     );
     changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeDeclaration), /*blankLineBetween*/ true);
