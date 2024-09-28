@@ -14393,7 +14393,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         setStructuredTypeMembers(type, members, emptyArray, emptyArray, indexInfos);
     }
 
-    // Return the lower bound of the key type in a mapped type. Intuitively, the lower
+    // Return the lower bound of the key or index type. Intuitively, the lower
     // bound includes those keys that are known to always be present, for example because
     // because of constraints on type parameters (e.g. 'keyof T' for a constrained T).
     function getLowerBoundOfKeyType(type: Type): Type {
@@ -14934,11 +14934,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getBaseConstraintOfType(type: Type): Type | undefined {
-        if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) || isGenericTupleType(type)) {
-            const constraint = getResolvedBaseConstraint(type as InstantiableType | UnionOrIntersectionType);
+        if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Index) || isGenericTupleType(type)) {
+            const constraint = getResolvedBaseConstraint(type as InstantiableType | UnionOrIntersectionType | IndexType);
             return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
         }
-        return type.flags & TypeFlags.Index ? stringNumberSymbolType : undefined;
+        return undefined;
     }
 
     /**
@@ -15036,6 +15036,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     undefined;
             }
             if (t.flags & TypeFlags.Index) {
+                const type = (t as IndexType).type;
+                if (type.flags & TypeFlags.IndexedAccess) {
+                    let objectType = (type as IndexedAccessType).objectType;
+                    while (objectType.flags & TypeFlags.IndexedAccess) {
+                        objectType = (objectType as IndexedAccessType).objectType;
+                    }
+                    if (!isGenericObjectType(objectType)) {
+                        const consraint = getLowerBoundOfKeyType(t);
+                        if (!(consraint.flags & TypeFlags.Never)) {
+                            return consraint;
+                        }
+                    }
+                }
                 return stringNumberSymbolType;
             }
             if (t.flags & TypeFlags.TemplateLiteral) {
@@ -23503,7 +23516,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (sourceFlags & TypeFlags.Index) {
                 const isDeferredMappedIndex = shouldDeferIndexType((source as IndexType).type, (source as IndexType).indexFlags) && getObjectFlags((source as IndexType).type) & ObjectFlags.Mapped;
-                if (result = isRelatedTo(stringNumberSymbolType, target, RecursionFlags.Source, reportErrors && !isDeferredMappedIndex)) {
+                if (result = isRelatedTo(getBaseConstraintOfType(source)!, target, RecursionFlags.Source, reportErrors && !isDeferredMappedIndex)) {
                     return result;
                 }
                 if (isDeferredMappedIndex) {

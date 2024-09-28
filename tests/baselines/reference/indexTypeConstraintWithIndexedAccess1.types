@@ -1,0 +1,196 @@
+//// [tests/cases/compiler/indexTypeConstraintWithIndexedAccess1.ts] ////
+
+=== indexTypeConstraintWithIndexedAccess1.ts ===
+// https://github.com/microsoft/TypeScript/issues/21760
+
+interface IExample {
+    foo: {
+>foo : { bar: { baz: number; }; }
+>    : ^^^^^^^                ^^^
+
+        bar: {
+>bar : { baz: number; }
+>    : ^^^^^^^      ^^^
+
+            baz: number;
+>baz : number
+>    : ^^^^^^
+        }
+    }
+}
+
+type F = <
+>F : F
+>  : ^
+
+    name extends keyof IExample,
+    val extends keyof IExample[name]
+>() => IExample[name][val]['baz'];
+
+export type Nested = {
+>Nested : Nested
+>       : ^^^^^^
+
+  nest: {
+>nest : { foo: string[]; bar: number[]; }
+>     : ^^^^^^^        ^^^^^^^        ^^^
+
+    foo: string[];
+>foo : string[]
+>    : ^^^^^^^^
+
+    bar: number[];
+>bar : number[]
+>    : ^^^^^^^^
+
+  };
+};
+
+export const test = <
+>test : <T extends keyof Nested, K extends keyof Nested[T], V extends Nested[T][K][number]>(type: T, key: K, value: V) => void
+>     : ^ ^^^^^^^^^            ^^ ^^^^^^^^^               ^^ ^^^^^^^^^                    ^^    ^^ ^^   ^^ ^^     ^^ ^^^^^^^^^
+><  T extends keyof Nested,  K extends keyof Nested[T],  V extends Nested[T][K][number],>(  type: T,  key: K,  value: V,) => {} : <T extends keyof Nested, K extends keyof Nested[T], V extends Nested[T][K][number]>(type: T, key: K, value: V) => void
+>                                                                                                                               : ^ ^^^^^^^^^            ^^ ^^^^^^^^^               ^^ ^^^^^^^^^                    ^^    ^^ ^^   ^^ ^^     ^^ ^^^^^^^^^
+
+  T extends keyof Nested,
+  K extends keyof Nested[T],
+  V extends Nested[T][K][number],
+>(
+  type: T,
+>type : T
+>     : ^
+
+  key: K,
+>key : K
+>    : ^
+
+  value: V,
+>value : V
+>      : ^
+
+) => {};
+
+const constRoutes = {
+>constRoutes : { readonly users: { readonly admin: { readonly get: "/admin"; }; }; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  users: {    admin: {      get: "/admin",    },  },} as const : { readonly users: { readonly admin: { readonly get: "/admin"; }; }; }
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  users: {    admin: {      get: "/admin",    },  },} : { readonly users: { readonly admin: { readonly get: "/admin"; }; }; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  users: {
+>users : { readonly admin: { readonly get: "/admin"; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    admin: {      get: "/admin",    },  } : { readonly admin: { readonly get: "/admin"; }; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    admin: {
+>admin : { readonly get: "/admin"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      get: "/admin",    } : { readonly get: "/admin"; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      get: "/admin",
+>get : "/admin"
+>    : ^^^^^^^^
+>"/admin" : "/admin"
+>         : ^^^^^^^^
+
+    },
+  },
+} as const;
+type ConstRoutes = typeof constRoutes;
+>ConstRoutes : { readonly users: { readonly admin: { readonly get: "/admin"; }; }; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>constRoutes : { readonly users: { readonly admin: { readonly get: "/admin"; }; }; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type ConstRouteSectionName = keyof ConstRoutes;
+>ConstRouteSectionName : "users"
+>                      : ^^^^^^^
+
+type ConstRouteModelName<Section extends ConstRouteSectionName> =
+>ConstRouteModelName : keyof { readonly users: { readonly admin: { readonly get: "/admin"; }; }; }[Section]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  keyof ConstRoutes[Section];
+
+function getForConstRoute<
+>getForConstRoute : <Section extends ConstRouteSectionName, Model extends ConstRouteModelName<Section>>(section: Section, model: Model) => string
+>                 : ^       ^^^^^^^^^                     ^^     ^^^^^^^^^                            ^^       ^^       ^^     ^^     ^^^^^      
+
+  Section extends ConstRouteSectionName,
+  Model extends ConstRouteModelName<Section>,
+>(section: Section, model: Model): string {
+>section : Section
+>        : ^^^^^^^
+>model : Model
+>      : ^^^^^
+
+  return constRoutes[section][model].get;
+>constRoutes[section][model].get : "/admin"
+>                                : ^^^^^^^^
+>constRoutes[section][model] : { readonly users: { readonly admin: { readonly get: "/admin"; }; }; }[Section][Model]
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>constRoutes[section] : { readonly users: { readonly admin: { readonly get: "/admin"; }; }; }[Section]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>constRoutes : { readonly users: { readonly admin: { readonly get: "/admin"; }; }; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>section : Section
+>        : ^^^^^^^
+>model : Model
+>      : ^^^^^
+>get : "/admin"
+>    : ^^^^^^^^
+}
+
+interface IndexedActions {
+  a: {
+>a : { start: { foo: string; }; }
+>  : ^^^^^^^^^                ^^^
+
+    start: {
+>start : { foo: string; }
+>      : ^^^^^^^      ^^^
+
+      foo: string;
+>foo : string
+>    : ^^^^^^
+
+    };
+  };
+}
+
+type DeriveInputType<
+>DeriveInputType : DeriveInputType<N, A>
+>                : ^^^^^^^^^^^^^^^^^^^^^
+
+  N extends keyof IndexedActions,
+  A extends keyof IndexedActions[N],
+> = IndexedActions[N][A] & { namespace: N; verb: A };
+>namespace : N
+>          : ^
+>verb : A
+>     : ^
+
+function doAction<
+>doAction : <N extends keyof IndexedActions, A extends keyof IndexedActions[N]>(action: DeriveInputType<N, A>) => void
+>         : ^ ^^^^^^^^^                    ^^ ^^^^^^^^^                       ^^      ^^                     ^^^^^^^^^
+
+  N extends keyof IndexedActions,
+  A extends keyof IndexedActions[N],
+>(action: DeriveInputType<N, A>) {
+>action : DeriveInputType<N, A>
+>       : ^^^^^^^^^^^^^^^^^^^^^
+
+  const s: string = action.verb;
+>s : string
+>  : ^^^^^^
+>action.verb : A
+>            : ^
+>action : DeriveInputType<N, A>
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>verb : A
+>     : ^
+}
+

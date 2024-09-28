@@ -1,0 +1,207 @@
+//// [tests/cases/compiler/indexTypeConstraintWithIndexedAccess1.ts] ////
+
+=== indexTypeConstraintWithIndexedAccess1.ts ===
+// https://github.com/microsoft/TypeScript/issues/21760
+
+interface IExample {
+>IExample : Symbol(IExample, Decl(indexTypeConstraintWithIndexedAccess1.ts, 0, 0))
+
+    foo: {
+>foo : Symbol(IExample.foo, Decl(indexTypeConstraintWithIndexedAccess1.ts, 2, 20))
+
+        bar: {
+>bar : Symbol(bar, Decl(indexTypeConstraintWithIndexedAccess1.ts, 3, 10))
+
+            baz: number;
+>baz : Symbol(baz, Decl(indexTypeConstraintWithIndexedAccess1.ts, 4, 14))
+        }
+    }
+}
+
+type F = <
+>F : Symbol(F, Decl(indexTypeConstraintWithIndexedAccess1.ts, 8, 1))
+
+    name extends keyof IExample,
+>name : Symbol(name, Decl(indexTypeConstraintWithIndexedAccess1.ts, 10, 10))
+>IExample : Symbol(IExample, Decl(indexTypeConstraintWithIndexedAccess1.ts, 0, 0))
+
+    val extends keyof IExample[name]
+>val : Symbol(val, Decl(indexTypeConstraintWithIndexedAccess1.ts, 11, 32))
+>IExample : Symbol(IExample, Decl(indexTypeConstraintWithIndexedAccess1.ts, 0, 0))
+>name : Symbol(name, Decl(indexTypeConstraintWithIndexedAccess1.ts, 10, 10))
+
+>() => IExample[name][val]['baz'];
+>IExample : Symbol(IExample, Decl(indexTypeConstraintWithIndexedAccess1.ts, 0, 0))
+>name : Symbol(name, Decl(indexTypeConstraintWithIndexedAccess1.ts, 10, 10))
+>val : Symbol(val, Decl(indexTypeConstraintWithIndexedAccess1.ts, 11, 32))
+
+export type Nested = {
+>Nested : Symbol(Nested, Decl(indexTypeConstraintWithIndexedAccess1.ts, 13, 34))
+
+  nest: {
+>nest : Symbol(nest, Decl(indexTypeConstraintWithIndexedAccess1.ts, 15, 22))
+
+    foo: string[];
+>foo : Symbol(foo, Decl(indexTypeConstraintWithIndexedAccess1.ts, 16, 9))
+
+    bar: number[];
+>bar : Symbol(bar, Decl(indexTypeConstraintWithIndexedAccess1.ts, 17, 18))
+
+  };
+};
+
+export const test = <
+>test : Symbol(test, Decl(indexTypeConstraintWithIndexedAccess1.ts, 22, 12))
+
+  T extends keyof Nested,
+>T : Symbol(T, Decl(indexTypeConstraintWithIndexedAccess1.ts, 22, 21))
+>Nested : Symbol(Nested, Decl(indexTypeConstraintWithIndexedAccess1.ts, 13, 34))
+
+  K extends keyof Nested[T],
+>K : Symbol(K, Decl(indexTypeConstraintWithIndexedAccess1.ts, 23, 25))
+>Nested : Symbol(Nested, Decl(indexTypeConstraintWithIndexedAccess1.ts, 13, 34))
+>T : Symbol(T, Decl(indexTypeConstraintWithIndexedAccess1.ts, 22, 21))
+
+  V extends Nested[T][K][number],
+>V : Symbol(V, Decl(indexTypeConstraintWithIndexedAccess1.ts, 24, 28))
+>Nested : Symbol(Nested, Decl(indexTypeConstraintWithIndexedAccess1.ts, 13, 34))
+>T : Symbol(T, Decl(indexTypeConstraintWithIndexedAccess1.ts, 22, 21))
+>K : Symbol(K, Decl(indexTypeConstraintWithIndexedAccess1.ts, 23, 25))
+
+>(
+  type: T,
+>type : Symbol(type, Decl(indexTypeConstraintWithIndexedAccess1.ts, 26, 2))
+>T : Symbol(T, Decl(indexTypeConstraintWithIndexedAccess1.ts, 22, 21))
+
+  key: K,
+>key : Symbol(key, Decl(indexTypeConstraintWithIndexedAccess1.ts, 27, 10))
+>K : Symbol(K, Decl(indexTypeConstraintWithIndexedAccess1.ts, 23, 25))
+
+  value: V,
+>value : Symbol(value, Decl(indexTypeConstraintWithIndexedAccess1.ts, 28, 9))
+>V : Symbol(V, Decl(indexTypeConstraintWithIndexedAccess1.ts, 24, 28))
+
+) => {};
+
+const constRoutes = {
+>constRoutes : Symbol(constRoutes, Decl(indexTypeConstraintWithIndexedAccess1.ts, 32, 5))
+
+  users: {
+>users : Symbol(users, Decl(indexTypeConstraintWithIndexedAccess1.ts, 32, 21))
+
+    admin: {
+>admin : Symbol(admin, Decl(indexTypeConstraintWithIndexedAccess1.ts, 33, 10))
+
+      get: "/admin",
+>get : Symbol(get, Decl(indexTypeConstraintWithIndexedAccess1.ts, 34, 12))
+
+    },
+  },
+} as const;
+>const : Symbol(const)
+
+type ConstRoutes = typeof constRoutes;
+>ConstRoutes : Symbol(ConstRoutes, Decl(indexTypeConstraintWithIndexedAccess1.ts, 38, 11))
+>constRoutes : Symbol(constRoutes, Decl(indexTypeConstraintWithIndexedAccess1.ts, 32, 5))
+
+type ConstRouteSectionName = keyof ConstRoutes;
+>ConstRouteSectionName : Symbol(ConstRouteSectionName, Decl(indexTypeConstraintWithIndexedAccess1.ts, 39, 38))
+>ConstRoutes : Symbol(ConstRoutes, Decl(indexTypeConstraintWithIndexedAccess1.ts, 38, 11))
+
+type ConstRouteModelName<Section extends ConstRouteSectionName> =
+>ConstRouteModelName : Symbol(ConstRouteModelName, Decl(indexTypeConstraintWithIndexedAccess1.ts, 40, 47))
+>Section : Symbol(Section, Decl(indexTypeConstraintWithIndexedAccess1.ts, 41, 25))
+>ConstRouteSectionName : Symbol(ConstRouteSectionName, Decl(indexTypeConstraintWithIndexedAccess1.ts, 39, 38))
+
+  keyof ConstRoutes[Section];
+>ConstRoutes : Symbol(ConstRoutes, Decl(indexTypeConstraintWithIndexedAccess1.ts, 38, 11))
+>Section : Symbol(Section, Decl(indexTypeConstraintWithIndexedAccess1.ts, 41, 25))
+
+function getForConstRoute<
+>getForConstRoute : Symbol(getForConstRoute, Decl(indexTypeConstraintWithIndexedAccess1.ts, 42, 29))
+
+  Section extends ConstRouteSectionName,
+>Section : Symbol(Section, Decl(indexTypeConstraintWithIndexedAccess1.ts, 44, 26))
+>ConstRouteSectionName : Symbol(ConstRouteSectionName, Decl(indexTypeConstraintWithIndexedAccess1.ts, 39, 38))
+
+  Model extends ConstRouteModelName<Section>,
+>Model : Symbol(Model, Decl(indexTypeConstraintWithIndexedAccess1.ts, 45, 40))
+>ConstRouteModelName : Symbol(ConstRouteModelName, Decl(indexTypeConstraintWithIndexedAccess1.ts, 40, 47))
+>Section : Symbol(Section, Decl(indexTypeConstraintWithIndexedAccess1.ts, 44, 26))
+
+>(section: Section, model: Model): string {
+>section : Symbol(section, Decl(indexTypeConstraintWithIndexedAccess1.ts, 47, 2))
+>Section : Symbol(Section, Decl(indexTypeConstraintWithIndexedAccess1.ts, 44, 26))
+>model : Symbol(model, Decl(indexTypeConstraintWithIndexedAccess1.ts, 47, 19))
+>Model : Symbol(Model, Decl(indexTypeConstraintWithIndexedAccess1.ts, 45, 40))
+
+  return constRoutes[section][model].get;
+>constRoutes[section][model].get : Symbol(get, Decl(indexTypeConstraintWithIndexedAccess1.ts, 34, 12))
+>constRoutes : Symbol(constRoutes, Decl(indexTypeConstraintWithIndexedAccess1.ts, 32, 5))
+>section : Symbol(section, Decl(indexTypeConstraintWithIndexedAccess1.ts, 47, 2))
+>model : Symbol(model, Decl(indexTypeConstraintWithIndexedAccess1.ts, 47, 19))
+>get : Symbol(get, Decl(indexTypeConstraintWithIndexedAccess1.ts, 34, 12))
+}
+
+interface IndexedActions {
+>IndexedActions : Symbol(IndexedActions, Decl(indexTypeConstraintWithIndexedAccess1.ts, 49, 1))
+
+  a: {
+>a : Symbol(IndexedActions.a, Decl(indexTypeConstraintWithIndexedAccess1.ts, 51, 26))
+
+    start: {
+>start : Symbol(start, Decl(indexTypeConstraintWithIndexedAccess1.ts, 52, 6))
+
+      foo: string;
+>foo : Symbol(foo, Decl(indexTypeConstraintWithIndexedAccess1.ts, 53, 12))
+
+    };
+  };
+}
+
+type DeriveInputType<
+>DeriveInputType : Symbol(DeriveInputType, Decl(indexTypeConstraintWithIndexedAccess1.ts, 57, 1))
+
+  N extends keyof IndexedActions,
+>N : Symbol(N, Decl(indexTypeConstraintWithIndexedAccess1.ts, 59, 21))
+>IndexedActions : Symbol(IndexedActions, Decl(indexTypeConstraintWithIndexedAccess1.ts, 49, 1))
+
+  A extends keyof IndexedActions[N],
+>A : Symbol(A, Decl(indexTypeConstraintWithIndexedAccess1.ts, 60, 33))
+>IndexedActions : Symbol(IndexedActions, Decl(indexTypeConstraintWithIndexedAccess1.ts, 49, 1))
+>N : Symbol(N, Decl(indexTypeConstraintWithIndexedAccess1.ts, 59, 21))
+
+> = IndexedActions[N][A] & { namespace: N; verb: A };
+>IndexedActions : Symbol(IndexedActions, Decl(indexTypeConstraintWithIndexedAccess1.ts, 49, 1))
+>N : Symbol(N, Decl(indexTypeConstraintWithIndexedAccess1.ts, 59, 21))
+>A : Symbol(A, Decl(indexTypeConstraintWithIndexedAccess1.ts, 60, 33))
+>namespace : Symbol(namespace, Decl(indexTypeConstraintWithIndexedAccess1.ts, 62, 28))
+>N : Symbol(N, Decl(indexTypeConstraintWithIndexedAccess1.ts, 59, 21))
+>verb : Symbol(verb, Decl(indexTypeConstraintWithIndexedAccess1.ts, 62, 42))
+>A : Symbol(A, Decl(indexTypeConstraintWithIndexedAccess1.ts, 60, 33))
+
+function doAction<
+>doAction : Symbol(doAction, Decl(indexTypeConstraintWithIndexedAccess1.ts, 62, 53))
+
+  N extends keyof IndexedActions,
+>N : Symbol(N, Decl(indexTypeConstraintWithIndexedAccess1.ts, 64, 18))
+>IndexedActions : Symbol(IndexedActions, Decl(indexTypeConstraintWithIndexedAccess1.ts, 49, 1))
+
+  A extends keyof IndexedActions[N],
+>A : Symbol(A, Decl(indexTypeConstraintWithIndexedAccess1.ts, 65, 33))
+>IndexedActions : Symbol(IndexedActions, Decl(indexTypeConstraintWithIndexedAccess1.ts, 49, 1))
+>N : Symbol(N, Decl(indexTypeConstraintWithIndexedAccess1.ts, 64, 18))
+
+>(action: DeriveInputType<N, A>) {
+>action : Symbol(action, Decl(indexTypeConstraintWithIndexedAccess1.ts, 67, 2))
+>DeriveInputType : Symbol(DeriveInputType, Decl(indexTypeConstraintWithIndexedAccess1.ts, 57, 1))
+>N : Symbol(N, Decl(indexTypeConstraintWithIndexedAccess1.ts, 64, 18))
+>A : Symbol(A, Decl(indexTypeConstraintWithIndexedAccess1.ts, 65, 33))
+
+  const s: string = action.verb;
+>s : Symbol(s, Decl(indexTypeConstraintWithIndexedAccess1.ts, 68, 7))
+>action.verb : Symbol(verb, Decl(indexTypeConstraintWithIndexedAccess1.ts, 62, 42))
+>action : Symbol(action, Decl(indexTypeConstraintWithIndexedAccess1.ts, 67, 2))
+>verb : Symbol(verb, Decl(indexTypeConstraintWithIndexedAccess1.ts, 62, 42))
+}
+
