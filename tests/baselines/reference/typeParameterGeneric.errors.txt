@@ -1,0 +1,10 @@
+typeParameterGeneric.ts(4,38): error TS2315: Type 'TypeParameter' is not generic.
+
+
+==== typeParameterGeneric.ts (1 errors) ====
+    // ignore `Generic` so it can't be used inside the expression for `Monad`.
+    // ensure `TypeParameter` is called, or provided to another thing that needs it.
+    // Fail when the type for self is recursive.
+    type Monad<TypeParameter<Generic>> = TypeParameter<string>
+                                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'TypeParameter' is not generic.

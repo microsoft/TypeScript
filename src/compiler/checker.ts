@@ -8974,6 +8974,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         setTextRange(context, typeParameterToName(getDeclaredTypeOfSymbol(getSymbolOfDeclaration(node)), context), node),
                         visitNode(node.constraint, visitExistingNodeTreeSymbols, isTypeNode),
                         visitNode(node.default, visitExistingNodeTreeSymbols, isTypeNode),
+                        visitNodes(node.typeParameters, visitExistingNodeTreeSymbols, isTypeParameterDeclaration)
                     );
                 }
 

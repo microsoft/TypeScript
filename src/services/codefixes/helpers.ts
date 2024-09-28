@@ -431,6 +431,7 @@ export function createSignatureDeclarationFromSignature(
                     typeParameterDecl.name,
                     constraint,
                     defaultType,
+                    typeParameterDecl.typeParameters
                 );
             });
             if (typeParameters !== newTypeParameters) {

@@ -3950,6 +3950,8 @@ namespace Parser {
         const name = parseIdentifier();
         let constraint: TypeNode | undefined;
         let expression: Expression | undefined;
+        let typeParameters: NodeArray<TypeParameterDeclaration> | undefined;
+
         if (parseOptional(SyntaxKind.ExtendsKeyword)) {
             // It's not uncommon for people to write improper constraints to a generic.  If the
             // user writes a constraint that is an expression and not an actual type, then parse
@@ -3969,9 +3971,12 @@ namespace Parser {
                 expression = parseUnaryExpressionOrHigher();
             }
         }
+        else {
+            typeParameters = parseTypeParameters();
+        }
 
         const defaultType = parseOptional(SyntaxKind.EqualsToken) ? parseType() : undefined;
-        const node = factory.createTypeParameterDeclaration(modifiers, name, constraint, defaultType);
+        const node = factory.createTypeParameterDeclaration(modifiers, name, constraint, defaultType, typeParameters);
         node.expression = expression;
         return finishNode(node, pos);
     }
