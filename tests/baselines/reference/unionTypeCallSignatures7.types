@@ -7,14 +7,20 @@ interface Callable<Name extends string> {
   (): `${Name} without id`;
   (id: number): `${Name} with id`;
 >id : number
+>   : ^^^^^^
 }
 
 declare const f: Callable<"A"> | Callable<"B">;
 >f : Callable<"A"> | Callable<"B">
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const result = f(123);
 >result : "A with id" | "B with id"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f(123) : "A with id" | "B with id"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : Callable<"A"> | Callable<"B">
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 

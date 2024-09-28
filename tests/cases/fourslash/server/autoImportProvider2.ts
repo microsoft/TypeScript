@@ -1,25 +1,25 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /node_modules/direct-dependency/package.json
+// @Filename: /home/src/workspaces/project/node_modules/direct-dependency/package.json
 //// { "name": "direct-dependency", "dependencies": { "indirect-dependency": "*" } }
 
-// @Filename: /node_modules/direct-dependency/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/direct-dependency/index.d.ts
 //// import "indirect-dependency";
 //// export declare class DirectDependency {}
 
-// @Filename: /node_modules/indirect-dependency/package.json
+// @Filename: /home/src/workspaces/project/node_modules/indirect-dependency/package.json
 //// { "name": "indirect-dependency" }
 
-// @Filename: /node_modules/indirect-dependency/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/indirect-dependency/index.d.ts
 //// export declare class IndirectDependency
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// {}
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// { "dependencies": { "direct-dependency": "*" } }
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// IndirectDependency/**/
 
 

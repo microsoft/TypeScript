@@ -34,6 +34,7 @@ import {
     firstOrUndefined,
     flattenDestructuringAssignment,
     FlattenLevel,
+    forEachDynamicImportOrRequireCall,
     ForInStatement,
     ForOfStatement,
     ForStatement,
@@ -56,6 +57,7 @@ import {
     getOriginalNodeId,
     getStrictOptionValue,
     getTextOfIdentifierOrLiteral,
+    hasJSFileExtension,
     hasJsonModuleEmitEnabled,
     hasSyntacticModifier,
     Identifier,
@@ -113,6 +115,7 @@ import {
     isSpreadElement,
     isStatement,
     isStringLiteral,
+    isStringLiteralLike,
     isVariableDeclaration,
     isVariableDeclarationList,
     LabeledStatement,
@@ -120,7 +123,10 @@ import {
     mapDefined,
     Modifier,
     ModifierFlags,
+    ModuleExportName,
+    moduleExportNameIsDefault,
     ModuleKind,
+    NamespaceImport,
     Node,
     NodeArray,
     NodeFlags,
@@ -132,11 +138,13 @@ import {
     PrefixUnaryExpression,
     reduceLeft,
     removeAllComments,
+    rewriteModuleSpecifier,
     ScriptTarget,
     setEmitFlags,
     setOriginalNode,
     setTextRange,
     ShorthandPropertyAssignment,
+    shouldRewriteModuleSpecifier,
     singleOrMany,
     some,
     SourceFile,
@@ -160,7 +168,7 @@ import {
     VisitResult,
     WhileStatement,
     WithStatement,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
@@ -209,6 +217,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
     let currentSourceFile: SourceFile; // The current file.
     let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
+    let importsAndRequiresToRewriteOrShim: CallExpression[] | undefined;
     const noSubstitution: boolean[] = []; // Set of nodes for which substitution rules should be ignored.
     let needUMDDynamicImportHelper: boolean;
 
@@ -232,6 +241,13 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         currentSourceFile = node;
         currentModuleInfo = collectExternalModuleInfo(context, node);
         moduleInfoMap[getOriginalNodeId(node)] = currentModuleInfo;
+        if (compilerOptions.rewriteRelativeImportExtensions) {
+            forEachDynamicImportOrRequireCall(node, /*includeTypeSpaceImports*/ false, /*requireStringLiteralLikeArgument*/ false, node => {
+                if (!isStringLiteralLike(node.arguments[0]) || shouldRewriteModuleSpecifier(node.arguments[0].text, compilerOptions)) {
+                    importsAndRequiresToRewriteOrShim = append(importsAndRequiresToRewriteOrShim, node);
+                }
+            });
+        }
 
         // Perform the transformation.
         const transformModule = getTransformModuleDelegate(moduleKind);
@@ -243,6 +259,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function shouldEmitUnderscoreUnderscoreESModule() {
+        if (hasJSFileExtension(currentSourceFile.fileName) && currentSourceFile.commonJsModuleIndicator && (!currentSourceFile.externalModuleIndicator || currentSourceFile.externalModuleIndicator === true)) {
+            return false;
+        }
         if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile)) {
             return true;
         }
@@ -272,17 +291,18 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     factory.createExpressionStatement(
                         reduceLeft(
                             currentModuleInfo.exportedNames.slice(i, i + chunkSize),
-                            (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
+                            (prev, nextId) =>
+                                nextId.kind === SyntaxKind.StringLiteral
+                                    ? factory.createAssignment(factory.createElementAccessExpression(factory.createIdentifier("exports"), factory.createStringLiteral(nextId.text)), prev)
+                                    : factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
                             factory.createVoidZero() as Expression,
                         ),
                     ),
                 );
             }
         }
-        if (some(currentModuleInfo.exportedFunctions)) {
-            for (const f of currentModuleInfo.exportedFunctions) {
-                appendExportsOfHoistedDeclaration(statements, f);
-            }
+        for (const f of currentModuleInfo.exportedFunctions) {
+            appendExportsOfHoistedDeclaration(statements, f);
         }
 
         append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, topLevelVisitor, isStatement));
@@ -607,12 +627,16 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             append(statements, createUnderscoreUnderscoreESModule());
         }
         if (some(currentModuleInfo.exportedNames)) {
-            append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+            append(
+                statements,
+                factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) =>
+                    nextId.kind === SyntaxKind.StringLiteral
+                        ? factory.createAssignment(factory.createElementAccessExpression(factory.createIdentifier("exports"), factory.createStringLiteral(nextId.text)), prev)
+                        : factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)),
+            );
         }
-        if (some(currentModuleInfo.exportedFunctions)) {
-            for (const f of currentModuleInfo.exportedFunctions) {
-                appendExportsOfHoistedDeclaration(statements, f);
-            }
+        for (const f of currentModuleInfo.exportedFunctions) {
+            appendExportsOfHoistedDeclaration(statements, f);
         }
 
         // Visit each statement of the module body.
@@ -771,7 +795,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function visitorWorker(node: Node, valueIsDiscarded: boolean): VisitResult<Node> {
         // This visitor does not need to descend into the tree if there is no dynamic import, destructuring assignment, or update expression
         // as export/import statements are only transformed at the top level of a file.
-        if (!(node.transformFlags & (TransformFlags.ContainsDynamicImport | TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsUpdateExpressionForIdentifier))) {
+        if (!(node.transformFlags & (TransformFlags.ContainsDynamicImport | TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsUpdateExpressionForIdentifier)) && !importsAndRequiresToRewriteOrShim?.length) {
             return node;
         }
 
@@ -785,8 +809,15 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
             case SyntaxKind.CallExpression:
-                if (isImportCall(node) && currentSourceFile.impliedNodeFormat === undefined) {
-                    return visitImportCallExpression(node);
+                const needsRewrite = node === firstOrUndefined(importsAndRequiresToRewriteOrShim);
+                if (needsRewrite) {
+                    importsAndRequiresToRewriteOrShim!.shift();
+                }
+                if (isImportCall(node) && host.shouldTransformImportCall(currentSourceFile)) {
+                    return visitImportCallExpression(node, needsRewrite);
+                }
+                else if (needsRewrite) {
+                    return shimOrRewriteImportOrRequireCall(node as CallExpression);
                 }
                 break;
             case SyntaxKind.BinaryExpression:
@@ -981,7 +1012,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return factory.updateLabeledStatement(
             node,
             node.label,
-            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
+            visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock) ?? setTextRange(factory.createEmptyStatement(), node.statement),
         );
     }
 
@@ -1007,7 +1038,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return factory.updateIfStatement(
             node,
             visitNode(node.expression, visitor, isExpression),
-            Debug.checkDefined(visitNode(node.thenStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
+            visitNode(node.thenStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock) ?? factory.createBlock([]),
             visitNode(node.elseStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock),
         );
     }
@@ -1158,14 +1189,34 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return visitEachChild(node, visitor, context);
     }
 
-    function visitImportCallExpression(node: ImportCall): Expression {
+    function shimOrRewriteImportOrRequireCall(node: CallExpression): CallExpression {
+        return factory.updateCallExpression(
+            node,
+            node.expression,
+            /*typeArguments*/ undefined,
+            visitNodes(node.arguments, (arg: Expression) => {
+                if (arg === node.arguments[0]) {
+                    return isStringLiteralLike(arg)
+                        ? rewriteModuleSpecifier(arg, compilerOptions)
+                        : emitHelpers().createRewriteRelativeImportExtensionsHelper(arg);
+                }
+                return visitor(arg);
+            }, isExpression),
+        );
+    }
+
+    function visitImportCallExpression(node: ImportCall, rewriteOrShim: boolean): Expression {
         if (moduleKind === ModuleKind.None && languageVersion >= ScriptTarget.ES2020) {
             return visitEachChild(node, visitor, context);
         }
         const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
         const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
-        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
+        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text)
+            ? externalModuleName
+            : firstArgument && rewriteOrShim
+            ? isStringLiteral(firstArgument) ? rewriteModuleSpecifier(firstArgument, compilerOptions) : emitHelpers().createRewriteRelativeImportExtensionsHelper(firstArgument)
+            : firstArgument;
         const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
         switch (compilerOptions.module) {
             case ModuleKind.AMD:
@@ -1385,7 +1436,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      */
     function visitTopLevelImportDeclaration(node: ImportDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
-        const namespaceDeclaration = getNamespaceDeclarationNode(node);
+        const namespaceDeclaration = getNamespaceDeclarationNode(node) as NamespaceImport | undefined;
         if (moduleKind !== ModuleKind.AMD) {
             if (!node.importClause) {
                 // import "mod";
@@ -1488,7 +1539,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         const moduleName = getExternalModuleNameLiteral(factory, importNode, currentSourceFile, host, resolver, compilerOptions);
         const args: Expression[] = [];
         if (moduleName) {
-            args.push(moduleName);
+            args.push(rewriteModuleSpecifier(moduleName, compilerOptions));
         }
 
         return factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, args);
@@ -1607,18 +1658,24 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 );
             }
             for (const specifier of node.exportClause.elements) {
+                const specifierName = specifier.propertyName || specifier.name;
                 const exportNeedsImportDefault = !!getESModuleInterop(compilerOptions) &&
                     !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
-                    idText(specifier.propertyName || specifier.name) === "default";
-                const exportedValue = factory.createPropertyAccessExpression(
-                    exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
-                    specifier.propertyName || specifier.name,
-                );
+                    moduleExportNameIsDefault(specifierName);
+                const target = exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName;
+                const exportedValue = specifierName.kind === SyntaxKind.StringLiteral
+                    ? factory.createElementAccessExpression(target, specifierName)
+                    : factory.createPropertyAccessExpression(target, specifierName);
                 statements.push(
                     setOriginalNode(
                         setTextRange(
                             factory.createExpressionStatement(
-                                createExportExpression(factory.getExportName(specifier), exportedValue, /*location*/ undefined, /*liveBinding*/ true),
+                                createExportExpression(
+                                    specifier.name.kind === SyntaxKind.StringLiteral ? factory.cloneNode(specifier.name) : factory.getExportName(specifier),
+                                    exportedValue,
+                                    /*location*/ undefined,
+                                    /*liveBinding*/ true,
+                                ),
                             ),
                             specifier,
                         ),
@@ -1644,6 +1701,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                     moduleKind !== ModuleKind.AMD ?
                                         createRequireCall(node) :
                                         isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
+                                        node.exportClause.name.kind === SyntaxKind.StringLiteral ? generatedName :
                                         factory.createIdentifier(idText(node.exportClause.name)),
                                 ),
                             ),
@@ -2070,11 +2128,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments Whether to allow comments on the export.
      */
-    function appendExportStatement(statements: Statement[] | undefined, seen: IdentifierNameMap<boolean>, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
-        if (!seen.has(exportName)) {
+    function appendExportStatement(statements: Statement[] | undefined, seen: IdentifierNameMap<boolean>, exportName: ModuleExportName, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
+        if (exportName.kind !== SyntaxKind.StringLiteral) {
+            if (seen.has(exportName)) {
+                return statements;
+            }
             seen.set(exportName, true);
-            statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
         }
+        statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
         return statements;
     }
 
@@ -2104,7 +2165,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments An optional value indicating whether to emit comments for the statement.
      */
-    function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
+    function createExportStatement(name: ModuleExportName, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
         const statement = setTextRange(factory.createExpressionStatement(createExportExpression(name, value, /*location*/ undefined, liveBinding)), location);
         startOnNewLine(statement);
         if (!allowComments) {
@@ -2121,7 +2182,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param value The exported value.
      * @param location The location to use for source maps and comments for the export.
      */
-    function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
+    function createExportExpression(name: ModuleExportName, value: Expression, location?: TextRange, liveBinding?: boolean) {
         return setTextRange(
             liveBinding ? factory.createCallExpression(
                 factory.createPropertyAccessExpression(
@@ -2149,10 +2210,15 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     ]),
                 ],
             ) : factory.createAssignment(
-                factory.createPropertyAccessExpression(
-                    factory.createIdentifier("exports"),
-                    factory.cloneNode(name),
-                ),
+                name.kind === SyntaxKind.StringLiteral
+                    ? factory.createElementAccessExpression(
+                        factory.createIdentifier("exports"),
+                        factory.cloneNode(name),
+                    )
+                    : factory.createPropertyAccessExpression(
+                        factory.createIdentifier("exports"),
+                        factory.cloneNode(name),
+                    ),
                 value,
             ),
             location,
@@ -2338,11 +2404,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 }
                 else if (isImportSpecifier(importDeclaration)) {
                     const name = importDeclaration.propertyName || importDeclaration.name;
+                    const target = factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration);
                     return setTextRange(
-                        factory.createPropertyAccessExpression(
-                            factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                            factory.cloneNode(name),
-                        ),
+                        name.kind === SyntaxKind.StringLiteral
+                            ? factory.createElementAccessExpression(target, factory.cloneNode(name))
+                            : factory.createPropertyAccessExpression(target, factory.cloneNode(name)),
                         /*location*/ node,
                     );
                 }
@@ -2391,7 +2457,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param name The name.
      */
-    function getExports(name: Identifier): Identifier[] | undefined {
+    function getExports(name: Identifier): ModuleExportName[] | undefined {
         if (!isGeneratedIdentifier(name)) {
             const importDeclaration = resolver.getReferencedImportDeclaration(name);
             if (importDeclaration) {
@@ -2419,7 +2485,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         else if (isFileLevelReservedGeneratedIdentifier(name)) {
             const exportSpecifiers = currentModuleInfo?.exportSpecifiers.get(name);
             if (exportSpecifiers) {
-                const exportedNames: Identifier[] = [];
+                const exportedNames: ModuleExportName[] = [];
                 for (const exportSpecifier of exportSpecifiers) {
                     exportedNames.push(exportSpecifier.name);
                 }

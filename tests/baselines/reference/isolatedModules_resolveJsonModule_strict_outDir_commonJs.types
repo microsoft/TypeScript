@@ -3,8 +3,10 @@
 === /a.ts ===
 import * as j from "./j.json";
 >j : {}
+>  : ^^
 
 === /j.json ===
 {}
 >{} : {}
+>   : ^^
 

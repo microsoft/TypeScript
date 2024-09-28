@@ -1,10 +1,10 @@
-import * as documents from "./_namespaces/documents";
-import * as fakes from "./_namespaces/fakes";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+import * as documents from "./_namespaces/documents.js";
+import * as fakes from "./_namespaces/fakes.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {
@@ -38,7 +38,7 @@ interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
 }
 
 export class ProjectRunner extends Harness.RunnerBase {
-    public enumerateTestFiles() {
+    public enumerateTestFiles(): string[] {
         const all = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
         if (Harness.shards === 1) {
             return all;
@@ -50,7 +50,7 @@ export class ProjectRunner extends Harness.RunnerBase {
         return "project";
     }
 
-    public initializeTests() {
+    public initializeTests(): void {
         describe("projects tests", () => {
             const tests = this.tests.length === 0 ? this.enumerateTestFiles() : this.tests;
             for (const test of tests) {
@@ -282,7 +282,7 @@ class ProjectTestCase {
                     }
 
                     const content = Utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
-                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // TODO: GH#18217
+                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // eslint-disable-line no-restricted-syntax
                 }
                 catch (e) {
                     errs.push(e);

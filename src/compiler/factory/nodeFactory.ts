@@ -226,6 +226,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
+    JSDocImportTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -308,6 +309,7 @@ import {
     ModuleBlock,
     ModuleBody,
     ModuleDeclaration,
+    ModuleExportName,
     ModuleName,
     ModuleReference,
     Mutable,
@@ -330,6 +332,7 @@ import {
     NonNullExpression,
     NoSubstitutionTemplateLiteral,
     NotEmittedStatement,
+    NotEmittedTypeElement,
     NullLiteral,
     nullNodeConverters,
     nullParenthesizerRules,
@@ -454,7 +457,7 @@ import {
     WhileStatement,
     WithStatement,
     YieldExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 let nextAutoGenerateId = 0;
 
@@ -473,8 +476,8 @@ export const enum NodeFactoryFlags {
 
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
 
-/** @internal */
-export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
+/** @internal @knipignore */
+export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void): void {
     nodeFactoryPatchers.push(fn);
 }
 
@@ -857,6 +860,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateJSDocImplementsTag,
         createJSDocSeeTag,
         updateJSDocSeeTag,
+        createJSDocImportTag,
+        updateJSDocImportTag,
         createJSDocNameReference,
         updateJSDocNameReference,
         createJSDocMemberName,
@@ -1003,6 +1008,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createSyntheticExpression,
         createSyntaxList,
         createNotEmittedStatement,
+        createNotEmittedTypeElement,
         createPartiallyEmittedExpression,
         updatePartiallyEmittedExpression,
         createCommaListExpression,
@@ -1981,10 +1987,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.parameters = createNodeArray(parameters);
         node.body = body;
 
-        node.transformFlags = propagateChildrenFlags(node.modifiers) |
-            propagateChildrenFlags(node.parameters) |
-            (propagateChildFlags(node.body) & ~TransformFlags.ContainsPossibleTopLevelAwait) |
-            TransformFlags.ContainsES2015;
+        if (!node.body) {
+            node.transformFlags = TransformFlags.ContainsTypeScript;
+        }
+        else {
+            node.transformFlags = propagateChildrenFlags(node.modifiers) |
+                propagateChildrenFlags(node.parameters) |
+                (propagateChildFlags(node.body) & ~TransformFlags.ContainsPossibleTopLevelAwait) |
+                TransformFlags.ContainsES2015;
+        }
 
         node.typeParameters = undefined; // initialized by parser for grammar errors
         node.type = undefined; // initialized by parser for grammar errors
@@ -4838,7 +4849,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createNamespaceExport(name: Identifier): NamespaceExport {
+    function createNamespaceExport(name: ModuleExportName): NamespaceExport {
         const node = createBaseDeclaration<NamespaceExport>(SyntaxKind.NamespaceExport);
         node.name = name;
         node.transformFlags |= propagateChildFlags(node.name) |
@@ -4848,7 +4859,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateNamespaceExport(node: NamespaceExport, name: Identifier) {
+    function updateNamespaceExport(node: NamespaceExport, name: ModuleExportName) {
         return node.name !== name
             ? update(createNamespaceExport(name), node)
             : node;
@@ -4871,7 +4882,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
+    function createImportSpecifier(isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier) {
         const node = createBaseDeclaration<ImportSpecifier>(SyntaxKind.ImportSpecifier);
         node.isTypeOnly = isTypeOnly;
         node.propertyName = propertyName;
@@ -4883,7 +4894,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
+    function updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: Identifier) {
         return node.isTypeOnly !== isTypeOnly
                 || node.propertyName !== propertyName
                 || node.name !== name
@@ -4990,7 +5001,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier) {
+    function createExportSpecifier(isTypeOnly: boolean, propertyName: string | ModuleExportName | undefined, name: string | ModuleExportName) {
         const node = createBaseNode<ExportSpecifier>(SyntaxKind.ExportSpecifier);
         node.isTypeOnly = isTypeOnly;
         node.propertyName = asName(propertyName);
@@ -5004,7 +5015,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
+    function updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: ModuleExportName | undefined, name: ModuleExportName) {
         return node.isTypeOnly !== isTypeOnly
                 || node.propertyName !== propertyName
                 || node.name !== name
@@ -5520,6 +5531,26 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 || node.typeExpression !== typeExpression
                 || node.comment !== comment
             ? update(createJSDocEnumTag(tagName, typeExpression, comment), node)
+            : node;
+    }
+
+    // @api
+    function createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes, comment?: string | NodeArray<JSDocComment>): JSDocImportTag {
+        const node = createBaseJSDocTag<JSDocImportTag>(SyntaxKind.JSDocImportTag, tagName ?? createIdentifier("import"), comment);
+        node.importClause = importClause;
+        node.moduleSpecifier = moduleSpecifier;
+        node.attributes = attributes;
+        node.comment = comment;
+        return node;
+    }
+
+    function updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag {
+        return node.tagName !== tagName
+                || node.comment !== comment
+                || node.importClause !== importClause
+                || node.moduleSpecifier !== moduleSpecifier
+                || node.attributes !== attributes
+            ? update(createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comment), node)
             : node;
     }
 
@@ -6185,7 +6216,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createSyntaxList(children: Node[]) {
+    function createSyntaxList(children: readonly Node[]) {
         const node = createBaseNode<SyntaxList>(SyntaxKind.SyntaxList);
         node._children = children;
         return node;
@@ -6232,6 +6263,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node.expression !== expression
             ? update(createPartiallyEmittedExpression(expression, node.original), node)
             : node;
+    }
+
+    // @api
+    function createNotEmittedTypeElement() {
+        return createBaseNode<NotEmittedTypeElement>(SyntaxKind.NotEmittedTypeElement);
     }
 
     function flattenCommaElements(node: Expression): Expression | readonly Expression[] {
@@ -6529,6 +6565,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 return updateSatisfiesExpression(outerExpression, expression, outerExpression.type);
             case SyntaxKind.NonNullExpression:
                 return updateNonNullExpression(outerExpression, expression);
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return updateExpressionWithTypeArguments(outerExpression, expression, outerExpression.typeArguments);
             case SyntaxKind.PartiallyEmittedExpression:
                 return updatePartiallyEmittedExpression(outerExpression, expression);
         }
@@ -7179,6 +7217,8 @@ function getDefaultTagNameForKind(kind: JSDocTag["kind"]): string {
             return "augments";
         case SyntaxKind.JSDocImplementsTag:
             return "implements";
+        case SyntaxKind.JSDocImportTag:
+            return "import";
         default:
             return Debug.fail(`Unsupported kind: ${Debug.formatSyntaxKind(kind)}`);
     }
@@ -7268,10 +7308,8 @@ function aggregateChildrenFlags(children: MutableNodeArray<Node>) {
 
 /**
  * Gets the transform flags to exclude when unioning the transform flags of a subtree.
- *
- * @internal
  */
-export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
+function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
     if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
         return TransformFlags.TypeExcludes;
     }
@@ -7358,7 +7396,7 @@ const syntheticFactory: BaseNodeFactory = {
     createBaseNode: kind => makeSynthetic(baseFactory.createBaseNode(kind)),
 };
 
-export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
+export const factory: NodeFactory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
 
 let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 

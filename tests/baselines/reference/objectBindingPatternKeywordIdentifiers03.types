@@ -3,7 +3,11 @@
 === objectBindingPatternKeywordIdentifiers03.ts ===
 var { "while" } = { while: 1 }
 > : number
+> : ^^^^^^
 >{ while: 1 } : { while: number; }
+>             : ^^^^^^^^^^^^^^^^^^
 >while : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 

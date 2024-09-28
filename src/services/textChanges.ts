@@ -154,7 +154,6 @@ import {
     skipTrivia,
     SourceFile,
     SourceFileLike,
-    stableSort,
     Statement,
     stringContainsAt,
     Symbol,
@@ -164,6 +163,7 @@ import {
     textSpanEnd,
     Token,
     tokenToString,
+    toSorted,
     TransformationContext,
     TypeLiteralNode,
     TypeNode,
@@ -174,7 +174,7 @@ import {
     visitEachChild,
     visitNodes,
     Visitor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Currently for simplicity we store recovered positions on the node itself.
@@ -509,7 +509,7 @@ export class ChangeTracker {
     /** Public for tests only. Other callers should use `ChangeTracker.with`. */
     constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
 
-    public pushRaw(sourceFile: SourceFile, change: FileTextChanges) {
+    public pushRaw(sourceFile: SourceFile, change: FileTextChanges): void {
         Debug.assertEqual(sourceFile.fileName, change.fileName);
         for (const c of change.textChanges) {
             this.changes.push({
@@ -534,7 +534,7 @@ export class ChangeTracker {
         this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
     }
 
-    public deleteNodes(sourceFile: SourceFile, nodes: readonly Node[], options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }, hasTrailingComment: boolean): void {
+    public deleteNodes(sourceFile: SourceFile, nodes: readonly Node[], options: ConfigurableStartEnd | undefined = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }, hasTrailingComment: boolean): void {
         // When deleting multiple nodes we need to track if the end position is including multiline trailing comments.
         for (const node of nodes) {
             const pos = getAdjustedStartPosition(sourceFile, node, options, hasTrailingComment);
@@ -655,7 +655,7 @@ export class ChangeTracker {
         this.insertNodesAt(sourceFile, pos, insert, options);
     }
 
-    private insertStatementsInNewFile(fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], oldFile?: SourceFile): void {
+    public insertStatementsInNewFile(fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], oldFile?: SourceFile): void {
         if (!this.newFileChanges) {
             this.newFileChanges = createMultiMap<string, NewFileInsertion>();
         }
@@ -724,7 +724,7 @@ export class ChangeTracker {
             factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
     }
 
-    public replaceJSDocComment(sourceFile: SourceFile, node: HasJSDoc, tags: readonly JSDocTag[]) {
+    public replaceJSDocComment(sourceFile: SourceFile, node: HasJSDoc, tags: readonly JSDocTag[]): void {
         this.insertJsdocCommentBefore(sourceFile, updateJSDocHost(node), factory.createJSDocComment(this.createJSDocText(sourceFile, node), factory.createNodeArray(tags)));
     }
 
@@ -1011,7 +1011,7 @@ export class ChangeTracker {
         this.insertText(sourceFile, node.getStart(sourceFile), "export ");
     }
 
-    public insertImportSpecifierAtIndex(sourceFile: SourceFile, importSpecifier: ImportSpecifier, namedImports: NamedImports, index: number) {
+    public insertImportSpecifierAtIndex(sourceFile: SourceFile, importSpecifier: ImportSpecifier, namedImports: NamedImports, index: number): void {
         const prevSpecifier = namedImports.elements[index - 1];
         if (prevSpecifier) {
             this.insertNodeInListAfter(sourceFile, prevSpecifier, importSpecifier);
@@ -1031,7 +1031,7 @@ export class ChangeTracker {
      * i.e. arguments in arguments lists, parameters in parameter lists etc.
      * Note that separators are part of the node in statements and class elements.
      */
-    public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList = formatting.SmartIndenter.getContainingList(after, sourceFile)): void {
+    public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList: NodeArray<Node> | undefined = formatting.SmartIndenter.getContainingList(after, sourceFile)): void {
         if (!containingList) {
             Debug.fail("node is not a list element");
             return;
@@ -1121,7 +1121,7 @@ export class ChangeTracker {
         }
     }
 
-    public parenthesizeExpression(sourceFile: SourceFile, expression: Expression) {
+    public parenthesizeExpression(sourceFile: SourceFile, expression: Expression): void {
         this.replaceRange(sourceFile, rangeOfNode(expression), factory.createParenthesizedExpression(expression));
     }
 
@@ -1264,7 +1264,7 @@ namespace changesToText {
             const sourceFile = changesInFile[0].sourceFile;
             // order changes by start position
             // If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
-            const normalized = stableSort(changesInFile, (a, b) => (a.range.pos - b.range.pos) || (a.range.end - b.range.end));
+            const normalized = toSorted(changesInFile, (a, b) => (a.range.pos - b.range.pos) || (a.range.end - b.range.end));
             // verify that change intervals do not overlap, except possibly at end points.
             for (let i = 0; i < normalized.length - 1; i++) {
                 Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () => `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
@@ -1659,7 +1659,7 @@ function getInsertionPositionAtSourceFileTop(sourceFile: SourceFile): number {
 }
 
 /** @internal */
-export function isValidLocationToAddComment(sourceFile: SourceFile, position: number) {
+export function isValidLocationToAddComment(sourceFile: SourceFile, position: number): boolean {
     return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position) && !isInJSXText(sourceFile, position);
 }
 

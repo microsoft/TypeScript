@@ -108,7 +108,7 @@ import {
     TypeParameter,
     typeToDisplayParts,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 
@@ -557,7 +557,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                         typeChecker,
                         resolvedSymbol,
                         getSourceFileOfNode(resolvedNode),
-                        resolvedNode,
+                        enclosingDeclaration,
                         declarationName,
                         type,
                         semanticMeaning,
@@ -866,7 +866,15 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
 
 // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
 /** @internal */
-export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined, location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
+export function getSymbolDisplayPartsDocumentationAndSymbolKind(
+    typeChecker: TypeChecker,
+    symbol: Symbol,
+    sourceFile: SourceFile,
+    enclosingDeclaration: Node | undefined,
+    location: Node,
+    semanticMeaning: SemanticMeaning = getMeaningFromLocation(location),
+    alias?: Symbol,
+): SymbolDisplayPartsDocumentationAndSymbolKind {
     return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker, symbol, sourceFile, enclosingDeclaration, location, /*type*/ undefined, semanticMeaning, alias);
 }
 

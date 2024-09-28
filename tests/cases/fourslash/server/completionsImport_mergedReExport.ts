@@ -1,24 +1,24 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// { "compilerOptions": { "module": "commonjs" } }
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// { "dependencies": { "@jest/types": "*", "ts-jest": "*" } }
 
-// @Filename: /node_modules/@jest/types/package.json
+// @Filename: /home/src/workspaces/project/node_modules/@jest/types/package.json
 //// { "name": "@jest/types" }
 
-// @Filename: /node_modules/@jest/types/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@jest/types/index.d.ts
 //// import type * as Config from "./Config";
 //// export type { Config };
 
-// @Filename: /node_modules/@jest/types/Config.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@jest/types/Config.d.ts
 //// export interface ConfigGlobals {
 ////     [K: string]: unknown;
 //// }
 
-// @Filename: /node_modules/ts-jest/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/ts-jest/index.d.ts
 //// export {};
 //// declare module "@jest/types" {
 ////     namespace Config {
@@ -28,14 +28,14 @@
 ////     }
 //// }
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// C/**/
 
 verify.completions({
   marker: "",
   includes: [{
     name: "Config",
-    source: "/node_modules/@jest/types/index",
+    source: "/home/src/workspaces/project/node_modules/@jest/types/index",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions,
   }],

@@ -363,3 +363,20 @@ function f12() {
 >v : Symbol(v, Decl(narrowingPastLastAssignment.ts, 151, 19))
 }
 
+function f13() {
+>f13 : Symbol(f13, Decl(narrowingPastLastAssignment.ts, 152, 1))
+
+    // Test for captured 'var' declaration (as opposed to parameters, let, const).
+    var foo: string | undefined;
+>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 156, 7))
+
+    foo = '';
+>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 156, 7))
+
+    return () => {
+        foo.toLocaleLowerCase();
+>foo.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 156, 7))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+    }
+}

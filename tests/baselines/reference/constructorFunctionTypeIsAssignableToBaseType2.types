@@ -5,49 +5,65 @@
 
 class Base {
 >Base : Base
+>     : ^^^^
 
     static foo: {
 >foo : { bar: Object; }
+>    : ^^^^^^^      ^^^
 
         bar: Object;
 >bar : Object
+>    : ^^^^^^
     }
     constructor(x: Object) {
 >x : Object
+>  : ^^^^^^
     }
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     // ok
     static foo: {
 >foo : { bar: number; }
+>    : ^^^^^^^      ^^^
 
         bar: number;
 >bar : number
+>    : ^^^^^^
     }
 
     constructor(x: number) {
 >x : number
+>  : ^^^^^^
 
         super(x);
 >super(x) : void
+>         : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
 }
 
 class Derived2 extends Base {   
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 
     static foo: {
 >foo : { bar: number; }
+>    : ^^^^^^^      ^^^
 
         bar: number;
 >bar : number
+>    : ^^^^^^
     }
 
     // ok, not enforcing assignability relation on this
@@ -56,10 +72,13 @@ class Derived2 extends Base {
 
         super(x);
 >super(x) : void
+>         : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >x : any
 
         return 1;
 >1 : 1
+>  : ^
     }
 }

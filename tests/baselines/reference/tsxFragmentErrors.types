@@ -6,16 +6,22 @@ declare module JSX {
 	interface IntrinsicElements {
 		[s: string]: any;
 >s : string
+>  : ^^^^^^
 	}
 }
 declare var React: any;
 >React : any
+>      : ^^^
 
 <>hi</div> // Error
 ><>hi</ : JSX.Element
+>       : ^^^^^^^^^^^
 >div> // Error<>eof   // Error : boolean
+>                              : ^^^^^^^
 >div : any
+>    : ^^^
 
 <>eof   // Error
 ><>eof   // Error : JSX.Element
+>                 : ^^^^^^^^^^^
 

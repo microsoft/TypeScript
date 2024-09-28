@@ -3,5 +3,7 @@
 === parserConstructorAmbiguity3.ts ===
 new Date<A>
 >new Date<A> : Date
+>            : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 

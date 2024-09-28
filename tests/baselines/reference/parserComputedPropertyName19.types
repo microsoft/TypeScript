@@ -2,7 +2,10 @@
 
 === parserComputedPropertyName19.ts ===
 var v: { [e]? };
->v : {}
+>v : { [x: number]: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >[e] : any
+>    : ^^^
 >e : any
+>  : ^^^
 

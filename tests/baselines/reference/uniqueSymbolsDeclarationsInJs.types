@@ -4,14 +4,18 @@
 // classes
 class C {
 >C : C
+>  : ^
 
     /**
      * @readonly
      */
     static readonlyStaticCall = Symbol();
 >readonlyStaticCall : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     /**
      * @type {unique symbol}
@@ -19,6 +23,7 @@ class C {
      */
     static readonlyStaticType;
 >readonlyStaticType : unique symbol
+>                   : ^^^^^^^^^^^^^
 
     /**
      * @type {unique symbol}
@@ -26,31 +31,46 @@ class C {
      */
     static readonlyStaticTypeAndCall = Symbol();
 >readonlyStaticTypeAndCall : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     static readwriteStaticCall = Symbol();
 >readwriteStaticCall : symbol
+>                    : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     /**
      * @readonly
      */
     readonlyCall = Symbol();
 >readonlyCall : symbol
+>             : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     readwriteCall = Symbol();
 >readwriteCall : symbol
+>              : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 }
 
 /** @type {unique symbol} */
 const a = Symbol();
 >a : unique symbol
+>  : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 

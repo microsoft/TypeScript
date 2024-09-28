@@ -40,10 +40,8 @@ export * as fs from "fs";
 
 
 //// [index.d.ts]
-/// <reference path="../../types.d.ts" />
 export * from "fs";
 export * as fs from "fs";
 //// [index.d.ts]
-/// <reference path="../types.d.ts" />
 export * from "fs";
 export * as fs from "fs";

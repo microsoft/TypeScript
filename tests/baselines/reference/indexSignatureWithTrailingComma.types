@@ -2,22 +2,27 @@
 
 === indexSignatureWithTrailingComma.ts ===
 type A = {
->A : { [key: string]: string; }
+>A : A
+>  : ^
 
     [key: string,]: string;
 >key : string
+>    : ^^^^^^
 
 };
 
 interface B {
     [key: string,]: string;
 >key : string
+>    : ^^^^^^
 }
 
 class C {
 >C : C
+>  : ^
 
     [key: string,]: null;
 >key : string
+>    : ^^^^^^
 }
 

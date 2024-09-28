@@ -8,6 +8,19 @@ interface AddEventListenerOptions extends EventListenerOptions {
     signal?: AbortSignal;
 }
 
+interface AddressErrors {
+    addressLine?: string;
+    city?: string;
+    country?: string;
+    dependentLocality?: string;
+    organization?: string;
+    phone?: string;
+    postalCode?: string;
+    recipient?: string;
+    region?: string;
+    sortingCode?: string;
+}
+
 interface AesCbcParams extends Algorithm {
     iv: BufferSource;
 }
@@ -89,6 +102,59 @@ interface AudioContextOptions {
     sampleRate?: number;
 }
 
+interface AudioDataCopyToOptions {
+    format?: AudioSampleFormat;
+    frameCount?: number;
+    frameOffset?: number;
+    planeIndex: number;
+}
+
+interface AudioDataInit {
+    data: BufferSource;
+    format: AudioSampleFormat;
+    numberOfChannels: number;
+    numberOfFrames: number;
+    sampleRate: number;
+    timestamp: number;
+    transfer?: ArrayBuffer[];
+}
+
+interface AudioDecoderConfig {
+    codec: string;
+    description?: BufferSource;
+    numberOfChannels: number;
+    sampleRate: number;
+}
+
+interface AudioDecoderInit {
+    error: WebCodecsErrorCallback;
+    output: AudioDataOutputCallback;
+}
+
+interface AudioDecoderSupport {
+    config?: AudioDecoderConfig;
+    supported?: boolean;
+}
+
+interface AudioEncoderConfig {
+    bitrate?: number;
+    bitrateMode?: BitrateMode;
+    codec: string;
+    numberOfChannels: number;
+    opus?: OpusEncoderConfig;
+    sampleRate: number;
+}
+
+interface AudioEncoderInit {
+    error: WebCodecsErrorCallback;
+    output: EncodedAudioChunkOutputCallback;
+}
+
+interface AudioEncoderSupport {
+    config?: AudioEncoderConfig;
+    supported?: boolean;
+}
+
 interface AudioNodeOptions {
     channelCount?: number;
     channelCountMode?: ChannelCountMode;
@@ -119,12 +185,32 @@ interface AuthenticationExtensionsClientInputs {
     credProps?: boolean;
     hmacCreateSecret?: boolean;
     minPinLength?: boolean;
+    prf?: AuthenticationExtensionsPRFInputs;
+}
+
+interface AuthenticationExtensionsClientInputsJSON {
 }
 
 interface AuthenticationExtensionsClientOutputs {
     appid?: boolean;
     credProps?: CredentialPropertiesOutput;
     hmacCreateSecret?: boolean;
+    prf?: AuthenticationExtensionsPRFOutputs;
+}
+
+interface AuthenticationExtensionsPRFInputs {
+    eval?: AuthenticationExtensionsPRFValues;
+    evalByCredential?: Record<string, AuthenticationExtensionsPRFValues>;
+}
+
+interface AuthenticationExtensionsPRFOutputs {
+    enabled?: boolean;
+    results?: AuthenticationExtensionsPRFValues;
+}
+
+interface AuthenticationExtensionsPRFValues {
+    first: BufferSource;
+    second?: BufferSource;
 }
 
 interface AuthenticatorSelectionCriteria {
@@ -190,6 +276,10 @@ interface CanvasRenderingContext2DSettings {
     willReadFrequently?: boolean;
 }
 
+interface CaretPositionFromPointOptions {
+    shadowRoots?: ShadowRoot[];
+}
+
 interface ChannelMergerOptions extends AudioNodeOptions {
     numberOfInputs?: number;
 }
@@ -201,6 +291,9 @@ interface ChannelSplitterOptions extends AudioNodeOptions {
 interface CheckVisibilityOptions {
     checkOpacity?: boolean;
     checkVisibilityCSS?: boolean;
+    contentVisibilityAuto?: boolean;
+    opacityProperty?: boolean;
+    visibilityProperty?: boolean;
 }
 
 interface ClientQueryOptions {
@@ -265,6 +358,10 @@ interface ConstrainDoubleRange extends DoubleRange {
 interface ConstrainULongRange extends ULongRange {
     exact?: number;
     ideal?: number;
+}
+
+interface ContentVisibilityAutoStateChangeEventInit extends EventInit {
+    skipped?: boolean;
 }
 
 interface ConvolverOptions extends AudioNodeOptions {
@@ -443,6 +540,18 @@ interface ElementDefinitionOptions {
     extends?: string;
 }
 
+interface EncodedAudioChunkInit {
+    data: AllowSharedBufferSource;
+    duration?: number;
+    timestamp: number;
+    transfer?: ArrayBuffer[];
+    type: EncodedAudioChunkType;
+}
+
+interface EncodedAudioChunkMetadata {
+    decoderConfig?: AudioDecoderConfig;
+}
+
 interface EncodedVideoChunkInit {
     data: AllowSharedBufferSource;
     duration?: number;
@@ -556,6 +665,8 @@ interface GainOptions extends AudioNodeOptions {
 
 interface GamepadEffectParameters {
     duration?: number;
+    leftTrigger?: number;
+    rightTrigger?: number;
     startDelay?: number;
     strongMagnitude?: number;
     weakMagnitude?: number;
@@ -567,6 +678,11 @@ interface GamepadEventInit extends EventInit {
 
 interface GetAnimationsOptions {
     subtree?: boolean;
+}
+
+interface GetHTMLOptions {
+    serializableShadowRoots?: boolean;
+    shadowRoots?: ShadowRoot[];
 }
 
 interface GetNotificationOptions {
@@ -658,26 +774,12 @@ interface ImageEncodeOptions {
     type?: string;
 }
 
-interface ImportMeta {
-    url: string;
-}
-
 interface InputEventInit extends UIEventInit {
     data?: string | null;
     dataTransfer?: DataTransfer | null;
     inputType?: string;
     isComposing?: boolean;
     targetRanges?: StaticRange[];
-}
-
-interface IntersectionObserverEntryInit {
-    boundingClientRect: DOMRectInit;
-    intersectionRatio: number;
-    intersectionRect: DOMRectInit;
-    isIntersecting: boolean;
-    rootBounds: DOMRectInit | null;
-    target: Element;
-    time: DOMHighResTimeStamp;
 }
 
 interface IntersectionObserverInit {
@@ -835,6 +937,10 @@ interface MediaKeySystemMediaCapability {
     robustness?: string;
 }
 
+interface MediaKeysPolicy {
+    minHdcpVersion?: string;
+}
+
 interface MediaMetadataInit {
     album?: string;
     artist?: string;
@@ -885,6 +991,7 @@ interface MediaStreamTrackEventInit extends EventInit {
 interface MediaTrackCapabilities {
     aspectRatio?: DoubleRange;
     autoGainControl?: boolean[];
+    backgroundBlur?: boolean[];
     channelCount?: ULongRange;
     deviceId?: string;
     displaySurface?: string;
@@ -902,6 +1009,7 @@ interface MediaTrackCapabilities {
 interface MediaTrackConstraintSet {
     aspectRatio?: ConstrainDouble;
     autoGainControl?: ConstrainBoolean;
+    backgroundBlur?: ConstrainBoolean;
     channelCount?: ConstrainULong;
     deviceId?: ConstrainDOMString;
     displaySurface?: ConstrainDOMString;
@@ -923,6 +1031,7 @@ interface MediaTrackConstraints extends MediaTrackConstraintSet {
 interface MediaTrackSettings {
     aspectRatio?: number;
     autoGainControl?: boolean;
+    backgroundBlur?: boolean;
     channelCount?: number;
     deviceId?: string;
     displaySurface?: string;
@@ -940,6 +1049,7 @@ interface MediaTrackSettings {
 interface MediaTrackSupportedConstraints {
     aspectRatio?: boolean;
     autoGainControl?: boolean;
+    backgroundBlur?: boolean;
     channelCount?: boolean;
     deviceId?: boolean;
     displaySurface?: boolean;
@@ -1034,6 +1144,15 @@ interface OptionalEffectTiming {
     playbackRate?: number;
 }
 
+interface OpusEncoderConfig {
+    complexity?: number;
+    format?: OpusBitstreamFormat;
+    frameDuration?: number;
+    packetlossperc?: number;
+    usedtx?: boolean;
+    useinbandfec?: boolean;
+}
+
 interface OscillatorOptions extends AudioNodeOptions {
     detune?: number;
     frequency?: number;
@@ -1062,6 +1181,12 @@ interface PannerOptions extends AudioNodeOptions {
     rolloffFactor?: number;
 }
 
+interface PayerErrors {
+    email?: string;
+    name?: string;
+    phone?: string;
+}
+
 interface PaymentCurrencyAmount {
     currency: string;
     value: string;
@@ -1070,6 +1195,7 @@ interface PaymentCurrencyAmount {
 interface PaymentDetailsBase {
     displayItems?: PaymentItem[];
     modifiers?: PaymentDetailsModifier[];
+    shippingOptions?: PaymentShippingOption[];
 }
 
 interface PaymentDetailsInit extends PaymentDetailsBase {
@@ -1085,7 +1211,9 @@ interface PaymentDetailsModifier {
 }
 
 interface PaymentDetailsUpdate extends PaymentDetailsBase {
+    error?: string;
     paymentMethodErrors?: any;
+    shippingAddressErrors?: AddressErrors;
     total?: PaymentItem;
 }
 
@@ -1105,12 +1233,28 @@ interface PaymentMethodData {
     supportedMethods: string;
 }
 
+interface PaymentOptions {
+    requestPayerEmail?: boolean;
+    requestPayerName?: boolean;
+    requestPayerPhone?: boolean;
+    requestShipping?: boolean;
+    shippingType?: PaymentShippingType;
+}
+
 interface PaymentRequestUpdateEventInit extends EventInit {
+}
+
+interface PaymentShippingOption {
+    amount: PaymentCurrencyAmount;
+    id: string;
+    label: string;
+    selected?: boolean;
 }
 
 interface PaymentValidationErrors {
     error?: string;
-    paymentMethod?: any;
+    payer?: PayerErrors;
+    shippingAddress?: AddressErrors;
 }
 
 interface Pbkdf2Params extends Algorithm {
@@ -1160,6 +1304,8 @@ interface PlaneLayout {
 }
 
 interface PointerEventInit extends MouseEventInit {
+    altitudeAngle?: number;
+    azimuthAngle?: number;
     coalescedEvents?: PointerEvent[];
     height?: number;
     isPrimary?: boolean;
@@ -1172,6 +1318,10 @@ interface PointerEventInit extends MouseEventInit {
     tiltY?: number;
     twist?: number;
     width?: number;
+}
+
+interface PointerLockOptions {
+    unadjustedMovement?: boolean;
 }
 
 interface PopStateEventInit extends EventInit {
@@ -1221,10 +1371,29 @@ interface PublicKeyCredentialCreationOptions {
     user: PublicKeyCredentialUserEntity;
 }
 
+interface PublicKeyCredentialCreationOptionsJSON {
+    attestation?: string;
+    authenticatorSelection?: AuthenticatorSelectionCriteria;
+    challenge: Base64URLString;
+    excludeCredentials?: PublicKeyCredentialDescriptorJSON[];
+    extensions?: AuthenticationExtensionsClientInputsJSON;
+    hints?: string[];
+    pubKeyCredParams: PublicKeyCredentialParameters[];
+    rp: PublicKeyCredentialRpEntity;
+    timeout?: number;
+    user: PublicKeyCredentialUserEntityJSON;
+}
+
 interface PublicKeyCredentialDescriptor {
     id: BufferSource;
     transports?: AuthenticatorTransport[];
     type: PublicKeyCredentialType;
+}
+
+interface PublicKeyCredentialDescriptorJSON {
+    id: Base64URLString;
+    transports?: string[];
+    type: string;
 }
 
 interface PublicKeyCredentialEntity {
@@ -1245,6 +1414,16 @@ interface PublicKeyCredentialRequestOptions {
     userVerification?: UserVerificationRequirement;
 }
 
+interface PublicKeyCredentialRequestOptionsJSON {
+    allowCredentials?: PublicKeyCredentialDescriptorJSON[];
+    challenge: Base64URLString;
+    extensions?: AuthenticationExtensionsClientInputsJSON;
+    hints?: string[];
+    rpId?: string;
+    timeout?: number;
+    userVerification?: string;
+}
+
 interface PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
     id?: string;
 }
@@ -1252,6 +1431,12 @@ interface PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
 interface PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
     displayName: string;
     id: BufferSource;
+}
+
+interface PublicKeyCredentialUserEntityJSON {
+    displayName: string;
+    id: Base64URLString;
+    name: string;
 }
 
 interface PushSubscriptionJSON {
@@ -1355,11 +1540,6 @@ interface RTCIceCandidateInit {
     sdpMLineIndex?: number | null;
     sdpMid?: string | null;
     usernameFragment?: string | null;
-}
-
-interface RTCIceCandidatePair {
-    local?: RTCIceCandidate;
-    remote?: RTCIceCandidate;
 }
 
 interface RTCIceCandidatePairStats extends RTCStats {
@@ -1493,7 +1673,7 @@ interface RTCRtcpParameters {
 }
 
 interface RTCRtpCapabilities {
-    codecs: RTCRtpCodecCapability[];
+    codecs: RTCRtpCodec[];
     headerExtensions: RTCRtpHeaderExtensionCapability[];
 }
 
@@ -1502,9 +1682,6 @@ interface RTCRtpCodec {
     clockRate: number;
     mimeType: string;
     sdpFmtpLine?: string;
-}
-
-interface RTCRtpCodecCapability extends RTCRtpCodec {
 }
 
 interface RTCRtpCodecParameters extends RTCRtpCodec {
@@ -1617,6 +1794,17 @@ interface ReadableStreamGetReaderOptions {
      * This call behaves the same way as the no-argument variant, except that it only works on readable byte streams, i.e. streams which were constructed specifically with the ability to handle "bring your own buffer" reading. The returned BYOB reader provides the ability to directly read individual chunks from the stream via its read() method, into developer-supplied buffers, allowing more precise control over allocation.
      */
     mode?: ReadableStreamReaderMode;
+}
+
+interface ReadableStreamIteratorOptions {
+    /**
+     * Asynchronously iterates over the chunks in the stream's internal queue.
+     *
+     * Asynchronously iterating over the stream will lock it, preventing any other consumer from acquiring a reader. The lock will be released if the async iterator's return() method is called, e.g. by breaking out of the loop.
+     *
+     * By default, calling the async iterator's return() method will also cancel the stream. To prevent this, use the stream's values() method, passing true for the preventCancel option.
+     */
+    preventCancel?: boolean;
 }
 
 interface ReadableStreamReadDoneResult<T> {
@@ -1750,21 +1938,22 @@ interface ScrollToOptions extends ScrollOptions {
 interface SecurityPolicyViolationEventInit extends EventInit {
     blockedURI?: string;
     columnNumber?: number;
-    disposition: SecurityPolicyViolationEventDisposition;
-    documentURI: string;
-    effectiveDirective: string;
+    disposition?: SecurityPolicyViolationEventDisposition;
+    documentURI?: string;
+    effectiveDirective?: string;
     lineNumber?: number;
-    originalPolicy: string;
+    originalPolicy?: string;
     referrer?: string;
     sample?: string;
     sourceFile?: string;
-    statusCode: number;
-    violatedDirective: string;
+    statusCode?: number;
+    violatedDirective?: string;
 }
 
 interface ShadowRootInit {
     delegatesFocus?: boolean;
     mode: ShadowRootMode;
+    serializable?: boolean;
     slotAssignment?: SlotAssignmentMode;
 }
 
@@ -1972,6 +2161,7 @@ interface VideoConfiguration {
     colorGamut?: ColorGamut;
     contentType: string;
     framerate: number;
+    hasAlphaChannel?: boolean;
     hdrMetadataType?: HdrMetadataType;
     height: number;
     scalabilityMode?: string;
@@ -2007,6 +2197,7 @@ interface VideoEncoderConfig {
     bitrate?: number;
     bitrateMode?: VideoEncoderBitrateMode;
     codec: string;
+    contentHint?: string;
     displayHeight?: number;
     displayWidth?: number;
     framerate?: number;
@@ -2018,7 +2209,12 @@ interface VideoEncoderConfig {
 }
 
 interface VideoEncoderEncodeOptions {
+    avc?: VideoEncoderEncodeOptionsForAvc;
     keyFrame?: boolean;
+}
+
+interface VideoEncoderEncodeOptionsForAvc {
+    quantizer?: number | null;
 }
 
 interface VideoEncoderInit {
@@ -2058,6 +2254,8 @@ interface VideoFrameCallbackMetadata {
 }
 
 interface VideoFrameCopyToOptions {
+    colorSpace?: PredefinedColorSpace;
+    format?: VideoPixelFormat;
     layout?: PlaneLayout[];
     rect?: DOMRectInit;
 }
@@ -2189,6 +2387,10 @@ interface ARIAMixin {
     ariaAtomic: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaAutoComplete) */
     ariaAutoComplete: string | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaBrailleLabel) */
+    ariaBrailleLabel: string | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaBrailleRoleDescription) */
+    ariaBrailleRoleDescription: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaBusy) */
     ariaBusy: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaChecked) */
@@ -2197,6 +2399,8 @@ interface ARIAMixin {
     ariaColCount: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaColIndex) */
     ariaColIndex: string | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaColIndexText) */
+    ariaColIndexText: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaColSpan) */
     ariaColSpan: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaCurrent) */
@@ -2244,6 +2448,8 @@ interface ARIAMixin {
     ariaRowCount: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaRowIndex) */
     ariaRowIndex: string | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaRowIndexText) */
+    ariaRowIndexText: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaRowSpan) */
     ariaRowSpan: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/ariaSelected) */
@@ -2321,6 +2527,8 @@ declare var AbortSignal: {
     new(): AbortSignal;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/abort_static) */
     abort(reason?: any): AbortSignal;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/any_static) */
+    any(signals: AbortSignal[]): AbortSignal;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/timeout_static) */
     timeout(milliseconds: number): AbortSignal;
 };
@@ -2418,7 +2626,7 @@ interface Animatable {
 interface AnimationEventMap {
     "cancel": AnimationPlaybackEvent;
     "finish": AnimationPlaybackEvent;
-    "remove": Event;
+    "remove": AnimationPlaybackEvent;
 }
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Animation) */
@@ -2436,7 +2644,7 @@ interface Animation extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Animation/finish_event) */
     onfinish: ((this: Animation, ev: AnimationPlaybackEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Animation/remove_event) */
-    onremove: ((this: Animation, ev: Event) => any) | null;
+    onremove: ((this: Animation, ev: AnimationPlaybackEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Animation/pending) */
     readonly pending: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Animation/playState) */
@@ -2668,6 +2876,74 @@ declare var AudioContext: {
     new(contextOptions?: AudioContextOptions): AudioContext;
 };
 
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData) */
+interface AudioData {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData/duration) */
+    readonly duration: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData/format) */
+    readonly format: AudioSampleFormat | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData/numberOfChannels) */
+    readonly numberOfChannels: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData/numberOfFrames) */
+    readonly numberOfFrames: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData/sampleRate) */
+    readonly sampleRate: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData/timestamp) */
+    readonly timestamp: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData/allocationSize) */
+    allocationSize(options: AudioDataCopyToOptions): number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData/clone) */
+    clone(): AudioData;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData/close) */
+    close(): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioData/copyTo) */
+    copyTo(destination: AllowSharedBufferSource, options: AudioDataCopyToOptions): void;
+}
+
+declare var AudioData: {
+    prototype: AudioData;
+    new(init: AudioDataInit): AudioData;
+};
+
+interface AudioDecoderEventMap {
+    "dequeue": Event;
+}
+
+/**
+ * Available only in secure contexts.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder)
+ */
+interface AudioDecoder extends EventTarget {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder/decodeQueueSize) */
+    readonly decodeQueueSize: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder/dequeue_event) */
+    ondequeue: ((this: AudioDecoder, ev: Event) => any) | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder/state) */
+    readonly state: CodecState;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder/close) */
+    close(): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder/configure) */
+    configure(config: AudioDecoderConfig): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder/decode) */
+    decode(chunk: EncodedAudioChunk): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder/flush) */
+    flush(): Promise<void>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder/reset) */
+    reset(): void;
+    addEventListener<K extends keyof AudioDecoderEventMap>(type: K, listener: (this: AudioDecoder, ev: AudioDecoderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof AudioDecoderEventMap>(type: K, listener: (this: AudioDecoder, ev: AudioDecoderEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var AudioDecoder: {
+    prototype: AudioDecoder;
+    new(init: AudioDecoderInit): AudioDecoder;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioDecoder/isConfigSupported_static) */
+    isConfigSupported(config: AudioDecoderConfig): Promise<AudioDecoderSupport>;
+};
+
 /**
  * AudioDestinationNode has no output (as it is the output, no more AudioNode can be linked after it in the audio graph) and one input. The number of channels in the input must be between 0 and the maxChannelCount value or an exception is raised.
  *
@@ -2681,6 +2957,45 @@ interface AudioDestinationNode extends AudioNode {
 declare var AudioDestinationNode: {
     prototype: AudioDestinationNode;
     new(): AudioDestinationNode;
+};
+
+interface AudioEncoderEventMap {
+    "dequeue": Event;
+}
+
+/**
+ * Available only in secure contexts.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder)
+ */
+interface AudioEncoder extends EventTarget {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder/encodeQueueSize) */
+    readonly encodeQueueSize: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder/dequeue_event) */
+    ondequeue: ((this: AudioEncoder, ev: Event) => any) | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder/state) */
+    readonly state: CodecState;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder/close) */
+    close(): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder/configure) */
+    configure(config: AudioEncoderConfig): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder/encode) */
+    encode(data: AudioData): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder/flush) */
+    flush(): Promise<void>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder/reset) */
+    reset(): void;
+    addEventListener<K extends keyof AudioEncoderEventMap>(type: K, listener: (this: AudioEncoder, ev: AudioEncoderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof AudioEncoderEventMap>(type: K, listener: (this: AudioEncoder, ev: AudioEncoderEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var AudioEncoder: {
+    prototype: AudioEncoder;
+    new(init: AudioEncoderInit): AudioEncoder;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioEncoder/isConfigSupported_static) */
+    isConfigSupported(config: AudioEncoderConfig): Promise<AudioEncoderSupport>;
 };
 
 /**
@@ -2768,7 +3083,6 @@ declare var AudioNode: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioParam)
  */
 interface AudioParam {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioParam/automationRate) */
     automationRate: AutomationRate;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioParam/defaultValue) */
     readonly defaultValue: number;
@@ -2879,7 +3193,7 @@ declare var AudioWorklet: {
 };
 
 interface AudioWorkletNodeEventMap {
-    "processorerror": Event;
+    "processorerror": ErrorEvent;
 }
 
 /**
@@ -2889,7 +3203,7 @@ interface AudioWorkletNodeEventMap {
  */
 interface AudioWorkletNode extends AudioNode {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioWorkletNode/processorerror_event) */
-    onprocessorerror: ((this: AudioWorkletNode, ev: Event) => any) | null;
+    onprocessorerror: ((this: AudioWorkletNode, ev: ErrorEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioWorkletNode/parameters) */
     readonly parameters: AudioParamMap;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioWorkletNode/port) */
@@ -3056,7 +3370,11 @@ declare var BaseAudioContext: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/BeforeUnloadEvent)
  */
 interface BeforeUnloadEvent extends Event {
-    /** @deprecated */
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/BeforeUnloadEvent/returnValue)
+     */
     returnValue: any;
 }
 
@@ -3102,6 +3420,8 @@ interface Blob {
     readonly type: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/arrayBuffer) */
     arrayBuffer(): Promise<ArrayBuffer>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/bytes) */
+    bytes(): Promise<Uint8Array>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/slice) */
     slice(start?: number, end?: number, contentType?: string): Blob;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Blob/stream) */
@@ -3137,6 +3457,8 @@ interface Body {
     arrayBuffer(): Promise<ArrayBuffer>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/blob) */
     blob(): Promise<Blob>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/bytes) */
+    bytes(): Promise<Uint8Array>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/formData) */
     formData(): Promise<FormData>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/json) */
@@ -3400,6 +3722,7 @@ declare var CSSKeyframeRule: {
 interface CSSKeyframesRule extends CSSRule {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSKeyframesRule/cssRules) */
     readonly cssRules: CSSRuleList;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSKeyframesRule/length) */
     readonly length: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSKeyframesRule/name) */
     name: string;
@@ -3770,6 +4093,19 @@ declare var CSSScale: {
     new(x: CSSNumberish, y: CSSNumberish, z?: CSSNumberish): CSSScale;
 };
 
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSScopeRule) */
+interface CSSScopeRule extends CSSGroupingRule {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSScopeRule/end) */
+    readonly end: string | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSScopeRule/start) */
+    readonly start: string | null;
+}
+
+declare var CSSScopeRule: {
+    prototype: CSSScopeRule;
+    new(): CSSScopeRule;
+};
+
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSSkew) */
 interface CSSSkew extends CSSTransformComponent {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSSkew/ax) */
@@ -3803,6 +4139,15 @@ interface CSSSkewY extends CSSTransformComponent {
 declare var CSSSkewY: {
     prototype: CSSSkewY;
     new(ay: CSSNumericValue): CSSSkewY;
+};
+
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStartingStyleRule) */
+interface CSSStartingStyleRule extends CSSGroupingRule {
+}
+
+declare var CSSStartingStyleRule: {
+    prototype: CSSStartingStyleRule;
+    new(): CSSStartingStyleRule;
 };
 
 /**
@@ -3875,7 +4220,6 @@ interface CSSStyleDeclaration {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/background-size) */
     backgroundSize: string;
     baselineShift: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/baseline-source) */
     baselineSource: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/block-size) */
     blockSize: string;
@@ -4027,10 +4371,13 @@ interface CSSStyleDeclaration {
     clip: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/clip-path) */
     clipPath: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/clip-rule) */
     clipRule: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/color) */
     color: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/color-interpolation) */
     colorInterpolation: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/color-interpolation-filters) */
     colorInterpolationFilters: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/color-scheme) */
     colorScheme: string;
@@ -4056,11 +4403,11 @@ interface CSSStyleDeclaration {
     columns: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/contain) */
     contain: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/contain-intrinsic-contain-intrinsic-block-size) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/contain-intrinsic-block-size) */
     containIntrinsicBlockSize: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/contain-intrinsic-height) */
     containIntrinsicHeight: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/contain-intrinsic-contain-intrinsic-inline-size) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/contain-intrinsic-inline-size) */
     containIntrinsicInlineSize: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/contain-intrinsic-size) */
     containIntrinsicSize: string;
@@ -4074,6 +4421,8 @@ interface CSSStyleDeclaration {
     containerType: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/content) */
     content: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/content-visibility) */
+    contentVisibility: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/counter-increment) */
     counterIncrement: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/counter-reset) */
@@ -4086,18 +4435,25 @@ interface CSSStyleDeclaration {
     cssText: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/cursor) */
     cursor: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/cx) */
     cx: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/cy) */
     cy: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/d) */
     d: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/direction) */
     direction: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/display) */
     display: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/dominant-baseline) */
     dominantBaseline: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/empty-cells) */
     emptyCells: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/fill) */
     fill: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/fill-opacity) */
     fillOpacity: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/fill-rule) */
     fillRule: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/filter) */
     filter: string;
@@ -4284,9 +4640,13 @@ interface CSSStyleDeclaration {
     marginRight: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/margin-top) */
     marginTop: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/marker) */
     marker: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/marker-end) */
     markerEnd: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/marker-mid) */
     markerMid: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/marker-start) */
     markerStart: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/mask) */
     mask: string;
@@ -4436,6 +4796,7 @@ interface CSSStyleDeclaration {
     printColorAdjust: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/quotes) */
     quotes: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/r) */
     r: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/resize) */
     resize: string;
@@ -4445,9 +4806,13 @@ interface CSSStyleDeclaration {
     rotate: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/row-gap) */
     rowGap: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/ruby-align) */
+    rubyAlign: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/ruby-position) */
     rubyPosition: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/rx) */
     rx: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/ry) */
     ry: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/scale) */
     scale: string;
@@ -4515,16 +4880,27 @@ interface CSSStyleDeclaration {
     shapeMargin: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/shape-outside) */
     shapeOutside: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/shape-rendering) */
     shapeRendering: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/stop-color) */
     stopColor: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/stop-opacity) */
     stopOpacity: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/stroke) */
     stroke: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/stroke-dasharray) */
     strokeDasharray: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/stroke-dashoffset) */
     strokeDashoffset: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/stroke-linecap) */
     strokeLinecap: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/stroke-linejoin) */
     strokeLinejoin: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/stroke-miterlimit) */
     strokeMiterlimit: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/stroke-opacity) */
     strokeOpacity: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/stroke-width) */
     strokeWidth: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/tab-size) */
     tabSize: string;
@@ -4534,6 +4910,7 @@ interface CSSStyleDeclaration {
     textAlign: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/text-align-last) */
     textAlignLast: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/text-anchor) */
     textAnchor: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/text-combine-upright) */
     textCombineUpright: string;
@@ -4575,6 +4952,10 @@ interface CSSStyleDeclaration {
     textUnderlinePosition: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/text-wrap) */
     textWrap: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/text-wrap-mode) */
+    textWrapMode: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/text-wrap-style) */
+    textWrapStyle: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/top) */
     top: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/touch-action) */
@@ -4589,6 +4970,8 @@ interface CSSStyleDeclaration {
     transformStyle: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/transition) */
     transition: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/transition-behavior) */
+    transitionBehavior: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/transition-delay) */
     transitionDelay: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/transition-duration) */
@@ -4603,9 +4986,12 @@ interface CSSStyleDeclaration {
     unicodeBidi: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/user-select) */
     userSelect: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/vector-effect) */
     vectorEffect: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/vertical-align) */
     verticalAlign: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/view-transition-name) */
+    viewTransitionName: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/visibility) */
     visibility: string;
     /**
@@ -4836,7 +5222,11 @@ interface CSSStyleDeclaration {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/justify-content)
      */
     webkitJustifyContent: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/-webkit-line-clamp) */
+    /**
+     * @deprecated This is a legacy alias of `lineClamp`.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/-webkit-line-clamp)
+     */
     webkitLineClamp: string;
     /**
      * @deprecated This is a legacy alias of `mask`.
@@ -5010,6 +5400,8 @@ interface CSSStyleDeclaration {
     webkitUserSelect: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/white-space) */
     whiteSpace: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/white-space-collapse) */
+    whiteSpaceCollapse: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/widows) */
     widows: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/width) */
@@ -5024,10 +5416,14 @@ interface CSSStyleDeclaration {
     wordWrap: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/writing-mode) */
     writingMode: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/x) */
     x: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/y) */
     y: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/z-index) */
     zIndex: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/CSS/zoom) */
+    zoom: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleDeclaration/getPropertyPriority) */
     getPropertyPriority(property: string): string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleDeclaration/getPropertyValue) */
@@ -5494,6 +5890,8 @@ interface CanvasShadowStyles {
 }
 
 interface CanvasState {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/isContextLost) */
+    isContextLost(): boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/reset) */
     reset(): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/restore) */
@@ -5557,6 +5955,18 @@ interface CanvasUserInterface {
     drawFocusIfNeeded(element: Element): void;
     drawFocusIfNeeded(path: Path2D, element: Element): void;
 }
+
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CaretPosition) */
+interface CaretPosition {
+    readonly offset: number;
+    readonly offsetNode: Node;
+    getClientRect(): DOMRect | null;
+}
+
+declare var CaretPosition: {
+    prototype: CaretPosition;
+    new(): CaretPosition;
+};
 
 /**
  * The ChannelMergerNode interface, often used in conjunction with its opposite, ChannelSplitterNode, reunites different mono inputs into a single output. Each input is used to fill a channel of the output. This is useful for accessing each channels separately, e.g. for performing channel mixing where gain must be separately controlled on each channel.
@@ -5691,6 +6101,8 @@ declare var ClipboardEvent: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ClipboardItem)
  */
 interface ClipboardItem {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ClipboardItem/presentationStyle) */
+    readonly presentationStyle: PresentationStyle;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ClipboardItem/types) */
     readonly types: ReadonlyArray<string>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ClipboardItem/getType) */
@@ -5700,6 +6112,8 @@ interface ClipboardItem {
 declare var ClipboardItem: {
     prototype: ClipboardItem;
     new(items: Record<string, string | Blob | PromiseLike<string | Blob>>, options?: ClipboardItemOptions): ClipboardItem;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ClipboardItem/supports_static) */
+    supports(type: string): boolean;
 };
 
 /**
@@ -5769,6 +6183,8 @@ declare var CompositionEvent: {
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CompressionStream) */
 interface CompressionStream extends GenericTransformStream {
+    readonly readable: ReadableStream<Uint8Array>;
+    readonly writable: WritableStream<BufferSource>;
 }
 
 declare var CompressionStream: {
@@ -5789,6 +6205,17 @@ interface ConstantSourceNode extends AudioScheduledSourceNode {
 declare var ConstantSourceNode: {
     prototype: ConstantSourceNode;
     new(context: BaseAudioContext, options?: ConstantSourceOptions): ConstantSourceNode;
+};
+
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContentVisibilityAutoStateChangeEvent) */
+interface ContentVisibilityAutoStateChangeEvent extends Event {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContentVisibilityAutoStateChangeEvent/skipped) */
+    readonly skipped: boolean;
+}
+
+declare var ContentVisibilityAutoStateChangeEvent: {
+    prototype: ContentVisibilityAutoStateChangeEvent;
+    new(type: string, eventInitDict?: ContentVisibilityAutoStateChangeEventInit): ContentVisibilityAutoStateChangeEvent;
 };
 
 /**
@@ -5952,6 +6379,16 @@ declare var CustomEvent: {
     new<T>(type: string, eventInitDict?: CustomEventInit<T>): CustomEvent<T>;
 };
 
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CustomStateSet) */
+interface CustomStateSet {
+    forEach(callbackfn: (value: string, key: string, parent: CustomStateSet) => void, thisArg?: any): void;
+}
+
+declare var CustomStateSet: {
+    prototype: CustomStateSet;
+    new(): CustomStateSet;
+};
+
 /**
  * An abnormal event (called an exception) which occurs as a result of calling a method or accessing a property of a web API.
  *
@@ -6052,27 +6489,49 @@ declare var DOMImplementation: {
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix) */
 interface DOMMatrix extends DOMMatrixReadOnly {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     a: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     b: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     c: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     d: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     e: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     f: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m11: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m12: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m13: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m14: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m21: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m22: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m23: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m24: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m31: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m32: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m33: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m34: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m41: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m42: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m43: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix#instance_properties) */
     m44: number;
     invertSelf(): DOMMatrix;
     multiplySelf(other?: DOMMatrixInit): DOMMatrix;
@@ -6080,9 +6539,7 @@ interface DOMMatrix extends DOMMatrixReadOnly {
     rotateAxisAngleSelf(x?: number, y?: number, z?: number, angle?: number): DOMMatrix;
     rotateFromVectorSelf(x?: number, y?: number): DOMMatrix;
     rotateSelf(rotX?: number, rotY?: number, rotZ?: number): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix/scale3dSelf) */
     scale3dSelf(scale?: number, originX?: number, originY?: number, originZ?: number): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrix/scaleSelf) */
     scaleSelf(scaleX?: number, scaleY?: number, scaleZ?: number, originX?: number, originY?: number, originZ?: number): DOMMatrix;
     setMatrixValue(transformList: string): DOMMatrix;
     skewXSelf(sx?: number): DOMMatrix;
@@ -6106,88 +6563,70 @@ declare var WebKitCSSMatrix: typeof DOMMatrix;
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly) */
 interface DOMMatrixReadOnly {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/a) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly a: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/b) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly b: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/c) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly c: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/d) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly d: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/e) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly e: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/f) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly f: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/is2D) */
     readonly is2D: boolean;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/isIdentity) */
     readonly isIdentity: boolean;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m11) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m11: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m12) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m12: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m13) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m13: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m14) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m14: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m21) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m21: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m22) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m22: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m23) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m23: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m24) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m24: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m31) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m31: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m32) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m32: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m33) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m33: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m34) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m34: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m41) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m41: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m42) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m42: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m43) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m43: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/m44) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly#instance_properties) */
     readonly m44: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/flipX) */
     flipX(): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/flipY) */
     flipY(): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/inverse) */
     inverse(): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/multiply) */
     multiply(other?: DOMMatrixInit): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/rotate) */
     rotate(rotX?: number, rotY?: number, rotZ?: number): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/rotateAxisAngle) */
     rotateAxisAngle(x?: number, y?: number, z?: number, angle?: number): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/rotateFromVector) */
     rotateFromVector(x?: number, y?: number): DOMMatrix;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/scale) */
     scale(scaleX?: number, scaleY?: number, scaleZ?: number, originX?: number, originY?: number, originZ?: number): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/scale3d) */
     scale3d(scale?: number, originX?: number, originY?: number, originZ?: number): DOMMatrix;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/scaleNonUniform)
-     */
+    /** @deprecated */
     scaleNonUniform(scaleX?: number, scaleY?: number): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/skewX) */
     skewX(sx?: number): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/skewY) */
     skewY(sy?: number): DOMMatrix;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/toFloat32Array) */
     toFloat32Array(): Float32Array;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/toFloat64Array) */
     toFloat64Array(): Float64Array;
     toJSON(): any;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/transformPoint) */
     transformPoint(point?: DOMPointInit): DOMPoint;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMMatrixReadOnly/translate) */
     translate(tx?: number, ty?: number, tz?: number): DOMMatrix;
@@ -6259,7 +6698,6 @@ interface DOMPointReadOnly {
     readonly y: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMPointReadOnly/z) */
     readonly z: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMPointReadOnly/matrixTransform) */
     matrixTransform(matrix?: DOMMatrixInit): DOMPoint;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMPointReadOnly/toJSON) */
     toJSON(): any;
@@ -6274,15 +6712,10 @@ declare var DOMPointReadOnly: {
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMQuad) */
 interface DOMQuad {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMQuad/p1) */
     readonly p1: DOMPoint;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMQuad/p2) */
     readonly p2: DOMPoint;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMQuad/p3) */
     readonly p3: DOMPoint;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMQuad/p4) */
     readonly p4: DOMPoint;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMQuad/getBounds) */
     getBounds(): DOMRect;
     toJSON(): any;
 }
@@ -6305,6 +6738,7 @@ interface DOMRect extends DOMRectReadOnly {
 declare var DOMRect: {
     prototype: DOMRect;
     new(x?: number, y?: number, width?: number, height?: number): DOMRect;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMRect/fromRect_static) */
     fromRect(other?: DOMRectInit): DOMRect;
 };
 
@@ -6645,6 +7079,8 @@ declare var DataTransferItemList: {
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DecompressionStream) */
 interface DecompressionStream extends GenericTransformStream {
+    readonly readable: ReadableStream<Uint8Array>;
+    readonly writable: WritableStream<BufferSource>;
 }
 
 declare var DecompressionStream: {
@@ -6907,6 +7343,8 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/forms)
      */
     readonly forms: HTMLCollectionOf<HTMLFormElement>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/fragmentDirective) */
+    readonly fragmentDirective: FragmentDirective;
     /**
      * @deprecated
      *
@@ -7049,12 +7487,10 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/adoptNode)
      */
     adoptNode<T extends Node>(node: T): T;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/captureEvents)
-     */
+    /** @deprecated */
     captureEvents(): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/caretPositionFromPoint) */
+    caretPositionFromPoint(x: number, y: number, options?: CaretPositionFromPointOptions): CaretPosition | null;
     /** @deprecated */
     caretRangeFromPoint(x: number, y: number): Range | null;
     /**
@@ -7140,6 +7576,7 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
     createEvent(eventInterface: "ClipboardEvent"): ClipboardEvent;
     createEvent(eventInterface: "CloseEvent"): CloseEvent;
     createEvent(eventInterface: "CompositionEvent"): CompositionEvent;
+    createEvent(eventInterface: "ContentVisibilityAutoStateChangeEvent"): ContentVisibilityAutoStateChangeEvent;
     createEvent(eventInterface: "CustomEvent"): CustomEvent;
     createEvent(eventInterface: "DeviceMotionEvent"): DeviceMotionEvent;
     createEvent(eventInterface: "DeviceOrientationEvent"): DeviceOrientationEvent;
@@ -7164,8 +7601,6 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
     createEvent(eventInterface: "MessageEvent"): MessageEvent;
     createEvent(eventInterface: "MouseEvent"): MouseEvent;
     createEvent(eventInterface: "MouseEvents"): MouseEvent;
-    createEvent(eventInterface: "MutationEvent"): MutationEvent;
-    createEvent(eventInterface: "MutationEvents"): MutationEvent;
     createEvent(eventInterface: "OfflineAudioCompletionEvent"): OfflineAudioCompletionEvent;
     createEvent(eventInterface: "PageTransitionEvent"): PageTransitionEvent;
     createEvent(eventInterface: "PaymentMethodChangeEvent"): PaymentMethodChangeEvent;
@@ -7186,6 +7621,7 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
     createEvent(eventInterface: "SpeechSynthesisEvent"): SpeechSynthesisEvent;
     createEvent(eventInterface: "StorageEvent"): StorageEvent;
     createEvent(eventInterface: "SubmitEvent"): SubmitEvent;
+    createEvent(eventInterface: "TextEvent"): TextEvent;
     createEvent(eventInterface: "ToggleEvent"): ToggleEvent;
     createEvent(eventInterface: "TouchEvent"): TouchEvent;
     createEvent(eventInterface: "TrackEvent"): TrackEvent;
@@ -7342,8 +7778,6 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
      * Returns a Boolean value that indicates whether the specified command is in the indeterminate state.
      * @param commandId String that specifies a command identifier.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/queryCommandIndeterm)
      */
     queryCommandIndeterm(commandId: string): boolean;
     /**
@@ -7366,18 +7800,14 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
      * Returns the current value of the document, range, or current selection for the given command.
      * @param commandId String that specifies a command identifier.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/queryCommandValue)
      */
     queryCommandValue(commandId: string): string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/releaseEvents)
-     */
+    /** @deprecated */
     releaseEvents(): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/requestStorageAccess) */
     requestStorageAccess(): Promise<void>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/startViewTransition) */
+    startViewTransition(callbackOptions?: ViewTransitionUpdateCallback): ViewTransition;
     /**
      * Writes one or more HTML expressions to a document in the specified window.
      * @param content Specifies the text and HTML tags to write.
@@ -7401,6 +7831,8 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
 declare var Document: {
     prototype: Document;
     new(): Document;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/parseHTMLUnsafe_static) */
+    parseHTMLUnsafe(html: string): Document;
 };
 
 /**
@@ -7621,7 +8053,7 @@ interface ElementEventMap {
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element)
  */
-interface Element extends Node, ARIAMixin, Animatable, ChildNode, InnerHTML, NonDocumentTypeChildNode, ParentNode, Slottable {
+interface Element extends Node, ARIAMixin, Animatable, ChildNode, NonDocumentTypeChildNode, ParentNode, Slottable {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/attributes) */
     readonly attributes: NamedNodeMap;
     /**
@@ -7644,12 +8076,16 @@ interface Element extends Node, ARIAMixin, Animatable, ChildNode, InnerHTML, Non
     readonly clientTop: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/clientWidth) */
     readonly clientWidth: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/currentCSSZoom) */
+    readonly currentCSSZoom: number;
     /**
      * Returns the value of element's id content attribute. Can be set to change it.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/id)
      */
     id: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/innerHTML) */
+    innerHTML: string;
     /**
      * Returns the local name.
      *
@@ -7766,6 +8202,8 @@ interface Element extends Node, ARIAMixin, Animatable, ChildNode, InnerHTML, Non
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1998/Math/MathML", localName: string): HTMLCollectionOf<MathMLElement>;
     getElementsByTagNameNS(namespace: string | null, localName: string): HTMLCollectionOf<Element>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/getHTML) */
+    getHTML(options?: GetHTMLOptions): string;
     /**
      * Returns true if element has an attribute whose qualified name is qualifiedName, and false otherwise.
      *
@@ -7789,7 +8227,7 @@ interface Element extends Node, ARIAMixin, Animatable, ChildNode, InnerHTML, Non
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/insertAdjacentElement) */
     insertAdjacentElement(where: InsertPosition, element: Element): Element | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/insertAdjacentHTML) */
-    insertAdjacentHTML(position: InsertPosition, text: string): void;
+    insertAdjacentHTML(position: InsertPosition, string: string): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/insertAdjacentText) */
     insertAdjacentText(where: InsertPosition, data: string): void;
     /**
@@ -7823,7 +8261,7 @@ interface Element extends Node, ARIAMixin, Animatable, ChildNode, InnerHTML, Non
      */
     requestFullscreen(options?: FullscreenOptions): Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/requestPointerLock) */
-    requestPointerLock(): void;
+    requestPointerLock(options?: PointerLockOptions): Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/scroll) */
     scroll(options?: ScrollToOptions): void;
     scroll(x: number, y: number): void;
@@ -7851,6 +8289,8 @@ interface Element extends Node, ARIAMixin, Animatable, ChildNode, InnerHTML, Non
     setAttributeNode(attr: Attr): Attr | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/setAttributeNodeNS) */
     setAttributeNodeNS(attr: Attr): Attr | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/setHTMLUnsafe) */
+    setHTMLUnsafe(html: string): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/setPointerCapture) */
     setPointerCapture(pointerId: number): void;
     /**
@@ -7879,6 +8319,7 @@ declare var Element: {
 };
 
 interface ElementCSSInlineStyle {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/attributeStyleMap) */
     readonly attributeStyleMap: StylePropertyMap;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/style) */
     readonly style: CSSStyleDeclaration;
@@ -7915,6 +8356,8 @@ interface ElementInternals extends ARIAMixin {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ElementInternals/shadowRoot)
      */
     readonly shadowRoot: ShadowRoot | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ElementInternals/states) */
+    readonly states: CustomStateSet;
     /**
      * Returns the error message that would be shown to the user if internals's target element was to be checked for validity.
      *
@@ -7966,6 +8409,25 @@ declare var ElementInternals: {
     new(): ElementInternals;
 };
 
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/EncodedAudioChunk) */
+interface EncodedAudioChunk {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/EncodedAudioChunk/byteLength) */
+    readonly byteLength: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/EncodedAudioChunk/duration) */
+    readonly duration: number | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/EncodedAudioChunk/timestamp) */
+    readonly timestamp: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/EncodedAudioChunk/type) */
+    readonly type: EncodedAudioChunkType;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/EncodedAudioChunk/copyTo) */
+    copyTo(destination: AllowSharedBufferSource): void;
+}
+
+declare var EncodedAudioChunk: {
+    prototype: EncodedAudioChunk;
+    new(init: EncodedAudioChunkInit): EncodedAudioChunk;
+};
+
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/EncodedVideoChunk) */
 interface EncodedVideoChunk {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/EncodedVideoChunk/byteLength) */
@@ -7991,15 +8453,10 @@ declare var EncodedVideoChunk: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ErrorEvent)
  */
 interface ErrorEvent extends Event {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ErrorEvent/colno) */
     readonly colno: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ErrorEvent/error) */
     readonly error: any;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ErrorEvent/filename) */
     readonly filename: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ErrorEvent/lineno) */
     readonly lineno: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ErrorEvent/message) */
     readonly message: string;
 }
 
@@ -8255,23 +8712,11 @@ declare var EventTarget: {
     new(): EventTarget;
 };
 
-/**
- * @deprecated
- *
- * [MDN Reference](https://developer.mozilla.org/docs/Web/API/External)
- */
+/** @deprecated */
 interface External {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/External/AddSearchProvider)
-     */
+    /** @deprecated */
     AddSearchProvider(): void;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/External/IsSearchProviderInstalled)
-     */
+    /** @deprecated */
     IsSearchProviderInstalled(): void;
 }
 
@@ -8578,23 +9023,23 @@ interface FontFace {
 
 declare var FontFace: {
     prototype: FontFace;
-    new(family: string, source: string | BinaryData, descriptors?: FontFaceDescriptors): FontFace;
+    new(family: string, source: string | BufferSource, descriptors?: FontFaceDescriptors): FontFace;
 };
 
 interface FontFaceSetEventMap {
-    "loading": Event;
-    "loadingdone": Event;
-    "loadingerror": Event;
+    "loading": FontFaceSetLoadEvent;
+    "loadingdone": FontFaceSetLoadEvent;
+    "loadingerror": FontFaceSetLoadEvent;
 }
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet) */
 interface FontFaceSet extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/loading_event) */
-    onloading: ((this: FontFaceSet, ev: Event) => any) | null;
+    onloading: ((this: FontFaceSet, ev: FontFaceSetLoadEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/loadingdone_event) */
-    onloadingdone: ((this: FontFaceSet, ev: Event) => any) | null;
+    onloadingdone: ((this: FontFaceSet, ev: FontFaceSetLoadEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/loadingerror_event) */
-    onloadingerror: ((this: FontFaceSet, ev: Event) => any) | null;
+    onloadingerror: ((this: FontFaceSet, ev: FontFaceSetLoadEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/ready) */
     readonly ready: Promise<FontFaceSet>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSet/status) */
@@ -8612,7 +9057,7 @@ interface FontFaceSet extends EventTarget {
 
 declare var FontFaceSet: {
     prototype: FontFaceSet;
-    new(initialFaces: FontFace[]): FontFaceSet;
+    new(): FontFaceSet;
 };
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FontFaceSetLoadEvent) */
@@ -8676,6 +9121,15 @@ declare var FormDataEvent: {
     new(type: string, eventInitDict: FormDataEventInit): FormDataEvent;
 };
 
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FragmentDirective) */
+interface FragmentDirective {
+}
+
+declare var FragmentDirective: {
+    prototype: FragmentDirective;
+    new(): FragmentDirective;
+};
+
 /**
  * A change in volume. It is an AudioNode audio-processing module that causes a given gain to be applied to the input data before its propagation to the output. A GainNode always has exactly one input and one output, both with the same number of channels.
  *
@@ -8693,7 +9147,6 @@ declare var GainNode: {
 
 /**
  * This Gamepad API interface defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id.
- * Available only in secure contexts.
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Gamepad)
  */
@@ -8712,7 +9165,8 @@ interface Gamepad {
     readonly mapping: GamepadMappingType;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Gamepad/timestamp) */
     readonly timestamp: DOMHighResTimeStamp;
-    readonly vibrationActuator: GamepadHapticActuator | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Gamepad/vibrationActuator) */
+    readonly vibrationActuator: GamepadHapticActuator;
 }
 
 declare var Gamepad: {
@@ -8722,7 +9176,6 @@ declare var Gamepad: {
 
 /**
  * An individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device.
- * Available only in secure contexts.
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GamepadButton)
  */
@@ -8742,7 +9195,6 @@ declare var GamepadButton: {
 
 /**
  * This Gamepad API interface contains references to gamepads connected to the system, which is what the gamepad events Window.gamepadconnected and Window.gamepaddisconnected are fired in response to.
- * Available only in secure contexts.
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GamepadEvent)
  */
@@ -8762,9 +9214,9 @@ declare var GamepadEvent: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GamepadHapticActuator)
  */
 interface GamepadHapticActuator {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GamepadHapticActuator/type) */
-    readonly type: GamepadHapticActuatorType;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GamepadHapticActuator/playEffect) */
     playEffect(type: GamepadHapticEffectType, params?: GamepadEffectParameters): Promise<GamepadHapticsResult>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GamepadHapticActuator/reset) */
     reset(): Promise<GamepadHapticsResult>;
 }
 
@@ -8819,6 +9271,8 @@ interface GeolocationCoordinates {
     readonly longitude: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GeolocationCoordinates/speed) */
     readonly speed: number | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GeolocationCoordinates/toJSON) */
+    toJSON(): any;
 }
 
 declare var GeolocationCoordinates: {
@@ -8836,6 +9290,8 @@ interface GeolocationPosition {
     readonly coords: GeolocationCoordinates;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GeolocationPosition/timestamp) */
     readonly timestamp: EpochTimeStamp;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GeolocationPosition/toJSON) */
+    toJSON(): any;
 }
 
 declare var GeolocationPosition: {
@@ -8881,7 +9337,9 @@ interface GlobalEventHandlersEventMap {
     "compositionend": CompositionEvent;
     "compositionstart": CompositionEvent;
     "compositionupdate": CompositionEvent;
+    "contextlost": Event;
     "contextmenu": MouseEvent;
+    "contextrestored": Event;
     "copy": ClipboardEvent;
     "cuechange": Event;
     "cut": ClipboardEvent;
@@ -8995,7 +9453,7 @@ interface GlobalEventHandlers {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/blur_event)
      */
     onblur: ((this: GlobalEventHandlers, ev: FocusEvent) => any) | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDialogElement/cancel_event) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/cancel_event) */
     oncancel: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     /**
      * Occurs when playback is possible, but would require further buffering.
@@ -9022,6 +9480,8 @@ interface GlobalEventHandlers {
     onclick: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDialogElement/close_event) */
     onclose: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLCanvasElement/webglcontextlost_event) */
+    oncontextlost: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     /**
      * Fires when the user clicks the right mouse button in the client area, opening the context menu.
      * @param ev The mouse event.
@@ -9029,6 +9489,8 @@ interface GlobalEventHandlers {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/contextmenu_event)
      */
     oncontextmenu: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLCanvasElement/contextrestored_event) */
+    oncontextrestored: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/copy_event) */
     oncopy: ((this: GlobalEventHandlers, ev: ClipboardEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTrackElement/cuechange_event) */
@@ -9179,7 +9641,7 @@ interface GlobalEventHandlers {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/loadstart_event)
      */
     onloadstart: ((this: GlobalEventHandlers, ev: Event) => any) | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/lostpointercapture_event) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/lostpointercapture_event) */
     onlostpointercapture: ((this: GlobalEventHandlers, ev: PointerEvent) => any) | null;
     /**
      * Fires when the user clicks the object with either mouse button.
@@ -9448,15 +9910,11 @@ interface HTMLAnchorElement extends HTMLElement, HTMLHyperlinkElementUtils {
     /**
      * Sets or retrieves the character set used to encode the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAnchorElement/charset)
      */
     charset: string;
     /**
      * Sets or retrieves the coordinates of the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAnchorElement/coords)
      */
     coords: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAnchorElement/download) */
@@ -9470,10 +9928,9 @@ interface HTMLAnchorElement extends HTMLElement, HTMLHyperlinkElementUtils {
     /**
      * Sets or retrieves the shape of the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAnchorElement/name)
      */
     name: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAnchorElement/ping) */
     ping: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAnchorElement/referrerPolicy) */
     referrerPolicy: string;
@@ -9488,15 +9945,11 @@ interface HTMLAnchorElement extends HTMLElement, HTMLHyperlinkElementUtils {
     /**
      * Sets or retrieves the relationship between the object and the destination of the link.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAnchorElement/rev)
      */
     rev: string;
     /**
      * Sets or retrieves the shape of the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAnchorElement/shape)
      */
     shape: string;
     /**
@@ -9530,27 +9983,17 @@ declare var HTMLAnchorElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAreaElement)
  */
 interface HTMLAreaElement extends HTMLElement, HTMLHyperlinkElementUtils {
-    /**
-     * Sets or retrieves a text alternative to the graphic.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAreaElement/alt)
-     */
+    /** Sets or retrieves a text alternative to the graphic. */
     alt: string;
-    /**
-     * Sets or retrieves the coordinates of the object.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAreaElement/coords)
-     */
+    /** Sets or retrieves the coordinates of the object. */
     coords: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAreaElement/download) */
     download: string;
     /**
      * Sets or gets whether clicks in this region cause action.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAreaElement/noHref)
      */
     noHref: boolean;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAreaElement/ping) */
     ping: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAreaElement/referrerPolicy) */
     referrerPolicy: string;
@@ -9558,11 +10001,7 @@ interface HTMLAreaElement extends HTMLElement, HTMLHyperlinkElementUtils {
     rel: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAreaElement/relList) */
     readonly relList: DOMTokenList;
-    /**
-     * Sets or retrieves the shape of the object.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLAreaElement/shape)
-     */
+    /** Sets or retrieves the shape of the object. */
     shape: string;
     /**
      * Sets or retrieves the window or frame at which to target content.
@@ -9607,8 +10046,6 @@ interface HTMLBRElement extends HTMLElement {
     /**
      * Sets or retrieves the side on which floating objects are not to be positioned when any IHTMLBlockElement is inserted into the document.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLBRElement/clear)
      */
     clear: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLBRElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -9660,41 +10097,17 @@ interface HTMLBodyElementEventMap extends HTMLElementEventMap, WindowEventHandle
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLBodyElement)
  */
 interface HTMLBodyElement extends HTMLElement, WindowEventHandlers {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLBodyElement/aLink)
-     */
+    /** @deprecated */
     aLink: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLBodyElement/background)
-     */
+    /** @deprecated */
     background: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLBodyElement/bgColor)
-     */
+    /** @deprecated */
     bgColor: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLBodyElement/link)
-     */
+    /** @deprecated */
     link: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLBodyElement/text)
-     */
+    /** @deprecated */
     text: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLBodyElement/vLink)
-     */
+    /** @deprecated */
     vLink: string;
     addEventListener<K extends keyof HTMLBodyElementEventMap>(type: K, listener: (this: HTMLBodyElement, ev: HTMLBodyElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -9721,35 +10134,15 @@ interface HTMLButtonElement extends HTMLElement, PopoverInvokerElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement/form)
      */
     readonly form: HTMLFormElement | null;
-    /**
-     * Overrides the action attribute (where the data on a form is sent) on the parent form element.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement/formAction)
-     */
+    /** Overrides the action attribute (where the data on a form is sent) on the parent form element. */
     formAction: string;
-    /**
-     * Used to override the encoding (formEnctype attribute) specified on the form element.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement/formEnctype)
-     */
+    /** Used to override the encoding (formEnctype attribute) specified on the form element. */
     formEnctype: string;
-    /**
-     * Overrides the submit method attribute previously specified on a form element.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement/formMethod)
-     */
+    /** Overrides the submit method attribute previously specified on a form element. */
     formMethod: string;
-    /**
-     * Overrides any validation or required attributes on a form or form elements to allow it to be submitted without validation. This can be used to create a "save draft"-type submit option.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement/formNoValidate)
-     */
+    /** Overrides any validation or required attributes on a form or form elements to allow it to be submitted without validation. This can be used to create a "save draft"-type submit option. */
     formNoValidate: boolean;
-    /**
-     * Overrides the target attribute on a form element.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement/formTarget)
-     */
+    /** Overrides the target attribute on a form element. */
     formTarget: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement/labels) */
     readonly labels: NodeListOf<HTMLLabelElement>;
@@ -9789,13 +10182,19 @@ interface HTMLButtonElement extends HTMLElement, PopoverInvokerElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement/willValidate)
      */
     readonly willValidate: boolean;
-    /** Returns whether a form will validate when it is submitted, without having to submit it. */
+    /**
+     * Returns whether a form will validate when it is submitted, without having to submit it.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement/checkValidity)
+     */
     checkValidity(): boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement/reportValidity) */
     reportValidity(): boolean;
     /**
      * Sets a custom error message that is displayed when a form is submitted.
      * @param error Sets a custom error message that is displayed when a form is submitted.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLButtonElement/setCustomValidity)
      */
     setCustomValidity(error: string): void;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLButtonElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -9909,11 +10308,7 @@ interface HTMLCollectionOf<T extends Element> extends HTMLCollectionBase {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDListElement)
  */
 interface HTMLDListElement extends HTMLElement {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDListElement/compact)
-     */
+    /** @deprecated */
     compact: boolean;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDListElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -9970,6 +10365,7 @@ declare var HTMLDataListElement: {
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDetailsElement) */
 interface HTMLDetailsElement extends HTMLElement {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDetailsElement/open) */
     name: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDetailsElement/open) */
     open: boolean;
@@ -10042,8 +10438,6 @@ interface HTMLDivElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDivElement/align)
      */
     align: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDivElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -10084,6 +10478,7 @@ interface HTMLElement extends Element, ElementCSSInlineStyle, ElementContentEdit
     accessKey: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/accessKeyLabel) */
     readonly accessKeyLabel: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/autocapitalize) */
     autocapitalize: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/dir) */
     dir: string;
@@ -10117,6 +10512,7 @@ interface HTMLElement extends Element, ElementCSSInlineStyle, ElementContentEdit
     title: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/translate) */
     translate: boolean;
+    writingSuggestions: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/attachInternals) */
     attachInternals(): ElementInternals;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/click) */
@@ -10146,17 +10542,29 @@ declare var HTMLElement: {
 interface HTMLEmbedElement extends HTMLElement {
     /** @deprecated */
     align: string;
-    /** Sets or retrieves the height of the object. */
+    /**
+     * Sets or retrieves the height of the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLEmbedElement/height)
+     */
     height: string;
     /**
      * Sets or retrieves the name of the object.
      * @deprecated
      */
     name: string;
-    /** Sets or retrieves a URL to be loaded by the object. */
+    /**
+     * Sets or retrieves a URL to be loaded by the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLEmbedElement/src)
+     */
     src: string;
     type: string;
-    /** Sets or retrieves the width of the object. */
+    /**
+     * Sets or retrieves the width of the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLEmbedElement/width)
+     */
     width: string;
     getSVGDocument(): Document | null;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLEmbedElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -10216,13 +10624,19 @@ interface HTMLFieldSetElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFieldSetElement/willValidate)
      */
     readonly willValidate: boolean;
-    /** Returns whether a form will validate when it is submitted, without having to submit it. */
+    /**
+     * Returns whether a form will validate when it is submitted, without having to submit it.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFieldSetElement/checkValidity)
+     */
     checkValidity(): boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFieldSetElement/reportValidity) */
     reportValidity(): boolean;
     /**
      * Sets a custom error message that is displayed when a form is submitted.
      * @param error Sets a custom error message that is displayed when a form is submitted.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFieldSetElement/setCustomValidity)
      */
     setCustomValidity(error: string): void;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLFieldSetElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -10313,11 +10727,7 @@ interface HTMLFormElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFormElement/action)
      */
     action: string;
-    /**
-     * Specifies whether autocomplete is applied to an editable text field.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFormElement/autocomplete)
-     */
+    /** Specifies whether autocomplete is applied to an editable text field. */
     autocomplete: AutoFillBase;
     /**
      * Retrieves a collection, in source order, of all controls in a given form.
@@ -10355,11 +10765,7 @@ interface HTMLFormElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFormElement/name)
      */
     name: string;
-    /**
-     * Designates a form that is not validated when submitted.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFormElement/noValidate)
-     */
+    /** Designates a form that is not validated when submitted. */
     noValidate: boolean;
     rel: string;
     readonly relList: DOMTokenList;
@@ -10404,80 +10810,56 @@ declare var HTMLFormElement: {
     new(): HTMLFormElement;
 };
 
-/**
- * @deprecated
- *
- * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameElement)
- */
+/** @deprecated */
 interface HTMLFrameElement extends HTMLElement {
     /**
      * Retrieves the document object of the page or frame.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameElement/contentDocument)
      */
     readonly contentDocument: Document | null;
     /**
      * Retrieves the object of the specified.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameElement/contentWindow)
      */
     readonly contentWindow: WindowProxy | null;
     /**
      * Sets or retrieves whether to display a border for the frame.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameElement/frameBorder)
      */
     frameBorder: string;
     /**
      * Sets or retrieves a URI to a long description of the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameElement/longDesc)
      */
     longDesc: string;
     /**
      * Sets or retrieves the top and bottom margin heights before displaying the text in a frame.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameElement/marginHeight)
      */
     marginHeight: string;
     /**
      * Sets or retrieves the left and right margin widths before displaying the text in a frame.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameElement/marginWidth)
      */
     marginWidth: string;
     /**
      * Sets or retrieves the frame name.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameElement/name)
      */
     name: string;
     /**
      * Sets or retrieves whether the user can resize the frame.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameElement/noResize)
      */
     noResize: boolean;
     /**
      * Sets or retrieves whether the frame can be scrolled.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameElement/scrolling)
      */
     scrolling: string;
     /**
      * Sets or retrieves a URL to be loaded by the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLFrameElement/src)
      */
     src: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLFrameElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -10586,8 +10968,6 @@ interface HTMLHeadingElement extends HTMLElement {
     /**
      * Sets or retrieves a value that indicates the table alignment.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLHeadingElement/align)
      */
     align: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLHeadingElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -10724,11 +11104,11 @@ interface HTMLIFrameElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/align)
      */
     align: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/allow) */
     allow: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/allowFullscreen) */
     allowFullscreen: boolean;
     /**
      * Retrieves the document object of the page or frame.
@@ -10745,8 +11125,6 @@ interface HTMLIFrameElement extends HTMLElement {
     /**
      * Sets or retrieves whether to display a border for the frame.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/frameBorder)
      */
     frameBorder: string;
     /**
@@ -10755,26 +11133,21 @@ interface HTMLIFrameElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/height)
      */
     height: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/loading) */
     loading: string;
     /**
      * Sets or retrieves a URI to a long description of the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/longDesc)
      */
     longDesc: string;
     /**
      * Sets or retrieves the top and bottom margin heights before displaying the text in a frame.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/marginHeight)
      */
     marginHeight: string;
     /**
      * Sets or retrieves the left and right margin widths before displaying the text in a frame.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/marginWidth)
      */
     marginWidth: string;
     /**
@@ -10785,12 +11158,11 @@ interface HTMLIFrameElement extends HTMLElement {
     name: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/referrerPolicy) */
     referrerPolicy: ReferrerPolicy;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/sandbox) */
     readonly sandbox: DOMTokenList;
     /**
      * Sets or retrieves whether the frame can be scrolled.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLIFrameElement/scrolling)
      */
     scrolling: string;
     /**
@@ -10895,11 +11267,7 @@ interface HTMLImageElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/longDesc)
      */
     longDesc: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/lowsrc)
-     */
+    /** @deprecated */
     lowsrc: string;
     /**
      * Sets or retrieves the name of the object.
@@ -10974,14 +11342,22 @@ declare var HTMLImageElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement)
  */
 interface HTMLInputElement extends HTMLElement, PopoverInvokerElement {
-    /** Sets or retrieves a comma-separated list of content types. */
+    /**
+     * Sets or retrieves a comma-separated list of content types.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/accept)
+     */
     accept: string;
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
      * @deprecated
      */
     align: string;
-    /** Sets or retrieves a text alternative to the graphic. */
+    /**
+     * Sets or retrieves a text alternative to the graphic.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/alt)
+     */
     alt: string;
     /**
      * Specifies whether autocomplete is applied to an editable text field.
@@ -10989,12 +11365,25 @@ interface HTMLInputElement extends HTMLElement, PopoverInvokerElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/autocomplete)
      */
     autocomplete: AutoFill;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/capture) */
     capture: string;
-    /** Sets or retrieves the state of the check box or radio button. */
+    /**
+     * Sets or retrieves the state of the check box or radio button.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/checked)
+     */
     checked: boolean;
-    /** Sets or retrieves the state of the check box or radio button. */
+    /**
+     * Sets or retrieves the state of the check box or radio button.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/defaultChecked)
+     */
     defaultChecked: boolean;
-    /** Sets or retrieves the initial contents of the object. */
+    /**
+     * Sets or retrieves the initial contents of the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/defaultValue)
+     */
     defaultValue: string;
     dirName: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/disabled) */
@@ -11005,37 +11394,21 @@ interface HTMLInputElement extends HTMLElement, PopoverInvokerElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/files)
      */
     files: FileList | null;
-    /** Retrieves a reference to the form that the object is embedded in. */
+    /**
+     * Retrieves a reference to the form that the object is embedded in.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/form)
+     */
     readonly form: HTMLFormElement | null;
-    /**
-     * Overrides the action attribute (where the data on a form is sent) on the parent form element.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/formAction)
-     */
+    /** Overrides the action attribute (where the data on a form is sent) on the parent form element. */
     formAction: string;
-    /**
-     * Used to override the encoding (formEnctype attribute) specified on the form element.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/formEnctype)
-     */
+    /** Used to override the encoding (formEnctype attribute) specified on the form element. */
     formEnctype: string;
-    /**
-     * Overrides the submit method attribute previously specified on a form element.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/formMethod)
-     */
+    /** Overrides the submit method attribute previously specified on a form element. */
     formMethod: string;
-    /**
-     * Overrides any validation or required attributes on a form or form elements to allow it to be submitted without validation. This can be used to create a "save draft"-type submit option.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/formNoValidate)
-     */
+    /** Overrides any validation or required attributes on a form or form elements to allow it to be submitted without validation. This can be used to create a "save draft"-type submit option. */
     formNoValidate: boolean;
-    /**
-     * Overrides the target attribute on a form element.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/formTarget)
-     */
+    /** Overrides the target attribute on a form element. */
     formTarget: string;
     /**
      * Sets or retrieves the height of the object.
@@ -11043,7 +11416,11 @@ interface HTMLInputElement extends HTMLElement, PopoverInvokerElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/height)
      */
     height: number;
-    /** When set, overrides the rendering of checkbox controls so that the current value is not visible. */
+    /**
+     * When set, overrides the rendering of checkbox controls so that the current value is not visible.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/indeterminate)
+     */
     indeterminate: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/labels) */
     readonly labels: NodeListOf<HTMLLabelElement> | null;
@@ -11053,12 +11430,25 @@ interface HTMLInputElement extends HTMLElement, PopoverInvokerElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/list)
      */
     readonly list: HTMLDataListElement | null;
-    /** Defines the maximum acceptable value for an input element with type="number".When used with the min and step attributes, lets you control the range and increment (such as only even numbers) that the user can enter into an input field. */
+    /**
+     * Defines the maximum acceptable value for an input element with type="number".When used with the min and step attributes, lets you control the range and increment (such as only even numbers) that the user can enter into an input field.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/max)
+     */
     max: string;
-    /** Sets or retrieves the maximum number of characters that the user can enter in a text control. */
+    /**
+     * Sets or retrieves the maximum number of characters that the user can enter in a text control.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/maxLength)
+     */
     maxLength: number;
-    /** Defines the minimum acceptable value for an input element with type="number". When used with the max and step attributes, lets you control the range and increment (such as even numbers only) that the user can enter into an input field. */
+    /**
+     * Defines the minimum acceptable value for an input element with type="number". When used with the max and step attributes, lets you control the range and increment (such as even numbers only) that the user can enter into an input field.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/min)
+     */
     min: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/minLength) */
     minLength: number;
     /**
      * Sets or retrieves the Boolean value indicating whether multiple items can be selected from a list.
@@ -11066,7 +11456,11 @@ interface HTMLInputElement extends HTMLElement, PopoverInvokerElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/multiple)
      */
     multiple: boolean;
-    /** Sets or retrieves the name of the object. */
+    /**
+     * Sets or retrieves the name of the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/name)
+     */
     name: string;
     /**
      * Gets or sets a string containing a regular expression that the user's input must match.
@@ -11080,6 +11474,7 @@ interface HTMLInputElement extends HTMLElement, PopoverInvokerElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/placeholder)
      */
     placeholder: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/readOnly) */
     readOnly: boolean;
     /**
      * When present, marks an element that can't be submitted without a value.
@@ -11089,16 +11484,37 @@ interface HTMLInputElement extends HTMLElement, PopoverInvokerElement {
     required: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/selectionDirection) */
     selectionDirection: "forward" | "backward" | "none" | null;
-    /** Gets or sets the end position or offset of a text selection. */
+    /**
+     * Gets or sets the end position or offset of a text selection.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/selectionEnd)
+     */
     selectionEnd: number | null;
-    /** Gets or sets the starting position or offset of a text selection. */
+    /**
+     * Gets or sets the starting position or offset of a text selection.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/selectionStart)
+     */
     selectionStart: number | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/size) */
     size: number;
-    /** The address or URL of the a media resource that is to be considered. */
+    /**
+     * The address or URL of the a media resource that is to be considered.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/src)
+     */
     src: string;
-    /** Defines an increment or jump between values that you want to allow the user to enter. When used with the max and min attributes, lets you control the range and increment (for example, allow only even numbers) that the user can enter into an input field. */
+    /**
+     * Defines an increment or jump between values that you want to allow the user to enter. When used with the max and min attributes, lets you control the range and increment (for example, allow only even numbers) that the user can enter into an input field.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/step)
+     */
     step: string;
-    /** Returns the content type of the object. */
+    /**
+     * Returns the content type of the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/type)
+     */
     type: string;
     /**
      * Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map.
@@ -11117,11 +11533,23 @@ interface HTMLInputElement extends HTMLElement, PopoverInvokerElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/validity)
      */
     readonly validity: ValidityState;
-    /** Returns the value of the data at the cursor's current position. */
+    /**
+     * Returns the value of the data at the cursor's current position.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/value)
+     */
     value: string;
-    /** Returns a Date object representing the form control's value, if applicable; otherwise, returns null. Can be set, to change the value. Throws an "InvalidStateError" DOMException if the control isn't date- or time-based. */
+    /**
+     * Returns a Date object representing the form control's value, if applicable; otherwise, returns null. Can be set, to change the value. Throws an "InvalidStateError" DOMException if the control isn't date- or time-based.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/valueAsDate)
+     */
     valueAsDate: Date | null;
-    /** Returns the input field value as a number. */
+    /**
+     * Returns the input field value as a number.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/valueAsNumber)
+     */
     valueAsNumber: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLInputElement/webkitEntries) */
     readonly webkitEntries: ReadonlyArray<FileSystemEntry>;
@@ -11263,7 +11691,11 @@ declare var HTMLLabelElement: {
 interface HTMLLegendElement extends HTMLElement {
     /** @deprecated */
     align: string;
-    /** Retrieves a reference to the form that the object is embedded in. */
+    /**
+     * Retrieves a reference to the form that the object is embedded in.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLegendElement/form)
+     */
     readonly form: HTMLFormElement | null;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLegendElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -11291,6 +11723,7 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
     charset: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/crossOrigin) */
     crossOrigin: string | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/disabled) */
     disabled: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/fetchPriority) */
     fetchPriority: string;
@@ -11308,8 +11741,13 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
     hreflang: string;
     imageSizes: string;
     imageSrcset: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/integrity) */
     integrity: string;
-    /** Sets or retrieves the media type. */
+    /**
+     * Sets or retrieves the media type.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/media)
+     */
     media: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/referrerPolicy) */
     referrerPolicy: string;
@@ -11326,14 +11764,17 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
      * @deprecated
      */
     rev: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/sizes) */
     readonly sizes: DOMTokenList;
     /**
      * Sets or retrieves the window or frame at which to target content.
      * @deprecated
      */
     target: string;
-    /** Sets or retrieves the MIME type of the object. */
+    /**
+     * Sets or retrieves the MIME type of the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLLinkElement/type)
+     */
     type: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLinkElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -11517,7 +11958,6 @@ interface HTMLMediaElement extends HTMLElement {
     readonly networkState: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/encrypted_event) */
     onencrypted: ((this: HTMLMediaElement, ev: MediaEncryptedEvent) => any) | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/waitingforkey_event) */
     onwaitingforkey: ((this: HTMLMediaElement, ev: Event) => any) | null;
     /**
      * Gets a flag that specifies whether playback is paused.
@@ -11531,11 +11971,7 @@ interface HTMLMediaElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/playbackRate)
      */
     playbackRate: number;
-    /**
-     * Gets TimeRanges for the current media resource that has been played.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/played)
-     */
+    /** Gets TimeRanges for the current media resource that has been played. */
     readonly played: TimeRanges;
     /**
      * Gets or sets a value indicating what data should be preloaded, if any.
@@ -11555,11 +11991,7 @@ interface HTMLMediaElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/seekable)
      */
     readonly seekable: TimeRanges;
-    /**
-     * Gets a flag that indicates whether the client is currently moving to a new playback position in the media resource.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/seeking)
-     */
+    /** Gets a flag that indicates whether the client is currently moving to a new playback position in the media resource. */
     readonly seeking: boolean;
     /**
      * Available only in secure contexts.
@@ -11583,7 +12015,6 @@ interface HTMLMediaElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/volume)
      */
     volume: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/addTextTrack) */
     addTextTrack(kind: TextTrackKind, label?: string, language?: string): TextTrack;
     /**
      * Returns a string that specifies whether the client can play a given media resource type.
@@ -11654,11 +12085,7 @@ declare var HTMLMediaElement: {
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMenuElement) */
 interface HTMLMenuElement extends HTMLElement {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMenuElement/compact)
-     */
+    /** @deprecated */
     compact: boolean;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLMenuElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -11677,16 +12104,31 @@ declare var HTMLMenuElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMetaElement)
  */
 interface HTMLMetaElement extends HTMLElement {
-    /** Gets or sets meta-information to associate with httpEquiv or name. */
+    /**
+     * Gets or sets meta-information to associate with httpEquiv or name.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMetaElement/content)
+     */
     content: string;
-    /** Gets or sets information used to bind the value of a content attribute of a meta element to an HTTP response header. */
+    /**
+     * Gets or sets information used to bind the value of a content attribute of a meta element to an HTTP response header.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMetaElement/httpEquiv)
+     */
     httpEquiv: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMetaElement/media) */
     media: string;
-    /** Sets or retrieves the value specified in the content attribute of the meta object. */
+    /**
+     * Sets or retrieves the value specified in the content attribute of the meta object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMetaElement/name)
+     */
     name: string;
     /**
      * Sets or retrieves a scheme to be used in interpreting the value of a property specified for the object.
      * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMetaElement/scheme)
      */
     scheme: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLMetaElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -11737,17 +12179,9 @@ declare var HTMLMeterElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLModElement)
  */
 interface HTMLModElement extends HTMLElement {
-    /**
-     * Sets or retrieves reference information about the object.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLModElement/cite)
-     */
+    /** Sets or retrieves reference information about the object. */
     cite: string;
-    /**
-     * Sets or retrieves the date and time of a modification to the object.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLModElement/dateTime)
-     */
+    /** Sets or retrieves the date and time of a modification to the object. */
     dateTime: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLModElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -11766,11 +12200,7 @@ declare var HTMLModElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOListElement)
  */
 interface HTMLOListElement extends HTMLElement {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOListElement/compact)
-     */
+    /** @deprecated */
     compact: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOListElement/reversed) */
     reversed: boolean;
@@ -11799,44 +12229,28 @@ declare var HTMLOListElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement)
  */
 interface HTMLObjectElement extends HTMLElement {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/align)
-     */
+    /** @deprecated */
     align: string;
     /**
      * Sets or retrieves a character string that can be used to implement your own archive functionality for the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/archive)
      */
     archive: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/border)
-     */
+    /** @deprecated */
     border: string;
     /**
      * Sets or retrieves the URL of the file containing the compiled Java class.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/code)
      */
     code: string;
     /**
      * Sets or retrieves the URL of the component.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/codeBase)
      */
     codeBase: string;
     /**
      * Sets or retrieves the Internet media type for the code associated with the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/codeType)
      */
     codeType: string;
     /**
@@ -11853,11 +12267,7 @@ interface HTMLObjectElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/data)
      */
     data: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/declare)
-     */
+    /** @deprecated */
     declare: boolean;
     /**
      * Retrieves a reference to the form that the object is embedded in.
@@ -11871,11 +12281,7 @@ interface HTMLObjectElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/height)
      */
     height: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/hspace)
-     */
+    /** @deprecated */
     hspace: number;
     /**
      * Sets or retrieves the name of the object.
@@ -11886,8 +12292,6 @@ interface HTMLObjectElement extends HTMLElement {
     /**
      * Sets or retrieves a message to be displayed while an object is loading.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/standby)
      */
     standby: string;
     /**
@@ -11898,6 +12302,7 @@ interface HTMLObjectElement extends HTMLElement {
     type: string;
     /**
      * Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map.
+     * @deprecated
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/useMap)
      */
@@ -11914,11 +12319,7 @@ interface HTMLObjectElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/validity)
      */
     readonly validity: ValidityState;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/vspace)
-     */
+    /** @deprecated */
     vspace: number;
     /**
      * Sets or retrieves the width of the object.
@@ -11938,7 +12339,6 @@ interface HTMLObjectElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/checkValidity)
      */
     checkValidity(): boolean;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/getSVGDocument) */
     getSVGDocument(): Document | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLObjectElement/reportValidity) */
     reportValidity(): boolean;
@@ -12058,16 +12458,12 @@ interface HTMLOptionsCollection extends HTMLCollectionOf<HTMLOptionElement> {
      * When set to a smaller number, truncates the number of option elements in the corresponding container.
      *
      * When set to a greater number, adds new blank option elements to that container.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOptionsCollection/length)
      */
     length: number;
     /**
      * Returns the index of the first selected item, if any, or −1 if there is no selected item.
      *
      * Can be set, to change the selection.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOptionsCollection/selectedIndex)
      */
     selectedIndex: number;
     /**
@@ -12078,15 +12474,9 @@ interface HTMLOptionsCollection extends HTMLCollectionOf<HTMLOptionElement> {
      * If before is omitted, null, or a number out of range, then element will be added at the end of the list.
      *
      * This method will throw a "HierarchyRequestError" DOMException if element is an ancestor of the element into which it is to be inserted.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOptionsCollection/add)
      */
     add(element: HTMLOptionElement | HTMLOptGroupElement, before?: HTMLElement | number | null): void;
-    /**
-     * Removes the item with index index from the collection.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOptionsCollection/remove)
-     */
+    /** Removes the item with index index from the collection. */
     remove(index: number): void;
 }
 
@@ -12116,11 +12506,9 @@ interface HTMLOrSVGElement {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOutputElement)
  */
 interface HTMLOutputElement extends HTMLElement {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOutputElement/defaultValue) */
     defaultValue: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOutputElement/form) */
     readonly form: HTMLFormElement | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOutputElement/htmlFor) */
     readonly htmlFor: DOMTokenList;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLOutputElement/labels) */
     readonly labels: NodeListOf<HTMLLabelElement>;
@@ -12172,8 +12560,6 @@ interface HTMLParagraphElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLParagraphElement/align)
      */
     align: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLParagraphElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -12197,29 +12583,21 @@ interface HTMLParamElement extends HTMLElement {
     /**
      * Sets or retrieves the name of an input parameter for an element.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLParamElement/name)
      */
     name: string;
     /**
      * Sets or retrieves the content type of the resource designated by the value attribute.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLParamElement/type)
      */
     type: string;
     /**
      * Sets or retrieves the value of an input parameter for an element.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLParamElement/value)
      */
     value: string;
     /**
      * Sets or retrieves the data type of the value attribute.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLParamElement/valueType)
      */
     valueType: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLParamElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -12260,8 +12638,6 @@ interface HTMLPreElement extends HTMLElement {
     /**
      * Sets or gets a value that you can use to implement your own width functionality for the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLPreElement/width)
      */
     width: number;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLPreElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -12318,11 +12694,7 @@ declare var HTMLProgressElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLQuoteElement)
  */
 interface HTMLQuoteElement extends HTMLElement {
-    /**
-     * Sets or retrieves reference information about the object.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLQuoteElement/cite)
-     */
+    /** Sets or retrieves reference information about the object. */
     cite: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLQuoteElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -12341,6 +12713,7 @@ declare var HTMLQuoteElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement)
  */
 interface HTMLScriptElement extends HTMLElement {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/async) */
     async: boolean;
     /**
      * Sets or retrieves the character set used to encode the object.
@@ -12349,28 +12722,47 @@ interface HTMLScriptElement extends HTMLElement {
     charset: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/crossOrigin) */
     crossOrigin: string | null;
-    /** Sets or retrieves the status of the script. */
+    /**
+     * Sets or retrieves the status of the script.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/defer)
+     */
     defer: boolean;
     /**
      * Sets or retrieves the event for which the script is written.
      * @deprecated
      */
     event: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/fetchPriority) */
     fetchPriority: string;
     /**
      * Sets or retrieves the object that is bound to the event script.
      * @deprecated
      */
     htmlFor: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/integrity) */
     integrity: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/noModule) */
     noModule: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/referrerPolicy) */
     referrerPolicy: string;
-    /** Retrieves the URL to an external file that contains the source code or data. */
+    /**
+     * Retrieves the URL to an external file that contains the source code or data.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/src)
+     */
     src: string;
-    /** Retrieves or sets the text of the object as a string. */
+    /**
+     * Retrieves or sets the text of the object as a string.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/text)
+     */
     text: string;
-    /** Sets or retrieves the MIME type for the associated scripting engine. */
+    /**
+     * Sets or retrieves the MIME type for the associated scripting engine.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLScriptElement/type)
+     */
     type: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLScriptElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -12391,7 +12783,6 @@ declare var HTMLScriptElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSelectElement)
  */
 interface HTMLSelectElement extends HTMLElement {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSelectElement/autocomplete) */
     autocomplete: AutoFill;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSelectElement/disabled) */
     disabled: boolean;
@@ -12452,7 +12843,7 @@ interface HTMLSelectElement extends HTMLElement {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSelectElement/type)
      */
-    readonly type: string;
+    readonly type: "select-one" | "select-multiple";
     /**
      * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
      *
@@ -12564,29 +12955,17 @@ declare var HTMLSlotElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSourceElement)
  */
 interface HTMLSourceElement extends HTMLElement {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSourceElement/height) */
     height: number;
-    /**
-     * Gets or sets the intended media type of the media source.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSourceElement/media)
-     */
+    /** Gets or sets the intended media type of the media source. */
     media: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSourceElement/sizes) */
     sizes: string;
-    /**
-     * The address or URL of the a media resource that is to be considered.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSourceElement/src)
-     */
+    /** The address or URL of the a media resource that is to be considered. */
     src: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSourceElement/srcset) */
     srcset: string;
-    /**
-     * Gets or sets the MIME type of a media resource.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSourceElement/type)
-     */
+    /** Gets or sets the MIME type of a media resource. */
     type: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLSourceElement/width) */
     width: number;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLSourceElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -12698,8 +13077,6 @@ interface HTMLTableCellElement extends HTMLElement {
     /**
      * Sets or retrieves a comma-delimited list of conceptual categories associated with the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/axis)
      */
     axis: string;
     /**
@@ -12741,8 +13118,6 @@ interface HTMLTableCellElement extends HTMLElement {
     /**
      * Sets or retrieves the height of the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/height)
      */
     height: string;
     /**
@@ -12773,8 +13148,6 @@ interface HTMLTableCellElement extends HTMLElement {
     /**
      * Sets or retrieves the width of the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/width)
      */
     width: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableCellElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -12828,8 +13201,6 @@ interface HTMLTableColElement extends HTMLElement {
     /**
      * Sets or retrieves the width of the object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableColElement/width)
      */
     width: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableColElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -13178,7 +13549,14 @@ interface HTMLTemplateElement extends HTMLElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTemplateElement/content)
      */
     readonly content: DocumentFragment;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTemplateElement/shadowRootClonable) */
+    shadowRootClonable: boolean;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTemplateElement/shadowRootDelegatesFocus) */
+    shadowRootDelegatesFocus: boolean;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTemplateElement/shadowRootMode) */
     shadowRootMode: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTemplateElement/shadowRootSerializable) */
+    shadowRootSerializable: boolean;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTemplateElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTemplateElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -13198,59 +13576,141 @@ declare var HTMLTemplateElement: {
 interface HTMLTextAreaElement extends HTMLElement {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/autocomplete) */
     autocomplete: AutoFill;
-    /** Sets or retrieves the width of the object. */
+    /**
+     * Sets or retrieves the width of the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/cols)
+     */
     cols: number;
-    /** Sets or retrieves the initial contents of the object. */
+    /**
+     * Sets or retrieves the initial contents of the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/defaultValue)
+     */
     defaultValue: string;
     dirName: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/disabled) */
     disabled: boolean;
-    /** Retrieves a reference to the form that the object is embedded in. */
+    /**
+     * Retrieves a reference to the form that the object is embedded in.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/form)
+     */
     readonly form: HTMLFormElement | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/labels) */
     readonly labels: NodeListOf<HTMLLabelElement>;
-    /** Sets or retrieves the maximum number of characters that the user can enter in a text control. */
+    /**
+     * Sets or retrieves the maximum number of characters that the user can enter in a text control.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/maxLength)
+     */
     maxLength: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/minLength) */
     minLength: number;
-    /** Sets or retrieves the name of the object. */
+    /**
+     * Sets or retrieves the name of the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/name)
+     */
     name: string;
-    /** Gets or sets a text string that is displayed in an input field as a hint or prompt to users as the format or type of information they need to enter.The text appears in an input field until the user puts focus on the field. */
+    /**
+     * Gets or sets a text string that is displayed in an input field as a hint or prompt to users as the format or type of information they need to enter.The text appears in an input field until the user puts focus on the field.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/placeholder)
+     */
     placeholder: string;
-    /** Sets or retrieves the value indicated whether the content of the object is read-only. */
+    /**
+     * Sets or retrieves the value indicated whether the content of the object is read-only.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/readOnly)
+     */
     readOnly: boolean;
-    /** When present, marks an element that can't be submitted without a value. */
+    /**
+     * When present, marks an element that can't be submitted without a value.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/required)
+     */
     required: boolean;
-    /** Sets or retrieves the number of horizontal rows contained in the object. */
+    /**
+     * Sets or retrieves the number of horizontal rows contained in the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/rows)
+     */
     rows: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/selectionDirection) */
     selectionDirection: "forward" | "backward" | "none";
-    /** Gets or sets the end position or offset of a text selection. */
+    /**
+     * Gets or sets the end position or offset of a text selection.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/selectionEnd)
+     */
     selectionEnd: number;
-    /** Gets or sets the starting position or offset of a text selection. */
+    /**
+     * Gets or sets the starting position or offset of a text selection.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/selectionStart)
+     */
     selectionStart: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/textLength) */
     readonly textLength: number;
-    /** Retrieves the type of control. */
+    /**
+     * Retrieves the type of control.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/type)
+     */
     readonly type: string;
-    /** Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting. */
+    /**
+     * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/validationMessage)
+     */
     readonly validationMessage: string;
-    /** Returns a  ValidityState object that represents the validity states of an element. */
+    /**
+     * Returns a  ValidityState object that represents the validity states of an element.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/validity)
+     */
     readonly validity: ValidityState;
-    /** Retrieves or sets the text in the entry field of the textArea element. */
+    /**
+     * Retrieves or sets the text in the entry field of the textArea element.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/value)
+     */
     value: string;
-    /** Returns whether an element will successfully validate based on forms validation rules and constraints. */
+    /**
+     * Returns whether an element will successfully validate based on forms validation rules and constraints.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/willValidate)
+     */
     readonly willValidate: boolean;
-    /** Sets or retrieves how to handle wordwrapping in the object. */
+    /**
+     * Sets or retrieves how to handle wordwrapping in the object.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/wrap)
+     */
     wrap: string;
-    /** Returns whether a form will validate when it is submitted, without having to submit it. */
+    /**
+     * Returns whether a form will validate when it is submitted, without having to submit it.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/checkValidity)
+     */
     checkValidity(): boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/reportValidity) */
     reportValidity(): boolean;
-    /** Highlights the input area of a form element. */
+    /**
+     * Highlights the input area of a form element.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/select)
+     */
     select(): void;
     /**
      * Sets a custom error message that is displayed when a form is submitted.
      * @param error Sets a custom error message that is displayed when a form is submitted.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/setCustomValidity)
      */
     setCustomValidity(error: string): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/setRangeText) */
     setRangeText(replacement: string): void;
     setRangeText(replacement: string, start: number, end: number, selectionMode?: SelectionMode): void;
     /**
@@ -13258,6 +13718,8 @@ interface HTMLTextAreaElement extends HTMLElement {
      * @param start The offset into the text field for the start of the selection.
      * @param end The offset into the text field for the end of the selection.
      * @param direction The direction in which the selection is performed.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTextAreaElement/setSelectionRange)
      */
     setSelectionRange(start: number | null, end: number | null, direction?: "forward" | "backward" | "none"): void;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTextAreaElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -13319,23 +13781,14 @@ declare var HTMLTitleElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTrackElement)
  */
 interface HTMLTrackElement extends HTMLElement {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTrackElement/default) */
     default: boolean;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTrackElement/kind) */
     kind: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTrackElement/label) */
     label: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTrackElement/readyState) */
     readonly readyState: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTrackElement/src) */
     src: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTrackElement/srclang) */
     srclang: string;
-    /**
-     * Returns the TextTrack object corresponding to the text track of the track element.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTrackElement/track)
-     */
+    /** Returns the TextTrack object corresponding to the text track of the track element. */
     readonly track: TextTrack;
     readonly NONE: 0;
     readonly LOADING: 1;
@@ -13362,17 +13815,9 @@ declare var HTMLTrackElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLUListElement)
  */
 interface HTMLUListElement extends HTMLElement {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLUListElement/compact)
-     */
+    /** @deprecated */
     compact: boolean;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLUListElement/type)
-     */
+    /** @deprecated */
     type: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLUListElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -13403,8 +13848,8 @@ declare var HTMLUnknownElement: {
 };
 
 interface HTMLVideoElementEventMap extends HTMLMediaElementEventMap {
-    "enterpictureinpicture": Event;
-    "leavepictureinpicture": Event;
+    "enterpictureinpicture": PictureInPictureEvent;
+    "leavepictureinpicture": PictureInPictureEvent;
 }
 
 /**
@@ -13422,9 +13867,9 @@ interface HTMLVideoElement extends HTMLMediaElement {
      */
     height: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLVideoElement/enterpictureinpicture_event) */
-    onenterpictureinpicture: ((this: HTMLVideoElement, ev: Event) => any) | null;
+    onenterpictureinpicture: ((this: HTMLVideoElement, ev: PictureInPictureEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLVideoElement/leavepictureinpicture_event) */
-    onleavepictureinpicture: ((this: HTMLVideoElement, ev: Event) => any) | null;
+    onleavepictureinpicture: ((this: HTMLVideoElement, ev: PictureInPictureEvent) => any) | null;
     /** Gets or sets the playsinline of the video element. for example, On iPhone, video elements will now be allowed to play inline, and will not automatically enter fullscreen mode when playback begins. */
     playsInline: boolean;
     /**
@@ -13451,11 +13896,13 @@ interface HTMLVideoElement extends HTMLMediaElement {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLVideoElement/width)
      */
     width: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLVideoElement/cancelVideoFrameCallback) */
     cancelVideoFrameCallback(handle: number): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLVideoElement/getVideoPlaybackQuality) */
     getVideoPlaybackQuality(): VideoPlaybackQuality;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLVideoElement/requestPictureInPicture) */
     requestPictureInPicture(): Promise<PictureInPictureWindow>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLVideoElement/requestVideoFrameCallback) */
     requestVideoFrameCallback(callback: VideoFrameRequestCallback): number;
     addEventListener<K extends keyof HTMLVideoElementEventMap>(type: K, listener: (this: HTMLVideoElement, ev: HTMLVideoElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -14309,7 +14756,11 @@ declare var ImageBitmap: {
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageBitmapRenderingContext) */
 interface ImageBitmapRenderingContext {
-    /** Returns the canvas element that the context is bound to. */
+    /**
+     * Returns the canvas element that the context is bound to.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ImageBitmapRenderingContext/canvas)
+     */
     readonly canvas: HTMLCanvasElement | OffscreenCanvas;
     /**
      * Transfers the underlying bitmap data from imageBitmap to context, and the bitmap becomes the contents of the canvas element to which context is bound.
@@ -14358,9 +14809,9 @@ declare var ImageData: {
     new(data: Uint8ClampedArray, sw: number, sh?: number, settings?: ImageDataSettings): ImageData;
 };
 
-interface InnerHTML {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/innerHTML) */
-    innerHTML: string;
+interface ImportMeta {
+    url: string;
+    resolve(specifier: string): string;
 }
 
 /**
@@ -14448,7 +14899,7 @@ interface IntersectionObserverEntry {
 
 declare var IntersectionObserverEntry: {
     prototype: IntersectionObserverEntry;
-    new(intersectionObserverEntryInit: IntersectionObserverEntryInit): IntersectionObserverEntry;
+    new(): IntersectionObserverEntry;
 };
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/KHR_parallel_shader_compile) */
@@ -14535,6 +14986,29 @@ declare var KeyframeEffect: {
     prototype: KeyframeEffect;
     new(target: Element | null, keyframes: Keyframe[] | PropertyIndexedKeyframes | null, options?: number | KeyframeEffectOptions): KeyframeEffect;
     new(source: KeyframeEffect): KeyframeEffect;
+};
+
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/LargestContentfulPaint) */
+interface LargestContentfulPaint extends PerformanceEntry {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/LargestContentfulPaint/element) */
+    readonly element: Element | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/LargestContentfulPaint/id) */
+    readonly id: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/LargestContentfulPaint/loadTime) */
+    readonly loadTime: DOMHighResTimeStamp;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/LargestContentfulPaint/renderTime) */
+    readonly renderTime: DOMHighResTimeStamp;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/LargestContentfulPaint/size) */
+    readonly size: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/LargestContentfulPaint/url) */
+    readonly url: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/LargestContentfulPaint/toJSON) */
+    toJSON(): any;
+}
+
+declare var LargestContentfulPaint: {
+    prototype: LargestContentfulPaint;
+    new(): LargestContentfulPaint;
 };
 
 interface LinkStyle {
@@ -14686,7 +15160,7 @@ declare var LockManager: {
 };
 
 interface MIDIAccessEventMap {
-    "statechange": Event;
+    "statechange": MIDIConnectionEvent;
 }
 
 /**
@@ -14698,7 +15172,7 @@ interface MIDIAccess extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIAccess/inputs) */
     readonly inputs: MIDIInputMap;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIAccess/statechange_event) */
-    onstatechange: ((this: MIDIAccess, ev: Event) => any) | null;
+    onstatechange: ((this: MIDIAccess, ev: MIDIConnectionEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIAccess/outputs) */
     readonly outputs: MIDIOutputMap;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MIDIAccess/sysexEnabled) */
@@ -15106,6 +15580,8 @@ declare var MediaKeySystemAccess: {
 interface MediaKeys {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeys/createSession) */
     createSession(sessionType?: MediaKeySessionType): MediaKeySession;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeys/getStatusForPolicy) */
+    getStatusForPolicy(policy?: MediaKeysPolicy): Promise<MediaKeyStatus>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeys/setServerCertificate) */
     setServerCertificate(serverCertificate: BufferSource): Promise<boolean>;
 }
@@ -15207,7 +15683,7 @@ declare var MediaQueryListEvent: {
 
 interface MediaRecorderEventMap {
     "dataavailable": BlobEvent;
-    "error": Event;
+    "error": ErrorEvent;
     "pause": Event;
     "resume": Event;
     "start": Event;
@@ -15223,7 +15699,7 @@ interface MediaRecorder extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaRecorder/dataavailable_event) */
     ondataavailable: ((this: MediaRecorder, ev: BlobEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaRecorder/error_event) */
-    onerror: ((this: MediaRecorder, ev: Event) => any) | null;
+    onerror: ((this: MediaRecorder, ev: ErrorEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaRecorder/pause_event) */
     onpause: ((this: MediaRecorder, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaRecorder/resume_event) */
@@ -15294,11 +15770,8 @@ interface MediaSource extends EventTarget {
     readonly activeSourceBuffers: SourceBufferList;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/duration) */
     duration: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/sourceclose_event) */
     onsourceclose: ((this: MediaSource, ev: Event) => any) | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/sourceended_event) */
     onsourceended: ((this: MediaSource, ev: Event) => any) | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/sourceopen_event) */
     onsourceopen: ((this: MediaSource, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/readyState) */
     readonly readyState: ReadyState;
@@ -15323,8 +15796,19 @@ interface MediaSource extends EventTarget {
 declare var MediaSource: {
     prototype: MediaSource;
     new(): MediaSource;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/canConstructInDedicatedWorker_static) */
+    readonly canConstructInDedicatedWorker: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSource/isTypeSupported_static) */
     isTypeSupported(type: string): boolean;
+};
+
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaSourceHandle) */
+interface MediaSourceHandle {
+}
+
+declare var MediaSourceHandle: {
+    prototype: MediaSourceHandle;
+    new(): MediaSourceHandle;
 };
 
 interface MediaStreamEventMap {
@@ -15530,11 +16014,7 @@ interface MessageEvent<T = any> extends Event {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MessageEvent/source)
      */
     readonly source: MessageEventSource | null;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MessageEvent/initMessageEvent)
-     */
+    /** @deprecated */
     initMessageEvent(type: string, bubbles?: boolean, cancelable?: boolean, data?: any, origin?: string, lastEventId?: string, source?: MessageEventSource | null, ports?: MessagePort[]): void;
 }
 
@@ -15600,29 +16080,21 @@ interface MimeType {
     /**
      * Returns the MIME type's description.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MimeType/description)
      */
     readonly description: string;
     /**
      * Returns the Plugin object that implements this MIME type.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MimeType/enabledPlugin)
      */
     readonly enabledPlugin: Plugin;
     /**
      * Returns the MIME type's typical file extensions, in a comma-separated list.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MimeType/suffixes)
      */
     readonly suffixes: string;
     /**
      * Returns the MIME type.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MimeType/type)
      */
     readonly type: string;
 }
@@ -15640,23 +16112,11 @@ declare var MimeType: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MimeTypeArray)
  */
 interface MimeTypeArray {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MimeTypeArray/length)
-     */
+    /** @deprecated */
     readonly length: number;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MimeTypeArray/item)
-     */
+    /** @deprecated */
     item(index: number): MimeType | null;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MimeTypeArray/namedItem)
-     */
+    /** @deprecated */
     namedItem(name: string): MimeType | null;
     [index: number]: MimeType;
 }
@@ -15728,63 +16188,6 @@ interface MouseEvent extends UIEvent {
 declare var MouseEvent: {
     prototype: MouseEvent;
     new(type: string, eventInitDict?: MouseEventInit): MouseEvent;
-};
-
-/**
- * Provides event properties that are specific to modifications to the Document Object Model (DOM) hierarchy and nodes.
- * @deprecated DOM4 [DOM] provides a new mechanism using a MutationObserver interface which addresses the use cases that mutation events solve, but in a more performant manner. Thus, this specification describes mutation events for reference and completeness of legacy behavior, but deprecates the use of the MutationEvent interface.
- *
- * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MutationEvent)
- */
-interface MutationEvent extends Event {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MutationEvent/attrChange)
-     */
-    readonly attrChange: number;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MutationEvent/attrName)
-     */
-    readonly attrName: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MutationEvent/newValue)
-     */
-    readonly newValue: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MutationEvent/prevValue)
-     */
-    readonly prevValue: string;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MutationEvent/relatedNode)
-     */
-    readonly relatedNode: Node | null;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MutationEvent/initMutationEvent)
-     */
-    initMutationEvent(typeArg: string, bubblesArg?: boolean, cancelableArg?: boolean, relatedNodeArg?: Node | null, prevValueArg?: string, newValueArg?: string, attrNameArg?: string, attrChangeArg?: number): void;
-    readonly MODIFICATION: 1;
-    readonly ADDITION: 2;
-    readonly REMOVAL: 3;
-}
-
-/** @deprecated */
-declare var MutationEvent: {
-    prototype: MutationEvent;
-    new(): MutationEvent;
-    readonly MODIFICATION: 1;
-    readonly ADDITION: 2;
-    readonly REMOVAL: 3;
 };
 
 /**
@@ -16127,7 +16530,7 @@ interface NavigatorPlugins {
     /**
      * @deprecated
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigatorPlugins/mimeTypes)
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/mimeTypes)
      */
     readonly mimeTypes: MimeTypeArray;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/pdfViewerEnabled) */
@@ -16596,7 +16999,7 @@ interface OES_vertex_array_object {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OES_vertex_array_object/bindVertexArrayOES) */
     bindVertexArrayOES(arrayObject: WebGLVertexArrayObjectOES | null): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OES_vertex_array_object/createVertexArrayOES) */
-    createVertexArrayOES(): WebGLVertexArrayObjectOES | null;
+    createVertexArrayOES(): WebGLVertexArrayObjectOES;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OES_vertex_array_object/deleteVertexArrayOES) */
     deleteVertexArrayOES(arrayObject: WebGLVertexArrayObjectOES | null): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OES_vertex_array_object/isVertexArrayOES) */
@@ -16676,7 +17079,9 @@ interface OffscreenCanvas extends EventTarget {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas/height)
      */
     height: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas/contextlost_event) */
     oncontextlost: ((this: OffscreenCanvas, ev: Event) => any) | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas/contextrestored_event) */
     oncontextrestored: ((this: OffscreenCanvas, ev: Event) => any) | null;
     /**
      * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
@@ -16727,9 +17132,8 @@ declare var OffscreenCanvas: {
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OffscreenCanvasRenderingContext2D) */
 interface OffscreenCanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/canvas) */
     readonly canvas: OffscreenCanvas;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OffscreenCanvasRenderingContext2D/commit) */
-    commit(): void;
 }
 
 declare var OffscreenCanvasRenderingContext2D: {
@@ -16942,6 +17346,37 @@ declare var Path2D: {
     new(path?: Path2D | string): Path2D;
 };
 
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress) */
+interface PaymentAddress {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress/addressLine) */
+    readonly addressLine: ReadonlyArray<string>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress/city) */
+    readonly city: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress/country) */
+    readonly country: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress/dependentLocality) */
+    readonly dependentLocality: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress/organization) */
+    readonly organization: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress/phone) */
+    readonly phone: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress/postalCode) */
+    readonly postalCode: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress/recipient) */
+    readonly recipient: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress/region) */
+    readonly region: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress/sortingCode) */
+    readonly sortingCode: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ContactAddress/toJSON) */
+    toJSON(): any;
+}
+
+declare var PaymentAddress: {
+    prototype: PaymentAddress;
+    new(): PaymentAddress;
+};
+
 /**
  * Available only in secure contexts.
  *
@@ -16960,7 +17395,9 @@ declare var PaymentMethodChangeEvent: {
 };
 
 interface PaymentRequestEventMap {
-    "paymentmethodchange": Event;
+    "paymentmethodchange": PaymentMethodChangeEvent;
+    "shippingaddresschange": PaymentRequestUpdateEvent;
+    "shippingoptionchange": PaymentRequestUpdateEvent;
 }
 
 /**
@@ -16973,7 +17410,37 @@ interface PaymentRequest extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/id) */
     readonly id: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/paymentmethodchange_event) */
-    onpaymentmethodchange: ((this: PaymentRequest, ev: Event) => any) | null;
+    onpaymentmethodchange: ((this: PaymentRequest, ev: PaymentMethodChangeEvent) => any) | null;
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/shippingaddresschange_event)
+     */
+    onshippingaddresschange: ((this: PaymentRequest, ev: PaymentRequestUpdateEvent) => any) | null;
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/shippingoptionchange_event)
+     */
+    onshippingoptionchange: ((this: PaymentRequest, ev: PaymentRequestUpdateEvent) => any) | null;
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/shippingAddress)
+     */
+    readonly shippingAddress: PaymentAddress | null;
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/shippingOption)
+     */
+    readonly shippingOption: string | null;
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/shippingType)
+     */
+    readonly shippingType: PaymentShippingType | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/abort) */
     abort(): Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/canMakePayment) */
@@ -16988,7 +17455,7 @@ interface PaymentRequest extends EventTarget {
 
 declare var PaymentRequest: {
     prototype: PaymentRequest;
-    new(methodData: PaymentMethodData[], details: PaymentDetailsInit): PaymentRequest;
+    new(methodData: PaymentMethodData[], details: PaymentDetailsInit, options?: PaymentOptions): PaymentRequest;
 };
 
 /**
@@ -17007,6 +17474,10 @@ declare var PaymentRequestUpdateEvent: {
     new(type: string, eventInitDict?: PaymentRequestUpdateEventInit): PaymentRequestUpdateEvent;
 };
 
+interface PaymentResponseEventMap {
+    "payerdetailchange": PaymentRequestUpdateEvent;
+}
+
 /**
  * This Payment Request API interface is returned after a user selects a payment method and approves a payment request.
  * Available only in secure contexts.
@@ -17018,14 +17489,30 @@ interface PaymentResponse extends EventTarget {
     readonly details: any;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/methodName) */
     readonly methodName: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/payerdetailchange_event) */
+    onpayerdetailchange: ((this: PaymentResponse, ev: PaymentRequestUpdateEvent) => any) | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/payerEmail) */
+    readonly payerEmail: string | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/payerName) */
+    readonly payerName: string | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/payerPhone) */
+    readonly payerPhone: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/requestId) */
     readonly requestId: string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/shippingAddress) */
+    readonly shippingAddress: PaymentAddress | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/shippingOption) */
+    readonly shippingOption: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/complete) */
     complete(result?: PaymentComplete): Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/retry) */
     retry(errorFields?: PaymentValidationErrors): Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/toJSON) */
     toJSON(): any;
+    addEventListener<K extends keyof PaymentResponseEventMap>(type: K, listener: (this: PaymentResponse, ev: PaymentResponseEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof PaymentResponseEventMap>(type: K, listener: (this: PaymentResponse, ev: PaymentResponseEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 declare var PaymentResponse: {
@@ -17317,6 +17804,8 @@ interface PerformanceResourceTiming extends PerformanceEntry {
     readonly responseEnd: DOMHighResTimeStamp;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceResourceTiming/responseStart) */
     readonly responseStart: DOMHighResTimeStamp;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceResourceTiming/responseStatus) */
+    readonly responseStatus: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceResourceTiming/secureConnectionStart) */
     readonly secureConnectionStart: DOMHighResTimeStamp;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PerformanceResourceTiming/serverTiming) */
@@ -17589,15 +18078,11 @@ interface Plugin {
     /**
      * Returns the plugin's description.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Plugin/description)
      */
     readonly description: string;
     /**
      * Returns the plugin library's filename, if applicable on the current platform.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Plugin/filename)
      */
     readonly filename: string;
     /**
@@ -17608,22 +18093,14 @@ interface Plugin {
     /**
      * Returns the plugin's name.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Plugin/name)
      */
     readonly name: string;
     /**
      * Returns the specified MimeType object.
      * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Plugin/item)
      */
     item(index: number): MimeType | null;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Plugin/namedItem)
-     */
+    /** @deprecated */
     namedItem(name: string): MimeType | null;
     [index: number]: MimeType;
 }
@@ -17641,29 +18118,13 @@ declare var Plugin: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PluginArray)
  */
 interface PluginArray {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PluginArray/length)
-     */
+    /** @deprecated */
     readonly length: number;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PluginArray/item)
-     */
+    /** @deprecated */
     item(index: number): Plugin | null;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PluginArray/namedItem)
-     */
+    /** @deprecated */
     namedItem(name: string): Plugin | null;
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PluginArray/refresh)
-     */
+    /** @deprecated */
     refresh(): void;
     [index: number]: Plugin;
 }
@@ -17680,6 +18141,10 @@ declare var PluginArray: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PointerEvent)
  */
 interface PointerEvent extends MouseEvent {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PointerEvent/altitudeAngle) */
+    readonly altitudeAngle: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PointerEvent/azimuthAngle) */
+    readonly azimuthAngle: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PointerEvent/height) */
     readonly height: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PointerEvent/isPrimary) */
@@ -17721,6 +18186,7 @@ declare var PointerEvent: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PopStateEvent)
  */
 interface PopStateEvent extends Event {
+    readonly hasUAVisualTransition: boolean;
     /**
      * Returns a copy of the information that was provided to pushState() or replaceState().
      *
@@ -17796,6 +18262,7 @@ declare var PromiseRejectionEvent: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/PublicKeyCredential)
  */
 interface PublicKeyCredential extends Credential {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PublicKeyCredential/authenticatorAttachment) */
     readonly authenticatorAttachment: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PublicKeyCredential/rawId) */
     readonly rawId: ArrayBuffer;
@@ -17803,15 +18270,21 @@ interface PublicKeyCredential extends Credential {
     readonly response: AuthenticatorResponse;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PublicKeyCredential/getClientExtensionResults) */
     getClientExtensionResults(): AuthenticationExtensionsClientOutputs;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PublicKeyCredential/toJSON) */
+    toJSON(): PublicKeyCredentialJSON;
 }
 
 declare var PublicKeyCredential: {
     prototype: PublicKeyCredential;
     new(): PublicKeyCredential;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PublicKeyCredential/isConditionalMediationAvailable) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PublicKeyCredential/isConditionalMediationAvailable_static) */
     isConditionalMediationAvailable(): Promise<boolean>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PublicKeyCredential/isUserVerifyingPlatformAuthenticatorAvailable_static) */
     isUserVerifyingPlatformAuthenticatorAvailable(): Promise<boolean>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PublicKeyCredential/parseCreationOptionsFromJSON_static) */
+    parseCreationOptionsFromJSON(options: PublicKeyCredentialCreationOptionsJSON): PublicKeyCredentialCreationOptions;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PublicKeyCredential/parseRequestOptionsFromJSON_static) */
+    parseRequestOptionsFromJSON(options: PublicKeyCredentialRequestOptionsJSON): PublicKeyCredentialRequestOptions;
 };
 
 /**
@@ -17936,7 +18409,7 @@ interface RTCDataChannelEventMap {
     "bufferedamountlow": Event;
     "close": Event;
     "closing": Event;
-    "error": Event;
+    "error": RTCErrorEvent;
     "message": MessageEvent;
     "open": Event;
 }
@@ -17966,7 +18439,7 @@ interface RTCDataChannel extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDataChannel/closing_event) */
     onclosing: ((this: RTCDataChannel, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDataChannel/error_event) */
-    onerror: ((this: RTCDataChannel, ev: Event) => any) | null;
+    onerror: ((this: RTCDataChannel, ev: RTCErrorEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDataChannel/message_event) */
     onmessage: ((this: RTCDataChannel, ev: MessageEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDataChannel/open_event) */
@@ -18007,7 +18480,7 @@ declare var RTCDataChannelEvent: {
 };
 
 interface RTCDtlsTransportEventMap {
-    "error": Event;
+    "error": RTCErrorEvent;
     "statechange": Event;
 }
 
@@ -18015,12 +18488,11 @@ interface RTCDtlsTransportEventMap {
 interface RTCDtlsTransport extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDtlsTransport/iceTransport) */
     readonly iceTransport: RTCIceTransport;
-    onerror: ((this: RTCDtlsTransport, ev: Event) => any) | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDtlsTransport/statechange_event) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDtlsTransport/error_event) */
+    onerror: ((this: RTCDtlsTransport, ev: RTCErrorEvent) => any) | null;
     onstatechange: ((this: RTCDtlsTransport, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDtlsTransport/state) */
     readonly state: RTCDtlsTransportState;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCDtlsTransport/getRemoteCertificates) */
     getRemoteCertificates(): ArrayBuffer[];
     addEventListener<K extends keyof RTCDtlsTransportEventMap>(type: K, listener: (this: RTCDtlsTransport, ev: RTCDtlsTransportEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -18138,6 +18610,11 @@ declare var RTCIceCandidate: {
     new(candidateInitDict?: RTCIceCandidateInit): RTCIceCandidate;
 };
 
+interface RTCIceCandidatePair {
+    local: RTCIceCandidate;
+    remote: RTCIceCandidate;
+}
+
 interface RTCIceTransportEventMap {
     "gatheringstatechange": Event;
     "selectedcandidatepairchange": Event;
@@ -18234,9 +18711,9 @@ interface RTCPeerConnection extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/signalingState) */
     readonly signalingState: RTCSignalingState;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/addIceCandidate) */
-    addIceCandidate(candidate?: RTCIceCandidateInit): Promise<void>;
+    addIceCandidate(candidate?: RTCIceCandidateInit | null): Promise<void>;
     /** @deprecated */
-    addIceCandidate(candidate: RTCIceCandidateInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+    addIceCandidate(candidate: RTCIceCandidateInit | null, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/addTrack) */
     addTrack(track: MediaStreamTrack, ...streams: MediaStream[]): RTCRtpSender;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/addTransceiver) */
@@ -18294,12 +18771,9 @@ declare var RTCPeerConnection: {
 interface RTCPeerConnectionIceErrorEvent extends Event {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnectionIceErrorEvent/address) */
     readonly address: string | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnectionIceErrorEvent/errorCode) */
     readonly errorCode: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnectionIceErrorEvent/errorText) */
     readonly errorText: string;
     readonly port: number | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnectionIceErrorEvent/url) */
     readonly url: string;
 }
 
@@ -18329,6 +18803,8 @@ declare var RTCPeerConnectionIceEvent: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpReceiver)
  */
 interface RTCRtpReceiver {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpReceiver/jitterBufferTarget) */
+    jitterBufferTarget: DOMHighResTimeStamp | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpReceiver/track) */
     readonly track: MediaStreamTrack;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpReceiver/transform) */
@@ -18407,7 +18883,7 @@ interface RTCRtpTransceiver {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpTransceiver/sender) */
     readonly sender: RTCRtpSender;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpTransceiver/setCodecPreferences) */
-    setCodecPreferences(codecs: RTCRtpCodecCapability[]): void;
+    setCodecPreferences(codecs: RTCRtpCodec[]): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpTransceiver/stop) */
     stop(): void;
 }
@@ -18427,6 +18903,7 @@ interface RTCSctpTransport extends EventTarget {
     readonly maxChannels: number | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCSctpTransport/maxMessageSize) */
     readonly maxMessageSize: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCSctpTransport/statechange_event) */
     onstatechange: ((this: RTCSctpTransport, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCSctpTransport/state) */
     readonly state: RTCSctpTransportState;
@@ -18454,7 +18931,7 @@ interface RTCSessionDescription {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCSessionDescription/type) */
     readonly type: RTCSdpType;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCSessionDescription/toJSON) */
-    toJSON(): any;
+    toJSON(): RTCSessionDescriptionInit;
 }
 
 declare var RTCSessionDescription: {
@@ -18527,7 +19004,7 @@ interface Range extends AbstractRange {
      */
     comparePoint(node: Node, offset: number): number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Range/createContextualFragment) */
-    createContextualFragment(fragment: string): DocumentFragment;
+    createContextualFragment(string: string): DocumentFragment;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Range/deleteContents) */
     deleteContents(): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Range/detach) */
@@ -18640,7 +19117,7 @@ interface ReadableStreamBYOBReader extends ReadableStreamGenericReader {
 
 declare var ReadableStreamBYOBReader: {
     prototype: ReadableStreamBYOBReader;
-    new(stream: ReadableStream): ReadableStreamBYOBReader;
+    new(stream: ReadableStream<Uint8Array>): ReadableStreamBYOBReader;
 };
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBRequest) */
@@ -18746,6 +19223,7 @@ declare var Report: {
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReportBody) */
 interface ReportBody {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReportBody/toJSON) */
     toJSON(): any;
 }
 
@@ -18805,11 +19283,7 @@ interface Request extends Body {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/integrity)
      */
     readonly integrity: string;
-    /**
-     * Returns a boolean indicating whether or not request can outlive the global in which it was created.
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request/keepalive)
-     */
+    /** Returns a boolean indicating whether or not request can outlive the global in which it was created. */
     readonly keepalive: boolean;
     /**
      * Returns request's HTTP method, which is "GET" by default.
@@ -18885,6 +19359,7 @@ interface ResizeObserverEntry {
     readonly contentBoxSize: ReadonlyArray<ResizeObserverSize>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ResizeObserverEntry/contentRect) */
     readonly contentRect: DOMRectReadOnly;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ResizeObserverEntry/devicePixelContentBoxSize) */
     readonly devicePixelContentBoxSize: ReadonlyArray<ResizeObserverSize>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ResizeObserverEntry/target) */
     readonly target: Element;
@@ -19068,7 +19543,9 @@ declare var SVGAnimatedBoolean: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedEnumeration)
  */
 interface SVGAnimatedEnumeration {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedEnumeration/animVal) */
     readonly animVal: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedEnumeration/baseVal) */
     baseVal: number;
 }
 
@@ -19098,7 +19575,9 @@ declare var SVGAnimatedInteger: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedLength)
  */
 interface SVGAnimatedLength {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedLength/animVal) */
     readonly animVal: SVGLength;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGAnimatedLength/baseVal) */
     readonly baseVal: SVGLength;
 }
 
@@ -19460,11 +19939,8 @@ declare var SVGFEBlendElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEColorMatrixElement)
  */
 interface SVGFEColorMatrixElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEColorMatrixElement/in1) */
     readonly in1: SVGAnimatedString;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEColorMatrixElement/type) */
     readonly type: SVGAnimatedEnumeration;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGFEColorMatrixElement/values) */
     readonly values: SVGAnimatedNumberList;
     readonly SVG_FECOLORMATRIX_TYPE_UNKNOWN: 0;
     readonly SVG_FECOLORMATRIX_TYPE_MATRIX: 1;
@@ -20154,7 +20630,6 @@ declare var SVGGraphicsElement: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGImageElement)
  */
 interface SVGImageElement extends SVGGraphicsElement, SVGURIReference {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGImageElement/crossorigin) */
     crossOrigin: string | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGImageElement/height) */
     readonly height: SVGAnimatedLength;
@@ -20224,14 +20699,23 @@ declare var SVGLength: {
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLengthList)
  */
 interface SVGLengthList {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLengthList/length) */
     readonly length: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLengthList/numberOfItems) */
     readonly numberOfItems: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLengthList/appendItem) */
     appendItem(newItem: SVGLength): SVGLength;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLengthList/clear) */
     clear(): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLengthList/getItem) */
     getItem(index: number): SVGLength;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLengthList/initialize) */
     initialize(newItem: SVGLength): SVGLength;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLengthList/insertItemBefore) */
     insertItemBefore(newItem: SVGLength, index: number): SVGLength;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLengthList/removeItem) */
     removeItem(index: number): SVGLength;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SVGLengthList/replaceItem) */
     replaceItem(newItem: SVGLength, index: number): SVGLength;
     [index: number]: SVGLength;
 }
@@ -21103,6 +21587,7 @@ interface ScreenOrientationEventMap {
 interface ScreenOrientation extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ScreenOrientation/angle) */
     readonly angle: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ScreenOrientation/change_event) */
     onchange: ((this: ScreenOrientation, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ScreenOrientation/type) */
     readonly type: OrientationType;
@@ -21201,6 +21686,8 @@ interface Selection {
     readonly anchorNode: Node | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Selection/anchorOffset) */
     readonly anchorOffset: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Selection/direction) */
+    readonly direction: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Selection/focusNode) */
     readonly focusNode: Node | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Selection/focusOffset) */
@@ -21373,16 +21860,26 @@ interface ShadowRootEventMap {
 }
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ShadowRoot) */
-interface ShadowRoot extends DocumentFragment, DocumentOrShadowRoot, InnerHTML {
+interface ShadowRoot extends DocumentFragment, DocumentOrShadowRoot {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ShadowRoot/clonable) */
+    readonly clonable: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ShadowRoot/delegatesFocus) */
     readonly delegatesFocus: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ShadowRoot/host) */
     readonly host: Element;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ShadowRoot/innerHTML) */
+    innerHTML: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ShadowRoot/mode) */
     readonly mode: ShadowRootMode;
     onslotchange: ((this: ShadowRoot, ev: Event) => any) | null;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ShadowRoot/serializable) */
+    readonly serializable: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ShadowRoot/slotAssignment) */
     readonly slotAssignment: SlotAssignmentMode;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ShadowRoot/getHTML) */
+    getHTML(options?: GetHTMLOptions): string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ShadowRoot/setHTMLUnsafe) */
+    setHTMLUnsafe(html: string): void;
     /** Throws a "NotSupportedError" DOMException if context object is a shadow root. */
     addEventListener<K extends keyof ShadowRootEventMap>(type: K, listener: (this: ShadowRoot, ev: ShadowRootEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -21441,15 +21938,10 @@ interface SourceBuffer extends EventTarget {
     readonly buffered: TimeRanges;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBuffer/mode) */
     mode: AppendMode;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBuffer/abort_event) */
     onabort: ((this: SourceBuffer, ev: Event) => any) | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBuffer/error_event) */
     onerror: ((this: SourceBuffer, ev: Event) => any) | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBuffer/update_event) */
     onupdate: ((this: SourceBuffer, ev: Event) => any) | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBuffer/updateend_event) */
     onupdateend: ((this: SourceBuffer, ev: Event) => any) | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBuffer/updatestart_event) */
     onupdatestart: ((this: SourceBuffer, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBuffer/timestampOffset) */
     timestampOffset: number;
@@ -21487,9 +21979,7 @@ interface SourceBufferListEventMap {
 interface SourceBufferList extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBufferList/length) */
     readonly length: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBufferList/addsourcebuffer_event) */
     onaddsourcebuffer: ((this: SourceBufferList, ev: Event) => any) | null;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SourceBufferList/removesourcebuffer_event) */
     onremovesourcebuffer: ((this: SourceBufferList, ev: Event) => any) | null;
     addEventListener<K extends keyof SourceBufferListEventMap>(type: K, listener: (this: SourceBufferList, ev: SourceBufferListEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -21958,7 +22448,7 @@ interface SubtleCrypto {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/decrypt) */
     decrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, key: CryptoKey, data: BufferSource): Promise<ArrayBuffer>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveBits) */
-    deriveBits(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, length: number): Promise<ArrayBuffer>;
+    deriveBits(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, length?: number | null): Promise<ArrayBuffer>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveKey) */
     deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | AesDerivedKeyParams | HmacImportParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/digest) */
@@ -22121,6 +22611,32 @@ interface TextEncoderStream extends GenericTransformStream, TextEncoderCommon {
 declare var TextEncoderStream: {
     prototype: TextEncoderStream;
     new(): TextEncoderStream;
+};
+
+/**
+ * @deprecated
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextEvent)
+ */
+interface TextEvent extends UIEvent {
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextEvent/data)
+     */
+    readonly data: string;
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/TextEvent/initTextEvent)
+     */
+    initTextEvent(type: string, bubbles?: boolean, cancelable?: boolean, view?: Window | null, data?: string): void;
+}
+
+/** @deprecated */
+declare var TextEvent: {
+    prototype: TextEvent;
+    new(): TextEvent;
 };
 
 /**
@@ -22716,9 +23232,11 @@ declare var URL: {
     prototype: URL;
     new(url: string | URL, base?: string | URL): URL;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/canParse_static) */
-    canParse(url: string | URL, base?: string): boolean;
+    canParse(url: string | URL, base?: string | URL): boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/createObjectURL_static) */
     createObjectURL(obj: Blob | MediaSource): string;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/parse_static) */
+    parse(url: string | URL, base?: string | URL): URL | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/URL/revokeObjectURL_static) */
     revokeObjectURL(url: string): void;
 };
@@ -22782,7 +23300,7 @@ declare var URLSearchParams: {
 interface UserActivation {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/UserActivation/hasBeenActive) */
     readonly hasBeenActive: boolean;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/UserActivation/hasBeenActive) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/UserActivation/isActive) */
     readonly isActive: boolean;
 }
 
@@ -22828,21 +23346,13 @@ declare var VTTCue: {
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTRegion) */
 interface VTTRegion {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTRegion/id) */
     id: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTRegion/lines) */
     lines: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTRegion/regionAnchorX) */
     regionAnchorX: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTRegion/regionAnchorY) */
     regionAnchorY: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTRegion/scroll) */
     scroll: ScrollSetting;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTRegion/viewportAnchorX) */
     viewportAnchorX: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTRegion/viewportAnchorY) */
     viewportAnchorY: number;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VTTRegion/width) */
     width: number;
 }
 
@@ -22917,6 +23427,7 @@ interface VideoDecoderEventMap {
 interface VideoDecoder extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/decodeQueueSize) */
     readonly decodeQueueSize: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/dequeue_event) */
     ondequeue: ((this: VideoDecoder, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/state) */
     readonly state: CodecState;
@@ -22939,6 +23450,7 @@ interface VideoDecoder extends EventTarget {
 declare var VideoDecoder: {
     prototype: VideoDecoder;
     new(init: VideoDecoderInit): VideoDecoder;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/isConfigSupported_static) */
     isConfigSupported(config: VideoDecoderConfig): Promise<VideoDecoderSupport>;
 };
 
@@ -22954,6 +23466,7 @@ interface VideoEncoderEventMap {
 interface VideoEncoder extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/encodeQueueSize) */
     readonly encodeQueueSize: number;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/dequeue_event) */
     ondequeue: ((this: VideoEncoder, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/state) */
     readonly state: CodecState;
@@ -22963,6 +23476,7 @@ interface VideoEncoder extends EventTarget {
     configure(config: VideoEncoderConfig): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/encode) */
     encode(frame: VideoFrame, options?: VideoEncoderEncodeOptions): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/flush) */
     flush(): Promise<void>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/reset) */
     reset(): void;
@@ -22975,6 +23489,7 @@ interface VideoEncoder extends EventTarget {
 declare var VideoEncoder: {
     prototype: VideoEncoder;
     new(init: VideoEncoderInit): VideoEncoder;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/isConfigSupported_static) */
     isConfigSupported(config: VideoEncoderConfig): Promise<VideoEncoderSupport>;
 };
 
@@ -23006,6 +23521,7 @@ interface VideoFrame {
     clone(): VideoFrame;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoFrame/close) */
     close(): void;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoFrame/copyTo) */
     copyTo(destination: AllowSharedBufferSource, options?: VideoFrameCopyToOptions): Promise<PlaneLayout[]>;
 }
 
@@ -23038,6 +23554,23 @@ interface VideoPlaybackQuality {
 declare var VideoPlaybackQuality: {
     prototype: VideoPlaybackQuality;
     new(): VideoPlaybackQuality;
+};
+
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransition) */
+interface ViewTransition {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransition/finished) */
+    readonly finished: Promise<undefined>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransition/ready) */
+    readonly ready: Promise<undefined>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransition/updateCallbackDone) */
+    readonly updateCallbackDone: Promise<undefined>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ViewTransition/skipTransition) */
+    skipTransition(): void;
+}
+
+declare var ViewTransition: {
+    prototype: ViewTransition;
+    new(): ViewTransition;
 };
 
 interface VisualViewportEventMap {
@@ -23905,7 +24438,7 @@ interface WebGL2RenderingContextBase {
     clearBufferuiv(buffer: GLenum, drawbuffer: GLint, values: Uint32List, srcOffset?: number): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clientWaitSync) */
     clientWaitSync(sync: WebGLSync, flags: GLbitfield, timeout: GLuint64): GLenum;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/compressedTexImage3D) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/compressedTexImage2D) */
     compressedTexImage3D(target: GLenum, level: GLint, internalformat: GLenum, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, imageSize: GLsizei, offset: GLintptr): void;
     compressedTexImage3D(target: GLenum, level: GLint, internalformat: GLenum, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, srcData: ArrayBufferView, srcOffset?: number, srcLengthOverride?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/compressedTexSubImage3D) */
@@ -23916,13 +24449,13 @@ interface WebGL2RenderingContextBase {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/copyTexSubImage3D) */
     copyTexSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, x: GLint, y: GLint, width: GLsizei, height: GLsizei): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/createQuery) */
-    createQuery(): WebGLQuery | null;
+    createQuery(): WebGLQuery;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/createSampler) */
-    createSampler(): WebGLSampler | null;
+    createSampler(): WebGLSampler;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/createTransformFeedback) */
-    createTransformFeedback(): WebGLTransformFeedback | null;
+    createTransformFeedback(): WebGLTransformFeedback;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/createVertexArray) */
-    createVertexArray(): WebGLVertexArrayObject | null;
+    createVertexArray(): WebGLVertexArrayObject;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/deleteQuery) */
     deleteQuery(query: WebGLQuery | null): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/deleteSampler) */
@@ -24788,6 +25321,7 @@ declare var WebGLRenderingContext: {
 interface WebGLRenderingContextBase {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/canvas) */
     readonly canvas: HTMLCanvasElement | OffscreenCanvas;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/drawingBufferColorSpace) */
     drawingBufferColorSpace: PredefinedColorSpace;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/drawingBufferHeight) */
     readonly drawingBufferHeight: GLsizei;
@@ -24836,17 +25370,17 @@ interface WebGLRenderingContextBase {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/copyTexSubImage2D) */
     copyTexSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, x: GLint, y: GLint, width: GLsizei, height: GLsizei): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/createBuffer) */
-    createBuffer(): WebGLBuffer | null;
+    createBuffer(): WebGLBuffer;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/createFramebuffer) */
-    createFramebuffer(): WebGLFramebuffer | null;
+    createFramebuffer(): WebGLFramebuffer;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/createProgram) */
-    createProgram(): WebGLProgram | null;
+    createProgram(): WebGLProgram;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/createRenderbuffer) */
-    createRenderbuffer(): WebGLRenderbuffer | null;
+    createRenderbuffer(): WebGLRenderbuffer;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/createShader) */
     createShader(type: GLenum): WebGLShader | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/createTexture) */
-    createTexture(): WebGLTexture | null;
+    createTexture(): WebGLTexture;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/cullFace) */
     cullFace(mode: GLenum): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/deleteBuffer) */
@@ -25497,7 +26031,7 @@ declare var WebGLVertexArrayObject: {
     new(): WebGLVertexArrayObject;
 };
 
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLVertexArrayObjectOES) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLVertexArrayObject) */
 interface WebGLVertexArrayObjectOES {
 }
 
@@ -25903,7 +26437,11 @@ interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandler
     readonly window: Window & typeof globalThis;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/alert) */
     alert(message?: any): void;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/blur) */
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/blur)
+     */
     blur(): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/cancelIdleCallback) */
     cancelIdleCallback(handle: number): void;
@@ -26074,24 +26612,24 @@ interface WindowOrWorkerGlobalScope {
     /**
      * Available only in secure contexts.
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/caches)
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/caches)
      */
     readonly caches: CacheStorage;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/crossOriginIsolated) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/crossOriginIsolated) */
     readonly crossOriginIsolated: boolean;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/crypto_property) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/crypto) */
     readonly crypto: Crypto;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/indexedDB) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/indexedDB) */
     readonly indexedDB: IDBFactory;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/isSecureContext) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/isSecureContext) */
     readonly isSecureContext: boolean;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/origin) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/origin) */
     readonly origin: string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/performance_property) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/performance) */
     readonly performance: Performance;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/atob) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/atob) */
     atob(data: string): string;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/btoa) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/btoa) */
     btoa(data: string): string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/clearInterval) */
     clearInterval(id: number | undefined): void;
@@ -26100,7 +26638,7 @@ interface WindowOrWorkerGlobalScope {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/createImageBitmap) */
     createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/fetch) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch) */
     fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/queueMicrotask) */
     queueMicrotask(callback: VoidFunction): void;
@@ -26489,7 +27027,11 @@ declare var XPathEvaluator: {
 interface XPathEvaluatorBase {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/createExpression) */
     createExpression(expression: string, resolver?: XPathNSResolver | null): XPathExpression;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/createNSResolver) */
+    /**
+     * @deprecated
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/createNSResolver)
+     */
     createNSResolver(nodeResolver: Node): Node;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/evaluate) */
     evaluate(expression: string, contextNode: Node, resolver?: XPathNSResolver | null, type?: number, result?: XPathResult | null): XPathResult;
@@ -26776,9 +27318,7 @@ declare namespace WebAssembly {
 
     /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/JavaScript_interface/Global) */
     interface Global<T extends ValueType = ValueType> {
-        /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/JavaScript_interface/Global/value) */
         value: ValueTypeMap[T];
-        /** [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/JavaScript_interface/Global/valueOf) */
         valueOf(): ValueTypeMap[T];
     }
 
@@ -26925,6 +27465,10 @@ declare namespace WebAssembly {
     function validate(bytes: BufferSource): boolean;
 }
 
+interface AudioDataOutputCallback {
+    (output: AudioData): void;
+}
+
 interface BlobCallback {
     (blob: Blob | null): void;
 }
@@ -26939,6 +27483,10 @@ interface DecodeErrorCallback {
 
 interface DecodeSuccessCallback {
     (decodedData: AudioBuffer): void;
+}
+
+interface EncodedAudioChunkOutputCallback {
+    (output: EncodedAudioChunk, metadata?: EncodedAudioChunkMetadata): void;
 }
 
 interface EncodedVideoChunkOutputCallback {
@@ -27083,6 +27631,10 @@ interface VideoFrameOutputCallback {
 
 interface VideoFrameRequestCallback {
     (now: DOMHighResTimeStamp, metadata: VideoFrameCallbackMetadata): void;
+}
+
+interface ViewTransitionUpdateCallback {
+    (): any;
 }
 
 interface VoidFunction {
@@ -27528,7 +28080,11 @@ declare var visualViewport: VisualViewport | null;
 declare var window: Window & typeof globalThis;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/alert) */
 declare function alert(message?: any): void;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/blur) */
+/**
+ * @deprecated
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/blur)
+ */
 declare function blur(): void;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/cancelIdleCallback) */
 declare function cancelIdleCallback(handle: number): void;
@@ -27649,7 +28205,7 @@ declare var onbeforetoggle: ((this: Window, ev: Event) => any) | null;
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/blur_event)
  */
 declare var onblur: ((this: Window, ev: FocusEvent) => any) | null;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDialogElement/cancel_event) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/cancel_event) */
 declare var oncancel: ((this: Window, ev: Event) => any) | null;
 /**
  * Occurs when playback is possible, but would require further buffering.
@@ -27676,6 +28232,8 @@ declare var onchange: ((this: Window, ev: Event) => any) | null;
 declare var onclick: ((this: Window, ev: MouseEvent) => any) | null;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDialogElement/close_event) */
 declare var onclose: ((this: Window, ev: Event) => any) | null;
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLCanvasElement/webglcontextlost_event) */
+declare var oncontextlost: ((this: Window, ev: Event) => any) | null;
 /**
  * Fires when the user clicks the right mouse button in the client area, opening the context menu.
  * @param ev The mouse event.
@@ -27683,6 +28241,8 @@ declare var onclose: ((this: Window, ev: Event) => any) | null;
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/contextmenu_event)
  */
 declare var oncontextmenu: ((this: Window, ev: MouseEvent) => any) | null;
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLCanvasElement/contextrestored_event) */
+declare var oncontextrestored: ((this: Window, ev: Event) => any) | null;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/copy_event) */
 declare var oncopy: ((this: Window, ev: ClipboardEvent) => any) | null;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTrackElement/cuechange_event) */
@@ -27833,7 +28393,7 @@ declare var onloadedmetadata: ((this: Window, ev: Event) => any) | null;
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/loadstart_event)
  */
 declare var onloadstart: ((this: Window, ev: Event) => any) | null;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLElement/lostpointercapture_event) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/lostpointercapture_event) */
 declare var onlostpointercapture: ((this: Window, ev: PointerEvent) => any) | null;
 /**
  * Fires when the user clicks the object with either mouse button.
@@ -28100,24 +28660,24 @@ declare var localStorage: Storage;
 /**
  * Available only in secure contexts.
  *
- * [MDN Reference](https://developer.mozilla.org/docs/Web/API/caches)
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/caches)
  */
 declare var caches: CacheStorage;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/crossOriginIsolated) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/crossOriginIsolated) */
 declare var crossOriginIsolated: boolean;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/crypto_property) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/crypto) */
 declare var crypto: Crypto;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/indexedDB) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/indexedDB) */
 declare var indexedDB: IDBFactory;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/isSecureContext) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/isSecureContext) */
 declare var isSecureContext: boolean;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/origin) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/origin) */
 declare var origin: string;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/performance_property) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/performance) */
 declare var performance: Performance;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/atob) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/atob) */
 declare function atob(data: string): string;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/btoa) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/btoa) */
 declare function btoa(data: string): string;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/clearInterval) */
 declare function clearInterval(id: number | undefined): void;
@@ -28126,7 +28686,7 @@ declare function clearTimeout(id: number | undefined): void;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/createImageBitmap) */
 declare function createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
-/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/fetch) */
+/** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/fetch) */
 declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/queueMicrotask) */
 declare function queueMicrotask(callback: VoidFunction): void;
@@ -28149,8 +28709,8 @@ type AllowSharedBufferSource = ArrayBuffer | ArrayBufferView;
 type AutoFill = AutoFillBase | `${OptionalPrefixToken<AutoFillSection>}${OptionalPrefixToken<AutoFillAddressKind>}${AutoFillField}${OptionalPostfixToken<AutoFillCredentialField>}`;
 type AutoFillField = AutoFillNormalField | `${OptionalPrefixToken<AutoFillContactKind>}${AutoFillContactField}`;
 type AutoFillSection = `section-${string}`;
+type Base64URLString = string;
 type BigInteger = Uint8Array;
-type BinaryData = ArrayBuffer | ArrayBufferView;
 type BlobPart = BufferSource | Blob | string;
 type BodyInit = ReadableStream | XMLHttpRequestBodyInit;
 type BufferSource = ArrayBufferView | ArrayBuffer;
@@ -28202,6 +28762,7 @@ type OnErrorEventHandler = OnErrorEventHandlerNonNull | null;
 type OptionalPostfixToken<T extends string> = ` ${T}` | "";
 type OptionalPrefixToken<T extends string> = `${T} ` | "";
 type PerformanceEntryList = PerformanceEntry[];
+type PublicKeyCredentialJSON = any;
 type RTCRtpTransform = RTCRtpScriptTransform;
 type ReadableStreamController<T> = ReadableStreamDefaultController<T> | ReadableByteStreamController;
 type ReadableStreamReadResult<T> = ReadableStreamReadValueResult<T> | ReadableStreamReadDoneResult<T>;
@@ -28211,7 +28772,7 @@ type ReportList = Report[];
 type RequestInfo = Request | string;
 type TexImageSource = ImageBitmap | ImageData | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | OffscreenCanvas | VideoFrame;
 type TimerHandler = string | Function;
-type Transferable = OffscreenCanvas | ImageBitmap | MessagePort | ReadableStream | WritableStream | TransformStream | VideoFrame | ArrayBuffer;
+type Transferable = OffscreenCanvas | ImageBitmap | MessagePort | MediaSourceHandle | ReadableStream | WritableStream | TransformStream | AudioData | VideoFrame | ArrayBuffer;
 type Uint32List = Uint32Array | GLuint[];
 type VibratePattern = number | number[];
 type WindowProxy = Window;
@@ -28224,6 +28785,7 @@ type AppendMode = "segments" | "sequence";
 type AttestationConveyancePreference = "direct" | "enterprise" | "indirect" | "none";
 type AudioContextLatencyCategory = "balanced" | "interactive" | "playback";
 type AudioContextState = "closed" | "running" | "suspended";
+type AudioSampleFormat = "f32" | "f32-planar" | "s16" | "s16-planar" | "s32" | "s32-planar" | "u8" | "u8-planar";
 type AuthenticatorAttachment = "cross-platform" | "platform";
 type AuthenticatorTransport = "ble" | "hybrid" | "internal" | "nfc" | "usb";
 type AutoFillAddressKind = "billing" | "shipping";
@@ -28237,6 +28799,7 @@ type AutomationRate = "a-rate" | "k-rate";
 type AvcBitstreamFormat = "annexb" | "avc";
 type BinaryType = "arraybuffer" | "blob";
 type BiquadFilterType = "allpass" | "bandpass" | "highpass" | "highshelf" | "lowpass" | "lowshelf" | "notch" | "peaking";
+type BitrateMode = "constant" | "variable";
 type CSSMathOperator = "clamp" | "invert" | "max" | "min" | "negate" | "product" | "sum";
 type CSSNumericBaseType = "angle" | "flex" | "frequency" | "length" | "percent" | "resolution" | "time";
 type CanPlayTypeResult = "" | "maybe" | "probably";
@@ -28266,6 +28829,7 @@ type DisplayCaptureSurfaceType = "browser" | "monitor" | "window";
 type DistanceModelType = "exponential" | "inverse" | "linear";
 type DocumentReadyState = "complete" | "interactive" | "loading";
 type DocumentVisibilityState = "hidden" | "visible";
+type EncodedAudioChunkType = "delta" | "key";
 type EncodedVideoChunkType = "delta" | "key";
 type EndOfStreamError = "decode" | "network";
 type EndingType = "native" | "transparent";
@@ -28275,8 +28839,7 @@ type FontDisplay = "auto" | "block" | "fallback" | "optional" | "swap";
 type FontFaceLoadStatus = "error" | "loaded" | "loading" | "unloaded";
 type FontFaceSetLoadStatus = "loaded" | "loading";
 type FullscreenNavigationUI = "auto" | "hide" | "show";
-type GamepadHapticActuatorType = "vibration";
-type GamepadHapticEffectType = "dual-rumble";
+type GamepadHapticEffectType = "dual-rumble" | "trigger-rumble";
 type GamepadHapticsResult = "complete" | "preempted";
 type GamepadMappingType = "" | "standard" | "xr-standard";
 type GlobalCompositeOperation = "color" | "color-burn" | "color-dodge" | "copy" | "darken" | "destination-atop" | "destination-in" | "destination-out" | "destination-over" | "difference" | "exclusion" | "hard-light" | "hue" | "lighten" | "lighter" | "luminosity" | "multiply" | "overlay" | "saturation" | "screen" | "soft-light" | "source-atop" | "source-in" | "source-out" | "source-over" | "xor";
@@ -28315,12 +28878,14 @@ type NavigationTimingType = "back_forward" | "navigate" | "prerender" | "reload"
 type NotificationDirection = "auto" | "ltr" | "rtl";
 type NotificationPermission = "default" | "denied" | "granted";
 type OffscreenRenderingContextId = "2d" | "bitmaprenderer" | "webgl" | "webgl2" | "webgpu";
+type OpusBitstreamFormat = "ogg" | "opus";
 type OrientationType = "landscape-primary" | "landscape-secondary" | "portrait-primary" | "portrait-secondary";
 type OscillatorType = "custom" | "sawtooth" | "sine" | "square" | "triangle";
 type OverSampleType = "2x" | "4x" | "none";
 type PanningModelType = "HRTF" | "equalpower";
 type PaymentComplete = "fail" | "success" | "unknown";
-type PermissionName = "geolocation" | "notifications" | "persistent-storage" | "push" | "screen-wake-lock" | "xr-spatial-tracking";
+type PaymentShippingType = "delivery" | "pickup" | "shipping";
+type PermissionName = "geolocation" | "midi" | "notifications" | "persistent-storage" | "push" | "screen-wake-lock" | "storage-access";
 type PermissionState = "denied" | "granted" | "prompt";
 type PlaybackDirection = "alternate" | "alternate-reverse" | "normal" | "reverse";
 type PositionAlignSetting = "auto" | "center" | "line-left" | "line-right";

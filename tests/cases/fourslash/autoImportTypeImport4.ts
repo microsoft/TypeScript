@@ -23,27 +23,28 @@
 
 // @Filename: /index0.ts
 //// import { A, B, C } from "./exports1";
-//// a/*0*/;
+//// a/*0*//*0a*/;
 //// b;
 
 // @Filename: /index1.ts
 //// import { A, B, C, type Y, type Z } from "./exports1";
-//// a/*1*/;
+//// a/*1*//*1a*//*1b*//*1c*/;
 //// b;
 
 // @Filename: /index2.ts
 //// import { A, a, B, b, type Y, type Z } from "./exports1";
 //// import { E } from "./exports2";
-//// d/*2*/
+//// d/*2*//*2a*//*2b*//*2c*/
 
 // addition of correctly sorted type imports should not affect behavior as shown in autoImportSortCaseSensitivity1.ts
 goTo.marker("0");
 verify.importFixAtPosition([
-    `import { A, B, C, a } from "./exports1";\na;\nb;`,
-    `import { A, B, C, b } from "./exports1";\na;\nb;`,
+    `import { a, A, B, C } from "./exports1";\na;\nb;`,
+    `import { A, b, B, C } from "./exports1";\na;\nb;`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "last" });
+goTo.marker("0a");
 verify.importFixAtPosition([
     `import { a, A, B, C } from "./exports1";\na;\nb;`,
     `import { A, b, B, C } from "./exports1";\na;\nb;`
@@ -53,11 +54,12 @@ verify.importFixAtPosition([
 
 goTo.marker("1");
 verify.importFixAtPosition([
-    `import { A, B, C, a, type Y, type Z } from "./exports1";\na;\nb;`,
-    `import { A, B, C, b, type Y, type Z } from "./exports1";\na;\nb;`,
+    `import { a, A, B, C, type Y, type Z } from "./exports1";\na;\nb;`,
+    `import { A, b, B, C, type Y, type Z } from "./exports1";\na;\nb;`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "last" });
+goTo.marker("1a");
 verify.importFixAtPosition([
     `import { a, A, B, C, type Y, type Z } from "./exports1";\na;\nb;`,
     `import { A, b, B, C, type Y, type Z } from "./exports1";\na;\nb;`
@@ -65,13 +67,15 @@ verify.importFixAtPosition([
     /*errorCode*/ undefined,
     { organizeImportsIgnoreCase: true, organizeImportsTypeOrder : "last" });
 
+goTo.marker("1b");
 // if we sort inline and sensitive, then all upper case imports should be sorted before any lower case imports
 verify.importFixAtPosition([
-    `import { A, B, C, type Y, type Z, a } from "./exports1";\na;\nb;`,
-    `import { A, B, C, type Y, type Z, b } from "./exports1";\na;\nb;`,
+    `import { a, A, B, C, type Y, type Z } from "./exports1";\na;\nb;`,
+    `import { A, b, B, C, type Y, type Z } from "./exports1";\na;\nb;`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "inline" });
+goTo.marker("1c");
 verify.importFixAtPosition([
     `import { a, A, B, C, type Y, type Z } from "./exports1";\na;\nb;`,
     `import { A, b, B, C, type Y, type Z } from "./exports1";\na;\nb;`
@@ -87,6 +91,7 @@ d`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "last" });
+goTo.marker("2a");
 verify.importFixAtPosition([
 `import { A, a, B, b, type Y, type Z } from "./exports1";
 import { E, d } from "./exports2";
@@ -94,7 +99,7 @@ d`
 ],
     /*errorCode*/ undefined,
     { organizeImportsIgnoreCase: false, organizeImportsTypeOrder : "last" });
-
+goTo.marker("2b");
 verify.importFixAtPosition([
 `import { A, a, B, b, type Y, type Z } from "./exports1";
 import { d, E } from "./exports2";
@@ -102,6 +107,7 @@ d`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "last" });
+goTo.marker("2c");
 verify.importFixAtPosition([
 `import { A, a, B, b, type Y, type Z } from "./exports1";
 import { E, d } from "./exports2";

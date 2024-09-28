@@ -91,7 +91,6 @@ define("main", ["require", "exports", "d", "e"], function (require, exports) {
 
 
 //// [f.d.ts]
-/// <reference path="c.d.ts" />
 declare module "a" {
     export class A {
     }

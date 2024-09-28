@@ -3,25 +3,34 @@
 === utils.ts ===
 export function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
 export function bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
 
 export interface Buzz { }
 
 === index.ts ===
 import {foo, bar, Buzz} from "./utils";
 >foo : () => void
+>    : ^^^^^^^^^^
 >bar : () => void
+>    : ^^^^^^^^^^
 >Buzz : any
+>     : ^^^
 
 foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 let obj: Buzz;
 >obj : Buzz
+>    : ^^^^
 
 export {bar};
 >bar : () => void
+>    : ^^^^^^^^^^
 

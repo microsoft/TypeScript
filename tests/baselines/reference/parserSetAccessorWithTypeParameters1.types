@@ -3,8 +3,11 @@
 === parserSetAccessorWithTypeParameters1.ts ===
 class C {
 >C : C
+>  : ^
 
    set foo<T>(v) { }
 >foo : any
+>    : ^^^
 >v : any
+>  : ^^^
 }

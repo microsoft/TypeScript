@@ -1,6 +1,4 @@
-import {
-    sys,
-} from "./_namespaces/ts";
+import { sys } from "./_namespaces/ts.js";
 
 export type ActionSet = "action::set";
 export type ActionInvalidate = "action::invalidate";
@@ -47,7 +45,7 @@ export namespace Arguments {
 }
 
 /** @internal */
-export function hasArgument(argumentName: string) {
+export function hasArgument(argumentName: string): boolean {
     return sys.args.includes(argumentName);
 }
 

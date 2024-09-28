@@ -3,17 +3,20 @@
 === modules.d.ts ===
 declare module 'mod' {
 >'mod' : typeof import("mod")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
   var y: any;
 >y : any
 
   export default y;
 >y : any
+>  : ^^^
 }
 
 === app.tsx ===
 import Main from 'mod';
 >Main : any
+>     : ^^^
 
 declare var Foo, React;
 >Foo : any

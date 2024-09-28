@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/dtsEmitTripleSlashAvoidUnnecessaryResolutionMode.ts] ////
 
 === /app.mts ===
-/// <reference types="node" />
+/// <reference types="node" preserve="true" />
 export async function drainStream(stream: NodeJS.ReadableStream): Promise<void> {
 >drainStream : Symbol(drainStream, Decl(app.mts, 0, 0))
 >stream : Symbol(stream, Decl(app.mts, 1, 34))

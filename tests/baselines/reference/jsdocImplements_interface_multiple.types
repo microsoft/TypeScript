@@ -4,10 +4,12 @@
 interface Drawable {
     draw(): number;
 >draw : () => number
+>     : ^^^^^^      
 }
 interface Sizable {
     size(): number;
 >size : () => number
+>     : ^^^^^^      
 }
 === /a.js ===
 /** 
@@ -16,18 +18,23 @@ interface Sizable {
  **/
 class Square {
 >Square : Square
+>       : ^^^^^^
 
     draw() {
 >draw : () => number
+>     : ^^^^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
     size() {
 >size : () => number
+>     : ^^^^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
 }
 /**
@@ -36,11 +43,14 @@ class Square {
  **/
 class BadSquare {
 >BadSquare : BadSquare
+>          : ^^^^^^^^^
 
     size() {
 >size : () => number
+>     : ^^^^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
 }

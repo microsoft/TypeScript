@@ -3,16 +3,21 @@
 === parserClassDeclaration18.ts ===
 declare class FooBase {
 >FooBase : FooBase
+>        : ^^^^^^^
 
     constructor(s: string);
 >s : string
+>  : ^^^^^^
 
     constructor(n: number);
 >n : number
+>  : ^^^^^^
 
     constructor(x: any) {
 >x : any
+>  : ^^^
     }
     bar1():void;
 >bar1 : () => void
+>     : ^^^^^^    
 }

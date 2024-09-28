@@ -1,3 +1,4 @@
+error TS-1: Pre-emit (44) and post-emit (45) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 astralAsSurrogatePair.ts(1,11): error TS1127: Invalid character.
 astralAsSurrogatePair.ts(1,14): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'as'.
 astralAsSurrogatePair.ts(1,17): error TS1127: Invalid character.
@@ -44,6 +45,9 @@ extendedEscapesForAstralsInVarsAndClasses.ts(24,8): error TS1351: An identifier 
 extendedEscapesForAstralsInVarsAndClasses.ts(24,12): error TS1128: Declaration or statement expected.
 
 
+!!! error TS-1: Pre-emit (44) and post-emit (45) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2532 extendedEscapesForAstralsInVarsAndClasses.ts:18:16: Object is possibly 'undefined'.
 ==== extendedEscapesForAstralsInVarsAndClasses.ts (38 errors) ====
     // U+102A7 CARIAN LETTER A2
     var 𐊧: string;

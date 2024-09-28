@@ -39,6 +39,6 @@ var C = /** @class */ (function () {
 declare class C {
     static D: {
         new (): {};
-        D: any;
+        D: /*elided*/ any;
     };
 }

@@ -4,10 +4,12 @@
 declare namespace NS {
     type A = object;
 >A : object
+>  : ^^^^^^
 }
 
 export = NS;
 >NS : any
+>   : ^^^
 
 export as namespace MyTypes;
 >MyTypes : error
@@ -18,6 +20,7 @@ import type * as NS from './type1';
 
 export = NS;
 >NS : any
+>   : ^^^
 
 export as namespace ModuleATypes;
 >ModuleATypes : error

@@ -53,6 +53,7 @@ import {
     getFileMatcherPatterns,
     getLocaleSpecificMessage,
     getNormalizedAbsolutePath,
+    getOwnKeys,
     getRegexFromPattern,
     getRegularExpressionForWildcard,
     getRegularExpressionsForWildcards,
@@ -120,10 +121,9 @@ import {
     WatchDirectoryKind,
     WatchFileKind,
     WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
-/** @internal */
-export const compileOnSaveCommandLineOption: CommandLineOption = {
+const compileOnSaveCommandLineOption: CommandLineOption = {
     name: "compileOnSave",
     type: "boolean",
     defaultValueDescription: false,
@@ -138,12 +138,16 @@ const jsxOptionMap = new Map(Object.entries({
 }));
 
 /** @internal */
-export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const));
+export const inverseJsxOptionMap: Map<string, string> = new Map(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const));
 
 // NOTE: The order here is important to default lib ordering as entries will have the same
 //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
 //       order also affects overload resolution when a type declared in one lib is
 //       augmented in another lib.
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
+//       lib/esnext.*.d.ts file.
 const libEntries: [string, string][] = [
     // JavaScript only
     ["es5", "lib.es5.d.ts"],
@@ -158,6 +162,7 @@ const libEntries: [string, string][] = [
     ["es2021", "lib.es2021.d.ts"],
     ["es2022", "lib.es2022.d.ts"],
     ["es2023", "lib.es2023.d.ts"],
+    ["es2024", "lib.es2024.d.ts"],
     ["esnext", "lib.esnext.d.ts"],
     // Host only
     ["dom", "lib.dom.d.ts"],
@@ -180,6 +185,7 @@ const libEntries: [string, string][] = [
     ["es2015.symbol.wellknown", "lib.es2015.symbol.wellknown.d.ts"],
     ["es2016.array.include", "lib.es2016.array.include.d.ts"],
     ["es2016.intl", "lib.es2016.intl.d.ts"],
+    ["es2017.arraybuffer", "lib.es2017.arraybuffer.d.ts"],
     ["es2017.date", "lib.es2017.date.d.ts"],
     ["es2017.object", "lib.es2017.object.d.ts"],
     ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"],
@@ -212,12 +218,18 @@ const libEntries: [string, string][] = [
     ["es2022.error", "lib.es2022.error.d.ts"],
     ["es2022.intl", "lib.es2022.intl.d.ts"],
     ["es2022.object", "lib.es2022.object.d.ts"],
-    ["es2022.sharedmemory", "lib.es2022.sharedmemory.d.ts"],
     ["es2022.string", "lib.es2022.string.d.ts"],
     ["es2022.regexp", "lib.es2022.regexp.d.ts"],
     ["es2023.array", "lib.es2023.array.d.ts"],
     ["es2023.collection", "lib.es2023.collection.d.ts"],
     ["es2023.intl", "lib.es2023.intl.d.ts"],
+    ["es2024.arraybuffer", "lib.es2024.arraybuffer.d.ts"],
+    ["es2024.collection", "lib.es2024.collection.d.ts"],
+    ["es2024.object", "lib.es2024.object.d.ts"],
+    ["es2024.promise", "lib.es2024.promise.d.ts"],
+    ["es2024.regexp", "lib.es2024.regexp.d.ts"],
+    ["es2024.sharedmemory", "lib.es2024.sharedmemory.d.ts"],
+    ["es2024.string", "lib.es2024.string.d.ts"],
     ["esnext.array", "lib.es2023.array.d.ts"],
     ["esnext.collection", "lib.esnext.collection.d.ts"],
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
@@ -226,10 +238,14 @@ const libEntries: [string, string][] = [
     ["esnext.disposable", "lib.esnext.disposable.d.ts"],
     ["esnext.bigint", "lib.es2020.bigint.d.ts"],
     ["esnext.string", "lib.es2022.string.d.ts"],
-    ["esnext.promise", "lib.esnext.promise.d.ts"],
+    ["esnext.promise", "lib.es2024.promise.d.ts"],
     ["esnext.weakref", "lib.es2021.weakref.d.ts"],
     ["esnext.decorators", "lib.esnext.decorators.d.ts"],
-    ["esnext.object", "lib.esnext.object.d.ts"],
+    ["esnext.object", "lib.es2024.object.d.ts"],
+    ["esnext.array", "lib.esnext.array.d.ts"],
+    ["esnext.regexp", "lib.es2024.regexp.d.ts"],
+    ["esnext.string", "lib.es2024.string.d.ts"],
+    ["esnext.iterator", "lib.esnext.iterator.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
@@ -241,7 +257,7 @@ const libEntries: [string, string][] = [
  *
  * @internal
  */
-export const libs = libEntries.map(entry => entry[0]);
+export const libs: string[] = libEntries.map(entry => entry[0]);
 
 /**
  * A map of lib names to lib files. This map is used both for parsing the "lib" command line
@@ -249,9 +265,11 @@ export const libs = libEntries.map(entry => entry[0]);
  *
  * @internal
  */
-export const libMap = new Map(libEntries);
+export const libMap: Map<string, string> = new Map(libEntries);
 
 // Watch related options
+
+// Do not delete this without updating the website's tsconfig generation.
 /** @internal */
 export const optionsForWatch: CommandLineOption[] = [
     {
@@ -308,6 +326,7 @@ export const optionsForWatch: CommandLineOption[] = [
             isFilePath: true,
             extraValidation: specToDiagnostic,
         },
+        allowConfigDirTemplateSubstitution: true,
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Remove_a_list_of_directories_from_the_watch_process,
     },
@@ -320,6 +339,7 @@ export const optionsForWatch: CommandLineOption[] = [
             isFilePath: true,
             extraValidation: specToDiagnostic,
         },
+        allowConfigDirTemplateSubstitution: true,
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Remove_a_list_of_files_from_the_watch_mode_s_processing,
     },
@@ -426,7 +446,6 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         name: "generateTrace",
         type: "string",
         isFilePath: true,
-        isCommandLineOnly: true,
         paramType: Diagnostics.DIRECTORY,
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Generates_an_event_trace_and_a_list_of_types,
@@ -459,7 +478,6 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Emit,
-        transpileOptionValue: undefined,
         defaultValueDescription: false,
         description: Diagnostics.Create_sourcemaps_for_d_ts_files,
     },
@@ -491,6 +509,25 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Emit,
         description: Diagnostics.Include_sourcemap_files_inside_the_emitted_JavaScript,
+        defaultValueDescription: false,
+    },
+    {
+        name: "noCheck",
+        type: "boolean",
+        showInSimplifiedHelpView: false,
+        category: Diagnostics.Compiler_Diagnostics,
+        description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
+        transpileOptionValue: true,
+        defaultValueDescription: false,
+        // Not setting affectsSemanticDiagnostics or affectsBuildInfo because we dont want all diagnostics to go away, its handled in builder
+    },
+    {
+        name: "noEmit",
+        type: "boolean",
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Emit,
+        description: Diagnostics.Disable_emitting_files_from_a_compilation,
+        transpileOptionValue: undefined,
         defaultValueDescription: false,
     },
     {
@@ -529,6 +566,8 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
         es2020: ScriptTarget.ES2020,
         es2021: ScriptTarget.ES2021,
         es2022: ScriptTarget.ES2022,
+        es2023: ScriptTarget.ES2023,
+        es2024: ScriptTarget.ES2024,
         esnext: ScriptTarget.ESNext,
     })),
     affectsSourceFile: true,
@@ -609,15 +648,6 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Command_line_Options,
         paramType: Diagnostics.FILE_OR_DIRECTORY,
         description: Diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
-    },
-    {
-        name: "build",
-        type: "boolean",
-        shortName: "b",
-        showInSimplifiedHelpView: true,
-        category: Diagnostics.Command_line_Options,
-        description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date,
-        defaultValueDescription: false,
     },
     {
         name: "showConfig",
@@ -763,19 +793,11 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Disable_emitting_comments,
     },
     {
-        name: "noEmit",
-        type: "boolean",
-        showInSimplifiedHelpView: true,
-        category: Diagnostics.Emit,
-        description: Diagnostics.Disable_emitting_files_from_a_compilation,
-        transpileOptionValue: undefined,
-        defaultValueDescription: false,
-    },
-    {
         name: "importHelpers",
         type: "boolean",
         affectsEmit: true,
         affectsBuildInfo: true,
+        affectsSourceFile: true,
         category: Diagnostics.Emit,
         description: Diagnostics.Allow_importing_helper_functions_from_tslib_once_per_project_instead_of_including_them_per_file,
         defaultValueDescription: false,
@@ -820,6 +842,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
         defaultValueDescription: false,
+    },
+    {
+        name: "isolatedDeclarations",
+        type: "boolean",
+        category: Diagnostics.Interop_Constraints,
+        description: Diagnostics.Require_sufficient_annotation_on_exports_so_other_tools_can_trivially_generate_declaration_files,
+        defaultValueDescription: false,
+        affectsBuildInfo: true,
+        affectsSemanticDiagnostics: true,
     },
 
     // Strict Type Checks
@@ -884,6 +915,16 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Check_for_class_properties_that_are_declared_but_not_set_in_the_constructor,
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+    },
+    {
+        name: "strictBuiltinIteratorReturn",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        strictFlag: true,
+        category: Diagnostics.Type_Checking,
+        description: Diagnostics.Built_in_iterators_are_instantiated_with_a_TReturn_type_of_undefined_instead_of_any,
         defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
@@ -1028,6 +1069,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         name: "paths",
         type: "object",
         affectsModuleResolution: true,
+        allowConfigDirTemplateSubstitution: true,
         isTSConfigOnly: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_a_set_of_entries_that_re_map_imports_to_additional_lookup_locations,
@@ -1045,6 +1087,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             isFilePath: true,
         },
         affectsModuleResolution: true,
+        allowConfigDirTemplateSubstitution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Allow_multiple_folders_to_be_treated_as_one_when_resolving_modules,
         transpileOptionValue: undefined,
@@ -1059,6 +1102,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             isFilePath: true,
         },
         affectsModuleResolution: true,
+        allowConfigDirTemplateSubstitution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types,
     },
@@ -1134,6 +1178,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         transpileOptionValue: undefined,
     },
     {
+        name: "rewriteRelativeImportExtensions",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_in_output_files,
+        defaultValueDescription: false,
+    },
+    {
         name: "resolvePackageJsonExports",
         type: "boolean",
         affectsModuleResolution: true,
@@ -1159,6 +1212,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsModuleResolution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Conditions_to_set_in_addition_to_the_resolver_specific_defaults_when_resolving_imports,
+    },
+    {
+        name: "noUncheckedSideEffectImports",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Check_side_effect_imports,
+        defaultValueDescription: false,
     },
 
     // Source Maps
@@ -1234,6 +1296,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsModuleResolution: true,
+        affectsSourceFile: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Specify_module_specifier_used_to_import_the_JSX_factory_functions_when_using_jsx_Colon_react_jsx_Asterisk,
         defaultValueDescription: "react",
@@ -1567,6 +1630,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
 ];
 
+// Do not delete this without updating the website's tsconfig generation.
 /** @internal */
 export const optionDeclarations: CommandLineOption[] = [
     ...commonOptionsWithBuild,
@@ -1594,9 +1658,35 @@ export const optionsAffectingProgramStructure: readonly CommandLineOption[] = op
 /** @internal */
 export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => hasProperty(option, "transpileOptionValue"));
 
+const configDirTemplateSubstitutionOptions: readonly CommandLineOption[] = optionDeclarations.filter(
+    option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
+);
+
+const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOption[] = optionsForWatch.filter(
+    option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
+);
+
+/** @internal */
+export const commandLineOptionOfCustomType: readonly CommandLineOptionOfCustomType[] = optionDeclarations.filter(isCommandLineOptionOfCustomType);
+function isCommandLineOptionOfCustomType(option: CommandLineOption): option is CommandLineOptionOfCustomType {
+    return !isString(option.type);
+}
+
+/** @internal */
+export const tscBuildOption: CommandLineOption = {
+    name: "build",
+    type: "boolean",
+    shortName: "b",
+    showInSimplifiedHelpView: true,
+    category: Diagnostics.Command_line_Options,
+    description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date,
+    defaultValueDescription: false,
+};
+
 // Build related options
 /** @internal */
 export const optionsForBuild: CommandLineOption[] = [
+    tscBuildOption,
     {
         name: "verbose",
         shortName: "v",
@@ -1628,6 +1718,13 @@ export const optionsForBuild: CommandLineOption[] = [
         type: "boolean",
         defaultValueDescription: false,
     },
+    {
+        name: "stopBuildOnErrors",
+        category: Diagnostics.Command_line_Options,
+        description: Diagnostics.Skip_building_downstream_projects_on_error_in_upstream_project,
+        type: "boolean",
+        defaultValueDescription: false,
+    },
 ];
 
 /** @internal */
@@ -1636,6 +1733,7 @@ export const buildOpts: CommandLineOption[] = [
     ...optionsForBuild,
 ];
 
+// Do not delete this without updating the website's tsconfig generation.
 /** @internal */
 export const typeAcquisitionDeclarations: CommandLineOption[] = [
     {
@@ -1698,7 +1796,8 @@ const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
     getOptionsNameMap: getBuildOptionsNameMap,
 };
 
-/** @internal */
+// Do not delete this without updating the website's tsconfig generation.
+/** @internal @knipignore */
 export const defaultInitCompilerOptions: CompilerOptions = {
     module: ModuleKind.CommonJS,
     target: ScriptTarget.ES2016,
@@ -1720,7 +1819,7 @@ function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType
 }
 
 /** @internal */
-export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string | undefined, errors: Diagnostic[]) {
+export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string | undefined, errors: Diagnostic[]): string | number | undefined {
     return convertJsonOptionOfCustomType(opt, (value ?? "").trim(), errors);
 }
 
@@ -1756,6 +1855,14 @@ export interface OptionsBase {
 }
 
 /** @internal */
+export interface BaseParsedCommandLine {
+    options: OptionsBase;
+    watchOptions: WatchOptions | undefined;
+    fileNames: string[];
+    errors: Diagnostic[];
+}
+
+/** @internal */
 export interface ParseCommandLineWorkerDiagnostics extends DidYouMeanOptionsDiagnostics {
     getOptionsNameMap: () => OptionsNameMap;
     optionTypeMismatchDiagnostic: DiagnosticMessage;
@@ -1772,8 +1879,16 @@ function createUnknownOptionError(
     node?: PropertyName,
     sourceFile?: TsConfigSourceFile,
 ) {
-    if (diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.has(unknownOption.toLowerCase())) {
-        return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.alternateMode.diagnostic, unknownOption);
+    const otherOption = diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.get(unknownOption.toLowerCase());
+    if (otherOption) {
+        return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
+            sourceFile,
+            node,
+            otherOption !== tscBuildOption ?
+                diagnostics.alternateMode!.diagnostic :
+                Diagnostics.Option_build_must_be_the_first_command_line_argument,
+            unknownOption,
+        );
     }
 
     const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
@@ -1787,7 +1902,7 @@ export function parseCommandLineWorker(
     diagnostics: ParseCommandLineWorkerDiagnostics,
     commandLine: readonly string[],
     readFile?: (path: string) => string | undefined,
-) {
+): BaseParsedCommandLine {
     const options = {} as OptionsBase;
     let watchOptions: WatchOptions | undefined;
     const fileNames: string[] = [];
@@ -1974,7 +2089,7 @@ function getOptionDeclarationFromName(getOptionNameMap: () => OptionsNameMap, op
     return optionsNameMap.get(optionName);
 }
 
-/** @internal */
+/** Parsed command line for build */
 export interface ParsedBuildCommand {
     buildOptions: BuildOptions;
     watchOptions: WatchOptions | undefined;
@@ -2001,11 +2116,10 @@ const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
     optionTypeMismatchDiagnostic: Diagnostics.Build_option_0_requires_a_value_of_type_1,
 };
 
-/** @internal */
-export function parseBuildCommand(args: readonly string[]): ParsedBuildCommand {
+export function parseBuildCommand(commandLine: readonly string[]): ParsedBuildCommand {
     const { options, watchOptions, fileNames: projects, errors } = parseCommandLineWorker(
         buildOptionsDidYouMeanDiagnostics,
-        args,
+        commandLine,
     );
     const buildOptions = options as BuildOptions;
 
@@ -2373,7 +2487,7 @@ export function convertToJson(
                 return false;
 
             case SyntaxKind.NullKeyword:
-                return null; // eslint-disable-line no-null/no-null
+                return null; // eslint-disable-line no-restricted-syntax
 
             case SyntaxKind.StringLiteral:
                 if (!isDoubleQuotedString(valueExpression)) {
@@ -2515,11 +2629,11 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
     const providedKeys = new Set(optionMap.keys());
     const impliedCompilerOptions: Record<string, CompilerOptionsValue> = {};
     for (const option in computedOptions) {
-        if (!providedKeys.has(option) && some(computedOptions[option as keyof typeof computedOptions].dependencies, dep => providedKeys.has(dep))) {
-            const implied = computedOptions[option as keyof typeof computedOptions].computeValue(configParseResult.options);
-            const defaultValue = computedOptions[option as keyof typeof computedOptions].computeValue({});
+        if (!providedKeys.has(option) && some(computedOptions[option].dependencies, dep => providedKeys.has(dep))) {
+            const implied = computedOptions[option].computeValue(configParseResult.options);
+            const defaultValue = computedOptions[option].computeValue({});
             if (implied !== defaultValue) {
-                impliedCompilerOptions[option] = computedOptions[option as keyof typeof computedOptions].computeValue(configParseResult.options);
+                impliedCompilerOptions[option] = computedOptions[option].computeValue(configParseResult.options);
             }
         }
     }
@@ -2529,9 +2643,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
 
 /** @internal */
 export function optionMapToObject(optionMap: Map<string, CompilerOptionsValue>): object {
-    return {
-        ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
-    };
+    return Object.fromEntries(optionMap);
 }
 
 function filterSameAsDefaultInclude(specs: readonly string[] | undefined) {
@@ -2621,6 +2733,9 @@ function serializeOptionBaseObject(
                     // This is the case if the value is expect to be string, number, boolean or list of string
                     if (pathOptions && optionDefinition.isFilePath) {
                         result.set(name, getRelativePathFromFile(pathOptions.configFilePath, getNormalizedAbsolutePath(value as string, getDirectoryPath(pathOptions.configFilePath)), getCanonicalFileName!));
+                    }
+                    else if (pathOptions && optionDefinition.type === "list" && optionDefinition.element.isFilePath) {
+                        result.set(name, (value as string[]).map(v => getRelativePathFromFile(pathOptions.configFilePath, getNormalizedAbsolutePath(v, getDirectoryPath(pathOptions.configFilePath)), getCanonicalFileName!)));
                     }
                     else {
                         result.set(name, value);
@@ -2778,7 +2893,7 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
 }
 
 /** @internal */
-export function convertToOptionsWithAbsolutePaths(options: CompilerOptions, toAbsolutePath: (path: string) => string) {
+export function convertToOptionsWithAbsolutePaths(options: CompilerOptions, toAbsolutePath: (path: string) => string): CompilerOptions {
     const result: CompilerOptions = {};
     const optionsNameMap = getOptionsNameMap().optionsNameMap;
 
@@ -2839,14 +2954,14 @@ export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceF
 }
 
 /** @internal */
-export function setConfigFileInOptions(options: CompilerOptions, configFile: TsConfigSourceFile | undefined) {
+export function setConfigFileInOptions(options: CompilerOptions, configFile: TsConfigSourceFile | undefined): void {
     if (configFile) {
         Object.defineProperty(options, "configFile", { enumerable: false, writable: false, value: configFile });
     }
 }
 
-function isNullOrUndefined(x: any): x is null | undefined {
-    return x === undefined || x === null; // eslint-disable-line no-null/no-null
+function isNullOrUndefined(x: any): x is null | undefined { // eslint-disable-line no-restricted-syntax
+    return x === undefined || x === null; // eslint-disable-line no-restricted-syntax
 }
 
 function directoryOfCombinedPath(fileName: string, basePath: string) {
@@ -2855,8 +2970,7 @@ function directoryOfCombinedPath(fileName: string, basePath: string) {
     return getDirectoryPath(getNormalizedAbsolutePath(fileName, basePath));
 }
 
-/** @internal */
-export const defaultIncludeSpec = "**/*";
+const defaultIncludeSpec = "**/*";
 
 /**
  * Parse the contents of a config file from json or json source file (tsconfig.json).
@@ -2884,17 +2998,23 @@ function parseJsonConfigFileContentWorker(
 
     const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors, extendedConfigCache);
     const { raw } = parsedConfig;
-    const options = extend(existingOptions, parsedConfig.options || {});
-    const watchOptions = existingWatchOptions && parsedConfig.watchOptions ?
-        extend(existingWatchOptions, parsedConfig.watchOptions) :
-        parsedConfig.watchOptions || existingWatchOptions;
-
+    const options = handleOptionConfigDirTemplateSubstitution(
+        extend(existingOptions, parsedConfig.options || {}),
+        configDirTemplateSubstitutionOptions,
+        basePath,
+    ) as CompilerOptions;
+    const watchOptions = handleWatchOptionsConfigDirTemplateSubstitution(
+        existingWatchOptions && parsedConfig.watchOptions ?
+            extend(existingWatchOptions, parsedConfig.watchOptions) :
+            parsedConfig.watchOptions || existingWatchOptions,
+        basePath,
+    );
     options.configFilePath = configFileName && normalizeSlashes(configFileName);
+    const basePathForFileNames = normalizePath(configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath);
     const configFileSpecs = getConfigFileSpecs();
     if (sourceFile) sourceFile.configFileSpecs = configFileSpecs;
     setConfigFileInOptions(options, sourceFile);
 
-    const basePathForFileNames = normalizePath(configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath);
     return {
         options,
         watchOptions,
@@ -2936,12 +3056,12 @@ function parseJsonConfigFileContentWorker(
         const excludeOfRaw = getSpecsFromRaw("exclude");
         let isDefaultIncludeSpec = false;
         let excludeSpecs = toPropValue(excludeOfRaw);
-        if (excludeOfRaw === "no-prop" && raw.compilerOptions) {
-            const outDir = raw.compilerOptions.outDir;
-            const declarationDir = raw.compilerOptions.declarationDir;
+        if (excludeOfRaw === "no-prop") {
+            const outDir = options.outDir;
+            const declarationDir = options.declarationDir;
 
             if (outDir || declarationDir) {
-                excludeSpecs = [outDir, declarationDir].filter(d => !!d);
+                excludeSpecs = filter([outDir, declarationDir], d => !!d) as string[];
             }
         }
 
@@ -2949,6 +3069,7 @@ function parseJsonConfigFileContentWorker(
             includeSpecs = [defaultIncludeSpec];
             isDefaultIncludeSpec = true;
         }
+        let validatedIncludeSpecsBeforeSubstitution: readonly string[] | undefined, validatedExcludeSpecsBeforeSubstitution: readonly string[] | undefined;
         let validatedIncludeSpecs: readonly string[] | undefined, validatedExcludeSpecs: readonly string[] | undefined;
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly
@@ -2956,21 +3077,37 @@ function parseJsonConfigFileContentWorker(
         // file system.
 
         if (includeSpecs) {
-            validatedIncludeSpecs = validateSpecs(includeSpecs, errors, /*disallowTrailingRecursion*/ true, sourceFile, "include");
+            validatedIncludeSpecsBeforeSubstitution = validateSpecs(includeSpecs, errors, /*disallowTrailingRecursion*/ true, sourceFile, "include");
+            validatedIncludeSpecs = getSubstitutedStringArrayWithConfigDirTemplate(
+                validatedIncludeSpecsBeforeSubstitution,
+                basePathForFileNames,
+            ) || validatedIncludeSpecsBeforeSubstitution;
         }
 
         if (excludeSpecs) {
-            validatedExcludeSpecs = validateSpecs(excludeSpecs, errors, /*disallowTrailingRecursion*/ false, sourceFile, "exclude");
+            validatedExcludeSpecsBeforeSubstitution = validateSpecs(excludeSpecs, errors, /*disallowTrailingRecursion*/ false, sourceFile, "exclude");
+            validatedExcludeSpecs = getSubstitutedStringArrayWithConfigDirTemplate(
+                validatedExcludeSpecsBeforeSubstitution,
+                basePathForFileNames,
+            ) || validatedExcludeSpecsBeforeSubstitution;
         }
+
+        const validatedFilesSpecBeforeSubstitution = filter(filesSpecs, isString);
+        const validatedFilesSpec = getSubstitutedStringArrayWithConfigDirTemplate(
+            validatedFilesSpecBeforeSubstitution,
+            basePathForFileNames,
+        ) || validatedFilesSpecBeforeSubstitution;
 
         return {
             filesSpecs,
             includeSpecs,
             excludeSpecs,
-            validatedFilesSpec: filter(filesSpecs, isString),
+            validatedFilesSpec,
             validatedIncludeSpecs,
             validatedExcludeSpecs,
-            pathPatterns: undefined, // Initialized on first use
+            validatedFilesSpecBeforeSubstitution,
+            validatedIncludeSpecsBeforeSubstitution,
+            validatedExcludeSpecsBeforeSubstitution,
             isDefaultIncludeSpec,
         };
     }
@@ -3037,6 +3174,84 @@ function parseJsonConfigFileContentWorker(
     }
 }
 
+/** @internal */
+export function handleWatchOptionsConfigDirTemplateSubstitution(
+    watchOptions: WatchOptions | undefined,
+    basePath: string,
+) {
+    return handleOptionConfigDirTemplateSubstitution(watchOptions, configDirTemplateSubstitutionWatchOptions, basePath) as WatchOptions | undefined;
+}
+
+function handleOptionConfigDirTemplateSubstitution(
+    options: OptionsBase | undefined,
+    optionDeclarations: readonly CommandLineOption[],
+    basePath: string,
+) {
+    if (!options) return options;
+    let result: OptionsBase | undefined;
+    for (const option of optionDeclarations) {
+        if (options[option.name] !== undefined) {
+            const value = options[option.name];
+            switch (option.type) {
+                case "string":
+                    Debug.assert(option.isFilePath);
+                    if (startsWithConfigDirTemplate(value)) {
+                        setOptionValue(option, getSubstitutedPathWithConfigDirTemplate(value, basePath));
+                    }
+                    break;
+                case "list":
+                    Debug.assert(option.element.isFilePath);
+                    const listResult = getSubstitutedStringArrayWithConfigDirTemplate(value as string[], basePath);
+                    if (listResult) setOptionValue(option, listResult);
+                    break;
+                case "object":
+                    Debug.assert(option.name === "paths");
+                    const objectResult = getSubstitutedMapLikeOfStringArrayWithConfigDirTemplate(value as MapLike<string[]>, basePath);
+                    if (objectResult) setOptionValue(option, objectResult);
+                    break;
+                default:
+                    Debug.fail("option type not supported");
+            }
+        }
+    }
+    return result || options;
+
+    function setOptionValue(option: CommandLineOption, value: CompilerOptionsValue) {
+        (result ??= assign({}, options))[option.name] = value;
+    }
+}
+
+const configDirTemplate = `\${configDir}`;
+function startsWithConfigDirTemplate(value: any): value is string {
+    return isString(value) && startsWith(value, configDirTemplate, /*ignoreCase*/ true);
+}
+
+function getSubstitutedPathWithConfigDirTemplate(value: string, basePath: string) {
+    return getNormalizedAbsolutePath(value.replace(configDirTemplate, "./"), basePath);
+}
+
+function getSubstitutedStringArrayWithConfigDirTemplate(list: readonly string[] | undefined, basePath: string) {
+    if (!list) return list;
+    let result: string[] | undefined;
+    list.forEach((element, index) => {
+        if (!startsWithConfigDirTemplate(element)) return;
+        (result ??= list.slice())[index] = getSubstitutedPathWithConfigDirTemplate(element, basePath);
+    });
+    return result;
+}
+
+function getSubstitutedMapLikeOfStringArrayWithConfigDirTemplate(mapLike: MapLike<string[]>, basePath: string) {
+    let result: MapLike<string[]> | undefined;
+    const ownKeys = getOwnKeys(mapLike);
+    ownKeys.forEach(key => {
+        if (!isArray(mapLike[key])) return;
+        const subStitution = getSubstitutedStringArrayWithConfigDirTemplate(mapLike[key], basePath);
+        if (!subStitution) return;
+        (result ??= assign({}, mapLike))[key] = subStitution;
+    });
+    return result;
+}
+
 function isErrorNoInputFiles(error: Diagnostic) {
     return error.code === Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code;
 }
@@ -3055,12 +3270,24 @@ function shouldReportNoInputFiles(fileNames: string[], canJsonReportNoInutFiles:
 }
 
 /** @internal */
-export function canJsonReportNoInputFiles(raw: any) {
+export function isSolutionConfig(config: ParsedCommandLine): boolean {
+    return !config.fileNames.length &&
+        hasProperty(config.raw, "references");
+}
+
+/** @internal */
+export function canJsonReportNoInputFiles(raw: any): boolean {
     return !hasProperty(raw, "files") && !hasProperty(raw, "references");
 }
 
 /** @internal */
-export function updateErrorForNoInputFiles(fileNames: string[], configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
+export function updateErrorForNoInputFiles(
+    fileNames: string[],
+    configFileName: string,
+    configFileSpecs: ConfigFileSpecs,
+    configParseDiagnostics: Diagnostic[],
+    canJsonReportNoInutFiles: boolean,
+): boolean {
     const existingErrors = configParseDiagnostics.length;
     if (shouldReportNoInputFiles(fileNames, canJsonReportNoInutFiles)) {
         configParseDiagnostics.push(getErrorForNoInputFiles(configFileSpecs, configFileName));
@@ -3089,6 +3316,7 @@ function isSuccessfulParsedTsconfig(value: ParsedTsconfig) {
 interface ExtendsResult {
     options: CompilerOptions;
     watchOptions?: WatchOptions;
+    watchOptionsCopied?: boolean;
     include?: string[];
     exclude?: string[];
     files?: string[];
@@ -3138,15 +3366,16 @@ function parseConfig(
         else {
             ownConfig.extendedConfigPath.forEach(extendedConfigPath => applyExtendedConfig(result, extendedConfigPath));
         }
-        if (!ownConfig.raw.include && result.include) ownConfig.raw.include = result.include;
-        if (!ownConfig.raw.exclude && result.exclude) ownConfig.raw.exclude = result.exclude;
-        if (!ownConfig.raw.files && result.files) ownConfig.raw.files = result.files;
+        if (result.include) ownConfig.raw.include = result.include;
+        if (result.exclude) ownConfig.raw.exclude = result.exclude;
+        if (result.files) ownConfig.raw.files = result.files;
+
         if (ownConfig.raw.compileOnSave === undefined && result.compileOnSave) ownConfig.raw.compileOnSave = result.compileOnSave;
         if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = arrayFrom(result.extendedSourceFiles.keys());
 
         ownConfig.options = assign(result.options, ownConfig.options);
         ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
-            assign(result.watchOptions, ownConfig.watchOptions) :
+            assignWatchOptions(result, ownConfig.watchOptions) :
             ownConfig.watchOptions || result.watchOptions;
     }
     return ownConfig;
@@ -3157,12 +3386,15 @@ function parseConfig(
             const extendsRaw = extendedConfig.raw;
             let relativeDifference: string | undefined;
             const setPropertyInResultIfNotUndefined = (propertyName: "include" | "exclude" | "files") => {
+                if (ownConfig.raw[propertyName]) return; // No need to calculate if already set in own config
                 if (extendsRaw[propertyName]) {
                     result[propertyName] = map(extendsRaw[propertyName], (path: string) =>
-                        isRootedDiskPath(path) ? path : combinePaths(
-                            relativeDifference ||= convertToRelativePath(getDirectoryPath(extendedConfigPath), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
-                            path,
-                        ));
+                        startsWithConfigDirTemplate(path) || isRootedDiskPath(path) ?
+                            path :
+                            combinePaths(
+                                relativeDifference ||= convertToRelativePath(getDirectoryPath(extendedConfigPath), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
+                                path,
+                            ));
                 }
             };
             setPropertyInResultIfNotUndefined("include");
@@ -3173,10 +3405,16 @@ function parseConfig(
             }
             assign(result.options, extendedConfig.options);
             result.watchOptions = result.watchOptions && extendedConfig.watchOptions ?
-                assign({}, result.watchOptions, extendedConfig.watchOptions) :
+                assignWatchOptions(result, extendedConfig.watchOptions) :
                 result.watchOptions || extendedConfig.watchOptions;
             // TODO extend type typeAcquisition
         }
+    }
+
+    function assignWatchOptions(result: ExtendsResult, watchOptions: WatchOptions) {
+        if (result.watchOptionsCopied) return assign(result.watchOptions!, watchOptions);
+        result.watchOptionsCopied = true;
+        return assign({}, result.watchOptions, watchOptions);
     }
 }
 
@@ -3509,7 +3747,7 @@ export function convertJsonOption(
                 convertJsonOption(opt.element, value, basePath, errors, propertyAssignment, valueExpression, sourceFile);
         }
         else if (!isString(opt.type)) {
-            return convertJsonOptionOfCustomType(opt, value as string, errors, valueExpression, sourceFile);
+            return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors, valueExpression, sourceFile);
         }
         const validatedValue = validateJsonOptionValue(opt, value, errors, valueExpression, sourceFile);
         return isNullOrUndefined(validatedValue) ? validatedValue : normalizeNonListOptionValue(opt, basePath, validatedValue);
@@ -3521,7 +3759,8 @@ export function convertJsonOption(
 
 function normalizeNonListOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
     if (option.isFilePath) {
-        value = getNormalizedAbsolutePath(value, basePath);
+        value = normalizeSlashes(value);
+        value = !startsWithConfigDirTemplate(value) ? getNormalizedAbsolutePath(value, basePath) : value;
         if (value === "") {
             value = ".";
         }
@@ -3584,7 +3823,7 @@ function convertJsonOptionOfListType(
  *  \*\*        # matches the recursive directory wildcard "**".
  *  \/?$        # matches an optional trailing directory separator at the end of the string.
  */
-const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
+const invalidTrailingRecursionPattern = /(?:^|\/)\*\*\/?$/;
 
 /**
  * Matches the portion of a wildcard path that does not contain wildcards.
@@ -3743,7 +3982,7 @@ export function matchesExclude(
     excludeSpecs: readonly string[] | undefined,
     useCaseSensitiveFileNames: boolean,
     currentDirectory: string,
-) {
+): boolean {
     return matchesExcludeWorker(
         pathToCheck,
         filter(excludeSpecs, spec => !invalidDotDotAfterRecursiveWildcard(spec)),
@@ -3752,13 +3991,14 @@ export function matchesExclude(
     );
 }
 
-function matchesExcludeWorker(
+/** @internal */
+export function matchesExcludeWorker(
     pathToCheck: string,
     excludeSpecs: readonly string[] | undefined,
     useCaseSensitiveFileNames: boolean,
     currentDirectory: string,
     basePath?: string,
-) {
+): boolean {
     const excludePattern = getRegularExpressionForWildcard(excludeSpecs, combinePaths(normalizePath(currentDirectory), basePath), "exclude");
     const excludeRegex = excludePattern && getRegexFromPattern(excludePattern, useCaseSensitiveFileNames);
     if (!excludeRegex) return false;

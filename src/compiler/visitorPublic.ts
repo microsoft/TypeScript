@@ -59,6 +59,7 @@ import {
     isModifier,
     isModifierLike,
     isModuleBody,
+    isModuleExportName,
     isModuleName,
     isModuleReference,
     isNamedExportBindings,
@@ -102,7 +103,7 @@ import {
     SyntaxKind,
     TransformationContext,
     Visitor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
@@ -378,7 +379,7 @@ function visitArrayWorker(
  * Starts a new lexical environment and visits a statement list, ending the lexical environment
  * and merging hoisted declarations upon completion.
  */
-export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor: NodesVisitor = visitNodes) {
+export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor: NodesVisitor = visitNodes): NodeArray<Statement> {
     context.startLexicalEnvironment();
     statements = nodesVisitor(statements, visitor, isStatement, start);
     if (ensureUseStrict) statements = context.factory.ensureUseStrict(statements);
@@ -560,7 +561,7 @@ export function visitIterationBody(body: Statement, visitor: Visitor, context: T
  * @param visitor The visitor to use when visiting expressions whose result will not be discarded at runtime.
  * @param discardVisitor The visitor to use when visiting expressions whose result will be discarded at runtime. Defaults to {@link visitor}.
  */
-export function visitCommaListElements(elements: NodeArray<Expression>, visitor: Visitor, discardVisitor = visitor): NodeArray<Expression> {
+export function visitCommaListElements(elements: NodeArray<Expression>, visitor: Visitor, discardVisitor: Visitor = visitor): NodeArray<Expression> {
     if (discardVisitor === visitor || elements.length <= 1) {
         return visitNodes(elements, visitor, isExpression);
     }
@@ -1579,7 +1580,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateImportSpecifier(
             node,
             node.isTypeOnly,
-            nodeVisitor(node.propertyName, visitor, isIdentifier),
+            nodeVisitor(node.propertyName, visitor, isModuleExportName),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
         );
     },
@@ -1614,8 +1615,8 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateExportSpecifier(
             node,
             node.isTypeOnly,
-            nodeVisitor(node.propertyName, visitor, isIdentifier),
-            Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
+            nodeVisitor(node.propertyName, visitor, isModuleExportName),
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isModuleExportName)),
         );
     },
 

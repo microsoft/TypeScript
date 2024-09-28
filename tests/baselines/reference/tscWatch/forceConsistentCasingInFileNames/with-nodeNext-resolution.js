@@ -1,4 +1,4 @@
-currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames: false
+currentDirectory:: /Users/name/projects/web useCaseSensitiveFileNames:: false
 Input::
 //// [/Users/name/projects/web/src/bin.ts]
 import { foo } from "yargs";
@@ -32,7 +32,7 @@ export function foo(): void;
   }
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -44,12 +44,14 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --w --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 File '/Users/name/projects/web/src/package.json' does not exist.
 File '/Users/name/projects/web/package.json' does not exist.
@@ -80,6 +82,7 @@ Saw non-matching condition 'import'.
 Matched 'exports' condition 'default'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'default'.
 Exiting conditional exports.
 Resolved under condition 'types'.
@@ -97,21 +100,25 @@ File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists ac
 File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
 ======== Type reference directive 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12', primary: true. ========
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+[96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 
-../../../../a/lib/lib.d.ts
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 node_modules/@types/yargs/index.d.ts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.ts@17.0.12'
   Entry point for implicit type library 'yargs' with packageId 'yargs/index.d.ts@17.0.12'
-  File is CommonJS module because 'node_modules/@types/yargs/package.json' does not have field "type"
 src/bin.ts
   Matched by default include pattern '**/*'
-  File is CommonJS module because 'package.json' was not found
-[[90m12:00:38 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -130,6 +137,12 @@ PolledWatches::
   {"pollingInterval":2000}
 /Users/name/projects/web/src/package.json: *new*
   {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /Users/name/projects: *new*
@@ -144,7 +157,7 @@ FsWatches::
   {}
 /Users/name/projects/web/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -170,14 +183,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /Users/name/projects/web/node_modules/@types/yargs/index.d.ts
 /Users/name/projects/web/src/bin.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /users/name/projects/web/node_modules/@types/yargs/index.d.ts (used version)
 /users/name/projects/web/src/bin.ts (used version)
 

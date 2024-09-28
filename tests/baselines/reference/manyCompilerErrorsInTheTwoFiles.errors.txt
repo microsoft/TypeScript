@@ -1,7 +1,7 @@
 [96ma.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
 
 [7m1[0m const a =!@#!@$
-[7m [0m [91m           [0m
+[7m [0m [91m           ~~[0m
 [96ma.ts[0m:[93m1[0m:[93m13[0m - [91merror[0m[90m TS1134: [0mVariable declaration expected.
 
 [7m1[0m const a =!@#!@$
@@ -13,7 +13,7 @@
 [96ma.ts[0m:[93m2[0m:[93m13[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
 
 [7m2[0m const b = !@#!@#!@#!
-[7m [0m [91m            [0m
+[7m [0m [91m            ~~[0m
 [96ma.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS1134: [0mVariable declaration expected.
 
 [7m2[0m const b = !@#!@#!@#!
@@ -21,11 +21,11 @@
 [96ma.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
 
 [7m2[0m const b = !@#!@#!@#!
-[7m [0m [91m               [0m
+[7m [0m [91m               ~~[0m
 [96ma.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS18026: [0m'#!' can only be used at the start of a file.
 
 [7m2[0m const b = !@#!@#!@#!
-[7m [0m [91m                  [0m
+[7m [0m [91m                  ~~[0m
 [96ma.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'OK'.
 
 [7m3[0m OK!
@@ -78,20 +78,20 @@
 
 ==== a.ts (16 errors) ====
     const a =!@#!@$
-               
+               ~~
 !!! error TS18026: '#!' can only be used at the start of a file.
                 ~
 !!! error TS1134: Variable declaration expected.
                    
 !!! error TS1109: Expression expected.
     const b = !@#!@#!@#!
-                
+                ~~
 !!! error TS18026: '#!' can only be used at the start of a file.
                  ~
 !!! error TS1134: Variable declaration expected.
-                   
+                   ~~
 !!! error TS18026: '#!' can only be used at the start of a file.
-                      
+                      ~~
 !!! error TS18026: '#!' can only be used at the start of a file.
     OK!
     ~~

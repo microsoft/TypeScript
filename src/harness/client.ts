@@ -35,12 +35,12 @@ import {
     identity,
     ImplementationLocation,
     InlayHint,
-    InlayHintKind,
     InteractiveRefactorArguments,
     isString,
     JSDocTagInfo,
     LanguageService,
     LanguageServiceHost,
+    LineAndCharacter,
     map,
     mapOneOrMany,
     NavigateToItem,
@@ -49,6 +49,8 @@ import {
     notImplemented,
     OrganizeImportsArgs,
     OutliningSpan,
+    PasteEdits,
+    PasteEditsArgs,
     PatternMatchKind,
     Program,
     QuickInfo,
@@ -56,6 +58,7 @@ import {
     RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
+    RegionDiagnosticsResult,
     RenameInfo,
     RenameInfoFailure,
     RenameInfoSuccess,
@@ -74,13 +77,12 @@ import {
     TodoComment,
     TodoCommentDescriptor,
     UserPreferences,
-} from "./_namespaces/ts";
-import {
-    protocol,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.js";
+import { protocol } from "./_namespaces/ts.server.js";
 
 export interface SessionClientHost extends LanguageServiceHost {
     writeMessage(message: string): void;
+    openFile(fileName: string): void;
 }
 
 interface RenameEntry {
@@ -94,8 +96,7 @@ interface RenameEntry {
     readonly locations: RenameLocation[];
 }
 
-/** @internal */
-export function extractMessage(message: string): string {
+function extractMessage(message: string): string {
     // Read the content length
     const contentLengthPrefix = "Content-Length: ";
     const lines = message.split(/\r?\n/);
@@ -204,7 +205,7 @@ export class SessionClient implements LanguageService {
     }
 
     /** @internal */
-    configure(preferences: UserPreferences) {
+    configure(preferences: UserPreferences): void {
         this.preferences = preferences;
         const args: protocol.ConfigureRequestArguments = { preferences };
         const request = this.processRequest(protocol.CommandTypes.Configure, args);
@@ -212,14 +213,14 @@ export class SessionClient implements LanguageService {
     }
 
     /** @internal */
-    setFormattingOptions(formatOptions: FormatCodeSettings) {
+    setFormattingOptions(formatOptions: FormatCodeSettings): void {
         const args: protocol.ConfigureRequestArguments = { formatOptions };
         const request = this.processRequest(protocol.CommandTypes.Configure, args);
         this.processResponse(request, /*expectEmptyBody*/ true);
     }
 
     /** @internal */
-    setCompilerOptionsForInferredProjects(options: protocol.CompilerOptions) {
+    setCompilerOptionsForInferredProjects(options: protocol.CompilerOptions): void {
         const args: protocol.SetCompilerOptionsForInferredProjectsArgs = { options };
         const request = this.processRequest(protocol.CommandTypes.CompilerOptionsForInferredProjects, args);
         this.processResponse(request, /*expectEmptyBody*/ false);
@@ -227,12 +228,14 @@ export class SessionClient implements LanguageService {
 
     openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
         const args: protocol.OpenRequestArgs = { file, fileContent, scriptKindName };
-        this.processRequest(protocol.CommandTypes.Open, args);
+        const request = this.processRequest(protocol.CommandTypes.Open, args);
+        this.processResponse(request, /*expectEmptyBody*/ true);
     }
 
     closeFile(file: string): void {
         const args: protocol.FileRequestArgs = { file };
-        this.processRequest(protocol.CommandTypes.Close, args);
+        const request = this.processRequest(protocol.CommandTypes.Close, args);
+        this.processResponse(request, /*expectEmptyBody*/ true);
     }
 
     createChangeFileRequestArgs(fileName: string, start: number, end: number, insertString: string): protocol.ChangeRequestArgs {
@@ -242,10 +245,11 @@ export class SessionClient implements LanguageService {
     changeFile(fileName: string, args: protocol.ChangeRequestArgs): void {
         // clear the line map after an edit
         this.lineMaps.set(fileName, undefined!); // TODO: GH#18217
-        this.processRequest(protocol.CommandTypes.Change, args);
+        const request = this.processRequest(protocol.CommandTypes.Change, args);
+        this.processResponse(request, /*expectEmptyBody*/ true);
     }
 
-    toLineColumnOffset(fileName: string, position: number) {
+    toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
         const { line, offset } = this.positionToOneBasedLineOffset(fileName, position);
         return { line, character: offset };
     }
@@ -298,6 +302,7 @@ export class SessionClient implements LanguageService {
 
                 return entry as { name: string; kind: ScriptElementKind; kindModifiers: string; sortText: string; }; // TODO: GH#18217
             }),
+            defaultCommitCharacters: response.body!.defaultCommitCharacters,
         };
     }
 
@@ -476,6 +481,7 @@ export class SessionClient implements LanguageService {
     }
 
     getFileReferences(fileName: string): ReferenceEntry[] {
+        this.host.openFile(fileName);
         const request = this.processRequest<protocol.FileReferencesRequest>(protocol.CommandTypes.FileReferences, { file: fileName });
         const response = this.processResponse<protocol.FileReferencesResponse>(request);
 
@@ -501,6 +507,9 @@ export class SessionClient implements LanguageService {
     }
     getSuggestionDiagnostics(file: string): DiagnosticWithLocation[] {
         return this.getDiagnostics(file, protocol.CommandTypes.SuggestionDiagnosticsSync);
+    }
+    getRegionSemanticDiagnostics(_file: string, _ranges: TextRange[]): RegionDiagnosticsResult | undefined {
+        throw new Error("Method not implemented.");
     }
 
     private getDiagnostics(file: string, command: protocol.CommandTypes): DiagnosticWithLocation[] {
@@ -574,7 +583,7 @@ export class SessionClient implements LanguageService {
         return renameInfo;
     }
 
-    getSmartSelectionRange() {
+    getSmartSelectionRange(): never {
         return notImplemented();
     }
 
@@ -760,9 +769,9 @@ export class SessionClient implements LanguageService {
         ({ fixName, description, changes: this.convertChanges(changes, file), commands: commands as CodeActionCommand[], fixId, fixAllDescription }));
     }
 
-    getCombinedCodeFix = notImplemented;
+    getCombinedCodeFix: typeof notImplemented = notImplemented;
 
-    applyCodeActionCommand = notImplemented;
+    applyCodeActionCommand: typeof notImplemented = notImplemented;
 
     provideInlayHints(file: string, span: TextSpan): InlayHint[] {
         const { start, length } = span;
@@ -777,7 +786,7 @@ export class SessionClient implements LanguageService {
             return ({
                 ...item,
                 position: this.lineOffsetToPosition(file, position),
-                kind: item.kind as InlayHintKind,
+                kind: item.kind,
                 displayParts: displayParts?.map(({ text, span }) => ({
                     text,
                     span: span && {
@@ -789,6 +798,9 @@ export class SessionClient implements LanguageService {
             });
         });
     }
+
+    mapCode: typeof notImplemented = notImplemented;
+    getImports: typeof notImplemented = notImplemented;
 
     private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
         return typeof positionOrRange === "number"
@@ -894,7 +906,7 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    getEditsForFileRename() {
+    getEditsForFileRename(): never {
         return notImplemented();
     }
 
@@ -984,7 +996,7 @@ export class SessionClient implements LanguageService {
         };
     }
 
-    provideCallHierarchyIncomingCalls(fileName: string, position: number) {
+    provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[] {
         const args = this.createFileLocationRequestArgs(fileName, position);
         const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(protocol.CommandTypes.ProvideCallHierarchyIncomingCalls, args);
         const response = this.processResponse<protocol.ProvideCallHierarchyIncomingCallsResponse>(request);
@@ -998,7 +1010,7 @@ export class SessionClient implements LanguageService {
         };
     }
 
-    provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
+    provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[] {
         const args = this.createFileLocationRequestArgs(fileName, position);
         const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls, args);
         const response = this.processResponse<protocol.ProvideCallHierarchyOutgoingCallsResponse>(request);
@@ -1007,6 +1019,36 @@ export class SessionClient implements LanguageService {
 
     getSupportedCodeFixes(): readonly string[] {
         return getSupportedCodeFixes();
+    }
+
+    preparePasteEditsForFile(copiedFromFile: string, copiedTextSpan: TextRange[]): boolean {
+        const args: protocol.PreparePasteEditsRequestArgs = {
+            file: copiedFromFile,
+            copiedTextSpan: copiedTextSpan.map(span => ({ start: this.positionToOneBasedLineOffset(copiedFromFile, span.pos), end: this.positionToOneBasedLineOffset(copiedFromFile, span.end) })),
+        };
+        const request = this.processRequest<protocol.PreparePasteEditsRequest>(protocol.CommandTypes.PreparePasteEdits, args);
+        const response = this.processResponse<protocol.PreparePasteEditsResponse>(request);
+        return response.body;
+    }
+
+    getPasteEdits(
+        { targetFile, pastedText, pasteLocations, copiedFrom }: PasteEditsArgs,
+        formatOptions: FormatCodeSettings,
+    ): PasteEdits {
+        this.setFormattingOptions(formatOptions);
+        const args: protocol.GetPasteEditsRequestArgs = {
+            file: targetFile,
+            pastedText,
+            pasteLocations: pasteLocations.map(range => ({ start: this.positionToOneBasedLineOffset(targetFile, range.pos), end: this.positionToOneBasedLineOffset(targetFile, range.end) })),
+            copiedFrom: copiedFrom ? { file: copiedFrom.file, spans: copiedFrom.range.map(range => ({ start: this.positionToOneBasedLineOffset(copiedFrom.file, range.pos), end: this.positionToOneBasedLineOffset(copiedFrom.file, range.end) })) } : undefined,
+        };
+        const request = this.processRequest<protocol.GetPasteEditsRequest>(protocol.CommandTypes.GetPasteEdits, args);
+        const response = this.processResponse<protocol.GetPasteEditsResponse>(request);
+        if (response.body.edits.length === 0) {
+            return { edits: [] };
+        }
+        const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
+        return { edits, fixId: response.body.fixId };
     }
 
     getProgram(): Program {

@@ -8,4 +8,5 @@ namespace A {}
 === final.ts ===
 type A = {}
 >A : {}
+>  : ^^
 

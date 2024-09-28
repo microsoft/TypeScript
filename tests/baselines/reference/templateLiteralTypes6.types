@@ -1,0 +1,62 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes6.ts] ////
+
+=== templateLiteralTypes6.ts ===
+// https://github.com/microsoft/TypeScript/issues/56659
+
+type Registry = {
+>Registry : Registry
+>         : ^^^^^^^^
+
+  a: { a1: {} };
+>a : { a1: {}; }
+>  : ^^^^^^  ^^^
+>a1 : {}
+>   : ^^
+
+  b: { b1: {} };
+>b : { b1: {}; }
+>  : ^^^^^^  ^^^
+>b1 : {}
+>   : ^^
+
+};
+
+type Keyof<T> = keyof T & string;
+>Keyof : Keyof<T>
+>      : ^^^^^^^^
+
+declare function f1<
+>f1 : <Scope extends Keyof<Registry>, Event extends Keyof<Registry[Scope]>>(eventPath: `${Scope}:${Event}`) => void
+>   : ^     ^^^^^^^^^               ^^     ^^^^^^^^^                      ^^         ^^                   ^^^^^    
+
+  Scope extends Keyof<Registry>,
+  Event extends Keyof<Registry[Scope]>,
+>(eventPath: `${Scope}:${Event}`): void;
+>eventPath : `${Scope}:${Event}`
+>          : ^^^^^^^^^^^^^^^^^^^
+
+function f2<
+>f2 : <Scope extends Keyof<Registry>, Event extends Keyof<Registry[Scope]>>(scope: Scope, event: Event) => void
+>   : ^     ^^^^^^^^^               ^^     ^^^^^^^^^                      ^^     ^^     ^^     ^^     ^^^^^^^^^
+
+  Scope extends Keyof<Registry>,
+  Event extends Keyof<Registry[Scope]>,
+>(scope: Scope, event: Event) {
+>scope : Scope
+>      : ^^^^^
+>event : Event
+>      : ^^^^^
+
+  f1(`${scope}:${event}`);
+>f1(`${scope}:${event}`) : void
+>                        : ^^^^
+>f1 : <Scope_1 extends Keyof<Registry>, Event_1 extends Keyof<Registry[Scope_1]>>(eventPath: `${Scope_1}:${Event_1}`) => void
+>   : ^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^                        ^^         ^^                       ^^^^^    
+>`${scope}:${event}` : `${Scope}:${Event}`
+>                    : ^^^^^^^^^^^^^^^^^^^
+>scope : Scope
+>      : ^^^^^
+>event : Event
+>      : ^^^^^
+}
+

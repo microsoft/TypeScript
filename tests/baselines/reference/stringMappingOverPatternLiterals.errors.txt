@@ -18,6 +18,7 @@ stringMappingOverPatternLiterals.ts(57,5): error TS2322: Type 'string' is not as
 stringMappingOverPatternLiterals.ts(78,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Uppercase<Lowercase<string>>'.
   Type 'string' is not assignable to type 'Lowercase<string>'.
 stringMappingOverPatternLiterals.ts(79,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Uppercase<Lowercase<string>>'.
+  Type 'string' is not assignable to type 'Lowercase<string>'.
 stringMappingOverPatternLiterals.ts(83,5): error TS2322: Type 'Lowercase<Uppercase<string>>' is not assignable to type 'Uppercase<string>'.
 stringMappingOverPatternLiterals.ts(84,5): error TS2322: Type 'Lowercase<Uppercase<string>>' is not assignable to type 'Uppercase<string>'.
 stringMappingOverPatternLiterals.ts(85,5): error TS2322: Type 'Lowercase<Uppercase<string>>' is not assignable to type 'Uppercase<Lowercase<string>>'.
@@ -27,11 +28,15 @@ stringMappingOverPatternLiterals.ts(89,5): error TS2322: Type 'Uppercase<Lowerca
 stringMappingOverPatternLiterals.ts(129,5): error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
   Type 'string' is not assignable to type '`A${string}`'.
 stringMappingOverPatternLiterals.ts(130,5): error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
+  Type 'string' is not assignable to type '`A${string}`'.
 stringMappingOverPatternLiterals.ts(131,5): error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
+  Type 'string' is not assignable to type '`A${string}`'.
 stringMappingOverPatternLiterals.ts(147,5): error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
   Type 'string' is not assignable to type '`a${string}`'.
 stringMappingOverPatternLiterals.ts(148,5): error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
+  Type 'string' is not assignable to type '`a${string}`'.
 stringMappingOverPatternLiterals.ts(149,5): error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
+  Type 'string' is not assignable to type '`a${string}`'.
 
 
 ==== stringMappingOverPatternLiterals.ts (29 errors) ====
@@ -151,6 +156,7 @@ stringMappingOverPatternLiterals.ts(149,5): error TS2322: Type 'Uncapitalize<str
         x3 = x2;
         ~~
 !!! error TS2322: Type 'Uppercase<string>' is not assignable to type 'Uppercase<Lowercase<string>>'.
+!!! error TS2322:   Type 'string' is not assignable to type 'Lowercase<string>'.
     
         // and this should also not be equivlent to any others
         var x4: Lowercase<Uppercase<string>> = null as any;
@@ -219,9 +225,11 @@ stringMappingOverPatternLiterals.ts(149,5): error TS2322: Type 'Uncapitalize<str
         cap_tem_map = cap_str;
         ~~~~~~~~~~~
 !!! error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
+!!! error TS2322:   Type 'string' is not assignable to type '`A${string}`'.
         cap_tem_map2 = cap_str;
         ~~~~~~~~~~~~
 !!! error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
+!!! error TS2322:   Type 'string' is not assignable to type '`A${string}`'.
     
         // All these are uncapitalized
         uncap_str = uncap_tem;
@@ -244,7 +252,9 @@ stringMappingOverPatternLiterals.ts(149,5): error TS2322: Type 'Uncapitalize<str
         uncap_tem_map = uncap_str;
         ~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
+!!! error TS2322:   Type 'string' is not assignable to type '`a${string}`'.
         uncap_tem_map2 = uncap_str;
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
+!!! error TS2322:   Type 'string' is not assignable to type '`a${string}`'.
     }
