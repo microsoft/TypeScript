@@ -599,9 +599,9 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/@types/bar/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/@types/bar/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.tsx' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.d.ts' does not exist.
@@ -761,9 +761,9 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/foo/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/foo/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.ts.tsx' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.ts.d.ts' does not exist.
@@ -845,9 +845,9 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/@types/bar/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/@types/bar/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.tsx' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.d.ts' does not exist.
@@ -1009,9 +1009,9 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/foo/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/foo/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.ts.tsx' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.ts.d.ts' does not exist.
@@ -2841,9 +2841,9 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.tsx' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.d.ts' does not exist.
@@ -3003,9 +3003,9 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/foo2/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/foo2/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts.tsx' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts.d.ts' does not exist.
@@ -3087,9 +3087,9 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.tsx' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.d.ts' does not exist.
@@ -3251,9 +3251,9 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/foo2/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/foo2/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts.tsx' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts.d.ts' does not exist.
