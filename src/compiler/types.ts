@@ -1828,6 +1828,7 @@ export interface TypeParameterDeclaration extends NamedDeclaration, JSDocContain
     /** Note: Consider calling `getEffectiveConstraintOfTypeParameter` */
     readonly constraint?: TypeNode;
     readonly default?: TypeNode;
+    readonly typeParameters?: NodeArray<TypeParameterDeclaration>
 
     // For error recovery purposes (see `isGrammarError` in utilities.ts).
     expression?: Expression;

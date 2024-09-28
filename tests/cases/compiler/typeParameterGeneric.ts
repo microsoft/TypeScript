@@ -1,0 +1,1 @@
+type Monad<TypeParameter<Generic>> = TypeParameter<string>
