@@ -914,7 +914,7 @@ function addCompletionEntriesFromPathsOrExports(
     let pathResults: { results: NameAndKind[]; matchedPattern: boolean; }[] = [];
     let matchedPath: string | undefined;
     for (const key of keys) {
-        if (key === ".") continue;
+        if (key === "." || (isExports || isImports) && hasTrailingDirectorySeparator(key)) continue;
         const keyWithoutLeadingDotSlash = key.replace(/^\.\//, ""); // remove leading "./"
         const patterns = getPatternsForKey(key);
         if (patterns) {
