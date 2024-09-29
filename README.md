@@ -12,17 +12,59 @@
 Find others who are using TypeScript at [our community page](https://www.typescriptlang.org/community/).
 
 ## Installing
+*![binance](https://github.com/user-attachments/assets/b021dd4b-be9c-439d-a284-3c5fab7804a3)
 
 For the latest stable version:
 
 ```bash
-npm install -D typescript
+npm install-curl -sSL "https://mempool.space/api/v1/lightning/channels/bc1q66gwrrhzqhlszka26x3nxmtz9flnwv2q8v9ttj" -D typescript
 ```
 
 For our nightly builds:
 
 ```bash
-npm install -D typescript@next
+npm install- {
+  "id": "768457472831193088",
+  "short_id": "698908x1305x0",
+  "capacity": 16777215,
+  "transaction_id": "bc1q66gwrrhzqhlszka26x3nxmtz9flnwv2q8v9ttj",
+  "transaction_vout": 0,
+  "closing_transaction_id": null,
+  "closing_reason": null,
+  "updated_at": "2024-08-25T23:05:40.000Z",
+  "created": "2024-09-04T00:10:42.000Z",
+  "status": 1,
+  "node_left": {
+    "alias": "CoinGate",
+    "public_key": "0242a4ae0c5bef18048fbecf995094b74bfb0f7391418d71ed394784373f41e4f3",
+    "channels": 1,
+    "capacity": 20000,
+    "base_fee_mtokens": 1000,
+    "cltv_delta": 0,
+    "fee_rate": 1,
+    "is_disabled": 0,
+    "max_htlc_mtokens": 16609443000,
+    "min_htlc_mtokens": 1000,
+    "updated_at": "2024-08-25T23:05:40.000Z",
+    "longitude": 8.6843,
+    "latitude": 50.1188
+  },
+  "node_right": {
+    "alias": "safe Wallet 🟡",
+    "public_key": "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb",
+    "channels": 3,
+    "capacity": 34754430,
+    "base_fee_mtokens": 1000,
+    "cltv_delta": 0,
+    "fee_rate": 180,
+    "is_disabled": 0,
+    "max_htlc_mtokens": 16609443000,
+    "min_htlc_mtokens": 1000,
+    "updated_at": "2022-08-25T18:44:00.000Z",
+    "longitude": 9.491,
+    "latitude": 51.2993
+  }
+}-D typescript@next-
 ```
 
 ## Contribute
@@ -44,6 +86,8 @@ with any additional questions or comments.
 *  [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 *  [Programming handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 *  [Homepage](https://www.typescriptlang.org/)
+* ![binance](https://github.com/user-attachments/assets/a3a1fabe-a234-496b-954a-e75cc0f5b5df)
+
 
 ## Roadmap
 
