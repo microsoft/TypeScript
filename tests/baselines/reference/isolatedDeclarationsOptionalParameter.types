@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/isolatedDeclarationsOptionalParameter.ts] ////
+
+=== /node_modules/foo/index.d.ts ===
+export interface Foo<T> {
+    a: T;
+>a : T
+>  : ^
+}
+
+=== /bar.ts ===
+import { type Foo } from "foo";
+>Foo : any
+>    : ^^^
+
+export const bar = <T,>(foo?: Foo<T>): void => { };
+>bar : <T>(foo?: Foo<T>) => void
+>    : ^ ^^   ^^^      ^^^^^    
+><T,>(foo?: Foo<T>): void => { } : <T>(foo?: Foo<T>) => void
+>                                : ^ ^^   ^^^      ^^^^^    
+>foo : Foo<T> | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
