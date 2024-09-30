@@ -5,7 +5,7 @@
 //                 ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -174,7 +174,7 @@
 //  ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -345,7 +345,7 @@
 //  ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -517,7 +517,7 @@
 //                      ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -686,7 +686,7 @@
 //     ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -854,7 +854,7 @@
 //                     ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -1022,7 +1022,7 @@
 //             ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -1193,7 +1193,7 @@
 //                ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -1374,7 +1374,7 @@
 //             ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -1547,7 +1547,7 @@
 //       ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -1719,7 +1719,7 @@
 //                       ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -1891,7 +1891,7 @@
 //      ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -2065,7 +2065,7 @@
 //      ^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -2237,7 +2237,7 @@
 //      ^^^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -2412,7 +2412,7 @@
 //      ^^^
 // | ----------------------------------------------------------------------
 // | class C
-// | function F(pred: x): any
+// | function F(pred: (x)): any
 // | function func(a: string, b: number): {
 // |     a: string;
 // |     b: number;
@@ -3010,8 +3010,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -7689,8 +7697,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -12431,8 +12447,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -17169,8 +17193,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -21848,8 +21880,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -26522,8 +26562,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -31200,8 +31248,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -35942,8 +35998,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -40696,8 +40760,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -45431,8 +45503,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -50207,8 +50287,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -54946,8 +55034,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -59718,8 +59814,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -64494,8 +64598,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",
@@ -69311,8 +69423,16 @@
               "kind": "space"
             },
             {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
               "text": "x",
               "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ")",

@@ -1668,7 +1668,7 @@ export function createAccessorPropertySetRedirector(factory: NodeFactory, node: 
 }
 
 /** @internal */
-export function findComputedPropertyNameCacheAssignment(name: ComputedPropertyName) {
+export function findComputedPropertyNameCacheAssignment(name: ComputedPropertyName): AssignmentExpression<EqualsToken> & { readonly left: GeneratedIdentifier; } | undefined {
     let node = name.expression;
     while (true) {
         node = skipOuterExpressions(node);

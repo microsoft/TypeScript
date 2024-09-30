@@ -6998,7 +6998,7 @@
         "category": "Error",
         "code": 9008
     },
-    "At least one accessor must have an explicit return type annotation with --isolatedDeclarations.": {
+    "At least one accessor must have an explicit type annotation with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9009
     },
