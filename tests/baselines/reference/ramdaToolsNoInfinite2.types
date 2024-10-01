@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/ramdaToolsNoInfinite2.ts] ////
 
 === Performance Stats ===
-Assignability cache: 5,000
-Type Count: 10,000
-Instantiation count: 25,000
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
 
 === ramdaToolsNoInfinite2.ts ===
 declare module "Any/Kind" {
