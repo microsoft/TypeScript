@@ -5603,8 +5603,9 @@ export class SyntheticReferenceExpression extends Node<SyntaxKind.SyntheticRefer
     // declare readonly ast: AstSyntheticReferenceExpression;
 
     get expression(): Expression { return this.ast.data.expression.node; }
-    /** @internal */ set expression(value: Expression) { this.ast.data.expression = value.ast; }
     get thisArg(): Expression { return this.ast.data.thisArg.node; }
+
+    /** @internal */ set expression(value: Expression) { this.ast.data.expression = value.ast; }
     /** @internal */ set thisArg(value: Expression) { this.ast.data.thisArg = value.ast; }
 }
 

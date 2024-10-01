@@ -17,7 +17,6 @@ import {
     AssertKeyword,
     AssertsKeyword,
     AsteriskToken,
-    astHasJSDocNodes,
     AsyncKeyword,
     AwaitExpression,
     AwaitKeyword,
@@ -82,6 +81,7 @@ import {
     ElementAccessExpression,
     EmitFlags,
     EmitNode,
+    emptyArray,
     EmptyStatement,
     EndOfFileToken,
     EntityName,
@@ -125,6 +125,7 @@ import {
     hasProperty,
     HeritageClause,
     Identifier,
+    idText,
     IfStatement,
     ImportAttribute,
     ImportAttributeName,
@@ -146,6 +147,7 @@ import {
     IScriptSnapshot,
     isLogicalOrCoalescingAssignmentOperator,
     isParseTreeNode,
+    isTokenKind,
     IterationStatement,
     JSDoc,
     JSDocAllType,
@@ -237,7 +239,6 @@ import {
     LiteralToken,
     LiteralTypeNode,
     MappedTypeNode,
-    MatchingKeys,
     MemberExpression,
     MemberName,
     MetaProperty,
@@ -341,6 +342,7 @@ import {
     ShorthandPropertyAssignment,
     SignatureDeclaration,
     SourceFile,
+    SourceFileLike,
     SpreadAssignment,
     SpreadElement,
     Statement,
@@ -649,653 +651,653 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
         return clone;
     }
 
-    static Token<K extends TokenSyntaxKind>(kind: K) {
+    static Token<K extends TokenSyntaxKind>(kind: K): AstToken<K> {
         const makeToken = AstNode._tokenFactoryMap.get(kind);
-        return (makeToken ? makeToken() : new AstNode(kind, new AstTokenData(), Token<K>)) as AstToken<K>;
+        return (makeToken ? makeToken() : new AstNode(kind, new AstTokenData(), AnyNode /*Token<K>*/)) as AstToken<K>;
     }
 
     private static _tokenFactoryMap = new Map<SyntaxKind, () => AstToken>([
-        [SyntaxKind.NumericLiteral, this.NumericLiteral],
-        [SyntaxKind.BigIntLiteral, this.BigIntLiteral],
-        [SyntaxKind.StringLiteral, this.StringLiteral],
-        [SyntaxKind.JsxText, this.JsxText],
-        [SyntaxKind.RegularExpressionLiteral, this.RegularExpressionLiteral],
-        [SyntaxKind.NoSubstitutionTemplateLiteral, this.NoSubstitutionTemplateLiteral],
-        [SyntaxKind.TemplateHead, this.TemplateHead],
-        [SyntaxKind.TemplateMiddle, this.TemplateMiddle],
-        [SyntaxKind.TemplateTail, this.TemplateTail],
-        [SyntaxKind.Identifier, this.Identifier],
-        [SyntaxKind.PrivateIdentifier, this.PrivateIdentifier],
-        [SyntaxKind.EndOfFileToken, this.EndOfFileToken],
-        [SyntaxKind.ThisKeyword, this.ThisExpression],
-        [SyntaxKind.SuperKeyword, this.SuperExpression],
-        [SyntaxKind.ImportKeyword, this.ImportExpression],
-        [SyntaxKind.NullKeyword, this.NullLiteral],
-        [SyntaxKind.TrueKeyword, this.TrueLiteral],
-        [SyntaxKind.FalseKeyword, this.FalseLiteral],
+        // [SyntaxKind.NumericLiteral, this.NumericLiteral],
+        // [SyntaxKind.BigIntLiteral, this.BigIntLiteral],
+        // [SyntaxKind.StringLiteral, this.StringLiteral],
+        // [SyntaxKind.JsxText, this.JsxText],
+        // [SyntaxKind.RegularExpressionLiteral, this.RegularExpressionLiteral],
+        // [SyntaxKind.NoSubstitutionTemplateLiteral, this.NoSubstitutionTemplateLiteral],
+        // [SyntaxKind.TemplateHead, this.TemplateHead],
+        // [SyntaxKind.TemplateMiddle, this.TemplateMiddle],
+        // [SyntaxKind.TemplateTail, this.TemplateTail],
+        // [SyntaxKind.Identifier, this.Identifier],
+        // [SyntaxKind.PrivateIdentifier, this.PrivateIdentifier],
+        // [SyntaxKind.EndOfFileToken, this.EndOfFileToken],
+        // [SyntaxKind.ThisKeyword, this.ThisExpression],
+        // [SyntaxKind.SuperKeyword, this.SuperExpression],
+        // [SyntaxKind.ImportKeyword, this.ImportExpression],
+        // [SyntaxKind.NullKeyword, this.NullLiteral],
+        // [SyntaxKind.TrueKeyword, this.TrueLiteral],
+        // [SyntaxKind.FalseKeyword, this.FalseLiteral],
     ]);
 
     static EndOfFileToken(): AstEndOfFileToken {
-        return new AstNode(SyntaxKind.EndOfFileToken, new AstEndOfFileTokenData(), EndOfFileToken);
+        return new AstNode(SyntaxKind.EndOfFileToken, new AstEndOfFileTokenData(), AnyNode /* EndOfFileToken */);
     }
     static ThisExpression(): AstThisExpression {
-        return new AstNode(SyntaxKind.ThisKeyword, new AstThisExpressionData(), ThisExpression);
+        return new AstNode(SyntaxKind.ThisKeyword, new AstThisExpressionData(), AnyNode /* ThisExpression */);
     }
     static SuperExpression(): AstSuperExpression {
-        return new AstNode(SyntaxKind.SuperKeyword, new AstSuperExpressionData(), SuperExpression);
+        return new AstNode(SyntaxKind.SuperKeyword, new AstSuperExpressionData(), AnyNode /* SuperExpression */);
     }
     static ImportExpression(): AstImportExpression {
-        return new AstNode(SyntaxKind.ImportKeyword, new AstTokenData(), ImportExpression);
+        return new AstNode(SyntaxKind.ImportKeyword, new AstTokenData(), AnyNode /* ImportExpression */);
     }
     static NullLiteral(): AstNullLiteral {
-        return new AstNode(SyntaxKind.NullKeyword, new AstTokenData(), NullLiteral);
+        return new AstNode(SyntaxKind.NullKeyword, new AstTokenData(), AnyNode /* NullLiteral */);
     }
     static TrueLiteral(): AstTrueLiteral {
-        return new AstNode(SyntaxKind.TrueKeyword, new AstTokenData(), TrueLiteral);
+        return new AstNode(SyntaxKind.TrueKeyword, new AstTokenData(), AnyNode /* TrueLiteral */);
     }
     static FalseLiteral(): AstFalseLiteral {
-        return new AstNode(SyntaxKind.FalseKeyword, new AstTokenData(), FalseLiteral);
+        return new AstNode(SyntaxKind.FalseKeyword, new AstTokenData(), AnyNode /* FalseLiteral */);
     }
     static Identifier(): AstIdentifier {
-        return new AstNode(SyntaxKind.Identifier, new AstIdentifierData(), Identifier);
+        return new AstNode(SyntaxKind.Identifier, new AstIdentifierData(), AnyNode /* Identifier */);
     }
     static PrivateIdentifier(): AstPrivateIdentifier {
-        return new AstNode(SyntaxKind.PrivateIdentifier, new AstPrivateIdentifierData(), PrivateIdentifier);
+        return new AstNode(SyntaxKind.PrivateIdentifier, new AstPrivateIdentifierData(), AnyNode /* PrivateIdentifier */);
     }
     static QualifiedName(): AstQualifiedName {
-        return new AstNode(SyntaxKind.QualifiedName, new AstQualifiedNameData(), QualifiedName);
+        return new AstNode(SyntaxKind.QualifiedName, new AstQualifiedNameData(), AnyNode /* QualifiedName */);
     }
     static ComputedPropertyName(): AstComputedPropertyName {
-        return new AstNode(SyntaxKind.ComputedPropertyName, new AstComputedPropertyNameData(), ComputedPropertyName);
+        return new AstNode(SyntaxKind.ComputedPropertyName, new AstComputedPropertyNameData(), AnyNode /* ComputedPropertyName */);
     }
     static TypeParameterDeclaration(): AstTypeParameterDeclaration {
-        return new AstNode(SyntaxKind.TypeParameter, new AstTypeParameterDeclarationData(), TypeParameterDeclaration);
+        return new AstNode(SyntaxKind.TypeParameter, new AstTypeParameterDeclarationData(), AnyNode /* TypeParameterDeclaration */);
     }
     static ParameterDeclaration(): AstParameterDeclaration {
-        return new AstNode(SyntaxKind.Parameter, new AstParameterDeclarationData(), ParameterDeclaration);
+        return new AstNode(SyntaxKind.Parameter, new AstParameterDeclarationData(), AnyNode /* ParameterDeclaration */);
     }
     static Decorator(): AstDecorator {
-        return new AstNode(SyntaxKind.Decorator, new AstDecoratorData(), Decorator);
+        return new AstNode(SyntaxKind.Decorator, new AstDecoratorData(), AnyNode /* Decorator */);
     }
     static PropertySignature(): AstPropertySignature {
-        return new AstNode(SyntaxKind.PropertySignature, new AstPropertySignatureData(), PropertySignature);
+        return new AstNode(SyntaxKind.PropertySignature, new AstPropertySignatureData(), AnyNode /* PropertySignature */);
     }
     static CallSignatureDeclaration(): AstCallSignatureDeclaration {
-        return new AstNode(SyntaxKind.CallSignature, new AstCallSignatureDeclarationData(), CallSignatureDeclaration);
+        return new AstNode(SyntaxKind.CallSignature, new AstCallSignatureDeclarationData(), AnyNode /* CallSignatureDeclaration */);
     }
     static ConstructSignatureDeclaration(): AstConstructSignatureDeclaration {
-        return new AstNode(SyntaxKind.ConstructSignature, new AstConstructSignatureDeclarationData(), ConstructSignatureDeclaration);
+        return new AstNode(SyntaxKind.ConstructSignature, new AstConstructSignatureDeclarationData(), AnyNode /* ConstructSignatureDeclaration */);
     }
     static VariableDeclaration(): AstVariableDeclaration {
-        return new AstNode(SyntaxKind.VariableDeclaration, new AstVariableDeclarationData(), VariableDeclaration);
+        return new AstNode(SyntaxKind.VariableDeclaration, new AstVariableDeclarationData(), AnyNode /* VariableDeclaration */);
     }
     static VariableDeclarationList(): AstVariableDeclarationList {
-        return new AstNode(SyntaxKind.VariableDeclarationList, new AstVariableDeclarationListData(), VariableDeclarationList);
+        return new AstNode(SyntaxKind.VariableDeclarationList, new AstVariableDeclarationListData(), AnyNode /* VariableDeclarationList */);
     }
     static BindingElement(): AstBindingElement {
-        return new AstNode(SyntaxKind.BindingElement, new AstBindingElementData(), BindingElement);
+        return new AstNode(SyntaxKind.BindingElement, new AstBindingElementData(), AnyNode /* BindingElement */);
     }
     static PropertyDeclaration(): AstPropertyDeclaration {
-        return new AstNode(SyntaxKind.PropertyDeclaration, new AstPropertyDeclarationData(), PropertyDeclaration);
+        return new AstNode(SyntaxKind.PropertyDeclaration, new AstPropertyDeclarationData(), AnyNode /* PropertyDeclaration */);
     }
     static PropertyAssignment(): AstPropertyAssignment {
-        return new AstNode(SyntaxKind.PropertyAssignment, new AstPropertyAssignmentData(), PropertyAssignment);
+        return new AstNode(SyntaxKind.PropertyAssignment, new AstPropertyAssignmentData(), AnyNode /* PropertyAssignment */);
     }
     static ShorthandPropertyAssignment(): AstShorthandPropertyAssignment {
-        return new AstNode(SyntaxKind.ShorthandPropertyAssignment, new AstShorthandPropertyAssignmentData(), ShorthandPropertyAssignment);
+        return new AstNode(SyntaxKind.ShorthandPropertyAssignment, new AstShorthandPropertyAssignmentData(), AnyNode /* ShorthandPropertyAssignment */);
     }
     static SpreadAssignment(): AstSpreadAssignment {
-        return new AstNode(SyntaxKind.SpreadAssignment, new AstSpreadAssignmentData(), SpreadAssignment);
+        return new AstNode(SyntaxKind.SpreadAssignment, new AstSpreadAssignmentData(), AnyNode /* SpreadAssignment */);
     }
     static ObjectBindingPattern(): AstObjectBindingPattern {
-        return new AstNode(SyntaxKind.ObjectBindingPattern, new AstObjectBindingPatternData(), ObjectBindingPattern);
+        return new AstNode(SyntaxKind.ObjectBindingPattern, new AstObjectBindingPatternData(), AnyNode /* ObjectBindingPattern */);
     }
     static ArrayBindingPattern(): AstArrayBindingPattern {
-        return new AstNode(SyntaxKind.ArrayBindingPattern, new AstArrayBindingPatternData(), ArrayBindingPattern);
+        return new AstNode(SyntaxKind.ArrayBindingPattern, new AstArrayBindingPatternData(), AnyNode /* ArrayBindingPattern */);
     }
     static FunctionDeclaration(): AstFunctionDeclaration {
-        return new AstNode(SyntaxKind.FunctionDeclaration, new AstFunctionDeclarationData(), FunctionDeclaration);
+        return new AstNode(SyntaxKind.FunctionDeclaration, new AstFunctionDeclarationData(), AnyNode /* FunctionDeclaration */);
     }
     static MethodSignature(): AstMethodSignature {
-        return new AstNode(SyntaxKind.MethodSignature, new AstMethodSignatureData(), MethodSignature);
+        return new AstNode(SyntaxKind.MethodSignature, new AstMethodSignatureData(), AnyNode /* MethodSignature */);
     }
     static MethodDeclaration(): AstMethodDeclaration {
-        return new AstNode(SyntaxKind.MethodDeclaration, new AstMethodDeclarationData(), MethodDeclaration);
+        return new AstNode(SyntaxKind.MethodDeclaration, new AstMethodDeclarationData(), AnyNode /* MethodDeclaration */);
     }
     static ConstructorDeclaration(): AstConstructorDeclaration {
-        return new AstNode(SyntaxKind.Constructor, new AstConstructorDeclarationData(), ConstructorDeclaration);
+        return new AstNode(SyntaxKind.Constructor, new AstConstructorDeclarationData(), AnyNode /* ConstructorDeclaration */);
     }
     static SemicolonClassElement(): AstSemicolonClassElement {
-        return new AstNode(SyntaxKind.SemicolonClassElement, new AstSemicolonClassElementData(), SemicolonClassElement);
+        return new AstNode(SyntaxKind.SemicolonClassElement, new AstSemicolonClassElementData(), AnyNode as any /* SemicolonClassElement */);
     }
     static GetAccessorDeclaration(): AstGetAccessorDeclaration {
-        return new AstNode(SyntaxKind.GetAccessor, new AstGetAccessorDeclarationData(), GetAccessorDeclaration);
+        return new AstNode(SyntaxKind.GetAccessor, new AstGetAccessorDeclarationData(), AnyNode /* GetAccessorDeclaration */);
     }
     static SetAccessorDeclaration(): AstSetAccessorDeclaration {
-        return new AstNode(SyntaxKind.SetAccessor, new AstSetAccessorDeclarationData(), SetAccessorDeclaration);
+        return new AstNode(SyntaxKind.SetAccessor, new AstSetAccessorDeclarationData(), AnyNode /* SetAccessorDeclaration */);
     }
     static IndexSignatureDeclaration(): AstIndexSignatureDeclaration {
-        return new AstNode(SyntaxKind.IndexSignature, new AstIndexSignatureDeclarationData(), IndexSignatureDeclaration);
+        return new AstNode(SyntaxKind.IndexSignature, new AstIndexSignatureDeclarationData(), AnyNode /* IndexSignatureDeclaration */);
     }
     static ClassStaticBlockDeclaration(): AstClassStaticBlockDeclaration {
-        return new AstNode(SyntaxKind.ClassStaticBlockDeclaration, new AstClassStaticBlockDeclarationData(), ClassStaticBlockDeclaration);
+        return new AstNode(SyntaxKind.ClassStaticBlockDeclaration, new AstClassStaticBlockDeclarationData(), AnyNode /* ClassStaticBlockDeclaration */);
     }
     /** @deprecated */
     static ImportTypeAssertionContainer(): AstImportTypeAssertionContainer {
-        return new AstNode(SyntaxKind.ImportTypeAssertionContainer, new AstImportTypeAssertionContainerData(), ImportTypeAssertionContainer);
+        return new AstNode(SyntaxKind.ImportTypeAssertionContainer, new AstImportTypeAssertionContainerData(), AnyNode /* ImportTypeAssertionContainer */);
     }
     static ImportTypeNode(): AstImportTypeNode {
-        return new AstNode(SyntaxKind.ImportType, new AstImportTypeNodeData(), ImportTypeNode);
+        return new AstNode(SyntaxKind.ImportType, new AstImportTypeNodeData(), AnyNode /* ImportTypeNode */);
     }
     static ThisTypeNode(): AstThisTypeNode {
-        return new AstNode(SyntaxKind.ThisType, new AstThisTypeNodeData(), ThisTypeNode);
+        return new AstNode(SyntaxKind.ThisType, new AstThisTypeNodeData(), AnyNode /* ThisTypeNode */);
     }
     static FunctionTypeNode(): AstFunctionTypeNode {
-        return new AstNode(SyntaxKind.FunctionType, new AstFunctionTypeNodeData(), FunctionTypeNode);
+        return new AstNode(SyntaxKind.FunctionType, new AstFunctionTypeNodeData(), AnyNode /* FunctionTypeNode */);
     }
     static ConstructorTypeNode(): AstConstructorTypeNode {
-        return new AstNode(SyntaxKind.ConstructorType, new AstConstructorTypeNodeData(), ConstructorTypeNode);
+        return new AstNode(SyntaxKind.ConstructorType, new AstConstructorTypeNodeData(), AnyNode /* ConstructorTypeNode */);
     }
     static TypeReferenceNode(): AstTypeReferenceNode {
-        return new AstNode(SyntaxKind.TypeReference, new AstTypeReferenceNodeData(), TypeReferenceNode);
+        return new AstNode(SyntaxKind.TypeReference, new AstTypeReferenceNodeData(), AnyNode /* TypeReferenceNode */);
     }
     static TypePredicateNode(): AstTypePredicateNode {
-        return new AstNode(SyntaxKind.TypePredicate, new AstTypePredicateNodeData(), TypePredicateNode);
+        return new AstNode(SyntaxKind.TypePredicate, new AstTypePredicateNodeData(), AnyNode /* TypePredicateNode */);
     }
     static TypeQueryNode(): AstTypeQueryNode {
-        return new AstNode(SyntaxKind.TypeQuery, new AstTypeQueryNodeData(), TypeQueryNode);
+        return new AstNode(SyntaxKind.TypeQuery, new AstTypeQueryNodeData(), AnyNode /* TypeQueryNode */);
     }
     static TypeLiteralNode(): AstTypeLiteralNode {
-        return new AstNode(SyntaxKind.TypeLiteral, new AstTypeLiteralNodeData(), TypeLiteralNode);
+        return new AstNode(SyntaxKind.TypeLiteral, new AstTypeLiteralNodeData(), AnyNode /* TypeLiteralNode */);
     }
     static ArrayTypeNode(): AstArrayTypeNode {
-        return new AstNode(SyntaxKind.ArrayType, new AstArrayTypeNodeData(), ArrayTypeNode);
+        return new AstNode(SyntaxKind.ArrayType, new AstArrayTypeNodeData(), AnyNode /* ArrayTypeNode */);
     }
     static TupleTypeNode(): AstTupleTypeNode {
-        return new AstNode(SyntaxKind.TupleType, new AstTupleTypeNodeData(), TupleTypeNode);
+        return new AstNode(SyntaxKind.TupleType, new AstTupleTypeNodeData(), AnyNode /* TupleTypeNode */);
     }
     static NamedTupleMember(): AstNamedTupleMember {
-        return new AstNode(SyntaxKind.NamedTupleMember, new AstNamedTupleMemberData(), NamedTupleMember);
+        return new AstNode(SyntaxKind.NamedTupleMember, new AstNamedTupleMemberData(), AnyNode /* NamedTupleMember */);
     }
     static OptionalTypeNode(): AstOptionalTypeNode {
-        return new AstNode(SyntaxKind.OptionalType, new AstOptionalTypeNodeData(), OptionalTypeNode);
+        return new AstNode(SyntaxKind.OptionalType, new AstOptionalTypeNodeData(), AnyNode /* OptionalTypeNode */);
     }
     static RestTypeNode(): AstRestTypeNode {
-        return new AstNode(SyntaxKind.RestType, new AstRestTypeNodeData(), RestTypeNode);
+        return new AstNode(SyntaxKind.RestType, new AstRestTypeNodeData(), AnyNode /* RestTypeNode */);
     }
     static UnionTypeNode(): AstUnionTypeNode {
-        return new AstNode(SyntaxKind.UnionType, new AstUnionTypeNodeData(), UnionTypeNode);
+        return new AstNode(SyntaxKind.UnionType, new AstUnionTypeNodeData(), AnyNode /* UnionTypeNode */);
     }
     static IntersectionTypeNode(): AstIntersectionTypeNode {
-        return new AstNode(SyntaxKind.IntersectionType, new AstIntersectionTypeNodeData(), IntersectionTypeNode);
+        return new AstNode(SyntaxKind.IntersectionType, new AstIntersectionTypeNodeData(), AnyNode /* IntersectionTypeNode */);
     }
     static ConditionalTypeNode(): AstConditionalTypeNode {
-        return new AstNode(SyntaxKind.ConditionalType, new AstConditionalTypeNodeData(), ConditionalTypeNode);
+        return new AstNode(SyntaxKind.ConditionalType, new AstConditionalTypeNodeData(), AnyNode /* ConditionalTypeNode */);
     }
     static InferTypeNode(): AstInferTypeNode {
-        return new AstNode(SyntaxKind.InferType, new AstInferTypeNodeData(), InferTypeNode);
+        return new AstNode(SyntaxKind.InferType, new AstInferTypeNodeData(), AnyNode /* InferTypeNode */);
     }
     static ParenthesizedTypeNode(): AstParenthesizedTypeNode {
-        return new AstNode(SyntaxKind.ParenthesizedType, new AstParenthesizedTypeNodeData(), ParenthesizedTypeNode);
+        return new AstNode(SyntaxKind.ParenthesizedType, new AstParenthesizedTypeNodeData(), AnyNode /* ParenthesizedTypeNode */);
     }
     static TypeOperatorNode(): AstTypeOperatorNode {
-        return new AstNode(SyntaxKind.TypeOperator, new AstTypeOperatorNodeData(), TypeOperatorNode);
+        return new AstNode(SyntaxKind.TypeOperator, new AstTypeOperatorNodeData(), AnyNode /* TypeOperatorNode */);
     }
     static IndexedAccessTypeNode(): AstIndexedAccessTypeNode {
-        return new AstNode(SyntaxKind.IndexedAccessType, new AstIndexedAccessTypeNodeData(), IndexedAccessTypeNode);
+        return new AstNode(SyntaxKind.IndexedAccessType, new AstIndexedAccessTypeNodeData(), AnyNode /* IndexedAccessTypeNode */);
     }
     static MappedTypeNode(): AstMappedTypeNode {
-        return new AstNode(SyntaxKind.MappedType, new AstMappedTypeNodeData(), MappedTypeNode);
+        return new AstNode(SyntaxKind.MappedType, new AstMappedTypeNodeData(), AnyNode /* MappedTypeNode */);
     }
     static LiteralTypeNode(): AstLiteralTypeNode {
-        return new AstNode(SyntaxKind.LiteralType, new AstLiteralTypeNodeData(), LiteralTypeNode);
+        return new AstNode(SyntaxKind.LiteralType, new AstLiteralTypeNodeData(), AnyNode /* LiteralTypeNode */);
     }
     static StringLiteral(): AstStringLiteral {
-        return new AstNode(SyntaxKind.StringLiteral, new AstStringLiteralData(), StringLiteral);
+        return new AstNode(SyntaxKind.StringLiteral, new AstStringLiteralData(), AnyNode /* StringLiteral */);
     }
     static TemplateLiteralTypeNode(): AstTemplateLiteralTypeNode {
-        return new AstNode(SyntaxKind.TemplateLiteralType, new AstTemplateLiteralTypeNodeData(), TemplateLiteralTypeNode);
+        return new AstNode(SyntaxKind.TemplateLiteralType, new AstTemplateLiteralTypeNodeData(), AnyNode /* TemplateLiteralTypeNode */);
     }
     static TemplateLiteralTypeSpan(): AstTemplateLiteralTypeSpan {
-        return new AstNode(SyntaxKind.TemplateLiteralTypeSpan, new AstTemplateLiteralTypeSpanData(), TemplateLiteralTypeSpan);
+        return new AstNode(SyntaxKind.TemplateLiteralTypeSpan, new AstTemplateLiteralTypeSpanData(), AnyNode /* TemplateLiteralTypeSpan */);
     }
     static OmittedExpression(): AstOmittedExpression {
-        return new AstNode(SyntaxKind.OmittedExpression, new AstOmittedExpressionData(), OmittedExpression);
+        return new AstNode(SyntaxKind.OmittedExpression, new AstOmittedExpressionData(), AnyNode /* OmittedExpression */);
     }
     static PrefixUnaryExpression(): AstPrefixUnaryExpression {
-        return new AstNode(SyntaxKind.PrefixUnaryExpression, new AstPrefixUnaryExpressionData(), PrefixUnaryExpression);
+        return new AstNode(SyntaxKind.PrefixUnaryExpression, new AstPrefixUnaryExpressionData(), AnyNode /* PrefixUnaryExpression */);
     }
     static PostfixUnaryExpression(): AstPostfixUnaryExpression {
-        return new AstNode(SyntaxKind.PostfixUnaryExpression, new AstPostfixUnaryExpressionData(), PostfixUnaryExpression);
+        return new AstNode(SyntaxKind.PostfixUnaryExpression, new AstPostfixUnaryExpressionData(), AnyNode /* PostfixUnaryExpression */);
     }
     static DeleteExpression(): AstDeleteExpression {
-        return new AstNode(SyntaxKind.DeleteExpression, new AstDeleteExpressionData(), DeleteExpression);
+        return new AstNode(SyntaxKind.DeleteExpression, new AstDeleteExpressionData(), AnyNode /* DeleteExpression */);
     }
     static TypeOfExpression(): AstTypeOfExpression {
-        return new AstNode(SyntaxKind.TypeOfExpression, new AstTypeOfExpressionData(), TypeOfExpression);
+        return new AstNode(SyntaxKind.TypeOfExpression, new AstTypeOfExpressionData(), AnyNode /* TypeOfExpression */);
     }
     static VoidExpression(): AstVoidExpression {
-        return new AstNode(SyntaxKind.VoidExpression, new AstVoidExpressionData(), VoidExpression);
+        return new AstNode(SyntaxKind.VoidExpression, new AstVoidExpressionData(), AnyNode /* VoidExpression */);
     }
     static AwaitExpression(): AstAwaitExpression {
-        return new AstNode(SyntaxKind.AwaitExpression, new AstAwaitExpressionData(), AwaitExpression);
+        return new AstNode(SyntaxKind.AwaitExpression, new AstAwaitExpressionData(), AnyNode /* AwaitExpression */);
     }
     static YieldExpression(): AstYieldExpression {
-        return new AstNode(SyntaxKind.YieldExpression, new AstYieldExpressionData(), YieldExpression);
+        return new AstNode(SyntaxKind.YieldExpression, new AstYieldExpressionData(), AnyNode /* YieldExpression */);
     }
     static BinaryExpression(): AstBinaryExpression {
-        return new AstNode(SyntaxKind.BinaryExpression, new AstBinaryExpressionData(), BinaryExpression);
+        return new AstNode(SyntaxKind.BinaryExpression, new AstBinaryExpressionData(), AnyNode /* BinaryExpression */);
     }
     static ConditionalExpression(): AstConditionalExpression {
-        return new AstNode(SyntaxKind.ConditionalExpression, new AstConditionalExpressionData(), ConditionalExpression);
+        return new AstNode(SyntaxKind.ConditionalExpression, new AstConditionalExpressionData(), AnyNode /* ConditionalExpression */);
     }
     static FunctionExpression(): AstFunctionExpression {
-        return new AstNode(SyntaxKind.FunctionExpression, new AstFunctionExpressionData(), FunctionExpression);
+        return new AstNode(SyntaxKind.FunctionExpression, new AstFunctionExpressionData(), AnyNode /* FunctionExpression */);
     }
     static ArrowFunction(): AstArrowFunction {
-        return new AstNode(SyntaxKind.ArrowFunction, new AstArrowFunctionData(), ArrowFunction);
+        return new AstNode(SyntaxKind.ArrowFunction, new AstArrowFunctionData(), AnyNode /* ArrowFunction */);
     }
     static RegularExpressionLiteral(): AstRegularExpressionLiteral {
-        return new AstNode(SyntaxKind.RegularExpressionLiteral, new AstRegularExpressionLiteralData(), RegularExpressionLiteral);
+        return new AstNode(SyntaxKind.RegularExpressionLiteral, new AstRegularExpressionLiteralData(), AnyNode /* RegularExpressionLiteral */);
     }
     static NoSubstitutionTemplateLiteral(): AstNoSubstitutionTemplateLiteral {
-        return new AstNode(SyntaxKind.NoSubstitutionTemplateLiteral, new AstNoSubstitutionTemplateLiteralData(), NoSubstitutionTemplateLiteral);
+        return new AstNode(SyntaxKind.NoSubstitutionTemplateLiteral, new AstNoSubstitutionTemplateLiteralData(), AnyNode /* NoSubstitutionTemplateLiteral */);
     }
     static NumericLiteral(): AstNumericLiteral {
-        return new AstNode(SyntaxKind.NumericLiteral, new AstNumericLiteralData(), NumericLiteral);
+        return new AstNode(SyntaxKind.NumericLiteral, new AstNumericLiteralData(), AnyNode /* NumericLiteral */);
     }
     static BigIntLiteral(): AstBigIntLiteral {
-        return new AstNode(SyntaxKind.BigIntLiteral, new AstBigIntLiteralData(), BigIntLiteral);
+        return new AstNode(SyntaxKind.BigIntLiteral, new AstBigIntLiteralData(), AnyNode /* BigIntLiteral */);
     }
     static TemplateHead(): AstTemplateHead {
-        return new AstNode(SyntaxKind.TemplateHead, new AstTemplateHeadData(), TemplateHead);
+        return new AstNode(SyntaxKind.TemplateHead, new AstTemplateHeadData(), AnyNode /* TemplateHead */);
     }
     static TemplateMiddle(): AstTemplateMiddle {
-        return new AstNode(SyntaxKind.TemplateMiddle, new AstTemplateMiddleData(), TemplateMiddle);
+        return new AstNode(SyntaxKind.TemplateMiddle, new AstTemplateMiddleData(), AnyNode /* TemplateMiddle */);
     }
     static TemplateTail(): AstTemplateTail {
-        return new AstNode(SyntaxKind.TemplateTail, new AstTemplateTailData(), TemplateTail);
+        return new AstNode(SyntaxKind.TemplateTail, new AstTemplateTailData(), AnyNode /* TemplateTail */);
     }
     static TemplateExpression(): AstTemplateExpression {
-        return new AstNode(SyntaxKind.TemplateExpression, new AstTemplateExpressionData(), TemplateExpression);
+        return new AstNode(SyntaxKind.TemplateExpression, new AstTemplateExpressionData(), AnyNode /* TemplateExpression */);
     }
     static TemplateSpan(): AstTemplateSpan {
-        return new AstNode(SyntaxKind.TemplateSpan, new AstTemplateSpanData(), TemplateSpan);
+        return new AstNode(SyntaxKind.TemplateSpan, new AstTemplateSpanData(), AnyNode /* TemplateSpan */);
     }
     static ParenthesizedExpression(): AstParenthesizedExpression {
-        return new AstNode(SyntaxKind.ParenthesizedExpression, new AstParenthesizedExpressionData(), ParenthesizedExpression);
+        return new AstNode(SyntaxKind.ParenthesizedExpression, new AstParenthesizedExpressionData(), AnyNode /* ParenthesizedExpression */);
     }
     static ArrayLiteralExpression(): AstArrayLiteralExpression {
-        return new AstNode(SyntaxKind.ArrayLiteralExpression, new AstArrayLiteralExpressionData(), ArrayLiteralExpression);
+        return new AstNode(SyntaxKind.ArrayLiteralExpression, new AstArrayLiteralExpressionData(), AnyNode /* ArrayLiteralExpression */);
     }
     static SpreadElement(): AstSpreadElement {
-        return new AstNode(SyntaxKind.SpreadElement, new AstSpreadElementData(), SpreadElement);
+        return new AstNode(SyntaxKind.SpreadElement, new AstSpreadElementData(), AnyNode /* SpreadElement */);
     }
     static ObjectLiteralExpression(): AstObjectLiteralExpression {
-        return new AstNode(SyntaxKind.ObjectLiteralExpression, new AstObjectLiteralExpressionData(), ObjectLiteralExpression);
+        return new AstNode(SyntaxKind.ObjectLiteralExpression, new AstObjectLiteralExpressionData(), AnyNode /* ObjectLiteralExpression */);
     }
     static PropertyAccessExpression(): AstPropertyAccessExpression {
-        return new AstNode(SyntaxKind.PropertyAccessExpression, new AstPropertyAccessExpressionData(), PropertyAccessExpression);
+        return new AstNode(SyntaxKind.PropertyAccessExpression, new AstPropertyAccessExpressionData(), AnyNode /* PropertyAccessExpression */);
     }
     static PropertyAccessChain(): AstPropertyAccessChain {
         return new AstNode(SyntaxKind.PropertyAccessExpression, new AstPropertyAccessExpressionData(), PropertyAccessExpression, NodeFlags.OptionalChain) as AstPropertyAccessChain;
     }
     static ElementAccessExpression(): AstElementAccessExpression {
-        return new AstNode(SyntaxKind.ElementAccessExpression, new AstElementAccessExpressionData(), ElementAccessExpression);
+        return new AstNode(SyntaxKind.ElementAccessExpression, new AstElementAccessExpressionData(), AnyNode /* ElementAccessExpression */);
     }
     static ElementAccessChain(): AstElementAccessChain {
         return new AstNode(SyntaxKind.ElementAccessExpression, new AstElementAccessExpressionData(), ElementAccessExpression, NodeFlags.OptionalChain) as AstElementAccessChain;
     }
     static CallExpression(): AstCallExpression {
-        return new AstNode(SyntaxKind.CallExpression, new AstCallExpressionData(), CallExpression);
+        return new AstNode(SyntaxKind.CallExpression, new AstCallExpressionData(), AnyNode /* CallExpression */);
     }
     static CallChain(): AstCallChain {
         return new AstNode(SyntaxKind.CallExpression, new AstCallExpressionData(), CallExpression, NodeFlags.OptionalChain) as AstCallChain;
     }
     static ExpressionWithTypeArguments(): AstExpressionWithTypeArguments {
-        return new AstNode(SyntaxKind.ExpressionWithTypeArguments, new AstExpressionWithTypeArgumentsData(), ExpressionWithTypeArguments);
+        return new AstNode(SyntaxKind.ExpressionWithTypeArguments, new AstExpressionWithTypeArgumentsData(), AnyNode /* ExpressionWithTypeArguments */);
     }
     static NewExpression(): AstNewExpression {
-        return new AstNode(SyntaxKind.NewExpression, new AstNewExpressionData(), NewExpression);
+        return new AstNode(SyntaxKind.NewExpression, new AstNewExpressionData(), AnyNode /* NewExpression */);
     }
     static TaggedTemplateExpression(): AstTaggedTemplateExpression {
-        return new AstNode(SyntaxKind.TaggedTemplateExpression, new AstTaggedTemplateExpressionData(), TaggedTemplateExpression);
+        return new AstNode(SyntaxKind.TaggedTemplateExpression, new AstTaggedTemplateExpressionData(), AnyNode /* TaggedTemplateExpression */);
     }
     static AsExpression(): AstAsExpression {
-        return new AstNode(SyntaxKind.AsExpression, new AstAsExpressionData(), AsExpression);
+        return new AstNode(SyntaxKind.AsExpression, new AstAsExpressionData(), AnyNode /* AsExpression */);
     }
     static TypeAssertion(): AstTypeAssertion {
-        return new AstNode(SyntaxKind.TypeAssertionExpression, new AstTypeAssertionData(), TypeAssertionExpression);
+        return new AstNode(SyntaxKind.TypeAssertionExpression, new AstTypeAssertionData(), AnyNode /* TypeAssertionExpression */);
     }
     static SatisfiesExpression(): AstSatisfiesExpression {
-        return new AstNode(SyntaxKind.SatisfiesExpression, new AstSatisfiesExpressionData(), SatisfiesExpression);
+        return new AstNode(SyntaxKind.SatisfiesExpression, new AstSatisfiesExpressionData(), AnyNode /* SatisfiesExpression */);
     }
     static NonNullExpression(): AstNonNullExpression {
-        return new AstNode(SyntaxKind.NonNullExpression, new AstNonNullExpressionData(), NonNullExpression);
+        return new AstNode(SyntaxKind.NonNullExpression, new AstNonNullExpressionData(), AnyNode /* NonNullExpression */);
     }
     static NonNullChain(): AstNonNullChain {
         return new AstNode(SyntaxKind.NonNullExpression, new AstNonNullExpressionData(), NonNullExpression, NodeFlags.OptionalChain) as AstNonNullChain;
     }
     static MetaProperty(): AstMetaProperty {
-        return new AstNode(SyntaxKind.MetaProperty, new AstMetaPropertyData(), MetaProperty);
+        return new AstNode(SyntaxKind.MetaProperty, new AstMetaPropertyData(), AnyNode /* MetaProperty */);
     }
     static JsxElement(): AstJsxElement {
-        return new AstNode(SyntaxKind.JsxElement, new AstJsxElementData(), JsxElement);
+        return new AstNode(SyntaxKind.JsxElement, new AstJsxElementData(), AnyNode /* JsxElement */);
     }
     static JsxAttributes(): AstJsxAttributes {
-        return new AstNode(SyntaxKind.JsxAttributes, new AstJsxAttributesData(), JsxAttributes);
+        return new AstNode(SyntaxKind.JsxAttributes, new AstJsxAttributesData(), AnyNode /* JsxAttributes */);
     }
     static JsxNamespacedName(): AstJsxNamespacedName {
-        return new AstNode(SyntaxKind.JsxNamespacedName, new AstJsxNamespacedNameData(), JsxNamespacedName);
+        return new AstNode(SyntaxKind.JsxNamespacedName, new AstJsxNamespacedNameData(), AnyNode /* JsxNamespacedName */);
     }
     static JsxOpeningElement(): AstJsxOpeningElement {
-        return new AstNode(SyntaxKind.JsxOpeningElement, new AstJsxOpeningElementData(), JsxOpeningElement);
+        return new AstNode(SyntaxKind.JsxOpeningElement, new AstJsxOpeningElementData(), AnyNode /* JsxOpeningElement */);
     }
     static JsxSelfClosingElement(): AstJsxSelfClosingElement {
-        return new AstNode(SyntaxKind.JsxSelfClosingElement, new AstJsxSelfClosingElementData(), JsxSelfClosingElement);
+        return new AstNode(SyntaxKind.JsxSelfClosingElement, new AstJsxSelfClosingElementData(), AnyNode /* JsxSelfClosingElement */);
     }
     static JsxFragment(): AstJsxFragment {
-        return new AstNode(SyntaxKind.JsxFragment, new AstJsxFragmentData(), JsxFragment);
+        return new AstNode(SyntaxKind.JsxFragment, new AstJsxFragmentData(), AnyNode /* JsxFragment */);
     }
     static JsxOpeningFragment(): AstJsxOpeningFragment {
-        return new AstNode(SyntaxKind.JsxOpeningFragment, new AstJsxOpeningFragmentData(), JsxOpeningFragment);
+        return new AstNode(SyntaxKind.JsxOpeningFragment, new AstJsxOpeningFragmentData(), AnyNode /* JsxOpeningFragment */);
     }
     static JsxClosingFragment(): AstJsxClosingFragment {
-        return new AstNode(SyntaxKind.JsxClosingFragment, new AstJsxClosingFragmentData(), JsxClosingFragment);
+        return new AstNode(SyntaxKind.JsxClosingFragment, new AstJsxClosingFragmentData(), AnyNode /* JsxClosingFragment */);
     }
     static JsxAttribute(): AstJsxAttribute {
-        return new AstNode(SyntaxKind.JsxAttribute, new AstJsxAttributeData(), JsxAttribute);
+        return new AstNode(SyntaxKind.JsxAttribute, new AstJsxAttributeData(), AnyNode /* JsxAttribute */);
     }
     static JsxSpreadAttribute(): AstJsxSpreadAttribute {
-        return new AstNode(SyntaxKind.JsxSpreadAttribute, new AstJsxSpreadAttributeData(), JsxSpreadAttribute);
+        return new AstNode(SyntaxKind.JsxSpreadAttribute, new AstJsxSpreadAttributeData(), AnyNode as any /* JsxSpreadAttribute */);
     }
     static JsxClosingElement(): AstJsxClosingElement {
-        return new AstNode(SyntaxKind.JsxClosingElement, new AstJsxClosingElementData(), JsxClosingElement);
+        return new AstNode(SyntaxKind.JsxClosingElement, new AstJsxClosingElementData(), AnyNode /* JsxClosingElement */);
     }
     static JsxExpression(): AstJsxExpression {
-        return new AstNode(SyntaxKind.JsxExpression, new AstJsxExpressionData(), JsxExpression);
+        return new AstNode(SyntaxKind.JsxExpression, new AstJsxExpressionData(), AnyNode /* JsxExpression */);
     }
     static JsxText(): AstJsxText {
-        return new AstNode(SyntaxKind.JsxText, new AstJsxTextData(), JsxText);
+        return new AstNode(SyntaxKind.JsxText, new AstJsxTextData(), AnyNode /* JsxText */);
     }
     static EmptyStatement(): AstEmptyStatement {
-        return new AstNode(SyntaxKind.EmptyStatement, new AstEmptyStatementData(), EmptyStatement);
+        return new AstNode(SyntaxKind.EmptyStatement, new AstEmptyStatementData(), AnyNode /* EmptyStatement */);
     }
     static DebuggerStatement(): AstDebuggerStatement {
-        return new AstNode(SyntaxKind.DebuggerStatement, new AstDebuggerStatementData(), DebuggerStatement);
+        return new AstNode(SyntaxKind.DebuggerStatement, new AstDebuggerStatementData(), AnyNode /* DebuggerStatement */);
     }
     static MissingDeclaration(): AstMissingDeclaration {
-        return new AstNode(SyntaxKind.MissingDeclaration, new AstMissingDeclarationData(), MissingDeclaration);
+        return new AstNode(SyntaxKind.MissingDeclaration, new AstMissingDeclarationData(), AnyNode /* MissingDeclaration */);
     }
     static Block(): AstBlock {
-        return new AstNode(SyntaxKind.Block, new AstBlockData(), Block);
+        return new AstNode(SyntaxKind.Block, new AstBlockData(), AnyNode /* Block */);
     }
     static VariableStatement(): AstVariableStatement {
-        return new AstNode(SyntaxKind.VariableStatement, new AstVariableStatementData(), VariableStatement);
+        return new AstNode(SyntaxKind.VariableStatement, new AstVariableStatementData(), AnyNode /* VariableStatement */);
     }
     static ExpressionStatement(): AstExpressionStatement {
-        return new AstNode(SyntaxKind.ExpressionStatement, new AstExpressionStatementData(), ExpressionStatement);
+        return new AstNode(SyntaxKind.ExpressionStatement, new AstExpressionStatementData(), AnyNode /* ExpressionStatement */);
     }
     static IfStatement(): AstIfStatement {
-        return new AstNode(SyntaxKind.IfStatement, new AstIfStatementData(), IfStatement);
+        return new AstNode(SyntaxKind.IfStatement, new AstIfStatementData(), AnyNode /* IfStatement */);
     }
     static DoStatement(): AstDoStatement {
-        return new AstNode(SyntaxKind.DoStatement, new AstDoStatementData(), DoStatement);
+        return new AstNode(SyntaxKind.DoStatement, new AstDoStatementData(), AnyNode /* DoStatement */);
     }
     static WhileStatement(): AstWhileStatement {
-        return new AstNode(SyntaxKind.WhileStatement, new AstWhileStatementData(), WhileStatement);
+        return new AstNode(SyntaxKind.WhileStatement, new AstWhileStatementData(), AnyNode /* WhileStatement */);
     }
     static ForStatement(): AstForStatement {
-        return new AstNode(SyntaxKind.ForStatement, new AstForStatementData(), ForStatement);
+        return new AstNode(SyntaxKind.ForStatement, new AstForStatementData(), AnyNode /* ForStatement */);
     }
     static ForInStatement(): AstForInStatement {
-        return new AstNode(SyntaxKind.ForInStatement, new AstForInStatementData(), ForInStatement);
+        return new AstNode(SyntaxKind.ForInStatement, new AstForInStatementData(), AnyNode /* ForInStatement */);
     }
     static ForOfStatement(): AstForOfStatement {
-        return new AstNode(SyntaxKind.ForOfStatement, new AstForOfStatementData(), ForOfStatement);
+        return new AstNode(SyntaxKind.ForOfStatement, new AstForOfStatementData(), AnyNode /* ForOfStatement */);
     }
     static BreakStatement(): AstBreakStatement {
-        return new AstNode(SyntaxKind.BreakStatement, new AstBreakStatementData(), BreakStatement);
+        return new AstNode(SyntaxKind.BreakStatement, new AstBreakStatementData(), AnyNode /* BreakStatement */);
     }
     static ContinueStatement(): AstContinueStatement {
-        return new AstNode(SyntaxKind.ContinueStatement, new AstContinueStatementData(), ContinueStatement);
+        return new AstNode(SyntaxKind.ContinueStatement, new AstContinueStatementData(), AnyNode /* ContinueStatement */);
     }
     static ReturnStatement(): AstReturnStatement {
-        return new AstNode(SyntaxKind.ReturnStatement, new AstReturnStatementData(), ReturnStatement);
+        return new AstNode(SyntaxKind.ReturnStatement, new AstReturnStatementData(), AnyNode /* ReturnStatement */);
     }
     static WithStatement(): AstWithStatement {
-        return new AstNode(SyntaxKind.WithStatement, new AstWithStatementData(), WithStatement);
+        return new AstNode(SyntaxKind.WithStatement, new AstWithStatementData(), AnyNode /* WithStatement */);
     }
     static SwitchStatement(): AstSwitchStatement {
-        return new AstNode(SyntaxKind.SwitchStatement, new AstSwitchStatementData(), SwitchStatement);
+        return new AstNode(SyntaxKind.SwitchStatement, new AstSwitchStatementData(), AnyNode /* SwitchStatement */);
     }
     static CaseBlock(): AstCaseBlock {
-        return new AstNode(SyntaxKind.CaseBlock, new AstCaseBlockData(), CaseBlock);
+        return new AstNode(SyntaxKind.CaseBlock, new AstCaseBlockData(), AnyNode /* CaseBlock */);
     }
     static CaseClause(): AstCaseClause {
-        return new AstNode(SyntaxKind.CaseClause, new AstCaseClauseData(), CaseClause);
+        return new AstNode(SyntaxKind.CaseClause, new AstCaseClauseData(), AnyNode /* CaseClause */);
     }
     static DefaultClause(): AstDefaultClause {
-        return new AstNode(SyntaxKind.DefaultClause, new AstDefaultClauseData(), DefaultClause);
+        return new AstNode(SyntaxKind.DefaultClause, new AstDefaultClauseData(), AnyNode /* DefaultClause */);
     }
     static LabeledStatement(): AstLabeledStatement {
-        return new AstNode(SyntaxKind.LabeledStatement, new AstLabeledStatementData(), LabeledStatement);
+        return new AstNode(SyntaxKind.LabeledStatement, new AstLabeledStatementData(), AnyNode /* LabeledStatement */);
     }
     static ThrowStatement(): AstThrowStatement {
-        return new AstNode(SyntaxKind.ThrowStatement, new AstThrowStatementData(), ThrowStatement);
+        return new AstNode(SyntaxKind.ThrowStatement, new AstThrowStatementData(), AnyNode /* ThrowStatement */);
     }
     static TryStatement(): AstTryStatement {
-        return new AstNode(SyntaxKind.TryStatement, new AstTryStatementData(), TryStatement);
+        return new AstNode(SyntaxKind.TryStatement, new AstTryStatementData(), AnyNode /* TryStatement */);
     }
     static CatchClause(): AstCatchClause {
-        return new AstNode(SyntaxKind.CatchClause, new AstCatchClauseData(), CatchClause);
+        return new AstNode(SyntaxKind.CatchClause, new AstCatchClauseData(), AnyNode /* CatchClause */);
     }
     static ClassDeclaration(): AstClassDeclaration {
-        return new AstNode(SyntaxKind.ClassDeclaration, new AstClassDeclarationData(), ClassDeclaration);
+        return new AstNode(SyntaxKind.ClassDeclaration, new AstClassDeclarationData(), AnyNode /* ClassDeclaration */);
     }
     static ClassExpression(): AstClassExpression {
-        return new AstNode(SyntaxKind.ClassExpression, new AstClassExpressionData(), ClassExpression);
+        return new AstNode(SyntaxKind.ClassExpression, new AstClassExpressionData(), AnyNode /* ClassExpression */);
     }
     static InterfaceDeclaration(): AstInterfaceDeclaration {
-        return new AstNode(SyntaxKind.InterfaceDeclaration, new AstInterfaceDeclarationData(), InterfaceDeclaration);
+        return new AstNode(SyntaxKind.InterfaceDeclaration, new AstInterfaceDeclarationData(), AnyNode /* InterfaceDeclaration */);
     }
     static HeritageClause(): AstHeritageClause {
-        return new AstNode(SyntaxKind.HeritageClause, new AstHeritageClauseData(), HeritageClause);
+        return new AstNode(SyntaxKind.HeritageClause, new AstHeritageClauseData(), AnyNode /* HeritageClause */);
     }
     static TypeAliasDeclaration(): AstTypeAliasDeclaration {
-        return new AstNode(SyntaxKind.TypeAliasDeclaration, new AstTypeAliasDeclarationData(), TypeAliasDeclaration);
+        return new AstNode(SyntaxKind.TypeAliasDeclaration, new AstTypeAliasDeclarationData(), AnyNode /* TypeAliasDeclaration */);
     }
     static EnumMember(): AstEnumMember {
-        return new AstNode(SyntaxKind.EnumMember, new AstEnumMemberData(), EnumMember);
+        return new AstNode(SyntaxKind.EnumMember, new AstEnumMemberData(), AnyNode /* EnumMember */);
     }
     static EnumDeclaration(): AstEnumDeclaration {
-        return new AstNode(SyntaxKind.EnumDeclaration, new AstEnumDeclarationData(), EnumDeclaration);
+        return new AstNode(SyntaxKind.EnumDeclaration, new AstEnumDeclarationData(), AnyNode /* EnumDeclaration */);
     }
     static ModuleDeclaration(): AstModuleDeclaration {
-        return new AstNode(SyntaxKind.ModuleDeclaration, new AstModuleDeclarationData(), ModuleDeclaration);
+        return new AstNode(SyntaxKind.ModuleDeclaration, new AstModuleDeclarationData(), AnyNode /* ModuleDeclaration */);
     }
     static ModuleBlock(): AstModuleBlock {
-        return new AstNode(SyntaxKind.ModuleBlock, new AstModuleBlockData(), ModuleBlock);
+        return new AstNode(SyntaxKind.ModuleBlock, new AstModuleBlockData(), AnyNode /* ModuleBlock */);
     }
     static ImportEqualsDeclaration(): AstImportEqualsDeclaration {
-        return new AstNode(SyntaxKind.ImportEqualsDeclaration, new AstImportEqualsDeclarationData(), ImportEqualsDeclaration);
+        return new AstNode(SyntaxKind.ImportEqualsDeclaration, new AstImportEqualsDeclarationData(), AnyNode /* ImportEqualsDeclaration */);
     }
     static ExternalModuleReference(): AstExternalModuleReference {
-        return new AstNode(SyntaxKind.ExternalModuleReference, new AstExternalModuleReferenceData(), ExternalModuleReference);
+        return new AstNode(SyntaxKind.ExternalModuleReference, new AstExternalModuleReferenceData(), AnyNode /* ExternalModuleReference */);
     }
     static ImportDeclaration(): AstImportDeclaration {
-        return new AstNode(SyntaxKind.ImportDeclaration, new AstImportDeclarationData(), ImportDeclaration);
+        return new AstNode(SyntaxKind.ImportDeclaration, new AstImportDeclarationData(), AnyNode /* ImportDeclaration */);
     }
     static ImportClause(): AstImportClause {
-        return new AstNode(SyntaxKind.ImportClause, new AstImportClauseData(), ImportClause);
+        return new AstNode(SyntaxKind.ImportClause, new AstImportClauseData(), AnyNode /* ImportClause */);
     }
     static ImportAttribute(): AstImportAttribute {
-        return new AstNode(SyntaxKind.ImportAttribute, new AstImportAttributeData(), ImportAttribute);
+        return new AstNode(SyntaxKind.ImportAttribute, new AstImportAttributeData(), AnyNode /* ImportAttribute */);
     }
     static ImportAttributes(): AstImportAttributes {
-        return new AstNode(SyntaxKind.ImportAttributes, new AstImportAttributesData(), ImportAttributes);
+        return new AstNode(SyntaxKind.ImportAttributes, new AstImportAttributesData(), AnyNode /* ImportAttributes */);
     }
     static NamespaceImport(): AstNamespaceImport {
-        return new AstNode(SyntaxKind.NamespaceImport, new AstNamespaceImportData(), NamespaceImport);
+        return new AstNode(SyntaxKind.NamespaceImport, new AstNamespaceImportData(), AnyNode /* NamespaceImport */);
     }
     static NamespaceExport(): AstNamespaceExport {
-        return new AstNode(SyntaxKind.NamespaceExport, new AstNamespaceExportData(), NamespaceExport);
+        return new AstNode(SyntaxKind.NamespaceExport, new AstNamespaceExportData(), AnyNode /* NamespaceExport */);
     }
     static NamespaceExportDeclaration(): AstNamespaceExportDeclaration {
-        return new AstNode(SyntaxKind.NamespaceExportDeclaration, new AstNamespaceExportDeclarationData(), NamespaceExportDeclaration);
+        return new AstNode(SyntaxKind.NamespaceExportDeclaration, new AstNamespaceExportDeclarationData(), AnyNode /* NamespaceExportDeclaration */);
     }
     static ExportDeclaration(): AstExportDeclaration {
-        return new AstNode(SyntaxKind.ExportDeclaration, new AstExportDeclarationData(), ExportDeclaration);
+        return new AstNode(SyntaxKind.ExportDeclaration, new AstExportDeclarationData(), AnyNode /* ExportDeclaration */);
     }
     static NamedImports(): AstNamedImports {
-        return new AstNode(SyntaxKind.NamedImports, new AstNamedImportsData(), NamedImports);
+        return new AstNode(SyntaxKind.NamedImports, new AstNamedImportsData(), AnyNode /* NamedImports */);
     }
     static NamedExports(): AstNamedExports {
-        return new AstNode(SyntaxKind.NamedExports, new AstNamedExportsData(), NamedExports);
+        return new AstNode(SyntaxKind.NamedExports, new AstNamedExportsData(), AnyNode /* NamedExports */);
     }
     static ImportSpecifier(): AstImportSpecifier {
-        return new AstNode(SyntaxKind.ImportSpecifier, new AstImportSpecifierData(), ImportSpecifier);
+        return new AstNode(SyntaxKind.ImportSpecifier, new AstImportSpecifierData(), AnyNode /* ImportSpecifier */);
     }
     static ExportSpecifier(): AstExportSpecifier {
-        return new AstNode(SyntaxKind.ExportSpecifier, new AstExportSpecifierData(), ExportSpecifier);
+        return new AstNode(SyntaxKind.ExportSpecifier, new AstExportSpecifierData(), AnyNode /* ExportSpecifier */);
     }
     static ExportAssignment(): AstExportAssignment {
-        return new AstNode(SyntaxKind.ExportAssignment, new AstExportAssignmentData(), ExportAssignment);
+        return new AstNode(SyntaxKind.ExportAssignment, new AstExportAssignmentData(), AnyNode /* ExportAssignment */);
     }
     static JSDocTypeExpression(): AstJSDocTypeExpression {
-        return new AstNode(SyntaxKind.JSDocTypeExpression, new AstJSDocTypeExpressionData(), JSDocTypeExpression);
+        return new AstNode(SyntaxKind.JSDocTypeExpression, new AstJSDocTypeExpressionData(), AnyNode /* JSDocTypeExpression */);
     }
     static JSDocNameReference(): AstJSDocNameReference {
-        return new AstNode(SyntaxKind.JSDocNameReference, new AstJSDocNameReferenceData(), JSDocNameReference);
+        return new AstNode(SyntaxKind.JSDocNameReference, new AstJSDocNameReferenceData(), AnyNode /* JSDocNameReference */);
     }
     static JSDocMemberName(): AstJSDocMemberName {
-        return new AstNode(SyntaxKind.JSDocMemberName, new AstJSDocMemberNameData(), JSDocMemberName);
+        return new AstNode(SyntaxKind.JSDocMemberName, new AstJSDocMemberNameData(), AnyNode /* JSDocMemberName */);
     }
     static JSDocAllType(): AstJSDocAllType {
-        return new AstNode(SyntaxKind.JSDocAllType, new AstJSDocAllTypeData(), JSDocAllType);
+        return new AstNode(SyntaxKind.JSDocAllType, new AstJSDocAllTypeData(), AnyNode /* JSDocAllType */);
     }
     static JSDocUnknownType(): AstJSDocUnknownType {
-        return new AstNode(SyntaxKind.JSDocUnknownType, new AstJSDocUnknownTypeData(), JSDocUnknownType);
+        return new AstNode(SyntaxKind.JSDocUnknownType, new AstJSDocUnknownTypeData(), AnyNode /* JSDocUnknownType */);
     }
     static JSDocNonNullableType(): AstJSDocNonNullableType {
-        return new AstNode(SyntaxKind.JSDocNonNullableType, new AstJSDocNonNullableTypeData(), JSDocNonNullableType);
+        return new AstNode(SyntaxKind.JSDocNonNullableType, new AstJSDocNonNullableTypeData(), AnyNode /* JSDocNonNullableType */);
     }
     static JSDocNullableType(): AstJSDocNullableType {
-        return new AstNode(SyntaxKind.JSDocNullableType, new AstJSDocNullableTypeData(), JSDocNullableType);
+        return new AstNode(SyntaxKind.JSDocNullableType, new AstJSDocNullableTypeData(), AnyNode /* JSDocNullableType */);
     }
     static JSDocOptionalType(): AstJSDocOptionalType {
-        return new AstNode(SyntaxKind.JSDocOptionalType, new AstJSDocOptionalTypeData(), JSDocOptionalType);
+        return new AstNode(SyntaxKind.JSDocOptionalType, new AstJSDocOptionalTypeData(), AnyNode /* JSDocOptionalType */);
     }
     static JSDocFunctionType(): AstJSDocFunctionType {
-        return new AstNode(SyntaxKind.JSDocFunctionType, new AstJSDocFunctionTypeData(), JSDocFunctionType);
+        return new AstNode(SyntaxKind.JSDocFunctionType, new AstJSDocFunctionTypeData(), AnyNode /* JSDocFunctionType */);
     }
     static JSDocVariadicType(): AstJSDocVariadicType {
-        return new AstNode(SyntaxKind.JSDocVariadicType, new AstJSDocVariadicTypeData(), JSDocVariadicType);
+        return new AstNode(SyntaxKind.JSDocVariadicType, new AstJSDocVariadicTypeData(), AnyNode /* JSDocVariadicType */);
     }
     static JSDocNamepathType(): AstJSDocNamepathType {
-        return new AstNode(SyntaxKind.JSDocNamepathType, new AstJSDocNamepathTypeData(), JSDocNamepathType);
+        return new AstNode(SyntaxKind.JSDocNamepathType, new AstJSDocNamepathTypeData(), AnyNode /* JSDocNamepathType */);
     }
     static JSDocNode(): AstJSDoc {
-        return new AstNode(SyntaxKind.JSDoc, new AstJSDocData(), JSDoc);
+        return new AstNode(SyntaxKind.JSDoc, new AstJSDocData(), AnyNode /* JSDoc */);
     }
     static JSDocLink(): AstJSDocLink {
-        return new AstNode(SyntaxKind.JSDocLink, new AstJSDocLinkData(), JSDocLink);
+        return new AstNode(SyntaxKind.JSDocLink, new AstJSDocLinkData(), AnyNode /* JSDocLink */);
     }
     static JSDocLinkCode(): AstJSDocLinkCode {
-        return new AstNode(SyntaxKind.JSDocLinkCode, new AstJSDocLinkCodeData(), JSDocLinkCode);
+        return new AstNode(SyntaxKind.JSDocLinkCode, new AstJSDocLinkCodeData(), AnyNode /* JSDocLinkCode */);
     }
     static JSDocLinkPlain(): AstJSDocLinkPlain {
-        return new AstNode(SyntaxKind.JSDocLinkPlain, new AstJSDocLinkPlainData(), JSDocLinkPlain);
+        return new AstNode(SyntaxKind.JSDocLinkPlain, new AstJSDocLinkPlainData(), AnyNode /* JSDocLinkPlain */);
     }
     static JSDocText(): AstJSDocText {
-        return new AstNode(SyntaxKind.JSDocText, new AstJSDocTextData(), JSDocText);
+        return new AstNode(SyntaxKind.JSDocText, new AstJSDocTextData(), AnyNode /* JSDocText */);
     }
     static JSDocUnknownTag(): AstJSDocUnknownTag {
-        return new AstNode(SyntaxKind.JSDocTag, new AstJSDocUnknownTagData(), JSDocUnknownTag);
+        return new AstNode(SyntaxKind.JSDocTag, new AstJSDocUnknownTagData(), AnyNode /* JSDocUnknownTag */);
     }
     static JSDocAugmentsTag(): AstJSDocAugmentsTag {
-        return new AstNode(SyntaxKind.JSDocAugmentsTag, new AstJSDocAugmentsTagData(), JSDocAugmentsTag);
+        return new AstNode(SyntaxKind.JSDocAugmentsTag, new AstJSDocAugmentsTagData(), AnyNode /* JSDocAugmentsTag */);
     }
     static JSDocImplementsTag(): AstJSDocImplementsTag {
-        return new AstNode(SyntaxKind.JSDocImplementsTag, new AstJSDocImplementsTagData(), JSDocImplementsTag);
+        return new AstNode(SyntaxKind.JSDocImplementsTag, new AstJSDocImplementsTagData(), AnyNode /* JSDocImplementsTag */);
     }
     static JSDocAuthorTag(): AstJSDocAuthorTag {
-        return new AstNode(SyntaxKind.JSDocAuthorTag, new AstJSDocAuthorTagData(), JSDocAuthorTag);
+        return new AstNode(SyntaxKind.JSDocAuthorTag, new AstJSDocAuthorTagData(), AnyNode /* JSDocAuthorTag */);
     }
     static JSDocDeprecatedTag(): AstJSDocDeprecatedTag {
-        return new AstNode(SyntaxKind.JSDocDeprecatedTag, new AstJSDocDeprecatedTagData(), JSDocDeprecatedTag);
+        return new AstNode(SyntaxKind.JSDocDeprecatedTag, new AstJSDocDeprecatedTagData(), AnyNode /* JSDocDeprecatedTag */);
     }
     static JSDocClassTag(): AstJSDocClassTag {
-        return new AstNode(SyntaxKind.JSDocClassTag, new AstJSDocClassTagData(), JSDocClassTag);
+        return new AstNode(SyntaxKind.JSDocClassTag, new AstJSDocClassTagData(), AnyNode /* JSDocClassTag */);
     }
     static JSDocPublicTag(): AstJSDocPublicTag {
-        return new AstNode(SyntaxKind.JSDocPublicTag, new AstJSDocPublicTagData(), JSDocPublicTag);
+        return new AstNode(SyntaxKind.JSDocPublicTag, new AstJSDocPublicTagData(), AnyNode /* JSDocPublicTag */);
     }
     static JSDocPrivateTag(): AstJSDocPrivateTag {
-        return new AstNode(SyntaxKind.JSDocPrivateTag, new AstJSDocPrivateTagData(), JSDocPrivateTag);
+        return new AstNode(SyntaxKind.JSDocPrivateTag, new AstJSDocPrivateTagData(), AnyNode /* JSDocPrivateTag */);
     }
     static JSDocProtectedTag(): AstJSDocProtectedTag {
-        return new AstNode(SyntaxKind.JSDocProtectedTag, new AstJSDocProtectedTagData(), JSDocProtectedTag);
+        return new AstNode(SyntaxKind.JSDocProtectedTag, new AstJSDocProtectedTagData(), AnyNode /* JSDocProtectedTag */);
     }
     static JSDocReadonlyTag(): AstJSDocReadonlyTag {
-        return new AstNode(SyntaxKind.JSDocReadonlyTag, new AstJSDocReadonlyTagData(), JSDocReadonlyTag);
+        return new AstNode(SyntaxKind.JSDocReadonlyTag, new AstJSDocReadonlyTagData(), AnyNode /* JSDocReadonlyTag */);
     }
     static JSDocOverrideTag(): AstJSDocOverrideTag {
-        return new AstNode(SyntaxKind.JSDocOverrideTag, new AstJSDocOverrideTagData(), JSDocOverrideTag);
+        return new AstNode(SyntaxKind.JSDocOverrideTag, new AstJSDocOverrideTagData(), AnyNode /* JSDocOverrideTag */);
     }
     static JSDocEnumTag(): AstJSDocEnumTag {
-        return new AstNode(SyntaxKind.JSDocEnumTag, new AstJSDocEnumTagData(), JSDocEnumTag);
+        return new AstNode(SyntaxKind.JSDocEnumTag, new AstJSDocEnumTagData(), AnyNode /* JSDocEnumTag */);
     }
     static JSDocThisTag(): AstJSDocThisTag {
-        return new AstNode(SyntaxKind.JSDocThisTag, new AstJSDocThisTagData(), JSDocThisTag);
+        return new AstNode(SyntaxKind.JSDocThisTag, new AstJSDocThisTagData(), AnyNode /* JSDocThisTag */);
     }
     static JSDocTemplateTag(): AstJSDocTemplateTag {
-        return new AstNode(SyntaxKind.JSDocTemplateTag, new AstJSDocTemplateTagData(), JSDocTemplateTag);
+        return new AstNode(SyntaxKind.JSDocTemplateTag, new AstJSDocTemplateTagData(), AnyNode /* JSDocTemplateTag */);
     }
     static JSDocSeeTag(): AstJSDocSeeTag {
-        return new AstNode(SyntaxKind.JSDocSeeTag, new AstJSDocSeeTagData(), JSDocSeeTag);
+        return new AstNode(SyntaxKind.JSDocSeeTag, new AstJSDocSeeTagData(), AnyNode /* JSDocSeeTag */);
     }
     static JSDocReturnTag(): AstJSDocReturnTag {
-        return new AstNode(SyntaxKind.JSDocReturnTag, new AstJSDocReturnTagData(), JSDocReturnTag);
+        return new AstNode(SyntaxKind.JSDocReturnTag, new AstJSDocReturnTagData(), AnyNode /* JSDocReturnTag */);
     }
     static JSDocTypeTag(): AstJSDocTypeTag {
-        return new AstNode(SyntaxKind.JSDocTypeTag, new AstJSDocTypeTagData(), JSDocTypeTag);
+        return new AstNode(SyntaxKind.JSDocTypeTag, new AstJSDocTypeTagData(), AnyNode /* JSDocTypeTag */);
     }
     static JSDocTypedefTag(): AstJSDocTypedefTag {
-        return new AstNode(SyntaxKind.JSDocTypedefTag, new AstJSDocTypedefTagData(), JSDocTypedefTag);
+        return new AstNode(SyntaxKind.JSDocTypedefTag, new AstJSDocTypedefTagData(), AnyNode /* JSDocTypedefTag */);
     }
     static JSDocCallbackTag(): AstJSDocCallbackTag {
-        return new AstNode(SyntaxKind.JSDocCallbackTag, new AstJSDocCallbackTagData(), JSDocCallbackTag);
+        return new AstNode(SyntaxKind.JSDocCallbackTag, new AstJSDocCallbackTagData(), AnyNode /* JSDocCallbackTag */);
     }
     static JSDocOverloadTag(): AstJSDocOverloadTag {
-        return new AstNode(SyntaxKind.JSDocOverloadTag, new AstJSDocOverloadTagData(), JSDocOverloadTag);
+        return new AstNode(SyntaxKind.JSDocOverloadTag, new AstJSDocOverloadTagData(), AnyNode /* JSDocOverloadTag */);
     }
     static JSDocThrowsTag(): AstJSDocThrowsTag {
-        return new AstNode(SyntaxKind.JSDocThrowsTag, new AstJSDocThrowsTagData(), JSDocThrowsTag);
+        return new AstNode(SyntaxKind.JSDocThrowsTag, new AstJSDocThrowsTagData(), AnyNode /* JSDocThrowsTag */);
     }
     static JSDocSignature(): AstJSDocSignature {
-        return new AstNode(SyntaxKind.JSDocSignature, new AstJSDocSignatureData(), JSDocSignature);
+        return new AstNode(SyntaxKind.JSDocSignature, new AstJSDocSignatureData(), AnyNode /* JSDocSignature */);
     }
     static JSDocPropertyTag(): AstJSDocPropertyTag {
-        return new AstNode(SyntaxKind.JSDocPropertyTag, new AstJSDocPropertyTagData(), JSDocPropertyTag);
+        return new AstNode(SyntaxKind.JSDocPropertyTag, new AstJSDocPropertyTagData(), AnyNode /* JSDocPropertyTag */);
     }
     static JSDocParameterTag(): AstJSDocParameterTag {
-        return new AstNode(SyntaxKind.JSDocParameterTag, new AstJSDocParameterTagData(), JSDocParameterTag);
+        return new AstNode(SyntaxKind.JSDocParameterTag, new AstJSDocParameterTagData(), AnyNode /* JSDocParameterTag */);
     }
     static JSDocTypeLiteral(): AstJSDocTypeLiteral {
-        return new AstNode(SyntaxKind.JSDocTypeLiteral, new AstJSDocTypeLiteralData(), JSDocTypeLiteral);
+        return new AstNode(SyntaxKind.JSDocTypeLiteral, new AstJSDocTypeLiteralData(), AnyNode /* JSDocTypeLiteral */);
     }
     static JSDocSatisfiesTag(): AstJSDocSatisfiesTag {
-        return new AstNode(SyntaxKind.JSDocSatisfiesTag, new AstJSDocSatisfiesTagData(), JSDocSatisfiesTag);
+        return new AstNode(SyntaxKind.JSDocSatisfiesTag, new AstJSDocSatisfiesTagData(), AnyNode /* JSDocSatisfiesTag */);
     }
     static JSDocImportTag(): AstJSDocImportTag {
-        return new AstNode(SyntaxKind.JSDocImportTag, new AstJSDocImportTagData(), JSDocImportTag);
+        return new AstNode(SyntaxKind.JSDocImportTag, new AstJSDocImportTagData(), AnyNode /* JSDocImportTag */);
     }
     static SourceFile(): AstSourceFile {
         return new AstNode(SyntaxKind.SourceFile, new AstSourceFileData(), SourceFile);
     }
     static SyntheticExpression(): AstSyntheticExpression {
-        return new AstNode(SyntaxKind.SyntheticExpression, new AstSyntheticExpressionData(), SyntheticExpression);
+        return new AstNode(SyntaxKind.SyntheticExpression, new AstSyntheticExpressionData(), AnyNode /* SyntheticExpression */);
     }
     static Bundle(): AstBundle {
         return new AstNode(SyntaxKind.Bundle, new AstBundleData(), Bundle);
@@ -1304,19 +1306,19 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
         return new AstNode(SyntaxKind.SyntaxList, new AstSyntaxListData(), SyntaxList);
     }
     static NotEmittedStatement(): AstNotEmittedStatement {
-        return new AstNode(SyntaxKind.NotEmittedStatement, new AstNotEmittedStatementData(), NotEmittedStatement);
+        return new AstNode(SyntaxKind.NotEmittedStatement, new AstNotEmittedStatementData(), AnyNode /* NotEmittedStatement */);
     }
     static NotEmittedTypeElement(): AstNotEmittedTypeElement {
-        return new AstNode(SyntaxKind.NotEmittedTypeElement, new AstNotEmittedTypeElementData(), NotEmittedTypeElement);
+        return new AstNode(SyntaxKind.NotEmittedTypeElement, new AstNotEmittedTypeElementData(), AnyNode /* NotEmittedTypeElement */);
     }
     static PartiallyEmittedExpression(): AstPartiallyEmittedExpression {
-        return new AstNode(SyntaxKind.PartiallyEmittedExpression, new AstPartiallyEmittedExpressionData(), PartiallyEmittedExpression);
+        return new AstNode(SyntaxKind.PartiallyEmittedExpression, new AstPartiallyEmittedExpressionData(), AnyNode /* PartiallyEmittedExpression */);
     }
     static CommaListExpression(): AstCommaListExpression {
-        return new AstNode(SyntaxKind.CommaListExpression, new AstCommaListExpressionData(), CommaListExpression);
+        return new AstNode(SyntaxKind.CommaListExpression, new AstCommaListExpressionData(), AnyNode /* CommaListExpression */);
     }
     /** @internal */ static SyntheticReferenceExpression(): AstSyntheticReferenceExpression {
-        return new AstNode(SyntaxKind.SyntheticReferenceExpression, new AstSyntheticReferenceExpressionData(), SyntheticReferenceExpression);
+        return new AstNode(SyntaxKind.SyntheticReferenceExpression, new AstSyntheticReferenceExpressionData(), AnyNode /* SyntheticReferenceExpression */);
     }
 }
 
@@ -5676,4 +5678,355 @@ export function skipAstOuterExpressions(node: AstNode, kinds: OuterExpressionKin
         node = node.data.expression;
     }
     return node;
+}
+
+// Temporary `Node` implementation representing every possible `Node` shape.
+// This is only used for testing and will be removed in favor of the node classes in types.ts
+class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
+    declare _literalExpressionBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _signatureDeclarationBrand: any;
+    declare _typeElementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    declare _flowContainerBrand: any;
+    declare _classElementBrand: any;
+    declare _objectLiteralBrand: any;
+    declare _functionLikeDeclarationBrand: any;
+    declare _typeNodeBrand: any;
+    declare _statementBrand: any;
+    declare _jsDocTypeBrand: any;
+    
+    override getChildCount(sourceFile?: SourceFileLike): number {
+        if (isTokenKind(this.kind)) {
+            return this.getChildren().length;
+        }
+        return super.getChildCount(sourceFile);
+    }
+
+    override getChildAt(index: number, sourceFile?: SourceFileLike): Node {
+        if (isTokenKind(this.kind)) {
+            return this.getChildren()[index];
+        }
+        return super.getChildAt(index, sourceFile);
+    }
+
+    override getChildren(sourceFile?: SourceFileLike): readonly Node[] {
+        if (isTokenKind(this.kind)) {
+            return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc ?? emptyArray : emptyArray;
+        }
+        return super.getChildren(sourceFile);
+    }
+
+    override getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
+        if (isTokenKind(this.kind)) {
+            return undefined;
+        }
+        return super.getFirstToken(sourceFile);
+    }
+
+    override getLastToken(sourceFile?: SourceFileLike): Node | undefined {
+        if (isTokenKind(this.kind)) {
+            return undefined;
+        }
+        return super.getLastToken(sourceFile);
+    }
+
+    override forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        if (isTokenKind(this.kind)) {
+            return undefined;
+        }
+        return super.forEachChild(cbNode, cbNodeArray);
+    }
+
+    override get parent(): any { return super.parent; }
+    override set parent(value) { super.parent = value; }
+
+    get left() { return this.ast.data.left?.node; }
+    set left(value) { this.ast.data.left = value?.ast; }
+    get right() { return this.ast.data.right?.node; }
+    set right(value) { this.ast.data.right = value?.ast; }
+    get expression() { return this.ast.data.expression?.node; }
+    set expression(value) { this.ast.data.expression = value?.ast; }
+    get modifiers() { return this.ast.data.modifiers?.nodes; }
+    set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    get name() { return this.ast.data.name?.node; }
+    set name(value) { this.ast.data.name = value?.ast; }
+    get constraint() { return this.ast.data.constraint?.node; }
+    set constraint(value) { this.ast.data.constraint = value?.ast; }
+    get default() { return this.ast.data.default?.node; }
+    set default(value) { this.ast.data.default = value?.ast; }
+    get typeParameters() { return this.ast.data.typeParameters?.nodes; }
+    set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    get parameters() { return this.ast.data.parameters?.nodes; }
+    set parameters(value) { this.ast.data.parameters = value?.ast; }
+    get type() {
+        if (this.kind === SyntaxKind.SyntheticExpression) {
+            return this.ast.data.type;
+        }
+        return this.ast.data.type?.node;
+    }
+    set type(value) {
+        if (this.kind === SyntaxKind.SyntheticExpression) {
+            this.ast.data.type = value;
+        }
+        else {
+            this.ast.data.type = value?.ast;
+        }
+    }
+    get typeArguments() { return this.ast.data.typeArguments?.nodes; }
+    set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    get exclamationToken() { return this.ast.data.exclamationToken?.node; }
+    set exclamationToken(value) { this.ast.data.exclamationToken = value?.ast; }
+    get initializer() { return this.ast.data.initializer?.node; }
+    set initializer(value) { this.ast.data.initializer = value?.ast; }
+    get declarations() { return this.ast.data.declarations.nodes; }
+    set declarations(value) { this.ast.data.declarations = value.ast; }
+    get dotDotDotToken() { return this.ast.data.dotDotDotToken?.node; }
+    set dotDotDotToken(value) { this.ast.data.dotDotDotToken = value?.ast; }
+    get questionToken() { return this.ast.data.questionToken?.node; }
+    set questionToken(value) { this.ast.data.questionToken = value?.ast; }
+    get propertyName() { return this.ast.data.propertyName?.node; }
+    set propertyName(value) { this.ast.data.propertyName = value?.ast; }
+    get equalsToken() { return this.ast.data.equalsToken?.node; }
+    set equalsToken(value) { this.ast.data.equalsToken = value?.ast; }
+    get objectAssignmentInitializer() { return this.ast.data.objectAssignmentInitializer?.node; }
+    set objectAssignmentInitializer(value) { this.ast.data.objectAssignmentInitializer = value?.ast; }
+    get elements() { return this.ast.data.elements.nodes; }
+    set elements(value) { this.ast.data.elements = value.ast; }
+    get asteriskToken() { return this.ast.data.asteriskToken?.node; }
+    set asteriskToken(value) { this.ast.data.asteriskToken = value?.ast; }
+    get body() { return this.ast.data.body?.node; }
+    set body(value) { this.ast.data.body = value?.ast; }
+    get assertClause() { return this.ast.data.assertClause?.node; }
+    set assertClause(value) { this.ast.data.assertClause = value?.ast; }
+    get multiLine() { return this.ast.data.multiLine; }
+    set multiLine(value) { this.ast.data.multiLine = value; }
+    get isTypeOf() { return this.ast.data.isTypeOf; }
+    set isTypeOf(value) { this.ast.data.isTypeOf = value; }
+    get argument() { return this.ast.data.argument.node; }
+    set argument(value) { this.ast.data.argument = value.ast; }
+    get attributes() { return this.ast.data.attributes?.node; }
+    set attributes(value) { this.ast.data.attributes = value?.ast; }
+    get assertions() { return this.ast.data.assertions?.node; }
+    set assertions(value) { this.ast.data.assertions = value?.ast; }
+    get qualifier() { return this.ast.data.qualifier?.node; }
+    set qualifier(value) { this.ast.data.qualifier = value?.ast; }
+    get typeName() { return this.ast.data.typeName.node; }
+    set typeName(value) { this.ast.data.typeName = value.ast; }
+    get assertsModifier() { return this.ast.data.assertsModifier?.node; }
+    set assertsModifier(value) { this.ast.data.assertsModifier = value?.ast; }
+    get parameterName() { return this.ast.data.parameterName.node; }
+    set parameterName(value) { this.ast.data.parameterName = value.ast; }
+    get exprName() { return this.ast.data.exprName.node; }
+    set exprName(value) { this.ast.data.exprName = value.ast; }
+    get members() { return this.ast.data.members?.nodes; }
+    set members(value) { this.ast.data.members = value?.ast; }
+    get elementType() { return this.ast.data.elementType.node; }
+    set elementType(value) { this.ast.data.elementType = value.ast; }
+    get types() { return this.ast.data.types.nodes; }
+    set types(value) { this.ast.data.types = value.ast; }
+    get checkType() { return this.ast.data.checkType.node; }
+    set checkType(value) { this.ast.data.checkType = value.ast; }
+    get extendsType() { return this.ast.data.extendsType.node; }
+    set extendsType(value) { this.ast.data.extendsType = value.ast; }
+    get trueType() { return this.ast.data.trueType.node; }
+    set trueType(value) { this.ast.data.trueType = value.ast; }
+    get falseType() { return this.ast.data.falseType.node; }
+    set falseType(value) { this.ast.data.falseType = value.ast; }
+    get typeParameter() { return this.ast.data.typeParameter.node; }
+    set typeParameter(value) { this.ast.data.typeParameter = value.ast; }
+    get operator() { return this.ast.data.operator; }
+    set operator(value) { this.ast.data.operator = value; }
+    get objectType() { return this.ast.data.objectType.node; }
+    set objectType(value) { this.ast.data.objectType = value.ast; }
+    get indexType() { return this.ast.data.indexType.node; }
+    set indexType(value) { this.ast.data.indexType = value.ast; }
+    get readonlyToken() { return this.ast.data.readonlyToken?.node; }
+    set readonlyToken(value) { this.ast.data.readonlyToken = value?.ast; }
+    get nameType() { return this.ast.data.nameType?.node; }
+    set nameType(value) { this.ast.data.nameType = value?.ast; }
+    get literal() { return this.ast.data.literal.node; }
+    set literal(value) { this.ast.data.literal = value.ast; }
+    get head() { return this.ast.data.head.node; }
+    set head(value) { this.ast.data.head = value.ast; }
+    get templateSpans() { return this.ast.data.templateSpans.nodes; }
+    set templateSpans(value) { this.ast.data.templateSpans = value.ast; }
+    get operand() { return this.ast.data.operand.node; }
+    set operand(value) { this.ast.data.operand = value.ast; }
+    get isSpread() { return this.ast.data.isSpread; }
+    set isSpread(value) { this.ast.data.isSpread = value; }
+    get tupleNameSource() { return this.ast.data.tupleNameSource?.node; }
+    set tupleNameSource(value) { this.ast.data.tupleNameSource = value?.ast; }
+    get operatorToken() { return this.ast.data.operatorToken.node; }
+    set operatorToken(value) { this.ast.data.operatorToken = value.ast; }
+    get condition() { return this.ast.data.condition?.node; }
+    set condition(value) { this.ast.data.condition = value?.ast; }
+    get whenTrue() { return this.ast.data.whenTrue.node; }
+    set whenTrue(value) { this.ast.data.whenTrue = value.ast; }
+    get colonToken() { return this.ast.data.colonToken.node; }
+    set colonToken(value) { this.ast.data.colonToken = value.ast; }
+    get whenFalse() { return this.ast.data.whenFalse.node; }
+    set whenFalse(value) { this.ast.data.whenFalse = value.ast; }
+    get equalsGreaterThanToken() { return this.ast.data.equalsGreaterThanToken.node; }
+    set equalsGreaterThanToken(value) { this.ast.data.equalsGreaterThanToken = value.ast; }
+    get properties() { return this.ast.data.properties?.nodes; }
+    set properties(value) { this.ast.data.properties = value?.ast; }
+    get questionDotToken() { return this.ast.data.questionDotToken?.node; }
+    set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
+    get argumentExpression() { return this.ast.data.argumentExpression.node; }
+    set argumentExpression(value) { this.ast.data.argumentExpression = value.ast; }
+    get arguments() { return this.ast.data.arguments?.nodes; }
+    set arguments(value) { this.ast.data.arguments = value?.ast; }
+    get tag() { return this.ast.data.tag.node; }
+    set tag(value) { this.ast.data.tag = value.ast; }
+    get template() { return this.ast.data.template.node; }
+    set template(value) { this.ast.data.template = value.ast; }
+    get keywordToken() { return this.ast.data.keywordToken; }
+    set keywordToken(value) { this.ast.data.keywordToken = value; }
+    get openingElement() { return this.ast.data.openingElement.node; }
+    set openingElement(value) { this.ast.data.openingElement = value.ast; }
+    get children() { return this.ast.data.children.nodes; }
+    set children(value) { this.ast.data.children = value.ast; }
+    get closingElement() { return this.ast.data.closingElement.node; }
+    set closingElement(value) { this.ast.data.closingElement = value.ast; }
+    get namespace() { return this.ast.data.namespace.node; }
+    set namespace(value) { this.ast.data.namespace = value.ast; }
+    get tagName() { return this.ast.data.tagName.node; }
+    set tagName(value) { this.ast.data.tagName = value.ast; }
+    get openingFragment() { return this.ast.data.openingFragment.node; }
+    set openingFragment(value) { this.ast.data.openingFragment = value.ast; }
+    get closingFragment() { return this.ast.data.closingFragment.node; }
+    set closingFragment(value) { this.ast.data.closingFragment = value.ast; }
+    get thisArg() { return this.ast.data.thisArg.node; }
+    set thisArg(value) { this.ast.data.thisArg = value.ast; }
+    get statements() { return this.ast.data.statements.nodes; }
+    set statements(value) { this.ast.data.statements = value.ast; }
+    get declarationList() { return this.ast.data.declarationList.node; }
+    set declarationList(value) { this.ast.data.declarationList = value.ast; }
+    get thenStatement() { return this.ast.data.thenStatement.node; }
+    set thenStatement(value) { this.ast.data.thenStatement = value.ast; }
+    get elseStatement() { return this.ast.data.elseStatement?.node; }
+    set elseStatement(value) { this.ast.data.elseStatement = value?.ast; }
+    get statement() { return this.ast.data.statement.node; }
+    set statement(value) { this.ast.data.statement = value.ast; }
+    get incrementor() { return this.ast.data.incrementor?.node; }
+    set incrementor(value) { this.ast.data.incrementor = value?.ast; }
+    get awaitModifier() { return this.ast.data.awaitModifier?.node; }
+    set awaitModifier(value) { this.ast.data.awaitModifier = value?.ast; }
+    get label() { return this.ast.data.label?.node; }
+    set label(value) { this.ast.data.label = value?.ast; }
+    get caseBlock() { return this.ast.data.caseBlock.node; }
+    set caseBlock(value) { this.ast.data.caseBlock = value.ast; }
+    get possiblyExhaustive() { return this.ast.data.possiblyExhaustive; }
+    set possiblyExhaustive(value) { this.ast.data.possiblyExhaustive = value; }
+    get clauses() { return this.ast.data.clauses?.nodes; }
+    set clauses(value) { this.ast.data.clauses = value?.ast; }
+    get tryBlock() { return this.ast.data.tryBlock.node; }
+    set tryBlock(value) { this.ast.data.tryBlock = value.ast; }
+    get catchClause() { return this.ast.data.catchClause?.node; }
+    set catchClause(value) { this.ast.data.catchClause = value?.ast; }
+    get finallyBlock() { return this.ast.data.finallyBlock?.node; }
+    set finallyBlock(value) { this.ast.data.finallyBlock = value?.ast; }
+    get variableDeclaration() { return this.ast.data.variableDeclaration?.node; }
+    set variableDeclaration(value) { this.ast.data.variableDeclaration = value?.ast; }
+    get block() { return this.ast.data.block?.node; }
+    set block(value) { this.ast.data.block = value?.ast; }
+    get heritageClauses() { return this.ast.data.heritageClauses?.nodes; }
+    set heritageClauses(value) { this.ast.data.heritageClauses = value?.ast; }
+    get token() { return this.ast.data.token; }
+    set token(value) { this.ast.data.token = value; }
+    get isTypeOnly() { return this.ast.data.isTypeOnly; }
+    set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
+    get moduleReference() { return this.ast.data.moduleReference.node; }
+    set moduleReference(value) { this.ast.data.moduleReference = value.ast; }
+    get importClause() { return this.ast.data.importClause?.node; }
+    set importClause(value) { this.ast.data.importClause = value?.ast; }
+    get moduleSpecifier() { return this.ast.data.moduleSpecifier?.node; }
+    set moduleSpecifier(value) { this.ast.data.moduleSpecifier = value?.ast; }
+    get namedBindings() { return this.ast.data.namedBindings?.node; }
+    set namedBindings(value) { this.ast.data.namedBindings = value?.ast; }
+    get value() { return this.ast.data.value.node; }
+    set value(value) { this.ast.data.value = value.ast; }
+    get exportClause() { return this.ast.data.exportClause?.node; }
+    set exportClause(value) { this.ast.data.exportClause = value?.ast; }
+    get isExportEquals() { return this.ast.data.isExportEquals; }
+    set isExportEquals(value) { this.ast.data.isExportEquals = value; }
+    get postfix() { return this.ast.data.postfix; }
+    set postfix(value) { this.ast.data.postfix = value; }
+    get tags() { return this.ast.data.tags?.nodes; }
+    set tags(value) { this.ast.data.tags = value?.ast; }
+    get comment() {
+        const comment = this.ast.data.comment;
+        return typeof comment === "string" ? comment : comment?.nodes;
+    }
+    set comment(value) { this.ast.data.comment = typeof value === "string" ? value : value?.ast; }
+    get class() { return this.ast.data.class.node; }
+    set class(value) { this.ast.data.class = value.ast; }
+    get typeExpression() { return this.ast.data.typeExpression?.node; }
+    set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
+    get fullName() { return this.ast.data.fullName?.node; }
+    set fullName(value) { this.ast.data.fullName = value?.ast; }
+    get isNameFirst() { return this.ast.data.isNameFirst; }
+    set isNameFirst(value) { this.ast.data.isNameFirst = value; }
+    get isBracketed() { return this.ast.data.isBracketed; }
+    set isBracketed(value) { this.ast.data.isBracketed = value; }
+    get jsDocPropertyTags() { return this.ast.data.jsDocPropertyTags?.nodes; }
+    set jsDocPropertyTags(value) { this.ast.data.jsDocPropertyTags = value?.ast; }
+    get isArrayType() { return this.ast.data.isArrayType; }
+    set isArrayType(value) { this.ast.data.isArrayType = value; }
+    get escapedText() { return this.ast.data.escapedText; }
+    set escapedText(value) { this.ast.data.escapedText = value; }
+    get text() {
+        switch (this.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateIdentifier:
+                return idText(this as unknown as Identifier | PrivateIdentifier); 
+            default:
+                return this.data.text;
+        }
+    }
+    set text(value) { this.ast.data.text = value; }
+    get isUnterminated() { return this.ast.data.isUnterminated; }
+    set isUnterminated(value) { this.ast.data.isUnterminated = value; }
+    get hasExtendedUnicodeEscape() { return this.ast.data.hasExtendedUnicodeEscape; }
+    set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
+    get singleQuote() { return this.ast.data.singleQuote; }
+    set singleQuote(value) { this.ast.data.singleQuote = value; }
+    get textSourceNode() { return this.ast.data.textSourceNode?.node; }
+    set textSourceNode(value) { this.ast.data.textSourceNode = value?.ast; }
+    get rawText() { return this.ast.data.rawText; }
+    set rawText(value) { this.ast.data.rawText = value; }
+    get templateFlags() { return this.ast.data.templateFlags; }
+    set templateFlags(value) { this.ast.data.templateFlags = value; }
+    get numericLiteralFlags() { return this.ast.data.numericLiteralFlags; }
+    set numericLiteralFlags(value) { this.ast.data.numericLiteralFlags = value; }
+    get containsOnlyTriviaWhiteSpaces() { return this.ast.data.containsOnlyTriviaWhiteSpaces; }
+    set containsOnlyTriviaWhiteSpaces(value) { this.ast.data.containsOnlyTriviaWhiteSpaces = value; }
+    get resolvedSymbol() { return this.ast.data.resolvedSymbol; }
+    set resolvedSymbol(value) { this.ast.data.resolvedSymbol = value; }
+    get symbol() { return this.ast.data.symbol; }
+    set symbol(value) { this.ast.data.symbol = value; }
+    get localSymbol() { return this.ast.data.localSymbol; }
+    set localSymbol(value) { this.ast.data.localSymbol = value; }
+    get jsDoc() { return this.ast.data.jsDoc; }
+    set jsDoc(value) { this.ast.data.jsDoc = value; }
+    get flowNode() { return this.ast.data.flowNode; }
+    set flowNode(value) { this.ast.data.flowNode = value; }
+    get locals() { return this.ast.data.locals; }
+    set locals(value) { this.ast.data.locals = value; }
+    get nextContainer() { return this.ast.data.nextContainer?.node; }
+    set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    get endFlowNode() { return this.ast.data.endFlowNode; }
+    set endFlowNode(value) { this.ast.data.endFlowNode = value; }
+    get returnFlowNode() { return this.ast.data.returnFlowNode; }
+    set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
+    get fallthroughFlowNode() { return this.ast.data.fallthroughFlowNode; }
+    set fallthroughFlowNode(value) { this.ast.data.fallthroughFlowNode = value; }
 }

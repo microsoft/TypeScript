@@ -335,7 +335,6 @@ import {
     writeFileEnsuringDirectories,
     PartialSourceFile,
     PackageJsonInfo,
-    JSDocParsingMode,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
 
