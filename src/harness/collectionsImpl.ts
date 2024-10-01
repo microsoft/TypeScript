@@ -1,19 +1,19 @@
 import * as ts from "./_namespaces/ts.js";
 
 export interface SortOptions<T> {
-    comparer: (a: T, b: T) => number;
+    comparer: ts.Comparer<T>;
     sort: "insertion" | "comparison";
 }
 
 export class SortedMap<K, V> {
-    private _comparer: (a: K, b: K) => number;
+    private _comparer: ts.Comparer<K>;
     private _keys: K[] = [];
     private _values: V[] = [];
     private _order: number[] | undefined;
     private _version = 0;
     private _copyOnWrite = false;
 
-    constructor(comparer: ((a: K, b: K) => number) | SortOptions<K>, iterable?: Iterable<[K, V]>) {
+    constructor(comparer: ts.Comparer<K> | SortOptions<K>, iterable?: Iterable<[K, V]>) {
         this._comparer = typeof comparer === "object" ? comparer.comparer : comparer;
         this._order = typeof comparer === "object" && comparer.sort === "insertion" ? [] : undefined;
         if (iterable) {
