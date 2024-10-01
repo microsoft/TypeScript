@@ -120,8 +120,7 @@ jobs:
 
       - name: Check for breaking changes
         run: |
-          if ./is_changed.sh "tests/baselines/reference/api/typescript.d.ts" \
-              "tests/baselines/reference/api/tsserverlibrary.d.ts"; then
+          if ./is_changed.sh "tests/baselines/reference/api/typescript.d.ts"; then
             MESSAGE="Looks like you're introducing a change to the public API surface area."
             MESSAGE+=" If this includes breaking changes, please document them"
             MESSAGE+=" [on our wiki's API Breaking Changes page](https://github.com/microsoft/TypeScript/wiki/API-Breaking-Changes)."

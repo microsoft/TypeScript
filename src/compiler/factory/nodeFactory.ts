@@ -1027,7 +1027,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (node:
             return elements;
         }
 
-        return new AstNodeArray(elements?.map(element => element.ast) ?? [], hasTrailingComma).nodes as NodeArray<T>;
+        return new AstNodeArray(elements?.map(element => element.ast) ?? [], hasTrailingComma).nodes;
     }
 
     //

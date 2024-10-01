@@ -96,16 +96,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/compositea/a.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/compositea/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/compositea/tsconfig.json, currentDirectory: /user/username/projects/myproject/compositea
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/compositea/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/compositea/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/compositea/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/myproject/compositea/a.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/compositea/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/compositea/a.ts",
@@ -125,6 +115,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/compositea/ts
   "configFilePath": "/user/username/projects/myproject/compositea/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/compositea/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/compositea/a.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/compositea 1 undefined Config: /user/username/projects/myproject/compositea/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/compositea 1 undefined Config: /user/username/projects/myproject/compositea/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/compositea/a2.ts 500 undefined WatchType: Closed Script info
@@ -308,16 +308,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/compositec/c.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/compositec/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/compositec/tsconfig.json, currentDirectory: /user/username/projects/myproject/compositec
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/compositec/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/compositec/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/compositec/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/myproject/compositec/c.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/compositec/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/compositec/c.ts"
@@ -342,6 +332,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/compositec/ts
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/compositec/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/compositec/c.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/compositec 1 undefined Config: /user/username/projects/myproject/compositec/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/compositec 1 undefined Config: /user/username/projects/myproject/compositec/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/compositec/tsconfig.json

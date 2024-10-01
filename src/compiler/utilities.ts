@@ -254,6 +254,7 @@ import {
     InterfaceDeclaration,
     InternalEmitFlags,
     InternalSymbolName,
+    IntroducesNewScopeNode,
     isAccessor,
     isAnyDirectorySeparator,
     isArray,
@@ -307,6 +308,7 @@ import {
     isJSDocAugmentsTag,
     isJSDocFunctionType,
     isJSDocImplementsTag,
+    isJSDocImportTag,
     isJSDocLinkLike,
     isJSDocMemberName,
     isJSDocNameReference,
@@ -330,6 +332,7 @@ import {
     isLeftHandSideExpression,
     isLineBreak,
     isLiteralTypeNode,
+    isMappedTypeNode,
     isMemberName,
     isMetaProperty,
     isMethodDeclaration,
@@ -1381,6 +1384,10 @@ export function getInternalEmitFlags(node: Node): InternalEmitFlags {
 /** @internal */
 export type ScriptTargetFeatures = ReadonlyMap<string, ReadonlyMap<string, string[]>>;
 
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
+//       lib/esnext.*.d.ts file.
 /** @internal */
 export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetFeatures =>
     new Map(Object.entries({
@@ -1419,11 +1426,45 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
         AsyncIterator: new Map(Object.entries({
             es2015: emptyArray,
         })),
+        ArrayBuffer: new Map(Object.entries({
+            es2024: [
+                "maxByteLength",
+                "resizable",
+                "resize",
+                "detached",
+                "transfer",
+                "transferToFixedLength",
+            ],
+        })),
         Atomics: new Map(Object.entries({
-            es2017: emptyArray,
+            es2017: [
+                "add",
+                "and",
+                "compareExchange",
+                "exchange",
+                "isLockFree",
+                "load",
+                "or",
+                "store",
+                "sub",
+                "wait",
+                "notify",
+                "xor",
+            ],
+            es2024: [
+                "waitAsync",
+            ],
         })),
         SharedArrayBuffer: new Map(Object.entries({
-            es2017: emptyArray,
+            es2017: [
+                "byteLength",
+                "slice",
+            ],
+            es2024: [
+                "growable",
+                "maxByteLength",
+                "grow",
+            ],
         })),
         AsyncIterable: new Map(Object.entries({
             es2018: emptyArray,
@@ -1445,6 +1486,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
             es2018: [
                 "dotAll",
+            ],
+            es2024: [
+                "unicodeSets",
             ],
         })),
         Reflect: new Map(Object.entries({
@@ -1492,6 +1536,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2022: [
                 "hasOwn",
             ],
+            es2024: [
+                "groupBy",
+            ],
         })),
         NumberConstructor: new Map(Object.entries({
             es2015: [
@@ -1531,11 +1578,25 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "values",
             ],
         })),
+        MapConstructor: new Map(Object.entries({
+            es2024: [
+                "groupBy",
+            ],
+        })),
         Set: new Map(Object.entries({
             es2015: [
                 "entries",
                 "keys",
                 "values",
+            ],
+            esnext: [
+                "union",
+                "intersection",
+                "difference",
+                "symmetricDifference",
+                "isSubsetOf",
+                "isSupersetOf",
+                "isDisjointFrom",
             ],
         })),
         PromiseConstructor: new Map(Object.entries({
@@ -1550,6 +1611,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
             es2021: [
                 "any",
+            ],
+            es2024: [
+                "withResolvers",
             ],
         })),
         Symbol: new Map(Object.entries({
@@ -1616,7 +1680,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2022: [
                 "at",
             ],
-            esnext: [
+            es2024: [
                 "isWellFormed",
                 "toWellFormed",
             ],
@@ -1661,6 +1725,11 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
         SymbolConstructor: new Map(Object.entries({
             es2020: [
                 "matchAll",
+            ],
+            esnext: [
+                "metadata",
+                "dispose",
+                "asyncDispose",
             ],
         })),
         DataView: new Map(Object.entries({
@@ -2868,11 +2937,6 @@ export function isVariableLike(node: Node): node is VariableLikeDeclaration {
 }
 
 /** @internal */
-export function isVariableLikeOrAccessor(node: Node): node is AccessorDeclaration | VariableLikeDeclaration {
-    return isVariableLike(node) || isAccessor(node);
-}
-
-/** @internal */
 export function isVariableDeclarationInVariableStatement(node: VariableDeclaration): boolean {
     return node.parent.kind === SyntaxKind.VariableDeclarationList
         && node.parent.parent.kind === SyntaxKind.VariableStatement;
@@ -3330,6 +3394,8 @@ export function getInvokedExpression(node: CallLikeExpression): Expression | Jsx
             return node.tagName;
         case SyntaxKind.BinaryExpression:
             return node.right;
+        case SyntaxKind.JsxOpeningFragment:
+            return node;
         default:
             return node.expression;
     }
@@ -4241,11 +4307,18 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
         case SyntaxKind.CallExpression:
             return isImportCall(node.parent) || isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false) ? node.parent as RequireOrImportCall : undefined;
         case SyntaxKind.LiteralType:
-            Debug.assert(isStringLiteral(node));
+            if (!isStringLiteral(node)) {
+                break;
+            }
             return tryCast(node.parent.parent, isImportTypeNode) as ValidImportTypeNode | undefined;
         default:
             return undefined;
     }
+}
+
+/** @internal */
+export function shouldRewriteModuleSpecifier(specifier: string, compilerOptions: CompilerOptions): boolean {
+    return !!compilerOptions.rewriteRelativeImportExtensions && pathIsRelative(specifier) && !isDeclarationFileName(specifier);
 }
 
 /** @internal */
@@ -7807,6 +7880,16 @@ export function getLinesBetweenPositionAndNextNonWhitespaceCharacter(pos: number
     return getLinesBetweenPositions(sourceFile, pos, Math.min(stopPos, nextPos));
 }
 
+/** @internal */
+export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
+    return startEndContainsRange(r1.pos, r1.end, r2);
+}
+
+/** @internal */
+export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
+    return start <= range.pos && end >= range.end;
+}
+
 function getPreviousNonWhitespacePosition(pos: number, stopPos = 0, sourceFile: SourceFile) {
     while (pos-- > stopPos) {
         if (!isWhiteSpaceLike(sourceFile.text.charCodeAt(pos))) {
@@ -8804,6 +8887,12 @@ function createComputedCompilerOptions<T extends Record<string, CompilerOptionKe
 }
 
 const _computedOptions = createComputedCompilerOptions({
+    allowImportingTsExtensions: {
+        dependencies: ["rewriteRelativeImportExtensions"],
+        computeValue: compilerOptions => {
+            return !!(compilerOptions.allowImportingTsExtensions || compilerOptions.rewriteRelativeImportExtensions);
+        },
+    },
     target: {
         dependencies: ["module"],
         computeValue: compilerOptions => {
@@ -9032,6 +9121,8 @@ const _computedOptions = createComputedCompilerOptions({
 /** @internal */
 export const computedOptions: Record<string, { dependencies: readonly string[]; computeValue: (options: CompilerOptions) => CompilerOptionsValue; }> = _computedOptions;
 
+/** @internal */
+export const getAllowImportingTsExtensions: (compilerOptions: CompilerOptions) => boolean = _computedOptions.allowImportingTsExtensions.computeValue;
 /** @internal */
 export const getEmitScriptTarget: (compilerOptions: CompilerOptions) => ScriptTarget = _computedOptions.target.computeValue;
 /** @internal */
@@ -11819,6 +11910,9 @@ export function hasInferredType(node: Node): node is HasInferredType {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.ExportAssignment:
         case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.JSDocParameterTag:
+        case SyntaxKind.JSDocPropertyTag:
             return true;
         default:
             assertType<never>(node);
@@ -11911,3 +12005,56 @@ export const nodeCoreModules: Set<string> = new Set([
     ...unprefixedNodeCoreModulesList.map(name => `node:${name}`),
     ...exclusivelyPrefixedNodeCoreModules,
 ]);
+
+/** @internal */
+export function forEachDynamicImportOrRequireCall<IncludeTypeSpaceImports extends boolean, RequireStringLiteralLikeArgument extends boolean>(
+    file: SourceFile,
+    includeTypeSpaceImports: IncludeTypeSpaceImports,
+    requireStringLiteralLikeArgument: RequireStringLiteralLikeArgument,
+    cb: (node: CallExpression | (IncludeTypeSpaceImports extends false ? never : JSDocImportTag | ImportTypeNode), argument: RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression) => void,
+): void {
+    const isJavaScriptFile = isInJSFile(file);
+    const r = /import|require/g;
+    while (r.exec(file.text) !== null) { // eslint-disable-line no-restricted-syntax
+        const node = getNodeAtPosition(file, r.lastIndex, /*includeJSDoc*/ includeTypeSpaceImports);
+        if (isJavaScriptFile && isRequireCall(node, requireStringLiteralLikeArgument)) {
+            cb(node, node.arguments[0] as RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression);
+        }
+        else if (isImportCall(node) && node.arguments.length >= 1 && (!requireStringLiteralLikeArgument || isStringLiteralLike(node.arguments[0]))) {
+            cb(node, node.arguments[0] as RequireStringLiteralLikeArgument extends true ? StringLiteralLike : Expression);
+        }
+        else if (includeTypeSpaceImports && isLiteralImportTypeNode(node)) {
+            (cb as (node: CallExpression | JSDocImportTag | ImportTypeNode, argument: StringLiteralLike) => void)(node, node.argument.literal);
+        }
+        else if (includeTypeSpaceImports && isJSDocImportTag(node)) {
+            const moduleNameExpr = getExternalModuleName(node);
+            if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text) {
+                (cb as (node: CallExpression | JSDocImportTag | ImportTypeNode, argument: StringLiteralLike) => void)(node, moduleNameExpr);
+            }
+        }
+    }
+}
+
+/** Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files */
+function getNodeAtPosition(sourceFile: SourceFile, position: number, includeJSDoc: boolean): Node {
+    const isJavaScriptFile = isInJSFile(sourceFile);
+    let current: Node = sourceFile;
+    const getContainingChild = (child: Node) => {
+        if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
+            return child;
+        }
+    };
+    while (true) {
+        const child = isJavaScriptFile && includeJSDoc && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+        if (!child) {
+            return current;
+        }
+        current = child;
+    }
+}
+/** @internal */
+export function isNewScopeNode(node: Node): node is IntroducesNewScopeNode {
+    return isFunctionLike(node)
+        || isJSDocSignature(node)
+        || isMappedTypeNode(node);
+}

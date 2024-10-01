@@ -2,6 +2,7 @@ import {
     __String,
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
+    arrayFrom,
     BaseType,
     BlockLike,
     BreakpointResolver,
@@ -197,6 +198,7 @@ import {
     NavigationTree,
     Node,
     NodeFlags,
+    nodeIsSynthesized,
     noop,
     normalizePath,
     normalizeSpans,
@@ -220,6 +222,7 @@ import {
     PasteEditsArgs,
     Path,
     PossibleProgramFileInfo,
+    PreparePasteEdits,
     Program,
     PropertyName,
     PropertySignature,
@@ -394,6 +397,8 @@ class SymbolObject implements Symbol {
         if (context) {
             if (isGetAccessor(context)) {
                 if (!this.contextualGetAccessorDocumentationComment) {
+                    this.contextualGetAccessorDocumentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                 }
                 if (length(this.contextualGetAccessorDocumentationComment)) {
@@ -402,6 +407,8 @@ class SymbolObject implements Symbol {
             }
             if (isSetAccessor(context)) {
                 if (!this.contextualSetAccessorDocumentationComment) {
+                    this.contextualSetAccessorDocumentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                 }
                 if (length(this.contextualSetAccessorDocumentationComment)) {
@@ -425,6 +432,8 @@ class SymbolObject implements Symbol {
         if (context) {
             if (isGetAccessor(context)) {
                 if (!this.contextualGetAccessorTags) {
+                    this.contextualGetAccessorTags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
                 }
                 if (length(this.contextualGetAccessorTags)) {
@@ -433,6 +442,8 @@ class SymbolObject implements Symbol {
             }
             if (isSetAccessor(context)) {
                 if (!this.contextualSetAccessorTags) {
+                    this.contextualSetAccessorTags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
                 }
                 if (length(this.contextualSetAccessorTags)) {
@@ -958,6 +969,7 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "provideInlayHints",
     "getSupportedCodeFixes",
     "getPasteEdits",
+    "getImports",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -978,6 +990,7 @@ const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
     "getRenameInfo",
     "findRenameLocations",
     "getApplicableRefactors",
+    "preparePasteEditsForFile",
 ];
 export function createLanguageService(
     host: LanguageServiceHost,
@@ -1663,6 +1676,15 @@ export function createLanguageService(
             documentation,
             tags,
         };
+    }
+
+    function preparePasteEditsForFile(fileName: string, copiedTextRange: TextRange[]): boolean {
+        synchronizeHostData();
+        return PreparePasteEdits.preparePasteEdits(
+            getValidSourceFile(fileName),
+            copiedTextRange,
+            program.getTypeChecker(),
+        );
     }
 
     function getPasteEdits(
@@ -2710,6 +2732,18 @@ export function createLanguageService(
         );
     }
 
+    function getImports(fileName: string): readonly string[] {
+        synchronizeHostData();
+        const file = getValidSourceFile(fileName);
+        let imports: Set<string> | undefined;
+        for (const specifier of file.imports) {
+            if (nodeIsSynthesized(specifier)) continue;
+            const name = program.getResolvedModuleFromModuleSpecifier(specifier, file)?.resolvedModule?.resolvedFileName;
+            if (name) (imports ??= new Set()).add(name);
+        }
+        return imports ? arrayFrom(imports) : emptyArray;
+    }
+
     const ls: LanguageService = {
         dispose,
         cleanupSemanticCache,
@@ -2781,8 +2815,10 @@ export function createLanguageService(
         uncommentSelection,
         provideInlayHints,
         getSupportedCodeFixes,
+        preparePasteEditsForFile,
         getPasteEdits,
         mapCode,
+        getImports,
     };
 
     switch (languageServiceMode) {

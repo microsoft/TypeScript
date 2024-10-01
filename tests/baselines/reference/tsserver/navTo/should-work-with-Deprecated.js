@@ -38,16 +38,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/a/b/file1.js ProjectRootPath: undefined:: Result: /home/src/projects/project/a/b/jsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/a/b/jsconfig.json, currentDirectory: /home/src/projects/project/a/b
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/jsconfig.json 2000 undefined Project: /home/src/projects/project/a/b/jsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/projects/project/a/b/jsconfig.json",
-        "reason": "Creating possible configured project for /home/src/projects/project/a/b/file1.js to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/a/b/jsconfig.json : {
  "rootNames": [
   "/home/src/projects/project/a/b/file1.js"
@@ -61,6 +51,16 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/a/b/jsconfig.json : 
   "configFilePath": "/home/src/projects/project/a/b/jsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project/a/b/jsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/a/b/file1.js to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/b/jsconfig.json
