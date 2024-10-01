@@ -14,10 +14,10 @@ function f<T, K extends keyof T>() {
 >  : ^
 
     var v = {
->v : { [t]: number; [k]: number; }
->  : ^^     ^^^^^^ ^     ^^^^^^ ^^
->{        [t]: 0,        [k]: 1    } : { [t]: number; [k]: number; }
->                                    : ^^     ^^^^^^ ^     ^^^^^^ ^^
+>v : { [x: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{        [t]: 0,        [k]: 1    } : { [x: string]: number; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         [t]: 0,
 >[t] : number

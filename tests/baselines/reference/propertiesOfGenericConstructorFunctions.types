@@ -95,12 +95,12 @@ var n = map._map2['hi']
 >  : ^^^^^^
 >map._map2['hi'] : number
 >                : ^^^^^^
->map._map2 : { [ik]: V; }
->          : ^^      ^ ^^
+>map._map2 : { [x: string]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >map : Multimap<"a" | "b", number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->_map2 : { [ik]: V; }
->      : ^^      ^ ^^
+>_map2 : { [x: string]: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'hi' : "hi"
 >     : ^^^^
 
@@ -125,12 +125,12 @@ var n = map._map2['hi']
 >  : ^^^^^^
 >map._map2['hi'] : number
 >                : ^^^^^^
->map._map2 : { [ik]: V; }
->          : ^^      ^ ^^
+>map._map2 : { [x: string]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >map : Multimap<"a" | "b", number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->_map2 : { [ik]: V; }
->      : ^^      ^ ^^
+>_map2 : { [x: string]: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'hi' : "hi"
 >     : ^^^^
 

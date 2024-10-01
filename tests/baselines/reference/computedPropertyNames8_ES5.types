@@ -14,10 +14,10 @@ function f<T, U extends string>() {
 >  : ^
 
     var v = {
->v : { [t]: number; [u]: number; }
->  : ^^     ^^^^^^ ^     ^^^^^^ ^^
->{        [t]: 0,        [u]: 1    } : { [t]: number; [u]: number; }
->                                    : ^^     ^^^^^^ ^     ^^^^^^ ^^
+>v : { [x: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{        [t]: 0,        [u]: 1    } : { [x: string]: number; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         [t]: 0,
 >[t] : number

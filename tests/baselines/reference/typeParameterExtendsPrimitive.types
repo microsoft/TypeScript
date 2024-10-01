@@ -11,10 +11,10 @@ function f<T extends number>() {
 >  : ^
 
     var v = {
->v : { [t]: number; }
->  : ^^     ^^^^^^ ^^
->{        [t]: 0    } : { [t]: number; }
->                     : ^^     ^^^^^^ ^^
+>v : { [x: number]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{        [t]: 0    } : { [x: number]: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         [t]: 0
 >[t] : number

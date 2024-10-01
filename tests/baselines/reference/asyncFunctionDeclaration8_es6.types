@@ -2,10 +2,10 @@
 
 === asyncFunctionDeclaration8_es6.ts ===
 var v = { [await]: foo }
->v : { [await]: any; }
->  : ^^         ^^^ ^^
->{ [await]: foo } : { [await]: any; }
->                 : ^^         ^^^ ^^
+>v : { [x: number]: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>{ [await]: foo } : { [x: number]: any; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^
 >[await] : any
 >        : ^^^
 >await : any

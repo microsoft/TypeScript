@@ -2,10 +2,10 @@
 
 === parserES5ComputedPropertyName4.ts ===
 var v = { get [e]() { } };
->v : { [e]: void; }
->  : ^^     ^^^^ ^^
->{ get [e]() { } } : { [e]: void; }
->                  : ^^     ^^^^ ^^
+>v : { [x: number]: void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>{ get [e]() { } } : { [x: number]: void; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
 >[e] : void
 >    : ^^^^
 >e : any

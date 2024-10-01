@@ -2,10 +2,10 @@
 
 === parserSymbolIndexer5.ts ===
 var x = {
->x : { [s]: any; "": any; }
->  : ^^     ^^^ ^^^^^^^^^^^
->{    [s: symbol]: ""} : { [s]: any; "": any; }
->                      : ^^     ^^^ ^^^^^^^^^^^
+>x : { [x: number]: any; "": any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    [s: symbol]: ""} : { [x: number]: any; "": any; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [s: symbol]: ""
 >[s : any

@@ -7211,29 +7211,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             function indexInfoToObjectComputedNamesOrSignatureDeclaration(indexInfo: IndexInfo, context: NodeBuilderContext, typeNode: TypeNode | undefined): [IndexSignatureDeclaration] | PropertySignature[] {
                 if (indexInfo.components) {
                     // Index info is derived from object or class computed property names (plus explicit named members) - we can clone those instead of writing out the result computed index signature
-                    let unusableResult = false;
-                    const result = map(indexInfo.components, e => {
-                        if (e.name && isComputedPropertyName(e.name) && isEntityNameExpression(e.name.expression)) {
-                            trackComputedName(e.name.expression, context.enclosingDeclaration, context);
-                        }
-                        else {
-                            // Computed name didn't take the form `[a.b.c]: something` - bail on using the computed name.
-                            // TODO: Issue isolated declarations error on this fallback?
-                            unusableResult = true;
-                        }
-                        return setTextRange(
-                            context,
-                            factory.createPropertySignature(
-                                indexInfo.isReadonly ? [factory.createModifier(SyntaxKind.ReadonlyKeyword)] : undefined,
-                                e.name,
-                                /*questionToken*/ undefined,
-                                typeNode || typeToTypeNodeHelper(getTypeOfSymbol(e.symbol), context),
-                            ),
-                            e,
-                        );
+                    const allComponentComputedNamesSerializable = every(indexInfo.components, e => {
+                        return !!(e.name && isComputedPropertyName(e.name) && isEntityNameExpression(e.name.expression) && context.enclosingDeclaration && isEntityNameVisible(e.name.expression, context.enclosingDeclaration, /*shouldComputeAliasToMakeVisible*/ false)?.accessibility === SymbolAccessibility.Accessible);
                     });
-                    if (!unusableResult) {
-                        return result;
+                    if (allComponentComputedNamesSerializable) {
+                        // Only use computed name serialization form if all components are visible and take the `a.b.c` form
+                        return map(indexInfo.components, e => {
+                            // Still need to track visibility even if we've already checked it to paint references as used
+                            trackComputedName(e.name.expression as EntityNameExpression, context.enclosingDeclaration, context);
+                            return setTextRange(
+                                context,
+                                factory.createPropertySignature(
+                                    indexInfo.isReadonly ? [factory.createModifier(SyntaxKind.ReadonlyKeyword)] : undefined,
+                                    e.name,
+                                    /*questionToken*/ undefined,
+                                    typeNode || typeToTypeNodeHelper(getTypeOfSymbol(e.symbol), context),
+                                ),
+                                e,
+                            );
+                        });
                     }
                 }
                 return [indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, typeNode)];

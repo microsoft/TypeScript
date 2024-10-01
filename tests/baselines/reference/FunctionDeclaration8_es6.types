@@ -2,10 +2,10 @@
 
 === FunctionDeclaration8_es6.ts ===
 var v = { [yield]: foo }
->v : { [yield]: any; }
->  : ^^         ^^^ ^^
->{ [yield]: foo } : { [yield]: any; }
->                 : ^^         ^^^ ^^
+>v : { [x: number]: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>{ [yield]: foo } : { [x: number]: any; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^
 >[yield] : any
 >        : ^^^
 >yield : any
