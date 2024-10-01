@@ -7224,7 +7224,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 factory.createPropertySignature(
                                     indexInfo.isReadonly ? [factory.createModifier(SyntaxKind.ReadonlyKeyword)] : undefined,
                                     e.name,
-                                    /*questionToken*/ undefined,
+                                    (isPropertySignature(e) || isPropertyDeclaration(e) || isMethodSignature(e) || isMethodDeclaration(e) || isGetAccessor(e) || isSetAccessor(e)) && e.questionToken ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                                     typeNode || typeToTypeNodeHelper(getTypeOfSymbol(e.symbol), context),
                                 ),
                                 e,
@@ -50330,27 +50330,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     for (const info of infoList!) {
                         if (info.declaration) continue;
                         if (info.components) {
-                            let unusableResult = false;
-                            const recreatedComponents = map(info.components, e => {
-                                if (e.name && isComputedPropertyName(e.name) && isEntityNameExpression(e.name.expression)) {
-                                    trackComputedName(e.name.expression);
-                                }
-                                else {
-                                    // Computed name didn't take the form `[a.b.c]: something` - bail on using the computed name.
-                                    // TODO: Issue isolated declarations error on this fallback?
-                                    unusableResult = true;
-                                }
-                                const mods = infoList === staticInfos ? [factory.createModifier(SyntaxKind.StaticKeyword)] as Modifier[] : undefined;
-                                return factory.createPropertyDeclaration(
-                                    append(mods, info.isReadonly ? factory.createModifier(SyntaxKind.ReadonlyKeyword) : undefined),
-                                    e.name,
-                                    /*questionOrExclamationToken*/ undefined,
-                                    nodeBuilder.typeToTypeNode(getTypeOfSymbol(e.symbol), enclosing, flags, internalFlags, tracker),
-                                    /*initializer*/ undefined,
-                                );
+                            const allComponentComputedNamesSerializable = every(info.components, e => {
+                                return !!(e.name && isComputedPropertyName(e.name) && isEntityNameExpression(e.name.expression) && enclosing && isEntityNameVisible(e.name.expression, enclosing, /*shouldComputeAliasToMakeVisible*/ false)?.accessibility === SymbolAccessibility.Accessible);
                             });
-                            if (!unusableResult) {
-                                result.push(...recreatedComponents);
+                            if (allComponentComputedNamesSerializable) {
+                                result.push(...map(info.components, e => {
+                                    trackComputedName(e.name.expression as EntityNameExpression);
+                                    const mods = infoList === staticInfos ? [factory.createModifier(SyntaxKind.StaticKeyword)] as Modifier[] : undefined;
+                                    return factory.createPropertyDeclaration(
+                                        append(mods, info.isReadonly ? factory.createModifier(SyntaxKind.ReadonlyKeyword) : undefined),
+                                        e.name,
+                                        (isPropertySignature(e) || isPropertyDeclaration(e) || isMethodSignature(e) || isMethodDeclaration(e) || isGetAccessor(e) || isSetAccessor(e)) && e.questionToken ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+                                        nodeBuilder.typeToTypeNode(getTypeOfSymbol(e.symbol), enclosing, flags, internalFlags, tracker),
+                                        /*initializer*/ undefined,
+                                    );
+                                }));
                                 continue;
                             }
                         }
