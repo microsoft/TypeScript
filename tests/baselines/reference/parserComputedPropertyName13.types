@@ -2,8 +2,8 @@
 
 === parserComputedPropertyName13.ts ===
 var v: { [e]: number };
->v : { [x: number]: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>v : { [e]: number; }
+>  : ^^     ^^^^^^ ^^
 >[e] : number
 >    : ^^^^^^
 >e : any

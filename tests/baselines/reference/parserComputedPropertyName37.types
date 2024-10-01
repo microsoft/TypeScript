@@ -2,10 +2,10 @@
 
 === parserComputedPropertyName37.ts ===
 var v = {
->v : { [x: number]: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
->{    [public]: 0} : { [x: number]: number; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>v : { [public]: number; }
+>  : ^^          ^^^^^^ ^^
+>{    [public]: 0} : { [public]: number; }
+>                  : ^^          ^^^^^^ ^^
 
     [public]: 0
 >[public] : number

@@ -107,8 +107,8 @@ export const updateIfChanged = <T>(t: T) => {
 >                                                                   : ^
 >update : (u: U) => T
 >       : ^ ^^ ^^^^^ 
->Object.assign(Array.isArray(u) ? [] : {}, u, { [key]: v }) : U & { [x: string]: Value<K, U>; }
->                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.assign(Array.isArray(u) ? [] : {}, u, { [key]: v }) : U & { [key]: Value<K, U>; }
+>                                                           : ^^^^^^       ^^^^^^^^^^^ ^^
 >Object.assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
 >              : ^^^^^^^^^^^^^^^  ^^^^^^^      ^^   ^^      ^^   ^^^         ^^^^^^^^^^^^^^^  ^^^^^^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^             ^^^^^^^^^^^^^^^  ^^^^^^^ ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^       ^^ ^^^                 ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
 >Object : ObjectConstructor
@@ -133,8 +133,8 @@ export const updateIfChanged = <T>(t: T) => {
 >   : ^^
 >u : U
 >  : ^
->{ [key]: v } : { [x: string]: Value<K, U>; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [key]: v } : { [key]: Value<K, U>; }
+>             : ^^       ^^^^^^^^^^^ ^^
 >[key] : Value<K, U>
 >      : ^^^^^^^^^^^
 >key : K

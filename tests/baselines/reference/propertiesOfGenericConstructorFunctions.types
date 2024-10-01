@@ -30,15 +30,15 @@ function Multimap(ik, iv) {
 
     // without type annotation
     this._map2 = { [ik]: iv };
->this._map2 = { [ik]: iv } : { [x: string]: V; }
->                          : ^^^^^^^^^^^^^^^^^^^
+>this._map2 = { [ik]: iv } : { [ik]: V; }
+>                          : ^^      ^ ^^
 >this._map2 : any
 >this : this
 >     : ^^^^
 >_map2 : any
 >      : ^^^
->{ [ik]: iv } : { [x: string]: V; }
->             : ^^^^^^^^^^^^^^^^^^^
+>{ [ik]: iv } : { [ik]: V; }
+>             : ^^      ^ ^^
 >[ik] : V
 >     : ^
 >ik : string
@@ -95,12 +95,12 @@ var n = map._map2['hi']
 >  : ^^^^^^
 >map._map2['hi'] : number
 >                : ^^^^^^
->map._map2 : { [x: string]: number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>map._map2 : { [ik]: V; }
+>          : ^^      ^ ^^
 >map : Multimap<"a" | "b", number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->_map2 : { [x: string]: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>_map2 : { [ik]: V; }
+>      : ^^      ^ ^^
 >'hi' : "hi"
 >     : ^^^^
 
@@ -125,12 +125,12 @@ var n = map._map2['hi']
 >  : ^^^^^^
 >map._map2['hi'] : number
 >                : ^^^^^^
->map._map2 : { [x: string]: number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>map._map2 : { [ik]: V; }
+>          : ^^      ^ ^^
 >map : Multimap<"a" | "b", number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->_map2 : { [x: string]: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>_map2 : { [ik]: V; }
+>      : ^^      ^ ^^
 >'hi' : "hi"
 >     : ^^^^
 
