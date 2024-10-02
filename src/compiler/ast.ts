@@ -940,19 +940,19 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
         return new AstNode(SyntaxKind.PropertyAccessExpression, new AstPropertyAccessExpressionData(), AnyNode /* PropertyAccessExpression */);
     }
     static PropertyAccessChain(): AstPropertyAccessChain {
-        return new AstNode(SyntaxKind.PropertyAccessExpression, new AstPropertyAccessExpressionData(), PropertyAccessExpression, NodeFlags.OptionalChain) as AstPropertyAccessChain;
+        return new AstNode(SyntaxKind.PropertyAccessExpression, new AstPropertyAccessExpressionData(), AnyNode as any /* PropertyAccessExpression */, NodeFlags.OptionalChain) as AstPropertyAccessChain;
     }
     static ElementAccessExpression(): AstElementAccessExpression {
         return new AstNode(SyntaxKind.ElementAccessExpression, new AstElementAccessExpressionData(), AnyNode /* ElementAccessExpression */);
     }
     static ElementAccessChain(): AstElementAccessChain {
-        return new AstNode(SyntaxKind.ElementAccessExpression, new AstElementAccessExpressionData(), ElementAccessExpression, NodeFlags.OptionalChain) as AstElementAccessChain;
+        return new AstNode(SyntaxKind.ElementAccessExpression, new AstElementAccessExpressionData(), AnyNode as any /* ElementAccessExpression */, NodeFlags.OptionalChain) as AstElementAccessChain;
     }
     static CallExpression(): AstCallExpression {
         return new AstNode(SyntaxKind.CallExpression, new AstCallExpressionData(), AnyNode /* CallExpression */);
     }
     static CallChain(): AstCallChain {
-        return new AstNode(SyntaxKind.CallExpression, new AstCallExpressionData(), CallExpression, NodeFlags.OptionalChain) as AstCallChain;
+        return new AstNode(SyntaxKind.CallExpression, new AstCallExpressionData(), AnyNode as any /*CallExpression*/, NodeFlags.OptionalChain) as AstCallChain;
     }
     static ExpressionWithTypeArguments(): AstExpressionWithTypeArguments {
         return new AstNode(SyntaxKind.ExpressionWithTypeArguments, new AstExpressionWithTypeArgumentsData(), AnyNode /* ExpressionWithTypeArguments */);
@@ -976,7 +976,7 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
         return new AstNode(SyntaxKind.NonNullExpression, new AstNonNullExpressionData(), AnyNode /* NonNullExpression */);
     }
     static NonNullChain(): AstNonNullChain {
-        return new AstNode(SyntaxKind.NonNullExpression, new AstNonNullExpressionData(), NonNullExpression, NodeFlags.OptionalChain) as AstNonNullChain;
+        return new AstNode(SyntaxKind.NonNullExpression, new AstNonNullExpressionData(), AnyNode as any /* NonNullExpression */, NodeFlags.OptionalChain) as AstNonNullChain;
     }
     static MetaProperty(): AstMetaProperty {
         return new AstNode(SyntaxKind.MetaProperty, new AstMetaPropertyData(), AnyNode /* MetaProperty */);

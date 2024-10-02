@@ -1245,8 +1245,8 @@ export class Node<
     readonly ast: AstNode<this> = undefined!;
 
     constructor(ast: AstNode<Node<K, T>>) {
-        this.ast = ast as AstNode<this>;
         Object.preventExtensions(this);
+        this.ast = ast as AstNode<this>;
     }
 
     get kind(): K { return this.ast.kind; }
@@ -5050,7 +5050,7 @@ export class CallExpression extends Node<SyntaxKind.CallExpression, AstCallExpre
     get questionDotToken(): QuestionDotToken | undefined { return this.ast.data.questionDotToken?.node; }
     get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
     get arguments(): NodeArray<Expression> { return this.ast.data.arguments.nodes; }
-
+    
     /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
     /** @internal */ set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
     /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
