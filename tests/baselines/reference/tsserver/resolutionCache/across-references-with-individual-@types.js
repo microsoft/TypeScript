@@ -45,6 +45,12 @@ import { b } from "../common/moduleB";
 export const y = b;
 
 
+//// [/home/src/workspaces/project/common/node_modules/@types/moduleZ/index.d.ts]
+export const mz = 10;
+
+//// [/home/src/workspaces/project/app/node_modules/@types/moduleZ/index.d.ts]
+export const mz = 10;
+
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -122,7 +128,10 @@ Info seq  [hh:mm:ss:mss] ======== Resolving module 'moduleX' from '/home/src/wor
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'moduleX' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/app/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/app/node_modules/moduleX.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/app/node_modules/moduleX.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/app/node_modules/moduleX.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/app/node_modules/@types/moduleX.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/moduleX/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/moduleX.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/moduleX.tsx' does not exist.
@@ -156,16 +165,40 @@ Info seq  [hh:mm:ss:mss] Using compiler options of project reference redirect '/
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'moduleX' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Directory '/home/src/workspaces/project/common/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/common/node_modules/moduleX.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/common/node_modules/moduleX.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/common/node_modules/moduleX.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/common/node_modules/@types/moduleX.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Resolution for module 'moduleX' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'moduleX' was successfully resolved to '/home/src/workspaces/project/node_modules/moduleX/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/common/node_modules 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/common/node_modules 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'moduleZ', containing file '/home/src/workspaces/project/app/__inferred type names__.ts', root directory '/home/src/workspaces/project/app/node_modules/@types,/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
+Info seq  [hh:mm:ss:mss] Resolving with primary search path '/home/src/workspaces/project/app/node_modules/@types, /home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/app/node_modules/@types/moduleZ/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/app/node_modules/@types/moduleZ/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/app/node_modules/@types/moduleZ/index.d.ts', result '/home/src/workspaces/project/app/node_modules/@types/moduleZ/index.d.ts'.
+Info seq  [hh:mm:ss:mss] ======== Type reference directive 'moduleZ' was successfully resolved to '/home/src/workspaces/project/app/node_modules/@types/moduleZ/index.d.ts', primary: true. ========
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/app/node_modules/@types/moduleZ/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/app/node_modules/@types/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/app/node_modules/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/app/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/app/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/app/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/moduleX/package.json 2000 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/app/node_modules/@types/moduleZ/package.json 2000 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/app/node_modules/@types/package.json 2000 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/app/node_modules/package.json 2000 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/app/package.json 2000 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/app/node_modules/@types 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/app/node_modules/@types 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Type roots
@@ -174,12 +207,13 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspaces/project/node_modules/moduleX/index.d.ts Text-1 "export const x = 10;"
 	/home/src/workspaces/project/app/appA.ts Text-1 "import { x } from \"moduleX\";\nexport const y = x;\n"
 	/home/src/workspaces/project/common/moduleB.ts Text-1 "import { x } from \"moduleX\";\nexport const b = x;\n"
 	/home/src/workspaces/project/app/appB.ts SVC-1-0 "import { b } from \"../common/moduleB\";\nexport const y = b;\n"
+	/home/src/workspaces/project/app/node_modules/@types/moduleZ/index.d.ts Text-1 "export const mz = 10;"
 
 
 	../../../tslibs/TS/Lib/lib.d.ts
@@ -193,6 +227,8 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Imported via "../common/moduleB" from file 'appB.ts'
 	appB.ts
 	  Matched by default include pattern '**/*'
+	node_modules/@types/moduleZ/index.d.ts
+	  Entry point for implicit type library 'moduleZ'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -222,8 +258,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 157,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 2,
-            "dtsSize": 433,
+            "dts": 3,
+            "dtsSize": 454,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -261,7 +297,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/app/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -285,12 +321,14 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/workspaces/package.json: *new*
   {"pollingInterval":2000}
-/home/src/workspaces/project/app/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/app/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/common/node_modules: *new*
-  {"pollingInterval":500}
+/home/src/workspaces/project/app/node_modules/@types/moduleZ/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/app/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/app/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/app/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/moduleX/package.json: *new*
@@ -315,7 +353,13 @@ FsWatches::
 FsWatchesRecursive::
 /home/src/workspaces/project/app: *new*
   {}
+/home/src/workspaces/project/app/node_modules: *new*
+  {}
+/home/src/workspaces/project/app/node_modules/@types: *new*
+  {}
 /home/src/workspaces/project/common: *new*
+  {}
+/home/src/workspaces/project/common/node_modules: *new*
   {}
 /home/src/workspaces/project/node_modules: *new*
   {}
@@ -339,6 +383,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/workspaces/project/app/tsconfig.json *default*
+/home/src/workspaces/project/app/node_modules/@types/moduleZ/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/app/tsconfig.json
 /home/src/workspaces/project/common/moduleB.ts *new*
     version: Text-1
     containingProjects: 1

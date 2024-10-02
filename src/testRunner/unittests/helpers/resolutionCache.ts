@@ -1,6 +1,7 @@
 import { emptyArray } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
+import { compilerOptionsToConfigJson } from "./contents.js";
 import { forEachPackageJsonScopeScenario } from "./packageJsonScope.js";
 import { solutionBuildWithBaseline } from "./solutionBuilder.js";
 import { TscWatchCompileChange } from "./tscWatch.js";
@@ -451,4 +452,154 @@ export function forEachResolutionCacheLifeTimeScenario(
                 ),
         );
     });
+}
+
+export function forEachModuleCacheScenario(
+    forTsserver: boolean,
+    action: (scenario: string, sys: () => TestServerHost) => void,
+): void {
+    [
+        {
+            scenario: "sharing across references",
+        },
+        {
+            scenario: "not sharing across references",
+            appExtraOptions: { typeRoots: emptyArray },
+        },
+        {
+            scenario: "across references with typeRoots",
+            commonExtraOptions: { typeRoots: emptyArray },
+            appExtraOptions: { typeRoots: emptyArray },
+        },
+        {
+            scenario: "across references with individual @types",
+            moduleZ: true,
+        },
+    ].forEach(({ scenario, commonExtraOptions, appExtraOptions, moduleZ }) =>
+        action(scenario, () =>
+            TestServerHost.getCreateWatchedSystem(forTsserver)({
+                "/home/src/workspaces/project/node_modules/moduleX/index.d.ts": "export const x = 10;",
+                "/home/src/workspaces/project/common/tsconfig.json": jsonToReadableText({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        composite: true,
+                        traceResolution: true,
+                        ...commonExtraOptions,
+                    }),
+                }),
+                "/home/src/workspaces/project/common/moduleA.ts": "export const a = 10;",
+                "/home/src/workspaces/project/common/moduleB.ts": dedent`
+                        import { x } from "moduleX";
+                        export const b = x;
+                    `,
+                "/home/src/workspaces/project/app/tsconfig.json": jsonToReadableText({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        composite: true,
+                        traceResolution: true,
+                        ...appExtraOptions,
+                    }),
+                    references: [{ path: "../common" }],
+                }),
+                "/home/src/workspaces/project/app/appA.ts": dedent`
+                        import { x } from "moduleX";
+                        export const y = x;
+                    `,
+                "/home/src/workspaces/project/app/appB.ts": dedent`
+                        import { b } from "../common/moduleB";
+                        export const y = b;
+                    `,
+                ...(moduleZ ? {
+                    "/home/src/workspaces/project/common/node_modules/@types/moduleZ/index.d.ts": "export const mz = 10;",
+                    "/home/src/workspaces/project/app/node_modules/@types/moduleZ/index.d.ts": "export const mz = 10;",
+                } : {}),
+            }))
+    );
+}
+
+export function forEachTypeReferenceResolutionScenario(
+    forTsserver: boolean,
+    action: (scenario: string, sys: () => TestServerHost, edits: () => readonly TscWatchCompileChange[]) => void,
+): void {
+    [undefined, ["responselike"]].forEach(
+        types =>
+            [
+                {
+                    scenario: "typeRef resolutions with typeRoots unspecified",
+                },
+                {
+                    scenario: "typeRef resolutions with typeRoots",
+                    tsRequireOptions: { typeRoots: emptyArray },
+                    tsOptions: { typeRoots: emptyArray },
+                },
+                {
+                    scenario: "typeRef resolutions only one with typeRoots",
+                    tsRequireOptions: { typeRoots: emptyArray },
+                },
+                {
+                    scenario: "typeRef resolutions with common @types",
+                    commonAtTypes: true,
+                },
+            ].forEach(
+                ({ scenario, tsRequireOptions, tsOptions, commonAtTypes }) =>
+                    action(
+                        `${scenario}${types ? " with types" : ""}`,
+                        () =>
+                            TestServerHost.getCreateWatchedSystem(forTsserver)({
+                                "/home/src/workspaces/project/test/module/ts-require/tsconfig.json": jsonToReadableText({
+                                    compilerOptions: compilerOptionsToConfigJson({
+                                        incremental: true,
+                                        traceResolution: true,
+                                        ...tsRequireOptions,
+                                        types,
+                                    }),
+                                }),
+                                "/home/src/workspaces/project/test/module/ts-require/index.ts": "export const tsRequireIndex= 10;",
+                                "/home/src/workspaces/project/test/module/ts-require/main.ts": "export const tsRequireMain= 10;",
+                                "/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts": dedent`
+                                    /// <reference types="node" />
+                                    export const z = 10;
+                                `,
+                                "/home/src/workspaces/project/test/module/ts/tsconfig.json": jsonToReadableText({
+                                    compilerOptions: compilerOptionsToConfigJson({
+                                        incremental: true,
+                                        traceResolution: true,
+                                        ...tsOptions,
+                                        types,
+                                    }),
+                                }),
+                                "/home/src/workspaces/project/test/module/ts/index.ts": "export const tsIndex= 10;",
+                                "/home/src/workspaces/project/test/module/ts/main.ts": "export const tsMain = 10;",
+                                ...(
+                                    commonAtTypes ?
+                                        {
+                                            "/home/src/workspaces/project/test/node_modules/@types/node/index.d.ts": "declare const tsRequireGlobal = 10;",
+                                        } :
+                                        {
+                                            "/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts": "declare const tsRequireGlobal = 10;",
+                                            "/home/src/workspaces/project/test/module/ts/node_modules/@types/node/index.d.ts": "declare const tsRequireGlobal = 10;",
+                                        }
+                                ),
+                            }),
+                        () => [
+                            {
+                                caption: "build ts project with edit",
+                                edit: sys => sys.appendFile("/home/src/workspaces/project/test/module/ts/main.ts", `export const z = 10;`),
+                                timeouts: sys => {
+                                    sys.runQueuedTimeoutCallbacks();
+                                    sys.runQueuedTimeoutCallbacks();
+                                    sys.runQueuedTimeoutCallbacks();
+                                },
+                            },
+                            {
+                                caption: "build ts-require project with edit",
+                                edit: sys => sys.appendFile("/home/src/workspaces/project/test/module/ts-require/main.ts", `export const z = 10;`),
+                                timeouts: sys => {
+                                    sys.runQueuedTimeoutCallbacks();
+                                    sys.runQueuedTimeoutCallbacks();
+                                    sys.runQueuedTimeoutCallbacks();
+                                },
+                            },
+                        ],
+                    ),
+            ),
+    );
 }

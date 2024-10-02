@@ -2,6 +2,10 @@ import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
+    forEachModuleCacheScenario,
+    forEachTypeReferenceResolutionScenario,
+} from "../helpers/resolutionCache.js";
+import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc.js";
@@ -188,4 +192,25 @@ describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
             commandLineArgs: ["-b", "packages/b", "--verbose", "--traceResolution", "--explainFiles"],
         }],
     });
+});
+
+describe("unittests:: tsbuild:: moduleResolution:: reusing type reference directives", () => {
+    forEachTypeReferenceResolutionScenario(/*forTsserver*/ false, (subScenario, sys, edits) =>
+        verifyTsc({
+            scenario: "moduleResolution",
+            subScenario,
+            sys,
+            commandLineArgs: ["-b", "test/module/ts-require", "test/module/ts", "--verbose", "--explainFiles"],
+            edits: edits(),
+        }));
+});
+
+describe("unittests:: tsbuild:: moduleResolution:: sharing resolutions across references", () => {
+    forEachModuleCacheScenario(/*forTsserver*/ false, (subScenario, sys) =>
+        verifyTsc({
+            scenario: "moduleResolution",
+            subScenario,
+            sys,
+            commandLineArgs: ["-b", "app", "--verbose", "--traceResolution"],
+        }));
 });

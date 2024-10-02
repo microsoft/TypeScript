@@ -10,7 +10,8 @@ export const x = 10;
 {
   "compilerOptions": {
     "composite": true,
-    "traceResolution": true
+    "traceResolution": true,
+    "typeRoots": []
   }
 }
 
@@ -26,7 +27,8 @@ export const b = x;
 {
   "compilerOptions": {
     "composite": true,
-    "traceResolution": true
+    "traceResolution": true,
+    "typeRoots": []
   },
   "references": [
     {
@@ -81,6 +83,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/app/tsconfig.json 
  "options": {
   "composite": true,
   "traceResolution": true,
+  "typeRoots": [],
   "configFilePath": "/home/src/workspaces/project/app/tsconfig.json"
  },
  "projectReferences": [
@@ -112,6 +115,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/common/tsconfig.js
  "options": {
   "composite": true,
   "traceResolution": true,
+  "typeRoots": [],
   "configFilePath": "/home/src/workspaces/project/common/tsconfig.json"
  }
 }
@@ -166,12 +170,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/app/node_modules/@types 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/app/node_modules/@types 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -229,7 +227,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "traceResolution": true
+            "traceResolution": true,
+            "typeRoots": []
           },
           "typeAcquisition": {
             "enable": false,
@@ -281,17 +280,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/home/src/workspaces/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/workspaces/package.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/app/node_modules: *new*
   {"pollingInterval":500}
-/home/src/workspaces/project/app/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/workspaces/project/common/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/moduleX/package.json: *new*
   {"pollingInterval":2000}
