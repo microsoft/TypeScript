@@ -44493,12 +44493,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Don't validate for-in initializer as it is already an error
                 const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
                 if (needCheckInitializer) {
-                    const initializerType = checkExpressionCached(node.initializer);
                     if (strictNullChecks && needCheckWidenedType) {
-                        checkNonNullNonVoidType(initializerType, node);
+                        checkNonNullNonVoidType(checkExpressionCached(node.initializer), node);
                     }
                     else {
-                        checkTypeAssignableToAndOptionallyElaborate(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, node.initializer);
+                        checkTypeAssignableToAndOptionallyElaborate(checkNonNullExpression(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), node, node.initializer);
                     }
                 }
                 // check the binding pattern with empty elements
