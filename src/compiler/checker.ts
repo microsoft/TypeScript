@@ -29873,7 +29873,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const jsxFactoryNamespace = getJsxNamespace(node);
             const jsxFactoryLocation = isJsxOpeningLikeElement(node) ? node.tagName : node;
 
-            // allow null as jsxFragmentFactory
+            // #38720/60122, allow null as jsxFragmentFactory
             let jsxFactorySym: Symbol | undefined;
             if (!(isJsxOpeningFragment(node) && jsxFactoryNamespace === "null")) {
                 jsxFactorySym = resolveName(jsxFactoryLocation, jsxFactoryNamespace, compilerOptions.jsx === JsxEmit.Preserve ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value, jsxFactoryRefErr, /*isUse*/ true);
@@ -29890,7 +29890,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            // For JsxFragment, additionally mark jsx pragma as referenced via resolveName, since `getJsxNamespace` above would have resolved to only the fragment factory if they are distinct
+            // if JsxFragment, additionally mark jsx pragma as referenced, since `getJsxNamespace` above would have resolved to only the fragment factory if they are distinct
             if (isJsxOpeningFragment(node)) {
                 const file = getSourceFileOfNode(node);
                 const localJsxNamespace = getLocalJsxNamespace(file);
@@ -36643,6 +36643,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (sourceFileLinks.jsxFragmentType !== undefined) return sourceFileLinks.jsxFragmentType;
 
         const jsxFragmentFactoryName = getJsxNamespace(node);
+        // #38720/60122, allow null as jsxFragmentFactory
         if (jsxFragmentFactoryName === "null") return sourceFileLinks.jsxFragmentType = anyType;
 
         const jsxFactoryRefErr = diagnostics ? Diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found : undefined;
