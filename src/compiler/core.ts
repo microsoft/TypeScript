@@ -10,6 +10,7 @@ import {
     SortedReadonlyArray,
     TextSpan,
 } from "./_namespaces/ts.js";
+import { ReadonlyArrayView } from "./readonlyArray.js";
 
 /* eslint-disable @typescript-eslint/prefer-for-of */
 
@@ -1749,7 +1750,7 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
  */
 export function isArray(value: any): value is readonly unknown[] {
     // See: https://github.com/microsoft/TypeScript/issues/17002
-    return Array.isArray(value);
+    return Array.isArray(value) || ReadonlyArrayView.isReadonlyArrayView(value);
 }
 
 /** @internal */
@@ -2590,4 +2591,9 @@ export function isNodeLikeSystem(): boolean {
         && !!process.nextTick
         && !(process as any).browser
         && typeof require !== "undefined";
+}
+
+/** @internal */
+export function createReadOnlyArrayView<T, U>(source: readonly T[], mapper: (value: T) => U): readonly U[] {
+    return new ReadonlyArrayView(source, mapper);
 }

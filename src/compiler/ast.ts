@@ -118,14 +118,13 @@ import {
     getTransformFlagsSubtreeExclusions,
     HasChildren,
     HasDecorators,
+    HasExpression,
     HasJSDoc,
     HasLocals,
     HasModifiers,
     HasName,
-    hasProperty,
     HeritageClause,
     Identifier,
-    idText,
     IfStatement,
     ImportAttribute,
     ImportAttributeName,
@@ -143,7 +142,9 @@ import {
     InKeyword,
     InterfaceDeclaration,
     IntersectionTypeNode,
-    isAstParenthesizedExpression,
+    astIsElementAccessExpression,
+    astIsParenthesizedExpression,
+    astIsPropertyAccessExpression,
     IScriptSnapshot,
     isLogicalOrCoalescingAssignmentOperator,
     isParseTreeNode,
@@ -291,7 +292,6 @@ import {
     OptionalChainRoot,
     OptionalTypeNode,
     OuterExpression,
-    OuterExpressionKinds,
     OutKeyword,
     OverrideKeyword,
     PackageJsonInfo,
@@ -402,8 +402,58 @@ import {
     VoidExpression,
     WhileStatement,
     WithStatement,
-    YieldExpression
+    YieldExpression,
+    HasFlowNode,
+    BindableStaticNameExpression,
+    BindableObjectDefinePropertyCall,
+    BindableStaticAccessExpression,
+    BindableStaticElementAccessExpression,
+    LiteralLikeElementAccessExpression,
+    AccessExpression,
+    WrappedExpression,
+    AssignmentExpression,
+    AssignmentOperatorToken,
+    BindableStaticPropertyAssignmentExpression,
+    BindablePropertyAssignmentExpression,
+    ThisContainer,
+    DynamicNamedDeclaration,
+    DynamicNamedBinaryExpression,
+    VariableLikeDeclaration,
+    HasInitializer,
+    AutoAccessorPropertyDeclaration,
+    PrologueDirective,
+    HasText,
+    AmbientModuleDeclaration,
+    NonGlobalAmbientModuleDeclaration,
+    HasSymbol,
+    HasType,
+    HasTypeParameters,
+    HasParameters,
+    HasBody,
+    HasQuestionToken,
+    HasEndFlowNode,
+    HasTypeArguments,
+    InternalHasTypeArguments,
+    HasElements,
+    HasMembers,
+    HasStatement,
+    HasExclamationToken,
+    HasAsteriskToken,
+    HasQuestionDotToken,
+    HasComment,
+    HasStatements,
+    astIdText,
+    HasTypes,
+    HasTagName,
+    HasIsTypeOnly,
+    InternalHasModifiers,
 } from "./_namespaces/ts.js";
+
+const cloneNodeMap: Partial<Record<SyntaxKind, (node: AstNode) => AstNode>> = {};
+const createDataInstanceMap: Partial<Record<SyntaxKind, (data: AstData) => AstData>> = {};
+const copyDataPropertiesMap: Partial<Record<SyntaxKind, (data: AstData, clone: AstData) => void>> = {};
+const shadowNodeMap: Partial<Record<SyntaxKind, (node: AstNode) => AstNode>> = {};
+const shadowDataMap: Partial<Record<SyntaxKind, (data: AstData) => AstData>> = {};
 
 // dprint-ignore
 class AstNodeArrayExtraFields<N extends AstNode> {
@@ -513,14 +563,14 @@ class AstNodeExtraFields {
     /** @internal */ __end: number = -1;
 }
 
-let astNodeCloneCore: (node: AstNode) => AstNode;
-let astNodeShadowCore: (node: AstNode) => AstNode;
+let cloneNodeCore: (node: AstNode) => AstNode;
+let shadowCore: (node: AstNode) => AstNode;
 
 // dprint-ignore
 export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstData>> {
     static {
-        astNodeCloneCore = node => node.cloneCore();
-        astNodeShadowCore = node => node.shadowCore();
+        cloneNodeCore = node => node.cloneCore();
+        shadowCore = node => node.shadowCore();
     }
 
     private _node: N | undefined = undefined;
@@ -530,7 +580,7 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
     readonly kind: N["kind"] = 0;
     readonly data: N["data"] = undefined!;
 
-    parent: AstNode<NonNullable<N["parent"]>> | undefined = undefined; // Parent node (initialized by binding)
+    parent: AstNodeOneOf<N["parent"]> = undefined!; // Parent node (initialized by binding)
     flags: NodeFlags = NodeFlags.None;
     pos = -1;
     end = -1;
@@ -608,7 +658,7 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
      * @internal
      */
     clone(): AstNode {
-        return this.data.cloneNode(this);
+        return cloneNode(this);
     }
 
     /**
@@ -618,7 +668,7 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
      * @internal
      */
     protected cloneCore(): AstNode {
-        const clone = new AstNode(this.kind, this.data.clone(), this._nodeConstructor, this.flags);
+        const clone = new AstNode(this.kind, cloneData(this), this._nodeConstructor, this.flags);
         if (this._extra?.transformFlags !== undefined) clone.transformFlags = this.transformFlags;
         return clone;
     }
@@ -632,7 +682,7 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
      * @internal
      */
     shadow(): AstNode {
-        return this.data.shadowNode(this);
+        return shadowNode(this);
     }
 
     /**
@@ -643,7 +693,7 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
      * @internal
      */
     protected shadowCore(): AstNode {
-        const clone = new AstNode(this.kind, this.data.shadow(), this._nodeConstructor, this.flags);
+        const clone = new AstNode(this.kind, shadowData(this), this._nodeConstructor, this.flags);
         clone._extra = Object.create(this.extra);
         clone.parent = this.parent;
         clone.pos = this.pos;
@@ -967,7 +1017,7 @@ export class AstNode<N extends Node<SyntaxKind, AstData> = Node<SyntaxKind, AstD
         return new AstNode(SyntaxKind.AsExpression, new AstAsExpressionData(), AnyNode /* AsExpression */);
     }
     static TypeAssertion(): AstTypeAssertion {
-        return new AstNode(SyntaxKind.TypeAssertionExpression, new AstTypeAssertionData(), AnyNode /* TypeAssertionExpression */);
+        return new AstNode(SyntaxKind.TypeAssertionExpression, new AstTypeAssertionExpressionData(), AnyNode /* TypeAssertionExpression */);
     }
     static SatisfiesExpression(): AstSatisfiesExpression {
         return new AstNode(SyntaxKind.SatisfiesExpression, new AstSatisfiesExpressionData(), AnyNode /* SatisfiesExpression */);
@@ -1330,62 +1380,6 @@ export class AstData {
         void node;
         return TransformFlags.None;
     }
-
-    /**
-     * Controls cloning the provided node.
-     * @internal
-     */
-    cloneNode(node: AstNode): AstNode {
-        return astNodeCloneCore(node);
-    }
-
-    /**
-     * Creates a shallow, member-wise clone of this data object.
-     * @internal
-     */
-    clone(): AstData {
-        const clone = this.createInstance();
-        this.copyProperties(clone);
-        return clone;
-    }
-
-    /**
-     * Creates a new instance of a data object with the same prototype as this object.
-     * @internal
-     */
-    protected createInstance(): AstData {
-        return Object.create(Object.getPrototypeOf(this));
-    }
-
-    /**
-     * Copies the properties of this object to the provided object.
-     * @internal
-     */
-    protected copyProperties(clone: AstData): void {
-        for (const key in this) {
-            if (hasProperty(this, key)) {
-                (clone as any)[key] = (this as any)[key];
-            }
-        }
-    }
-
-    /**
-     * Controls creation of a shadow node for the provided node.
-     * This is primarily used for the purpose of redirecting source files.
-     * @internal
-     */
-    shadowNode(node: AstNode): AstNode {
-        return astNodeShadowCore(node);
-    }
-
-    /**
-     * Creates a new data object using this object as the prototype.
-     * This is primarily used for the purpose of redirecting source files.
-     * @internal
-     */
-    shadow(): AstData {
-        return Object.create(this);
-    }
 }
 
 // dprint-ignore
@@ -1396,11 +1390,55 @@ export class AstTypeScriptNodeData extends AstData {
 }
 
 /** @internal */
+export type AstHasFlowNode = AstNodeOneOf<HasFlowNode>;
+/** @internal */
+export type AstHasEndFlowNode = AstNodeOneOf<HasEndFlowNode>;
+/** @internal */
 export type AstHasLocals = AstNodeOneOf<HasLocals>;
 export type AstHasDecorators = AstNodeOneOf<HasDecorators>;
 export type AstHasModifiers = AstNodeOneOf<HasModifiers>;
 /** @internal */
+export type AstInternalHasModifiers = AstNodeOneOf<InternalHasModifiers>;
+/** @internal */
 export type AstHasChildren = AstNodeOneOf<HasChildren>;
+/** @internal */
+export type AstHasSymbol = AstNodeOneOf<HasSymbol>;
+/** @internal */
+export type AstHasType = AstNodeOneOf<HasType>;
+/** @internal */
+export type AstHasTypes = AstNodeOneOf<HasTypes>;
+/** @internal */
+export type AstHasTypeParameters = AstNodeOneOf<HasTypeParameters>;
+/** @internal */
+export type AstHasTypeArguments = AstNodeOneOf<HasTypeArguments>;
+/** @internal */
+export type AstInternalHasTypeArguments = AstNodeOneOf<InternalHasTypeArguments>;
+/** @internal */
+export type AstHasParameters = AstNodeOneOf<HasParameters>;
+/** @internal */
+export type AstHasBody = AstNodeOneOf<HasBody>;
+/** @internal */
+export type AstHasQuestionToken = AstNodeOneOf<HasQuestionToken>;
+/** @internal */
+export type AstHasElements = AstNodeOneOf<HasElements>;
+/** @internal */
+export type AstHasMembers = AstNodeOneOf<HasMembers>;
+/** @internal */
+export type AstHasStatement = AstNodeOneOf<HasStatement>;
+/** @internal */
+export type AstHasStatements = AstNodeOneOf<HasStatements>;
+/** @internal */
+export type AstHasExclamationToken = AstNodeOneOf<HasExclamationToken>;
+/** @internal */
+export type AstHasAsteriskToken = AstNodeOneOf<HasAsteriskToken>;
+/** @internal */
+export type AstHasQuestionDotToken = AstNodeOneOf<HasQuestionDotToken>;
+/** @internal */
+export type AstHasIsTypeOnly = AstNodeOneOf<HasIsTypeOnly>;
+/** @internal */
+export type AstHasTagName = AstNodeOneOf<HasTagName>;
+/** @internal */
+export type AstHasComment = AstNodeOneOf<HasComment>;
 /** @internal */
 export type AstForEachChildNodes = AstNodeOneOf<ForEachChildNodes>;
 export type AstDeclaration = AstNode<Declaration>;
@@ -1490,6 +1528,10 @@ export type AstEndOfFileToken = AstNode<EndOfFileToken>;
 // dprint-ignore
 export class AstEndOfFileTokenData extends AstTokenData {
     /** @internal */ jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
+
+    static {
+        createDataInstanceMap[SyntaxKind.EndOfFileToken] = _ => new this();
+    }
 }
 
 export type AstThisExpression = AstNode<ThisExpression>;
@@ -1497,6 +1539,10 @@ export type AstThisExpression = AstNode<ThisExpression>;
 // dprint-ignore
 export class AstThisExpressionData extends AstTokenData {
     /** @internal */ flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
+
+    static {
+        createDataInstanceMap[SyntaxKind.ThisKeyword] = _ => new this();
+    }
 }
 
 export type AstSuperExpression = AstNode<SuperExpression>;
@@ -1504,6 +1550,10 @@ export type AstSuperExpression = AstNode<SuperExpression>;
 // dprint-ignore
 export class AstSuperExpressionData extends AstTokenData {
     /** @internal */ flowNode: FlowNode | undefined = undefined; // initialized by checker (FlowContainer)
+
+    static {
+        createDataInstanceMap[SyntaxKind.SuperKeyword] = _ => new this();
+    }
 }
 
 export type AstImportExpression = AstNode<ImportExpression>;
@@ -1581,6 +1631,20 @@ export class AstIdentifierData extends AstTokenData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.Identifier] = _ => new AstIdentifierData();
+        copyDataPropertiesMap[SyntaxKind.Identifier] = (data, clone) => {
+            Debug.assert(data instanceof this);
+            Debug.assert(clone instanceof this);
+            clone.escapedText = data.escapedText;
+            clone.resolvedSymbol = data.resolvedSymbol;
+            clone.jsDoc = data.jsDoc;
+            clone.symbol = data.symbol;
+            clone.localSymbol = data.localSymbol;
+            clone.flowNode = data.flowNode;
+        }
+    }
 }
 
 export type AstQualifiedName = AstNode<QualifiedName>;
@@ -1595,6 +1659,10 @@ export class AstQualifiedNameData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.left) |
             propagateIdentifierNameFlags(this.right);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.QualifiedName] = _ => new this();
     }
 }
 
@@ -1614,6 +1682,10 @@ export class AstComputedPropertyNameData extends AstData {
             TransformFlags.ContainsES2015 |
             TransformFlags.ContainsComputedPropertyName;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ComputedPropertyName] = _ => new this();
+    }
 }
 
 export type AstPrivateIdentifier = AstNode<PrivateIdentifier>;
@@ -1624,6 +1696,10 @@ export class AstPrivateIdentifierData extends AstTokenData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.ContainsClassFields;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.PrivateIdentifier] = _ => new this();
     }
 }
 
@@ -1640,6 +1716,11 @@ export class AstTypeParameterDeclarationData extends AstTypeScriptNodeData {
     /** @internal */ jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
     /** @internal */ symbol: Symbol = undefined!; // initialized by binder (Declaration)
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+
+
+    static {
+        createDataInstanceMap[SyntaxKind.TypeParameter] = _ => new this();
+    }
 }
 
 export type AstParameterDeclaration = AstNode<ParameterDeclaration>;
@@ -1672,6 +1753,11 @@ export class AstParameterDeclarationData extends AstData {
             (this.dotDotDotToken ?? this.initializer ? TransformFlags.ContainsES2015 : TransformFlags.None) |
             (modifiersToFlags(this.modifiers?.items) & ModifierFlags.ParameterPropertyModifier ? TransformFlags.ContainsTypeScriptClassSyntax : TransformFlags.None);
     }
+
+
+    static {
+        createDataInstanceMap[SyntaxKind.Parameter] = _ => new this();
+    }
 }
 
 export type AstDecorator = AstNode<Decorator>;
@@ -1685,6 +1771,10 @@ export class AstDecoratorData extends AstData {
             TransformFlags.ContainsTypeScript |
             TransformFlags.ContainsTypeScriptClassSyntax |
             TransformFlags.ContainsDecorators;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.Decorator] = _ => new this();
     }
 }
 
@@ -1701,6 +1791,11 @@ export class AstPropertySignatureData extends AstTypeScriptNodeData {
     /** @internal */ symbol: Symbol = undefined!;                           // initialized by binder (Declaration)
     /** @internal */ localSymbol: Symbol | undefined = undefined;           // initialized by binder (Declaration)
     /** @internal */ jsDoc: JSDocArray | undefined = undefined;             // initialized by parser (JSDocContainer)
+
+
+    static {
+        createDataInstanceMap[SyntaxKind.PropertySignature] = _ => new this();
+    }
 }
 
 export type AstSignatureDeclaration = AstNodeOneOf<SignatureDeclaration>;
@@ -1718,6 +1813,11 @@ export class AstCallSignatureDeclarationData extends AstTypeScriptNodeData {
     /** @internal */ symbol: Symbol = undefined!;                   // initialized by binder (Declaration)
     /** @internal */ localSymbol: Symbol | undefined = undefined;   // initialized by binder (Declaration)
     /** @internal */ jsDoc: JSDocArray | undefined = undefined;     // initialized by parser (JSDocContainer)
+
+
+    static {
+        createDataInstanceMap[SyntaxKind.CallSignature] = _ => new this();
+    }
 }
 
 export type AstConstructSignatureDeclaration = AstNode<ConstructSignatureDeclaration>;
@@ -1734,6 +1834,11 @@ export class AstConstructSignatureDeclarationData extends AstTypeScriptNodeData 
     /** @internal */ localSymbol: Symbol | undefined = undefined;   // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+
+
+    static {
+        createDataInstanceMap[SyntaxKind.ConstructSignature] = _ => new this();
+    }
 }
 
 export type AstVariableDeclaration = AstNode<VariableDeclaration>;
@@ -1754,7 +1859,14 @@ export class AstVariableDeclarationData extends AstData {
             propagateChildFlags(this.initializer) |
             (this.exclamationToken ?? this.type ? TransformFlags.ContainsTypeScript : TransformFlags.None);
     }
+
+
+    static {
+        createDataInstanceMap[SyntaxKind.VariableDeclaration] = _ => new this();
+    }
 }
+
+export type AstVariableLikeDeclaration = AstNodeOneOf<VariableLikeDeclaration>;
 
 export type AstVariableDeclarationList = AstNode<VariableDeclarationList>;
 
@@ -1773,6 +1885,11 @@ export class AstVariableDeclarationListData extends AstData {
             transformFlags |= TransformFlags.ContainsESNext;
         }
         return transformFlags;
+    }
+
+
+    static {
+        createDataInstanceMap[SyntaxKind.VariableDeclarationList] = _ => new this();
     }
 }
 
@@ -1797,9 +1914,14 @@ export class AstBindingElementData extends AstData {
             (this.dotDotDotToken ? TransformFlags.ContainsRestOrSpread : TransformFlags.None) |
             TransformFlags.ContainsES2015;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.BindingElement] = _ => new this();
+    }
 }
 
 export type AstPropertyDeclaration = AstNode<PropertyDeclaration>;
+export type AstAutoAccessorPropertyDeclaration = AstNode<AutoAccessorPropertyDeclaration>;
 
 // dprint-ignore
 export class AstPropertyDeclarationData extends AstData {
@@ -1825,6 +1947,10 @@ export class AstPropertyDeclarationData extends AstData {
             (this.name.kind === SyntaxKind.ComputedPropertyName || modifierFlags & ModifierFlags.Static && this.initializer ? TransformFlags.ContainsTypeScriptClassSyntax : TransformFlags.None) |
             TransformFlags.ContainsClassFields;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.PropertyDeclaration] = _ => new this();
+    }
 }
 
 export type AstPropertyAssignment = AstNode<PropertyAssignment>;
@@ -1844,6 +1970,10 @@ export class AstPropertyAssignmentData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateNameFlags(this.name) |
             propagateChildFlags(this.initializer);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.PropertyAssignment] = _ => new this();
     }
 }
 
@@ -1869,6 +1999,10 @@ export class AstShorthandPropertyAssignmentData extends AstData {
             propagateChildFlags(this.objectAssignmentInitializer) |
             TransformFlags.ContainsES2015;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ShorthandPropertyAssignment] = _ => new this();
+    }
 }
 
 export type AstSpreadAssignment = AstNode<SpreadAssignment>;
@@ -1885,6 +2019,10 @@ export class AstSpreadAssignmentData extends AstData {
         return propagateChildFlags(this.expression) |
             TransformFlags.ContainsES2018 |
             TransformFlags.ContainsObjectRestOrSpread;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.SpreadAssignment] = _ => new this();
     }
 }
 
@@ -1904,6 +2042,10 @@ export class AstObjectBindingPatternData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ObjectBindingPattern] = _ => new this();
+    }
 }
 
 export type AstArrayBindingElement = AstNodeOneOf<ArrayBindingElement>;
@@ -1917,6 +2059,10 @@ export class AstArrayBindingPatternData extends AstData {
         return propagateChildrenFlags(this.elements) |
             TransformFlags.ContainsES2015 |
             TransformFlags.ContainsBindingPattern;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ArrayBindingPattern] = _ => new this();
     }
 }
 
@@ -1965,6 +2111,10 @@ export class AstFunctionDeclarationData extends AstData {
                 TransformFlags.ContainsHoistedDeclarationOrCompletion;
         }
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.FunctionDeclaration] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -1982,6 +2132,10 @@ export class AstMethodSignatureData extends AstTypeScriptNodeData {
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.MethodSignature] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2031,6 +2185,10 @@ export class AstMethodDeclarationData extends AstData {
                 TransformFlags.ContainsES2015;
         }
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.MethodDeclaration] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2061,6 +2219,10 @@ export class AstConstructorDeclarationData extends AstData {
                 TransformFlags.ContainsES2015;
         }
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.Constructor] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2069,6 +2231,10 @@ export class AstSemicolonClassElementData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.None;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.SemicolonClassElement] = _ => new this();
     }
 }
 
@@ -2104,6 +2270,10 @@ export class AstGetAccessorDeclarationData extends AstData {
                 (this.type ? TransformFlags.ContainsTypeScript : TransformFlags.None);
         }
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.GetAccessor] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2137,6 +2307,10 @@ export class AstSetAccessorDeclarationData extends AstData {
                 (this.type ? TransformFlags.ContainsTypeScript : TransformFlags.None);
         }
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.SetAccessor] = _ => new this();
+    }
 }
 
 export type AstAccessorDeclaration = AstNodeOneOf<AccessorDeclaration>;
@@ -2154,6 +2328,10 @@ export class AstIndexSignatureDeclarationData extends AstTypeScriptNodeData {
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.IndexSignature] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2172,6 +2350,10 @@ export class AstClassStaticBlockDeclarationData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.body) | TransformFlags.ContainsClassFields;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ClassStaticBlockDeclaration] = _ => new this();
+    }
 }
 
 /**
@@ -2185,6 +2367,10 @@ export type AstImportTypeAssertionContainer = AstNode<ImportTypeAssertionContain
 export class AstImportTypeAssertionContainerData extends AstTypeScriptNodeData {
     assertClause: AstImportAttributes = undefined!;
     multiLine: boolean = false;
+
+    static {
+        createDataInstanceMap[SyntaxKind.ImportTypeAssertionContainer] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2195,12 +2381,20 @@ export class AstImportTypeNodeData extends AstTypeScriptNodeData {
     attributes: AstImportAttributes | undefined = undefined;
     qualifier: AstEntityName | undefined = undefined;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.ImportType] = _ => new this();
+    }
 }
 
 export type AstKeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTypeSyntaxKind> = AstNode<KeywordTypeNode<TKind>>;
 
 // dprint-ignore
 export class AstThisTypeNodeData extends AstTypeScriptNodeData {
+
+    static {
+        createDataInstanceMap[SyntaxKind.ThisType] = _ => new this();
+    }
 }
 
 export type AstFunctionOrConstructorTypeNode = AstNodeOneOf<FunctionOrConstructorTypeNode>;
@@ -2218,6 +2412,10 @@ export class AstFunctionTypeNodeData extends AstTypeScriptNodeData {
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.FunctionType] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2233,12 +2431,20 @@ export class AstConstructorTypeNodeData extends AstTypeScriptNodeData {
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.ConstructorType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstTypeReferenceNodeData extends AstTypeScriptNodeData {
     typeName: AstEntityName = undefined!;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.TypeReference] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2246,12 +2452,20 @@ export class AstTypePredicateNodeData extends AstTypeScriptNodeData {
     assertsModifier: AstAssertsKeyword | undefined = undefined;
     parameterName: AstIdentifier | AstThisTypeNode = undefined!;
     type: AstTypeNode | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.TypePredicate] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstTypeQueryNodeData extends AstTypeScriptNodeData {
     exprName: AstEntityName = undefined!;
     typeArguments: AstNodeArray<AstTypeNode> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.TypeQuery] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2260,16 +2474,28 @@ export class AstTypeLiteralNodeData extends AstTypeScriptNodeData {
 
     /** @internal */ symbol: Symbol = undefined!; // initialized by binder (Declaration)
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+
+    static {
+        createDataInstanceMap[SyntaxKind.TypeLiteral] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstArrayTypeNodeData extends AstTypeScriptNodeData {
     elementType: AstTypeNode = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.ArrayType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstTupleTypeNodeData extends AstTypeScriptNodeData {
     elements: AstNodeArray<AstTypeNode | AstNamedTupleMember> = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.TupleType] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2282,16 +2508,28 @@ export class AstNamedTupleMemberData extends AstTypeScriptNodeData {
     /** @internal */ jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
     /** @internal */ symbol: Symbol = undefined!; // initialized by binder (Declaration)
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+
+    static {
+        createDataInstanceMap[SyntaxKind.NamedTupleMember] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstOptionalTypeNodeData extends AstTypeScriptNodeData {
     type: AstTypeNode = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.OptionalType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstRestTypeNodeData extends AstTypeScriptNodeData {
     type: AstTypeNode = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.RestType] = _ => new this();
+    }
 }
 
 export type AstUnionOrIntersectionTypeNode = AstNodeOneOf<UnionOrIntersectionTypeNode>;
@@ -2299,11 +2537,19 @@ export type AstUnionOrIntersectionTypeNode = AstNodeOneOf<UnionOrIntersectionTyp
 // dprint-ignore
 export class AstUnionTypeNodeData extends AstTypeScriptNodeData {
     types: AstNodeArray<AstTypeNode> = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.UnionType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstIntersectionTypeNodeData extends AstTypeScriptNodeData {
     types: AstNodeArray<AstTypeNode> = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.IntersectionType] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2315,28 +2561,48 @@ export class AstConditionalTypeNodeData extends AstTypeScriptNodeData {
 
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.ConditionalType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstInferTypeNodeData extends AstTypeScriptNodeData {
     typeParameter: AstTypeParameterDeclaration = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.InferType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstParenthesizedTypeNodeData extends AstTypeScriptNodeData {
     type: AstTypeNode = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.ParenthesizedType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstTypeOperatorNodeData extends AstTypeScriptNodeData {
     operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword = undefined!;
     type: AstTypeNode = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.TypeOperator] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstIndexedAccessTypeNodeData extends AstTypeScriptNodeData {
     objectType: AstTypeNode = undefined!;
     indexType: AstTypeNode = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.IndexedAccessType] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2352,11 +2618,19 @@ export class AstMappedTypeNodeData extends AstTypeScriptNodeData {
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.MappedType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstLiteralTypeNodeData extends AstTypeScriptNodeData {
     literal: AstNullLiteral | AstBooleanLiteral | AstLiteralExpression | AstPrefixUnaryExpression = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.LiteralType] = _ => new this();
+    }
 }
 
 export type AstPropertyNameLiteral = AstNodeOneOf<PropertyNameLiteral>;
@@ -2365,18 +2639,30 @@ export type AstPropertyNameLiteral = AstNodeOneOf<PropertyNameLiteral>;
 export class AstTemplateLiteralTypeNodeData extends AstTypeScriptNodeData {
     head: AstTemplateHead = undefined!;
     templateSpans: AstNodeArray<AstTemplateLiteralTypeSpan> = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.TemplateLiteralType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstTemplateLiteralTypeSpanData extends AstTypeScriptNodeData {
     type: AstTypeNode = undefined!;
     literal: AstTemplateMiddle | AstTemplateTail = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.TemplateLiteralTypeSpan] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstOmittedExpressionData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.None;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.OmittedExpression] = _ => new this();
     }
 }
 
@@ -2400,6 +2686,10 @@ export class AstPrefixUnaryExpressionData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.PrefixUnaryExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2421,6 +2711,10 @@ export class AstPostfixUnaryExpressionData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.PostfixUnaryExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2429,6 +2723,10 @@ export class AstDeleteExpressionData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.DeleteExpression] = _ => new this();
     }
 }
 
@@ -2439,6 +2737,10 @@ export class AstTypeOfExpressionData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.TypeOfExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2447,6 +2749,10 @@ export class AstVoidExpressionData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.VoidExpression] = _ => new this();
     }
 }
 
@@ -2459,6 +2765,10 @@ export class AstAwaitExpressionData extends AstData {
             TransformFlags.ContainsES2017 |
             TransformFlags.ContainsES2018 |
             TransformFlags.ContainsAwait;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.AwaitExpression] = _ => new this();
     }
 }
 
@@ -2473,6 +2783,10 @@ export class AstYieldExpressionData extends AstData {
             TransformFlags.ContainsES2015 |
             TransformFlags.ContainsES2018 |
             TransformFlags.ContainsYield;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.YieldExpression] = _ => new this();
     }
 }
 
@@ -2521,8 +2835,13 @@ export class AstBinaryExpressionData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.BinaryExpression] = _ => new this();
+    }
 }
 
+export type AstAssignmentExpression<TOperator extends AssignmentOperatorToken> = AstNodeOneOf<AssignmentExpression<TOperator>>;
 export type AstDestructuringAssignment = AstNodeOneOf<DestructuringAssignment>;
 
 // dprint-ignore
@@ -2539,6 +2858,10 @@ export class AstConditionalExpressionData extends AstData {
             propagateChildFlags(this.whenTrue) |
             propagateChildFlags(this.colonToken) |
             propagateChildFlags(this.whenFalse);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ConditionalExpression] = _ => new this();
     }
 }
 
@@ -2583,6 +2906,10 @@ export class AstFunctionExpressionData extends AstData {
             (this.typeParameters || this.type ? TransformFlags.ContainsTypeScript : TransformFlags.None) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.FunctionExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2616,6 +2943,10 @@ export class AstArrowFunctionData extends AstData {
             (isAsync ? TransformFlags.ContainsES2017 | TransformFlags.ContainsLexicalThis : TransformFlags.None) |
             TransformFlags.ContainsES2015;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ArrowFunction] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2626,6 +2957,10 @@ export class AstRegularExpressionLiteralData extends AstTokenData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.None;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.RegularExpressionLiteral] = _ => new this();
     }
 }
 
@@ -2643,6 +2978,10 @@ export class AstStringLiteralData extends AstTokenData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return this.hasExtendedUnicodeEscape ? TransformFlags.ContainsES2015 : TransformFlags.None;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.StringLiteral] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2659,11 +2998,17 @@ export class AstNoSubstitutionTemplateLiteralData extends AstTokenData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return getTransformFlagsOfTemplateLiteralLike(this.templateFlags);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.NoSubstitutionTemplateLiteral] = _ => new this();
+    }
 }
 
 export type AstPseudoLiteralToken = AstNodeOneOf<PseudoLiteralToken>;
 export type AstTemplateLiteralToken = AstNodeOneOf<TemplateLiteralToken>;
 export type AstStringLiteralLike = AstNodeOneOf<StringLiteralLike>;
+/** @internal */
+export type AstHasText = AstNodeOneOf<HasText>;
 
 // dprint-ignore
 export class AstNumericLiteralData extends AstTokenData {
@@ -2676,6 +3021,10 @@ export class AstNumericLiteralData extends AstTokenData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return this.numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier ? TransformFlags.ContainsES2015 : TransformFlags.None;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.NumericLiteral] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2684,6 +3033,10 @@ export class AstBigIntLiteralData extends AstTokenData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.ContainsES2020;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.BigIntLiteral] = _ => new this();
     }
 }
 
@@ -2701,6 +3054,10 @@ export class AstTemplateHeadData extends AstTokenData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return getTransformFlagsOfTemplateLiteralLike(this.templateFlags);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.TemplateHead] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2714,6 +3071,10 @@ export class AstTemplateMiddleData extends AstTokenData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return getTransformFlagsOfTemplateLiteralLike(this.templateFlags);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.TemplateMiddle] = _ => new this();
     }
 }
 
@@ -2729,6 +3090,10 @@ export class AstTemplateTailData extends AstTokenData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return getTransformFlagsOfTemplateLiteralLike(this.templateFlags);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.TemplateTail] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2741,6 +3106,10 @@ export class AstTemplateExpressionData extends AstData {
             propagateChildrenFlags(this.templateSpans) |
             TransformFlags.ContainsES2015;
     }
+    static {
+        createDataInstanceMap[SyntaxKind.TemplateExpression] = _ => new this();
+    }
+
 }
 
 // dprint-ignore
@@ -2753,6 +3122,10 @@ export class AstTemplateSpanData extends AstData {
             propagateChildFlags(this.literal) |
             TransformFlags.ContainsES2015;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.TemplateSpan] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2762,6 +3135,10 @@ export class AstParenthesizedExpressionData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ParenthesizedExpression] = _ => new this();
     }
 }
 
@@ -2777,6 +3154,10 @@ export class AstArrayLiteralExpressionData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildrenFlags(this.elements);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ArrayLiteralExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2787,6 +3168,10 @@ export class AstSpreadElementData extends AstData {
         return propagateChildFlags(this.expression) |
             TransformFlags.ContainsES2015 |
             TransformFlags.ContainsRestOrSpread;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.SpreadElement] = _ => new this();
     }
 }
 
@@ -2804,6 +3189,10 @@ export class AstObjectLiteralExpressionData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildrenFlags(this.properties);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ObjectLiteralExpression] = _ => new this();
     }
 }
 
@@ -2837,9 +3226,14 @@ export class AstPropertyAccessExpressionData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.PropertyAccessExpression] = _ => new this();
+    }
 }
 
 export type AstPropertyAccessEntityNameExpression = AstNode<PropertyAccessEntityNameExpression>;
+export type AstAccessExpression = AstNodeOneOf<AccessExpression>;
 export type AstEntityNameExpression = AstNodeOneOf<EntityNameExpression>;
 export type AstPropertyAccessChain = AstNode<PropertyAccessChain>;
 /** @internal */
@@ -2871,6 +3265,10 @@ export class AstElementAccessExpressionData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ElementAccessExpression] = _ => new this();
+    }
 }
 
 export type AstElementAccessChain = AstNode<ElementAccessChain>;
@@ -2896,9 +3294,9 @@ export class AstCallExpressionData extends AstData {
             transformFlags |= TransformFlags.ContainsTypeScript;
         }
         if (
-            (this.expression.kind === SyntaxKind.PropertyAccessExpression ||
-                this.expression.kind === SyntaxKind.ElementAccessExpression) &&
-            (this.expression as AstNode<PropertyAccessExpression | ElementAccessExpression>).data.expression.kind === SyntaxKind.SuperKeyword
+            (astIsPropertyAccessExpression(this.expression) ||
+                astIsElementAccessExpression(this.expression)) &&
+            astGetExpression(this.expression).kind === SyntaxKind.SuperKeyword
         ) {
             transformFlags |= TransformFlags.ContainsLexicalThis;
         }
@@ -2910,6 +3308,10 @@ export class AstCallExpressionData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.CallExpression] = _ => new this();
+    }
 }
 
 export type AstCallChain = AstNode<CallChain>;
@@ -2917,6 +3319,20 @@ export type AstCallChain = AstNode<CallChain>;
 export type AstCallChainRoot = AstNode<CallChainRoot>;
 /** @internal */
 export type AstOptionalChainRoot = AstNodeOneOf<OptionalChainRoot>;
+/** @internal */
+export type AstLiteralLikeElementAccessExpression = AstNodeOneOf<LiteralLikeElementAccessExpression>;
+/** @internal */
+export type AstBindableStaticNameExpression = AstNodeOneOf<BindableStaticNameExpression>;
+/** @internal */
+export type AstBindableStaticAccessExpression = AstNodeOneOf<BindableStaticAccessExpression>;
+/** @internal */
+export type AstBindableStaticPropertyAssignmentExpression = AstNodeOneOf<BindableStaticPropertyAssignmentExpression>;
+/** @internal */
+export type AstBindableStaticElementAccessExpression = AstNodeOneOf<BindableStaticElementAccessExpression>;
+/** @internal */
+export type AstBindablePropertyAssignmentExpression = AstNodeOneOf<BindablePropertyAssignmentExpression>;
+/** @internal */
+export type AstBindableObjectDefinePropertyCall = AstNodeOneOf<BindableObjectDefinePropertyCall>;
 
 // dprint-ignore
 export class AstExpressionWithTypeArgumentsData extends AstData {
@@ -2927,6 +3343,10 @@ export class AstExpressionWithTypeArgumentsData extends AstData {
         return propagateChildFlags(this.expression) |
             propagateChildrenFlags(this.typeArguments) |
             TransformFlags.ContainsES2015;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ExpressionWithTypeArguments] = _ => new this();
     }
 }
 
@@ -2948,6 +3368,10 @@ export class AstNewExpressionData extends AstData {
             transformFlags |= TransformFlags.ContainsTypeScript;
         }
         return transformFlags;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.NewExpression] = _ => new this();
     }
 }
 
@@ -2973,6 +3397,10 @@ export class AstTaggedTemplateExpressionData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.TaggedTemplateExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -2985,10 +3413,14 @@ export class AstAsExpressionData extends AstData {
             propagateChildFlags(this.type) |
             TransformFlags.ContainsTypeScript;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.AsExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
-export class AstTypeAssertionData extends AstData {
+export class AstTypeAssertionExpressionData extends AstData {
     type: AstTypeNode = undefined!;
     expression: AstUnaryExpression = undefined!;
 
@@ -2996,6 +3428,10 @@ export class AstTypeAssertionData extends AstData {
         return propagateChildFlags(this.expression) |
             propagateChildFlags(this.type) |
             TransformFlags.ContainsTypeScript;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.TypeAssertionExpression] = _ => new this();
     }
 }
 
@@ -3009,6 +3445,10 @@ export class AstSatisfiesExpressionData extends AstData {
             propagateChildFlags(this.type) |
             TransformFlags.ContainsTypeScript;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.SatisfiesExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3018,6 +3458,10 @@ export class AstNonNullExpressionData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression) |
             TransformFlags.ContainsTypeScript;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.NonNullExpression] = _ => new this();
     }
 }
 
@@ -3044,6 +3488,10 @@ export class AstMetaPropertyData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.MetaProperty] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3057,6 +3505,10 @@ export class AstJsxElementData extends AstData {
             propagateChildrenFlags(this.children) |
             propagateChildFlags(this.closingElement) |
             TransformFlags.ContainsJsx;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxElement] = _ => new this();
     }
 }
 
@@ -3081,6 +3533,10 @@ export class AstJsxAttributesData extends AstData {
         return propagateChildrenFlags(this.properties) |
             TransformFlags.ContainsJsx;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxAttributes] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3092,6 +3548,10 @@ export class AstJsxNamespacedNameData extends AstData {
         return propagateChildFlags(this.namespace) |
             propagateChildFlags(this.name) |
             TransformFlags.ContainsJsx;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxNamespacedName] = _ => new this();
     }
 }
 
@@ -3111,6 +3571,10 @@ export class AstJsxOpeningElementData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxOpeningElement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3120,6 +3584,10 @@ export class AstJsxClosingElementData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.tagName) |
             TransformFlags.ContainsJsx;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxClosingElement] = _ => new this();
     }
 }
 
@@ -3139,6 +3607,10 @@ export class AstJsxSelfClosingElementData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxSelfClosingElement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3153,6 +3625,10 @@ export class AstJsxFragmentData extends AstData {
             propagateChildFlags(this.closingFragment) |
             TransformFlags.ContainsJsx;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxFragment] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3160,12 +3636,20 @@ export class AstJsxOpeningFragmentData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.ContainsJsx;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxOpeningFragment] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJsxClosingFragmentData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.ContainsJsx;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxClosingFragment] = _ => new this();
     }
 }
 
@@ -3182,6 +3666,10 @@ export class AstJsxAttributeData extends AstData {
             propagateChildFlags(this.initializer) |
             TransformFlags.ContainsJsx;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxAttribute] = _ => new this();
+    }
 }
 
 export type AstJsxAttributeValue = AstNodeOneOf<JsxAttributeValue>;
@@ -3193,6 +3681,10 @@ export class AstJsxSpreadAttributeData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression) |
             TransformFlags.ContainsJsx;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxSpreadAttribute] = _ => new this();
     }
 }
 
@@ -3206,6 +3698,10 @@ export class AstJsxExpressionData extends AstData {
             propagateChildFlags(this.expression) |
             TransformFlags.ContainsJsx;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3217,6 +3713,10 @@ export class AstJsxTextData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.ContainsJsx;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.JsxText] = _ => new this();
     }
 }
 
@@ -3230,6 +3730,10 @@ export class AstEmptyStatementData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.None;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.EmptyStatement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3239,6 +3743,10 @@ export class AstDebuggerStatementData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.None;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.DebuggerStatement] = _ => new this();
     }
 }
 
@@ -3254,6 +3762,10 @@ export class AstMissingDeclarationData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.None;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.MissingDeclaration] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3267,6 +3779,10 @@ export class AstBlockData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildrenFlags(this.statements);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.Block] = _ => new this();
     }
 }
 
@@ -3286,7 +3802,14 @@ export class AstVariableStatementData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.VariableStatement] = _ => new this();
+    }
 }
+
+/** @internal */
+export type AstPrologueDirective = AstNodeOneOf<PrologueDirective>;
 
 // dprint-ignore
 export class AstExpressionStatementData extends AstData {
@@ -3297,6 +3820,10 @@ export class AstExpressionStatementData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ExpressionStatement] = _ => new this();
     }
 }
 
@@ -3314,6 +3841,10 @@ export class AstIfStatementData extends AstData {
             propagateChildFlags(this.thenStatement) |
             propagateChildFlags(this.elseStatement);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.IfStatement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3328,6 +3859,10 @@ export class AstDoStatementData extends AstData {
         return propagateChildFlags(this.statement) |
             propagateChildFlags(this.expression);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.DoStatement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3341,6 +3876,10 @@ export class AstWhileStatementData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression) |
             propagateChildFlags(this.statement);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.WhileStatement] = _ => new this();
     }
 }
 
@@ -3364,6 +3903,10 @@ export class AstForStatementData extends AstData {
             propagateChildFlags(this.incrementor) |
             propagateChildFlags(this.statement);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ForStatement] = _ => new this();
+    }
 }
 
 export type AstForInOrOfStatement = AstNodeOneOf<ForInOrOfStatement>;
@@ -3383,6 +3926,10 @@ export class AstForInStatementData extends AstData {
         return propagateChildFlags(this.initializer) |
             propagateChildFlags(this.expression) |
             propagateChildFlags(this.statement);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ForInStatement] = _ => new this();
     }
 }
 
@@ -3409,6 +3956,10 @@ export class AstForOfStatementData extends AstData {
         }
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ForOfStatement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3421,6 +3972,10 @@ export class AstBreakStatementData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.label) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.BreakStatement] = _ => new this();
     }
 }
 
@@ -3437,6 +3992,10 @@ export class AstContinueStatementData extends AstData {
         return propagateChildFlags(this.label) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ContinueStatement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3452,6 +4011,10 @@ export class AstReturnStatementData extends AstData {
             TransformFlags.ContainsES2018 |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ReturnStatement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3465,6 +4028,10 @@ export class AstWithStatementData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression) |
             propagateChildFlags(this.statement);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.WithStatement] = _ => new this();
     }
 }
 
@@ -3481,6 +4048,10 @@ export class AstSwitchStatementData extends AstData {
         return propagateChildFlags(this.expression) |
             propagateChildFlags(this.caseBlock);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.SwitchStatement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3492,6 +4063,10 @@ export class AstCaseBlockData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildrenFlags(this.clauses);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.CaseBlock] = _ => new this();
     }
 }
 
@@ -3507,6 +4082,10 @@ export class AstCaseClauseData extends AstData {
         return propagateChildFlags(this.expression) |
             propagateChildrenFlags(this.statements);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.CaseClause] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3517,6 +4096,10 @@ export class AstDefaultClauseData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildrenFlags(this.statements);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.DefaultClause] = _ => new this();
     }
 }
 
@@ -3534,6 +4117,10 @@ export class AstLabeledStatementData extends AstData {
         return propagateChildFlags(this.label) |
             propagateChildFlags(this.statement);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.LabeledStatement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3545,6 +4132,10 @@ export class AstThrowStatementData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ThrowStatement] = _ => new this();
     }
 }
 
@@ -3562,6 +4153,10 @@ export class AstTryStatementData extends AstData {
             propagateChildFlags(this.catchClause) |
             propagateChildFlags(this.finallyBlock);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.TryStatement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3576,6 +4171,10 @@ export class AstCatchClauseData extends AstData {
         return propagateChildFlags(this.variableDeclaration) |
             propagateChildFlags(this.block) |
             (!this.variableDeclaration ? TransformFlags.ContainsES2019 : TransformFlags.None);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.CatchClause] = _ => new this();
     }
 }
 
@@ -3615,6 +4214,10 @@ export class AstClassDeclarationData extends AstData {
             return transformFlags;
         }
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ClassDeclaration] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3638,6 +4241,10 @@ export class AstClassExpressionData extends AstData {
             (this.typeParameters ? TransformFlags.ContainsTypeScript : TransformFlags.None) |
             TransformFlags.ContainsES2015;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ClassExpression] = _ => new this();
+    }
 }
 
 export type AstTypeElement = AstNode<TypeElement>;
@@ -3653,6 +4260,10 @@ export class AstInterfaceDeclarationData extends AstTypeScriptNodeData {
     /** @internal */ jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
     /** @internal */ symbol: Symbol = undefined!; // initialized by binder (Declaration)
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+
+    static {
+        createDataInstanceMap[SyntaxKind.InterfaceDeclaration] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3670,6 +4281,10 @@ export class AstHeritageClauseData extends AstData {
                 return Debug.assertNever(this.token);
         }
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.HeritageClause] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3684,6 +4299,10 @@ export class AstTypeAliasDeclarationData extends AstTypeScriptNodeData {
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.TypeAliasDeclaration] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3704,6 +4323,10 @@ export class AstEnumDeclarationData extends AstData {
         transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Enum declarations cannot contain `await`
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.EnumDeclaration] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3719,6 +4342,10 @@ export class AstEnumMemberData extends AstData {
         return propagateChildFlags(this.name) |
             propagateChildFlags(this.initializer) |
             TransformFlags.ContainsTypeScript;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.EnumMember] = _ => new this();
     }
 }
 
@@ -3750,7 +4377,16 @@ export class AstModuleDeclarationData extends AstData {
             return transformFlags;
         }
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ModuleDeclaration] = _ => new this();
+    }
 }
+
+/** @internal */
+export type AstAmbientModuleDeclaration = AstNodeOneOf<AmbientModuleDeclaration>;
+/** @internal */
+export type AstNonGlobalAmbientModuleDeclaration = AstNodeOneOf<NonGlobalAmbientModuleDeclaration>;
 
 export type AstNamespaceBody = AstNodeOneOf<NamespaceBody>;
 
@@ -3779,6 +4415,10 @@ export class AstModuleBlockData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildrenFlags(this.statements);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ModuleBlock] = _ => new this();
+    }
 }
 
 export type AstModuleReference = AstNodeOneOf<ModuleReference>;
@@ -3805,6 +4445,10 @@ export class AstImportEqualsDeclarationData extends AstData {
 
         return transformFlags & ~TransformFlags.ContainsPossibleTopLevelAwait; // Import= declaration is always parsed in an Await context
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ImportEqualsDeclaration] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3814,6 +4458,10 @@ export class AstExternalModuleReferenceData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         // always parsed in an Await context
         return propagateChildFlags(this.expression) & ~TransformFlags.ContainsPossibleTopLevelAwait;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ExternalModuleReference] = _ => new this();
     }
 }
 
@@ -3834,6 +4482,10 @@ export class AstImportDeclarationData extends AstData {
             propagateChildFlags(this.moduleSpecifier);
         transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return transformFlags;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ImportDeclaration] = _ => new this();
     }
 }
 
@@ -3858,6 +4510,10 @@ export class AstImportClauseData extends AstData {
         transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ImportClause] = _ => new this();
+    }
 }
 
 export type AstAssertionKey = AstNodeOneOf<AssertionKey>;
@@ -3873,6 +4529,10 @@ export class AstImportAttributeData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.ContainsESNext;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ImportAttribute] = _ => new this();
+    }
 }
 
 /** @deprecated */
@@ -3887,6 +4547,10 @@ export class AstImportAttributesData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.ContainsESNext;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ImportAttributes] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3900,6 +4564,10 @@ export class AstNamespaceImportData extends AstData {
         let transformFlags = propagateChildFlags(this.name);
         transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return transformFlags;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.NamespaceImport] = _ => new this();
     }
 }
 
@@ -3916,6 +4584,10 @@ export class AstNamespaceExportData extends AstData {
         transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.NamespaceExport] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3930,6 +4602,10 @@ export class AstNamespaceExportDeclarationData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateIdentifierNameFlags(this.name) |
             TransformFlags.ContainsTypeScript;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.NamespaceExportDeclaration] = _ => new this();
     }
 }
 
@@ -3952,6 +4628,10 @@ export class AstExportDeclarationData extends AstData {
         transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ExportDeclaration] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3963,6 +4643,10 @@ export class AstNamedImportsData extends AstData {
         transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.NamedImports] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -3973,6 +4657,10 @@ export class AstNamedExportsData extends AstData {
         let transformFlags = propagateChildrenFlags(this.elements);
         transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return transformFlags;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.NamedExports] = _ => new this();
     }
 }
 
@@ -3991,6 +4679,10 @@ export class AstImportSpecifierData extends AstData {
         transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ImportSpecifier] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -4008,6 +4700,10 @@ export class AstExportSpecifierData extends AstData {
             propagateChildFlags(this.name);
         transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return transformFlags;
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ExportSpecifier] = _ => new this();
     }
 }
 
@@ -4028,49 +4724,85 @@ export class AstExportAssignmentData extends AstData {
         transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return transformFlags;
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.ExportAssignment] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocTypeExpressionData extends AstData {
     type: AstTypeNode = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocTypeExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocNameReferenceData extends AstData {
     name: AstEntityName | AstJSDocMemberName = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocNameReference] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocMemberNameData extends AstData {
     left: AstEntityName | AstJSDocMemberName = undefined!;
     right: AstIdentifier = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocMemberName] = _ => new this();
+    }
 }
 
 export type AstJSDocType = AstNodeOneOf<JSDocType>;
 
 // dprint-ignore
 export class AstJSDocAllTypeData extends AstData {
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocAllType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocUnknownTypeData extends AstData {
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocUnknownType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocNonNullableTypeData extends AstData {
     type: AstTypeNode = undefined!;
     postfix = false;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocNonNullableType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocNullableTypeData extends AstData {
     type: AstTypeNode = undefined!;
     postfix = false;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocNullableType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocOptionalTypeData extends AstData {
     type: AstTypeNode = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocOptionalType] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -4085,22 +4817,39 @@ export class AstJSDocFunctionTypeData extends AstData {
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocFunctionType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocVariadicTypeData extends AstData {
     type: AstTypeNode = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocVariadicType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocNamepathTypeData extends AstData {
     type: AstTypeNode = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocNamepathType] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocData extends AstData {
-    comment: string | AstNodeArray<AstJSDocComment> | undefined = undefined;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     tags: AstNodeArray<AstBaseJSDocTag> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDoc] = _ => new this();
+    }
 }
 
 export type AstHasJSDoc = AstNodeOneOf<HasJSDoc>;
@@ -4110,18 +4859,30 @@ export type AstJSDocTag = AstNodeOneOf<JSDocTag>;
 export class AstJSDocLinkData extends AstData {
     name: AstEntityName | AstJSDocMemberName | undefined = undefined;
     text = "";
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocLink] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocLinkCodeData extends AstData {
     name: AstEntityName | AstJSDocMemberName | undefined = undefined;
     text = "";
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocLinkCode] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocLinkPlainData extends AstData {
     name: AstEntityName | AstJSDocMemberName | undefined = undefined;
     text = "";
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocLinkPlain] = _ => new this();
+    }
 }
 
 export type AstJSDocComment = AstNodeOneOf<JSDocComment>;
@@ -4129,14 +4890,19 @@ export type AstJSDocComment = AstNodeOneOf<JSDocComment>;
 // dprint-ignore
 export class AstJSDocTextData extends AstData {
     text = "";
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocText] = _ => new this();
+    }
 }
 
 export type AstBaseJSDocTag<TKind extends SyntaxKind = SyntaxKind, T extends AstJSDocTagData = AstJSDocTagData> = AstNode<JSDocTag<TKind, T>>;
 
 // dprint-ignore
-export class AstJSDocTagData extends AstData {
-    tagName: AstIdentifier = undefined!;
-    comment: string | AstNodeArray<AstJSDocComment> | undefined = undefined;
+export abstract class AstJSDocTagData extends AstData {
+    abstract tagName: AstIdentifier;
+    abstract comment: string | undefined;
+    abstract commentArray: AstNodeArray<AstJSDocComment> | undefined;
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return TransformFlags.None;
@@ -4145,6 +4911,13 @@ export class AstJSDocTagData extends AstData {
 
 // dprint-ignore
 export class AstJSDocUnknownTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocTag] = _ => new this();
+    }
 }
 
 export type AstJSDocClassReference = AstNode<JSDocClassReference>;
@@ -4155,84 +4928,193 @@ export interface AstJSDocClassReferenceData extends AstExpressionWithTypeArgumen
 
 // dprint-ignore
 export class AstJSDocAugmentsTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     class: AstJSDocClassReference = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocAugmentsTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocImplementsTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     class: AstJSDocClassReference = undefined!;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocImplementsTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocAuthorTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocAuthorTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocDeprecatedTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocDeprecatedTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocClassTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocClassTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocPublicTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocPublicTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocPrivateTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocPrivateTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocProtectedTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocProtectedTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocReadonlyTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocReadonlyTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocOverrideTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocOverrideTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocEnumTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     typeExpression: AstJSDocTypeExpression = undefined!;
 
     /** @internal */ symbol: Symbol = undefined!; // initialized by binder (Declaration)
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocEnumTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocThisTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     typeExpression: AstJSDocTypeExpression = undefined!;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocThisTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocTemplateTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     constraint: AstJSDocTypeExpression | undefined = undefined;
     typeParameters: AstNodeArray<AstTypeParameterDeclaration> = undefined!;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocTemplateTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocSeeTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     name: AstJSDocNameReference | undefined = undefined;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocSeeTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocReturnTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     typeExpression: AstJSDocTypeExpression | undefined = undefined;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocReturnTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocTypeTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     typeExpression: AstJSDocTypeExpression = undefined!;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocTypeTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocTypedefTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     typeExpression: AstJSDocTypeExpression | AstJSDocTypeLiteral | undefined = undefined;
     fullName: AstJSDocNamespaceDeclaration | AstIdentifier | undefined = undefined;
     name: AstIdentifier | undefined = undefined;
@@ -4241,10 +5123,16 @@ export class AstJSDocTypedefTagData extends AstJSDocTagData {
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocTypedefTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocCallbackTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     fullName: AstJSDocNamespaceDeclaration | AstIdentifier | undefined = undefined;
     name: AstIdentifier | undefined = undefined;
     typeExpression: AstJSDocSignature = undefined!;
@@ -4253,16 +5141,31 @@ export class AstJSDocCallbackTagData extends AstJSDocTagData {
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocCallbackTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocOverloadTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     typeExpression: AstJSDocSignature = undefined!;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocOverloadTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocThrowsTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     typeExpression: AstJSDocTypeExpression | undefined = undefined;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocThrowsTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -4276,10 +5179,17 @@ export class AstJSDocSignatureData extends AstData {
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
     /** @internal */ locals: SymbolTable | undefined = undefined;
     /** @internal */ nextContainer: AstHasLocals | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocSignature] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocPropertyTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     typeExpression: AstJSDocTypeExpression | undefined = undefined;
     name: AstEntityName = undefined!;
     /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
@@ -4288,10 +5198,16 @@ export class AstJSDocPropertyTagData extends AstJSDocTagData {
 
     /** @internal */ symbol: Symbol = undefined!; // initialized by binder (Declaration)
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocPropertyTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocParameterTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     typeExpression: AstJSDocTypeExpression | undefined = undefined;
     name: AstEntityName = undefined!;
     /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
@@ -4300,6 +5216,9 @@ export class AstJSDocParameterTagData extends AstJSDocTagData {
 
     /** @internal */ symbol: Symbol = undefined!; // initialized by binder (Declaration)
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocParameterTag] = _ => new this();
+    }
 }
 
 export type AstJSDocPropertyLikeTag = AstNodeOneOf<JSDocPropertyLikeTag>;
@@ -4312,18 +5231,34 @@ export class AstJSDocTypeLiteralData extends AstData {
 
     /** @internal */ symbol: Symbol = undefined!; // initialized by binder (Declaration)
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocTypeLiteral] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocSatisfiesTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     typeExpression: AstJSDocTypeExpression = undefined!;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocSatisfiesTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstJSDocImportTagData extends AstJSDocTagData {
+    tagName: AstIdentifier = undefined!;
+    comment: string | undefined = undefined;
+    commentArray: AstNodeArray<AstJSDocComment> | undefined = undefined;
     importClause: AstImportClause | undefined = undefined;
     moduleSpecifier: AstExpression = undefined!;
     attributes: AstImportAttributes | undefined = undefined;
+    static {
+        createDataInstanceMap[SyntaxKind.JSDocImportTag] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -4331,6 +5266,10 @@ export class AstSyntheticExpressionData extends AstData {
     isSpread = false;
     type: Type = undefined!;
     tupleNameSource: AstParameterDeclaration | AstNamedTupleMember | undefined = undefined;
+
+    static {
+        createDataInstanceMap[SyntaxKind.SyntheticExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -4340,22 +5279,38 @@ export class AstBundleData extends AstData {
     /** @internal */ syntheticTypeReferences?: readonly FileReference[];
     /** @internal */ syntheticLibReferences?: readonly FileReference[];
     /** @internal */ hasNoDefaultLib?: boolean;
+
+    static {
+        createDataInstanceMap[SyntaxKind.Bundle] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstSyntaxListData extends AstData {
     /** @internal */ _children!: readonly Node[];
+
+    static {
+        createDataInstanceMap[SyntaxKind.SyntaxList] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstNotEmittedStatementData extends AstData {
     /** @internal */ jsDoc: JSDocArray | undefined = undefined; // initialized by parser (JSDocContainer)
+
+    static {
+        createDataInstanceMap[SyntaxKind.NotEmittedStatement] = _ => new this();
+    }
 }
 
 // dprint-ignore
 export class AstNotEmittedTypeElementData extends AstData {
     /** @internal */ symbol: Symbol = undefined!;
     /** @internal */ localSymbol: Symbol | undefined = undefined; // initialized by binder (Declaration)
+
+    static {
+        createDataInstanceMap[SyntaxKind.NotEmittedTypeElement] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -4365,6 +5320,10 @@ export class AstPartiallyEmittedExpressionData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression);
     }
+
+    static {
+        createDataInstanceMap[SyntaxKind.PartiallyEmittedExpression] = _ => new this();
+    }
 }
 
 // dprint-ignore
@@ -4373,6 +5332,10 @@ export class AstCommaListExpressionData extends AstData {
 
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildrenFlags(this.elements);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.CommaListExpression] = _ => new this();
     }
 }
 
@@ -4385,6 +5348,10 @@ export class AstSyntheticReferenceExpressionData extends AstData {
     /** @internal */ override computeTransformFlags(_: AstNode): TransformFlags {
         return propagateChildFlags(this.expression) |
             propagateChildFlags(this.thisArg);
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.SyntheticReferenceExpression] = _ => new this();
     }
 }
 
@@ -4560,14 +5527,21 @@ export class AstSourceFileData extends AstData {
             propagateChildFlags(this.endOfFileToken);
     }
 
-    override cloneNode(node: AstNode): AstNode {
-        if (this.redirectInfo) {
-            const clone = this.redirectInfo.redirectTarget.ast.shadow() as AstSourceFile;
-            this.copyProperties(clone.data);
-            clone.emitNode = undefined;
-            return clone;
-        }
-        return super.cloneNode(node);
+    static {
+        cloneNodeMap[SyntaxKind.SourceFile] = (node: AstNode) => {
+            Debug.assert(node.data instanceof this);
+            if (node.data.redirectInfo) {
+                const clone = node.data.redirectInfo.redirectTarget.ast.shadow() as AstSourceFile;
+                copyDataProperties(node, clone.data);
+                clone.emitNode = undefined;
+                return clone;
+            }
+            return cloneNodeCore(node);
+        };
+    }
+
+    static {
+        createDataInstanceMap[SyntaxKind.SourceFile] = _ => new this();
     }
 }
 
@@ -4899,7 +5873,7 @@ function propagateChildFlags(child: AstNode | undefined): TransformFlags {
     if (!child) return TransformFlags.None;
     const childFlags = child.transformFlags & ~getTransformFlagsSubtreeExclusions(child.kind);
     const name = astGetName(child);
-    return name && isAstPropertyName(name) ? propagatePropertyNameFlagsOfChild(name, childFlags) : childFlags;
+    return name && astIsPropertyName(name) ? propagatePropertyNameFlagsOfChild(name, childFlags) : childFlags;
 }
 
 function propagateChildrenFlags(children: AstNodeArray<AstNode> | undefined): TransformFlags {
@@ -4919,14 +5893,32 @@ function getTransformFlagsOfTemplateLiteralLike(templateFlags: TokenFlags) {
     return transformFlags;
 }
 
-/** @internal */
 export type AstNamedDeclaration = AstNodeOneOf<NamedDeclaration>;
+
+/** @internal */
+export type AstDynamicNamedDeclaration = AstNodeOneOf<DynamicNamedDeclaration>;
+
+/** @internal */
+export type AstDynamicNamedBinaryExpression = AstNodeOneOf<DynamicNamedBinaryExpression>;
 
 /** @internal */
 export type AstHasName = AstNodeOneOf<HasName>;
 
 /** @internal */
+export type AstHasExpression = AstNodeOneOf<HasExpression>;
+
+/** @internal */
+export type AstHasInitializer = AstNodeOneOf<HasInitializer>;
+
+/** @internal */
+export type AstThisContainer = AstNodeOneOf<ThisContainer>;
+
+/** @internal */
+export type AstGetResult<T extends AstNode, Base extends AstNode, K extends keyof Base["data"]> = T extends Base ? T["data"][K] : Base["data"][K] | undefined;
+
+/** @internal */
 export function astCanHaveName(node: AstNode): node is AstHasName {
+    Debug.type<AstHasName>(node); // ensures `astCanHaveName` is up-to-date with `AstHasName`/`HasName`
     switch (node.kind) {
         case SyntaxKind.BindingElement:
         case SyntaxKind.ClassDeclaration:
@@ -4973,8 +5965,10 @@ export function astCanHaveName(node: AstNode): node is AstHasName {
         case SyntaxKind.TypeParameter:
         case SyntaxKind.VariableDeclaration:
             return true;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astCanHaveName` is up-to-date with `AstHasName`/`HasName`
+            return false;
     }
-    return false;
 }
 
 /** @internal */
@@ -4983,10 +5977,10 @@ export function astHasName(node: AstNode): node is AstNodeOneOf<RequiredNodeProp
 }
 
 /** @internal */
-export function astGetName<T extends AstNode>(node: T): T extends AstHasName ? T["data"]["name"] : undefined;
+export function astGetName<T extends AstNode>(node: T): AstGetResult<T, AstHasName, "name">;
 export function astGetName(node: AstNode) {
-    Debug.type<AstHasName>(node);
-    // NOTE: each branch is monomorphic
+    Debug.type<AstHasName>(node); // ensures `astGetName` is up-to-date with `AstHasName`/`HasName`
+    // NOTE: each branch is duplicated to remain monomorphic
     switch (node.kind) {
         case SyntaxKind.BindingElement: return node.data.name;
         case SyntaxKind.ClassDeclaration: return node.data.name;
@@ -5032,12 +6026,15 @@ export function astGetName(node: AstNode) {
         case SyntaxKind.TypeAliasDeclaration: return node.data.name;
         case SyntaxKind.TypeParameter: return node.data.name;
         case SyntaxKind.VariableDeclaration: return node.data.name;
-        default: return undefined;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetName` is up-to-date with `AstHasName`/`HasName`
+            return undefined;
     }
 }
 
 /** @internal */
 export function astCanHaveJSDoc(node: AstNode): node is AstHasJSDoc {
+    Debug.type<AstHasJSDoc>(node); // ensures `astCanHaveJSDoc` is up-to-date with `AstHasJSDoc`/`HasJSDoc`
     switch (node.kind) {
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.BinaryExpression:
@@ -5110,6 +6107,7 @@ export function astCanHaveJSDoc(node: AstNode): node is AstHasJSDoc {
         case SyntaxKind.NotEmittedStatement:
             return true;
         default:
+            Debug.assertNeverTypeOnly(node); // ensures `astCanHaveJSDoc` is up-to-date with `AstHasJSDoc`/`HasJSDoc`
             return false;
     }
 }
@@ -5121,8 +6119,8 @@ export function astHasJSDoc(node: AstNode): node is AstNodeOneOf<RequiredNodePro
 
 /** @internal */
 export function astGetJSDoc(node: AstNode): JSDocArray | undefined {
-    // each branch is monomorphic
-    Debug.type<AstHasJSDoc>(node);
+    Debug.type<AstHasJSDoc>(node); // ensures `astGetJSDoc` is up-to-date with `AstHasJSDoc`/`HasJSDoc`
+    // NOTE: each branch is duplicated to remain monomorphic
     switch (node.kind) {
         case SyntaxKind.ArrowFunction: return node.data.jsDoc;
         case SyntaxKind.BinaryExpression: return node.data.jsDoc;
@@ -5193,226 +6191,1563 @@ export function astGetJSDoc(node: AstNode): JSDocArray | undefined {
         case SyntaxKind.ModuleBlock: return node.data.jsDoc;
         case SyntaxKind.MissingDeclaration: return node.data.jsDoc;
         case SyntaxKind.NotEmittedStatement: return node.data.jsDoc;
-        default: Debug.assertNever(node);
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetJSDoc` is up-to-date with `AstHasJSDoc`/`HasJSDoc`
+            return undefined;
     }
 }
 
 /** @internal */
-export function astSetJSDoc(node: AstHasJSDoc, value: JSDocArray | undefined): void {
-    // each branch is monomorphic
+export function astSetJSDoc(node: AstHasJSDoc, value: JSDocArray | undefined): JSDocArray | undefined {
+    // NOTE: each branch is duplicated to remain monomorphic
     switch (node.kind) {
-        case SyntaxKind.ArrowFunction:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.BinaryExpression:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.Block:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.BreakStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.CallSignature:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.CaseClause:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ClassDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ClassExpression:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ClassStaticBlockDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.Constructor:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ConstructorType:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ConstructSignature:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ContinueStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.DebuggerStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.DoStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ElementAccessExpression:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.EmptyStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.EndOfFileToken:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.EnumDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.EnumMember:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ExportAssignment:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ExportDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ExportSpecifier:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ExpressionStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ForInStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ForOfStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ForStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.FunctionDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.FunctionExpression:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.FunctionType:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.GetAccessor:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.Identifier:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.IfStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ImportDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ImportEqualsDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.IndexSignature:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.InterfaceDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.JSDocFunctionType:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.JSDocSignature:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.LabeledStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.MethodDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.MethodSignature:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ModuleDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.NamedTupleMember:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.NamespaceExportDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ObjectLiteralExpression:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.Parameter:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ParenthesizedExpression:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.PropertyAccessExpression:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.PropertyAssignment:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.PropertyDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.PropertySignature:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ReturnStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.SemicolonClassElement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.SetAccessor:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ShorthandPropertyAssignment:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.SpreadAssignment:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.SwitchStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ThrowStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.TryStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.TypeAliasDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.TypeParameter:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.VariableDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.VariableStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.WhileStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.WithStatement:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.ModuleBlock:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.MissingDeclaration:
-            node.data.jsDoc = value;
-            break;
-        case SyntaxKind.NotEmittedStatement:
-            node.data.jsDoc = value;
-            break;
-        default: Debug.assertNever(node);
+        case SyntaxKind.ArrowFunction: return node.data.jsDoc = value;
+        case SyntaxKind.BinaryExpression: return node.data.jsDoc = value;
+        case SyntaxKind.Block: return node.data.jsDoc = value;
+        case SyntaxKind.BreakStatement: return node.data.jsDoc = value;
+        case SyntaxKind.CallSignature: return node.data.jsDoc = value;
+        case SyntaxKind.CaseClause: return node.data.jsDoc = value;
+        case SyntaxKind.ClassDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.ClassExpression: return node.data.jsDoc = value;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.Constructor: return node.data.jsDoc = value;
+        case SyntaxKind.ConstructorType: return node.data.jsDoc = value;
+        case SyntaxKind.ConstructSignature: return node.data.jsDoc = value;
+        case SyntaxKind.ContinueStatement: return node.data.jsDoc = value;
+        case SyntaxKind.DebuggerStatement: return node.data.jsDoc = value;
+        case SyntaxKind.DoStatement: return node.data.jsDoc = value;
+        case SyntaxKind.ElementAccessExpression: return node.data.jsDoc = value;
+        case SyntaxKind.EmptyStatement: return node.data.jsDoc = value;
+        case SyntaxKind.EndOfFileToken: return node.data.jsDoc = value;
+        case SyntaxKind.EnumDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.EnumMember: return node.data.jsDoc = value;
+        case SyntaxKind.ExportAssignment: return node.data.jsDoc = value;
+        case SyntaxKind.ExportDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.ExportSpecifier: return node.data.jsDoc = value;
+        case SyntaxKind.ExpressionStatement: return node.data.jsDoc = value;
+        case SyntaxKind.ForInStatement: return node.data.jsDoc = value;
+        case SyntaxKind.ForOfStatement: return node.data.jsDoc = value;
+        case SyntaxKind.ForStatement: return node.data.jsDoc = value;
+        case SyntaxKind.FunctionDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.FunctionExpression: return node.data.jsDoc = value;
+        case SyntaxKind.FunctionType: return node.data.jsDoc = value;
+        case SyntaxKind.GetAccessor: return node.data.jsDoc = value;
+        case SyntaxKind.Identifier: return node.data.jsDoc = value;
+        case SyntaxKind.IfStatement: return node.data.jsDoc = value;
+        case SyntaxKind.ImportDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.ImportEqualsDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.IndexSignature: return node.data.jsDoc = value;
+        case SyntaxKind.InterfaceDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.JSDocFunctionType: return node.data.jsDoc = value;
+        case SyntaxKind.JSDocSignature: return node.data.jsDoc = value;
+        case SyntaxKind.LabeledStatement: return node.data.jsDoc = value;
+        case SyntaxKind.MethodDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.MethodSignature: return node.data.jsDoc = value;
+        case SyntaxKind.ModuleDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.NamedTupleMember: return node.data.jsDoc = value;
+        case SyntaxKind.NamespaceExportDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.ObjectLiteralExpression: return node.data.jsDoc = value;
+        case SyntaxKind.Parameter: return node.data.jsDoc = value;
+        case SyntaxKind.ParenthesizedExpression: return node.data.jsDoc = value;
+        case SyntaxKind.PropertyAccessExpression: return node.data.jsDoc = value;
+        case SyntaxKind.PropertyAssignment: return node.data.jsDoc = value;
+        case SyntaxKind.PropertyDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.PropertySignature: return node.data.jsDoc = value;
+        case SyntaxKind.ReturnStatement: return node.data.jsDoc = value;
+        case SyntaxKind.SemicolonClassElement: return node.data.jsDoc = value;
+        case SyntaxKind.SetAccessor: return node.data.jsDoc = value;
+        case SyntaxKind.ShorthandPropertyAssignment: return node.data.jsDoc = value;
+        case SyntaxKind.SpreadAssignment: return node.data.jsDoc = value;
+        case SyntaxKind.SwitchStatement: return node.data.jsDoc = value;
+        case SyntaxKind.ThrowStatement: return node.data.jsDoc = value;
+        case SyntaxKind.TryStatement: return node.data.jsDoc = value;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.TypeParameter: return node.data.jsDoc = value;
+        case SyntaxKind.VariableDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.VariableStatement: return node.data.jsDoc = value;
+        case SyntaxKind.WhileStatement: return node.data.jsDoc = value;
+        case SyntaxKind.WithStatement: return node.data.jsDoc = value;
+        case SyntaxKind.ModuleBlock: return node.data.jsDoc = value;
+        case SyntaxKind.MissingDeclaration: return node.data.jsDoc = value;
+        case SyntaxKind.NotEmittedStatement: return node.data.jsDoc = value;
+        default:
+            Debug.assertNever(node); // ensures `astSetJSDoc` is up-to-date with `AstHasJSDoc`/`HasJSDoc`
     }
 }
 
-// NOTE: each branch is monomorphic
+/** @internal */
+export function astCanHaveExpression(node: AstNode): node is AstHasExpression {
+    Debug.type<AstHasExpression>(node); // ensures `astCanHaveExpression` is up-to-date with `AstHasExpression`/`HasExpression`
+    switch (node.kind) {
+        case SyntaxKind.ComputedPropertyName:
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.Decorator:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.CallExpression:
+        case SyntaxKind.NewExpression:
+        case SyntaxKind.TypeAssertionExpression:
+        case SyntaxKind.ParenthesizedExpression:
+        case SyntaxKind.DeleteExpression:
+        case SyntaxKind.TypeOfExpression:
+        case SyntaxKind.VoidExpression:
+        case SyntaxKind.AwaitExpression:
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+        case SyntaxKind.ExpressionStatement:
+        case SyntaxKind.IfStatement:
+        case SyntaxKind.DoStatement:
+        case SyntaxKind.WhileStatement:
+        case SyntaxKind.YieldExpression:
+        case SyntaxKind.SpreadElement:
+        case SyntaxKind.ExpressionWithTypeArguments:
+        case SyntaxKind.AsExpression:
+        case SyntaxKind.NonNullExpression:
+        case SyntaxKind.SatisfiesExpression:
+        case SyntaxKind.TemplateSpan:
+        case SyntaxKind.ReturnStatement:
+        case SyntaxKind.WithStatement:
+        case SyntaxKind.SwitchStatement:
+        case SyntaxKind.ThrowStatement:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.ExternalModuleReference:
+        case SyntaxKind.JsxSpreadAttribute:
+        case SyntaxKind.JsxExpression:
+        case SyntaxKind.CaseClause:
+        case SyntaxKind.SpreadAssignment:
+        case SyntaxKind.PartiallyEmittedExpression:
+        case SyntaxKind.SyntheticReferenceExpression:
+            return true;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astCanHaveExpression` is up-to-date with `AstHasExpression`/`HasExpression`
+            return false;
+    }
+}
+
+/** @internal */
+export function astGetExpression<T extends AstNode>(node: T): AstGetResult<T, AstHasExpression, "expression">;
+export function astGetExpression(node: AstNode) {
+    Debug.type<AstHasExpression>(node); // ensures `astGetExpression` is up-to-date with `AstHasExpression`/`HasExpression`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.ComputedPropertyName: return node.data.expression;
+        case SyntaxKind.TypeParameter: return node.data.expression;
+        case SyntaxKind.Decorator: return node.data.expression;
+        case SyntaxKind.PropertyAccessExpression: return node.data.expression;
+        case SyntaxKind.ElementAccessExpression: return node.data.expression;
+        case SyntaxKind.CallExpression: return node.data.expression;
+        case SyntaxKind.NewExpression: return node.data.expression;
+        case SyntaxKind.TypeAssertionExpression: return node.data.expression;
+        case SyntaxKind.ParenthesizedExpression: return node.data.expression;
+        case SyntaxKind.DeleteExpression: return node.data.expression;
+        case SyntaxKind.TypeOfExpression: return node.data.expression;
+        case SyntaxKind.VoidExpression: return node.data.expression;
+        case SyntaxKind.AwaitExpression: return node.data.expression;
+        case SyntaxKind.ForInStatement: return node.data.expression;
+        case SyntaxKind.ForOfStatement: return node.data.expression;
+        case SyntaxKind.ExpressionStatement: return node.data.expression;
+        case SyntaxKind.IfStatement: return node.data.expression;
+        case SyntaxKind.DoStatement: return node.data.expression;
+        case SyntaxKind.WhileStatement: return node.data.expression;
+        case SyntaxKind.YieldExpression: return node.data.expression;
+        case SyntaxKind.SpreadElement: return node.data.expression;
+        case SyntaxKind.ExpressionWithTypeArguments: return node.data.expression;
+        case SyntaxKind.AsExpression: return node.data.expression;
+        case SyntaxKind.NonNullExpression: return node.data.expression;
+        case SyntaxKind.SatisfiesExpression: return node.data.expression;
+        case SyntaxKind.TemplateSpan: return node.data.expression;
+        case SyntaxKind.ReturnStatement: return node.data.expression;
+        case SyntaxKind.WithStatement: return node.data.expression;
+        case SyntaxKind.SwitchStatement: return node.data.expression;
+        case SyntaxKind.ThrowStatement: return node.data.expression;
+        case SyntaxKind.ExportAssignment: return node.data.expression;
+        case SyntaxKind.ExternalModuleReference: return node.data.expression;
+        case SyntaxKind.JsxSpreadAttribute: return node.data.expression;
+        case SyntaxKind.JsxExpression: return node.data.expression;
+        case SyntaxKind.CaseClause: return node.data.expression;
+        case SyntaxKind.SpreadAssignment: return node.data.expression;
+        case SyntaxKind.PartiallyEmittedExpression: return node.data.expression;
+        case SyntaxKind.SyntheticReferenceExpression: return node.data.expression;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetExpression` is up-to-date with `AstHasExpression`/`HasExpression`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astCanHaveFlowNode(node: AstNode): node is AstHasFlowNode {
+    Debug.type<AstHasFlowNode>(node); // ensures `astCanHaveFlowNode` is up-to-date with `AstHasFlowNode`/`HasFlowNode`
+    switch (node.kind) {
+        case SyntaxKind.VariableStatement:
+        case SyntaxKind.ExpressionStatement:
+        case SyntaxKind.IfStatement:
+        case SyntaxKind.DoStatement:
+        case SyntaxKind.WhileStatement:
+        case SyntaxKind.ForStatement:
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+        case SyntaxKind.ContinueStatement:
+        case SyntaxKind.BreakStatement:
+        case SyntaxKind.ReturnStatement:
+        case SyntaxKind.WithStatement:
+        case SyntaxKind.SwitchStatement:
+        case SyntaxKind.LabeledStatement:
+        case SyntaxKind.ThrowStatement:
+        case SyntaxKind.TryStatement:
+        case SyntaxKind.DebuggerStatement:
+        case SyntaxKind.Identifier:
+        case SyntaxKind.ThisKeyword:
+        case SyntaxKind.SuperKeyword:
+        case SyntaxKind.QualifiedName:
+        case SyntaxKind.MetaProperty:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+            return true;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astCanHaveFlowNode` is up-to-date with `AstHasFlowNode`/`HasFlowNode`
+            return false;
+    }
+}
+
+/** @internal */
+export function astGetFlowNode(node: AstNode): FlowNode | undefined {
+    Debug.type<AstHasFlowNode>(node); // ensures `astGetFlowNode` is up-to-date with `AstHasFlowNode`/`HasFlowNode`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.VariableStatement: return node.data.flowNode;
+        case SyntaxKind.ExpressionStatement: return node.data.flowNode;
+        case SyntaxKind.IfStatement: return node.data.flowNode;
+        case SyntaxKind.DoStatement: return node.data.flowNode;
+        case SyntaxKind.WhileStatement: return node.data.flowNode;
+        case SyntaxKind.ForStatement: return node.data.flowNode;
+        case SyntaxKind.ForInStatement: return node.data.flowNode;
+        case SyntaxKind.ForOfStatement: return node.data.flowNode;
+        case SyntaxKind.ContinueStatement: return node.data.flowNode;
+        case SyntaxKind.BreakStatement: return node.data.flowNode;
+        case SyntaxKind.ReturnStatement: return node.data.flowNode;
+        case SyntaxKind.WithStatement: return node.data.flowNode;
+        case SyntaxKind.SwitchStatement: return node.data.flowNode;
+        case SyntaxKind.LabeledStatement: return node.data.flowNode;
+        case SyntaxKind.ThrowStatement: return node.data.flowNode;
+        case SyntaxKind.TryStatement: return node.data.flowNode;
+        case SyntaxKind.DebuggerStatement: return node.data.flowNode;
+        case SyntaxKind.Identifier: return node.data.flowNode;
+        case SyntaxKind.ThisKeyword: return node.data.flowNode;
+        case SyntaxKind.SuperKeyword: return node.data.flowNode;
+        case SyntaxKind.QualifiedName: return node.data.flowNode;
+        case SyntaxKind.MetaProperty: return node.data.flowNode;
+        case SyntaxKind.ElementAccessExpression: return node.data.flowNode;
+        case SyntaxKind.PropertyAccessExpression: return node.data.flowNode;
+        case SyntaxKind.BindingElement: return node.data.flowNode;
+        case SyntaxKind.FunctionExpression: return node.data.flowNode;
+        case SyntaxKind.ArrowFunction: return node.data.flowNode;
+        case SyntaxKind.MethodDeclaration: return node.data.flowNode;
+        case SyntaxKind.GetAccessor: return node.data.flowNode;
+        case SyntaxKind.SetAccessor: return node.data.flowNode;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetFlowNode` is up-to-date with `AstHasFlowNode`/`HasFlowNode`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astSetFlowNode(node: AstHasFlowNode, value: FlowNode | undefined): FlowNode | undefined {
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.VariableStatement: return node.data.flowNode = value;
+        case SyntaxKind.ExpressionStatement: return node.data.flowNode = value;
+        case SyntaxKind.IfStatement: return node.data.flowNode = value;
+        case SyntaxKind.DoStatement: return node.data.flowNode = value;
+        case SyntaxKind.WhileStatement: return node.data.flowNode = value;
+        case SyntaxKind.ForStatement: return node.data.flowNode = value;
+        case SyntaxKind.ForInStatement: return node.data.flowNode = value;
+        case SyntaxKind.ForOfStatement: return node.data.flowNode = value;
+        case SyntaxKind.ContinueStatement: return node.data.flowNode = value;
+        case SyntaxKind.BreakStatement: return node.data.flowNode = value;
+        case SyntaxKind.ReturnStatement: return node.data.flowNode = value;
+        case SyntaxKind.WithStatement: return node.data.flowNode = value;
+        case SyntaxKind.SwitchStatement: return node.data.flowNode = value;
+        case SyntaxKind.LabeledStatement: return node.data.flowNode = value;
+        case SyntaxKind.ThrowStatement: return node.data.flowNode = value;
+        case SyntaxKind.TryStatement: return node.data.flowNode = value;
+        case SyntaxKind.DebuggerStatement: return node.data.flowNode = value;
+        case SyntaxKind.Identifier: return node.data.flowNode = value;
+        case SyntaxKind.ThisKeyword: return node.data.flowNode = value;
+        case SyntaxKind.SuperKeyword: return node.data.flowNode = value;
+        case SyntaxKind.QualifiedName: return node.data.flowNode = value;
+        case SyntaxKind.MetaProperty: return node.data.flowNode = value;
+        case SyntaxKind.ElementAccessExpression: return node.data.flowNode = value;
+        case SyntaxKind.PropertyAccessExpression: return node.data.flowNode = value;
+        case SyntaxKind.BindingElement: return node.data.flowNode = value;
+        case SyntaxKind.FunctionExpression: return node.data.flowNode = value;
+        case SyntaxKind.ArrowFunction: return node.data.flowNode = value;
+        case SyntaxKind.MethodDeclaration: return node.data.flowNode = value;
+        case SyntaxKind.GetAccessor: return node.data.flowNode = value;
+        case SyntaxKind.SetAccessor: return node.data.flowNode = value;
+        default:
+            return Debug.assertNever(node); // ensures `astSetFlowNode` is up-to-date with `AstHasFlowNode`/`HasFlowNode`
+    }
+}
+
+/** @internal */
+export function astGetEndFlowNode(node: AstNode): FlowNode | undefined {
+    Debug.type<AstHasEndFlowNode>(node); // ensures `astGetEndFlowNode` is up-to-date with `AstHasEndFlowNode`/`HasEndFlowNode`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.MethodDeclaration: return node.data.endFlowNode;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.endFlowNode;
+        case SyntaxKind.Constructor: return node.data.endFlowNode;
+        case SyntaxKind.GetAccessor: return node.data.endFlowNode;
+        case SyntaxKind.SetAccessor: return node.data.endFlowNode;
+        case SyntaxKind.FunctionExpression: return node.data.endFlowNode;
+        case SyntaxKind.ArrowFunction: return node.data.endFlowNode;
+        case SyntaxKind.FunctionDeclaration: return node.data.endFlowNode;
+        case SyntaxKind.SourceFile: return node.data.endFlowNode;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetEndFlowNode` is up-to-date with `AstHasEndFlowNode`/`HasEndFlowNode`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astSetEndFlowNode(node: AstHasEndFlowNode, value: FlowNode | undefined): FlowNode | undefined {
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.MethodDeclaration: return node.data.endFlowNode = value;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.endFlowNode = value;
+        case SyntaxKind.Constructor: return node.data.endFlowNode = value;
+        case SyntaxKind.GetAccessor: return node.data.endFlowNode = value;
+        case SyntaxKind.SetAccessor: return node.data.endFlowNode = value;
+        case SyntaxKind.FunctionExpression: return node.data.endFlowNode = value;
+        case SyntaxKind.ArrowFunction: return node.data.endFlowNode = value;
+        case SyntaxKind.FunctionDeclaration: return node.data.endFlowNode = value;
+        case SyntaxKind.SourceFile: return node.data.endFlowNode = value;
+        default:
+            return Debug.assertNever(node); // ensures `astSetEndFlowNode` is up-to-date with `AstHasEndFlowNode`/`HasEndFlowNode`
+    }
+}
+
+/** @internal */
+export function astCanHaveInitializer(node: AstNode): node is AstHasInitializer {
+    Debug.type<AstHasInitializer>(node); // ensures `astCanHaveInitializer` is up-to-date with `AstHasInitializer`/`HasInitializer`
+    switch (node.kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.ForStatement:
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.JsxAttribute:
+        case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.EnumMember:
+            return true;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astCanHaveInitializer` is up-to-date with `AstHasInitializer`/`HasInitializer`
+            return false;
+    }
+}
+
+/** @internal */
+export function astGetInitializer<T extends AstNode>(node: T): AstGetResult<T, AstHasInitializer, "initializer">;
+export function astGetInitializer(node: AstNode) {
+    Debug.type<AstHasInitializer>(node); // ensures `astGetInitializer` is up-to-date with `AstHasInitializer`/`HasInitializer`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.Parameter: return node.data.initializer;
+        case SyntaxKind.PropertyDeclaration: return node.data.initializer;
+        case SyntaxKind.BindingElement: return node.data.initializer;
+        case SyntaxKind.ForStatement: return node.data.initializer;
+        case SyntaxKind.ForInStatement: return node.data.initializer;
+        case SyntaxKind.ForOfStatement: return node.data.initializer;
+        case SyntaxKind.VariableDeclaration: return node.data.initializer;
+        case SyntaxKind.JsxAttribute: return node.data.initializer;
+        case SyntaxKind.PropertyAssignment: return node.data.initializer;
+        case SyntaxKind.PropertySignature: return node.data.initializer;
+        case SyntaxKind.EnumMember: return node.data.initializer;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetInitializer` is up-to-date with `AstHasInitializer`/`HasInitializer`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astCanHaveModifiers(node: AstNode): node is AstHasModifiers {
+    Debug.type<AstHasModifiers>(node); // ensures `astCanHaveModifiers` is up-to-date with `AstHasModifiers`/`HasModifiers`
+    switch (node.kind) {
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.VariableStatement:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.ExportDeclaration:
+            return true;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astCanHaveModifiers` is up-to-date with `AstHasModifiers`/`HasModifiers`
+            return false;
+    }
+}
+
+/** @internal */
+export function astGetModifiers<T extends AstNode>(node: T): AstGetResult<T, AstInternalHasModifiers, "modifiers">;
+export function astGetModifiers(node: AstNode) {
+    Debug.type<AstInternalHasModifiers>(node); // ensures `astGetModifiers` is up-to-date with `AstHasModifiers`/`HasModifiers`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.TypeParameter: return node.data.modifiers;
+        case SyntaxKind.Parameter: return node.data.modifiers;
+        case SyntaxKind.PropertySignature: return node.data.modifiers;
+        case SyntaxKind.PropertyDeclaration: return node.data.modifiers;
+        case SyntaxKind.MethodSignature: return node.data.modifiers;
+        case SyntaxKind.MethodDeclaration: return node.data.modifiers;
+        case SyntaxKind.Constructor: return node.data.modifiers;
+        case SyntaxKind.GetAccessor: return node.data.modifiers;
+        case SyntaxKind.SetAccessor: return node.data.modifiers;
+        case SyntaxKind.IndexSignature: return node.data.modifiers;
+        case SyntaxKind.ConstructorType: return node.data.modifiers;
+        case SyntaxKind.FunctionExpression: return node.data.modifiers;
+        case SyntaxKind.ArrowFunction: return node.data.modifiers;
+        case SyntaxKind.ClassExpression: return node.data.modifiers;
+        case SyntaxKind.VariableStatement: return node.data.modifiers;
+        case SyntaxKind.FunctionDeclaration: return node.data.modifiers;
+        case SyntaxKind.ClassDeclaration: return node.data.modifiers;
+        case SyntaxKind.InterfaceDeclaration: return node.data.modifiers;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.modifiers;
+        case SyntaxKind.EnumDeclaration: return node.data.modifiers;
+        case SyntaxKind.ModuleDeclaration: return node.data.modifiers;
+        case SyntaxKind.ImportEqualsDeclaration: return node.data.modifiers;
+        case SyntaxKind.ImportDeclaration: return node.data.modifiers;
+        case SyntaxKind.ExportAssignment: return node.data.modifiers;
+        case SyntaxKind.ExportDeclaration: return node.data.modifiers;
+        case SyntaxKind.MissingDeclaration: return node.data.modifiers;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.modifiers;
+        case SyntaxKind.NamespaceExportDeclaration: return node.data.modifiers;
+        case SyntaxKind.PropertyAssignment: return node.data.modifiers;
+        case SyntaxKind.ShorthandPropertyAssignment: return node.data.modifiers;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetModifiers` is up-to-date with `AstHasModifiers`/`HasModifiers`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astCanHaveDecorators(node: AstNode): node is AstHasDecorators {
+    Debug.type<AstHasDecorators>(node); // ensures `astCanHaveDecorators` is up-to-date with `AstHasDecorators`/`HasDecorators`
+    switch (node.kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.ClassDeclaration:
+            return true;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astCanHaveDecorators` is up-to-date with `AstHasDecorators`/`HasDecorators`
+            return false;
+    }
+}
+
+/** @internal */
+export function astGetRawText(node: AstNode): string | undefined {
+    Debug.type<AstTemplateLiteralToken>(node); // ensures `astGetRawText` is up-to-date with `AstTemplateLiteralToken`/`TemplateLiteralToken`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.NoSubstitutionTemplateLiteral: return node.data.rawText;
+        case SyntaxKind.TemplateHead: return node.data.rawText;
+        case SyntaxKind.TemplateMiddle: return node.data.rawText;
+        case SyntaxKind.TemplateTail: return node.data.rawText;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetRawText` is up-to-date with `AstTemplateLiteralToken`/`TemplateLiteralToken`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetText<T extends AstNode>(node: T): AstGetResult<T, AstHasText | AstLiteralLikeNode & { escapedText?: never }, "text">;
+export function astGetText(node: AstNode): string | undefined {
+    Debug.type<AstHasText>(node); // ensures `astGetText` is up-to-date with `AstHasText`/`HasText`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.NumericLiteral: return node.data.text;
+        case SyntaxKind.BigIntLiteral: return node.data.text;
+        case SyntaxKind.StringLiteral: return node.data.text;
+        case SyntaxKind.RegularExpressionLiteral: return node.data.text;
+        case SyntaxKind.NoSubstitutionTemplateLiteral: return node.data.text;
+        case SyntaxKind.TemplateHead: return node.data.text;
+        case SyntaxKind.TemplateMiddle: return node.data.text;
+        case SyntaxKind.TemplateTail: return node.data.text;
+        case SyntaxKind.JsxText: return node.data.text;
+        case SyntaxKind.JSDocText: return node.data.text;
+        case SyntaxKind.JSDocLink: return node.data.text;
+        case SyntaxKind.JSDocLinkCode: return node.data.text;
+        case SyntaxKind.JSDocLinkPlain: return node.data.text;
+        case SyntaxKind.SourceFile: return node.data.text;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetText` is up-to-date with `AstHasText`/`HasText`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astCanHaveSymbol(node: AstNode): node is AstHasSymbol {
+    Debug.type<AstHasSymbol>(node); // ensures `astCanHaveSymbol` is up-to-date with `AstHasSymbol`/`HasSymbol`
+    switch (node.kind) {
+        case SyntaxKind.NumericLiteral:
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+        case SyntaxKind.Identifier:
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.ClassStaticBlockDeclaration:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.CallSignature:
+        case SyntaxKind.ConstructSignature:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.FunctionType:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.TypeLiteral:
+        case SyntaxKind.MappedType:
+        case SyntaxKind.NamedTupleMember:
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.ObjectLiteralExpression:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.CallExpression:
+        case SyntaxKind.NewExpression:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.BinaryExpression:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.NamespaceExportDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.ImportClause:
+        case SyntaxKind.NamespaceImport:
+        case SyntaxKind.ImportSpecifier:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.NamespaceExport:
+        case SyntaxKind.ExportSpecifier:
+        case SyntaxKind.MissingDeclaration:
+        case SyntaxKind.JsxAttribute:
+        case SyntaxKind.JsxAttributes:
+        case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.SpreadAssignment:
+        case SyntaxKind.EnumMember:
+        case SyntaxKind.SourceFile:
+        case SyntaxKind.JSDocFunctionType:
+        case SyntaxKind.JSDocTypeLiteral:
+        case SyntaxKind.JSDocSignature:
+        case SyntaxKind.JSDocCallbackTag:
+        case SyntaxKind.JSDocEnumTag:
+        case SyntaxKind.JSDocParameterTag:
+        case SyntaxKind.JSDocTypedefTag:
+        case SyntaxKind.JSDocPropertyTag:
+        case SyntaxKind.NotEmittedTypeElement:
+            return true;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astCanHaveSymbol` is up-to-date with `AstHasSymbol`/`HasSymbol`
+            return false;
+    }
+}
+
+/** @internal */
+export function astGetSymbol<T extends AstNode>(node: T): T extends AstHasSymbol ? Symbol : Symbol | undefined;
+export function astGetSymbol<T extends AstNode>(node: T) {
+    Debug.type<AstHasSymbol>(node); // ensures `astGetSymbol` is up-to-date with `AstHasSymbol`/`HasSymbol`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.NumericLiteral: return node.data.symbol;
+        case SyntaxKind.StringLiteral: return node.data.symbol;
+        case SyntaxKind.NoSubstitutionTemplateLiteral: return node.data.symbol;
+        case SyntaxKind.Identifier: return node.data.symbol;
+        case SyntaxKind.TypeParameter: return node.data.symbol;
+        case SyntaxKind.Parameter: return node.data.symbol;
+        case SyntaxKind.PropertySignature: return node.data.symbol;
+        case SyntaxKind.PropertyDeclaration: return node.data.symbol;
+        case SyntaxKind.MethodSignature: return node.data.symbol;
+        case SyntaxKind.MethodDeclaration: return node.data.symbol;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.symbol;
+        case SyntaxKind.Constructor: return node.data.symbol;
+        case SyntaxKind.GetAccessor: return node.data.symbol;
+        case SyntaxKind.SetAccessor: return node.data.symbol;
+        case SyntaxKind.CallSignature: return node.data.symbol;
+        case SyntaxKind.ConstructSignature: return node.data.symbol;
+        case SyntaxKind.IndexSignature: return node.data.symbol;
+        case SyntaxKind.FunctionType: return node.data.symbol;
+        case SyntaxKind.ConstructorType: return node.data.symbol;
+        case SyntaxKind.TypeLiteral: return node.data.symbol;
+        case SyntaxKind.MappedType: return node.data.symbol;
+        case SyntaxKind.NamedTupleMember: return node.data.symbol;
+        case SyntaxKind.BindingElement: return node.data.symbol;
+        case SyntaxKind.ObjectLiteralExpression: return node.data.symbol;
+        case SyntaxKind.PropertyAccessExpression: return node.data.symbol;
+        case SyntaxKind.ElementAccessExpression: return node.data.symbol;
+        case SyntaxKind.CallExpression: return node.data.symbol;
+        case SyntaxKind.NewExpression: return node.data.symbol;
+        case SyntaxKind.FunctionExpression: return node.data.symbol;
+        case SyntaxKind.ArrowFunction: return node.data.symbol;
+        case SyntaxKind.BinaryExpression: return node.data.symbol;
+        case SyntaxKind.ClassExpression: return node.data.symbol;
+        case SyntaxKind.VariableDeclaration: return node.data.symbol;
+        case SyntaxKind.FunctionDeclaration: return node.data.symbol;
+        case SyntaxKind.ClassDeclaration: return node.data.symbol;
+        case SyntaxKind.InterfaceDeclaration: return node.data.symbol;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.symbol;
+        case SyntaxKind.EnumDeclaration: return node.data.symbol;
+        case SyntaxKind.ModuleDeclaration: return node.data.symbol;
+        case SyntaxKind.NamespaceExportDeclaration: return node.data.symbol;
+        case SyntaxKind.ImportEqualsDeclaration: return node.data.symbol;
+        case SyntaxKind.ImportDeclaration: return node.data.symbol;
+        case SyntaxKind.ImportClause: return node.data.symbol;
+        case SyntaxKind.NamespaceImport: return node.data.symbol;
+        case SyntaxKind.ImportSpecifier: return node.data.symbol;
+        case SyntaxKind.ExportAssignment: return node.data.symbol;
+        case SyntaxKind.ExportDeclaration: return node.data.symbol;
+        case SyntaxKind.NamespaceExport: return node.data.symbol;
+        case SyntaxKind.ExportSpecifier: return node.data.symbol;
+        case SyntaxKind.MissingDeclaration: return node.data.symbol;
+        case SyntaxKind.JsxAttribute: return node.data.symbol;
+        case SyntaxKind.JsxAttributes: return node.data.symbol;
+        case SyntaxKind.PropertyAssignment: return node.data.symbol;
+        case SyntaxKind.ShorthandPropertyAssignment: return node.data.symbol;
+        case SyntaxKind.SpreadAssignment: return node.data.symbol;
+        case SyntaxKind.EnumMember: return node.data.symbol;
+        case SyntaxKind.SourceFile: return node.data.declaration.symbol;
+        case SyntaxKind.JSDocFunctionType: return node.data.symbol;
+        case SyntaxKind.JSDocTypeLiteral: return node.data.symbol;
+        case SyntaxKind.JSDocSignature: return node.data.symbol;
+        case SyntaxKind.JSDocCallbackTag: return node.data.symbol;
+        case SyntaxKind.JSDocEnumTag: return node.data.symbol;
+        case SyntaxKind.JSDocParameterTag: return node.data.symbol;
+        case SyntaxKind.JSDocTypedefTag: return node.data.symbol;
+        case SyntaxKind.JSDocPropertyTag: return node.data.symbol;
+        case SyntaxKind.NotEmittedTypeElement: return node.data.symbol;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetSymbol` is up-to-date with `AstHasSymbol`/`HasSymbol`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astSetSymbol(node: AstHasSymbol, value: Symbol): Symbol {
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.NumericLiteral: return node.data.symbol = value;
+        case SyntaxKind.StringLiteral: return node.data.symbol = value;
+        case SyntaxKind.NoSubstitutionTemplateLiteral: return node.data.symbol = value;
+        case SyntaxKind.Identifier: return node.data.symbol = value;
+        case SyntaxKind.TypeParameter: return node.data.symbol = value;
+        case SyntaxKind.Parameter: return node.data.symbol = value;
+        case SyntaxKind.PropertySignature: return node.data.symbol = value;
+        case SyntaxKind.PropertyDeclaration: return node.data.symbol = value;
+        case SyntaxKind.MethodSignature: return node.data.symbol = value;
+        case SyntaxKind.MethodDeclaration: return node.data.symbol = value;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.symbol = value;
+        case SyntaxKind.Constructor: return node.data.symbol = value;
+        case SyntaxKind.GetAccessor: return node.data.symbol = value;
+        case SyntaxKind.SetAccessor: return node.data.symbol = value;
+        case SyntaxKind.CallSignature: return node.data.symbol = value;
+        case SyntaxKind.ConstructSignature: return node.data.symbol = value;
+        case SyntaxKind.IndexSignature: return node.data.symbol = value;
+        case SyntaxKind.FunctionType: return node.data.symbol = value;
+        case SyntaxKind.ConstructorType: return node.data.symbol = value;
+        case SyntaxKind.TypeLiteral: return node.data.symbol = value;
+        case SyntaxKind.MappedType: return node.data.symbol = value;
+        case SyntaxKind.NamedTupleMember: return node.data.symbol = value;
+        case SyntaxKind.BindingElement: return node.data.symbol = value;
+        case SyntaxKind.ObjectLiteralExpression: return node.data.symbol = value;
+        case SyntaxKind.PropertyAccessExpression: return node.data.symbol = value;
+        case SyntaxKind.ElementAccessExpression: return node.data.symbol = value;
+        case SyntaxKind.CallExpression: return node.data.symbol = value;
+        case SyntaxKind.NewExpression: return node.data.symbol = value;
+        case SyntaxKind.FunctionExpression: return node.data.symbol = value;
+        case SyntaxKind.ArrowFunction: return node.data.symbol = value;
+        case SyntaxKind.BinaryExpression: return node.data.symbol = value;
+        case SyntaxKind.ClassExpression: return node.data.symbol = value;
+        case SyntaxKind.VariableDeclaration: return node.data.symbol = value;
+        case SyntaxKind.FunctionDeclaration: return node.data.symbol = value;
+        case SyntaxKind.ClassDeclaration: return node.data.symbol = value;
+        case SyntaxKind.InterfaceDeclaration: return node.data.symbol = value;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.symbol = value;
+        case SyntaxKind.EnumDeclaration: return node.data.symbol = value;
+        case SyntaxKind.ModuleDeclaration: return node.data.symbol = value;
+        case SyntaxKind.NamespaceExportDeclaration: return node.data.symbol = value;
+        case SyntaxKind.ImportEqualsDeclaration: return node.data.symbol = value;
+        case SyntaxKind.ImportDeclaration: return node.data.symbol = value;
+        case SyntaxKind.ImportClause: return node.data.symbol = value;
+        case SyntaxKind.NamespaceImport: return node.data.symbol = value;
+        case SyntaxKind.ImportSpecifier: return node.data.symbol = value;
+        case SyntaxKind.ExportAssignment: return node.data.symbol = value;
+        case SyntaxKind.ExportDeclaration: return node.data.symbol = value;
+        case SyntaxKind.NamespaceExport: return node.data.symbol = value;
+        case SyntaxKind.ExportSpecifier: return node.data.symbol = value;
+        case SyntaxKind.MissingDeclaration: return node.data.symbol = value;
+        case SyntaxKind.JsxAttribute: return node.data.symbol = value;
+        case SyntaxKind.JsxAttributes: return node.data.symbol = value;
+        case SyntaxKind.PropertyAssignment: return node.data.symbol = value;
+        case SyntaxKind.ShorthandPropertyAssignment: return node.data.symbol = value;
+        case SyntaxKind.SpreadAssignment: return node.data.symbol = value;
+        case SyntaxKind.EnumMember: return node.data.symbol = value;
+        case SyntaxKind.SourceFile: return node.data.declaration.symbol = value;
+        case SyntaxKind.JSDocFunctionType: return node.data.symbol = value;
+        case SyntaxKind.JSDocTypeLiteral: return node.data.symbol = value;
+        case SyntaxKind.JSDocSignature: return node.data.symbol = value;
+        case SyntaxKind.JSDocCallbackTag: return node.data.symbol = value;
+        case SyntaxKind.JSDocEnumTag: return node.data.symbol = value;
+        case SyntaxKind.JSDocParameterTag: return node.data.symbol = value;
+        case SyntaxKind.JSDocTypedefTag: return node.data.symbol = value;
+        case SyntaxKind.JSDocPropertyTag: return node.data.symbol = value;
+        case SyntaxKind.NotEmittedTypeElement: return node.data.symbol = value;
+        default:
+            Debug.assertNever(node); // ensures `astSetSymbol` is up-to-date with `AstHasSymbol`/`HasSymbol`
+    }
+}
+
+/** @internal */
+export function astGetLocalSymbol(node: AstNode): Symbol | undefined;
+export function astGetLocalSymbol(node: AstNode) {
+    Debug.type<AstHasSymbol>(node); // ensures `astGetLocalSymbol` is up-to-date with `AstHasSymbol`/`HasSymbol`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.NumericLiteral: return node.data.localSymbol;
+        case SyntaxKind.StringLiteral: return node.data.localSymbol;
+        case SyntaxKind.NoSubstitutionTemplateLiteral: return node.data.localSymbol;
+        case SyntaxKind.Identifier: return node.data.localSymbol;
+        case SyntaxKind.TypeParameter: return node.data.localSymbol;
+        case SyntaxKind.Parameter: return node.data.localSymbol;
+        case SyntaxKind.PropertySignature: return node.data.localSymbol;
+        case SyntaxKind.PropertyDeclaration: return node.data.localSymbol;
+        case SyntaxKind.MethodSignature: return node.data.localSymbol;
+        case SyntaxKind.MethodDeclaration: return node.data.localSymbol;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.localSymbol;
+        case SyntaxKind.Constructor: return node.data.localSymbol;
+        case SyntaxKind.GetAccessor: return node.data.localSymbol;
+        case SyntaxKind.SetAccessor: return node.data.localSymbol;
+        case SyntaxKind.CallSignature: return node.data.localSymbol;
+        case SyntaxKind.ConstructSignature: return node.data.localSymbol;
+        case SyntaxKind.IndexSignature: return node.data.localSymbol;
+        case SyntaxKind.FunctionType: return node.data.localSymbol;
+        case SyntaxKind.ConstructorType: return node.data.localSymbol;
+        case SyntaxKind.TypeLiteral: return node.data.localSymbol;
+        case SyntaxKind.MappedType: return node.data.localSymbol;
+        case SyntaxKind.NamedTupleMember: return node.data.localSymbol;
+        case SyntaxKind.BindingElement: return node.data.localSymbol;
+        case SyntaxKind.ObjectLiteralExpression: return node.data.localSymbol;
+        case SyntaxKind.PropertyAccessExpression: return node.data.localSymbol;
+        case SyntaxKind.ElementAccessExpression: return node.data.localSymbol;
+        case SyntaxKind.CallExpression: return node.data.localSymbol;
+        case SyntaxKind.NewExpression: return node.data.localSymbol;
+        case SyntaxKind.FunctionExpression: return node.data.localSymbol;
+        case SyntaxKind.ArrowFunction: return node.data.localSymbol;
+        case SyntaxKind.BinaryExpression: return node.data.localSymbol;
+        case SyntaxKind.ClassExpression: return node.data.localSymbol;
+        case SyntaxKind.VariableDeclaration: return node.data.localSymbol;
+        case SyntaxKind.FunctionDeclaration: return node.data.localSymbol;
+        case SyntaxKind.ClassDeclaration: return node.data.localSymbol;
+        case SyntaxKind.InterfaceDeclaration: return node.data.localSymbol;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.localSymbol;
+        case SyntaxKind.EnumDeclaration: return node.data.localSymbol;
+        case SyntaxKind.ModuleDeclaration: return node.data.localSymbol;
+        case SyntaxKind.NamespaceExportDeclaration: return node.data.localSymbol;
+        case SyntaxKind.ImportEqualsDeclaration: return node.data.localSymbol;
+        case SyntaxKind.ImportDeclaration: return node.data.localSymbol;
+        case SyntaxKind.ImportClause: return node.data.localSymbol;
+        case SyntaxKind.NamespaceImport: return node.data.localSymbol;
+        case SyntaxKind.ImportSpecifier: return node.data.localSymbol;
+        case SyntaxKind.ExportAssignment: return node.data.localSymbol;
+        case SyntaxKind.ExportDeclaration: return node.data.localSymbol;
+        case SyntaxKind.NamespaceExport: return node.data.localSymbol;
+        case SyntaxKind.ExportSpecifier: return node.data.localSymbol;
+        case SyntaxKind.MissingDeclaration: return node.data.localSymbol;
+        case SyntaxKind.JsxAttribute: return node.data.localSymbol;
+        case SyntaxKind.JsxAttributes: return node.data.localSymbol;
+        case SyntaxKind.PropertyAssignment: return node.data.localSymbol;
+        case SyntaxKind.ShorthandPropertyAssignment: return node.data.localSymbol;
+        case SyntaxKind.SpreadAssignment: return node.data.localSymbol;
+        case SyntaxKind.EnumMember: return node.data.localSymbol;
+        case SyntaxKind.SourceFile: return node.data.declaration.localSymbol;
+        case SyntaxKind.JSDocFunctionType: return node.data.localSymbol;
+        case SyntaxKind.JSDocTypeLiteral: return node.data.localSymbol;
+        case SyntaxKind.JSDocSignature: return node.data.localSymbol;
+        case SyntaxKind.JSDocCallbackTag: return node.data.localSymbol;
+        case SyntaxKind.JSDocEnumTag: return node.data.localSymbol;
+        case SyntaxKind.JSDocParameterTag: return node.data.localSymbol;
+        case SyntaxKind.JSDocTypedefTag: return node.data.localSymbol;
+        case SyntaxKind.JSDocPropertyTag: return node.data.localSymbol;
+        case SyntaxKind.NotEmittedTypeElement: return node.data.localSymbol;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetLocalSymbol` is up-to-date with `AstHasSymbol`/`HasSymbol`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astSetLocalSymbol(node: AstHasSymbol, value: Symbol | undefined): Symbol | undefined {
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.NumericLiteral: return node.data.localSymbol = value;
+        case SyntaxKind.StringLiteral: return node.data.localSymbol = value;
+        case SyntaxKind.NoSubstitutionTemplateLiteral: return node.data.localSymbol = value;
+        case SyntaxKind.Identifier: return node.data.localSymbol = value;
+        case SyntaxKind.TypeParameter: return node.data.localSymbol = value;
+        case SyntaxKind.Parameter: return node.data.localSymbol = value;
+        case SyntaxKind.PropertySignature: return node.data.localSymbol = value;
+        case SyntaxKind.PropertyDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.MethodSignature: return node.data.localSymbol = value;
+        case SyntaxKind.MethodDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.Constructor: return node.data.localSymbol = value;
+        case SyntaxKind.GetAccessor: return node.data.localSymbol = value;
+        case SyntaxKind.SetAccessor: return node.data.localSymbol = value;
+        case SyntaxKind.CallSignature: return node.data.localSymbol = value;
+        case SyntaxKind.ConstructSignature: return node.data.localSymbol = value;
+        case SyntaxKind.IndexSignature: return node.data.localSymbol = value;
+        case SyntaxKind.FunctionType: return node.data.localSymbol = value;
+        case SyntaxKind.ConstructorType: return node.data.localSymbol = value;
+        case SyntaxKind.TypeLiteral: return node.data.localSymbol = value;
+        case SyntaxKind.MappedType: return node.data.localSymbol = value;
+        case SyntaxKind.NamedTupleMember: return node.data.localSymbol = value;
+        case SyntaxKind.BindingElement: return node.data.localSymbol = value;
+        case SyntaxKind.ObjectLiteralExpression: return node.data.localSymbol = value;
+        case SyntaxKind.PropertyAccessExpression: return node.data.localSymbol = value;
+        case SyntaxKind.ElementAccessExpression: return node.data.localSymbol = value;
+        case SyntaxKind.CallExpression: return node.data.localSymbol = value;
+        case SyntaxKind.NewExpression: return node.data.localSymbol = value;
+        case SyntaxKind.FunctionExpression: return node.data.localSymbol = value;
+        case SyntaxKind.ArrowFunction: return node.data.localSymbol = value;
+        case SyntaxKind.BinaryExpression: return node.data.localSymbol = value;
+        case SyntaxKind.ClassExpression: return node.data.localSymbol = value;
+        case SyntaxKind.VariableDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.FunctionDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.ClassDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.InterfaceDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.EnumDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.ModuleDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.NamespaceExportDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.ImportEqualsDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.ImportDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.ImportClause: return node.data.localSymbol = value;
+        case SyntaxKind.NamespaceImport: return node.data.localSymbol = value;
+        case SyntaxKind.ImportSpecifier: return node.data.localSymbol = value;
+        case SyntaxKind.ExportAssignment: return node.data.localSymbol = value;
+        case SyntaxKind.ExportDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.NamespaceExport: return node.data.localSymbol = value;
+        case SyntaxKind.ExportSpecifier: return node.data.localSymbol = value;
+        case SyntaxKind.MissingDeclaration: return node.data.localSymbol = value;
+        case SyntaxKind.JsxAttribute: return node.data.localSymbol = value;
+        case SyntaxKind.JsxAttributes: return node.data.localSymbol = value;
+        case SyntaxKind.PropertyAssignment: return node.data.localSymbol = value;
+        case SyntaxKind.ShorthandPropertyAssignment: return node.data.localSymbol = value;
+        case SyntaxKind.SpreadAssignment: return node.data.localSymbol = value;
+        case SyntaxKind.EnumMember: return node.data.localSymbol = value;
+        case SyntaxKind.SourceFile: return node.data.declaration.localSymbol = value;
+        case SyntaxKind.JSDocFunctionType: return node.data.localSymbol = value;
+        case SyntaxKind.JSDocTypeLiteral: return node.data.localSymbol = value;
+        case SyntaxKind.JSDocSignature: return node.data.localSymbol = value;
+        case SyntaxKind.JSDocCallbackTag: return node.data.localSymbol = value;
+        case SyntaxKind.JSDocEnumTag: return node.data.localSymbol = value;
+        case SyntaxKind.JSDocParameterTag: return node.data.localSymbol = value;
+        case SyntaxKind.JSDocTypedefTag: return node.data.localSymbol = value;
+        case SyntaxKind.JSDocPropertyTag: return node.data.localSymbol = value;
+        case SyntaxKind.NotEmittedTypeElement: return node.data.localSymbol = value;
+        default:
+            Debug.assertNever(node); // ensures `astSetLocalSymbol` is up-to-date with `AstHasSymbol`/`HasSymbol`
+    }
+}
+
+/** @internal */
+export function astGetLocals(node: AstNode): SymbolTable | undefined {
+    Debug.type<AstHasLocals>(node); // ensures `astGetLocals` is up-to-date with `AstHasLocals`/`HasLocals`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.MethodSignature: return node.data.locals;
+        case SyntaxKind.MethodDeclaration: return node.data.locals;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.locals;
+        case SyntaxKind.Constructor: return node.data.locals;
+        case SyntaxKind.GetAccessor: return node.data.locals;
+        case SyntaxKind.SetAccessor: return node.data.locals;
+        case SyntaxKind.CallSignature: return node.data.locals;
+        case SyntaxKind.ConstructSignature: return node.data.locals;
+        case SyntaxKind.IndexSignature: return node.data.locals;
+        case SyntaxKind.FunctionType: return node.data.locals;
+        case SyntaxKind.ConstructorType: return node.data.locals;
+        case SyntaxKind.ConditionalType: return node.data.locals;
+        case SyntaxKind.MappedType: return node.data.locals;
+        case SyntaxKind.FunctionExpression: return node.data.locals;
+        case SyntaxKind.ArrowFunction: return node.data.locals;
+        case SyntaxKind.Block: return node.data.locals;
+        case SyntaxKind.ForStatement: return node.data.locals;
+        case SyntaxKind.ForInStatement: return node.data.locals;
+        case SyntaxKind.ForOfStatement: return node.data.locals;
+        case SyntaxKind.FunctionDeclaration: return node.data.locals;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.locals;
+        case SyntaxKind.ModuleDeclaration: return node.data.locals;
+        case SyntaxKind.CaseBlock: return node.data.locals;
+        case SyntaxKind.CatchClause: return node.data.locals;
+        case SyntaxKind.SourceFile: return node.data.locals;
+        case SyntaxKind.JSDocFunctionType: return node.data.locals;
+        case SyntaxKind.JSDocSignature: return node.data.locals;
+        case SyntaxKind.JSDocCallbackTag: return node.data.locals;
+        case SyntaxKind.JSDocEnumTag: return node.data.locals;
+        case SyntaxKind.JSDocTypedefTag: return node.data.locals;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetLocals` is up-to-date with `AstHasLocals`/`HasLocals`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astSetLocals(node: AstHasLocals, value: SymbolTable | undefined): SymbolTable | undefined {
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.MethodSignature: return node.data.locals = value;
+        case SyntaxKind.MethodDeclaration: return node.data.locals = value;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.locals = value;
+        case SyntaxKind.Constructor: return node.data.locals = value;
+        case SyntaxKind.GetAccessor: return node.data.locals = value;
+        case SyntaxKind.SetAccessor: return node.data.locals = value;
+        case SyntaxKind.CallSignature: return node.data.locals = value;
+        case SyntaxKind.ConstructSignature: return node.data.locals = value;
+        case SyntaxKind.IndexSignature: return node.data.locals = value;
+        case SyntaxKind.FunctionType: return node.data.locals = value;
+        case SyntaxKind.ConstructorType: return node.data.locals = value;
+        case SyntaxKind.ConditionalType: return node.data.locals = value;
+        case SyntaxKind.MappedType: return node.data.locals = value;
+        case SyntaxKind.FunctionExpression: return node.data.locals = value;
+        case SyntaxKind.ArrowFunction: return node.data.locals = value;
+        case SyntaxKind.Block: return node.data.locals = value;
+        case SyntaxKind.ForStatement: return node.data.locals = value;
+        case SyntaxKind.ForInStatement: return node.data.locals = value;
+        case SyntaxKind.ForOfStatement: return node.data.locals = value;
+        case SyntaxKind.FunctionDeclaration: return node.data.locals = value;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.locals = value;
+        case SyntaxKind.ModuleDeclaration: return node.data.locals = value;
+        case SyntaxKind.CaseBlock: return node.data.locals = value;
+        case SyntaxKind.CatchClause: return node.data.locals = value;
+        case SyntaxKind.SourceFile: return node.data.locals = value;
+        case SyntaxKind.JSDocFunctionType: return node.data.locals = value;
+        case SyntaxKind.JSDocSignature: return node.data.locals = value;
+        case SyntaxKind.JSDocCallbackTag: return node.data.locals = value;
+        case SyntaxKind.JSDocEnumTag: return node.data.locals = value;
+        case SyntaxKind.JSDocTypedefTag: return node.data.locals = value;
+        default:
+            Debug.assertNever(node); // ensures `astSetLocals` is up-to-date with `AstHasLocals`/`HasLocals`
+    }
+}
+
+/** @internal */
+export function astGetNextContainer(node: AstNode): AstHasLocals | undefined {
+    Debug.type<AstHasLocals>(node); // ensures `astGetNextContainer` is up-to-date with `AstHasLocals`/`HasLocals`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.MethodSignature: return node.data.nextContainer;
+        case SyntaxKind.MethodDeclaration: return node.data.nextContainer;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.nextContainer;
+        case SyntaxKind.Constructor: return node.data.nextContainer;
+        case SyntaxKind.GetAccessor: return node.data.nextContainer;
+        case SyntaxKind.SetAccessor: return node.data.nextContainer;
+        case SyntaxKind.CallSignature: return node.data.nextContainer;
+        case SyntaxKind.ConstructSignature: return node.data.nextContainer;
+        case SyntaxKind.IndexSignature: return node.data.nextContainer;
+        case SyntaxKind.FunctionType: return node.data.nextContainer;
+        case SyntaxKind.ConstructorType: return node.data.nextContainer;
+        case SyntaxKind.ConditionalType: return node.data.nextContainer;
+        case SyntaxKind.MappedType: return node.data.nextContainer;
+        case SyntaxKind.FunctionExpression: return node.data.nextContainer;
+        case SyntaxKind.ArrowFunction: return node.data.nextContainer;
+        case SyntaxKind.Block: return node.data.nextContainer;
+        case SyntaxKind.ForStatement: return node.data.nextContainer;
+        case SyntaxKind.ForInStatement: return node.data.nextContainer;
+        case SyntaxKind.ForOfStatement: return node.data.nextContainer;
+        case SyntaxKind.FunctionDeclaration: return node.data.nextContainer;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.nextContainer;
+        case SyntaxKind.ModuleDeclaration: return node.data.nextContainer;
+        case SyntaxKind.CaseBlock: return node.data.nextContainer;
+        case SyntaxKind.CatchClause: return node.data.nextContainer;
+        case SyntaxKind.SourceFile: return node.data.nextContainer;
+        case SyntaxKind.JSDocFunctionType: return node.data.nextContainer;
+        case SyntaxKind.JSDocSignature: return node.data.nextContainer;
+        case SyntaxKind.JSDocCallbackTag: return node.data.nextContainer;
+        case SyntaxKind.JSDocEnumTag: return node.data.nextContainer;
+        case SyntaxKind.JSDocTypedefTag: return node.data.nextContainer;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetNextContainer` is up-to-date with `AstHasLocals`/`HasLocals`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astSetNextContainer(node: AstHasLocals, value: AstHasLocals | undefined): AstHasLocals | undefined {
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.MethodSignature: return node.data.nextContainer = value;
+        case SyntaxKind.MethodDeclaration: return node.data.nextContainer = value;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.nextContainer = value;
+        case SyntaxKind.Constructor: return node.data.nextContainer = value;
+        case SyntaxKind.GetAccessor: return node.data.nextContainer = value;
+        case SyntaxKind.SetAccessor: return node.data.nextContainer = value;
+        case SyntaxKind.CallSignature: return node.data.nextContainer = value;
+        case SyntaxKind.ConstructSignature: return node.data.nextContainer = value;
+        case SyntaxKind.IndexSignature: return node.data.nextContainer = value;
+        case SyntaxKind.FunctionType: return node.data.nextContainer = value;
+        case SyntaxKind.ConstructorType: return node.data.nextContainer = value;
+        case SyntaxKind.ConditionalType: return node.data.nextContainer = value;
+        case SyntaxKind.MappedType: return node.data.nextContainer = value;
+        case SyntaxKind.FunctionExpression: return node.data.nextContainer = value;
+        case SyntaxKind.ArrowFunction: return node.data.nextContainer = value;
+        case SyntaxKind.Block: return node.data.nextContainer = value;
+        case SyntaxKind.ForStatement: return node.data.nextContainer = value;
+        case SyntaxKind.ForInStatement: return node.data.nextContainer = value;
+        case SyntaxKind.ForOfStatement: return node.data.nextContainer = value;
+        case SyntaxKind.FunctionDeclaration: return node.data.nextContainer = value;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.nextContainer = value;
+        case SyntaxKind.ModuleDeclaration: return node.data.nextContainer = value;
+        case SyntaxKind.CaseBlock: return node.data.nextContainer = value;
+        case SyntaxKind.CatchClause: return node.data.nextContainer = value;
+        case SyntaxKind.SourceFile: return node.data.nextContainer = value;
+        case SyntaxKind.JSDocFunctionType: return node.data.nextContainer = value;
+        case SyntaxKind.JSDocSignature: return node.data.nextContainer = value;
+        case SyntaxKind.JSDocCallbackTag: return node.data.nextContainer = value;
+        case SyntaxKind.JSDocEnumTag: return node.data.nextContainer = value;
+        case SyntaxKind.JSDocTypedefTag: return node.data.nextContainer = value;
+        default:
+            Debug.assertNever(node); // ensures `astSetNextContainer` is up-to-date with `AstHasLocals`/`HasLocals`
+    }
+}
+
+/** @internal */
+export function astGetType<T extends AstNode>(node: T): AstGetResult<T, AstHasType, "type">;
+export function astGetType<T extends AstNode>(node: T) {
+    Debug.type<AstHasType>(node); // ensures `astGetType` is up-to-date with `AstHasType`/`HasType`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.Parameter: return node.data.type;
+        case SyntaxKind.PropertySignature: return node.data.type;
+        case SyntaxKind.PropertyDeclaration: return node.data.type;
+        case SyntaxKind.MethodSignature: return node.data.type;
+        case SyntaxKind.MethodDeclaration: return node.data.type;
+        case SyntaxKind.Constructor: return node.data.type;
+        case SyntaxKind.GetAccessor: return node.data.type;
+        case SyntaxKind.SetAccessor: return node.data.type;
+        case SyntaxKind.CallSignature: return node.data.type;
+        case SyntaxKind.ConstructSignature: return node.data.type;
+        case SyntaxKind.IndexSignature: return node.data.type;
+        case SyntaxKind.TypePredicate: return node.data.type;
+        case SyntaxKind.FunctionType: return node.data.type;
+        case SyntaxKind.ConstructorType: return node.data.type;
+        case SyntaxKind.ParenthesizedType: return node.data.type;
+        case SyntaxKind.TypeOperator: return node.data.type;
+        case SyntaxKind.MappedType: return node.data.type;
+        case SyntaxKind.TypeAssertionExpression: return node.data.type;
+        case SyntaxKind.FunctionExpression: return node.data.type;
+        case SyntaxKind.ArrowFunction: return node.data.type;
+        case SyntaxKind.AsExpression: return node.data.type;
+        case SyntaxKind.VariableDeclaration: return node.data.type;
+        case SyntaxKind.FunctionDeclaration: return node.data.type;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.type;
+        case SyntaxKind.JSDocTypeExpression: return node.data.type;
+        case SyntaxKind.JSDocNullableType: return node.data.type;
+        case SyntaxKind.JSDocNonNullableType: return node.data.type;
+        case SyntaxKind.JSDocOptionalType: return node.data.type;
+        case SyntaxKind.JSDocFunctionType: return node.data.type;
+        case SyntaxKind.JSDocVariadicType: return node.data.type;
+        case SyntaxKind.OptionalType: return node.data.type;
+        case SyntaxKind.RestType: return node.data.type;
+        case SyntaxKind.NamedTupleMember: return node.data.type;
+        case SyntaxKind.TemplateLiteralTypeSpan: return node.data.type;
+        case SyntaxKind.SatisfiesExpression: return node.data.type;
+        case SyntaxKind.JSDocNamepathType: return node.data.type;
+        case SyntaxKind.JSDocSignature: return node.data.type;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetType` is up-to-date with `AstHasType`/`HasType`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetTypes<T extends AstNode>(node: T): AstGetResult<T, AstHasTypes, "types">;
+export function astGetTypes(node: AstNode) {
+    Debug.type<AstHasTypes>(node); // ensures `astGetTypes` is up-to-date with `AstHasTypes`/`HasTypes`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.UnionType: return node.data.types;
+        case SyntaxKind.IntersectionType: return node.data.types;
+        case SyntaxKind.HeritageClause: return node.data.types;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetTypes` is up-to-date with `AstHasTypes`/`HasTypes`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetTypeParameters<T extends AstNode>(node: T): AstGetResult<T, AstHasTypeParameters, "typeParameters">;
+export function astGetTypeParameters(node: AstNode) {
+    Debug.type<AstHasTypeParameters>(node); // ensures `astGetTypeParameters` is up-to-date with `AstHasTypeParameters`/`HasTypeParameters`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.MethodSignature: return node.data.typeParameters;
+        case SyntaxKind.MethodDeclaration: return node.data.typeParameters;
+        case SyntaxKind.Constructor: return node.data.typeParameters;
+        case SyntaxKind.GetAccessor: return node.data.typeParameters;
+        case SyntaxKind.SetAccessor: return node.data.typeParameters;
+        case SyntaxKind.CallSignature: return node.data.typeParameters;
+        case SyntaxKind.ConstructSignature: return node.data.typeParameters;
+        case SyntaxKind.IndexSignature: return node.data.typeParameters;
+        case SyntaxKind.FunctionType: return node.data.typeParameters;
+        case SyntaxKind.ConstructorType: return node.data.typeParameters;
+        case SyntaxKind.FunctionExpression: return node.data.typeParameters;
+        case SyntaxKind.ArrowFunction: return node.data.typeParameters;
+        case SyntaxKind.ClassExpression: return node.data.typeParameters;
+        case SyntaxKind.FunctionDeclaration: return node.data.typeParameters;
+        case SyntaxKind.ClassDeclaration: return node.data.typeParameters;
+        case SyntaxKind.InterfaceDeclaration: return node.data.typeParameters;
+        case SyntaxKind.TypeAliasDeclaration: return node.data.typeParameters;
+        case SyntaxKind.JSDocFunctionType: return node.data.typeParameters;
+        case SyntaxKind.JSDocSignature: return node.data.typeParameters;
+        case SyntaxKind.JSDocTemplateTag: return node.data.typeParameters;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetTypeParameters` is up-to-date with `AstHasTypeParameters`/`HasTypeParameters`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetParameters<T extends AstNode>(node: T): AstGetResult<T, AstHasParameters, "parameters">;
+export function astGetParameters(node: AstNode) {
+    Debug.type<AstHasParameters>(node); // ensures `astGetParameters` is up-to-date with `AstHasParameters`/`HasParameters`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.MethodSignature: return node.data.parameters;
+        case SyntaxKind.MethodDeclaration: return node.data.parameters;
+        case SyntaxKind.Constructor: return node.data.parameters;
+        case SyntaxKind.GetAccessor: return node.data.parameters;
+        case SyntaxKind.SetAccessor: return node.data.parameters;
+        case SyntaxKind.CallSignature: return node.data.parameters;
+        case SyntaxKind.ConstructSignature: return node.data.parameters;
+        case SyntaxKind.IndexSignature: return node.data.parameters;
+        case SyntaxKind.FunctionType: return node.data.parameters;
+        case SyntaxKind.ConstructorType: return node.data.parameters;
+        case SyntaxKind.FunctionExpression: return node.data.parameters;
+        case SyntaxKind.ArrowFunction: return node.data.parameters;
+        case SyntaxKind.FunctionDeclaration: return node.data.parameters;
+        case SyntaxKind.JSDocFunctionType: return node.data.parameters;
+        case SyntaxKind.JSDocSignature: return node.data.parameters;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetParameters` is up-to-date with `AstHasParameters`/`HasParameters`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetBody<T extends AstNode>(node: T): AstGetResult<T, AstHasBody, "body">;
+export function astGetBody(node: AstNode) {
+    Debug.type<AstHasBody>(node); // ensures `astGetBody` is up-to-date with `AstHasBody`/`HasBody`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.MethodDeclaration: return node.data.body;
+        case SyntaxKind.ClassStaticBlockDeclaration: return node.data.body;
+        case SyntaxKind.Constructor: return node.data.body;
+        case SyntaxKind.GetAccessor: return node.data.body;
+        case SyntaxKind.SetAccessor: return node.data.body;
+        case SyntaxKind.FunctionExpression: return node.data.body;
+        case SyntaxKind.ArrowFunction: return node.data.body;
+        case SyntaxKind.FunctionDeclaration: return node.data.body;
+        case SyntaxKind.ModuleDeclaration: return node.data.body;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetBody` is up-to-date with `AstHasBody`/`HasBody`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetQuestionToken<T extends AstNode>(node: T): AstGetResult<T, AstHasQuestionToken, "questionToken">;
+export function astGetQuestionToken(node: AstNode) {
+    Debug.type<AstHasQuestionToken>(node); // ensures `astGetQuestionToken` is up-to-date with `AstHasQuestionToken`/`HasQuestionToken`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.Parameter: return node.data.questionToken;
+        case SyntaxKind.PropertySignature: return node.data.questionToken;
+        case SyntaxKind.PropertyDeclaration: return node.data.questionToken;
+        case SyntaxKind.MethodSignature: return node.data.questionToken;
+        case SyntaxKind.MethodDeclaration: return node.data.questionToken;
+        case SyntaxKind.MappedType: return node.data.questionToken;
+        case SyntaxKind.NamedTupleMember: return node.data.questionToken;
+        case SyntaxKind.ConditionalExpression: return node.data.questionToken;
+        case SyntaxKind.PropertyAssignment: return node.data.questionToken;
+        case SyntaxKind.ShorthandPropertyAssignment: return node.data.questionToken;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetQuestionToken` is up-to-date with `AstHasQuestionToken`/`HasQuestionToken`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetTypeArguments<T extends AstNode>(node: T): AstGetResult<T, AstInternalHasTypeArguments, "typeArguments">;
+export function astGetTypeArguments(node: AstNode) {
+    Debug.type<AstInternalHasTypeArguments>(node); // ensures `astGetTypeArguments` is up-to-date with `AstInternalHasTypeArguments`/`InternalHasTypeArguments`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.MethodSignature: return node.data.typeArguments;
+        case SyntaxKind.MethodDeclaration: return node.data.typeArguments;
+        case SyntaxKind.Constructor: return node.data.typeArguments;
+        case SyntaxKind.GetAccessor: return node.data.typeArguments;
+        case SyntaxKind.SetAccessor: return node.data.typeArguments;
+        case SyntaxKind.CallSignature: return node.data.typeArguments;
+        case SyntaxKind.ConstructSignature: return node.data.typeArguments;
+        case SyntaxKind.IndexSignature: return node.data.typeArguments;
+        case SyntaxKind.TypeReference: return node.data.typeArguments;
+        case SyntaxKind.FunctionType: return node.data.typeArguments;
+        case SyntaxKind.ConstructorType: return node.data.typeArguments;
+        case SyntaxKind.TypeQuery: return node.data.typeArguments;
+        case SyntaxKind.ImportType: return node.data.typeArguments;
+        case SyntaxKind.CallExpression: return node.data.typeArguments;
+        case SyntaxKind.NewExpression: return node.data.typeArguments;
+        case SyntaxKind.TaggedTemplateExpression: return node.data.typeArguments;
+        case SyntaxKind.FunctionExpression: return node.data.typeArguments;
+        case SyntaxKind.ArrowFunction: return node.data.typeArguments;
+        case SyntaxKind.ExpressionWithTypeArguments: return node.data.typeArguments;
+        case SyntaxKind.FunctionDeclaration: return node.data.typeArguments;
+        case SyntaxKind.JsxSelfClosingElement: return node.data.typeArguments;
+        case SyntaxKind.JsxOpeningElement: return node.data.typeArguments;
+        case SyntaxKind.JSDocFunctionType: return node.data.typeArguments;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetTypeArguments` is up-to-date with `AstInternalHasTypeArguments`/`InternalHasTypeArguments`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetElements<T extends AstNode>(node: T): AstGetResult<T, AstHasElements, "elements">;
+export function astGetElements(node: AstNode) {
+    Debug.type<AstHasElements>(node); // ensures `astGetElements` is up-to-date with `AstHasElements`/`HasElements`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.TupleType: return node.data.elements;
+        case SyntaxKind.ObjectBindingPattern: return node.data.elements;
+        case SyntaxKind.ArrayBindingPattern: return node.data.elements;
+        case SyntaxKind.ArrayLiteralExpression: return node.data.elements;
+        case SyntaxKind.NamedImports: return node.data.elements;
+        case SyntaxKind.NamedExports: return node.data.elements;
+        case SyntaxKind.CommaListExpression: return node.data.elements;
+        case SyntaxKind.ImportAttributes: return node.data.elements;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetElements` is up-to-date with `AstHasElements`/`HasElements`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetMembers<T extends AstNode>(node: T): AstGetResult<T, AstHasMembers, "members">;
+export function astGetMembers(node: AstNode) {
+    Debug.type<AstHasMembers>(node); // ensures `astGetMembers` is up-to-date with `AstHasMembers`/`HasMembers`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.TypeLiteral: return node.data.members;
+        case SyntaxKind.MappedType: return node.data.members;
+        case SyntaxKind.ClassExpression: return node.data.members;
+        case SyntaxKind.ClassDeclaration: return node.data.members;
+        case SyntaxKind.InterfaceDeclaration: return node.data.members;
+        case SyntaxKind.EnumDeclaration: return node.data.members;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetMembers` is up-to-date with `AstHasMembers`/`HasMembers`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetStatement<T extends AstNode>(node: T): AstGetResult<T, AstHasStatement, "statement">;
+export function astGetStatement(node: AstNode) {
+    Debug.type<AstHasStatement>(node); // ensures `astGetStatement` is up-to-date with `AstHasStatement`/`HasStatement`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.DoStatement: return node.data.statement;
+        case SyntaxKind.WhileStatement: return node.data.statement;
+        case SyntaxKind.ForStatement: return node.data.statement;
+        case SyntaxKind.ForInStatement: return node.data.statement;
+        case SyntaxKind.ForOfStatement: return node.data.statement;
+        case SyntaxKind.WithStatement: return node.data.statement;
+        case SyntaxKind.LabeledStatement: return node.data.statement;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetStatement` is up-to-date with `AstHasStatement`/`HasStatement`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetStatements<T extends AstNode>(node: T): AstGetResult<T, AstHasStatements, "statements">;
+export function astGetStatements(node: AstNode) {
+    Debug.type<AstHasStatements>(node); // ensures `astGetStatements` is up-to-date with `AstHasStatements`/`HasStatements`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.Block: return node.data.statements;
+        case SyntaxKind.ModuleBlock: return node.data.statements;
+        case SyntaxKind.CaseClause: return node.data.statements;
+        case SyntaxKind.DefaultClause: return node.data.statements;
+        case SyntaxKind.SourceFile: return node.data.statements;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetStatements` is up-to-date with `AstHasStatements`/`HasStatements`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetExclamationToken<T extends AstNode>(node: T): AstGetResult<T, AstHasExclamationToken, "exclamationToken">;
+export function astGetExclamationToken(node: AstNode) {
+    Debug.type<AstHasExclamationToken>(node); // ensures `astGetExclamationToken` is up-to-date with `AstHasExclamationToken`/`HasExclamationToken`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.PropertyDeclaration: return node.data.exclamationToken;
+        case SyntaxKind.MethodDeclaration: return node.data.exclamationToken;
+        case SyntaxKind.VariableDeclaration: return node.data.exclamationToken;
+        case SyntaxKind.PropertyAssignment: return node.data.exclamationToken;
+        case SyntaxKind.ShorthandPropertyAssignment: return node.data.exclamationToken;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetExclamationToken` is up-to-date with `AstHasExclamationToken`/`HasExclamationToken`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetAsteriskToken<T extends AstNode>(node: T): AstGetResult<T, AstHasAsteriskToken, "asteriskToken">;
+export function astGetAsteriskToken(node: AstNode) {
+    Debug.type<AstHasAsteriskToken>(node); // ensures `astGetAsteriskToken` is up-to-date with `AstHasAsteriskToken`/`HasAsteriskToken`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.MethodDeclaration: return node.data.asteriskToken;
+        case SyntaxKind.FunctionExpression: return node.data.asteriskToken;
+        case SyntaxKind.YieldExpression: return node.data.asteriskToken;
+        case SyntaxKind.FunctionDeclaration: return node.data.asteriskToken;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetAsteriskToken` is up-to-date with `AstHasAsteriskToken`/`HasAsteriskToken`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetQuestionDotToken<T extends AstNode>(node: T): AstGetResult<T, AstHasQuestionDotToken, "questionDotToken">;
+export function astGetQuestionDotToken(node: AstNode) {
+    Debug.type<AstHasQuestionDotToken>(node); // ensures `astGetQuestionDotToken` is up-to-date with `AstHasQuestionDotToken`/`HasQuestionDotToken`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.PropertyAccessExpression: return node.data.questionDotToken;
+        case SyntaxKind.ElementAccessExpression: return node.data.questionDotToken;
+        case SyntaxKind.CallExpression: return node.data.questionDotToken;
+        case SyntaxKind.TaggedTemplateExpression: return node.data.questionDotToken;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetQuestionDotToken` is up-to-date with `AstHasQuestionDotToken`/`HasQuestionDotToken`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetIsTypeOnly<T extends AstNode>(node: T): AstGetResult<T, AstHasIsTypeOnly, "isTypeOnly">;
+export function astGetIsTypeOnly(node: AstNode) {
+    Debug.type<AstHasIsTypeOnly>(node); // ensures `astGetIsTypeOnly` is up-to-date with `AstHasIsTypeOnly`/`HasIsTypeOnly`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.ImportEqualsDeclaration: return node.data.isTypeOnly;
+        case SyntaxKind.ImportClause: return node.data.isTypeOnly;
+        case SyntaxKind.ImportSpecifier: return node.data.isTypeOnly;
+        case SyntaxKind.ExportDeclaration: return node.data.isTypeOnly;
+        case SyntaxKind.ExportSpecifier: return node.data.isTypeOnly;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetIsTypeOnly` is up-to-date with `AstHasIsTypeOnly`/`HasIsTypeOnly`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetTagName<T extends AstNode>(node: T): AstGetResult<T, AstHasTagName, "tagName">;
+export function astGetTagName(node: AstNode) {
+    Debug.type<AstHasTagName>(node); // ensures `astGetTagName` is up-to-date with `AstHasTagName`/`HasTagName`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.JsxSelfClosingElement: return node.data.tagName;
+        case SyntaxKind.JsxOpeningElement: return node.data.tagName;
+        case SyntaxKind.JsxClosingElement: return node.data.tagName;
+        case SyntaxKind.JSDocTag: return node.data.tagName;
+        case SyntaxKind.JSDocAugmentsTag: return node.data.tagName;
+        case SyntaxKind.JSDocImplementsTag: return node.data.tagName;
+        case SyntaxKind.JSDocAuthorTag: return node.data.tagName;
+        case SyntaxKind.JSDocDeprecatedTag: return node.data.tagName;
+        case SyntaxKind.JSDocClassTag: return node.data.tagName;
+        case SyntaxKind.JSDocPublicTag: return node.data.tagName;
+        case SyntaxKind.JSDocPrivateTag: return node.data.tagName;
+        case SyntaxKind.JSDocProtectedTag: return node.data.tagName;
+        case SyntaxKind.JSDocReadonlyTag: return node.data.tagName;
+        case SyntaxKind.JSDocOverrideTag: return node.data.tagName;
+        case SyntaxKind.JSDocCallbackTag: return node.data.tagName;
+        case SyntaxKind.JSDocOverloadTag: return node.data.tagName;
+        case SyntaxKind.JSDocEnumTag: return node.data.tagName;
+        case SyntaxKind.JSDocParameterTag: return node.data.tagName;
+        case SyntaxKind.JSDocReturnTag: return node.data.tagName;
+        case SyntaxKind.JSDocThisTag: return node.data.tagName;
+        case SyntaxKind.JSDocTypeTag: return node.data.tagName;
+        case SyntaxKind.JSDocTemplateTag: return node.data.tagName;
+        case SyntaxKind.JSDocTypedefTag: return node.data.tagName;
+        case SyntaxKind.JSDocSeeTag: return node.data.tagName;
+        case SyntaxKind.JSDocPropertyTag: return node.data.tagName;
+        case SyntaxKind.JSDocThrowsTag: return node.data.tagName;
+        case SyntaxKind.JSDocSatisfiesTag: return node.data.tagName;
+        case SyntaxKind.JSDocImportTag: return node.data.tagName;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetTagName` is up-to-date with `AstHasTagName`/`HasTagName`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astGetComment<T extends AstNode>(node: T): AstGetResult<T, AstHasComment, "comment" | "commentArray">;
+export function astGetComment(node: AstNode) {
+    Debug.type<AstHasComment>(node); // ensures `astGetComment` is up-to-date with `AstHasComment`/`HasComment`
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (node.kind) {
+        case SyntaxKind.JSDoc: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocAugmentsTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocImplementsTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocAuthorTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocDeprecatedTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocClassTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocPublicTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocPrivateTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocProtectedTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocReadonlyTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocOverrideTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocCallbackTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocOverloadTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocEnumTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocParameterTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocReturnTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocThisTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocTypeTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocTemplateTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocTypedefTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocSeeTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocPropertyTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocThrowsTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocSatisfiesTag: return node.data.comment ?? node.data.commentArray;
+        case SyntaxKind.JSDocImportTag: return node.data.comment ?? node.data.commentArray;
+        default:
+            Debug.assertNeverTypeOnly(node); // ensures `astGetComment` is up-to-date with `AstHasComment`/`HasComment`
+            return undefined;
+    }
+}
+
+/** @internal */
+export function astSetComment<T extends AstHasComment>(node: T, value: string | AstNodeArray<AstJSDocComment> | undefined): string | AstNodeArray<AstJSDocComment> | undefined {
+    if (typeof value === "string") {
+        // NOTE: each branch is duplicated to remain monomorphic
+        switch (node.kind) {
+            case SyntaxKind.JSDoc: return node.data.comment = value;
+            case SyntaxKind.JSDocTag: return node.data.comment = value;
+            case SyntaxKind.JSDocAugmentsTag: return node.data.comment = value;
+            case SyntaxKind.JSDocImplementsTag: return node.data.comment = value;
+            case SyntaxKind.JSDocAuthorTag: return node.data.comment = value;
+            case SyntaxKind.JSDocDeprecatedTag: return node.data.comment = value;
+            case SyntaxKind.JSDocClassTag: return node.data.comment = value;
+            case SyntaxKind.JSDocPublicTag: return node.data.comment = value;
+            case SyntaxKind.JSDocPrivateTag: return node.data.comment = value;
+            case SyntaxKind.JSDocProtectedTag: return node.data.comment = value;
+            case SyntaxKind.JSDocReadonlyTag: return node.data.comment = value;
+            case SyntaxKind.JSDocOverrideTag: return node.data.comment = value;
+            case SyntaxKind.JSDocCallbackTag: return node.data.comment = value;
+            case SyntaxKind.JSDocOverloadTag: return node.data.comment = value;
+            case SyntaxKind.JSDocEnumTag: return node.data.comment = value;
+            case SyntaxKind.JSDocParameterTag: return node.data.comment = value;
+            case SyntaxKind.JSDocReturnTag: return node.data.comment = value;
+            case SyntaxKind.JSDocThisTag: return node.data.comment = value;
+            case SyntaxKind.JSDocTypeTag: return node.data.comment = value;
+            case SyntaxKind.JSDocTemplateTag: return node.data.comment = value;
+            case SyntaxKind.JSDocTypedefTag: return node.data.comment = value;
+            case SyntaxKind.JSDocSeeTag: return node.data.comment = value;
+            case SyntaxKind.JSDocPropertyTag: return node.data.comment = value;
+            case SyntaxKind.JSDocThrowsTag: return node.data.comment = value;
+            case SyntaxKind.JSDocSatisfiesTag: return node.data.comment = value;
+            case SyntaxKind.JSDocImportTag: return node.data.comment = value;
+            default:
+                Debug.assertNever(node); // ensures `astSetComment` is up-to-date with `AstHasComment`/`HasComment`
+        }
+    }
+    else {
+        // NOTE: each branch is duplicated to remain monomorphic
+        switch (node.kind) {
+            case SyntaxKind.JSDoc: return node.data.commentArray = value;
+            case SyntaxKind.JSDocTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocAugmentsTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocImplementsTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocAuthorTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocDeprecatedTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocClassTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocPublicTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocPrivateTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocProtectedTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocReadonlyTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocOverrideTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocCallbackTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocOverloadTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocEnumTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocParameterTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocReturnTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocThisTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocTypeTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocTemplateTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocTypedefTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocSeeTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocPropertyTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocThrowsTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocSatisfiesTag: return node.data.commentArray = value;
+            case SyntaxKind.JSDocImportTag: return node.data.commentArray = value;
+            default:
+                Debug.assertNever(node); // ensures `astSetComment` is up-to-date with `AstHasComment`/`HasComment`
+        }
+    }
+}
+
+// NOTE: each branch is duplicated to remain monomorphic
 const computeTransformFlagsMap: Partial<Record<SyntaxKind, (node: AstNode) => TransformFlags>> = {
     [SyntaxKind.EndOfFileToken]: node => node.data.computeTransformFlags(node),
     [SyntaxKind.ThisKeyword]: node => node.data.computeTransformFlags(node),
@@ -5583,7 +7918,52 @@ function computeTransformFlags(node: AstNode) {
     return fn !== undefined ? fn(node) : node.data.computeTransformFlags(node);
 }
 
-function isAstPropertyName(node: AstNode): node is AstPropertyName {
+function copyDataPropertiesCore(data: AstData, clone: AstData) {
+    Object.assign(clone, data);
+}
+
+function copyDataProperties(node: AstNode, clone: AstData) {
+    const fn = copyDataPropertiesMap[node.kind];
+    return fn !== undefined ? fn(node.data, clone) : copyDataPropertiesCore(node.data, clone);
+}
+
+function createDataInstanceCore(data: AstData) {
+    return Object.create(Object.getPrototypeOf(data));
+}
+
+function createDataInstance(node: AstNode) {
+    const fn = createDataInstanceMap[node.kind];
+    return fn !== undefined ? fn(node.data) :
+        isTokenKind(node.kind) ? new AstTokenData() :
+        createDataInstanceCore(node.data);
+}
+
+function cloneData(node: AstNode) {
+    const clone = createDataInstance(node);
+    copyDataProperties(node, clone);
+    return clone;
+}
+
+function cloneNode(node: AstNode) {
+    const fn = cloneNodeMap[node.kind];
+    return fn !== undefined ? fn(node) : cloneNodeCore(node);
+}
+
+function shadowDataCore(data: AstData) {
+    return Object.create(data);
+}
+
+function shadowData(node: AstNode) {
+    const fn = shadowDataMap[node.kind];
+    return fn !== undefined ? fn(node.data) : shadowDataCore(node.data);
+}
+
+function shadowNode(node: AstNode) {
+    const fn = shadowNodeMap[node.kind];
+    return fn !== undefined ? fn(node) : shadowCore(node);
+}
+
+function astIsPropertyName(node: AstNode): node is AstPropertyName {
     const kind = node.kind;
     return kind === SyntaxKind.Identifier
         || kind === SyntaxKind.PrivateIdentifier
@@ -5641,8 +8021,8 @@ export function getAstParseTreeNode(node: AstNode | undefined, nodeTest?: (node:
 }
 
 /** @internal */
-export function isAstJSDocTypeAssertion(node: AstNode): node is AstJSDocTypeAssertion {
-    return isAstParenthesizedExpression(node)
+export function astIsJSDocTypeAssertion(node: AstNode): node is AstJSDocTypeAssertion {
+    return astIsParenthesizedExpression(node)
         && !!(node.flags & NodeFlags.JavaScriptFile)
         && !!getJSDocTypeTag(node.node); // TODO: don't invoke node
 }
@@ -5651,34 +8031,7 @@ export function isAstJSDocTypeAssertion(node: AstNode): node is AstJSDocTypeAsse
 export type AstOuterExpression = AstNodeOneOf<OuterExpression>;
 
 /** @internal */
-export function isAstOuterExpression(node: AstNode, kinds: OuterExpressionKinds = OuterExpressionKinds.All): node is AstOuterExpression {
-    switch (node.kind) {
-        case SyntaxKind.ParenthesizedExpression:
-            if (kinds & OuterExpressionKinds.ExcludeJSDocTypeAssertion && isAstJSDocTypeAssertion(node)) {
-                return false;
-            }
-            return (kinds & OuterExpressionKinds.Parentheses) !== 0;
-        case SyntaxKind.TypeAssertionExpression:
-        case SyntaxKind.AsExpression:
-        case SyntaxKind.SatisfiesExpression:
-            return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
-        case SyntaxKind.ExpressionWithTypeArguments:
-            return (kinds & OuterExpressionKinds.ExpressionsWithTypeArguments) !== 0;
-        case SyntaxKind.NonNullExpression:
-            return (kinds & OuterExpressionKinds.NonNullAssertions) !== 0;
-        case SyntaxKind.PartiallyEmittedExpression:
-            return (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) !== 0;
-    }
-    return false;
-}
-
-/** @internal */
-export function skipAstOuterExpressions(node: AstNode, kinds: OuterExpressionKinds = OuterExpressionKinds.All): AstNode {
-    while (isAstOuterExpression(node, kinds)) {
-        node = node.data.expression;
-    }
-    return node;
-}
+export type AstWrappedExpression<T extends AstExpression> = AstNodeOneOf<WrappedExpression<T["node"]>>;
 
 // Temporary `Node` implementation representing every possible `Node` shape.
 // This is only used for testing and will be removed in favor of the node classes in types.ts
@@ -5702,7 +8055,7 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     declare _typeNodeBrand: any;
     declare _statementBrand: any;
     declare _jsDocTypeBrand: any;
-    
+
     override getChildCount(sourceFile?: SourceFileLike): number {
         if (isTokenKind(this.kind)) {
             return this.getChildren().length;
@@ -5752,25 +8105,25 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     set left(value) { this.ast.data.left = value?.ast; }
     get right() { return this.ast.data.right?.node; }
     set right(value) { this.ast.data.right = value?.ast; }
-    get expression() { return this.ast.data.expression?.node; }
+    get expression() { return astGetExpression(this.ast)?.node; }
     set expression(value) { this.ast.data.expression = value?.ast; }
-    get modifiers() { return this.ast.data.modifiers?.nodes; }
+    get modifiers() { return astGetModifiers(this.ast)?.nodes; }
     set modifiers(value) { this.ast.data.modifiers = value?.ast; }
-    get name() { return this.ast.data.name?.node; }
+    get name() { return astGetName(this.ast)?.node; }
     set name(value) { this.ast.data.name = value?.ast; }
     get constraint() { return this.ast.data.constraint?.node; }
     set constraint(value) { this.ast.data.constraint = value?.ast; }
     get default() { return this.ast.data.default?.node; }
     set default(value) { this.ast.data.default = value?.ast; }
-    get typeParameters() { return this.ast.data.typeParameters?.nodes; }
+    get typeParameters(): any { return astGetTypeParameters(this.ast)?.nodes; }
     set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
-    get parameters() { return this.ast.data.parameters?.nodes; }
+    get parameters() { return astGetParameters(this.ast)?.nodes; }
     set parameters(value) { this.ast.data.parameters = value?.ast; }
     get type() {
         if (this.kind === SyntaxKind.SyntheticExpression) {
             return this.ast.data.type;
         }
-        return this.ast.data.type?.node;
+        return astGetType(this.ast)?.node;
     }
     set type(value) {
         if (this.kind === SyntaxKind.SyntheticExpression) {
@@ -5780,17 +8133,17 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
             this.ast.data.type = value?.ast;
         }
     }
-    get typeArguments() { return this.ast.data.typeArguments?.nodes; }
+    get typeArguments() { return astGetTypeArguments(this.ast)?.nodes; }
     set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
-    get exclamationToken() { return this.ast.data.exclamationToken?.node; }
+    get exclamationToken() { return astGetExclamationToken(this.ast)?.node; }
     set exclamationToken(value) { this.ast.data.exclamationToken = value?.ast; }
-    get initializer() { return this.ast.data.initializer?.node; }
+    get initializer() { return astGetInitializer(this.ast)?.node; }
     set initializer(value) { this.ast.data.initializer = value?.ast; }
     get declarations() { return this.ast.data.declarations.nodes; }
     set declarations(value) { this.ast.data.declarations = value.ast; }
     get dotDotDotToken() { return this.ast.data.dotDotDotToken?.node; }
     set dotDotDotToken(value) { this.ast.data.dotDotDotToken = value?.ast; }
-    get questionToken() { return this.ast.data.questionToken?.node; }
+    get questionToken() { return astGetQuestionToken(this.ast)?.node; }
     set questionToken(value) { this.ast.data.questionToken = value?.ast; }
     get propertyName() { return this.ast.data.propertyName?.node; }
     set propertyName(value) { this.ast.data.propertyName = value?.ast; }
@@ -5798,11 +8151,11 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     set equalsToken(value) { this.ast.data.equalsToken = value?.ast; }
     get objectAssignmentInitializer() { return this.ast.data.objectAssignmentInitializer?.node; }
     set objectAssignmentInitializer(value) { this.ast.data.objectAssignmentInitializer = value?.ast; }
-    get elements() { return this.ast.data.elements.nodes; }
+    get elements(): any { return astGetElements(this.ast)?.nodes; }
     set elements(value) { this.ast.data.elements = value.ast; }
-    get asteriskToken() { return this.ast.data.asteriskToken?.node; }
+    get asteriskToken() { return astGetAsteriskToken(this.ast)?.node; }
     set asteriskToken(value) { this.ast.data.asteriskToken = value?.ast; }
-    get body() { return this.ast.data.body?.node; }
+    get body() { return astGetBody(this.ast)?.node; }
     set body(value) { this.ast.data.body = value?.ast; }
     get assertClause() { return this.ast.data.assertClause?.node; }
     set assertClause(value) { this.ast.data.assertClause = value?.ast; }
@@ -5826,11 +8179,11 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     set parameterName(value) { this.ast.data.parameterName = value.ast; }
     get exprName() { return this.ast.data.exprName.node; }
     set exprName(value) { this.ast.data.exprName = value.ast; }
-    get members() { return this.ast.data.members?.nodes; }
+    get members() { return astGetMembers(this.ast)?.nodes; }
     set members(value) { this.ast.data.members = value?.ast; }
     get elementType() { return this.ast.data.elementType.node; }
     set elementType(value) { this.ast.data.elementType = value.ast; }
-    get types() { return this.ast.data.types.nodes; }
+    get types() { return astGetTypes(this.ast).nodes; }
     set types(value) { this.ast.data.types = value.ast; }
     get checkType() { return this.ast.data.checkType.node; }
     set checkType(value) { this.ast.data.checkType = value.ast; }
@@ -5878,7 +8231,7 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     set equalsGreaterThanToken(value) { this.ast.data.equalsGreaterThanToken = value.ast; }
     get properties() { return this.ast.data.properties?.nodes; }
     set properties(value) { this.ast.data.properties = value?.ast; }
-    get questionDotToken() { return this.ast.data.questionDotToken?.node; }
+    get questionDotToken() { return astGetQuestionDotToken(this.ast)?.node; }
     set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
     get argumentExpression() { return this.ast.data.argumentExpression.node; }
     set argumentExpression(value) { this.ast.data.argumentExpression = value.ast; }
@@ -5898,7 +8251,7 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     set closingElement(value) { this.ast.data.closingElement = value.ast; }
     get namespace() { return this.ast.data.namespace.node; }
     set namespace(value) { this.ast.data.namespace = value.ast; }
-    get tagName() { return this.ast.data.tagName.node; }
+    get tagName() { return astGetTagName(this.ast).node; }
     set tagName(value) { this.ast.data.tagName = value.ast; }
     get openingFragment() { return this.ast.data.openingFragment.node; }
     set openingFragment(value) { this.ast.data.openingFragment = value.ast; }
@@ -5906,7 +8259,7 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     set closingFragment(value) { this.ast.data.closingFragment = value.ast; }
     get thisArg() { return this.ast.data.thisArg.node; }
     set thisArg(value) { this.ast.data.thisArg = value.ast; }
-    get statements() { return this.ast.data.statements.nodes; }
+    get statements() { return astGetStatements(this.ast).nodes; }
     set statements(value) { this.ast.data.statements = value.ast; }
     get declarationList() { return this.ast.data.declarationList.node; }
     set declarationList(value) { this.ast.data.declarationList = value.ast; }
@@ -5914,7 +8267,7 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     set thenStatement(value) { this.ast.data.thenStatement = value.ast; }
     get elseStatement() { return this.ast.data.elseStatement?.node; }
     set elseStatement(value) { this.ast.data.elseStatement = value?.ast; }
-    get statement() { return this.ast.data.statement.node; }
+    get statement() { return astGetStatement(this.ast).node; }
     set statement(value) { this.ast.data.statement = value.ast; }
     get incrementor() { return this.ast.data.incrementor?.node; }
     set incrementor(value) { this.ast.data.incrementor = value?.ast; }
@@ -5942,7 +8295,7 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     set heritageClauses(value) { this.ast.data.heritageClauses = value?.ast; }
     get token() { return this.ast.data.token; }
     set token(value) { this.ast.data.token = value; }
-    get isTypeOnly() { return this.ast.data.isTypeOnly; }
+    get isTypeOnly(): any { return astGetIsTypeOnly(this.ast); }
     set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
     get moduleReference() { return this.ast.data.moduleReference.node; }
     set moduleReference(value) { this.ast.data.moduleReference = value.ast; }
@@ -5963,7 +8316,7 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     get tags() { return this.ast.data.tags?.nodes; }
     set tags(value) { this.ast.data.tags = value?.ast; }
     get comment() {
-        const comment = this.ast.data.comment;
+        const comment = astGetComment(this.ast);
         return typeof comment === "string" ? comment : comment?.nodes;
     }
     set comment(value) { this.ast.data.comment = typeof value === "string" ? value : value?.ast; }
@@ -5983,13 +8336,13 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     set isArrayType(value) { this.ast.data.isArrayType = value; }
     get escapedText() { return this.ast.data.escapedText; }
     set escapedText(value) { this.ast.data.escapedText = value; }
-    get text() {
+    get text(): any {
         switch (this.kind) {
             case SyntaxKind.Identifier:
             case SyntaxKind.PrivateIdentifier:
-                return idText(this as unknown as Identifier | PrivateIdentifier); 
+                return astIdText(this.ast as unknown as AstIdentifier | AstPrivateIdentifier);
             default:
-                return this.data.text;
+                return astGetText(this.ast);
         }
     }
     set text(value) { this.ast.data.text = value; }
@@ -6011,20 +8364,20 @@ class AnyNode<TKind extends SyntaxKind> extends Node<TKind, any> {
     set containsOnlyTriviaWhiteSpaces(value) { this.ast.data.containsOnlyTriviaWhiteSpaces = value; }
     get resolvedSymbol() { return this.ast.data.resolvedSymbol; }
     set resolvedSymbol(value) { this.ast.data.resolvedSymbol = value; }
-    get symbol() { return this.ast.data.symbol; }
-    set symbol(value) { this.ast.data.symbol = value; }
-    get localSymbol() { return this.ast.data.localSymbol; }
-    set localSymbol(value) { this.ast.data.localSymbol = value; }
-    get jsDoc() { return this.ast.data.jsDoc; }
-    set jsDoc(value) { this.ast.data.jsDoc = value; }
-    get flowNode() { return this.ast.data.flowNode; }
-    set flowNode(value) { this.ast.data.flowNode = value; }
-    get locals() { return this.ast.data.locals; }
-    set locals(value) { this.ast.data.locals = value; }
-    get nextContainer() { return this.ast.data.nextContainer?.node; }
-    set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
-    get endFlowNode() { return this.ast.data.endFlowNode; }
-    set endFlowNode(value) { this.ast.data.endFlowNode = value; }
+    get symbol(): any { return astGetSymbol(this.ast); }
+    set symbol(value) { astSetSymbol(this.ast as AstHasSymbol, value); }
+    get localSymbol(): any { return astGetLocalSymbol(this.ast); }
+    set localSymbol(value) { astSetLocalSymbol(this.ast as AstHasSymbol, value); }
+    get jsDoc() { return astGetJSDoc(this.ast); }
+    set jsDoc(value) { astSetJSDoc(this.ast as AstHasJSDoc, value); }
+    get flowNode() { return astGetFlowNode(this.ast); }
+    set flowNode(value) { astSetFlowNode(this.ast as AstHasFlowNode, value); }
+    get locals(): any { return astGetLocals(this.ast); }
+    set locals(value) { astSetLocals(this.ast as AstHasLocals, value); }
+    get nextContainer(): any { return astGetNextContainer(this.ast)?.node; }
+    set nextContainer(value) { astSetNextContainer(this.ast as AstHasLocals, value?.ast); }
+    get endFlowNode() { return astGetEndFlowNode(this.ast); }
+    set endFlowNode(value) { astSetEndFlowNode(this.ast as AstHasEndFlowNode, value); }
     get returnFlowNode() { return this.ast.data.returnFlowNode; }
     set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
     get fallthroughFlowNode() { return this.ast.data.fallthroughFlowNode; }

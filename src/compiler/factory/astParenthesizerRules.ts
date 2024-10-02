@@ -21,21 +21,20 @@ import {
     AstTaggedTemplateExpression,
     AstTypeNode,
     AstUnaryExpression,
-    isAstBinaryExpression,
-    isAstBlock,
-    isAstCallExpression,
-    isAstCommaListExpression,
-    isAstConditionalTypeNode,
-    isAstConstructorTypeNode,
-    isAstFunctionTypeNode,
-    isAstInferTypeNode,
-    isAstIntersectionTypeNode,
-    isAstJSDocNullableType,
-    isAstNamedTupleMember,
-    isAstOptionalChain,
-    isAstTypeOperatorNode,
-    isAstUnionTypeNode,
-    skipAstOuterExpressions,
+    astIsBinaryExpression,
+    astIsBlock,
+    astIsCallExpression,
+    astIsCommaListExpression,
+    astIsConditionalTypeNode,
+    astIsConstructorTypeNode,
+    astIsFunctionTypeNode,
+    astIsInferTypeNode,
+    astIsIntersectionTypeNode,
+    astIsJSDocNullableType,
+    astIsNamedTupleMember,
+    astIsOptionalChain,
+    astIsTypeOperatorNode,
+    astIsUnionTypeNode,
     Associativity,
     BinaryOperator,
     compareValues,
@@ -56,6 +55,7 @@ import {
     setTextRange,
     SyntaxKind,
     TextRange,
+    astSkipOuterExpressions,
 } from "../_namespaces/ts.js";
 
 /** @internal */
@@ -179,7 +179,7 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
         // the intended order of operations: `(a ** b) ** c`
         const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
         const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
-        const emittedOperand = skipAstOuterExpressions(operand, OuterExpressionKinds.PartiallyEmittedExpressions) as AstExpression;
+        const emittedOperand = astSkipOuterExpressions(operand, OuterExpressionKinds.PartiallyEmittedExpressions);
         if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > OperatorPrecedence.Assignment) {
             // We need to parenthesize arrow functions on the right side to avoid it being
             // parsed as parenthesized expression: `a && (() => {})`
@@ -218,7 +218,7 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
                 }
                 else {
                     if (
-                        isAstBinaryExpression(emittedOperand)
+                        astIsBinaryExpression(emittedOperand)
                         && emittedOperand.data.operatorToken.kind === binaryOperator
                     ) {
                         // No need to parenthesize the right operand when the binary operator and
@@ -289,13 +289,13 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
      * emitted without parentheses.
      */
     function getLiteralKindOfBinaryPlusOperand(node: AstExpression): SyntaxKind {
-        node = skipAstOuterExpressions(node, OuterExpressionKinds.PartiallyEmittedExpressions) as AstExpression;
+        node = astSkipOuterExpressions(node, OuterExpressionKinds.PartiallyEmittedExpressions);
 
         if (isLiteralKind(node.kind)) {
             return node.kind;
         }
 
-        if (isAstBinaryExpression(node) && (node as AstBinaryExpression).data.operatorToken.kind === SyntaxKind.PlusToken) {
+        if (astIsBinaryExpression(node) && (node as AstBinaryExpression).data.operatorToken.kind === SyntaxKind.PlusToken) {
             if (node.data.cachedLiteralKind !== undefined) {
                 return node.data.cachedLiteralKind;
             }
@@ -323,7 +323,7 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
      *                           BinaryExpression.
      */
     function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: AstExpression, isLeftSideOfBinary: boolean, leftOperand?: AstExpression) {
-        const skipped = skipAstOuterExpressions(operand, OuterExpressionKinds.PartiallyEmittedExpressions) as AstExpression;
+        const skipped = astSkipOuterExpressions(operand, OuterExpressionKinds.PartiallyEmittedExpressions);
 
         // If the resulting expression is already parenthesized, we do not need to do any further processing.
         if (skipped.kind === SyntaxKind.ParenthesizedExpression) {
@@ -349,7 +349,7 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
 
     function parenthesizeConditionOfConditionalExpression(condition: AstExpression): AstExpression {
         const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.QuestionToken);
-        const emittedCondition = skipAstOuterExpressions(condition, OuterExpressionKinds.PartiallyEmittedExpressions) as AstExpression;
+        const emittedCondition = astSkipOuterExpressions(condition, OuterExpressionKinds.PartiallyEmittedExpressions);
         const conditionPrecedence = getExpressionPrecedence(emittedCondition);
         if (compareValues(conditionPrecedence, conditionalPrecedence) !== Comparison.GreaterThan) {
             return factory.createParenthesizedExpression(condition);
@@ -358,14 +358,14 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
     }
 
     function isCommaSequence(expression: AstExpression): boolean {
-        return isAstCommaListExpression(expression) || isAstBinaryExpression(expression) && expression.node.data.operatorToken.kind === SyntaxKind.CommaToken;
+        return astIsCommaListExpression(expression) || astIsBinaryExpression(expression) && expression.node.data.operatorToken.kind === SyntaxKind.CommaToken;
     }
 
     function parenthesizeBranchOfConditionalExpression(branch: AstExpression): AstExpression {
         // per ES grammar both 'whenTrue' and 'whenFalse' parts of conditional expression are assignment expressions
         // so in case when comma expression is introduced as a part of previous transformations
         // if should be wrapped in parens since comma operator has the lowest precedence
-        const emittedExpression = skipAstOuterExpressions(branch, OuterExpressionKinds.PartiallyEmittedExpressions) as AstExpression;
+        const emittedExpression = astSkipOuterExpressions(branch, OuterExpressionKinds.PartiallyEmittedExpressions);
         return isCommaSequence(emittedExpression)
             ? factory.createParenthesizedExpression(branch)
             : branch;
@@ -383,7 +383,7 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
      * - ClassExpression
      */
     function parenthesizeExpressionOfExportDefault(expression: AstExpression): AstExpression {
-        const check = skipAstOuterExpressions(expression, OuterExpressionKinds.PartiallyEmittedExpressions) as AstExpression;
+        const check = astSkipOuterExpressions(expression, OuterExpressionKinds.PartiallyEmittedExpressions);
         let needsParens = isCommaSequence(check);
         if (!needsParens) {
             switch (getLeftmostExpression(check, /*stopAtCallExpressions*/ false).kind) {
@@ -425,11 +425,11 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
         //    NewExpression:
         //       new C.x        -> not the same as (new C).x
         //
-        const emittedExpression = skipAstOuterExpressions(expression, OuterExpressionKinds.PartiallyEmittedExpressions) as AstExpression;
+        const emittedExpression = astSkipOuterExpressions(expression, OuterExpressionKinds.PartiallyEmittedExpressions);
         if (
-            isLeftHandSideExpressionKind(skipAstOuterExpressions(emittedExpression, OuterExpressionKinds.PartiallyEmittedExpressions).kind)
+            isLeftHandSideExpressionKind(astSkipOuterExpressions(emittedExpression, OuterExpressionKinds.PartiallyEmittedExpressions).kind)
             && (emittedExpression.kind !== SyntaxKind.NewExpression || (emittedExpression as AstNewExpression).data.arguments)
-            && (optionalChain || !isAstOptionalChain(emittedExpression))
+            && (optionalChain || !astIsOptionalChain(emittedExpression))
         ) {
             // TODO(rbuckton): Verify whether this assertion holds.
             return expression as AstLeftHandSideExpression;
@@ -441,12 +441,12 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
 
     function parenthesizeOperandOfPostfixUnary(operand: AstExpression): AstLeftHandSideExpression {
         // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-        return isLeftHandSideExpressionKind(skipAstOuterExpressions(operand, OuterExpressionKinds.PartiallyEmittedExpressions).kind) ? operand as AstLeftHandSideExpression : setTextRange(factory.createParenthesizedExpression(operand), operand);
+        return isLeftHandSideExpressionKind(astSkipOuterExpressions(operand, OuterExpressionKinds.PartiallyEmittedExpressions).kind) ? operand as AstLeftHandSideExpression : setTextRange(factory.createParenthesizedExpression(operand), operand);
     }
 
     function parenthesizeOperandOfPrefixUnary(operand: AstExpression): AstUnaryExpression {
         // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-        return isUnaryExpressionKind(skipAstOuterExpressions(operand, OuterExpressionKinds.PartiallyEmittedExpressions).kind) ? operand as AstUnaryExpression : setTextRange(factory.createParenthesizedExpression(operand), operand);
+        return isUnaryExpressionKind(astSkipOuterExpressions(operand, OuterExpressionKinds.PartiallyEmittedExpressions).kind) ? operand as AstUnaryExpression : setTextRange(factory.createParenthesizedExpression(operand), operand);
     }
 
     function parenthesizeExpressionsOfCommaDelimitedList(elements: AstNodeArrayLike<AstExpression>): AstNodeArray<AstExpression> {
@@ -466,7 +466,7 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
     }
 
     function parenthesizeExpressionForDisallowedComma(expression: AstExpression): AstExpression {
-        const emittedExpression = skipAstOuterExpressions(expression, OuterExpressionKinds.PartiallyEmittedExpressions) as AstExpression;
+        const emittedExpression = astSkipOuterExpressions(expression, OuterExpressionKinds.PartiallyEmittedExpressions);
         const expressionPrecedence = getExpressionPrecedence(emittedExpression);
         const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
         // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
@@ -474,10 +474,10 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
     }
 
     function parenthesizeExpressionOfExpressionStatement(expression: AstExpression): AstExpression {
-        const emittedExpression = skipAstOuterExpressions(expression, OuterExpressionKinds.PartiallyEmittedExpressions) as AstExpression;
-        if (isAstCallExpression(emittedExpression)) {
+        const emittedExpression = astSkipOuterExpressions(expression, OuterExpressionKinds.PartiallyEmittedExpressions);
+        if (astIsCallExpression(emittedExpression)) {
             const callee = emittedExpression.data.expression;
-            const kind = skipAstOuterExpressions(callee, OuterExpressionKinds.PartiallyEmittedExpressions).kind;
+            const kind = astSkipOuterExpressions(callee, OuterExpressionKinds.PartiallyEmittedExpressions).kind;
             if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
                 // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
                 const updated = factory.updateCallExpression(
@@ -502,7 +502,7 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
     function parenthesizeConciseBodyOfArrowFunction(body: AstExpression): AstExpression;
     function parenthesizeConciseBodyOfArrowFunction(body: AstConciseBody): AstConciseBody;
     function parenthesizeConciseBodyOfArrowFunction(body: AstConciseBody): AstConciseBody {
-        if (!isAstBlock(body) && (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)) {
+        if (!astIsBlock(body) && (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)) {
             // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
             return setTextRange(factory.createParenthesizedExpression(body), body);
         }
@@ -660,13 +660,13 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
     }
 
     function hasJSDocPostfixQuestion(type: AstTypeNode | AstNamedTupleMember): boolean {
-        if (isAstJSDocNullableType(type)) return type.data.postfix;
-        if (isAstNamedTupleMember(type)) return hasJSDocPostfixQuestion(type.data.type);
-        if (isAstFunctionTypeNode(type) || isAstConstructorTypeNode(type) || isAstTypeOperatorNode(type)) return hasJSDocPostfixQuestion(type.data.type);
-        if (isAstConditionalTypeNode(type)) return hasJSDocPostfixQuestion(type.data.falseType);
-        if (isAstUnionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.data.types.items));
-        if (isAstIntersectionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.data.types.items));
-        if (isAstInferTypeNode(type)) return !!type.data.typeParameter.data.constraint && hasJSDocPostfixQuestion(type.data.typeParameter.data.constraint);
+        if (astIsJSDocNullableType(type)) return type.data.postfix;
+        if (astIsNamedTupleMember(type)) return hasJSDocPostfixQuestion(type.data.type);
+        if (astIsFunctionTypeNode(type) || astIsConstructorTypeNode(type) || astIsTypeOperatorNode(type)) return hasJSDocPostfixQuestion(type.data.type);
+        if (astIsConditionalTypeNode(type)) return hasJSDocPostfixQuestion(type.data.falseType);
+        if (astIsUnionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.data.types.items));
+        if (astIsIntersectionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.data.types.items));
+        if (astIsInferTypeNode(type)) return !!type.data.typeParameter.data.constraint && hasJSDocPostfixQuestion(type.data.typeParameter.data.constraint);
         return false;
     }
 
@@ -697,7 +697,7 @@ export function createAstParenthesizerRules(factory: AstNodeFactory): AstParenth
     // }
 
     function parenthesizeLeadingTypeArgument(node: AstTypeNode) {
-        return (isAstFunctionTypeNode(node) || isAstConstructorTypeNode(node)) && node.data.typeParameters ? factory.createParenthesizedType(node) : node;
+        return (astIsFunctionTypeNode(node) || astIsConstructorTypeNode(node)) && node.data.typeParameters ? factory.createParenthesizedType(node) : node;
     }
 
     function parenthesizeOrdinalTypeArgument(node: AstTypeNode, i: number) {

@@ -93,7 +93,7 @@
 -                                "transformFlags": 0,
 -                                "escapedText": "see"
 -                            },
--                            "comment": {
+-                            "commentArray": {
 -                                "0": {
 -                                    "kind": "JSDocText",
 -                                    "pos": 42,
@@ -142,7 +142,7 @@
 -                                "transformFlags": 0,
 -                                "escapedText": "see"
 -                            },
--                            "comment": {
+-                            "commentArray": {
 -                                "0": {
 -                                    "kind": "JSDocText",
 -                                    "pos": 60,
@@ -191,7 +191,7 @@
 -                                "transformFlags": 0,
 -                                "escapedText": "see"
 -                            },
--                            "comment": {
+-                            "commentArray": {
 -                                "0": {
 -                                    "kind": "JSDocText",
 -                                    "pos": 82,

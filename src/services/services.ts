@@ -299,6 +299,8 @@ import {
     UnionType,
     updateSourceFile,
     UserPreferences,
+    AstDeclaration,
+    createReadOnlyArrayView,
 } from "./_namespaces/ts.js";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo.js";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar.js";
@@ -316,8 +318,9 @@ export const servicesVersion = "0.8";
 class SymbolObject implements Symbol {
     flags: SymbolFlags;
     escapedName: __String;
-    declarations?: Declaration[];
-    valueDeclaration?: Declaration;
+    private _declarations: readonly Declaration[] | undefined = undefined;
+    astValueDeclaration: AstDeclaration | undefined = undefined;
+    astDeclarations: AstDeclaration[] | undefined = undefined;
     members?: SymbolTable;
     exports?: SymbolTable;
     id: number;
@@ -344,8 +347,6 @@ class SymbolObject implements Symbol {
         // Note: if modifying this, be sure to update Symbol in src/compiler/types.ts
         this.flags = flags;
         this.escapedName = name;
-        this.declarations = undefined;
-        this.valueDeclaration = undefined;
         this.id = 0;
         this.mergeId = 0;
         this.parent = undefined;
@@ -357,6 +358,10 @@ class SymbolObject implements Symbol {
         this.lastAssignmentPos = undefined;
         this.links = undefined; // used by TransientSymbol
     }
+
+    get valueDeclaration() { return this.astValueDeclaration?.node; }
+    set valueDeclaration(value) { this.astValueDeclaration = value?.ast; }
+    get declarations() { return this._declarations ??= this.astDeclarations && createReadOnlyArrayView(this.astDeclarations, ast => ast.node); }
 
     getFlags(): SymbolFlags {
         return this.flags;
@@ -374,7 +379,7 @@ class SymbolObject implements Symbol {
         return this.name;
     }
 
-    getDeclarations(): Declaration[] | undefined {
+    getDeclarations(): readonly Declaration[] | undefined {
         return this.declarations;
     }
 
@@ -617,7 +622,7 @@ function hasJSDocInheritDocTag(node: Node) {
     return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc" || tag.tagName.text === "inheritdoc");
 }
 
-function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+function getJsDocTagsOfDeclarations(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
     if (!declarations) return emptyArray;
 
     let tags = JsDoc.getJsDocTagsFromDeclarations(declarations, checker);

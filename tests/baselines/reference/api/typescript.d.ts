@@ -4444,10 +4444,10 @@ declare namespace ts {
         | ModuleBlock
         | MissingDeclaration
         | NotEmittedStatement;
-    export type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
-    export type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
+    export type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType | OptionalTypeNode | RestTypeNode | NamedTupleMember | TemplateLiteralTypeSpan | SatisfiesExpression | JSDocNamepathType | JSDocSignature;
+    export type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | ExpressionWithTypeArguments | TypeQueryNode | ImportTypeNode | TypeReferenceNode | JsxOpeningElement | JsxSelfClosingElement;
     export type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
-    export type HasExpressionInitializer = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | EnumMember;
+    export type HasExpressionInitializer = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | PropertySignature | EnumMember;
     export type HasDecorators = ParameterDeclaration | PropertyDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ClassExpression | ClassDeclaration;
     export type HasModifiers = TypeParameterDeclaration | ParameterDeclaration | ConstructorTypeNode | PropertySignature | PropertyDeclaration | MethodSignature | MethodDeclaration | ConstructorDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | IndexSignatureDeclaration | FunctionExpression | ArrowFunction | ClassExpression | VariableStatement | FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | ExportAssignment | ExportDeclaration;
     export class NodeArray<N extends Node> extends ReadonlyArray<N> {
@@ -5239,10 +5239,14 @@ declare namespace ts {
         get right(): Expression;
     }
     export type AssignmentOperatorToken = Token<AssignmentOperator>;
-    export interface AssignmentExpression<TOperator extends AssignmentOperatorToken> extends BinaryExpression {
+    export type AssignmentExpression<TOperator extends AssignmentOperatorToken> = BinaryExpression & {
         readonly left: LeftHandSideExpression;
         readonly operatorToken: TOperator;
-    }
+        readonly data: {
+            readonly left: AstLeftHandSideExpression;
+            readonly operatorToken: TOperator;
+        };
+    };
     export interface ObjectDestructuringAssignment extends AssignmentExpression<EqualsToken> {
         readonly left: ObjectLiteralExpression;
     }
@@ -5586,7 +5590,7 @@ declare namespace ts {
         get expression(): Expression;
         get type(): TypeNode;
     }
-    export class TypeAssertionExpression extends Node<SyntaxKind.TypeAssertionExpression, AstTypeAssertionData> implements UnaryExpression {
+    export class TypeAssertionExpression extends Node<SyntaxKind.TypeAssertionExpression, AstTypeAssertionExpressionData> implements UnaryExpression {
         _unaryExpressionBrand: any;
         _expressionBrand: any;
         get type(): TypeNode;
@@ -6417,13 +6421,18 @@ declare namespace ts {
         get type(): JSDocReturnTag | undefined;
     }
     export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
-        readonly data: AstJSDocTagData & AstDeclarationData;
         readonly parent: JSDoc;
         readonly name: EntityName;
         readonly typeExpression?: JSDocTypeExpression | undefined;
         /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
         readonly isNameFirst: boolean;
         readonly isBracketed: boolean;
+        readonly data: AstJSDocTagData & AstDeclarationData & {
+            readonly name: AstEntityName;
+            readonly typeExpression?: AstJSDocTypeExpression | undefined;
+            readonly isNameFirst: boolean;
+            readonly isBracketed: boolean;
+        };
     }
     export class JSDocPropertyTag extends JSDocTag<SyntaxKind.JSDocPropertyTag, AstJSDocPropertyTagData> implements JSDocPropertyLikeTag, Declaration {
         _declarationBrand: any;
@@ -7126,8 +7135,8 @@ declare namespace ts {
     export interface Symbol {
         flags: SymbolFlags;
         escapedName: __String;
-        declarations?: Declaration[];
-        valueDeclaration?: Declaration;
+        readonly declarations?: readonly Declaration[];
+        readonly valueDeclaration?: Declaration;
         members?: SymbolTable;
         exports?: SymbolTable;
         globalExports?: SymbolTable;
@@ -7137,7 +7146,7 @@ declare namespace ts {
         getFlags(): SymbolFlags;
         getEscapedName(): __String;
         getName(): string;
-        getDeclarations(): Declaration[] | undefined;
+        getDeclarations(): readonly Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
     }
@@ -9024,7 +9033,7 @@ declare namespace ts {
         private _extra;
         readonly kind: N["kind"];
         readonly data: N["data"];
-        parent: AstNode<NonNullable<N["parent"]>> | undefined;
+        parent: AstNodeOneOf<N["parent"]>;
         flags: NodeFlags;
         pos: number;
         end: number;
@@ -9405,6 +9414,7 @@ declare namespace ts {
         type: AstTypeNode | undefined;
         initializer: AstExpression | undefined;
     }
+    export type AstVariableLikeDeclaration = AstNodeOneOf<VariableLikeDeclaration>;
     export type AstVariableDeclarationList = AstNode<VariableDeclarationList>;
     export class AstVariableDeclarationListData extends AstData {
         declarations: AstNodeArray<AstVariableDeclaration>;
@@ -9417,6 +9427,7 @@ declare namespace ts {
         initializer: AstExpression | undefined;
     }
     export type AstPropertyDeclaration = AstNode<PropertyDeclaration>;
+    export type AstAutoAccessorPropertyDeclaration = AstNode<AutoAccessorPropertyDeclaration>;
     export class AstPropertyDeclarationData extends AstData {
         modifiers: AstNodeArray<AstModifierLike> | undefined;
         name: AstPropertyName;
@@ -9669,6 +9680,7 @@ declare namespace ts {
         operatorToken: AstBinaryOperatorToken;
         right: AstExpression;
     }
+    export type AstAssignmentExpression<TOperator extends AssignmentOperatorToken> = AstNodeOneOf<AssignmentExpression<TOperator>>;
     export type AstDestructuringAssignment = AstNodeOneOf<DestructuringAssignment>;
     export class AstConditionalExpressionData extends AstData {
         condition: AstExpression;
@@ -9771,6 +9783,7 @@ declare namespace ts {
         name: AstMemberName;
     }
     export type AstPropertyAccessEntityNameExpression = AstNode<PropertyAccessEntityNameExpression>;
+    export type AstAccessExpression = AstNodeOneOf<AccessExpression>;
     export type AstEntityNameExpression = AstNodeOneOf<EntityNameExpression>;
     export type AstPropertyAccessChain = AstNode<PropertyAccessChain>;
     export class AstElementAccessExpressionData extends AstData {
@@ -9806,7 +9819,7 @@ declare namespace ts {
         expression: AstExpression;
         type: AstTypeNode;
     }
-    export class AstTypeAssertionData extends AstData {
+    export class AstTypeAssertionExpressionData extends AstData {
         type: AstTypeNode;
         expression: AstUnaryExpression;
     }
@@ -10164,7 +10177,8 @@ declare namespace ts {
         type: AstTypeNode;
     }
     export class AstJSDocData extends AstData {
-        comment: string | AstNodeArray<AstJSDocComment> | undefined;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         tags: AstNodeArray<AstBaseJSDocTag> | undefined;
     }
     export type AstHasJSDoc = AstNodeOneOf<HasJSDoc>;
@@ -10186,71 +10200,135 @@ declare namespace ts {
         text: string;
     }
     export type AstBaseJSDocTag<TKind extends SyntaxKind = SyntaxKind, T extends AstJSDocTagData = AstJSDocTagData> = AstNode<JSDocTag<TKind, T>>;
-    export class AstJSDocTagData extends AstData {
-        tagName: AstIdentifier;
-        comment: string | AstNodeArray<AstJSDocComment> | undefined;
+    export abstract class AstJSDocTagData extends AstData {
+        abstract tagName: AstIdentifier;
+        abstract comment: string | undefined;
+        abstract commentArray: AstNodeArray<AstJSDocComment> | undefined;
     }
     export class AstJSDocUnknownTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
     }
     export type AstJSDocClassReference = AstNode<JSDocClassReference>;
     export interface AstJSDocClassReferenceData extends AstExpressionWithTypeArgumentsData {
         expression: AstIdentifier | AstPropertyAccessEntityNameExpression;
     }
     export class AstJSDocAugmentsTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         class: AstJSDocClassReference;
     }
     export class AstJSDocImplementsTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         class: AstJSDocClassReference;
     }
     export class AstJSDocAuthorTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
     }
     export class AstJSDocDeprecatedTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
     }
     export class AstJSDocClassTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
     }
     export class AstJSDocPublicTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
     }
     export class AstJSDocPrivateTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
     }
     export class AstJSDocProtectedTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
     }
     export class AstJSDocReadonlyTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
     }
     export class AstJSDocOverrideTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
     }
     export class AstJSDocEnumTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         typeExpression: AstJSDocTypeExpression;
     }
     export class AstJSDocThisTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         typeExpression: AstJSDocTypeExpression;
     }
     export class AstJSDocTemplateTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         constraint: AstJSDocTypeExpression | undefined;
         typeParameters: AstNodeArray<AstTypeParameterDeclaration>;
     }
     export class AstJSDocSeeTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         name: AstJSDocNameReference | undefined;
     }
     export class AstJSDocReturnTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         typeExpression: AstJSDocTypeExpression | undefined;
     }
     export class AstJSDocTypeTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         typeExpression: AstJSDocTypeExpression;
     }
     export class AstJSDocTypedefTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         typeExpression: AstJSDocTypeExpression | AstJSDocTypeLiteral | undefined;
         fullName: AstJSDocNamespaceDeclaration | AstIdentifier | undefined;
         name: AstIdentifier | undefined;
     }
     export class AstJSDocCallbackTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         fullName: AstJSDocNamespaceDeclaration | AstIdentifier | undefined;
         name: AstIdentifier | undefined;
         typeExpression: AstJSDocSignature;
     }
     export class AstJSDocOverloadTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         typeExpression: AstJSDocSignature;
     }
     export class AstJSDocThrowsTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         typeExpression: AstJSDocTypeExpression | undefined;
     }
     export class AstJSDocSignatureData extends AstData {
@@ -10259,6 +10337,9 @@ declare namespace ts {
         type: AstJSDocReturnTag | undefined;
     }
     export class AstJSDocPropertyTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         typeExpression: AstJSDocTypeExpression | undefined;
         name: AstEntityName;
         /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
@@ -10266,6 +10347,9 @@ declare namespace ts {
         isBracketed: boolean;
     }
     export class AstJSDocParameterTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         typeExpression: AstJSDocTypeExpression | undefined;
         name: AstEntityName;
         /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
@@ -10279,9 +10363,15 @@ declare namespace ts {
         isArrayType: boolean;
     }
     export class AstJSDocSatisfiesTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         typeExpression: AstJSDocTypeExpression;
     }
     export class AstJSDocImportTagData extends AstJSDocTagData {
+        tagName: AstIdentifier;
+        comment: string | undefined;
+        commentArray: AstNodeArray<AstJSDocComment> | undefined;
         importClause: AstImportClause | undefined;
         moduleSpecifier: AstExpression;
         attributes: AstImportAttributes | undefined;
@@ -10350,7 +10440,6 @@ declare namespace ts {
         impliedNodeFormat: ResolutionMode | undefined;
         moduleName: string | undefined;
         namedDeclarations: Map<string, Declaration[]> | undefined;
-        cloneNode(node: AstNode): AstNode;
     }
     export type AstMethodSignature = AstNode<MethodSignature>;
     export type AstMethodDeclaration = AstNode<MethodDeclaration>;
@@ -10587,6 +10676,7 @@ declare namespace ts {
             >
         >
         : never;
+    export type AstNamedDeclaration = AstNodeOneOf<NamedDeclaration>;
     export enum FileWatcherEventKind {
         Created = 0,
         Changed = 1,
@@ -10801,14 +10891,22 @@ declare namespace ts {
      */
     export function unescapeLeadingUnderscores(identifier: __String): string;
     export function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string;
+    export function astIdText(identifierOrPrivateName: AstIdentifier | AstPrivateIdentifier): string;
     /**
      * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
      * SyntaxKind for the matching keyword.
      */
     export function identifierToKeywordKind(node: Identifier): KeywordSyntaxKind | undefined;
+    /**
+     * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
+     * SyntaxKind for the matching keyword.
+     */
+    export function astIdentifierToKeywordKind(node: AstIdentifier): KeywordSyntaxKind | undefined;
     export function symbolName(symbol: Symbol): string;
     export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined;
+    export function astGetNameOfJSDocTypedef(declaration: AstJSDocTypedefTag): AstIdentifier | AstPrivateIdentifier | undefined;
     export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined;
+    export function astGetNameOfDeclaration(declaration: AstDeclaration | AstExpression | undefined): AstDeclarationName | undefined;
     export function getDecorators(node: HasDecorators): readonly Decorator[] | undefined;
     export function getModifiers(node: HasModifiers): readonly Modifier[] | undefined;
     /**
@@ -10825,6 +10923,19 @@ declare namespace ts {
      */
     export function getJSDocParameterTags(param: ParameterDeclaration): readonly JSDocParameterTag[];
     /**
+     * Gets the JSDoc parameter tags for the node if present.
+     *
+     * @remarks Returns any JSDoc param tag whose name matches the provided
+     * parameter, whether a param tag on a containing function
+     * expression, or a param tag on a variable declaration whose
+     * initializer is the containing function. The tags closest to the
+     * node are returned first, so in the previous example, the param
+     * tag on the containing function expression would be first.
+     *
+     * For binding patterns, parameter tags are matched by position.
+     */
+    export function astGetJSDocParameterTags(param: AstParameterDeclaration): readonly JSDocParameterTag[];
+    /**
      * Gets the JSDoc type parameter tags for the node if present.
      *
      * @remarks Returns any JSDoc template tag whose names match the provided
@@ -10835,6 +10946,17 @@ declare namespace ts {
      * tag on the containing function expression would be first.
      */
     export function getJSDocTypeParameterTags(param: TypeParameterDeclaration): readonly JSDocTemplateTag[];
+    /**
+     * Gets the JSDoc type parameter tags for the node if present.
+     *
+     * @remarks Returns any JSDoc template tag whose names match the provided
+     * parameter, whether a template tag on a containing function
+     * expression, or a template tag on a variable declaration whose
+     * initializer is the containing function. The tags closest to the
+     * node are returned first, so in the previous example, the template
+     * tag on the containing function expression would be first.
+     */
+    export function astGetJSDocTypeParameterTags(param: AstTypeParameterDeclaration): readonly JSDocTemplateTag[];
     /**
      * Return true if the node has JSDoc parameter tags.
      *
@@ -10856,7 +10978,7 @@ declare namespace ts {
     export function getJSDocProtectedTag(node: Node): JSDocProtectedTag | undefined;
     /** Gets the JSDoc protected tag for the node if present */
     export function getJSDocReadonlyTag(node: Node): JSDocReadonlyTag | undefined;
-    export function getJSDocOverrideTagNoCache(node: Node): JSDocOverrideTag | undefined;
+    export function getJSDocOverrideTag(node: Node): JSDocOverrideTag | undefined;
     /** Gets the JSDoc deprecated tag for the node if present */
     export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined;
     /** Gets the JSDoc enum tag for the node if present */
@@ -10950,10 +11072,14 @@ declare namespace ts {
     export function isBindingName(node: Node): node is BindingName;
     export function isFunctionLike(node: Node | undefined): node is SignatureDeclaration;
     export function isClassElement(node: Node): node is ClassElement;
+    export function astIsClassElement(node: AstNode): node is AstClassElement;
     export function isClassLike(node: Node): node is ClassLikeDeclaration;
+    export function astIsClassLike(node: AstNode): node is AstClassLikeDeclaration;
     export function isAccessor(node: Node): node is AccessorDeclaration;
     export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAccessorPropertyDeclaration;
     export function isModifierLike(node: Node): node is ModifierLike;
+    /** @intenral */
+    export function astIsModifierLike(node: AstNode): node is AstModifierLike;
     export function isTypeElement(node: Node): node is TypeElement;
     export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement;
     export function isObjectLiteralElementLike(node: Node): node is ObjectLiteralElementLike;
@@ -11030,6 +11156,26 @@ declare namespace ts {
      * ```
      */
     export function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
+    /**
+     * This function checks multiple locations for JSDoc comments that apply to a host node.
+     * At each location, the whole comment may apply to the node, or only a specific tag in
+     * the comment. In the first case, location adds the entire {@link JSDoc} object. In the
+     * second case, it adds the applicable {@link JSDocTag}.
+     *
+     * For example, a JSDoc comment before a parameter adds the entire {@link JSDoc}. But a
+     * `@param` tag on the parent function only adds the {@link JSDocTag} for the `@param`.
+     *
+     * ```ts
+     * /** JSDoc will be returned for `a` *\/
+     * const a = 0
+     * /**
+     *  * Entire JSDoc will be returned for `b`
+     *  * @param c JSDocTag will be returned for `c`
+     *  *\/
+     * function b(/** JSDoc will be returned for `c` *\/ c) {}
+     * ```
+     */
+    export function astGetJSDocCommentsAndTags(hostNode: AstNode): readonly (JSDoc | JSDocTag)[];
     /**
      * Create an external source map source file reference
      */
@@ -11116,7 +11262,7 @@ declare namespace ts {
     export function isDotDotDotToken(node: Node): node is DotDotDotToken;
     export function isPlusToken(node: Node): node is PlusToken;
     export function isMinusToken(node: Node): node is MinusToken;
-    export function isAsteriskToken(node: Node): node is AsteriskToken;
+    export function astIseriskToken(node: Node): node is AsteriskToken;
     export function isExclamationToken(node: Node): node is ExclamationToken;
     export function isQuestionToken(node: Node): node is QuestionToken;
     export function isColonToken(node: Node): node is ColonToken;

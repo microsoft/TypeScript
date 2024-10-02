@@ -51,7 +51,7 @@ declare module "../compiler/types.js" {
         getFlags(): SymbolFlags;
         getEscapedName(): __String;
         getName(): string;
-        getDeclarations(): Declaration[] | undefined;
+        getDeclarations(): readonly Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         /** @internal */
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[];

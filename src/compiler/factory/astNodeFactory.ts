@@ -293,22 +293,21 @@ import {
     getSyntheticLeadingComments,
     getSyntheticTrailingComments,
     identity,
-    isAstBinaryExpression,
-    isAstCallChain,
-    isAstCommaListExpression,
-    isAstCommaToken,
-    isAstElementAccessChain,
-    isAstExclamationToken,
-    isAstIdentifier,
-    isAstNonNullChain,
-    isAstNotEmittedStatement,
-    isAstOmittedExpression,
-    isAstOuterExpression,
-    isAstParenthesizedExpression,
-    isAstPrivateIdentifier,
-    isAstPropertyAccessChain,
-    isAstQuestionToken,
-    isAstVariableDeclaration,
+    astIsBinaryExpression,
+    astIsCallChain,
+    astIsCommaListExpression,
+    astIsCommaToken,
+    astIsElementAccessChain,
+    astIsExclamationToken,
+    astIsIdentifier,
+    astIsNonNullChain,
+    astIsNotEmittedStatement,
+    astIsOmittedExpression,
+    astIsParenthesizedExpression,
+    astIsPrivateIdentifier,
+    astIsPropertyAccessChain,
+    astIsQuestionToken,
+    astIsVariableDeclaration,
     isParseTreeNode,
     KeywordSyntaxKind,
     KeywordTypeSyntaxKind,
@@ -347,6 +346,11 @@ import {
     TokenSyntaxKind,
     TransformFlags,
     Type,
+    astIsOuterExpression,
+    astNodeIsSynthesized,
+    astSetComment,
+    astGetComment,
+    AstHasComment,
 } from "../_namespaces/ts.js";
 
 /** @internal */
@@ -2006,8 +2010,8 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
         const node = AstNode.PropertyDeclaration();
         node.data.modifiers = asNodeArray(modifiers);
         node.data.name = asName(name);
-        node.data.questionToken = questionOrExclamationToken && isAstQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined;
-        node.data.exclamationToken = questionOrExclamationToken && isAstExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined;
+        node.data.questionToken = questionOrExclamationToken && astIsQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined;
+        node.data.exclamationToken = questionOrExclamationToken && astIsExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined;
         node.data.type = type;
         node.data.initializer = asInitializer(initializer);
         return finish(node);
@@ -2024,8 +2028,8 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     ) {
         return !sameNodeArray(node.data.modifiers, modifiers)
                 || node.data.name !== name
-                || node.data.questionToken !== (questionOrExclamationToken !== undefined && isAstQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined)
-                || node.data.exclamationToken !== (questionOrExclamationToken !== undefined && isAstExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined)
+                || node.data.questionToken !== (questionOrExclamationToken !== undefined && astIsQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined)
+                || node.data.exclamationToken !== (questionOrExclamationToken !== undefined && astIsExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined)
                 || node.data.type !== type
                 || node.data.initializer !== initializer
             ? update(createPropertyDeclaration(modifiers, name, questionOrExclamationToken, type, initializer), node)
@@ -2856,7 +2860,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
         // we end up with `[1, 2, ,]` instead of `[1, 2, ]` otherwise the `OmittedExpression` will just end up being treated like
         // a trailing comma.
         const lastElement = elements && lastOrUndefined(arrayItems(elements));
-        const elementsArray = createNodeArray(elements, lastElement && isAstOmittedExpression(lastElement) ? true : undefined);
+        const elementsArray = createNodeArray(elements, lastElement && astIsOmittedExpression(lastElement) ? true : undefined);
         node.data.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(elementsArray);
         node.data.multiLine = multiLine;
         return finish(node);
@@ -2902,8 +2906,8 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
 
     // @api
     function updatePropertyAccessExpression(node: AstPropertyAccessExpression, expression: AstExpression, name: AstIdentifier | AstPrivateIdentifier) {
-        if (isAstPropertyAccessChain(node)) {
-            return updatePropertyAccessChain(node, expression, node.data.questionDotToken, cast(name, isAstIdentifier));
+        if (astIsPropertyAccessChain(node)) {
+            return updatePropertyAccessChain(node, expression, node.data.questionDotToken, cast(name, astIsIdentifier));
         }
         return node.data.expression !== expression
                 || node.data.name !== name
@@ -2950,7 +2954,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
 
     // @api
     function updateElementAccessExpression(node: AstElementAccessExpression, expression: AstExpression, argumentExpression: AstExpression) {
-        if (isAstElementAccessChain(node)) {
+        if (astIsElementAccessChain(node)) {
             return updateElementAccessChain(node, expression, node.data.questionDotToken, argumentExpression);
         }
         return node.data.expression !== expression
@@ -2990,7 +2994,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
 
     // @api
     function updateCallExpression(node: AstCallExpression, expression: AstExpression, typeArguments: AstNodeArrayLike<AstTypeNode> | undefined, argumentsArray: AstNodeArrayLike<AstExpression>) {
-        if (isAstCallChain(node)) {
+        if (astIsCallChain(node)) {
             return updateCallChain(node, expression, node.data.questionDotToken, typeArguments, argumentsArray);
         }
         return node.data.expression !== expression
@@ -3528,7 +3532,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
 
     // @api
     function updateNonNullExpression(node: AstNonNullExpression, expression: AstExpression) {
-        if (isAstNonNullChain(node)) {
+        if (astIsNonNullChain(node)) {
             return updateNonNullChain(node, expression);
         }
         return node.data.expression !== expression
@@ -4695,7 +4699,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function createJSDocTemplateTag(tagName: AstIdentifier | undefined, constraint: AstJSDocTypeExpression | undefined, typeParameters: AstNodeArrayLike<AstTypeParameterDeclaration>, comment?: string | AstNodeArray<AstJSDocComment>): AstJSDocTemplateTag {
         const node = AstNode.JSDocTemplateTag();
         node.data.tagName = tagName ?? createIdentifier("template");
-        node.data.comment = comment;
+        astSetComment(node, comment);
         node.data.constraint = constraint;
         node.data.typeParameters = createNodeArray(typeParameters);
         return finish(node);
@@ -4706,7 +4710,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
         return node.data.tagName !== tagName
                 || node.data.constraint !== constraint
                 || !sameNodeArray(node.data.typeParameters, typeParameters)
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocTemplateTag(tagName, constraint, typeParameters, comment), node)
             : node;
     }
@@ -4715,7 +4719,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function createJSDocTypedefTag(tagName: AstIdentifier | undefined, typeExpression?: AstJSDocTypeExpression, fullName?: AstIdentifier | AstJSDocNamespaceDeclaration, comment?: string | AstNodeArray<AstJSDocComment>): AstJSDocTypedefTag {
         const node = AstNode.JSDocTypedefTag();
         node.data.tagName = tagName ?? createIdentifier("typedef");
-        node.data.comment = comment;
+        astSetComment(node, comment);
         node.data.typeExpression = typeExpression;
         node.data.fullName = fullName;
         node.data.name = getJSDocTypeAliasName(fullName);
@@ -4727,7 +4731,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
         return node.data.tagName !== tagName
                 || node.data.typeExpression !== typeExpression
                 || node.data.fullName !== fullName
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocTypedefTag(tagName, typeExpression, fullName, comment), node)
             : node;
     }
@@ -4736,7 +4740,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function createJSDocParameterTag(tagName: AstIdentifier | undefined, name: AstEntityName, isBracketed: boolean, typeExpression?: AstJSDocTypeExpression, isNameFirst?: boolean, comment?: string | AstNodeArray<AstJSDocComment>): AstJSDocParameterTag {
         const node = AstNode.JSDocParameterTag();
         node.data.tagName = tagName ?? createIdentifier("param");
-        node.data.comment = comment;
+        astSetComment(node, comment);
         node.data.typeExpression = typeExpression;
         node.data.name = name;
         node.data.isNameFirst = !!isNameFirst;
@@ -4751,7 +4755,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
                 || node.data.isBracketed !== isBracketed
                 || node.data.typeExpression !== typeExpression
                 || node.data.isNameFirst !== isNameFirst
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocParameterTag(tagName, name, isBracketed, typeExpression, isNameFirst, comment), node)
             : node;
     }
@@ -4760,7 +4764,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function createJSDocPropertyTag(tagName: AstIdentifier | undefined, name: AstEntityName, isBracketed: boolean, typeExpression?: AstJSDocTypeExpression, isNameFirst?: boolean, comment?: string | AstNodeArray<AstJSDocComment>): AstJSDocPropertyTag {
         const node = AstNode.JSDocPropertyTag();
         node.data.tagName = tagName ?? createIdentifier("prop");
-        node.data.comment = comment;
+        astSetComment(node, comment);
         node.data.typeExpression = typeExpression;
         node.data.name = name;
         node.data.isNameFirst = !!isNameFirst;
@@ -4775,7 +4779,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
                 || node.data.isBracketed !== isBracketed
                 || node.data.typeExpression !== typeExpression
                 || node.data.isNameFirst !== isNameFirst
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocPropertyTag(tagName, name, isBracketed, typeExpression, isNameFirst, comment), node)
             : node;
     }
@@ -4784,7 +4788,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function createJSDocCallbackTag(tagName: AstIdentifier | undefined, typeExpression: AstJSDocSignature, fullName?: AstIdentifier | AstJSDocNamespaceDeclaration, comment?: string | AstNodeArray<AstJSDocComment>): AstJSDocCallbackTag {
         const node = AstNode.JSDocCallbackTag();
         node.data.tagName = tagName ?? createIdentifier("callback");
-        node.data.comment = comment;
+        astSetComment(node, comment);
         node.data.typeExpression = typeExpression;
         node.data.fullName = fullName;
         node.data.name = getJSDocTypeAliasName(fullName);
@@ -4799,7 +4803,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
         return node.data.tagName !== tagName
                 || node.data.typeExpression !== typeExpression
                 || node.data.fullName !== fullName
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocCallbackTag(tagName, typeExpression, fullName, comment), node)
             : node;
     }
@@ -4808,7 +4812,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function createJSDocOverloadTag(tagName: AstIdentifier | undefined, typeExpression: AstJSDocSignature, comment?: string | AstNodeArray<AstJSDocComment>): AstJSDocOverloadTag {
         const node = AstNode.JSDocOverloadTag();
         node.data.tagName = tagName ?? createIdentifier("overload");
-        node.data.comment = comment;
+        astSetComment(node, comment);
         node.data.typeExpression = typeExpression;
         return finish(node);
     }
@@ -4817,7 +4821,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function updateJSDocOverloadTag(node: AstJSDocOverloadTag, tagName: AstIdentifier = getDefaultTagName(node), typeExpression: AstJSDocSignature, comment: string | AstNodeArray<AstJSDocComment> | undefined): AstJSDocOverloadTag {
         return node.data.tagName !== tagName
                 || node.data.typeExpression !== typeExpression
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocOverloadTag(tagName, typeExpression, comment), node)
             : node;
     }
@@ -4826,7 +4830,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function createJSDocAugmentsTag(tagName: AstIdentifier | undefined, className: AstJSDocAugmentsTag["data"]["class"], comment?: string | AstNodeArray<AstJSDocComment>): AstJSDocAugmentsTag {
         const node = AstNode.JSDocAugmentsTag();
         node.data.tagName = tagName ?? createIdentifier("augments");
-        node.data.comment = comment;
+        astSetComment(node, comment);
         node.data.class = className;
         return finish(node);
     }
@@ -4835,7 +4839,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function updateJSDocAugmentsTag(node: AstJSDocAugmentsTag, tagName: AstIdentifier = getDefaultTagName(node), className: AstJSDocAugmentsTag["data"]["class"], comment: string | AstNodeArray<AstJSDocComment> | undefined): AstJSDocAugmentsTag {
         return node.data.tagName !== tagName
                 || node.data.class !== className
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocAugmentsTag(tagName, className, comment), node)
             : node;
     }
@@ -4844,7 +4848,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function createJSDocImplementsTag(tagName: AstIdentifier | undefined, className: AstJSDocImplementsTag["data"]["class"], comment?: string | AstNodeArray<AstJSDocComment>): AstJSDocImplementsTag {
         const node = AstNode.JSDocImplementsTag();
         node.data.tagName = tagName ?? createIdentifier("implements");
-        node.data.comment = comment;
+        astSetComment(node, comment);
         node.data.class = className;
         return finish(node);
     }
@@ -4853,7 +4857,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function createJSDocSeeTag(tagName: AstIdentifier | undefined, name: AstJSDocNameReference | undefined, comment?: string | AstNodeArray<AstJSDocComment>): AstJSDocSeeTag {
         const node = AstNode.JSDocSeeTag();
         node.data.tagName = tagName ?? createIdentifier("see");
-        node.data.comment = comment;
+        astSetComment(node, comment);
         node.data.name = name;
         return finish(node);
     }
@@ -4862,7 +4866,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function updateJSDocSeeTag(node: AstJSDocSeeTag, tagName: AstIdentifier | undefined, name: AstJSDocNameReference | undefined, comment?: string | AstNodeArray<AstJSDocComment>): AstJSDocSeeTag {
         return node.data.tagName !== tagName
                 || node.data.name !== name
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocSeeTag(tagName, name, comment), node)
             : node;
     }
@@ -4946,7 +4950,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function updateJSDocImplementsTag(node: AstJSDocImplementsTag, tagName: AstIdentifier = getDefaultTagName(node), className: AstJSDocImplementsTag["data"]["class"], comment: string | AstNodeArray<AstJSDocComment> | undefined): AstJSDocImplementsTag {
         return node.data.tagName !== tagName
                 || node.data.class !== className
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocImplementsTag(tagName, className, comment), node)
             : node;
     }
@@ -4962,7 +4966,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function createJSDocSimpleTag<T extends AstJSDocTag>(makeTag: () => T, tagName: AstIdentifier | undefined, comment?: string | AstNodeArray<AstJSDocComment>) {
         const node = makeTag();
         node.data.tagName = tagName ?? createIdentifier(getDefaultTagNameForKind(node.kind));
-        node.data.comment = comment;
+        astSetComment(node as AstHasComment, comment);
         return finish(node);
     }
 
@@ -4976,7 +4980,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     // updateJSDocDeprecatedTag
     function updateJSDocSimpleTag<T extends AstJSDocTag>(makeTag: () => T, node: T, tagName: AstIdentifier = getDefaultTagName(node), comment: string | AstNodeArray<AstJSDocComment> | undefined) {
         return node.data.tagName !== tagName
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocSimpleTag(makeTag, tagName, comment), node) :
             node;
     }
@@ -5002,7 +5006,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function updateJSDocTypeLikeTag<T extends AstJSDocTag & { readonly data: { typeExpression?: AstJSDocTypeExpression; }; }>(makeTag: () => T, node: T, tagName: AstIdentifier = getDefaultTagName(node), typeExpression: AstJSDocTypeExpression | undefined, comment: string | AstNodeArray<AstJSDocComment> | undefined) {
         return node.data.tagName !== tagName
                 || node.data.typeExpression !== typeExpression
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocTypeLikeTag(makeTag, tagName, typeExpression, comment), node)
             : node;
     }
@@ -5016,7 +5020,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     // @api
     function updateJSDocUnknownTag(node: AstJSDocUnknownTag, tagName: AstIdentifier, comment: string | AstNodeArray<AstJSDocComment> | undefined): AstJSDocUnknownTag {
         return node.data.tagName !== tagName
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocUnknownTag(tagName, comment), node)
             : node;
     }
@@ -5032,7 +5036,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function updateJSDocEnumTag(node: AstJSDocEnumTag, tagName: AstIdentifier = getDefaultTagName(node), typeExpression: AstJSDocTypeExpression, comment: string | AstNodeArray<AstJSDocComment> | undefined) {
         return node.data.tagName !== tagName
                 || node.data.typeExpression !== typeExpression
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
             ? update(createJSDocEnumTag(tagName, typeExpression, comment), node)
             : node;
     }
@@ -5041,17 +5045,17 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function createJSDocImportTag(tagName: AstIdentifier | undefined, importClause: AstImportClause | undefined, moduleSpecifier: AstExpression, attributes?: AstImportAttributes, comment?: string | AstNodeArray<AstJSDocComment>): AstJSDocImportTag {
         const node = AstNode.JSDocImportTag();
         node.data.tagName = tagName ?? createIdentifier("import");
-        node.data.comment = comment;
+        astSetComment(node, comment);
         node.data.importClause = importClause;
         node.data.moduleSpecifier = moduleSpecifier;
         node.data.attributes = attributes;
-        node.data.comment = comment;
+        astSetComment(node, comment);
         return finish(node);
     }
 
     function updateJSDocImportTag(node: AstJSDocImportTag, tagName: AstIdentifier | undefined, importClause: AstImportClause | undefined, moduleSpecifier: AstExpression, attributes: AstImportAttributes | undefined, comment: string | AstNodeArray<AstJSDocComment> | undefined): AstJSDocImportTag {
         return node.data.tagName !== tagName
-                || node.data.comment !== comment
+                || astGetComment(node) !== comment
                 || node.data.importClause !== importClause
                 || node.data.moduleSpecifier !== moduleSpecifier
                 || node.data.attributes !== attributes
@@ -5076,14 +5080,14 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     // @api
     function createJSDocComment(comment?: string | AstNodeArray<AstJSDocComment> | undefined, tags?: AstNodeArrayLike<AstBaseJSDocTag> | undefined) {
         const node = AstNode.JSDocNode();
-        node.data.comment = comment;
+        astSetComment(node, comment);
         node.data.tags = asNodeArray(tags);
         return finish(node);
     }
 
     // @api
     function updateJSDocComment(node: AstJSDoc, comment: string | AstNodeArray<AstJSDocComment> | undefined, tags: AstNodeArrayLike<AstJSDocTag> | undefined) {
-        return node.data.comment !== comment
+        return astGetComment(node) !== comment
                 || !sameNodeArray(node.data.tags, tags)
             ? update(createJSDocComment(comment, tags), node)
             : node;
@@ -5588,11 +5592,11 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     }
 
     function flattenCommaElements(node: AstExpression): AstExpression | readonly AstExpression[] {
-        if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
-            if (isAstCommaListExpression(node)) {
+        if (astNodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
+            if (astIsCommaListExpression(node)) {
                 return node.data.elements.items;
             }
-            if (isAstBinaryExpression(node) && isAstCommaToken(node.data.operatorToken)) {
+            if (astIsBinaryExpression(node) && astIsCommaToken(node.data.operatorToken)) {
                 return [node.data.left, node.data.right];
             }
         }
@@ -5645,8 +5649,8 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
         clone.emitNode = undefined;
         setOriginal(clone, node);
 
-        if (isAstIdentifier(node)) {
-            Debug.assert(isAstIdentifier(clone));
+        if (astIsIdentifier(node)) {
+            Debug.assert(astIsIdentifier(clone));
 
             const typeArguments = getIdentifierTypeArguments(node);
             if (typeArguments) setIdentifierTypeArguments(clone, typeArguments);
@@ -5654,8 +5658,8 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
             const autoGenerate = getIdentifierAutoGenerate(node);
             if (autoGenerate) setIdentifierAutoGenerate(clone, { ...autoGenerate });
         }
-        else if (isAstPrivateIdentifier(node)) {
-            Debug.assert(isAstPrivateIdentifier(clone));
+        else if (astIsPrivateIdentifier(node)) {
+            Debug.assert(astIsPrivateIdentifier(clone));
 
             const autoGenerate = getIdentifierAutoGenerate(node);
             if (autoGenerate) setIdentifierAutoGenerate(clone, { ...autoGenerate });
@@ -5702,8 +5706,8 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
      * the containing expression is created/updated.
      */
     function isIgnorableParen(node: AstExpression) {
-        return isAstParenthesizedExpression(node)
-            && nodeIsSynthesized(node)
+        return astIsParenthesizedExpression(node)
+            && astNodeIsSynthesized(node)
             && nodeIsSynthesized(getSourceMapRange(node))
             && nodeIsSynthesized(getCommentRange(node))
             && !some(getSyntheticLeadingComments(node))
@@ -5711,7 +5715,7 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     }
 
     function restoreOuterExpressions(outerExpression: AstExpression | undefined, innerExpression: AstExpression, kinds = OuterExpressionKinds.All): AstExpression {
-        if (outerExpression && isAstOuterExpression(outerExpression, kinds) && !isIgnorableParen(outerExpression)) {
+        if (outerExpression && astIsOuterExpression(outerExpression, kinds) && !isIgnorableParen(outerExpression)) {
             return updateOuterExpression(
                 outerExpression,
                 restoreOuterExpressions(outerExpression.data.expression, innerExpression),
@@ -5749,11 +5753,11 @@ export function createAstNodeFactory(flags: NodeFactoryFlags, onFinishNode?: (no
     function asEmbeddedStatement<T extends AstNode>(statement: T): T | AstEmptyStatement;
     function asEmbeddedStatement<T extends AstNode>(statement: T | undefined): T | AstEmptyStatement | undefined;
     function asEmbeddedStatement<T extends AstNode>(statement: T | undefined): T | AstEmptyStatement | undefined {
-        return statement && isAstNotEmittedStatement(statement) ? setTextRange(setOriginal(createEmptyStatement(), statement), statement) : statement;
+        return statement && astIsNotEmittedStatement(statement) ? setTextRange(setOriginal(createEmptyStatement(), statement), statement) : statement;
     }
 
     function asVariableDeclaration(variableDeclaration: string | AstBindingName | AstVariableDeclaration | undefined) {
-        if (typeof variableDeclaration === "string" || variableDeclaration && !isAstVariableDeclaration(variableDeclaration)) {
+        if (typeof variableDeclaration === "string" || variableDeclaration && !astIsVariableDeclaration(variableDeclaration)) {
             return createVariableDeclaration(
                 variableDeclaration,
                 /*exclamationToken*/ undefined,
@@ -5911,8 +5915,8 @@ function getJSDocTypeAliasName(fullName: AstJSDocNamespaceBody | undefined) {
     if (fullName) {
         let rightNode = fullName;
         while (true) {
-            if (isAstIdentifier(rightNode) || !rightNode.data.body) {
-                return isAstIdentifier(rightNode) ? rightNode : rightNode.data.name;
+            if (astIsIdentifier(rightNode) || !rightNode.data.body) {
+                return astIsIdentifier(rightNode) ? rightNode : rightNode.data.name;
             }
             rightNode = rightNode.data.body;
         }

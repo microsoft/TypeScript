@@ -244,7 +244,7 @@ function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDo
 }
 
 /** @internal */
-export function getJsDocTagsFromDeclarations(declarations?: Declaration[], checker?: TypeChecker): JSDocTagInfo[] {
+export function getJsDocTagsFromDeclarations(declarations?: readonly Declaration[], checker?: TypeChecker): JSDocTagInfo[] {
     // Only collect doc comments from duplicate declarations once.
     const infos: JSDocTagInfo[] = [];
     forEachUnique(declarations, declaration => {

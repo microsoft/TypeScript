@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
@@ -52,13 +53,35 @@ import {
     FunctionExpression,
     FunctionTypeNode,
     GetAccessorDeclaration,
+    HasAsteriskToken,
+    HasBody,
+    HasComment,
+    HasElements,
+    HasEndFlowNode,
+    HasExclamationToken,
+    HasExpression,
+    HasInitializer,
+    HasIsTypeOnly,
     HasJSDoc,
     HasLocals,
+    HasMembers,
     HasName,
+    HasParameters,
+    HasQuestionDotToken,
+    HasQuestionToken,
+    HasStatement,
+    HasStatements,
+    HasSymbol,
+    HasTagName,
+    HasText,
+    HasType,
+    HasTypeParameters,
+    HasTypes,
     HeritageClause,
     Identifier,
     IfStatement,
     ImportAttribute,
+    ImportAttributes,
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -70,6 +93,7 @@ import {
     IndexSignatureDeclaration,
     InferTypeNode,
     InterfaceDeclaration,
+    InternalHasTypeArguments,
     IntersectionTypeNode,
     IsFunctionLike,
     JSDoc,
@@ -144,6 +168,7 @@ import {
     NamespaceExportDeclaration,
     NamespaceImport,
     NewExpression,
+    Node,
     NonNullExpression,
     NoSubstitutionTemplateLiteral,
     NotEmittedStatement,
@@ -213,7 +238,6 @@ import {
 } from "./_namespaces/ts.js";
 
 {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     type _ = [
         __Expect<IsFunctionLike, Extract<Nodes, { _signatureDeclarationBrand: any }>>,
         __Expect<Extract<Nodes, { _signatureDeclarationBrand: any }>, IsFunctionLike>,
@@ -221,7 +245,6 @@ import {
 }
 
 {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     type _ = [
         __Expect<HasLocals, Extract<Nodes, { _localsContainerBrand: any }>>,
         __Expect<Extract<Nodes, { _localsContainerBrand: any }>, HasLocals>,
@@ -229,7 +252,6 @@ import {
 }
 
 {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     type _ = [
         __Expect<HasName, Extract<Nodes, { name: any }>>,
         __Expect<Extract<Nodes, { name: any }>, HasName>,
@@ -237,11 +259,193 @@ import {
 }
 
 {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     type _ = [
         __Expect<HasJSDoc, Extract<Nodes, { jsDoc: any }>>,
         __Expect<Extract<Nodes, { jsDoc: any }>, HasJSDoc>,
     ];
+}
+
+{
+    type _ = [
+        __Expect<HasExpression, Extract<Nodes, { expression: any }>>,
+        __Expect<Extract<Nodes, { expression: any }>, HasExpression>,
+    ];
+}
+
+{
+    type _ = [
+        __Expect<HasInitializer, Extract<Nodes, { initializer: any }>>,
+        __Expect<Extract<Nodes, { initializer: any }>, HasInitializer>,
+    ];
+    type __ = Exclude<Extract<Nodes, { initializer: any }>, HasInitializer>;
+}
+
+{
+    type _ = [
+        __Expect<HasText, Extract<Nodes, { text: any, escapedText?: never }>>,
+        __Expect<Extract<Nodes, { text: any, escapedText?: never }>, HasText>,
+    ];
+    type __ = Exclude<Extract<Nodes, { text: any, escapedText?: never }>, HasText>;
+}
+
+{
+    type _ = [
+        __Expect<HasSymbol, Exclude<Extract<Nodes, { symbol: any }>, { symbol: never }>>,
+        __Expect<Exclude<Extract<Nodes, { symbol: any }>, { symbol: never }>, HasSymbol>,
+    ];
+    type __ = Exclude<Exclude<Extract<Nodes, { symbol: any }>, { symbol: never }>, HasSymbol>;
+}
+
+{
+    type _ = [
+        __Expect<HasType, Extract<Nodes, { type: Node | undefined }>>,
+        __Expect<Extract<Nodes, { type: Node | undefined }>, HasType>,
+    ];
+    type __ = Exclude<Extract<Nodes, { type: Node | undefined }>, HasType>;
+}
+
+{
+    type _ = [
+        __Expect<HasLocals, Extract<Nodes, { locals: any }>>,
+        __Expect<Extract<Nodes, { locals: any }>, HasLocals>,
+    ];
+    type __ = Exclude<Extract<Nodes, { locals: any }>, HasLocals>;
+}
+
+{
+    type _ = [
+        __Expect<HasTypeParameters, Extract<Nodes, { typeParameters: any }>>,
+        __Expect<Extract<Nodes, { typeParameters: any }>, HasTypeParameters>,
+    ];
+    type __ = Exclude<Extract<Nodes, { typeParameters: any }>, HasTypeParameters>;
+}
+
+{
+    type _ = [
+        __Expect<HasParameters, Extract<Nodes, { parameters: any }>>,
+        __Expect<Extract<Nodes, { parameters: any }>, HasParameters>,
+    ];
+    type __ = Exclude<Extract<Nodes, { parameters: any }>, HasParameters>;
+}
+
+{
+    type _ = [
+        __Expect<HasBody, Extract<Nodes, { body: any }>>,
+        __Expect<Extract<Nodes, { body: any }>, HasBody>,
+    ];
+    type __ = Exclude<Extract<Nodes, { body: any }>, HasBody>;
+}
+
+{
+    type _ = [
+        __Expect<HasQuestionToken, Extract<Nodes, { questionToken: any }>>,
+        __Expect<Extract<Nodes, { questionToken: any }>, HasQuestionToken>,
+    ];
+    type __ = Exclude<Extract<Nodes, { questionToken: any }>, HasQuestionToken>;
+}
+
+{
+    type _ = [
+        __Expect<HasEndFlowNode, Extract<Nodes, { endFlowNode: any }>>,
+        __Expect<Extract<Nodes, { endFlowNode: any }>, HasEndFlowNode>,
+    ];
+    type __ = Exclude<Extract<Nodes, { endFlowNode: any }>, HasEndFlowNode>;
+}
+
+{
+    type _ = [
+        __Expect<InternalHasTypeArguments, Extract<Nodes, { typeArguments: any }>>,
+        __Expect<Extract<Nodes, { typeArguments: any }>, InternalHasTypeArguments>,
+    ];
+    type __ = Exclude<Extract<Nodes, { typeArguments: any }>, InternalHasTypeArguments>;
+}
+
+{
+    type _ = [
+        __Expect<HasElements, Extract<Nodes, { elements: any }>>,
+        __Expect<Extract<Nodes, { elements: any }>, HasElements>,
+    ];
+    type __ = Exclude<Extract<Nodes, { elements: any }>, HasElements>;
+}
+
+{
+    type _ = [
+        __Expect<HasMembers, Extract<Nodes, { members: any }>>,
+        __Expect<Extract<Nodes, { members: any }>, HasMembers>,
+    ];
+    type __ = Exclude<Extract<Nodes, { members: any }>, HasMembers>;
+}
+
+{
+    type _ = [
+        __Expect<HasStatement, Extract<Nodes, { statement: any }>>,
+        __Expect<Extract<Nodes, { statement: any }>, HasStatement>,
+    ];
+    type __ = Exclude<Extract<Nodes, { statement: any }>, HasStatement>;
+}
+
+{
+    type _ = [
+        __Expect<HasStatements, Extract<Nodes, { statements: any }>>,
+        __Expect<Extract<Nodes, { statements: any }>, HasStatements>,
+    ];
+    type __ = Exclude<Extract<Nodes, { statements: any }>, HasStatements>;
+}
+
+{
+    type _ = [
+        __Expect<HasExclamationToken, Extract<Nodes, { exclamationToken: any }>>,
+        __Expect<Extract<Nodes, { exclamationToken: any }>, HasExclamationToken>,
+    ];
+    type __ = Exclude<Extract<Nodes, { exclamationToken: any }>, HasExclamationToken>;
+}
+
+{
+    type _ = [
+        __Expect<HasAsteriskToken, Extract<Nodes, { asteriskToken: any }>>,
+        __Expect<Extract<Nodes, { asteriskToken: any }>, HasAsteriskToken>,
+    ];
+    type __ = Exclude<Extract<Nodes, { asteriskToken: any }>, HasAsteriskToken>;
+}
+
+{
+    type _ = [
+        __Expect<HasQuestionDotToken, Extract<Nodes, { questionDotToken: any }>>,
+        __Expect<Extract<Nodes, { questionDotToken: any }>, HasQuestionDotToken>,
+    ];
+    type __ = Exclude<Extract<Nodes, { questionDotToken: any }>, HasQuestionDotToken>;
+}
+
+{
+    type _ = [
+        __Expect<HasComment, Extract<Nodes, { comment: any }>>,
+        __Expect<Extract<Nodes, { comment: any }>, HasComment>,
+    ];
+    type __ = Exclude<Extract<Nodes, { comment: any }>, HasComment>;
+}
+
+{
+    type _ = [
+        __Expect<HasTypes, Extract<Nodes, { types: any }>>,
+        __Expect<Extract<Nodes, { types: any }>, HasTypes>,
+    ];
+    type __ = Exclude<Extract<Nodes, { types: any }>, HasTypes>;
+}
+
+{
+    type _ = [
+        __Expect<HasTagName, Extract<Nodes, { tagName: any }>>,
+        __Expect<Extract<Nodes, { tagName: any }>, HasTagName>,
+    ];
+    type __ = Exclude<Extract<Nodes, { tagName: any }>, HasTagName>;
+}
+
+{
+    type _ = [
+        __Expect<HasIsTypeOnly, Extract<Nodes, { isTypeOnly: any }>>,
+        __Expect<Extract<Nodes, { isTypeOnly: any }>, HasIsTypeOnly>,
+    ];
+    type __ = Exclude<Extract<Nodes, { isTypeOnly: any }>, HasIsTypeOnly>;
 }
 
 // Registry
@@ -619,4 +823,4 @@ export interface NodeMap {
  */
 export type Nodes = NodeMap[keyof NodeMap];
 
-type __Expect<T, _ extends T> = never; // eslint-disable-line @typescript-eslint/naming-convention
+type __Expect<T, _ extends T> = never;

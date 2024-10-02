@@ -13,7 +13,7 @@ import {
     isArrayBindingElement,
     isAssertClause,
     isAssertsKeyword,
-    isAsteriskToken,
+    astIseriskToken,
     isAwaitKeyword,
     isBinaryOperatorToken,
     isBindingElement,
@@ -705,7 +705,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateMethodDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
-            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken) : node.asteriskToken,
+            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, astIseriskToken) : node.asteriskToken,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isPropertyName)),
             tokenVisitor ? nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken) : node.questionToken,
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
@@ -1102,7 +1102,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateFunctionExpression(
             node,
             nodesVisitor(node.modifiers, visitor, isModifier),
-            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken) : node.asteriskToken,
+            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, astIseriskToken) : node.asteriskToken,
             nodeVisitor(node.name, visitor, isIdentifier),
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
             visitParameterList(node.parameters, visitor, context, nodesVisitor),
@@ -1196,7 +1196,7 @@ const visitEachChildTable: VisitEachChildTable = {
     [SyntaxKind.YieldExpression]: function visitEachChildOfYieldExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateYieldExpression(
             node,
-            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken) : node.asteriskToken,
+            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, astIseriskToken) : node.asteriskToken,
             nodeVisitor(node.expression, visitor, isExpression),
         );
     },
@@ -1430,7 +1430,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateFunctionDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifier),
-            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken) : node.asteriskToken,
+            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, astIseriskToken) : node.asteriskToken,
             nodeVisitor(node.name, visitor, isIdentifier),
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
             visitParameterList(node.parameters, visitor, context, nodesVisitor),

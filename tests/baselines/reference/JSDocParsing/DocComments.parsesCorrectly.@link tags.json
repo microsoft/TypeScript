@@ -5,7 +5,7 @@
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
-    "comment": {
+    "commentArray": {
         "0": {
             "kind": "JSDocText",
             "pos": 0,
@@ -89,7 +89,7 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 70,
@@ -164,7 +164,7 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 113,
@@ -404,7 +404,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 597,

@@ -209,7 +209,7 @@ import {
     AstTryStatementData,
     AstTupleTypeNodeData,
     AstTypeAliasDeclarationData,
-    AstTypeAssertionData,
+    AstTypeAssertionExpressionData,
     AstTypeLiteralNodeData,
     AstTypeOfExpressionData,
     AstTypeOperatorNodeData,
@@ -315,6 +315,24 @@ import {
     AstEntityNameExpression,
     AstQuestionDotToken,
     AstMemberName,
+    AstStringLiteralLike,
+    AstNumericLiteral,
+    AstObjectLiteralExpression,
+    AstBindableStaticNameExpression,
+    AstWrappedExpression,
+    AstNodeOneOf,
+    AstLeftHandSideExpression,
+    AstBindableStaticAccessExpression,
+    AstEntityName,
+    AstJSDocTypeExpression,
+    AstComputedPropertyName,
+    AstElementAccessExpression,
+    AstDeclaration,
+    AstModuleBlock,
+    AstStringLiteral,
+    astGetComment,
+    astSetComment,
+    AstJSDocUnknownTag,
 } from "./_namespaces/ts.js";
 
 // branded string type used to store absolute, normalized and canonicalized paths
@@ -1254,12 +1272,12 @@ export class Node<
     get pos(): number { return this.ast.pos; }
     get end(): number { return this.ast.end; }
     get flags(): NodeFlags { return this.ast.flags; }
-    get parent(): Node { return this.ast.parent?.node!; }
+    get parent(): Node { return this.ast.parent?.node; }
 
     /** @internal */ set pos(value) { this.ast.pos = value; }
     /** @internal */ set end(value) { this.ast.end = value; }
     /** @internal */ set flags(value) { this.ast.flags = value; }
-    /** @internal */ set parent(value) { this.ast.parent = value?.ast; }
+    /** @internal */ set parent(value) { this.ast.parent = value?.ast as typeof this.ast.parent; }
     /** @internal */ get modifierFlagsCache(): ModifierFlags { return this.ast.modifierFlagsCache; }
     /** @internal */ set modifierFlagsCache(value) { this.ast.modifierFlagsCache = value; }
     /** @internal */ get transformFlags(): TransformFlags { return this.ast.transformFlags; }
@@ -1520,11 +1538,22 @@ export type HasFlowNode =
     | TryStatement
     | DebuggerStatement;
 
+/** @internal */
+export type HasEndFlowNode =
+    | MethodDeclaration
+    | ClassStaticBlockDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | FunctionExpression
+    | ArrowFunction
+    | FunctionDeclaration
+    | SourceFile;
+
 // Ideally, `ForEachChildNodes` and `VisitEachChildNodes` would not differ.
 // However, `forEachChild` currently processes JSDoc comment syntax and missing declarations more thoroughly.
 // On the other hand, `visitEachChild` actually processes `Identifier`s (which really *shouldn't* have children,
 // but are constructed as if they could for faked-up `QualifiedName`s in the language service.)
-
 /** @internal */
 export type ForEachChildNodes =
     | HasChildren
@@ -1794,7 +1823,20 @@ export type HasType =
     | JSDocNonNullableType
     | JSDocNullableType
     | JSDocOptionalType
-    | JSDocVariadicType;
+    | JSDocVariadicType
+    | OptionalTypeNode
+    | RestTypeNode
+    | NamedTupleMember
+    | TemplateLiteralTypeSpan
+    | SatisfiesExpression
+    | JSDocNamepathType
+    | JSDocSignature;
+
+/** @internal */
+export type HasTypes =
+    | UnionTypeNode
+    | IntersectionTypeNode
+    | HeritageClause;
 
 // NOTE: Changing the following list requires changes to:
 // - `canHaveIllegalType` in factory/utilities.ts
@@ -1802,6 +1844,29 @@ export type HasType =
 export type HasIllegalType =
     | ConstructorDeclaration
     | SetAccessorDeclaration;
+
+/** @internal */
+export type HasTypeParameters =
+    | ConstructorDeclaration
+    | SetAccessorDeclaration
+    | GetAccessorDeclaration
+    | CallSignatureDeclaration
+    | ConstructSignatureDeclaration
+    | MethodSignature
+    | IndexSignatureDeclaration
+    | MethodDeclaration
+    | FunctionDeclaration
+    | JSDocSignature
+    | JSDocFunctionType
+    | FunctionTypeNode
+    | ConstructorTypeNode
+    | FunctionExpression
+    | ArrowFunction
+    | ClassExpression
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | TypeAliasDeclaration
+    | JSDocTemplateTag;
 
 // NOTE: Changing the following list requires changes to:
 // - `canHaveIllegalTypeParameters` in factory/utilities.ts
@@ -1811,12 +1876,185 @@ export type HasIllegalTypeParameters =
     | SetAccessorDeclaration
     | GetAccessorDeclaration;
 
+/** @internal */
+export type HasParameters =
+    | ConstructorDeclaration
+    | SetAccessorDeclaration
+    | GetAccessorDeclaration
+    | CallSignatureDeclaration
+    | ConstructSignatureDeclaration
+    | MethodSignature
+    | IndexSignatureDeclaration
+    | MethodDeclaration
+    | FunctionDeclaration
+    | JSDocSignature
+    | JSDocFunctionType
+    | FunctionTypeNode
+    | ConstructorTypeNode
+    | FunctionExpression
+    | ArrowFunction;
+
+/** @internal */
+export type HasBody =
+    | MethodDeclaration
+    | ClassStaticBlockDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | FunctionDeclaration
+    | FunctionExpression
+    | ArrowFunction
+    | ModuleDeclaration;
+
 export type HasTypeArguments =
     | CallExpression
     | NewExpression
     | TaggedTemplateExpression
+    | ExpressionWithTypeArguments
+    | TypeQueryNode
+    | ImportTypeNode
+    | TypeReferenceNode
     | JsxOpeningElement
     | JsxSelfClosingElement;
+
+/** @internal */
+export type InternalHasTypeArguments =
+    | HasTypeArguments
+    | MethodSignature
+    | MethodDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | CallSignatureDeclaration
+    | ConstructSignatureDeclaration
+    | IndexSignatureDeclaration
+    | FunctionTypeNode
+    | ConstructorTypeNode
+    | FunctionExpression
+    | ArrowFunction
+    | FunctionDeclaration
+    | JSDocFunctionType;
+
+/** @internal */
+export type HasElements =
+    | TupleTypeNode
+    | ObjectBindingPattern
+    | ArrayBindingPattern
+    | ArrayLiteralExpression
+    | ImportAttributes
+    | NamedImports
+    | NamedExports
+    | CommaListExpression;
+
+/** @internal */
+export type HasMembers =
+    | TypeLiteralNode
+    | MappedTypeNode
+    | ClassExpression
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | EnumDeclaration;
+
+/** @internal */
+export type HasStatement =
+    | DoStatement
+    | WhileStatement
+    | ForStatement
+    | ForInStatement
+    | ForOfStatement
+    | WithStatement
+    | LabeledStatement;
+
+/** @internal */
+export type HasStatements =
+    | Block
+    | ModuleBlock
+    | CaseClause
+    | DefaultClause
+    | SourceFile;
+
+/** @internal */
+export type HasExclamationToken =
+    | MethodDeclaration
+    | PropertyAssignment
+    | PropertyDeclaration
+    | ShorthandPropertyAssignment
+    | VariableDeclaration;
+
+/** @internal */
+export type HasQuestionDotToken =
+    | PropertyAccessExpression
+    | ElementAccessExpression
+    | CallExpression
+    | TaggedTemplateExpression;
+
+/** @internal */
+export type HasTagName =
+    | JsxSelfClosingElement
+    | JsxOpeningElement
+    | JsxClosingElement
+    | JSDocUnknownTag
+    | JSDocAugmentsTag
+    | JSDocImplementsTag
+    | JSDocAuthorTag
+    | JSDocDeprecatedTag
+    | JSDocClassTag
+    | JSDocPublicTag
+    | JSDocPrivateTag
+    | JSDocProtectedTag
+    | JSDocReadonlyTag
+    | JSDocOverrideTag
+    | JSDocCallbackTag
+    | JSDocOverloadTag
+    | JSDocEnumTag
+    | JSDocParameterTag
+    | JSDocReturnTag
+    | JSDocThisTag
+    | JSDocTypedefTag
+    | JSDocSeeTag
+    | JSDocPropertyTag
+    | JSDocTemplateTag
+    | JSDocTypeTag
+    | JSDocThrowsTag
+    | JSDocSatisfiesTag
+    | JSDocImportTag;
+
+/** @internal */
+export type HasIsTypeOnly =
+    | ImportEqualsDeclaration
+    | ExportDeclaration
+    | ExportSpecifier
+    | ImportClause
+    | ImportSpecifier;
+
+/** @internal */
+export type HasComment =
+    | JSDoc
+    | JSDocUnknownTag
+    | JSDocAugmentsTag
+    | JSDocImplementsTag
+    | JSDocAuthorTag
+    | JSDocDeprecatedTag
+    | JSDocClassTag
+    | JSDocPublicTag
+    | JSDocPrivateTag
+    | JSDocProtectedTag
+    | JSDocReadonlyTag
+    | JSDocOverrideTag
+    | JSDocCallbackTag
+    | JSDocOverloadTag
+    | JSDocEnumTag
+    | JSDocParameterTag
+    | JSDocReturnTag
+    | JSDocThisTag
+    | JSDocTypeTag
+    | JSDocTemplateTag
+    | JSDocTypedefTag
+    | JSDocSeeTag
+    | JSDocPropertyTag
+    | JSDocThrowsTag
+    | JSDocSatisfiesTag
+    | JSDocImportTag;
 
 export type HasInitializer =
     | HasExpressionInitializer
@@ -1831,6 +2069,7 @@ export type HasExpressionInitializer =
     | BindingElement
     | PropertyDeclaration
     | PropertyAssignment
+    | PropertySignature
     | EnumMember;
 
 /** @internal @knipignore */
@@ -1911,6 +2150,80 @@ export type HasIllegalModifiers =
     | NamespaceExportDeclaration;
 
 /** @internal */
+export type InternalHasModifiers =
+    | HasModifiers
+    | HasIllegalModifiers;
+
+/** @internal */
+export type HasSymbol =
+    | NumericLiteral
+    | StringLiteral
+    | NoSubstitutionTemplateLiteral
+    | Identifier
+    | TypeParameterDeclaration
+    | ParameterDeclaration
+    | PropertySignature
+    | PropertyDeclaration
+    | MethodSignature
+    | MethodDeclaration
+    | ClassStaticBlockDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | CallSignatureDeclaration
+    | ConstructSignatureDeclaration
+    | IndexSignatureDeclaration
+    | FunctionTypeNode
+    | ConstructorTypeNode
+    | TypeLiteralNode
+    | MappedTypeNode
+    | NamedTupleMember
+    | BindingElement
+    | ObjectLiteralExpression
+    | PropertyAccessExpression
+    | ElementAccessExpression
+    | CallExpression
+    | NewExpression
+    | FunctionExpression
+    | ArrowFunction
+    | BinaryExpression
+    | ClassExpression
+    | VariableDeclaration
+    | FunctionDeclaration
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | TypeAliasDeclaration
+    | EnumDeclaration
+    | ModuleDeclaration
+    | NamespaceExportDeclaration
+    | ImportEqualsDeclaration
+    | ImportDeclaration
+    | ImportClause
+    | NamespaceImport
+    | ImportSpecifier
+    | ExportAssignment
+    | ExportDeclaration
+    | NamespaceExport
+    | ExportSpecifier
+    | MissingDeclaration
+    | JsxAttribute
+    | JsxAttributes
+    | SourceFile
+    | JSDocCallbackTag
+    | JSDocEnumTag
+    | JSDocFunctionType
+    | JSDocSignature
+    | JSDocTypedefTag
+    | PropertyAssignment
+    | ShorthandPropertyAssignment
+    | SpreadAssignment
+    | EnumMember
+    | JSDocParameterTag
+    | JSDocPropertyTag
+    | JSDocTypeLiteral
+    | NotEmittedTypeElement;
+
+/** @internal */
 export type PrimitiveLiteral =
     | BooleanLiteral
     | NumericLiteral
@@ -1919,6 +2232,21 @@ export type PrimitiveLiteral =
     | BigIntLiteral
     | PrefixUnaryExpression & { operator: SyntaxKind.PlusToken; operand: NumericLiteral; }
     | PrefixUnaryExpression & { operator: SyntaxKind.MinusToken; operand: NumericLiteral | BigIntLiteral; };
+
+/** @internal */
+export type HasText =
+    | NumericLiteral
+    | BigIntLiteral
+    | StringLiteral
+    | RegularExpressionLiteral
+    | TemplateLiteralToken
+    | JsxText
+    | JSDocText
+    | JSDocLink
+    | JSDocLinkCode
+    | JSDocLinkPlain
+    | SourceFile
+    ;
 
 /**
  * Declarations that can contain other declarations. Corresponds with `ContainerFlags.IsContainer` in binder.ts.
@@ -2432,15 +2760,65 @@ export type HasName =
     | JSDocPropertyTag
     | MissingDeclaration;
 
+// NOTE: Changing the following list requires changes to:
+// - `astCanHaveExpression` in ast.ts
+// - `astGetExpression` in ast.ts
 /** @internal */
-export interface DynamicNamedDeclaration extends NamedDeclaration {
-    readonly name: ComputedPropertyName;
-}
+export type HasExpression =
+    | ComputedPropertyName
+    | TypeParameterDeclaration
+    | Decorator
+    | PropertyAccessExpression
+    | ElementAccessExpression
+    | CallExpression
+    | NewExpression
+    | TypeAssertionExpression
+    | ParenthesizedExpression
+    | DeleteExpression
+    | TypeOfExpression
+    | VoidExpression
+    | AwaitExpression
+    | ForInStatement
+    | ForOfStatement
+    | ExpressionStatement
+    | IfStatement
+    | DoStatement
+    | WhileStatement
+    | YieldExpression
+    | SpreadElement
+    | ExpressionWithTypeArguments
+    | AsExpression
+    | NonNullExpression
+    | SatisfiesExpression
+    | TemplateSpan
+    | ReturnStatement
+    | WithStatement
+    | SwitchStatement
+    | ThrowStatement
+    | ExportAssignment
+    | ExternalModuleReference
+    | JsxSpreadAttribute
+    | JsxExpression
+    | CaseClause
+    | SpreadAssignment
+    | PartiallyEmittedExpression
+    | SyntheticReferenceExpression;
 
 /** @internal */
-export interface DynamicNamedBinaryExpression extends BinaryExpression {
+export type DynamicNamedDeclaration = NamedDeclaration & {
+    readonly name: ComputedPropertyName;
+    readonly data: {
+        readonly name: AstComputedPropertyName;
+    };
+};
+
+/** @internal */
+export type DynamicNamedBinaryExpression = BinaryExpression & {
     readonly left: ElementAccessExpression;
-}
+    readonly data: {
+        readonly left: AstElementAccessExpression;
+    };
+};
 
 /** @internal */
 // A declaration that supports late-binding (used in checker)
@@ -4304,10 +4682,14 @@ export class BinaryExpression extends Node<SyntaxKind.BinaryExpression, AstBinar
 
 export type AssignmentOperatorToken = Token<AssignmentOperator>;
 
-export interface AssignmentExpression<TOperator extends AssignmentOperatorToken> extends BinaryExpression {
+export type AssignmentExpression<TOperator extends AssignmentOperatorToken> = BinaryExpression & {
     readonly left: LeftHandSideExpression;
     readonly operatorToken: TOperator;
-}
+    readonly data: {
+        readonly left: AstLeftHandSideExpression;
+        readonly operatorToken: TOperator;
+    };
+};
 
 export interface ObjectDestructuringAssignment extends AssignmentExpression<EqualsToken> {
     readonly left: ObjectLiteralExpression;
@@ -5050,7 +5432,7 @@ export class CallExpression extends Node<SyntaxKind.CallExpression, AstCallExpre
     get questionDotToken(): QuestionDotToken | undefined { return this.ast.data.questionDotToken?.node; }
     get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
     get arguments(): NodeArray<Expression> { return this.ast.data.arguments.nodes; }
-    
+
     /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
     /** @internal */ set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
     /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
@@ -5086,6 +5468,9 @@ export type OptionalChainRoot =
 /** @internal */
 export type BindableObjectDefinePropertyCall = CallExpression & {
     readonly arguments: readonly [BindableStaticNameExpression, StringLiteralLike | NumericLiteral, ObjectLiteralExpression] & Readonly<TextRange>;
+    readonly data: {
+        readonly arguments: { readonly items: readonly [AstBindableStaticNameExpression, AstStringLiteralLike | AstNumericLiteral, AstObjectLiteralExpression]; } & Readonly<TextRange>
+    };
 };
 
 /** @internal */
@@ -5096,16 +5481,25 @@ export type BindableStaticNameExpression =
 /** @internal */
 export type LiteralLikeElementAccessExpression = ElementAccessExpression & Declaration & {
     readonly argumentExpression: StringLiteralLike | NumericLiteral;
+    readonly data: {
+        readonly argumentExpression: AstStringLiteralLike | AstNumericLiteral;
+    };
 };
 
 /** @internal */
 export type BindableStaticElementAccessExpression = LiteralLikeElementAccessExpression & {
     readonly expression: BindableStaticNameExpression;
+    readonly data: {
+        readonly expression: AstBindableStaticNameExpression;
+    };
 };
 
 /** @internal */
 export type BindableElementAccessExpression = ElementAccessExpression & {
     readonly expression: BindableStaticNameExpression;
+    readonly data: {
+        readonly expression: AstBindableStaticNameExpression;
+    };
 };
 
 /** @internal */
@@ -5119,14 +5513,20 @@ export type BindableAccessExpression =
     | BindableElementAccessExpression;
 
 /** @internal */
-export interface BindableStaticPropertyAssignmentExpression extends BinaryExpression {
+export type BindableStaticPropertyAssignmentExpression = BinaryExpression & {
     readonly left: BindableStaticAccessExpression;
-}
+    readonly data: {
+        readonly left: AstBindableStaticAccessExpression;
+    };
+};
 
 /** @internal */
-export interface BindablePropertyAssignmentExpression extends BinaryExpression {
+export type BindablePropertyAssignmentExpression = BinaryExpression & {
     readonly left: BindableAccessExpression;
-}
+    readonly data: {
+        readonly left: AstBindableStaticAccessExpression;
+    };
+};
 
 // see: https://tc39.github.io/ecma262/#prod-SuperCall
 export interface SuperCall extends CallExpression {
@@ -5219,7 +5619,7 @@ export class AsExpression extends Node<SyntaxKind.AsExpression, AstAsExpressionD
 }
 
 // dprint-ignore
-export class TypeAssertionExpression extends Node<SyntaxKind.TypeAssertionExpression, AstTypeAssertionData> implements UnaryExpression {
+export class TypeAssertionExpression extends Node<SyntaxKind.TypeAssertionExpression, AstTypeAssertionExpressionData> implements UnaryExpression {
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
     // declare readonly ast: AstTypeAssertion;
@@ -6320,9 +6720,23 @@ export type ModuleBody =
 
 // TODO(rbuckton): Move after ModuleDeclaration
 /** @internal */
-export interface AmbientModuleDeclaration extends ModuleDeclaration {
+export type AmbientModuleDeclaration = ModuleDeclaration & {
+    readonly name: StringLiteral;
     readonly body: ModuleBlock | undefined;
-}
+    readonly data: {
+        readonly name: AstStringLiteral;
+        readonly body: AstModuleBlock | undefined;
+    };
+};
+
+// TODO(rbuckton): Move after ModuleDeclaration
+/** @internal */
+export type NonGlobalAmbientModuleDeclaration = AmbientModuleDeclaration & {
+    readonly name: StringLiteral;
+    readonly data: {
+        readonly name: AstStringLiteral;
+    };
+};
 
 // dprint-ignore
 export class ModuleDeclaration extends Node<SyntaxKind.ModuleDeclaration, AstModuleDeclarationData> implements DeclarationStatement, JSDocContainer, LocalsContainer {
@@ -6960,13 +7374,13 @@ export class JSDoc extends Node<SyntaxKind.JSDoc, AstJSDocData> {
 
     get tags(): NodeArray<JSDocTag> | undefined { return this.ast.data.tags?.nodes; }
     get comment(): string | NodeArray<JSDocComment> | undefined {
-        const comment = this.ast.data.comment;
+        const comment = astGetComment(this.ast);
         return typeof comment === "string" ? comment : comment?.nodes;
     }
 
     /** @internal */ override set parent(value) { super.parent = value; }
     /** @internal */ set tags(value) { this.ast.data.tags = value?.ast; }
-    /** @internal */ set comment(value) { this.ast.data.comment = typeof value === "string" ? value : value?.ast; }
+    /** @internal */ set comment(value) { astSetComment(this.ast, typeof value === "string" ? value : value?.ast); }
 }
 
 // TODO(rbuckton): Move after JSDocText
@@ -6978,13 +7392,13 @@ export class JSDocTag<TKind extends SyntaxKind = SyntaxKind, T extends AstJSDocT
 
     get tagName(): Identifier { return this.ast.data.tagName.node; }
     get comment(): string | NodeArray<JSDocLink | JSDocLinkCode | JSDocLinkPlain | JSDocText> | undefined {
-        const comment = this.ast.data.comment;
+        const comment = astGetComment(this.ast);
         return typeof comment === "string" ? comment : comment?.nodes;
     }
 
     /** @internal */ override set parent(value) { super.parent = value; }
     /** @internal */ set tagName(value) { this.ast.data.tagName = value.ast; }
-    /** @internal */ set comment(value) { this.ast.data.comment = typeof value === "string" ? value : value?.ast; }
+    /** @internal */ set comment(value) { astSetComment(this.ast as AstJSDocUnknownTag, typeof value === "string" ? value : value?.ast); }
 }
 
 // dprint-ignore
@@ -7277,13 +7691,18 @@ export class JSDocSignature extends Node<SyntaxKind.JSDocSignature, AstJSDocSign
 
 export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
     // readonly ast: AstJSDocPropertyLikeTag;
-    readonly data: AstJSDocTagData & AstDeclarationData;
     readonly parent: JSDoc;
     readonly name: EntityName;
     readonly typeExpression?: JSDocTypeExpression | undefined;
     /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
     readonly isNameFirst: boolean;
     readonly isBracketed: boolean;
+    readonly data: AstJSDocTagData & AstDeclarationData & {
+        readonly name: AstEntityName;
+        readonly typeExpression?: AstJSDocTypeExpression | undefined;
+        readonly isNameFirst: boolean;
+        readonly isBracketed: boolean;
+    };
 }
 
 // dprint-ignore
@@ -7913,7 +8332,7 @@ export class SourceFile extends Node<SyntaxKind.SourceFile, AstSourceFileData> i
 }
 
 /** @internal */
-export type PartialSourceFile<OptionalKeys extends keyof SourceFile = never> = 
+export type PartialSourceFile<OptionalKeys extends keyof SourceFile = never> =
     & Pick<SourceFile, "fileName">
     & Partial<Pick<SourceFile, OptionalKeys>>;
 
@@ -9482,21 +9901,23 @@ export type SymbolId = number;
 
 // dprint-ignore
 export interface Symbol {
-    flags: SymbolFlags;                     // Symbol flags
-    escapedName: __String;                  // Name of symbol
-    declarations?: Declaration[];           // Declarations associated with this symbol
-    valueDeclaration?: Declaration;         // First value declaration of the symbol
-    members?: SymbolTable;                  // Class, interface or object literal instance members
-    exports?: SymbolTable;                  // Module exports
-    globalExports?: SymbolTable;            // Conditional global UMD exports
-    /** @internal */ id: SymbolId;          // Unique id (used to look up SymbolLinks)
-    /** @internal */ mergeId: number;       // Merge id (used to look up merged symbol)
-    /** @internal */ parent?: Symbol;       // Parent symbol
-    /** @internal */ exportSymbol?: Symbol; // Exported symbol associated with this symbol
+    flags: SymbolFlags;                                     // Symbol flags
+    escapedName: __String;                                  // Name of symbol
+    readonly declarations?: readonly Declaration[];         // Declarations associated with this symbol
+    readonly valueDeclaration?: Declaration;                // First value declaration of the symbol
+    members?: SymbolTable;                                  // Class, interface or object literal instance members
+    exports?: SymbolTable;                                  // Module exports
+    globalExports?: SymbolTable;                            // Conditional global UMD exports
+    /** @internal */ astValueDeclaration?: AstDeclaration;  // Declarations associated with this symbol
+    /** @internal */ astDeclarations?: AstDeclaration[];    // First value declaration of the symbol
+    /** @internal */ id: SymbolId;                          // Unique id (used to look up SymbolLinks)
+    /** @internal */ mergeId: number;                       // Merge id (used to look up merged symbol)
+    /** @internal */ parent?: Symbol;                       // Parent symbol
+    /** @internal */ exportSymbol?: Symbol;                 // Exported symbol associated with this symbol
     /** @internal */ constEnumOnlyModule: boolean | undefined; // True if module contains only const enums or other modules with only const enums
-    /** @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
-    /** @internal */ lastAssignmentPos?: number; // Source position of last node that assigns value to symbol. Negative if it is assigned anywhere definitely
-    /** @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
+    /** @internal */ isReferenced?: SymbolFlags;            // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
+    /** @internal */ lastAssignmentPos?: number;            // Source position of last node that assigns value to symbol. Negative if it is assigned anywhere definitely
+    /** @internal */ isReplaceableByMethod?: boolean;       // Can this Javascript class property be replaced by a method symbol?
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
 }
 
@@ -12082,7 +12503,7 @@ export type OuterExpression =
 
 /** @internal */
 export type WrappedExpression<T extends Expression> =
-    | OuterExpression & { readonly expression: WrappedExpression<T>; }
+    | OuterExpression & { readonly expression: WrappedExpression<T>; readonly data: { readonly expression: AstWrappedExpression<AstNodeOneOf<T>>; }; }
     | T;
 
 /** @internal */

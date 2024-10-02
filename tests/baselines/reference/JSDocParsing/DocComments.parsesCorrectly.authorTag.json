@@ -21,7 +21,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 15,
@@ -87,7 +87,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 178,
@@ -119,7 +119,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 235,
@@ -168,7 +168,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 346,
@@ -200,7 +200,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 389,
@@ -232,7 +232,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 406,
@@ -264,7 +264,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 437,
@@ -296,7 +296,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 453,
@@ -328,7 +328,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 461,
@@ -360,7 +360,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 469,
@@ -392,7 +392,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 497,
@@ -424,7 +424,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 510,
@@ -456,7 +456,7 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 530,

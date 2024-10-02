@@ -289,7 +289,7 @@ export function isMinusToken(node: Node): node is MinusToken {
     return node.kind === SyntaxKind.MinusToken;
 }
 
-export function isAsteriskToken(node: Node): node is AsteriskToken {
+export function astIseriskToken(node: Node): node is AsteriskToken {
     return node.kind === SyntaxKind.AsteriskToken;
 }
 

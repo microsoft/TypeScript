@@ -757,13 +757,13 @@ const astForEachChildTable: AstForEachChildTable = {
             visitNode(cbNode, node.data.type);
     },
     [SyntaxKind.JSDoc]: function forEachChildInJSDoc<T>(node: AstJSDoc, cbNode: (node: AstNode) => T | undefined, cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
-        return (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment))
+        return visitNodes(cbNode, cbNodes, node.data.commentArray)
             || visitNodes(cbNode, cbNodes, node.data.tags);
     },
     [SyntaxKind.JSDocSeeTag]: function forEachChildInJSDocSeeTag<T>(node: AstJSDocSeeTag, cbNode: (node: AstNode) => T | undefined, cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.data.tagName) ||
             visitNode(cbNode, node.data.name) ||
-            (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment));
+            visitNodes(cbNode, cbNodes, node.data.commentArray);
     },
     [SyntaxKind.JSDocNameReference]: function forEachChildInJSDocNameReference<T>(node: AstJSDocNameReference, cbNode: (node: AstNode) => T | undefined, _cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.data.name);
@@ -776,23 +776,23 @@ const astForEachChildTable: AstForEachChildTable = {
     [SyntaxKind.JSDocPropertyTag]: forEachChildInJSDocParameterOrPropertyTag,
     [SyntaxKind.JSDocAuthorTag]: function forEachChildInJSDocAuthorTag<T>(node: AstJSDocAuthorTag, cbNode: (node: AstNode) => T | undefined, cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.data.tagName) ||
-            (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment));
+            visitNodes(cbNode, cbNodes, node.data.commentArray);
     },
     [SyntaxKind.JSDocImplementsTag]: function forEachChildInJSDocImplementsTag<T>(node: AstJSDocImplementsTag, cbNode: (node: AstNode) => T | undefined, cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.data.tagName) ||
             visitNode(cbNode, node.data.class) ||
-            (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment));
+            visitNodes(cbNode, cbNodes, node.data.commentArray);
     },
     [SyntaxKind.JSDocAugmentsTag]: function forEachChildInJSDocAugmentsTag<T>(node: AstJSDocAugmentsTag, cbNode: (node: AstNode) => T | undefined, cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.data.tagName) ||
             visitNode(cbNode, node.data.class) ||
-            (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment));
+            visitNodes(cbNode, cbNodes, node.data.commentArray);
     },
     [SyntaxKind.JSDocTemplateTag]: function forEachChildInJSDocTemplateTag<T>(node: AstJSDocTemplateTag, cbNode: (node: AstNode) => T | undefined, cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.data.tagName) ||
             visitNode(cbNode, node.data.constraint) ||
             visitNodes(cbNode, cbNodes, node.data.typeParameters) ||
-            (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment));
+            visitNodes(cbNode, cbNodes, node.data.commentArray);
     },
     [SyntaxKind.JSDocTypedefTag]: function forEachChildInJSDocTypedefTag<T>(node: AstJSDocTypedefTag, cbNode: (node: AstNode) => T | undefined, cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.data.tagName) ||
@@ -800,16 +800,16 @@ const astForEachChildTable: AstForEachChildTable = {
                     node.data.typeExpression.kind === SyntaxKind.JSDocTypeExpression
                 ? visitNode(cbNode, node.data.typeExpression) ||
                     visitNode(cbNode, node.data.fullName) ||
-                    (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment))
+                    visitNodes(cbNode, cbNodes, node.data.commentArray)
                 : visitNode(cbNode, node.data.fullName) ||
                     visitNode(cbNode, node.data.typeExpression) ||
-                    (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment)));
+                    visitNodes(cbNode, cbNodes, node.data.commentArray));
     },
     [SyntaxKind.JSDocCallbackTag]: function forEachChildInJSDocCallbackTag<T>(node: AstJSDocCallbackTag, cbNode: (node: AstNode) => T | undefined, cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.data.tagName) ||
             visitNode(cbNode, node.data.fullName) ||
             visitNode(cbNode, node.data.typeExpression) ||
-            (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment));
+            visitNodes(cbNode, cbNodes, node.data.commentArray);
     },
     [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocTypeLikeTag,
@@ -901,13 +901,13 @@ function forEachChildInJSDocParameterOrPropertyTag<T>(node: AstJSDocParameterTag
         (node.data.isNameFirst
             ? visitNode(cbNode, node.data.name) || visitNode(cbNode, node.data.typeExpression)
             : visitNode(cbNode, node.data.typeExpression) || visitNode(cbNode, node.data.name)) ||
-        (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment));
+        visitNodes(cbNode, cbNodes, node.data.commentArray);
 }
 
 function forEachChildInJSDocTypeLikeTag<T>(node: AstJSDocReturnTag | AstJSDocTypeTag | AstJSDocThisTag | AstJSDocEnumTag | AstJSDocThrowsTag | AstJSDocOverloadTag | AstJSDocSatisfiesTag, cbNode: (node: AstNode) => T | undefined, cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.data.tagName) ||
         visitNode(cbNode, node.data.typeExpression) ||
-        (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment));
+        visitNodes(cbNode, cbNodes, node.data.commentArray);
 }
 
 function forEachChildInJSDocLinkCodeOrPlain<T>(node: AstJSDocLink | AstJSDocLinkCode | AstJSDocLinkPlain, cbNode: (node: AstNode) => T | undefined, _cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
@@ -916,7 +916,7 @@ function forEachChildInJSDocLinkCodeOrPlain<T>(node: AstJSDocLink | AstJSDocLink
 
 function forEachChildInJSDocTag<T>(node: AstJSDocUnknownTag | AstJSDocClassTag | AstJSDocPublicTag | AstJSDocPrivateTag | AstJSDocProtectedTag | AstJSDocReadonlyTag | AstJSDocDeprecatedTag | AstJSDocOverrideTag, cbNode: (node: AstNode) => T | undefined, cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.data.tagName)
-        || (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment));
+        || visitNodes(cbNode, cbNodes, node.data.commentArray);
 }
 
 function forEachChildInJSDocImportTag<T>(node: AstJSDocImportTag, cbNode: (node: AstNode) => T | undefined, cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {
@@ -924,7 +924,7 @@ function forEachChildInJSDocImportTag<T>(node: AstJSDocImportTag, cbNode: (node:
         || visitNode(cbNode, node.data.importClause)
         || visitNode(cbNode, node.data.moduleSpecifier)
         || visitNode(cbNode, node.data.attributes)
-        || (typeof node.data.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.data.comment));
+        || visitNodes(cbNode, cbNodes, node.data.commentArray);
 }
 
 function forEachChildInPartiallyEmittedExpression<T>(node: AstPartiallyEmittedExpression, cbNode: (node: AstNode) => T | undefined, _cbNodes?: (nodes: AstNodeArray<AstNode>) => T | undefined): T | undefined {

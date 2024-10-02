@@ -8,6 +8,11 @@ import {
     AssignmentExpression,
     AssignmentOperatorOrHigher,
     AssignmentPattern,
+    AstExpression,
+    astIsJSDocTypeAssertion,
+    AstNode,
+    AstOuterExpression,
+    AstWrappedExpression,
     BinaryExpression,
     BinaryOperator,
     BinaryOperatorToken,
@@ -628,9 +633,14 @@ export function getJSDocTypeAssertionType(node: JSDocTypeAssertion): TypeNode {
 
 /** @internal */
 export function isOuterExpression(node: Node, kinds: OuterExpressionKinds = OuterExpressionKinds.All): node is OuterExpression {
+    return astIsOuterExpression(node.ast, kinds);
+}
+
+/** @internal */
+export function astIsOuterExpression(node: AstNode, kinds: OuterExpressionKinds = OuterExpressionKinds.All): node is AstOuterExpression {
     switch (node.kind) {
         case SyntaxKind.ParenthesizedExpression:
-            if (kinds & OuterExpressionKinds.ExcludeJSDocTypeAssertion && isJSDocTypeAssertion(node)) {
+            if (kinds & OuterExpressionKinds.ExcludeJSDocTypeAssertion && astIsJSDocTypeAssertion(node)) {
                 return false;
             }
             return (kinds & OuterExpressionKinds.Parentheses) !== 0;
@@ -656,8 +666,19 @@ export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKi
 export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
 /** @internal */
 export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
-    while (isOuterExpression(node, kinds)) {
-        node = node.expression;
+    return astSkipOuterExpressions(node.ast, kinds).node;
+}
+
+/** @internal */
+export function astSkipOuterExpressions<T extends AstExpression>(node: AstWrappedExpression<T>): T;
+/** @internal */
+export function astSkipOuterExpressions(node: AstExpression, kinds?: OuterExpressionKinds): AstExpression;
+/** @internal */
+export function astSkipOuterExpressions(node: AstNode, kinds?: OuterExpressionKinds): AstNode;
+/** @internal */
+export function astSkipOuterExpressions(node: AstNode, kinds: OuterExpressionKinds = OuterExpressionKinds.All): AstNode {
+    while (astIsOuterExpression(node, kinds)) {
+        node = node.data.expression;
     }
     return node;
 }
