@@ -32918,7 +32918,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         checkJsxChildren(node);
-        return getJsxElementTypeAt(node) || anyType;
+        const jsxElementType = getJsxElementTypeAt(node);
+        return isErrorType(jsxElementType) ? anyType : jsxElementType;
     }
 
     function isHyphenatedJsxName(name: string | __String) {
