@@ -68,3 +68,24 @@ function f3<L extends keyof T>(k: L, t: T | null | undefined) {
 >  : ^^^^^^^^^^^^^^^^^^^^
 }
 
+function f4<L extends keyof T>(k: L, t: { f: T | undefined }) {
+>f4 : <L extends keyof T>(k: L, t: { f: T | undefined; }) => void
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^ ^^                     ^^^^^^^^^
+>k : L
+>  : ^
+>t : { f: T | undefined; }
+>  : ^^^^^             ^^^
+>f : T | undefined
+>  : ^^^^^^^^^^^^^
+
+  const { f: { [k]: v } } = t;
+>f : any
+>  : ^^^
+>k : L
+>  : ^
+>v : (T | undefined)[L]
+>  : ^^^^^^^^^^^^^^^^^^
+>t : { f: T | undefined; }
+>  : ^^^^^             ^^^
+}
+

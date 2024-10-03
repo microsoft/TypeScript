@@ -20,3 +20,7 @@ function f2<L extends keyof T>(k: L, t: T | null) {
 function f3<L extends keyof T>(k: L, t: T | null | undefined) {
   const { [k]: v } = t;
 }
+
+function f4<L extends keyof T>(k: L, t: { f: T | undefined }) {
+  const { f: { [k]: v } } = t;
+}

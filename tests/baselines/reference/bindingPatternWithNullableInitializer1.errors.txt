@@ -1,9 +1,10 @@
 bindingPatternWithNullableInitializer1.ts(10,22): error TS18048: 't' is possibly 'undefined'.
 bindingPatternWithNullableInitializer1.ts(14,22): error TS18047: 't' is possibly 'null'.
 bindingPatternWithNullableInitializer1.ts(18,22): error TS18049: 't' is possibly 'null' or 'undefined'.
+bindingPatternWithNullableInitializer1.ts(22,14): error TS2532: Object is possibly 'undefined'.
 
 
-==== bindingPatternWithNullableInitializer1.ts (3 errors) ====
+==== bindingPatternWithNullableInitializer1.ts (4 errors) ====
     // https://github.com/microsoft/TypeScript/issues/60119
     
     interface T {
@@ -28,5 +29,11 @@ bindingPatternWithNullableInitializer1.ts(18,22): error TS18049: 't' is possibly
       const { [k]: v } = t;
                          ~
 !!! error TS18049: 't' is possibly 'null' or 'undefined'.
+    }
+    
+    function f4<L extends keyof T>(k: L, t: { f: T | undefined }) {
+      const { f: { [k]: v } } = t;
+                 ~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
     }
     
