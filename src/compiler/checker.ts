@@ -4255,7 +4255,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
         const typeOnlyExportStarTargets = typeOnlyDeclarationIsExportStar && typeOnlyResolution ? getExportsOfModule(typeOnlyResolution) : undefined;
         let flags = excludeLocalMeanings ? SymbolFlags.None : symbol.flags;
-        let seenSymbols;
+        let seenSymbols: Set<Symbol> | undefined;
         while (symbol.flags & SymbolFlags.Alias) {
             const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));
             if (
