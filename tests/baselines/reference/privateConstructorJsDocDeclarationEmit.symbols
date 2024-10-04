@@ -1,0 +1,59 @@
+//// [tests/cases/conformance/salsa/privateConstructorJsDocDeclarationEmit.ts] ////
+
+=== privateConstructorJsDocDeclarationEmit.js ===
+// https://github.com/microsoft/TypeScript/issues/58653
+
+class Foo {
+>Foo : Symbol(Foo, Decl(privateConstructorJsDocDeclarationEmit.js, 0, 0))
+
+    /**
+     * @private
+     */
+    constructor() { }
+}
+
+class Bar {
+>Bar : Symbol(Bar, Decl(privateConstructorJsDocDeclarationEmit.js, 7, 1))
+
+    constructor() { }
+}
+
+class Baz extends Bar {
+>Baz : Symbol(Baz, Decl(privateConstructorJsDocDeclarationEmit.js, 11, 1))
+>Bar : Symbol(Bar, Decl(privateConstructorJsDocDeclarationEmit.js, 7, 1))
+
+    /**
+     * @private
+     */
+    constructor() {
+        super()
+>super : Symbol(Bar, Decl(privateConstructorJsDocDeclarationEmit.js, 7, 1))
+    }
+}
+
+// https://github.com/microsoft/TypeScript/pull/58655#issuecomment-2130552519
+
+class C {
+>C : Symbol(C, Decl(privateConstructorJsDocDeclarationEmit.js, 20, 1))
+
+  /**
+   * @private
+   * @overload
+   * @param x {string}
+   * @param y {string}
+   */
+
+  /**
+   * @private
+   * @overload
+   * @param x {number}
+   * @param y {number}
+   */
+
+  /**
+   * @private
+   * @param {...any} args
+   */
+  constructor(...args) {}
+>args : Symbol(args, Decl(privateConstructorJsDocDeclarationEmit.js, 43, 14))
+}
