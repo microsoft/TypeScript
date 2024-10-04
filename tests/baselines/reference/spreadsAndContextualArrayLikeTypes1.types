@@ -1,0 +1,227 @@
+//// [tests/cases/compiler/spreadsAndContextualArrayLikeTypes1.ts] ////
+
+=== spreadsAndContextualArrayLikeTypes1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58286
+
+type MyType<T extends unknown> = {
+>MyType : MyType<T>
+>       : ^^^^^^^^^
+
+  myKey: T;
+>myKey : T
+>      : ^
+
+  myFunction: (arg1: T) => void;
+>myFunction : (arg1: T) => void
+>           : ^    ^^ ^^^^^    
+>arg1 : T
+>     : ^
+
+};
+
+declare const generate: () => Array<MyType<string>>;
+>generate : () => Array<MyType<string>>
+>         : ^^^^^^                     
+
+declare const arrayLikeInferenceFunction: <T extends unknown>(
+>arrayLikeInferenceFunction : <T extends unknown>(arr: ArrayLike<T>) => T[]
+>                           : ^ ^^^^^^^^^^^^^^^^^^   ^^            ^^^^^   
+
+  arr: ArrayLike<T>,
+>arr : ArrayLike<T>
+>    : ^^^^^^^^^^^^
+
+) => T[];
+
+arrayLikeInferenceFunction([
+>arrayLikeInferenceFunction([  { myKey: "123", myFunction: (value1) => {} },  ...generate(),  { myKey: "456", myFunction: (value2) => {} },]) : MyType<string>[]
+>                                                                                                                                             : ^^^^^^^^^^^^^^^^
+>arrayLikeInferenceFunction : <T extends unknown>(arr: ArrayLike<T>) => T[]
+>                           : ^ ^^^^^^^^^^^^^^^^^^   ^^            ^^^^^^^^
+>[  { myKey: "123", myFunction: (value1) => {} },  ...generate(),  { myKey: "456", myFunction: (value2) => {} },] : MyType<string>[]
+>                                                                                                                 : ^^^^^^^^^^^^^^^^
+
+  { myKey: "123", myFunction: (value1) => {} },
+>{ myKey: "123", myFunction: (value1) => {} } : { myKey: string; myFunction: (value1: string) => void; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>myKey : string
+>      : ^^^^^^
+>"123" : "123"
+>      : ^^^^^
+>myFunction : (value1: string) => void
+>           : ^      ^^^^^^^^^^^^^^^^^
+>(value1) => {} : (value1: string) => void
+>               : ^      ^^^^^^^^^^^^^^^^^
+>value1 : string
+>       : ^^^^^^
+
+  ...generate(),
+>...generate() : MyType<string>
+>              : ^^^^^^^^^^^^^^
+>generate() : MyType<string>[]
+>           : ^^^^^^^^^^^^^^^^
+>generate : () => MyType<string>[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^
+
+  { myKey: "456", myFunction: (value2) => {} },
+>{ myKey: "456", myFunction: (value2) => {} } : { myKey: string; myFunction: (value2: string) => void; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>myKey : string
+>      : ^^^^^^
+>"456" : "456"
+>      : ^^^^^
+>myFunction : (value2: string) => void
+>           : ^      ^^^^^^^^^^^^^^^^^
+>(value2) => {} : (value2: string) => void
+>               : ^      ^^^^^^^^^^^^^^^^^
+>value2 : string
+>       : ^^^^^^
+
+]);
+
+arrayLikeInferenceFunction([
+>arrayLikeInferenceFunction([  { myKey: "123", myFunction: (value1) => {} },  { myKey: "456", myFunction: (value2) => {} },  ...generate(),]) : MyType<string>[]
+>                                                                                                                                             : ^^^^^^^^^^^^^^^^
+>arrayLikeInferenceFunction : <T extends unknown>(arr: ArrayLike<T>) => T[]
+>                           : ^ ^^^^^^^^^^^^^^^^^^   ^^            ^^^^^^^^
+>[  { myKey: "123", myFunction: (value1) => {} },  { myKey: "456", myFunction: (value2) => {} },  ...generate(),] : MyType<string>[]
+>                                                                                                                 : ^^^^^^^^^^^^^^^^
+
+  { myKey: "123", myFunction: (value1) => {} },
+>{ myKey: "123", myFunction: (value1) => {} } : { myKey: string; myFunction: (value1: string) => void; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>myKey : string
+>      : ^^^^^^
+>"123" : "123"
+>      : ^^^^^
+>myFunction : (value1: string) => void
+>           : ^      ^^^^^^^^^^^^^^^^^
+>(value1) => {} : (value1: string) => void
+>               : ^      ^^^^^^^^^^^^^^^^^
+>value1 : string
+>       : ^^^^^^
+
+  { myKey: "456", myFunction: (value2) => {} },
+>{ myKey: "456", myFunction: (value2) => {} } : { myKey: string; myFunction: (value2: string) => void; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>myKey : string
+>      : ^^^^^^
+>"456" : "456"
+>      : ^^^^^
+>myFunction : (value2: string) => void
+>           : ^      ^^^^^^^^^^^^^^^^^
+>(value2) => {} : (value2: string) => void
+>               : ^      ^^^^^^^^^^^^^^^^^
+>value2 : string
+>       : ^^^^^^
+
+  ...generate(),
+>...generate() : MyType<string>
+>              : ^^^^^^^^^^^^^^
+>generate() : MyType<string>[]
+>           : ^^^^^^^^^^^^^^^^
+>generate : () => MyType<string>[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^
+
+]);
+
+arrayLikeInferenceFunction([
+>arrayLikeInferenceFunction([  ...generate(),  { myKey: "123", myFunction: (value1) => {} },  { myKey: "456", myFunction: (value2) => {} },]) : MyType<string>[]
+>                                                                                                                                             : ^^^^^^^^^^^^^^^^
+>arrayLikeInferenceFunction : <T extends unknown>(arr: ArrayLike<T>) => T[]
+>                           : ^ ^^^^^^^^^^^^^^^^^^   ^^            ^^^^^^^^
+>[  ...generate(),  { myKey: "123", myFunction: (value1) => {} },  { myKey: "456", myFunction: (value2) => {} },] : MyType<string>[]
+>                                                                                                                 : ^^^^^^^^^^^^^^^^
+
+  ...generate(),
+>...generate() : MyType<string>
+>              : ^^^^^^^^^^^^^^
+>generate() : MyType<string>[]
+>           : ^^^^^^^^^^^^^^^^
+>generate : () => MyType<string>[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^
+
+  { myKey: "123", myFunction: (value1) => {} },
+>{ myKey: "123", myFunction: (value1) => {} } : { myKey: string; myFunction: (value1: string) => void; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>myKey : string
+>      : ^^^^^^
+>"123" : "123"
+>      : ^^^^^
+>myFunction : (value1: string) => void
+>           : ^      ^^^^^^^^^^^^^^^^^
+>(value1) => {} : (value1: string) => void
+>               : ^      ^^^^^^^^^^^^^^^^^
+>value1 : string
+>       : ^^^^^^
+
+  { myKey: "456", myFunction: (value2) => {} },
+>{ myKey: "456", myFunction: (value2) => {} } : { myKey: string; myFunction: (value2: string) => void; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>myKey : string
+>      : ^^^^^^
+>"456" : "456"
+>      : ^^^^^
+>myFunction : (value2: string) => void
+>           : ^      ^^^^^^^^^^^^^^^^^
+>(value2) => {} : (value2: string) => void
+>               : ^      ^^^^^^^^^^^^^^^^^
+>value2 : string
+>       : ^^^^^^
+
+]);
+
+declare function numericProperties(weirdo: {
+>numericProperties : (weirdo: { "0": (a: 0) => void; "1": (a: 1) => void; "2": (a: 2) => void; }) => void
+>                  : ^      ^^                                                                  ^^^^^    
+>weirdo : { "0": (a: 0) => void; "1": (a: 1) => void; "2": (a: 2) => void; }
+>       : ^^^^^^^              ^^^^^^^              ^^^^^^^              ^^^
+
+  "0": (a: 0) => void;
+>"0" : (a: 0) => void
+>    : ^ ^^ ^^^^^    
+>a : 0
+>  : ^
+
+  "1": (a: 1) => void;
+>"1" : (a: 1) => void
+>    : ^ ^^ ^^^^^    
+>a : 1
+>  : ^
+
+  "2": (a: 2) => void;
+>"2" : (a: 2) => void
+>    : ^ ^^ ^^^^^    
+>a : 2
+>  : ^
+
+}): void;
+
+const tuple1 = [() => {}, () => {}] as const;
+>tuple1 : readonly [() => void, () => void]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[() => {}, () => {}] as const : readonly [() => void, () => void]
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[() => {}, () => {}] : readonly [() => void, () => void]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+numericProperties([...tuple1, (a) => {}]);
+>numericProperties([...tuple1, (a) => {}]) : void
+>                                          : ^^^^
+>numericProperties : (weirdo: { "0": (a: 0) => void; "1": (a: 1) => void; "2": (a: 2) => void; }) => void
+>                  : ^      ^^                                                                  ^^^^^^^^^
+>[...tuple1, (a) => {}] : [() => void, () => void, (a: any) => void]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+>...tuple1 : (() => void) | (() => void)
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>tuple1 : readonly [() => void, () => void]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(a) => {} : (a: any) => void
+>          : ^ ^^^^^^^^^^^^^^
+>a : any
+>  : ^^^
+
