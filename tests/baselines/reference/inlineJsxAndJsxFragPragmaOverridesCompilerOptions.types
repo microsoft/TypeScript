@@ -44,9 +44,7 @@ import {createElement, Fragment} from "./react";
 
 <><span></span></>
 ><><span></span></> : any
->                   : ^^^
-><span></span> : any
->              : ^^^
+><span></span> : error
 >span : any
 >     : ^^^
 >span : any
@@ -65,9 +63,7 @@ import {h, Frag} from "./preact";
 
 <><div></div></>
 ><><div></div></> : any
->                 : ^^^
-><div></div> : any
->            : ^^^
+><div></div> : error
 >div : any
 >    : ^^^
 >div : any
@@ -84,9 +80,7 @@ import {h} from "./snabbdom";
 
 <><div></div></>
 ><><div></div></> : any
->                 : ^^^
-><div></div> : any
->            : ^^^
+><div></div> : error
 >div : any
 >    : ^^^
 >div : any
@@ -105,9 +99,7 @@ import {Fragment} from "./react";
 
 <><span></span></>
 ><><span></span></> : any
->                   : ^^^
-><span></span> : any
->              : ^^^
+><span></span> : error
 >span : any
 >     : ^^^
 >span : any
