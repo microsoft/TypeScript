@@ -3,14 +3,14 @@ import { jsonToReadableText } from "../helpers.js";
 import { getProjectConfigWithNodeNext } from "./contents.js";
 import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
-export function getFsContentsForTransitiveReferencesRefsAdts() {
+export function getFsContentsForTransitiveReferencesRefsAdts(): string {
     return dedent`
         export class X {}
         export class A {}
     `;
 }
 
-export function getFsContentsForTransitiveReferencesBConfig(withNodeNext: boolean) {
+export function getFsContentsForTransitiveReferencesBConfig(withNodeNext: boolean): string {
     return jsonToReadableText({
         compilerOptions: {
             ...getProjectConfigWithNodeNext(withNodeNext),
@@ -25,7 +25,7 @@ export function getFsContentsForTransitiveReferencesBConfig(withNodeNext: boolea
     });
 }
 
-export function getFsContentsForTransitiveReferencesAConfig(withNodeNext: boolean) {
+export function getFsContentsForTransitiveReferencesAConfig(withNodeNext: boolean): string {
     return jsonToReadableText({
         compilerOptions: {
             ...getProjectConfigWithNodeNext(withNodeNext),
@@ -35,7 +35,7 @@ export function getFsContentsForTransitiveReferencesAConfig(withNodeNext: boolea
     });
 }
 
-export function getSysForTransitiveReferences(withNodeNext?: boolean) {
+export function getSysForTransitiveReferences(withNodeNext?: boolean): TestServerHost {
     return TestServerHost.createWatchedSystem({
         "/user/username/projects/transitiveReferences/refs/a.d.ts": getFsContentsForTransitiveReferencesRefsAdts(),
         "/user/username/projects/transitiveReferences/a.ts": dedent`

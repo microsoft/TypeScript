@@ -26,7 +26,7 @@ export interface Timer {
 }
 
 /** @internal */
-export function createTimerIf(condition: boolean, measureName: string, startMarkName: string, endMarkName: string) {
+export function createTimerIf(condition: boolean, measureName: string, startMarkName: string, endMarkName: string): Timer {
     return condition ? createTimer(measureName, startMarkName, endMarkName) : nullTimer;
 }
 
@@ -71,7 +71,7 @@ const durations = new Map<string, number>();
  *
  * @internal
  */
-export function mark(markName: string) {
+export function mark(markName: string): void {
     if (enabled) {
         const count = counts.get(markName) ?? 0;
         counts.set(markName, count + 1);
@@ -94,7 +94,7 @@ export function mark(markName: string) {
  *
  * @internal
  */
-export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
+export function measure(measureName: string, startMarkName?: string, endMarkName?: string): void {
     if (enabled) {
         const end = (endMarkName !== undefined ? marks.get(endMarkName) : undefined) ?? timestamp();
         const start = (startMarkName !== undefined ? marks.get(startMarkName) : undefined) ?? timeorigin;
@@ -111,7 +111,7 @@ export function measure(measureName: string, startMarkName?: string, endMarkName
  *
  * @internal
  */
-export function getCount(markName: string) {
+export function getCount(markName: string): number {
     return counts.get(markName) || 0;
 }
 
@@ -122,7 +122,7 @@ export function getCount(markName: string) {
  *
  * @internal
  */
-export function getDuration(measureName: string) {
+export function getDuration(measureName: string): number {
     return durations.get(measureName) || 0;
 }
 
@@ -133,24 +133,24 @@ export function getDuration(measureName: string) {
  *
  * @internal
  */
-export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
+export function forEachMeasure(cb: (measureName: string, duration: number) => void): void {
     durations.forEach((duration, measureName) => cb(measureName, duration));
 }
 
 /** @internal */
-export function forEachMark(cb: (markName: string) => void) {
+export function forEachMark(cb: (markName: string) => void): void {
     marks.forEach((_time, markName) => cb(markName));
 }
 
 /** @internal */
-export function clearMeasures(name?: string) {
+export function clearMeasures(name?: string): void {
     if (name !== undefined) durations.delete(name);
     else durations.clear();
     performanceImpl?.clearMeasures(name);
 }
 
 /** @internal */
-export function clearMarks(name?: string) {
+export function clearMarks(name?: string): void {
     if (name !== undefined) {
         counts.delete(name);
         marks.delete(name);
@@ -167,7 +167,7 @@ export function clearMarks(name?: string) {
  *
  * @internal
  */
-export function isEnabled() {
+export function isEnabled(): boolean {
     return enabled;
 }
 
@@ -199,7 +199,7 @@ export function enable(system: System = sys) {
  *
  * @internal
  */
-export function disable() {
+export function disable(): void {
     if (enabled) {
         marks.clear();
         counts.clear();

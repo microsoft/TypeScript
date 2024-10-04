@@ -298,16 +298,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/project/src/common/tsconfig.json, currentDirectory: /user/username/projects/project/src/common
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/tsconfig.json 2000 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/project/src/common/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/project/src/common/input/keyboard.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/src/common/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/project/src/common/input/keyboard.test.ts",
@@ -322,6 +312,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/src/common/tsco
   "configFilePath": "/user/username/projects/project/src/common/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/project/src/common/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/project/src/common/input/keyboard.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common 1 undefined Config: /user/username/projects/project/src/common/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common 1 undefined Config: /user/username/projects/project/src/common/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/input/keyboard.test.ts 500 undefined WatchType: Closed Script info
@@ -480,6 +480,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.d.ts *new*
@@ -507,16 +508,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/terminal.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/project/src/tsconfig.json",
-        "reason": "Creating project possibly referencing default composite project /user/username/projects/project/src/common/tsconfig.json of open file /user/username/projects/project/src/common/input/keyboard.ts"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/src/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/project/src/terminal.ts",
@@ -545,6 +536,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/src/tsconfig.js
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/project/src/tsconfig.json",
+        "reason": "Creating project possibly referencing default composite project /user/username/projects/project/src/common/tsconfig.json of open file /user/username/projects/project/src/common/input/keyboard.ts"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src 1 undefined Config: /user/username/projects/project/src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src 1 undefined Config: /user/username/projects/project/src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/src/tsconfig.json
@@ -706,6 +707,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
     autoImportProviderHost: false *changed*
 
 ScriptInfos::

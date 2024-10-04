@@ -49,13 +49,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - if: ${{ github.event.inputs.bisect }}
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         with:
           filter: blob:none # https://github.blog/2020-12-21-get-up-to-speed-with-partial-clone-and-shallow-clone/
           fetch-depth: 0 # Default is 1; need to set to 0 to get the benefits of blob:none.
       - if: ${{ !github.event.inputs.bisect }}
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+      - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
         with:
           node-version: 'lts/*'
       - uses: microsoft/TypeScript-Twoslash-Repro-Action@8680b5b290d48a7badbc7ba65971d526c61b86b8 # master

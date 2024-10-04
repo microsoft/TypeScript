@@ -87,20 +87,20 @@ declare const console: { log(msg: any): void; };
 
 //// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 33
 
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 116
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 120
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 117
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 121
 export type FooType = "foo";
 export type BarType = "bar";
 
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 118
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 122
 {"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 119
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 123
 {
   "root": [
     "./src/index.ts"
@@ -122,16 +122,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/package2/src/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/packages/package2/tsconfig.json, currentDirectory: /home/src/projects/project/packages/package2
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/tsconfig.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/projects/project/packages/package2/tsconfig.json",
-        "reason": "Creating possible configured project for /home/src/projects/project/packages/package2/src/index.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/packages/package2/tsconfig.json : {
  "rootNames": [
   "/home/src/projects/project/packages/package2/src/index.ts"
@@ -150,6 +140,16 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/packages/package2/ts
   "configFilePath": "/home/src/projects/project/packages/package2/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project/packages/package2/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/packages/package2/src/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Config: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Config: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
@@ -327,9 +327,9 @@ FsWatches::
 /home/src/projects/project/packages/package1: *new*
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":115}
+  {"inode":119}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":117}
+  {"inode":121}
 /home/src/projects/project/packages/package1/package.json: *new*
   {"inode":7}
 /home/src/projects/project/packages/package1/src: *new*
@@ -537,9 +537,9 @@ FsWatches::
 
 FsWatches *deleted*::
 /home/src/projects/project/packages/package1/dist:
-  {"inode":115}
+  {"inode":119}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":117}
+  {"inode":121}
 
 Timeout callback:: count: 3
 2: /home/src/projects/project/packages/package2/tsconfig.json *new*
@@ -1024,14 +1024,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 1
 14: timerToUpdateChildWatches
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 118
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 119
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 121
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 122
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 123
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 125
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 122
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 126
 export type FooType = "foo";
 export type BarType = "bar";
 
@@ -1065,7 +1065,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":122}
+  {"inode":126}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1131,9 +1131,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":120}
+  {"inode":124}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":122}
+  {"inode":126}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1273,9 +1273,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":120}
+  {"inode":124}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":122}
+  {"inode":126}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:

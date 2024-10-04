@@ -40,12 +40,12 @@ export function createSolutionBuilder(
     rootNames: readonly string[],
     buildOptions?: ts.BuildOptions,
     originalRead?: TestServerHost["readFile"],
-) {
+): ts.SolutionBuilder<ts.EmitAndSemanticDiagnosticsBuilderProgram> {
     const host = createSolutionBuilderHostForBaseline(system, originalRead);
     return ts.createSolutionBuilder(host, rootNames, buildOptions ?? {});
 }
 
-export function ensureErrorFreeBuild(host: TestServerHost, rootNames: readonly string[]) {
+export function ensureErrorFreeBuild(host: TestServerHost, rootNames: readonly string[]): void {
     // ts build should succeed
     solutionBuildWithBaseline(host, rootNames);
     assert.equal(host.getOutput().length, 0, jsonToReadableText(host.getOutput()));
@@ -57,7 +57,7 @@ export function solutionBuildWithBaseline(
     buildOptions?: ts.BuildOptions,
     versionToWrite?: string,
     originalRead?: TestServerHost["readFile"],
-) {
+): TestServerHost {
     if (sys.writtenFiles === undefined) {
         const originalReadFile = sys.readFile;
         const originalWrite = sys.write;
@@ -87,7 +87,7 @@ export function solutionBuildWithBaseline(
     }
 }
 
-export function verifySolutionBuilderWithDifferentTsVersion(input: VerifyTscWithEditsInput, rootNames: readonly string[]) {
+export function verifySolutionBuilderWithDifferentTsVersion(input: VerifyTscWithEditsInput, rootNames: readonly string[]): void {
     describe(input.subScenario, () => {
         let originalReadFile: TscWatchSystem["readFile"];
         let originalWriteFile: TscWatchSystem["writeFile"];

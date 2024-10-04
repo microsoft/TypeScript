@@ -47,7 +47,7 @@ export class InClassMethodBad { o(array: T = [], rParam: string): void { } };
 
 //// [fnDecl.d.ts] ////
 type T = number[];
-export declare function fnDeclBasic1(p: (number[] | string[] | [T]) | undefined, rParam: string): void;
+export declare function fnDeclBasic1(p: number[] | string[] | [T] | undefined, rParam: string): void;
 export declare function fnDeclBasic2(p: ((n: T) => T) | undefined, rParam: string): void;
 export declare function fnDeclBasic3(p: (new () => any) | undefined, rParam: string): void;
 export declare function fnDeclBasic4(p: [T] | undefined, rParam: string): void;
@@ -58,7 +58,7 @@ export declare function fnDeclBasic6(p: `_${string}` | undefined, rParam: string
 export declare function fnDeclBasic7(p: ({
     a?: string;
 } & number[]) | undefined, rParam: string): void;
-export declare function fnDeclBasic8(p: ((number[] | string[]) | number) | undefined, rParam: string): void;
+export declare function fnDeclBasic8(p: (number[] | string[]) | number | undefined, rParam: string): void;
 export declare function fnDeclHasUndefined(p: T | undefined, rParam: string): void;
 export declare function fnDeclBad(p: T | undefined, rParam: string): void;
 export declare const fnExprOk1: (array: number[] | undefined, rParam: string) => void;

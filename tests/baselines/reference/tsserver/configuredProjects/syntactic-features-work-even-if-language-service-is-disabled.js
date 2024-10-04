@@ -40,16 +40,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/a/app.js ProjectRootPath: undefined:: Result: /user/username/projects/project/a/jsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/project/a/jsconfig.json, currentDirectory: /user/username/projects/project/a
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/jsconfig.json 2000 undefined Project: /user/username/projects/project/a/jsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/project/a/jsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/project/a/app.js to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/a/jsconfig.json : {
  "rootNames": [
   "/user/username/projects/project/a/app.js",
@@ -64,6 +54,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/a/jsconfig.json
   "configFilePath": "/user/username/projects/project/a/jsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/project/a/jsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/project/a/app.js to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Non TS file size exceeded limit (20971533). Largest files: /user/username/projects/project/a/largefile.js:20971521, /user/username/projects/project/a/app.js:12
 Info seq  [hh:mm:ss:mss] event:
     {
