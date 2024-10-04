@@ -1625,7 +1625,7 @@ const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
 >'hello ' : "hello "
 >         : ^^^^^^^^
 
-const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
+const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Error
 >obj2 : { [key: string]: string; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
