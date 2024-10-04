@@ -2370,7 +2370,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         [".json", ".json"],
     ];
 
-    var narrowableReturnTypeCache = new Map<TypeId, boolean>;
+    var narrowableReturnTypeCache = new Map<TypeId, boolean>();
     /* eslint-enable no-var */
 
     initializeTypeChecker();
@@ -20316,14 +20316,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // result is (A extends U ? X : Y) | (B extends U ? X : Y).
                 if (distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never)) {
                     const mapperCallback = narrowingBaseType ?
-                        (t: Type) => getConditionalType(
-                            root,
-                            prependTypeMapping(checkType, getSubstitutionType(narrowingBaseType, t, /*isNarrowed*/ true), newMapper),
-                            forConstraint,
-                            /*aliasSymbol*/ undefined,
-                            /*aliasTypeArguments*/ undefined,
-                            forNarrowing,
-                        ) :
+                        (t: Type) =>
+                            getConditionalType(
+                                root,
+                                prependTypeMapping(checkType, getSubstitutionType(narrowingBaseType, t, /*isNarrowed*/ true), newMapper),
+                                forConstraint,
+                                /*aliasSymbol*/ undefined,
+                                /*aliasTypeArguments*/ undefined,
+                                forNarrowing,
+                            ) :
                         (t: Type) => getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint);
                     if (narrowingBaseType) {
                         result = mapType(distributionType, mapperCallback, /*noReductions*/ undefined, /*toIntersection*/ true);
@@ -45807,9 +45808,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!typeNode) continue;
                     if (isTypeParameterReferenced(typeParam, typeNode)) {
                         let candidateReference;
-                        if (isTypeReferenceNode(typeNode) &&
+                        if (
+                            isTypeReferenceNode(typeNode) &&
                             isReferenceToTypeParameter(typeParam, typeNode) &&
-                            (candidateReference = getValidParameterReference(paramDecl, constraint))) {
+                            (candidateReference = getValidParameterReference(paramDecl, constraint))
+                        ) {
                             if (reference) {
                                 hasInvalidReference = true;
                                 break;
