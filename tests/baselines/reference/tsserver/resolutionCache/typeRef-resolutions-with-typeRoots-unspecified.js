@@ -142,9 +142,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'node', containing file '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts', root directory '/home/src/workspaces/project/test/module/ts-require/node_modules/@types,/home/src/workspaces/project/test/module/node_modules/@types,/home/src/workspaces/project/test/node_modules/@types,/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
 Info seq  [hh:mm:ss:mss] Resolving with primary search path '/home/src/workspaces/project/test/module/ts-require/node_modules/@types, /home/src/workspaces/project/test/module/node_modules/@types, /home/src/workspaces/project/test/node_modules/@types, /home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts', result '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for type reference directive 'node' was found in cache from location '/home/src/workspaces/project/test/module/ts-require'.
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'node' was successfully resolved to '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/package.json 2000 undefined Project: /home/src/workspaces/project/test/module/ts-require/tsconfig.json WatchType: File location affecting resolution
@@ -433,20 +431,10 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist
 Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'node', containing file '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts'. ========
-Info seq  [hh:mm:ss:mss] Resolution for type reference directive 'node' was found in cache from location '/home/src/workspaces/project/node_modules/@types/responselike'.
-Info seq  [hh:mm:ss:mss] ======== Type reference directive 'node' was successfully resolved to '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts', primary: true. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/ts-require/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/ts-require/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'node', containing file '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts', root directory '/home/src/workspaces/project/test/module/ts/node_modules/@types,/home/src/workspaces/project/test/module/node_modules/@types,/home/src/workspaces/project/test/node_modules/@types,/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
+Info seq  [hh:mm:ss:mss] Resolving with primary search path '/home/src/workspaces/project/test/module/ts/node_modules/@types, /home/src/workspaces/project/test/module/node_modules/@types, /home/src/workspaces/project/test/node_modules/@types, /home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
+Info seq  [hh:mm:ss:mss] Resolution for type reference directive 'node' was found in cache from location '/home/src/workspaces/project/test/module/ts'.
+Info seq  [hh:mm:ss:mss] ======== Type reference directive 'node' was successfully resolved to '/home/src/workspaces/project/test/module/ts/node_modules/@types/node/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/test/module/ts/node_modules/@types/node/package.json 2000 undefined Project: /home/src/workspaces/project/test/module/ts/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/test/module/ts/node_modules/@types/package.json 2000 undefined Project: /home/src/workspaces/project/test/module/ts/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/test/module/ts/node_modules/package.json 2000 undefined Project: /home/src/workspaces/project/test/module/ts/tsconfig.json WatchType: File location affecting resolution
@@ -455,12 +443,11 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/test/module/ts/node_modules/@types 1 undefined Project: /home/src/workspaces/project/test/module/ts/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/test/module/ts/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/test/module/ts/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspaces/project/test/module/ts/index.ts SVC-1-0 "export const tsIndex= 10;"
 	/home/src/workspaces/project/test/module/ts/main.ts Text-1 "export const tsMain = 10;"
 	/home/src/workspaces/project/test/module/ts/node_modules/@types/node/index.d.ts Text-1 "declare const tsRequireGlobal = 10;"
-	/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts Text-1 "declare const tsRequireGlobal = 10;"
 	/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts Text-1 "/// <reference types=\"node\" />\nexport const z = 10;\n"
 
 
@@ -472,7 +459,6 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Matched by default include pattern '**/*'
 	node_modules/@types/node/index.d.ts
 	  Entry point for implicit type library 'node'
-	../ts-require/node_modules/@types/node/index.d.ts
 	  Type library referenced via 'node' from file '../../../node_modules/@types/responselike/index.d.ts'
 	../../../node_modules/@types/responselike/index.d.ts
 	  Entry point for implicit type library 'responselike'
@@ -505,8 +491,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 50,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 4,
-            "dtsSize": 535,
+            "dts": 3,
+            "dtsSize": 500,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -547,7 +533,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/test/module/ts/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -669,11 +655,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/test/module/ts-require/tsconfig.json
-/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts *changed*
+/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2 *changed*
+    containingProjects: 1
         /home/src/workspaces/project/test/module/ts-require/tsconfig.json
-        /home/src/workspaces/project/test/module/ts/tsconfig.json *new*
 /home/src/workspaces/project/test/module/ts/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -735,9 +720,8 @@ ScriptInfos::
         /home/src/workspaces/project/test/module/ts-require/tsconfig.json
 /home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/test/module/ts-require/tsconfig.json
-        /home/src/workspaces/project/test/module/ts/tsconfig.json
 /home/src/workspaces/project/test/module/ts/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -765,17 +749,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist
 Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/ts-require/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/ts-require/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/module/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/test/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/responselike/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -786,12 +759,11 @@ Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to e
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/test/module/ts/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/test/module/ts/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspaces/project/test/module/ts/index.ts SVC-1-0 "export const tsIndex= 10;"
 	/home/src/workspaces/project/test/module/ts/main.ts Text-2 "export const tsMain = 10;export const z = 10;"
 	/home/src/workspaces/project/test/module/ts/node_modules/@types/node/index.d.ts Text-1 "declare const tsRequireGlobal = 10;"
-	/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts Text-1 "declare const tsRequireGlobal = 10;"
 	/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts Text-1 "/// <reference types=\"node\" />\nexport const z = 10;\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -802,7 +774,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/test/module/ts/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -816,7 +788,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/test/module/ts/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -871,9 +843,8 @@ ScriptInfos::
         /home/src/workspaces/project/test/module/ts-require/tsconfig.json
 /home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/test/module/ts-require/tsconfig.json
-        /home/src/workspaces/project/test/module/ts/tsconfig.json
 /home/src/workspaces/project/test/module/ts/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -945,9 +916,8 @@ ScriptInfos::
         /home/src/workspaces/project/test/module/ts-require/tsconfig.json
 /home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/test/module/ts-require/tsconfig.json
-        /home/src/workspaces/project/test/module/ts/tsconfig.json
 /home/src/workspaces/project/test/module/ts/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -999,7 +969,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/test/module/ts/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1013,7 +983,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/test/module/ts/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1069,9 +1039,8 @@ ScriptInfos::
         /home/src/workspaces/project/test/module/ts-require/tsconfig.json
 /home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /home/src/workspaces/project/test/module/ts-require/tsconfig.json
-        /home/src/workspaces/project/test/module/ts/tsconfig.json
 /home/src/workspaces/project/test/module/ts/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1

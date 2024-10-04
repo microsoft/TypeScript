@@ -479,6 +479,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
     /** @internal */ getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+    /** @internal */ getEffectiveTypeRoots?(options: CompilerOptions, redirect: ResolvedProjectReference | undefined): readonly string[] | undefined;
 
     private readonly cancellationToken: ThrottledCancellationToken;
 
@@ -575,6 +576,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal*/ preferNonRecursiveWatch: boolean | undefined;
 
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
+    private compilerHost?: CompilerHost;
 
     /** @internal */
     constructor(
@@ -654,6 +656,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.projectService.pendingEnsureProjectForOpenFiles = true;
         }
         this.projectService.onProjectCreation(this);
+    }
+
+    /** @internal */
+    setCompilerHost(host: CompilerHost): void {
+        this.compilerHost = host;
+    }
+
+    /** @internal */
+    getCompilerHost(): CompilerHost | undefined {
+        return this.compilerHost;
     }
 
     isKnownTypesPackageName(name: string): boolean {
@@ -1198,6 +1210,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     close(): void {
+        this.compilerHost = undefined;
         if (this.typingsCache) this.projectService.typingsInstaller.onProjectClosed(this);
         this.typingsCache = undefined;
         this.closeWatchingTypingLocations();
@@ -1754,6 +1767,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         tracing?.push(tracing.Phase.Session, "finishCachingPerDirectoryResolution");
         this.resolutionCache.finishCachingPerDirectoryResolution(this.program, oldProgram);
         tracing?.pop();
+        this.compilerHost = undefined;
 
         Debug.assert(oldProgram === undefined || this.program !== undefined);
 
@@ -3008,8 +3022,6 @@ export class ConfiguredProject extends Project {
     /** @internal */
     sendLoadingProjectFinish = false;
 
-    private compilerHost?: CompilerHost;
-
     /** @internal */
     configDiagDiagnosticsReported?: number;
 
@@ -3041,16 +3053,6 @@ export class ConfiguredProject extends Project {
         );
         this.pendingUpdateLevel = ProgramUpdateLevel.Full;
         this.pendingUpdateReason = pendingUpdateReason;
-    }
-
-    /** @internal */
-    setCompilerHost(host: CompilerHost): void {
-        this.compilerHost = host;
-    }
-
-    /** @internal */
-    getCompilerHost(): CompilerHost | undefined {
-        return this.compilerHost;
     }
 
     /** @internal */
@@ -3111,7 +3113,6 @@ export class ConfiguredProject extends Project {
             default:
                 result = super.updateGraph();
         }
-        this.compilerHost = undefined;
         this.projectService.sendProjectLoadingFinishEvent(this);
         this.projectService.sendProjectTelemetry(this);
         if (
@@ -3219,7 +3220,6 @@ export class ConfiguredProject extends Project {
         this.projectService.configFileExistenceInfoCache.forEach((_configFileExistenceInfo, canonicalConfigFilePath) => this.releaseParsedConfig(canonicalConfigFilePath));
         this.projectErrors = undefined;
         this.openFileWatchTriggered.clear();
-        this.compilerHost = undefined;
         super.close();
     }
 
@@ -3234,8 +3234,18 @@ export class ConfiguredProject extends Project {
         return !!this.deferredClose;
     }
 
-    getEffectiveTypeRoots(): string[] {
-        return getEffectiveTypeRoots(this.getCompilationSettings(), this) || [];
+    /** @internal */
+    override getEffectiveTypeRoots(
+        options: CompilerOptions,
+        redirect: ResolvedProjectReference | undefined,
+    ): readonly string[] | undefined {
+        const path = !redirect ? this.canonicalConfigFilePath : redirect.sourceFile.path as unknown as NormalizedPath;
+        const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(path)!;
+        let result = configFileExistenceInfo.config!.effectiveTypeRoots;
+        if (result === undefined) {
+            result = configFileExistenceInfo.config!.effectiveTypeRoots = getEffectiveTypeRoots(options, this) ?? false;
+        }
+        return result || undefined;
     }
 
     /** @internal */

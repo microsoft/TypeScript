@@ -1776,6 +1776,7 @@ export function createLanguageService(
             onSourceFileNotCreated: maybeBind(host, host.onSourceFileNotCreated),
             useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             getParsedCommandLine,
+            getEffectiveTypeRoots: maybeBind(host, host.getEffectiveTypeRoots),
             jsDocParsingMode: host.jsDocParsingMode,
             getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
         };

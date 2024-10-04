@@ -45,6 +45,7 @@ import {
     startsWith,
     tryAddToSet,
     TypeReferenceDirectiveResolutionCache,
+    TypeRootsCacheKeyOrSpecifiedTypeRoots,
     WatchDirectoryFlags,
 } from "./_namespaces/ts.js";
 
@@ -53,6 +54,12 @@ declare module "./_namespaces/ts.js" {
     export interface ModuleOrTypeReferenceResolutionCache<T> {
         sharedCache?: ModuleOrTypeReferenceResolutionCache<T>;
     }
+}
+
+/** @internal */
+export interface CacheToOptionsEntry {
+    availableOptions: Set<CompilerOptions>;
+    availableTypeCacheKeys: Map<CompilerOptions, Set<TypeRootsCacheKeyOrSpecifiedTypeRoots>>;
 }
 
 /**
@@ -72,7 +79,7 @@ export interface SharedResolutionCache {
     watchedResolutionInfoMap: Map<ResolutionWithFailedLookupLocations, WatchedResolutionInfo>;
     typeRootsWatches: Map<string, TypeRootWatch>;
     inUseResolutionCaches: RefCountCache;
-    cacheToOptions: Map<ResolutionCache, Set<CompilerOptions>>;
+    cacheToOptions: Map<ResolutionCache, CacheToOptionsEntry>;
     directoryWatchesOfFailedLookups: Map<Path, DirectoryWatchesOfFailedLookup>;
     nonRecursiveDirectoryWatchesOfFailedLookups: Map<Path, DirectoryWatchesOfFailedLookup>;
     fileWatchesOfAffectingLocations: Map<string, FileWatcherOfAffectingLocation>;
@@ -82,7 +89,11 @@ export interface SharedResolutionCache {
     clear(cache: ResolutionCache): void;
     startCachingPerDirectoryResolution(cache: ResolutionCache): void;
     finishCachingPerDirectoryResolution(): void;
-    compactCaches(availableOptions: Set<CompilerOptions>, cache: ResolutionCache): void;
+    compactCaches(
+        availableOptions: Set<CompilerOptions>,
+        availableTypeCacheKeys: Map<CompilerOptions, Set<TypeRootsCacheKeyOrSpecifiedTypeRoots>>,
+        cache: ResolutionCache,
+    ): void;
 
     watchResolution<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
         resolution: T,
@@ -412,7 +423,7 @@ export function createSharedResolutionCache(sharedCacheHost: SharedResolutionCac
     const watchedResolutionInfoMap = new Map<ResolutionWithFailedLookupLocations, WatchedResolutionInfo>();
     const typeRootsWatches = new Map<string, TypeRootWatch>();
     const inUseResolutionCaches = new Map<ResolutionCache, number>();
-    const cacheToOptions = new Map<ResolutionCache, Set<CompilerOptions>>();
+    const cacheToOptions = new Map<ResolutionCache, CacheToOptionsEntry>();
 
     let affectingPathChecks: Set<string> | undefined;
     let failedLookupChecks: Set<Path> | undefined;
@@ -587,21 +598,36 @@ export function createSharedResolutionCache(sharedCacheHost: SharedResolutionCac
         currentCache = undefined;
     }
 
-    function compactCaches(availableOptions: Set<CompilerOptions>, cache: ResolutionCache) {
-        if (availableOptions.size) cacheToOptions.set(cache, availableOptions);
+    function compactCaches(
+        availableOptions: Set<CompilerOptions>,
+        availableTypeCacheKeys: Map<CompilerOptions, Set<TypeRootsCacheKeyOrSpecifiedTypeRoots>>,
+        cache: ResolutionCache,
+    ) {
+        if (availableOptions.size) cacheToOptions.set(cache, { availableOptions, availableTypeCacheKeys });
         else cacheToOptions.delete(cache);
         compactCachesWoker();
     }
 
     function compactCachesWoker() {
         let availableOptions: Set<CompilerOptions>;
-        if (cacheToOptions.size === 1) availableOptions = firstDefinedIterator(cacheToOptions.values(), identity)!;
+        let availableTypeCacheKeys: Map<CompilerOptions, Set<TypeRootsCacheKeyOrSpecifiedTypeRoots>>;
+        if (cacheToOptions.size === 1) {
+            ({ availableOptions, availableTypeCacheKeys } = firstDefinedIterator(cacheToOptions.values(), identity)!);
+        }
         else {
             availableOptions = new Set();
-            cacheToOptions.forEach(setOfOptions => setOfOptions.forEach(options => availableOptions.add(options)));
+            availableTypeCacheKeys = new Map();
+            cacheToOptions.forEach(entry => {
+                entry.availableOptions.forEach(options => availableOptions.add(options));
+                entry.availableTypeCacheKeys.forEach((keys, options) => {
+                    const existing = availableTypeCacheKeys.get(options);
+                    if (existing) keys.forEach(key => existing.add(key));
+                    else availableTypeCacheKeys.set(options, new Set(keys));
+                });
+            });
         }
         moduleResolutionCache.compact(availableOptions, /*skipOptionsToRedirectsKeyCleanup*/ true);
-        typeReferenceDirectiveResolutionCache.compact(availableOptions);
+        typeReferenceDirectiveResolutionCache.compact(availableOptions, /*skipOptionsToRedirectsKeyCleanup*/ false, availableTypeCacheKeys);
         libraryResolutionCache.compact();
     }
 
@@ -1351,12 +1377,12 @@ export function enableSharingModuleOrTypeReferenceResolutionCache<T extends Modu
     sharedCache: T,
 ): T {
     const getFromDirectoryCache = moduleOrTypeRefCache.getFromDirectoryCache;
-    moduleOrTypeRefCache.getFromDirectoryCache = (name, mode, directoryName, redirectedReference) => {
-        let result = getFromDirectoryCache.call(moduleOrTypeRefCache, name, mode, directoryName, redirectedReference);
+    moduleOrTypeRefCache.getFromDirectoryCache = (name, mode, directoryName, redirectedReference, typeRootsKey?) => {
+        let result = getFromDirectoryCache.call(moduleOrTypeRefCache, name, mode, directoryName, redirectedReference, typeRootsKey);
         if (result) return result;
         result = withSharingModuleOrTypeReferenceResolutionCache(
             moduleOrTypeRefCache,
-            sharedCache => sharedCache.getFromDirectoryCache(name, mode, directoryName, redirectedReference),
+            sharedCache => sharedCache.getFromDirectoryCache(name, mode, directoryName, redirectedReference, typeRootsKey as TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined),
         );
         if (result) {
             moduleOrTypeRefCache.setPerDirectoryAndNonRelativeNameCacheResult(
@@ -1364,26 +1390,27 @@ export function enableSharingModuleOrTypeReferenceResolutionCache<T extends Modu
                 mode,
                 directoryName,
                 redirectedReference,
+                typeRootsKey as TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined,
                 result,
             );
         }
         return result;
     };
     const getFromNonRelativeNameCache = moduleOrTypeRefCache.getFromNonRelativeNameCache;
-    moduleOrTypeRefCache.getFromNonRelativeNameCache = (nonRelativeModuleName, mode, directoryName, redirectedReference) =>
-        getFromNonRelativeNameCache.call(moduleOrTypeRefCache, nonRelativeModuleName, mode, directoryName, redirectedReference) ||
+    moduleOrTypeRefCache.getFromNonRelativeNameCache = (nonRelativeModuleName, mode, directoryName, redirectedReference, typeRootsKey?) =>
+        getFromNonRelativeNameCache.call(moduleOrTypeRefCache, nonRelativeModuleName, mode, directoryName, redirectedReference, typeRootsKey) ||
         withSharingModuleOrTypeReferenceResolutionCache(
             moduleOrTypeRefCache,
-            sharedCache => sharedCache?.getFromNonRelativeNameCache(nonRelativeModuleName, mode, directoryName, redirectedReference),
+            sharedCache => sharedCache?.getFromNonRelativeNameCache(nonRelativeModuleName, mode, directoryName, redirectedReference, typeRootsKey as TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined),
         );
     const setPerDirectoryAndNonRelativeNameCacheResult = moduleOrTypeRefCache.setPerDirectoryAndNonRelativeNameCacheResult;
-    moduleOrTypeRefCache.setPerDirectoryAndNonRelativeNameCacheResult = (name, mode, directoryName, redirectedReference, result, primary) => {
-        setPerDirectoryAndNonRelativeNameCacheResult.call(moduleOrTypeRefCache, name, mode, directoryName, redirectedReference, result, primary);
+    moduleOrTypeRefCache.setPerDirectoryAndNonRelativeNameCacheResult = (name, mode, directoryName, redirectedReference, typeRootsKey, result, primary) => {
+        setPerDirectoryAndNonRelativeNameCacheResult.call(moduleOrTypeRefCache, name, mode, directoryName, redirectedReference, typeRootsKey, result, primary);
         if (primary) return; // Already in the cache
         result = result.globalCacheResolution?.primary || result;
         withSharingModuleOrTypeReferenceResolutionCache(
             moduleOrTypeRefCache,
-            sharedCache => sharedCache.setPerDirectoryAndNonRelativeNameCacheResult(name, mode, directoryName, redirectedReference, result),
+            sharedCache => sharedCache.setPerDirectoryAndNonRelativeNameCacheResult(name, mode, directoryName, redirectedReference, typeRootsKey, result),
         );
     };
     const update = moduleOrTypeRefCache.update;

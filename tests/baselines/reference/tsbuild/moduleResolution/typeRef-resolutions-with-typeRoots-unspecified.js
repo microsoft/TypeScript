@@ -100,9 +100,7 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving type reference directive 'node', containing file '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts', root directory '/home/src/workspaces/project/test/module/ts-require/node_modules/@types,/home/src/workspaces/project/test/module/node_modules/@types,/home/src/workspaces/project/test/node_modules/@types,/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/home/src/workspaces/project/test/module/ts-require/node_modules/@types, /home/src/workspaces/project/test/module/node_modules/@types, /home/src/workspaces/project/test/node_modules/@types, /home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
-File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts', result '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts'.
+Resolution for type reference directive 'node' was found in cache from location '/home/src/workspaces/project/test/module/ts-require'.
 ======== Type reference directive 'node' was successfully resolved to '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts', primary: true. ========
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -152,40 +150,10 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving type reference directive 'node', containing file '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts'. ========
-Resolution for type reference directive 'node' was found in cache from location '/home/src/workspaces/project/node_modules/@types/responselike'.
-======== Type reference directive 'node' was successfully resolved to '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts', primary: true. ========
-File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/test/module/ts-require/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/test/module/ts-require/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/test/module/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/test/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-[96mtest/module/ts-require/node_modules/@types/node/index.d.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'tsRequireGlobal'.
-
-[7m1[0m declare const tsRequireGlobal = 10;
-[7m [0m [91m              ~~~~~~~~~~~~~~~[0m
-
-  [96mtest/module/ts/node_modules/@types/node/index.d.ts[0m:[93m1[0m:[93m15[0m
-    [7m1[0m declare const tsRequireGlobal = 10;
-    [7m [0m [96m              ~~~~~~~~~~~~~~~[0m
-    'tsRequireGlobal' was also declared here.
-
-[96mtest/module/ts/node_modules/@types/node/index.d.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'tsRequireGlobal'.
-
-[7m1[0m declare const tsRequireGlobal = 10;
-[7m [0m [91m              ~~~~~~~~~~~~~~~[0m
-
-  [96mtest/module/ts-require/node_modules/@types/node/index.d.ts[0m:[93m1[0m:[93m15[0m
-    [7m1[0m declare const tsRequireGlobal = 10;
-    [7m [0m [96m              ~~~~~~~~~~~~~~~[0m
-    'tsRequireGlobal' was also declared here.
-
+======== Resolving type reference directive 'node', containing file '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts', root directory '/home/src/workspaces/project/test/module/ts/node_modules/@types,/home/src/workspaces/project/test/module/node_modules/@types,/home/src/workspaces/project/test/node_modules/@types,/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/home/src/workspaces/project/test/module/ts/node_modules/@types, /home/src/workspaces/project/test/module/node_modules/@types, /home/src/workspaces/project/test/node_modules/@types, /home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
+Resolution for type reference directive 'node' was found in cache from location '/home/src/workspaces/project/test/module/ts'.
+======== Type reference directive 'node' was successfully resolved to '/home/src/workspaces/project/test/module/ts/node_modules/@types/node/index.d.ts', primary: true. ========
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 test/module/ts/index.ts
@@ -194,13 +162,9 @@ test/module/ts/main.ts
   Matched by default include pattern '**/*'
 test/module/ts/node_modules/@types/node/index.d.ts
   Entry point for implicit type library 'node'
-test/module/ts-require/node_modules/@types/node/index.d.ts
   Type library referenced via 'node' from file 'node_modules/@types/responselike/index.d.ts'
 node_modules/@types/responselike/index.d.ts
   Entry point for implicit type library 'responselike'
-
-Found 2 errors.
-
 
 
 //// [/home/src/workspaces/project/test/module/ts-require/index.js]
@@ -307,7 +271,7 @@ exports.tsMain = 10;
 
 
 //// [/home/src/workspaces/project/test/module/ts/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../tslibs/ts/lib/lib.d.ts","./index.ts","./main.ts","./node_modules/@types/node/index.d.ts","../ts-require/node_modules/@types/node/index.d.ts","../../../node_modules/@types/responselike/index.d.ts"],"fileIdsList":[[5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13547799514-export const tsIndex= 10;","-10684672141-export const tsMain = 10;",{"version":"-4340658070-declare const tsRequireGlobal = 10;","affectsGlobalScope":true,"impliedFormat":1},{"version":"-4340658070-declare const tsRequireGlobal = 10;","affectsGlobalScope":true,"impliedFormat":1},{"version":"4670743798-/// <reference types=\"node\" />\nexport const z = 10;\n","impliedFormat":1}],"root":[2,3],"referencedMap":[[6,1]],"semanticDiagnosticsPerFile":[[4,[{"start":14,"length":15,"messageText":"Cannot redeclare block-scoped variable 'tsRequireGlobal'.","category":1,"code":2451,"relatedInformation":[{"file":"../ts-require/node_modules/@types/node/index.d.ts","start":14,"length":15,"messageText":"'tsRequireGlobal' was also declared here.","category":3,"code":6203}]}]],[5,[{"start":14,"length":15,"messageText":"Cannot redeclare block-scoped variable 'tsRequireGlobal'.","category":1,"code":2451,"relatedInformation":[{"file":"./node_modules/@types/node/index.d.ts","start":14,"length":15,"messageText":"'tsRequireGlobal' was also declared here.","category":3,"code":6203}]}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../../tslibs/ts/lib/lib.d.ts","./index.ts","./main.ts","./node_modules/@types/node/index.d.ts","../../../node_modules/@types/responselike/index.d.ts"],"fileIdsList":[[4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13547799514-export const tsIndex= 10;","-10684672141-export const tsMain = 10;",{"version":"-4340658070-declare const tsRequireGlobal = 10;","affectsGlobalScope":true,"impliedFormat":1},{"version":"4670743798-/// <reference types=\"node\" />\nexport const z = 10;\n","impliedFormat":1}],"root":[2,3],"referencedMap":[[5,1]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/test/module/ts/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -316,12 +280,11 @@ exports.tsMain = 10;
     "./index.ts",
     "./main.ts",
     "./node_modules/@types/node/index.d.ts",
-    "../ts-require/node_modules/@types/node/index.d.ts",
     "../../../node_modules/@types/responselike/index.d.ts"
   ],
   "fileIdsList": [
     [
-      "../ts-require/node_modules/@types/node/index.d.ts"
+      "./node_modules/@types/node/index.d.ts"
     ]
   ],
   "fileInfos": {
@@ -343,17 +306,6 @@ exports.tsMain = 10;
       "signature": "-10684672141-export const tsMain = 10;"
     },
     "./node_modules/@types/node/index.d.ts": {
-      "original": {
-        "version": "-4340658070-declare const tsRequireGlobal = 10;",
-        "affectsGlobalScope": true,
-        "impliedFormat": 1
-      },
-      "version": "-4340658070-declare const tsRequireGlobal = 10;",
-      "signature": "-4340658070-declare const tsRequireGlobal = 10;",
-      "affectsGlobalScope": true,
-      "impliedFormat": "commonjs"
-    },
-    "../ts-require/node_modules/@types/node/index.d.ts": {
       "original": {
         "version": "-4340658070-declare const tsRequireGlobal = 10;",
         "affectsGlobalScope": true,
@@ -386,61 +338,15 @@ exports.tsMain = 10;
   ],
   "referencedMap": {
     "../../../node_modules/@types/responselike/index.d.ts": [
-      "../ts-require/node_modules/@types/node/index.d.ts"
+      "./node_modules/@types/node/index.d.ts"
     ]
   },
-  "semanticDiagnosticsPerFile": [
-    [
-      "./node_modules/@types/node/index.d.ts",
-      [
-        {
-          "start": 14,
-          "length": 15,
-          "messageText": "Cannot redeclare block-scoped variable 'tsRequireGlobal'.",
-          "category": 1,
-          "code": 2451,
-          "relatedInformation": [
-            {
-              "file": "../ts-require/node_modules/@types/node/index.d.ts",
-              "start": 14,
-              "length": 15,
-              "messageText": "'tsRequireGlobal' was also declared here.",
-              "category": 3,
-              "code": 6203
-            }
-          ]
-        }
-      ]
-    ],
-    [
-      "../ts-require/node_modules/@types/node/index.d.ts",
-      [
-        {
-          "start": 14,
-          "length": 15,
-          "messageText": "Cannot redeclare block-scoped variable 'tsRequireGlobal'.",
-          "category": 1,
-          "code": 2451,
-          "relatedInformation": [
-            {
-              "file": "./node_modules/@types/node/index.d.ts",
-              "start": 14,
-              "length": 15,
-              "messageText": "'tsRequireGlobal' was also declared here.",
-              "category": 3,
-              "code": 6203
-            }
-          ]
-        }
-      ]
-    ]
-  ],
   "version": "FakeTSVersion",
-  "size": 1856
+  "size": 1039
 }
 
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 Change:: build ts project with edit
 
@@ -457,7 +363,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Project 'test/module/ts-require/tsconfig.json' is up to date because newest input 'test/module/ts-require/main.ts' is older than output 'test/module/ts-require/tsconfig.tsbuildinfo'
 
-[[90mHH:MM:SS AM[0m] Project 'test/module/ts/tsconfig.json' is out of date because buildinfo file 'test/module/ts/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'test/module/ts/tsconfig.json' is out of date because output 'test/module/ts/tsconfig.tsbuildinfo' is older than input 'test/module/ts/main.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/test/module/ts/tsconfig.json'...
 
@@ -496,9 +402,7 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving type reference directive 'node', containing file '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts', root directory '/home/src/workspaces/project/test/module/ts/node_modules/@types,/home/src/workspaces/project/test/module/node_modules/@types,/home/src/workspaces/project/test/node_modules/@types,/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/home/src/workspaces/project/test/module/ts/node_modules/@types, /home/src/workspaces/project/test/module/node_modules/@types, /home/src/workspaces/project/test/node_modules/@types, /home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
-File '/home/src/workspaces/project/test/module/ts/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/test/module/ts/node_modules/@types/node/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/test/module/ts/node_modules/@types/node/index.d.ts', result '/home/src/workspaces/project/test/module/ts/node_modules/@types/node/index.d.ts'.
+Resolution for type reference directive 'node' was found in cache from location '/home/src/workspaces/project/test/module/ts'.
 ======== Type reference directive 'node' was successfully resolved to '/home/src/workspaces/project/test/module/ts/node_modules/@types/node/index.d.ts', primary: true. ========
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -513,7 +417,6 @@ node_modules/@types/responselike/index.d.ts
   Entry point for implicit type library 'responselike'
 
 
-//// [/home/src/workspaces/project/test/module/ts/index.js] file written with same contents
 //// [/home/src/workspaces/project/test/module/ts/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -523,7 +426,7 @@ exports.z = 10;
 
 
 //// [/home/src/workspaces/project/test/module/ts/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../tslibs/ts/lib/lib.d.ts","./index.ts","./main.ts","./node_modules/@types/node/index.d.ts","../../../node_modules/@types/responselike/index.d.ts"],"fileIdsList":[[4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13547799514-export const tsIndex= 10;","signature":"-3096057536-export declare const tsIndex = 10;\n"},{"version":"-8570461073-export const tsMain = 10;export const z = 10;","signature":"-7988574173-export declare const tsMain = 10;\nexport declare const z = 10;\n"},{"version":"-4340658070-declare const tsRequireGlobal = 10;","affectsGlobalScope":true,"impliedFormat":1},{"version":"4670743798-/// <reference types=\"node\" />\nexport const z = 10;\n","impliedFormat":1}],"root":[2,3],"referencedMap":[[5,1]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../../tslibs/ts/lib/lib.d.ts","./index.ts","./main.ts","./node_modules/@types/node/index.d.ts","../../../node_modules/@types/responselike/index.d.ts"],"fileIdsList":[[4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13547799514-export const tsIndex= 10;",{"version":"-8570461073-export const tsMain = 10;export const z = 10;","signature":"-7988574173-export declare const tsMain = 10;\nexport declare const z = 10;\n"},{"version":"-4340658070-declare const tsRequireGlobal = 10;","affectsGlobalScope":true,"impliedFormat":1},{"version":"4670743798-/// <reference types=\"node\" />\nexport const z = 10;\n","impliedFormat":1}],"root":[2,3],"referencedMap":[[5,1]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/test/module/ts/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -550,12 +453,8 @@ exports.z = 10;
       "affectsGlobalScope": true
     },
     "./index.ts": {
-      "original": {
-        "version": "-13547799514-export const tsIndex= 10;",
-        "signature": "-3096057536-export declare const tsIndex = 10;\n"
-      },
       "version": "-13547799514-export const tsIndex= 10;",
-      "signature": "-3096057536-export declare const tsIndex = 10;\n"
+      "signature": "-13547799514-export const tsIndex= 10;"
     },
     "./main.ts": {
       "original": {
@@ -602,7 +501,7 @@ exports.z = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1237
+  "size": 1162
 }
 
 
@@ -660,9 +559,7 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving type reference directive 'node', containing file '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts', root directory '/home/src/workspaces/project/test/module/ts-require/node_modules/@types,/home/src/workspaces/project/test/module/node_modules/@types,/home/src/workspaces/project/test/node_modules/@types,/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/home/src/workspaces/project/test/module/ts-require/node_modules/@types, /home/src/workspaces/project/test/module/node_modules/@types, /home/src/workspaces/project/test/node_modules/@types, /home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
-File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts', result '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts'.
+Resolution for type reference directive 'node' was found in cache from location '/home/src/workspaces/project/test/module/ts-require'.
 ======== Type reference directive 'node' was successfully resolved to '/home/src/workspaces/project/test/module/ts-require/node_modules/@types/node/index.d.ts', primary: true. ========
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'

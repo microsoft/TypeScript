@@ -118,10 +118,7 @@ node_modules/@types/responselike/index.d.ts
 ======== Resolving type reference directive 'responselike', containing file '/home/src/workspaces/project/test/module/ts/__inferred type names__.ts', root directory '/home/src/workspaces/project/test/module/ts/node_modules/@types,/home/src/workspaces/project/test/module/node_modules/@types,/home/src/workspaces/project/test/node_modules/@types,/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/home/src/workspaces/project/test/module/ts/node_modules/@types, /home/src/workspaces/project/test/module/node_modules/@types, /home/src/workspaces/project/test/node_modules/@types, /home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
 Directory '/home/src/workspaces/project/test/module/ts/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/test/module/node_modules/@types' does not exist, skipping all lookups in it.
-File '/home/src/workspaces/project/node_modules/@types/responselike/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts', result '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts'.
+Resolution for type reference directive 'responselike' was found in cache from location '/home/src/workspaces/project/test/module'.
 ======== Type reference directive 'responselike' was successfully resolved to '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts', primary: true. ========
 File '/home/src/workspaces/project/node_modules/@types/responselike/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
@@ -131,8 +128,13 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving type reference directive 'node', containing file '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts'. ========
-Resolution for type reference directive 'node' was found in cache from location '/home/src/workspaces/project/node_modules/@types/responselike'.
+======== Resolving type reference directive 'node', containing file '/home/src/workspaces/project/node_modules/@types/responselike/index.d.ts', root directory '/home/src/workspaces/project/test/module/ts/node_modules/@types,/home/src/workspaces/project/test/module/node_modules/@types,/home/src/workspaces/project/test/node_modules/@types,/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/home/src/workspaces/project/test/module/ts/node_modules/@types, /home/src/workspaces/project/test/module/node_modules/@types, /home/src/workspaces/project/test/node_modules/@types, /home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
+Directory '/home/src/workspaces/project/test/module/ts/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/home/src/workspaces/project/test/module/node_modules/@types' does not exist, skipping all lookups in it.
+File '/home/src/workspaces/project/test/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/test/node_modules/@types/node/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/home/src/workspaces/project/test/node_modules/@types/node/index.d.ts', result '/home/src/workspaces/project/test/node_modules/@types/node/index.d.ts'.
 ======== Type reference directive 'node' was successfully resolved to '/home/src/workspaces/project/test/node_modules/@types/node/index.d.ts', primary: true. ========
 File '/home/src/workspaces/project/test/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/test/node_modules/@types/package.json' does not exist according to earlier cached lookups.

@@ -299,23 +299,23 @@ Info seq  [hh:mm:ss:mss] fileExists:: [
 Info seq  [hh:mm:ss:mss] directoryExists:: [
   {
     "key": "/users/username/projects/project",
-    "count": 3
+    "count": 2
   },
   {
     "key": "/users/username/projects",
-    "count": 3
+    "count": 2
   },
   {
     "key": "/users/username",
-    "count": 2
+    "count": 1
   },
   {
     "key": "/users",
-    "count": 2
+    "count": 1
   },
   {
     "key": "/",
-    "count": 2
+    "count": 1
   },
   {
     "key": "/users/username/projects/project/node_modules",

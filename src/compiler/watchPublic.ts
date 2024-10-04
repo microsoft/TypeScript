@@ -41,6 +41,7 @@ import {
     getBuildInfo,
     getConfigFileParsingDiagnostics,
     getDirectoryPath,
+    getEffectiveTypeRoots as ts_getEffectiveTypeRoots,
     getFileNamesFromConfigSpecs,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
@@ -402,6 +403,8 @@ interface ParsedConfig {
     watchedDirectories?: Map<string, WildcardDirectoryWatcher>;
     /** Level of program update to be done for this config file */
     updateLevel?: ProgramUpdateLevel.RootNamesAndUpdate | ProgramUpdateLevel.Full;
+    /** Effective typeroots if calculated and cached */
+    effectiveTypeRoots?: readonly string[] | false;
 }
 
 // All of one and partial of the other, or vice versa.
@@ -455,6 +458,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     const currentDirectory = host.getCurrentDirectory();
     const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {}, watchOptionsToExtend, extraFileExtensions, createProgram } = host;
     let { rootFiles: rootFileNames, options: compilerOptions, watchOptions, projectReferences } = host;
+    let effectiveTypeRoots: readonly string[] | false | undefined;
     let wildcardDirectories: MapLike<WatchDirectoryFlags> | undefined;
     let configFileParsingDiagnostics: Diagnostic[] | undefined;
     let canConfigFileJsonReportNoInputFiles = false;
@@ -516,6 +520,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     compilerHost.getCurrentProgram = getCurrentProgram;
     compilerHost.writeLog = writeLog;
     compilerHost.getParsedCommandLine = getParsedCommandLine;
+    compilerHost.getEffectiveTypeRoots = getEffectiveTypeRoots;
 
     // Cache for the module resolution
     const resolutionCache = createResolutionCache(
@@ -971,6 +976,20 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         ); // TODO: GH#18217
     }
 
+    function getEffectiveTypeRoots(options: CompilerOptions, redirect: ResolvedProjectReference | undefined): readonly string[] | undefined {
+        if (!redirect) {
+            if (effectiveTypeRoots === undefined) {
+                effectiveTypeRoots = ts_getEffectiveTypeRoots(options, compilerHost) ?? false;
+            }
+            return effectiveTypeRoots || undefined;
+        }
+        const config = parsedConfigs!.get(redirect.sourceFile.path)!;
+        if (config.effectiveTypeRoots === undefined) {
+            config.effectiveTypeRoots = ts_getEffectiveTypeRoots(config.parsedCommandLine!.options, compilerHost) ?? false;
+        }
+        return config.effectiveTypeRoots || undefined;
+    }
+
     function setConfigFileParsingResult(configFileParseResult: ParsedCommandLine) {
         rootFileNames = configFileParseResult.fileNames;
         compilerOptions = configFileParseResult.options;
@@ -980,6 +999,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         configFileParsingDiagnostics = getConfigFileParsingDiagnostics(configFileParseResult).slice();
         canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(configFileParseResult.raw);
         hasChangedConfigFileParsingErrors = true;
+        effectiveTypeRoots = undefined;
     }
 
     function getParsedCommandLine(configFileName: string): ParsedCommandLine | undefined {

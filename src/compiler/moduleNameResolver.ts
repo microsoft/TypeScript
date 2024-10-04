@@ -256,7 +256,7 @@ function createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
 }
 
 function updateResultFromCache(
-    resultFromCache: ResolvedModuleWithFailedLookupLocations,
+    resultFromCache: ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     failedLookupLocations: string[],
     affectingLocations: string[],
     diagnostics: Diagnostic[],
@@ -527,6 +527,17 @@ export function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffecti
     }
 }
 
+/** @internal */
+export function getEffectiveTypeRootsWithModuleResolutionHost(
+    options: CompilerOptions,
+    redirect: ResolvedProjectReference | undefined,
+    host: ModuleResolutionHost,
+): readonly string[] | undefined {
+    return host.getEffectiveTypeRoots ?
+        host.getEffectiveTypeRoots(options, redirect) :
+        getEffectiveTypeRoots(options, host);
+}
+
 /**
  * Returns the path to every node_modules/@types directory from some ancestor directory.
  * Returns undefined if there are none.
@@ -575,12 +586,15 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         options = redirectedReference.commandLine.options;
     }
 
-    const containingDirectory = containingFile ? getDirectoryPath(containingFile) : undefined;
-    let result = containingDirectory ? cache?.getFromDirectoryCache(typeReferenceDirectiveName, resolutionMode, containingDirectory, redirectedReference) : undefined;
-    if (!result && containingDirectory && !isExternalModuleNameRelative(typeReferenceDirectiveName)) {
-        result = cache?.getFromNonRelativeNameCache(typeReferenceDirectiveName, resolutionMode, containingDirectory, redirectedReference);
-    }
+    const typeRootsCacheKey = host.getTypeRootsCacheKey ?
+        host.getTypeRootsCacheKey(options, redirectedReference) :
+        createTypeRootsCacheKey(options, redirectedReference, host);
 
+    const containingDirectory = containingFile ? getDirectoryPath(containingFile) : undefined;
+    // Cache is already equired to handle specified typeRoots - and only guaranteed to have in perDirectoryCache
+    let result = options.typeRoots && containingDirectory ?
+        lookFromPerDirectoryCache(containingDirectory) :
+        undefined;
     if (result) {
         if (traceEnabled) {
             trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1, typeReferenceDirectiveName, containingFile);
@@ -591,7 +605,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         return result;
     }
 
-    const typeRoots = getEffectiveTypeRoots(options, host);
+    const typeRoots = getEffectiveTypeRootsWithModuleResolutionHost(options, redirectedReference, host);
     if (traceEnabled) {
         if (containingFile === undefined) {
             if (typeRoots === undefined) {
@@ -646,6 +660,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         resolvedPackageDirectory: false,
     };
     let resolved = primaryLookup();
+    if (result) return setResultInCacheAndResult(result);
     let primary = true;
     if (!resolved) {
         resolved = secondaryLookup();
@@ -671,17 +686,8 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         affectingLocations: initializeResolutionField(affectingLocations),
         resolutionDiagnostics: initializeResolutionField(diagnostics),
     };
-    if (containingDirectory) {
-        cache?.setPerDirectoryAndNonRelativeNameCacheResult(
-            typeReferenceDirectiveName,
-            resolutionMode,
-            containingDirectory,
-            redirectedReference,
-            result,
-        );
-    }
-    if (traceEnabled) traceResult(result);
-    return result;
+
+    return setResultInCacheAndResult(result);
 
     function traceResult(result: ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
         if (!result.resolvedTypeReferenceDirective?.resolvedFileName) {
@@ -695,13 +701,80 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         }
     }
 
-    function primaryLookup(): PathAndPackageId | undefined {
+    function setResultInCacheAndResult(result: ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
+        if (containingDirectory) {
+            cache?.setPerDirectoryAndNonRelativeNameCacheResult(
+                typeReferenceDirectiveName,
+                resolutionMode,
+                containingDirectory,
+                redirectedReference,
+                typeRootsCacheKey,
+                result,
+            );
+        }
+        if (traceEnabled) traceResult(result);
+        return result;
+    }
+
+    function lookFromPerDirectoryCache(directory: string) {
+        return directory === containingDirectory ?
+            cache?.getFromDirectoryCache(
+                typeReferenceDirectiveName,
+                resolutionMode,
+                containingDirectory,
+                redirectedReference,
+                typeRootsCacheKey,
+            ) : undefined;
+    }
+
+    function lookupFromCache(directory: string) {
+        return lookFromPerDirectoryCache(directory) ?? (
+            !isExternalModuleNameRelative(typeReferenceDirectiveName) ?
+                cache?.getFromNonRelativeNameCache(
+                    typeReferenceDirectiveName,
+                    resolutionMode,
+                    directory,
+                    redirectedReference,
+                    typeRootsCacheKey,
+                ) :
+                undefined
+        );
+    }
+
+    function primaryLookup(): PathAndPackageId | false | undefined {
         // Check primary library paths
         if (typeRoots && typeRoots.length) {
             if (traceEnabled) {
                 trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
             }
             return firstDefined(typeRoots, typeRoot => {
+                // Default effective type roots, check in cache
+                if (!options.typeRoots) {
+                    // TODO:: sheetal - the issue here is that when we find the result in folder thats inside the containing folder
+                    // our type cache algo does not handle that as it assumes we have looked from containing folder and ancestor
+                    // Need to handle that!!!
+                    const typeRootDirectory = getDirectoryPath(getDirectoryPath(typeRoot));
+                    result = lookupFromCache(typeRootDirectory);
+                    if (result) {
+                        if (traceEnabled) {
+                            trace(host, Diagnostics.Resolution_for_type_reference_directive_0_was_found_in_cache_from_location_1, typeReferenceDirectiveName, typeRootDirectory);
+                        }
+                        if (!cache?.isReadonly) {
+                            updateResultFromCache(result, failedLookupLocations, affectingLocations, diagnostics);
+                        }
+                        else {
+                            result = {
+                                resolvedTypeReferenceDirective: result.resolvedTypeReferenceDirective,
+                                failedLookupLocations: initializeResolutionFieldForReadonlyCache(result.failedLookupLocations, failedLookupLocations),
+                                affectingLocations: initializeResolutionFieldForReadonlyCache(result.affectingLocations, affectingLocations),
+                                resolutionDiagnostics: initializeResolutionFieldForReadonlyCache(result.resolutionDiagnostics, diagnostics),
+                            };
+                        }
+                        // Failed lookup and cache update
+                        return false;
+                    }
+                }
+
                 const candidate = getCandidateFromTypeRoot(typeRoot, typeReferenceDirectiveName, moduleResolutionState);
                 const directoryExists = directoryProbablyExists(typeRoot, host);
                 if (!directoryExists && traceEnabled) {
@@ -855,7 +928,7 @@ export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: M
     // Walk the primary type lookup locations
     const result: string[] = [];
     if (host.directoryExists && host.getDirectories) {
-        const typeRoots = getEffectiveTypeRoots(options, host);
+        const typeRoots = getEffectiveTypeRootsWithModuleResolutionHost(options, /*redirect*/ undefined, host);
         if (typeRoots) {
             for (const root of typeRoots) {
                 if (host.directoryExists(root)) {
@@ -914,7 +987,11 @@ export interface ModeAwareCache<T> {
  */
 export interface PerDirectoryResolutionCache<T> {
     getFromDirectoryCache(name: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
+    /** @internal */
+    getFromDirectoryCache(name: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined, typeRootsKey?: TypeRootsCacheKeyOrSpecifiedTypeRoots): T | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
     getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): ModeAwareCache<T>;
+    /** @internal */
+    getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference, typeRootsKey?: TypeRootsCacheKeyOrSpecifiedTypeRoots): ModeAwareCache<T>; // eslint-disable-line @typescript-eslint/unified-signatures
     clear(): void;
     /**
      *  Updates with the current compilerOptions the cache will operate with.
@@ -927,7 +1004,11 @@ export interface PerDirectoryResolutionCache<T> {
 
 export interface NonRelativeNameResolutionCache<T> {
     getFromNonRelativeNameCache(nonRelativeName: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
+    /** @internal */
+    getFromNonRelativeNameCache(nonRelativeName: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined, typeRootsKey?: TypeRootsCacheKeyOrSpecifiedTypeRoots): T | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
     getOrCreateCacheForNonRelativeName(nonRelativeName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerNonRelativeNameCache<T>;
+    /** @internal */
+    getOrCreateCacheForNonRelativeName(nonRelativeName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference, typeRootsKey?: TypeRootsCacheKeyOrSpecifiedTypeRoots): PerNonRelativeNameCache<T>; // eslint-disable-line @typescript-eslint/unified-signatures
     clear(): void;
     /**
      *  Updates with the current compilerOptions the cache will operate with.
@@ -1016,15 +1097,19 @@ export function getKeyForCompilerOptions(options: CompilerOptions, affectingOpti
 
 /** @internal */
 export interface CacheWithRedirects<K, V> {
-    getMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> | undefined;
-    getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V>;
+    getMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined, typeRootsKey: TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined): Map<K, V> | undefined;
+    getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined, typeRootsKey: TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined): Map<K, V>;
     update(newOptions: CompilerOptions): void;
     clear(): void;
-    forEach(cb: (value: V, key: K, redirectsCacheKey: RedirectsCacheKey | undefined, map: Map<K, V>) => void): void;
-    compact(availableOptions: Set<CompilerOptions>): void;
+    forEach(cb: (value: V, key: K, redirectsCacheKey: RedirectsCacheKey | undefined, typeRootsKey: TypeRootsCacheKey | undefined, map: Map<K, V>) => void): void;
+    compact(
+        availableOptions: Set<CompilerOptions>,
+        availableTypeCacheKeys: Map<CompilerOptions, Set<TypeRootsCacheKeyOrSpecifiedTypeRoots>> | undefined,
+    ): void;
     getOwnMap(): Map<K, V>;
     getOwnOptions(): CompilerOptions | undefined;
     redirectsKeyToMap: Map<RedirectsCacheKey, Map<K, V>>;
+    getTypesRootKeyToMap(): Map<Map<K, V>, Map<TypeRootsCacheKey, Map<K, V>>> | undefined;
 }
 
 /** @internal */
@@ -1035,9 +1120,34 @@ export function computeRedirectsCacheKey(options: CompilerOptions) {
     return getKeyForCompilerOptions(options, moduleResolutionOptionDeclarations) as RedirectsCacheKey;
 }
 
+/** @internal */
+export type TypeRootsCacheKey = string & { __typeRootsKey: any; };
+/** @internal */
+export type TypeRootsCacheKeyOrSpecifiedTypeRoots = TypeRootsCacheKey | false;
+
+/** @internal */
+export function createTypeRootsCacheKey(
+    options: CompilerOptions,
+    redirectedReference: ResolvedProjectReference | undefined,
+    host: ModuleResolutionHost,
+): TypeRootsCacheKeyOrSpecifiedTypeRoots {
+    return options.typeRoots ?
+        false :
+        `[${
+            getEffectiveTypeRootsWithModuleResolutionHost(
+                options,
+                redirectedReference,
+                host,
+            )?.filter(
+                typeRoot => directoryProbablyExists(typeRoot, host),
+            )?.join(",")
+        }]` as TypeRootsCacheKey;
+}
+
 function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined, optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>): CacheWithRedirects<K, V> {
     const redirectsMap = new Map<CompilerOptions, Map<K, V>>();
     const redirectsKeyToMap = new Map<RedirectsCacheKey, Map<K, V>>();
+    let typesRootKeyToMap: Map<Map<K, V>, Map<TypeRootsCacheKey, Map<K, V>>> | undefined;
     let ownMap = new Map<K, V>();
     if (ownOptions) redirectsMap.set(ownOptions, ownMap);
     return {
@@ -1050,18 +1160,37 @@ function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined,
         getOwnMap: () => ownMap,
         getOwnOptions: () => ownOptions,
         redirectsKeyToMap,
+        getTypesRootKeyToMap: () => typesRootKeyToMap,
     };
 
-    function getMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> | undefined {
-        return redirectedReference ?
-            getOrCreateMap(redirectedReference.commandLine.options, /*create*/ false) :
-            ownMap;
-    }
-
-    function getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> {
-        return redirectedReference ?
+    function getOrCreateMapWithTypeRoots(redirectedReference: ResolvedProjectReference | undefined, typeRootsKey: TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined, create: true): Map<K, V>;
+    function getOrCreateMapWithTypeRoots(redirectedReference: ResolvedProjectReference | undefined, typeRootsKey: TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined, create: false): Map<K, V> | undefined;
+    function getOrCreateMapWithTypeRoots(redirectedReference: ResolvedProjectReference | undefined, typeRootsKey: TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined, create: boolean): Map<K, V> | undefined {
+        const map = redirectedReference ?
             getOrCreateMap(redirectedReference.commandLine.options, /*create*/ true) :
             ownMap;
+        if (!map || !typeRootsKey) return map;
+        let typeRootsKeyMap = typesRootKeyToMap?.get(map);
+        let result = typeRootsKeyMap?.get(typeRootsKey);
+        if (!result && create) {
+            if (!typeRootsKeyMap) (typesRootKeyToMap ??= new Map()).set(map, typeRootsKeyMap = new Map());
+            typeRootsKeyMap.set(typeRootsKey, result = new Map());
+        }
+        return result;
+    }
+
+    function getMapOfCacheRedirects(
+        redirectedReference: ResolvedProjectReference | undefined,
+        typeRootsKey: TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined,
+    ): Map<K, V> | undefined {
+        return getOrCreateMapWithTypeRoots(redirectedReference, typeRootsKey, /*create*/ false);
+    }
+
+    function getOrCreateMapOfCacheRedirects(
+        redirectedReference: ResolvedProjectReference | undefined,
+        typeRootsKey: TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined,
+    ): Map<K, V> {
+        return getOrCreateMapWithTypeRoots(redirectedReference, typeRootsKey, /*create*/ true);
     }
 
     function update(newOptions: CompilerOptions) {
@@ -1098,6 +1227,7 @@ function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined,
         redirectsMap.clear();
         optionsToRedirectsKey.clear();
         redirectsKeyToMap.clear();
+        typesRootKeyToMap = undefined;
         if (ownOptions) {
             if (ownKey) optionsToRedirectsKey.set(ownOptions, ownKey);
             redirectsMap.set(ownOptions, ownMap);
@@ -1112,24 +1242,71 @@ function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined,
         return result;
     }
 
-    function forEach(cb: (value: V, key: K, redirectsCacheKey: RedirectsCacheKey | undefined, map: Map<K, V>) => void) {
-        ownMap.forEach((value, key) => cb(value, key, /*redirectsCacheKey*/ undefined, ownMap));
+    function forEach(
+        cb: (
+            value: V,
+            key: K,
+            redirectsCacheKey: RedirectsCacheKey | undefined,
+            typeRootsKey: TypeRootsCacheKey | undefined,
+            map: Map<K, V>,
+        ) => void,
+    ) {
+        forEachMapWithTypeRootKey(ownMap, /*redirectsCacheKey*/ undefined, cb);
         redirectsKeyToMap.forEach((map, redirectsCacheKey) => {
-            if (map !== ownMap) map.forEach((value, key) => cb(value, key, redirectsCacheKey, map));
+            if (map !== ownMap) forEachMapWithTypeRootKey(map, redirectsCacheKey, cb);
         });
     }
 
-    function compact(availableOptions: Set<CompilerOptions>) {
+    function forEachMapWithTypeRootKey(
+        map: Map<K, V>,
+        redirectsCacheKey: RedirectsCacheKey | undefined,
+        cb: (value: V, key: K, redirectsCacheKey: RedirectsCacheKey | undefined, typeRootsKey: TypeRootsCacheKey | undefined, map: Map<K, V>) => void,
+    ) {
+        map.forEach((value, key) => cb(value, key, redirectsCacheKey, /*typeRootsKey*/ undefined, map));
+        typesRootKeyToMap?.get(map)?.forEach(
+            (map, typesRootKey) => map.forEach((value, key) => cb(value, key, redirectsCacheKey, typesRootKey, map)),
+        );
+    }
+
+    function compact(
+        availableOptions: Set<CompilerOptions>,
+        availableTypeCacheKeys: Map<CompilerOptions, Set<TypeRootsCacheKeyOrSpecifiedTypeRoots>> | undefined,
+    ) {
         const toDeleteRedirectsCacheKeys = new Set(redirectsKeyToMap.keys());
+        if (!availableTypeCacheKeys?.size) typesRootKeyToMap = undefined;
+        const toDeleteTypesRootKeyToMap = typesRootKeyToMap && new Map<Map<K, V>, Set<TypeRootsCacheKey>>();
+        typesRootKeyToMap?.forEach((keyToMap, map) => toDeleteTypesRootKeyToMap!.set(map, new Set(keyToMap.keys())));
+
         optionsToRedirectsKey.forEach((key, options) => {
             if (options === ownOptions || availableOptions.has(options)) {
                 toDeleteRedirectsCacheKeys.delete(key);
+                keepTypesRootKeyMap(availableTypeCacheKeys, options, toDeleteTypesRootKeyToMap, options === ownOptions ? ownMap : redirectsKeyToMap.get(key)!);
             }
             else {
                 redirectsMap.delete(options);
             }
         });
+        if (ownOptions) keepTypesRootKeyMap(availableTypeCacheKeys, ownOptions, toDeleteTypesRootKeyToMap, ownMap);
         toDeleteRedirectsCacheKeys.forEach(key => redirectsKeyToMap.delete(key));
+        toDeleteTypesRootKeyToMap?.forEach((typeRootKeys, map) => {
+            const keyToMap = typesRootKeyToMap!.get(map)!;
+            if (keyToMap.size === typeRootKeys.size) typesRootKeyToMap!.delete(map);
+            else typeRootKeys.forEach(key => keyToMap.delete(key));
+        });
+    }
+
+    function keepTypesRootKeyMap(
+        availableTypeCacheKeys: Map<CompilerOptions, Set<TypeRootsCacheKeyOrSpecifiedTypeRoots>> | undefined,
+        options: CompilerOptions,
+        toDeleteTypesRootKeyToMap: Map<Map<K, V>, Set<TypeRootsCacheKey>> | undefined,
+        map: Map<K, V>,
+    ) {
+        const setOfKeys = toDeleteTypesRootKeyToMap?.get(map);
+        if (!setOfKeys?.size) return;
+        availableTypeCacheKeys?.get(options)?.forEach(
+            typeRootsKey => typeRootsKey ? setOfKeys.delete(typeRootsKey) : undefined,
+        );
+        if (!setOfKeys.size) toDeleteTypesRootKeyToMap!.delete(map);
     }
 }
 
@@ -1150,8 +1327,14 @@ function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileNa
     }
 }
 
-function getOrCreateCache<K, V>(cacheWithRedirects: CacheWithRedirects<K, V>, redirectedReference: ResolvedProjectReference | undefined, key: K, create: () => V): V {
-    const cache = cacheWithRedirects.getOrCreateMapOfCacheRedirects(redirectedReference);
+function getOrCreateCache<K, V>(
+    cacheWithRedirects: CacheWithRedirects<K, V>,
+    redirectedReference: ResolvedProjectReference | undefined,
+    typeRootsKey: TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined,
+    key: K,
+    create: () => V,
+): V {
+    const cache = cacheWithRedirects.getOrCreateMapOfCacheRedirects(redirectedReference, typeRootsKey);
     let result = cache.get(key);
     if (!result) {
         result = create();
@@ -1184,14 +1367,14 @@ function createPerDirectoryResolutionCache<T>(
         directoryToModuleNameMap.update(options);
     }
 
-    function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
+    function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference, typeRootsKey?: TypeRootsCacheKeyOrSpecifiedTypeRoots) {
         const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
-        return getOrCreateCache(directoryToModuleNameMap, redirectedReference, path, () => createModeAwareCache());
+        return getOrCreateCache(directoryToModuleNameMap, redirectedReference, typeRootsKey, path, () => createModeAwareCache());
     }
 
-    function getFromDirectoryCache(name: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined) {
+    function getFromDirectoryCache(name: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined, typeRootsKey?: TypeRootsCacheKeyOrSpecifiedTypeRoots) {
         const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
-        return getValidResolution(directoryToModuleNameMap.getMapOfCacheRedirects(redirectedReference)?.get(path)?.get(name, mode));
+        return getValidResolution(directoryToModuleNameMap.getMapOfCacheRedirects(redirectedReference, typeRootsKey)?.get(path)?.get(name, mode));
     }
 }
 
@@ -1277,18 +1460,19 @@ function createNonRelativeNameResolutionCache<T>(
         moduleNameToDirectoryMap.update(options);
     }
 
-    function getFromNonRelativeNameCache(nonRelativeModuleName: string, mode: ResolutionMode, directoryName: string, redirectedReference?: ResolvedProjectReference): T | undefined {
+    function getFromNonRelativeNameCache(nonRelativeModuleName: string, mode: ResolutionMode, directoryName: string, redirectedReference?: ResolvedProjectReference, typeRootsKey?: TypeRootsCacheKeyOrSpecifiedTypeRoots): T | undefined {
         Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
-        return moduleNameToDirectoryMap.getMapOfCacheRedirects(redirectedReference)?.get(
+        return moduleNameToDirectoryMap.getMapOfCacheRedirects(redirectedReference, typeRootsKey)?.get(
             createModeAwareCacheKey(nonRelativeModuleName, mode),
         )?.get(directoryName);
     }
 
-    function getOrCreateCacheForNonRelativeName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerNonRelativeNameCache<T> {
+    function getOrCreateCacheForNonRelativeName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference, typeRootsKey?: TypeRootsCacheKeyOrSpecifiedTypeRoots): PerNonRelativeNameCache<T> {
         Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
         return getOrCreateCache(
             moduleNameToDirectoryMap,
             redirectedReference,
+            typeRootsKey,
             createModeAwareCacheKey(nonRelativeModuleName, mode),
             createPerModuleNameCache,
         );
@@ -1406,12 +1590,17 @@ function createNonRelativeNameResolutionCache<T>(
 export interface ModuleOrTypeReferenceResolutionCache<T> extends PerDirectoryResolutionCache<T>, NonRelativeNameResolutionCache<T>, PackageJsonInfoCache {
     getPackageJsonInfoCache(): PackageJsonInfoCache;
     gc(setOrMapToCheckPresence: Set<T> | Map<T, any>): void;
-    compact(availableOptions?: Set<CompilerOptions>, skipOptionsToRedirectsKeyCleanup?: boolean): void;
+    compact(
+        availableOptions?: Set<CompilerOptions>,
+        skipOptionsToRedirectsKeyCleanup?: boolean,
+        availableTypeCacheKeys?: Map<CompilerOptions, Set<TypeRootsCacheKeyOrSpecifiedTypeRoots>>,
+    ): void;
     setPerDirectoryAndNonRelativeNameCacheResult(
         name: string,
         mode: ResolutionMode,
         directoryName: string,
         redirectedReference: ResolvedProjectReference | undefined,
+        typeRootsKey: TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined,
         result: T,
         primary?: T,
     ): void;
@@ -1477,14 +1666,17 @@ function createModuleOrTypeReferenceResolutionCache<T>(
 
     function gc(setOrMapToCheckPresence: Set<T> | Map<T, any>) {
         // Iterate through maps to remove things that have 0 refCount
-        perDirectoryResolutionCache.directoryToModuleNameMap.forEach((resolutions, dir, redirectsCacheKey, directoryToModuleNameMap) => {
+        perDirectoryResolutionCache.directoryToModuleNameMap.forEach((resolutions, dir, redirectsCacheKey, typeRootsKey, directoryToModuleNameMap) => {
             resolutions.forEach((resolution, name, mode, key) => {
                 if (setOrMapToCheckPresence.has(resolution)) return;
                 resolutions.delete(name, mode);
                 if (!isExternalModuleNameRelative(name)) {
-                    const moduleNameToDirectoryMap = !redirectsCacheKey ?
+                    const ownOrRedirectsMap = !redirectsCacheKey ?
                         nonRelativeNameResolutionCache.moduleNameToDirectoryMap.getOwnMap() :
                         nonRelativeNameResolutionCache.moduleNameToDirectoryMap.redirectsKeyToMap.get(redirectsCacheKey);
+                    const moduleNameToDirectoryMap = ownOrRedirectsMap && typeRootsKey ?
+                        nonRelativeNameResolutionCache.moduleNameToDirectoryMap.getTypesRootKeyToMap()?.get(ownOrRedirectsMap)?.get(typeRootsKey) :
+                        ownOrRedirectsMap;
                     const directoryMap = moduleNameToDirectoryMap?.get(key);
                     directoryMap?.deleteByPath(dir);
                     if (!directoryMap?.directoryPathMap.size) moduleNameToDirectoryMap!.delete(key);
@@ -1494,9 +1686,13 @@ function createModuleOrTypeReferenceResolutionCache<T>(
         });
     }
 
-    function compact(availableOptions = new Set(optionsToRedirectsKey!.keys()), skipOptionsToRedirectsKeyCleanup?: boolean) {
-        perDirectoryResolutionCache.directoryToModuleNameMap.compact(availableOptions);
-        nonRelativeNameResolutionCache.moduleNameToDirectoryMap.compact(availableOptions);
+    function compact(
+        availableOptions = new Set(optionsToRedirectsKey!.keys()),
+        skipOptionsToRedirectsKeyCleanup?: boolean,
+        availableTypeCacheKeys?: Map<CompilerOptions, Set<TypeRootsCacheKeyOrSpecifiedTypeRoots>>,
+    ) {
+        perDirectoryResolutionCache.directoryToModuleNameMap.compact(availableOptions, availableTypeCacheKeys);
+        nonRelativeNameResolutionCache.moduleNameToDirectoryMap.compact(availableOptions, availableTypeCacheKeys);
         if (!skipOptionsToRedirectsKeyCleanup) {
             optionsToRedirectsKey!.forEach(
                 (_redirectsKey, options) => {
@@ -1511,31 +1707,32 @@ function createModuleOrTypeReferenceResolutionCache<T>(
         mode: ResolutionMode,
         directoryName: string,
         redirectedReference: ResolvedProjectReference | undefined,
+        typeRootsKey: TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined,
         result: T,
         primary?: T,
     ): void {
         if (cache.isReadonly) return;
-        cache.getOrCreateCacheForDirectory(directoryName, redirectedReference).set(name, mode, result);
-        if (!isExternalModuleNameRelative(name)) {
+        cache.getOrCreateCacheForDirectory(directoryName, redirectedReference, typeRootsKey).set(name, mode, result);
+        if (typeRootsKey !== false && !isExternalModuleNameRelative(name)) {
             // put result in per-module name cache
-            cache.getOrCreateCacheForNonRelativeName(name, mode, redirectedReference).set(directoryName, result, primary);
+            cache.getOrCreateCacheForNonRelativeName(name, mode, redirectedReference, typeRootsKey).set(directoryName, result, primary);
         }
     }
 
     function print() {
         console.log(`directoryToModuleNameMap::`);
-        perDirectoryResolutionCache.directoryToModuleNameMap.forEach((moduleNameMap, directoryPath, redirectsCacheKey) => {
-            if (!redirectsCacheKey) console.log("  OwnMap");
-            else console.log(`  redirectsCacheKey:: ${redirectsCacheKey}`);
+        perDirectoryResolutionCache.directoryToModuleNameMap.forEach((moduleNameMap, directoryPath, redirectsCacheKey, typeRootsKey) => {
+            if (!redirectsCacheKey) console.log(`  OwnMap ${typeRootsKey ? typeRootsKey : ""}`);
+            else console.log(`  redirectsCacheKey:: ${redirectsCacheKey} ${typeRootsKey ? typeRootsKey : ""}`);
             console.log(`    directoryPath:: ${directoryPath}`);
             moduleNameMap.forEach((value, key, mode) => {
                 console.log(`      ${key} ${mode} ${JSON.stringify(value, undefined, " ")}`);
             });
         });
         console.log(`moduleNameToDirectoryMap::`);
-        nonRelativeNameResolutionCache.moduleNameToDirectoryMap.forEach((perNonRelativeNameCache, key, redirectsCacheKey) => {
-            if (!redirectsCacheKey) console.log("  OwnMap");
-            else console.log(`  redirectsCacheKey:: ${redirectsCacheKey}`);
+        nonRelativeNameResolutionCache.moduleNameToDirectoryMap.forEach((perNonRelativeNameCache, key, redirectsCacheKey, typeRootsKey) => {
+            if (!redirectsCacheKey) console.log(`  OwnMap ${typeRootsKey ? typeRootsKey : ""}`);
+            else console.log(`  redirectsCacheKey:: ${redirectsCacheKey} ${typeRootsKey ? typeRootsKey : ""}`);
             console.log(`    modeAwareCacheKey:: ${key}`);
             perNonRelativeNameCache.directoryPathMap.forEach((value, key) => {
                 console.log(`      ${key} ${JSON.stringify(value, undefined, " ")}`);
@@ -1695,6 +1892,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             resolutionMode,
             containingDirectory,
             redirectedReference,
+            undefined,
             result,
         );
     }

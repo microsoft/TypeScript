@@ -442,6 +442,7 @@ function populateResolutionCache(
                 path !== inferredTypesPath ?
                     actualProgram.getResolvedTypeReferenceDirective(actualProgram.getSourceFileByPath(path)!, name, mode) :
                     actualProgram.getAutomaticTypeDirectiveResolutions().get(name, mode),
+            redirect => actualProgram.getTypeRootsCacheKeys()?.get(redirect?.sourceFile.path),
         )
     );
     actual.resolvedLibraries.forEach((resolved, libFileName) => {
@@ -461,6 +462,7 @@ function populateResolutionCache(
             ts.getLibraryNameFromLibFileName(libFileName),
             undefined,
             ts.getDirectoryPath(libResolvedFrom),
+            undefined,
             undefined,
             expectedResolution,
         );
@@ -521,6 +523,7 @@ function populateResolutionCache(
         moduleOrTypeRefCache: ts.ModuleOrTypeReferenceResolutionCache<T>,
         getRedirectReferenceForResolution: () => ts.ResolvedProjectReference | undefined,
         getProgramResolutions: (name: string, mode: ts.ResolutionMode) => T | undefined,
+        getTypeRootsCacheKey?: (redirect: ts.ResolvedProjectReference | undefined) => ts.TypeRootsCacheKeyOrSpecifiedTypeRoots | undefined,
     ) {
         if (verifyProgramAndResolution) {
             ts.Debug.assert(
@@ -542,11 +545,13 @@ function populateResolutionCache(
             );
             if (!expectedCache) storeExpected.set(fileName, expectedCache = ts.createModeAwareCache());
             expectedCache.set(name, mode, expected);
+            const redirect = getRedirectReferenceForResolution();
             moduleOrTypeRefCache.setPerDirectoryAndNonRelativeNameCacheResult(
                 name,
                 mode,
                 ts.getDirectoryPath(fileName),
-                getRedirectReferenceForResolution(),
+                redirect,
+                getTypeRootsCacheKey?.(redirect),
                 expected as unknown as T,
             );
             if (verifyProgramAndResolution) {
@@ -1179,22 +1184,21 @@ export function verifyResolutionCache(
             (expectedOwnOptions && ts.computeRedirectsCacheKey(expectedOwnOptions)) === (actualOwnOptions && ts.computeRedirectsCacheKey(actualOwnOptions)),
             `${projectName}:: ${cacheType}:: ownOptions affecting cache should match`,
         );
-        verifyMap(
+        verifyMapAndTypeRootsCacheKeyMaps(
             expectedCacheWithRedirects.getOwnMap(),
             actualCacheWithRedirects.getOwnMap(),
-            verifyValue,
             `${cacheType}:: ownMap`,
         );
+
         expectedCacheWithRedirects.redirectsKeyToMap.forEach(
             (expectedCacheWithRedirectsValue, key) => {
                 // Expected might have value in redirectsKeyToMap because we collect and set resolutions
                 // in different order than its computed by program creation
                 const actualCacheWithRedirectsValue = actualCacheWithRedirects.redirectsKeyToMap.get(key);
                 if (actualCacheWithRedirectsValue) {
-                    verifyMap(
+                    verifyMapAndTypeRootsCacheKeyMaps(
                         expectedCacheWithRedirectsValue,
                         actualCacheWithRedirects.redirectsKeyToMap.get(key),
-                        verifyValue,
                         `${cacheType}:: redirectsKeyToMap:: ${key}`,
                     );
                 }
@@ -1216,10 +1220,9 @@ export function verifyResolutionCache(
             (actualCacheWithRedirectsValue, key) => {
                 const expectedCacheWithRedirectsValue = expectedCacheWithRedirects.redirectsKeyToMap.get(key);
                 if (expectedCacheWithRedirectsValue) {
-                    verifyMap(
+                    verifyMapAndTypeRootsCacheKeyMaps(
                         expectedCacheWithRedirectsValue,
                         actualCacheWithRedirectsValue,
-                        verifyValue,
                         `${cacheType}:: redirectsKeyToMap:: ${key}`,
                     );
                 }
@@ -1237,6 +1240,55 @@ export function verifyResolutionCache(
                     );
                 }
             },
+        );
+
+        function verifyMapAndTypeRootsCacheKeyMaps(
+            expectedRootMap: Map<K, V> | undefined,
+            actualRootMap: Map<K, V> | undefined,
+            caption: string,
+        ) {
+            verifyMapFromCacheSame(
+                expectedRootMap,
+                actualRootMap,
+                caption,
+            );
+            verifyTypeRootsCacheKeyMaps(
+                expectedCacheWithRedirects,
+                actualCacheWithRedirects,
+                verifyMapFromCacheSame,
+                expectedRootMap,
+                actualRootMap,
+                caption,
+            );
+        }
+
+        function verifyMapFromCacheSame(
+            expctedCacheMap: Map<K, V> | undefined,
+            actualCacheMap: Map<K, V> | undefined,
+            caption: string,
+        ) {
+            verifyMap(
+                expctedCacheMap,
+                actualCacheMap,
+                verifyValue,
+                caption,
+            );
+        }
+    }
+
+    function verifyTypeRootsCacheKeyMaps<K extends string, V>(
+        expectedCacheWithRedirects: ts.CacheWithRedirects<K, V>,
+        actualCacheWithRedirects: ts.CacheWithRedirects<K, V>,
+        verifyTypeRootsResultMap: (expectedTypeRootsCacheMap: Map<K, V> | undefined, actualTypeRootsCacheMap: Map<K, V> | undefined, caption: string) => void,
+        expectedKeyMap: Map<K, V> | undefined,
+        actualKeyMap: Map<K, V> | undefined,
+        caption: string,
+    ) {
+        verifyMap(
+            expectedCacheWithRedirects.getTypesRootKeyToMap()?.get(expectedKeyMap!),
+            actualCacheWithRedirects.getTypesRootKeyToMap()?.get(actualKeyMap!),
+            verifyTypeRootsResultMap,
+            caption,
         );
     }
 
@@ -1279,6 +1331,7 @@ export function verifyResolutionCache(
                 );
             }
         });
+        // TODO:: sheetal
     }
 
     function verifyModuleOrTypeResolutionCacheReferencesOnlyOtherCaches(
@@ -1286,10 +1339,11 @@ export function verifyResolutionCache(
         cacheType: ModuleOrTypeRefOrLibraryCacheType,
         compacted: boolean,
     ) {
+        // TODO:: sheetal
         let allowedKeys: Set<ts.RedirectsCacheKey> | undefined;
         forEachOtherResolutionCachesInSharedCache(cache =>
             cacheType !== "libraryResolutionCache" ?
-                actual.sharedCache.cacheToOptions.get(cache)?.forEach(
+                actual.sharedCache.cacheToOptions.get(cache)?.availableOptions.forEach(
                     options =>
                         (allowedKeys ??= new Set()).add(
                             ts.computeRedirectsCacheKey(options),
@@ -1319,6 +1373,7 @@ export function verifyResolutionCache(
         allowedKeys: Set<ts.RedirectsCacheKey> | undefined,
         compacted: boolean,
     ) {
+        // TODO:: sheetal
         ts.Debug.assert(
             cacheWithRedirects.getOwnMap().size === 0 || allowedKeys?.has(ts.computeRedirectsCacheKey(cacheWithRedirects.getOwnOptions()!)),
             `${projectName}:: ${cacheType}:: ${compacted}:: ownMap should be empty`,

@@ -74,6 +74,7 @@ import {
     trace,
     TypeReferenceDirectiveResolutionCache,
     typeReferenceResolutionNameAndModeGetter,
+    TypeRootsCacheKeyOrSpecifiedTypeRoots,
     WatchDirectoryFlags,
 } from "./_namespaces/ts.js";
 
@@ -360,6 +361,7 @@ function resolveModuleNameUsingGlobalCache(
         mode,
         getDirectoryPath(containingFile),
         redirectedReference,
+        undefined,
         primary.globalCacheResolution.globalResult,
         primary,
     );
@@ -658,16 +660,25 @@ export function createResolutionCache(
 
     function compactCaches(newProgram: Program | undefined) {
         const availableOptions = new Set<CompilerOptions>();
+        const availableTypeCacheKeys = new Map<CompilerOptions, Set<TypeRootsCacheKeyOrSpecifiedTypeRoots>>();
         if (newProgram) {
             availableOptions.add(newProgram.getCompilerOptions());
+            const key = newProgram.getTypeRootsCacheKeys()?.get(/*key*/ undefined);
+            if (key !== undefined) availableTypeCacheKeys.set(newProgram.getCompilerOptions(), new Set([key]));
             newProgram.forEachResolvedProjectReference(ref => {
                 availableOptions.add(ref.commandLine.options);
+                const key = newProgram.getTypeRootsCacheKeys()?.get(ref.sourceFile.path);
+                if (key !== undefined) {
+                    const existing = availableTypeCacheKeys.get(ref.commandLine.options);
+                    if (existing) existing.add(key);
+                    else availableTypeCacheKeys.set(ref.commandLine.options, new Set([key]));
+                }
             });
         }
         moduleResolutionCache.compact(availableOptions, /*skipOptionsToRedirectsKeyCleanup*/ true);
-        typeReferenceDirectiveResolutionCache.compact(availableOptions);
+        typeReferenceDirectiveResolutionCache.compact(availableOptions, /*skipOptionsToRedirectsKeyCleanup*/ false, availableTypeCacheKeys);
         libraryResolutionCache.compact();
-        sharedCache.compactCaches(availableOptions, cache);
+        sharedCache.compactCaches(availableOptions, availableTypeCacheKeys, cache);
     }
 
     function gcModuleOrTypeRefCache(

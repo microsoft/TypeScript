@@ -1163,6 +1163,7 @@ export interface ParsedConfig {
      */
     watchedDirectoriesStale?: boolean;
     updateLevel?: ProgramUpdateLevel.RootNamesAndUpdate | ProgramUpdateLevel.Full;
+    effectiveTypeRoots?: readonly string[] | false;
 }
 
 function createProjectNameFactoryWithCounter(nameFactory: (counter: number) => string) {
@@ -3024,6 +3025,7 @@ export class ProjectService {
             configFileExistenceInfo.config.watchedDirectoriesStale = true;
             configFileExistenceInfo.config.updateLevel = undefined;
         }
+        configFileExistenceInfo.config.effectiveTypeRoots = undefined;
 
         // If watch options different than older options when setting for the first time, update the config file watcher
         if (

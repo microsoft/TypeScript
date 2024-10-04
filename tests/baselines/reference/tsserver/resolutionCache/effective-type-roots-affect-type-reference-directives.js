@@ -132,9 +132,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/replay/axios-src/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'node', containing file '/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts', root directory '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types,/users/username/projects/replay/axios-src/test/module/node_modules/@types,/users/username/projects/replay/axios-src/test/node_modules/@types,/users/username/projects/replay/axios-src/node_modules/@types,/users/username/projects/replay/node_modules/@types,/users/username/projects/node_modules/@types,/users/username/node_modules/@types,/users/node_modules/@types,/node_modules/@types'. ========
 Info seq  [hh:mm:ss:mss] Resolving with primary search path '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types, /users/username/projects/replay/axios-src/test/module/node_modules/@types, /users/username/projects/replay/axios-src/test/node_modules/@types, /users/username/projects/replay/axios-src/node_modules/@types, /users/username/projects/replay/node_modules/@types, /users/username/projects/node_modules/@types, /users/username/node_modules/@types, /users/node_modules/@types, /node_modules/@types'.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/index.d.ts', result '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for type reference directive 'node' was found in cache from location '/users/username/projects/replay/axios-src/test/module/ts-require'.
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'node' was successfully resolved to '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
@@ -412,21 +410,10 @@ Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not e
 Info seq  [hh:mm:ss:mss] File '/users/username/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'node', containing file '/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts'. ========
-Info seq  [hh:mm:ss:mss] Resolution for type reference directive 'node' was found in cache from location '/users/username/projects/replay/axios-src/node_modules/@types/responselike'.
-Info seq  [hh:mm:ss:mss] ======== Type reference directive 'node' was successfully resolved to '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/index.d.ts', primary: true. ========
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/replay/axios-src/test/module/ts-require/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/replay/axios-src/test/module/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/replay/axios-src/test/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/replay/axios-src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/replay/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/username/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'node', containing file '/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts', root directory '/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types,/users/username/projects/replay/axios-src/test/module/node_modules/@types,/users/username/projects/replay/axios-src/test/node_modules/@types,/users/username/projects/replay/axios-src/node_modules/@types,/users/username/projects/replay/node_modules/@types,/users/username/projects/node_modules/@types,/users/username/node_modules/@types,/users/node_modules/@types,/node_modules/@types'. ========
+Info seq  [hh:mm:ss:mss] Resolving with primary search path '/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types, /users/username/projects/replay/axios-src/test/module/node_modules/@types, /users/username/projects/replay/axios-src/test/node_modules/@types, /users/username/projects/replay/axios-src/node_modules/@types, /users/username/projects/replay/node_modules/@types, /users/username/projects/node_modules/@types, /users/username/node_modules/@types, /users/node_modules/@types, /node_modules/@types'.
+Info seq  [hh:mm:ss:mss] Resolution for type reference directive 'node' was found in cache from location '/users/username/projects/replay/axios-src/test/module/ts'.
+Info seq  [hh:mm:ss:mss] ======== Type reference directive 'node' was successfully resolved to '/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types/node/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/replay/axios-src/test/module/ts/node_modules/@types/node/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/replay/axios-src/test/module/ts/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/replay/axios-src/test/module/ts/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
@@ -435,11 +422,10 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/replay/axios-src/test/module/ts/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/users/username/projects/replay/axios-src/test/module/ts/index.js SVC-1-0 "export const y = 10;\n"
 	/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types/node/index.d.ts Text-1 "export const x = 10;\n"
-	/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/index.d.ts Text-1 "export const x = 10;\n"
 	/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts Text-1 "/// <reference types=\"node\" />\nexport const z = 10;\n"
 
 
@@ -449,7 +435,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Root file specified for compilation
 	node_modules/@types/node/index.d.ts
 	  Entry point for implicit type library 'node'
-	../ts-require/node_modules/@types/node/index.d.ts
 	  Type library referenced via 'node' from file '../../../node_modules/@types/responselike/index.d.ts'
 	../../../node_modules/@types/responselike/index.d.ts
 	  Entry point for implicit type library 'responselike'
@@ -460,7 +445,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -595,11 +580,10 @@ ScriptInfos::
     version: SVC-1-1
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/index.d.ts *changed*
+/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/index.d.ts
     version: Text-1
-    containingProjects: 2 *changed*
+    containingProjects: 1
         /dev/null/inferredProject1*
-        /dev/null/inferredProject2* *new*
 /users/username/projects/replay/axios-src/test/module/ts/index.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1

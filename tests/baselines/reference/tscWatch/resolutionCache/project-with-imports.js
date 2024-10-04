@@ -684,7 +684,8 @@ Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces
 Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was not resolved.
 File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-======== Resolving type reference directive 'pkg2', containing file '/home/src/workspaces/project/randomFileForTypeRef.ts'. ========
+======== Resolving type reference directive 'pkg2', containing file '/home/src/workspaces/project/randomFileForTypeRef.ts', root directory '/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
 Resolution for type reference directive 'pkg2' was found in cache from location '/home/src/workspaces/project'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1', primary: false. ========
 Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.

@@ -16,6 +16,7 @@ import {
     ProgramDiagnostics,
     SymlinkCache,
     ThisContainer,
+    TypeRootsCacheKeyOrSpecifiedTypeRoots,
 } from "./_namespaces/ts.js";
 
 // branded string type used to store absolute, normalized and canonicalized paths
@@ -4732,6 +4733,8 @@ export interface Program extends ScriptReferenceHost {
         callback: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
         file?: SourceFile,
     ): void;
+    /** @internal */
+    getTypeRootsCacheKeys(): Map<Path | undefined, TypeRootsCacheKeyOrSpecifiedTypeRoots> | undefined;
 
     /**
      * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -7965,6 +7968,8 @@ export interface ModuleResolutionHost {
     getDirectories?(path: string): string[];
     useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
     /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
+    /** @internal */ getTypeRootsCacheKey?(options: CompilerOptions, redirect: ResolvedProjectReference | undefined): TypeRootsCacheKeyOrSpecifiedTypeRoots;
+    /** @internal */ getEffectiveTypeRoots?(options: CompilerOptions, redirect: ResolvedProjectReference | undefined): readonly string[] | undefined;
 }
 
 /**

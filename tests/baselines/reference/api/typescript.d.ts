@@ -3034,7 +3034,6 @@ declare namespace ts {
             getAllProjectErrors(): readonly Diagnostic[];
             setProjectErrors(projectErrors: Diagnostic[]): void;
             close(): void;
-            getEffectiveTypeRoots(): string[];
         }
         /**
          * Project whose configuration is handled externally, such as in a '.csproj'.
