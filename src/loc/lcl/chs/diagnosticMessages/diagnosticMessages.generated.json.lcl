@@ -7884,11 +7884,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Generator_implicitly_has_yield_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_retu_7025" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Generator_implicitly_has_yield_type_0_Consider_supplying_a_return_type_annotation_7025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Generator implicitly has yield type '{0}' because it does not yield any values. Consider supplying a return type annotation.]]></Val>
+          <Val><![CDATA[Generator implicitly has yield type '{0}'. Consider supplying a return type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[生成器隐式具有产出类型 "{0}" ，因为它不生成任何值。请考虑提供一个返回类型注释。]]></Val>
+            <Val><![CDATA[生成器隐式具有 yield 类型 ‘{0}’。请考虑提供一个返回类型注释。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8420,6 +8420,15 @@
           <Val><![CDATA[Imported via {0} from file '{1}' with packageId '{2}' to import 'jsx' and 'jsxs' factory functions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[通过 {0} 从具有 packageId "{2}" 的文件 "{1}" 导入，以导入 "jsx" 和 "jsxs" 工厂函数]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_import_attribute_when_mod_1543" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[当 ‘module’ 设置为 ‘{0}’ 时，将 JSON 文件导入 ECMAScript 模块需要 ‘type: “json”’ 导入属性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9840,6 +9849,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0_1544" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[当 ‘module’ 设置为 ‘{0}’ 时，不允许从 JSON 文件到 ECMAScript 模块中的命名导入。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Named_property_0_of_types_1_and_2_are_not_identical_2319" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Named property '{0}' of types '{1}' and '{2}' are not identical.]]></Val>
@@ -10598,15 +10616,6 @@
           <Val><![CDATA[Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[当“module”设置为“none”、“system”或“umd”时，无法指定选项“--resolveJsonModule”。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Option_tsBuildInfoFile_cannot_be_specified_without_specifying_option_incremental_or_composite_or_if__5111" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[如果未指定选项“incremental”或“composite”或未运行“tsc -b”，则无法指定选项“tsBuildInfoFile”。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13059,6 +13068,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_i_6421" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[将相对导入路径中的 ‘.ts’、‘.tsx’、‘.mts’ 和 ‘.cts’ 文件扩展名改写为其在输出文件中的 JavaScript 等效项。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish_2869" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Right operand of ?? is unreachable because the left operand is never nullish.]]></Val>
@@ -15090,6 +15108,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_JSX_tag_requires_0_to_be_in_scope_but_it_could_not_be_found_2874" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This JSX tag requires '{0}' to be in scope, but it could not be found.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此 JSX 标记要求 ‘{0}’ 在范围内，但找不到它。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_types_fo_2875" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This JSX tag requires the module path '{0}' to exist, but none could be found. Make sure you have types for the appropriate package installed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此 JSX 标记要求模块路径 ‘{0}’ 存在，但找不到任何路径。请确保已安装相应包的类型。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_JSX_tag_s_0_prop_expects_a_single_child_of_type_1_but_multiple_children_were_provided_2746" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag's '{0}' prop expects a single child of type '{1}', but multiple children were provided.]]></Val>
@@ -15239,6 +15275,24 @@
           <Val><![CDATA[This file already has a default export]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[此文件已具有默认导出]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_import_path_is_unsafe_to_rewrite_because_it_resolves_to_another_project_and_the_relative_path_b_2878" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[重写此导入路径并不安全，因为它会解析为另一个项目，并且项目的输出文件之间的相对路径与其输入文件之间的相对路径不同。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_will_not_be_rewritten_duri_2877" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This import uses a '{0}' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此导入使用 ‘{0}’ 扩展解析为输入 TypeScript 文件，但不会在发出期间重写，因为它不是相对路径。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15446,6 +15500,15 @@
           <Val><![CDATA[This regular expression flag is only available when targeting '{0}' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[此正则表达式标志仅在面向“{0}”或更高版本时可用。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_relative_import_path_is_unsafe_to_rewrite_because_it_looks_like_a_file_name_but_actually_resolv_2876" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "{0}".]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[重写此相对导入路径并不安全，因为它看起来像文件名，但实际上解析为 ‘{0}’。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17021,6 +17084,15 @@
           <Val><![CDATA[Using '{0}' subpath '{1}' with target '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[将“{0}”子路径“{1}”与目标“{2}”一起使用]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found_2879" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Using JSX fragments requires fragment factory '{0}' to be in scope, but it could not be found.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[使用 JSX 片段需要片段工厂 ‘{0}’ 在范围内，但找不到它。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
