@@ -18,31 +18,31 @@ interface IteratorReturnResult<TReturn> {
     value: TReturn;
 }
 
-type IteratorResult<T, TReturn = any> = IteratorYieldResult<T> | IteratorReturnResult<TReturn>;
+type IteratorResult<TYield, TReturn = any> = IteratorYieldResult<TYield> | IteratorReturnResult<TReturn>;
 
-interface Iterator<T, TReturn = any, TNext = any> {
+interface Iterator<TYield, TReturn = any, TNext = any> {
     // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
-    next(...[value]: [] | [TNext]): IteratorResult<T, TReturn>;
-    return?(value?: TReturn): IteratorResult<T, TReturn>;
-    throw?(e?: any): IteratorResult<T, TReturn>;
+    next(...[value]: [] | [TNext]): IteratorResult<TYield, TReturn>;
+    return?(value?: TReturn): IteratorResult<TYield, TReturn>;
+    throw?(e?: any): IteratorResult<TYield, TReturn>;
 }
 
-interface Iterable<T, TReturn = any, TNext = any> {
-    [Symbol.iterator](): Iterator<T, TReturn, TNext>;
+interface Iterable<TYield, TReturn = any, TNext = any> {
+    [Symbol.iterator](): Iterator<TYield, TReturn, TNext>;
 }
 
 /**
  * Describes a user-defined {@link Iterator} that is also iterable.
  */
-interface IterableIterator<T, TReturn = any, TNext = any> extends Iterator<T, TReturn, TNext> {
-    [Symbol.iterator](): IterableIterator<T, TReturn, TNext>;
+interface IterableIterator<TYield, TReturn = any, TNext = any> extends Iterator<TYield, TReturn, TNext> {
+    [Symbol.iterator](): IterableIterator<TYield, TReturn, TNext>;
 }
 
 /**
  * Describes an {@link Iterator} produced by the runtime that inherits from the intrinsic `Iterator.prototype`.
  */
-interface IteratorObject<T, TReturn = unknown, TNext = unknown> extends Iterator<T, TReturn, TNext> {
-    [Symbol.iterator](): IteratorObject<T, TReturn, TNext>;
+interface IteratorObject<TYield, TReturn = unknown, TNext = unknown> extends Iterator<TYield, TReturn, TNext> {
+    [Symbol.iterator](): IteratorObject<TYield, TReturn, TNext>;
 }
 
 /**
@@ -51,8 +51,8 @@ interface IteratorObject<T, TReturn = unknown, TNext = unknown> extends Iterator
  */
 type BuiltinIteratorReturn = intrinsic;
 
-interface ArrayIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
-    [Symbol.iterator](): ArrayIterator<T>;
+interface ArrayIterator<TYield> extends IteratorObject<TYield, BuiltinIteratorReturn, unknown> {
+    [Symbol.iterator](): ArrayIterator<TYield>;
 }
 
 interface Array<T> {
