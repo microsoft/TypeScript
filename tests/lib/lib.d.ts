@@ -11186,6 +11186,22 @@ declare var KeyboardEvent: {
     DOM_KEY_LOCATION_STANDARD: number;
 }
 
+interface LargestContentfulPaint extends PerformanceEntry {
+}
+
+declare var LargestContentfulPaint: {
+    prototype: LargestContentfulPaint;
+    new(): LargestContentfulPaint;
+}
+
+interface LayoutShift extends PerformanceEntry {
+}
+
+declare var LayoutShift: {
+    prototype: LayoutShift;
+    new(): LayoutShift;
+}
+
 interface Location {
     hash: string;
     host: string;
@@ -12208,7 +12224,15 @@ interface Performance {
     clearResourceTimings(): void;
     getEntries(): any;
     getEntriesByName(name: string, entryType?: string): any;
-    getEntriesByType(entryType: string): any;
+    getEntriesByType(entryType: 'first-input'): PerformanceEventTiming;
+    getEntriesByType(entryType: 'long-animation-frame'): PerformanceLongAnimationFrameTiming;
+    getEntriesByType(entryType: 'mark'): PerformanceMark;
+    getEntriesByType(entryType: 'measure'): PerformanceMeasure;
+    getEntriesByType(entryType: 'navigation'): PerformanceNavigationTiming;
+    getEntriesByType(entryType: 'paint'): PerformancePaintTiming;
+    getEntriesByType(entryType: 'resource'): PerformanceResourceTiming;
+    getEntriesByType(entryType: 'taskattribution'): TaskAttributionTiming;
+    getEntriesByType(entryType: 'visibility-state'): VisibilityStateEntry;
     getMarks(markName?: string): any;
     getMeasures(measureName?: string): any;
     mark(markName: string): void;
@@ -12233,6 +12257,38 @@ interface PerformanceEntry {
 declare var PerformanceEntry: {
     prototype: PerformanceEntry;
     new(): PerformanceEntry;
+}
+
+interface PerformanceElementTiming extends PerformanceEntry {
+}
+
+declare var PerformanceElementTiming: {
+    prototype: PerformanceElementTiming;
+    new(): PerformanceElementTiming;
+}
+
+interface PerformanceEventTiming extends PerformanceEntry {
+}
+
+declare var PerformanceEventTiming: {
+    prototype: PerformanceEventTiming;
+    new(): PerformanceEventTiming;
+}
+
+interface PerformanceLongAnimationFrameTiming extends PerformanceEntry {
+}
+
+declare var PerformanceLongAnimationFrameTiming: {
+    prototype: PerformanceLongAnimationFrameTiming;
+    new(): PerformanceLongAnimationFrameTiming;
+}
+
+interface PerformanceLongTaskTiming extends PerformanceEntry {
+}
+
+declare var PerformanceLongTaskTiming: {
+    prototype: PerformanceLongTaskTiming;
+    new(): PerformanceLongTaskTiming;
 }
 
 interface PerformanceMark extends PerformanceEntry {
@@ -12298,6 +12354,14 @@ interface PerformanceNavigationTiming extends PerformanceEntry {
 declare var PerformanceNavigationTiming: {
     prototype: PerformanceNavigationTiming;
     new(): PerformanceNavigationTiming;
+}
+
+interface PerformancePaintTiming extends PerformanceEntry {
+}
+
+declare var PerformancePaintTiming: {
+    prototype: PerformancePaintTiming;
+    new(): PerformancePaintTiming;
 }
 
 interface PerformanceResourceTiming extends PerformanceEntry {
@@ -14512,6 +14576,14 @@ declare var SubtleCrypto: {
     new(): SubtleCrypto;
 }
 
+interface TaskAttributionTiming extends PerformanceEntry {
+}
+
+declare var TaskAttributionTiming: {
+    prototype: TaskAttributionTiming;
+    new(): TaskAttributionTiming;
+}
+
 interface Text extends CharacterData {
     wholeText: string;
     replaceWholeText(content: string): Text;
@@ -14889,6 +14961,13 @@ declare var VideoTrackList: {
     new(): VideoTrackList;
 }
 
+interface VisibilityStateEntry extends PerformanceEntry {
+}
+
+declare var VisibilityStateEntry: {
+    prototype: VisibilityStateEntry;
+    new(): VisibilityStateEntry;
+}
 interface WEBGL_compressed_texture_s3tc {
     COMPRESSED_RGBA_S3TC_DXT1_EXT: number;
     COMPRESSED_RGBA_S3TC_DXT3_EXT: number;
