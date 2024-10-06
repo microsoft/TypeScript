@@ -219,3 +219,18 @@ console.log((cond || undefined) && 1 / cond);
 >cond : any
 >     : ^^^
 
+function foo(this: Object | undefined) {
+>foo : (this: Object | undefined) => Object | 0
+>    : ^    ^^                  ^^^^^^^^^^^^^^^
+>this : Object
+>     : ^^^^^^
+
+    // Should be OK
+    return this ?? 0;
+>this ?? 0 : 0 | Object
+>          : ^^^^^^^^^^
+>this : Object
+>     : ^^^^^^
+>0 : 0
+>  : ^
+}

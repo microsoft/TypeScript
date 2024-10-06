@@ -37,3 +37,8 @@ while ((({}))) { }
 
 // Should be OK
 console.log((cond || undefined) && 1 / cond);
+
+function foo(this: Object | undefined) {
+    // Should be OK
+    return this ?? 0;
+}

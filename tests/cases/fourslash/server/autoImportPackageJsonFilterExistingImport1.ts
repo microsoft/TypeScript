@@ -2,14 +2,14 @@
 
 // @module: preserve
 
-// @Filename: /node_modules/@types/react/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/react/index.d.ts
 //// export declare function useMemo(): void;
 //// export declare function useState(): void;
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// {}
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// import { useState } from "react";
 //// useMemo/**/
 

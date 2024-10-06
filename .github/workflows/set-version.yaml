@@ -49,11 +49,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         with:
           ref: ${{ inputs.branch_name }}
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+      - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
         with:
           node-version: 'lts/*'
       - run: |
@@ -72,7 +72,6 @@ jobs:
           sed -i -e 's/"version": ".*"/"version": "${{ inputs.package_version }}"/g' package.json
           sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ inputs.core_major_minor }}"/g' src/compiler/corePublic.ts
           sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ inputs.core_major_minor }}"/g' tests/baselines/reference/api/typescript.d.ts
-          sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ inputs.core_major_minor }}"/g' tests/baselines/reference/api/tsserverlibrary.d.ts
           sed -i -e 's/const version\(: string\)\{0,1\} = .*;/const version = "${{ inputs.package_version }}" as string;/g' src/compiler/corePublic.ts
           npm ci
           npm install # update package-lock.json to ensure the version bump is included
@@ -82,7 +81,6 @@ jobs:
           git add package.json package-lock.json
           git add src/compiler/corePublic.ts
           git add tests/baselines/reference/api/typescript.d.ts
-          git add tests/baselines/reference/api/tsserverlibrary.d.ts
           git add --force ./lib
           git config user.email "typescriptbot@microsoft.com"
           git config user.name "TypeScript Bot"

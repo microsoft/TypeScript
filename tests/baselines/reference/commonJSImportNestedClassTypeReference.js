@@ -41,7 +41,7 @@ function f(k) {
 //// [mod1.d.ts]
 export var K: {
     new (): {
-        values(): any;
+        values(): /*elided*/ any;
     };
 };
 //// [main.d.ts]

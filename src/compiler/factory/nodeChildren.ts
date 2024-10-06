@@ -41,7 +41,7 @@ export function setNodeChildren(node: Node, sourceFile: SourceFileLike, children
 }
 
 /** @internal */
-export function unsetNodeChildren(node: Node, origSourceFile: SourceFileLike) {
+export function unsetNodeChildren(node: Node, origSourceFile: SourceFileLike): void {
     if (node.kind === SyntaxKind.SyntaxList) {
         // Syntax lists are synthesized and we store their children directly on them.
         // They are a special case where we expect incremental parsing to toss them away entirely
@@ -52,7 +52,7 @@ export function unsetNodeChildren(node: Node, origSourceFile: SourceFileLike) {
 }
 
 /** @internal */
-export function transferSourceFileChildren(sourceFile: SourceFileLike, targetSourceFile: SourceFileLike) {
+export function transferSourceFileChildren(sourceFile: SourceFileLike, targetSourceFile: SourceFileLike): void {
     const map = sourceFileToNodeChildren.get(sourceFile);
     if (map !== undefined) {
         sourceFileToNodeChildren.delete(sourceFile);
