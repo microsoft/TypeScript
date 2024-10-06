@@ -333,14 +333,17 @@ interface Float16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     [index: number]: number;
 
     [Symbol.iterator](): ArrayIterator<number>;
+
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
     entries(): ArrayIterator<[number, number]>;
+
     /**
      * Returns an list of keys in the array
      */
     keys(): ArrayIterator<number>;
+
     /**
      * Returns an list of values in the array
      */
@@ -351,12 +354,9 @@ interface Float16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
 
 interface Float16ArrayConstructor {
     readonly prototype: Float16Array<ArrayBufferLike>;
-    new (): Float16Array<ArrayBuffer>;
-    new (length: number): Float16Array<ArrayBuffer>;
-    new (array: ArrayLike<number>): Float16Array<ArrayBuffer>;
+    new (length?: number): Float16Array<ArrayBuffer>;
+    new (array: ArrayLike<number> | Iterable<number>): Float16Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Float16Array<TArrayBuffer>;
-    new (array: ArrayLike<number> | ArrayBuffer): Float16Array<ArrayBuffer>;
-    new (elements: Iterable<number>): Float16Array<ArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.
@@ -371,13 +371,13 @@ interface Float16ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      */
     from(arrayLike: ArrayLike<number>): Float16Array<ArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
@@ -385,18 +385,17 @@ interface Float16ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param elements An iterable object to convert to an array.
      */
-    from(arrayLike: Iterable<number>): Float16Array<ArrayBuffer>;
+    from(elements: Iterable<number>): Float16Array<ArrayBuffer>;
+
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param elements An iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float16Array<ArrayBuffer>;
+    from<T>(elements: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float16Array<ArrayBuffer>;
 }
 declare var Float16Array: Float16ArrayConstructor;
 
