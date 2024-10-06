@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/XY.ts]
 
@@ -7,6 +7,7 @@ export const b = 2;
 
 
 //// [/user/username/projects/myproject/link.ts] symlink(/user/username/projects/myproject/XY.ts)
+
 //// [/user/username/projects/myproject/b.ts]
 
 import { a } from "./XY";
@@ -15,7 +16,14 @@ import { b } from "./link";
 a;b;
 
 
-//// [/a/lib/lib.d.ts]
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -27,16 +35,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "compilerOptions": {
-    "forceConsistentCasingInFileNames": true
-  }
-}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w --p . --explainFiles --extendedDiagnostics
+/home/src/tslibs/TS/Lib/tsc.js --w --p . --explainFiles --extendedDiagnostics
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -49,12 +52,12 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/XY.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/link.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-../../../../a/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 XY.ts
   Matched by default include pattern '**/*'
@@ -103,7 +106,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/XY.ts: *new*
   {}
@@ -133,19 +136,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/XY.ts
 /user/username/projects/myproject/link.ts
 /user/username/projects/myproject/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/XY.ts
 /user/username/projects/myproject/link.ts
 /user/username/projects/myproject/b.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/xy.ts (used version)
 /user/username/projects/myproject/link.ts (used version)
 /user/username/projects/myproject/b.ts (used version)
@@ -187,7 +190,7 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/XY.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/link.ts"]
   options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-../../../../a/lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 XY.ts
   Matched by default include pattern '**/*'
@@ -237,7 +240,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/XY.ts
 /user/username/projects/myproject/link.ts
 /user/username/projects/myproject/b.ts

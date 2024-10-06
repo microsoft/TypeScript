@@ -55,7 +55,7 @@ export namespace tracingEnabled {
     }
 
     /** Starts tracing for the given project. */
-    export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {
+    export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string): void {
         Debug.assert(!tracing, "Tracing already started");
 
         if (fs === undefined) {
@@ -105,7 +105,7 @@ export namespace tracingEnabled {
     }
 
     /** Stops tracing for the in-progress project and dumps the type catalog. */
-    export function stopTracing() {
+    export function stopTracing(): void {
         Debug.assert(tracing, "Tracing is not in progress");
         Debug.assert(!!typeCatalog.length === (mode !== "server")); // Have a type catalog iff not in server mode
 
@@ -139,7 +139,7 @@ export namespace tracingEnabled {
         Session = "session",
     }
 
-    export function instant(phase: Phase, name: string, args?: Args) {
+    export function instant(phase: Phase, name: string, args?: Args): void {
         writeEvent("I", phase, name, args, `"s":"g"`);
     }
 
@@ -151,18 +151,18 @@ export namespace tracingEnabled {
      * In the future we might implement an exit handler to dump unfinished events which would deprecate
      * these operations.
      */
-    export function push(phase: Phase, name: string, args?: Args, separateBeginAndEnd = false) {
+    export function push(phase: Phase, name: string, args?: Args, separateBeginAndEnd = false): void {
         if (separateBeginAndEnd) {
             writeEvent("B", phase, name, args);
         }
         eventStack.push({ phase, name, args, time: 1000 * timestamp(), separateBeginAndEnd });
     }
-    export function pop(results?: Args) {
+    export function pop(results?: Args): void {
         Debug.assert(eventStack.length > 0);
         writeStackEvent(eventStack.length - 1, 1000 * timestamp(), results);
         eventStack.length--;
     }
-    export function popAll() {
+    export function popAll(): void {
         const endTime = 1000 * timestamp();
         for (let i = eventStack.length - 1; i >= 0; i--) {
             writeStackEvent(i, endTime);
@@ -348,7 +348,7 @@ export namespace tracingEnabled {
         performance.measure("Dump types", "beginDumpTypes", "endDumpTypes");
     }
 
-    export function dumpLegend() {
+    export function dumpLegend(): void {
         if (!legendPath) {
             return;
         }
@@ -365,9 +365,9 @@ export namespace tracingEnabled {
 
 // define after tracingEnabled is initialized
 /** @internal */
-export const startTracing = tracingEnabled.startTracing;
+export const startTracing: typeof tracingEnabled.startTracing = tracingEnabled.startTracing;
 /** @internal */
-export const dumpTracingLegend = tracingEnabled.dumpLegend;
+export const dumpTracingLegend: typeof tracingEnabled.dumpLegend = tracingEnabled.dumpLegend;
 
 /** @internal */
 export interface TracingNode {

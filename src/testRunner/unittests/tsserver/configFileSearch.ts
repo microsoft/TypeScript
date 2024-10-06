@@ -5,24 +5,23 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: configFileSearch:: searching for config file", () => {
     it("should stop at projectRootPath if given", () => {
         const f1 = {
-            path: "/a/file1.ts",
+            path: "/home/src/project/project/a/file1.ts",
             content: "",
         };
         const configFile = {
-            path: "/tsconfig.json",
+            path: "/home/src/project/project/tsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, configFile]);
+        const host = TestServerHost.createServerHost([f1, configFile]);
         const session = new TestSession(host);
-        openFilesForSession([{ file: f1, projectRootPath: "/a" }], session);
+        openFilesForSession([{ file: f1, projectRootPath: "/home/src/project/project/a" }], session);
 
         closeFilesForSession([f1], session);
         openFilesForSession([f1], session);
@@ -30,7 +29,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
     });
 
     it("should use projectRootPath when searching for inferred project again", () => {
-        const projectRootPath = "/a/b/projects/project";
+        const projectRootPath = "/home/a/b/projects/project";
         const configFileLocation = `${projectRootPath}/src`;
         const f1 = {
             path: `${configFileLocation}/file1.ts`,
@@ -41,10 +40,10 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             content: "{}",
         };
         const configFile2 = {
-            path: "/a/b/projects/tsconfig.json",
+            path: "/home/a/b/projects/tsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, libFile, configFile, configFile2]);
+        const host = TestServerHost.createServerHost([f1, configFile, configFile2]);
         const session = new TestSession(host);
         openFilesForSession([{ file: f1, projectRootPath }], session);
 
@@ -55,7 +54,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
     });
 
     it("should use projectRootPath when searching for inferred project again 2", () => {
-        const projectRootPath = "/a/b/projects/project";
+        const projectRootPath = "/home/a/b/projects/project";
         const configFileLocation = `${projectRootPath}/src`;
         const f1 = {
             path: `${configFileLocation}/file1.ts`,
@@ -66,10 +65,10 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             content: "{}",
         };
         const configFile2 = {
-            path: "/a/b/projects/tsconfig.json",
+            path: "/home/a/b/projects/tsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, libFile, configFile, configFile2]);
+        const host = TestServerHost.createServerHost([f1, configFile, configFile2]);
         const session = new TestSession({
             host,
             useSingleInferredProject: true,
@@ -94,14 +93,14 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             content: "{}",
         };
         function openClientFile(files: File[]) {
-            const host = createServerHost(files);
+            const host = TestServerHost.createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([{ file, projectRootPath: "/a/b/projects/proj" }], session);
             return { host, session };
         }
 
         it("tsconfig for the file exists", () => {
-            const { host, session } = openClientFile([file, libFile, tsconfig]);
+            const { host, session } = openClientFile([file, tsconfig]);
 
             host.deleteFile(tsconfig.path);
             host.runQueuedTimeoutCallbacks();
@@ -113,7 +112,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         });
 
         it("tsconfig for the file does not exist", () => {
-            const { host, session } = openClientFile([file, libFile]);
+            const { host, session } = openClientFile([file]);
 
             host.writeFile(tsconfig.path, tsconfig.content);
             host.runQueuedTimeoutCallbacks();
@@ -129,7 +128,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         function verifyConfigFileWatch(scenario: string, projectRootPath: string | undefined) {
             it(scenario, () => {
                 const path = `/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js`;
-                const host = createServerHost([libFile, { path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
+                const host = TestServerHost.createServerHost([{ path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
                 const session = new TestSession(host);
                 openFilesForSession([{ file: path, projectRootPath }], session);
                 baselineTsserverLogs("configFileSearch", scenario, session);

@@ -1,5 +1,5 @@
 // === Completions ===
-=== /src/foo.ts ===
+=== /home/src/workspaces/project/src/foo.ts ===
 // import { fooFromIndex } from "";
 //                               ^
 // | ----------------------------------------------------------------------
@@ -9,7 +9,7 @@
 [
   {
     "marker": {
-      "fileName": "/src/foo.ts",
+      "fileName": "/home/src/workspaces/project/src/foo.ts",
       "position": 30,
       "name": ""
     },

@@ -55,7 +55,7 @@ export function refactorKindBeginsWith(known: string, requested: string | undefi
  *
  * @internal
  */
-export function getIdentifierForNode(node: Node, scope: FunctionLikeDeclaration | SourceFile | ModuleBlock | ClassLikeDeclaration, checker: TypeChecker, file: SourceFile) {
+export function getIdentifierForNode(node: Node, scope: FunctionLikeDeclaration | SourceFile | ModuleBlock | ClassLikeDeclaration, checker: TypeChecker, file: SourceFile): string {
     return isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !identifierToKeywordKind(node.name)
         ? node.name.text
         : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
@@ -69,7 +69,7 @@ export function addTargetFileImports(
     checker: TypeChecker,
     program: Program,
     importAdder: codefix.ImportAdder,
-) {
+): void {
     /**
      * Recomputing the imports is preferred with importAdder because it manages multiple import additions for a file and writes then to a ChangeTracker,
      * but sometimes it fails because of unresolved imports from files, or when a source file is not available for the target file (in this case when creating a new file).

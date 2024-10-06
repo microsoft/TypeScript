@@ -4,41 +4,41 @@ import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc.js";
-import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild - clean::", () => {
     verifyTsc({
         scenario: "clean",
         subScenario: `file name and output name clashing`,
-        commandLineArgs: ["--b", "/src/tsconfig.json", "-clean"],
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/index.js": "",
-                "/src/bar.ts": "",
-                "/src/tsconfig.json": jsonToReadableText({
+        commandLineArgs: ["--b", "-clean"],
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/solution/index.js": "",
+                "/home/src/workspaces/solution/bar.ts": "",
+                "/home/src/workspaces/solution/tsconfig.json": jsonToReadableText({
                     compilerOptions: { allowJs: true },
                 }),
-            }),
+            }, { currentDirectory: "/home/src/workspaces/solution" }),
     });
 
     verifyTsc({
         scenario: "clean",
         subScenario: "tsx with dts emit",
-        fs: () =>
-            loadProjectFromFiles({
-                "/src/project/src/main.tsx": "export const x = 10;",
-                "/src/project/tsconfig.json": jsonToReadableText({
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/solution/project/src/main.tsx": "export const x = 10;",
+                "/home/src/workspaces/solution/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: { declaration: true },
                     include: ["src/**/*.tsx", "src/**/*.ts"],
                 }),
-            }),
-        commandLineArgs: ["--b", "src/project", "-v", "--explainFiles"],
+            }, { currentDirectory: "/home/src/workspaces/solution" }),
+        commandLineArgs: ["--b", "project", "-v", "--explainFiles"],
         edits: [
             noChangeRun,
             {
                 caption: "clean build",
                 edit: noop,
-                commandLineArgs: ["-b", "/src/project", "--clean"],
+                commandLineArgs: ["-b", "project", "--clean"],
             },
         ],
     });

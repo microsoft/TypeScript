@@ -1,7 +1,7 @@
 import { forEachMonorepoSymlinkScenario } from "../helpers/monorepoSymlinkedSiblingPackages.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 
-describe("unittests:: tsc-watch:: symlinks::", () => {
+describe("unittests:: tscWatch:: symlinks::", () => {
     forEachMonorepoSymlinkScenario(/*forTsserver*/ false, (subScenario, sys, edits, project) => {
         verifyTscWatch({
             scenario: "symlinks",

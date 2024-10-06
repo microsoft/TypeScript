@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/project/a.ts]
 export const a = "hello
@@ -11,10 +11,7 @@ export const a = "hello
   }
 }
 
-//// [/home/src/projects/project/b.ts]
-export const b = 10;
-
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -29,20 +26,23 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
+//// [/home/src/projects/project/b.ts]
+export const b = 10;
 
-/a/lib/tsc.js -b -verbose /home/src/projects/project -w
+
+/home/src/tslibs/TS/Lib/tsc.js -b -verbose -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/project/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
 [7m [0m [91m                       [0m
@@ -52,17 +52,17 @@ Output::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-14000546910-export const a = \"hello","signature":false},{"version":"-13368947479-export const b = 10;","signature":false}],"root":[2,3],"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-14000546910-export const a = \"hello","signature":false},{"version":"-13368947479-export const b = 10;","signature":false}],"root":[2,3],"changeFileSet":[2,3,1],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../a/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./a.ts",
     "./b.ts"
   ],
   "fileInfos": {
-    "../../../../a/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": false,
@@ -97,12 +97,12 @@ Output::
     ]
   ],
   "changeFileSet": [
-    "../../../../a/lib/lib.d.ts",
     "./a.ts",
-    "./b.ts"
+    "./b.ts",
+    "../../tslibs/ts/lib/lib.d.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 772
+  "size": 774
 }
 
 
@@ -131,7 +131,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
@@ -160,7 +160,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -169,17 +169,17 @@ Output::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16641552193-export const a = \"hello\";","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"affectedFilesPendingEmit":[2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16641552193-export const a = \"hello\";","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"affectedFilesPendingEmit":[2,3],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../a/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./a.ts",
     "./b.ts"
   ],
   "fileInfos": {
-    "../../../../a/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -226,7 +226,7 @@ Output::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 851
+  "size": 853
 }
 
 
@@ -244,17 +244,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/project/a.ts (computed .d.ts)
 /home/src/projects/project/b.ts (computed .d.ts)
 
@@ -283,7 +283,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -292,17 +292,17 @@ Output::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16641552193-export const a = \"hello\";","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-16641552193-export const a = \"hello\";","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../a/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./a.ts",
     "./b.ts"
   ],
   "fileInfos": {
-    "../../../../a/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -339,7 +339,7 @@ Output::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 818
+  "size": 820
 }
 
 //// [/home/src/projects/project/a.js]
@@ -370,7 +370,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
@@ -404,7 +404,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/project/tsconfig.tsbuildinfo' is older than input 'home/src/projects/project/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'tsconfig.tsbuildinfo' is older than input 'tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
@@ -427,7 +427,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
@@ -456,11 +456,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/project/tsconfig.tsbuildinfo' is older than input 'home/src/projects/project/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'tsconfig.tsbuildinfo' is older than input 'a.ts'
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
 [7m [0m [91m                       [0m
@@ -470,17 +470,17 @@ Output::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14000546910-export const a = \"hello","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"changeFileSet":[2],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14000546910-export const a = \"hello","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"changeFileSet":[2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../a/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./a.ts",
     "./b.ts"
   ],
   "fileInfos": {
-    "../../../../a/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -520,7 +520,7 @@ Output::
     "./a.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 835
+  "size": 837
 }
 
 
@@ -538,7 +538,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
@@ -572,11 +572,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
 [7m [0m [91m                       [0m
@@ -586,17 +586,17 @@ Output::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14000546910-export const a = \"hello","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"semanticDiagnosticsPerFile":[2],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14000546910-export const a = \"hello","signature":"-2692717255-export declare const a = \"hello\";\n"},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2,3],"semanticDiagnosticsPerFile":[2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../a/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.d.ts",
     "./a.ts",
     "./b.ts"
   ],
   "fileInfos": {
-    "../../../../a/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -639,7 +639,7 @@ Output::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 848
+  "size": 850
 }
 
 //// [/home/src/projects/project/a.js]
@@ -663,7 +663,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
@@ -699,11 +699,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/project/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m export const a = "hello
 [7m [0m [91m                       [0m
@@ -727,7 +727,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
