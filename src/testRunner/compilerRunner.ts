@@ -46,17 +46,17 @@ export class CompilerBaselineRunner extends RunnerBase {
         this.basePath += "/" + this.testSuiteName;
     }
 
-    public kind() {
+    public kind(): TestRunnerKind {
         return this.testSuiteName;
     }
 
     private testFiles: string[] | undefined;
-    public enumerateTestFiles() {
+    public enumerateTestFiles(): string[] {
         // see also: `enumerateTestFiles` in tests/webTestServer.ts
         return this.testFiles ??= this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
     }
 
-    public initializeTests() {
+    public initializeTests(): void {
         describe(this.testSuiteName + " tests", () => {
             describe("Setup compiler for compiler baselines", () => {
                 this.parseOptions();
@@ -70,7 +70,7 @@ export class CompilerBaselineRunner extends RunnerBase {
         });
     }
 
-    public checkTestCodeOutput(fileName: string, test?: CompilerFileBasedTest) {
+    public checkTestCodeOutput(fileName: string, test?: CompilerFileBasedTest): void {
         if (test && ts.some(test.configurations)) {
             test.configurations.forEach(configuration => {
                 describe(`${this.testSuiteName} tests for ${fileName}${configuration ? ` (${getFileBasedTestConfigurationDescription(configuration)})` : ``}`, () => {

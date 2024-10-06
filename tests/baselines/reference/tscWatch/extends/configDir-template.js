@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/configs/first/tsconfig.json]
 {
@@ -70,7 +70,7 @@ export const x = 10;
 export const k = 10;
 
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -82,9 +82,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w --extendedDiagnostics --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w --extendedDiagnostics --explainFiles
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -128,7 +130,7 @@ File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - us
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/index.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
@@ -141,7 +143,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeFile
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-../../../../a/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
@@ -204,8 +206,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
 /home/src/projects/configs/first/tsconfig.json: *new*
   {}
 /home/src/projects/configs/second/tsconfig.json: *new*
@@ -217,6 +217,8 @@ FsWatches::
 /home/src/projects/myproject/tsconfig.json: *new*
   {}
 /home/src/projects/myproject/types/sometype.ts: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -259,21 +261,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts
 /home/src/projects/myproject/src/secondary.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts
 /home/src/projects/myproject/src/secondary.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/myproject/types/sometype.ts (computed .d.ts during emit)
 /home/src/projects/myproject/main.ts (computed .d.ts during emit)
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts (used version)
@@ -352,7 +354,7 @@ Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/inde
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-../../../../a/lib/lib.d.ts
+../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
@@ -376,8 +378,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
 /home/src/projects/configs/first/tsconfig.json:
   {}
 /home/src/projects/configs/second/tsconfig.json:
@@ -389,6 +389,8 @@ FsWatches::
 /home/src/projects/myproject/tsconfig.json:
   {}
 /home/src/projects/myproject/types/sometype.ts:
+  {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -432,7 +434,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts

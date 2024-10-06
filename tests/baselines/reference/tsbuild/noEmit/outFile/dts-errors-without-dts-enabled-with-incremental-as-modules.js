@@ -1,10 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/project/a.ts]
 export const a = class { private p = 10; };
-
-//// [/home/src/projects/project/b.ts]
-export const b = 10;
 
 //// [/home/src/projects/project/tsconfig.json]
 {
@@ -15,7 +12,7 @@ export const b = 10;
   }
 }
 
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -30,56 +27,33 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
+//// [/home/src/projects/project/b.ts]
+export const b = 10;
 
 
+/home/src/tslibs/TS/Lib/tsc.js --b --v . --noEmit
 Output::
-/lib/tsc --b --v /home/src/projects/project --noEmit
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../outFile.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
-Program root files: [
-  "/home/src/projects/project/a.ts",
-  "/home/src/projects/project/b.ts"
-]
-Program options: {
-  "outFile": "/home/src/projects/outFile.js",
-  "module": 2,
-  "incremental": true,
-  "noEmit": true,
-  "tscBuild": true,
-  "configFilePath": "/home/src/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
-
-No shapes updated in the builder::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9502176711-export const a = class { private p = 10; };","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9502176711-export const a = class { private p = 10; };","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.d.ts",
     "./project/a.ts",
     "./project/b.ts"
   ],
   "fileInfos": {
-    "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-9502176711-export const a = class { private p = 10; };",
     "./project/b.ts": "-13368947479-export const b = 10;"
   },
@@ -102,44 +76,10 @@ No shapes updated in the builder::
     false
   ],
   "version": "FakeTSVersion",
-  "size": 729
+  "size": 733
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/lib/tsc --b --v /home/src/projects/project --noEmit
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/b.ts' is older than output 'home/src/projects/outFile.tsbuildinfo'
-
-exitCode:: ExitStatus.Success
-
-
-
-
-Change:: Fix error
-Input::
-//// [/home/src/projects/project/a.ts]
-export const a = "hello";
-
-
-
-Output::
-/lib/tsc --b --v /home/src/projects/project --noEmit
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/outFile.tsbuildinfo' is older than input 'home/src/projects/project/a.ts'
-
-[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -154,30 +94,65 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
 No shapes updated in the builder::
 
+exitCode:: ExitStatus.Success
+
+Change:: no-change-run
+
+Input::
+
+/home/src/tslibs/TS/Lib/tsc.js --b --v . --noEmit
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'b.ts' is older than output '../outFile.tsbuildinfo'
+
+
+
+
+exitCode:: ExitStatus.Success
+
+Change:: Fix error
+
+Input::
+//// [/home/src/projects/project/a.ts]
+export const a = "hello";
+
+
+/home/src/tslibs/TS/Lib/tsc.js --b --v . --noEmit
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../outFile.tsbuildinfo' is older than input 'a.ts'
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
+
+
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.d.ts",
     "./project/a.ts",
     "./project/b.ts"
   ],
   "fileInfos": {
-    "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-16641552193-export const a = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;"
   },
@@ -200,41 +175,10 @@ No shapes updated in the builder::
     false
   ],
   "version": "FakeTSVersion",
-  "size": 714
+  "size": 718
 }
 
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/lib/tsc --b --v /home/src/projects/project --noEmit
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/outFile.tsbuildinfo'
-
-exitCode:: ExitStatus.Success
-
-
-
-
-Change:: Emit after fixing error
-Input::
-
-
-Output::
-/lib/tsc --b --v /home/src/projects/project
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that some of the changes were not emitted
-
-[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -243,19 +187,88 @@ Program options: {
   "outFile": "/home/src/projects/outFile.js",
   "module": 2,
   "incremental": true,
+  "noEmit": true,
   "tscBuild": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
 
 No shapes updated in the builder::
 
+exitCode:: ExitStatus.Success
+
+Change:: no-change-run
+
+Input::
+
+/home/src/tslibs/TS/Lib/tsc.js --b --v . --noEmit
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'a.ts' is older than output '../outFile.tsbuildinfo'
+
+
+
+
+exitCode:: ExitStatus.Success
+
+Change:: Emit after fixing error
+
+Input::
+
+/home/src/tslibs/TS/Lib/tsc.js --b --v .
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that some of the changes were not emitted
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
+
+
+
+//// [/home/src/projects/outFile.tsbuildinfo]
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+
+//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../tslibs/ts/lib/lib.d.ts",
+    "./project/a.ts",
+    "./project/b.ts"
+  ],
+  "fileInfos": {
+    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "-16641552193-export const a = \"hello\";",
+    "./project/b.ts": "-13368947479-export const b = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./project/a.ts"
+    ],
+    [
+      3,
+      "./project/b.ts"
+    ]
+  ],
+  "options": {
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "version": "FakeTSVersion",
+  "size": 698
+}
 
 //// [/home/src/projects/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
@@ -272,74 +285,7 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 
 
-//// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
 
-//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../../lib/lib.d.ts",
-    "./project/a.ts",
-    "./project/b.ts"
-  ],
-  "fileInfos": {
-    "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./project/a.ts": "-16641552193-export const a = \"hello\";",
-    "./project/b.ts": "-13368947479-export const b = 10;"
-  },
-  "root": [
-    [
-      2,
-      "./project/a.ts"
-    ],
-    [
-      3,
-      "./project/b.ts"
-    ]
-  ],
-  "options": {
-    "module": 2,
-    "outFile": "./outFile.js"
-  },
-  "version": "FakeTSVersion",
-  "size": 694
-}
-
-
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/lib/tsc --b --v /home/src/projects/project --noEmit
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/outFile.tsbuildinfo'
-
-exitCode:: ExitStatus.Success
-
-
-
-
-Change:: Introduce error
-Input::
-//// [/home/src/projects/project/a.ts]
-export const a = class { private p = 10; };
-
-
-
-Output::
-/lib/tsc --b --v /home/src/projects/project --noEmit
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/outFile.tsbuildinfo' is older than input 'home/src/projects/project/a.ts'
-
-[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -348,36 +294,67 @@ Program options: {
   "outFile": "/home/src/projects/outFile.js",
   "module": 2,
   "incremental": true,
-  "noEmit": true,
   "tscBuild": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
-/home/src/projects/project/a.ts
-/home/src/projects/project/b.ts
 
 No shapes updated in the builder::
 
+exitCode:: ExitStatus.Success
+
+Change:: no-change-run
+
+Input::
+
+/home/src/tslibs/TS/Lib/tsc.js --b --v . --noEmit
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'a.ts' is older than output '../outFile.tsbuildinfo'
+
+
+
+
+exitCode:: ExitStatus.Success
+
+Change:: Introduce error
+
+Input::
+//// [/home/src/projects/project/a.ts]
+export const a = class { private p = 10; };
+
+
+/home/src/tslibs/TS/Lib/tsc.js --b --v . --noEmit
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output '../outFile.tsbuildinfo' is older than input 'a.ts'
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
+
+
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9502176711-export const a = class { private p = 10; };","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9502176711-export const a = class { private p = 10; };","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.d.ts",
     "./project/a.ts",
     "./project/b.ts"
   ],
   "fileInfos": {
-    "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-9502176711-export const a = class { private p = 10; };",
     "./project/b.ts": "-13368947479-export const b = 10;"
   },
@@ -400,25 +377,10 @@ No shapes updated in the builder::
     false
   ],
   "version": "FakeTSVersion",
-  "size": 729
+  "size": 733
 }
 
 
-
-Change:: Emit when error
-Input::
-
-
-Output::
-/lib/tsc --b --v /home/src/projects/project
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that some of the changes were not emitted
-
-[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts",
   "/home/src/projects/project/b.ts"
@@ -427,19 +389,72 @@ Program options: {
   "outFile": "/home/src/projects/outFile.js",
   "module": 2,
   "incremental": true,
+  "noEmit": true,
   "tscBuild": true,
   "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /home/src/projects/project/a.ts
 /home/src/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
 
 No shapes updated in the builder::
 
+exitCode:: ExitStatus.Success
+
+Change:: Emit when error
+
+Input::
+
+/home/src/tslibs/TS/Lib/tsc.js --b --v .
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that some of the changes were not emitted
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
+
+
+
+//// [/home/src/projects/outFile.tsbuildinfo]
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9502176711-export const a = class { private p = 10; };","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+
+//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../tslibs/ts/lib/lib.d.ts",
+    "./project/a.ts",
+    "./project/b.ts"
+  ],
+  "fileInfos": {
+    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "-9502176711-export const a = class { private p = 10; };",
+    "./project/b.ts": "-13368947479-export const b = 10;"
+  },
+  "root": [
+    [
+      2,
+      "./project/a.ts"
+    ],
+    [
+      3,
+      "./project/b.ts"
+    ]
+  ],
+  "options": {
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "version": "FakeTSVersion",
+  "size": 713
+}
 
 //// [/home/src/projects/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
@@ -461,52 +476,42 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 
 
-//// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-9502176711-export const a = class { private p = 10; };","-13368947479-export const b = 10;"],"root":[2,3],"options":{"module":2,"outFile":"./outFile.js"},"version":"FakeTSVersion"}
 
-//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../../lib/lib.d.ts",
-    "./project/a.ts",
-    "./project/b.ts"
-  ],
-  "fileInfos": {
-    "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./project/a.ts": "-9502176711-export const a = class { private p = 10; };",
-    "./project/b.ts": "-13368947479-export const b = 10;"
-  },
-  "root": [
-    [
-      2,
-      "./project/a.ts"
-    ],
-    [
-      3,
-      "./project/b.ts"
-    ]
-  ],
-  "options": {
-    "module": 2,
-    "outFile": "./outFile.js"
-  },
-  "version": "FakeTSVersion",
-  "size": 709
+Program root files: [
+  "/home/src/projects/project/a.ts",
+  "/home/src/projects/project/b.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "module": 2,
+  "incremental": true,
+  "tscBuild": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/project/a.ts
+/home/src/projects/project/b.ts
 
+Semantic diagnostics in builder refreshed for::
 
-
-Change:: no-change-run
-Input::
-
-
-Output::
-/lib/tsc --b --v /home/src/projects/project --noEmit
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is up to date because newest input 'home/src/projects/project/a.ts' is older than output 'home/src/projects/outFile.tsbuildinfo'
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.Success
 
+Change:: no-change-run
 
+Input::
+
+/home/src/tslibs/TS/Lib/tsc.js --b --v . --noEmit
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is up to date because newest input 'a.ts' is older than output '../outFile.tsbuildinfo'
+
+
+
+
+exitCode:: ExitStatus.Success

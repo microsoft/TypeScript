@@ -1,22 +1,22 @@
 0:: reports syntax errors after change to config file
 During incremental build, tsbuildinfo is not emitted, so declaration option is not present
 Clean build has declaration option in tsbuildinfo
-TsBuild info text without affectedFilesPendingEmit:: /outfile.tsbuildinfo.readable.baseline.txt::
+TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/outfile.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
   "fileInfos": {
-    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./src/a.ts": "4646078106-export function foo() { }",
-    "./src/b.ts": "1045484683-export function bar() { }"
+    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "4646078106-export function foo() { }",
+    "./project/b.ts": "1045484683-export function bar() { }"
   },
   "root": [
     [
       2,
-      "./src/a.ts"
+      "./project/a.ts"
     ],
     [
       3,
-      "./src/b.ts"
+      "./project/b.ts"
     ]
   ],
   "options": {
@@ -33,18 +33,18 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./src/a.ts": "4646078106-export function foo() { }",
-    "./src/b.ts": "1045484683-export function bar() { }"
+    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "4646078106-export function foo() { }",
+    "./project/b.ts": "1045484683-export function bar() { }"
   },
   "root": [
     [
       2,
-      "./src/a.ts"
+      "./project/a.ts"
     ],
     [
       3,
-      "./src/b.ts"
+      "./project/b.ts"
     ]
   ],
   "options": {
