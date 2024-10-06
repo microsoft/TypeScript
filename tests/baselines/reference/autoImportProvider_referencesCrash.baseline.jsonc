@@ -1,10 +1,10 @@
 // === findAllReferences ===
-// === /b/b.ts ===
+// === /home/src/workspaces/project/b/b.ts ===
 // /// <reference path="../a/index.d.ts" />
 // new [|A|]/*FIND ALL REFS*/();
 
   // === Definitions ===
-  // === /a/index.ts ===
+  // === /home/src/workspaces/project/a/index.ts ===
   // <|class A {}[||>|]
 
   // === Details ===

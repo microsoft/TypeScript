@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/package.json]
 {
@@ -46,7 +46,7 @@ declare global {
 }
 
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -58,22 +58,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/a/lib/lib.es2022.full.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w --traceResolution --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js -w --traceResolution --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -104,15 +93,18 @@ Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/node_modules/@types/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/@types/pkg/import.d.ts'.
 ======== Type reference directive 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/@types/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1', primary: false. ========
 File '/user/username/projects/myproject/node_modules/@types/pkg/package.json' exists according to earlier cached lookups.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 [96mindex.ts[0m:[93m2[0m:[93m34[0m - [91merror[0m[90m TS2304: [0mCannot find name 'RequireInterface'.
 
 [7m2[0m interface LocalInterface extends RequireInterface {}
 [7m [0m [91m                                 ~~~~~~~~~~~~~~~~[0m
 
-../../../../a/lib/lib.es2022.full.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
   Default library for target 'es2022'
 node_modules/@types/pkg/import.d.ts
   Type library referenced via 'pkg' from file 'index.ts' with packageId 'pkg/import.d.ts@0.0.1'
@@ -123,17 +115,25 @@ index.ts
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/index.js]
 /// <reference types="pkg"/>
 
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2022.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts: *new*
   {}
 /user/username/projects/myproject/index.ts: *new*
   {}
@@ -167,17 +167,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/node_modules/@types/pkg/import.d.ts
 /user/username/projects/myproject/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/node_modules/@types/pkg/import.d.ts
 /user/username/projects/myproject/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.es2022.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2022.full.d.ts (used version)
 /user/username/projects/myproject/node_modules/@types/pkg/import.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
 
@@ -218,8 +218,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/node_modules/@types/pkg/package.json' exists according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
@@ -250,10 +253,13 @@ Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts', result '/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts'.
 ======== Type reference directive 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts' with Package ID 'pkg/require.d.ts@0.0.1', primary: false. ========
 File '/user/username/projects/myproject/node_modules/@types/pkg/package.json' exists according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../a/lib/lib.es2022.full.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
   Default library for target 'es2022'
 node_modules/@types/pkg/require.d.ts
   Type library referenced via 'pkg' from file 'index.ts' with packageId 'pkg/require.d.ts@0.0.1'
@@ -267,11 +273,17 @@ index.ts
 //// [/user/username/projects/myproject/index.js] file written with same contents
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2022.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts:
   {}
 /user/username/projects/myproject/index.ts:
   {}
@@ -310,12 +322,12 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/node_modules/@types/pkg/require.d.ts
 /user/username/projects/myproject/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2022.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
 /user/username/projects/myproject/node_modules/@types/pkg/require.d.ts
 /user/username/projects/myproject/index.ts
 

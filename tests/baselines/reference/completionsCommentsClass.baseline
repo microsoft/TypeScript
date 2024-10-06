@@ -77,7 +77,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -101,9 +101,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -117,11 +117,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -173,13 +173,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -1166,6 +1166,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -1936,6 +1980,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -1988,6 +2076,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -2248,6 +2380,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -2302,6 +2478,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -2354,6 +2574,50 @@
             {
               "text": "Int32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -3636,6 +3900,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -3688,6 +3996,50 @@
             {
               "text": "Uint8ClampedArray",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -3744,6 +4096,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -3796,6 +4192,50 @@
             {
               "text": "Uint32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",

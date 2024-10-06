@@ -7,59 +7,59 @@
 export {};
 
 // Abstract type that allows us to mark `next` as `abstract`
-declare abstract class Iterator<T> { // eslint-disable-line @typescript-eslint/no-unsafe-declaration-merging
-    abstract next(value?: unknown): IteratorResult<T, undefined>;
+declare abstract class Iterator<T, TResult = undefined, TNext = unknown> { // eslint-disable-line @typescript-eslint/no-unsafe-declaration-merging
+    abstract next(value?: TNext): IteratorResult<T, TResult>;
 }
 
-// Merge all members of `BuiltinIterator<T>` into `Iterator<T>`
-interface Iterator<T> extends globalThis.BuiltinIterator<T, undefined, unknown> {}
+// Merge all members of `IteratorObject<T>` into `Iterator<T>`
+interface Iterator<T, TResult, TNext> extends globalThis.IteratorObject<T, TResult, TNext> {}
 
 // Capture the `Iterator` constructor in a type we can use in the `extends` clause of `IteratorConstructor`.
-type BuiltinIteratorConstructor = typeof Iterator;
+type IteratorObjectConstructor = typeof Iterator;
 
 declare global {
-    // Global `BuiltinIterator<T>` interface that can be augmented by polyfills
-    interface BuiltinIterator<T, TReturn, TNext> {
+    // Global `IteratorObject<T, TReturn, TNext>` interface that can be augmented by polyfills
+    interface IteratorObject<T, TReturn, TNext> {
         /**
          * Returns this iterator.
          */
-        [Symbol.iterator](): BuiltinIterator<T, TReturn, TNext>;
+        [Symbol.iterator](): IteratorObject<T, TReturn, TNext>;
 
         /**
          * Creates an iterator whose values are the result of applying the callback to the values from this iterator.
          * @param callbackfn A function that accepts up to two arguments to be used to transform values from the underlying iterator.
          */
-        map<U>(callbackfn: (value: T, index: number) => U): BuiltinIterator<U, undefined>;
+        map<U>(callbackfn: (value: T, index: number) => U): IteratorObject<U, undefined, unknown>;
 
         /**
          * Creates an iterator whose values are those from this iterator for which the provided predicate returns true.
          * @param predicate A function that accepts up to two arguments to be used to test values from the underlying iterator.
          */
-        filter<S extends T>(predicate: (value: T, index: number) => value is S): BuiltinIterator<S, undefined>;
+        filter<S extends T>(predicate: (value: T, index: number) => value is S): IteratorObject<S, undefined, unknown>;
 
         /**
          * Creates an iterator whose values are those from this iterator for which the provided predicate returns true.
          * @param predicate A function that accepts up to two arguments to be used to test values from the underlying iterator.
          */
-        filter(predicate: (value: T, index: number) => unknown): BuiltinIterator<T, undefined>;
+        filter(predicate: (value: T, index: number) => unknown): IteratorObject<T, undefined, unknown>;
 
         /**
          * Creates an iterator whose values are the values from this iterator, stopping once the provided limit is reached.
          * @param limit The maximum number of values to yield.
          */
-        take(limit: number): BuiltinIterator<T, undefined>;
+        take(limit: number): IteratorObject<T, undefined, unknown>;
 
         /**
          * Creates an iterator whose values are the values from this iterator after skipping the provided count.
          * @param count The number of values to drop.
          */
-        drop(count: number): BuiltinIterator<T, undefined>;
+        drop(count: number): IteratorObject<T, undefined, unknown>;
 
         /**
          * Creates an iterator whose values are the result of applying the callback to the values from this iterator and then flattening the resulting iterators or iterables.
          * @param callback A function that accepts up to two arguments to be used to transform values from the underlying iterator into new iterators or iterables to be flattened into the result.
          */
-        flatMap<U>(callback: (value: T, index: number) => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>): BuiltinIterator<U, undefined>;
+        flatMap<U>(callback: (value: T, index: number) => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>): IteratorObject<U, undefined, unknown>;
 
         /**
          * Calls the specified callback function for all the elements in this iterator. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
@@ -117,13 +117,13 @@ declare global {
     }
 
     // Global `IteratorConstructor` interface that can be augmented by polyfills
-    interface IteratorConstructor extends BuiltinIteratorConstructor {
+    interface IteratorConstructor extends IteratorObjectConstructor {
         /**
          * Creates a native iterator from an iterator or iterable object.
          * Returns its input if the input already inherits from the built-in Iterator class.
          * @param value An iterator or iterable object to convert a native iterator.
          */
-        from<T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>): BuiltinIterator<T, undefined>;
+        from<T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>): IteratorObject<T, undefined, unknown>;
     }
 
     var Iterator: IteratorConstructor;

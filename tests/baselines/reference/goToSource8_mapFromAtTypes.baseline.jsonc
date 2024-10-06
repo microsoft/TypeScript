@@ -1,5 +1,5 @@
 // === goToSourceDefinition ===
-// === /node_modules/lodash/lodash.js ===
+// === /home/src/workspaces/project/node_modules/lodash/lodash.js ===
 // --- (line: 13) skipped ---
 //      * _.add(6, 4);
 //      * // => 10
@@ -15,7 +15,7 @@
 //     var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
 // --- (line: 26) skipped ---
 
-// === /index.ts ===
+// === /home/src/workspaces/project/index.ts ===
 // import { /*GOTO SOURCE DEF*/add } from 'lodash';
 
   // === Details ===

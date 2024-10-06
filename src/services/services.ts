@@ -2,6 +2,7 @@ import {
     __String,
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
+    arrayFrom,
     AssignmentDeclarationKind,
     BaseType,
     BinaryExpression,
@@ -233,6 +234,7 @@ import {
     Node,
     NodeArray,
     NodeFlags,
+    nodeIsSynthesized,
     noop,
     normalizePath,
     normalizeSpans,
@@ -258,6 +260,7 @@ import {
     positionIsSynthesized,
     PossibleProgramFileInfo,
     PragmaMap,
+    PreparePasteEdits,
     PrivateIdentifier,
     Program,
     PropertyName,
@@ -735,6 +738,8 @@ class SymbolObject implements Symbol {
         if (context) {
             if (isGetAccessor(context)) {
                 if (!this.contextualGetAccessorDocumentationComment) {
+                    this.contextualGetAccessorDocumentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                 }
                 if (length(this.contextualGetAccessorDocumentationComment)) {
@@ -743,6 +748,8 @@ class SymbolObject implements Symbol {
             }
             if (isSetAccessor(context)) {
                 if (!this.contextualSetAccessorDocumentationComment) {
+                    this.contextualSetAccessorDocumentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                 }
                 if (length(this.contextualSetAccessorDocumentationComment)) {
@@ -766,6 +773,8 @@ class SymbolObject implements Symbol {
         if (context) {
             if (isGetAccessor(context)) {
                 if (!this.contextualGetAccessorTags) {
+                    this.contextualGetAccessorTags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
                 }
                 if (length(this.contextualGetAccessorTags)) {
@@ -774,6 +783,8 @@ class SymbolObject implements Symbol {
             }
             if (isSetAccessor(context)) {
                 if (!this.contextualSetAccessorTags) {
+                    this.contextualSetAccessorTags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+
                     this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
                 }
                 if (length(this.contextualSetAccessorTags)) {
@@ -1363,7 +1374,7 @@ function isCamelCase(s: string) {
     return !s.length || s.charAt(0) === s.charAt(0).toLowerCase();
 }
 
-export function displayPartsToString(displayParts: SymbolDisplayPart[] | undefined) {
+export function displayPartsToString(displayParts: SymbolDisplayPart[] | undefined): string {
     if (displayParts) {
         return map(displayParts, displayPart => displayPart.text).join("");
     }
@@ -1379,7 +1390,7 @@ export function getDefaultCompilerOptions(): CompilerOptions {
     };
 }
 
-export function getSupportedCodeFixes() {
+export function getSupportedCodeFixes(): readonly string[] {
     return codefix.getSupportedErrorCodes();
 }
 
@@ -1593,6 +1604,7 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "provideInlayHints",
     "getSupportedCodeFixes",
     "getPasteEdits",
+    "getImports",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -1613,6 +1625,7 @@ const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
     "getRenameInfo",
     "findRenameLocations",
     "getApplicableRefactors",
+    "preparePasteEditsForFile",
 ];
 export function createLanguageService(
     host: LanguageServiceHost,
@@ -1763,6 +1776,7 @@ export function createLanguageService(
             useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             getParsedCommandLine,
             jsDocParsingMode: host.jsDocParsingMode,
+            getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
         };
 
         const originalGetSourceFile = compilerHost.getSourceFile;
@@ -2297,6 +2311,15 @@ export function createLanguageService(
             documentation,
             tags,
         };
+    }
+
+    function preparePasteEditsForFile(fileName: string, copiedTextRange: TextRange[]): boolean {
+        synchronizeHostData();
+        return PreparePasteEdits.preparePasteEdits(
+            getValidSourceFile(fileName),
+            copiedTextRange,
+            program.getTypeChecker(),
+        );
     }
 
     function getPasteEdits(
@@ -3166,7 +3189,7 @@ export function createLanguageService(
             //
             // The following three regexps are used to match the start of the text up to the TODO
             // comment portion.
-            const singleLineCommentStart = /(?:\/\/+\s*)/.source;
+            const singleLineCommentStart = /(?:\/{2,}\s*)/.source;
             const multiLineCommentStart = /(?:\/\*+\s*)/.source;
             const anyNumberOfSpacesAndAsterisksAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
 
@@ -3344,6 +3367,18 @@ export function createLanguageService(
         );
     }
 
+    function getImports(fileName: string): readonly string[] {
+        synchronizeHostData();
+        const file = getValidSourceFile(fileName);
+        let imports: Set<string> | undefined;
+        for (const specifier of file.imports) {
+            if (nodeIsSynthesized(specifier)) continue;
+            const name = program.getResolvedModuleFromModuleSpecifier(specifier, file)?.resolvedModule?.resolvedFileName;
+            if (name) (imports ??= new Set()).add(name);
+        }
+        return imports ? arrayFrom(imports) : emptyArray;
+    }
+
     const ls: LanguageService = {
         dispose,
         cleanupSemanticCache,
@@ -3415,8 +3450,10 @@ export function createLanguageService(
         uncommentSelection,
         provideInlayHints,
         getSupportedCodeFixes,
+        preparePasteEditsForFile,
         getPasteEdits,
         mapCode,
+        getImports,
     };
 
     switch (languageServiceMode) {

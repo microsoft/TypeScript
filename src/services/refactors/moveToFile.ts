@@ -1,4 +1,3 @@
-import { getModuleSpecifier } from "../../compiler/_namespaces/ts.moduleSpecifiers.js";
 import {
     ApplicableRefactorInfo,
     arrayFrom,
@@ -118,6 +117,7 @@ import {
     ModifierLike,
     ModuleDeclaration,
     ModuleKind,
+    moduleSpecifiers,
     moduleSpecifierToValidIdentifier,
     NamedImportBindings,
     Node,
@@ -157,8 +157,10 @@ import {
     VariableDeclarationList,
     VariableStatement,
 } from "../_namespaces/ts.js";
-import { addTargetFileImports } from "../_namespaces/ts.refactor.js";
-import { registerRefactor } from "../refactorProvider.js";
+import {
+    addTargetFileImports,
+    registerRefactor,
+} from "../_namespaces/ts.refactor.js";
 
 const refactorNameForMoveToFile = "Move to file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_file);
@@ -244,7 +246,7 @@ export function getNewStatementsAndRemoveFromOldFile(
     preferences: UserPreferences,
     importAdderForNewFile: codefix.ImportAdder,
     importAdderForOldFile: codefix.ImportAdder,
-) {
+): void {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
 
@@ -309,7 +311,7 @@ function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[
 }
 
 /** @internal */
-export function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean) {
+export function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean): void {
     const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
     targetFileImportsFromOldFile.forEach((_, symbol) => {
         if (!symbol.declarations) {
@@ -358,7 +360,7 @@ function updateImportsInOtherFiles(
 
                 if (getStringComparer(!program.useCaseSensitiveFileNames())(pathToTargetFileWithExtension, sourceFile.fileName) === Comparison.EqualTo) return;
 
-                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
+                const newModuleSpecifier = moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
                 const newImportDeclaration = filterImport(importNode, makeStringLiteral(newModuleSpecifier, quotePreference), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
@@ -510,7 +512,7 @@ export function addImportsForMovedSymbols(
     targetFileName: string,
     importAdder: codefix.ImportAdder,
     program: Program,
-) {
+): void {
     for (const [symbol, isValidTypeOnlyUseSite] of symbols) {
         const symbolName = getNameForExportedSymbol(symbol, getEmitScriptTarget(program.getCompilerOptions()));
         const exportKind = symbol.name === "default" && symbol.parent ? ExportKind.Default : ExportKind.Named;
@@ -838,7 +840,7 @@ export function getStatementsToMove(context: RefactorContext): ToMove | undefine
 }
 
 /** @internal */
-export function containsJsx(statements: readonly Statement[] | undefined) {
+export function containsJsx(statements: readonly Statement[] | undefined): Statement | undefined {
     return find(statements, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
 }
 
@@ -998,8 +1000,8 @@ function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevel
         }
     }
 }
-
-function isInImport(decl: Declaration) {
+/** @internal */
+export function isInImport(decl: Declaration): boolean {
     switch (decl.kind) {
         case SyntaxKind.ImportEqualsDeclaration:
         case SyntaxKind.ImportSpecifier:
@@ -1119,7 +1121,7 @@ function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
 }
 
 /** @internal */
-export function getExistingLocals(sourceFile: SourceFile, statements: readonly Statement[], checker: TypeChecker) {
+export function getExistingLocals(sourceFile: SourceFile, statements: readonly Statement[], checker: TypeChecker): Set<Symbol> {
     const existingLocals = new Set<Symbol>();
     for (const moduleSpecifier of sourceFile.imports) {
         const declaration = importFromModuleSpecifier(moduleSpecifier);

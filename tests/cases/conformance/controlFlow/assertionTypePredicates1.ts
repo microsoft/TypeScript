@@ -197,3 +197,65 @@ function example1(things: Thing[]) {
         thing.good;
     }
 }
+
+class TestPropertyDeclaration1 {
+  assert = (value: unknown): asserts value => {};
+  other(x: unknown) {
+    this.assert(x); // error
+    x;
+  }
+}
+
+class TestPropertyDeclaration2 {
+  assert: (v: unknown) => asserts v = (value) => {};
+  other(x: unknown) {
+    this.assert(x); // ok
+    x;
+  }
+}
+
+declare class ParentInheritedPropertyDeclaration {
+  assert: (value: unknown) => asserts value;
+}
+class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclaration {
+  other(x: unknown) {
+    this.assert(x); // ok
+    x;
+  }
+}
+
+interface TestPropertySignature {
+  assert: (value: unknown) => asserts value;
+}
+function testPropertySignature(
+  x: TestPropertySignature,
+  y: unknown,
+) {
+  x.assert(y); // ok
+  x;
+}
+function testFunctionThisParameter1(
+  this: TestPropertySignature,
+  x: unknown,
+) {
+  this.assert(x); // ok
+  x;
+}
+
+interface TestMethodSignature {
+  assert(value: unknown): asserts value;
+}
+function testMethodSignature(
+  x: TestMethodSignature,
+  y: unknown,
+) {
+  x.assert(y); // ok
+  x;
+}
+function testFunctionThisParameter2(
+  this: TestMethodSignature,
+  x: unknown,
+) {
+  this.assert(x); // ok
+  x;
+}

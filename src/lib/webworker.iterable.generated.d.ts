@@ -8,24 +8,24 @@ interface AbortSignal {
 }
 
 interface CSSNumericArray {
-    [Symbol.iterator](): BuiltinIterator<CSSNumericValue, BuiltinIteratorReturn>;
-    entries(): BuiltinIterator<[number, CSSNumericValue], BuiltinIteratorReturn>;
-    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
-    values(): BuiltinIterator<CSSNumericValue, BuiltinIteratorReturn>;
+    [Symbol.iterator](): ArrayIterator<CSSNumericValue>;
+    entries(): ArrayIterator<[number, CSSNumericValue]>;
+    keys(): ArrayIterator<number>;
+    values(): ArrayIterator<CSSNumericValue>;
 }
 
 interface CSSTransformValue {
-    [Symbol.iterator](): BuiltinIterator<CSSTransformComponent, BuiltinIteratorReturn>;
-    entries(): BuiltinIterator<[number, CSSTransformComponent], BuiltinIteratorReturn>;
-    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
-    values(): BuiltinIterator<CSSTransformComponent, BuiltinIteratorReturn>;
+    [Symbol.iterator](): ArrayIterator<CSSTransformComponent>;
+    entries(): ArrayIterator<[number, CSSTransformComponent]>;
+    keys(): ArrayIterator<number>;
+    values(): ArrayIterator<CSSTransformComponent>;
 }
 
 interface CSSUnparsedValue {
-    [Symbol.iterator](): BuiltinIterator<CSSUnparsedSegment, BuiltinIteratorReturn>;
-    entries(): BuiltinIterator<[number, CSSUnparsedSegment], BuiltinIteratorReturn>;
-    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
-    values(): BuiltinIterator<CSSUnparsedSegment, BuiltinIteratorReturn>;
+    [Symbol.iterator](): ArrayIterator<CSSUnparsedSegment>;
+    entries(): ArrayIterator<[number, CSSUnparsedSegment]>;
+    keys(): ArrayIterator<number>;
+    values(): ArrayIterator<CSSUnparsedSegment>;
 }
 
 interface Cache {
@@ -44,34 +44,42 @@ interface CanvasPathDrawingStyles {
 }
 
 interface DOMStringList {
-    [Symbol.iterator](): BuiltinIterator<string, BuiltinIteratorReturn>;
+    [Symbol.iterator](): ArrayIterator<string>;
 }
 
 interface FileList {
-    [Symbol.iterator](): BuiltinIterator<File, BuiltinIteratorReturn>;
+    [Symbol.iterator](): ArrayIterator<File>;
 }
 
 interface FontFaceSet extends Set<FontFace> {
 }
 
+interface FormDataIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+    [Symbol.iterator](): FormDataIterator<T>;
+}
+
 interface FormData {
-    [Symbol.iterator](): BuiltinIterator<[string, FormDataEntryValue], BuiltinIteratorReturn>;
+    [Symbol.iterator](): FormDataIterator<[string, FormDataEntryValue]>;
     /** Returns an array of key, value pairs for every entry in the list. */
-    entries(): BuiltinIterator<[string, FormDataEntryValue], BuiltinIteratorReturn>;
+    entries(): FormDataIterator<[string, FormDataEntryValue]>;
     /** Returns a list of keys in the list. */
-    keys(): BuiltinIterator<string, BuiltinIteratorReturn>;
+    keys(): FormDataIterator<string>;
     /** Returns a list of values in the list. */
-    values(): BuiltinIterator<FormDataEntryValue, BuiltinIteratorReturn>;
+    values(): FormDataIterator<FormDataEntryValue>;
+}
+
+interface HeadersIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+    [Symbol.iterator](): HeadersIterator<T>;
 }
 
 interface Headers {
-    [Symbol.iterator](): BuiltinIterator<[string, string], BuiltinIteratorReturn>;
+    [Symbol.iterator](): HeadersIterator<[string, string]>;
     /** Returns an iterator allowing to go through all key/value pairs contained in this object. */
-    entries(): BuiltinIterator<[string, string], BuiltinIteratorReturn>;
+    entries(): HeadersIterator<[string, string]>;
     /** Returns an iterator allowing to go through all keys of the key/value pairs contained in this object. */
-    keys(): BuiltinIterator<string, BuiltinIteratorReturn>;
+    keys(): HeadersIterator<string>;
     /** Returns an iterator allowing to go through all values of the key/value pairs contained in this object. */
-    values(): BuiltinIterator<string, BuiltinIteratorReturn>;
+    values(): HeadersIterator<string>;
 }
 
 interface IDBDatabase {
@@ -99,11 +107,15 @@ interface MessageEvent<T = any> {
     initMessageEvent(type: string, bubbles?: boolean, cancelable?: boolean, data?: any, origin?: string, lastEventId?: string, source?: MessageEventSource | null, ports?: Iterable<MessagePort>): void;
 }
 
+interface StylePropertyMapReadOnlyIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+    [Symbol.iterator](): StylePropertyMapReadOnlyIterator<T>;
+}
+
 interface StylePropertyMapReadOnly {
-    [Symbol.iterator](): BuiltinIterator<[string, Iterable<CSSStyleValue>], BuiltinIteratorReturn>;
-    entries(): BuiltinIterator<[string, Iterable<CSSStyleValue>], BuiltinIteratorReturn>;
-    keys(): BuiltinIterator<string, BuiltinIteratorReturn>;
-    values(): BuiltinIterator<Iterable<CSSStyleValue>, BuiltinIteratorReturn>;
+    [Symbol.iterator](): StylePropertyMapReadOnlyIterator<[string, Iterable<CSSStyleValue>]>;
+    entries(): StylePropertyMapReadOnlyIterator<[string, Iterable<CSSStyleValue>]>;
+    keys(): StylePropertyMapReadOnlyIterator<string>;
+    values(): StylePropertyMapReadOnlyIterator<Iterable<CSSStyleValue>>;
 }
 
 interface SubtleCrypto {
@@ -121,14 +133,18 @@ interface SubtleCrypto {
     unwrapKey(format: KeyFormat, wrappedKey: BufferSource, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, unwrappedKeyAlgorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
 }
 
+interface URLSearchParamsIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+    [Symbol.iterator](): URLSearchParamsIterator<T>;
+}
+
 interface URLSearchParams {
-    [Symbol.iterator](): BuiltinIterator<[string, string], BuiltinIteratorReturn>;
+    [Symbol.iterator](): URLSearchParamsIterator<[string, string]>;
     /** Returns an array of key, value pairs for every entry in the search params. */
-    entries(): BuiltinIterator<[string, string], BuiltinIteratorReturn>;
+    entries(): URLSearchParamsIterator<[string, string]>;
     /** Returns a list of keys in the search params. */
-    keys(): BuiltinIterator<string, BuiltinIteratorReturn>;
+    keys(): URLSearchParamsIterator<string>;
     /** Returns a list of values in the search params. */
-    values(): BuiltinIterator<string, BuiltinIteratorReturn>;
+    values(): URLSearchParamsIterator<string>;
 }
 
 interface WEBGL_draw_buffers {

@@ -1,4 +1,14 @@
 import {
+    createCodeFixAction,
+    createCombinedCodeActions,
+    createImportAdder,
+    eachDiagnostic,
+    registerCodeFix,
+    typeNodeToAutoImportableTypeNode,
+    typePredicateToAutoImportableTypeNode,
+    typeToMinimizedReferenceType,
+} from "../_namespaces/ts.codefix.js";
+import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     AssertionExpression,
@@ -36,6 +46,7 @@ import {
     hasInitializer,
     hasSyntacticModifier,
     Identifier,
+    InternalNodeBuilderFlags,
     isArrayBindingPattern,
     isArrayLiteralExpression,
     isAssertionExpression,
@@ -97,17 +108,7 @@ import {
     VariableStatement,
     walkUpParenthesizedExpressions,
 } from "../_namespaces/ts.js";
-
-import {
-    createCodeFixAction,
-    createCombinedCodeActions,
-    createImportAdder,
-    eachDiagnostic,
-    registerCodeFix,
-    typePredicateToAutoImportableTypeNode,
-    typeToAutoImportableTypeNode,
-} from "../_namespaces/ts.codefix.js";
-import { getIdentifierForNode } from "../refactors/helpers.js";
+import { getIdentifierForNode } from "../_namespaces/ts.refactor.js";
 
 const fixId = "fixMissingTypeAnnotationOnExports";
 
@@ -118,7 +119,7 @@ const extractExpression = "extract-expression";
 const errorCodes = [
     Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
-    Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations.code,
+    Diagnostics.At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
     Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations.code,
@@ -160,8 +161,9 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     | NodeBuilderFlags.UseStructuralFallback
     | NodeBuilderFlags.AllowEmptyTuple
     | NodeBuilderFlags.GenerateNamesForShadowedTypeParams
-    | NodeBuilderFlags.NoTruncation
-    | NodeBuilderFlags.WriteComputedProps;
+    | NodeBuilderFlags.NoTruncation;
+
+const declarationEmitInternalNodeBuilderFlags = InternalNodeBuilderFlags.WriteComputedProps;
 
 enum TypePrintMode {
     // Prints its fully spelled out type
@@ -913,11 +915,12 @@ function withContext<T>(
             type = widenedType;
         }
 
-        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node)) {
+        const enclosingDeclaration = findAncestor(node, isDeclaration) ?? sourceFile;
+        if (isParameter(node) && typeChecker.requiresAddingImplicitUndefined(node, enclosingDeclaration)) {
             type = typeChecker.getUnionType([typeChecker.getUndefinedType(), type], UnionReduction.None);
         }
         return {
-            typeNode: typeToTypeNode(type, findAncestor(node, isDeclaration) ?? sourceFile, getFlags(type)),
+            typeNode: typeToTypeNode(type, enclosingDeclaration, getFlags(type)),
             mutatedTarget: false,
         };
 
@@ -1094,9 +1097,9 @@ function withContext<T>(
         return emptyInferenceResult;
     }
 
-    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None) {
+    function typeToTypeNode(type: Type, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
-        const result = typeToAutoImportableTypeNode(typeChecker, importAdder, type, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, {
+        const minimizedTypeNode = typeToMinimizedReferenceType(typeChecker, type, enclosingDeclaration, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
             trackSymbol() {
                 return true;
@@ -1105,12 +1108,16 @@ function withContext<T>(
                 isTruncated = true;
             },
         });
+        if (!minimizedTypeNode) {
+            return undefined;
+        }
+        const result = typeNodeToAutoImportableTypeNode(minimizedTypeNode, importAdder, scriptTarget);
         return isTruncated ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword) : result;
     }
 
     function typePredicateToTypeNode(typePredicate: TypePredicate, enclosingDeclaration: Node, flags = NodeBuilderFlags.None): TypeNode | undefined {
         let isTruncated = false;
-        const result = typePredicateToAutoImportableTypeNode(typeChecker, importAdder, typePredicate, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, {
+        const result = typePredicateToAutoImportableTypeNode(typeChecker, importAdder, typePredicate, enclosingDeclaration, scriptTarget, declarationEmitNodeBuilderFlags | flags, declarationEmitInternalNodeBuilderFlags, {
             moduleResolverHost: program,
             trackSymbol() {
                 return true;
