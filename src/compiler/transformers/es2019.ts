@@ -11,7 +11,7 @@ import {
     visitEachChild,
     visitNode,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformES2019(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
@@ -43,7 +43,7 @@ export function transformES2019(context: TransformationContext): (x: SourceFile 
             return factory.updateCatchClause(
                 node,
                 factory.createVariableDeclaration(factory.createTempVariable(/*recordTempVariable*/ undefined)),
-                visitNode(node.block, visitor, isBlock)
+                visitNode(node.block, visitor, isBlock),
             );
         }
         return visitEachChild(node, visitor, context);

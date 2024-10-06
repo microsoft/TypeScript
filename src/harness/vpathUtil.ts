@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
-import * as vfs from "./_namespaces/vfs";
+import * as ts from "./_namespaces/ts.js";
+import * as vfs from "./_namespaces/vfs.js";
 
 export import sep = ts.directorySeparator;
 export import normalizeSeparators = ts.normalizeSlashes;
@@ -26,7 +26,7 @@ export import changeExtension = ts.changeAnyExtension;
 export import isTypeScript = ts.hasTSFileExtension;
 export import isJavaScript = ts.hasJSFileExtension;
 
-const invalidRootComponentRegExp = /^(?!(\/|\/\/\w+\/|[a-zA-Z]:\/?|)$)/;
+const invalidRootComponentRegExp = /^(?!(?:\/|\/\/\w+\/|[a-z]:\/?)?$)/i;
 const invalidNavigableComponentRegExp = /[:*?"<>|]/;
 const invalidNavigableComponentWithWildcardsRegExp = /[:"<>|]/;
 const invalidNonNavigableComponentRegExp = /^\.{1,2}$|[:*?"<>|]/;
@@ -102,36 +102,36 @@ function validateComponents(components: string[], flags: ValidationFlags, hasTra
     return true;
 }
 
-export function validate(path: string, flags: ValidationFlags = ValidationFlags.RelativeOrAbsolute) {
+export function validate(path: string, flags: ValidationFlags = ValidationFlags.RelativeOrAbsolute): string {
     const components = parse(path);
     const trailing = hasTrailingSeparator(path);
     if (!validateComponents(components, flags, trailing)) throw vfs.createIOError("ENOENT");
     return components.length > 1 && trailing ? format(reduce(components)) + sep : format(reduce(components));
 }
 
-export function isDeclaration(path: string) {
+export function isDeclaration(path: string): boolean {
     return ts.isDeclarationFileName(path);
 }
 
-export function isSourceMap(path: string) {
+export function isSourceMap(path: string): boolean {
     return extname(path, ".map", /*ignoreCase*/ false).length > 0;
 }
 
 const javaScriptSourceMapExtensions: readonly string[] = [".js.map", ".jsx.map"];
 
-export function isJavaScriptSourceMap(path: string) {
+export function isJavaScriptSourceMap(path: string): boolean {
     return extname(path, javaScriptSourceMapExtensions, /*ignoreCase*/ false).length > 0;
 }
 
-export function isJson(path: string) {
+export function isJson(path: string): boolean {
     return extname(path, ".json", /*ignoreCase*/ false).length > 0;
 }
 
-export function isDefaultLibrary(path: string) {
+export function isDefaultLibrary(path: string): boolean {
     return isDeclaration(path)
         && basename(path).startsWith("lib.");
 }
 
 export function isTsConfigFile(path: string): boolean {
-    return path.indexOf("tsconfig") !== -1 && path.indexOf("json") !== -1;
+    return path.includes("tsconfig") && path.includes("json");
 }

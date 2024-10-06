@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings21.ts] ////
+
+=== unicodeExtendedEscapesInStrings21.ts ===
+var x = "\u{67";
+>x : string
+>  : ^^^^^^
+>"\u{67" : "\\u{67"
+>        : ^^^^^^^^
+

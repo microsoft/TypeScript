@@ -3,4 +3,5 @@
 === throwWithoutNewLine1.ts ===
 throw
 > : any
+> : ^^^
 

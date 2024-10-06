@@ -1,0 +1,254 @@
+// === Completions ===
+=== /a.js ===
+// class C1 {
+//     async #fo
+//              ^
+// | ----------------------------------------------------------------------
+// | accessor
+// | async
+// | constructor
+// | get
+// | set
+// | static
+// | (warning) C1
+// | (warning) C2
+// | (warning) fo
+// | ----------------------------------------------------------------------
+// }
+// class C2 {
+//     async fo
+//           ^^
+// | ----------------------------------------------------------------------
+// | accessor
+// | async
+// | constructor
+// | get
+// | set
+// | static
+// | (warning) C1
+// | (warning) C2
+// | ----------------------------------------------------------------------
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/a.js",
+      "position": 24,
+      "name": "a"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": true,
+      "entries": [
+        {
+          "name": "accessor",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "accessor",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "async",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "async",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "constructor",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "constructor",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "get",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "get",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "set",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "set",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "static",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "static",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "C1",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "18",
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
+        },
+        {
+          "name": "C2",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "18",
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
+        },
+        {
+          "name": "fo",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "18",
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/a.js",
+      "position": 50,
+      "name": "b"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": true,
+      "optionalReplacementSpan": {
+        "start": 48,
+        "length": 2
+      },
+      "entries": [
+        {
+          "name": "accessor",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "accessor",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "async",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "async",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "constructor",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "constructor",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "get",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "get",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "set",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "set",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "static",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "static",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "C1",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "18",
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
+        },
+        {
+          "name": "C2",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "18",
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
+        }
+      ],
+      "defaultCommitCharacters": []
+    }
+  }
+]

@@ -19,29 +19,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-    - run: |
-        npm --version
-        # corepack enable npm
-        npm install -g $(jq -r '.packageManager' < package.json)
-        npm --version
-    - name: npm install and test
-      run: |
-        npm ci
-        npm test
-    - name: Adding playwright
-      run: npm install --no-save --no-package-lock playwright
-    - name: Validate the browser can import TypeScript
-      run: npx hereby test-browser-integration
-    - name: LKG, clean, and pack
-      run: |
-        npx hereby LKG
-        npx hereby clean
-        npm pack ./
-        mv typescript-*.tgz typescript.tgz
-    - name: Upload built tarfile
-      uses: actions/upload-artifact@v3
-      with:
-        name: tgz
-        path: typescript.tgz
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+      - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+        with:
+          node-version: 'lts/*'
+      - run: |
+          npm --version
+          # corepack enable npm
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
+      - name: npm install and test
+        run: |
+          npm ci
+          npm test
+      - name: Installing browsers
+        run: npx playwright install --with-deps
+      - name: Validate the browser can import TypeScript
+        run: npx hereby test-browser-integration
+      - name: LKG, clean, and pack
+        run: |
+          npx hereby LKG
+          npx hereby clean
+          node ./scripts/addPackageJsonGitHead.mjs package.json
+          npm pack ./
+          mv typescript-*.tgz typescript.tgz
+      - name: Upload built tarfile
+        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
+        with:
+          name: tgz
+          path: typescript.tgz

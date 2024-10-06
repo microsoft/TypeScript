@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/jsDeclarationEmitDoesNotRenameImport.ts] ////
+
+=== test/Test.js ===
+/** @module test/Test */
+class Test {}
+>Test : Symbol(Test, Decl(Test.js, 0, 0))
+
+export default Test;
+>Test : Symbol(Test, Decl(Test.js, 0, 0))
+
+=== Test.js ===
+/** @module Test */
+class Test {}
+>Test : Symbol(Test, Decl(Test.js, 0, 0))
+
+export default Test;
+>Test : Symbol(Test, Decl(Test.js, 0, 0))
+
+=== index.js ===
+import Test from './test/Test.js'
+>Test : Symbol(Test, Decl(index.js, 0, 6))
+
+/**
+ * @typedef {Object} Options
+ * @property {typeof import("./Test.js").default} [test]
+ */
+
+class X extends Test {
+>X : Symbol(X, Decl(index.js, 0, 33))
+>Test : Symbol(Test, Decl(index.js, 0, 6))
+
+    /**
+     * @param {Options} options
+     */
+    constructor(options) {
+>options : Symbol(options, Decl(index.js, 11, 16))
+
+        super();
+>super : Symbol(Test, Decl(Test.js, 0, 0))
+
+        if (options.test) {
+>options.test : Symbol(test, Decl(index.js, 4, 3))
+>options : Symbol(options, Decl(index.js, 11, 16))
+>test : Symbol(test, Decl(index.js, 4, 3))
+
+            this.test = new options.test();
+>this.test : Symbol(X.test, Decl(index.js, 13, 27))
+>this : Symbol(X, Decl(index.js, 0, 33))
+>test : Symbol(X.test, Decl(index.js, 13, 27))
+>options.test : Symbol(test, Decl(index.js, 4, 3))
+>options : Symbol(options, Decl(index.js, 11, 16))
+>test : Symbol(test, Decl(index.js, 4, 3))
+        }
+    }
+}
+
+export default X;
+>X : Symbol(X, Decl(index.js, 0, 33))
+

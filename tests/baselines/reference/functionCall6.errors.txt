@@ -13,7 +13,7 @@ functionCall6.ts(5,1): error TS2554: Expected 1 arguments, but got 0.
                ~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     foo();
-    ~~~~~
+    ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 functionCall6.ts:1:14: An argument for 'a' was not provided.
     

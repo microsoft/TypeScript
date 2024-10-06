@@ -3,5 +3,7 @@
 === optionsCompositeWithIncrementalFalse.ts ===
 const x = "Hello World";
 >x : "Hello World"
+>  : ^^^^^^^^^^^^^
 >"Hello World" : "Hello World"
+>              : ^^^^^^^^^^^^^
 

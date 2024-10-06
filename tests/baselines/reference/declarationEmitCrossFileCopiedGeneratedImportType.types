@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/declarationEmitCrossFileCopiedGeneratedImportType.ts] ////
+
+=== projA/index.d.ts ===
+export declare class Foo extends Number {
+>Foo : Foo
+>    : ^^^
+>Number : Number
+>       : ^^^^^^
+
+    private _;
+>_ : any
+}
+=== projB/index.d.ts ===
+import { Foo } from "../projA";
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+export declare const f: (foo: Foo) => boolean;
+>f : (foo: Foo) => boolean
+>  : ^   ^^   ^^^^^       
+>foo : Foo
+>    : ^^^
+
+=== projC/index.d.ts ===
+export declare const e: {
+>e : { f: (foo: import("../projA").Foo) => boolean; }
+>  : ^^^^^                                        ^^^
+
+    f: (foo: import("../projA").Foo) => boolean;
+>f : (foo: import("../projA").Foo) => boolean
+>  : ^   ^^                      ^^^^^       
+>foo : import("projA/index").Foo
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+=== projD/index.ts ===
+import {e} from "../projC";
+>e : { f: (foo: import("projA/index").Foo) => boolean; }
+>  : ^^^^^                                           ^^^
+
+export const d = {e};
+>d : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
+>  : ^^^^^^^^^^                                           ^^^^^^
+>{e} : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
+>    : ^^^^^^^^^^                                           ^^^^^^
+>e : { f: (foo: import("projA/index").Foo) => boolean; }
+>  : ^^^^^                                           ^^^
+

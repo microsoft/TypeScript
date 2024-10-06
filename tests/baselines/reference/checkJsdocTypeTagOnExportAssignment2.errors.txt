@@ -1,5 +1,4 @@
-b.js(2,18): error TS2322: Type '{ c: boolean; }' is not assignable to type 'Foo'.
-  Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
+b.js(2,18): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
 
 
 ==== checkJsdocTypeTagOnExportAssignment2.js (0 errors) ====
@@ -14,8 +13,7 @@ b.js(2,18): error TS2322: Type '{ c: boolean; }' is not assignable to type 'Foo'
     /** @type {import("./a").Foo} */
     export default { c: false };
                      ~
-!!! error TS2322: Type '{ c: boolean; }' is not assignable to type 'Foo'.
-!!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
     
 ==== c.js (0 errors) ====
     import b from "./b";

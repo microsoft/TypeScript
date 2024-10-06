@@ -2,10 +2,11 @@ const { RuleTester } = require("./support/RuleTester.cjs");
 const rule = require("../rules/no-keywords.cjs");
 
 const ruleTester = new RuleTester({
-    parserOptions: {
-        warnOnUnsupportedTypeScriptVersion: false,
+    languageOptions: {
+        parserOptions: {
+            warnOnUnsupportedTypeScriptVersion: false,
+        },
     },
-    parser: require.resolve("@typescript-eslint/parser"),
 });
 
 ruleTester.run("no-keywords", rule, {
@@ -76,7 +77,7 @@ interface Foo {
     number: string;
 }
             `,
-        }
+        },
     ],
 
     invalid: [
@@ -144,14 +145,14 @@ interface A {
             code: `let [number, string] = [3, ''];`,
             errors: [
                 { messageId: "noKeywordsError" },
-                { messageId: "noKeywordsError" }
+                { messageId: "noKeywordsError" },
             ],
         },
         {
             code: `let { String, Boolean } = { String: 1, Boolean: false };`,
             errors: [
                 { messageId: "noKeywordsError" },
-                { messageId: "noKeywordsError" }
+                { messageId: "noKeywordsError" },
             ],
         },
     ],

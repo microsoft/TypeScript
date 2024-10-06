@@ -4,18 +4,29 @@
 // https://github.com/microsoft/TypeScript/issues/35801
 let A;
 >A : any
+>  : ^^^
 
 A = {};
 >A = {} : {}
+>       : ^^
 >A : any
+>  : ^^^
 >{} : {}
+>   : ^^
 
 A.prototype.b = {};
 >A.prototype.b = {} : {}
+>                   : ^^
 >A.prototype.b : any
+>              : ^^^
 >A.prototype : any
+>            : ^^^
 >A : {}
+>  : ^^
 >prototype : any
+>          : ^^^
 >b : any
+>  : ^^^
 >{} : {}
+>   : ^^
 

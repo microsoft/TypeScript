@@ -3,8 +3,10 @@
 === file1.ts ===
 export var x;
 >x : any
+>  : ^^^
 
 === file2.ts ===
 var y;
 >y : any
+>  : ^^^
 

@@ -1,22 +1,22 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { createBaseline } from "../helpers/baseline.js";
 import {
-    createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
     runWatchBaseline,
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: console clearing", () => {
+describe("unittests:: tscWatch:: consoleClearing::", () => {
     const scenario = "consoleClearing";
     const file: File = {
-        path: "/f.ts",
-        content: ""
+        path: "/user/username/projects/myproject/f.ts",
+        content: "",
     };
 
     const makeChangeToFile: TscWatchCompileChange[] = [{
@@ -30,7 +30,7 @@ describe("unittests:: tsc-watch:: console clearing", () => {
             scenario,
             subScenario,
             commandLineArgs: ["--w", file.path, ...commandLineOptions || ts.emptyArray],
-            sys: () => createWatchedSystem([file, libFile]),
+            sys: () => TestServerHost.createWatchedSystem([file], { currentDirectory: ts.getDirectoryPath(file.path) }),
             edits: makeChangeToFile,
         });
     }
@@ -42,15 +42,14 @@ describe("unittests:: tsc-watch:: console clearing", () => {
 
     describe("when preserveWatchOutput is true in config file", () => {
         const compilerOptions: ts.CompilerOptions = {
-            preserveWatchOutput: true
+            preserveWatchOutput: true,
         };
         const configFile: File = {
-            path: "/tsconfig.json",
-            content: JSON.stringify({ compilerOptions })
+            path: "/user/username/projects/myproject/tsconfig.json",
+            content: jsonToReadableText({ compilerOptions }),
         };
-        const files = [file, configFile, libFile];
         it("using createWatchOfConfigFile ", () => {
-            const baseline = createBaseline(createWatchedSystem(files));
+            const baseline = createBaseline(sys());
             const watch = ts.createWatchProgram(createWatchCompilerHostOfConfigFileForBaseline({
                 system: baseline.sys,
                 cb: baseline.cb,
@@ -64,15 +63,22 @@ describe("unittests:: tsc-watch:: console clearing", () => {
                 ...baseline,
                 getPrograms: () => [[watch.getCurrentProgram().getProgram(), watch.getCurrentProgram()]],
                 edits: makeChangeToFile,
-                watchOrSolution: watch
+                watchOrSolution: watch,
             });
         });
         verifyTscWatch({
             scenario,
             subScenario: "when preserveWatchOutput is true in config file/when createWatchProgram is invoked with configFileParseResult on WatchCompilerHostOfConfigFile",
             commandLineArgs: ["--w", "-p", configFile.path],
-            sys: () => createWatchedSystem(files),
+            sys,
             edits: makeChangeToFile,
         });
+
+        function sys() {
+            return TestServerHost.createWatchedSystem(
+                [file, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFile.path) },
+            );
+        }
     });
 });

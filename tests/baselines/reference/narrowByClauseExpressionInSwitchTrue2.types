@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue2.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue2.ts ===
+// https://github.com/microsoft/TypeScript/issues/55986
+
+declare const f: 'a' | 'b' | 'c';
+>f : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+
+switch(true) {
+>true : true
+>     : ^^^^
+
+    case f === 'a':
+>f === 'a' : boolean
+>          : ^^^^^^^
+>f : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+>'a' : "a"
+>    : ^^^
+
+    case f === 'b':
+>f === 'b' : boolean
+>          : ^^^^^^^
+>f : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+>'b' : "b"
+>    : ^^^
+
+        f;
+>f : "a" | "b"
+>  : ^^^^^^^^^
+
+        break
+    default:
+        f;
+>f : "c"
+>  : ^^^
+}
+
+f;
+>f : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+
+switch(true) {
+>true : true
+>     : ^^^^
+
+    case f === 'a':
+>f === 'a' : boolean
+>          : ^^^^^^^
+>f : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+>'a' : "a"
+>    : ^^^
+
+        f;
+>f : "a"
+>  : ^^^
+
+    case f === 'b':
+>f === 'b' : boolean
+>          : ^^^^^^^
+>f : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+>'b' : "b"
+>    : ^^^
+
+        f;
+>f : "a" | "b"
+>  : ^^^^^^^^^
+
+        break
+    default:
+        f;
+>f : "c"
+>  : ^^^
+}
+
+f;
+>f : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+

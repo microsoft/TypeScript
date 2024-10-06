@@ -1,3 +1,11 @@
+import { fork } from "child_process";
+import { statSync } from "fs";
+import Mocha from "mocha";
+import ms from "ms";
+import os from "os";
+import path from "path";
+import readline from "readline";
+import tty from "tty";
 import {
     configOption,
     globalTimeout,
@@ -12,7 +20,7 @@ import {
     TestConfig,
     TestRunnerKind,
     workerCount,
-} from "../_namespaces/Harness";
+} from "../_namespaces/Harness.js";
 import {
     ErrorInfo,
     ParallelClientMessage,
@@ -21,25 +29,17 @@ import {
     Task,
     TaskTimeout,
     TestInfo,
-} from "../_namespaces/Harness.Parallel";
-import * as ts from "../_namespaces/ts";
-import * as Utils from "../_namespaces/Utils";
+} from "../_namespaces/Harness.Parallel.js";
+import * as ts from "../_namespaces/ts.js";
+import * as Utils from "../_namespaces/Utils.js";
 
-export function start() {
-    const Mocha = require("mocha") as typeof import("mocha");
+export function start(importTests: () => Promise<unknown>): void {
     const Base = Mocha.reporters.Base;
     const color = Base.color;
     const cursor = Base.cursor;
-    const ms = require("ms") as typeof import("ms");
-    const readline = require("readline") as typeof import("readline");
-    const os = require("os") as typeof import("os");
-    const tty = require("tty") as typeof import("tty");
     const isatty = tty.isatty(1) && tty.isatty(2);
-    const path = require("path") as typeof import("path");
-    const { fork } = require("child_process") as typeof import("child_process");
-    const { statSync } = require("fs") as typeof import("fs");
 
-    // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
+    // NOTE: paths for module and types for FailedTestReporter _do not_ line up when bundled
     const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.cjs")) as typeof import("../../../scripts/failed-tests.cjs");
 
     const perfdataFileNameFragment = ".parallelperf";
@@ -79,7 +79,7 @@ export function start() {
     interface Worker {
         process: import("child_process").ChildProcess;
         accumulatedOutput: string;
-        currentTasks?: { file: string }[];
+        currentTasks?: { file: string; }[];
         timer?: any;
     }
 
@@ -118,7 +118,7 @@ export function start() {
                 incomplete,
                 close,
                 width,
-                noColors: options.noColors || false
+                noColors: options.noColors || false,
             };
 
             this._progressBars = [];
@@ -200,7 +200,7 @@ export function start() {
         return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
     }
 
-    function readSavedPerfData(target?: string): { [testHash: string]: number } | undefined {
+    function readSavedPerfData(target?: string): { [testHash: string]: number; } | undefined {
         const perfDataContents = IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
@@ -212,13 +212,12 @@ export function start() {
         return `tsrunner-${runner}://${test}`;
     }
 
-    function startDelayed(perfData: { [testHash: string]: number } | undefined, totalCost: number) {
+    function startDelayed(perfData: { [testHash: string]: number; } | undefined, totalCost: number) {
         console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
         for (const runner of runners) {
-            for (const test of runner.getTestFiles()) {
-                const file = typeof test === "string" ? test : test.file;
+            for (const file of runner.getTestFiles()) {
                 let size: number;
                 if (!perfData) {
                     try {
@@ -262,7 +261,7 @@ export function start() {
         let passingFiles = 0;
         let failingFiles = 0;
         let errorResults: ErrorInfo[] = [];
-        let passingResults: { name: string[] }[] = [];
+        let passingResults: { name: string[]; }[] = [];
         let totalPassing = 0;
         const startDate = new Date();
 
@@ -270,7 +269,7 @@ export function start() {
         const progressUpdateInterval = 1 / progressBars._options.width;
         let nextProgress = progressUpdateInterval;
 
-        const newPerfData: { [testHash: string]: number } = {};
+        const newPerfData: { [testHash: string]: number; } = {};
 
         const workers: Worker[] = [];
         let closedWorkers = 0;
@@ -283,7 +282,7 @@ export function start() {
                 process: fork(process.argv[1], [`--config="${configPath}"`], { stdio: ["pipe", "pipe", "pipe", "ipc"] }),
                 accumulatedOutput: "",
                 currentTasks: undefined,
-                timer: undefined
+                timer: undefined,
             };
             const appendOutput = (d: Buffer) => {
                 worker.accumulatedOutput += d.toString();
@@ -385,10 +384,11 @@ export function start() {
         // It's only really worth doing an initial batching if there are a ton of files to go through (and they have estimates)
         if (totalFiles > 1000 && batchSize > 0) {
             console.log("Batching initial test lists...");
-            const batches: { runner: TestRunnerKind | "unittest", file: string, size: number }[][] = new Array(batchCount);
+            const batches: { runner: TestRunnerKind | "unittest"; file: string; size: number; }[][] = new Array(batchCount);
             const doneBatching = new Array(batchCount);
             let scheduledTotal = 0;
-            batcher: while (true) {
+            batcher:
+            while (true) {
                 for (let i = 0; i < batchCount; i++) {
                     if (tasks.length <= workerCount) { // Keep a small reserve even in the suboptimally packed case
                         console.log(`Suboptimal packing detected: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`);
@@ -477,7 +477,7 @@ export function start() {
                 percentComplete,
                 progressColor,
                 title,
-                titleColor
+                titleColor,
             );
         }
 
@@ -485,20 +485,29 @@ export function start() {
             function patchStats(stats: Mocha.Stats) {
                 Object.defineProperties(stats, {
                     start: {
-                        configurable: true, enumerable: true,
-                        get() { return startDate; },
-                        set(_: Date) { /*do nothing*/ }
+                        configurable: true,
+                        enumerable: true,
+                        get() {
+                            return startDate;
+                        },
+                        set(_: Date) {/*do nothing*/},
                     },
                     end: {
-                        configurable: true, enumerable: true,
-                        get() { return endDate; },
-                        set(_: Date) { /*do nothing*/ }
+                        configurable: true,
+                        enumerable: true,
+                        get() {
+                            return endDate;
+                        },
+                        set(_: Date) {/*do nothing*/},
                     },
                     duration: {
-                        configurable: true, enumerable: true,
-                        get() { return duration; },
-                        set(_: number) { /*do nothing*/ }
-                    }
+                        configurable: true,
+                        enumerable: true,
+                        get() {
+                            return duration;
+                        },
+                        set(_: number) {/*do nothing*/},
+                    },
                 });
             }
 
@@ -563,8 +572,8 @@ export function start() {
                 xunitReporter = new Mocha.reporters.XUnit(replayRunner, {
                     reporterOptions: {
                         suiteName: "Tests",
-                        output: "./TEST-results.xml"
-                    }
+                        output: "./TEST-results.xml",
+                    },
                 });
                 patchStats(xunitReporter.stats);
                 xunitReporter.write(`<?xml version="1.0" encoding="UTF-8"?>\n`);
@@ -574,7 +583,7 @@ export function start() {
                     reporterOptions: {
                         file: path.resolve(".failed-tests"),
                         keepFailed,
-                    }
+                    },
                 });
             }
 
@@ -587,7 +596,7 @@ export function start() {
             consoleReporter.epilogue();
             if (noColors) Base.useColors = savedUseColors;
 
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4));
 
             if (xunitReporter) {
@@ -647,5 +656,5 @@ export function start() {
         shimNoopTestInterface(global);
     }
 
-    setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
+    importTests().then(() => startDelayed(perfData, totalCost));
 }

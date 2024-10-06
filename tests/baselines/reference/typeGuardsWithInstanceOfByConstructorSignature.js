@@ -62,7 +62,7 @@ interface C2 {
 declare var C: CConstructor;
 
 var obj5: C1 | A;
-if (obj5 instanceof C) { // narrowed to C1|C2.
+if (obj5 instanceof C) { // narrowed to C1.
     obj5.foo;
     obj5.c;
     obj5.bar1;
@@ -109,7 +109,7 @@ interface E2 {
 declare var E: EConstructor;
 
 var obj9: E1 | A;
-if (obj9 instanceof E) { // narrowed to E1 | E2
+if (obj9 instanceof E) { // narrowed to E1
     obj9.foo;
     obj9.bar1;
     obj9.bar2;
@@ -228,7 +228,7 @@ if (obj4 instanceof B) {
     obj4.bar = "str";
 }
 var obj5;
-if (obj5 instanceof C) { // narrowed to C1|C2.
+if (obj5 instanceof C) { // narrowed to C1.
     obj5.foo;
     obj5.c;
     obj5.bar1;
@@ -251,7 +251,7 @@ if (obj8 instanceof D) {
     obj8.bar;
 }
 var obj9;
-if (obj9 instanceof E) { // narrowed to E1 | E2
+if (obj9 instanceof E) { // narrowed to E1
     obj9.foo;
     obj9.bar1;
     obj9.bar2;

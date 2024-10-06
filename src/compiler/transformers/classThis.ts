@@ -20,8 +20,8 @@ import {
     some,
     Statement,
     SyntaxKind,
-    ThisExpression
-} from "../_namespaces/ts";
+    ThisExpression,
+} from "../_namespaces/ts.js";
 
 /**
  * Creates a class `static {}` block used to assign the static `this` to a `_classThis` (or similar) variable.
@@ -29,9 +29,8 @@ import {
  * @param classThis The identifier to use for the captured static `this` reference, usually with the name `_classThis`.
  * @param thisExpression Overrides the expression to use for the actual `this` reference. This can be used to provide an
  * expression that has already had its `EmitFlags` set or may have been tracked to prevent substitution.
- * @internal
  */
-export function createClassThisAssignmentBlock(factory: NodeFactory, classThis: Identifier, thisExpression = factory.createThis()): ClassThisAssignmentBlock {
+function createClassThisAssignmentBlock(factory: NodeFactory, classThis: Identifier, thisExpression = factory.createThis()): ClassThisAssignmentBlock {
     // produces:
     //
     //  static { _classThis = this; }
@@ -52,14 +51,16 @@ export function createClassThisAssignmentBlock(factory: NodeFactory, classThis: 
 /** @internal */
 export type ClassThisAssignmentBlock = ClassStaticBlockDeclaration & {
     readonly body: Block & {
-        readonly statements: NodeArray<Statement> & readonly [
-            ExpressionStatement & {
-                readonly expression: AssignmentExpression<EqualsToken> & {
-                    readonly left: Identifier;
-                    readonly right: ThisExpression;
-                };
-            }
-        ];
+        readonly statements:
+            & NodeArray<Statement>
+            & readonly [
+                ExpressionStatement & {
+                    readonly expression: AssignmentExpression<EqualsToken> & {
+                        readonly left: Identifier;
+                        readonly right: ThisExpression;
+                    };
+                },
+            ];
     };
 };
 
@@ -86,7 +87,7 @@ export function isClassThisAssignmentBlock(node: Node): node is ClassThisAssignm
  * `_classThis` (or similar) variable.
  * @internal
  */
-export function classHasClassThisAssignment(node: ClassLikeDeclaration) {
+export function classHasClassThisAssignment(node: ClassLikeDeclaration): boolean {
     return !!node.emitNode?.classThis && some(node.members, isClassThisAssignmentBlock);
 }
 
@@ -99,11 +100,8 @@ export function classHasClassThisAssignment(node: ClassLikeDeclaration) {
  * expression that has already had its `EmitFlags` set or may have been tracked to prevent substitution.
  * @internal
  */
-export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(factory: NodeFactory, node: T,
-    classThis: Identifier, thisExpression?: ThisExpression): Extract<ClassLikeDeclaration, Pick<T, "kind">>;
-export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(factory: NodeFactory, node: T,
-    classThis: Identifier, thisExpression?: ThisExpression) {
-
+export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(factory: NodeFactory, node: T, classThis: Identifier, thisExpression?: ThisExpression): Extract<ClassLikeDeclaration, Pick<T, "kind">>;
+export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(factory: NodeFactory, node: T, classThis: Identifier, thisExpression?: ThisExpression) {
     // given:
     //
     //  class C {
@@ -134,14 +132,16 @@ export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaratio
             node.name,
             node.typeParameters,
             node.heritageClauses,
-            members) :
+            members,
+        ) :
         factory.updateClassExpression(
             node,
             node.modifiers,
             node.name,
             node.typeParameters,
             node.heritageClauses,
-            members);
+            members,
+        );
 
     getOrCreateEmitNode(updatedNode).classThis = classThis;
     return updatedNode;

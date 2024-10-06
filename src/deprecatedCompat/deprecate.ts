@@ -5,11 +5,11 @@ import {
     noop,
     Version,
     version,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export let enableDeprecationWarnings = true;
 
-export function setEnableDeprecationWarnings(value: boolean) {
+export function setEnableDeprecationWarnings(value: boolean): void {
     enableDeprecationWarnings = value;
 }
 
@@ -24,7 +24,7 @@ function formatDeprecationMessage(name: string, error: boolean | undefined, erro
     deprecationMessage += `'${name}' `;
     deprecationMessage += since ? `has been deprecated since v${since}` : "is deprecated";
     deprecationMessage += error ? " and can no longer be used." : errorAfter ? ` and will no longer be usable after v${errorAfter}.` : ".";
-    deprecationMessage += message ? ` ${formatStringFromArgs(message, [name], 0)}` : "";
+    deprecationMessage += message ? ` ${formatStringFromArgs(message, [name])}` : "";
     return deprecationMessage;
 }
 
@@ -45,7 +45,7 @@ function createWarningDeprecation(name: string, errorAfter: Version | undefined,
     };
 }
 
-export function createDeprecation(name: string, options: DeprecationOptions & { error: true }): () => never;
+export function createDeprecation(name: string, options: DeprecationOptions & { error: true; }): () => never;
 export function createDeprecation(name: string, options?: DeprecationOptions): () => void;
 export function createDeprecation(name: string, options: DeprecationOptions = {}) {
     const version = typeof options.typeScriptVersion === "string" ? new Version(options.typeScriptVersion) : options.typeScriptVersion ?? getTypeScriptVersion();
@@ -62,6 +62,7 @@ export function createDeprecation(name: string, options: DeprecationOptions = {}
 function wrapFunction<F extends (...args: any[]) => any>(deprecation: () => void, func: F): F {
     return function (this: unknown) {
         deprecation();
+        // eslint-disable-next-line prefer-rest-params
         return func.apply(this, arguments);
     } as F;
 }

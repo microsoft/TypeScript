@@ -36,7 +36,7 @@ import {
     visitNode,
     visitNodes,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformES2020(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
@@ -151,11 +151,15 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
 
     function visitNonOptionalExpression(node: Expression, captureThisArg: boolean, isDelete: boolean): Expression {
         switch (node.kind) {
-            case SyntaxKind.ParenthesizedExpression: return visitNonOptionalParenthesizedExpression(node as ParenthesizedExpression, captureThisArg, isDelete);
+            case SyntaxKind.ParenthesizedExpression:
+                return visitNonOptionalParenthesizedExpression(node as ParenthesizedExpression, captureThisArg, isDelete);
             case SyntaxKind.PropertyAccessExpression:
-            case SyntaxKind.ElementAccessExpression: return visitNonOptionalPropertyOrElementAccessExpression(node as AccessExpression, captureThisArg, isDelete);
-            case SyntaxKind.CallExpression: return visitNonOptionalCallExpression(node as CallExpression, captureThisArg);
-            default: return visitNode(node, visitor, isExpression);
+            case SyntaxKind.ElementAccessExpression:
+                return visitNonOptionalPropertyOrElementAccessExpression(node as AccessExpression, captureThisArg, isDelete);
+            case SyntaxKind.CallExpression:
+                return visitNonOptionalCallExpression(node as CallExpression, captureThisArg);
+            default:
+                return visitNode(node, visitor, isExpression);
         }
     }
 
@@ -198,14 +202,14 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
                         rightExpression = factory.createFunctionCallCall(
                             rightExpression,
                             leftThisArg.kind === SyntaxKind.SuperKeyword ? factory.createThis() : leftThisArg,
-                            visitNodes(segment.arguments, visitor, isExpression)
+                            visitNodes(segment.arguments, visitor, isExpression),
                         );
                     }
                     else {
                         rightExpression = factory.createCallExpression(
                             rightExpression,
                             /*typeArguments*/ undefined,
-                            visitNodes(segment.arguments, visitor, isExpression)
+                            visitNodes(segment.arguments, visitor, isExpression),
                         );
                     }
                     break;
@@ -225,14 +229,14 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
             factory.createBinaryExpression(
                 left,
                 factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
-                factory.createNull()
+                factory.createNull(),
             ),
             factory.createToken(invert ? SyntaxKind.BarBarToken : SyntaxKind.AmpersandAmpersandToken),
             factory.createBinaryExpression(
                 right,
                 factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
-                factory.createVoidZero()
-            )
+                factory.createVoidZero(),
+            ),
         );
     }
 
@@ -243,13 +247,16 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
             right = factory.createTempVariable(hoistVariableDeclaration);
             left = factory.createAssignment(right, left);
         }
-        return setTextRange(factory.createConditionalExpression(
-            createNotNullCondition(left, right),
-            /*questionToken*/ undefined,
-            right,
-            /*colonToken*/ undefined,
-            visitNode(node.right, visitor, isExpression),
-        ), node);
+        return setTextRange(
+            factory.createConditionalExpression(
+                createNotNullCondition(left, right),
+                /*questionToken*/ undefined,
+                right,
+                /*colonToken*/ undefined,
+                visitNode(node.right, visitor, isExpression),
+            ),
+            node,
+        );
     }
 
     function visitDeleteExpression(node: DeleteExpression) {

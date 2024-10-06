@@ -1,0 +1,22 @@
+bad.ts(1,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+bad.ts(1,10): error TS1484: 'FC' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+bad.ts(1,10): error TS2865: Import 'FC' conflicts with local value, so must be declared with a type-only import when 'isolatedModules' is enabled.
+
+
+==== types.ts (0 errors) ====
+    export type FC = () => void;
+    
+==== bad.ts (3 errors) ====
+    import { FC } from "./types";
+             ~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+             ~~
+!!! error TS1484: 'FC' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+             ~~
+!!! error TS2865: Import 'FC' conflicts with local value, so must be declared with a type-only import when 'isolatedModules' is enabled.
+    let FC: FC | null = null;
+    
+==== good.ts (0 errors) ====
+    import type { FC } from "./types";
+    let FC: FC | null = null;
+    

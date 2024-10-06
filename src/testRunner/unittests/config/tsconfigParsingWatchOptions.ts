@@ -1,7 +1,8 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import { baselineParseConfig } from "./helpers";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
+import { baselineParseConfig } from "./helpers.js";
 
 describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileTextToJson", () => {
     interface VerifyWatchOptions {
@@ -14,31 +15,33 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
         baselineParseConfig({
             scenario: "tsconfigParsingWatchOptions",
             subScenario,
-            input: () => scenario().map(({ json, additionalFiles, existingWatchOptions }) => {
-                const jsonText = JSON.stringify(json, undefined, " ");
-                return {
-                    createHost: () => new fakes.ParseConfigHost(
-                        new vfs.FileSystem(
-                            /*ignoreCase*/ false,
-                            {
-                                cwd: "/",
-                                files: {
-                                    "/a.ts": "",
-                                    ...additionalFiles,
-                                    "/tsconfig.json": jsonText,
-                                }
-                            }
-                        )
-                    ),
-                    jsonText,
-                    configFileName: "tsconfig.json",
-                    existingWatchOptions,
-                    baselineParsed: (baseline, parsed) => {
-                        baseline.push(`Result: WatchOptions::`);
-                        baseline.push(JSON.stringify(parsed.watchOptions, undefined, " "));
-                    },
-                };
-            }),
+            input: () =>
+                scenario().map(({ json, additionalFiles, existingWatchOptions }) => {
+                    const jsonText = jsonToReadableText(json);
+                    return {
+                        createHost: () =>
+                            new fakes.ParseConfigHost(
+                                new vfs.FileSystem(
+                                    /*ignoreCase*/ false,
+                                    {
+                                        cwd: "/",
+                                        files: {
+                                            "/a.ts": "",
+                                            ...additionalFiles,
+                                            "/tsconfig.json": jsonText,
+                                        },
+                                    },
+                                ),
+                            ),
+                        jsonText,
+                        configFileName: "tsconfig.json",
+                        existingWatchOptions,
+                        baselineParsed: (baseline, parsed) => {
+                            baseline.push(`Result: WatchOptions::`);
+                            baseline.push(jsonToReadableText(parsed.watchOptions));
+                        },
+                    };
+                }),
         });
     }
 
@@ -54,14 +57,14 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
         {
             json: {
                 extends: "./base.json",
-                watchOptions: { watchFile: "UseFsEvents" }
+                watchOptions: { watchFile: "UseFsEvents" },
             },
-            additionalFiles: { "/base.json": "{}" }
+            additionalFiles: { "/base.json": "{}" },
         },
         {
-            json: { extends: "./base.json", },
-            additionalFiles: { "/base.json": "{}" }
-        }
+            json: { extends: "./base.json" },
+            additionalFiles: { "/base.json": "{}" },
+        },
     ]);
 
     verifyWatchOptions("when extending config file with watchOptions", () => [
@@ -70,30 +73,42 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
                 extends: "./base.json",
                 watchOptions: {
                     watchFile: "UseFsEvents",
-                }
+                },
             },
             additionalFiles: {
-                "/base.json": JSON.stringify({
+                "/base.json": jsonToReadableText({
                     watchOptions: {
                         watchFile: "UseFsEventsOnParentDirectory",
-                        watchDirectory: "FixedPollingInterval"
-                    }
-                })
-            }
+                        watchDirectory: "FixedPollingInterval",
+                    },
+                }),
+            },
         },
         {
             json: {
                 extends: "./base.json",
             },
             additionalFiles: {
-                "/base.json": JSON.stringify({
+                "/base.json": jsonToReadableText({
                     watchOptions: {
                         watchFile: "UseFsEventsOnParentDirectory",
-                        watchDirectory: "FixedPollingInterval"
-                    }
-                })
-            }
-        }
+                        watchDirectory: "FixedPollingInterval",
+                    },
+                }),
+            },
+        },
+        {
+            json: {
+                extends: "./base/tsconfig.json",
+            },
+            additionalFiles: {
+                "/base/tsconfig.json": jsonToReadableText({
+                    watchOptions: {
+                        excludeFiles: ["${configDir}/temp/*.ts"], // eslint-disable-line no-template-curly-in-string
+                    },
+                }),
+            },
+        },
     ]);
 
     verifyWatchOptions("different options", () => [

@@ -1,39 +1,36 @@
-import * as ts from "../../../_namespaces/ts";
+import * as ts from "../../../_namespaces/ts.js";
+import { jsonToReadableText } from "../../helpers.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     createSessionWithCustomEventHandler,
     openFilesForSession,
     TestSession,
-} from "../../helpers/tsserver";
+} from "../../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
     TestServerHost,
-} from "../../helpers/virtualFileSystemWithWatch";
+} from "../../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
+describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
     function verifyProjectsUpdatedInBackgroundEvent(scenario: string, createSession: (host: TestServerHost) => TestSession) {
         it("when adding new file", () => {
             const commonFile1: File = {
                 path: "/users/username/projects/project/file1.ts",
-                content: "export var x = 10;"
+                content: "export var x = 10;",
             };
             const commonFile2: File = {
                 path: "/users/username/projects/project/file2.ts",
-                content: "export var y = 10;"
+                content: "export var y = 10;",
             };
             const commonFile3: File = {
                 path: "/users/username/projects/project/file3.ts",
-                content: "export var z = 10;"
+                content: "export var z = 10;",
             };
             const configFile: File = {
                 path: "/users/username/projects/project/tsconfig.json",
-                content: `{}`
+                content: `{}`,
             };
-            const host = createServerHost([commonFile1, libFile, configFile]);
+            const host = TestServerHost.createServerHost([commonFile1, configFile]);
             const session = createSession(host);
             openFilesForSession([commonFile1], session);
 
@@ -45,27 +42,27 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
             baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and when adding new file`, session);
         });
 
-        describe("with --out or --outFile setting", () => {
+        describe("with --outFile setting", () => {
             function verifyEventWithOutSettings(subScenario: string, compilerOptions: ts.CompilerOptions = {}) {
                 it(subScenario, () => {
                     const config: File = {
                         path: "/users/username/projects/project/tsconfig.json",
-                        content: JSON.stringify({
-                            compilerOptions
-                        })
+                        content: jsonToReadableText({
+                            compilerOptions,
+                        }),
                     };
 
                     const f1: File = {
                         path: "/users/username/projects/project/a.ts",
-                        content: "export let x = 1"
+                        content: "export let x = 1",
                     };
                     const f2: File = {
                         path: "/users/username/projects/project/b.ts",
-                        content: "export let y = 1"
+                        content: "export let y = 1",
                     };
 
-                    const files = [f1, config, libFile];
-                    const host = createServerHost(files);
+                    const files = [f1, config];
+                    const host = TestServerHost.createServerHost(files);
                     const session = createSession(host);
                     openFilesForSession([f1], session);
 
@@ -78,7 +75,6 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 });
             }
             verifyEventWithOutSettings("when both options are not set");
-            verifyEventWithOutSettings("when --out is set", { out: "/a/out.js" });
             verifyEventWithOutSettings("when --outFile is set", { outFile: "/a/out.js" });
         });
 
@@ -117,19 +113,19 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 const globalFile3: File = {
                     path: "/users/username/projects/project/globalFile3.ts",
-                    content: `interface GlobalFoo { age: number }`
+                    content: `interface GlobalFoo { age: number }`,
                 };
 
                 const additionalFiles = getAdditionalFileOrFolder ? getAdditionalFileOrFolder() : [];
                 const configFile = {
                     path: configFilePath,
-                    content: JSON.stringify(configObj || { compilerOptions: {} })
+                    content: jsonToReadableText(configObj || { compilerOptions: {} }),
                 };
 
-                const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, libFile, configFile];
+                const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, configFile];
 
                 const filesToReload = firstReloadFileList?.map(fileName => ts.find(files, file => file.path === fileName)!) || files;
-                const host = createServerHost([filesToReload[0], configFile]);
+                const host = TestServerHost.createServerHost([filesToReload[0], configFile]);
 
                 // Initial project creation
                 const session = createSession(host);
@@ -140,8 +136,14 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 if (!firstReloadFileList) host.runQueuedTimeoutCallbacks(); // Invalidated module resolutions to schedule project update
 
                 return {
-                    host, session,
-                    moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile,
+                    host,
+                    session,
+                    moduleFile1,
+                    file1Consumer1,
+                    file1Consumer2,
+                    moduleFile2,
+                    globalFile3,
+                    configFile,
                     updateContentOfOpenFile,
                 };
 
@@ -154,8 +156,8 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                             endLine: 1,
                             endOffset: file.content.length,
                             line: 1,
-                            offset: 1
-                        }
+                            offset: 1,
+                        },
                     });
                     file.content = newContent;
                 }
@@ -216,7 +218,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
             });
 
             it("should be up-to-date with newly created files", () => {
-                const { host, moduleFile1, session, } = getInitialState();
+                const { host, moduleFile1, session } = getInitialState();
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                 host.writeFile("/users/username/projects/project/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
@@ -248,7 +250,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
             it("should always return the file itself if '--isolatedModules' is specified", () => {
                 const { host, moduleFile1, session } = getInitialState({
-                    configObj: { compilerOptions: { isolatedModules: true } }
+                    configObj: { compilerOptions: { isolatedModules: true } },
                 });
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
@@ -259,7 +261,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
             it("should always return the file itself if '--out' or '--outFile' is specified", () => {
                 const outFilePath = "/users/username/projects/project/out.js";
                 const { host, moduleFile1, session } = getInitialState({
-                    configObj: { compilerOptions: { module: "system", outFile: outFilePath } }
+                    configObj: { compilerOptions: { module: "system", outFile: outFilePath } },
                 });
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
@@ -270,10 +272,10 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
             it("should return cascaded affected file list", () => {
                 const file1Consumer1Consumer1: File = {
                     path: "/users/username/projects/project/file1Consumer1Consumer1.ts",
-                    content: `import {y} from "./file1Consumer1";`
+                    content: `import {y} from "./file1Consumer1";`,
                 };
                 const { host, moduleFile1, file1Consumer1, updateContentOfOpenFile, session } = getInitialState({
-                    getAdditionalFileOrFolder: () => [file1Consumer1Consumer1]
+                    getAdditionalFileOrFolder: () => [file1Consumer1Consumer1],
                 });
 
                 updateContentOfOpenFile(file1Consumer1, file1Consumer1.content + "export var T: number;");
@@ -295,17 +297,17 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     path: "/users/username/projects/project/file1.ts",
                     content: `
                     /// <reference path="./file2.ts" />
-                    export var t1 = 10;`
+                    export var t1 = 10;`,
                 };
                 const file2: File = {
                     path: "/users/username/projects/project/file2.ts",
                     content: `
                     /// <reference path="./file1.ts" />
-                    export var t2 = 10;`
+                    export var t2 = 10;`,
                 };
                 const { host, session } = getInitialState({
                     getAdditionalFileOrFolder: () => [file1, file2],
-                    firstReloadFileList: [file1.path, libFile.path, file2.path, configFilePath]
+                    firstReloadFileList: [file1.path, file2.path, configFilePath],
                 });
 
                 host.writeFile(file2.path, file2.content + "export var t3 = 10;");
@@ -318,11 +320,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     path: "/users/username/projects/project/referenceFile1.ts",
                     content: `
                     /// <reference path="./moduleFile1.ts" />
-                    export var x = Foo();`
+                    export var x = Foo();`,
                 };
                 const { host, session } = getInitialState({
                     getAdditionalFileOrFolder: () => [referenceFile1],
-                    firstReloadFileList: [referenceFile1.path, libFile.path, moduleFile1Path, configFilePath]
+                    firstReloadFileList: [referenceFile1.path, moduleFile1Path, configFilePath],
                 });
 
                 host.deleteFile(moduleFile1Path);
@@ -335,11 +337,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     path: "/users/username/projects/project/referenceFile1.ts",
                     content: `
                     /// <reference path="./moduleFile2.ts" />
-                    export var x = Foo();`
+                    export var x = Foo();`,
                 };
                 const { host, moduleFile2, updateContentOfOpenFile, session } = getInitialState({
                     getAdditionalFileOrFolder: () => [referenceFile1],
-                    firstReloadFileList: [referenceFile1.path, libFile.path, configFilePath]
+                    firstReloadFileList: [referenceFile1.path, configFilePath],
                 });
 
                 updateContentOfOpenFile(referenceFile1, referenceFile1.content + "export var yy = Foo();");
@@ -353,27 +355,31 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
         });
 
         describe("resolution when resolution cache size", () => {
-            function verifyWithMaxCacheLimit(subScenario: string, useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
+            function verifyWithMaxCacheLimit(subScenario: string, atRoot: boolean) {
                 it(subScenario, () => {
-                    const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/" : "/";
+                    const rootFolder = atRoot ? "/" : "/user/username/rootfolder/otherfolder/";
                     const file1: File = {
                         path: rootFolder + "a/b/project/file1.ts",
-                        content: 'import a from "file2"'
+                        content: 'import a from "file2"',
+                        watchableExempt: atRoot,
                     };
                     const file2: File = {
                         path: rootFolder + "a/b/node_modules/file2.d.ts",
-                        content: "export class a { }"
+                        content: "export class a { }",
+                        watchableExempt: atRoot,
                     };
                     const file3: File = {
                         path: rootFolder + "a/b/project/file3.ts",
-                        content: "export class c { }"
+                        content: "export class c { }",
+                        watchableExempt: atRoot,
                     };
                     const configFile: File = {
                         path: rootFolder + "a/b/project/tsconfig.json",
-                        content: JSON.stringify({ compilerOptions: { typeRoots: [] } })
+                        content: jsonToReadableText({ compilerOptions: { typeRoots: [] } }),
+                        watchableExempt: atRoot,
                     };
 
-                    const host = createServerHost([file1, file3, libFile, configFile]);
+                    const host = TestServerHost.createServerHost([file1, file3, configFile]);
                     const session = createSession(host);
                     openFilesForSession([file1], session);
 
@@ -388,8 +394,8 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and ${subScenario}`, session);
                 });
             }
-            verifyWithMaxCacheLimit("project is not at root level", /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
-            verifyWithMaxCacheLimit("project is at root level", /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
+            verifyWithMaxCacheLimit("project is not at root level", /*atRoot*/ false);
+            verifyWithMaxCacheLimit("project is at root level", /*atRoot*/ true);
         });
     }
 
@@ -399,18 +405,15 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
     describe("when event handler is not set but session is created with canUseEvents = true", () => {
         describe("without noGetErrOnBackgroundUpdate, diagnostics for open files are queued", () => {
-            verifyProjectsUpdatedInBackgroundEvent("without noGetErrOnBackgroundUpdate", host => createSession(host, {
-                canUseEvents: true,
-                logger: createLoggerWithInMemoryLogs(host)
-            }));
+            verifyProjectsUpdatedInBackgroundEvent("without noGetErrOnBackgroundUpdate", host =>
+                new TestSession({
+                    host,
+                    noGetErrOnBackgroundUpdate: false,
+                }));
         });
 
         describe("with noGetErrOnBackgroundUpdate, diagnostics for open file are not queued", () => {
-            verifyProjectsUpdatedInBackgroundEvent("with noGetErrOnBackgroundUpdate", host => createSession(host, {
-                canUseEvents: true,
-                logger: createLoggerWithInMemoryLogs(host),
-                noGetErrOnBackgroundUpdate: true
-            }));
+            verifyProjectsUpdatedInBackgroundEvent("with noGetErrOnBackgroundUpdate", host => new TestSession(host));
         });
     });
 });

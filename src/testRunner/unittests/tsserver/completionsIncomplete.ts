@@ -1,14 +1,13 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 function createExportingModuleFile(path: string, exportPrefix: string, exportCount: number): File {
     return {
@@ -18,23 +17,25 @@ function createExportingModuleFile(path: string, exportPrefix: string, exportCou
 }
 
 function createExportingModuleFiles(pathPrefix: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
-    return ts.arrayOf(fileCount, fileIndex => createExportingModuleFile(
-        `${pathPrefix}_${fileIndex}.ts`,
-        getExportPrefix(fileIndex),
-        exportCount));
+    return ts.arrayOf(fileCount, fileIndex =>
+        createExportingModuleFile(
+            `${pathPrefix}_${fileIndex}.ts`,
+            getExportPrefix(fileIndex),
+            exportCount,
+        ));
 }
 
 function createNodeModulesPackage(packageName: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
-    const exportingFiles = createExportingModuleFiles(`/node_modules/${packageName}/file`, fileCount, exportCount, getExportPrefix);
+    const exportingFiles = createExportingModuleFiles(`/home/src/project/project/node_modules/${packageName}/file`, fileCount, exportCount, getExportPrefix);
     return [
         {
-            path: `/node_modules/${packageName}/package.json`,
+            path: `/home/src/project/project/node_modules/${packageName}/package.json`,
             content: `{ "types": "index.d.ts" }`,
         },
         {
-            path: `/node_modules/${packageName}/index.d.ts`,
+            path: `/home/src/project/project/node_modules/${packageName}/index.d.ts`,
             content: exportingFiles
-                .map(f => `export * from "./${ts.removeFileExtension(ts.convertToRelativePath(f.path, `/node_modules/${packageName}/`, ts.identity))}";`)
+                .map(f => `export * from "./${ts.removeFileExtension(ts.convertToRelativePath(f.path, `/home/src/project/project/node_modules/${packageName}/`, ts.identity))}";`)
                 .join("\n") + `\nexport default function main(): void;`,
         },
         ...exportingFiles,
@@ -42,24 +43,24 @@ function createNodeModulesPackage(packageName: string, fileCount: number, export
 }
 
 const indexFile: File = {
-    path: "/index.ts",
-    content: ""
+    path: "/home/src/project/project/index.ts",
+    content: "",
 };
 
 const tsconfigFile: File = {
-    path: "/tsconfig.json",
-    content: `{ "compilerOptions": { "module": "commonjs" } }`
+    path: "/home/src/project/project/tsconfig.json",
+    content: `{ "compilerOptions": { "module": "commonjs" } }`,
 };
 
 const packageJsonFile: File = {
-    path: "/package.json",
+    path: "/home/src/project/project/package.json",
     content: `{ "dependencies": { "dep-a": "*" } }`,
 };
 
-describe("unittests:: tsserver:: completionsIncomplete", () => {
+describe("unittests:: tsserver:: completionsIncomplete::", () => {
     it("works", () => {
         const excessFileCount = ts.Completions.moduleSpecifierResolutionLimit + 50;
-        const exportingFiles = createExportingModuleFiles(`/lib/a`, ts.Completions.moduleSpecifierResolutionLimit + excessFileCount, 1, i => `aa_${i}_`);
+        const exportingFiles = createExportingModuleFiles(`/home/src/project/project/lib/a`, ts.Completions.moduleSpecifierResolutionLimit + excessFileCount, 1, i => `aa_${i}_`);
         const { typeToTriggerCompletions, session } = setup([tsconfigFile, indexFile, ...exportingFiles]);
         openFilesForSession([indexFile], session);
 
@@ -82,7 +83,7 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
     });
 
     it("resolves more when available from module specifier cache (1)", () => {
-        const exportingFiles = createExportingModuleFiles(`/lib/a`, 50, 50, i => `aa_${i}_`);
+        const exportingFiles = createExportingModuleFiles(`/home/src/project/project/lib/a`, 50, 50, i => `aa_${i}_`);
         const { typeToTriggerCompletions, session } = setup([tsconfigFile, indexFile, ...exportingFiles]);
         openFilesForSession([indexFile], session);
 
@@ -94,7 +95,7 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
 
     it("resolves more when available from module specifier cache (2)", () => {
         const excessFileCount = 50;
-        const exportingFiles = createExportingModuleFiles(`/lib/a`, ts.Completions.moduleSpecifierResolutionLimit + excessFileCount, 1, i => `aa_${i}_`);
+        const exportingFiles = createExportingModuleFiles(`/home/src/project/project/lib/a`, ts.Completions.moduleSpecifierResolutionLimit + excessFileCount, 1, i => `aa_${i}_`);
         const { typeToTriggerCompletions, session } = setup([tsconfigFile, indexFile, ...exportingFiles]);
         openFilesForSession([indexFile], session);
 
@@ -106,11 +107,11 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
 
     it("ambient module specifier resolutions do not count against the resolution limit", () => {
         const ambientFiles = ts.arrayOf(100, (i): File => ({
-            path: `/lib/ambient_${i}.ts`,
+            path: `/home/src/project/project/lib/ambient_${i}.ts`,
             content: `declare module "ambient_${i}" { export const aa_${i} = ${i}; }`,
         }));
 
-        const exportingFiles = createExportingModuleFiles(`/lib/a`, ts.Completions.moduleSpecifierResolutionLimit, 5, i => `aa_${i}_`);
+        const exportingFiles = createExportingModuleFiles(`/home/src/project/project/lib/a`, ts.Completions.moduleSpecifierResolutionLimit, 5, i => `aa_${i}_`);
         const { typeToTriggerCompletions, session } = setup([tsconfigFile, indexFile, ...ambientFiles, ...exportingFiles]);
         openFilesForSession([indexFile], session);
 
@@ -122,7 +123,7 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
     });
 
     it("works with PackageJsonAutoImportProvider", () => {
-        const exportingFiles = createExportingModuleFiles(`/lib/a`, ts.Completions.moduleSpecifierResolutionLimit, 1, i => `aa_${i}_`);
+        const exportingFiles = createExportingModuleFiles(`/home/src/project/project/lib/a`, ts.Completions.moduleSpecifierResolutionLimit, 1, i => `aa_${i}_`);
         const nodeModulesPackage = createNodeModulesPackage("dep-a", 50, 1, i => `depA_${i}_`);
         const { typeToTriggerCompletions, assertCompletionDetailsOk, session } = setup([tsconfigFile, packageJsonFile, indexFile, ...exportingFiles, ...nodeModulesPackage]);
         openFilesForSession([indexFile], session);
@@ -133,20 +134,21 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
                 assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a")), 50);
                 assertCompletionDetailsOk(
                     indexFile.path,
-                    completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!);
+                    completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!,
+                );
             });
         baselineTsserverLogs("completionsIncomplete", "works with PackageJsonAutoImportProvider", session);
     });
 
     it("works for transient symbols between requests", () => {
         const constantsDts: File = {
-            path: "/lib/foo/constants.d.ts",
+            path: "/home/src/project/project/lib/foo/constants.d.ts",
             content: `
                     type Signals = "SIGINT" | "SIGABRT";
                     declare const exp: {} & { [K in Signals]: K };
                     export = exp;`,
         };
-        const exportingFiles = createExportingModuleFiles("/lib/a", ts.Completions.moduleSpecifierResolutionLimit, 1, i => `S${i}`);
+        const exportingFiles = createExportingModuleFiles("/home/src/project/project/lib/a", ts.Completions.moduleSpecifierResolutionLimit, 1, i => `S${i}`);
         const { typeToTriggerCompletions, session } = setup([tsconfigFile, indexFile, ...exportingFiles, constantsDts]);
         openFilesForSession([indexFile], session);
 
@@ -164,8 +166,8 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
 });
 
 function setup(files: File[]) {
-    const host = createServerHost(files);
-    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+    const host = TestServerHost.createServerHost(files);
+    const session = new TestSession(host);
     const projectService = session.getProjectService();
     session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
         command: ts.server.protocol.CommandTypes.Configure,
@@ -176,8 +178,8 @@ function setup(files: File[]) {
                 includeCompletionsWithInsertText: true,
                 includeCompletionsForImportStatements: true,
                 includePackageJsonAutoImports: "auto",
-            }
-        }
+            },
+        },
     });
 
     return { host, session, projectService, typeToTriggerCompletions, assertCompletionDetailsOk };
@@ -213,7 +215,7 @@ function setup(files: File[]) {
                     triggerKind: isIncompleteContinuation
                         ? ts.server.protocol.CompletionTriggerKind.TriggerForIncompleteCompletions
                         : undefined,
-                }
+                },
             }).response as ts.server.protocol.CompletionInfo;
 
             cb?.(ts.Debug.checkDefined(response));
@@ -268,8 +270,8 @@ function setup(files: File[]) {
                     name: entry.name,
                     source: entry.source,
                     data: entry.data,
-                }]
-            }
+                }],
+            },
         }).response as ts.server.protocol.CompletionEntryDetails[];
 
         assert(details[0]);

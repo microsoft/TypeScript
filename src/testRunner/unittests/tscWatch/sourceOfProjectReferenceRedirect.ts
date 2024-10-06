@@ -1,34 +1,32 @@
-import * as ts from "../../_namespaces/ts";
-import { libContent } from "../helpers/contents";
-import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { createBaseline } from "../helpers/baseline.js";
+import { getSysForDemoProjectReferences } from "../helpers/demoProjectReferences.js";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder.js";
 import {
-    createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
     runWatchBaseline,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
-    FileOrFolderOrSymLink,
-    getTsBuildProjectFile,
-    libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedirect", () => {
+describe("unittests:: tscWatch:: watchAPI:: with sourceOfProjectReferenceRedirect::", () => {
     interface VerifyWatchInput {
-        files: readonly FileOrFolderOrSymLink[];
+        getSys: () => TestServerHost;
         config: string;
         subScenario: string;
     }
 
-    function verifyWatch({ files, config, subScenario }: VerifyWatchInput, alreadyBuilt: boolean) {
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(
-            createWatchedSystem(files),
+    function verifyWatch({ getSys, config, subScenario }: VerifyWatchInput, alreadyBuilt: boolean) {
+        const { sys, baseline, cb, getPrograms } = createBaseline(
+            getSys(),
             alreadyBuilt ? (sys, originalRead) => {
-                solutionBuildWithBaseline(sys, [config], originalRead);
+                solutionBuildWithBaseline(sys, [config], /*buildOptions*/ undefined, /*versionToWrite*/ undefined, originalRead);
                 sys.clearOutput();
-            } : undefined
+            } : undefined,
         );
         const host = createWatchCompilerHostOfConfigFileForBaseline({
             configFileName: config,
@@ -43,49 +41,42 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             commandLineArgs: ["--w", "--p", config],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
-            watchOrSolution: watch
+            watchOrSolution: watch,
+            useSourceOfProjectReferenceRedirect: ts.returnTrue,
         });
     }
 
-    function verifyScenario(input: () => VerifyWatchInput) {
+    function verifyScenario(input: VerifyWatchInput) {
         it("when solution is not built", () => {
-            verifyWatch(input(), /*alreadyBuilt*/ false);
+            verifyWatch(input, /*alreadyBuilt*/ false);
         });
 
         it("when solution is already built", () => {
-            verifyWatch(input(), /*alreadyBuilt*/ true);
+            verifyWatch(input, /*alreadyBuilt*/ true);
         });
     }
 
     describe("with simple project", () => {
-        verifyScenario(() => {
-            const baseConfig = getTsBuildProjectFile("demo", "tsconfig-base.json");
-            const coreTs = getTsBuildProjectFile("demo", "core/utilities.ts");
-            const coreConfig = getTsBuildProjectFile("demo", "core/tsconfig.json");
-            const animalTs = getTsBuildProjectFile("demo", "animals/animal.ts");
-            const dogTs = getTsBuildProjectFile("demo", "animals/dog.ts");
-            const indexTs = getTsBuildProjectFile("demo", "animals/index.ts");
-            const animalsConfig = getTsBuildProjectFile("demo", "animals/tsconfig.json");
-            return {
-                files: [{ path: libFile.path, content: libContent }, baseConfig, coreTs, coreConfig, animalTs, dogTs, indexTs, animalsConfig],
-                config: animalsConfig.path,
-                subScenario: "with simple project"
-            };
+        verifyScenario({
+            getSys: getSysForDemoProjectReferences,
+            config: "/user/username/projects/demo/animals/tsconfig.json",
+            subScenario: "with simple project",
         });
     });
 
     describe("when references are monorepo like with symlinks", () => {
         interface Packages {
-            bPackageJson: File;
-            aTest: File;
-            bFoo: File;
-            bBar: File;
-            bSymlink: SymLink;
+            files: () => {
+                bPackageJson: File;
+                aTest: File;
+                bFoo: File;
+                bBar: File;
+                bSymlink: SymLink;
+            };
             subScenario: string;
         }
-        function verifySymlinkScenario(packages: () => Packages) {
+        function verifySymlinkScenario(packages: Packages) {
             describe("when preserveSymlinks is turned off", () => {
                 verifySymlinkScenarioWorker(packages, {});
             });
@@ -94,86 +85,105 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             });
         }
 
-        function verifySymlinkScenarioWorker(packages: () => Packages, extraOptions: ts.CompilerOptions) {
-            verifyScenario(() => {
-                const { bPackageJson, aTest, bFoo, bBar, bSymlink, subScenario } = packages();
-                const aConfig = config("A", extraOptions, ["../B"]);
-                const bConfig = config("B", extraOptions);
-                return {
-                    files: [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink],
-                    config: aConfig.path,
-                    subScenario: `${subScenario}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`
-                };
+        function verifySymlinkScenarioWorker(packages: Packages, extraOptions: ts.CompilerOptions) {
+            verifyScenario({
+                getSys: () => {
+                    const { bPackageJson, aTest, bFoo, bBar, bSymlink } = packages.files();
+                    const aConfig = config("A", extraOptions, ["../B"]);
+                    const bConfig = config("B", extraOptions);
+                    return TestServerHost.createWatchedSystem(
+                        [bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink],
+                        { currentDirectory: "/user/username/projects/myproject" },
+                    );
+                },
+                config: configPath("A"),
+                subScenario: `${packages.subScenario}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`,
             });
+        }
+
+        function configPath(packageName: string) {
+            return `/user/username/projects/myproject/packages/${packageName}/tsconfig.json`;
         }
 
         function config(packageName: string, extraOptions: ts.CompilerOptions, references?: string[]): File {
             return {
-                path: `/user/username/projects/myproject/packages/${packageName}/tsconfig.json`,
-                content: JSON.stringify({
+                path: configPath(packageName),
+                content: jsonToReadableText({
                     compilerOptions: {
                         outDir: "lib",
                         rootDir: "src",
                         composite: true,
-                        ...extraOptions
+                        ...extraOptions,
                     },
                     include: ["src"],
-                    ...(references ? { references: references.map(path => ({ path })) } : {})
-                })
+                    ...(references ? { references: references.map(path => ({ path })) } : {}),
+                }),
             };
         }
 
         function file(packageName: string, fileName: string, content: string): File {
             return {
                 path: `/user/username/projects/myproject/packages/${packageName}/src/${fileName}`,
-                content
+                content,
             };
         }
 
         function verifyMonoRepoLike(scope = "") {
             describe("when packageJson has types field", () => {
-                verifySymlinkScenario(() => ({
-                    bPackageJson: {
-                        path: `/user/username/projects/myproject/packages/B/package.json`,
-                        content: JSON.stringify({
-                            main: "lib/index.js",
-                            types: "lib/index.d.ts"
-                        })
-                    },
-                    aTest: file("A", "index.ts", `import { foo } from '${scope}b';
+                verifySymlinkScenario({
+                    files: () => ({
+                        bPackageJson: {
+                            path: `/user/username/projects/myproject/packages/B/package.json`,
+                            content: jsonToReadableText({
+                                main: "lib/index.js",
+                                types: "lib/index.d.ts",
+                            }),
+                        },
+                        aTest: file(
+                            "A",
+                            "index.ts",
+                            `import { foo } from '${scope}b';
 import { bar } from '${scope}b/lib/bar';
 foo();
 bar();
-`),
-                    bFoo: file("B", "index.ts", `export function foo() { }`),
-                    bBar: file("B", "bar.ts", `export function bar() { }`),
-                    bSymlink: {
-                        path: `/user/username/projects/myproject/node_modules/${scope}b`,
-                        symLink: `/user/username/projects/myproject/packages/B`
-                    },
-                    subScenario: `when packageJson has types field${scope ? " with scoped package" : ""}`
-                }));
+`,
+                        ),
+                        bFoo: file("B", "index.ts", `export function foo() { }`),
+                        bBar: file("B", "bar.ts", `export function bar() { }`),
+                        bSymlink: {
+                            path: `/user/username/projects/myproject/node_modules/${scope}b`,
+                            symLink: `/user/username/projects/myproject/packages/B`,
+                        },
+                    }),
+                    subScenario: `when packageJson has types field${scope ? " with scoped package" : ""}`,
+                });
             });
 
             describe("when referencing file from subFolder", () => {
-                verifySymlinkScenario(() => ({
-                    bPackageJson: {
-                        path: `/user/username/projects/myproject/packages/B/package.json`,
-                        content: "{}"
-                    },
-                    aTest: file("A", "test.ts", `import { foo } from '${scope}b/lib/foo';
+                verifySymlinkScenario({
+                    files: () => ({
+                        bPackageJson: {
+                            path: `/user/username/projects/myproject/packages/B/package.json`,
+                            content: "{}",
+                        },
+                        aTest: file(
+                            "A",
+                            "test.ts",
+                            `import { foo } from '${scope}b/lib/foo';
 import { bar } from '${scope}b/lib/bar/foo';
 foo();
 bar();
-`),
-                    bFoo: file("B", "foo.ts", `export function foo() { }`),
-                    bBar: file("B", "bar/foo.ts", `export function bar() { }`),
-                    bSymlink: {
-                        path: `/user/username/projects/myproject/node_modules/${scope}b`,
-                        symLink: `/user/username/projects/myproject/packages/B`
-                    },
-                    subScenario: `when referencing file from subFolder${scope ? " with scoped package" : ""}`
-                }));
+`,
+                        ),
+                        bFoo: file("B", "foo.ts", `export function foo() { }`),
+                        bBar: file("B", "bar/foo.ts", `export function bar() { }`),
+                        bSymlink: {
+                            path: `/user/username/projects/myproject/node_modules/${scope}b`,
+                            symLink: `/user/username/projects/myproject/packages/B`,
+                        },
+                    }),
+                    subScenario: `when referencing file from subFolder${scope ? " with scoped package" : ""}`,
+                });
             });
         }
         describe("when package is not scoped", () => {

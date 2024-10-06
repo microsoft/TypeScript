@@ -8,6 +8,7 @@ var x;
 /** @returns trailing @link tag {@link */
 function f() {
 >f : () => any
+>  : ^^^^^^^^^
 
     return x
 >x : any

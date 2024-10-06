@@ -1,0 +1,99 @@
+// === Inlay Hints ===
+    foo(...x, 3);
+        ^
+{
+  "text": "a:",
+  "position": 113,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    foo(...x, 3);
+              ^
+{
+  "text": "c:",
+  "position": 119,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    foo(...x, 1, 2, 3);
+              ^
+{
+  "text": "a:",
+  "position": 165,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    foo(...x, 1, 2, 3);
+                 ^
+{
+  "text": "b:",
+  "position": 168,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    foo(...x, 1, 2, 3);
+                    ^
+{
+  "text": "c:",
+  "position": 171,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    foo(1, ...x);
+        ^
+{
+  "text": "a:",
+  "position": 226,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    foo(1, ...x);
+           ^
+{
+  "text": "b:",
+  "position": 229,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    foo(...x, 3);
+        ^
+{
+  "text": "a:",
+  "position": 287,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    foo(...x, 3);
+              ^
+{
+  "text": "b:",
+  "position": 293,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    foo(...x, 3);
+        ^
+{
+  "text": "a:",
+  "position": 347,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    foo(...x, 3);
+              ^
+{
+  "text": "c:",
+  "position": 353,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

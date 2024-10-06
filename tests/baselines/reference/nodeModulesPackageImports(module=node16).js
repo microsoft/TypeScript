@@ -72,9 +72,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-var cjs = __importStar(require("#cjs"));
-var mjs = __importStar(require("#mjs"));
-var type = __importStar(require("#type"));
+const cjs = __importStar(require("#cjs"));
+const mjs = __importStar(require("#mjs"));
+const type = __importStar(require("#type"));
 cjs;
 mjs;
 type;

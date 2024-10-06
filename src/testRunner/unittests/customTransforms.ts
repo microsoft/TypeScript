@@ -1,22 +1,22 @@
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
 
 describe("unittests:: customTransforms", () => {
-    function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: ts.CustomTransformers, options: ts.CompilerOptions = {}) {
+    function emitsCorrectly(name: string, sources: { file: string; text: string; }[], customTransformers: ts.CustomTransformers, options: ts.CompilerOptions = {}) {
         it(name, () => {
             const roots = sources.map(source => ts.createSourceFile(source.file, source.text, ts.ScriptTarget.ES2015));
             const fileMap = ts.arrayToMap(roots, file => file.fileName);
             const outputs = new Map<string, string>();
             const host: ts.CompilerHost = {
-                getSourceFile: (fileName) => fileMap.get(fileName),
+                getSourceFile: fileName => fileMap.get(fileName),
                 getDefaultLibFileName: () => "lib.d.ts",
                 getCurrentDirectory: () => "",
                 getDirectories: () => [],
-                getCanonicalFileName: (fileName) => fileName,
+                getCanonicalFileName: fileName => fileName,
                 useCaseSensitiveFileNames: () => true,
                 getNewLine: () => "\n",
-                fileExists: (fileName) => fileMap.has(fileName),
-                readFile: (fileName) => fileMap.has(fileName) ? fileMap.get(fileName)!.text : undefined,
+                fileExists: fileName => fileMap.has(fileName),
+                readFile: fileName => fileMap.has(fileName) ? fileMap.get(fileName)!.text : undefined,
                 writeFile: (fileName, text) => outputs.set(fileName, text),
             };
 
@@ -40,7 +40,7 @@ describe("unittests:: customTransforms", () => {
             enum e { }
             // leading
             function f2() { } // trailing
-            `
+            `,
     }];
 
     const before: ts.TransformerFactory<ts.SourceFile> = context => {
@@ -86,84 +86,127 @@ describe("unittests:: customTransforms", () => {
                 class B {}
                 @dec export class C { constructor(b: B) { } }
                 'change'
-            `
-    }], {before: [
-        context => node => ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
-            if (ts.isStringLiteral(node) && node.text === "change") return ts.factory.createStringLiteral("changed");
-            return ts.visitEachChild(node, visitor, context);
-        }, ts.isSourceFile)
-    ]}, {
+            `,
+    }], {
+        before: [
+            context => node =>
+                ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
+                    if (ts.isStringLiteral(node) && node.text === "change") return ts.factory.createStringLiteral("changed");
+                    return ts.visitEachChild(node, visitor, context);
+                }, ts.isSourceFile),
+        ],
+    }, {
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.ES2015,
         emitDecoratorMetadata: true,
-        experimentalDecorators: true
+        experimentalDecorators: true,
     });
 
-    emitsCorrectly("sourceMapExternalSourceFiles",
-        [
-            {
-                file: "source.ts",
-                // The text of length 'changed' is made to be on two lines so we know the line map change
-                text: `\`multi
-                    line\`
-'change'`
-            },
-        ],
+    emitsCorrectly("sourceMapExternalSourceFiles", [
         {
-            before: [
-                context => node => ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
+            file: "source.ts",
+            // The text of length 'changed' is made to be on two lines so we know the line map change
+            text: `\`multi
+                    line\`
+'change'`,
+        },
+    ], {
+        before: [
+            context => node =>
+                ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
                     if (ts.isStringLiteral(node) && node.text === "change") {
                         const text = "'changed'";
                         const lineMap = ts.computeLineStarts(text);
                         ts.setSourceMapRange(node, {
-                            pos: 0, end: text.length, source: {
+                            pos: 0,
+                            end: text.length,
+                            source: {
                                 text,
                                 fileName: "another.html",
                                 lineMap,
-                                getLineAndCharacterOfPosition: pos => ts.computeLineAndCharacterOfPosition(lineMap, pos)
-                            }
+                                getLineAndCharacterOfPosition: pos => ts.computeLineAndCharacterOfPosition(lineMap, pos),
+                            },
                         });
                         return node;
                     }
                     return ts.visitEachChild(node, visitor, context);
-                }, ts.isSourceFile)
-            ]
-        },
-        { sourceMap: true }
-    );
-
-    emitsCorrectly("skipTriviaExternalSourceFiles",
-        [
-            {
-                file: "source.ts",
-                // The source file contains preceding trivia (e.g. whitespace) to try to confuse the `skipSourceTrivia` function.
-                text: "         original;"
-            },
+                }, ts.isSourceFile),
         ],
+    }, { sourceMap: true });
+
+    emitsCorrectly("skipTriviaExternalSourceFiles", [
         {
-            before: [
-                context => {
-                    const transformSourceFile: ts.Transformer<ts.SourceFile> = node => ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
+            file: "source.ts",
+            // The source file contains preceding trivia (e.g. whitespace) to try to confuse the `skipSourceTrivia` function.
+            text: "         original;",
+        },
+    ], {
+        before: [
+            context => {
+                const transformSourceFile: ts.Transformer<ts.SourceFile> = node =>
+                    ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
                         if (ts.isIdentifier(node) && node.text === "original") {
                             const newNode = ts.factory.createIdentifier("changed");
                             ts.setSourceMapRange(newNode, {
                                 pos: 0,
                                 end: 7,
                                 // Do not provide a custom skipTrivia function for `source`.
-                                source: ts.createSourceMapSource("another.html", "changed;")
+                                source: ts.createSourceMapSource("another.html", "changed;"),
                             });
                             return newNode;
                         }
                         return ts.visitEachChild(node, visitor, context);
                     }, ts.isSourceFile);
-                    return {
-                        transformSourceFile,
-                        transformBundle: node => ts.factory.createBundle(ts.map(node.sourceFiles, transformSourceFile), node.prepends),
-                    };
-                }
-            ]
-        },
-        { sourceMap: true, outFile: "source.js" }
-    );
+                return {
+                    transformSourceFile,
+                    transformBundle: node => ts.factory.createBundle(ts.map(node.sourceFiles, transformSourceFile)),
+                };
+            },
+        ],
+    }, { sourceMap: true, outFile: "source.js" });
 
+    emitsCorrectly("importDeclarationBeforeTransformElision", [
+        {
+            file: "a.ts",
+            text: "export type A = string;",
+        },
+        {
+            file: "index.ts",
+            text: "import { A } from './a.js';\nexport { A } from './a.js';",
+        },
+    ], {
+        before: [
+            context => {
+                const { factory } = context;
+                return (s: ts.SourceFile) => ts.visitEachChild(s, visitor, context);
+
+                function visitor(node: ts.Node): ts.Node {
+                    if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
+                        return factory.updateImportDeclaration(
+                            node,
+                            node.modifiers,
+                            node.importClause,
+                            factory.createStringLiteral(node.moduleSpecifier.text),
+                            node.attributes,
+                        );
+                    }
+
+                    if (ts.isExportDeclaration(node) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
+                        return factory.updateExportDeclaration(
+                            node,
+                            node.modifiers,
+                            node.isTypeOnly,
+                            node.exportClause,
+                            factory.createStringLiteral(node.moduleSpecifier.text),
+                            node.attributes,
+                        );
+                    }
+                    return node;
+                }
+            },
+        ],
+    }, {
+        target: ts.ScriptTarget.ESNext,
+        module: ts.ModuleKind.ESNext,
+    });
 });

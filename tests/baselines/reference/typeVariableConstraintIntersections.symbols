@@ -1,0 +1,335 @@
+//// [tests/cases/compiler/typeVariableConstraintIntersections.ts] ////
+
+=== typeVariableConstraintIntersections.ts ===
+type T00<K extends "a" | "b"> = K & "a";
+>T00 : Symbol(T00, Decl(typeVariableConstraintIntersections.ts, 0, 0))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 0, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 0, 9))
+
+type T01<K extends "a" | "b"> = K & "c";
+>T01 : Symbol(T01, Decl(typeVariableConstraintIntersections.ts, 0, 40))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 1, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 1, 9))
+
+type T02<K extends "a" | "b"> = K & string;
+>T02 : Symbol(T02, Decl(typeVariableConstraintIntersections.ts, 1, 40))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 2, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 2, 9))
+
+type T10<K extends string> = K & "a";
+>T10 : Symbol(T10, Decl(typeVariableConstraintIntersections.ts, 2, 43))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 4, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 4, 9))
+
+type T11<K extends string> = K & "c";
+>T11 : Symbol(T11, Decl(typeVariableConstraintIntersections.ts, 4, 37))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 5, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 5, 9))
+
+type T12<K extends string> = K & string;
+>T12 : Symbol(T12, Decl(typeVariableConstraintIntersections.ts, 5, 37))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 6, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 6, 9))
+
+type T20<K extends "a" | "b" | "c"> = K & ("a" | "b" | "c");
+>T20 : Symbol(T20, Decl(typeVariableConstraintIntersections.ts, 6, 40))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 8, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 8, 9))
+
+type T21<K extends "a" | "b" | "c"> = ("a" | "b" | "c") & K;
+>T21 : Symbol(T21, Decl(typeVariableConstraintIntersections.ts, 8, 60))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 9, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 9, 9))
+
+type T22<K extends "a" | "b" | "c"> = K & ("a" | "b");
+>T22 : Symbol(T22, Decl(typeVariableConstraintIntersections.ts, 9, 60))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 10, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 10, 9))
+
+type T23<K extends "a" | "b" | "c"> = ("a" | "b") & K;
+>T23 : Symbol(T23, Decl(typeVariableConstraintIntersections.ts, 10, 54))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 11, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 11, 9))
+
+type T30<K extends "a" | "b"> = K & ("a" | "b" | "c");
+>T30 : Symbol(T30, Decl(typeVariableConstraintIntersections.ts, 11, 54))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 13, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 13, 9))
+
+type T31<K extends "a" | "b"> = ("a" | "b" | "c") & K;
+>T31 : Symbol(T31, Decl(typeVariableConstraintIntersections.ts, 13, 54))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 14, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 14, 9))
+
+type T32<K extends "a" | "b"> = K & ("a" | "b");
+>T32 : Symbol(T32, Decl(typeVariableConstraintIntersections.ts, 14, 54))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 15, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 15, 9))
+
+type T33<K extends "a" | "b"> = ("a" | "b") & K;
+>T33 : Symbol(T33, Decl(typeVariableConstraintIntersections.ts, 15, 48))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 16, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 16, 9))
+
+type T40<K extends {}> = K & undefined;
+>T40 : Symbol(T40, Decl(typeVariableConstraintIntersections.ts, 16, 48))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 18, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 18, 9))
+
+type T41<K extends {}> = K & null;
+>T41 : Symbol(T41, Decl(typeVariableConstraintIntersections.ts, 18, 39))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 19, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 19, 9))
+
+type T42<K extends {}> = K & object;
+>T42 : Symbol(T42, Decl(typeVariableConstraintIntersections.ts, 19, 34))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 20, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 20, 9))
+
+type T43<K extends {}> = K & {};
+>T43 : Symbol(T43, Decl(typeVariableConstraintIntersections.ts, 20, 36))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 21, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 21, 9))
+
+type T50<K extends "a" | 0> = K & "a";
+>T50 : Symbol(T50, Decl(typeVariableConstraintIntersections.ts, 21, 32))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 23, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 23, 9))
+
+type T51<K extends "a" | 0> = K & "b";
+>T51 : Symbol(T51, Decl(typeVariableConstraintIntersections.ts, 23, 38))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 24, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 24, 9))
+
+type T52<K extends "a" | 0> = K & string;
+>T52 : Symbol(T52, Decl(typeVariableConstraintIntersections.ts, 24, 38))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 25, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 25, 9))
+
+type T53<K extends "a" | 0> = K & 0;
+>T53 : Symbol(T53, Decl(typeVariableConstraintIntersections.ts, 25, 41))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 26, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 26, 9))
+
+type T54<K extends "a" | 0> = K & 1;
+>T54 : Symbol(T54, Decl(typeVariableConstraintIntersections.ts, 26, 36))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 27, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 27, 9))
+
+type T55<K extends "a" | 0> = K & number;
+>T55 : Symbol(T55, Decl(typeVariableConstraintIntersections.ts, 27, 36))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 28, 9))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 28, 9))
+
+type T60<T extends "a" | "b", U extends T> = U & "a";
+>T60 : Symbol(T60, Decl(typeVariableConstraintIntersections.ts, 28, 41))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 30, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 30, 29))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 30, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 30, 29))
+
+type T61<T extends "a" | "b", U extends T> = U & ("a" | "b");
+>T61 : Symbol(T61, Decl(typeVariableConstraintIntersections.ts, 30, 53))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 31, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 31, 29))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 31, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 31, 29))
+
+type T62<T extends "a" | "b", U extends T> = U & ("a" | "b" | "c");
+>T62 : Symbol(T62, Decl(typeVariableConstraintIntersections.ts, 31, 61))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 32, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 32, 29))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 32, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 32, 29))
+
+type T63<T extends "a" | "b", U extends T> = U & string;
+>T63 : Symbol(T63, Decl(typeVariableConstraintIntersections.ts, 32, 67))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 33, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 33, 29))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 33, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 33, 29))
+
+type T70<T extends "a" | "b", U extends T | "c"> = U & "a";
+>T70 : Symbol(T70, Decl(typeVariableConstraintIntersections.ts, 33, 56))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 35, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 35, 29))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 35, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 35, 29))
+
+type T71<T extends "a" | "b", U extends T | "c"> = U & ("a" | "b");
+>T71 : Symbol(T71, Decl(typeVariableConstraintIntersections.ts, 35, 59))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 36, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 36, 29))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 36, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 36, 29))
+
+type T72<T extends "a" | "b", U extends T | "c"> = U & ("a" | "b" | "c");
+>T72 : Symbol(T72, Decl(typeVariableConstraintIntersections.ts, 36, 67))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 37, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 37, 29))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 37, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 37, 29))
+
+type T73<T extends "a" | "b", U extends T | "c"> = U & string;
+>T73 : Symbol(T73, Decl(typeVariableConstraintIntersections.ts, 37, 73))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 38, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 38, 29))
+>T : Symbol(T, Decl(typeVariableConstraintIntersections.ts, 38, 9))
+>U : Symbol(U, Decl(typeVariableConstraintIntersections.ts, 38, 29))
+
+declare function isA(x: any): x is "a";
+>isA : Symbol(isA, Decl(typeVariableConstraintIntersections.ts, 38, 62))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 40, 21))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 40, 21))
+
+declare function isB(x: any): x is "b";
+>isB : Symbol(isB, Decl(typeVariableConstraintIntersections.ts, 40, 39))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 41, 21))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 41, 21))
+
+declare function isC(x: any): x is "c";
+>isC : Symbol(isC, Decl(typeVariableConstraintIntersections.ts, 41, 39))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 42, 21))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 42, 21))
+
+function foo<K extends "a" | "b">(x: K) {
+>foo : Symbol(foo, Decl(typeVariableConstraintIntersections.ts, 42, 39))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 44, 13))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 44, 13))
+
+  if (isA(x)) {
+>isA : Symbol(isA, Decl(typeVariableConstraintIntersections.ts, 38, 62))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+
+    x;  // K & "a"
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+  }
+  if (isB(x)) {
+>isB : Symbol(isB, Decl(typeVariableConstraintIntersections.ts, 40, 39))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+
+    x;  // K & "b"
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+  }
+  if (isC(x)) {
+>isC : Symbol(isC, Decl(typeVariableConstraintIntersections.ts, 41, 39))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+
+    x;  // never
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+  }
+  if (isA(x) || isB(x)) {
+>isA : Symbol(isA, Decl(typeVariableConstraintIntersections.ts, 38, 62))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+>isB : Symbol(isB, Decl(typeVariableConstraintIntersections.ts, 40, 39))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+
+    x;  // K
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+  }
+  if (!(isA(x) || isB(x))) {
+>isA : Symbol(isA, Decl(typeVariableConstraintIntersections.ts, 38, 62))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+>isB : Symbol(isB, Decl(typeVariableConstraintIntersections.ts, 40, 39))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+
+    return;
+  }
+  x;  // K
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 44, 34))
+}
+
+// Example from #30581
+
+type OptionOne = {
+>OptionOne : Symbol(OptionOne, Decl(typeVariableConstraintIntersections.ts, 61, 1))
+
+  kind: "one";
+>kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 65, 18))
+
+  s: string;
+>s : Symbol(s, Decl(typeVariableConstraintIntersections.ts, 66, 14))
+
+};
+
+type OptionTwo = {
+>OptionTwo : Symbol(OptionTwo, Decl(typeVariableConstraintIntersections.ts, 68, 2))
+
+  kind: "two";
+>kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 70, 18))
+
+  x: number;
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 71, 14))
+
+  y: number;
+>y : Symbol(y, Decl(typeVariableConstraintIntersections.ts, 72, 12))
+
+};
+
+type Options = OptionOne | OptionTwo;
+>Options : Symbol(Options, Decl(typeVariableConstraintIntersections.ts, 74, 2))
+>OptionOne : Symbol(OptionOne, Decl(typeVariableConstraintIntersections.ts, 61, 1))
+>OptionTwo : Symbol(OptionTwo, Decl(typeVariableConstraintIntersections.ts, 68, 2))
+
+type OptionHandlers = {
+>OptionHandlers : Symbol(OptionHandlers, Decl(typeVariableConstraintIntersections.ts, 76, 37))
+
+  [K in Options['kind']]: (option: Options & { kind: K }) => string;
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 79, 3))
+>Options : Symbol(Options, Decl(typeVariableConstraintIntersections.ts, 74, 2))
+>option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 79, 27))
+>Options : Symbol(Options, Decl(typeVariableConstraintIntersections.ts, 74, 2))
+>kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 79, 46))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 79, 3))
+}
+
+const optionHandlers: OptionHandlers = {
+>optionHandlers : Symbol(optionHandlers, Decl(typeVariableConstraintIntersections.ts, 82, 5))
+>OptionHandlers : Symbol(OptionHandlers, Decl(typeVariableConstraintIntersections.ts, 76, 37))
+
+  "one": option => option.s,
+>"one" : Symbol("one", Decl(typeVariableConstraintIntersections.ts, 82, 40))
+>option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 83, 8))
+>option.s : Symbol(s, Decl(typeVariableConstraintIntersections.ts, 66, 14))
+>option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 83, 8))
+>s : Symbol(s, Decl(typeVariableConstraintIntersections.ts, 66, 14))
+
+  "two": option => option.x + "," + option.y,
+>"two" : Symbol("two", Decl(typeVariableConstraintIntersections.ts, 83, 28))
+>option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 84, 8))
+>option.x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 71, 14))
+>option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 84, 8))
+>x : Symbol(x, Decl(typeVariableConstraintIntersections.ts, 71, 14))
+>option.y : Symbol(y, Decl(typeVariableConstraintIntersections.ts, 72, 12))
+>option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 84, 8))
+>y : Symbol(y, Decl(typeVariableConstraintIntersections.ts, 72, 12))
+
+};
+
+function handleOption<K extends Options['kind']>(option: Options & { kind: K }): string {
+>handleOption : Symbol(handleOption, Decl(typeVariableConstraintIntersections.ts, 85, 2))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 87, 22))
+>Options : Symbol(Options, Decl(typeVariableConstraintIntersections.ts, 74, 2))
+>option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 87, 49))
+>Options : Symbol(Options, Decl(typeVariableConstraintIntersections.ts, 74, 2))
+>kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 87, 68))
+>K : Symbol(K, Decl(typeVariableConstraintIntersections.ts, 87, 22))
+
+  const kind = option.kind;
+>kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 88, 7))
+>option.kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 65, 18), Decl(typeVariableConstraintIntersections.ts, 87, 68), Decl(typeVariableConstraintIntersections.ts, 70, 18), Decl(typeVariableConstraintIntersections.ts, 87, 68))
+>option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 87, 49))
+>kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 65, 18), Decl(typeVariableConstraintIntersections.ts, 87, 68), Decl(typeVariableConstraintIntersections.ts, 70, 18), Decl(typeVariableConstraintIntersections.ts, 87, 68))
+
+  const handler = optionHandlers[kind];
+>handler : Symbol(handler, Decl(typeVariableConstraintIntersections.ts, 89, 7))
+>optionHandlers : Symbol(optionHandlers, Decl(typeVariableConstraintIntersections.ts, 82, 5))
+>kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 88, 7))
+
+  return handler(option);
+>handler : Symbol(handler, Decl(typeVariableConstraintIntersections.ts, 89, 7))
+>option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 87, 49))
+
+};
+

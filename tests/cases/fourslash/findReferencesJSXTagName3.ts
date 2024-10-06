@@ -25,17 +25,12 @@ const [d0Def, d0, c0Def, c0, d1Def, d1, d2Def, d2, d3, d4, c1Def, c1, c2] = test
 const allD = [d0, d1, d2, d3, d4];
 const allC = [c0, c1, c2];
 
-verify.baselineCommands(
-    {
-        type: "findAllReferences",
-        markerOrRange: [
-            // div occurrences
-            '1', '2', '3', '4', '5',
-            // Comp occurrences
-            '6', '7', '8'
-        ]
-    },
-    // For document highlights, we will just do tag matching if on a tag. Otherwise we find-all-references.
-    { type: "documentHighlights", markerOrRange: allD },
-    { type: "documentHighlights", markerOrRange: allC },
+verify.baselineFindAllReferences(
+    // div occurrences
+    '1', '2', '3', '4', '5',
+    // Comp occurrences
+    '6', '7', '8'
 );
+// For document highlights, we will just do tag matching if on a tag. Otherwise we find-all-references.
+verify.baselineDocumentHighlights(allD);
+verify.baselineDocumentHighlights(allC);

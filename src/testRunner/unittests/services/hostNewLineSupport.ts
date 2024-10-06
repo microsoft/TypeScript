@@ -1,5 +1,5 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: services:: hostNewLineSupport", () => {
     function testLSWithFiles(settings: ts.CompilerOptions, files: Harness.Compiler.TestFile[]) {
@@ -31,7 +31,7 @@ describe("unittests:: services:: hostNewLineSupport", () => {
         const ls = testLSWithFiles(options, [{
             content,
             fileOptions: {},
-            unitName: "input.ts"
+            unitName: "input.ts",
         }]);
         const result = ls.getEmitOutput("input.ts");
         assert(!result.emitSkipped, "emit was skipped");
@@ -50,7 +50,7 @@ describe("unittests:: services:: hostNewLineSupport", () => {
         const ls = testLSWithFiles(options, [{
             content,
             fileOptions: {},
-            unitName: "input.ts"
+            unitName: "input.ts",
         }]);
         const span = ls.getOutliningSpans("input.ts")[0];
         const textAfterSpanCollapse = content.substring(span.textSpan.start + span.textSpan.length);
@@ -67,12 +67,10 @@ describe("unittests:: services:: hostNewLineSupport", () => {
     });
 
     it("should respect CRLF line endings around outlining spans", () => {
-        verifyOutliningSpanNewLines("// comment not included\r\n// #region name\r\nlet x: string = \"x\";\r\n// #endregion name\r\n",
-            { newLine: ts.NewLineKind.CarriageReturnLineFeed });
+        verifyOutliningSpanNewLines('// comment not included\r\n// #region name\r\nlet x: string = "x";\r\n// #endregion name\r\n', { newLine: ts.NewLineKind.CarriageReturnLineFeed });
     });
 
     it("should respect LF line endings around outlining spans", () => {
-        verifyOutliningSpanNewLines("// comment not included\n// #region name\nlet x: string = \"x\";\n// #endregion name\n\n",
-            { newLine: ts.NewLineKind.LineFeed });
+        verifyOutliningSpanNewLines('// comment not included\n// #region name\nlet x: string = "x";\n// #endregion name\n\n', { newLine: ts.NewLineKind.LineFeed });
     });
 });

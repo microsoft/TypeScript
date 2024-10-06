@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarationsWithAsyncIteratorObject.ts] ////
+
+=== awaitUsingDeclarationsWithAsyncIteratorObject.ts ===
+declare const ai: AsyncIterator<string, undefined>;
+>ai : Symbol(ai, Decl(awaitUsingDeclarationsWithAsyncIteratorObject.ts, 0, 13))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+declare const aio: AsyncIteratorObject<string, undefined, unknown>;
+>aio : Symbol(aio, Decl(awaitUsingDeclarationsWithAsyncIteratorObject.ts, 1, 13))
+>AsyncIteratorObject : Symbol(AsyncIteratorObject, Decl(lib.es2018.asynciterable.d.ts, --, --), Decl(lib.esnext.disposable.d.ts, --, --))
+
+declare const ag: AsyncGenerator<string, void>;
+>ag : Symbol(ag, Decl(awaitUsingDeclarationsWithAsyncIteratorObject.ts, 2, 13))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+async function f() {
+>f : Symbol(f, Decl(awaitUsingDeclarationsWithAsyncIteratorObject.ts, 2, 47))
+
+    // should pass
+    await using it0 = aio;
+>it0 : Symbol(it0, Decl(awaitUsingDeclarationsWithAsyncIteratorObject.ts, 6, 15))
+>aio : Symbol(aio, Decl(awaitUsingDeclarationsWithAsyncIteratorObject.ts, 1, 13))
+
+    await using it1 = ag;
+>it1 : Symbol(it1, Decl(awaitUsingDeclarationsWithAsyncIteratorObject.ts, 7, 15))
+>ag : Symbol(ag, Decl(awaitUsingDeclarationsWithAsyncIteratorObject.ts, 2, 13))
+
+    // should fail
+    await using it2 = ai;
+>it2 : Symbol(it2, Decl(awaitUsingDeclarationsWithAsyncIteratorObject.ts, 10, 15))
+>ai : Symbol(ai, Decl(awaitUsingDeclarationsWithAsyncIteratorObject.ts, 0, 13))
+}
+

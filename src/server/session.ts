@@ -15,7 +15,6 @@ import {
     CompletionEntryData,
     CompletionEntryDetails,
     CompletionInfo,
-    CompletionTriggerKind,
     computeLineAndCharacterOfPosition,
     computeLineStarts,
     concatenate,
@@ -53,6 +52,7 @@ import {
     formatting,
     getDeclarationFromName,
     getDeclarationOfKind,
+    getDocumentSpansEqualityComparer,
     getEmitDeclarations,
     getEntrypointsFromPackageJsonInfo,
     getLineAndCharacterOfPosition,
@@ -99,10 +99,9 @@ import {
     normalizePath,
     OperationCanceledException,
     OrganizeImportsMode,
-    outFile,
     OutliningSpan,
+    PasteEdits,
     Path,
-    perfLogger,
     PerformanceEvent,
     PossibleProgramFileInfo,
     Program,
@@ -124,7 +123,6 @@ import {
     some,
     SourceFile,
     startsWith,
-    stringContains,
     SymbolDisplayPart,
     SyntaxKind,
     TextChange,
@@ -132,19 +130,25 @@ import {
     TextRange,
     TextSpan,
     textSpanEnd,
+    timestamp,
     toArray,
     toFileNameLowerCase,
     tracing,
     unmangleScopedPackageName,
     version,
     WithMetadata,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
+    AuxiliaryProject,
+    CloseFileWatcherEvent,
     ConfigFileDiagEvent,
     ConfiguredProject,
+    ConfiguredProjectLoadKind,
     convertFormatOptions,
     convertScriptKindName,
     convertUserPreferences,
+    CreateDirectoryWatcherEvent,
+    CreateFileWatcherEvent,
     EmitResult,
     emptyArray,
     Errors,
@@ -178,8 +182,8 @@ import {
     stringifyIndented,
     toNormalizedPath,
     updateProjectIfDirty,
-} from "./_namespaces/ts.server";
-import * as protocol from "./protocol";
+} from "./_namespaces/ts.server.js";
+import * as protocol from "./protocol.js";
 
 interface StackTraceError extends Error {
     stack?: string;
@@ -193,7 +197,7 @@ export interface ServerCancellationToken extends HostCancellationToken {
 export const nullCancellationToken: ServerCancellationToken = {
     isCancellationRequested: () => false,
     setRequest: () => void 0,
-    resetRequest: () => void 0
+    resetRequest: () => void 0,
 };
 
 function hrTimeToMilliseconds(time: [number, number]): number {
@@ -216,14 +220,15 @@ function isDeclarationFileInJSOnlyNonConfiguredProject(project: Project, file: N
     // We still want to check .js files in a JS-only inferred or external project (e.g. if the
     // file has '// @ts-check').
 
-    if ((isInferredProject(project) || isExternalProject(project)) &&
-        project.isJsOnlyProject()) {
+    if (
+        (isInferredProject(project) || isExternalProject(project)) &&
+        project.isJsOnlyProject()
+    ) {
         const scriptInfo = project.getScriptInfoForNormalizedPath(file);
         return scriptInfo && !scriptInfo.isJavaScript();
     }
     return false;
 }
-
 
 function dtsChangeCanAffectEmit(compilationSettings: CompilerOptions) {
     return getEmitDeclarations(compilationSettings) || !!compilationSettings.emitDecoratorMetadata;
@@ -249,18 +254,18 @@ function formatRelatedInformation(info: DiagnosticRelatedInformation): protocol.
         return {
             message: flattenDiagnosticMessageText(info.messageText, "\n"),
             category: diagnosticCategoryName(info),
-            code: info.code
+            code: info.code,
         };
     }
     return {
         span: {
             start: convertToLocation(getLineAndCharacterOfPosition(info.file, info.start!)),
             end: convertToLocation(getLineAndCharacterOfPosition(info.file, info.start! + info.length!)), // TODO: GH#18217
-            file: info.file.fileName
+            file: info.file.fileName,
         },
         message: flattenDiagnosticMessageText(info.messageText, "\n"),
         category: diagnosticCategoryName(info),
-        code: info.code
+        code: info.code,
     };
 }
 
@@ -295,7 +300,7 @@ export function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: bo
         : common;
 }
 
-export interface PendingErrorCheck {
+interface PendingErrorCheck {
     fileName: NormalizedPath;
     project: Project;
 }
@@ -312,14 +317,14 @@ function allEditsBeforePos(edits: readonly TextChange[], pos: number): boolean {
 /** @deprecated use ts.server.protocol.CommandTypes */
 export type CommandNames = protocol.CommandTypes;
 /** @deprecated use ts.server.protocol.CommandTypes */
-export const CommandNames = (protocol as any).CommandTypes;
+export const CommandNames: any = (protocol as any).CommandTypes;
 
 export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string {
     const verboseLogging = logger.hasLevel(LogLevel.verbose);
 
     const json = JSON.stringify(msg);
     if (verboseLogging) {
-        logger.info(`${msg.type}:${indent(JSON.stringify(msg, undefined, " "))}`);
+        logger.info(`${msg.type}:${stringifyIndented(msg)}`);
     }
 
     const len = byteLength(json, "utf8");
@@ -334,15 +339,21 @@ interface NextStep {
     delay(actionType: string, ms: number, action: () => void): void;
 }
 
+/** @internal */
+export type PerformanceData =
+    & Omit<protocol.PerformanceData, "diagnosticsDuration">
+    & { diagnosticsDuration?: Map<NormalizedPath, protocol.DiagnosticPerformanceData>; };
+
 /**
  * External capabilities used by multistep operation
  */
 interface MultistepOperationHost {
     getCurrentRequestId(): number;
-    sendRequestCompletedEvent(requestId: number): void;
+    getPerformanceData(): PerformanceData | undefined;
+    sendRequestCompletedEvent(requestId: number, performanceData: PerformanceData | undefined): void;
     getServerHost(): ServerHost;
     isCancellationRequested(): boolean;
-    executeWithRequestId(requestId: number, action: () => void): void;
+    executeWithRequestId(requestId: number, action: () => void, performanceData: PerformanceData | undefined): void;
     logError(error: Error, message: string): void;
 }
 
@@ -352,10 +363,11 @@ interface MultistepOperationHost {
  */
 class MultistepOperation implements NextStep {
     private requestId: number | undefined;
+    private performanceData: PerformanceData | undefined;
     private timerHandle: any;
     private immediateId: number | undefined;
 
-    constructor(private readonly operationHost: MultistepOperationHost) { }
+    constructor(private readonly operationHost: MultistepOperationHost) {}
 
     public startNew(action: (next: NextStep) => void) {
         this.complete();
@@ -365,29 +377,38 @@ class MultistepOperation implements NextStep {
 
     private complete() {
         if (this.requestId !== undefined) {
-            this.operationHost.sendRequestCompletedEvent(this.requestId);
+            this.operationHost.sendRequestCompletedEvent(this.requestId, this.performanceData);
             this.requestId = undefined;
         }
         this.setTimerHandle(undefined);
         this.setImmediateId(undefined);
+        this.performanceData = undefined;
     }
 
     public immediate(actionType: string, action: () => void) {
         const requestId = this.requestId!;
         Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "immediate: incorrect request id");
-        this.setImmediateId(this.operationHost.getServerHost().setImmediate(() => {
-            this.immediateId = undefined;
-            this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
-        }, actionType));
+        this.setImmediateId(
+            this.operationHost.getServerHost().setImmediate(() => {
+                this.immediateId = undefined;
+                this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action), this.performanceData);
+            }, actionType),
+        );
     }
 
     public delay(actionType: string, ms: number, action: () => void) {
         const requestId = this.requestId!;
         Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "delay: incorrect request id");
-        this.setTimerHandle(this.operationHost.getServerHost().setTimeout(() => {
-            this.timerHandle = undefined;
-            this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
-        }, ms, actionType));
+        this.setTimerHandle(
+            this.operationHost.getServerHost().setTimeout(
+                () => {
+                    this.timerHandle = undefined;
+                    this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action), this.performanceData);
+                },
+                ms,
+                actionType,
+            ),
+        );
     }
 
     private executeAction(action: (next: NextStep) => void) {
@@ -417,6 +438,7 @@ class MultistepOperation implements NextStep {
                 this.operationHost.logError(e, `delayed processing of request ${this.requestId}`);
             }
         }
+        this.performanceData = this.operationHost.getPerformanceData();
         if (stop || !this.hasPendingWork()) {
             this.complete();
         }
@@ -453,7 +475,7 @@ export function toEvent(eventName: string, body: object): protocol.Event {
         seq: 0,
         type: "event",
         event: eventName,
-        body
+        body,
     };
 }
 
@@ -465,7 +487,7 @@ type Projects = readonly Project[] | {
 /**
  * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
  */
-function combineProjectOutput<T, U>(
+function combineProjectOutput<T, U extends {}>(
     defaultValue: T,
     getValue: (path: Path) => T,
     projects: Projects,
@@ -486,8 +508,8 @@ interface ProjectNavigateToItems {
     navigateToItems: readonly NavigateToItem[];
 }
 
-function createDocumentSpanSet(): Set<DocumentSpan> {
-    return createSet(({textSpan}) => textSpan.start + 100003 * textSpan.length, documentSpansEqual);
+function createDocumentSpanSet(useCaseSensitiveFileNames: boolean): Set<DocumentSpan> {
+    return createSet(({ textSpan }) => textSpan.start + 100003 * textSpan.length, getDocumentSpansEqualityComparer(useCaseSensitiveFileNames));
 }
 
 function getRenameLocationsWorker(
@@ -496,13 +518,15 @@ function getRenameLocationsWorker(
     initialLocation: DocumentPosition,
     findInStrings: boolean,
     findInComments: boolean,
-    preferences: protocol.UserPreferences
+    preferences: protocol.UserPreferences,
+    useCaseSensitiveFileNames: boolean,
 ): readonly RenameLocation[] {
     const perProjectResults = getPerProjectReferences(
         projects,
         defaultProject,
         initialLocation,
-        /*isForRename*/ true,
+        getDefinitionLocation(defaultProject, initialLocation, /*isForRename*/ true),
+        mapDefinitionInProject,
         (project, position) => project.getLanguageService().findRenameLocations(position.fileName, position.pos, findInStrings, findInComments, preferences),
         (renameLocation, cb) => cb(documentSpanLocation(renameLocation)),
     );
@@ -513,7 +537,7 @@ function getRenameLocationsWorker(
     }
 
     const results: RenameLocation[] = [];
-    const seen = createDocumentSpanSet();
+    const seen = createDocumentSpanSet(useCaseSensitiveFileNames);
 
     perProjectResults.forEach((projectResults, project) => {
         for (const result of projectResults) {
@@ -540,13 +564,15 @@ function getReferencesWorker(
     projects: Projects,
     defaultProject: Project,
     initialLocation: DocumentPosition,
+    useCaseSensitiveFileNames: boolean,
     logger: Logger,
 ): readonly ReferencedSymbol[] {
     const perProjectResults = getPerProjectReferences(
         projects,
         defaultProject,
         initialLocation,
-        /*isForRename*/ false,
+        getDefinitionLocation(defaultProject, initialLocation, /*isForRename*/ false),
+        mapDefinitionInProject,
         (project, position) => {
             logger.info(`Finding references to ${position.fileName} position ${position.pos} in project ${project.getProjectName()}`);
             return project.getLanguageService().findReferences(position.fileName, position.pos);
@@ -581,7 +607,7 @@ function getReferencesWorker(
     }
     else {
         // Correct isDefinition properties from projects other than defaultProject
-        const knownSymbolSpans = createDocumentSpanSet();
+        const knownSymbolSpans = createDocumentSpanSet(useCaseSensitiveFileNames);
         for (const referencedSymbol of defaultProjectResults) {
             for (const ref of referencedSymbol.references) {
                 if (ref.isDefinition) {
@@ -620,7 +646,7 @@ function getReferencesWorker(
     // of each definition and merging references from all the projects where they appear.
 
     const results: ReferencedSymbol[] = [];
-    const seenRefs = createDocumentSpanSet(); // It doesn't make sense to have a reference in two definition lists, so we de-dup globally
+    const seenRefs = createDocumentSpanSet(useCaseSensitiveFileNames); // It doesn't make sense to have a reference in two definition lists, so we de-dup globally
 
     // TODO: We might end up with a more logical allocation of refs to defs if we pre-sorted the defs by descending ref-count.
     // Otherwise, it just ends up attached to the first corresponding def we happen to process.  The others may or may not be
@@ -634,10 +660,10 @@ function getReferencesWorker(
                     ...referencedSymbol.definition,
                     textSpan: createTextSpan(mappedDefinitionFile.pos, referencedSymbol.definition.textSpan.length), // Why would the length be the same in the original?
                     fileName: mappedDefinitionFile.fileName,
-                    contextSpan: getMappedContextSpanForProject(referencedSymbol.definition, project)
+                    contextSpan: getMappedContextSpanForProject(referencedSymbol.definition, project),
                 };
 
-            let symbolToAddTo = find(results, o => documentSpansEqual(o.definition, definition));
+            let symbolToAddTo = find(results, o => documentSpansEqual(o.definition, definition, useCaseSensitiveFileNames));
             if (!symbolToAddTo) {
                 symbolToAddTo = { definition, references: [] };
                 results.push(symbolToAddTo);
@@ -686,9 +712,15 @@ function getPerProjectReferences<TResult>(
     projects: Projects,
     defaultProject: Project,
     initialLocation: DocumentPosition,
-    isForRename: boolean,
+    defaultDefinition: DocumentPosition | undefined,
+    mapDefinitionInProject: (
+        definition: DocumentPosition,
+        project: Project,
+        getGeneratedDefinition: () => DocumentPosition | undefined,
+        getSourceDefinition: () => DocumentPosition | undefined,
+    ) => DocumentPosition | undefined,
     getResultsForPosition: (project: Project, location: DocumentPosition) => readonly TResult[] | undefined,
-    forPositionInResult: (result: TResult, cb: (location: DocumentPosition) => void) => void,
+    forPositionInResult?: (result: TResult, cb: (location: DocumentPosition) => void) => void,
 ): readonly TResult[] | Map<Project, readonly TResult[]> {
     // If `getResultsForPosition` returns results for a project, they go in here
     const resultsMap = new Map<Project, readonly TResult[]>();
@@ -710,15 +742,17 @@ function getPerProjectReferences<TResult>(
     const projectService = defaultProject.projectService;
     const cancellationToken = defaultProject.getCancellationToken();
 
-    const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation, isForRename);
-
     // Don't call these unless !!defaultDefinition
-    const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition!.fileName) ?
-        defaultDefinition :
-        defaultProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(defaultDefinition!));
-    const getSourceDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition!.fileName) ?
-        defaultDefinition :
-        defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition!));
+    const getGeneratedDefinition = memoize(() =>
+        defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition!.fileName) ?
+            defaultDefinition :
+            defaultProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(defaultDefinition!)
+    );
+    const getSourceDefinition = memoize(() =>
+        defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition!.fileName) ?
+            defaultDefinition :
+            defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition!)
+    );
 
     // The keys of resultsMap allow us to check which projects have already been searched, but we also
     // maintain a set of strings because that's what `loadAncestorProjectTree` wants.
@@ -773,7 +807,7 @@ function getPerProjectReferences<TResult>(
 
     function searchPosition(project: Project, location: DocumentPosition): readonly TResult[] | undefined {
         const projectResults = getResultsForPosition(project, location);
-        if (!projectResults) return undefined;
+        if (!projectResults || !forPositionInResult) return projectResults;
 
         for (const result of projectResults) {
             forPositionInResult(result, position => {
@@ -806,24 +840,35 @@ function getPerProjectReferences<TResult>(
     }
 }
 
+function mapDefinitionInProjectIfFileInProject(
+    definition: DocumentPosition,
+    project: Project,
+) {
+    // If the definition is actually from the project, definition is correct as is
+    if (
+        project.containsFile(toNormalizedPath(definition.fileName)) &&
+        !isLocationProjectReferenceRedirect(project, definition)
+    ) {
+        return definition;
+    }
+}
+
 function mapDefinitionInProject(
     definition: DocumentPosition,
     project: Project,
     getGeneratedDefinition: () => DocumentPosition | undefined,
-    getSourceDefinition: () => DocumentPosition | undefined
+    getSourceDefinition: () => DocumentPosition | undefined,
 ): DocumentPosition | undefined {
     // If the definition is actually from the project, definition is correct as is
-    if (project.containsFile(toNormalizedPath(definition.fileName)) &&
-        !isLocationProjectReferenceRedirect(project, definition)) {
-        return definition;
-    }
+    const result = mapDefinitionInProjectIfFileInProject(definition, project);
+    if (result) return result;
     const generatedDefinition = getGeneratedDefinition();
     if (generatedDefinition && project.containsFile(toNormalizedPath(generatedDefinition.fileName))) return generatedDefinition;
     const sourceDefinition = getSourceDefinition();
     return sourceDefinition && project.containsFile(toNormalizedPath(sourceDefinition.fileName)) ? sourceDefinition : undefined;
 }
 
-function isLocationProjectReferenceRedirect(project: Project, location: DocumentPosition | undefined) {
+function isLocationProjectReferenceRedirect(project: Project, location: Pick<DocumentPosition, "fileName"> | undefined) {
     if (!location) return false;
     const program = project.getLanguageService().getProgram();
     if (!program) return false;
@@ -891,6 +936,8 @@ const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.PrepareCallHierarchy,
     protocol.CommandTypes.ProvideCallHierarchyIncomingCalls,
     protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls,
+    protocol.CommandTypes.GetPasteEdits,
+    protocol.CommandTypes.CopilotRelated,
 ];
 
 const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
@@ -920,6 +967,7 @@ const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.NavtoFull,
     protocol.CommandTypes.DocumentHighlights,
     protocol.CommandTypes.DocumentHighlightsFull,
+    protocol.CommandTypes.PreparePasteEdits,
 ];
 
 export interface SessionOptions {
@@ -935,6 +983,7 @@ export interface SessionOptions {
      * If falsy, all events are suppressed.
      */
     canUseEvents: boolean;
+    canUseWatchEvents?: boolean;
     eventHandler?: ProjectServiceEventHandler;
     /** Has no effect if eventHandler is also specified. */
     suppressDiagnosticEvents?: boolean;
@@ -954,7 +1003,7 @@ export class Session<TMessage = string> implements EventSender {
     protected projectService: ProjectService;
     private changeSeq = 0;
 
-    private performanceData: protocol.PerformanceData | undefined;
+    private performanceData: PerformanceData | undefined;
 
     private currentRequestId!: number;
     private errorCheck: MultistepOperation;
@@ -970,6 +1019,10 @@ export class Session<TMessage = string> implements EventSender {
     private suppressDiagnosticEvents?: boolean;
     private eventHandler: ProjectServiceEventHandler | undefined;
     private readonly noGetErrOnBackgroundUpdate?: boolean;
+
+    // Minimum number of lines for attempting to use region diagnostics for a file.
+    /** @internal */
+    protected regionDiagLineCountThreshold = 500;
 
     constructor(opts: SessionOptions) {
         this.host = opts.host;
@@ -988,12 +1041,13 @@ export class Session<TMessage = string> implements EventSender {
             ? opts.eventHandler || (event => this.defaultEventHandler(event))
             : undefined;
         const multistepOperationHost: MultistepOperationHost = {
-            executeWithRequestId: (requestId, action) => this.executeWithRequestId(requestId, action),
+            executeWithRequestId: (requestId, action, performanceData) => this.executeWithRequestId(requestId, action, performanceData),
             getCurrentRequestId: () => this.currentRequestId,
+            getPerformanceData: () => this.performanceData,
             getServerHost: () => this.host,
             logError: (err, cmd) => this.logError(err, cmd),
-            sendRequestCompletedEvent: requestId => this.sendRequestCompletedEvent(requestId),
-            isCancellationRequested: () => this.cancellationToken.isCancellationRequested()
+            sendRequestCompletedEvent: (requestId, performanceData) => this.sendRequestCompletedEvent(requestId, performanceData),
+            isCancellationRequested: () => this.cancellationToken.isCancellationRequested(),
         };
         this.errorCheck = new MultistepOperation(multistepOperationHost);
         const settings: ProjectServiceOptions = {
@@ -1012,6 +1066,7 @@ export class Session<TMessage = string> implements EventSender {
             typesMapLocation: opts.typesMapLocation,
             serverMode: opts.serverMode,
             session: this,
+            canUseWatchEvents: opts.canUseWatchEvents,
             incrementalVerifier: opts.incrementalVerifier,
         };
         this.projectService = new ProjectService(settings);
@@ -1041,15 +1096,34 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private sendRequestCompletedEvent(requestId: number): void {
-        this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId }, "requestCompleted");
+    private sendRequestCompletedEvent(requestId: number, performanceData: PerformanceData | undefined): void {
+        this.event<protocol.RequestCompletedEventBody>(
+            {
+                request_seq: requestId,
+                performanceData: performanceData && toProtocolPerformanceData(performanceData),
+            },
+            "requestCompleted",
+        );
     }
 
-    private addPerformanceData(key: keyof protocol.PerformanceData, value: number) {
+    private addPerformanceData(key: Exclude<keyof PerformanceData, "diagnosticsDuration">, value: number) {
         if (!this.performanceData) {
             this.performanceData = {};
         }
         this.performanceData[key] = (this.performanceData[key] ?? 0) + value;
+    }
+
+    private addDiagnosticsPerformanceData(
+        file: NormalizedPath,
+        kind: protocol.DiagnosticEventKind,
+        duration: number,
+    ): void {
+        if (!this.performanceData) {
+            this.performanceData = {};
+        }
+        let fileDiagnosticDuration = this.performanceData.diagnosticsDuration?.get(file);
+        if (!fileDiagnosticDuration) (this.performanceData.diagnosticsDuration ??= new Map()).set(file, fileDiagnosticDuration = {});
+        fileDiagnosticDuration[kind] = duration;
     }
 
     private performanceEventHandler(event: PerformanceEvent) {
@@ -1066,38 +1140,37 @@ export class Session<TMessage = string> implements EventSender {
     private defaultEventHandler(event: ProjectServiceEvent) {
         switch (event.eventName) {
             case ProjectsUpdatedInBackgroundEvent:
-                const { openFiles } = event.data;
-                this.projectsUpdatedInBackgroundEvent(openFiles);
+                this.projectsUpdatedInBackgroundEvent(event.data.openFiles);
                 break;
             case ProjectLoadingStartEvent:
-                const { project, reason } = event.data;
-                this.event<protocol.ProjectLoadingStartEventBody>(
-                    { projectName: project.getProjectName(), reason },
-                    ProjectLoadingStartEvent);
+                this.event<protocol.ProjectLoadingStartEventBody>({
+                    projectName: event.data.project.getProjectName(),
+                    reason: event.data.reason,
+                }, event.eventName);
                 break;
             case ProjectLoadingFinishEvent:
-                const { project: finishProject } = event.data;
-                this.event<protocol.ProjectLoadingFinishEventBody>({ projectName: finishProject.getProjectName() }, ProjectLoadingFinishEvent);
+                this.event<protocol.ProjectLoadingFinishEventBody>({
+                    projectName: event.data.project.getProjectName(),
+                }, event.eventName);
                 break;
             case LargeFileReferencedEvent:
-                const { file, fileSize, maxFileSize } = event.data;
-                this.event<protocol.LargeFileReferencedEventBody>({ file, fileSize, maxFileSize }, LargeFileReferencedEvent);
+            case CreateFileWatcherEvent:
+            case CreateDirectoryWatcherEvent:
+            case CloseFileWatcherEvent:
+                this.event(event.data, event.eventName);
                 break;
             case ConfigFileDiagEvent:
-                const { triggerFile, configFileName: configFile, diagnostics } = event.data;
-                const bakedDiags = map(diagnostics, diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true));
                 this.event<protocol.ConfigFileDiagnosticEventBody>({
-                    triggerFile,
-                    configFile,
-                    diagnostics: bakedDiags
-                }, ConfigFileDiagEvent);
+                    triggerFile: event.data.triggerFile,
+                    configFile: event.data.configFileName,
+                    diagnostics: map(event.data.diagnostics, diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true)),
+                }, event.eventName);
                 break;
             case ProjectLanguageServiceStateEvent: {
-                const eventName: protocol.ProjectLanguageServiceStateEventName = ProjectLanguageServiceStateEvent;
                 this.event<protocol.ProjectLanguageServiceStateEventBody>({
                     projectName: event.data.project.getProjectName(),
-                    languageServiceEnabled: event.data.languageServiceEnabled
-                }, eventName);
+                    languageServiceEnabled: event.data.languageServiceEnabled,
+                }, event.eventName);
                 break;
             }
             case ProjectInfoTelemetryEvent: {
@@ -1112,16 +1185,17 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private projectsUpdatedInBackgroundEvent(openFiles: string[]): void {
-        this.projectService.logger.info(`got projects updated in background, updating diagnostics for ${openFiles}`);
+        this.projectService.logger.info(`got projects updated in background ${openFiles}`);
         if (openFiles.length) {
             if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
+                this.projectService.logger.info(`Queueing diagnostics update for ${openFiles}`);
                 // For now only queue error checking for open files. We can change this to include non open files as well
                 this.errorCheck.startNew(next => this.updateErrorCheck(next, openFiles, 100, /*requireOpen*/ true));
             }
 
             // Send project changed event
             this.event<protocol.ProjectsUpdatedInBackgroundEventBody>({
-                openFiles
+                openFiles,
             }, ProjectsUpdatedInBackgroundEvent);
         }
     }
@@ -1149,9 +1223,8 @@ export class Session<TMessage = string> implements EventSender {
                         msg += `\n\nFile text of ${fileRequest.file}:${indent(text)}\n`;
                     }
                 }
-                catch { } // eslint-disable-line no-empty
+                catch {} // eslint-disable-line no-empty
             }
-
 
             if (err.ProgramFiles) {
                 msg += `\n\nProgram files: ${JSON.stringify(err.ProgramFiles)}\n`;
@@ -1172,19 +1245,18 @@ export class Session<TMessage = string> implements EventSender {
         this.logger.msg(msg, Msg.Err);
     }
 
-    public send(msg: protocol.Message) {
+    public send(msg: protocol.Message): void {
         if (msg.type === "event" && !this.canUseEvents) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                this.logger.info(`Session does not support events: ignored event: ${stringifyIndented(msg)}`);
             }
             return;
         }
         this.writeMessage(msg);
     }
 
-    protected writeMessage(msg: protocol.Message) {
+    protected writeMessage(msg: protocol.Message): void {
         const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
-        perfLogger?.logEvent(`Response message size: ${msgText.length}`);
         this.host.write(msgText);
     }
 
@@ -1193,14 +1265,21 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     /** @internal */
-    doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
+    doOutput(
+        info: {} | undefined,
+        cmdName: string,
+        reqSeq: number,
+        success: boolean,
+        performanceData: PerformanceData | undefined,
+        message?: string,
+    ): void {
         const res: protocol.Response = {
             seq: 0,
             type: "response",
             command: cmdName,
             request_seq: reqSeq,
             success,
-            performanceData: this.performanceData
+            performanceData: performanceData && toProtocolPerformanceData(performanceData),
         };
 
         if (success) {
@@ -1212,7 +1291,7 @@ export class Session<TMessage = string> implements EventSender {
             }
             else if (typeof info === "object") {
                 if ((info as WithMetadata<{}>).metadata) {
-                    const { metadata: infoMetadata, ...body } = (info as WithMetadata<{}>);
+                    const { metadata: infoMetadata, ...body } = info as WithMetadata<{}>;
                     res.body = body;
                     metadata = infoMetadata;
                 }
@@ -1235,29 +1314,71 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private semanticCheck(file: NormalizedPath, project: Project) {
+        const diagnosticsStartTime = timestamp();
         tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
         const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
             ? emptyArray
             : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
-        this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
+        this.sendDiagnosticsEvent(file, project, diags, "semanticDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
     private syntacticCheck(file: NormalizedPath, project: Project) {
+        const diagnosticsStartTime = timestamp();
         tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
     private suggestionCheck(file: NormalizedPath, project: Project) {
+        const diagnosticsStartTime = timestamp();
         tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag", diagnosticsStartTime);
         tracing?.pop();
     }
 
-    private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind): void {
+    private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]): void {
+        const diagnosticsStartTime = timestamp();
+        tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
+        let diagnosticsResult;
+        if (!this.shouldDoRegionCheck(file) || !(diagnosticsResult = project.getLanguageService().getRegionSemanticDiagnostics(file, ranges))) {
+            tracing?.pop();
+            return;
+        }
+        this.sendDiagnosticsEvent(file, project, diagnosticsResult.diagnostics, "regionSemanticDiag", diagnosticsStartTime, diagnosticsResult.spans);
+        tracing?.pop();
+        return;
+    }
+
+    // We should only do the region-based semantic check if we think it would be
+    // considerably faster than a whole-file semantic check.
+    /** @internal */
+    protected shouldDoRegionCheck(file: NormalizedPath): boolean {
+        const lineCount = this.projectService.getScriptInfoForNormalizedPath(file)?.textStorage.getLineInfo().getLineCount();
+        return !!(lineCount && lineCount >= this.regionDiagLineCountThreshold);
+    }
+
+    private sendDiagnosticsEvent(
+        file: NormalizedPath,
+        project: Project,
+        diagnostics: readonly Diagnostic[],
+        kind: protocol.DiagnosticEventKind,
+        diagnosticsStartTime: number,
+        spans?: TextSpan[],
+    ): void {
         try {
-            this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
+            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
+            const duration = timestamp() - diagnosticsStartTime;
+            const body: protocol.DiagnosticEventBody = {
+                file,
+                diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)),
+                spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)),
+            };
+            this.event<protocol.DiagnosticEventBody>(
+                body,
+                kind,
+            );
+            this.addDiagnosticsPerformanceData(file, kind, duration);
         }
         catch (err) {
             this.logError(err, kind);
@@ -1265,7 +1386,15 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
-    private updateErrorCheck(next: NextStep, checkList: readonly string[] | readonly PendingErrorCheck[], ms: number, requireOpen = true) {
+    private updateErrorCheck(
+        next: NextStep,
+        checkList: PendingErrorCheck[] | (string | protocol.FileRangesRequestArgs)[],
+        ms: number,
+        requireOpen = true,
+    ) {
+        if (checkList.length === 0) {
+            return;
+        }
         Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
 
         const seq = this.changeSeq;
@@ -1275,23 +1404,43 @@ export class Session<TMessage = string> implements EventSender {
         const goNext = () => {
             index++;
             if (checkList.length > index) {
-                next.delay("checkOne", followMs, checkOne);
+                return next.delay("checkOne", followMs, checkOne);
             }
         };
+
+        const doSemanticCheck = (fileName: NormalizedPath, project: Project) => {
+            this.semanticCheck(fileName, project);
+            if (this.changeSeq !== seq) {
+                return;
+            }
+
+            if (this.getPreferences(fileName).disableSuggestions) {
+                return goNext();
+            }
+            next.immediate("suggestionCheck", () => {
+                this.suggestionCheck(fileName, project);
+                goNext();
+            });
+        };
+
         const checkOne = () => {
             if (this.changeSeq !== seq) {
                 return;
             }
 
-            let item: string | PendingErrorCheck | undefined = checkList[index];
+            let ranges: protocol.FileRange[] | undefined;
+            let item: string | protocol.FileRangesRequestArgs | PendingErrorCheck | undefined = checkList[index];
             if (isString(item)) {
-                // Find out project for the file name
                 item = this.toPendingErrorCheck(item);
-                if (!item) {
-                    // Ignore file if there is no project for the file
-                    goNext();
-                    return;
-                }
+            }
+            // eslint-disable-next-line local/no-in-operator
+            else if ("ranges" in item) {
+                ranges = item.ranges;
+                item = this.toPendingErrorCheck(item.file);
+            }
+
+            if (!item) {
+                return goNext();
             }
 
             const { fileName, project } = item;
@@ -1309,24 +1458,23 @@ export class Session<TMessage = string> implements EventSender {
 
             // Don't provide semantic diagnostics unless we're in full semantic mode.
             if (project.projectService.serverMode !== LanguageServiceMode.Semantic) {
-                goNext();
-                return;
+                return goNext();
             }
-            next.immediate("semanticCheck", () => {
-                this.semanticCheck(fileName, project);
-                if (this.changeSeq !== seq) {
-                    return;
-                }
 
-                if (this.getPreferences(fileName).disableSuggestions) {
-                    goNext();
-                    return;
-                }
-                next.immediate("suggestionCheck", () => {
-                    this.suggestionCheck(fileName, project);
-                    goNext();
+            if (ranges) {
+                return next.immediate("regionSemanticCheck", () => {
+                    const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(fileName);
+                    if (scriptInfo) {
+                        this.regionSemanticCheck(fileName, project, ranges.map(range => this.getRange({ file: fileName, ...range }, scriptInfo)));
+                    }
+                    if (this.changeSeq !== seq) {
+                        return;
+                    }
+                    next.immediate("semanticCheck", () => doSemanticCheck(fileName, project));
                 });
-            });
+            }
+
+            next.immediate("semanticCheck", () => doSemanticCheck(fileName, project));
         };
 
         if (checkList.length > index && this.changeSeq === seq) {
@@ -1370,13 +1518,13 @@ export class Session<TMessage = string> implements EventSender {
         return projectFileName === undefined ? undefined : this.projectService.findProject(projectFileName);
     }
 
-    private getConfigFileAndProject(args: protocol.FileRequestArgs): { configFile: NormalizedPath | undefined, project: Project | undefined } {
+    private getConfigFileAndProject(args: protocol.FileRequestArgs): { configFile: NormalizedPath | undefined; project: Project | undefined; } {
         const project = this.getProject(args.projectFileName);
         const file = toNormalizedPath(args.file);
 
         return {
             configFile: project && project.hasConfigFile(file) ? file : undefined,
-            project
+            project,
         };
     }
 
@@ -1385,13 +1533,13 @@ export class Session<TMessage = string> implements EventSender {
         const optionsErrors = project.getLanguageService().getCompilerOptionsDiagnostics();
         const diagnosticsForConfigFile = filter(
             concatenate(projectErrors, optionsErrors),
-            diagnostic => !!diagnostic.file && diagnostic.file.fileName === configFile
+            diagnostic => !!diagnostic.file && diagnostic.file.fileName === configFile,
         );
         return includeLinePosition ?
             this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnosticsForConfigFile) :
             map(
                 diagnosticsForConfigFile,
-                diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ false)
+                diagnostic => formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ false),
             );
     }
 
@@ -1407,7 +1555,7 @@ export class Session<TMessage = string> implements EventSender {
             endLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start! + d.length!)))!, // TODO: GH#18217
             reportsUnnecessary: d.reportsUnnecessary,
             reportsDeprecated: d.reportsDeprecated,
-            relatedInformation: map(d.relatedInformation, formatRelatedInformation)
+            relatedInformation: map(d.relatedInformation, formatRelatedInformation),
         }));
     }
 
@@ -1419,30 +1567,35 @@ export class Session<TMessage = string> implements EventSender {
         return this.convertToDiagnosticsWithLinePosition(
             filter(
                 project.getLanguageService().getCompilerOptionsDiagnostics(),
-                diagnostic => !diagnostic.file
+                diagnostic => !diagnostic.file,
             ),
-            /*scriptInfo*/ undefined
+            /*scriptInfo*/ undefined,
         );
     }
 
     private convertToDiagnosticsWithLinePosition(diagnostics: readonly Diagnostic[], scriptInfo: ScriptInfo | undefined): protocol.DiagnosticWithLinePosition[] {
-        return diagnostics.map(d => ({
-            message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
-            start: d.start,
-            length: d.length,
-            category: diagnosticCategoryName(d),
-            code: d.code,
-            source: d.source,
-            startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start!), // TODO: GH#18217
-            endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start! + d.length!),
-            reportsUnnecessary: d.reportsUnnecessary,
-            reportsDeprecated: d.reportsDeprecated,
-            relatedInformation: map(d.relatedInformation, formatRelatedInformation),
-        }) as protocol.DiagnosticWithLinePosition);
+        return diagnostics.map(d =>
+            ({
+                message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
+                start: d.start,
+                length: d.length,
+                category: diagnosticCategoryName(d),
+                code: d.code,
+                source: d.source,
+                startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start!), // TODO: GH#18217
+                endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start! + d.length!),
+                reportsUnnecessary: d.reportsUnnecessary,
+                reportsDeprecated: d.reportsDeprecated,
+                relatedInformation: map(d.relatedInformation, formatRelatedInformation),
+            }) as protocol.DiagnosticWithLinePosition
+        );
     }
 
     private getDiagnosticsWorker(
-        args: protocol.FileRequestArgs, isSemantic: boolean, selector: (project: Project, file: string) => readonly Diagnostic[], includeLinePosition: boolean
+        args: protocol.FileRequestArgs,
+        isSemantic: boolean,
+        selector: (project: Project, file: string) => readonly Diagnostic[],
+        includeLinePosition: boolean,
     ): readonly protocol.DiagnosticWithLinePosition[] | readonly protocol.Diagnostic[] {
         const { project, file } = this.getFileAndProject(args);
         if (isSemantic && isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
@@ -1487,7 +1640,7 @@ export class Session<TMessage = string> implements EventSender {
         if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
             return {
                 definitions: emptyArray,
-                textSpan: undefined! // TODO: GH#18217
+                textSpan: undefined!, // TODO: GH#18217
             };
         }
 
@@ -1497,7 +1650,7 @@ export class Session<TMessage = string> implements EventSender {
         if (simplifiedResult) {
             return {
                 definitions: this.mapDefinitionInfo(definitions, project),
-                textSpan: toProtocolTextSpan(textSpan, scriptInfo)
+                textSpan: toProtocolTextSpan(textSpan, scriptInfo),
             };
         }
 
@@ -1514,12 +1667,16 @@ export class Session<TMessage = string> implements EventSender {
         let definitions: readonly DefinitionInfo[] = this.mapDefinitionInfoLocations(unmappedDefinitions || emptyArray, project).slice();
         const needsJsResolution = this.projectService.serverMode === LanguageServiceMode.Semantic && (
             !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient) ||
-            some(definitions, d => !!d.failedAliasResolution));
+            some(definitions, d => !!d.failedAliasResolution)
+        );
 
         if (needsJsResolution) {
-            const definitionSet = createSet<DefinitionInfo>(d => d.textSpan.start, documentSpansEqual);
+            const definitionSet = createSet<DefinitionInfo>(
+                d => d.textSpan.start,
+                getDocumentSpansEqualityComparer(this.host.useCaseSensitiveFileNames),
+            );
             definitions?.forEach(d => definitionSet.add(d));
-            const noDtsProject = project.getNoDtsResolutionProject([file]);
+            const noDtsProject = project.getNoDtsResolutionProject(file);
             const ls = noDtsProject.getLanguageService();
             const jsDefinitions = ls.getDefinitionAtPosition(file, position, /*searchOtherFilesOnly*/ true, /*stopAtAlias*/ false)
                 ?.filter(d => toNormalizedPath(d.fileName) !== file);
@@ -1541,8 +1698,17 @@ export class Session<TMessage = string> implements EventSender {
                 const ambientCandidates = definitions.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient);
                 for (const candidate of some(ambientCandidates) ? ambientCandidates : getAmbientCandidatesByClimbingAccessChain()) {
                     const fileNameToSearch = findImplementationFileFromDtsFileName(candidate.fileName, file, noDtsProject);
-                    if (!fileNameToSearch || !ensureRoot(noDtsProject, fileNameToSearch)) {
-                        continue;
+                    if (!fileNameToSearch) continue;
+                    const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+                        fileNameToSearch,
+                        noDtsProject.currentDirectory,
+                        noDtsProject.directoryStructureHost,
+                        /*deferredDeleteOk*/ false,
+                    );
+                    if (!info) continue;
+                    if (!noDtsProject.containsScriptInfo(info)) {
+                        noDtsProject.addRoot(info);
+                        noDtsProject.updateGraph();
                     }
                     const noDtsProgram = ls.getProgram()!;
                     const fileToSearch = Debug.checkDefined(noDtsProgram.getSourceFile(fileNameToSearch));
@@ -1557,14 +1723,14 @@ export class Session<TMessage = string> implements EventSender {
         definitions = definitions.filter(d => !d.isAmbient && !d.failedAliasResolution);
         return this.mapDefinitionInfo(definitions, project);
 
-        function findImplementationFileFromDtsFileName(fileName: string, resolveFromFile: string, auxiliaryProject: Project) {
+        function findImplementationFileFromDtsFileName(fileName: string, resolveFromFile: string, auxiliaryProject: AuxiliaryProject) {
             const nodeModulesPathParts = getNodeModulePathParts(fileName);
             if (nodeModulesPathParts && fileName.lastIndexOf(nodeModulesPathPart) === nodeModulesPathParts.topLevelNodeModulesIndex) {
                 // Second check ensures the fileName only contains one `/node_modules/`. If there's more than one I give up.
                 const packageDirectory = fileName.substring(0, nodeModulesPathParts.packageRootIndex);
                 const packageJsonCache = project.getModuleResolutionCache()?.getPackageJsonInfoCache();
                 const compilerOptions = project.getCompilationSettings();
-                const packageJson = getPackageScopeForPath(getNormalizedAbsolutePath(packageDirectory + "/package.json", project.getCurrentDirectory()), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
+                const packageJson = getPackageScopeForPath(getNormalizedAbsolutePath(packageDirectory, project.getCurrentDirectory()), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
                 if (!packageJson) return undefined;
                 // Use fake options instead of actual compiler options to avoid following export map if the project uses node16 or nodenext -
                 // Mapping from an export map entry across packages is out of scope for now. Returned entrypoints will only be what can be
@@ -1573,11 +1739,13 @@ export class Session<TMessage = string> implements EventSender {
                     packageJson,
                     { moduleResolution: ModuleResolutionKind.Node10 },
                     project,
-                    project.getModuleResolutionCache());
+                    project.getModuleResolutionCache(),
+                );
                 // This substring is correct only because we checked for a single `/node_modules/` at the top.
                 const packageNamePathPart = fileName.substring(
                     nodeModulesPathParts.topLevelPackageNameIndex + 1,
-                    nodeModulesPathParts.packageRootIndex);
+                    nodeModulesPathParts.packageRootIndex,
+                );
                 const packageName = getPackageNameFromTypesPackageName(unmangleScopedPackageName(packageNamePathPart));
                 const path = project.toPath(fileName);
                 if (entrypoints && some(entrypoints, e => project.toPath(e) === path)) {
@@ -1599,7 +1767,7 @@ export class Session<TMessage = string> implements EventSender {
 
         // In 'foo.bar./**/baz', if we got not results on 'baz', see if we can get an ambient definition
         // for 'bar' or 'foo' (in that order) so we can search for declarations of 'baz' later.
-        function getAmbientCandidatesByClimbingAccessChain(): readonly { name: string, fileName: string }[] {
+        function getAmbientCandidatesByClimbingAccessChain(): readonly { name: string; fileName: string; }[] {
             const ls = project.getLanguageService();
             const program = ls.getProgram()!;
             const initialNode = getTouchingPropertyName(program.getSourceFile(file)!, position);
@@ -1610,7 +1778,7 @@ export class Session<TMessage = string> implements EventSender {
                         ?.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient)
                         .map(d => ({
                             fileName: d.fileName,
-                            name: getTextOfIdentifierOrLiteral(initialNode)
+                            name: getTextOfIdentifierOrLiteral(initialNode),
                         }));
                     if (some(candidates)) {
                         return candidates;
@@ -1646,16 +1814,6 @@ export class Session<TMessage = string> implements EventSender {
                 }
             });
         }
-
-        function ensureRoot(project: Project, fileName: string) {
-            const info = project.getScriptInfo(fileName);
-            if (!info) return false;
-            if (!project.containsScriptInfo(info)) {
-                project.addRoot(info);
-                project.updateGraph();
-            }
-            return true;
-        }
     }
 
     private getEmitOutput(args: protocol.EmitOutputRequestArgs): EmitOutput | protocol.EmitOutput {
@@ -1669,7 +1827,7 @@ export class Session<TMessage = string> implements EventSender {
                 ...result,
                 diagnostics: args.includeLinePosition ?
                     this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(result.diagnostics) :
-                    result.diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true))
+                    result.diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true)),
             } :
             result;
     }
@@ -1677,7 +1835,7 @@ export class Session<TMessage = string> implements EventSender {
     private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project, richResponse: boolean): protocol.JSDocTagInfo[] {
         return tags ? tags.map(tag => ({
             ...tag,
-            text: richResponse ? this.mapDisplayParts(tag.text, project) : tag.text?.map(part => part.text).join("")
+            text: richResponse ? this.mapDisplayParts(tag.text, project) : tag.text?.map(part => part.text).join(""),
         })) : [];
     }
 
@@ -1685,10 +1843,12 @@ export class Session<TMessage = string> implements EventSender {
         if (!parts) {
             return [];
         }
-        return parts.map(part => part.kind !== "linkName" ? part : {
-            ...part,
-            target: this.toFileSpan((part as JSDocLinkDisplayPart).target.fileName, (part as JSDocLinkDisplayPart).target.textSpan, project),
-        });
+        return parts.map(part =>
+            part.kind !== "linkName" ? part : {
+                ...part,
+                target: this.toFileSpan((part as JSDocLinkDisplayPart).target.fileName, (part as JSDocLinkDisplayPart).target.textSpan, project),
+            }
+        );
     }
 
     private mapSignatureHelpItems(items: SignatureHelpItem[], project: Project, richResponse: boolean): protocol.SignatureHelpItem[] {
@@ -1710,7 +1870,7 @@ export class Session<TMessage = string> implements EventSender {
      * This retains the existing behavior for the "simplified" (VS Code) protocol but stores the .d.ts location in a
      * set of additional fields, and does the reverse for VS (store the .d.ts location where
      * it used to be and stores the .ts location in the additional fields).
-    */
+     */
     private static mapToOriginalLocation<T extends DocumentSpan>(def: T): T {
         if (def.originalFileName) {
             Debug.assert(def.originalTextSpan !== undefined, "originalTextSpan should be present if originalFileName is");
@@ -1721,7 +1881,7 @@ export class Session<TMessage = string> implements EventSender {
                 targetFileName: def.fileName,
                 targetTextSpan: def.textSpan,
                 contextSpan: def.originalContextSpan,
-                targetContextSpan: def.contextSpan
+                targetContextSpan: def.contextSpan,
             };
         }
         return def;
@@ -1735,7 +1895,7 @@ export class Session<TMessage = string> implements EventSender {
         return {
             file: fileName,
             start: { line: start.line + 1, offset: start.character + 1 },
-            end: { line: end.line + 1, offset: end.character + 1 }
+            end: { line: end.line + 1, offset: end.character + 1 },
         };
     }
 
@@ -1833,8 +1993,8 @@ export class Session<TMessage = string> implements EventSender {
                 file: fileName,
                 highlightSpans: highlightSpans.map(({ textSpan, kind, contextSpan }) => ({
                     ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo),
-                    kind
-                }))
+                    kind,
+                })),
             };
         });
     }
@@ -1845,22 +2005,58 @@ export class Session<TMessage = string> implements EventSender {
         const hints = project.getLanguageService().provideInlayHints(file, args, this.getPreferences(file));
 
         return hints.map(hint => {
-            const { text, position } = hint;
-            const hintText = typeof text === "string" ? text : text.map(({ text, span, file }) => ({
-                text,
-                span: span && {
-                    start: scriptInfo.positionToLineOffset(span.start),
-                    end: scriptInfo.positionToLineOffset(span.start + span.length),
-                    file: file!
-                }
-            }));
+            const { position, displayParts } = hint;
 
             return {
                 ...hint,
                 position: scriptInfo.positionToLineOffset(position),
-                text: hintText
+                displayParts: displayParts?.map(({ text, span, file }) => {
+                    if (span) {
+                        Debug.assertIsDefined(file, "Target file should be defined together with its span.");
+                        const scriptInfo = this.projectService.getScriptInfo(file)!;
+
+                        return {
+                            text,
+                            span: {
+                                start: scriptInfo.positionToLineOffset(span.start),
+                                end: scriptInfo.positionToLineOffset(span.start + span.length),
+                                file,
+                            },
+                        };
+                    }
+                    else {
+                        return { text };
+                    }
+                }),
             };
         });
+    }
+    private mapCode(args: protocol.MapCodeRequestArgs): protocol.FileCodeEdits[] {
+        const formatOptions = this.getHostFormatOptions();
+        const preferences = this.getHostPreferences();
+        const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+        const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+        const focusLocations = args.mapping.focusLocations?.map(spans => {
+            return spans.map(loc => {
+                const start = scriptInfo.lineOffsetToPosition(loc.start.line, loc.start.offset);
+                const end = scriptInfo.lineOffsetToPosition(loc.end.line, loc.end.offset);
+                return {
+                    start,
+                    length: end - start,
+                };
+            });
+        });
+
+        const changes = languageService.mapCode(file, args.mapping.contents, focusLocations, formatOptions, preferences);
+        return this.mapTextChangesToCodeEdits(changes);
+    }
+
+    private getCopilotRelatedInfo(args: protocol.FileRequestArgs): protocol.CopilotRelatedItems {
+        const { file, project } = this.getFileAndProject(args);
+
+        return {
+            relatedFiles: project.getLanguageService().getImports(file),
+        };
     }
 
     private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
@@ -1868,18 +2064,61 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private getProjectInfo(args: protocol.ProjectInfoRequestArgs): protocol.ProjectInfo {
-        return this.getProjectInfoWorker(args.file, args.projectFileName, args.needFileNameList, /*excludeConfigFiles*/ false);
+        return this.getProjectInfoWorker(
+            args.file,
+            args.projectFileName,
+            args.needFileNameList,
+            args.needDefaultConfiguredProjectInfo,
+            /*excludeConfigFiles*/ false,
+        );
     }
 
-    private getProjectInfoWorker(uncheckedFileName: string, projectFileName: string | undefined, needFileNameList: boolean, excludeConfigFiles: boolean) {
+    private getProjectInfoWorker(
+        uncheckedFileName: string,
+        projectFileName: string | undefined,
+        needFileNameList: boolean,
+        needDefaultConfiguredProjectInfo: boolean | undefined,
+        excludeConfigFiles: boolean,
+    ): Omit<protocol.ProjectInfo, "fileNames"> & { fileNames?: NormalizedPath[]; } {
         const { project } = this.getFileAndProjectWorker(uncheckedFileName, projectFileName);
         updateProjectIfDirty(project);
         const projectInfo = {
             configFileName: project.getProjectName(),
             languageServiceDisabled: !project.languageServiceEnabled,
-            fileNames: needFileNameList ? project.getFileNames(/*excludeFilesFromExternalLibraries*/ false, excludeConfigFiles) : undefined
+            fileNames: needFileNameList ? project.getFileNames(/*excludeFilesFromExternalLibraries*/ false, excludeConfigFiles) : undefined,
+            configuredProjectInfo: needDefaultConfiguredProjectInfo ? this.getDefaultConfiguredProjectInfo(uncheckedFileName) : undefined,
         };
         return projectInfo;
+    }
+
+    private getDefaultConfiguredProjectInfo(uncheckedFileName: string): protocol.DefaultConfiguredProjectInfo | undefined {
+        const info = this.projectService.getScriptInfo(uncheckedFileName);
+        if (!info) return;
+
+        // Find default project for the info
+        const result = this.projectService.findDefaultConfiguredProjectWorker(
+            info,
+            ConfiguredProjectLoadKind.CreateReplay,
+        );
+        if (!result) return undefined;
+        let notMatchedByConfig: NormalizedPath[] | undefined;
+        let notInProject: NormalizedPath[] | undefined;
+        result.seenProjects.forEach((kind, project) => {
+            if (project !== result.defaultProject) {
+                if (kind !== ConfiguredProjectLoadKind.CreateReplay) {
+                    (notMatchedByConfig ??= []).push(toNormalizedPath(project.getConfigFilePath()));
+                }
+                else {
+                    (notInProject ??= []).push(toNormalizedPath(project.getConfigFilePath()));
+                }
+            }
+        });
+        result.seenConfigs?.forEach(config => (notMatchedByConfig ??= []).push(config));
+        return {
+            notMatchedByConfig,
+            notInProject,
+            defaultProject: result.defaultProject && toNormalizedPath(result.defaultProject.getConfigFilePath()),
+        };
     }
 
     private getRenameInfo(args: protocol.FileLocationRequestArgs): RenameInfo {
@@ -1944,7 +2183,9 @@ export class Session<TMessage = string> implements EventSender {
         const defaultProject = this.getDefaultProject(args);
         const preferences = this.getPreferences(file);
         const renameInfo: protocol.RenameInfo = this.mapRenameInfo(
-            defaultProject.getLanguageService().getRenameInfo(file, position, preferences), Debug.checkDefined(this.projectService.getScriptInfo(file)));
+            defaultProject.getLanguageService().getRenameInfo(file, position, preferences),
+            Debug.checkDefined(this.projectService.getScriptInfo(file)),
+        );
 
         if (!renameInfo.canRename) return simplifiedResult ? { info: renameInfo, locs: [] } : [];
 
@@ -1955,6 +2196,7 @@ export class Session<TMessage = string> implements EventSender {
             !!args.findInStrings,
             !!args.findInComments,
             preferences,
+            this.host.useCaseSensitiveFileNames,
         );
         if (!simplifiedResult) return locations;
         return { info: renameInfo, locs: this.toSpanGroups(locations) };
@@ -1964,7 +2206,8 @@ export class Session<TMessage = string> implements EventSender {
         if (info.canRename) {
             const { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan } = info;
             return identity<protocol.RenameInfoSuccess>(
-                { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: toProtocolTextSpan(triggerSpan, scriptInfo) });
+                { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: toProtocolTextSpan(triggerSpan, scriptInfo) },
+            );
         }
         else {
             return info;
@@ -1990,6 +2233,7 @@ export class Session<TMessage = string> implements EventSender {
             projects,
             this.getDefaultProject(args),
             { fileName: args.file, pos: position },
+            this.host.useCaseSensitiveFileNames,
             this.logger,
         );
 
@@ -2011,31 +2255,44 @@ export class Session<TMessage = string> implements EventSender {
 
     private getFileReferences(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.FileReferencesResponseBody | readonly ReferenceEntry[] {
         const projects = this.getProjects(args);
-        const fileName = args.file;
-        const preferences = this.getPreferences(toNormalizedPath(fileName));
+        const fileName = toNormalizedPath(args.file);
+        const preferences = this.getPreferences(fileName);
+        const initialLocation: DocumentPosition = { fileName, pos: 0 };
+        const perProjectResults = getPerProjectReferences(
+            projects,
+            this.getDefaultProject(args),
+            initialLocation,
+            initialLocation,
+            mapDefinitionInProjectIfFileInProject,
+            project => {
+                this.logger.info(`Finding references to file ${fileName} in project ${project.getProjectName()}`);
+                return project.getLanguageService().getFileReferences(fileName);
+            },
+        );
 
-        const references: ReferenceEntry[] = [];
-        const seen = createDocumentSpanSet();
-
-        forEachProjectInProjects(projects, /*path*/ undefined, project => {
-            if (project.getCancellationToken().isCancellationRequested()) return;
-
-            const projectOutputs = project.getLanguageService().getFileReferences(fileName);
-            if (projectOutputs) {
+        // No re-mapping or isDefinition updatses are required if there's exactly one project
+        let references: ReferenceEntry[];
+        if (isArray(perProjectResults)) {
+            references = perProjectResults as ReferenceEntry[];
+        }
+        else {
+            references = [];
+            const seen = createDocumentSpanSet(this.host.useCaseSensitiveFileNames);
+            perProjectResults.forEach(projectOutputs => {
                 for (const referenceEntry of projectOutputs) {
                     if (!seen.has(referenceEntry)) {
                         references.push(referenceEntry);
                         seen.add(referenceEntry);
                     }
                 }
-            }
-        });
+            });
+        }
 
         if (!simplifiedResult) return references;
         const refs = references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry, preferences));
         return {
             refs,
-            symbolName: `"${args.file}"`
+            symbolName: `"${args.file}"`,
         };
     }
 
@@ -2047,11 +2304,11 @@ export class Session<TMessage = string> implements EventSender {
         this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath);
     }
 
-    private getPosition(args: protocol.Location & { position?: number }, scriptInfo: ScriptInfo): number {
+    private getPosition(args: protocol.Location & { position?: number; }, scriptInfo: ScriptInfo): number {
         return args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
     }
 
-    private getPositionInFile(args: protocol.Location & { position?: number }, file: NormalizedPath): number {
+    private getPositionInFile(args: protocol.Location & { position?: number; }, file: NormalizedPath): number {
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
         return this.getPosition(args, scriptInfo);
     }
@@ -2064,11 +2321,11 @@ export class Session<TMessage = string> implements EventSender {
         const { file, project } = this.getFileAndProject(args);
         return {
             file,
-            languageService: project.getLanguageService(/*ensureSynchronized*/ false)
+            languageService: project.getLanguageService(/*ensureSynchronized*/ false),
         };
     }
 
-    private getFileAndProjectWorker(uncheckedFileName: string, projectFileName: string | undefined): { file: NormalizedPath, project: Project } {
+    private getFileAndProjectWorker(uncheckedFileName: string, projectFileName: string | undefined): { file: NormalizedPath; project: Project; } {
         const file = toNormalizedPath(uncheckedFileName);
         const project = this.getProject(projectFileName) || this.projectService.ensureDefaultProjectForFile(file);
         return { file, project };
@@ -2084,7 +2341,7 @@ export class Session<TMessage = string> implements EventSender {
                 hintSpan: toProtocolTextSpan(s.hintSpan, scriptInfo),
                 bannerText: s.bannerText,
                 autoCollapse: s.autoCollapse,
-                kind: s.kind
+                kind: s.kind,
             }));
         }
         else {
@@ -2160,7 +2417,7 @@ export class Session<TMessage = string> implements EventSender {
         else {
             return useDisplayParts ? quickInfo : {
                 ...quickInfo,
-                tags: this.mapJSDocTagInfo(quickInfo.tags, project, /*richResponse*/ false) as JSDocTagInfo[]
+                tags: this.mapJSDocTagInfo(quickInfo.tags, project, /*richResponse*/ false) as JSDocTagInfo[],
             };
         }
     }
@@ -2204,8 +2461,7 @@ export class Session<TMessage = string> implements EventSender {
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
         const position = scriptInfo.lineOffsetToPosition(args.line, args.offset);
         const formatOptions = this.getFormatOptions(file);
-        const edits = languageService.getFormattingEditsAfterKeystroke(file, position, args.key,
-            formatOptions);
+        const edits = languageService.getFormattingEditsAfterKeystroke(file, position, args.key, formatOptions);
         // Check whether we should auto-indent. This will be when
         // the position is on a line containing only whitespace.
         // This should leave the edits returned from
@@ -2234,7 +2490,7 @@ export class Session<TMessage = string> implements EventSender {
                     const firstNoWhiteSpacePosition = absolutePosition + i;
                     edits.push({
                         span: createTextSpanFromBounds(absolutePosition, firstNoWhiteSpacePosition),
-                        newText: formatting.getIndentationString(preferredIndent, formatOptions)
+                        newText: formatting.getIndentationString(preferredIndent, formatOptions),
                     });
                 }
             }
@@ -2244,11 +2500,11 @@ export class Session<TMessage = string> implements EventSender {
             return undefined;
         }
 
-        return edits.map((edit) => {
+        return edits.map(edit => {
             return {
                 start: scriptInfo.positionToLineOffset(edit.span.start),
                 end: scriptInfo.positionToLineOffset(textSpanEnd(edit.span)),
-                newText: edit.newText ? edit.newText : ""
+                newText: edit.newText ? edit.newText : "",
             };
         });
     }
@@ -2264,7 +2520,7 @@ export class Session<TMessage = string> implements EventSender {
             {
                 ...convertUserPreferences(this.getPreferences(file)),
                 triggerCharacter: args.triggerCharacter,
-                triggerKind: args.triggerKind as CompletionTriggerKind | undefined,
+                triggerKind: args.triggerKind,
                 includeExternalModuleExports: args.includeExternalModuleExports,
                 includeInsertTextCompletions: args.includeInsertTextCompletions,
             },
@@ -2277,42 +2533,13 @@ export class Session<TMessage = string> implements EventSender {
         const prefix = args.prefix || "";
         const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
             if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                const {
-                    name,
-                    kind,
-                    kindModifiers,
-                    sortText,
-                    insertText,
-                    filterText,
-                    replacementSpan,
-                    hasAction,
-                    source,
-                    sourceDisplay,
-                    labelDetails,
-                    isSnippet,
-                    isRecommended,
-                    isPackageJsonImport,
-                    isImportStatementCompletion,
-                    data } = entry;
-                const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
+                const convertedSpan = entry.replacementSpan ? toProtocolTextSpan(entry.replacementSpan, scriptInfo) : undefined;
                 // Use `hasAction || undefined` to avoid serializing `false`.
                 return {
-                    name,
-                    kind,
-                    kindModifiers,
-                    sortText,
-                    insertText,
-                    filterText,
+                    ...entry,
                     replacementSpan: convertedSpan,
-                    isSnippet,
-                    hasAction: hasAction || undefined,
-                    source,
-                    sourceDisplay,
-                    labelDetails,
-                    isRecommended,
-                    isPackageJsonImport,
-                    isImportStatementCompletion,
-                    data
+                    hasAction: entry.hasAction || undefined,
+                    symbol: undefined,
                 };
             }
         });
@@ -2377,9 +2604,9 @@ export class Session<TMessage = string> implements EventSender {
                 return {
                     projectFileName: project.getProjectName(),
                     fileNames: project.getCompileOnSaveAffectedFileList(info),
-                    projectUsesOutFile: !!outFile(compilationSettings)
+                    projectUsesOutFile: !!compilationSettings.outFile,
                 };
-            }
+            },
         );
     }
 
@@ -2398,7 +2625,7 @@ export class Session<TMessage = string> implements EventSender {
                 emitSkipped,
                 diagnostics: args.includeLinePosition ?
                     this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics) :
-                    diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true))
+                    diagnostics.map(d => formatDiagnosticToProtocol(d, /*includeFileName*/ true)),
             } :
             !emitSkipped;
     }
@@ -2415,7 +2642,7 @@ export class Session<TMessage = string> implements EventSender {
                 ...helpItems,
                 applicableSpan: {
                     start: scriptInfo.positionToLineOffset(span.start),
-                    end: scriptInfo.positionToLineOffset(span.start + span.length)
+                    end: scriptInfo.positionToLineOffset(span.start + span.length),
                 },
                 items: this.mapSignatureHelpItems(helpItems.items, project, useDisplayParts),
             };
@@ -2426,7 +2653,7 @@ export class Session<TMessage = string> implements EventSender {
         else {
             return {
                 ...helpItems,
-                items: helpItems.items.map(item => ({ ...item, tags: this.mapJSDocTagInfo(item.tags, project, /*richResponse*/ false) as JSDocTagInfo[] }))
+                items: helpItems.items.map(item => ({ ...item, tags: this.mapJSDocTagInfo(item.tags, project, /*richResponse*/ false) as JSDocTagInfo[] })),
             };
         }
     }
@@ -2437,13 +2664,13 @@ export class Session<TMessage = string> implements EventSender {
         return project && { fileName, project };
     }
 
-    private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
+    private getDiagnostics(next: NextStep, delay: number, fileArgs: (string | protocol.FileRangesRequestArgs)[]): void {
         if (this.suppressDiagnosticEvents) {
             return;
         }
 
-        if (fileNames.length > 0) {
-            this.updateErrorCheck(next, fileNames, delay);
+        if (fileArgs.length > 0) {
+            this.updateErrorCheck(next, fileArgs, delay);
         }
     }
 
@@ -2456,23 +2683,24 @@ export class Session<TMessage = string> implements EventSender {
         const end = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
         if (start >= 0) {
             this.changeSeq++;
-            this.projectService.applyChangesToFile(scriptInfo, singleIterator({
-                span: { start, length: end - start },
-                newText: args.insertString! // TODO: GH#18217
-            }));
+            this.projectService.applyChangesToFile(
+                scriptInfo,
+                singleIterator({
+                    span: { start, length: end - start },
+                    newText: args.insertString!, // TODO: GH#18217
+                }),
+            );
         }
     }
 
-    private reload(args: protocol.ReloadRequestArgs, reqSeq: number) {
+    private reload(args: protocol.ReloadRequestArgs) {
         const file = toNormalizedPath(args.file);
         const tempFileName = args.tmpfile === undefined ? undefined : toNormalizedPath(args.tmpfile);
         const info = this.projectService.getScriptInfoForNormalizedPath(file);
         if (info) {
             this.changeSeq++;
             // make sure no changes happen before this one is finished
-            if (info.reloadFromFile(tempFileName)) {
-                this.doOutput(/*info*/ undefined, protocol.CommandTypes.Reload, reqSeq, /*success*/ true);
-            }
+            info.reloadFromFile(tempFileName);
         }
     }
 
@@ -2498,7 +2726,7 @@ export class Session<TMessage = string> implements EventSender {
             kindModifiers: item.kindModifiers,
             spans: item.spans.map(span => toProtocolTextSpan(span, scriptInfo)),
             childItems: this.mapLocationNavigationBarItems(item.childItems, scriptInfo),
-            indent: item.indent
+            indent: item.indent,
         }));
     }
 
@@ -2508,8 +2736,8 @@ export class Session<TMessage = string> implements EventSender {
         return !items
             ? undefined
             : simplifiedResult
-                ? this.mapLocationNavigationBarItems(items, this.projectService.getScriptInfoForNormalizedPath(file)!)
-                : items;
+            ? this.mapLocationNavigationBarItems(items, this.projectService.getScriptInfoForNormalizedPath(file)!)
+            : items;
     }
 
     private toLocationNavigationTree(tree: NavigationTree, scriptInfo: ScriptInfo): protocol.NavigationTree {
@@ -2519,7 +2747,7 @@ export class Session<TMessage = string> implements EventSender {
             kindModifiers: tree.kindModifiers,
             spans: tree.spans.map(span => toProtocolTextSpan(span, scriptInfo)),
             nameSpan: tree.nameSpan && toProtocolTextSpan(tree.nameSpan, scriptInfo),
-            childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo))
+            childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo)),
         };
     }
 
@@ -2529,8 +2757,8 @@ export class Session<TMessage = string> implements EventSender {
         return !tree
             ? undefined
             : simplifiedResult
-                ? this.toLocationNavigationTree(tree, this.projectService.getScriptInfoForNormalizedPath(file)!)
-                : tree;
+            ? this.toLocationNavigationTree(tree, this.projectService.getScriptInfoForNormalizedPath(file)!)
+            : tree;
     }
 
     private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): readonly protocol.NavtoItem[] | readonly NavigateToItem[] {
@@ -2539,29 +2767,30 @@ export class Session<TMessage = string> implements EventSender {
             flatMap(full, ({ navigateToItems }) => navigateToItems) :
             flatMap(
                 full,
-                ({ project, navigateToItems }) => navigateToItems.map(navItem => {
-                    const scriptInfo = project.getScriptInfo(navItem.fileName)!;
-                    const bakedItem: protocol.NavtoItem = {
-                        name: navItem.name,
-                        kind: navItem.kind,
-                        kindModifiers: navItem.kindModifiers,
-                        isCaseSensitive: navItem.isCaseSensitive,
-                        matchKind: navItem.matchKind,
-                        file: navItem.fileName,
-                        start: scriptInfo.positionToLineOffset(navItem.textSpan.start),
-                        end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan))
-                    };
-                    if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
-                        bakedItem.kindModifiers = navItem.kindModifiers;
-                    }
-                    if (navItem.containerName && (navItem.containerName.length > 0)) {
-                        bakedItem.containerName = navItem.containerName;
-                    }
-                    if (navItem.containerKind && (navItem.containerKind.length > 0)) {
-                        bakedItem.containerKind = navItem.containerKind;
-                    }
-                    return bakedItem;
-                })
+                ({ project, navigateToItems }) =>
+                    navigateToItems.map(navItem => {
+                        const scriptInfo = project.getScriptInfo(navItem.fileName)!;
+                        const bakedItem: protocol.NavtoItem = {
+                            name: navItem.name,
+                            kind: navItem.kind,
+                            kindModifiers: navItem.kindModifiers,
+                            isCaseSensitive: navItem.isCaseSensitive,
+                            matchKind: navItem.matchKind,
+                            file: navItem.fileName,
+                            start: scriptInfo.positionToLineOffset(navItem.textSpan.start),
+                            end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan)),
+                        };
+                        if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
+                            bakedItem.kindModifiers = navItem.kindModifiers;
+                        }
+                        if (navItem.containerName && (navItem.containerName.length > 0)) {
+                            bakedItem.containerName = navItem.containerName;
+                        }
+                        if (navItem.containerKind && (navItem.containerKind.length > 0)) {
+                            bakedItem.containerKind = navItem.containerKind;
+                        }
+                        return bakedItem;
+                    }),
             );
     }
 
@@ -2573,6 +2802,7 @@ export class Session<TMessage = string> implements EventSender {
             const { file, project } = this.getFileAndProject(args as protocol.FileRequestArgs);
             return [{ project, navigateToItems: project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file) }];
         }
+        const preferences = this.getHostPreferences();
 
         const outputs: ProjectNavigateToItems[] = [];
 
@@ -2606,7 +2836,13 @@ export class Session<TMessage = string> implements EventSender {
 
         // Mutates `outputs`
         function addItemsForProject(project: Project) {
-            const projectItems = project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject());
+            const projectItems = project.getLanguageService().getNavigateToItems(
+                searchValue,
+                maxResultCount,
+                /*fileName*/ undefined,
+                /*excludeDts*/ project.isNonTsProject(),
+                /*excludeLibFiles*/ preferences.excludeLibrarySymbolsInNavTo,
+            );
             const unseenItems = filter(projectItems, item => tryAddSeenItem(item) && !getMappedLocationForProject(documentSpanLocation(item), project));
             if (unseenItems.length) {
                 outputs.push({ project, navigateToItems: unseenItems });
@@ -2693,7 +2929,8 @@ export class Session<TMessage = string> implements EventSender {
     private getApplicableRefactors(args: protocol.GetApplicableRefactorsRequestArgs): protocol.ApplicableRefactorInfo[] {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
-        return project.getLanguageService().getApplicableRefactors(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file), args.triggerReason, args.kind, args.includeInteractiveActions);
+        const result = project.getLanguageService().getApplicableRefactors(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file), args.triggerReason, args.kind, args.includeInteractiveActions);
+        return result.map(result => ({ ...result, actions: result.actions.map(action => ({ ...action, range: action.range ? { start: convertToLocation({ line: action.range.start.line, character: action.range.start.offset }), end: convertToLocation({ line: action.range.end.line, character: action.range.end.offset }) } : undefined })) }));
     }
 
     private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {
@@ -2706,12 +2943,12 @@ export class Session<TMessage = string> implements EventSender {
             args.refactor,
             args.action,
             this.getPreferences(file),
-            args.interactiveRefactorArguments
+            args.interactiveRefactorArguments,
         );
 
         if (result === undefined) {
             return {
-                edits: []
+                edits: [],
             };
         }
 
@@ -2732,10 +2969,32 @@ export class Session<TMessage = string> implements EventSender {
         return result;
     }
 
-    private getMoveToRefactoringFileSuggestions(args: protocol.GetMoveToRefactoringFileSuggestionsRequestArgs): { newFileName: string, files: string[] }{
+    private getMoveToRefactoringFileSuggestions(args: protocol.GetMoveToRefactoringFileSuggestionsRequestArgs): { newFileName: string; files: string[]; } {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
         return project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
+    }
+
+    private preparePasteEdits(args: protocol.PreparePasteEditsRequestArgs): boolean {
+        const { file, project } = this.getFileAndProject(args);
+        return project.getLanguageService().preparePasteEditsForFile(file, args.copiedTextSpan.map(copies => this.getRange({ file, startLine: copies.start.line, startOffset: copies.start.offset, endLine: copies.end.line, endOffset: copies.end.offset }, this.projectService.getScriptInfoForNormalizedPath(file)!)));
+    }
+    private getPasteEdits(args: protocol.GetPasteEditsRequestArgs): protocol.PasteEditsAction | undefined {
+        const { file, project } = this.getFileAndProject(args);
+        const copiedFrom = args.copiedFrom
+            ? { file: args.copiedFrom.file, range: args.copiedFrom.spans.map(copies => this.getRange({ file: args.copiedFrom!.file, startLine: copies.start.line, startOffset: copies.start.offset, endLine: copies.end.line, endOffset: copies.end.offset }, project.getScriptInfoForNormalizedPath(toNormalizedPath(args.copiedFrom!.file))!)) }
+            : undefined;
+        const result = project.getLanguageService().getPasteEdits(
+            {
+                targetFile: file,
+                pastedText: args.pastedText,
+                pasteLocations: args.pasteLocations.map(paste => this.getRange({ file, startLine: paste.start.line, startOffset: paste.start.offset, endLine: paste.end.line, endOffset: paste.end.offset }, project.getScriptInfoForNormalizedPath(file)!)),
+                copiedFrom,
+                preferences: this.getPreferences(file),
+            },
+            this.getFormatOptions(file),
+        );
+        return result && this.mapPasteEditsAction(result);
     }
 
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
@@ -2744,11 +3003,11 @@ export class Session<TMessage = string> implements EventSender {
         const changes = project.getLanguageService().organizeImports(
             {
                 fileName: file,
-                mode: args.mode as OrganizeImportsMode | undefined ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : undefined),
+                mode: args.mode ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : undefined),
                 type: "file",
             },
             this.getFormatOptions(file),
-            this.getPreferences(file)
+            this.getPreferences(file),
         );
         if (simplifiedResult) {
             return this.mapTextChangesToCodeEdits(changes);
@@ -2763,7 +3022,6 @@ export class Session<TMessage = string> implements EventSender {
         const newPath = toNormalizedPath(args.newFilePath);
         const formatOptions = this.getHostFormatOptions();
         const preferences = this.getHostPreferences();
-
 
         const seenFiles = new Set<string>();
         const textChanges: FileTextChanges[] = [];
@@ -2798,15 +3056,16 @@ export class Session<TMessage = string> implements EventSender {
         try {
             codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, this.getFormatOptions(file), this.getPreferences(file));
         }
-        catch(e) {
+        catch (e) {
             const ls = project.getLanguageService();
             const existingDiagCodes = [
                 ...ls.getSyntacticDiagnostics(file),
                 ...ls.getSemanticDiagnostics(file),
-                ...ls.getSuggestionDiagnostics(file)
+                ...ls.getSuggestionDiagnostics(file),
             ].map(d =>
                 decodedTextSpanIntersectsWith(startPosition, endPosition - startPosition, d.start!, d.length!)
-                && d.code);
+                && d.code
+            );
             const badCode = args.errorCodes.find(c => !existingDiagCodes.includes(c));
             if (badCode !== undefined) {
                 e.message = `BADCLIENT: Bad error code, ${badCode} not found in range ${startPosition}..${endPosition} (found: ${existingDiagCodes.join(", ")}); could have caused this error:\n${e.message}`;
@@ -2833,8 +3092,9 @@ export class Session<TMessage = string> implements EventSender {
         for (const command of toArray(commands)) {
             const { file, project } = this.getFileAndProject(command);
             project.getLanguageService().applyCodeActionCommand(command, this.getFormatOptions(file)).then(
-                _result => { /* TODO: GH#20447 report success message? */ },
-                _error => { /* TODO: GH#20447 report errors */ });
+                _result => {/* TODO: GH#20447 report success message? */},
+                _error => {/* TODO: GH#20447 report errors */},
+            );
         }
         return {};
     }
@@ -2869,6 +3129,10 @@ export class Session<TMessage = string> implements EventSender {
         return { fixName, description, changes: this.mapTextChangesToCodeEdits(changes), commands, fixId, fixAllDescription };
     }
 
+    private mapPasteEditsAction({ edits, fixId }: PasteEdits): protocol.PasteEditsAction {
+        return { edits: this.mapTextChangesToCodeEdits(edits), fixId };
+    }
+
     private mapTextChangesToCodeEdits(textChanges: readonly FileTextChanges[]): protocol.FileCodeEdits[] {
         return textChanges.map(change => this.mapTextChangeToCodeEdit(change));
     }
@@ -2890,7 +3154,7 @@ export class Session<TMessage = string> implements EventSender {
         return {
             start: scriptInfo.positionToLineOffset(change.span.start),
             end: scriptInfo.positionToLineOffset(change.span.start + change.span.length),
-            newText: change.newText ? change.newText : ""
+            newText: change.newText ? change.newText : "",
         };
     }
 
@@ -2903,8 +3167,8 @@ export class Session<TMessage = string> implements EventSender {
         return !spans
             ? undefined
             : simplifiedResult
-                ? spans.map(span => toProtocolTextSpan(span, scriptInfo))
-                : spans;
+            ? spans.map(span => toProtocolTextSpan(span, scriptInfo))
+            : spans;
     }
 
     private getDiagnosticsForProject(next: NextStep, delay: number, fileName: string): void {
@@ -2912,16 +3176,19 @@ export class Session<TMessage = string> implements EventSender {
             return;
         }
 
-        const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(fileName, /*projectFileName*/ undefined, /*needFileNameList*/ true, /*excludeConfigFiles*/ true);
-        if (languageServiceDisabled) {
-            return;
-        }
+        const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(
+            fileName,
+            /*projectFileName*/ undefined,
+            /*needFileNameList*/ true,
+            /*needDefaultConfiguredProjectInfo*/ undefined,
+            /*excludeConfigFiles*/ true,
+        );
+
+        if (languageServiceDisabled) return;
 
         // No need to analyze lib.d.ts
-        const fileNamesInProject = fileNames!.filter(value => !stringContains(value, "lib.d.ts")); // TODO: GH#18217
-        if (fileNamesInProject.length === 0) {
-            return;
-        }
+        const fileNamesInProject = fileNames!.filter(value => !value.includes("lib.d.ts")); // TODO: GH#18217
+        if (fileNamesInProject.length === 0) return;
 
         // Sort the file name list to make the recently touched files come first
         const highPriorityFiles: NormalizedPath[] = [];
@@ -3066,7 +3333,7 @@ export class Session<TMessage = string> implements EventSender {
             file: item.file,
             containerName: item.containerName,
             span: toProtocolTextSpan(item.span, scriptInfo),
-            selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo)
+            selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo),
         };
     }
 
@@ -3074,14 +3341,14 @@ export class Session<TMessage = string> implements EventSender {
         const scriptInfo = this.getScriptInfoFromProjectService(incomingCall.from.file);
         return {
             from: this.toProtocolCallHierarchyItem(incomingCall.from),
-            fromSpans: incomingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo))
+            fromSpans: incomingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo)),
         };
     }
 
     private toProtocolCallHierarchyOutgoingCall(outgoingCall: CallHierarchyOutgoingCall, scriptInfo: ScriptInfo): protocol.CallHierarchyOutgoingCall {
         return {
             to: this.toProtocolCallHierarchyItem(outgoingCall.to),
-            fromSpans: outgoingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo))
+            fromSpans: outgoingCall.fromSpans.map(fromSpan => toProtocolTextSpan(fromSpan, scriptInfo)),
         };
     }
 
@@ -3110,19 +3377,20 @@ export class Session<TMessage = string> implements EventSender {
         return outgoingCalls.map(call => this.toProtocolCallHierarchyOutgoingCall(call, scriptInfo));
     }
 
-    getCanonicalFileName(fileName: string) {
+    getCanonicalFileName(fileName: string): string {
         const name = this.host.useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
         return normalizePath(name);
     }
 
-    exit() { /*overridden*/ }
+    exit(): void {/*overridden*/}
 
-    private notRequired(): HandlerResponse {
-        return { responseRequired: false };
+    private notRequired(request: protocol.Request | undefined): HandlerResponse {
+        if (request) this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ true, this.performanceData);
+        return { responseRequired: false, performanceData: this.performanceData };
     }
 
     private requiredResponse(response: {} | undefined): HandlerResponse {
-        return { response, responseRequired: true };
+        return { response, responseRequired: true, performanceData: this.performanceData };
     }
 
     private handlers = new Map(Object.entries<(request: any) => HandlerResponse>({ // TODO(jakebailey): correctly type the handlers
@@ -3131,7 +3399,7 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(response);
         },
         [protocol.CommandTypes.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
-            this.projectService.openExternalProject(request.arguments);
+            this.projectService.openExternalProject(request.arguments, /*cleanupAfter*/ true);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },
@@ -3141,7 +3409,7 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(/*response*/ true);
         },
         [protocol.CommandTypes.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
-            this.projectService.closeExternalProject(request.arguments.projectFileName);
+            this.projectService.closeExternalProject(request.arguments.projectFileName, /*cleanupAfter*/ true);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },
@@ -3158,7 +3426,7 @@ export class Session<TMessage = string> implements EventSender {
                     info: p.info,
                     changes: p.changes,
                     files: p.files,
-                    projectErrors: this.convertToDiagnosticsWithLinePosition(p.projectErrors, /*scriptInfo*/ undefined)
+                    projectErrors: this.convertToDiagnosticsWithLinePosition(p.projectErrors, /*scriptInfo*/ undefined),
                 };
             });
             return this.requiredResponse(converted);
@@ -3170,7 +3438,7 @@ export class Session<TMessage = string> implements EventSender {
                     fileName: file.file,
                     content: file.fileContent,
                     scriptKind: file.scriptKindName,
-                    projectRootPath: file.projectRootPath
+                    projectRootPath: file.projectRootPath,
                 })),
                 request.arguments.changedFiles && mapIterator(request.arguments.changedFiles, file => ({
                     fileName: file.fileName,
@@ -3179,9 +3447,9 @@ export class Session<TMessage = string> implements EventSender {
                         const start = scriptInfo.lineOffsetToPosition(change.start.line, change.start.offset);
                         const end = scriptInfo.lineOffsetToPosition(change.end.line, change.end.offset);
                         return start >= 0 ? { span: { start, length: end - start }, newText: change.newText } : undefined;
-                    })
+                    }),
                 })),
-                request.arguments.closedFiles
+                request.arguments.closedFiles,
             );
             return this.requiredResponse(/*response*/ true);
         },
@@ -3192,16 +3460,16 @@ export class Session<TMessage = string> implements EventSender {
                 request.arguments.changedFiles && mapIterator(request.arguments.changedFiles, file => ({
                     fileName: file.fileName,
                     // apply changes in reverse order
-                    changes: arrayReverseIterator(file.changes)
+                    changes: arrayReverseIterator(file.changes),
                 })),
-                request.arguments.closedFiles
+                request.arguments.closedFiles,
             );
             // TODO: report errors
             return this.requiredResponse(/*response*/ true);
         },
         [protocol.CommandTypes.Exit]: () => {
             this.exit();
-            return this.notRequired();
+            return this.notRequired(/*request*/ undefined);
         },
         [protocol.CommandTypes.Definition]: (request: protocol.DefinitionRequest) => {
             return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ true));
@@ -3250,8 +3518,9 @@ export class Session<TMessage = string> implements EventSender {
                 toNormalizedPath(request.arguments.file),
                 request.arguments.fileContent,
                 convertScriptKindName(request.arguments.scriptKindName!), // TODO: GH#18217
-                request.arguments.projectRootPath ? toNormalizedPath(request.arguments.projectRootPath) : undefined);
-            return this.notRequired();
+                request.arguments.projectRootPath ? toNormalizedPath(request.arguments.projectRootPath) : undefined,
+            );
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Quickinfo]: (request: protocol.QuickInfoRequest) => {
             return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ true));
@@ -3358,34 +3627,33 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.Geterr]: (request: protocol.GeterrRequest) => {
             this.errorCheck.startNew(next => this.getDiagnostics(next, request.arguments.delay, request.arguments.files));
-            return this.notRequired();
+            return this.notRequired(/*request*/ undefined);
         },
         [protocol.CommandTypes.GeterrForProject]: (request: protocol.GeterrForProjectRequest) => {
             this.errorCheck.startNew(next => this.getDiagnosticsForProject(next, request.arguments.delay, request.arguments.file));
-            return this.notRequired();
+            return this.notRequired(/*request*/ undefined);
         },
         [protocol.CommandTypes.Change]: (request: protocol.ChangeRequest) => {
             this.change(request.arguments);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Configure]: (request: protocol.ConfigureRequest) => {
             this.projectService.setHostConfiguration(request.arguments);
-            this.doOutput(/*info*/ undefined, protocol.CommandTypes.Configure, request.seq, /*success*/ true);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Reload]: (request: protocol.ReloadRequest) => {
-            this.reload(request.arguments, request.seq);
+            this.reload(request.arguments);
             return this.requiredResponse({ reloadFinished: true });
         },
         [protocol.CommandTypes.Saveto]: (request: protocol.Request) => {
             const savetoArgs = request.arguments as protocol.SavetoRequestArgs;
             this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Close]: (request: protocol.Request) => {
             const closeArgs = request.arguments as protocol.FileRequestArgs;
             this.closeClientFile(closeArgs.file);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.Navto]: (request: protocol.NavtoRequest) => {
             return this.requiredResponse(this.getNavigateToItems(request.arguments, /*simplifiedResult*/ true));
@@ -3424,9 +3692,9 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
             return this.requiredResponse(this.getProjectInfo(request.arguments));
         },
-        [protocol.CommandTypes.ReloadProjects]: () => {
+        [protocol.CommandTypes.ReloadProjects]: request => {
             this.projectService.reloadProjects();
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
             return this.requiredResponse(this.getJsxClosingTag(request.arguments));
@@ -3461,6 +3729,12 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.GetMoveToRefactoringFileSuggestions]: (request: protocol.GetMoveToRefactoringFileSuggestionsRequest) => {
             return this.requiredResponse(this.getMoveToRefactoringFileSuggestions(request.arguments));
         },
+        [protocol.CommandTypes.PreparePasteEdits]: (request: protocol.PreparePasteEditsRequest) => {
+            return this.requiredResponse(this.preparePasteEdits(request.arguments));
+        },
+        [protocol.CommandTypes.GetPasteEdits]: (request: protocol.GetPasteEditsRequest) => {
+            return this.requiredResponse(this.getPasteEdits(request.arguments));
+        },
         [protocol.CommandTypes.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));
         },
@@ -3478,8 +3752,7 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.ConfigurePlugin]: (request: protocol.ConfigurePluginRequest) => {
             this.configurePlugin(request.arguments);
-            this.doOutput(/*info*/ undefined, protocol.CommandTypes.ConfigurePlugin, request.seq, /*success*/ true);
-            return this.notRequired();
+            return this.notRequired(request);
         },
         [protocol.CommandTypes.SelectionRange]: (request: protocol.SelectionRangeRequest) => {
             return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ true));
@@ -3522,10 +3795,16 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
             return this.requiredResponse(this.provideInlayHints(request.arguments));
-        }
+        },
+        [protocol.CommandTypes.MapCode]: (request: protocol.MapCodeRequest) => {
+            return this.requiredResponse(this.mapCode(request.arguments));
+        },
+        [protocol.CommandTypes.CopilotRelated]: (request: protocol.CopilotRelatedRequest) => {
+            return this.requiredResponse(this.getCopilotRelatedInfo(request.arguments));
+        },
     }));
 
-    public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {
+    public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse): void {
         if (this.handlers.has(command)) {
             throw new Error(`Protocol handler already exists for command "${command}"`);
         }
@@ -3544,36 +3823,40 @@ export class Session<TMessage = string> implements EventSender {
         this.cancellationToken.resetRequest(requestId);
     }
 
-    public executeWithRequestId<T>(requestId: number, f: () => T) {
+    public executeWithRequestId<T>(requestId: number, f: () => T): T;
+    /** @internal */
+    public executeWithRequestId<T>(requestId: number, f: () => T, perfomanceData: PerformanceData | undefined): T; // eslint-disable-line @typescript-eslint/unified-signatures
+    public executeWithRequestId<T>(requestId: number, f: () => T, perfomanceData?: PerformanceData) {
+        const currentPerformanceData = this.performanceData;
         try {
+            this.performanceData = perfomanceData;
             this.setCurrentRequest(requestId);
             return f();
         }
         finally {
             this.resetCurrentRequest(requestId);
+            this.performanceData = currentPerformanceData;
         }
     }
 
     public executeCommand(request: protocol.Request): HandlerResponse {
         const handler = this.handlers.get(request.command);
         if (handler) {
-            const response = this.executeWithRequestId(request.seq, () => handler(request));
+            const response = this.executeWithRequestId(request.seq, () => handler(request), /*perfomanceData*/ undefined);
             this.projectService.enableRequestedPlugins();
             return response;
         }
         else {
             this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
-            this.doOutput(/*info*/ undefined, protocol.CommandTypes.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
+            this.doOutput(/*info*/ undefined, protocol.CommandTypes.Unknown, request.seq, /*success*/ false, /*performanceData*/ undefined, `Unrecognized JSON command: ${request.command}`);
             return { responseRequired: false };
         }
     }
 
-    public onMessage(message: TMessage) {
+    public onMessage(message: TMessage): void {
         this.gcTimer.scheduleCollect();
-
-        this.performanceData = undefined;
-
         let start: [number, number] | undefined;
+        const currentPerformanceData = this.performanceData;
         if (this.logger.hasLevel(LogLevel.requestTime)) {
             start = this.hrtime();
             if (this.logger.hasLevel(LogLevel.verbose)) {
@@ -3588,10 +3871,9 @@ export class Session<TMessage = string> implements EventSender {
             relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
             tracing?.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
-            perfLogger?.logStartCommand("" + request.command, this.toStringMessage(message).substring(0, 100));
 
             tracing?.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }, /*separateBeginAndEnd*/ true);
-            const { response, responseRequired } = this.executeCommand(request);
+            const { response, responseRequired, performanceData } = this.executeCommand(request);
             tracing?.pop();
 
             if (this.logger.hasLevel(LogLevel.requestTime)) {
@@ -3605,13 +3887,25 @@ export class Session<TMessage = string> implements EventSender {
             }
 
             // Note: Log before writing the response, else the editor can complete its activity before the server does
-            perfLogger?.logStopCommand("" + request.command, "Success");
             tracing?.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
             if (response) {
-                this.doOutput(response, request.command, request.seq, /*success*/ true);
+                this.doOutput(
+                    response,
+                    request.command,
+                    request.seq,
+                    /*success*/ true,
+                    performanceData,
+                );
             }
             else if (responseRequired) {
-                this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
+                this.doOutput(
+                    /*info*/ undefined,
+                    request.command,
+                    request.seq,
+                    /*success*/ false,
+                    performanceData,
+                    "No content available.",
+                );
             }
         }
         catch (err) {
@@ -3620,14 +3914,12 @@ export class Session<TMessage = string> implements EventSender {
 
             if (err instanceof OperationCanceledException) {
                 // Handle cancellation exceptions
-                perfLogger?.logStopCommand("" + (request && request.command), "Canceled: " + err);
                 tracing?.instant(tracing.Phase.Session, "commandCanceled", { seq: request?.seq, command: request?.command });
-                this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
+                this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true, this.performanceData);
                 return;
             }
 
             this.logErrorWorker(err, this.toStringMessage(message), relevantFile);
-            perfLogger?.logStopCommand("" + (request && request.command), "Error: " + err);
             tracing?.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (err as Error).message });
 
             this.doOutput(
@@ -3635,7 +3927,12 @@ export class Session<TMessage = string> implements EventSender {
                 request ? request.command : protocol.CommandTypes.Unknown,
                 request ? request.seq : 0,
                 /*success*/ false,
-                "Error processing request. " + (err as StackTraceError).message + "\n" + (err as StackTraceError).stack);
+                this.performanceData,
+                "Error processing request. " + (err as StackTraceError).message + "\n" + (err as StackTraceError).stack,
+            );
+        }
+        finally {
+            this.performanceData = currentPerformanceData;
         }
     }
 
@@ -3669,10 +3966,16 @@ interface FileAndProject {
     readonly project: Project;
 }
 
+function toProtocolPerformanceData(performanceData: PerformanceData): protocol.PerformanceData {
+    const diagnosticsDuration = performanceData.diagnosticsDuration &&
+        arrayFrom(performanceData.diagnosticsDuration, ([file, data]) => ({ ...data, file }));
+    return { ...performanceData, diagnosticsDuration };
+}
+
 function toProtocolTextSpan(textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.TextSpan {
     return {
         start: scriptInfo.positionToLineOffset(textSpan.start),
-        end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan))
+        end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan)),
     };
 }
 
@@ -3694,13 +3997,13 @@ function positionToLineOffset(info: ScriptInfoOrConfig, position: number): proto
 
 function convertLinkedEditInfoToRanges(linkedEdit: LinkedEditingInfo, scriptInfo: ScriptInfo): protocol.LinkedEditingRangesBody {
     const ranges = linkedEdit.ranges.map(
-            r => {
-                return {
-                    start: scriptInfo.positionToLineOffset(r.start),
-                    end: scriptInfo.positionToLineOffset(r.start + r.length),
-                };
-            }
-        );
+        r => {
+            return {
+                start: scriptInfo.positionToLineOffset(r.start),
+                end: scriptInfo.positionToLineOffset(r.start + r.length),
+            };
+        },
+    );
     if (!linkedEdit.wordPattern) return { ranges };
     return { ranges, wordPattern: linkedEdit.wordPattern };
 }
@@ -3719,9 +4022,11 @@ function convertNewFileTextChangeToCodeEdit(textChanges: FileTextChanges): proto
 export interface HandlerResponse {
     response?: {};
     responseRequired?: boolean;
+    /** @internal */ performanceData?: PerformanceData;
 }
 
-/** @internal */ // Exported only for tests
+/** @internal */
+// Exported only for tests
 export function getLocationInNewDocument(oldText: string, renameFilename: string, renameLocation: number, edits: readonly FileTextChanges[]): protocol.Location {
     const newText = applyEdits(oldText, renameFilename, edits);
     const { line, character } = computeLineAndCharacterOfPosition(computeLineStarts(newText), renameLocation);
@@ -3752,7 +4057,7 @@ function referenceEntryToReferencesResponseItem(projectService: ProjectService, 
         ...span,
         lineText,
         isWriteAccess,
-        isDefinition
+        isDefinition,
     };
 }
 
@@ -3763,8 +4068,8 @@ function getLineText(scriptInfo: ScriptInfo, span: protocol.TextSpanWithContext)
 
 function isCompletionEntryData(data: any): data is CompletionEntryData {
     return data === undefined || data && typeof data === "object"
-        && typeof data.exportName === "string"
-        && (data.fileName === undefined || typeof data.fileName === "string")
-        && (data.ambientModuleName === undefined || typeof data.ambientModuleName === "string"
-        && (data.isPackageJsonImport === undefined || typeof data.isPackageJsonImport === "boolean"));
+            && typeof data.exportName === "string"
+            && (data.fileName === undefined || typeof data.fileName === "string")
+            && (data.ambientModuleName === undefined || typeof data.ambientModuleName === "string"
+                    && (data.isPackageJsonImport === undefined || typeof data.isPackageJsonImport === "boolean"));
 }

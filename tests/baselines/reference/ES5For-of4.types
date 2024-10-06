@@ -4,6 +4,7 @@
 for (var v of [])
 >v : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     var x = v;
 >x : any

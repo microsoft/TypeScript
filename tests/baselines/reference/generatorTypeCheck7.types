@@ -4,7 +4,9 @@
 interface WeirdIter extends IterableIterator<number> {
     hello: string;
 >hello : string
+>      : ^^^^^^
 }
 function* g1(): WeirdIter { }
 >g1 : () => WeirdIter
+>   : ^^^^^^         
 

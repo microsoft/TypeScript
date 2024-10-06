@@ -5,20 +5,20 @@ declare global {
 >global : Symbol(global, Decl(global.d.ts, 0, 0))
 
     const React: typeof import("./module");
->React : Symbol(React, Decl(module.d.ts, 1, 26), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(global.d.ts, 1, 9))
 }
 
 export { };
 
 === module.d.ts ===
 export = React;
->React : Symbol(React, Decl(module.d.ts, 1, 26), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(module.d.ts, 1, 26))
 
 export as namespace React;
 >React : Symbol(React, Decl(module.d.ts, 0, 15))
 
 declare namespace React {
->React : Symbol(React, Decl(module.d.ts, 1, 26), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(module.d.ts, 1, 26))
 
     function createRef(): any;
 >createRef : Symbol(createRef, Decl(module.d.ts, 3, 25))
@@ -28,7 +28,7 @@ declare namespace React {
 export { };
 React.createRef;
 >React.createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
->React : Symbol(React, Decl(module.d.ts, 1, 26), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(global.d.ts, 1, 9))
 >createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
 
 === emits.ts ===
@@ -39,6 +39,6 @@ console.log("hello");
 
 React.createRef;
 >React.createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
->React : Symbol(React, Decl(module.d.ts, 1, 26), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(global.d.ts, 1, 9))
 >createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
 

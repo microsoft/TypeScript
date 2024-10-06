@@ -4,7 +4,7 @@
 // @allowJs: true
 // @checkJs: true
 // @filename: uniqueSymbolsDeclarationsInJsErrors.js
-// @out: uniqueSymbolsDeclarationsInJsErrors-out.js
+// @outFile: uniqueSymbolsDeclarationsInJsErrors-out.js
 // @useDefineForClassFields: false
 
 class C {

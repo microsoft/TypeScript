@@ -1,0 +1,185 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocTags16.ts ===
+// class A {
+//     /**
+//      * Description text here.
+//      *
+//      * @virtual
+//      */
+//     foo() { }
+// }
+// 
+// class B extends A {
+//     override foo() { }
+//              ^^^
+// | ----------------------------------------------------------------------
+// | (method) B.foo(): void
+// | Description text here.
+// | @virtual 
+// | ----------------------------------------------------------------------
+// }
+// 
+// class C extends B {
+//     override foo() { }
+//              ^^^
+// | ----------------------------------------------------------------------
+// | (method) C.foo(): void
+// | Description text here.
+// | @virtual 
+// | ----------------------------------------------------------------------
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags16.ts",
+      "position": 129,
+      "name": "1"
+    },
+    "item": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 129,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "B",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Description text here.",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "virtual"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags16.ts",
+      "position": 175,
+      "name": "2"
+    },
+    "item": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 175,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Description text here.",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "virtual"
+        }
+      ]
+    }
+  }
+]

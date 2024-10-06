@@ -198,7 +198,7 @@
 // }|>
 // 
 // interface ArrayConstructor {
-//     new(arrayLength?: number): any[];
+//     new (arrayLength?: number): any[];
 // --- (line: --) skipped ---
 
 // --- (line: --) skipped ---
@@ -451,7 +451,7 @@
 // }|>
 // 
 // interface ArrayConstructor {
-//     new(arrayLength?: number): any[];
+//     new (arrayLength?: number): any[];
 // --- (line: --) skipped ---
 
 // --- (line: --) skipped ---

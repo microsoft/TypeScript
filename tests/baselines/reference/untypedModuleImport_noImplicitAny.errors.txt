@@ -9,8 +9,6 @@
 !!! error TS7016:   Try `npm i --save-dev @types/foo` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo';`
     
 ==== /node_modules/foo/package.json (0 errors) ====
-    // This tests that `--noImplicitAny` disables untyped modules.
-    
     { "name": "foo", "version": "1.2.3" }
     
 ==== /node_modules/foo/index.js (0 errors) ====

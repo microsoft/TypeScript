@@ -1,0 +1,140 @@
+//// [tests/cases/compiler/simpleRecursionWithBaseCase1.ts] ////
+
+=== simpleRecursionWithBaseCase1.ts ===
+function fn1(n: number) {
+>fn1 : (n: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+    if (n === 0) {
+>n === 0 : boolean
+>        : ^^^^^^^
+>n : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+        return 3;
+>3 : 3
+>  : ^
+
+    } else {
+        return fn1(n - 1);
+>fn1(n - 1) : number
+>           : ^^^^^^
+>fn1 : (n: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
+>n - 1 : number
+>      : ^^^^^^
+>n : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+}
+const num: number = fn1();
+>num : number
+>    : ^^^^^^
+>fn1() : number
+>      : ^^^^^^
+>fn1 : (n: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
+
+function fn2(n: number) {
+>fn2 : (n: number) => never
+>    : ^ ^^      ^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+    return fn2(n);
+>fn2(n) : never
+>       : ^^^^^
+>fn2 : (n: number) => never
+>    : ^ ^^      ^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+}
+const nev: never = fn2();
+>nev : never
+>    : ^^^^^
+>fn2() : never
+>      : ^^^^^
+>fn2 : (n: number) => never
+>    : ^ ^^      ^^^^^^^^^^
+
+function fn3(n: number) {
+>fn3 : (n: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+    if (n === 0) {
+>n === 0 : boolean
+>        : ^^^^^^^
+>n : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+        return 3;
+>3 : 3
+>  : ^
+
+    } else {
+        return fn1("hello world");
+>fn1("hello world") : number
+>                   : ^^^^^^
+>fn1 : (n: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
+>"hello world" : "hello world"
+>              : ^^^^^^^^^^^^^
+    }
+}
+
+function fn4(n: number) {
+>fn4 : (n: number) => any
+>    : ^ ^^      ^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+    if (n === 0) {
+>n === 0 : boolean
+>        : ^^^^^^^
+>n : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+        return 3;
+>3 : 3
+>  : ^
+
+    } else {
+        return notfoundsymbol("hello world");
+>notfoundsymbol("hello world") : any
+>                              : ^^^
+>notfoundsymbol : any
+>               : ^^^
+>"hello world" : "hello world"
+>              : ^^^^^^^^^^^^^
+    }
+}
+
+function fn5() {
+>fn5 : () => any
+>    : ^^^^^^^^^
+
+    return [fn5][0]();
+>[fn5][0]() : any
+>           : ^^^
+>[fn5][0] : () => any
+>         : ^^^^^^^^^
+>[fn5] : (() => any)[]
+>      : ^^^^^^^^^^^^^
+>fn5 : () => any
+>    : ^^^^^^^^^
+>0 : 0
+>  : ^
+}
+

@@ -3,14 +3,18 @@
 === classAbstractMethodInNonAbstractClass.ts ===
 class A {
 >A : A
+>  : ^
 
     abstract foo();
 >foo : () => any
+>    : ^^^^^^^^^
 }
 
 class B {
 >B : B
+>  : ^
 
     abstract foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 }

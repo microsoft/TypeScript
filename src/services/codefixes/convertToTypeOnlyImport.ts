@@ -1,4 +1,10 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     factory,
     FindAllReferences,
@@ -17,17 +23,11 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    createCodeFixActionWithoutFixAll,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [
-    Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error.code,
     Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.code,
+    Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.code,
 ];
 const fixId = "convertToTypeOnlyImport";
 
@@ -37,8 +37,8 @@ registerCodeFix({
         const declaration = getDeclaration(context.sourceFile, context.span.start);
         if (declaration) {
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration));
-            const importDeclarationChanges = declaration.kind === SyntaxKind.ImportSpecifier && canConvertImportDeclarationForSpecifier(declaration, context.sourceFile, context.program)
-                ? textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration.parent.parent.parent))
+            const importDeclarationChanges = declaration.kind === SyntaxKind.ImportSpecifier && isImportDeclaration(declaration.parent.parent.parent) && canConvertImportDeclarationForSpecifier(declaration, context.sourceFile, context.program)
+                ? textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration.parent.parent.parent as ImportDeclaration))
                 : undefined;
             const mainAction = createCodeFixAction(
                 fixId,
@@ -47,12 +47,13 @@ registerCodeFix({
                     ? [Diagnostics.Use_type_0, declaration.propertyName?.text ?? declaration.name.text]
                     : Diagnostics.Use_import_type,
                 fixId,
-                Diagnostics.Fix_all_with_type_only_imports);
+                Diagnostics.Fix_all_with_type_only_imports,
+            );
 
             if (some(importDeclarationChanges)) {
                 return [
                     createCodeFixActionWithoutFixAll(fixId, importDeclarationChanges, Diagnostics.Use_import_type),
-                    mainAction
+                    mainAction,
                 ];
             }
             return [mainAction];
@@ -68,7 +69,9 @@ registerCodeFix({
                 doChange(changes, diag.file, errorDeclaration);
                 fixedImportDeclarations.add(errorDeclaration);
             }
-            else if (errorDeclaration?.kind === SyntaxKind.ImportSpecifier
+            else if (
+                errorDeclaration?.kind === SyntaxKind.ImportSpecifier
+                && isImportDeclaration(errorDeclaration.parent.parent.parent)
                 && !fixedImportDeclarations.has(errorDeclaration.parent.parent.parent)
                 && canConvertImportDeclarationForSpecifier(errorDeclaration, diag.file, context.program)
             ) {
@@ -79,14 +82,13 @@ registerCodeFix({
                 doChange(changes, diag.file, errorDeclaration);
             }
         });
-    }
+    },
 });
 
 function getDeclaration(sourceFile: SourceFile, pos: number) {
     const { parent } = getTokenAtPosition(sourceFile, pos);
     return isImportSpecifier(parent) || isImportDeclaration(parent) && parent.importClause ? parent : undefined;
 }
-
 
 function canConvertImportDeclarationForSpecifier(specifier: ImportSpecifier, sourceFile: SourceFile, program: Program): boolean {
     if (specifier.parent.parent.name) {
@@ -102,7 +104,8 @@ function canConvertImportDeclarationForSpecifier(specifier: ImportSpecifier, sou
     const checker = program.getTypeChecker();
     for (const specifier of nonTypeOnlySpecifiers) {
         const isUsedAsValue = FindAllReferences.Core.eachSymbolReferenceInFile(specifier.name, checker, sourceFile, usage => {
-            return !isValidTypeOnlyAliasUseSite(usage);
+            const symbol = checker.getSymbolAtLocation(usage);
+            return !!symbol && checker.symbolIsValue(symbol) || !isValidTypeOnlyAliasUseSite(usage);
         });
         if (isUsedAsValue) {
             return false;
@@ -124,13 +127,13 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
                     factory.createImportClause(/*isTypeOnly*/ true, getSynthesizedDeepClone(importClause.name, /*includeTrivia*/ true), /*namedBindings*/ undefined),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
-                    getSynthesizedDeepClone(declaration.assertClause, /*includeTrivia*/ true),
+                    getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),
                 factory.createImportDeclaration(
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
                     factory.createImportClause(/*isTypeOnly*/ true, /*name*/ undefined, getSynthesizedDeepClone(importClause.namedBindings, /*includeTrivia*/ true)),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
-                    getSynthesizedDeepClone(declaration.assertClause, /*includeTrivia*/ true),
+                    getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),
             ]);
         }
@@ -138,10 +141,10 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
             const newNamedBindings = importClause.namedBindings?.kind === SyntaxKind.NamedImports
                 ? factory.updateNamedImports(
                     importClause.namedBindings,
-                    sameMap(importClause.namedBindings.elements, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ false, e.propertyName, e.name)))
+                    sameMap(importClause.namedBindings.elements, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ false, e.propertyName, e.name)),
+                )
                 : importClause.namedBindings;
-            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers,
-                factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.assertClause);
+            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers, factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.attributes);
             changes.replaceNode(sourceFile, declaration, importDeclaration);
         }
     }

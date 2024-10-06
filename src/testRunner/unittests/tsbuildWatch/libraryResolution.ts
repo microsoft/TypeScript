@@ -1,15 +1,16 @@
-import { getSysForLibResolution } from "../helpers/libraryResolution";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import { forEachLibResolutionScenario } from "../helpers/libraryResolution.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: libraryResolution:: library file resolution", () => {
-    function verify(libRedirection?: true) {
-        verifyTscWatch({
-            scenario: "libraryResolution",
-            subScenario: `with config${libRedirection ? " with redirection" : ""}`,
-            sys: () => getSysForLibResolution(libRedirection),
-            commandLineArgs: ["-b", "-w", "project1", "project2", "project3", "project4", "--verbose", "--explainFiles", "--extendedDiagnostics"],
-        });
-    }
-    verify();
-    verify(/*libRedirection*/ true);
+    forEachLibResolutionScenario(
+        /*forTsserver*/ false,
+        /*withoutConfig*/ undefined,
+        (subScenario, sys) =>
+            verifyTscWatch({
+                scenario: "libraryResolution",
+                subScenario,
+                sys,
+                commandLineArgs: ["-b", "-w", "project1", "project2", "project3", "project4", "--verbose", "--explainFiles", "--extendedDiagnostics"],
+            }),
+    );
 });

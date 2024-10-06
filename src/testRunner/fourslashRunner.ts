@@ -1,10 +1,10 @@
-import * as FourSlash from "./_namespaces/FourSlash";
+import * as FourSlash from "./_namespaces/FourSlash.js";
 import {
     IO,
     RunnerBase,
     TestRunnerKind,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
 
 export class FourSlashRunner extends RunnerBase {
     protected basePath: string;
@@ -17,14 +17,6 @@ export class FourSlashRunner extends RunnerBase {
                 this.basePath = "tests/cases/fourslash";
                 this.testSuiteName = "fourslash";
                 break;
-            case FourSlash.FourSlashTestType.Shims:
-                this.basePath = "tests/cases/fourslash/shims";
-                this.testSuiteName = "fourslash-shims";
-                break;
-            case FourSlash.FourSlashTestType.ShimsWithPreprocess:
-                this.basePath = "tests/cases/fourslash/shims-pp";
-                this.testSuiteName = "fourslash-shims-pp";
-                break;
             case FourSlash.FourSlashTestType.Server:
                 this.basePath = "tests/cases/fourslash/server";
                 this.testSuiteName = "fourslash-server";
@@ -34,35 +26,43 @@ export class FourSlashRunner extends RunnerBase {
         }
     }
 
-    public enumerateTestFiles() {
+    public enumerateTestFiles(): string[] {
         // see also: `enumerateTestFiles` in tests/webTestServer.ts
         return this.enumerateFiles(this.basePath, /\.ts/i, { recursive: false });
     }
 
-    public kind() {
+    public kind(): TestRunnerKind {
         return this.testSuiteName;
     }
 
-    public initializeTests() {
+    public initializeTests(): void {
         if (this.tests.length === 0) {
             this.tests = IO.enumerateTestFiles(this);
         }
 
         describe(this.testSuiteName + " tests", () => {
-            this.tests.forEach(test => {
-                const file = typeof test === "string" ? test : test.file;
+            this.tests.forEach(file => {
                 describe(file, () => {
                     let fn = ts.normalizeSlashes(file);
-                    const justName = fn.replace(/^.*[\\\/]/, "");
+                    const justName = fn.replace(/^.*[\\/]/, "");
 
                     // Convert to relative path
                     const testIndex = fn.indexOf("tests/");
                     if (testIndex >= 0) fn = fn.substr(testIndex);
 
                     if (justName !== "fourslash.ts") {
-                        it(this.testSuiteName + " test " + justName + " runs correctly", () => {
-                            FourSlash.runFourSlashTest(this.basePath, this.testType, fn);
+                        let serverLogBaseliner: FourSlash.FourSlashServerLogBaseliner = {};
+                        after(() => {
+                            serverLogBaseliner = undefined!;
                         });
+                        it(this.testSuiteName + " test " + justName + " runs correctly", () => {
+                            FourSlash.runFourSlashTest(this.basePath, this.testType, fn, serverLogBaseliner);
+                        });
+                        if (this.testType === FourSlash.FourSlashTestType.Server) {
+                            it(this.testSuiteName + " test " + justName + " tsserver log", () => {
+                                serverLogBaseliner.baseline?.();
+                            });
+                        }
                     }
                 });
             });

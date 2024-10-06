@@ -1,0 +1,13 @@
+circularTypeArgumentsLocalAndOuterNoCrash1.ts(5,12): error TS4109: Type arguments for 'NumArray' circularly reference themselves.
+
+
+==== circularTypeArgumentsLocalAndOuterNoCrash1.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/59062
+    
+    function f<_T, _S>() {
+      interface NumArray<T extends number> extends Array<T> {}
+      type X = NumArray<X extends {} ? number : number>;
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4109: Type arguments for 'NumArray' circularly reference themselves.
+    }
+    

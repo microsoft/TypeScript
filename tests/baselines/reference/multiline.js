@@ -70,12 +70,11 @@ exports.texts.push("100");
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MyComponent = void 0;
+exports.MyComponent = MyComponent;
 var React = require("react");
 function MyComponent(props) {
     return React.createElement("div", null);
 }
-exports.MyComponent = MyComponent;
 var x = (React.createElement("div", null,
     React.createElement(MyComponent, { foo: 100 }),
     React.createElement(MyComponent, { foo: 100 }),

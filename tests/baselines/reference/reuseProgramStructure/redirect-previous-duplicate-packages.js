@@ -1,19 +1,17 @@
-Program Reused:: Not
-File: /node_modules/a/node_modules/x/index.d.ts
+Program 1 Reused:: Not
+File: /home/src/workspaces/project/node_modules/a/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
-File: /node_modules/a/index.d.ts
+File: /home/src/workspaces/project/node_modules/a/index.d.ts
 
 import X from "x";
 export function a(x: X): void;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
-    "resolvedFileName": "/node_modules/a/node_modules/x/index.d.ts",
+    "resolvedFileName": "/home/src/workspaces/project/node_modules/a/node_modules/x/index.d.ts",
     "extension": ".d.ts",
     "isExternalLibraryImport": true,
     "packageId": {
@@ -24,33 +22,30 @@ x: {
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/a/node_modules/x.ts",
-    "/node_modules/a/node_modules/x.tsx",
-    "/node_modules/a/node_modules/x.d.ts",
-    "/node_modules/a/node_modules/x/index.ts",
-    "/node_modules/a/node_modules/x/index.tsx"
+    "/home/src/workspaces/project/node_modules/a/node_modules/x.ts",
+    "/home/src/workspaces/project/node_modules/a/node_modules/x.tsx",
+    "/home/src/workspaces/project/node_modules/a/node_modules/x.d.ts",
+    "/home/src/workspaces/project/node_modules/a/node_modules/x/index.ts",
+    "/home/src/workspaces/project/node_modules/a/node_modules/x/index.tsx"
   ],
   "affectingLocations": [
-    "/node_modules/a/node_modules/x/package.json"
+    "/home/src/workspaces/project/node_modules/a/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
-File: /node_modules/b/node_modules/x/index.d.ts
+File: /home/src/workspaces/project/node_modules/b/node_modules/x/index.d.ts
 
 
 export = class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
-File: /node_modules/b/index.d.ts
+File: /home/src/workspaces/project/node_modules/b/index.d.ts
 
 import X from "x";
 export const b: X;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
-    "resolvedFileName": "/node_modules/b/node_modules/x/index.d.ts",
+    "resolvedFileName": "/home/src/workspaces/project/node_modules/b/node_modules/x/index.d.ts",
     "extension": ".d.ts",
     "isExternalLibraryImport": true,
     "packageId": {
@@ -61,81 +56,79 @@ x: {
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/b/node_modules/x.ts",
-    "/node_modules/b/node_modules/x.tsx",
-    "/node_modules/b/node_modules/x.d.ts",
-    "/node_modules/b/node_modules/x/index.ts",
-    "/node_modules/b/node_modules/x/index.tsx"
+    "/home/src/workspaces/project/node_modules/b/node_modules/x.ts",
+    "/home/src/workspaces/project/node_modules/b/node_modules/x.tsx",
+    "/home/src/workspaces/project/node_modules/b/node_modules/x.d.ts",
+    "/home/src/workspaces/project/node_modules/b/node_modules/x/index.ts",
+    "/home/src/workspaces/project/node_modules/b/node_modules/x/index.tsx"
   ],
   "affectingLocations": [
-    "/node_modules/b/node_modules/x/package.json"
+    "/home/src/workspaces/project/node_modules/b/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
-File: /a.ts
+File: /home/src/workspaces/project/a.ts
 
 import { a } from "a"; import { b } from "b";
 a(b)
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
-    "resolvedFileName": "/node_modules/a/index.d.ts",
+    "resolvedFileName": "/home/src/workspaces/project/node_modules/a/index.d.ts",
     "extension": ".d.ts",
     "isExternalLibraryImport": true,
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/a/package.json",
-    "/node_modules/a.ts",
-    "/node_modules/a.tsx",
-    "/node_modules/a.d.ts",
-    "/node_modules/a/index.ts",
-    "/node_modules/a/index.tsx"
+    "/home/src/workspaces/project/node_modules/a/package.json",
+    "/home/src/workspaces/project/node_modules/a.ts",
+    "/home/src/workspaces/project/node_modules/a.tsx",
+    "/home/src/workspaces/project/node_modules/a.d.ts",
+    "/home/src/workspaces/project/node_modules/a/index.ts",
+    "/home/src/workspaces/project/node_modules/a/index.tsx"
   ]
 }
 b: {
   "resolvedModule": {
-    "resolvedFileName": "/node_modules/b/index.d.ts",
+    "resolvedFileName": "/home/src/workspaces/project/node_modules/b/index.d.ts",
     "extension": ".d.ts",
     "isExternalLibraryImport": true,
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/b/package.json",
-    "/node_modules/b.ts",
-    "/node_modules/b.tsx",
-    "/node_modules/b.d.ts",
-    "/node_modules/b/index.ts",
-    "/node_modules/b/index.tsx"
+    "/home/src/workspaces/project/node_modules/b/package.json",
+    "/home/src/workspaces/project/node_modules/b.ts",
+    "/home/src/workspaces/project/node_modules/b.tsx",
+    "/home/src/workspaces/project/node_modules/b.d.ts",
+    "/home/src/workspaces/project/node_modules/b/index.ts",
+    "/home/src/workspaces/project/node_modules/b/index.tsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
-/node_modules/b/index.d.ts(2,8): error TS1259: Module '"/node_modules/b/node_modules/x/index"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
-/node_modules/b/node_modules/x/index.d.ts(3,16): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
+home/src/workspaces/project/node_modules/b/index.d.ts(2,8): error TS1259: Module '"/home/src/workspaces/project/node_modules/b/node_modules/x/index"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
+home/src/workspaces/project/node_modules/b/node_modules/x/index.d.ts(3,16): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
 
 
 
-Program Reused:: Not
-File: /node_modules/a/node_modules/x/index.d.ts
+Program 2 Reused:: Not
+File: /home/src/workspaces/project/node_modules/a/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
-File: /node_modules/a/index.d.ts
+File: /home/src/workspaces/project/node_modules/a/index.d.ts
 
 import X from "x";
 export function a(x: X): void;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
-    "resolvedFileName": "/node_modules/a/node_modules/x/index.d.ts",
+    "resolvedFileName": "/home/src/workspaces/project/node_modules/a/node_modules/x/index.d.ts",
     "extension": ".d.ts",
     "isExternalLibraryImport": true,
     "packageId": {
@@ -146,33 +139,30 @@ x: {
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/a/node_modules/x.ts",
-    "/node_modules/a/node_modules/x.tsx",
-    "/node_modules/a/node_modules/x.d.ts",
-    "/node_modules/a/node_modules/x/index.ts",
-    "/node_modules/a/node_modules/x/index.tsx"
+    "/home/src/workspaces/project/node_modules/a/node_modules/x.ts",
+    "/home/src/workspaces/project/node_modules/a/node_modules/x.tsx",
+    "/home/src/workspaces/project/node_modules/a/node_modules/x.d.ts",
+    "/home/src/workspaces/project/node_modules/a/node_modules/x/index.ts",
+    "/home/src/workspaces/project/node_modules/a/node_modules/x/index.tsx"
   ],
   "affectingLocations": [
-    "/node_modules/a/node_modules/x/package.json"
+    "/home/src/workspaces/project/node_modules/a/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
-File: /node_modules/b/node_modules/x/index.d.ts
+File: /home/src/workspaces/project/node_modules/b/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
-File: /node_modules/b/index.d.ts
+File: /home/src/workspaces/project/node_modules/b/index.d.ts
 
 import X from "x";
 export const b: X;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
-    "resolvedFileName": "/node_modules/b/node_modules/x/index.d.ts",
+    "resolvedFileName": "/home/src/workspaces/project/node_modules/b/node_modules/x/index.d.ts",
     "extension": ".d.ts",
     "isExternalLibraryImport": true,
     "packageId": {
@@ -183,59 +173,59 @@ x: {
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/b/node_modules/x.ts",
-    "/node_modules/b/node_modules/x.tsx",
-    "/node_modules/b/node_modules/x.d.ts",
-    "/node_modules/b/node_modules/x/index.ts",
-    "/node_modules/b/node_modules/x/index.tsx"
+    "/home/src/workspaces/project/node_modules/b/node_modules/x.ts",
+    "/home/src/workspaces/project/node_modules/b/node_modules/x.tsx",
+    "/home/src/workspaces/project/node_modules/b/node_modules/x.d.ts",
+    "/home/src/workspaces/project/node_modules/b/node_modules/x/index.ts",
+    "/home/src/workspaces/project/node_modules/b/node_modules/x/index.tsx"
   ],
   "affectingLocations": [
-    "/node_modules/b/node_modules/x/package.json"
+    "/home/src/workspaces/project/node_modules/b/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
-File: /a.ts
+File: /home/src/workspaces/project/a.ts
 
 import { a } from "a"; import { b } from "b";
 a(b)
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
-    "resolvedFileName": "/node_modules/a/index.d.ts",
+    "resolvedFileName": "/home/src/workspaces/project/node_modules/a/index.d.ts",
     "extension": ".d.ts",
     "isExternalLibraryImport": true,
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/a/package.json",
-    "/node_modules/a.ts",
-    "/node_modules/a.tsx",
-    "/node_modules/a.d.ts",
-    "/node_modules/a/index.ts",
-    "/node_modules/a/index.tsx"
+    "/home/src/workspaces/project/node_modules/a/package.json",
+    "/home/src/workspaces/project/node_modules/a.ts",
+    "/home/src/workspaces/project/node_modules/a.tsx",
+    "/home/src/workspaces/project/node_modules/a.d.ts",
+    "/home/src/workspaces/project/node_modules/a/index.ts",
+    "/home/src/workspaces/project/node_modules/a/index.tsx"
   ]
 }
 b: {
   "resolvedModule": {
-    "resolvedFileName": "/node_modules/b/index.d.ts",
+    "resolvedFileName": "/home/src/workspaces/project/node_modules/b/index.d.ts",
     "extension": ".d.ts",
     "isExternalLibraryImport": true,
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/b/package.json",
-    "/node_modules/b.ts",
-    "/node_modules/b.tsx",
-    "/node_modules/b.d.ts",
-    "/node_modules/b/index.ts",
-    "/node_modules/b/index.tsx"
+    "/home/src/workspaces/project/node_modules/b/package.json",
+    "/home/src/workspaces/project/node_modules/b.ts",
+    "/home/src/workspaces/project/node_modules/b.tsx",
+    "/home/src/workspaces/project/node_modules/b.d.ts",
+    "/home/src/workspaces/project/node_modules/b/index.ts",
+    "/home/src/workspaces/project/node_modules/b/index.tsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 

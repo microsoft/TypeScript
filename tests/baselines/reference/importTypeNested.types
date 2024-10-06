@@ -3,13 +3,17 @@
 === a.d.ts ===
 export type LookAt = "./b";
 >LookAt : "./b"
+>       : ^^^^^
 
 === b.d.ts ===
 export type Value = "yes";
 >Value : "yes"
+>      : ^^^^^
 
 === chainer.ts ===
 export const x: import(import("./a").LookAt).Value = "yes";
 >x : any
+>  : ^^^
 >"yes" : "yes"
+>      : ^^^^^
 

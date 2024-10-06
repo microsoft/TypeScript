@@ -3,4 +3,5 @@
 === VariableDeclaration2_es6.ts ===
 const a
 >a : any
+>  : ^^^
 

@@ -53,7 +53,7 @@ classUpdateTests.ts(113,1): error TS1128: Declaration or statement expected.
     
     class F extends E {
     	constructor() {} // ERROR - super call required
-    	~~~~~~~~~~~~~~~~
+    	~~~~~~~~~~~
 !!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }
     

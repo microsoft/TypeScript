@@ -1,6 +1,5 @@
-
-import { Baseline } from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
+import { Baseline } from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
 describe("unittests:: canWatch::", () => {
     baselineCanWatch(
         "canWatchDirectoryOrFile",
@@ -14,7 +13,7 @@ describe("unittests:: canWatch::", () => {
             paths.forEach(path => baselineCanWatchDirectoryOrFile(combinePaths(path, "package.json"), maxLengths));
             baseline.push("", "");
             function baselineCanWatchDirectoryOrFile(path: ts.Path, maxLengths: readonly number[]) {
-                pushRow(baseline, [path, `${ts.canWatchDirectoryOrFile(ts.getPathComponents(path))}`], maxLengths);
+                pushRow(baseline, [path, `${ts.canWatchDirectoryOrFilePath(path)}`], maxLengths);
             }
         },
     );
@@ -56,68 +55,95 @@ describe("unittests:: canWatch::", () => {
         scenario: string,
         forPath: "node_modules" | "node_modules/@types" | "",
     ) {
-        baselineCanWatch(
-            scenario,
-            () => `Determines whether to watch given failed lookup location (file that didnt exist) when resolving module.\r\nIt also determines the directory to watch and whether to watch it recursively or not.`,
-            (paths, longestPathLength, baseline) => {
-                const recursive = "Recursive";
-                const maxLength = longestPathLength + ts.combinePaths(forPath, "dir/subdir/somefile.d.ts").length;
-                const maxLengths = [maxLength, maxLength, recursive.length] as const;
-                baselineCanWatchForRoot(paths, baseline, (rootPathCompoments, root) => {
-                    pushHeader(baseline, ["Location", "getDirectoryToWatchFailedLookupLocation", recursive], maxLengths);
-                    paths.forEach(path => {
-                        baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "somefile.d.ts"), root, rootPathCompoments, maxLengths);
-                        baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "dir/somefile.d.ts"), root, rootPathCompoments, maxLengths);
-                        baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "dir/subdir/somefile.d.ts"), root, rootPathCompoments, maxLengths);
-                    });
-                });
-                function baselineGetDirectoryToWatchFailedLookupLocation(path: ts.Path, root: ts.Path, rootPathCompoments: Readonly<ts.PathPathComponents>, maxLengths: readonly number[]) {
-                    const result = ts.getDirectoryToWatchFailedLookupLocation(
-                        path,
-                        path,
-                        root,
-                        root,
-                        rootPathCompoments,
-                        ts.returnUndefined,
-                    );
-                    pushRow(baseline, [path, result ? result.dir : "", result ? `${!result.nonRecursive}` : ""], maxLengths);
-                }
-            },
-        );
+        [undefined, true].forEach(preferNonRecursiveWatch => {
+            ["file", "dir", "subDir"].forEach(type => {
+                baselineCanWatch(
+                    `${scenario}In${type}${preferNonRecursiveWatch ? "NonRecursive" : ""}`,
+                    () => `Determines whether to watch given failed lookup location (file that didnt exist) when resolving module.\r\nIt also determines the directory to watch and whether to watch it recursively or not.`,
+                    (paths, longestPathLength, baseline) => {
+                        const recursive = "Recursive";
+                        const maxLength = longestPathLength + ts.combinePaths(forPath, "dir/subdir/somefile.d.ts").length;
+                        const maxLengths = [maxLength, maxLength, recursive.length, maxLength] as const;
+                        baselineCanWatchForRoot(paths, baseline, (rootPathCompoments, root, isRootWatchable) => {
+                            pushHeader(baseline, ["Location", "getDirectoryToWatchFailedLookupLocation", recursive, "Location if not symlink"], maxLengths);
+                            paths.forEach(path => {
+                                let subPath;
+                                switch (type) {
+                                    case "file":
+                                        subPath = "somefile.d.ts";
+                                        break;
+                                    case "dir":
+                                        subPath = "dir/somefile.d.ts";
+                                        break;
+                                    case "subDir":
+                                        subPath = "dir/subdir/somefile.d.ts";
+                                        break;
+                                }
+                                const testPath = combinePaths(path, forPath, subPath);
+                                const result = ts.getDirectoryToWatchFailedLookupLocation(
+                                    testPath,
+                                    testPath,
+                                    root,
+                                    root,
+                                    rootPathCompoments,
+                                    isRootWatchable,
+                                    ts.returnUndefined,
+                                    preferNonRecursiveWatch,
+                                );
+                                pushRow(baseline, [testPath, result ? result.packageDir ?? result.dir : "", result ? `${!result.nonRecursive}` : "", result?.packageDir ? result.dir : ""], maxLengths);
+                            });
+                        });
+                    },
+                );
+            });
+        });
     }
 
-    baselineCanWatch(
-        "getDirectoryToWatchFailedLookupLocationFromTypeRoot",
-        () => `When watched typeRoot handler is invoked, this method determines the directory for which the failedLookupLocation would need to be invalidated.\r\nSince this is invoked only when watching default typeRoot and is used to handle flaky directory watchers, this is used as a fail safe where if failed lookup starts with returned directory we will invalidate that resolution.`,
-        (paths, longestPathLength, baseline) => {
-            const maxLength = longestPathLength + "/node_modules/@types".length;
-            const maxLengths = [maxLength, maxLength] as const;
-            baselineCanWatchForRoot(paths, baseline, (rootPathCompoments, root) => {
-                pushHeader(baseline, ["Directory", "getDirectoryToWatchFailedLookupLocationFromTypeRoot"], maxLengths);
-                paths.forEach(path => {
-                    path = combinePaths(path, "node_modules/@types");
-                    // This is invoked only on paths that are watched
-                    if (!ts.canWatchAtTypes(path)) return;
-                    const result = ts.getDirectoryToWatchFailedLookupLocationFromTypeRoot(
-                        path,
-                        path,
-                        root,
-                        rootPathCompoments,
-                        ts.returnUndefined,
-                        ts.returnTrue,
-                    );
-                    pushRow(baseline, [path, result !== undefined ? result : ""], maxLengths);
+    [undefined, true].forEach(preferNonRecursiveWatch => {
+        baselineCanWatch(
+            `getDirectoryToWatchFailedLookupLocationFromTypeRoot${preferNonRecursiveWatch ? "NonRecursive" : ""}`,
+            () => `When watched typeRoot handler is invoked, this method determines the directory for which the failedLookupLocation would need to be invalidated.\r\nSince this is invoked only when watching default typeRoot and is used to handle flaky directory watchers, this is used as a fail safe where if failed lookup starts with returned directory we will invalidate that resolution.`,
+            (paths, longestPathLength, baseline) => {
+                const maxLength = longestPathLength + "/node_modules/@types".length;
+                const maxLengths = [maxLength, maxLength] as const;
+                baselineCanWatchForRoot(paths, baseline, (rootPathCompoments, root, isRootWatchable) => {
+                    pushHeader(baseline, ["Directory", "getDirectoryToWatchFailedLookupLocationFromTypeRoot"], maxLengths);
+                    paths.forEach(path => {
+                        path = combinePaths(path, "node_modules/@types");
+                        // This is invoked only on paths that are watched
+                        if (!ts.canWatchAtTypes(path)) return;
+                        const result = ts.getDirectoryToWatchFailedLookupLocationFromTypeRoot(
+                            path,
+                            path,
+                            root,
+                            rootPathCompoments,
+                            isRootWatchable,
+                            ts.returnUndefined,
+                            preferNonRecursiveWatch,
+                            ts.returnTrue,
+                        );
+                        pushRow(baseline, [path, result !== undefined ? result : ""], maxLengths);
+                    });
                 });
-            });
-        },
-    );
+            },
+        );
+    });
 
-    function baselineCanWatchForRoot(paths: readonly ts.Path[], baseline: string[], baselineForRoot: (rootPathCompoments: Readonly<ts.PathPathComponents>, root: ts.Path) => void) {
+    function baselineCanWatchForRoot(
+        paths: readonly ts.Path[],
+        baseline: string[],
+        baselineForRoot: (
+            rootPathCompoments: Readonly<ts.PathPathComponents>,
+            root: ts.Path,
+            isRootWatchable: boolean,
+        ) => void,
+    ) {
         paths.forEach(rootDirForResolution => {
             const root = ts.getRootDirectoryOfResolutionCache(rootDirForResolution, ts.returnUndefined) as ts.Path;
             assert(root === rootDirForResolution);
             baseline.push("", `## RootDirForResolution: ${rootDirForResolution}`);
-            baselineForRoot(ts.getPathComponents(root), root);
+            const rootPathCompoments = ts.getPathComponents(root);
+            baselineForRoot(rootPathCompoments, root, ts.canWatchDirectoryOrFile(rootPathCompoments));
         });
         baseline.push("", "");
     }
@@ -157,6 +183,7 @@ describe("unittests:: canWatch::", () => {
         getPathsOfDifferentFoldersWithUsers("user");
         getPathsOfDifferentFoldersWithUsers("usr");
         getPathsOfDifferentFoldersWithUsers("home");
+        getPathsOfDifferentFoldersWithWorkspaces();
         baselineOsRoot(paths, longestPathLength, baseline);
         Baseline.runBaseline(`canWatch/${scenario}${suffix}.baseline.md`, baseline.join("\r\n"));
         function getPathsOfDifferentFoldersAt(root: ts.Path) {
@@ -174,6 +201,9 @@ describe("unittests:: canWatch::", () => {
             paths.push(users);
             getPathsOfDifferentFoldersAt(combinePaths(users, "username"));
         }
+        function getPathsOfDifferentFoldersWithWorkspaces() {
+            getPathsOfDifferentFoldersAt(combinePaths(osRoot, "workspaces"));
+        }
     }
 
     function combinePaths(path: string, addition: string, anotherAddition?: string): ts.Path {
@@ -189,7 +219,7 @@ describe("unittests:: canWatch::", () => {
         let result = "|";
         let divider = addDivider ? "|" : undefined;
         columns.forEach((header, index) => {
-            result += " " + ts.padRight(header, maxLengths[index]) + " |";
+            result += " " + header.padEnd(maxLengths[index]) + " |";
             if (addDivider) divider += " " + "-".repeat(maxLengths[index]) + " |";
         });
         baseline.push(result);

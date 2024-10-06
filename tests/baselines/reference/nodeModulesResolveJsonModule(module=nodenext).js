@@ -1,21 +1,21 @@
 //// [tests/cases/conformance/node/nodeModulesResolveJsonModule.ts] ////
 
 //// [index.ts]
-import pkg from "./package.json"
+import pkg from "./package.json" with { type: "json" };
 export const name = pkg.name;
-import * as ns from "./package.json";
+import * as ns from "./package.json" with { type: "json" };
 export const thing = ns;
 export const name2 = ns.default.name;
 //// [index.cts]
-import pkg from "./package.json"
+import pkg from "./package.json";
 export const name = pkg.name;
 import * as ns from "./package.json";
 export const thing = ns;
 export const name2 = ns.default.name;
 //// [index.mts]
-import pkg from "./package.json"
+import pkg from "./package.json" with { type: "json" };
 export const name = pkg.name;
-import * as ns from "./package.json";
+import * as ns from "./package.json" with { type: "json" };
 export const thing = ns;
 export const name2 = ns.default.name;
 //// [package.json]
@@ -34,11 +34,11 @@ export const name2 = ns.default.name;
     "default": "misedirection"
 }
 //// [index.js]
-import pkg from "./package.json";
-export var name = pkg.name;
-import * as ns from "./package.json";
-export var thing = ns;
-export var name2 = ns.default.name;
+import pkg from "./package.json" with { type: "json" };
+export const name = pkg.name;
+import * as ns from "./package.json" with { type: "json" };
+export const thing = ns;
+export const name2 = ns.default.name;
 //// [index.cjs]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -69,17 +69,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.name2 = exports.thing = exports.name = void 0;
-var package_json_1 = __importDefault(require("./package.json"));
+const package_json_1 = __importDefault(require("./package.json"));
 exports.name = package_json_1.default.name;
-var ns = __importStar(require("./package.json"));
+const ns = __importStar(require("./package.json"));
 exports.thing = ns;
 exports.name2 = ns.default.name;
 //// [index.mjs]
-import pkg from "./package.json";
-export var name = pkg.name;
-import * as ns from "./package.json";
-export var thing = ns;
-export var name2 = ns.default.name;
+import pkg from "./package.json" with { type: "json" };
+export const name = pkg.name;
+import * as ns from "./package.json" with { type: "json" };
+export const thing = ns;
+export const name2 = ns.default.name;
 
 
 //// [index.d.ts]

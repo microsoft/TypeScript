@@ -10,7 +10,7 @@ import {
     ScriptTarget,
     startsWith,
     TextSpan,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.
 /** @internal */
@@ -18,7 +18,7 @@ export enum PatternMatchKind {
     exact,
     prefix,
     substring,
-    camelCase
+    camelCase,
 }
 
 // Information about a match made by the pattern matcher between a candidate and the
@@ -108,7 +108,7 @@ interface TextChunk {
 function createPatternMatch(kind: PatternMatchKind, isCaseSensitive: boolean): PatternMatch {
     return {
         kind,
-        isCaseSensitive
+        isCaseSensitive,
     };
 }
 
@@ -121,13 +121,22 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
     const stringToWordSpans = new Map<string, TextSpan[]>();
 
     const dotSeparatedSegments = pattern.trim().split(".").map(p => createSegment(p.trim()));
+
+    // The pattern is an empty string, and it matches everything.
+    if (dotSeparatedSegments.length === 1 && dotSeparatedSegments[0].totalTextChunk.text === "") {
+        return {
+            getMatchForLastSegmentOfPattern: () => createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ true),
+            getFullMatch: () => createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ true),
+            patternContainsDots: false,
+        };
+    }
     // A segment is considered invalid if we couldn't find any words in it.
     if (dotSeparatedSegments.some(segment => !segment.subWordTextChunks.length)) return undefined;
 
     return {
         getFullMatch: (containers, candidate) => getFullMatch(containers, candidate, dotSeparatedSegments, stringToWordSpans),
         getMatchForLastSegmentOfPattern: candidate => matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans),
-        patternContainsDots: dotSeparatedSegments.length > 1
+        patternContainsDots: dotSeparatedSegments.length > 1,
     };
 }
 
@@ -149,9 +158,7 @@ function getFullMatch(candidateContainers: readonly string[], candidate: string,
     }
 
     let bestMatch: PatternMatch | undefined;
-    for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
-        i >= 0;
-        i -= 1, j -= 1) {
+    for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1; i >= 0; i -= 1, j -= 1) {
         bestMatch = betterMatch(bestMatch, matchSegment(candidateContainers[j], dotSeparatedSegments[i], stringToWordSpans));
     }
     return bestMatch;
@@ -328,8 +335,10 @@ function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk:
                 // We've already gotten one pattern part match in this candidate.  We will
                 // only continue trying to consumer pattern parts if the last part and this
                 // part are both upper case.
-                if (!isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan - 1].start)) ||
-                    !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan].start))) {
+                if (
+                    !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan - 1].start)) ||
+                    !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan].start))
+                ) {
                     break;
                 }
             }
@@ -366,7 +375,7 @@ function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk:
 function createSegment(text: string): Segment {
     return {
         totalTextChunk: createTextChunk(text),
-        subWordTextChunks: breakPatternIntoTextChunks(text)
+        subWordTextChunks: breakPatternIntoTextChunks(text),
     };
 }
 
@@ -395,7 +404,6 @@ function isLowerCaseLetter(ch: number) {
     if (ch < CharacterCodes.maxAsciiCharacter || !isUnicodeIdentifierStart(ch, ScriptTarget.Latest)) {
         return false;
     }
-
 
     // TODO: find a way to determine this for any unicode characters in a
     // non-allocating manner.
@@ -473,7 +481,7 @@ function createTextChunk(text: string): TextChunk {
         text,
         textLowerCase,
         isLowerCase: text === textLowerCase,
-        characterSpans: breakIntoCharacterSpans(text)
+        characterSpans: breakIntoCharacterSpans(text),
     };
 }
 
@@ -498,12 +506,13 @@ function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
         const hasTransitionFromLowerToUpper = transitionFromLowerToUpper(identifier, word, i);
         const hasTransitionFromUpperToLower = word && transitionFromUpperToLower(identifier, i, wordStart);
 
-        if (charIsPunctuation(identifier.charCodeAt(i - 1)) ||
+        if (
+            charIsPunctuation(identifier.charCodeAt(i - 1)) ||
             charIsPunctuation(identifier.charCodeAt(i)) ||
             lastIsDigit !== currentIsDigit ||
             hasTransitionFromLowerToUpper ||
-            hasTransitionFromUpperToLower) {
-
+            hasTransitionFromUpperToLower
+        ) {
             if (!isAllPunctuation(identifier, wordStart, i)) {
                 result.push(createTextSpan(wordStart, i - wordStart));
             }

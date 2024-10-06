@@ -1,113 +1,132 @@
-Program Reused:: Not
-File: /types/typedefs/index.d.ts
+Program 1 Reused:: Not
+File: /home/src/workspaces/project/types/typedefs/index.d.ts
 
 
 declare var $: number
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
-File: /a.ts
+File: /home/src/workspaces/project/a.ts
 /// <reference types='typedefs'/>
 
 var x = $
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
-    "resolvedFileName": "/types/typedefs/index.d.ts",
+    "resolvedFileName": "/home/src/workspaces/project/types/typedefs/index.d.ts",
     "isExternalLibraryImport": false
   },
   "failedLookupLocations": [
-    "/types/typedefs.d.ts",
-    "/types/typedefs/package.json"
+    "/home/src/workspaces/project/types/typedefs.d.ts",
+    "/home/src/workspaces/project/types/typedefs/package.json"
   ]
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: Completely
-File: /types/typedefs/index.d.ts
+Program 2 Reused:: Completely
+File: /home/src/workspaces/project/types/typedefs/index.d.ts
 
 
 declare var $: number
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
-File: /a.ts
+File: /home/src/workspaces/project/a.ts
 /// <reference types='typedefs'/>
 
 var x = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
-    "resolvedFileName": "/types/typedefs/index.d.ts",
+    "resolvedFileName": "/home/src/workspaces/project/types/typedefs/index.d.ts",
     "isExternalLibraryImport": false
   },
   "failedLookupLocations": [
-    "/types/typedefs.d.ts",
-    "/types/typedefs/package.json"
+    "/home/src/workspaces/project/types/typedefs.d.ts",
+    "/home/src/workspaces/project/types/typedefs/package.json"
   ]
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: SafeModules
-File: /a.ts
+Program 3 Reused:: SafeModules
+File: /home/src/workspaces/project/a.ts
 
 
 var x = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: SafeModules
-File: /types/typedefs/index.d.ts
+Program 4 Reused:: SafeModules
+File: /home/src/workspaces/project/types/typedefs/index.d.ts
 
 
 declare var $: number
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
-File: /a.ts
+File: /home/src/workspaces/project/a.ts
 /// <reference types="typedefs"/>
                 /// <reference types="typedefs2"/>
                 
 
 var x = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
-    "resolvedFileName": "/types/typedefs/index.d.ts",
+    "resolvedFileName": "/home/src/workspaces/project/types/typedefs/index.d.ts",
     "isExternalLibraryImport": false
   },
   "failedLookupLocations": [
-    "/types/typedefs.d.ts",
-    "/types/typedefs/package.json"
+    "/home/src/workspaces/project/types/typedefs.d.ts",
+    "/home/src/workspaces/project/types/typedefs/package.json"
   ]
 }
 typedefs2: {
   "failedLookupLocations": [
-    "/types/typedefs2.d.ts",
-    "/types/typedefs2/package.json",
-    "/types/typedefs2/index.d.ts",
+    "/home/src/workspaces/project/types/typedefs2.d.ts",
+    "/home/src/workspaces/project/types/typedefs2/package.json",
+    "/home/src/workspaces/project/types/typedefs2/index.d.ts",
+    "/home/src/workspaces/project/node_modules/typedefs2/package.json",
+    "/home/src/workspaces/project/node_modules/typedefs2.d.ts",
+    "/home/src/workspaces/project/node_modules/typedefs2/index.d.ts",
+    "/home/src/workspaces/project/node_modules/@types/typedefs2/package.json",
+    "/home/src/workspaces/project/node_modules/@types/typedefs2.d.ts",
+    "/home/src/workspaces/project/node_modules/@types/typedefs2/index.d.ts",
+    "/home/src/workspaces/node_modules/typedefs2/package.json",
+    "/home/src/workspaces/node_modules/typedefs2.d.ts",
+    "/home/src/workspaces/node_modules/typedefs2/index.d.ts",
+    "/home/src/workspaces/node_modules/@types/typedefs2/package.json",
+    "/home/src/workspaces/node_modules/@types/typedefs2.d.ts",
+    "/home/src/workspaces/node_modules/@types/typedefs2/index.d.ts",
+    "/home/src/node_modules/typedefs2/package.json",
+    "/home/src/node_modules/typedefs2.d.ts",
+    "/home/src/node_modules/typedefs2/index.d.ts",
+    "/home/src/node_modules/@types/typedefs2/package.json",
+    "/home/src/node_modules/@types/typedefs2.d.ts",
+    "/home/src/node_modules/@types/typedefs2/index.d.ts",
+    "/home/node_modules/typedefs2/package.json",
+    "/home/node_modules/typedefs2.d.ts",
+    "/home/node_modules/typedefs2/index.d.ts",
+    "/home/node_modules/@types/typedefs2/package.json",
+    "/home/node_modules/@types/typedefs2.d.ts",
+    "/home/node_modules/@types/typedefs2/index.d.ts",
     "/node_modules/typedefs2/package.json",
     "/node_modules/typedefs2.d.ts",
     "/node_modules/typedefs2/index.d.ts",
@@ -118,8 +137,10 @@ typedefs2: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
-/a.ts(2,39): error TS2688: Cannot find type definition file for 'typedefs2'.
+home/src/workspaces/project/a.ts(2,39): error TS2688: Cannot find type definition file for 'typedefs2'.
 
 

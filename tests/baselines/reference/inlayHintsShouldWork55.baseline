@@ -1,8 +1,0 @@
-    get foo() { return 1; }
-             ^
-{
-  "text": ": number",
-  "position": 25,
-  "kind": "Type",
-  "whitespaceBefore": true
-}

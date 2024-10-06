@@ -1,0 +1,22 @@
+a.tsx(6,28): error TS2322: Type '{ children: () => string; }' is not assignable to type '{ children?: ReactNode; }'.
+  Types of property 'children' are incompatible.
+    Type '() => string' is not assignable to type 'ReactNode'.
+a.tsx(7,47): error TS2322: Type '() => string' is not assignable to type 'ReactNode'.
+
+
+==== a.tsx (2 errors) ====
+    /// <reference path="/.lib/react18/react18.d.ts" />
+    /// <reference path="/.lib/react18/global.d.ts" />
+    
+    const test = () => "asd";
+    
+    const jsxWithJsxFragment = <>{test}</>;
+                               ~~
+!!! error TS2322: Type '{ children: () => string; }' is not assignable to type '{ children?: ReactNode; }'.
+!!! error TS2322:   Types of property 'children' are incompatible.
+!!! error TS2322:     Type '() => string' is not assignable to type 'ReactNode'.
+    const jsxWithReactFragment = <React.Fragment>{test}</React.Fragment>;
+                                                  ~~~~
+!!! error TS2322: Type '() => string' is not assignable to type 'ReactNode'.
+!!! related TS6212 a.tsx:7:47: Did you mean to call this expression?
+    
