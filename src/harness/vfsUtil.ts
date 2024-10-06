@@ -637,12 +637,6 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readFileSync(path: string, encoding?: null): Buffer; // eslint-disable-line no-restricted-syntax
-    /**
-     * Read from a file.
-     *
-     * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
-     */
     public readFileSync(path: string, encoding: BufferEncoding): string;
     /**
      * Read from a file.
