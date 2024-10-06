@@ -293,8 +293,7 @@ interface Float16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * Converts a number to a string by using the current locale.
      */
-    toLocaleString(): string;
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 
     /**
      * Copies the array and returns the copy with the elements in reverse order.
