@@ -293,8 +293,8 @@ interface Float16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
     /**
      * Converts a number to a string by using the current locale.
      */
-    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
     toLocaleString(): string;
+    toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 
     /**
      * Copies the array and returns the copy with the elements in reverse order.
@@ -356,6 +356,7 @@ interface Float16ArrayConstructor {
     new (array: ArrayLike<number>): Float16Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Float16Array<TArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Float16Array<ArrayBuffer>;
+    new (elements: Iterable<number>): Float16Array<ArrayBuffer>;
 
     /**
      * The size in bytes of each element in the array.
@@ -381,6 +382,21 @@ interface Float16ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float16Array<ArrayBuffer>;
+
+    /**
+     * Creates an array from an array-like or iterable object.
+     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from(arrayLike: Iterable<number>): Float16Array<ArrayBuffer>;
+    /**
+     * Creates an array from an array-like or iterable object.
+     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float16Array<ArrayBuffer>;
 }
 declare var Float16Array: Float16ArrayConstructor;
 
