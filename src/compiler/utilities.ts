@@ -1558,7 +1558,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
             esnext: [
                 "f16round",
-            ]
+            ],
         })),
         Map: new Map(Object.entries({
             es2015: [
@@ -1731,7 +1731,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             esnext: [
                 "setFloat16",
                 "getFloat16",
-            ]
+            ],
         })),
         BigInt: new Map(Object.entries({
             es2020: emptyArray,
