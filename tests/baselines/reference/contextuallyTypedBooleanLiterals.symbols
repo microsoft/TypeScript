@@ -7,66 +7,173 @@ type Box<T> = {
 >Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
 >T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 2, 9))
 
-    get: () => T,
+  get: () => T;
 >get : Symbol(get, Decl(contextuallyTypedBooleanLiterals.ts, 2, 15))
 >T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 2, 9))
 
-    set: (value: T) => void
->set : Symbol(set, Decl(contextuallyTypedBooleanLiterals.ts, 3, 17))
->value : Symbol(value, Decl(contextuallyTypedBooleanLiterals.ts, 4, 10))
+  set: (value: T) => void;
+>set : Symbol(set, Decl(contextuallyTypedBooleanLiterals.ts, 3, 15))
+>value : Symbol(value, Decl(contextuallyTypedBooleanLiterals.ts, 4, 8))
 >T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 2, 9))
-}
+
+};
 
 declare function box<T>(value: T): Box<T>;
->box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 1))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
 >T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 7, 21))
 >value : Symbol(value, Decl(contextuallyTypedBooleanLiterals.ts, 7, 24))
 >T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 7, 21))
 >Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
 >T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 7, 21))
 
-const bn1 = box(0);  // Box<number>
+const bn1 = box(0); // Box<number>
 >bn1 : Symbol(bn1, Decl(contextuallyTypedBooleanLiterals.ts, 9, 5))
->box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 1))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
 
-const bn2: Box<number> = box(0);  // Ok
+const bn2: Box<number> = box(0); // Ok, Box<number>
 >bn2 : Symbol(bn2, Decl(contextuallyTypedBooleanLiterals.ts, 10, 5))
 >Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
->box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 1))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
 
-const bb1 = box(false);  // Box<boolean>
+const bb1 = box(false); // Box<boolean>
 >bb1 : Symbol(bb1, Decl(contextuallyTypedBooleanLiterals.ts, 12, 5))
->box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 1))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
 
-const bb2: Box<boolean> = box(false);  // Error, box<false> not assignable to Box<boolean>
+const bb2: Box<boolean> = box(false); // Ok, Box<boolean>
 >bb2 : Symbol(bb2, Decl(contextuallyTypedBooleanLiterals.ts, 13, 5))
 >Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
->box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 1))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+
+// https://github.com/microsoft/TypeScript/issues/59754
+
+const bn3 = box({ prop: 0 }); // Box<{ prop: number }>
+>bn3 : Symbol(bn3, Decl(contextuallyTypedBooleanLiterals.ts, 17, 5))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 17, 17))
+
+const bn4: Box<{ prop: number }> = box({ prop: 0 }); // Ok, Box<{ prop: number }>
+>bn4 : Symbol(bn4, Decl(contextuallyTypedBooleanLiterals.ts, 18, 5))
+>Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 18, 16))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 18, 40))
+
+const bb3 = box({ prop: false }); // Box<boolean>
+>bb3 : Symbol(bb3, Decl(contextuallyTypedBooleanLiterals.ts, 20, 5))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 20, 17))
+
+const bb4: Box<{ prop: boolean }> = box({ prop: false }); // Ok, Box<{ prop: boolean }>
+>bb4 : Symbol(bb4, Decl(contextuallyTypedBooleanLiterals.ts, 21, 5))
+>Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 21, 16))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 21, 41))
+
+const bn5 = box([0]); // Box<[number]>
+>bn5 : Symbol(bn5, Decl(contextuallyTypedBooleanLiterals.ts, 23, 5))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+
+const bn6: Box<[number]> = box([0]); // Ok, Box<[number]>
+>bn6 : Symbol(bn6, Decl(contextuallyTypedBooleanLiterals.ts, 24, 5))
+>Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+
+const bb5 = box([false]); // Box<[boolean]>
+>bb5 : Symbol(bb5, Decl(contextuallyTypedBooleanLiterals.ts, 26, 5))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+
+const bb6: Box<[boolean]> = box([false]); // Ok, Box<[boolean]>
+>bb6 : Symbol(bb6, Decl(contextuallyTypedBooleanLiterals.ts, 27, 5))
+>Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+
+const bb7: Box<{ deep: { prop: boolean } }> = box({ deep: { prop: false } }); // Ok, Box<{ deep: { prop: boolean } }>
+>bb7 : Symbol(bb7, Decl(contextuallyTypedBooleanLiterals.ts, 29, 5))
+>Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
+>deep : Symbol(deep, Decl(contextuallyTypedBooleanLiterals.ts, 29, 16))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 29, 24))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+>deep : Symbol(deep, Decl(contextuallyTypedBooleanLiterals.ts, 29, 51))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 29, 59))
+
+const bb8: Box<{ prop: true; other: string } | { prop: false; other: number }> = box({ prop: false, other: 0 }); // Error (T is invariant), Box<{ prop: false; other: number }>
+>bb8 : Symbol(bb8, Decl(contextuallyTypedBooleanLiterals.ts, 31, 5))
+>Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 31, 16))
+>other : Symbol(other, Decl(contextuallyTypedBooleanLiterals.ts, 31, 28))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 31, 48))
+>other : Symbol(other, Decl(contextuallyTypedBooleanLiterals.ts, 31, 61))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 31, 86))
+>other : Symbol(other, Decl(contextuallyTypedBooleanLiterals.ts, 31, 99))
+
+const bb9: Box<false> = box(false); // Ok, Box<false>
+>bb9 : Symbol(bb9, Decl(contextuallyTypedBooleanLiterals.ts, 33, 5))
+>Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+
+const bb10: Box<{ prop: false }> = box({ prop: false }); // Ok, Box<{ prop: false }>
+>bb10 : Symbol(bb10, Decl(contextuallyTypedBooleanLiterals.ts, 35, 5))
+>Box : Symbol(Box, Decl(contextuallyTypedBooleanLiterals.ts, 0, 0))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 35, 17))
+>box : Symbol(box, Decl(contextuallyTypedBooleanLiterals.ts, 5, 2))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 35, 40))
+
+type Box2<T> = {
+>Box2 : Symbol(Box2, Decl(contextuallyTypedBooleanLiterals.ts, 35, 56))
+>T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 37, 10))
+
+  get: () => T;
+>get : Symbol(get, Decl(contextuallyTypedBooleanLiterals.ts, 37, 16))
+>T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 37, 10))
+
+};
+
+const bb11: Box2<{ prop: true; other: string } | { prop: false; other: number }> = box2({ prop: false, other: 0 }); // Ok, Box2<{ prop: false; other: number }>
+>bb11 : Symbol(bb11, Decl(contextuallyTypedBooleanLiterals.ts, 41, 5))
+>Box2 : Symbol(Box2, Decl(contextuallyTypedBooleanLiterals.ts, 35, 56))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 41, 18))
+>other : Symbol(other, Decl(contextuallyTypedBooleanLiterals.ts, 41, 30))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 41, 50))
+>other : Symbol(other, Decl(contextuallyTypedBooleanLiterals.ts, 41, 63))
+>box2 : Symbol(box2, Decl(contextuallyTypedBooleanLiterals.ts, 41, 115))
+>prop : Symbol(prop, Decl(contextuallyTypedBooleanLiterals.ts, 41, 89))
+>other : Symbol(other, Decl(contextuallyTypedBooleanLiterals.ts, 41, 102))
+
+declare function box2<T>(value: T): Box2<T>;
+>box2 : Symbol(box2, Decl(contextuallyTypedBooleanLiterals.ts, 41, 115))
+>T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 43, 22))
+>value : Symbol(value, Decl(contextuallyTypedBooleanLiterals.ts, 43, 25))
+>T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 43, 22))
+>Box2 : Symbol(Box2, Decl(contextuallyTypedBooleanLiterals.ts, 35, 56))
+>T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 43, 22))
 
 // Repro from #48150
 
 interface Observable<T>
->Observable : Symbol(Observable, Decl(contextuallyTypedBooleanLiterals.ts, 13, 37))
->T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 17, 21))
+>Observable : Symbol(Observable, Decl(contextuallyTypedBooleanLiterals.ts, 43, 44))
+>T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 47, 21))
 {
   (): T;
->T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 17, 21))
+>T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 47, 21))
 
   (value: T): any;
->value : Symbol(value, Decl(contextuallyTypedBooleanLiterals.ts, 20, 3))
->T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 17, 21))
+>value : Symbol(value, Decl(contextuallyTypedBooleanLiterals.ts, 50, 3))
+>T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 47, 21))
 }
 
 declare function observable<T>(value: T): Observable<T>;
->observable : Symbol(observable, Decl(contextuallyTypedBooleanLiterals.ts, 21, 1))
->T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 23, 28))
->value : Symbol(value, Decl(contextuallyTypedBooleanLiterals.ts, 23, 31))
->T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 23, 28))
->Observable : Symbol(Observable, Decl(contextuallyTypedBooleanLiterals.ts, 13, 37))
->T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 23, 28))
+>observable : Symbol(observable, Decl(contextuallyTypedBooleanLiterals.ts, 51, 1))
+>T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 53, 28))
+>value : Symbol(value, Decl(contextuallyTypedBooleanLiterals.ts, 53, 31))
+>T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 53, 28))
+>Observable : Symbol(Observable, Decl(contextuallyTypedBooleanLiterals.ts, 43, 44))
+>T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 53, 28))
 
 const x: Observable<boolean> = observable(false);
->x : Symbol(x, Decl(contextuallyTypedBooleanLiterals.ts, 25, 5))
->Observable : Symbol(Observable, Decl(contextuallyTypedBooleanLiterals.ts, 13, 37))
->observable : Symbol(observable, Decl(contextuallyTypedBooleanLiterals.ts, 21, 1))
+>x : Symbol(x, Decl(contextuallyTypedBooleanLiterals.ts, 55, 5))
+>Observable : Symbol(Observable, Decl(contextuallyTypedBooleanLiterals.ts, 43, 44))
+>observable : Symbol(observable, Decl(contextuallyTypedBooleanLiterals.ts, 51, 1))
+
 
