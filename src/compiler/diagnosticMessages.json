@@ -7058,7 +7058,7 @@
         "category": "Error",
         "code": 9023
     },
-    "Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.": {
+    "Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9025
     },
