@@ -154,4 +154,47 @@ describe("unittests:: tsc:: projectReferences::", () => {
             }, { currentDirectory: "/home/src/workspaces/solution" }),
         commandLineArgs: ["--p", "project", "--pretty", "false"],
     });
+
+    verifyTsc({
+        scenario: "projectReferences",
+        subScenario: "referencing ambient const enum as value from referenced project with preserveConstEnums",
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/utils/index.ts": "export const enum E { A = 1 }",
+                "/src/utils/index.d.ts": "export declare const enum E { A = 1 }",
+                "/src/utils/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        declaration: true,
+                        preserveConstEnums: true,
+                    },
+                }),
+                "/src/utilsNonPreserved/index.ts": "export const enum E2 { A = 1 }",
+                "/src/utilsNonPreserved/index.d.ts": "export declare const enum E2 { A = 1 }",
+                "/src/utilsNonPreserved/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        declaration: true,
+                        preserveConstEnums: false,
+                    },
+                }),
+                "/src/project/index.ts": `
+                    import { E } from "../utils";
+                    import { E2 } from "../utilsNonPreserved";
+        
+                    E; declare const x: E; E[x];
+                    
+                    E2; declare const y: E2; E2[y];
+                `,
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        isolatedModules: true,
+                    },
+                    references: [
+                        { path: "../utils" },
+                    ],
+                }),
+            }),
+        commandLineArgs: ["--p", "src/project"],
+    });
 });
