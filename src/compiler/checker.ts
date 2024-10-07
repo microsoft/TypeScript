@@ -2370,7 +2370,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         [".json", ".json"],
     ];
 
-    var narrowableReturnTypeCache = new Map<TypeId, boolean>();
+    var narrowableReturnTypeCache = new Map<string, boolean>();
     /* eslint-enable no-var */
 
     initializeTypeChecker();
@@ -20306,7 +20306,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const checkType = root.checkType;
                 let distributionType = root.isDistributive ? getReducedType(getMappedType(checkType, newMapper)) : undefined;
                 let narrowingBaseType: Type | undefined;
-                const forNarrowing = distributionType && isNarrowingSubstitutionType(distributionType) && isNarrowableConditionalTypeWorker(type);
+                const forNarrowing = distributionType && isNarrowingSubstitutionType(distributionType) && isNarrowableConditionalType(type, mapper);
                 if (forNarrowing) {
                     narrowingBaseType = (distributionType as SubstitutionType).baseType;
                     distributionType = getReducedType((distributionType as SubstitutionType).constraint);
@@ -45868,11 +45868,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             : !!(returnType.indexType.flags & TypeFlags.TypeParameter);
     }
 
-    function isNarrowableConditionalType(type: ConditionalType): boolean {
-        let result = narrowableReturnTypeCache.get(type.id);
+    function isNarrowableConditionalType(type: ConditionalType, mapper?: TypeMapper): boolean {
+        const typeArguments = mapper && map(type.root.outerTypeParameters, t => {
+            const mapped = getMappedType(t, mapper);
+            if (isNarrowingSubstitutionType(mapped)) {
+                return (mapped as SubstitutionType).baseType;
+            }
+            return mapped;
+        });
+        const id = `${type.id}:${getTypeListId(typeArguments)}`;
+        let result = narrowableReturnTypeCache.get(id);
         if (result === undefined) {
-            result = isNarrowableConditionalTypeWorker(type);
-            narrowableReturnTypeCache.set(type.id, result);
+            const nonNarrowingMapper = type.root.outerTypeParameters
+                && typeArguments
+                && createTypeMapper(type.root.outerTypeParameters, typeArguments);
+            const instantiatedType = instantiateType(type, nonNarrowingMapper);
+            result = isConditionalType(instantiatedType) && isNarrowableConditionalTypeWorker(instantiatedType);
+            narrowableReturnTypeCache.set(id, result);
         }
         return result;
     }
@@ -45905,6 +45917,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!constraintType || !(constraintType.flags & TypeFlags.Union)) {
             return false;
         }
+
         // (3)
         if (
             !everyType(type.extendsType, extendsType =>

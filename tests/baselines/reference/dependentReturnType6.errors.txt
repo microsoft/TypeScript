@@ -1,25 +1,27 @@
-file.ts(26,26): error TS2322: Type 'true' is not assignable to type 'SomeInterface<T>[U]'.
+file.ts(28,26): error TS2322: Type 'true' is not assignable to type 'SomeInterfaceBad<T>[U]'.
   Type 'true' is not assignable to type 'T extends 1 ? true : T extends 2 ? false : never'.
-file.ts(26,33): error TS2322: Type 'false' is not assignable to type 'SomeInterface<T>[U]'.
+file.ts(28,33): error TS2322: Type 'false' is not assignable to type 'SomeInterfaceBad<T>[U]'.
   Type 'false' is not assignable to type 'T extends 1 ? true : T extends 2 ? false : never'.
-file.ts(28,16): error TS2322: Type '1' is not assignable to type 'SomeInterface<T>[U]'.
+file.ts(30,16): error TS2322: Type '1' is not assignable to type 'SomeInterfaceBad<T>[U]'.
   Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
-file.ts(28,20): error TS2322: Type '2' is not assignable to type 'SomeInterface<T>[U]'.
+file.ts(30,20): error TS2322: Type '2' is not assignable to type 'SomeInterfaceBad<T>[U]'.
   Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
-file.ts(65,13): error TS2322: Type '1' is not assignable to type 'this extends Sub1 ? 1 : this extends Sub2 ? 2 : never'.
-file.ts(67,9): error TS2322: Type '2' is not assignable to type 'this extends Sub1 ? 1 : this extends Sub2 ? 2 : never'.
-file.ts(79,16): error TS2322: Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
-file.ts(79,20): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
-file.ts(83,100): error TS2322: Type '1 | 2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+file.ts(80,13): error TS2322: Type '1' is not assignable to type 'this extends Sub1 ? 1 : this extends Sub2 ? 2 : never'.
+file.ts(82,9): error TS2322: Type '2' is not assignable to type 'this extends Sub1 ? 1 : this extends Sub2 ? 2 : never'.
+file.ts(94,16): error TS2322: Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+file.ts(94,20): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+file.ts(98,100): error TS2322: Type '1 | 2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
   Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
-file.ts(91,9): error TS2322: Type 'number' is not assignable to type 'SomeCond<T>'.
-file.ts(91,9): error TS2589: Type instantiation is excessively deep and possibly infinite.
-file.ts(93,5): error TS2322: Type 'number' is not assignable to type 'SomeCond<T>'.
-file.ts(99,60): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-file.ts(101,9): error TS2322: Type '"one"' is not assignable to type 'OtherCond<U> | OtherCond<V>'.
+file.ts(106,9): error TS2322: Type 'number' is not assignable to type 'SomeCond<T>'.
+file.ts(106,9): error TS2589: Type instantiation is excessively deep and possibly infinite.
+file.ts(108,5): error TS2322: Type 'number' is not assignable to type 'SomeCond<T>'.
+file.ts(114,60): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+file.ts(116,9): error TS2322: Type '"one"' is not assignable to type 'OtherCond<U> | OtherCond<V>'.
+file.ts(126,9): error TS2322: Type '"a"' is not assignable to type 'T extends (infer P)[] ? P : T extends number ? undefined : never'.
+file.ts(128,5): error TS2322: Type 'undefined' is not assignable to type 'T extends (infer P)[] ? P : T extends number ? undefined : never'.
 
 
-==== file.ts (14 errors) ====
+==== file.ts (16 errors) ====
     // Type parameter in outer scope
     function outer<T extends boolean>(x: T): number {
         return inner();
@@ -37,29 +39,44 @@ file.ts(101,9): error TS2322: Type '"one"' is not assignable to type 'OtherCond<
         return x ? y !== undefined ? y : 1 : 2;
     }
     
-    // Indexed access with conditional inside - DOESN'T NARROW the nested conditional type
-    interface SomeInterface<T> {
+    // Indexed access with conditional inside
+    
+    // DOESN'T NARROW the nested conditional type of wrong shape
+    interface SomeInterfaceBad<T> {
         prop1: T extends 1 ? true : T extends 2 ? false : never;
         prop2: T extends true ? 1 : T extends false ? 2 : never;
     }
     
-    function fun4<T, U extends keyof SomeInterface<unknown>>(x: T, y: U): SomeInterface<T>[U] {
+    function fun4bad<T, U extends keyof SomeInterfaceBad<unknown>>(x: T, y: U): SomeInterfaceBad<T>[U] {
         if (y === "prop1") {
             return x === 1 ? true : false;
                              ~~~~
-!!! error TS2322: Type 'true' is not assignable to type 'SomeInterface<T>[U]'.
+!!! error TS2322: Type 'true' is not assignable to type 'SomeInterfaceBad<T>[U]'.
 !!! error TS2322:   Type 'true' is not assignable to type 'T extends 1 ? true : T extends 2 ? false : never'.
                                     ~~~~~
-!!! error TS2322: Type 'false' is not assignable to type 'SomeInterface<T>[U]'.
+!!! error TS2322: Type 'false' is not assignable to type 'SomeInterfaceBad<T>[U]'.
 !!! error TS2322:   Type 'false' is not assignable to type 'T extends 1 ? true : T extends 2 ? false : never'.
         }
         return x ? 1 : 2;
                    ~
-!!! error TS2322: Type '1' is not assignable to type 'SomeInterface<T>[U]'.
+!!! error TS2322: Type '1' is not assignable to type 'SomeInterfaceBad<T>[U]'.
 !!! error TS2322:   Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
                        ~
-!!! error TS2322: Type '2' is not assignable to type 'SomeInterface<T>[U]'.
+!!! error TS2322: Type '2' is not assignable to type 'SomeInterfaceBad<T>[U]'.
 !!! error TS2322:   Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+    }
+    
+    // Narrows nested conditional type of right shape
+    interface SomeInterfaceGood<T> {
+        prop1: T extends true ? 2 : T extends false ? 1 : never;
+        prop2: T extends true ? 1 : T extends false ? 2 : never;
+    }
+    
+    function fun4good<T extends boolean, U extends keyof SomeInterfaceGood<unknown>>(x: T, y: U): SomeInterfaceGood<T>[U] {
+        if (y === "prop1") {
+            return x ? 2 : 1;
+        }
+        return x ? 1 : 2;
     }
     
     // Indexed access with indexed access inside - OK, narrows
@@ -126,7 +143,7 @@ file.ts(101,9): error TS2322: Type '"one"' is not assignable to type 'OtherCond<
                                                                                                        ~~~~~~~~~
 !!! error TS2322: Type '1 | 2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
 !!! error TS2322:   Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
-!!! related TS6502 file.ts:83:13: The expected type comes from the return type of this signature.
+!!! related TS6502 file.ts:98:13: The expected type comes from the return type of this signature.
     
     
     // Circular conditionals
@@ -157,3 +174,20 @@ file.ts(101,9): error TS2322: Type '"one"' is not assignable to type 'OtherCond<
 !!! error TS2322: Type '"one"' is not assignable to type 'OtherCond<U> | OtherCond<V>'.
         }
     }
+    
+    // Conditionals with `infer` - will not narrow, it is not safe to infer from the narrowed type into an `infer` type parameter
+    function f9<T extends "a"[] | "b"[] | number>(x: T): T extends Array<infer P> ? P : T extends number ? undefined : never {
+        if (Array.isArray(x)) {
+            // If we allowed narrowing of the conditional return type, when resolving the conditional `T & ("a"[] | "b"[]) extends Array<infer P> ? P : ...`,
+            // we could infer `"a" | "b"` for `P`, and allow "a" to be returned. However, when calling `f10`, `T` could be instantiated with `"b"[]`, and the return type would be `"b"`,
+            // so allowing an `"a"` return would be unsound.
+            return "a";
+            ~~~~~~
+!!! error TS2322: Type '"a"' is not assignable to type 'T extends (infer P)[] ? P : T extends number ? undefined : never'.
+        }
+        return undefined;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T extends (infer P)[] ? P : T extends number ? undefined : never'.
+    }
+    
+    

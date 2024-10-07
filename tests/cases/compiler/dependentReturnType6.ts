@@ -22,15 +22,30 @@ function fun6<T extends boolean>(x: T, y?: string): T extends true ? 1 | string 
     return x ? y !== undefined ? y : 1 : 2;
 }
 
-// Indexed access with conditional inside - DOESN'T NARROW the nested conditional type
-interface SomeInterface<T> {
+// Indexed access with conditional inside
+
+// DOESN'T NARROW the nested conditional type of wrong shape
+interface SomeInterfaceBad<T> {
     prop1: T extends 1 ? true : T extends 2 ? false : never;
     prop2: T extends true ? 1 : T extends false ? 2 : never;
 }
 
-function fun4<T, U extends keyof SomeInterface<unknown>>(x: T, y: U): SomeInterface<T>[U] {
+function fun4bad<T, U extends keyof SomeInterfaceBad<unknown>>(x: T, y: U): SomeInterfaceBad<T>[U] {
     if (y === "prop1") {
         return x === 1 ? true : false;
+    }
+    return x ? 1 : 2;
+}
+
+// Narrows nested conditional type of right shape
+interface SomeInterfaceGood<T> {
+    prop1: T extends true ? 2 : T extends false ? 1 : never;
+    prop2: T extends true ? 1 : T extends false ? 2 : never;
+}
+
+function fun4good<T extends boolean, U extends keyof SomeInterfaceGood<unknown>>(x: T, y: U): SomeInterfaceGood<T>[U] {
+    if (y === "prop1") {
+        return x ? 2 : 1;
     }
     return x ? 1 : 2;
 }
@@ -108,3 +123,15 @@ function f8<U extends 1 | 2, V extends 3 | 4>(x: U, y: V): OtherCond<U | V> {
         return "one";
     }
 }
+
+// Conditionals with `infer` - will not narrow, it is not safe to infer from the narrowed type into an `infer` type parameter
+function f9<T extends "a"[] | "b"[] | number>(x: T): T extends Array<infer P> ? P : T extends number ? undefined : never {
+    if (Array.isArray(x)) {
+        // If we allowed narrowing of the conditional return type, when resolving the conditional `T & ("a"[] | "b"[]) extends Array<infer P> ? P : ...`,
+        // we could infer `"a" | "b"` for `P`, and allow "a" to be returned. However, when calling `f10`, `T` could be instantiated with `"b"[]`, and the return type would be `"b"`,
+        // so allowing an `"a"` return would be unsound.
+        return "a";
+    }
+    return undefined;
+}
+
