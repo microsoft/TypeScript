@@ -27,8 +27,11 @@ controlFlowOptionalChain.ts(223,9): error TS18048: 'o' is possibly 'undefined'.
 controlFlowOptionalChain.ts(238,9): error TS18048: 'o' is possibly 'undefined'.
 controlFlowOptionalChain.ts(241,9): error TS18048: 'o' is possibly 'undefined'.
 controlFlowOptionalChain.ts(244,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(270,9): error TS2367: This comparison appears to be unintentional because the types 'string | number | undefined' and 'null' have no overlap.
 controlFlowOptionalChain.ts(271,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(273,9): error TS2367: This comparison appears to be unintentional because the types 'string | number | undefined' and 'null' have no overlap.
 controlFlowOptionalChain.ts(274,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(276,9): error TS2367: This comparison appears to be unintentional because the types 'number | undefined' and 'null' have no overlap.
 controlFlowOptionalChain.ts(277,9): error TS18048: 'o' is possibly 'undefined'.
 controlFlowOptionalChain.ts(307,9): error TS18048: 'o' is possibly 'undefined'.
 controlFlowOptionalChain.ts(310,9): error TS18048: 'o' is possibly 'undefined'.
@@ -61,7 +64,7 @@ controlFlowOptionalChain.ts(518,13): error TS18048: 'o' is possibly 'undefined'.
 controlFlowOptionalChain.ts(567,21): error TS18048: 'someOptionalObject' is possibly 'undefined'.
 
 
-==== controlFlowOptionalChain.ts (61 errors) ====
+==== controlFlowOptionalChain.ts (64 errors) ====
     // assignments in shortcutting chain
     declare const o: undefined | {
         [key: string]: any;
@@ -390,16 +393,22 @@ controlFlowOptionalChain.ts(567,21): error TS18048: 'someOptionalObject' is poss
     
     function f13a(o: Thing | undefined) {
         if (o?.foo !== null) {
+            ~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string | number | undefined' and 'null' have no overlap.
             o.foo;  // Error
             ~
 !!! error TS18048: 'o' is possibly 'undefined'.
         }
         if (o?.["foo"] !== null) {
+            ~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string | number | undefined' and 'null' have no overlap.
             o["foo"];  // Error
             ~
 !!! error TS18048: 'o' is possibly 'undefined'.
         }
         if (o?.bar() !== null) {
+            ~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number | undefined' and 'null' have no overlap.
             o.bar;  // Error
             ~
 !!! error TS18048: 'o' is possibly 'undefined'.
