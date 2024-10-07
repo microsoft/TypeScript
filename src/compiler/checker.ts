@@ -20286,13 +20286,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function getConditionalTypeInstantiation(
-        type: ConditionalType,
-        mapper: TypeMapper,
-        forConstraint: boolean,
-        aliasSymbol?: Symbol,
-        aliasTypeArguments?: readonly Type[],
-    ): Type {
+    function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper, forConstraint: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
         const root = type.root;
         if (root.outerTypeParameters) {
             // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
@@ -20315,22 +20309,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
                 // result is (A extends U ? X : Y) | (B extends U ? X : Y).
                 if (distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never)) {
-                    const mapperCallback = narrowingBaseType ?
-                        (t: Type) =>
-                            getConditionalType(
-                                root,
-                                prependTypeMapping(checkType, getSubstitutionType(narrowingBaseType, t, /*isNarrowed*/ true), newMapper),
-                                forConstraint,
-                                /*aliasSymbol*/ undefined,
-                                /*aliasTypeArguments*/ undefined,
-                                forNarrowing,
-                            ) :
-                        (t: Type) => getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint);
                     if (narrowingBaseType) {
-                        result = mapType(distributionType, mapperCallback, /*noReductions*/ undefined, /*toIntersection*/ true);
+                        result = mapType(
+                            distributionType,
+                            (t: Type) =>
+                                getConditionalType(
+                                    root,
+                                    prependTypeMapping(checkType, getSubstitutionType(narrowingBaseType, t, /*isNarrowed*/ true), newMapper),
+                                    forConstraint,
+                                    /*aliasSymbol*/ undefined,
+                                    /*aliasTypeArguments*/ undefined,
+                                    forNarrowing,
+                                ),
+                            /*noReductions*/ undefined,
+                            /*toIntersection*/ true,
+                        );
                     }
                     else {
-                        result = mapTypeWithAlias(distributionType, mapperCallback, aliasSymbol, aliasTypeArguments);
+                        result = mapTypeWithAlias(distributionType, (t: Type) => getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint), aliasSymbol, aliasTypeArguments);
                     }
                 }
                 else {
@@ -20369,12 +20365,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function instantiateTypeWorker(
-        type: Type,
-        mapper: TypeMapper,
-        aliasSymbol: Symbol | undefined,
-        aliasTypeArguments: readonly Type[] | undefined,
-    ): Type {
+    function instantiateTypeWorker(type: Type, mapper: TypeMapper, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined): Type {
         const flags = type.flags;
         if (flags & TypeFlags.TypeParameter) {
             return getMappedType(type, mapper);
@@ -20448,10 +20439,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return newBaseType.flags & TypeFlags.TypeVariable ? getSubstitutionType(newBaseType, newConstraint) : getIntersectionType([newConstraint, newBaseType]);
         }
         return type;
-    }
-
-    function isGenericIndexedOrConditionalReturnType(type: Type): type is IndexedAccessType | ConditionalType {
-        return !!(type.flags & (TypeFlags.IndexedAccess | TypeFlags.Conditional) && couldContainTypeVariables(type));
     }
 
     function instantiateReverseMappedType(type: ReverseMappedType, mapper: TypeMapper) {
@@ -21669,7 +21656,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const t of type.types) {
             hasInstantiable ||= !!(t.flags & TypeFlags.Instantiable);
             hasNullableOrEmpty ||= !!(t.flags & TypeFlags.Nullable) || isEmptyAnonymousObjectType(t);
-            hasSubstitution ||= isNarrowingSubstitutionType(t); // This avoids displaying error messages with types like `T & T`
+            hasSubstitution ||= isNarrowingSubstitutionType(t); // This avoids displaying error messages with types like `T & T` when narrowing a return type
             if (hasInstantiable && hasNullableOrEmpty || hasSubstitution) return true;
         }
         return false;
@@ -29441,12 +29428,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // up to five levels of aliased conditional expressions that are themselves declared as const variables.
                     if (!isMatchingReference(reference, expr) && inlineLevel < 5) {
                         const symbol = getResolvedSymbol(expr as Identifier);
-                        const inlineExpression = getNarrowableInlineExpression(symbol);
-                        if (inlineExpression && isConstantReference(reference)) {
-                            inlineLevel++;
-                            const result = narrowType(type, inlineExpression, assumeTrue);
-                            inlineLevel--;
-                            return result;
+                        if (isConstantVariable(symbol)) {
+                            const declaration = symbol.valueDeclaration;
+                            if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isConstantReference(reference)) {
+                                inlineLevel++;
+                                const result = narrowType(type, declaration.initializer, assumeTrue);
+                                inlineLevel--;
+                                return result;
+                            }
                         }
                     }
                     // falls through
@@ -29480,15 +29469,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return narrowTypeByDiscriminant(type, access, t => getTypeWithFacts(t, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull));
             }
             return type;
-        }
-    }
-
-    function getNarrowableInlineExpression(symbol: Symbol): Expression | undefined {
-        if (isConstantVariable(symbol)) {
-            const declaration = symbol.valueDeclaration;
-            if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer) {
-                return declaration.initializer;
-            }
         }
     }
 
@@ -45667,7 +45647,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (expr) {
             const unwrappedExpr = skipParentheses(expr);
             if (isConditionalExpression(unwrappedExpr)) {
-                return checkReturnConditionalExpression(container, returnType, node, unwrappedExpr);
+                return checkConditionalReturnExpression(container, returnType, node, unwrappedExpr);
             }
         }
 
@@ -45688,19 +45668,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return;
         }
 
-        if (!isGenericIndexedOrConditionalReturnType(unwrappedReturnType)) {
+        if (!(unwrappedReturnType.flags & (TypeFlags.IndexedAccess | TypeFlags.Conditional)) || !couldContainTypeVariables(unwrappedReturnType)) {
             checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, expr);
             return;
         }
         const allTypeParameters = appendTypeParameters(getOuterTypeParameters(container, /*includeThisTypes*/ false), getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
         const narrowableTypeParameters = allTypeParameters && getNarrowableTypeParameters(allTypeParameters);
 
-        // >> TODO: another optimization would be to check if any of the narrowable type parameters
-        // match the types in the return type that can be narrowed
         if (
             !narrowableTypeParameters ||
             !narrowableTypeParameters.length ||
-            !isNarrowableReturnType(unwrappedReturnType)
+            !isNarrowableReturnType(unwrappedReturnType as ConditionalType | IndexedAccessType)
         ) {
             checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, expr);
             return;
@@ -45779,7 +45757,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkTypeAssignableToAndOptionallyElaborate(narrowedUnwrappedExprType, narrowedReturnType, errorNode, expr);
     }
 
-    function checkReturnConditionalExpression(
+    function checkConditionalReturnExpression(
         container: SignatureDeclaration,
         returnType: Type,
         node: ReturnStatement,
@@ -45860,8 +45838,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    // A narrowable indexed access type is one that has the shape `A[T]`,
-    // where `T` is a narrowable type parameter.
     function isNarrowableReturnType(returnType: IndexedAccessType | ConditionalType): boolean {
         return isConditionalType(returnType)
             ? isNarrowableConditionalType(returnType)

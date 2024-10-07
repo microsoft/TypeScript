@@ -6917,7 +6917,6 @@ export interface SubstitutionType extends InstantiableType {
     objectFlags: ObjectFlags;
     baseType: Type; // Target type
     constraint: Type; // Constraint that target type is known to satisfy
-    /** @internal */
 }
 
 /** @internal */
