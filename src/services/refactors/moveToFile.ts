@@ -885,7 +885,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const unusedImportsFromOldFile = new Set<Symbol>();
     for (const statement of toMove) {
         forEachReference(statement, checker, enclosingRange, (symbol, isValidTypeOnlyUseSite) => {
-            if (!symbol.declarations || isGlobalType(checker, symbol)) {
+            if (!symbol.declarations || (isGlobalType(checker, symbol) && !symbol.declarations.some(d => (isInImport(d) && getSourceFileOfNode(d) === oldFile)))) {
                 return;
             }
             if (existingTargetLocals.has(skipAlias(symbol, checker))) {
