@@ -1,0 +1,18 @@
+// === Inlay Hints ===
+    { n: [1, 2, 3] },
+    ^
+{
+  "text": "ok_1:",
+  "position": 195,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    {
+    ^
+{
+  "text": "ok_2:",
+  "position": 217,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
