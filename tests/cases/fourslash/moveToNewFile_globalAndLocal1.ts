@@ -9,19 +9,21 @@
 //// }
 
 // @Filename: /src/test.ts
-//// import { Disposable } from './lifecycle';
+//// export interface Disposable {
+////     (): string;
+//// }
 //// export interface [|EditingService|] extends Disposable { }
 
-// @Filename: /src/lifecycle.ts
-//// export interface Disposable {
-//// 	(): string;
-//// }
 
 verify.moveToNewFile({
     newFileContents: {
-        "/src/test.ts": ``,
-        "/src/EditingService.ts": 
-`import { Disposable } from "./lifecycle";
+        "/src/test.ts": 
+`export interface Disposable {
+    (): string;
+}
+`,
+        "/src/EditingService.ts":  // Reference to Disposable is still from test
+`import { Disposable } from "./test";
 
 export interface EditingService extends Disposable { }
 `

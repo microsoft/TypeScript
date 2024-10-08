@@ -885,7 +885,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const unusedImportsFromOldFile = new Set<Symbol>();
     for (const statement of toMove) {
         forEachReference(statement, checker, enclosingRange, (symbol, isValidTypeOnlyUseSite) => {
-            if (!symbol.declarations || (isGlobalType(checker, symbol) && !symbol.declarations.some(d => (isInImport(d) && getSourceFileOfNode(d) === oldFile)))) {
+            if (!symbol.declarations || (isGlobalType(checker, oldFile, symbol))) {
                 return;
             }
             if (existingTargetLocals.has(skipAlias(symbol, checker))) {
@@ -946,8 +946,9 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     }
 }
 
-function isGlobalType(checker: TypeChecker, symbol: Symbol) {
-    return !!checker.resolveName(symbol.name, /*location*/ undefined, SymbolFlags.Type, /*excludeGlobals*/ false);
+function isGlobalType(checker: TypeChecker, location: Node, symbol: Symbol) {
+    if (checker.resolveName(symbol.name, location, SymbolFlags.Type, /*excludeGlobals*/ true)) return false;
+    return !!checker.resolveName(symbol.name, location, SymbolFlags.Type, /*excludeGlobals*/ false);
 }
 
 function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {
