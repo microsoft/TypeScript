@@ -65,6 +65,7 @@ export * from "../builderStatePublic.js";
 export * from "../builderState.js";
 export * from "../builder.js";
 export * from "../builderPublic.js";
+export * from "../sharedResolutionCache.js";
 export * from "../resolutionCache.js";
 export * from "../watch.js";
 export * from "../watchPublic.js";

@@ -611,7 +611,7 @@ File '/user/username/projects/transitiveReferences/nrefs/a.d.ts' exists - use it
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
-Module resolution kind is not specified, using 'Node10'.
+Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences/b'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'. ========
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -789,7 +789,7 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it 
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
-Module resolution kind is not specified, using 'Node10'.
+Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences/b'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'. ========
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'

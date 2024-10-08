@@ -1,6 +1,7 @@
 import {
     CancellationToken,
     CompilerHost,
+    CompilerHostSupportingResolutionCache,
     CompilerOptions,
     CustomTransformers,
     Diagnostic,
@@ -434,6 +435,10 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
     /** @internal */ runWithTemporaryFileUpdate?(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedPastedText: SourceFile) => void): void;
     jsDocParsingMode?: JSDocParsingMode | undefined;
+}
+
+/** @internal */
+export interface LanguageServiceHost extends CompilerHostSupportingResolutionCache {
 }
 
 /** @internal */
