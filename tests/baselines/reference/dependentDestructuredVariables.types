@@ -1565,8 +1565,8 @@ function foo({
 // Repro from #49772
 
 function fa1(x: [true, number] | [false, string]) {
->fa1 : (x: [true, number] | [false, string]) => void
->    : ^ ^^                                ^^^^^^^^^
+>fa1 : (x: [true, number] | [false, string]) => asserts x is [false, string]
+>    : ^ ^^                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [true, number] | [false, string]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
@@ -1609,8 +1609,8 @@ function fa1(x: [true, number] | [false, string]) {
 }
 
 function fa2(x: { guard: true, value: number } | { guard: false, value: string }) {
->fa2 : (x: { guard: true; value: number; } | { guard: false; value: string; }) => void
->    : ^ ^^                                                                  ^^^^^^^^^
+>fa2 : (x: { guard: true; value: number; } | { guard: false; value: string; }) => asserts x is { guard: false; value: string; }
+>    : ^ ^^                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^
 >x : { guard: true; value: number; } | { guard: false; value: string; }
 >  : ^^^^^^^^^    ^^^^^^^^^      ^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^
 >guard : true

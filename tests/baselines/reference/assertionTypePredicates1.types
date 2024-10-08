@@ -406,8 +406,8 @@ function f02(x: string | undefined) {
 }
 
 function f03(x: string | undefined, assert: (value: unknown) => asserts value) {
->f03 : (x: string | undefined, assert: (value: unknown) => asserts value) => void
->    : ^ ^^                  ^^      ^^                                 ^^^^^^^^^
+>f03 : (x: string | undefined, assert: (value: unknown) => asserts value) => asserts x is string
+>    : ^ ^^                  ^^      ^^                                 ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >assert : (value: unknown) => asserts value
@@ -918,8 +918,8 @@ declare class Wat {
 }
 
 function f20(x: unknown) {
->f20 : (x: unknown) => void
->    : ^ ^^       ^^^^^^^^^
+>f20 : (x: unknown) => asserts x is string
+>    : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 

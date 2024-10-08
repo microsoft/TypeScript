@@ -659,8 +659,8 @@ function f7(m: Message) {
 }
 
 function f8(m: Message) {
->f8 : (m: Message) => void
->   : ^ ^^       ^^^^^^^^^
+>f8 : (m: Message) => asserts m is { kind: "A"; x: string; } | { kind: "B" | "C"; y: number; }
+>   : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : Message
 >  : ^^^^^^^
 

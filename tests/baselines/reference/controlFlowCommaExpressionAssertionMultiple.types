@@ -7,8 +7,8 @@ function Narrow<T>(value: any): asserts value is T {}
 >value : any
 
 function func(foo: any, bar: any) {
->func : (foo: any, bar: any) => void
->     : ^   ^^   ^^   ^^   ^^^^^^^^^
+>func : (foo: any, bar: any) => asserts foo is number
+>     : ^   ^^   ^^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
 >bar : any
 
@@ -36,8 +36,8 @@ function func(foo: any, bar: any) {
 }
 
 function func2(foo: any, bar: any, baz: any) {
->func2 : (foo: any, bar: any, baz: any) => void
->      : ^   ^^   ^^   ^^   ^^   ^^   ^^^^^^^^^
+>func2 : (foo: any, bar: any, baz: any) => asserts foo is number
+>      : ^   ^^   ^^   ^^   ^^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
 >bar : any
 >baz : any
