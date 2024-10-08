@@ -1,13 +1,13 @@
-//// [tests/cases/compiler/exportDefaultNamespace.ts] ////
+//// [tests/cases/compiler/exportDefaultModule.ts] ////
 
 //// [a.ts]
-export default namespace A {
+export default module A {
     export const Foo = 1;
 }
 
 //// [b.ts]
 import A from "./a"
-A.Foo
+A.Foo;
 
 
 //// [a.js]
@@ -21,5 +21,5 @@ exports.default = A;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
+const a_1 = require("./a");
 a_1.default.Foo;
