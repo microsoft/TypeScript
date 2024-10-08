@@ -85,6 +85,7 @@
         "esnext.collection",
         "esnext.array",
         "esnext.iterator",
+        "esnext.float16",
         "decorators",
         "decorators.legacy",
         // Default libraries
