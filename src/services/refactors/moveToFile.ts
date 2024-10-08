@@ -947,7 +947,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
 }
 
 function isGlobalType(checker: TypeChecker, location: Node, symbol: Symbol) {
-    if (checker.resolveName(symbol.name, location, SymbolFlags.Type, /*excludeGlobals*/ true)) return false;
+    if (checker.resolveName(symbol.name, location, SymbolFlags.All, /*excludeGlobals*/ true)) return false;
     return !!checker.resolveName(symbol.name, location, SymbolFlags.Type, /*excludeGlobals*/ false);
 }
 
