@@ -1,0 +1,250 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinksWithCustomText.js",
+      "position": 41,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 41,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "myVar1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "https://hva Go to URL",
+          "kind": "linkText"
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinksWithCustomText.js",
+      "position": 97,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 97,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyVar2",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "https://hva Go to URL",
+          "kind": "linkText"
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinksWithCustomText.js",
+      "position": 158,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 158,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "myVar3",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "see",
+          "text": [
+            {
+              "text": "",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "https://hva Go to URL",
+              "kind": "linkText"
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinksWithCustomText.js",
+      "position": 219,
+      "name": "4"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 219,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyVar4",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "see",
+          "text": [
+            {
+              "text": "",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "https://hva Go to URL",
+              "kind": "linkText"
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
