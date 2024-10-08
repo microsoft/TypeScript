@@ -8,20 +8,20 @@ var K = 'k'
 >    : ^^^
 
 var a = { p  : (true ? { [K] : 'v'}        : null) }
->a : { p: { [x: string]: string; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ p  : (true ? { [K] : 'v'}        : null) } : { p: { [x: string]: string; }; }
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->p : { [x: string]: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
->(true ? { [K] : 'v'}        : null) : { [x: string]: string; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^
->true ? { [K] : 'v'}        : null : { [x: string]: string; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { p: { [K]: string; }; }
+>  : ^^^^^^^     ^^^^^^ ^^^^^
+>{ p  : (true ? { [K] : 'v'}        : null) } : { p: { [K]: string; }; }
+>                                             : ^^^^^^^     ^^^^^^ ^^^^^
+>p : { [K]: string; }
+>  : ^^     ^^^^^^ ^^
+>(true ? { [K] : 'v'}        : null) : { [K]: string; }
+>                                    : ^^     ^^^^^^ ^^
+>true ? { [K] : 'v'}        : null : { [K]: string; }
+>                                  : ^^     ^^^^^^ ^^
 >true : true
 >     : ^^^^
->{ [K] : 'v'} : { [x: string]: string; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [K] : 'v'} : { [K]: string; }
+>             : ^^     ^^^^^^ ^^
 >[K] : string
 >    : ^^^^^^
 >K : string
@@ -40,8 +40,8 @@ var b = { p  : (true ? { [K] : 'v'} as any : null) }
 >true : true
 >     : ^^^^
 >{ [K] : 'v'} as any : any
->{ [K] : 'v'} : { [x: string]: string; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [K] : 'v'} : { [K]: string; }
+>             : ^^     ^^^^^^ ^^
 >[K] : string
 >    : ^^^^^^
 >K : string

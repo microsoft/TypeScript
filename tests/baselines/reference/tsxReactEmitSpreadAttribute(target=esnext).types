@@ -239,8 +239,8 @@ export function T10(a: any, b: any, c: any, d: any) {
 >          : ^^^^^^
 >"T10" : "T10"
 >      : ^^^^^
->{ [__proto__]: null } : { [x: string]: null; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^
+>{ [__proto__]: null } : { [__proto__]: null; }
+>                      : ^^             ^^^^ ^^
 >[__proto__] : null
 >            : ^^^^
 >__proto__ : string
