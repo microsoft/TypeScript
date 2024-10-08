@@ -49681,7 +49681,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeNode = getNonlocalEffectiveTypeAnnotationNode(parameter);
         if (!typeNode) return false;
         const type = getTypeFromTypeNode(typeNode);
-        return containsUndefinedType(type);
+        // allow error type here to avoid confusing errors that the annotation has to contain undefined when it does in cases like this:
+        //
+        // export function fn(x?: Unresolved | undefined): void {}
+        return isErrorType(type) || containsUndefinedType(type);
     }
 
     function requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined) {
