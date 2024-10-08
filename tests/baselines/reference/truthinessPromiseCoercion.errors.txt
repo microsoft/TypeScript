@@ -1,11 +1,13 @@
 truthinessPromiseCoercion.ts(7,9): error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
+truthinessPromiseCoercion.ts(8,11): error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
 truthinessPromiseCoercion.ts(11,5): error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
+truthinessPromiseCoercion.ts(12,7): error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
 truthinessPromiseCoercion.ts(32,9): error TS2801: This condition will always return true since this 'Promise<unknown>' is always defined.
 truthinessPromiseCoercion.ts(40,9): error TS2801: This condition will always return true since this 'Promise<boolean>' is always defined.
 truthinessPromiseCoercion.ts(43,9): error TS2801: This condition will always return true since this 'Promise<boolean>' is always defined.
 
 
-==== truthinessPromiseCoercion.ts (5 errors) ====
+==== truthinessPromiseCoercion.ts (7 errors) ====
     declare const p: Promise<number>
     declare const p2: null | Promise<number>
     declare const obj: { p: Promise<unknown> }
@@ -17,6 +19,9 @@ truthinessPromiseCoercion.ts(43,9): error TS2801: This condition will always ret
 !!! error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
 !!! related TS2773 truthinessPromiseCoercion.ts:7:9: Did you forget to use 'await'?
         if (!!p) {} // no err
+              ~
+!!! error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
+!!! related TS2773 truthinessPromiseCoercion.ts:8:11: Did you forget to use 'await'?
         if (p2) {} // no err
     
         p ? f.arguments : f.arguments;
@@ -24,6 +29,9 @@ truthinessPromiseCoercion.ts(43,9): error TS2801: This condition will always ret
 !!! error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
 !!! related TS2773 truthinessPromiseCoercion.ts:11:5: Did you forget to use 'await'?
         !!p ? f.arguments : f.arguments;
+          ~
+!!! error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
+!!! related TS2773 truthinessPromiseCoercion.ts:12:7: Did you forget to use 'await'?
         p2 ? f.arguments : f.arguments;
     }
     
