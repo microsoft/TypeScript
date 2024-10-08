@@ -280,6 +280,58 @@ if (foobarPred(foobar)) {
   foobar.foo;
 }
 
+// Returning true can result in a predicate if the function throws earlier.
+function assertReturnTrue(x: string | number | Date) {
+  if (x instanceof Date) {
+    throw new Error();
+  }
+  return true;
+}
+
+function isStringForWhichWeHaveACaseHandler(anyString: string) {
+  switch (anyString) {
+    case 'a':
+    case 'b':
+    case 'c':
+      return true
+    default:
+      return false
+  }
+}
+
+function twoReturnExpressions(x: string | number) {
+  switch (typeof x) {
+    case 'string':
+      return x === 'a' || x === 'b';
+    case 'number':
+      return x === 10 || x === 11;
+  }
+}
+
+function oneNarrowingOneNot(x: string | number) {
+  switch (typeof x) {
+    case 'string':
+      return x === 'a' || x === 'b';
+    case 'number':
+      return x >= 0 && x <= 10;
+  }
+}
+
+function ifElseIfPredicate(x: Date | string | number) {
+  if (x instanceof Date) {
+    return true;
+  } else if (typeof x === 'string') {
+    return true;
+  }
+  return false;
+}
+
+function isArrayOfStrings(x: unknown) {
+  if (!(x instanceof Array)) return false;
+
+  return x.every((y) => typeof y === 'string');
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -538,6 +590,53 @@ var foobarPred = function (fb) { return fb.type === "foo"; };
 if (foobarPred(foobar)) {
     foobar.foo;
 }
+// Returning true can result in a predicate if the function throws earlier.
+function assertReturnTrue(x) {
+    if (x instanceof Date) {
+        throw new Error();
+    }
+    return true;
+}
+function isStringForWhichWeHaveACaseHandler(anyString) {
+    switch (anyString) {
+        case 'a':
+        case 'b':
+        case 'c':
+            return true;
+        default:
+            return false;
+    }
+}
+function twoReturnExpressions(x) {
+    switch (typeof x) {
+        case 'string':
+            return x === 'a' || x === 'b';
+        case 'number':
+            return x === 10 || x === 11;
+    }
+}
+function oneNarrowingOneNot(x) {
+    switch (typeof x) {
+        case 'string':
+            return x === 'a' || x === 'b';
+        case 'number':
+            return x >= 0 && x <= 10;
+    }
+}
+function ifElseIfPredicate(x) {
+    if (x instanceof Date) {
+        return true;
+    }
+    else if (typeof x === 'string') {
+        return true;
+    }
+    return false;
+}
+function isArrayOfStrings(x) {
+    if (!(x instanceof Array))
+        return false;
+    return x.every(function (y) { return typeof y === 'string'; });
+}
 
 
 //// [inferTypePredicates.d.ts]
@@ -583,7 +682,7 @@ declare let maybeDate: object;
 declare function irrelevantIsNumber(x: string | number): boolean;
 declare function irrelevantIsNumberDestructuring(x: string | number): boolean;
 declare function areBothNums(x: string | number, y: string | number): boolean;
-declare function doubleReturn(x: string | number): boolean;
+declare function doubleReturn(x: string | number): x is string;
 declare function guardsOneButNotOthers(a: string | number, b: string | number, c: string | number): b is string;
 declare function dunderguard(__x: number | string): __x is string;
 declare const booleanIdentity: (x: boolean) => boolean;
@@ -630,3 +729,9 @@ declare const foobarPred: (fb: typeof foobar) => fb is {
     type: "foo";
     foo: number;
 };
+declare function assertReturnTrue(x: string | number | Date): x is string | number;
+declare function isStringForWhichWeHaveACaseHandler(anyString: string): anyString is "a" | "b" | "c";
+declare function twoReturnExpressions(x: string | number): x is 10 | "a" | "b" | 11;
+declare function oneNarrowingOneNot(x: string | number): boolean;
+declare function ifElseIfPredicate(x: Date | string | number): x is string | Date;
+declare function isArrayOfStrings(x: unknown): x is string[];
