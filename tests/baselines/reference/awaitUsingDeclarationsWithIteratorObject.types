@@ -56,12 +56,12 @@ async function f() {
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Iterator.from(i) : IteratorObject<string, undefined, unknown>
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
->              : ^ ^^     ^^                                                                 ^^^^^                                     
+>Iterator.from : <T, TReturn = any>(value: Iterator<T, TReturn, undefined> | Iterable<T, TReturn, undefined>) => IteratorObject<T, TReturn, unknown>
+>              : ^ ^^       ^^^^^^^^     ^^                                                                 ^^^^^                                   
 >Iterator : IteratorConstructor
 >         : ^^^^^^^^^^^^^^^^^^^
->from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
->     : ^ ^^     ^^                                                                 ^^^^^                                     
+>from : <T, TReturn = any>(value: Iterator<T, TReturn, undefined> | Iterable<T, TReturn, undefined>) => IteratorObject<T, TReturn, unknown>
+>     : ^ ^^       ^^^^^^^^     ^^                                                                 ^^^^^                                   
 >i : Iterator<string, undefined, any>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
