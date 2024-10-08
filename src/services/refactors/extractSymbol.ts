@@ -9,6 +9,7 @@ import {
     BreakStatement,
     CancellationToken,
     canHaveModifiers,
+    cast,
     CharacterCodes,
     ClassElement,
     ClassLikeDeclaration,
@@ -59,6 +60,7 @@ import {
     getThisContainer,
     getUniqueName,
     hasEffectiveModifier,
+    hasName,
     hasSyntacticModifier,
     Identifier,
     InternalNodeBuilderFlags,
@@ -1646,7 +1648,7 @@ function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly
                 assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor, isExpression)));
             }
             if (assignments.length === 1) {
-                return factory.createReturnStatement(assignments[0].name as Expression);
+                return factory.createReturnStatement(cast(assignments[0], hasName).name as Expression);
             }
             else {
                 return factory.createReturnStatement(factory.createObjectLiteralExpression(assignments));

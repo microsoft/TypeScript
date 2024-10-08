@@ -2,6 +2,7 @@ import {
     ApplicableRefactorInfo,
     ArrowFunction,
     Block,
+    canHaveAsteriskToken,
     ConciseBody,
     copyComments,
     copyTrailingAsLeadingComments,
@@ -48,6 +49,7 @@ import {
     suppressLeadingTrivia,
     SyntaxKind,
     textChanges,
+    tryCast,
     TypeChecker,
     VariableDeclaration,
     VariableDeclarationList,
@@ -261,7 +263,7 @@ function getVariableInfo(func: FunctionExpression | ArrowFunction): VariableInfo
 function getEditInfoForConvertToAnonymousFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): FileTextChanges[] {
     const { file } = context;
     const body = convertToBlock(func.body);
-    const newNode = factory.createFunctionExpression(func.modifiers, func.asteriskToken, /*name*/ undefined, func.typeParameters, func.parameters, func.type, body);
+    const newNode = factory.createFunctionExpression(func.modifiers, tryCast(func, canHaveAsteriskToken)?.asteriskToken, /*name*/ undefined, func.typeParameters, func.parameters, func.type, body);
     return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
 }
 
@@ -274,7 +276,7 @@ function getEditInfoForConvertToNamedFunction(context: RefactorContext, func: Fu
 
     const modifiersFlags = (getCombinedModifierFlags(variableDeclaration) & ModifierFlags.Export) | getEffectiveModifierFlags(func);
     const modifiers = factory.createModifiersFromModifierFlags(modifiersFlags);
-    const newNode = factory.createFunctionDeclaration(length(modifiers) ? modifiers : undefined, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
+    const newNode = factory.createFunctionDeclaration(length(modifiers) ? modifiers : undefined, tryCast(func, canHaveAsteriskToken)?.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
 
     if (variableDeclarationList.declarations.length === 1) {
         return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));

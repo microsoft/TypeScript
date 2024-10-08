@@ -1,20 +1,338 @@
+/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 import {
-    BaseNodeFactory,
+    AstArrayBindingPatternData,
+    AstArrayLiteralExpressionData,
+    AstArrayTypeNodeData,
+    AstArrowFunctionData,
+    AstAsExpressionData,
+    AstAwaitExpressionData,
+    AstBigIntLiteralData,
+    AstBinaryExpressionData,
+    AstBindingElementData,
+    AstBlockData,
+    AstBreakStatementData,
+    AstBundleData,
+    AstCallExpressionData,
+    AstCallSignatureDeclarationData,
+    AstCaseBlockData,
+    AstCaseClauseData,
+    AstCatchClauseData,
+    AstClassDeclarationData,
+    AstClassExpressionData,
+    AstClassStaticBlockDeclarationData,
+    AstCommaListExpressionData,
+    AstComputedPropertyNameData,
+    AstConditionalExpressionData,
+    AstConditionalTypeNodeData,
+    AstConstructorDeclarationData,
+    AstConstructorTypeNodeData,
+    AstConstructSignatureDeclarationData,
+    AstContinueStatementData,
+    AstData,
+    AstDebuggerStatementData,
+    AstDeclarationData,
+    AstDecoratorData,
+    AstDefaultClauseData,
+    AstDeleteExpressionData,
+    AstDoStatementData,
+    AstElementAccessExpressionData,
+    AstEmptyStatementData,
+    AstEndOfFileTokenData,
+    AstEnumDeclarationData,
+    AstEnumMemberData,
+    AstExportAssignmentData,
+    AstExportDeclarationData,
+    AstExportSpecifierData,
+    AstExpressionStatementData,
+    AstExpressionWithTypeArgumentsData,
+    AstExternalModuleReferenceData,
+    AstForInStatementData,
+    AstForOfStatementData,
+    AstForStatementData,
+    AstFunctionDeclarationData,
+    AstFunctionExpressionData,
+    AstFunctionTypeNodeData,
+    AstGetAccessorDeclarationData,
+    AstHeritageClauseData,
+    AstIdentifier,
+    AstIdentifierData,
+    AstIfStatementData,
+    AstImportAttributeData,
+    AstImportAttributesData,
+    AstImportClauseData,
+    AstImportDeclarationData,
+    AstImportEqualsDeclarationData,
+    AstImportSpecifierData,
+    AstImportTypeAssertionContainerData,
+    AstImportTypeNodeData,
+    AstIndexedAccessTypeNodeData,
+    AstIndexSignatureDeclarationData,
+    AstInferTypeNodeData,
+    AstInterfaceDeclarationData,
+    AstIntersectionTypeNodeData,
+    AstJSDocAllTypeData,
+    AstJSDocAugmentsTagData,
+    AstJSDocAuthorTagData,
+    AstJSDocCallbackTagData,
+    AstJSDocClassReferenceData,
+    AstJSDocClassTagData,
+    AstJSDocData,
+    AstJSDocDeprecatedTagData,
+    AstJSDocEnumTagData,
+    AstJSDocFunctionTypeData,
+    AstJSDocImplementsTagData,
+    AstJSDocImportTagData,
+    AstJSDocLinkCodeData,
+    AstJSDocLinkData,
+    AstJSDocLinkPlainData,
+    AstJSDocMemberNameData,
+    AstJSDocNamepathTypeData,
+    AstJSDocNameReferenceData,
+    AstJSDocNamespaceDeclarationData,
+    AstJSDocNonNullableTypeData,
+    AstJSDocNullableTypeData,
+    AstJSDocOptionalTypeData,
+    AstJSDocOverloadTagData,
+    AstJSDocOverrideTagData,
+    AstJSDocParameterTagData,
+    AstJSDocPrivateTagData,
+    AstJSDocPropertyTagData,
+    AstJSDocProtectedTagData,
+    AstJSDocPublicTagData,
+    AstJSDocReadonlyTagData,
+    AstJSDocReturnTagData,
+    AstJSDocSatisfiesTagData,
+    AstJSDocSeeTagData,
+    AstJSDocSignatureData,
+    AstJSDocTagData,
+    AstJSDocTemplateTagData,
+    AstJSDocTextData,
+    AstJSDocThisTagData,
+    AstJSDocThrowsTagData,
+    AstJSDocTypedefTagData,
+    AstJSDocTypeExpressionData,
+    AstJSDocTypeLiteralData,
+    AstJSDocTypeTagData,
+    AstJSDocUnknownTagData,
+    AstJSDocUnknownTypeData,
+    AstJSDocVariadicTypeData,
+    AstJsonMinusNumericLiteralData,
+    AstJsonObjectExpressionStatementData,
+    AstJsonSourceFileData,
+    AstJsxAttributeData,
+    AstJsxAttributesData,
+    AstJsxClosingElementData,
+    AstJsxClosingFragmentData,
+    AstJsxElementData,
+    AstJsxExpressionData,
+    AstJsxFragmentData,
+    AstJsxNamespacedNameData,
+    AstJsxOpeningElementData,
+    AstJsxOpeningFragmentData,
+    AstJsxSelfClosingElementData,
+    AstJsxSpreadAttributeData,
+    AstJsxTagNamePropertyAccessData,
+    AstJsxTextData,
+    AstLabeledStatementData,
+    AstLiteralExpressionData,
+    AstLiteralLikeNodeData,
+    AstLiteralTypeNodeData,
+    AstMappedTypeNodeData,
+    AstMetaPropertyData,
+    AstMethodDeclarationData,
+    AstMethodSignatureData,
+    AstMissingDeclarationData,
+    AstModuleBlockData,
+    AstModuleDeclarationData,
+    AstNamedExportsData,
+    AstNamedImportsData,
+    AstNamedTupleMemberData,
+    AstNamespaceDeclarationData,
+    AstNamespaceExportData,
+    AstNamespaceExportDeclarationData,
+    AstNamespaceImportData,
+    AstNewExpressionData,
+    AstNode,
+    AstNodeArray,
+    AstNonNullExpressionData,
+    AstNoSubstitutionTemplateLiteralData,
+    AstNotEmittedStatementData,
+    AstNotEmittedTypeElementData,
+    AstNumericLiteralData,
+    AstObjectBindingPatternData,
+    AstObjectLiteralExpressionData,
+    AstOmittedExpressionData,
+    AstOptionalTypeNodeData,
+    AstParameterDeclarationData,
+    AstParenthesizedExpressionData,
+    AstParenthesizedTypeNodeData,
+    AstPartiallyEmittedExpressionData,
+    AstPostfixUnaryExpressionData,
+    AstPrefixUnaryExpressionData,
+    AstPrivateIdentifierData,
+    AstPropertyAccessExpressionData,
+    AstPropertyAssignmentData,
+    AstPropertyDeclarationData,
+    AstPropertySignatureData,
+    AstQualifiedNameData,
+    AstRegularExpressionLiteralData,
+    AstRestTypeNodeData,
+    AstReturnStatementData,
+    AstSatisfiesExpressionData,
+    AstSemicolonClassElementData,
+    AstSetAccessorDeclarationData,
+    AstShorthandPropertyAssignmentData,
+    AstSourceFileData,
+    AstSpreadAssignmentData,
+    AstSpreadElementData,
+    AstStringLiteralData,
+    AstStringLiteralLikeNodeData,
+    AstSuperExpression,
+    AstSuperExpressionData,
+    AstSwitchStatementData,
+    AstSyntaxListData,
+    AstSyntheticExpressionData,
+    AstSyntheticReferenceExpressionData,
+    AstTaggedTemplateExpressionData,
+    AstTemplateExpressionData,
+    AstTemplateHeadData,
+    AstTemplateLiteralLikeNodeData,
+    AstTemplateLiteralTypeNodeData,
+    AstTemplateLiteralTypeSpanData,
+    AstTemplateMiddleData,
+    AstTemplateSpanData,
+    AstTemplateTailData,
+    AstThisExpressionData,
+    AstThisTypeNodeData,
+    AstThrowStatementData,
+    AstTokenData,
+    AstTryStatementData,
+    AstTupleTypeNodeData,
+    AstTypeAliasDeclarationData,
+    AstTypeAssertionExpressionData,
+    AstTypeLiteralNodeData,
+    AstTypeOfExpressionData,
+    AstTypeOperatorNodeData,
+    AstTypeParameterDeclarationData,
+    AstTypePredicateNodeData,
+    AstTypeQueryNodeData,
+    AstTypeReferenceNodeData,
+    AstUnionTypeNodeData,
+    AstVariableDeclarationData,
+    AstVariableDeclarationListData,
+    AstVariableStatementData,
+    AstVoidExpressionData,
+    AstWhileStatementData,
+    AstWithStatementData,
+    AstYieldExpressionData,
+    AstNodeFactory,
+    computePositionOfLineAndCharacter,
+    createChildren,
+    createMultiMap,
     CreateSourceFileOptions,
+    Debug,
     EmitHelperFactory,
+    emptyArray,
+    find,
+    forEach,
+    forEachChild,
+    getAssignmentDeclarationKind,
     GetCanonicalFileName,
+    getEffectiveModifierFlagsNoCache,
+    getEmitFlags,
+    getLineAndCharacterOfPosition,
+    getLineStarts,
+    getNodeChildren,
+    getNonAssignedNameOfDeclaration,
+    getParseTreeNode,
+    getSourceFileOfNode,
+    getSourceTextOfNodeFromSourceFile,
+    getTextOfIdentifierOrLiteral,
+    getTokenPosOfNode,
+    hasProperty,
+    hasSyntacticModifier,
+    idText,
+    isArrayTypeNode,
+    isBigIntLiteral,
+    isBindingPattern,
+    isCallSignatureDeclaration,
+    isComputedPropertyName,
+    isConditionalTypeNode,
+    isConstructorDeclaration,
+    isConstructorTypeNode,
+    isConstructSignatureDeclaration,
+    isFunctionTypeNode,
+    isGeneratedIdentifier,
+    isGetAccessorDeclaration,
+    isIdentifier,
+    isImportTypeNode,
+    isIndexedAccessTypeNode,
+    isIndexSignatureDeclaration,
+    isInferTypeNode,
+    isIntersectionTypeNode,
+    isLiteralTypeNode,
+    isMappedTypeNode,
+    isNamedExports,
+    isNamedTupleMember,
+    isNumericLiteral,
+    isOptionalTypeNode,
+    isParameter,
+    isParenthesizedTypeNode,
+    isParseTreeNode,
+    isPrivateIdentifier,
+    isPropertyAccessExpression,
+    isPropertyName,
+    isRestTypeNode,
+    isSetAccessorDeclaration,
+    isStringLiteral,
+    isStringOrNumericLiteralLike,
+    isThisTypeNode,
+    isTupleTypeNode,
+    isTypeLiteralNode,
+    isTypeOperatorNode,
+    isTypeParameterDeclaration,
+    isTypePredicateNode,
+    isTypeQueryNode,
+    isTypeReferenceNode,
+    isUnionTypeNode,
+    lastOrUndefined,
     MapLike,
     ModeAwareCache,
     ModeAwareCacheKey,
     ModuleResolutionCache,
     MultiMap,
     NodeFactoryFlags,
+    nodeIsSynthesized,
     OptionsNameMap,
     PackageJsonInfo,
     PackageJsonInfoCache,
     Pattern,
+    positionIsSynthesized,
+    setNodeChildren,
     SymlinkCache,
     ThisContainer,
+    updateSourceFile,
+    AstEntityNameExpression,
+    AstQuestionDotToken,
+    AstMemberName,
+    AstStringLiteralLike,
+    AstNumericLiteral,
+    AstObjectLiteralExpression,
+    AstBindableStaticNameExpression,
+    AstWrappedExpression,
+    AstNodeOneOf,
+    AstLeftHandSideExpression,
+    AstBindableStaticAccessExpression,
+    AstEntityName,
+    AstJSDocTypeExpression,
+    AstComputedPropertyName,
+    AstElementAccessExpression,
+    AstDeclaration,
+    AstModuleBlock,
+    AstStringLiteral,
+    astGetComment,
+    astSetComment,
+    AstJSDocUnknownTag,
 } from "./_namespaces/ts.js";
 
 // branded string type used to store absolute, normalized and canonicalized paths
@@ -693,7 +1011,6 @@ export type KeywordTypeSyntaxKind =
     | SyntaxKind.UnknownKeyword
     | SyntaxKind.VoidKeyword;
 
-/** @internal */
 export type TypeNodeSyntaxKind =
     | KeywordTypeSyntaxKind
     | SyntaxKind.TypePredicate
@@ -741,6 +1058,7 @@ export type TokenSyntaxKind =
     | PseudoLiteralSyntaxKind
     | PunctuationSyntaxKind
     | SyntaxKind.Identifier
+    | SyntaxKind.PrivateIdentifier
     | KeywordSyntaxKind;
 
 export type JsxTokenSyntaxKind =
@@ -935,24 +1253,240 @@ export const enum PredicateSemantics {
 /** @internal */
 export type NodeId = number;
 
-export interface Node extends ReadonlyTextRange {
-    readonly kind: SyntaxKind;
-    readonly flags: NodeFlags;
-    /** @internal */ modifierFlagsCache: ModifierFlags;
-    /** @internal */ readonly transformFlags: TransformFlags; // Flags for transforms
-    /** @internal */ id?: NodeId; // Unique id (used to look up NodeLinks)
-    readonly parent: Node; // Parent node (initialized by binding)
-    /** @internal */ original?: Node; // The original node if this is an updated node.
-    /** @internal */ emitNode?: EmitNode; // Associated EmitNode (initialized by transforms)
-    // NOTE: `symbol` and `localSymbol` have been moved to `Declaration`
-    //       `locals` and `nextContainer` have been moved to `LocalsContainer`
-    //       `flowNode` has been moved to `FlowContainer`
-    //       see: https://github.com/microsoft/TypeScript/pull/51682
+export type NodeConstructor<N extends Node> = new (ast: AstNode<Node<N["kind"], N["data"]>>) => N; // TODO: avoid indexed access type
+
+// dprint-ignore
+export class Node<
+    K extends SyntaxKind = SyntaxKind,
+    T extends AstData = AstData
+> implements ReadonlyTextRange {
+    readonly ast: AstNode<this> = undefined!;
+
+    constructor(ast: AstNode<Node<K, T>>) {
+        Object.preventExtensions(this);
+        this.ast = ast as AstNode<this>;
+    }
+
+    get kind(): K { return this.ast.kind; }
+    get data(): T { return this.ast.data; }
+    get pos(): number { return this.ast.pos; }
+    get end(): number { return this.ast.end; }
+    get flags(): NodeFlags { return this.ast.flags; }
+    get parent(): Node { return this.ast.parent?.node; }
+
+    /** @internal */ set pos(value) { this.ast.pos = value; }
+    /** @internal */ set end(value) { this.ast.end = value; }
+    /** @internal */ set flags(value) { this.ast.flags = value; }
+    /** @internal */ set parent(value) { this.ast.parent = value?.ast as typeof this.ast.parent; }
+    /** @internal */ get modifierFlagsCache(): ModifierFlags { return this.ast.modifierFlagsCache; }
+    /** @internal */ set modifierFlagsCache(value) { this.ast.modifierFlagsCache = value; }
+    /** @internal */ get transformFlags(): TransformFlags { return this.ast.transformFlags; }
+    /** @internal */ set transformFlags(value) { this.ast.transformFlags = value; }
+    /** @internal */ get id(): number { return this.ast.id; }
+    /** @internal */ set id(value) { this.ast.id = value; }
+    /** @internal */ get original(): Node | undefined { return this.ast.original?.node; }
+    /** @internal */ set original(value) { this.ast.original = value?.ast; }
+    /** @internal */ get emitNode(): EmitNode | undefined { return this.ast.emitNode; }
+    /** @internal */ set emitNode(value) { this.ast.emitNode = value; }
+    /** @internal */ get __pos(): number | undefined { return this.ast.__pos; } // eslint-disable-line @typescript-eslint/naming-convention
+    /** @internal */ set __pos(value) { this.ast.__pos = value; } // eslint-disable-line @typescript-eslint/naming-convention
+    /** @internal */ get __end(): number | undefined { return this.ast.__end; } // eslint-disable-line @typescript-eslint/naming-convention
+    /** @internal */ set __end(value) { this.ast.__end = value; } // eslint-disable-line @typescript-eslint/naming-convention
+
+    /** @internal @private */ _assertHasRealPosition(message?: string): void {
+        // eslint-disable-next-line local/debug-assert
+        Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
+    }
+
+    getSourceFile(): SourceFile {
+        return getSourceFileOfNode(this);
+    }
+
+    getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
+        this._assertHasRealPosition();
+        return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
+    }
+
+    getFullStart(): number {
+        this._assertHasRealPosition();
+        return this.pos;
+    }
+
+    getEnd(): number {
+        this._assertHasRealPosition();
+        return this.end;
+    }
+
+    getWidth(sourceFile?: SourceFileLike): number {
+        this._assertHasRealPosition();
+        return this.getEnd() - this.getStart(sourceFile);
+    }
+
+    getFullWidth(): number {
+        this._assertHasRealPosition();
+        return this.end - this.pos;
+    }
+
+    getLeadingTriviaWidth(sourceFile?: SourceFileLike): number {
+        this._assertHasRealPosition();
+        return this.getStart(sourceFile) - this.pos;
+    }
+
+    getFullText(sourceFile?: SourceFileLike): string {
+        this._assertHasRealPosition();
+        sourceFile ??= this.getSourceFile();
+        return sourceFile.text.substring(this.pos, this.end);
+    }
+
+    getText(sourceFile?: SourceFileLike): string {
+        this._assertHasRealPosition();
+        sourceFile ??= this.getSourceFile();
+        return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
+    }
+
+    getChildCount(sourceFile?: SourceFileLike): number {
+        return this.getChildren(sourceFile).length;
+    }
+
+    getChildAt(index: number, sourceFile?: SourceFileLike): Node {
+        return this.getChildren(sourceFile)[index];
+    }
+
+    getChildren(sourceFile?: SourceFileLike): readonly Node[] {
+        this._assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
+        sourceFile ??= this.getSourceFile();
+        return getNodeChildren(this, sourceFile) ?? setNodeChildren(this, sourceFile, createChildren(this, sourceFile));
+    }
+
+    getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
+        this._assertHasRealPosition();
+        sourceFile ??= this.getSourceFile();
+        const children = this.getChildren(sourceFile);
+        if (!children.length) {
+            return undefined;
+        }
+
+        const child = find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode);
+        return !child || child.kind < SyntaxKind.FirstNode ?
+            child :
+            child.getFirstToken(sourceFile);
+    }
+
+    getLastToken(sourceFile?: SourceFileLike): Node | undefined {
+        this._assertHasRealPosition();
+        const children = this.getChildren(sourceFile);
+        const child = lastOrUndefined(children);
+        if (!child) {
+            return undefined;
+        }
+
+        return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
+    }
+
+    forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return forEachChild(this, cbNode, cbNodeArray);
+    }
 }
+
+Debug.registerDebugInfo(() => {
+    if (!hasProperty(Node.prototype, "__debugKind")) {
+        const weakNodeTextMap = new WeakMap<Node, string>();
+
+        Object.defineProperties(Node.prototype, {
+            // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
+            __tsDebuggerDisplay: {
+                value(this: Node) { // TODO(rbuckton): This is probably no longer needed now that every node has a unique class
+                    const nodeHeader = isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
+                        isIdentifier(this) ? `Identifier '${idText(this)}'` :
+                        isPrivateIdentifier(this) ? `PrivateIdentifier '${idText(this)}'` :
+                        isStringLiteral(this) ? `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
+                        isNumericLiteral(this) ? `NumericLiteral ${this.text}` :
+                        isBigIntLiteral(this) ? `BigIntLiteral ${this.text}n` :
+                        isTypeParameterDeclaration(this) ? "TypeParameterDeclaration" :
+                        isParameter(this) ? "ParameterDeclaration" :
+                        isConstructorDeclaration(this) ? "ConstructorDeclaration" :
+                        isGetAccessorDeclaration(this) ? "GetAccessorDeclaration" :
+                        isSetAccessorDeclaration(this) ? "SetAccessorDeclaration" :
+                        isCallSignatureDeclaration(this) ? "CallSignatureDeclaration" :
+                        isConstructSignatureDeclaration(this) ? "ConstructSignatureDeclaration" :
+                        isIndexSignatureDeclaration(this) ? "IndexSignatureDeclaration" :
+                        isTypePredicateNode(this) ? "TypePredicateNode" :
+                        isTypeReferenceNode(this) ? "TypeReferenceNode" :
+                        isFunctionTypeNode(this) ? "FunctionTypeNode" :
+                        isConstructorTypeNode(this) ? "ConstructorTypeNode" :
+                        isTypeQueryNode(this) ? "TypeQueryNode" :
+                        isTypeLiteralNode(this) ? "TypeLiteralNode" :
+                        isArrayTypeNode(this) ? "ArrayTypeNode" :
+                        isTupleTypeNode(this) ? "TupleTypeNode" :
+                        isOptionalTypeNode(this) ? "OptionalTypeNode" :
+                        isRestTypeNode(this) ? "RestTypeNode" :
+                        isUnionTypeNode(this) ? "UnionTypeNode" :
+                        isIntersectionTypeNode(this) ? "IntersectionTypeNode" :
+                        isConditionalTypeNode(this) ? "ConditionalTypeNode" :
+                        isInferTypeNode(this) ? "InferTypeNode" :
+                        isParenthesizedTypeNode(this) ? "ParenthesizedTypeNode" :
+                        isThisTypeNode(this) ? "ThisTypeNode" :
+                        isTypeOperatorNode(this) ? "TypeOperatorNode" :
+                        isIndexedAccessTypeNode(this) ? "IndexedAccessTypeNode" :
+                        isMappedTypeNode(this) ? "MappedTypeNode" :
+                        isLiteralTypeNode(this) ? "LiteralTypeNode" :
+                        isNamedTupleMember(this) ? "NamedTupleMember" :
+                        isImportTypeNode(this) ? "ImportTypeNode" :
+                        Debug.formatSyntaxKind(this.kind);
+                    return `${nodeHeader}${this.flags ? ` (${Debug.formatNodeFlags(this.flags)})` : ""}`;
+                },
+            },
+            __debugKind: {
+                get(this: Node) {
+                    return Debug.formatSyntaxKind(this.kind);
+                },
+            },
+            __debugNodeFlags: {
+                get(this: Node) {
+                    return Debug.formatNodeFlags(this.flags);
+                },
+            },
+            __debugModifierFlags: {
+                get(this: Node) {
+                    return Debug.formatModifierFlags(getEffectiveModifierFlagsNoCache(this));
+                },
+            },
+            __debugTransformFlags: {
+                get(this: Node) {
+                    return Debug.formatTransformFlags(this.transformFlags);
+                },
+            },
+            __debugIsParseTreeNode: {
+                get(this: Node) {
+                    return isParseTreeNode(this);
+                },
+            },
+            __debugEmitFlags: {
+                get(this: Node) {
+                    return Debug.formatEmitFlags(getEmitFlags(this));
+                },
+            },
+            __debugGetText: {
+                value(this: Node, includeTrivia?: boolean) {
+                    if (nodeIsSynthesized(this)) return "";
+                    // avoid recomputing
+                    let text = weakNodeTextMap.get(this);
+                    if (text === undefined) {
+                        const parseNode = getParseTreeNode(this);
+                        const sourceFile = parseNode && getSourceFileOfNode(parseNode);
+                        text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
+                        weakNodeTextMap.set(this, text);
+                    }
+                    return text;
+                },
+            },
+        });
+    }
+});
 
 export interface JSDocContainer extends Node {
     _jsdocContainerBrand: any;
-    /** @internal */ jsDoc?: JSDocArray; // JSDoc that directly precedes this node
+    /** @internal */ jsDoc: JSDocArray | undefined;
 }
 
 /** @internal */
@@ -962,13 +1496,13 @@ export interface JSDocArray extends Array<JSDoc> {
 
 export interface LocalsContainer extends Node {
     _localsContainerBrand: any;
-    /** @internal */ locals?: SymbolTable; // Locals associated with node (initialized by binding)
-    /** @internal */ nextContainer?: HasLocals; // Next container in declaration order (initialized by binding)
+    /** @internal */ locals: SymbolTable | undefined; // Locals associated with node (initialized by binding)
+    /** @internal */ nextContainer: HasLocals | undefined; // Next container in declaration order (initialized by binding)
 }
 
 export interface FlowContainer extends Node {
     _flowContainerBrand: any;
-    /** @internal */ flowNode?: FlowNode; // Associated FlowNode (initialized by binding)
+    /** @internal */ flowNode: FlowNode | undefined; // Associated FlowNode (initialized by binding)
 }
 
 /** @internal */
@@ -1004,11 +1538,22 @@ export type HasFlowNode =
     | TryStatement
     | DebuggerStatement;
 
+/** @internal */
+export type HasEndFlowNode =
+    | MethodDeclaration
+    | ClassStaticBlockDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | FunctionExpression
+    | ArrowFunction
+    | FunctionDeclaration
+    | SourceFile;
+
 // Ideally, `ForEachChildNodes` and `VisitEachChildNodes` would not differ.
 // However, `forEachChild` currently processes JSDoc comment syntax and missing declarations more thoroughly.
 // On the other hand, `visitEachChild` actually processes `Identifier`s (which really *shouldn't* have children,
 // but are constructed as if they could for faked-up `QualifiedName`s in the language service.)
-
 /** @internal */
 export type ForEachChildNodes =
     | HasChildren
@@ -1105,7 +1650,7 @@ export type HasChildren =
     | CallExpression
     | NewExpression
     | TaggedTemplateExpression
-    | TypeAssertion
+    | TypeAssertionExpression
     | ParenthesizedExpression
     | FunctionExpression
     | ArrowFunction
@@ -1257,7 +1802,10 @@ export type HasJSDoc =
     | VariableDeclaration
     | VariableStatement
     | WhileStatement
-    | WithStatement;
+    | WithStatement
+    | ModuleBlock
+    | MissingDeclaration
+    | NotEmittedStatement;
 
 export type HasType =
     | SignatureDeclaration
@@ -1275,7 +1823,20 @@ export type HasType =
     | JSDocNonNullableType
     | JSDocNullableType
     | JSDocOptionalType
-    | JSDocVariadicType;
+    | JSDocVariadicType
+    | OptionalTypeNode
+    | RestTypeNode
+    | NamedTupleMember
+    | TemplateLiteralTypeSpan
+    | SatisfiesExpression
+    | JSDocNamepathType
+    | JSDocSignature;
+
+/** @internal */
+export type HasTypes =
+    | UnionTypeNode
+    | IntersectionTypeNode
+    | HeritageClause;
 
 // NOTE: Changing the following list requires changes to:
 // - `canHaveIllegalType` in factory/utilities.ts
@@ -1283,6 +1844,29 @@ export type HasType =
 export type HasIllegalType =
     | ConstructorDeclaration
     | SetAccessorDeclaration;
+
+/** @internal */
+export type HasTypeParameters =
+    | ConstructorDeclaration
+    | SetAccessorDeclaration
+    | GetAccessorDeclaration
+    | CallSignatureDeclaration
+    | ConstructSignatureDeclaration
+    | MethodSignature
+    | IndexSignatureDeclaration
+    | MethodDeclaration
+    | FunctionDeclaration
+    | JSDocSignature
+    | JSDocFunctionType
+    | FunctionTypeNode
+    | ConstructorTypeNode
+    | FunctionExpression
+    | ArrowFunction
+    | ClassExpression
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | TypeAliasDeclaration
+    | JSDocTemplateTag;
 
 // NOTE: Changing the following list requires changes to:
 // - `canHaveIllegalTypeParameters` in factory/utilities.ts
@@ -1292,12 +1876,185 @@ export type HasIllegalTypeParameters =
     | SetAccessorDeclaration
     | GetAccessorDeclaration;
 
+/** @internal */
+export type HasParameters =
+    | ConstructorDeclaration
+    | SetAccessorDeclaration
+    | GetAccessorDeclaration
+    | CallSignatureDeclaration
+    | ConstructSignatureDeclaration
+    | MethodSignature
+    | IndexSignatureDeclaration
+    | MethodDeclaration
+    | FunctionDeclaration
+    | JSDocSignature
+    | JSDocFunctionType
+    | FunctionTypeNode
+    | ConstructorTypeNode
+    | FunctionExpression
+    | ArrowFunction;
+
+/** @internal */
+export type HasBody =
+    | MethodDeclaration
+    | ClassStaticBlockDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | FunctionDeclaration
+    | FunctionExpression
+    | ArrowFunction
+    | ModuleDeclaration;
+
 export type HasTypeArguments =
     | CallExpression
     | NewExpression
     | TaggedTemplateExpression
+    | ExpressionWithTypeArguments
+    | TypeQueryNode
+    | ImportTypeNode
+    | TypeReferenceNode
     | JsxOpeningElement
     | JsxSelfClosingElement;
+
+/** @internal */
+export type InternalHasTypeArguments =
+    | HasTypeArguments
+    | MethodSignature
+    | MethodDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | CallSignatureDeclaration
+    | ConstructSignatureDeclaration
+    | IndexSignatureDeclaration
+    | FunctionTypeNode
+    | ConstructorTypeNode
+    | FunctionExpression
+    | ArrowFunction
+    | FunctionDeclaration
+    | JSDocFunctionType;
+
+/** @internal */
+export type HasElements =
+    | TupleTypeNode
+    | ObjectBindingPattern
+    | ArrayBindingPattern
+    | ArrayLiteralExpression
+    | ImportAttributes
+    | NamedImports
+    | NamedExports
+    | CommaListExpression;
+
+/** @internal */
+export type HasMembers =
+    | TypeLiteralNode
+    | MappedTypeNode
+    | ClassExpression
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | EnumDeclaration;
+
+/** @internal */
+export type HasStatement =
+    | DoStatement
+    | WhileStatement
+    | ForStatement
+    | ForInStatement
+    | ForOfStatement
+    | WithStatement
+    | LabeledStatement;
+
+/** @internal */
+export type HasStatements =
+    | Block
+    | ModuleBlock
+    | CaseClause
+    | DefaultClause
+    | SourceFile;
+
+/** @internal */
+export type HasExclamationToken =
+    | MethodDeclaration
+    | PropertyAssignment
+    | PropertyDeclaration
+    | ShorthandPropertyAssignment
+    | VariableDeclaration;
+
+/** @internal */
+export type HasQuestionDotToken =
+    | PropertyAccessExpression
+    | ElementAccessExpression
+    | CallExpression
+    | TaggedTemplateExpression;
+
+/** @internal */
+export type HasTagName =
+    | JsxSelfClosingElement
+    | JsxOpeningElement
+    | JsxClosingElement
+    | JSDocUnknownTag
+    | JSDocAugmentsTag
+    | JSDocImplementsTag
+    | JSDocAuthorTag
+    | JSDocDeprecatedTag
+    | JSDocClassTag
+    | JSDocPublicTag
+    | JSDocPrivateTag
+    | JSDocProtectedTag
+    | JSDocReadonlyTag
+    | JSDocOverrideTag
+    | JSDocCallbackTag
+    | JSDocOverloadTag
+    | JSDocEnumTag
+    | JSDocParameterTag
+    | JSDocReturnTag
+    | JSDocThisTag
+    | JSDocTypedefTag
+    | JSDocSeeTag
+    | JSDocPropertyTag
+    | JSDocTemplateTag
+    | JSDocTypeTag
+    | JSDocThrowsTag
+    | JSDocSatisfiesTag
+    | JSDocImportTag;
+
+/** @internal */
+export type HasIsTypeOnly =
+    | ImportEqualsDeclaration
+    | ExportDeclaration
+    | ExportSpecifier
+    | ImportClause
+    | ImportSpecifier;
+
+/** @internal */
+export type HasComment =
+    | JSDoc
+    | JSDocUnknownTag
+    | JSDocAugmentsTag
+    | JSDocImplementsTag
+    | JSDocAuthorTag
+    | JSDocDeprecatedTag
+    | JSDocClassTag
+    | JSDocPublicTag
+    | JSDocPrivateTag
+    | JSDocProtectedTag
+    | JSDocReadonlyTag
+    | JSDocOverrideTag
+    | JSDocCallbackTag
+    | JSDocOverloadTag
+    | JSDocEnumTag
+    | JSDocParameterTag
+    | JSDocReturnTag
+    | JSDocThisTag
+    | JSDocTypeTag
+    | JSDocTemplateTag
+    | JSDocTypedefTag
+    | JSDocSeeTag
+    | JSDocPropertyTag
+    | JSDocThrowsTag
+    | JSDocSatisfiesTag
+    | JSDocImportTag;
 
 export type HasInitializer =
     | HasExpressionInitializer
@@ -1312,6 +2069,7 @@ export type HasExpressionInitializer =
     | BindingElement
     | PropertyDeclaration
     | PropertyAssignment
+    | PropertySignature
     | EnumMember;
 
 /** @internal @knipignore */
@@ -1392,6 +2150,80 @@ export type HasIllegalModifiers =
     | NamespaceExportDeclaration;
 
 /** @internal */
+export type InternalHasModifiers =
+    | HasModifiers
+    | HasIllegalModifiers;
+
+/** @internal */
+export type HasSymbol =
+    | NumericLiteral
+    | StringLiteral
+    | NoSubstitutionTemplateLiteral
+    | Identifier
+    | TypeParameterDeclaration
+    | ParameterDeclaration
+    | PropertySignature
+    | PropertyDeclaration
+    | MethodSignature
+    | MethodDeclaration
+    | ClassStaticBlockDeclaration
+    | ConstructorDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | CallSignatureDeclaration
+    | ConstructSignatureDeclaration
+    | IndexSignatureDeclaration
+    | FunctionTypeNode
+    | ConstructorTypeNode
+    | TypeLiteralNode
+    | MappedTypeNode
+    | NamedTupleMember
+    | BindingElement
+    | ObjectLiteralExpression
+    | PropertyAccessExpression
+    | ElementAccessExpression
+    | CallExpression
+    | NewExpression
+    | FunctionExpression
+    | ArrowFunction
+    | BinaryExpression
+    | ClassExpression
+    | VariableDeclaration
+    | FunctionDeclaration
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | TypeAliasDeclaration
+    | EnumDeclaration
+    | ModuleDeclaration
+    | NamespaceExportDeclaration
+    | ImportEqualsDeclaration
+    | ImportDeclaration
+    | ImportClause
+    | NamespaceImport
+    | ImportSpecifier
+    | ExportAssignment
+    | ExportDeclaration
+    | NamespaceExport
+    | ExportSpecifier
+    | MissingDeclaration
+    | JsxAttribute
+    | JsxAttributes
+    | SourceFile
+    | JSDocCallbackTag
+    | JSDocEnumTag
+    | JSDocFunctionType
+    | JSDocSignature
+    | JSDocTypedefTag
+    | PropertyAssignment
+    | ShorthandPropertyAssignment
+    | SpreadAssignment
+    | EnumMember
+    | JSDocParameterTag
+    | JSDocPropertyTag
+    | JSDocTypeLiteral
+    | NotEmittedTypeElement;
+
+/** @internal */
 export type PrimitiveLiteral =
     | BooleanLiteral
     | NumericLiteral
@@ -1400,6 +2232,21 @@ export type PrimitiveLiteral =
     | BigIntLiteral
     | PrefixUnaryExpression & { operator: SyntaxKind.PlusToken; operand: NumericLiteral; }
     | PrefixUnaryExpression & { operator: SyntaxKind.MinusToken; operand: NumericLiteral | BigIntLiteral; };
+
+/** @internal */
+export type HasText =
+    | NumericLiteral
+    | BigIntLiteral
+    | StringLiteral
+    | RegularExpressionLiteral
+    | TemplateLiteralToken
+    | JsxText
+    | JSDocText
+    | JSDocLink
+    | JSDocLinkCode
+    | JSDocLinkPlain
+    | SourceFile
+    ;
 
 /**
  * Declarations that can contain other declarations. Corresponds with `ContainerFlags.IsContainer` in binder.ts.
@@ -1582,17 +2429,89 @@ export interface MutableNodeArray<T extends Node> extends Array<T>, TextRange {
     /** @internal */ transformFlags: TransformFlags; // Flags for transforms, possibly undefined
 }
 
-export interface NodeArray<T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
-    readonly hasTrailingComma: boolean;
-    /** @internal */ transformFlags: TransformFlags; // Flags for transforms, possibly undefined
+const ReadonlyArray = Array as new <T>(...items: readonly T[]) => readonly T[];
+
+// dprint-ignore
+export class NodeArray<N extends Node> extends ReadonlyArray<N> {
+    readonly ast: AstNodeArray<N["ast"]> = undefined!;
+
+    constructor(ast: AstNodeArray<N["ast"]>) {
+        super(...ast.items.map(item => item.node as N));
+        this.ast = ast;
+        Object.preventExtensions(this);
+    }
+
+    static get [globalThis.Symbol.species](): ArrayConstructor { return Array; }
+
+    get pos(): number { return this.ast.pos; }
+    get end(): number { return this.ast.end; }
+    get hasTrailingComma(): boolean { return this.ast.hasTrailingComma; }
+
+    /** @internal */ set pos(value) { this.ast.pos = value; }
+    /** @internal */ set end(value) { this.ast.end = value; }
+    /** @internal */ set hasTrailingComma(value) { this.ast.hasTrailingComma = value; }
+    /** @internal */ get transformFlags(): TransformFlags { return this.ast.transformFlags; }
+    /** @internal */ set transformFlags(value) { this.ast.transformFlags = value; }
+    /** @internal */ get __pos(): number | undefined { return this.ast.__pos; } // eslint-disable-line @typescript-eslint/naming-convention
+    /** @internal */ set __pos(value) { this.ast.__pos = value; } // eslint-disable-line @typescript-eslint/naming-convention
+    /** @internal */ get __end(): number | undefined { return this.ast.__end; } // eslint-disable-line @typescript-eslint/naming-convention
+    /** @internal */ set __end(value) { this.ast.__end = value; } // eslint-disable-line @typescript-eslint/naming-convention
 }
 
-// TODO(rbuckton): Constraint 'TKind' to 'TokenSyntaxKind'
-export interface Token<TKind extends SyntaxKind> extends Node {
-    readonly kind: TKind;
+Debug.registerDebugInfo(() => {
+    if (!("__tsDebuggerDisplay" in NodeArray.prototype)) { // eslint-disable-line local/no-in-operator
+        Object.defineProperties(NodeArray.prototype, {
+            __tsDebuggerDisplay: {
+                value(this: NodeArray<Node>, defaultValue: string) {
+                    // An `Array` with extra properties is rendered as `[A, B, prop1: 1, prop2: 2]`. Most of
+                    // these aren't immediately useful so we trim off the `prop1: ..., prop2: ...` part from the
+                    // formatted string.
+                    // This regex can trigger slow backtracking because of overlapping potential captures.
+                    // We don't care, this is debug code that's only enabled with a debugger attached -
+                    // we're just taking note of it for anyone checking regex performance in the future.
+                    defaultValue = String(defaultValue).replace(/(?:,[\s\w]+:[^,]+)+\]$/, "]");
+                    return `NodeArray ${defaultValue}`;
+                },
+            },
+        });
+    }
+});
+
+// dprint-ignore
+export class Token<K extends TokenSyntaxKind = TokenSyntaxKind, T extends AstTokenData = AstTokenData> extends Node<K, T> {
+    override getChildCount(_sourceFile?: SourceFileLike): number {
+        return this.getChildren().length;
+    }
+
+    override getChildAt(index: number, _sourceFile?: SourceFileLike): Node {
+        return this.getChildren()[index];
+    }
+
+    override getChildren(_sourceFile?: SourceFileLike): readonly Node[] {
+        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc ?? emptyArray : emptyArray;
+    }
+
+    override getFirstToken(_sourceFile?: SourceFileLike): Node | undefined {
+        return undefined;
+    }
+
+    override getLastToken(_sourceFile?: SourceFileLike): Node | undefined {
+        return undefined;
+    }
+
+    override forEachChild<T>(_cbNode: (node: Node) => T | undefined, _cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return undefined;
+    }
 }
 
-export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & JSDocContainer;
+// dprint-ignore
+export class EndOfFileToken extends Token<SyntaxKind.EndOfFileToken, AstEndOfFileTokenData> implements JSDocContainer {
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstEndOfFileToken;
+
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+}
 
 // Punctuation
 export interface PunctuationToken<TKind extends PunctuationSyntaxKind> extends Token<TKind> {
@@ -1677,6 +2596,11 @@ export type ClassMemberModifier =
 
 export type ModifiersArray = NodeArray<Modifier>;
 
+export interface KeywordExpression<TKind extends KeywordSyntaxKind = KeywordSyntaxKind> extends PrimaryExpression, KeywordToken<TKind> {
+    // readonly ast: AstKeywordExpression<TKind>;
+    readonly kind: TKind;
+}
+
 // dprint-ignore
 export const enum GeneratedIdentifierFlags {
     // Kinds
@@ -1694,18 +2618,37 @@ export const enum GeneratedIdentifierFlags {
     AllowNameSubstitution = 1 << 6, // Used by `module.ts` to indicate generated nodes which can have substitutions performed upon them (as they were generated by an earlier transform phase)
 }
 
-export interface Identifier extends PrimaryExpression, Declaration, JSDocContainer, FlowContainer {
-    readonly kind: SyntaxKind.Identifier;
+// dprint-ignore
+export class Identifier extends Token<SyntaxKind.Identifier, AstIdentifierData> implements PrimaryExpression, Declaration, JSDocContainer, FlowContainer {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstIdentifier;
+
     /**
-     * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
+     * Prefer to use {@link text}.
      * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
      */
-    readonly escapedText: __String;
-}
+    get escapedText(): __String { return this.ast.data.escapedText; }
+    get text(): string { return idText(this); }
 
-// Transient identifier node (marked by id === -1)
-export interface TransientIdentifier extends Identifier {
-    resolvedSymbol: Symbol;
+    /** @internal */ set escapedText(value: __String) { this.ast.data.escapedText = value; }
+    /** @internal */ get resolvedSymbol(): Symbol { return this.ast.data.resolvedSymbol; }
+    /** @internal */ set resolvedSymbol(value: Symbol) { this.ast.data.resolvedSymbol = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value) { this.ast.data.flowNode = value; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value) { this.ast.data.jsDoc = value; }
 }
 
 // dprint-ignore
@@ -1722,10 +2665,18 @@ export interface GeneratedIdentifier extends Identifier {
     readonly emitNode: EmitNode & { autoGenerate: AutoGenerateInfo; };
 }
 
-export interface QualifiedName extends Node, FlowContainer {
-    readonly kind: SyntaxKind.QualifiedName;
-    readonly left: EntityName;
-    readonly right: Identifier;
+// dprint-ignore
+export class QualifiedName extends Node<SyntaxKind.QualifiedName, AstQualifiedNameData> implements FlowContainer {
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstQualifiedName;
+
+    get left(): EntityName { return this.ast.data.left?.node; }
+    get right(): Identifier { return this.ast.data.right?.node; }
+
+    /** @internal */ set left(value: EntityName) { this.ast.data.left = value?.ast; }
+    /** @internal */ set right(value: Identifier) { this.ast.data.right = value?.ast; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value) { this.ast.data.flowNode = value; }
 }
 
 export type EntityName = Identifier | QualifiedName;
@@ -1751,23 +2702,123 @@ export type DeclarationName =
 
 export interface Declaration extends Node {
     _declarationBrand: any;
+    // readonly ast: AstDeclaration;
     /** @internal */ symbol: Symbol; // Symbol declared by node (initialized by binding)
-    /** @internal */ localSymbol?: Symbol; // Local symbol declared by node (initialized by binding only for exported nodes)
+    /** @internal */ localSymbol: Symbol | undefined; // Local symbol declared by node (initialized by binding only for exported nodes)
 }
 
 export interface NamedDeclaration extends Declaration {
-    readonly name?: DeclarationName;
+    readonly name?: DeclarationName | undefined;
 }
 
+// NOTE: Changing the following list requires changes to:
+// - `canHaveName` in utilitiesPublic.ts
 /** @internal */
-export interface DynamicNamedDeclaration extends NamedDeclaration {
+export type HasName =
+    | FunctionDeclaration
+    | FunctionExpression
+    | ClassExpression
+    | ClassDeclaration
+    | MethodDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | PropertyDeclaration
+    | InterfaceDeclaration
+    | MethodSignature
+    | PropertySignature
+    | TypeAliasDeclaration
+    | EnumDeclaration
+    | EnumMember
+    | ModuleDeclaration
+    | VariableDeclaration
+    | ParameterDeclaration
+    | BindingElement
+    | TypeParameterDeclaration
+    | ImportEqualsDeclaration
+    | NamespaceExportDeclaration
+    | ImportClause
+    | NamespaceImport
+    | NamespaceExport
+    | ImportSpecifier
+    | ExportSpecifier
+    | JSDocTypedefTag
+    | JSDocCallbackTag
+    | PropertyAssignment
+    | ShorthandPropertyAssignment
+    | NamedTupleMember
+    | PropertyAccessExpression
+    | MetaProperty
+    | ImportAttribute
+    | JsxAttribute
+    | JsxNamespacedName
+    | JSDocNameReference
+    | JSDocLink
+    | JSDocLinkCode
+    | JSDocLinkPlain
+    | JSDocParameterTag
+    | JSDocSeeTag
+    | JSDocPropertyTag
+    | MissingDeclaration;
+
+// NOTE: Changing the following list requires changes to:
+// - `astCanHaveExpression` in ast.ts
+// - `astGetExpression` in ast.ts
+/** @internal */
+export type HasExpression =
+    | ComputedPropertyName
+    | TypeParameterDeclaration
+    | Decorator
+    | PropertyAccessExpression
+    | ElementAccessExpression
+    | CallExpression
+    | NewExpression
+    | TypeAssertionExpression
+    | ParenthesizedExpression
+    | DeleteExpression
+    | TypeOfExpression
+    | VoidExpression
+    | AwaitExpression
+    | ForInStatement
+    | ForOfStatement
+    | ExpressionStatement
+    | IfStatement
+    | DoStatement
+    | WhileStatement
+    | YieldExpression
+    | SpreadElement
+    | ExpressionWithTypeArguments
+    | AsExpression
+    | NonNullExpression
+    | SatisfiesExpression
+    | TemplateSpan
+    | ReturnStatement
+    | WithStatement
+    | SwitchStatement
+    | ThrowStatement
+    | ExportAssignment
+    | ExternalModuleReference
+    | JsxSpreadAttribute
+    | JsxExpression
+    | CaseClause
+    | SpreadAssignment
+    | PartiallyEmittedExpression
+    | SyntheticReferenceExpression;
+
+/** @internal */
+export type DynamicNamedDeclaration = NamedDeclaration & {
     readonly name: ComputedPropertyName;
-}
+    readonly data: {
+        readonly name: AstComputedPropertyName;
+    };
+};
 
 /** @internal */
-export interface DynamicNamedBinaryExpression extends BinaryExpression {
+export type DynamicNamedBinaryExpression = BinaryExpression & {
     readonly left: ElementAccessExpression;
-}
+    readonly data: {
+        readonly left: AstElementAccessExpression;
+    };
+};
 
 /** @internal */
 // A declaration that supports late-binding (used in checker)
@@ -1786,21 +2837,37 @@ export interface LateBoundElementAccessExpression extends ElementAccessExpressio
 }
 
 export interface DeclarationStatement extends NamedDeclaration, Statement {
-    readonly name?: Identifier | StringLiteral | NumericLiteral;
+    // readonly ast: AstNode<Declaration & Statement>;
+    readonly name?: Identifier | StringLiteral | NumericLiteral | undefined;
 }
 
-export interface ComputedPropertyName extends Node {
-    readonly kind: SyntaxKind.ComputedPropertyName;
-    readonly parent: Declaration;
-    readonly expression: Expression;
+// dprint-ignore
+export class ComputedPropertyName extends Node<SyntaxKind.ComputedPropertyName, AstComputedPropertyNameData> {
+    // declare readonly ast: AstComputedPropertyName;
+
+    override get parent(): Declaration { return super.parent as Declaration; }
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+
+    /** @internal */ override set parent(value: Declaration) { super.parent = value; }
+    /** @internal */ set expression(value: Expression) { this.ast.data.expression = value.ast; }
 }
 
 // Typed as a PrimaryExpression due to its presence in BinaryExpressions (#field in expr)
-export interface PrivateIdentifier extends PrimaryExpression {
-    readonly kind: SyntaxKind.PrivateIdentifier;
-    // escaping not strictly necessary
-    // avoids gotchas in transforms and utils
-    readonly escapedText: __String;
+// dprint-ignore
+export class PrivateIdentifier extends Token<SyntaxKind.PrivateIdentifier, AstPrivateIdentifierData> {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstPrivateIdentifier;
+
+    get escapedText(): __String { return this.ast.data.escapedText; }
+    get text(): string { return idText(this); }
+
+    /** @internal */ set escapedText(value: __String) { this.ast.data.escapedText = value; }
 }
 
 /** @internal */
@@ -1814,32 +2881,57 @@ export interface LateBoundName extends ComputedPropertyName {
     readonly expression: EntityNameExpression;
 }
 
-export interface Decorator extends Node {
-    readonly kind: SyntaxKind.Decorator;
-    readonly parent: NamedDeclaration;
-    readonly expression: LeftHandSideExpression;
+// dprint-ignore
+export class Decorator extends Node<SyntaxKind.Decorator, AstDecoratorData> {
+    // declare readonly ast: AstDecorator;
+
+    override get parent(): Declaration { return super.parent as Declaration; }
+
+    get expression(): LeftHandSideExpression { return this.ast.data.expression.node; }
+
+    /** @internal */ override set parent(value: Declaration) { super.parent = value; }
+    /** @internal */ set expression(value: LeftHandSideExpression) { this.ast.data.expression = value.ast; }
 }
 
-export interface TypeParameterDeclaration extends NamedDeclaration, JSDocContainer {
-    readonly kind: SyntaxKind.TypeParameter;
-    readonly parent: DeclarationWithTypeParameterChildren | InferTypeNode;
-    readonly modifiers?: NodeArray<Modifier>;
-    readonly name: Identifier;
-    /** Note: Consider calling `getEffectiveConstraintOfTypeParameter` */
-    readonly constraint?: TypeNode;
-    readonly default?: TypeNode;
+// dprint-ignore
+export class TypeParameterDeclaration extends Node<SyntaxKind.TypeParameter, AstTypeParameterDeclarationData> implements Declaration, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstTypeParameterDeclaration;
 
-    // For error recovery purposes (see `isGrammarError` in utilities.ts).
-    expression?: Expression;
+    override get parent(): DeclarationWithTypeParameterChildren | InferTypeNode { return super.parent as DeclarationWithTypeParameterChildren | InferTypeNode; }
+
+    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): Identifier { return this.ast.data.name.node; }
+    /**
+     * NOTE: Consider calling `getEffectiveConstraintOfTypeParameter`
+     */
+    get constraint(): TypeNode | undefined { return this.ast.data.constraint?.node; }
+    get default(): TypeNode | undefined { return this.ast.data.default?.node; }
+
+    /** @internal */ override set parent(value: DeclarationWithTypeParameterChildren | InferTypeNode) { super.parent = value; }
+    /** @internal */ set modifiers(value: NodeArray<Modifier> | undefined) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value: Identifier) { this.ast.data.name = value.ast; }
+    /** @internal */ set constraint(value: TypeNode | undefined) { this.ast.data.constraint = value?.ast; }
+    /** @internal */ set default(value: TypeNode | undefined) { this.ast.data.default = value?.ast; }
+    /** @internal */ get expression(): Expression | undefined { return this.ast.data.expression?.node; }
+    /** @internal */ set expression(value: Expression | undefined) { this.ast.data.expression = value?.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value) { this.ast.data.jsDoc = value; }
 }
 
 export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
+    // readonly ast: AstNode<Declaration & JSDocContainer>;
     readonly kind: SignatureDeclaration["kind"];
-    readonly name?: PropertyName;
+    readonly name?: PropertyName | undefined;
     readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined;
     readonly parameters: NodeArray<ParameterDeclaration>;
     readonly type?: TypeNode | undefined;
-    /** @internal */ typeArguments?: NodeArray<TypeNode>; // Used for quick info, replaces typeParameters for instantiated signatures
+    /** @internal */ typeArguments?: NodeArray<TypeNode> | undefined; // Used for quick info, replaces typeParameters for instantiated signatures
 }
 
 export type SignatureDeclaration =
@@ -1857,83 +2949,268 @@ export type SignatureDeclaration =
     | FunctionExpression
     | ArrowFunction;
 
-export interface CallSignatureDeclaration extends SignatureDeclarationBase, TypeElement, LocalsContainer {
-    readonly kind: SyntaxKind.CallSignature;
+// dprint-ignore
+export class CallSignatureDeclaration extends Node<SyntaxKind.CallSignature, AstCallSignatureDeclarationData> implements SignatureDeclarationBase, TypeElement, LocalsContainer {
+    declare _signatureDeclarationBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _typeElementBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstCallSignatureDeclaration;
+
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface ConstructSignatureDeclaration extends SignatureDeclarationBase, TypeElement, LocalsContainer {
-    readonly kind: SyntaxKind.ConstructSignature;
+// dprint-ignore
+export class ConstructSignatureDeclaration extends Node<SyntaxKind.ConstructSignature, AstConstructSignatureDeclarationData> implements SignatureDeclarationBase, TypeElement, LocalsContainer {
+    declare _signatureDeclarationBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _typeElementBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstConstructSignatureDeclaration;
+
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
 export type BindingName = Identifier | BindingPattern;
 
 // dprint-ignore
-export interface VariableDeclaration extends NamedDeclaration, JSDocContainer {
-    readonly kind: SyntaxKind.VariableDeclaration;
-    readonly parent: VariableDeclarationList | CatchClause;
-    readonly name: BindingName;                    // Declared variable name
-    readonly exclamationToken?: ExclamationToken;  // Optional definite assignment assertion
-    readonly type?: TypeNode;                      // Optional type annotation
-    readonly initializer?: Expression;             // Optional initializer
+export class VariableDeclaration extends Node<SyntaxKind.VariableDeclaration, AstVariableDeclarationData> implements Declaration, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstVariableDeclaration;
+
+    override get parent() { return super.parent as VariableDeclarationList | CatchClause; }
+
+    /**
+     * Declared variable name
+     */
+    get name(): BindingName { return this.ast.data.name.node; }
+    /**
+     * Optional definite assignment assertion
+     */
+    get exclamationToken(): ExclamationToken | undefined { return this.ast.data.exclamationToken?.node; }
+    /**
+     * Optional type annotation
+     */
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+    /**
+     * Optional initializer
+     */
+    get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set name(value: BindingName) { this.ast.data.name = value.ast; }
+    /** @internal */ set exclamationToken(value: ExclamationToken | undefined) { this.ast.data.exclamationToken = value?.ast; }
+    /** @internal */ set type(value: TypeNode | undefined) { this.ast.data.type = value?.ast; }
+    /** @internal */ set initializer(value: Expression | undefined) { this.ast.data.initializer = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
+
 
 /** @internal */
 export type InitializedVariableDeclaration = VariableDeclaration & { readonly initializer: Expression; };
 
-export interface VariableDeclarationList extends Node {
-    readonly kind: SyntaxKind.VariableDeclarationList;
-    readonly parent: VariableStatement | ForStatement | ForOfStatement | ForInStatement;
-    readonly declarations: NodeArray<VariableDeclaration>;
+// dprint-ignore
+export class VariableDeclarationList extends Node<SyntaxKind.VariableDeclarationList, AstVariableDeclarationListData> {
+    // declare readonly ast: AstVariableDeclarationList;
+
+    override get parent() { return super.parent as VariableStatement | ForStatement | ForOfStatement | ForInStatement; }
+
+    get declarations(): NodeArray<VariableDeclaration> { return this.ast.data.declarations.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set declarations(value) { this.ast.data.declarations = value.ast; }
 }
 
 // dprint-ignore
-export interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
-    readonly kind: SyntaxKind.Parameter;
-    readonly parent: SignatureDeclaration;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
-    readonly name: BindingName;                  // Declared parameter name.
-    readonly questionToken?: QuestionToken;      // Present on optional parameter
-    readonly type?: TypeNode;                    // Optional type annotation
-    readonly initializer?: Expression;           // Optional initializer
+export class ParameterDeclaration extends Node<SyntaxKind.Parameter, AstParameterDeclarationData> implements Declaration, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstParameterDeclaration;
+
+    override get parent(): SignatureDeclaration { return super.parent as SignatureDeclaration; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get dotDotDotToken(): DotDotDotToken | undefined { return this.ast.data.dotDotDotToken?.node; }
+    // TODO(rbuckton): `name` can be undefined for JSDoc signature parameters
+    get name(): BindingName { return this.ast.data.name?.node; }
+    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+    get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
+
+    /** @internal */ override set parent(value: SignatureDeclaration) { super.parent = value; }
+    /** @internal */ set modifiers(value: NodeArray<ModifierLike> | undefined) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set dotDotDotToken(value: DotDotDotToken | undefined) { this.ast.data.dotDotDotToken = value?.ast; }
+    // TODO(rbuckton): `name` can be undefined for JSDoc signature parameters
+    /** @internal */ set name(value: BindingName) { this.ast.data.name = value?.ast; }
+    /** @internal */ set questionToken(value: QuestionToken | undefined) { this.ast.data.questionToken = value?.ast; }
+    /** @internal */ set type(value: TypeNode | undefined) { this.ast.data.type = value?.ast; }
+    /** @internal */ set initializer(value: Expression | undefined) { this.ast.data.initializer = value?.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value) { this.ast.data.jsDoc = value; }
 }
 
 // dprint-ignore
-export interface BindingElement extends NamedDeclaration, FlowContainer {
-    readonly kind: SyntaxKind.BindingElement;
-    readonly parent: BindingPattern;
-    readonly propertyName?: PropertyName;        // Binding property name (in object binding pattern)
-    readonly dotDotDotToken?: DotDotDotToken;    // Present on rest element (in object binding pattern)
-    readonly name: BindingName;                  // Declared binding element name
-    readonly initializer?: Expression;           // Optional initializer
+export class BindingElement extends Node<SyntaxKind.BindingElement, AstBindingElementData> implements Declaration, FlowContainer {
+    declare _declarationBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstBindingElement;
+
+    override get parent() { return super.parent as BindingPattern; }
+
+    /**
+     * Binding property name (in object binding pattern)
+     */
+    get propertyName(): PropertyName | undefined { return this.ast.data.propertyName?.node; }
+    /**
+     * Present on rest element (in object binding pattern)
+     */
+    get dotDotDotToken(): DotDotDotToken | undefined { return this.ast.data.dotDotDotToken?.node; }
+    /**
+     * Declared binding element name
+     */
+    get name(): BindingName { return this.ast.data.name.node; }
+    /**
+     * Optional initializer
+     */
+    get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set propertyName(value) { this.ast.data.propertyName = value?.ast; }
+    /** @internal */ set dotDotDotToken(value) { this.ast.data.dotDotDotToken = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set initializer(value) { this.ast.data.initializer = value?.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
 /** @internal */
 export type BindingElementGrandparent = BindingElement["parent"]["parent"];
 
 // dprint-ignore
-export interface PropertySignature extends TypeElement, JSDocContainer {
-    readonly kind: SyntaxKind.PropertySignature;
-    readonly parent: TypeLiteralNode | InterfaceDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
-    readonly name: PropertyName;                 // Declared property name
-    readonly questionToken?: QuestionToken;      // Present on optional property
-    readonly type?: TypeNode;                    // Optional type annotation
+export class PropertySignature extends Node<SyntaxKind.PropertySignature, AstPropertySignatureData> implements TypeElement, JSDocContainer {
+    declare _typeElementBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstPropertySignature;
 
-    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
-    /** @internal */ readonly initializer?: Expression | undefined; // A property signature cannot have an initializer
+    override get parent() { return super.parent as TypeLiteralNode | InterfaceDeclaration; }
+
+    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
+    /**
+     * Declared property name
+     */
+    get name(): PropertyName { return this.ast.data.name.node; }
+    /**
+     * Present on optional property
+     */
+    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
+    /**
+     * Optional type annotation
+     */
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value: NodeArray<Modifier> | undefined) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set questionToken(value) { this.ast.data.questionToken = value?.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
+    /** @internal */ set initializer(value) { this.ast.data.initializer = value?.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
 }
 
 // dprint-ignore
-export interface PropertyDeclaration extends ClassElement, JSDocContainer {
-    readonly kind: SyntaxKind.PropertyDeclaration;
-    readonly parent: ClassLikeDeclaration;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly name: PropertyName;
-    readonly questionToken?: QuestionToken;      // Present for use with reporting a grammar error for auto-accessors (see `isGrammarError` in utilities.ts)
-    readonly exclamationToken?: ExclamationToken;
-    readonly type?: TypeNode;
-    readonly initializer?: Expression;           // Optional initializer
+export class PropertyDeclaration extends Node<SyntaxKind.PropertyDeclaration, AstPropertyDeclarationData> implements ClassElement, JSDocContainer {
+    declare _classElementBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstPropertyDeclaration;
+
+    override get parent() { return super.parent as ClassLikeDeclaration; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): PropertyName { return this.ast.data.name.node; }
+    /**
+     * Optional field. Disallowed for auto-accessors and only used to report a grammar error (see `isGrammarError` in utilities.ts)
+     */
+    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
+    get exclamationToken(): ExclamationToken | undefined { return this.ast.data.exclamationToken?.node; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+    /**
+     * Optional initializer
+     */
+    get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set questionToken(value) { this.ast.data.questionToken = value?.ast; }
+    /** @internal */ set exclamationToken(value) { this.ast.data.exclamationToken = value?.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ set initializer(value) { this.ast.data.initializer = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
@@ -1975,7 +3252,10 @@ export type InitializedPropertyDeclaration = PropertyDeclaration & { readonly in
 
 export interface ObjectLiteralElement extends NamedDeclaration {
     _objectLiteralBrand: any;
-    readonly name?: PropertyName;
+    // readonly ast: AstObjectLiteralElement;
+
+    // TODO(rbuckton): remove this?
+    readonly name?: PropertyName | undefined;
 }
 
 /** Unlike ObjectLiteralElement, excludes JSXAttribute and JSXSpreadAttribute. */
@@ -1986,37 +3266,85 @@ export type ObjectLiteralElementLike =
     | MethodDeclaration
     | AccessorDeclaration;
 
-export interface PropertyAssignment extends ObjectLiteralElement, JSDocContainer {
-    readonly kind: SyntaxKind.PropertyAssignment;
-    readonly parent: ObjectLiteralExpression;
-    readonly name: PropertyName;
-    readonly initializer: Expression;
+// dprint-ignore
+export class PropertyAssignment extends Node<SyntaxKind.PropertyAssignment, AstPropertyAssignmentData> implements ObjectLiteralElement, Declaration, JSDocContainer {
+    declare _objectLiteralBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstPropertyAssignment;
 
-    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
-    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined; // property assignment cannot have decorators or modifiers
-    /** @internal */ readonly questionToken?: QuestionToken | undefined; // property assignment cannot have a question token
-    /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // property assignment cannot have an exclamation token
+    override get parent() { return super.parent as ObjectLiteralExpression; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): PropertyName { return this.ast.data.name.node; }
+    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
+    get exclamationToken(): ExclamationToken | undefined { return this.ast.data.exclamationToken?.node; }
+    get initializer(): Expression { return this.ast.data.initializer.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set questionToken(value) { this.ast.data.questionToken = value?.ast; }
+    /** @internal */ set exclamationToken(value) { this.ast.data.exclamationToken = value?.ast; }
+    /** @internal */ set initializer(value) { this.ast.data.initializer = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDocContainer {
-    readonly kind: SyntaxKind.ShorthandPropertyAssignment;
-    readonly parent: ObjectLiteralExpression;
-    readonly name: Identifier;
-    // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
-    // it is a grammar error to appear in actual object initializer (see `isGrammarError` in utilities.ts):
-    readonly equalsToken?: EqualsToken;
-    readonly objectAssignmentInitializer?: Expression;
+// dprint-ignore
+export class ShorthandPropertyAssignment extends Node<SyntaxKind.ShorthandPropertyAssignment, AstShorthandPropertyAssignmentData> implements ObjectLiteralElement, Declaration, JSDocContainer {
+    declare _objectLiteralBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstShorthandPropertyAssignment;
 
-    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
-    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined; // shorthand property assignment cannot have decorators or modifiers
-    /** @internal */ readonly questionToken?: QuestionToken | undefined; // shorthand property assignment cannot have a question token
-    /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // shorthand property assignment cannot have an exclamation token
+    override get parent() { return super.parent as ObjectLiteralExpression; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): Identifier { return this.ast.data.name.node; }
+    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
+    get exclamationToken(): ExclamationToken | undefined { return this.ast.data.exclamationToken?.node; }
+    get equalsToken(): EqualsToken | undefined { return this.ast.data.equalsToken?.node; }
+    get objectAssignmentInitializer(): Expression | undefined { return this.ast.data.objectAssignmentInitializer?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set questionToken(value) { this.ast.data.questionToken = value?.ast; }
+    /** @internal */ set exclamationToken(value) { this.ast.data.exclamationToken = value?.ast; }
+    /** @internal */ set equalsToken(value) { this.ast.data.equalsToken = value?.ast; }
+    /** @internal */ set objectAssignmentInitializer(value) { this.ast.data.objectAssignmentInitializer = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface SpreadAssignment extends ObjectLiteralElement, JSDocContainer {
-    readonly kind: SyntaxKind.SpreadAssignment;
-    readonly parent: ObjectLiteralExpression;
-    readonly expression: Expression;
+// dprint-ignore
+export class SpreadAssignment extends Node<SyntaxKind.SpreadAssignment, AstSpreadAssignmentData> implements ObjectLiteralElement, JSDocContainer {
+    declare _objectLiteralBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstSpreadAssignment;
+
+    override get parent() { return super.parent as ObjectLiteralExpression; }
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export type VariableLikeDeclaration =
@@ -2032,16 +3360,28 @@ export type VariableLikeDeclaration =
     | JSDocPropertyTag
     | JSDocParameterTag;
 
-export interface ObjectBindingPattern extends Node {
-    readonly kind: SyntaxKind.ObjectBindingPattern;
-    readonly parent: VariableDeclaration | ParameterDeclaration | BindingElement;
-    readonly elements: NodeArray<BindingElement>;
+// dprint-ignore
+export class ObjectBindingPattern extends Node<SyntaxKind.ObjectBindingPattern, AstObjectBindingPatternData> {
+    // declare readonly ast: AstObjectBindingPattern;
+
+    override get parent() { return super.parent as VariableDeclaration | ParameterDeclaration | BindingElement; }
+
+    get elements(): NodeArray<BindingElement> { return this.ast.data.elements.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set elements(value) { this.ast.data.elements = value.ast; }
 }
 
-export interface ArrayBindingPattern extends Node {
-    readonly kind: SyntaxKind.ArrayBindingPattern;
-    readonly parent: VariableDeclaration | ParameterDeclaration | BindingElement;
-    readonly elements: NodeArray<ArrayBindingElement>;
+// dprint-ignore
+export class ArrayBindingPattern extends Node<SyntaxKind.ArrayBindingPattern, AstArrayBindingPatternData> {
+    // declare readonly ast: AstArrayBindingPattern;
+
+    override get parent() { return super.parent as VariableDeclaration | ParameterDeclaration | BindingElement; }
+
+    get elements(): NodeArray<ArrayBindingElement> { return this.ast.data.elements.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set elements(value) { this.ast.data.elements = value.ast; }
 }
 
 export type BindingPattern = ObjectBindingPattern | ArrayBindingPattern;
@@ -2063,8 +3403,8 @@ export interface FunctionLikeDeclarationBase extends SignatureDeclarationBase {
     readonly questionToken?: QuestionToken | undefined;
     readonly exclamationToken?: ExclamationToken | undefined;
     readonly body?: Block | Expression | undefined;
-    /** @internal */ endFlowNode?: FlowNode;
-    /** @internal */ returnFlowNode?: FlowNode;
+    /** @internal */ endFlowNode?: FlowNode | undefined;
+    /** @internal */ returnFlowNode?: FlowNode | undefined;
 }
 
 export type FunctionLikeDeclaration =
@@ -2075,21 +3415,115 @@ export type FunctionLikeDeclaration =
     | ConstructorDeclaration
     | FunctionExpression
     | ArrowFunction;
+
 /** @deprecated Use SignatureDeclaration */
 export type FunctionLike = SignatureDeclaration;
 
-export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement, LocalsContainer {
-    readonly kind: SyntaxKind.FunctionDeclaration;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly name?: Identifier;
-    readonly body?: FunctionBody;
+// NOTE: Changing the following list requires changes to:
+// - `canHaveQuestionToken` in utilitiesPublic.ts
+/** @internal */
+export type HasQuestionToken =
+    | ParameterDeclaration
+    | PropertySignature
+    | PropertyDeclaration
+    | MethodSignature
+    | MethodDeclaration
+    | ShorthandPropertyAssignment
+    | MappedTypeNode
+    | NamedTupleMember
+    | ConditionalExpression
+    | PropertyAssignment;
+
+// NOTE: Changing the following list requires changes to:
+// - `canHaveAsteriskToken` in utilitiesPublic.ts
+/** @internal */
+export type HasAsteriskToken =
+    | FunctionDeclaration
+    | FunctionExpression
+    | MethodDeclaration
+    | YieldExpression;
+
+// dprint-ignore
+export class FunctionDeclaration extends Node<SyntaxKind.FunctionDeclaration, AstFunctionDeclarationData> implements FunctionLikeDeclarationBase, DeclarationStatement, LocalsContainer {
+    declare _functionLikeDeclarationBrand: any;
+    declare _signatureDeclarationBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _statementBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstFunctionDeclaration;
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get asteriskToken(): AsteriskToken | undefined { return this.ast.data.asteriskToken?.node; }
+    get name(): Identifier | undefined { return this.ast.data.name?.node; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+    get body(): Block | undefined { return this.ast.data.body?.node; }
+
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set asteriskToken(value) { this.ast.data.asteriskToken = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ set body(value) { this.ast.data.body = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get endFlowNode(): FlowNode | undefined { return this.ast.data.endFlowNode; }
+    /** @internal */ set endFlowNode(value) { this.ast.data.endFlowNode = value; }
+    /** @internal */ get returnFlowNode(): FlowNode | undefined { return this.ast.data.returnFlowNode; }
+    /** @internal */ set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
 }
 
-export interface MethodSignature extends SignatureDeclarationBase, TypeElement, LocalsContainer {
-    readonly kind: SyntaxKind.MethodSignature;
-    readonly parent: TypeLiteralNode | InterfaceDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
-    readonly name: PropertyName;
+
+// dprint-ignore
+export class MethodSignature extends Node<SyntaxKind.MethodSignature, AstMethodSignatureData> implements SignatureDeclarationBase, TypeElement, LocalsContainer {
+    declare _signatureDeclarationBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _typeElementBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstMethodSignature;
+
+    override get parent() { return super.parent as TypeLiteralNode | InterfaceDeclaration; }
+
+    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): PropertyName { return this.ast.data.name.node; }
+    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set questionToken(value) { this.ast.data.questionToken = value?.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
 // Note that a MethodDeclaration is considered both a ClassElement and an ObjectLiteralElement.
@@ -2101,230 +3535,624 @@ export interface MethodSignature extends SignatureDeclarationBase, TypeElement, 
 // Because of this, it may be necessary to determine what sort of MethodDeclaration you have
 // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
 // of the method, or use helpers like isObjectLiteralMethodDeclaration
-export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
-    readonly kind: SyntaxKind.MethodDeclaration;
-    readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
-    readonly modifiers?: NodeArray<ModifierLike> | undefined;
-    readonly name: PropertyName;
-    readonly body?: FunctionBody | undefined;
+// dprint-ignore
+export class MethodDeclaration extends Node<SyntaxKind.MethodDeclaration, AstMethodDeclarationData> implements FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, LocalsContainer, FlowContainer {
+    declare _functionLikeDeclarationBrand: any;
+    declare _signatureDeclarationBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _classElementBrand: any;
+    declare _objectLiteralBrand: any;
+    declare _localsContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstMethodDeclaration;
 
-    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
-    /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // A method cannot have an exclamation token
+    override get parent() { return super.parent as ClassLikeDeclaration | ObjectLiteralExpression; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get asteriskToken(): AsteriskToken | undefined { return this.ast.data.asteriskToken?.node; }
+    get name(): PropertyName { return this.ast.data.name.node; }
+    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+    get body(): Block | undefined { return this.ast.data.body?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set asteriskToken(value) { this.ast.data.asteriskToken = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set questionToken(value) { this.ast.data.questionToken = value?.ast; }
+    /**
+     * used only to report grammar errors (see `isGrammarError` in utilities.ts)
+     * @internal
+     */
+    get exclamationToken(): ExclamationToken | undefined { return this.ast.data.exclamationToken?.node; }
+    /** @internal */ set exclamationToken(value) { this.ast.data.exclamationToken = value?.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ set body(value) { this.ast.data.body = value?.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    /** @internal */ get endFlowNode(): FlowNode | undefined { return this.ast.data.endFlowNode; }
+    /** @internal */ set endFlowNode(value) { this.ast.data.endFlowNode = value; }
+    /** @internal */ get returnFlowNode(): FlowNode | undefined { return this.ast.data.returnFlowNode; }
+    /** @internal */ set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
 }
 
-export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer, LocalsContainer {
-    readonly kind: SyntaxKind.Constructor;
-    readonly parent: ClassLikeDeclaration;
-    readonly modifiers?: NodeArray<ModifierLike> | undefined;
-    readonly body?: FunctionBody | undefined;
+// dprint-ignore
+export class ConstructorDeclaration extends Node<SyntaxKind.Constructor, AstConstructorDeclarationData> implements FunctionLikeDeclarationBase, ClassElement, JSDocContainer, LocalsContainer {
+    declare _functionLikeDeclarationBrand: any;
+    declare _signatureDeclarationBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _classElementBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstConstructorDeclaration;
 
-    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
-    /** @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration>; // A constructor cannot have type parameters
-    /** @internal */ readonly type?: TypeNode; // A constructor cannot have a return type annotation
+    override get parent() { return super.parent as ClassLikeDeclaration; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get body(): Block | undefined { return this.ast.data.body?.node; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set body(value) { this.ast.data.body = value?.ast; }
+    /** @internal */ get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get endFlowNode(): FlowNode | undefined { return this.ast.data.endFlowNode; }
+    /** @internal */ set endFlowNode(value) { this.ast.data.endFlowNode = value; }
+    /** @internal */ get returnFlowNode(): FlowNode | undefined { return this.ast.data.returnFlowNode; }
+    /** @internal */ set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
 }
 
 /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
-export interface SemicolonClassElement extends ClassElement, JSDocContainer {
-    readonly kind: SyntaxKind.SemicolonClassElement;
-    readonly parent: ClassLikeDeclaration;
+// dprint-ignore
+export class SemicolonClassElement extends Node<SyntaxKind.SemicolonClassElement, AstSemicolonClassElementData> implements ClassElement, JSDocContainer {
+    declare _classElementBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare symbol: never;
+    declare localSymbol: never;
+    // declare readonly ast: AstSemicolonClassElement;
+
+    override get parent() { return super.parent as ClassLikeDeclaration; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
 }
 
 // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
 // ClassElement and an ObjectLiteralElement.
-export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
-    readonly kind: SyntaxKind.GetAccessor;
-    readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly name: PropertyName;
-    readonly body?: FunctionBody;
+// dprint-ignore
+export class GetAccessorDeclaration extends Node<SyntaxKind.GetAccessor, AstGetAccessorDeclarationData> implements FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
+    declare _functionLikeDeclarationBrand: any;
+    declare _signatureDeclarationBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _classElementBrand: any;
+    declare _typeElementBrand: any;
+    declare _objectLiteralBrand: any;
+    declare _localsContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstGetAccessorDeclaration;
 
-    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
-    /** @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined; // A get accessor cannot have type parameters
+    override get parent() { return super.parent as ClassLikeDeclaration | ObjectLiteralExpression | InterfaceDeclaration | TypeLiteralNode; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): PropertyName { return this.ast.data.name.node; }
+    get body(): Block | undefined { return this.ast.data.body?.node; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set body(value) { this.ast.data.body = value?.ast; }
+    /** @internal */ get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    /** @internal */ get endFlowNode(): FlowNode | undefined { return this.ast.data.endFlowNode; }
+    /** @internal */ set endFlowNode(value) { this.ast.data.endFlowNode = value; }
+    /** @internal */ get returnFlowNode(): FlowNode | undefined { return this.ast.data.returnFlowNode; }
+    /** @internal */ set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
 }
 
 // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
 // ClassElement and an ObjectLiteralElement.
-export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
-    readonly kind: SyntaxKind.SetAccessor;
-    readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly name: PropertyName;
-    readonly body?: FunctionBody;
+// dprint-ignore
+export class SetAccessorDeclaration extends Node<SyntaxKind.SetAccessor, AstSetAccessorDeclarationData> implements FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
+    declare _functionLikeDeclarationBrand: any;
+    declare _signatureDeclarationBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _classElementBrand: any;
+    declare _typeElementBrand: any;
+    declare _objectLiteralBrand: any;
+    declare _localsContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstSetAccessorDeclaration;
 
-    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
-    /** @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined; // A set accessor cannot have type parameters
-    /** @internal */ readonly type?: TypeNode | undefined; // A set accessor cannot have a return type
+    override get parent() { return super.parent as ClassLikeDeclaration | ObjectLiteralExpression | InterfaceDeclaration | TypeLiteralNode; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): PropertyName { return this.ast.data.name.node; }
+    get body(): Block | undefined { return this.ast.data.body?.node; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set body(value) { this.ast.data.body = value?.ast; }
+    /** @internal */ get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    /** @internal */ get endFlowNode(): FlowNode | undefined { return this.ast.data.endFlowNode; }
+    /** @internal */ set endFlowNode(value) { this.ast.data.endFlowNode = value; }
+    /** @internal */ get returnFlowNode(): FlowNode | undefined { return this.ast.data.returnFlowNode; }
+    /** @internal */ set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
 }
 
 export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
 
-export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement, LocalsContainer {
-    readonly kind: SyntaxKind.IndexSignature;
-    readonly parent: ObjectTypeDeclaration;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly type: TypeNode;
+// dprint-ignore
+export class IndexSignatureDeclaration extends Node<SyntaxKind.IndexSignature, AstIndexSignatureDeclarationData> implements SignatureDeclarationBase, ClassElement, TypeElement, LocalsContainer {
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _classElementBrand: any;
+    declare _typeElementBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstIndexSignatureDeclaration;
+
+    override get parent() { return super.parent as ObjectTypeDeclaration; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode { return this.ast.data.type?.node!; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer, LocalsContainer {
-    readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
-    readonly parent: ClassDeclaration | ClassExpression;
-    readonly body: Block;
+// dprint-ignore
+export class ClassStaticBlockDeclaration extends Node<SyntaxKind.ClassStaticBlockDeclaration, AstClassStaticBlockDeclarationData> implements ClassElement, JSDocContainer, LocalsContainer {
+    declare _signatureDeclarationBrand: any;
+    declare _classElementBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstClassStaticBlockDeclaration;
 
-    /** @internal */ endFlowNode?: FlowNode;
-    /** @internal */ returnFlowNode?: FlowNode;
+    override get parent() { return super.parent as ClassLikeDeclaration; }
 
-    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
-    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
+    get body(): Block { return this.ast.data.body.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set body(value) { this.ast.data.body = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get endFlowNode(): FlowNode | undefined { return this.ast.data.endFlowNode; }
+    /** @internal */ set endFlowNode(value) { this.ast.data.endFlowNode = value; }
+    /** @internal */ get returnFlowNode(): FlowNode | undefined { return this.ast.data.returnFlowNode; }
+    /** @internal */ set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
 }
 
-export interface TypeNode extends Node {
+export interface TypeNode<TKind extends TypeNodeSyntaxKind = TypeNodeSyntaxKind> extends Node<TKind> {
     _typeNodeBrand: any;
+    // readonly ast: AstTypeNode<TKind>;
 }
 
-/** @internal */
-export interface TypeNode extends Node {
-    readonly kind: TypeNodeSyntaxKind;
-}
-
-export interface KeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTypeSyntaxKind> extends KeywordToken<TKind>, TypeNode {
+export interface KeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTypeSyntaxKind> extends KeywordToken<TKind>, TypeNode<TKind> {
+    // readonly ast: AstKeywordTypeNode<TKind>;
     readonly kind: TKind;
 }
 
 /** @deprecated */
-export interface ImportTypeAssertionContainer extends Node {
-    readonly kind: SyntaxKind.ImportTypeAssertionContainer;
-    readonly parent: ImportTypeNode;
-    /** @deprecated */ readonly assertClause: AssertClause;
-    readonly multiLine?: boolean;
+// dprint-ignore
+export class ImportTypeAssertionContainer extends Node<SyntaxKind.ImportTypeAssertionContainer, AstImportTypeAssertionContainerData> {
+    // declare readonly ast: AstImportTypeAssertionContainer;
+
+    override get parent() { return super.parent as ImportTypeNode; }
+
+    /** @deprecated */
+    get assertClause(): ImportAttributes { return this.ast.data.assertClause.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set assertClause(value) { this.ast.data.assertClause = value.ast; }
+    /** @internal */ get multiLine(): boolean { return this.ast.data.multiLine; }
+    /** @internal */ set multiLine(value) { this.ast.data.multiLine = value; }
 }
 
-export interface ImportTypeNode extends NodeWithTypeArguments {
-    readonly kind: SyntaxKind.ImportType;
-    readonly isTypeOf: boolean;
-    readonly argument: TypeNode;
-    /** @deprecated */ readonly assertions?: ImportTypeAssertionContainer;
-    readonly attributes?: ImportAttributes;
-    readonly qualifier?: EntityName;
+// dprint-ignore
+export class ImportTypeNode extends Node<SyntaxKind.ImportType, AstImportTypeNodeData> implements TypeNode, NodeWithTypeArguments {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstImportTypeNode;
+
+    get isTypeOf(): boolean { return this.ast.data.isTypeOf; }
+    get argument(): TypeNode { return this.ast.data.argument.node; }
+    get attributes(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
+    /** @deprecated */
+    get assertions(): ImportTypeAssertionContainer | undefined { return this.ast.data.assertions?.node; }
+    get qualifier(): EntityName | undefined { return this.ast.data.qualifier?.node; }
+    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+
+    /** @internal */ set isTypeOf(value) { this.ast.data.isTypeOf = value; }
+    /** @internal */ set argument(value) { this.ast.data.argument = value.ast; }
+    /** @internal */ set attributes(value) { this.ast.data.attributes = value?.ast; }
+    /** @internal */ set assertions(value) { this.ast.data.assertions = value?.ast; }
+    /** @internal */ set qualifier(value) { this.ast.data.qualifier = value?.ast; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
 }
 
 /** @internal */
 export type LiteralImportTypeNode = ImportTypeNode & { readonly argument: LiteralTypeNode & { readonly literal: StringLiteral; }; };
 
-export interface ThisTypeNode extends TypeNode {
-    readonly kind: SyntaxKind.ThisType;
+// dprint-ignore
+export class ThisTypeNode extends Node<SyntaxKind.ThisType, AstThisTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstThisTypeNode;
 }
 
 export type FunctionOrConstructorTypeNode = FunctionTypeNode | ConstructorTypeNode;
 
 export interface FunctionOrConstructorTypeNodeBase extends TypeNode, SignatureDeclarationBase {
+    // readonly ast: AstNode<TypeNode & SignatureDeclarationBase>;
     readonly kind: SyntaxKind.FunctionType | SyntaxKind.ConstructorType;
     readonly type: TypeNode;
 }
 
-export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
-    readonly kind: SyntaxKind.FunctionType;
+// dprint-ignore
+export class FunctionTypeNode extends Node<SyntaxKind.FunctionType, AstFunctionTypeNodeData> implements FunctionOrConstructorTypeNodeBase, LocalsContainer {
+    declare _signatureDeclarationBrand: any;
+    declare _typeNodeBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstFunctionTypeNode;
 
-    // A function type cannot have modifiers
-    /** @internal */ readonly modifiers?: undefined;
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
-    readonly kind: SyntaxKind.ConstructorType;
-    readonly modifiers?: NodeArray<Modifier>;
+// dprint-ignore
+export class ConstructorTypeNode extends Node<SyntaxKind.ConstructorType, AstConstructorTypeNodeData> implements FunctionOrConstructorTypeNodeBase, LocalsContainer {
+    // declare readonly ast: AstConstructorTypeNode;
+
+    declare _signatureDeclarationBrand: any;
+    declare _typeNodeBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+
+    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
 export interface NodeWithTypeArguments extends TypeNode {
-    readonly typeArguments?: NodeArray<TypeNode>;
+    readonly typeArguments?: NodeArray<TypeNode> | undefined;
 }
 
 export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
 
-export interface TypeReferenceNode extends NodeWithTypeArguments {
-    readonly kind: SyntaxKind.TypeReference;
-    readonly typeName: EntityName;
+// dprint-ignore
+export class TypeReferenceNode extends Node<SyntaxKind.TypeReference, AstTypeReferenceNodeData> implements NodeWithTypeArguments {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstTypeReferenceNode;
+
+    get typeName(): Identifier | QualifiedName { return this.ast.data.typeName.node; }
+    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+
+    /** @internal */ set typeName(value) { this.ast.data.typeName = value.ast; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
 }
 
-export interface TypePredicateNode extends TypeNode {
-    readonly kind: SyntaxKind.TypePredicate;
-    readonly parent: SignatureDeclaration | JSDocTypeExpression;
-    readonly assertsModifier?: AssertsKeyword;
-    readonly parameterName: Identifier | ThisTypeNode;
-    readonly type?: TypeNode;
+// dprint-ignore
+export class TypePredicateNode extends Node<SyntaxKind.TypePredicate, AstTypePredicateNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstTypePredicateNode;
+
+    override get parent() { return super.parent as SignatureDeclaration | JSDocTypeExpression; }
+
+    get assertsModifier(): AssertsKeyword | undefined { return this.ast.data.assertsModifier?.node; }
+    get parameterName(): Identifier | ThisTypeNode { return this.ast.data.parameterName.node; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set assertsModifier(value) { this.ast.data.assertsModifier = value?.ast; }
+    /** @internal */ set parameterName(value) { this.ast.data.parameterName = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
 }
 
-export interface TypeQueryNode extends NodeWithTypeArguments {
-    readonly kind: SyntaxKind.TypeQuery;
-    readonly exprName: EntityName;
+// dprint-ignore
+export class TypeQueryNode extends Node<SyntaxKind.TypeQuery, AstTypeQueryNodeData> implements NodeWithTypeArguments {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstTypeQueryNode;
+
+    get exprName(): Identifier | QualifiedName { return this.ast.data.exprName.node; }
+    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+
+    /** @internal */ set exprName(value) { this.ast.data.exprName = value.ast; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
 }
 
 // A TypeLiteral is the declaration node for an anonymous symbol.
-export interface TypeLiteralNode extends TypeNode, Declaration {
-    readonly kind: SyntaxKind.TypeLiteral;
-    readonly members: NodeArray<TypeElement>;
+// dprint-ignore
+export class TypeLiteralNode extends Node<SyntaxKind.TypeLiteral, AstTypeLiteralNodeData> implements TypeNode, Declaration {
+    declare _typeNodeBrand: any;
+    declare _declarationBrand: any;
+    // declare readonly ast: AstTypeLiteralNode;
+
+    get members(): NodeArray<TypeElement> { return this.ast.data.members.nodes; }
+
+    /** @internal */ set members(value) { this.ast.data.members = value.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface ArrayTypeNode extends TypeNode {
-    readonly kind: SyntaxKind.ArrayType;
-    readonly elementType: TypeNode;
+// dprint-ignore
+export class ArrayTypeNode extends Node<SyntaxKind.ArrayType, AstArrayTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstArrayTypeNode;
+
+    get elementType(): TypeNode { return this.ast.data.elementType.node; }
+
+    /** @internal */ set elementType(value) { this.ast.data.elementType = value.ast; }
 }
 
-export interface TupleTypeNode extends TypeNode {
-    readonly kind: SyntaxKind.TupleType;
-    readonly elements: NodeArray<TypeNode | NamedTupleMember>;
+// dprint-ignore
+export class TupleTypeNode extends Node<SyntaxKind.TupleType, AstTupleTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstTupleTypeNode;
+
+    get elements(): NodeArray<TypeNode | NamedTupleMember> { return this.ast.data.elements.nodes; }
+
+    /** @internal */ set elements(value: NodeArray<TypeNode | NamedTupleMember>) { this.ast.data.elements = value.ast; }
 }
 
-export interface NamedTupleMember extends TypeNode, Declaration, JSDocContainer {
-    readonly kind: SyntaxKind.NamedTupleMember;
-    readonly dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
-    readonly name: Identifier;
-    readonly questionToken?: Token<SyntaxKind.QuestionToken>;
-    readonly type: TypeNode;
+// dprint-ignore
+export class NamedTupleMember extends Node<SyntaxKind.NamedTupleMember, AstNamedTupleMemberData> implements TypeNode, Declaration, JSDocContainer {
+    declare _typeNodeBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstNamedTupleMember;
+
+    get dotDotDotToken(): DotDotDotToken | undefined { return this.ast.data.dotDotDotToken?.node; }
+    get name(): Identifier { return this.ast.data.name.node; }
+    get questionToken(): QuestionToken | undefined { return this.ast.data.questionToken?.node; }
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set dotDotDotToken(value) { this.ast.data.dotDotDotToken = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set questionToken(value) { this.ast.data.questionToken = value?.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface OptionalTypeNode extends TypeNode {
-    readonly kind: SyntaxKind.OptionalType;
-    readonly type: TypeNode;
+// dprint-ignore
+export class OptionalTypeNode extends Node<SyntaxKind.OptionalType, AstOptionalTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstOptionalTypeNode;
+
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
 }
 
-export interface RestTypeNode extends TypeNode {
-    readonly kind: SyntaxKind.RestType;
-    readonly type: TypeNode;
+// dprint-ignore
+export class RestTypeNode extends Node<SyntaxKind.RestType, AstRestTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstRestTypeNode;
+
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
 }
 
 export type UnionOrIntersectionTypeNode = UnionTypeNode | IntersectionTypeNode;
 
-export interface UnionTypeNode extends TypeNode {
-    readonly kind: SyntaxKind.UnionType;
-    readonly types: NodeArray<TypeNode>;
+// dprint-ignore
+export class UnionTypeNode extends Node<SyntaxKind.UnionType, AstUnionTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstUnionTypeNode;
+
+    get types(): NodeArray<TypeNode> { return this.ast.data.types.nodes; }
+
+    /** @internal */ set types(value) { this.ast.data.types = value.ast; }
 }
 
-export interface IntersectionTypeNode extends TypeNode {
-    readonly kind: SyntaxKind.IntersectionType;
-    readonly types: NodeArray<TypeNode>;
+// dprint-ignore
+export class IntersectionTypeNode extends Node<SyntaxKind.IntersectionType, AstIntersectionTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstIntersectionTypeNode;
+
+    get types(): NodeArray<TypeNode> { return this.ast.data.types.nodes; }
+
+    /** @internal */ set types(value) { this.ast.data.types = value.ast; }
 }
 
-export interface ConditionalTypeNode extends TypeNode, LocalsContainer {
-    readonly kind: SyntaxKind.ConditionalType;
-    readonly checkType: TypeNode;
-    readonly extendsType: TypeNode;
-    readonly trueType: TypeNode;
-    readonly falseType: TypeNode;
+// dprint-ignore
+export class ConditionalTypeNode extends Node<SyntaxKind.ConditionalType, AstConditionalTypeNodeData> implements TypeNode, LocalsContainer {
+    declare _typeNodeBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstConditionalTypeNode;
+
+    get checkType(): TypeNode { return this.ast.data.checkType.node; }
+    get extendsType(): TypeNode { return this.ast.data.extendsType.node; }
+    get trueType(): TypeNode { return this.ast.data.trueType.node; }
+    get falseType(): TypeNode { return this.ast.data.falseType.node; }
+
+    /** @internal */ set checkType(value) { this.ast.data.checkType = value.ast; }
+    /** @internal */ set extendsType(value) { this.ast.data.extendsType = value.ast; }
+    /** @internal */ set trueType(value) { this.ast.data.trueType = value.ast; }
+    /** @internal */ set falseType(value) { this.ast.data.falseType = value.ast; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface InferTypeNode extends TypeNode {
-    readonly kind: SyntaxKind.InferType;
-    readonly typeParameter: TypeParameterDeclaration;
+// dprint-ignore
+export class InferTypeNode extends Node<SyntaxKind.InferType, AstInferTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstInferTypeNode;
+
+    get typeParameter(): TypeParameterDeclaration { return this.ast.data.typeParameter.node; }
+
+    /** @internal */ set typeParameter(value) { this.ast.data.typeParameter = value.ast; }
 }
 
-export interface ParenthesizedTypeNode extends TypeNode {
-    readonly kind: SyntaxKind.ParenthesizedType;
-    readonly type: TypeNode;
+// dprint-ignore
+export class ParenthesizedTypeNode extends Node<SyntaxKind.ParenthesizedType, AstParenthesizedTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstParenthesizedTypeNode;
+
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
 }
 
-export interface TypeOperatorNode extends TypeNode {
-    readonly kind: SyntaxKind.TypeOperator;
-    readonly operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
-    readonly type: TypeNode;
+// dprint-ignore
+export class TypeOperatorNode extends Node<SyntaxKind.TypeOperator, AstTypeOperatorNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstTypeOperatorNode;
+
+    get operator(): SyntaxKind.KeyOfKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.UniqueKeyword { return this.ast.data.operator; }
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set operator(value) { this.ast.data.operator = value; }
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
 }
 
 /** @internal @knipignore */
@@ -2332,54 +4160,120 @@ export interface UniqueTypeOperatorNode extends TypeOperatorNode {
     readonly operator: SyntaxKind.UniqueKeyword;
 }
 
-export interface IndexedAccessTypeNode extends TypeNode {
-    readonly kind: SyntaxKind.IndexedAccessType;
-    readonly objectType: TypeNode;
-    readonly indexType: TypeNode;
+// dprint-ignore
+export class IndexedAccessTypeNode extends Node<SyntaxKind.IndexedAccessType, AstIndexedAccessTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstIndexedAccessTypeNode;
+
+    get objectType(): TypeNode { return this.ast.data.objectType.node; }
+    get indexType(): TypeNode { return this.ast.data.indexType.node; }
+
+    /** @internal */ set objectType(value) { this.ast.data.objectType = value.ast; }
+    /** @internal */ set indexType(value) { this.ast.data.indexType = value.ast; }
 }
 
-export interface MappedTypeNode extends TypeNode, Declaration, LocalsContainer {
-    readonly kind: SyntaxKind.MappedType;
-    readonly readonlyToken?: ReadonlyKeyword | PlusToken | MinusToken;
-    readonly typeParameter: TypeParameterDeclaration;
-    readonly nameType?: TypeNode;
-    readonly questionToken?: QuestionToken | PlusToken | MinusToken;
-    readonly type?: TypeNode;
-    /** Used only to produce grammar errors */
-    readonly members?: NodeArray<TypeElement>;
+// dprint-ignore
+export class MappedTypeNode extends Node<SyntaxKind.MappedType, AstMappedTypeNodeData> implements TypeNode, Declaration, LocalsContainer {
+    declare _typeNodeBrand: any;
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstMappedTypeNode;
+
+    get readonlyToken(): PlusToken | MinusToken | ReadonlyKeyword | undefined { return this.ast.data.readonlyToken?.node; }
+    get typeParameter(): TypeParameterDeclaration { return this.ast.data.typeParameter.node; }
+    get nameType(): TypeNode | undefined { return this.ast.data.nameType?.node; }
+    get questionToken(): QuestionToken | PlusToken | MinusToken | undefined { return this.ast.data.questionToken?.node; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+    get members(): NodeArray<TypeElement> | undefined { return this.ast.data.members?.nodes; }
+
+    /** @internal */ set readonlyToken(value) { this.ast.data.readonlyToken = value?.ast; }
+    /** @internal */ set typeParameter(value) { this.ast.data.typeParameter = value.ast; }
+    /** @internal */ set nameType(value) { this.ast.data.nameType = value?.ast; }
+    /** @internal */ set questionToken(value) { this.ast.data.questionToken = value?.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ set members(value) { this.ast.data.members = value?.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface LiteralTypeNode extends TypeNode {
-    readonly kind: SyntaxKind.LiteralType;
-    readonly literal: NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
+// dprint-ignore
+export class LiteralTypeNode extends Node<SyntaxKind.LiteralType, AstLiteralTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstLiteralTypeNode;
+
+    get literal(): NullLiteral | TrueLiteral | FalseLiteral | PrefixUnaryExpression | LiteralExpression { return this.ast.data.literal.node; }
+
+    /** @internal */ set literal(value) { this.ast.data.literal = value.ast; }
 }
 
-export interface StringLiteral extends LiteralExpression, Declaration {
-    readonly kind: SyntaxKind.StringLiteral;
-    /** @internal */
-    readonly textSourceNode?: Identifier | StringLiteralLike | NumericLiteral | PrivateIdentifier | JsxNamespacedName | BigIntLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
+// TODO(rbuckton): Move string literal adjacent to tokens and other literals.
+// dprint-ignore
+export class StringLiteral extends Token<SyntaxKind.StringLiteral, AstStringLiteralData> implements LiteralExpression, StringLiteralLikeNode, Declaration {
+    declare _literalExpressionBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    // declare readonly ast: AstStringLiteral;
+
+    get text(): string { return this.ast.data.text; }
+    get isUnterminated(): boolean { return this.ast.data.isUnterminated; }
+    get hasExtendedUnicodeEscape(): boolean { return this.ast.data.hasExtendedUnicodeEscape; }
+
+    /** @internal */ set text(value) { this.ast.data.text = value; }
     /**
-     * Note: this is only set when synthesizing a node, not during parsing.
-     *
+     * NOTE: This is only set when synthesizing a node, not during parsing.
      * @internal
      */
-    readonly singleQuote?: boolean;
+    get singleQuote(): boolean | undefined { return this.ast.data.singleQuote; }
+    /** @internal */ set singleQuote(value) { this.ast.data.singleQuote = value; }
+    /** @internal */ set isUnterminated(value) { this.ast.data.isUnterminated = value; }
+    /** @internal */ set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
+    /** @internal */ get textSourceNode(): Identifier | PrivateIdentifier | NumericLiteral | BigIntLiteral | JsxNamespacedName | StringLiteralLike | undefined { return this.ast.data.textSourceNode?.node; }
+    /** @internal */ set textSourceNode(value) { this.ast.data.textSourceNode = value?.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
 export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral | JsxNamespacedName | BigIntLiteral;
 
-export interface TemplateLiteralTypeNode extends TypeNode {
-    kind: SyntaxKind.TemplateLiteralType;
-    readonly head: TemplateHead;
-    readonly templateSpans: NodeArray<TemplateLiteralTypeSpan>;
+// dprint-ignore
+export class TemplateLiteralTypeNode extends Node<SyntaxKind.TemplateLiteralType, AstTemplateLiteralTypeNodeData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstTemplateLiteralTypeNode;
+
+    get head(): TemplateHead { return this.ast.data.head.node; }
+    get templateSpans(): NodeArray<TemplateLiteralTypeSpan> { return this.ast.data.templateSpans.nodes; }
+
+    /** @internal */ set head(value) { this.ast.data.head = value.ast; }
+    /** @internal */ set templateSpans(value) { this.ast.data.templateSpans = value.ast; }
 }
 
-export interface TemplateLiteralTypeSpan extends TypeNode {
-    readonly kind: SyntaxKind.TemplateLiteralTypeSpan;
-    readonly parent: TemplateLiteralTypeNode;
-    readonly type: TypeNode;
-    readonly literal: TemplateMiddle | TemplateTail;
+// dprint-ignore
+export class TemplateLiteralTypeSpan extends Node<SyntaxKind.TemplateLiteralTypeSpan, AstTemplateLiteralTypeSpanData> {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstTemplateLiteralTypeSpan;
+
+    override get parent() { return super.parent as TemplateLiteralTypeNode; }
+
+    get type(): TypeNode { return this.ast.data.type.node; }
+    get literal(): TemplateMiddle | TemplateTail { return this.ast.data.literal.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
+    /** @internal */ set literal(value) { this.ast.data.literal = value.ast; }
 }
 
 // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
@@ -2391,27 +4285,41 @@ export interface TemplateLiteralTypeSpan extends TypeNode {
 
 export interface Expression extends Node {
     _expressionBrand: any;
+    // readonly ast: AstExpression;
 }
 
-export interface OmittedExpression extends Expression {
-    readonly kind: SyntaxKind.OmittedExpression;
+// dprint-ignore
+export class OmittedExpression extends Node<SyntaxKind.OmittedExpression, AstOmittedExpressionData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstOmittedExpression;
 }
 
 // Represents an expression that is elided as part of a transformation to emit comments on a
 // not-emitted node. The 'expression' property of a PartiallyEmittedExpression should be emitted.
-export interface PartiallyEmittedExpression extends LeftHandSideExpression {
-    readonly kind: SyntaxKind.PartiallyEmittedExpression;
-    readonly expression: Expression;
+// dprint-ignore
+export class PartiallyEmittedExpression extends Node<SyntaxKind.PartiallyEmittedExpression, AstPartiallyEmittedExpressionData> implements LeftHandSideExpression {
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstPartiallyEmittedExpression;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+
+    /** @internal */ set expression(value: Expression) { this.ast.data.expression = value.ast; }
 }
 
 export interface UnaryExpression extends Expression {
     _unaryExpressionBrand: any;
+    // readonly ast: AstUnaryExpression;
 }
 
-/** Deprecated, please use UpdateExpression */
+/** @deprecated use UpdateExpression instead */
 export type IncrementExpression = UpdateExpression;
+
 export interface UpdateExpression extends UnaryExpression {
     _updateExpressionBrand: any;
+    // readonly ast: AstUpdateExpression;
 }
 
 // see: https://tc39.github.io/ecma262/#prod-UpdateExpression
@@ -2424,10 +4332,18 @@ export type PrefixUnaryOperator =
     | SyntaxKind.TildeToken
     | SyntaxKind.ExclamationToken;
 
-export interface PrefixUnaryExpression extends UpdateExpression {
-    readonly kind: SyntaxKind.PrefixUnaryExpression;
-    readonly operator: PrefixUnaryOperator;
-    readonly operand: UnaryExpression;
+// dprint-ignore
+export class PrefixUnaryExpression extends Node<SyntaxKind.PrefixUnaryExpression, AstPrefixUnaryExpressionData> implements UpdateExpression {
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstPrefixUnaryExpression;
+
+    get operator(): PrefixUnaryOperator { return this.ast.data.operator; }
+    get operand(): UnaryExpression { return this.ast.data.operand.node; }
+
+    /** @internal */ set operator(value) { this.ast.data.operator = value; }
+    /** @internal */ set operand(value) { this.ast.data.operand = value.ast; }
 }
 
 // see: https://tc39.github.io/ecma262/#prod-UpdateExpression
@@ -2435,81 +4351,182 @@ export type PostfixUnaryOperator =
     | SyntaxKind.PlusPlusToken
     | SyntaxKind.MinusMinusToken;
 
-export interface PostfixUnaryExpression extends UpdateExpression {
-    readonly kind: SyntaxKind.PostfixUnaryExpression;
-    readonly operand: LeftHandSideExpression;
-    readonly operator: PostfixUnaryOperator;
+// dprint-ignore
+export class PostfixUnaryExpression extends Node<SyntaxKind.PostfixUnaryExpression, AstPostfixUnaryExpressionData> implements UpdateExpression {
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstPostfixUnaryExpression;
+
+    get operand(): LeftHandSideExpression { return this.ast.data.operand.node; }
+    get operator(): PostfixUnaryOperator { return this.ast.data.operator; }
+
+    /** @internal */ set operand(value) { this.ast.data.operand = value.ast; }
+    /** @internal */ set operator(value) { this.ast.data.operator = value; }
 }
 
 export interface LeftHandSideExpression extends UpdateExpression {
     _leftHandSideExpressionBrand: any;
+    // readonly ast: AstLeftHandSideExpression;
 }
 
 export interface MemberExpression extends LeftHandSideExpression {
     _memberExpressionBrand: any;
+    // readonly ast: AstMemberExpression;
 }
 
 export interface PrimaryExpression extends MemberExpression {
     _primaryExpressionBrand: any;
+    // readonly ast: AstPrimaryExpression;
 }
 
-export interface NullLiteral extends PrimaryExpression {
-    readonly kind: SyntaxKind.NullKeyword;
+// TODO(rbuckton): Move literal token nodes adjacent to other tokens and literals.
+// dprint-ignore
+export class NullLiteral extends Token<SyntaxKind.NullKeyword> implements KeywordExpression<SyntaxKind.NullKeyword> {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstNullLiteral;
 }
 
-export interface TrueLiteral extends PrimaryExpression {
-    readonly kind: SyntaxKind.TrueKeyword;
+// TODO(rbuckton): Move literal token nodes adjacent to other tokens and literals.
+// dprint-ignore
+export class TrueLiteral extends Token<SyntaxKind.TrueKeyword> implements KeywordExpression<SyntaxKind.TrueKeyword> {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstTrueLiteral;
 }
 
-export interface FalseLiteral extends PrimaryExpression {
-    readonly kind: SyntaxKind.FalseKeyword;
+// TODO(rbuckton): Move literal token nodes adjacent to other tokens and literals.
+// dprint-ignore
+export class FalseLiteral extends Token<SyntaxKind.FalseKeyword> implements KeywordExpression<SyntaxKind.FalseKeyword> {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstFalseLiteral;
 }
 
 export type BooleanLiteral = TrueLiteral | FalseLiteral;
 
-export interface ThisExpression extends PrimaryExpression, FlowContainer {
-    readonly kind: SyntaxKind.ThisKeyword;
+// dprint-ignore
+export class ThisExpression extends Token<SyntaxKind.ThisKeyword, AstThisExpressionData> implements KeywordExpression<SyntaxKind.ThisKeyword>, FlowContainer {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstThisExpression;
+
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface SuperExpression extends PrimaryExpression, FlowContainer {
-    readonly kind: SyntaxKind.SuperKeyword;
+// dprint-ignore
+export class SuperExpression extends Token<SyntaxKind.SuperKeyword, AstSuperExpressionData> implements KeywordExpression<SyntaxKind.SuperKeyword>, FlowContainer {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstSuperExpression;
+
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface ImportExpression extends PrimaryExpression {
-    readonly kind: SyntaxKind.ImportKeyword;
+// dprint-ignore
+export class ImportExpression extends Token<SyntaxKind.ImportKeyword> implements KeywordExpression<SyntaxKind.ImportKeyword> {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstImportExpression;
 }
 
-export interface DeleteExpression extends UnaryExpression {
-    readonly kind: SyntaxKind.DeleteExpression;
-    readonly expression: UnaryExpression;
+// dprint-ignore
+export class DeleteExpression extends Node<SyntaxKind.DeleteExpression, AstDeleteExpressionData> implements UnaryExpression {
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstDeleteExpression;
+
+    get expression(): UnaryExpression { return this.ast.data.expression.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
 }
 
-export interface TypeOfExpression extends UnaryExpression {
-    readonly kind: SyntaxKind.TypeOfExpression;
-    readonly expression: UnaryExpression;
+// dprint-ignore
+export class TypeOfExpression extends Node<SyntaxKind.TypeOfExpression, AstTypeOfExpressionData> implements UnaryExpression {
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstTypeOfExpression;
+
+    get expression(): UnaryExpression { return this.ast.data.expression.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
 }
 
-export interface VoidExpression extends UnaryExpression {
-    readonly kind: SyntaxKind.VoidExpression;
-    readonly expression: UnaryExpression;
+// dprint-ignore
+export class VoidExpression extends Node<SyntaxKind.VoidExpression, AstVoidExpressionData> implements UnaryExpression {
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstVoidExpression;
+
+    get expression(): UnaryExpression { return this.ast.data.expression.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
 }
 
-export interface AwaitExpression extends UnaryExpression {
-    readonly kind: SyntaxKind.AwaitExpression;
-    readonly expression: UnaryExpression;
+// dprint-ignore
+export class AwaitExpression extends Node<SyntaxKind.AwaitExpression, AstAwaitExpressionData> implements UnaryExpression {
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstAwaitExpression;
+
+    get expression(): UnaryExpression { return this.ast.data.expression.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
 }
 
-export interface YieldExpression extends Expression {
-    readonly kind: SyntaxKind.YieldExpression;
-    readonly asteriskToken?: AsteriskToken;
-    readonly expression?: Expression;
+// dprint-ignore
+export class YieldExpression extends Node<SyntaxKind.YieldExpression, AstYieldExpressionData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstYieldExpression;
+
+    get asteriskToken(): AsteriskToken | undefined { return this.ast.data.asteriskToken?.node; }
+    get expression(): Expression | undefined { return this.ast.data.expression?.node; }
+
+    /** @internal */ set asteriskToken(value) { this.ast.data.asteriskToken = value?.ast; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value?.ast; }
 }
 
-export interface SyntheticExpression extends Expression {
-    readonly kind: SyntaxKind.SyntheticExpression;
-    readonly isSpread: boolean;
-    readonly type: Type;
-    readonly tupleNameSource?: ParameterDeclaration | NamedTupleMember;
+// dprint-ignore
+export class SyntheticExpression extends Node<SyntaxKind.SyntheticExpression, AstSyntheticExpressionData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstSyntheticExpression;
+
+    get isSpread(): boolean { return this.ast.data.isSpread; }
+    get type(): Type { return this.ast.data.type; }
+    get tupleNameSource(): ParameterDeclaration | NamedTupleMember | undefined { return this.ast.data.tupleNameSource?.node; }
+
+    /** @internal */ set isSpread(value: boolean) { this.ast.data.isSpread = value; }
+    /** @internal */ set type(value: Type) { this.ast.data.type = value; }
+    /** @internal */ set tupleNameSource(value: ParameterDeclaration | NamedTupleMember | undefined) { this.ast.data.tupleNameSource = value?.ast; }
 }
 
 // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
@@ -2641,19 +4658,38 @@ export type LogicalOrCoalescingAssignmentOperator =
 
 export type BinaryOperatorToken = Token<BinaryOperator>;
 
-export interface BinaryExpression extends Expression, Declaration, JSDocContainer {
-    readonly kind: SyntaxKind.BinaryExpression;
-    readonly left: Expression;
-    readonly operatorToken: BinaryOperatorToken;
-    readonly right: Expression;
+// dprint-ignore
+export class BinaryExpression extends Node<SyntaxKind.BinaryExpression, AstBinaryExpressionData> implements Expression, Declaration, JSDocContainer {
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstBinaryExpression;
+
+    get left(): Expression { return this.ast.data.left.node; }
+    get operatorToken(): BinaryOperatorToken { return this.ast.data.operatorToken.node; }
+    get right(): Expression { return this.ast.data.right.node; }
+
+    /** @internal */ set left(value) { this.ast.data.left = value.ast; }
+    /** @internal */ set operatorToken(value) { this.ast.data.operatorToken = value.ast; }
+    /** @internal */ set right(value) { this.ast.data.right = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export type AssignmentOperatorToken = Token<AssignmentOperator>;
 
-export interface AssignmentExpression<TOperator extends AssignmentOperatorToken> extends BinaryExpression {
+export type AssignmentExpression<TOperator extends AssignmentOperatorToken> = BinaryExpression & {
     readonly left: LeftHandSideExpression;
     readonly operatorToken: TOperator;
-}
+    readonly data: {
+        readonly left: AstLeftHandSideExpression;
+        readonly operatorToken: TOperator;
+    };
+};
 
 export interface ObjectDestructuringAssignment extends AssignmentExpression<EqualsToken> {
     readonly left: ObjectLiteralExpression;
@@ -2728,59 +4764,195 @@ export type AssignmentPattern = ObjectLiteralExpression | ArrayLiteralExpression
 
 export type BindingOrAssignmentPattern = ObjectBindingOrAssignmentPattern | ArrayBindingOrAssignmentPattern;
 
-export interface ConditionalExpression extends Expression {
-    readonly kind: SyntaxKind.ConditionalExpression;
-    readonly condition: Expression;
-    readonly questionToken: QuestionToken;
-    readonly whenTrue: Expression;
-    readonly colonToken: ColonToken;
-    readonly whenFalse: Expression;
+export interface InstanceofExpression extends BinaryExpression {
+    readonly operatorToken: Token<SyntaxKind.InstanceOfKeyword>;
+}
+
+// dprint-ignore
+export class ConditionalExpression extends Node<SyntaxKind.ConditionalExpression, AstConditionalExpressionData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstConditionalExpression;
+
+    get condition(): Expression { return this.ast.data.condition.node; }
+    get questionToken(): QuestionToken { return this.ast.data.questionToken.node; }
+    get whenTrue(): Expression { return this.ast.data.whenTrue.node; }
+    get colonToken(): ColonToken { return this.ast.data.colonToken.node; }
+    get whenFalse(): Expression { return this.ast.data.whenFalse.node; }
+
+    /** @internal */ set condition(value) { this.ast.data.condition = value.ast; }
+    /** @internal */ set questionToken(value) { this.ast.data.questionToken = value.ast; }
+    /** @internal */ set whenTrue(value) { this.ast.data.whenTrue = value.ast; }
+    /** @internal */ set colonToken(value) { this.ast.data.colonToken = value.ast; }
+    /** @internal */ set whenFalse(value) { this.ast.data.whenFalse = value.ast; }
 }
 
 export type FunctionBody = Block;
 export type ConciseBody = FunctionBody | Expression;
 
-export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer {
-    readonly kind: SyntaxKind.FunctionExpression;
-    readonly modifiers?: NodeArray<Modifier>;
-    readonly name?: Identifier;
-    readonly body: FunctionBody; // Required, whereas the member inherited from FunctionDeclaration is optional
+// dprint-ignore
+export class FunctionExpression extends Node<SyntaxKind.FunctionExpression, AstFunctionExpressionData> implements PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _functionLikeDeclarationBrand: any;
+    declare _signatureDeclarationBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstFunctionExpression;
+
+    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
+    get asteriskToken(): AsteriskToken | undefined { return this.ast.data.asteriskToken?.node; }
+    get name(): Identifier | undefined { return this.ast.data.name?.node; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+    get body(): Block { return this.ast.data.body.node; }
+
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set asteriskToken(value) { this.ast.data.asteriskToken = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ set body(value) { this.ast.data.body = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    /** @internal */ get endFlowNode(): FlowNode | undefined { return this.ast.data.endFlowNode; }
+    /** @internal */ set endFlowNode(value) { this.ast.data.endFlowNode = value; }
+    /** @internal */ get returnFlowNode(): FlowNode | undefined { return this.ast.data.returnFlowNode; }
+    /** @internal */ set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
 }
 
-export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer {
-    readonly kind: SyntaxKind.ArrowFunction;
-    readonly modifiers?: NodeArray<Modifier>;
-    readonly equalsGreaterThanToken: EqualsGreaterThanToken;
-    readonly body: ConciseBody;
-    readonly name: never;
+// dprint-ignore
+export class ArrowFunction extends Node<SyntaxKind.ArrowFunction, AstArrowFunctionData> implements Expression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer {
+    declare _expressionBrand: any;
+    declare _functionLikeDeclarationBrand: any;
+    declare _signatureDeclarationBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstArrowFunction;
+
+    get modifiers(): NodeArray<Modifier> | undefined { return this.ast.data.modifiers?.nodes; }
+    get equalsGreaterThanToken(): EqualsGreaterThanToken { return this.ast.data.equalsGreaterThanToken.node; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+    get body(): Block | Expression { return this.ast.data.body.node; }
+
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set equalsGreaterThanToken(value) { this.ast.data.equalsGreaterThanToken = value.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ set body(value) { this.ast.data.body = value.ast; }
+    /** @internal */ get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
+    /** @internal */ get endFlowNode(): FlowNode | undefined { return this.ast.data.endFlowNode; }
+    /** @internal */ set endFlowNode(value) { this.ast.data.endFlowNode = value; }
+    /** @internal */ get returnFlowNode(): FlowNode | undefined { return this.ast.data.returnFlowNode; }
+    /** @internal */ set returnFlowNode(value) { this.ast.data.returnFlowNode = value; }
 }
 
+// TODO(rbuckton): Move adjacent to tokens and other literals.
 // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
 // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
 // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
 export interface LiteralLikeNode extends Node {
-    text: string;
-    isUnterminated?: boolean;
-    hasExtendedUnicodeEscape?: boolean;
+    // readonly ast: AstLiteralLikeNode;
+    readonly data: AstLiteralLikeNodeData;
+
+    get text(): string;
+
+    /** @internal */ set text(value: string);
 }
 
-export interface TemplateLiteralLikeNode extends LiteralLikeNode {
-    rawText?: string;
-    /** @internal */
-    templateFlags?: TokenFlags;
+// TODO(rbuckton): Move adjacent to tokens and other literals.
+export interface StringLiteralLikeNode extends LiteralLikeNode {
+    // readonly ast: AstStringLiteralLikeNode;
+    readonly data: AstStringLiteralLikeNodeData;
+
+    get isUnterminated(): boolean | undefined;
+    get hasExtendedUnicodeEscape(): boolean | undefined;
+
+    /** @internal */ set isUnterminated(value: boolean | undefined);
+    /** @internal */ set hasExtendedUnicodeEscape(value: boolean | undefined);
 }
 
+// TODO(rbuckton): Move adjacent to tokens and other literals.
+export interface TemplateLiteralLikeNode extends StringLiteralLikeNode {
+    // readonly ast: AstTemplateLiteralLikeNode;
+    readonly data: AstTemplateLiteralLikeNodeData;
+
+    get rawText(): string | undefined;
+
+    /** @internal */ set rawText(value: string | undefined);
+    /** @internal */ get templateFlags(): TokenFlags | undefined;
+    /** @internal */ set templateFlags(value: TokenFlags | undefined);
+}
+
+// TODO(rbuckton): Move adjacent to tokens and other literals.
 // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
 // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
 // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
 export interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
     _literalExpressionBrand: any;
+    // readonly ast: AstLiteralExpression;
+    readonly data: AstLiteralExpressionData;
 }
 
-export interface RegularExpressionLiteral extends LiteralExpression {
-    readonly kind: SyntaxKind.RegularExpressionLiteral;
+// TODO(rbuckton): Move adjacent to tokens and other literals.
+// dprint-ignore
+export class RegularExpressionLiteral extends Token<SyntaxKind.RegularExpressionLiteral, AstRegularExpressionLiteralData> implements StringLiteralLikeNode {
+    declare _literalExpressionBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstRegularExpressionLiteral;
+
+    get text(): string { return this.ast.data.text; }
+    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
+    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
+
+    /** @internal */ set text(value) { this.ast.data.text = value; }
+    /** @internal */ set isUnterminated(value) { this.ast.data.isUnterminated = value; }
+    /** @internal */ set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
 }
 
+// TODO(rbuckton): Move adjacent to tokens and other literals.
 // dprint-ignore
 /** @internal */
 export const enum RegularExpressionFlags {
@@ -2797,12 +4969,37 @@ export const enum RegularExpressionFlags {
     Modifiers      = IgnoreCase | Multiline | DotAll,
 }
 
-export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
-    readonly kind: SyntaxKind.NoSubstitutionTemplateLiteral;
-    /** @internal */
-    templateFlags?: TokenFlags;
+// TODO(rbuckton): Move adjacent to tokens and other literals.
+// dprint-ignore
+export class NoSubstitutionTemplateLiteral extends Token<SyntaxKind.NoSubstitutionTemplateLiteral, AstNoSubstitutionTemplateLiteralData> implements LiteralExpression, TemplateLiteralLikeNode, Declaration {
+    declare _literalExpressionBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    // declare readonly ast: AstNoSubstitutionTemplateLiteral;
+
+    get text(): string { return this.ast.data.text; }
+    get rawText(): string | undefined { return this.ast.data.rawText; }
+    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
+    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
+
+    /** @internal */ set text(value) { this.ast.data.text = value; }
+    /** @internal */ set rawText(value) { this.ast.data.rawText = value; }
+    /** @internal */ set isUnterminated(value) { this.ast.data.isUnterminated = value; }
+    /** @internal */ set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
+    /** @internal */ get templateFlags(): TokenFlags { return this.ast.data.templateFlags; }
+    /** @internal */ set templateFlags(value) { this.ast.data.templateFlags = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
+// TODO(rbuckton): Move adjacent to tokens and other literals.
 // dprint-ignore
 export const enum TokenFlags {
     None = 0,
@@ -2847,16 +5044,47 @@ export const enum TokenFlags {
     IsInvalid = Octal | ContainsLeadingZero | ContainsInvalidSeparator | ContainsInvalidEscape,
 }
 
-export interface NumericLiteral extends LiteralExpression, Declaration {
-    readonly kind: SyntaxKind.NumericLiteral;
-    /** @internal */
-    readonly numericLiteralFlags: TokenFlags;
+// TODO(rbuckton): Move adjacent to tokens and other literals.
+// dprint-ignore
+export class NumericLiteral extends Token<SyntaxKind.NumericLiteral, AstNumericLiteralData> implements LiteralExpression, LiteralLikeNode, Declaration {
+    declare _literalExpressionBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    // declare readonly ast: AstNumericLiteral;
+
+    get text(): string { return this.ast.data.text; }
+
+    /** @internal */ set text(value) { this.ast.data.text = value; }
+    /** @internal */ get numericLiteralFlags(): TokenFlags { return this.ast.data.numericLiteralFlags; }
+    /** @internal */ set numericLiteralFlags(value) { this.ast.data.numericLiteralFlags = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface BigIntLiteral extends LiteralExpression {
-    readonly kind: SyntaxKind.BigIntLiteral;
+// TODO(rbuckton): Move adjacent to tokens and other literals.
+// dprint-ignore
+export class BigIntLiteral extends Token<SyntaxKind.BigIntLiteral, AstBigIntLiteralData> implements LiteralExpression, LiteralLikeNode {
+    declare _literalExpressionBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstBigIntLiteral;
+
+    get text(): string { return this.ast.data.text; }
+    /** @internal */ set text(value) { this.ast.data.text = value; }
 }
 
+// TODO(rbuckton): Move adjacent to tokens and other literals.
 export type LiteralToken =
     | NumericLiteral
     | BigIntLiteral
@@ -2865,40 +5093,95 @@ export type LiteralToken =
     | RegularExpressionLiteral
     | NoSubstitutionTemplateLiteral;
 
-export interface TemplateHead extends TemplateLiteralLikeNode {
-    readonly kind: SyntaxKind.TemplateHead;
-    readonly parent: TemplateExpression | TemplateLiteralTypeNode;
-    /** @internal */
-    templateFlags?: TokenFlags;
+// TODO(rbuckton): Move adjacent to tokens and other literals.
+// dprint-ignore
+export class TemplateHead extends Token<SyntaxKind.TemplateHead, AstTemplateHeadData> implements TemplateLiteralLikeNode {
+    // declare readonly ast: AstTemplateHead;
+
+    override get parent() { return super.parent as TemplateExpression | TemplateLiteralTypeNode; }
+
+    get text(): string { return this.ast.data.text; }
+    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
+    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
+    get rawText(): string | undefined { return this.ast.data.rawText; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set text(value) { this.ast.data.text = value; }
+    /** @internal */ set isUnterminated(value) { this.ast.data.isUnterminated = value; }
+    /** @internal */ set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
+    /** @internal */ set rawText(value) { this.ast.data.rawText = value; }
+    /** @internal */ get templateFlags(): TokenFlags { return this.ast.data.templateFlags; }
+    /** @internal */ set templateFlags(value) { this.ast.data.templateFlags = value; }
 }
 
-export interface TemplateMiddle extends TemplateLiteralLikeNode {
-    readonly kind: SyntaxKind.TemplateMiddle;
-    readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
-    /** @internal */
-    templateFlags?: TokenFlags;
+// TODO(rbuckton): Move adjacent to tokens and other literals.
+// dprint-ignore
+export class TemplateMiddle extends Token<SyntaxKind.TemplateMiddle, AstTemplateMiddleData> implements TemplateLiteralLikeNode {
+    // declare readonly ast: AstTemplateMiddle;
+
+    override get parent() { return super.parent as TemplateSpan | TemplateLiteralTypeSpan; }
+
+    get text(): string { return this.ast.data.text; }
+    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
+    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
+    get rawText(): string | undefined { return this.ast.data.rawText; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set text(value) { this.ast.data.text = value; }
+    /** @internal */ set isUnterminated(value) { this.ast.data.isUnterminated = value; }
+    /** @internal */ set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
+    /** @internal */ set rawText(value) { this.ast.data.rawText = value; }
+    /** @internal */ get templateFlags(): TokenFlags { return this.ast.data.templateFlags; }
+    /** @internal */ set templateFlags(value) { this.ast.data.templateFlags = value; }
 }
 
-export interface TemplateTail extends TemplateLiteralLikeNode {
-    readonly kind: SyntaxKind.TemplateTail;
-    readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
-    /** @internal */
-    templateFlags?: TokenFlags;
+// TODO(rbuckton): Move adjacent to tokens and other literals.
+// dprint-ignore
+export class TemplateTail extends Token<SyntaxKind.TemplateTail, AstTemplateTailData> implements TemplateLiteralLikeNode {
+    // declare readonly ast: AstTemplateTail;
+
+    override get parent() { return super.parent as TemplateSpan | TemplateLiteralTypeSpan; }
+
+    get text(): string { return this.ast.data.text; }
+    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
+    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
+    get rawText(): string | undefined { return this.ast.data.rawText; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set text(value) { this.ast.data.text = value; }
+    /** @internal */ set isUnterminated(value) { this.ast.data.isUnterminated = value; }
+    /** @internal */ set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
+    /** @internal */ set rawText(value) { this.ast.data.rawText = value; }
+    /** @internal */ get templateFlags(): TokenFlags { return this.ast.data.templateFlags; }
+    /** @internal */ set templateFlags(value) { this.ast.data.templateFlags = value; }
 }
 
+// TODO(rbuckton): Move adjacent to tokens and other literals.
 export type PseudoLiteralToken =
     | TemplateHead
     | TemplateMiddle
     | TemplateTail;
 
+// TODO(rbuckton): Move adjacent to tokens and other literals.
 export type TemplateLiteralToken =
     | NoSubstitutionTemplateLiteral
     | PseudoLiteralToken;
 
-export interface TemplateExpression extends PrimaryExpression {
-    readonly kind: SyntaxKind.TemplateExpression;
-    readonly head: TemplateHead;
-    readonly templateSpans: NodeArray<TemplateSpan>;
+// dprint-ignore
+export class TemplateExpression extends Node<SyntaxKind.TemplateExpression, AstTemplateExpressionData> implements PrimaryExpression {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstTemplateExpression;
+
+    get head(): TemplateHead { return this.ast.data.head.node; }
+    get templateSpans(): NodeArray<TemplateSpan> { return this.ast.data.templateSpans.nodes; }
+
+    /** @internal */ set head(value) { this.ast.data.head = value.ast; }
+    /** @internal */ set templateSpans(value) { this.ast.data.templateSpans = value.ast; }
 }
 
 export type TemplateLiteral =
@@ -2907,16 +5190,36 @@ export type TemplateLiteral =
 
 // Each of these corresponds to a substitution expression and a template literal, in that order.
 // The template literal must have kind TemplateMiddleLiteral or TemplateTailLiteral.
-export interface TemplateSpan extends Node {
-    readonly kind: SyntaxKind.TemplateSpan;
-    readonly parent: TemplateExpression;
-    readonly expression: Expression;
-    readonly literal: TemplateMiddle | TemplateTail;
+// dprint-ignore
+export class TemplateSpan extends Node<SyntaxKind.TemplateSpan, AstTemplateSpanData> {
+    // declare readonly ast: AstTemplateSpan;
+
+    override get parent() { return super.parent as TemplateExpression; }
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+    get literal(): TemplateMiddle | TemplateTail { return this.ast.data.literal.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set literal(value) { this.ast.data.literal = value.ast; }
 }
 
-export interface ParenthesizedExpression extends PrimaryExpression, JSDocContainer {
-    readonly kind: SyntaxKind.ParenthesizedExpression;
-    readonly expression: Expression;
+// dprint-ignore
+export class ParenthesizedExpression extends Node<SyntaxKind.ParenthesizedExpression, AstParenthesizedExpressionData> implements PrimaryExpression, JSDocContainer {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstParenthesizedExpression;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
 }
 
 /** @internal */
@@ -2924,19 +5227,37 @@ export interface JSDocTypeAssertion extends ParenthesizedExpression {
     readonly _jsDocTypeAssertionBrand: never;
 }
 
-export interface ArrayLiteralExpression extends PrimaryExpression {
-    readonly kind: SyntaxKind.ArrayLiteralExpression;
-    readonly elements: NodeArray<Expression>;
-    /** @internal */
-    multiLine?: boolean;
+// dprint-ignore
+export class ArrayLiteralExpression extends Node<SyntaxKind.ArrayLiteralExpression, AstArrayLiteralExpressionData> implements PrimaryExpression {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstArrayLiteralExpression;
+
+    get elements(): NodeArray<Expression> { return this.ast.data.elements.nodes; }
+
+    /** @internal */ set elements(value: NodeArray<Expression>) { this.ast.data.elements = value.ast; }
+    /** @internal */ get multiLine(): boolean | undefined { return this.ast.data.multiLine; }
+    /** @internal */ set multiLine(value) { this.ast.data.multiLine = value; }
 }
 
-export interface SpreadElement extends Expression {
-    readonly kind: SyntaxKind.SpreadElement;
-    readonly parent: ArrayLiteralExpression | CallExpression | NewExpression;
-    readonly expression: Expression;
+// dprint-ignore
+export class SpreadElement extends Node<SyntaxKind.SpreadElement, AstSpreadElementData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstSpreadElement;
+
+    override get parent() { return super.parent as ArrayLiteralExpression | CallExpression | NewExpression; }
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
 }
 
+// TODO(rbuckton): Is this still needed?
 /**
  * This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
  * ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
@@ -2944,25 +5265,67 @@ export interface SpreadElement extends Expression {
  * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
  */
 export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
+    // readonly ast: AstNode<PrimaryExpression & Declaration>;
     readonly properties: NodeArray<T>;
 }
 
 // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
-export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike>, JSDocContainer {
-    readonly kind: SyntaxKind.ObjectLiteralExpression;
-    /** @internal */
-    multiLine?: boolean;
+// dprint-ignore
+export class ObjectLiteralExpression extends Node<SyntaxKind.ObjectLiteralExpression, AstObjectLiteralExpressionData> implements ObjectLiteralExpressionBase<ObjectLiteralElementLike>, JSDocContainer {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstObjectLiteralExpression;
+
+    get properties(): NodeArray<ObjectLiteralElementLike> { return this.ast.data.properties.nodes; }
+
+    /** @internal */ set properties(value) { this.ast.data.properties = value.ast; }
+    /** @internal */ get multiLine(): boolean | undefined { return this.ast.data.multiLine; }
+    /** @internal */ set multiLine(value) { this.ast.data.multiLine = value; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
 export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
 export type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
 
-export interface PropertyAccessExpression extends MemberExpression, NamedDeclaration, JSDocContainer, FlowContainer {
-    readonly kind: SyntaxKind.PropertyAccessExpression;
-    readonly expression: LeftHandSideExpression;
-    readonly questionDotToken?: QuestionDotToken;
-    readonly name: MemberName;
+// dprint-ignore
+export class PropertyAccessExpression extends Node<SyntaxKind.PropertyAccessExpression, AstPropertyAccessExpressionData> implements MemberExpression, NamedDeclaration, JSDocContainer, FlowContainer {
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstPropertyAccessExpression;
+
+    get expression(): LeftHandSideExpression { return this.ast.data.expression.node; }
+    get questionDotToken(): QuestionDotToken | undefined { return this.ast.data.questionDotToken?.node; }
+    get name(): Identifier | PrivateIdentifier { return this.ast.data.name.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
 /** @internal */
@@ -2970,36 +5333,78 @@ export interface PrivateIdentifierPropertyAccessExpression extends PropertyAcces
     readonly name: PrivateIdentifier;
 }
 
-export interface PropertyAccessChain extends PropertyAccessExpression {
+export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
+    // readonly ast: AstJsxTagNamePropertyAccess;
+    readonly data: AstJsxTagNamePropertyAccessData;
+    readonly expression: Identifier | ThisExpression | JsxTagNamePropertyAccess;
+}
+
+export type PropertyAccessChain = PropertyAccessExpression & {
     _optionalChainBrand: any;
     readonly name: MemberName;
-}
+    readonly data: {
+        readonly name: AstMemberName;
+    };
+};
 
 /** @internal */
-export interface PropertyAccessChainRoot extends PropertyAccessChain {
+export type PropertyAccessChainRoot = PropertyAccessChain & {
     readonly questionDotToken: QuestionDotToken;
-}
+    readonly data: {
+        readonly questionDotToken: AstQuestionDotToken;
+    };
+};
 
-export interface SuperPropertyAccessExpression extends PropertyAccessExpression {
+export type SuperPropertyAccessExpression = PropertyAccessExpression & {
     readonly expression: SuperExpression;
-}
+    readonly data: {
+        readonly expression: AstSuperExpression;
+    };
+};
 
 /** Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots. */
-export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
+export type PropertyAccessEntityNameExpression = PropertyAccessExpression & {
     _propertyAccessExpressionLikeQualifiedNameBrand?: any;
     readonly expression: EntityNameExpression;
     readonly name: Identifier;
-}
+    readonly data: {
+        readonly expression: AstEntityNameExpression;
+        readonly name: AstIdentifier;
+    };
+};
 
-export interface ElementAccessExpression extends MemberExpression, Declaration, JSDocContainer, FlowContainer {
-    readonly kind: SyntaxKind.ElementAccessExpression;
-    readonly expression: LeftHandSideExpression;
-    readonly questionDotToken?: QuestionDotToken;
-    readonly argumentExpression: Expression;
+// dprint-ignore
+export class ElementAccessExpression extends Node<SyntaxKind.ElementAccessExpression, AstElementAccessExpressionData> implements MemberExpression, Declaration, JSDocContainer, FlowContainer {
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstElementAccessExpression;
+
+    get expression(): LeftHandSideExpression { return this.ast.data.expression.node; }
+    get questionDotToken(): QuestionDotToken | undefined { return this.ast.data.questionDotToken?.node; }
+    get argumentExpression(): Expression { return this.ast.data.argumentExpression.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
+    /** @internal */ set argumentExpression(value) { this.ast.data.argumentExpression = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
 export interface ElementAccessChain extends ElementAccessExpression {
     _optionalChainBrand: any;
+    // readonly ast: AstElementAccessChain;
 }
 
 /** @internal */
@@ -3014,16 +5419,33 @@ export interface SuperElementAccessExpression extends ElementAccessExpression {
 // see: https://tc39.github.io/ecma262/#prod-SuperProperty
 export type SuperProperty = SuperPropertyAccessExpression | SuperElementAccessExpression;
 
-export interface CallExpression extends LeftHandSideExpression, Declaration {
-    readonly kind: SyntaxKind.CallExpression;
-    readonly expression: LeftHandSideExpression;
-    readonly questionDotToken?: QuestionDotToken;
-    readonly typeArguments?: NodeArray<TypeNode>;
-    readonly arguments: NodeArray<Expression>;
+// dprint-ignore
+export class CallExpression extends Node<SyntaxKind.CallExpression, AstCallExpressionData> implements LeftHandSideExpression, Declaration {
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    // declare readonly ast: AstCallExpression;
+
+    get expression(): LeftHandSideExpression { return this.ast.data.expression.node; }
+    get questionDotToken(): QuestionDotToken | undefined { return this.ast.data.questionDotToken?.node; }
+    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    get arguments(): NodeArray<Expression> { return this.ast.data.arguments.nodes; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ set arguments(value) { this.ast.data.arguments = value.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export interface CallChain extends CallExpression {
     _optionalChainBrand: any;
+    // readonly ast: AstCallChain;
 }
 
 /** @internal */
@@ -3046,6 +5468,9 @@ export type OptionalChainRoot =
 /** @internal */
 export type BindableObjectDefinePropertyCall = CallExpression & {
     readonly arguments: readonly [BindableStaticNameExpression, StringLiteralLike | NumericLiteral, ObjectLiteralExpression] & Readonly<TextRange>;
+    readonly data: {
+        readonly arguments: { readonly items: readonly [AstBindableStaticNameExpression, AstStringLiteralLike | AstNumericLiteral, AstObjectLiteralExpression]; } & Readonly<TextRange>
+    };
 };
 
 /** @internal */
@@ -3056,16 +5481,25 @@ export type BindableStaticNameExpression =
 /** @internal */
 export type LiteralLikeElementAccessExpression = ElementAccessExpression & Declaration & {
     readonly argumentExpression: StringLiteralLike | NumericLiteral;
+    readonly data: {
+        readonly argumentExpression: AstStringLiteralLike | AstNumericLiteral;
+    };
 };
 
 /** @internal */
 export type BindableStaticElementAccessExpression = LiteralLikeElementAccessExpression & {
     readonly expression: BindableStaticNameExpression;
+    readonly data: {
+        readonly expression: AstBindableStaticNameExpression;
+    };
 };
 
 /** @internal */
 export type BindableElementAccessExpression = ElementAccessExpression & {
     readonly expression: BindableStaticNameExpression;
+    readonly data: {
+        readonly expression: AstBindableStaticNameExpression;
+    };
 };
 
 /** @internal */
@@ -3079,14 +5513,20 @@ export type BindableAccessExpression =
     | BindableElementAccessExpression;
 
 /** @internal */
-export interface BindableStaticPropertyAssignmentExpression extends BinaryExpression {
+export type BindableStaticPropertyAssignmentExpression = BinaryExpression & {
     readonly left: BindableStaticAccessExpression;
-}
+    readonly data: {
+        readonly left: AstBindableStaticAccessExpression;
+    };
+};
 
 /** @internal */
-export interface BindablePropertyAssignmentExpression extends BinaryExpression {
+export type BindablePropertyAssignmentExpression = BinaryExpression & {
     readonly left: BindableAccessExpression;
-}
+    readonly data: {
+        readonly left: AstBindableStaticAccessExpression;
+    };
+};
 
 // see: https://tc39.github.io/ecma262/#prod-SuperCall
 export interface SuperCall extends CallExpression {
@@ -3097,28 +5537,65 @@ export interface ImportCall extends CallExpression {
     readonly expression: ImportExpression;
 }
 
-export interface ExpressionWithTypeArguments extends MemberExpression, NodeWithTypeArguments {
-    readonly kind: SyntaxKind.ExpressionWithTypeArguments;
-    readonly expression: LeftHandSideExpression;
+// dprint-ignore
+export class ExpressionWithTypeArguments extends Node<SyntaxKind.ExpressionWithTypeArguments, AstExpressionWithTypeArgumentsData> implements MemberExpression, NodeWithTypeArguments {
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstExpressionWithTypeArguments;
+
+    get expression(): LeftHandSideExpression { return this.ast.data.expression.node; }
+    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
 }
 
-export interface NewExpression extends PrimaryExpression, Declaration {
-    readonly kind: SyntaxKind.NewExpression;
-    readonly expression: LeftHandSideExpression;
-    readonly typeArguments?: NodeArray<TypeNode>;
-    readonly arguments?: NodeArray<Expression>;
+// dprint-ignore
+export class NewExpression extends Node<SyntaxKind.NewExpression, AstNewExpressionData> implements PrimaryExpression, Declaration {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    // declare readonly ast: AstNewExpression;
+
+    get expression(): LeftHandSideExpression { return this.ast.data.expression.node; }
+    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    get arguments(): NodeArray<Expression> | undefined { return this.ast.data.arguments?.nodes; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ set arguments(value) { this.ast.data.arguments = value?.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface TaggedTemplateExpression extends MemberExpression {
-    readonly kind: SyntaxKind.TaggedTemplateExpression;
-    readonly tag: LeftHandSideExpression;
-    readonly typeArguments?: NodeArray<TypeNode>;
-    readonly template: TemplateLiteral;
-    /** @internal */ questionDotToken?: QuestionDotToken; // NOTE: Invalid syntax, only used to report a grammar error.
-}
+// dprint-ignore
+export class TaggedTemplateExpression extends Node<SyntaxKind.TaggedTemplateExpression, AstTaggedTemplateExpressionData> implements MemberExpression {
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstTaggedTemplateExpression;
 
-export interface InstanceofExpression extends BinaryExpression {
-    readonly operatorToken: Token<SyntaxKind.InstanceOfKeyword>;
+    get tag(): LeftHandSideExpression { return this.ast.data.tag.node; }
+    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    get template(): NoSubstitutionTemplateLiteral | TemplateExpression { return this.ast.data.template.node; }
+
+    /** @internal */ set tag(value) { this.ast.data.tag = value.ast; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ set template(value) { this.ast.data.template = value.ast; }
+    /** @internal */ get questionDotToken(): QuestionDotToken | undefined { return this.ast.data.questionDotToken?.node; }
+    /** @internal */ set questionDotToken(value) { this.ast.data.questionDotToken = value?.ast; }
 }
 
 export type CallLikeExpression =
@@ -3129,43 +5606,86 @@ export type CallLikeExpression =
     | JsxCallLike
     | InstanceofExpression;
 
-export interface AsExpression extends Expression {
-    readonly kind: SyntaxKind.AsExpression;
-    readonly expression: Expression;
-    readonly type: TypeNode;
+// dprint-ignore
+export class AsExpression extends Node<SyntaxKind.AsExpression, AstAsExpressionData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstAsExpression;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
 }
 
-export interface TypeAssertion extends UnaryExpression {
-    readonly kind: SyntaxKind.TypeAssertionExpression;
-    readonly type: TypeNode;
-    readonly expression: UnaryExpression;
+// dprint-ignore
+export class TypeAssertionExpression extends Node<SyntaxKind.TypeAssertionExpression, AstTypeAssertionExpressionData> implements UnaryExpression {
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstTypeAssertion;
+
+    get type(): TypeNode { return this.ast.data.type.node; }
+    get expression(): UnaryExpression { return this.ast.data.expression.node; }
+
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
 }
 
-export interface SatisfiesExpression extends Expression {
-    readonly kind: SyntaxKind.SatisfiesExpression;
-    readonly expression: Expression;
-    readonly type: TypeNode;
-}
+/** @deprecated Use `TypeAssertionExpression` instead */
+export type TypeAssertion = TypeAssertionExpression;
 
 export type AssertionExpression =
-    | TypeAssertion
+    | TypeAssertionExpression
     | AsExpression;
 
-export interface NonNullExpression extends LeftHandSideExpression {
-    readonly kind: SyntaxKind.NonNullExpression;
-    readonly expression: Expression;
+// dprint-ignore
+export class SatisfiesExpression extends Node<SyntaxKind.SatisfiesExpression, AstSatisfiesExpressionData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstSatisfiesExpression;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
+}
+
+// dprint-ignore
+export class NonNullExpression extends Node<SyntaxKind.NonNullExpression, AstNonNullExpressionData> implements LeftHandSideExpression {
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstNonNullExpression;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+
+    /** @internal */ set expression(value: Expression) { this.ast.data.expression = value.ast; }
 }
 
 export interface NonNullChain extends NonNullExpression {
     _optionalChainBrand: any;
+    // readonly ast: AstNonNullChain;
 }
 
-// NOTE: MetaProperty is really a MemberExpression, but we consider it a PrimaryExpression
-//       for the same reasons we treat NewExpression as a PrimaryExpression.
-export interface MetaProperty extends PrimaryExpression, FlowContainer {
-    readonly kind: SyntaxKind.MetaProperty;
-    readonly keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword;
-    readonly name: Identifier;
+// dprint-ignore
+export class MetaProperty extends Node<SyntaxKind.MetaProperty, AstMetaPropertyData> implements PrimaryExpression, FlowContainer {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstMetaProperty;
+
+    get keywordToken(): SyntaxKind.ImportKeyword | SyntaxKind.NewKeyword { return this.ast.data.keywordToken; }
+    get name(): Identifier { return this.ast.data.name.node; }
+
+    /** @internal */ set keywordToken(value: SyntaxKind.ImportKeyword | SyntaxKind.NewKeyword) { this.ast.data.keywordToken = value; }
+    /** @internal */ set name(value: Identifier) { this.ast.data.name = value.ast; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value) { this.ast.data.flowNode = value; }
 }
 
 /** @internal */
@@ -3175,11 +5695,23 @@ export interface ImportMetaProperty extends MetaProperty {
 }
 
 /// A JSX expression of the form <TagName attrs>...</TagName>
-export interface JsxElement extends PrimaryExpression {
-    readonly kind: SyntaxKind.JsxElement;
-    readonly openingElement: JsxOpeningElement;
-    readonly children: NodeArray<JsxChild>;
-    readonly closingElement: JsxClosingElement;
+// dprint-ignore
+export class JsxElement extends Node<SyntaxKind.JsxElement, AstJsxElementData> implements PrimaryExpression {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstJsxElement;
+
+    get openingElement(): JsxOpeningElement { return this.ast.data.openingElement.node; }
+    get children(): NodeArray<JsxChild> { return this.ast.data.children.nodes; }
+    get closingElement(): JsxClosingElement { return this.ast.data.closingElement.node; }
+
+    /** @internal */ set openingElement(value: JsxOpeningElement) { this.ast.data.openingElement = value.ast; }
+    /** @internal */ set children(value: NodeArray<JsxChild>) { this.ast.data.children = value.ast; }
+    /** @internal */ set closingElement(value: JsxClosingElement) { this.ast.data.closingElement = value.ast; }
 }
 
 /// Either the opening tag in a <Tag>...</Tag> pair or the lone <Tag /> in a self-closing form
@@ -3205,65 +5737,142 @@ export type JsxTagNameExpression =
     | JsxTagNamePropertyAccess
     | JsxNamespacedName;
 
-export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
-    readonly expression: Identifier | ThisExpression | JsxTagNamePropertyAccess;
+// dprint-ignore
+export class JsxAttributes extends Node<SyntaxKind.JsxAttributes, AstJsxAttributesData> implements PrimaryExpression, Declaration {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    // declare readonly ast: AstJsxAttributes;
+
+    override get parent() { return super.parent as JsxOpeningLikeElement; }
+
+    get properties(): NodeArray<JsxAttributeLike> { return this.ast.data.properties.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set properties(value) { this.ast.data.properties = value.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface JsxAttributes extends PrimaryExpression, Declaration {
-    readonly properties: NodeArray<JsxAttributeLike>;
-    readonly kind: SyntaxKind.JsxAttributes;
-    readonly parent: JsxOpeningLikeElement;
+// dprint-ignore
+export class JsxNamespacedName extends Node<SyntaxKind.JsxNamespacedName, AstJsxNamespacedNameData> {
+    // declare readonly ast: AstJsxNamespacedName;
+
+    get name(): Identifier { return this.ast.data.name.node; }
+    get namespace(): Identifier { return this.ast.data.namespace.node; }
+
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set namespace(value) { this.ast.data.namespace = value.ast; }
 }
 
-export interface JsxNamespacedName extends Node {
-    readonly kind: SyntaxKind.JsxNamespacedName;
-    readonly name: Identifier;
-    readonly namespace: Identifier;
-}
-
+// TODO(rbuckton): Is this actually an expression or just a part of JsxElement?
 /// The opening element of a <Tag>...</Tag> JsxElement
-export interface JsxOpeningElement extends Expression {
-    readonly kind: SyntaxKind.JsxOpeningElement;
-    readonly parent: JsxElement;
-    readonly tagName: JsxTagNameExpression;
-    readonly typeArguments?: NodeArray<TypeNode>;
-    readonly attributes: JsxAttributes;
+// dprint-ignore
+export class JsxOpeningElement extends Node<SyntaxKind.JsxOpeningElement, AstJsxOpeningElementData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstJsxOpeningElement;
+
+    override get parent() { return super.parent as JsxElement; }
+
+    get tagName(): JsxTagNameExpression { return this.ast.data.tagName.node; }
+    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    get attributes(): JsxAttributes { return this.ast.data.attributes.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set tagName(value) { this.ast.data.tagName = value.ast; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ set attributes(value) { this.ast.data.attributes = value.ast; }
 }
 
 /// A JSX expression of the form <TagName attrs />
-export interface JsxSelfClosingElement extends PrimaryExpression {
-    readonly kind: SyntaxKind.JsxSelfClosingElement;
-    readonly tagName: JsxTagNameExpression;
-    readonly typeArguments?: NodeArray<TypeNode>;
-    readonly attributes: JsxAttributes;
+// dprint-ignore
+export class JsxSelfClosingElement extends Node<SyntaxKind.JsxSelfClosingElement, AstJsxSelfClosingElementData> implements PrimaryExpression {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstJsxSelfClosingElement;
+
+    get tagName(): JsxTagNameExpression { return this.ast.data.tagName.node; }
+    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+    get attributes(): JsxAttributes { return this.ast.data.attributes.node; }
+
+    /** @internal */ set tagName(value) { this.ast.data.tagName = value.ast; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ set attributes(value) { this.ast.data.attributes = value.ast; }
 }
 
 /// A JSX expression of the form <>...</>
-export interface JsxFragment extends PrimaryExpression {
-    readonly kind: SyntaxKind.JsxFragment;
-    readonly openingFragment: JsxOpeningFragment;
-    readonly children: NodeArray<JsxChild>;
-    readonly closingFragment: JsxClosingFragment;
+// dprint-ignore
+export class JsxFragment extends Node<SyntaxKind.JsxFragment, AstJsxFragmentData> implements PrimaryExpression {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstJsxFragment;
+
+    get openingFragment(): JsxOpeningFragment { return this.ast.data.openingFragment.node; }
+    get children(): NodeArray<JsxChild> { return this.ast.data.children.nodes; }
+    get closingFragment(): JsxClosingFragment { return this.ast.data.closingFragment.node; }
+
+    /** @internal */ set openingFragment(value: JsxOpeningFragment) { this.ast.data.openingFragment = value.ast; }
+    /** @internal */ set children(value: NodeArray<JsxChild>) { this.ast.data.children = value.ast; }
+    /** @internal */ set closingFragment(value: JsxClosingFragment) { this.ast.data.closingFragment = value.ast; }
 }
 
+// TODO(rbuckton): Is this actually an expression or just a part of JsxFragment?
 /// The opening element of a <>...</> JsxFragment
-export interface JsxOpeningFragment extends Expression {
-    readonly kind: SyntaxKind.JsxOpeningFragment;
-    readonly parent: JsxFragment;
+// dprint-ignore
+export class JsxOpeningFragment extends Node<SyntaxKind.JsxOpeningFragment, AstJsxOpeningFragmentData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstJsxOpeningFragment;
+
+    override get parent() { return super.parent as JsxFragment; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
 }
 
+// TODO(rbuckton): Is this actually an expression or just a part of JsxFragment?
 /// The closing element of a <>...</> JsxFragment
-export interface JsxClosingFragment extends Expression {
-    readonly kind: SyntaxKind.JsxClosingFragment;
-    readonly parent: JsxFragment;
+// dprint-ignore
+export class JsxClosingFragment extends Node<SyntaxKind.JsxClosingFragment, AstJsxClosingFragmentData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstJsxClosingFragment;
+
+    override get parent() { return super.parent as JsxFragment; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
 }
 
-export interface JsxAttribute extends Declaration {
-    readonly kind: SyntaxKind.JsxAttribute;
-    readonly parent: JsxAttributes;
-    readonly name: JsxAttributeName;
-    /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
-    readonly initializer?: JsxAttributeValue;
+// dprint-ignore
+export class JsxAttribute extends Node<SyntaxKind.JsxAttribute, AstJsxAttributeData> implements Declaration {
+    // declare readonly ast: AstJsxAttribute;
+
+    declare _declarationBrand: any;
+
+    override get parent() { return super.parent as JsxAttributes; }
+
+    get name(): JsxAttributeName { return this.ast.data.name.node; }
+    // JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
+    get initializer(): JsxAttributeValue | undefined { return this.ast.data.initializer?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set initializer(value) { this.ast.data.initializer = value?.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export type JsxAttributeValue =
@@ -3273,29 +5882,69 @@ export type JsxAttributeValue =
     | JsxSelfClosingElement
     | JsxFragment;
 
-export interface JsxSpreadAttribute extends ObjectLiteralElement {
-    readonly kind: SyntaxKind.JsxSpreadAttribute;
-    readonly parent: JsxAttributes;
-    readonly expression: Expression;
+// TODO(rbuckton): Does this need to implement ObjectLiteralElement?
+// dprint-ignore
+export class JsxSpreadAttribute extends Node<SyntaxKind.JsxSpreadAttribute, AstJsxSpreadAttributeData> implements ObjectLiteralElement {
+    declare _objectLiteralBrand: any;
+    declare _declarationBrand: any;
+    // declare readonly ast: AstJsxSpreadAttribute;
+
+    /** @internal*/ declare symbol: never; // not actually a declaration
+    /** @internal*/ declare localSymbol: never; // not actually a declaration
+
+    override get parent() { return super.parent as JsxAttributes; }
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
 }
 
-export interface JsxClosingElement extends Node {
-    readonly kind: SyntaxKind.JsxClosingElement;
-    readonly parent: JsxElement;
-    readonly tagName: JsxTagNameExpression;
+// TODO(rbuckton): Move adjacent to JsxOpeningElement
+// dprint-ignore
+export class JsxClosingElement extends Node<SyntaxKind.JsxClosingElement, AstJsxClosingElementData> {
+    // declare readonly ast: AstJsxClosingElement;
+
+    override get parent() { return super.parent as JsxElement; }
+
+    get tagName(): JsxTagNameExpression { return this.ast.data.tagName.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set tagName(value) { this.ast.data.tagName = value.ast; }
 }
 
-export interface JsxExpression extends Expression {
-    readonly kind: SyntaxKind.JsxExpression;
-    readonly parent: JsxElement | JsxFragment | JsxAttributeLike;
-    readonly dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
-    readonly expression?: Expression;
+// TODO(rbuckton): Is this actually an expression?
+// dprint-ignore
+export class JsxExpression extends Node<SyntaxKind.JsxExpression, AstJsxExpressionData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstJsxExpression;
+
+    override get parent() { return super.parent as JsxElement | JsxFragment | JsxAttributeLike; }
+
+    get dotDotDotToken(): DotDotDotToken | undefined { return this.ast.data.dotDotDotToken?.node; }
+    get expression(): Expression | undefined { return this.ast.data.expression?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set dotDotDotToken(value) { this.ast.data.dotDotDotToken = value?.ast; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value?.ast; }
 }
 
-export interface JsxText extends LiteralLikeNode {
-    readonly kind: SyntaxKind.JsxText;
-    readonly parent: JsxElement | JsxFragment;
-    readonly containsOnlyTriviaWhiteSpaces: boolean;
+// dprint-ignore
+export class JsxText extends Token<SyntaxKind.JsxText, AstJsxTextData> implements LiteralLikeNode {
+    // declare readonly ast: AstJsxText;
+
+    override get parent() { return super.parent as JsxElement | JsxFragment; }
+
+    get text(): string { return this.ast.data.text; }
+    get isUnterminated(): boolean | undefined { return this.ast.data.isUnterminated; }
+    get hasExtendedUnicodeEscape(): boolean | undefined { return this.ast.data.hasExtendedUnicodeEscape; }
+    get containsOnlyTriviaWhiteSpaces(): boolean { return this.ast.data.containsOnlyTriviaWhiteSpaces; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set text(value) { this.ast.data.text = value; }
+    /** @internal */ set isUnterminated(value) { this.ast.data.isUnterminated = value; }
+    /** @internal */ set hasExtendedUnicodeEscape(value) { this.ast.data.hasExtendedUnicodeEscape = value; }
+    /** @internal */ set containsOnlyTriviaWhiteSpaces(value) { this.ast.data.containsOnlyTriviaWhiteSpaces = value; }
 }
 
 export type JsxChild =
@@ -3305,49 +5954,112 @@ export type JsxChild =
     | JsxSelfClosingElement
     | JsxFragment;
 
-export interface Statement extends Node, JSDocContainer {
+export interface Statement extends JSDocContainer {
     _statementBrand: any;
+    // readonly ast: AstStatement;
 }
 
 // Represents a statement that is elided as part of a transformation to emit comments on a
 // not-emitted node.
-export interface NotEmittedStatement extends Statement {
-    readonly kind: SyntaxKind.NotEmittedStatement;
+// dprint-ignore
+export class NotEmittedStatement extends Node<SyntaxKind.NotEmittedStatement, AstNotEmittedStatementData> implements Statement {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstNotEmittedStatement;
+
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
 }
 
-export interface NotEmittedTypeElement extends TypeElement {
-    readonly kind: SyntaxKind.NotEmittedTypeElement;
+// TODO(rbuckton): Move adjacent to other type elements
+// dprint-ignore
+export class NotEmittedTypeElement extends Node<SyntaxKind.NotEmittedTypeElement, AstNotEmittedTypeElementData> implements TypeElement {
+    declare _typeElementBrand: any;
+    declare _declarationBrand: any;
+    // declare readonly ast: AstNotEmittedTypeElement;
+
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value: Symbol) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value: Symbol | undefined) { this.ast.data.localSymbol = value; }
 }
 
 /**
  * A list of comma-separated expressions. This node is only created by transformations.
  */
-export interface CommaListExpression extends Expression {
-    readonly kind: SyntaxKind.CommaListExpression;
-    readonly elements: NodeArray<Expression>;
+// dprint-ignore
+export class CommaListExpression extends Node<SyntaxKind.CommaListExpression, AstCommaListExpressionData> implements Expression {
+    declare _expressionBrand: any;
+    // declare readonly ast: AstCommaListExpression;
+
+    get elements(): NodeArray<Expression> { return this.ast.data.elements.nodes; }
+
+    /** @internal */ set elements(value: NodeArray<Expression>) { this.ast.data.elements = value.ast; }
 }
 
 /** @internal */
-export interface SyntheticReferenceExpression extends LeftHandSideExpression {
-    readonly kind: SyntaxKind.SyntheticReferenceExpression;
-    readonly expression: Expression;
-    readonly thisArg: Expression;
+// dprint-ignore
+export class SyntheticReferenceExpression extends Node<SyntaxKind.SyntheticReferenceExpression, AstSyntheticReferenceExpressionData> implements LeftHandSideExpression {
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstSyntheticReferenceExpression;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+    get thisArg(): Expression { return this.ast.data.thisArg.node; }
+
+    /** @internal */ set expression(value: Expression) { this.ast.data.expression = value.ast; }
+    /** @internal */ set thisArg(value: Expression) { this.ast.data.thisArg = value.ast; }
 }
 
-export interface EmptyStatement extends Statement {
-    readonly kind: SyntaxKind.EmptyStatement;
+// dprint-ignore
+export class EmptyStatement extends Node<SyntaxKind.EmptyStatement, AstEmptyStatementData> implements Statement, JSDocContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstEmptyStatement;
+
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
 }
 
-export interface DebuggerStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.DebuggerStatement;
+// dprint-ignore
+export class DebuggerStatement extends Node<SyntaxKind.DebuggerStatement, AstDebuggerStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstDebuggerStatement;
+
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface MissingDeclaration extends DeclarationStatement, PrimaryExpression {
-    readonly kind: SyntaxKind.MissingDeclaration;
-    readonly name?: Identifier;
+// dprint-ignore
+export class MissingDeclaration extends Node<SyntaxKind.MissingDeclaration, AstMissingDeclarationData> implements DeclarationStatement {
+    declare _declarationBrand: any;
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstMissingDeclaration;
 
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
+    get name(): Identifier | undefined { return this.ast.data.name?.node; }
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export type BlockLike =
@@ -3356,21 +6068,58 @@ export type BlockLike =
     | ModuleBlock
     | CaseOrDefaultClause;
 
-export interface Block extends Statement, LocalsContainer {
-    readonly kind: SyntaxKind.Block;
-    readonly statements: NodeArray<Statement>;
-    /** @internal */ multiLine?: boolean;
+// dprint-ignore
+export class Block extends Node<SyntaxKind.Block, AstBlockData> implements Statement, LocalsContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstBlock;
+
+    get statements(): NodeArray<Statement> { return this.ast.data.statements.nodes; }
+
+    /** @internal */ set statements(value) { this.ast.data.statements = value.ast; }
+    /** @internal */ get multiLine(): boolean | undefined { return this.ast.data.multiLine; }
+    /** @internal */ set multiLine(value) { this.ast.data.multiLine = value; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface VariableStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.VariableStatement;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly declarationList: VariableDeclarationList;
+// dprint-ignore
+export class VariableStatement extends Node<SyntaxKind.VariableStatement, AstVariableStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstVariableStatement;
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get declarationList(): VariableDeclarationList { return this.ast.data.declarationList.node; }
+
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set declarationList(value) { this.ast.data.declarationList = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface ExpressionStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.ExpressionStatement;
-    readonly expression: Expression;
+// dprint-ignore
+export class ExpressionStatement extends Node<SyntaxKind.ExpressionStatement, AstExpressionStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstExpressionStatement;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
 /** @internal */
@@ -3378,135 +6127,368 @@ export interface PrologueDirective extends ExpressionStatement {
     readonly expression: StringLiteral;
 }
 
-export interface IfStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.IfStatement;
-    readonly expression: Expression;
-    readonly thenStatement: Statement;
-    readonly elseStatement?: Statement;
+// dprint-ignore
+export class IfStatement extends Node<SyntaxKind.IfStatement, AstIfStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstIfStatement;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+    get thenStatement(): Statement { return this.ast.data.thenStatement.node; }
+    get elseStatement(): Statement | undefined { return this.ast.data.elseStatement?.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set thenStatement(value) { this.ast.data.thenStatement = value.ast; }
+    /** @internal */ set elseStatement(value) { this.ast.data.elseStatement = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
 export interface IterationStatement extends Statement {
     readonly statement: Statement;
 }
 
-export interface DoStatement extends IterationStatement, FlowContainer {
-    readonly kind: SyntaxKind.DoStatement;
-    readonly expression: Expression;
+// dprint-ignore
+export class DoStatement extends Node<SyntaxKind.DoStatement, AstDoStatementData> implements IterationStatement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstDoStatement;
+
+    get statement(): Statement { return this.ast.data.statement.node; }
+    get expression(): Expression { return this.ast.data.expression.node; }
+
+    /** @internal */ set statement(value) { this.ast.data.statement = value.ast; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface WhileStatement extends IterationStatement, FlowContainer {
-    readonly kind: SyntaxKind.WhileStatement;
-    readonly expression: Expression;
+// dprint-ignore
+export class WhileStatement extends Node<SyntaxKind.WhileStatement, AstWhileStatementData> implements IterationStatement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstWhileStatement;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+    get statement(): Statement { return this.ast.data.statement.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set statement(value) { this.ast.data.statement = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
 export type ForInitializer =
     | VariableDeclarationList
     | Expression;
 
-export interface ForStatement extends IterationStatement, LocalsContainer, FlowContainer {
-    readonly kind: SyntaxKind.ForStatement;
-    readonly initializer?: ForInitializer;
-    readonly condition?: Expression;
-    readonly incrementor?: Expression;
+// dprint-ignore
+export class ForStatement extends Node<SyntaxKind.ForStatement, AstForStatementData> implements IterationStatement, LocalsContainer, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstForStatement;
+
+    get initializer(): ForInitializer | undefined { return this.ast.data.initializer?.node; }
+    get condition(): Expression | undefined { return this.ast.data.condition?.node; }
+    get incrementor(): Expression | undefined { return this.ast.data.incrementor?.node; }
+    get statement(): Statement { return this.ast.data.statement.node; }
+
+    /** @internal */ set initializer(value) { this.ast.data.initializer = value?.ast; }
+    /** @internal */ set condition(value) { this.ast.data.condition = value?.ast; }
+    /** @internal */ set incrementor(value) { this.ast.data.incrementor = value?.ast; }
+    /** @internal */ set statement(value) { this.ast.data.statement = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
 export type ForInOrOfStatement =
     | ForInStatement
     | ForOfStatement;
 
-export interface ForInStatement extends IterationStatement, LocalsContainer, FlowContainer {
-    readonly kind: SyntaxKind.ForInStatement;
-    readonly initializer: ForInitializer;
-    readonly expression: Expression;
+// dprint-ignore
+export class ForInStatement extends Node<SyntaxKind.ForInStatement, AstForInStatementData> implements IterationStatement, LocalsContainer, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstForInStatement;
+
+    get initializer(): ForInitializer { return this.ast.data.initializer.node; }
+    get expression(): Expression { return this.ast.data.expression.node; }
+    get statement(): Statement { return this.ast.data.statement.node; }
+
+    /** @internal */ set initializer(value) { this.ast.data.initializer = value.ast; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set statement(value) { this.ast.data.statement = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface ForOfStatement extends IterationStatement, LocalsContainer, FlowContainer {
-    readonly kind: SyntaxKind.ForOfStatement;
-    readonly awaitModifier?: AwaitKeyword;
-    readonly initializer: ForInitializer;
-    readonly expression: Expression;
+// dprint-ignore
+export class ForOfStatement extends Node<SyntaxKind.ForOfStatement, AstForOfStatementData> implements IterationStatement, LocalsContainer, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstForOfStatement;
+
+    get awaitModifier(): AwaitKeyword | undefined { return this.ast.data.awaitModifier?.node; }
+    get initializer(): ForInitializer { return this.ast.data.initializer.node; }
+    get expression(): Expression { return this.ast.data.expression.node; }
+    get statement(): Statement { return this.ast.data.statement.node; }
+
+    /** @internal */ set awaitModifier(value) { this.ast.data.awaitModifier = value?.ast; }
+    /** @internal */ set initializer(value) { this.ast.data.initializer = value.ast; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set statement(value) { this.ast.data.statement = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface BreakStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.BreakStatement;
-    readonly label?: Identifier;
+// dprint-ignore
+export class BreakStatement extends Node<SyntaxKind.BreakStatement, AstBreakStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstBreakStatement;
+
+    get label(): Identifier | undefined { return this.ast.data.label?.node; }
+
+    /** @internal */ set label(value) { this.ast.data.label = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface ContinueStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.ContinueStatement;
-    readonly label?: Identifier;
+// dprint-ignore
+export class ContinueStatement extends Node<SyntaxKind.ContinueStatement, AstContinueStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstContinueStatement;
+
+    get label(): Identifier | undefined { return this.ast.data.label?.node; }
+
+    /** @internal */ set label(value) { this.ast.data.label = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
 export type BreakOrContinueStatement =
     | BreakStatement
     | ContinueStatement;
 
-export interface ReturnStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.ReturnStatement;
-    readonly expression?: Expression;
+// dprint-ignore
+export class ReturnStatement extends Node<SyntaxKind.ReturnStatement, AstReturnStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstReturnStatement;
+
+    get expression(): Expression | undefined { return this.ast.data.expression?.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface WithStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.WithStatement;
-    readonly expression: Expression;
-    readonly statement: Statement;
+// dprint-ignore
+export class WithStatement extends Node<SyntaxKind.WithStatement, AstWithStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstWithStatement;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+    get statement(): Statement { return this.ast.data.statement.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set statement(value) { this.ast.data.statement = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface SwitchStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.SwitchStatement;
-    readonly expression: Expression;
-    readonly caseBlock: CaseBlock;
-    possiblyExhaustive?: boolean; // initialized by binding
+// dprint-ignore
+export class SwitchStatement extends Node<SyntaxKind.SwitchStatement, AstSwitchStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstSwitchStatement;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+    get caseBlock(): CaseBlock { return this.ast.data.caseBlock.node; }
+    get possiblyExhaustive(): boolean | undefined { return this.ast.data.possiblyExhaustive; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set caseBlock(value) { this.ast.data.caseBlock = value.ast; }
+    /** @internal */ set possiblyExhaustive(value) { this.ast.data.possiblyExhaustive = value; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface CaseBlock extends Node, LocalsContainer {
-    readonly kind: SyntaxKind.CaseBlock;
-    readonly parent: SwitchStatement;
-    readonly clauses: NodeArray<CaseOrDefaultClause>;
+// dprint-ignore
+export class CaseBlock extends Node<SyntaxKind.CaseBlock, AstCaseBlockData> implements LocalsContainer {
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstCaseBlock;
+
+    override get parent() { return super.parent as SwitchStatement; }
+
+    get clauses(): NodeArray<CaseOrDefaultClause> { return this.ast.data.clauses.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set clauses(value) { this.ast.data.clauses = value.ast; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface CaseClause extends Node, JSDocContainer {
-    readonly kind: SyntaxKind.CaseClause;
-    readonly parent: CaseBlock;
-    readonly expression: Expression;
-    readonly statements: NodeArray<Statement>;
-    /** @internal */ fallthroughFlowNode?: FlowNode;
+// dprint-ignore
+export class CaseClause extends Node<SyntaxKind.CaseClause, AstCaseClauseData> implements JSDocContainer {
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstCaseClause;
+
+    override get parent() { return super.parent as CaseBlock; }
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+    get statements(): NodeArray<Statement> { return this.ast.data.statements.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ set statements(value) { this.ast.data.statements = value.ast; }
+    /** @internal */ get fallthroughFlowNode(): FlowNode | undefined { return this.ast.data.fallthroughFlowNode; }
+    /** @internal */ set fallthroughFlowNode(value) { this.ast.data.fallthroughFlowNode = value; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
 }
 
-export interface DefaultClause extends Node {
-    readonly kind: SyntaxKind.DefaultClause;
-    readonly parent: CaseBlock;
-    readonly statements: NodeArray<Statement>;
-    /** @internal */ fallthroughFlowNode?: FlowNode;
+// dprint-ignore
+export class DefaultClause extends Node<SyntaxKind.DefaultClause, AstDefaultClauseData> {
+    // declare readonly ast: AstDefaultClause;
+
+    override get parent() { return super.parent as CaseBlock; }
+
+    get statements(): NodeArray<Statement> { return this.ast.data.statements.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set statements(value) { this.ast.data.statements = value.ast; }
+    /** @internal */ get fallthroughFlowNode(): FlowNode | undefined { return this.ast.data.fallthroughFlowNode; }
+    /** @internal */ set fallthroughFlowNode(value) { this.ast.data.fallthroughFlowNode = value; }
 }
 
 export type CaseOrDefaultClause =
     | CaseClause
     | DefaultClause;
 
-export interface LabeledStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.LabeledStatement;
-    readonly label: Identifier;
-    readonly statement: Statement;
+// dprint-ignore
+export class LabeledStatement extends Node<SyntaxKind.LabeledStatement, AstLabeledStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstLabeledStatement;
+
+    get label(): Identifier { return this.ast.data.label.node; }
+    get statement(): Statement { return this.ast.data.statement.node; }
+
+    /** @internal */ set label(value) { this.ast.data.label = value.ast; }
+    /** @internal */ set statement(value) { this.ast.data.statement = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface ThrowStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.ThrowStatement;
-    readonly expression: Expression;
+// dprint-ignore
+export class ThrowStatement extends Node<SyntaxKind.ThrowStatement, AstThrowStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstThrowStatement;
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface TryStatement extends Statement, FlowContainer {
-    readonly kind: SyntaxKind.TryStatement;
-    readonly tryBlock: Block;
-    readonly catchClause?: CatchClause;
-    readonly finallyBlock?: Block;
+// dprint-ignore
+export class TryStatement extends Node<SyntaxKind.TryStatement, AstTryStatementData> implements Statement, FlowContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+    // declare readonly ast: AstTryStatement;
+
+    get tryBlock(): Block { return this.ast.data.tryBlock.node; }
+    get catchClause(): CatchClause | undefined { return this.ast.data.catchClause?.node; }
+    get finallyBlock(): Block | undefined { return this.ast.data.finallyBlock?.node; }
+
+    /** @internal */ set tryBlock(value) { this.ast.data.tryBlock = value.ast; }
+    /** @internal */ set catchClause(value) { this.ast.data.catchClause = value?.ast; }
+    /** @internal */ set finallyBlock(value) { this.ast.data.finallyBlock = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get flowNode(): FlowNode | undefined { return this.ast.data.flowNode; }
+    /** @internal */ set flowNode(value: FlowNode | undefined) { this.ast.data.flowNode = value; }
 }
 
-export interface CatchClause extends Node, LocalsContainer {
-    readonly kind: SyntaxKind.CatchClause;
-    readonly parent: TryStatement;
-    readonly variableDeclaration?: VariableDeclaration;
-    readonly block: Block;
+// dprint-ignore
+export class CatchClause extends Node<SyntaxKind.CatchClause, AstCatchClauseData> implements LocalsContainer {
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstCatchClause;
+
+    override get parent() { return super.parent as TryStatement; }
+
+    get variableDeclaration(): VariableDeclaration | undefined { return this.ast.data.variableDeclaration?.node; }
+    get block(): Block { return this.ast.data.block.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set variableDeclaration(value) { this.ast.data.variableDeclaration = value?.ast; }
+    /** @internal */ set block(value) { this.ast.data.block = value.ast; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
 export type ObjectTypeDeclaration =
@@ -3528,78 +6510,204 @@ export type DeclarationWithTypeParameterChildren =
     | JSDocTemplateTag;
 
 export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
+    // readonly ast: AstNode<NamedDeclaration & JSDocContainer>;
     readonly kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
-    readonly name?: Identifier;
-    readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
-    readonly heritageClauses?: NodeArray<HeritageClause>;
+    readonly name?: Identifier | undefined;
+    readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined;
+    readonly heritageClauses?: NodeArray<HeritageClause> | undefined;
     readonly members: NodeArray<ClassElement>;
 }
 
-export interface ClassDeclaration extends ClassLikeDeclarationBase, DeclarationStatement {
-    readonly kind: SyntaxKind.ClassDeclaration;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    /** May be undefined in `export default class { ... }`. */
-    readonly name?: Identifier;
+// dprint-ignore
+export class ClassDeclaration extends Node<SyntaxKind.ClassDeclaration, AstClassDeclarationData> implements ClassLikeDeclarationBase, DeclarationStatement {
+    declare _declarationBrand: any;
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstClassDeclaration;
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): Identifier | undefined { return this.ast.data.name?.node; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get heritageClauses(): NodeArray<HeritageClause> | undefined { return this.ast.data.heritageClauses?.nodes; }
+    get members(): NodeArray<ClassElement> { return this.ast.data.members.nodes; }
+
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set heritageClauses(value) { this.ast.data.heritageClauses = value?.ast; }
+    /** @internal */ set members(value: NodeArray<ClassElement>) { this.ast.data.members = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface ClassExpression extends ClassLikeDeclarationBase, PrimaryExpression {
-    readonly kind: SyntaxKind.ClassExpression;
-    readonly modifiers?: NodeArray<ModifierLike>;
+// dprint-ignore
+export class ClassExpression extends Node<SyntaxKind.ClassExpression, AstClassExpressionData> implements ClassLikeDeclarationBase, PrimaryExpression {
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    // declare readonly ast: AstClassExpression;
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    /** May be undefined in `export default class { ... }`. */
+    get name(): Identifier | undefined { return this.ast.data.name?.node; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get heritageClauses(): NodeArray<HeritageClause> | undefined { return this.ast.data.heritageClauses?.nodes; }
+    get members(): NodeArray<ClassElement> { return this.ast.data.members.nodes; }
+
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set heritageClauses(value) { this.ast.data.heritageClauses = value?.ast; }
+    /** @internal */ set members(value) { this.ast.data.members = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export type ClassLikeDeclaration =
     | ClassDeclaration
     | ClassExpression;
 
-export interface ClassElement extends NamedDeclaration {
+export interface ClassElement extends Declaration {
     _classElementBrand: any;
-    readonly name?: PropertyName;
+    // readonly ast: AstClassElement;
+
+    // TODO(rbuckton): remove this?
+    readonly name?: PropertyName | undefined;
 }
 
-export interface TypeElement extends NamedDeclaration {
+export interface TypeElement extends Declaration {
     _typeElementBrand: any;
-    readonly name?: PropertyName;
+    // readonly ast: AstTypeElement;
+
+    // TODO(rbuckton): remove these?
+    readonly name?: PropertyName | undefined;
     readonly questionToken?: QuestionToken | undefined;
 }
 
-export interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
-    readonly kind: SyntaxKind.InterfaceDeclaration;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly name: Identifier;
-    readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
-    readonly heritageClauses?: NodeArray<HeritageClause>;
-    readonly members: NodeArray<TypeElement>;
+// dprint-ignore
+export class InterfaceDeclaration extends Node<SyntaxKind.InterfaceDeclaration, AstInterfaceDeclarationData> implements DeclarationStatement, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstInterfaceDeclaration;
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): Identifier { return this.ast.data.name.node; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get heritageClauses(): NodeArray<HeritageClause> | undefined { return this.ast.data.heritageClauses?.nodes; }
+    get members(): NodeArray<TypeElement> { return this.ast.data.members.nodes; }
+
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set heritageClauses(value) { this.ast.data.heritageClauses = value?.ast; }
+    /** @internal */ set members(value) { this.ast.data.members = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface HeritageClause extends Node {
-    readonly kind: SyntaxKind.HeritageClause;
-    readonly parent: InterfaceDeclaration | ClassLikeDeclaration;
-    readonly token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
-    readonly types: NodeArray<ExpressionWithTypeArguments>;
+// dprint-ignore
+export class HeritageClause extends Node<SyntaxKind.HeritageClause, AstHeritageClauseData> {
+    // declare readonly ast: AstHeritageClause;
+
+    override get parent() { return super.parent as InterfaceDeclaration | ClassLikeDeclaration; }
+
+    get token(): SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword { return this.ast.data.token; }
+    get types(): NodeArray<ExpressionWithTypeArguments> { return this.ast.data.types.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set token(value) { this.ast.data.token = value; }
+    /** @internal */ set types(value) { this.ast.data.types = value.ast; }
 }
 
-export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
-    readonly kind: SyntaxKind.TypeAliasDeclaration;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly name: Identifier;
-    readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
-    readonly type: TypeNode;
+// dprint-ignore
+export class TypeAliasDeclaration extends Node<SyntaxKind.TypeAliasDeclaration, AstTypeAliasDeclarationData> implements DeclarationStatement, JSDocContainer, LocalsContainer {
+    declare _declarationBrand: any;
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstTypeAliasDeclaration;
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): Identifier { return this.ast.data.name.node; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface EnumMember extends NamedDeclaration, JSDocContainer {
-    readonly kind: SyntaxKind.EnumMember;
-    readonly parent: EnumDeclaration;
-    // This does include ComputedPropertyName, but the parser will give an error
-    // if it parses a ComputedPropertyName in an EnumMember
-    readonly name: PropertyName;
-    readonly initializer?: Expression;
+// dprint-ignore
+export class EnumMember extends Node<SyntaxKind.EnumMember, AstEnumMemberData> implements NamedDeclaration, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstEnumMember;
+
+    override get parent() { return super.parent as EnumDeclaration; }
+
+    get name(): PropertyName { return this.ast.data.name.node; }
+    get initializer(): Expression | undefined { return this.ast.data.initializer?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set initializer(value) { this.ast.data.initializer = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
-    readonly kind: SyntaxKind.EnumDeclaration;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly name: Identifier;
-    readonly members: NodeArray<EnumMember>;
+// dprint-ignore
+export class EnumDeclaration extends Node<SyntaxKind.EnumDeclaration, AstEnumDeclarationData> implements DeclarationStatement, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstEnumDeclaration;
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): Identifier { return this.ast.data.name.node; }
+    get members(): NodeArray<EnumMember> { return this.ast.data.members.nodes; }
+
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set members(value) { this.ast.data.members = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export type ModuleName =
@@ -3610,17 +6718,54 @@ export type ModuleBody =
     | NamespaceBody
     | JSDocNamespaceBody;
 
+// TODO(rbuckton): Move after ModuleDeclaration
 /** @internal */
-export interface AmbientModuleDeclaration extends ModuleDeclaration {
-    readonly body?: ModuleBlock;
-}
+export type AmbientModuleDeclaration = ModuleDeclaration & {
+    readonly name: StringLiteral;
+    readonly body: ModuleBlock | undefined;
+    readonly data: {
+        readonly name: AstStringLiteral;
+        readonly body: AstModuleBlock | undefined;
+    };
+};
 
-export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
-    readonly kind: SyntaxKind.ModuleDeclaration;
-    readonly parent: ModuleBody | SourceFile;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly name: ModuleName;
-    readonly body?: ModuleBody | JSDocNamespaceDeclaration;
+// TODO(rbuckton): Move after ModuleDeclaration
+/** @internal */
+export type NonGlobalAmbientModuleDeclaration = AmbientModuleDeclaration & {
+    readonly name: StringLiteral;
+    readonly data: {
+        readonly name: AstStringLiteral;
+    };
+};
+
+// dprint-ignore
+export class ModuleDeclaration extends Node<SyntaxKind.ModuleDeclaration, AstModuleDeclarationData> implements DeclarationStatement, JSDocContainer, LocalsContainer {
+    declare _declarationBrand: any;
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstModuleDeclaration;
+
+    override get parent() { return super.parent as ModuleDeclaration | ModuleBlock | SourceFile; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): ModuleName { return this.ast.data.name.node; }
+    get body(): ModuleBody | JSDocNamespaceDeclaration | undefined { return this.ast.data.body?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set body(value) { this.ast.data.body = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
 export type NamespaceBody =
@@ -3628,6 +6773,8 @@ export type NamespaceBody =
     | NamespaceDeclaration;
 
 export interface NamespaceDeclaration extends ModuleDeclaration {
+    // readonly ast: AstNamespaceDeclaration;
+    readonly data: AstNamespaceDeclarationData;
     readonly name: Identifier;
     readonly body: NamespaceBody;
 }
@@ -3637,14 +6784,27 @@ export type JSDocNamespaceBody =
     | JSDocNamespaceDeclaration;
 
 export interface JSDocNamespaceDeclaration extends ModuleDeclaration {
+    // readonly ast: AstJSDocNamespaceDeclaration;
+    readonly data: AstJSDocNamespaceDeclarationData;
     readonly name: Identifier;
-    readonly body?: JSDocNamespaceBody;
+    readonly body: JSDocNamespaceBody | undefined;
 }
 
-export interface ModuleBlock extends Node, Statement {
-    readonly kind: SyntaxKind.ModuleBlock;
-    readonly parent: ModuleDeclaration;
-    readonly statements: NodeArray<Statement>;
+// TODO(rbuckton): Is this actually a Statement?
+// dprint-ignore
+export class ModuleBlock extends Node<SyntaxKind.ModuleBlock, AstModuleBlockData> implements Statement, JSDocContainer {
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstModuleBlock;
+
+    override get parent() { return super.parent as ModuleDeclaration; }
+
+    get statements(): NodeArray<Statement> { return this.ast.data.statements.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set statements(value) { this.ast.data.statements = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
 }
 
 export type ModuleReference =
@@ -3656,37 +6816,80 @@ export type ModuleReference =
  * - import x = require("mod");
  * - import x = M.x;
  */
-export interface ImportEqualsDeclaration extends DeclarationStatement, JSDocContainer {
-    readonly kind: SyntaxKind.ImportEqualsDeclaration;
-    readonly parent: SourceFile | ModuleBlock;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly name: Identifier;
-    readonly isTypeOnly: boolean;
+// dprint-ignore
+export class ImportEqualsDeclaration extends Node<SyntaxKind.ImportEqualsDeclaration, AstImportEqualsDeclarationData> implements DeclarationStatement, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstImportEqualsDeclaration;
 
-    // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
-    // module reference.
-    readonly moduleReference: ModuleReference;
+    override get parent() { return super.parent as ModuleBlock | SourceFile; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get name(): Identifier { return this.ast.data.name.node; }
+    get isTypeOnly(): boolean { return this.ast.data.isTypeOnly; }
+    /**
+     * 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external module reference.
+     */
+    get moduleReference(): ModuleReference { return this.ast.data.moduleReference.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
+    /** @internal */ set moduleReference(value) { this.ast.data.moduleReference = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface ExternalModuleReference extends Node {
-    readonly kind: SyntaxKind.ExternalModuleReference;
-    readonly parent: ImportEqualsDeclaration;
-    readonly expression: Expression;
+// dprint-ignore
+export class ExternalModuleReference extends Node<SyntaxKind.ExternalModuleReference, AstExternalModuleReferenceData> {
+    // declare readonly ast: AstExternalModuleReference;
+
+    override get parent() { return super.parent as ImportEqualsDeclaration; }
+
+    get expression(): Expression { return this.ast.data.expression.node; }
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
 }
 
 // In case of:
 // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
 // In rest of the cases, module specifier is string literal corresponding to module
 // ImportClause information is shown at its declaration below.
-export interface ImportDeclaration extends Statement {
-    readonly kind: SyntaxKind.ImportDeclaration;
-    readonly parent: SourceFile | ModuleBlock;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly importClause?: ImportClause;
+// dprint-ignore
+export class ImportDeclaration extends Node<SyntaxKind.ImportDeclaration, AstImportDeclarationData> implements Declaration, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstImportDeclaration;
+
+    override get parent() { return super.parent as ModuleBlock | SourceFile; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get importClause(): ImportClause | undefined { return this.ast.data.importClause?.node; }
     /** If this is not a StringLiteral it will be a grammar error. */
-    readonly moduleSpecifier: Expression;
-    /** @deprecated */ readonly assertClause?: AssertClause;
-    readonly attributes?: ImportAttributes;
+    get moduleSpecifier(): Expression { return this.ast.data.moduleSpecifier.node; }
+    /** @deprecated */
+    get assertClause(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
+    get attributes(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set importClause(value) { this.ast.data.importClause = value?.ast; }
+    /** @internal */ set moduleSpecifier(value) { this.ast.data.moduleSpecifier = value.ast; }
+    /** @internal */ set attributes(value) { this.ast.data.attributes = value?.ast; }
+    /** @internal */ set assertClause(value) { this.ast.data.attributes = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export type NamedImportBindings =
@@ -3703,12 +6906,25 @@ export type NamedExportBindings =
 // import d, * as ns from "mod" => name = d, namedBinding: NamespaceImport = { name: ns }
 // import { a, b as x } from "mod" => name = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
 // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
-export interface ImportClause extends NamedDeclaration {
-    readonly kind: SyntaxKind.ImportClause;
-    readonly parent: ImportDeclaration | JSDocImportTag;
-    readonly isTypeOnly: boolean;
-    readonly name?: Identifier; // Default binding
-    readonly namedBindings?: NamedImportBindings;
+// dprint-ignore
+export class ImportClause extends Node<SyntaxKind.ImportClause, AstImportClauseData> implements NamedDeclaration {
+    declare _declarationBrand: any;
+    // declare readonly ast: AstImportClause;
+
+    override get parent() { return super.parent as ImportDeclaration | JSDocImportTag; }
+
+    get isTypeOnly(): boolean { return this.ast.data.isTypeOnly; }
+    get name(): Identifier | undefined { return this.ast.data.name?.node; }
+    get namedBindings(): NamedImportBindings | undefined { return this.ast.data.namedBindings?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
+    /** @internal */ set namedBindings(value) { this.ast.data.namedBindings = value?.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 /** @deprecated */
@@ -3722,82 +6938,204 @@ export interface AssertClause extends ImportAttributes {}
 
 export type ImportAttributeName = Identifier | StringLiteral;
 
-export interface ImportAttribute extends Node {
-    readonly kind: SyntaxKind.ImportAttribute;
-    readonly parent: ImportAttributes;
-    readonly name: ImportAttributeName;
-    readonly value: Expression;
+// dprint-ignore
+export class ImportAttribute extends Node<SyntaxKind.ImportAttribute, AstImportAttributeData> {
+    // declare readonly ast: AstImportAttribute;
+
+    override get parent() { return super.parent as ImportAttributes; }
+
+    get name(): ImportAttributeName { return this.ast.data.name.node; }
+    get value(): Expression { return this.ast.data.value.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set value(value) { this.ast.data.value = value.ast; }
 }
 
-export interface ImportAttributes extends Node {
-    readonly token: SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword;
-    readonly kind: SyntaxKind.ImportAttributes;
-    readonly parent: ImportDeclaration | ExportDeclaration;
-    readonly elements: NodeArray<ImportAttribute>;
-    readonly multiLine?: boolean;
+// dprint-ignore
+export class ImportAttributes extends Node<SyntaxKind.ImportAttributes, AstImportAttributesData> {
+    // declare readonly ast: AstImportAttributes;
+
+    override get parent() { return super.parent as ImportDeclaration | ExportDeclaration; }
+
+    get token(): SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword { return this.ast.data.token; }
+    get elements(): NodeArray<ImportAttribute> { return this.ast.data.elements.nodes; }
+    // TODO(rbuckton): Should this be internal like Block, ObjectLiteralExpression, etc.?
+    get multiLine(): boolean | undefined { return this.ast.data.multiLine; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set token(value) { this.ast.data.token = value; }
+    /** @internal */ set elements(value) { this.ast.data.elements = value.ast; }
+    /** @internal */ set multiLine(value) { this.ast.data.multiLine = value; }
 }
 
-export interface NamespaceImport extends NamedDeclaration {
-    readonly kind: SyntaxKind.NamespaceImport;
-    readonly parent: ImportClause;
-    readonly name: Identifier;
+// dprint-ignore
+export class NamespaceImport extends Node<SyntaxKind.NamespaceImport, AstNamespaceImportData> implements NamedDeclaration {
+    declare _declarationBrand: any;
+    // declare readonly ast: AstNamespaceImport;
+
+    override get parent() { return super.parent as ImportClause; }
+
+    get name(): Identifier { return this.ast.data.name.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface NamespaceExport extends NamedDeclaration {
-    readonly kind: SyntaxKind.NamespaceExport;
-    readonly parent: ExportDeclaration;
-    readonly name: ModuleExportName;
+// dprint-ignore
+export class NamespaceExport extends Node<SyntaxKind.NamespaceExport, AstNamespaceExportData> implements NamedDeclaration {
+    declare _declarationBrand: any;
+    // declare readonly ast: AstNamespaceExport;
+
+    override get parent() { return super.parent as ExportDeclaration; }
+
+    get name(): ModuleExportName { return this.ast.data.name.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface NamespaceExportDeclaration extends DeclarationStatement, JSDocContainer {
-    readonly kind: SyntaxKind.NamespaceExportDeclaration;
-    readonly name: Identifier;
+// dprint-ignore
+export class NamespaceExportDeclaration extends Node<SyntaxKind.NamespaceExportDeclaration, AstNamespaceExportDeclarationData> implements DeclarationStatement, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstNamespaceExportDeclaration;
 
-    // The following properties are used only to report grammar errors (see `isGrammarError` in utilities.ts)
-    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
+    get name(): Identifier { return this.ast.data.name.node; }
+
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
-    readonly kind: SyntaxKind.ExportDeclaration;
-    readonly parent: SourceFile | ModuleBlock;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly isTypeOnly: boolean;
-    /** Will not be assigned in the case of `export * from "foo";` */
-    readonly exportClause?: NamedExportBindings;
-    /** If this is not a StringLiteral it will be a grammar error. */
-    readonly moduleSpecifier?: Expression;
-    /** @deprecated */ readonly assertClause?: AssertClause;
-    readonly attributes?: ImportAttributes;
+// dprint-ignore
+export class ExportDeclaration extends Node<SyntaxKind.ExportDeclaration, AstExportDeclarationData> implements DeclarationStatement, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstExportDeclaration;
+
+    override get parent() { return super.parent as SourceFile | ModuleBlock; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get isTypeOnly(): boolean { return this.ast.data.isTypeOnly; }
+    get exportClause(): NamedExportBindings | undefined { return this.ast.data.exportClause?.node; }
+    get moduleSpecifier(): Expression | undefined { return this.ast.data.moduleSpecifier?.node; }
+    /** @deprecated */
+    get assertClause(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
+    get attributes(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
+    /** @internal */ set exportClause(value) { this.ast.data.exportClause = value?.ast; }
+    /** @internal */ set moduleSpecifier(value) { this.ast.data.moduleSpecifier = value?.ast; }
+    /** @internal */ set attributes(value) { this.ast.data.attributes = value?.ast; }
+    /** @internal */ set assertClause(value) { this.ast.data.attributes = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface NamedImports extends Node {
-    readonly kind: SyntaxKind.NamedImports;
-    readonly parent: ImportClause;
-    readonly elements: NodeArray<ImportSpecifier>;
+// dprint-ignore
+export class NamedImports extends Node<SyntaxKind.NamedImports, AstNamedImportsData> {
+    // declare readonly ast: AstNamedImports;
+
+    override get parent() { return super.parent as ImportClause; }
+
+    get elements(): NodeArray<ImportSpecifier> { return this.ast.data.elements.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set elements(value) { this.ast.data.elements = value.ast; }
 }
 
-export interface NamedExports extends Node {
-    readonly kind: SyntaxKind.NamedExports;
-    readonly parent: ExportDeclaration;
-    readonly elements: NodeArray<ExportSpecifier>;
+// dprint-ignore
+export class NamedExports extends Node<SyntaxKind.NamedExports, AstNamedExportsData> {
+    // declare readonly ast: AstNamedExports;
+
+    override get parent() { return super.parent as ExportDeclaration; }
+
+    get elements(): NodeArray<ExportSpecifier> { return this.ast.data.elements.nodes; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set elements(value) { this.ast.data.elements = value.ast; }
 }
 
 export type NamedImportsOrExports = NamedImports | NamedExports;
 
-export interface ImportSpecifier extends NamedDeclaration {
-    readonly kind: SyntaxKind.ImportSpecifier;
-    readonly parent: NamedImports;
-    readonly propertyName?: ModuleExportName; // Name preceding "as" keyword (or undefined when "as" is absent)
-    readonly name: Identifier; // Declared name
-    readonly isTypeOnly: boolean;
+// dprint-ignore
+export class ImportSpecifier extends Node<SyntaxKind.ImportSpecifier, AstImportSpecifierData> implements NamedDeclaration {
+    declare _declarationBrand: any;
+    // declare readonly ast: AstImportSpecifier;
+
+    override get parent() { return super.parent as NamedImports; }
+
+    get isTypeOnly(): boolean { return this.ast.data.isTypeOnly; }
+    /**
+     * Name preceding "as" keyword (or undefined when "as" is absent)
+     */
+    get propertyName(): ModuleExportName | undefined { return this.ast.data.propertyName?.node; }
+    /**
+     * Declared name
+     */
+    get name(): Identifier { return this.ast.data.name.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set propertyName(value) { this.ast.data.propertyName = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface ExportSpecifier extends NamedDeclaration, JSDocContainer {
-    readonly kind: SyntaxKind.ExportSpecifier;
-    readonly parent: NamedExports;
-    readonly isTypeOnly: boolean;
-    readonly propertyName?: ModuleExportName; // Name preceding "as" keyword (or undefined when "as" is absent)
-    readonly name: ModuleExportName; // Declared name
+// dprint-ignore
+export class ExportSpecifier extends Node<SyntaxKind.ExportSpecifier, AstExportSpecifierData> implements NamedDeclaration, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstExportSpecifier;
+
+    override get parent() { return super.parent as NamedExports; }
+
+    get isTypeOnly(): boolean { return this.ast.data.isTypeOnly; }
+    /**
+     * Name preceding "as" keyword (or undefined when "as" is absent)
+     */
+    get propertyName(): ModuleExportName | undefined { return this.ast.data.propertyName?.node; }
+    /**
+     * Declared name
+     */
+    get name(): ModuleExportName { return this.ast.data.name.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set isTypeOnly(value) { this.ast.data.isTypeOnly = value; }
+    /** @internal */ set propertyName(value) { this.ast.data.propertyName = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export type ModuleExportName = Identifier | StringLiteral;
@@ -3832,12 +7170,29 @@ export type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExpor
  * This is either an `export =` or an `export default` declaration.
  * Unless `isExportEquals` is set, this node was parsed as an `export default`.
  */
-export interface ExportAssignment extends DeclarationStatement, JSDocContainer {
-    readonly kind: SyntaxKind.ExportAssignment;
-    readonly parent: SourceFile;
-    readonly modifiers?: NodeArray<ModifierLike>;
-    readonly isExportEquals?: boolean;
-    readonly expression: Expression;
+// dprint-ignore
+export class ExportAssignment extends Node<SyntaxKind.ExportAssignment, AstExportAssignmentData> implements DeclarationStatement, JSDocContainer {
+    declare _declarationBrand: any;
+    declare _statementBrand: any;
+    declare _jsdocContainerBrand: any;
+    // declare readonly ast: AstExportAssignment;
+
+    override get parent() { return super.parent as SourceFile; }
+
+    get modifiers(): NodeArray<ModifierLike> | undefined { return this.ast.data.modifiers?.nodes; }
+    get isExportEquals(): boolean | undefined { return this.ast.data.isExportEquals; }
+    get expression(): Expression { return this.ast.data.expression.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set modifiers(value) { this.ast.data.modifiers = value?.ast; }
+    /** @internal */ set isExportEquals(value) { this.ast.data.isExportEquals = value; }
+    /** @internal */ set expression(value) { this.ast.data.expression = value.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value: JSDocArray | undefined) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
 export interface FileReference extends TextRange {
@@ -3865,64 +7220,144 @@ export interface SynthesizedComment extends CommentRange {
 }
 
 // represents a top level: { type } expression in a JSDoc comment.
-export interface JSDocTypeExpression extends TypeNode {
-    readonly kind: SyntaxKind.JSDocTypeExpression;
-    readonly type: TypeNode;
+// dprint-ignore
+export class JSDocTypeExpression extends Node<SyntaxKind.JSDocTypeExpression, AstJSDocTypeExpressionData> implements TypeNode {
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstJSDocTypeExpression;
+
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
 }
 
-export interface JSDocNameReference extends Node {
-    readonly kind: SyntaxKind.JSDocNameReference;
-    readonly name: EntityName | JSDocMemberName;
+// dprint-ignore
+export class JSDocNameReference extends Node<SyntaxKind.JSDocNameReference, AstJSDocNameReferenceData> {
+    // declare readonly ast: AstJSDocNameReference;
+
+    get name(): EntityName | JSDocMemberName { return this.ast.data.name.node; }
+
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
 }
+
 
 /** Class#method reference in JSDoc */
-export interface JSDocMemberName extends Node {
-    readonly kind: SyntaxKind.JSDocMemberName;
-    readonly left: EntityName | JSDocMemberName;
-    readonly right: Identifier;
+// dprint-ignore
+export class JSDocMemberName extends Node<SyntaxKind.JSDocMemberName, AstJSDocMemberNameData> {
+    // declare readonly ast: AstJSDocMemberName;
+
+    get left(): EntityName | JSDocMemberName { return this.ast.data.left.node; }
+    get right(): Identifier { return this.ast.data.right.node; }
+
+    /** @internal */ set left(value) { this.ast.data.left = value.ast; }
+    /** @internal */ set right(value) { this.ast.data.right = value.ast; }
 }
 
 export interface JSDocType extends TypeNode {
     _jsDocTypeBrand: any;
 }
 
-export interface JSDocAllType extends JSDocType {
-    readonly kind: SyntaxKind.JSDocAllType;
+// dprint-ignore
+export class JSDocAllType extends Node<SyntaxKind.JSDocAllType, AstJSDocAllTypeData> implements JSDocType {
+    declare _jsDocTypeBrand: any;
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstJSDocAllType;
 }
 
-export interface JSDocUnknownType extends JSDocType {
-    readonly kind: SyntaxKind.JSDocUnknownType;
+// dprint-ignore
+export class JSDocUnknownType extends Node<SyntaxKind.JSDocUnknownType, AstJSDocUnknownTypeData> implements JSDocType {
+    declare _jsDocTypeBrand: any;
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstJSDocUnknownType;
 }
 
-export interface JSDocNonNullableType extends JSDocType {
-    readonly kind: SyntaxKind.JSDocNonNullableType;
-    readonly type: TypeNode;
-    readonly postfix: boolean;
+// dprint-ignore
+export class JSDocNonNullableType extends Node<SyntaxKind.JSDocNonNullableType, AstJSDocNonNullableTypeData> implements JSDocType {
+    declare _jsDocTypeBrand: any;
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstJSDocNonNullableType;
+
+    get type(): TypeNode { return this.ast.data.type.node; }
+    get postfix(): boolean { return this.ast.data.postfix; }
+
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
+    /** @internal */ set postfix(value) { this.ast.data.postfix = value; }
 }
 
-export interface JSDocNullableType extends JSDocType {
-    readonly kind: SyntaxKind.JSDocNullableType;
-    readonly type: TypeNode;
-    readonly postfix: boolean;
+// dprint-ignore
+export class JSDocNullableType extends Node<SyntaxKind.JSDocNullableType, AstJSDocNullableTypeData> implements JSDocType {
+    declare _jsDocTypeBrand: any;
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstJSDocNullableType;
+
+    get type(): TypeNode { return this.ast.data.type.node; }
+    get postfix(): boolean { return this.ast.data.postfix; }
+
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
+    /** @internal */ set postfix(value) { this.ast.data.postfix = value; }
 }
 
-export interface JSDocOptionalType extends JSDocType {
-    readonly kind: SyntaxKind.JSDocOptionalType;
-    readonly type: TypeNode;
+// dprint-ignore
+export class JSDocOptionalType extends Node<SyntaxKind.JSDocOptionalType, AstJSDocOptionalTypeData> implements JSDocType {
+    declare _jsDocTypeBrand: any;
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstJSDocOptionalType;
+
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
 }
 
-export interface JSDocFunctionType extends JSDocType, SignatureDeclarationBase, LocalsContainer {
-    readonly kind: SyntaxKind.JSDocFunctionType;
+// dprint-ignore
+export class JSDocFunctionType extends Node<SyntaxKind.JSDocFunctionType, AstJSDocFunctionTypeData> implements JSDocType, SignatureDeclarationBase, LocalsContainer {
+    declare _signatureDeclarationBrand: any;
+    declare _jsDocTypeBrand: any;
+    declare _typeNodeBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstJSDocFunctionType;
+
+    get typeParameters(): NodeArray<TypeParameterDeclaration> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get parameters(): NodeArray<ParameterDeclaration> { return this.ast.data.parameters.nodes; }
+    get type(): TypeNode | undefined { return this.ast.data.type?.node; }
+    get typeArguments(): NodeArray<TypeNode> | undefined { return this.ast.data.typeArguments?.nodes; }
+
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ set typeArguments(value) { this.ast.data.typeArguments = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface JSDocVariadicType extends JSDocType {
-    readonly kind: SyntaxKind.JSDocVariadicType;
-    readonly type: TypeNode;
+// dprint-ignore
+export class JSDocVariadicType extends Node<SyntaxKind.JSDocVariadicType, AstJSDocVariadicTypeData> implements JSDocType {
+    declare _jsDocTypeBrand: any;
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstJSDocVariadicType;
+
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
 }
 
-export interface JSDocNamepathType extends JSDocType {
-    readonly kind: SyntaxKind.JSDocNamepathType;
-    readonly type: TypeNode;
+// dprint-ignore
+export class JSDocNamepathType extends Node<SyntaxKind.JSDocNamepathType, AstJSDocNamepathTypeData> implements JSDocType {
+    declare _jsDocTypeBrand: any;
+    declare _typeNodeBrand: any;
+    // declare readonly ast: AstJSDocNamepathType;
+
+    get type(): TypeNode { return this.ast.data.type.node; }
+
+    /** @internal */ set type(value) { this.ast.data.type = value.ast; }
 }
 
 export type JSDocTypeReferencingNode =
@@ -3931,187 +7366,419 @@ export type JSDocTypeReferencingNode =
     | JSDocNullableType
     | JSDocNonNullableType;
 
-export interface JSDoc extends Node {
-    readonly kind: SyntaxKind.JSDoc;
-    readonly parent: HasJSDoc;
-    readonly tags?: NodeArray<JSDocTag>;
-    readonly comment?: string | NodeArray<JSDocComment>;
+// dprint-ignore
+export class JSDoc extends Node<SyntaxKind.JSDoc, AstJSDocData> {
+    // declare readonly ast: AstJSDoc;
+
+    override get parent() { return super.parent as HasJSDoc; }
+
+    get tags(): NodeArray<JSDocTag> | undefined { return this.ast.data.tags?.nodes; }
+    get comment(): string | NodeArray<JSDocComment> | undefined {
+        const comment = astGetComment(this.ast);
+        return typeof comment === "string" ? comment : comment?.nodes;
+    }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set tags(value) { this.ast.data.tags = value?.ast; }
+    /** @internal */ set comment(value) { astSetComment(this.ast, typeof value === "string" ? value : value?.ast); }
 }
 
-export interface JSDocTag extends Node {
-    readonly parent: JSDoc | JSDocTypeLiteral;
-    readonly tagName: Identifier;
-    readonly comment?: string | NodeArray<JSDocComment>;
+// TODO(rbuckton): Move after JSDocText
+// dprint-ignore
+export class JSDocTag<TKind extends SyntaxKind = SyntaxKind, T extends AstJSDocTagData = AstJSDocTagData> extends Node<TKind, T> {
+    // declare readonly ast: AstBaseJSDocTag<TKind, T>;
+
+    override get parent() { return super.parent as JSDoc | JSDocTypeLiteral; }
+
+    get tagName(): Identifier { return this.ast.data.tagName.node; }
+    get comment(): string | NodeArray<JSDocLink | JSDocLinkCode | JSDocLinkPlain | JSDocText> | undefined {
+        const comment = astGetComment(this.ast);
+        return typeof comment === "string" ? comment : comment?.nodes;
+    }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set tagName(value) { this.ast.data.tagName = value.ast; }
+    /** @internal */ set comment(value) { astSetComment(this.ast as AstJSDocUnknownTag, typeof value === "string" ? value : value?.ast); }
 }
 
-export interface JSDocLink extends Node {
-    readonly kind: SyntaxKind.JSDocLink;
-    readonly name?: EntityName | JSDocMemberName;
-    text: string;
+// dprint-ignore
+export class JSDocLink extends Node<SyntaxKind.JSDocLink, AstJSDocLinkData> {
+    // declare readonly ast: AstJSDocLink;
+
+    get name(): EntityName | JSDocMemberName | undefined { return this.ast.data.name?.node; }
+    get text(): string { return this.ast.data.text; }
+
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
+    /** @internal */ set text(value) { this.ast.data.text = value; }
 }
 
-export interface JSDocLinkCode extends Node {
-    readonly kind: SyntaxKind.JSDocLinkCode;
-    readonly name?: EntityName | JSDocMemberName;
-    text: string;
+// dprint-ignore
+export class JSDocLinkCode extends Node<SyntaxKind.JSDocLinkCode, AstJSDocLinkCodeData> {
+    // declare readonly ast: AstJSDocLinkCode;
+
+    get name(): EntityName | JSDocMemberName | undefined { return this.ast.data.name?.node; }
+    get text(): string { return this.ast.data.text; }
+
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
+    /** @internal */ set text(value) { this.ast.data.text = value; }
 }
 
-export interface JSDocLinkPlain extends Node {
-    readonly kind: SyntaxKind.JSDocLinkPlain;
-    readonly name?: EntityName | JSDocMemberName;
-    text: string;
+// dprint-ignore
+export class JSDocLinkPlain extends Node<SyntaxKind.JSDocLinkPlain, AstJSDocLinkPlainData> {
+    // declare readonly ast: AstJSDocLinkPlain;
+
+    get name(): EntityName | JSDocMemberName | undefined { return this.ast.data.name?.node; }
+    get text(): string { return this.ast.data.text; }
+
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
+    /** @internal */ set text(value) { this.ast.data.text = value; }
 }
 
 export type JSDocComment = JSDocText | JSDocLink | JSDocLinkCode | JSDocLinkPlain;
 
-export interface JSDocText extends Node {
-    readonly kind: SyntaxKind.JSDocText;
-    text: string;
+// dprint-ignore
+export class JSDocText extends Node<SyntaxKind.JSDocText, AstJSDocTextData> {
+    // declare readonly ast: AstJSDocText;
+
+    get text(): string { return this.ast.data.text; }
+
+    /** @internal */ set text(value) { this.ast.data.text = value; }
 }
 
-export interface JSDocUnknownTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocTag;
+// dprint-ignore
+export class JSDocUnknownTag extends JSDocTag<SyntaxKind.JSDocTag, AstJSDocUnknownTagData> {
+    // declare readonly ast: AstJSDocUnknownTag;
+}
+
+export interface JSDocClassReference extends ExpressionWithTypeArguments {
+    // readonly ast: AstJSDocClassReference;
+    readonly data: AstJSDocClassReferenceData;
+    readonly expression: Identifier | PropertyAccessEntityNameExpression;
 }
 
 /**
  * Note that `@extends` is a synonym of `@augments`.
  * Both tags are represented by this interface.
  */
-export interface JSDocAugmentsTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocAugmentsTag;
-    readonly class: ExpressionWithTypeArguments & { readonly expression: Identifier | PropertyAccessEntityNameExpression; };
+// dprint-ignore
+export class JSDocAugmentsTag extends JSDocTag<SyntaxKind.JSDocAugmentsTag, AstJSDocAugmentsTagData> {
+    // declare readonly ast: AstJSDocAugmentsTag;
+
+    get class(): JSDocClassReference { return this.ast.data.class.node; }
+
+    /** @internal */ set class(value) { this.ast.data.class = value.ast; }
 }
 
-export interface JSDocImplementsTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocImplementsTag;
-    readonly class: ExpressionWithTypeArguments & { readonly expression: Identifier | PropertyAccessEntityNameExpression; };
+// dprint-ignore
+export class JSDocImplementsTag extends JSDocTag<SyntaxKind.JSDocImplementsTag, AstJSDocImplementsTagData> {
+    // declare readonly ast: AstJSDocImplementsTag;
+
+    get class(): JSDocClassReference { return this.ast.data.class.node; }
+
+    /** @internal */ set class(value) { this.ast.data.class = value.ast; }
 }
 
-export interface JSDocAuthorTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocAuthorTag;
+// dprint-ignore
+export class JSDocAuthorTag extends JSDocTag<SyntaxKind.JSDocAuthorTag, AstJSDocAuthorTagData> {
+    // declare readonly ast: AstJSDocAuthorTag;
 }
 
-export interface JSDocDeprecatedTag extends JSDocTag {
-    kind: SyntaxKind.JSDocDeprecatedTag;
+// dprint-ignore
+export class JSDocDeprecatedTag extends JSDocTag<SyntaxKind.JSDocDeprecatedTag, AstJSDocDeprecatedTagData> {
+    // declare readonly ast: AstJSDocDeprecatedTag;
 }
 
-export interface JSDocClassTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocClassTag;
+// dprint-ignore
+export class JSDocClassTag extends JSDocTag<SyntaxKind.JSDocClassTag, AstJSDocClassTagData> {
+    // declare readonly ast: AstJSDocClassTag;
 }
 
-export interface JSDocPublicTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocPublicTag;
+// dprint-ignore
+export class JSDocPublicTag extends JSDocTag<SyntaxKind.JSDocPublicTag, AstJSDocPublicTagData> {
+    // declare readonly ast: AstJSDocPublicTag;
 }
 
-export interface JSDocPrivateTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocPrivateTag;
+// dprint-ignore
+export class JSDocPrivateTag extends JSDocTag<SyntaxKind.JSDocPrivateTag, AstJSDocPrivateTagData> {
+    // declare readonly ast: AstJSDocPrivateTag;
 }
 
-export interface JSDocProtectedTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocProtectedTag;
+// dprint-ignore
+export class JSDocProtectedTag extends JSDocTag<SyntaxKind.JSDocProtectedTag, AstJSDocProtectedTagData> {
+    // declare readonly ast: AstJSDocProtectedTag;
 }
 
-export interface JSDocReadonlyTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocReadonlyTag;
+// dprint-ignore
+export class JSDocReadonlyTag extends JSDocTag<SyntaxKind.JSDocReadonlyTag, AstJSDocReadonlyTagData> {
+    // declare readonly ast: AstJSDocReadonlyTag;
 }
 
-export interface JSDocOverrideTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocOverrideTag;
+// dprint-ignore
+export class JSDocOverrideTag extends JSDocTag<SyntaxKind.JSDocOverrideTag, AstJSDocOverrideTagData> {
+    // declare readonly ast: AstJSDocOverrideTag;
 }
 
-export interface JSDocEnumTag extends JSDocTag, Declaration, LocalsContainer {
-    readonly kind: SyntaxKind.JSDocEnumTag;
-    readonly parent: JSDoc;
-    readonly typeExpression: JSDocTypeExpression;
+// dprint-ignore
+export class JSDocEnumTag extends JSDocTag<SyntaxKind.JSDocEnumTag, AstJSDocEnumTagData> implements Declaration, LocalsContainer {
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstJSDocEnumTag;
+
+    override get parent() { return super.parent as JSDoc; }
+
+    get typeExpression(): JSDocTypeExpression { return this.ast.data.typeExpression.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set typeExpression(value) { this.ast.data.typeExpression = value.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface JSDocThisTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocThisTag;
-    readonly typeExpression: JSDocTypeExpression;
+// dprint-ignore
+export class JSDocThisTag extends JSDocTag<SyntaxKind.JSDocThisTag, AstJSDocThisTagData> {
+    // declare readonly ast: AstJSDocThisTag;
+
+    get typeExpression(): JSDocTypeExpression { return this.ast.data.typeExpression.node; }
+
+    /** @internal */ set typeExpression(value) { this.ast.data.typeExpression = value.ast; }
 }
 
-export interface JSDocTemplateTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocTemplateTag;
-    readonly constraint: JSDocTypeExpression | undefined;
-    readonly typeParameters: NodeArray<TypeParameterDeclaration>;
+// dprint-ignore
+export class JSDocTemplateTag extends JSDocTag<SyntaxKind.JSDocTemplateTag, AstJSDocTemplateTagData> {
+    // declare readonly ast: AstJSDocTemplateTag;
+
+    get constraint(): JSDocTypeExpression | undefined { return this.ast.data.constraint?.node; }
+    get typeParameters(): NodeArray<TypeParameterDeclaration> { return this.ast.data.typeParameters.nodes; }
+
+    /** @internal */ set constraint(value) { this.ast.data.constraint = value?.ast; }
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value.ast; }
 }
 
-export interface JSDocSeeTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocSeeTag;
-    readonly name?: JSDocNameReference;
+// dprint-ignore
+export class JSDocSeeTag extends JSDocTag<SyntaxKind.JSDocSeeTag, AstJSDocSeeTagData> {
+    // declare readonly ast: AstJSDocSeeTag;
+
+    get name(): JSDocNameReference | undefined { return this.ast.data.name?.node; }
+
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
 }
 
-export interface JSDocReturnTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocReturnTag;
-    readonly typeExpression?: JSDocTypeExpression;
+// dprint-ignore
+export class JSDocReturnTag extends JSDocTag<SyntaxKind.JSDocReturnTag, AstJSDocReturnTagData> {
+    // declare readonly ast: AstJSDocReturnTag;
+
+    get typeExpression(): JSDocTypeExpression | undefined { return this.ast.data.typeExpression?.node; }
+
+    /** @internal */ set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
 }
 
-export interface JSDocTypeTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocTypeTag;
-    readonly typeExpression: JSDocTypeExpression;
+// dprint-ignore
+export class JSDocTypeTag extends JSDocTag<SyntaxKind.JSDocTypeTag, AstJSDocTypeTagData> {
+    // declare readonly ast: AstJSDocTypeTag;
+
+    get typeExpression(): JSDocTypeExpression { return this.ast.data.typeExpression.node; }
+
+    /** @internal */ set typeExpression(value) { this.ast.data.typeExpression = value.ast; }
 }
 
-export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration, LocalsContainer {
-    readonly kind: SyntaxKind.JSDocTypedefTag;
-    readonly parent: JSDoc;
-    readonly fullName?: JSDocNamespaceDeclaration | Identifier;
-    readonly name?: Identifier;
-    readonly typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
+// dprint-ignore
+export class JSDocTypedefTag extends JSDocTag<SyntaxKind.JSDocTypedefTag, AstJSDocTypedefTagData> implements Declaration, LocalsContainer {
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstJSDocTypedefTag;
+
+    override get parent() { return super.parent as JSDoc; }
+
+    get fullName(): Identifier | JSDocNamespaceDeclaration | undefined { return this.ast.data.fullName?.node; }
+    get name(): Identifier | undefined { return this.ast.data.name?.node; }
+    get typeExpression(): JSDocTypeLiteral | JSDocTypeExpression | undefined { return this.ast.data.typeExpression?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set fullName(value) { this.ast.data.fullName = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
+    /** @internal */ set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration, LocalsContainer {
-    readonly kind: SyntaxKind.JSDocCallbackTag;
-    readonly parent: JSDoc;
-    readonly fullName?: JSDocNamespaceDeclaration | Identifier;
-    readonly name?: Identifier;
-    readonly typeExpression: JSDocSignature;
+// dprint-ignore
+export class JSDocCallbackTag extends JSDocTag<SyntaxKind.JSDocCallbackTag, AstJSDocCallbackTagData> implements Declaration, LocalsContainer {
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstJSDocCallbackTag;
+
+    override get parent() { return super.parent as JSDoc; }
+
+    get fullName(): Identifier | JSDocNamespaceDeclaration | undefined { return this.ast.data.fullName?.node; }
+    get name(): Identifier | undefined { return this.ast.data.name?.node; }
+    get typeExpression(): JSDocSignature { return this.ast.data.typeExpression.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set fullName(value) { this.ast.data.fullName = value?.ast; }
+    /** @internal */ set name(value) { this.ast.data.name = value?.ast; }
+    /** @internal */ set typeExpression(value) { this.ast.data.typeExpression = value.ast; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
-export interface JSDocOverloadTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocOverloadTag;
-    readonly parent: JSDoc;
-    readonly typeExpression: JSDocSignature;
+// dprint-ignore
+export class JSDocOverloadTag extends JSDocTag<SyntaxKind.JSDocOverloadTag, AstJSDocOverloadTagData> {
+    // declare readonly ast: AstJSDocOverloadTag;
+
+    override get parent() { return super.parent as JSDoc; }
+
+    get typeExpression(): JSDocSignature { return this.ast.data.typeExpression.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set typeExpression(value) { this.ast.data.typeExpression = value.ast; }
 }
 
-export interface JSDocThrowsTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocThrowsTag;
-    readonly typeExpression?: JSDocTypeExpression;
+// dprint-ignore
+export class JSDocThrowsTag extends JSDocTag<SyntaxKind.JSDocThrowsTag, AstJSDocThrowsTagData> {
+    // declare readonly ast: AstJSDocThrowsTag;
+
+    get typeExpression(): JSDocTypeExpression | undefined { return this.ast.data.typeExpression?.node; }
+
+    /** @internal */ set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
 }
 
-export interface JSDocSignature extends JSDocType, Declaration, JSDocContainer, LocalsContainer {
-    readonly kind: SyntaxKind.JSDocSignature;
-    readonly typeParameters?: readonly JSDocTemplateTag[];
-    readonly parameters: readonly JSDocParameterTag[];
-    readonly type: JSDocReturnTag | undefined;
+// dprint-ignore
+export class JSDocSignature extends Node<SyntaxKind.JSDocSignature, AstJSDocSignatureData> implements JSDocType, Declaration, JSDocContainer, LocalsContainer {
+    declare _jsDocTypeBrand: any;
+    declare _typeNodeBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _localsContainerBrand: any;
+    declare _signatureDeclarationBrand: any;
+    // declare readonly ast: AstJSDocSignature;
+
+    get typeParameters(): NodeArray<JSDocTemplateTag> | undefined { return this.ast.data.typeParameters?.nodes; }
+    get parameters(): NodeArray<JSDocParameterTag> { return this.ast.data.parameters.nodes; }
+    get type(): JSDocReturnTag | undefined { return this.ast.data.type?.node; }
+
+    /** @internal */ set typeParameters(value) { this.ast.data.typeParameters = value?.ast; }
+    /** @internal */ set parameters(value) { this.ast.data.parameters = value.ast; }
+    /** @internal */ set type(value) { this.ast.data.type = value?.ast; }
+    /** @internal */ get jsDoc(): JSDocArray | undefined { return this.ast.data.jsDoc; }
+    /** @internal */ set jsDoc(value) { this.ast.data.jsDoc = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
 }
 
 export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
+    // readonly ast: AstJSDocPropertyLikeTag;
     readonly parent: JSDoc;
     readonly name: EntityName;
-    readonly typeExpression?: JSDocTypeExpression;
+    readonly typeExpression?: JSDocTypeExpression | undefined;
     /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
     readonly isNameFirst: boolean;
     readonly isBracketed: boolean;
+    readonly data: AstJSDocTagData & AstDeclarationData & {
+        readonly name: AstEntityName;
+        readonly typeExpression?: AstJSDocTypeExpression | undefined;
+        readonly isNameFirst: boolean;
+        readonly isBracketed: boolean;
+    };
 }
 
-export interface JSDocPropertyTag extends JSDocPropertyLikeTag {
-    readonly kind: SyntaxKind.JSDocPropertyTag;
+// dprint-ignore
+export class JSDocPropertyTag extends JSDocTag<SyntaxKind.JSDocPropertyTag, AstJSDocPropertyTagData> implements JSDocPropertyLikeTag, Declaration {
+    declare _declarationBrand: any;
+    // declare readonly ast: AstJSDocPropertyTag;
+
+    override get parent() { return super.parent as JSDoc; }
+
+    get name(): Identifier | QualifiedName { return this.ast.data.name.node; }
+    get typeExpression(): JSDocTypeExpression | undefined { return this.ast.data.typeExpression?.node; }
+    /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
+    get isNameFirst(): boolean { return this.ast.data.isNameFirst; }
+    get isBracketed(): boolean { return this.ast.data.isBracketed; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
+    /** @internal */ set isNameFirst(value) { this.ast.data.isNameFirst = value; }
+    /** @internal */ set isBracketed(value) { this.ast.data.isBracketed = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface JSDocParameterTag extends JSDocPropertyLikeTag {
-    readonly kind: SyntaxKind.JSDocParameterTag;
+// dprint-ignore
+export class JSDocParameterTag extends JSDocTag<SyntaxKind.JSDocParameterTag, AstJSDocParameterTagData> implements JSDocPropertyLikeTag {
+    declare _declarationBrand: any;
+    // declare readonly ast: AstJSDocParameterTag;
+
+    override get parent() { return super.parent as JSDoc; }
+
+    get name(): Identifier | QualifiedName { return this.ast.data.name.node; }
+    get typeExpression(): JSDocTypeExpression | undefined { return this.ast.data.typeExpression?.node; }
+    /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
+    get isNameFirst(): boolean { return this.ast.data.isNameFirst; }
+    get isBracketed(): boolean { return this.ast.data.isBracketed; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set name(value) { this.ast.data.name = value.ast; }
+    /** @internal */ set typeExpression(value) { this.ast.data.typeExpression = value?.ast; }
+    /** @internal */ set isNameFirst(value) { this.ast.data.isNameFirst = value; }
+    /** @internal */ set isBracketed(value) { this.ast.data.isBracketed = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface JSDocTypeLiteral extends JSDocType, Declaration {
-    readonly kind: SyntaxKind.JSDocTypeLiteral;
-    readonly jsDocPropertyTags?: readonly JSDocPropertyLikeTag[];
+// dprint-ignore
+export class JSDocTypeLiteral extends Node<SyntaxKind.JSDocTypeLiteral, AstJSDocTypeLiteralData> implements JSDocType, Declaration {
+    declare _jsDocTypeBrand: any;
+    declare _typeNodeBrand: any;
+    declare _declarationBrand: any;
+    // declare readonly ast: AstJSDocTypeLiteral;
+
+    get jsDocPropertyTags(): NodeArray<JSDocPropertyLikeTag> | undefined { return this.ast.data.jsDocPropertyTags?.nodes; }
     /** If true, then this type literal represents an *array* of its type. */
-    readonly isArrayType: boolean;
+    get isArrayType(): boolean { return this.ast.data.isArrayType; }
+
+    /** @internal */ set jsDocPropertyTags(value) { this.ast.data.jsDocPropertyTags = value?.ast; }
+    /** @internal */ set isArrayType(value) { this.ast.data.isArrayType = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.localSymbol = value; }
 }
 
-export interface JSDocSatisfiesTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocSatisfiesTag;
-    readonly typeExpression: JSDocTypeExpression;
+// dprint-ignore
+export class JSDocSatisfiesTag extends JSDocTag<SyntaxKind.JSDocSatisfiesTag, AstJSDocSatisfiesTagData> {
+    // declare readonly ast: AstJSDocSatisfiesTag;
+
+    get typeExpression(): JSDocTypeExpression { return this.ast.data.typeExpression.node; }
+
+    /** @internal */ set typeExpression(value) { this.ast.data.typeExpression = value.ast; }
 }
 
 /** @internal */
@@ -4119,12 +7786,20 @@ export interface JSDocSatisfiesExpression extends ParenthesizedExpression {
     readonly _jsDocSatisfiesExpressionBrand: never;
 }
 
-export interface JSDocImportTag extends JSDocTag {
-    readonly kind: SyntaxKind.JSDocImportTag;
-    readonly parent: JSDoc;
-    readonly importClause?: ImportClause;
-    readonly moduleSpecifier: Expression;
-    readonly attributes?: ImportAttributes;
+// dprint-ignore
+export class JSDocImportTag extends JSDocTag<SyntaxKind.JSDocImportTag, AstJSDocImportTagData> {
+    // declare readonly ast: AstJSDocImportTag;
+
+    override get parent() { return super.parent as JSDoc; }
+
+    get importClause(): ImportClause | undefined { return this.ast.data.importClause?.node; }
+    get moduleSpecifier(): Expression { return this.ast.data.moduleSpecifier.node; }
+    get attributes(): ImportAttributes | undefined { return this.ast.data.attributes?.node; }
+
+    /** @internal */ override set parent(value) { super.parent = value; }
+    /** @internal */ set importClause(value) { this.ast.data.importClause = value?.ast; }
+    /** @internal */ set moduleSpecifier(value) { this.ast.data.moduleSpecifier = value.ast; }
+    /** @internal */ set attributes(value) { this.ast.data.attributes = value?.ast; }
 }
 
 // NOTE: Ensure this is up-to-date with src/debug/debug.ts
@@ -4269,7 +7944,7 @@ export interface AmdDependency {
 export interface SourceFileLike {
     readonly text: string;
     /** @internal */
-    lineMap?: readonly number[];
+    lineMap?: readonly number[] | undefined;
     /** @internal */
     getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
 }
@@ -4278,8 +7953,8 @@ export interface SourceFileLike {
 export interface FutureSourceFile {
     readonly path: Path;
     readonly fileName: string;
-    readonly impliedNodeFormat?: ResolutionMode;
-    readonly packageJsonScope?: PackageJsonInfo;
+    readonly impliedNodeFormat?: ResolutionMode | undefined;
+    readonly packageJsonScope?: PackageJsonInfo | undefined;
     readonly externalModuleIndicator?: true | undefined;
     readonly commonJsModuleIndicator?: true | undefined;
     readonly statements: readonly never[];
@@ -4300,52 +7975,23 @@ export interface RedirectInfo {
 export type ResolutionMode = ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
 
 // Source files are declarations when they are external modules.
-export interface SourceFile extends Declaration, LocalsContainer {
-    readonly kind: SyntaxKind.SourceFile;
-    readonly statements: NodeArray<Statement>;
-    readonly endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
+// dprint-ignore
+export class SourceFile extends Node<SyntaxKind.SourceFile, AstSourceFileData> implements Declaration, LocalsContainer, ReadonlyPragmaContext {
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
+    // declare readonly ast: AstSourceFile;
 
-    fileName: string;
-    /** @internal */ path: Path;
-    text: string;
-    /** Resolved path can be different from path property,
-     * when file is included through project reference is mapped to its output instead of source
-     * in that case resolvedPath = path to output file
-     * path = input file's path
-     *
-     * @internal
-     */
-    resolvedPath: Path;
-    /** Original file name that can be different from fileName,
-     * when file is included through project reference is mapped to its output instead of source
-     * in that case originalFileName = name of input file
-     * fileName = output file's name
-     *
-     * @internal
-     */
-    originalFileName: string;
-
-    /**
-     * If two source files are for the same version of the same package, one will redirect to the other.
-     * (See `createRedirectSourceFile` in program.ts.)
-     * The redirect will have this set. The redirected-to source file will be in `redirectTargetsMap`.
-     *
-     * @internal
-     */
-    redirectInfo?: RedirectInfo;
-
-    amdDependencies: readonly AmdDependency[];
-    moduleName?: string;
-    referencedFiles: readonly FileReference[];
-    typeReferenceDirectives: readonly FileReference[];
-    libReferenceDirectives: readonly FileReference[];
-    languageVariant: LanguageVariant;
-    isDeclarationFile: boolean;
-
-    // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
-    /** @internal */
-    renamedDependencies?: ReadonlyMap<string, string>;
-
+    get statements(): NodeArray<Statement> { return this.ast.data.statements.nodes; }
+    get endOfFileToken(): EndOfFileToken { return this.ast.data.endOfFileToken.node; }
+    get fileName(): string { return this.ast.data.fileName; }
+    get text(): string { return this.ast.data.text; }
+    get amdDependencies(): AmdDependency[] { return this.ast.data.amdDependencies; }
+    get moduleName(): string | undefined { return this.ast.data.moduleName; }
+    get referencedFiles(): readonly FileReference[] { return this.ast.data.referencedFiles; }
+    get typeReferenceDirectives(): readonly FileReference[] { return this.ast.data.typeReferenceDirectives; }
+    get libReferenceDirectives(): readonly FileReference[] { return this.ast.data.libReferenceDirectives; }
+    get languageVariant(): LanguageVariant { return this.ast.data.languageVariant; }
+    get isDeclarationFile(): boolean { return this.ast.data.isDeclarationFile; }
     /**
      * lib.d.ts should have a reference comment like
      *
@@ -4354,10 +8000,8 @@ export interface SourceFile extends Declaration, LocalsContainer {
      * If any other file has this comment, it signals not to include lib.d.ts
      * because this containing file is intended to act as a default library.
      */
-    hasNoDefaultLib: boolean;
-
-    languageVersion: ScriptTarget;
-
+    get hasNoDefaultLib(): boolean { return this.ast.data.hasNoDefaultLib; }
+    get languageVersion(): ScriptTarget { return this.ast.data.languageVersion; }
     /**
      * When `module` is `Node16` or `NodeNext`, this field controls whether the
      * source file in question is an ESNext-output-format file, or a CommonJS-output-format
@@ -4375,100 +8019,373 @@ export interface SourceFile extends Declaration, LocalsContainer {
      * of `node`). If so, this field will be unset and source files will be considered to be
      * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
      */
-    impliedNodeFormat?: ResolutionMode;
-    /** @internal */ packageJsonLocations?: readonly string[];
-    /** @internal */ packageJsonScope?: PackageJsonInfo;
+    get impliedNodeFormat(): ResolutionMode { return this.ast.data.impliedNodeFormat; }
 
-    /** @internal */ scriptKind: ScriptKind;
+    /** @internal */ set statements(value) { this.ast.data.statements = value.ast; }
+    /** @internal */ set endOfFileToken(value) { this.ast.data.endOfFileToken = value.ast; }
+    /** @internal */ set fileName(value) { this.ast.data.fileName = value; }
+    /** @internal */ get path(): Path { return this.ast.data.path; }
+    /** @internal */ set path(value) { this.ast.data.path = value; }
+    /** @internal */ set text(value) { this.ast.data.text = value; }
+    /** @internal */ get resolvedPath(): Path { return this.ast.data.resolvedPath; }
+    /** @internal */ set resolvedPath(value) { this.ast.data.resolvedPath = value; }
+    /** @internal */ get originalFileName(): string { return this.ast.data.originalFileName; }
+    /** @internal */ set originalFileName(value) { this.ast.data.originalFileName = value; }
+    /** @internal */ set amdDependencies(value) { this.ast.data.amdDependencies = value; }
+    /** @internal */ set moduleName(value) { this.ast.data.moduleName = value; }
+    /** @internal */ set referencedFiles(value) { this.ast.data.referencedFiles = value; }
+    /** @internal */ set typeReferenceDirectives(value) { this.ast.data.typeReferenceDirectives = value; }
+    /** @internal */ set libReferenceDirectives(value) { this.ast.data.libReferenceDirectives = value; }
+    /** @internal */ set languageVariant(value) { this.ast.data.languageVariant = value; }
+    /** @internal */ set isDeclarationFile(value) { this.ast.data.isDeclarationFile = value; }
+    /** @internal */ get renamedDependencies(): Map<string, string> { return this.ast.data.renamedDependencies; }
+    /** @internal */ set renamedDependencies(value) { this.ast.data.renamedDependencies = value; }
+    /** @internal */ set hasNoDefaultLib(value) { this.ast.data.hasNoDefaultLib = value; }
+    /** @internal */ set languageVersion(value) { this.ast.data.languageVersion = value; }
+    /** @internal */ set impliedNodeFormat(value) { this.ast.data.impliedNodeFormat = value; }
+    /** @internal */ get scriptKind(): ScriptKind { return this.ast.data.scriptKind; }
+    /** @internal */ set scriptKind(value) { this.ast.data.scriptKind = value; }
+    /** @internal */ get pragmas(): ReadonlyPragmaMap { return this.ast.data.pragmas; }
+    /** @internal */ set pragmas(value) { this.ast.data.pragmas = value; }
+    /** @internal */ get externalModuleIndicator(): true | Node | undefined { return this.ast.data.externalModuleIndicator; }
+    /** @internal */ set externalModuleIndicator(value) { this.ast.data.externalModuleIndicator = value; }
+    /** @internal */ get commonJsModuleIndicator(): Node | undefined { return this.ast.data.commonJsModuleIndicator; }
+    /** @internal */ set commonJsModuleIndicator(value) { this.ast.data.commonJsModuleIndicator = value; }
+    /** @internal */ get identifiers(): Map<string, string> { return this.ast.data.identifiers; }
+    /** @internal */ set identifiers(value) { this.ast.data.identifiers = value; }
+    /** @internal */ get parseDiagnostics(): DiagnosticWithLocation[] { return this.ast.data.parseDiagnostics; }
+    /** @internal */ set parseDiagnostics(value) { this.ast.data.parseDiagnostics = value; }
+    /** @internal */ get bindDiagnostics(): DiagnosticWithLocation[] { return this.ast.data.bindDiagnostics; }
+    /** @internal */ set bindDiagnostics(value) { this.ast.data.bindDiagnostics = value; }
+    /** @internal */ get bindSuggestionDiagnostics(): DiagnosticWithLocation[] | undefined { return this.ast.data.bindSuggestionDiagnostics; }
+    /** @internal */ set bindSuggestionDiagnostics(value) { this.ast.data.bindSuggestionDiagnostics = value; }
+    /** @internal */ get lineMap(): readonly number[] { return this.ast.data.lineMap; }
+    /** @internal */ set lineMap(value) { this.ast.data.lineMap = value; }
+    /** @internal */ get jsDocDiagnostics(): DiagnosticWithLocation[] | undefined { return this.ast.data.jsDocDiagnostics; }
+    /** @internal */ set jsDocDiagnostics(value) { this.ast.data.jsDocDiagnostics = value; }
+    /** @internal */ get commentDirectives(): CommentDirective[] | undefined { return this.ast.data.commentDirectives; }
+    /** @internal */ set commentDirectives(value) { this.ast.data.commentDirectives = value; }
+    /** @internal */ get checkJsDirective(): CheckJsDirective | undefined { return this.ast.data.checkJsDirective; }
+    /** @internal */ set checkJsDirective(value) { this.ast.data.checkJsDirective = value; }
+    /** @internal */ get version(): string { return this.ast.data.version; }
+    /** @internal */ set version(value) { this.ast.data.version = value; }
+    /** @internal */ get symbol(): Symbol { return this.ast.data.declaration.symbol; }
+    /** @internal */ set symbol(value) { this.ast.data.declaration.symbol = value; }
+    /** @internal */ get localSymbol(): Symbol | undefined { return this.ast.data.declaration.localSymbol; }
+    /** @internal */ set localSymbol(value) { this.ast.data.declaration.localSymbol = value; }
+    /** @internal */ get locals(): SymbolTable | undefined { return this.ast.data.locals; }
+    /** @internal */ set locals(value) { this.ast.data.locals = value; }
+    /** @internal */ get redirectInfo(): RedirectInfo | undefined { return this.ast.data.redirectInfo; }
+    /** @internal */ set redirectInfo(value) { this.ast.data.redirectInfo = value; }
+    /** @internal */ get packageJsonLocations(): readonly string[] | undefined { return this.ast.data.packageJsonLocations; }
+    /** @internal */ set packageJsonLocations(value) { this.ast.data.packageJsonLocations = value; }
+    /** @internal */ get packageJsonScope(): PackageJsonInfo | undefined { return this.ast.data.packageJsonScope; }
+    /** @internal */ set packageJsonScope(value) { this.ast.data.packageJsonScope = value; }
+    /** @internal */ get setExternalModuleIndicator(): ((file: SourceFile) => void) | undefined { return this.ast.data.setExternalModuleIndicator; }
+    /** @internal */ set setExternalModuleIndicator(value) { this.ast.data.setExternalModuleIndicator = value; }
+    /** @internal */ get jsGlobalAugmentations(): SymbolTable | undefined { return this.ast.data.jsGlobalAugmentations; }
+    /** @internal */ set jsGlobalAugmentations(value) { this.ast.data.jsGlobalAugmentations = value; }
+    /** @internal */ get nodeCount(): number { return this.ast.data.nodeCount; }
+    /** @internal */ set nodeCount(value) { this.ast.data.nodeCount = value; }
+    /** @internal */ get identifierCount(): number { return this.ast.data.identifierCount; }
+    /** @internal */ set identifierCount(value) { this.ast.data.identifierCount = value; }
+    /** @internal */ get symbolCount(): number { return this.ast.data.symbolCount; }
+    /** @internal */ set symbolCount(value) { this.ast.data.symbolCount = value; }
+    /** @internal */ get additionalSyntacticDiagnostics(): readonly DiagnosticWithLocation[] | undefined { return this.ast.data.additionalSyntacticDiagnostics; }
+    /** @internal */ set additionalSyntacticDiagnostics(value) { this.ast.data.additionalSyntacticDiagnostics = value; }
+    /** @internal */ get classifiableNames(): ReadonlySet<__String> | undefined { return this.ast.data.classifiableNames; }
+    /** @internal */ set classifiableNames(value) { this.ast.data.classifiableNames = value; }
+    /** @internal */ get imports(): readonly StringLiteralLike[] { return this.ast.data.imports; }
+    /** @internal */ set imports(value) { this.ast.data.imports = value; }
+    /** @internal */ get moduleAugmentations(): readonly (Identifier | StringLiteral)[] { return this.ast.data.moduleAugmentations; }
+    /** @internal */ set moduleAugmentations(value) { this.ast.data.moduleAugmentations = value; }
+    /** @internal */ get patternAmbientModules(): PatternAmbientModule[] | undefined { return this.ast.data.patternAmbientModules; }
+    /** @internal */ set patternAmbientModules(value) { this.ast.data.patternAmbientModules = value; }
+    /** @internal */ get ambientModuleNames(): readonly string[] { return this.ast.data.ambientModuleNames; }
+    /** @internal */ set ambientModuleNames(value) { this.ast.data.ambientModuleNames = value; }
+    /** @internal */ get localJsxNamespace(): __String | undefined { return this.ast.data.localJsxNamespace; }
+    /** @internal */ set localJsxNamespace(value) { this.ast.data.localJsxNamespace = value; }
+    /** @internal */ get localJsxFragmentNamespace(): __String | undefined { return this.ast.data.localJsxFragmentNamespace; }
+    /** @internal */ set localJsxFragmentNamespace(value) { this.ast.data.localJsxFragmentNamespace = value; }
+    /** @internal */ get localJsxFactory(): EntityName | undefined { return this.ast.data.localJsxFactory; }
+    /** @internal */ set localJsxFactory(value) { this.ast.data.localJsxFactory = value; }
+    /** @internal */ get localJsxFragmentFactory(): EntityName | undefined { return this.ast.data.localJsxFragmentFactory; }
+    /** @internal */ set localJsxFragmentFactory(value) { this.ast.data.localJsxFragmentFactory = value; }
+    /** @internal */ get endFlowNode(): FlowNode | undefined { return this.ast.data.endFlowNode; }
+    /** @internal */ set endFlowNode(value) { this.ast.data.endFlowNode = value; }
+    /** @internal */ get jsDocParsingMode(): JSDocParsingMode | undefined { return this.ast.data.jsDocParsingMode; }
+    /** @internal */ set jsDocParsingMode(value) { this.ast.data.jsDocParsingMode = value; }
+    /** @internal */ get scriptSnapshot(): IScriptSnapshot | undefined { return this.ast.data.scriptSnapshot; }
+    /** @internal */ set scriptSnapshot(value) { this.ast.data.scriptSnapshot = value; }
+    /** @internal */ get nameTable(): Map<__String, number> | undefined { return this.ast.data.nameTable; }
+    /** @internal */ set nameTable(value) { this.ast.data.nameTable = value; }
+    /** @internal */ get nextContainer(): HasLocals | undefined { return this.ast.data.nextContainer?.node; }
+    /** @internal */ set nextContainer(value) { this.ast.data.nextContainer = value?.ast; }
+    /** @internal */ get extendedSourceFiles(): string[] | undefined { return this.ast.data.extendedSourceFiles; }
+    /** @internal */ set extendedSourceFiles(value) { this.ast.data.extendedSourceFiles = value; }
+    /** @internal */ get configFileSpecs(): ConfigFileSpecs | undefined { return this.ast.data.configFileSpecs; }
+    /** @internal */ set configFileSpecs(value) { this.ast.data.configFileSpecs = value; }
 
-    /**
-     * The first "most obvious" node that makes a file an external module.
-     * This is intended to be the first top-level import/export,
-     * but could be arbitrarily nested (e.g. `import.meta`).
-     *
-     * @internal
-     */
-    externalModuleIndicator?: Node | true;
-    /**
-     * The callback used to set the external module indicator - this is saved to
-     * be later reused during incremental reparsing, which otherwise lacks the information
-     * to set this field
-     *
-     * @internal
-     */
-    setExternalModuleIndicator?: (file: SourceFile) => void;
-    // The first node that causes this file to be a CommonJS module
-    /** @internal */ commonJsModuleIndicator?: Node;
-    // JS identifier-declarations that are intended to merge with globals
-    /** @internal */ jsGlobalAugmentations?: SymbolTable;
+    update(newText: string, textChangeRange: TextChangeRange): SourceFile {
+        return updateSourceFile(this, newText, textChangeRange);
+    }
 
-    /** @internal */ identifiers: ReadonlyMap<string, string>; // Map from a string to an interned string
-    /** @internal */ nodeCount: number;
-    /** @internal */ identifierCount: number;
-    /** @internal */ symbolCount: number;
+    getLineAndCharacterOfPosition(position: number): LineAndCharacter {
+        return getLineAndCharacterOfPosition(this, position);
+    }
 
-    // File-level diagnostics reported by the parser (includes diagnostics about /// references
-    // as well as code diagnostics).
-    /** @internal */ parseDiagnostics: DiagnosticWithLocation[];
+    getLineStarts(): readonly number[] {
+        return getLineStarts(this);
+    }
 
-    // File-level diagnostics reported by the binder.
-    /** @internal */ bindDiagnostics: DiagnosticWithLocation[];
-    /** @internal */ bindSuggestionDiagnostics?: DiagnosticWithLocation[];
+    getPositionOfLineAndCharacter(line: number, character: number): number;
+    /** @internal */
+    getPositionOfLineAndCharacter(line: number, character: number, allowEdits?: true): number;  // eslint-disable-line @typescript-eslint/unified-signatures
+    getPositionOfLineAndCharacter(line: number, character: number, allowEdits?: true): number {
+        return computePositionOfLineAndCharacter(getLineStarts(this), line, character, this.text, allowEdits);
+    }
 
-    // File-level JSDoc diagnostics reported by the JSDoc parser
-    /** @internal */ jsDocDiagnostics?: DiagnosticWithLocation[];
+    getLineEndOfPosition(pos: number): number {
+        const { line } = this.getLineAndCharacterOfPosition(pos);
+        const lineStarts = this.getLineStarts();
 
-    // Stores additional file-level diagnostics reported by the program
-    /** @internal */ additionalSyntacticDiagnostics?: readonly DiagnosticWithLocation[];
+        let lastCharPos: number | undefined;
+        if (line + 1 >= lineStarts.length) {
+            lastCharPos = this.getEnd();
+        }
+        if (!lastCharPos) {
+            lastCharPos = lineStarts[line + 1] - 1;
+        }
 
-    // Stores a line map for the file.
-    // This field should never be used directly to obtain line map, use getLineMap function instead.
-    /** @internal */ lineMap: readonly number[];
-    /** @internal */ classifiableNames?: ReadonlySet<__String>;
-    // Comments containing @ts-* directives, in order.
-    /** @internal */ commentDirectives?: CommentDirective[];
-    /** @internal */ imports: readonly StringLiteralLike[];
-    // Identifier only if `declare global`
-    /** @internal */ moduleAugmentations: readonly (StringLiteral | Identifier)[];
-    /** @internal */ patternAmbientModules?: PatternAmbientModule[];
-    /** @internal */ ambientModuleNames: readonly string[];
-    /** @internal */ checkJsDirective?: CheckJsDirective;
-    /** @internal */ version: string;
-    /** @internal */ pragmas: ReadonlyPragmaMap;
-    /** @internal */ localJsxNamespace?: __String;
-    /** @internal */ localJsxFragmentNamespace?: __String;
-    /** @internal */ localJsxFactory?: EntityName;
-    /** @internal */ localJsxFragmentFactory?: EntityName;
+        const fullText = this.getFullText();
+        // if the new line is "\r\n", we should return the last non-new-line-character position
+        return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
+    }
 
-    /** @internal */ endFlowNode?: FlowNode;
+    /** @internal */
+    getNamedDeclarations(): Map<string, Declaration[]> {
+        if (!this.ast.data.namedDeclarations) {
+            this.ast.data.namedDeclarations = this._computeNamedDeclarations();
+        }
 
-    /** @internal */ jsDocParsingMode?: JSDocParsingMode;
+        return this.ast.data.namedDeclarations;
+    }
+
+    /** @internal @private */
+    _computeNamedDeclarations(): Map<string, Declaration[]> {
+        const result = createMultiMap<string, Declaration>();
+
+        this.forEachChild(visit);
+
+        return result;
+
+        function addDeclaration(declaration: Declaration) {
+            const name = getDeclarationName(declaration);
+            if (name) {
+                result.add(name, declaration);
+            }
+        }
+
+        function getDeclarations(name: string) {
+            let declarations = result.get(name);
+            if (!declarations) {
+                result.set(name, declarations = []);
+            }
+            return declarations;
+        }
+
+        function getDeclarationName(declaration: Declaration) {
+            const name = getNonAssignedNameOfDeclaration(declaration);
+            if (name) {
+                if (isComputedPropertyName(name) && isPropertyAccessExpression(name.expression)) {
+                    return (name.expression.name as MemberName).text
+                }
+                if (isPropertyName(name)) {
+                    return name.kind === SyntaxKind.ComputedPropertyName
+                        // treat computed property names where expression is string/numeric literal as just string/numeric literal
+                        ? isStringOrNumericLiteralLike(name.expression) ? name.expression.text : undefined
+                        : isPrivateIdentifier(name) ? idText(name) : getTextOfIdentifierOrLiteral(name);
+                }
+            }
+            return undefined;
+        }
+
+        function visit(node: Node): void {
+            switch (node.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                    const functionDeclaration = node as FunctionLikeDeclaration;
+                    const declarationName = getDeclarationName(functionDeclaration);
+
+                    if (declarationName) {
+                        const declarations = getDeclarations(declarationName);
+                        const lastDeclaration = lastOrUndefined(declarations);
+
+                        // Check whether this declaration belongs to an "overload group".
+                        if (lastDeclaration && functionDeclaration.parent === lastDeclaration.parent && functionDeclaration.symbol === lastDeclaration.symbol) {
+                            // Overwrite the last declaration if it was an overload
+                            // and this one is an implementation.
+                            if (functionDeclaration.body && !(lastDeclaration as FunctionLikeDeclaration).body) {
+                                declarations[declarations.length - 1] = functionDeclaration;
+                            }
+                        }
+                        else {
+                            declarations.push(functionDeclaration);
+                        }
+                    }
+                    forEachChild(node, visit);
+                    break;
+
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
+                case SyntaxKind.ExportSpecifier:
+                case SyntaxKind.ImportSpecifier:
+                case SyntaxKind.ImportClause:
+                case SyntaxKind.NamespaceImport:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.TypeLiteral:
+                    addDeclaration(node as Declaration);
+                    forEachChild(node, visit);
+                    break;
+
+                case SyntaxKind.Parameter:
+                    // Only consider parameter properties
+                    if (!hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
+                        break;
+                    }
+                // falls through
+
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.BindingElement: {
+                    const decl = node as VariableDeclaration;
+                    if (isBindingPattern(decl.name)) {
+                        forEachChild(decl.name, visit);
+                        break;
+                    }
+                    if (decl.initializer) {
+                        visit(decl.initializer);
+                    }
+                }
+                // falls through
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    addDeclaration(node as Declaration);
+                    break;
+
+                case SyntaxKind.ExportDeclaration:
+                    // Handle named exports case e.g.:
+                    //    export {a, b as B} from "mod";
+                    const exportDeclaration = node as ExportDeclaration;
+                    if (exportDeclaration.exportClause) {
+                        if (isNamedExports(exportDeclaration.exportClause)) {
+                            forEach(exportDeclaration.exportClause.elements, visit);
+                        }
+                        else {
+                            visit(exportDeclaration.exportClause.name);
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.ImportDeclaration:
+                    const importClause = (node as ImportDeclaration).importClause;
+                    if (importClause) {
+                        // Handle default import case e.g.:
+                        //    import d from "mod";
+                        if (importClause.name) {
+                            addDeclaration(importClause.name);
+                        }
+
+                        // Handle named bindings in imports e.g.:
+                        //    import * as NS from "mod";
+                        //    import {a, b as B} from "mod";
+                        if (importClause.namedBindings) {
+                            if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                addDeclaration(importClause.namedBindings);
+                            }
+                            else {
+                                forEach(importClause.namedBindings.elements, visit);
+                            }
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.BinaryExpression:
+                    if (getAssignmentDeclarationKind(node as BinaryExpression) !== AssignmentDeclarationKind.None) {
+                        addDeclaration(node as BinaryExpression);
+                    }
+                // falls through
+
+                default:
+                    forEachChild(node, visit);
+            }
+        }
+    }
 }
 
 /** @internal */
+export type PartialSourceFile<OptionalKeys extends keyof SourceFile = never> =
+    & Pick<SourceFile, "fileName">
+    & Partial<Pick<SourceFile, OptionalKeys>>;
+
+/**
+ * Represents an immutable snapshot of a script at a specified time.Once acquired, the
+ * snapshot is observably immutable. i.e. the same calls with the same parameters will return
+ * the same values.
+ */
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export interface IScriptSnapshot {
+    /** Gets a portion of the script snapshot specified by [start, end). */
+    getText(start: number, end: number): string;
+
+    /** Gets the length of this script snapshot. */
+    getLength(): number;
+
+    /**
+     * Gets the TextChangeRange that describe how the text changed between this text and
+     * an older version.  This information is used by the incremental parser to determine
+     * what sections of the script need to be re-parsed.  'undefined' can be returned if the
+     * change range cannot be determined.  However, in that case, incremental parsing will
+     * not happen and the entire document will be re - parsed.
+     */
+    getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
+
+    /** Releases all resources held by this script snapshot */
+    dispose?(): void;
+}
+
 export interface ReadonlyPragmaContext {
-    languageVersion: ScriptTarget;
-    pragmas?: ReadonlyPragmaMap;
-    checkJsDirective?: CheckJsDirective;
-    referencedFiles: readonly FileReference[];
-    typeReferenceDirectives: readonly FileReference[];
-    libReferenceDirectives: readonly FileReference[];
-    amdDependencies: readonly AmdDependency[];
-    hasNoDefaultLib?: boolean;
-    moduleName?: string;
+    readonly languageVersion: ScriptTarget;
+    /** @internal */ readonly pragmas?: ReadonlyPragmaMap | undefined;
+    /** @internal */ readonly checkJsDirective?: CheckJsDirective | undefined;
+    readonly referencedFiles: readonly FileReference[];
+    readonly typeReferenceDirectives: readonly FileReference[];
+    readonly libReferenceDirectives: readonly FileReference[];
+    readonly amdDependencies: readonly AmdDependency[];
+    readonly hasNoDefaultLib?: boolean | undefined;
+    /** @internal */ readonly moduleName?: string | undefined;
 }
 
 /** @internal */
 export interface PragmaContext extends ReadonlyPragmaContext {
+    languageVersion: ScriptTarget;
     pragmas?: PragmaMap;
+    checkJsDirective?: CheckJsDirective | undefined;
     referencedFiles: FileReference[];
     typeReferenceDirectives: FileReference[];
     libReferenceDirectives: FileReference[];
     amdDependencies: AmdDependency[];
+    hasNoDefaultLib?: boolean | undefined;
+    moduleName?: string | undefined;
 }
-
-/** @internal */
-export interface SourceFile extends ReadonlyPragmaContext {}
 
 /** @internal */
 export interface CommentDirective {
@@ -4482,26 +8399,37 @@ export const enum CommentDirectiveType {
     Ignore,
 }
 
-export interface Bundle extends Node {
-    readonly kind: SyntaxKind.Bundle;
-    readonly sourceFiles: readonly SourceFile[];
-    /** @internal */ syntheticFileReferences?: readonly FileReference[];
-    /** @internal */ syntheticTypeReferences?: readonly FileReference[];
-    /** @internal */ syntheticLibReferences?: readonly FileReference[];
-    /** @internal */ hasNoDefaultLib?: boolean;
+// dprint-ignore
+export class Bundle extends Node<SyntaxKind.Bundle, AstBundleData> {
+    // declare readonly ast: AstBundle;
+
+    get sourceFiles(): readonly SourceFile[] { return this.ast.data.sourceFiles; }
+
+    /** @internal */ set sourceFiles(value: readonly SourceFile[]) { this.ast.data.sourceFiles = value; }
+    /** @internal */ get syntheticFileReferences(): readonly FileReference[] | undefined { return this.ast.data.syntheticFileReferences; }
+    /** @internal */ set syntheticFileReferences(value: readonly FileReference[] | undefined) { this.ast.data.syntheticFileReferences = value; }
+    /** @internal */ get syntheticTypeReferences(): readonly FileReference[] | undefined { return this.ast.data.syntheticTypeReferences; }
+    /** @internal */ set syntheticTypeReferences(value: readonly FileReference[] | undefined) { this.ast.data.syntheticTypeReferences = value; }
+    /** @internal */ get syntheticLibReferences(): readonly FileReference[] | undefined { return this.ast.data.syntheticLibReferences; }
+    /** @internal */ set syntheticLibReferences(value: readonly FileReference[] | undefined) { this.ast.data.syntheticLibReferences = value; }
+    /** @internal */ get hasNoDefaultLib(): boolean | undefined { return this.ast.data.hasNoDefaultLib; }
+    /** @internal */ set hasNoDefaultLib(value: boolean | undefined) { this.ast.data.hasNoDefaultLib = value; }
 }
 
 export interface JsonSourceFile extends SourceFile {
+    // readonly ast: AstJsonSourceFile;
+    readonly data: AstJsonSourceFileData;
     readonly statements: NodeArray<JsonObjectExpressionStatement>;
 }
 
 export interface TsConfigSourceFile extends JsonSourceFile {
-    extendedSourceFiles?: string[];
-    /** @internal */ configFileSpecs?: ConfigFileSpecs;
+    extendedSourceFiles: string[] | undefined;
+    /** @internal */ configFileSpecs: ConfigFileSpecs | undefined;
 }
 
 export interface JsonMinusNumericLiteral extends PrefixUnaryExpression {
-    readonly kind: SyntaxKind.PrefixUnaryExpression;
+    // readonly ast: AstJsonMinusNumericLiteral;
+    readonly data: AstJsonMinusNumericLiteralData;
     readonly operator: SyntaxKind.MinusToken;
     readonly operand: NumericLiteral;
 }
@@ -4516,6 +8444,8 @@ export type JsonObjectExpression =
     | NullLiteral;
 
 export interface JsonObjectExpressionStatement extends ExpressionStatement {
+    // readonly ast: AstJsonObjectExpressionStatement;
+    readonly data: AstJsonObjectExpressionStatementData;
     readonly expression: JsonObjectExpression;
 }
 
@@ -5971,21 +9901,23 @@ export type SymbolId = number;
 
 // dprint-ignore
 export interface Symbol {
-    flags: SymbolFlags;                     // Symbol flags
-    escapedName: __String;                  // Name of symbol
-    declarations?: Declaration[];           // Declarations associated with this symbol
-    valueDeclaration?: Declaration;         // First value declaration of the symbol
-    members?: SymbolTable;                  // Class, interface or object literal instance members
-    exports?: SymbolTable;                  // Module exports
-    globalExports?: SymbolTable;            // Conditional global UMD exports
-    /** @internal */ id: SymbolId;          // Unique id (used to look up SymbolLinks)
-    /** @internal */ mergeId: number;       // Merge id (used to look up merged symbol)
-    /** @internal */ parent?: Symbol;       // Parent symbol
-    /** @internal */ exportSymbol?: Symbol; // Exported symbol associated with this symbol
+    flags: SymbolFlags;                                     // Symbol flags
+    escapedName: __String;                                  // Name of symbol
+    readonly declarations?: readonly Declaration[];         // Declarations associated with this symbol
+    readonly valueDeclaration?: Declaration;                // First value declaration of the symbol
+    members?: SymbolTable;                                  // Class, interface or object literal instance members
+    exports?: SymbolTable;                                  // Module exports
+    globalExports?: SymbolTable;                            // Conditional global UMD exports
+    /** @internal */ astValueDeclaration?: AstDeclaration;  // Declarations associated with this symbol
+    /** @internal */ astDeclarations?: AstDeclaration[];    // First value declaration of the symbol
+    /** @internal */ id: SymbolId;                          // Unique id (used to look up SymbolLinks)
+    /** @internal */ mergeId: number;                       // Merge id (used to look up merged symbol)
+    /** @internal */ parent?: Symbol;                       // Parent symbol
+    /** @internal */ exportSymbol?: Symbol;                 // Exported symbol associated with this symbol
     /** @internal */ constEnumOnlyModule: boolean | undefined; // True if module contains only const enums or other modules with only const enums
-    /** @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
-    /** @internal */ lastAssignmentPos?: number; // Source position of last node that assigns value to symbol. Negative if it is assigned anywhere definitely
-    /** @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
+    /** @internal */ isReferenced?: SymbolFlags;            // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
+    /** @internal */ lastAssignmentPos?: number;            // Source position of last node that assigns value to symbol. Negative if it is assigned anywhere definitely
+    /** @internal */ isReplaceableByMethod?: boolean;       // Can this Javascript class property be replaced by a method symbol?
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
 }
 
@@ -8562,7 +12494,7 @@ export const enum OuterExpressionKinds {
 /** @internal */
 export type OuterExpression =
     | ParenthesizedExpression
-    | TypeAssertion
+    | TypeAssertionExpression
     | SatisfiesExpression
     | AsExpression
     | NonNullExpression
@@ -8571,7 +12503,7 @@ export type OuterExpression =
 
 /** @internal */
 export type WrappedExpression<T extends Expression> =
-    | OuterExpression & { readonly expression: WrappedExpression<T>; }
+    | OuterExpression & { readonly expression: WrappedExpression<T>; readonly data: { readonly expression: AstWrappedExpression<AstNodeOneOf<T>>; }; }
     | T;
 
 /** @internal */
@@ -8646,8 +12578,8 @@ export type ImmediatelyInvokedArrowFunction = CallExpression & { readonly expres
 export interface NodeFactory {
     /** @internal */ readonly parenthesizer: ParenthesizerRules;
     /** @internal */ readonly converters: NodeConverters;
-    /** @internal */ readonly baseFactory: BaseNodeFactory;
     /** @internal */ readonly flags: NodeFactoryFlags;
+    /** @internal */ readonly astFactory: AstNodeFactory;
 
     createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
@@ -8718,7 +12650,7 @@ export interface NodeFactory {
     createToken<TKind extends KeywordTypeSyntaxKind>(token: TKind): KeywordTypeNode<TKind>;
     createToken<TKind extends ModifierSyntaxKind>(token: TKind): ModifierToken<TKind>;
     createToken<TKind extends KeywordSyntaxKind>(token: TKind): KeywordToken<TKind>;
-    /** @internal */ createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
+    /** @internal */ createToken<TKind extends TokenSyntaxKind>(token: TKind): Token<TKind>;
 
     //
     // Reserved words
@@ -8873,8 +12805,8 @@ export interface NodeFactory {
     updateNewExpression(node: NewExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): NewExpression;
     createTaggedTemplateExpression(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression;
     updateTaggedTemplateExpression(node: TaggedTemplateExpression, tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression;
-    createTypeAssertion(type: TypeNode, expression: Expression): TypeAssertion;
-    updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: Expression): TypeAssertion;
+    createTypeAssertion(type: TypeNode, expression: Expression): TypeAssertionExpression;
+    updateTypeAssertion(node: TypeAssertionExpression, type: TypeNode, expression: Expression): TypeAssertionExpression;
     createParenthesizedExpression(expression: Expression): ParenthesizedExpression;
     updateParenthesizedExpression(node: ParenthesizedExpression, expression: Expression): ParenthesizedExpression;
     createFunctionExpression(modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[] | undefined, type: TypeNode | undefined, body: Block): FunctionExpression;
@@ -9148,7 +13080,8 @@ export interface NodeFactory {
     createJsxText(text: string, containsOnlyTriviaWhiteSpaces?: boolean): JsxText;
     updateJsxText(node: JsxText, text: string, containsOnlyTriviaWhiteSpaces?: boolean): JsxText;
     createJsxOpeningFragment(): JsxOpeningFragment;
-    createJsxJsxClosingFragment(): JsxClosingFragment;
+    createJsxClosingFragment(): JsxClosingFragment;
+    /** @deprecated*/ createJsxJsxClosingFragment(): JsxClosingFragment;
     updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
     createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
     updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
@@ -9998,15 +13931,10 @@ export interface DiagnosticCollection {
     getDiagnostics(fileName: string): DiagnosticWithLocation[];
 }
 
-// SyntaxKind.SyntaxList
-export interface SyntaxList extends Node {
-    kind: SyntaxKind.SyntaxList;
-
-    // Unlike other nodes which may or may not have their child nodes calculated,
-    // the entire purpose of a SyntaxList is to hold child nodes.
-    // Instead of using the WeakMap machinery in `nodeChildren.ts`,
-    // we just store the children directly on the SyntaxList.
-    /** @internal */ _children: readonly Node[];
+// dprint-ignore
+export class SyntaxList extends Node<SyntaxKind.SyntaxList, AstSyntaxListData> {
+    /** @internal */ get _children(): readonly Node[] { return this.ast.data._children; }
+    /** @internal */ set _children(value: readonly Node[]) { this.ast.data._children = value; }
 }
 
 // dprint-ignore

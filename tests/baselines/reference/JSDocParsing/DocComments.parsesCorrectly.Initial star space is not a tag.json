@@ -11,12 +11,14 @@
             "kind": "JSDocTag",
             "pos": 5,
             "end": 7,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 6,
                 "end": 7,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "a"
             }

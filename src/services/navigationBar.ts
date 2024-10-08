@@ -48,6 +48,7 @@ import {
     getTextOfIdentifierOrLiteral,
     getTextOfNode,
     hasJSDocNodes,
+    hasName,
     Identifier,
     ImportClause,
     InterfaceDeclaration,
@@ -407,12 +408,12 @@ function addChildrenRecursively(node: Node | undefined): void {
             break;
         }
         case SyntaxKind.FunctionDeclaration:
-            const nameNode = (node as FunctionLikeDeclaration).name;
+            const nameNode = (node as FunctionDeclaration).name;
             // If we see a function declaration track as a possible ES5 class
             if (nameNode && isIdentifier(nameNode)) {
                 addTrackedEs5Class(nameNode.text);
             }
-            addNodeWithRecursiveChild(node, (node as FunctionLikeDeclaration).body);
+            addNodeWithRecursiveChild(node, (node as FunctionDeclaration).body);
             break;
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.FunctionExpression:
@@ -1028,7 +1029,7 @@ function getModifiers(node: Node): string {
 
 function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {
     const { parent } = node;
-    if (node.name && getFullWidth(node.name) > 0) {
+    if (hasName(node) && getFullWidth(node.name) > 0) {
         return cleanText(declarationNameToString(node.name));
     }
     // See if it is a var initializer. If so, use the var name.

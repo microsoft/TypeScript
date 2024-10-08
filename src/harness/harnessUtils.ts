@@ -132,7 +132,11 @@ export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | un
                     childName === "illegalQuestionToken" ||
                     childName === "illegalExclamationToken" ||
                     childName === "illegalTypeParameters" ||
-                    childName === "illegalType"
+                    childName === "illegalType" ||
+                    childName === "ast" ||
+                    childName === "data" ||
+                    childName === "_node" ||
+                    childName === "loc"
                 ) {
                     continue;
                 }
@@ -170,7 +174,12 @@ function convertDiagnostic(diagnostic: ts.Diagnostic) {
 }
 
 export function sourceFileToJSON(file: ts.Node): string {
-    return JSON.stringify(file, (_, v) => isNodeOrArray(v) ? serializeNode(v) : v, "    ");
+    const s = JSON.stringify(file, (_, v) => {
+        if (v instanceof ts.AstNode) v = v.node;
+        if (v instanceof ts.AstNodeArray) v = v.nodes;
+        return isNodeOrArray(v) ? serializeNode(v) : v;
+    }, "    ");
+    return s;
 
     function getKindName(k: number | string | undefined): string | undefined {
         if (k === undefined || ts.isString(k)) {
@@ -183,13 +192,12 @@ export function sourceFileToJSON(file: ts.Node): string {
         return ts.Debug.formatNodeFlags(f);
     }
 
-    function serializeNode(n: ts.Node): any {
-        const o: any = { kind: getKindName(n.kind) };
-        if (ts.containsParseError(n)) {
-            o.containsParseError = true;
-        }
+    function serializeProperties(o: any, n: ts.Node | undefined, obj: any, propertyNames: Iterable<string>) {
+        for (const propertyName of propertyNames) {
+            if (ts.hasProperty(o, propertyName)) {
+                continue;
+            }
 
-        for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof ts.SourceFile | keyof ts.Identifier | keyof ts.StringLiteral)[]) {
             switch (propertyName) {
                 case "parent":
                 case "symbol":
@@ -202,12 +210,15 @@ export function sourceFileToJSON(file: ts.Node): string {
                 case "identifierCount":
                 case "scriptSnapshot":
                 case "emitNode":
+                case "ast":
                     // Blocklist of items we never put in the baseline file.
                     break;
 
                 case "hasExtendedUnicodeEscape":
-                    if ((n as any).hasExtendedUnicodeEscape) {
-                        o.hasExtendedUnicodeEscape = true;
+                case "isUnterminated":
+                case "isTypeOnly":
+                    if (obj[propertyName]) {
+                        o[propertyName] = true;
                     }
                     break;
 
@@ -215,8 +226,8 @@ export function sourceFileToJSON(file: ts.Node): string {
                     // Clear the flags that are produced by aggregating child values. That is ephemeral
                     // data we don't care about in the dump. We only care what the parser set directly
                     // on the AST.
-                    let flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
-                    if (ts.isIdentifier(n)) {
+                    let flags = obj.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
+                    if (n && ts.isIdentifier(n)) {
                         if (flags & ts.NodeFlags.IdentifierHasExtendedUnicodeEscape) {
                             o.hasExtendedUnicodeEscape = true;
                             flags &= ~ts.NodeFlags.IdentifierHasExtendedUnicodeEscape;
@@ -228,27 +239,63 @@ export function sourceFileToJSON(file: ts.Node): string {
                     break;
 
                 case "parseDiagnostics":
-                    o[propertyName] = convertDiagnostics((n as any)[propertyName]);
+                    o[propertyName] = convertDiagnostics(obj[propertyName]);
                     break;
 
                 case "nextContainer":
-                    if ((n as ts.HasLocals).nextContainer) {
-                        o[propertyName] = { kind: (n as ts.HasLocals).nextContainer!.kind, pos: (n as ts.HasLocals).nextContainer!.pos, end: (n as ts.HasLocals).nextContainer!.end };
+                    if ((obj as ts.HasLocals).nextContainer) {
+                        o[propertyName] = {
+                            kind: (obj as ts.HasLocals).nextContainer!.kind,
+                            pos: (obj as ts.HasLocals).nextContainer!.pos,
+                            end: (obj as ts.HasLocals).nextContainer!.end,
+                        };
                     }
                     break;
 
                 case "text":
                     // Include 'text' field for identifiers/literals, but not for source files.
-                    if (n.kind !== ts.SyntaxKind.SourceFile) {
-                        o[propertyName] = (n as any)[propertyName];
+                    if (!n || n.kind !== ts.SyntaxKind.SourceFile) {
+                        o[propertyName] = obj[propertyName];
                     }
                     break;
 
-                default:
-                    o[propertyName] = (n as any)[propertyName];
+                case "modifierFlagsCache":
+                    if (!n || ts.isNodeKind(n.kind) || ts.isLiteralKind(n.kind)) {
+                        o[propertyName] = obj[propertyName];
+                    }
+                    break;
+
+                default: {
+                    let value = obj[propertyName];
+                    if (value instanceof ts.AstNode) value = value.node;
+                    if (value instanceof ts.AstNodeArray) value = value.nodes;
+                    o[propertyName] = value;
+                }
             }
         }
+    }
 
+    function serializeNode(n: ts.Node | ts.NodeArray<ts.Node>): any {
+        const o: any = {};
+        if ("kind" in n) { // eslint-disable-line local/no-in-operator
+            o.kind = getKindName(n.kind);
+            if (ts.containsParseError(n)) {
+                o.containsParseError = true;
+            }
+            if (n instanceof ts.Node) {
+                serializeProperties(o, n, n, ["pos", "end", "flags", "modifierFlagsCache", "transformFlags"]);
+                serializeProperties(o, n, n.ast.data, Object.getOwnPropertyNames(n.ast.data));
+            }
+            else {
+                serializeProperties(o, n, n, Object.getOwnPropertyNames(n));
+            }
+        }
+        else {
+            serializeProperties(o, /*n*/ undefined, n, Object.getOwnPropertyNames(n));
+            if (n instanceof ts.NodeArray) {
+                serializeProperties(o, /*n*/ undefined, n, ["pos", "end", "hasTrailingComma", "transformFlags"]);
+            }
+        }
         return o;
     }
 }
@@ -280,51 +327,61 @@ export function assertDiagnosticsEquals(array1: readonly ts.Diagnostic[], array2
 }
 
 export function assertStructuralEquals(node1: ts.Node, node2: ts.Node): void {
+    assertStructuralEqualsWorker(node1, node2, "");
+}
+
+function assertStructuralEqualsWorker(node1: ts.Node, node2: ts.Node, path: string) {
     if (node1 === node2) {
         return;
     }
 
-    assert(node1, "node1");
-    assert(node2, "node2");
-    assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
-    assert.equal(node1.end, node2.end, "node1.end !== node2.end");
-    assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
+    assert(node1, `node1 is missing. path: ${path}`);
+    assert(node2, `node2 is missing. path: ${path}`);
+    assert.equal(node1.pos, node2.pos, `node1.pos !== node2.pos. path: ${path}`);
+    assert.equal(node1.end, node2.end, `node1.end !== node2.end. path: ${path}`);
+    assert.equal(node1.kind, node2.kind, `node1.kind !== node2.kind. path: ${path}`);
 
     // call this on both nodes to ensure all propagated flags have been set (and thus can be
     // compared).
-    assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
-    assert.equal(node1.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, node2.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, "node1.flags !== node2.flags");
+    assert.equal(ts.containsParseError(node1), ts.containsParseError(node2), `containsParseError(node1) !== containsParseError(node2): path: ${path}`);
+    assert.equal(node1.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, node2.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, `node1.flags !== node2.flags. path: ${path}`);
 
     ts.forEachChild(node1, child1 => {
         const childName = findChildName(node1, child1);
         const child2: ts.Node = (node2 as any)[childName];
 
-        assertStructuralEquals(child1, child2);
+        assertStructuralEqualsWorker(child1, child2, `${path}.${childName}`);
     }, array1 => {
         const childName = findChildName(node1, array1);
         const array2: ts.NodeArray<ts.Node> = (node2 as any)[childName];
 
-        assertArrayStructuralEquals(array1, array2);
+        assertArrayStructuralEquals(array1, array2, `${path}.${childName}`);
     });
 }
 
-function assertArrayStructuralEquals(array1: ts.NodeArray<ts.Node>, array2: ts.NodeArray<ts.Node>) {
+function assertArrayStructuralEquals(array1: ts.NodeArray<ts.Node>, array2: ts.NodeArray<ts.Node>, path: string) {
     if (array1 === array2) {
         return;
     }
 
-    assert(array1, "array1");
-    assert(array2, "array2");
-    assert.equal(array1.pos, array2.pos, "array1.pos !== array2.pos");
-    assert.equal(array1.end, array2.end, "array1.end !== array2.end");
-    assert.equal(array1.length, array2.length, "array1.length !== array2.length");
+    assert(array1, `array1 is missing. path: ${path}`);
+    assert(array2, `array2 is missing. path: ${path}`);
+    assert.equal(array1.pos, array2.pos, `array1.pos !== array2.pos. path: ${path}`);
+    assert.equal(array1.end, array2.end, `array1.end !== array2.end. path: ${path}`);
+    assert.equal(array1.length, array2.length, `array1.length !== array2.length. path: ${path}`);
 
     for (let i = 0; i < array1.length; i++) {
-        assertStructuralEquals(array1[i], array2[i]);
+        assertStructuralEqualsWorker(array1[i], array2[i], `${path}[${i}]`);
     }
 }
 
 function findChildName(parent: any, child: any) {
+    if (parent instanceof ts.Node) {
+        parent = parent.ast.data;
+    }
+    if (child instanceof ts.Node || child instanceof ts.NodeArray) {
+        child = child.ast;
+    }
     for (const name in parent) {
         if (ts.hasProperty(parent, name) && parent[name] === child) {
             return name;
