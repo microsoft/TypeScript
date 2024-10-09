@@ -373,18 +373,18 @@ function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: num
 }
 
 class NodeObject<TKind extends SyntaxKind> implements Node {
-    public kind: TKind;
-    public pos: number;
-    public end: number;
-    public flags: NodeFlags;
-    public modifierFlagsCache: ModifierFlags;
-    public transformFlags: TransformFlags;
-    public parent: Node;
-    public symbol!: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
-    public jsDoc?: JSDoc[];
-    public original?: Node;
-    public id?: number;
-    public emitNode?: EmitNode;
+    declare public kind: TKind;
+    declare public pos: number;
+    declare public end: number;
+    declare public flags: NodeFlags;
+    declare public modifierFlagsCache: ModifierFlags;
+    declare public transformFlags: TransformFlags;
+    declare public parent: Node;
+    declare public symbol: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
+    declare public jsDoc?: JSDoc[];
+    declare public original?: Node;
+    declare public id?: number;
+    declare public emitNode?: EmitNode;
 
     constructor(kind: TKind, pos: number, end: number) {
         // Note: if modifying this, be sure to update Node in src/compiler/utilities.ts
@@ -566,17 +566,17 @@ function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
 }
 
 class TokenOrIdentifierObject<TKind extends SyntaxKind> implements Node {
-    public kind: TKind;
-    public pos: number;
-    public end: number;
-    public flags: NodeFlags;
-    public modifierFlagsCache!: ModifierFlags;
-    public transformFlags: TransformFlags;
-    public parent: Node;
-    public symbol!: Symbol;
-    public jsDocComments?: JSDoc[];
-    public id?: number;
-    public emitNode?: EmitNode | undefined;
+    declare public kind: TKind;
+    declare public pos: number;
+    declare public end: number;
+    declare public flags: NodeFlags;
+    declare public modifierFlagsCache: ModifierFlags;
+    declare public transformFlags: TransformFlags;
+    declare public parent: Node;
+    declare public symbol: Symbol;
+    declare public jsDocComments?: JSDoc[];
+    declare public id?: number;
+    declare public emitNode?: EmitNode | undefined;
 
     constructor(kind: TKind, pos: number, end: number) {
         // Note: if modifying this, be sure to update Token and Identifier in src/compiler/utilities.ts
@@ -655,31 +655,31 @@ class TokenOrIdentifierObject<TKind extends SyntaxKind> implements Node {
 }
 
 class SymbolObject implements Symbol {
-    flags: SymbolFlags;
-    escapedName: __String;
-    declarations?: Declaration[];
-    valueDeclaration?: Declaration;
-    members?: SymbolTable;
-    exports?: SymbolTable;
-    id: number;
-    mergeId: number;
-    parent?: Symbol;
-    exportSymbol?: Symbol;
-    constEnumOnlyModule: boolean | undefined;
-    isReferenced?: SymbolFlags;
-    lastAssignmentPos?: number;
-    links?: SymbolLinks;
+    declare flags: SymbolFlags;
+    declare escapedName: __String;
+    declare declarations?: Declaration[];
+    declare valueDeclaration?: Declaration;
+    declare members?: SymbolTable;
+    declare exports?: SymbolTable;
+    declare id: number;
+    declare mergeId: number;
+    declare parent?: Symbol;
+    declare exportSymbol?: Symbol;
+    declare constEnumOnlyModule: boolean | undefined;
+    declare isReferenced?: SymbolFlags;
+    declare lastAssignmentPos?: number;
+    declare links?: SymbolLinks;
 
     // Undefined is used to indicate the value has not been computed. If, after computing, the
     // symbol has no doc comment, then the empty array will be returned.
-    documentationComment?: SymbolDisplayPart[];
-    tags?: JSDocTagInfo[]; // same
+    declare documentationComment?: SymbolDisplayPart[];
+    declare tags?: JSDocTagInfo[]; // same
 
-    contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
-    contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
+    declare contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
+    declare contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
 
-    contextualGetAccessorTags?: JSDocTagInfo[];
-    contextualSetAccessorTags?: JSDocTagInfo[];
+    declare contextualGetAccessorTags?: JSDocTagInfo[];
+    declare contextualSetAccessorTags?: JSDocTagInfo[];
 
     constructor(flags: SymbolFlags, name: __String) {
         // Note: if modifying this, be sure to update Symbol in src/compiler/types.ts
@@ -803,7 +803,7 @@ class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject<TKin
 }
 
 class IdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Identifier> implements Identifier {
-    public escapedText!: __String;
+    declare public escapedText: __String;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
     declare _leftHandSideExpressionBrand: any;
@@ -813,7 +813,7 @@ class IdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Identifier> im
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
-    typeArguments!: NodeArray<TypeNode>;
+    declare typeArguments: NodeArray<TypeNode>;
     constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
         super(kind, pos, end);
     }
@@ -824,7 +824,7 @@ class IdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Identifier> im
 }
 
 class PrivateIdentifierObject extends TokenOrIdentifierObject<SyntaxKind.PrivateIdentifier> implements PrivateIdentifier {
-    public escapedText!: __String;
+    declare public escapedText: __String;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
     declare _leftHandSideExpressionBrand: any;
@@ -841,11 +841,11 @@ class PrivateIdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Private
 }
 
 class TypeObject implements Type {
-    checker: TypeChecker;
-    flags: TypeFlags;
-    objectFlags?: ObjectFlags;
-    id!: number;
-    symbol!: Symbol;
+    declare checker: TypeChecker;
+    declare flags: TypeFlags;
+    declare objectFlags?: ObjectFlags;
+    declare id: number;
+    declare symbol: Symbol;
     constructor(checker: TypeChecker, flags: TypeFlags) {
         // Note: if modifying this, be sure to update Type in src/compiler/types.ts
         this.flags = flags;
@@ -939,21 +939,21 @@ class TypeObject implements Type {
 }
 
 class SignatureObject implements Signature {
-    flags: SignatureFlags;
-    checker: TypeChecker;
-    declaration!: SignatureDeclaration;
-    typeParameters?: TypeParameter[];
-    parameters!: Symbol[];
-    thisParameter!: Symbol;
-    resolvedReturnType!: Type;
-    resolvedTypePredicate: TypePredicate | undefined;
-    minTypeArgumentCount!: number;
-    minArgumentCount!: number;
+    declare flags: SignatureFlags;
+    declare checker: TypeChecker;
+    declare declaration: SignatureDeclaration;
+    declare typeParameters?: TypeParameter[];
+    declare parameters: Symbol[];
+    declare thisParameter: Symbol;
+    declare resolvedReturnType: Type;
+    declare resolvedTypePredicate: TypePredicate | undefined;
+    declare minTypeArgumentCount: number;
+    declare minArgumentCount: number;
 
     // Undefined is used to indicate the value has not been computed. If, after computing, the
     // symbol has no doc comment, then the empty array will be returned.
-    documentationComment?: SymbolDisplayPart[];
-    jsDocTags?: JSDocTagInfo[]; // same
+    declare documentationComment?: SymbolDisplayPart[];
+    declare jsDocTags?: JSDocTagInfo[]; // same
 
     constructor(checker: TypeChecker, flags: SignatureFlags) {
         // Note: if modifying this, be sure to update Signature in src/compiler/types.ts
@@ -1065,52 +1065,52 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
 class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implements SourceFile {
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
-    public fileName!: string;
-    public path!: Path;
-    public resolvedPath!: Path;
-    public originalFileName!: string;
-    public text!: string;
-    public scriptSnapshot!: IScriptSnapshot;
-    public lineMap!: readonly number[];
+    declare public fileName: string;
+    declare public path: Path;
+    declare public resolvedPath: Path;
+    declare public originalFileName: string;
+    declare public text: string;
+    declare public scriptSnapshot: IScriptSnapshot;
+    declare public lineMap: readonly number[];
 
-    public statements!: NodeArray<Statement>;
-    public endOfFileToken!: Token<SyntaxKind.EndOfFileToken>;
+    declare public statements: NodeArray<Statement>;
+    declare public endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
 
-    public amdDependencies!: { name: string; path: string; }[];
-    public moduleName!: string;
-    public referencedFiles!: FileReference[];
-    public typeReferenceDirectives!: FileReference[];
-    public libReferenceDirectives!: FileReference[];
+    declare public amdDependencies: { name: string; path: string; }[];
+    declare public moduleName: string;
+    declare public referencedFiles: FileReference[];
+    declare public typeReferenceDirectives: FileReference[];
+    declare public libReferenceDirectives: FileReference[];
 
-    public syntacticDiagnostics!: DiagnosticWithLocation[];
-    public parseDiagnostics!: DiagnosticWithLocation[];
-    public bindDiagnostics!: DiagnosticWithLocation[];
-    public bindSuggestionDiagnostics?: DiagnosticWithLocation[];
+    declare public syntacticDiagnostics: DiagnosticWithLocation[];
+    declare public parseDiagnostics: DiagnosticWithLocation[];
+    declare public bindDiagnostics: DiagnosticWithLocation[];
+    declare public bindSuggestionDiagnostics: DiagnosticWithLocation[];
 
-    public isDeclarationFile!: boolean;
-    public isDefaultLib!: boolean;
-    public hasNoDefaultLib!: boolean;
-    public externalModuleIndicator!: Node; // The first node that causes this file to be an external module
-    public commonJsModuleIndicator!: Node; // The first node that causes this file to be a CommonJS module
-    public nodeCount!: number;
-    public identifierCount!: number;
-    public symbolCount!: number;
-    public version!: string;
-    public scriptKind!: ScriptKind;
-    public languageVersion!: ScriptTarget;
-    public languageVariant!: LanguageVariant;
-    public identifiers!: Map<string, string>;
-    public nameTable: Map<__String, number> | undefined;
-    public imports!: readonly StringLiteralLike[];
-    public moduleAugmentations!: StringLiteral[];
-    private namedDeclarations: Map<string, Declaration[]> | undefined;
-    public ambientModuleNames!: string[];
-    public checkJsDirective: CheckJsDirective | undefined;
-    public errorExpectations: TextRange[] | undefined;
-    public possiblyContainDynamicImport?: boolean;
-    public pragmas!: PragmaMap;
-    public localJsxFactory: EntityName | undefined;
-    public localJsxNamespace: __String | undefined;
+    declare public isDeclarationFile: boolean;
+    declare public isDefaultLib: boolean;
+    declare public hasNoDefaultLib: boolean;
+    declare public externalModuleIndicator: Node; // The first node that causes this file to be an external module
+    declare public commonJsModuleIndicator: Node; // The first node that causes this file to be a CommonJS module
+    declare public nodeCount: number;
+    declare public identifierCount: number;
+    declare public symbolCount: number;
+    declare public version: string;
+    declare public scriptKind: ScriptKind;
+    declare public languageVersion: ScriptTarget;
+    declare public languageVariant: LanguageVariant;
+    declare public identifiers: Map<string, string>;
+    declare public nameTable: Map<__String, number> | undefined;
+    declare public imports: readonly StringLiteralLike[];
+    declare public moduleAugmentations: StringLiteral[];
+    declare private namedDeclarations: Map<string, Declaration[]> | undefined;
+    declare public ambientModuleNames: string[];
+    declare public checkJsDirective: CheckJsDirective | undefined;
+    declare public errorExpectations: TextRange[] | undefined;
+    declare public possiblyContainDynamicImport?: boolean;
+    declare public pragmas: PragmaMap;
+    declare public localJsxFactory: EntityName | undefined;
+    declare public localJsxNamespace: __String | undefined;
 
     constructor(kind: SyntaxKind.SourceFile, pos: number, end: number) {
         super(kind, pos, end);
@@ -1307,10 +1307,10 @@ class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implements Sour
 }
 
 class SourceMapSourceObject implements SourceMapSource {
-    fileName: string;
-    text: string;
-    skipTrivia?: ((pos: number) => number) | undefined;
-    lineMap!: number[];
+    declare fileName: string;
+    declare text: string;
+    declare skipTrivia?: ((pos: number) => number) | undefined;
+    declare lineMap: number[];
 
     constructor(fileName: string, text: string, skipTrivia?: (pos: number) => number) {
         // Note: if modifying this, be sure to update SourceMapSource in src/compiler/types.ts
