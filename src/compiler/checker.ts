@@ -45777,12 +45777,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfTypeParameter(typeParam);
             if (!constraint || !(constraint.flags & TypeFlags.Union)) continue;
             if (typeParam.symbol && typeParam.symbol.declarations && typeParam.symbol.declarations.length === 1) {
-                const container = typeParam.symbol.declarations[0].parent;
+                const declaration = typeParam.symbol.declarations[0];
+                const container = isJSDocTemplateTag(declaration.parent) ? getJSDocHost(declaration.parent) : declaration.parent;
                 if (!isFunctionLike(container)) continue;
                 let reference: Identifier | undefined;
                 let hasInvalidReference = false;
                 for (const paramDecl of container.parameters) {
-                    const typeNode = paramDecl.type;
+                    const typeNode = getEffectiveTypeAnnotationNode(paramDecl);
                     if (!typeNode) continue;
                     if (isTypeParameterReferenced(typeParam, typeNode)) {
                         let candidateReference;
@@ -45815,7 +45816,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // - if the parameter is optional, then `T`'s constraint must allow for undefined
         function getValidParameterReference(paramDecl: ParameterDeclaration, constraint: Type): Identifier | undefined {
             if (!isIdentifier(paramDecl.name)) return;
-            if (paramDecl.questionToken && !containsUndefinedType(constraint)) return;
+            const isOptional = !!paramDecl.questionToken || isJSDocOptionalParameter(paramDecl);
+            if (isOptional && !containsUndefinedType(constraint)) return;
             return paramDecl.name;
         }
 

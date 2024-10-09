@@ -18,3 +18,12 @@ function source(type = "javascript") {
             : sources.get("some other thing")
     );
 }
+
+/**
+ * @template {boolean} T
+ * @param {T} b
+ * @returns {T extends true ? 1 : T extends false ? 2 : never}
+ */
+function simple(b) {
+    return b ? 1 : 2;
+}

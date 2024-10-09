@@ -32,3 +32,16 @@ function source(type = "javascript") {
 
     );
 }
+
+/**
+ * @template {boolean} T
+ * @param {T} b
+ * @returns {T extends true ? 1 : T extends false ? 2 : never}
+ */
+function simple(b) {
+>simple : Symbol(simple, Decl(file.js, 13, 1))
+>b : Symbol(b, Decl(file.js, 20, 16))
+
+    return b ? 1 : 2;
+>b : Symbol(b, Decl(file.js, 20, 16))
+}
