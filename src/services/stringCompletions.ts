@@ -808,7 +808,7 @@ function getCompletionEntriesForDirectoryFragment(
                 continue;
             }
 
-            const { name, extension } = getFilenameWithExtensionOption(getBaseFileName(filePath), program, extensionOptions, /*isExportsWildcard*/ false);
+            const { name, extension } = getFilenameWithExtensionOption(getBaseFileName(filePath), program, extensionOptions, /*isExportsOrImportsWildcard*/ false);
             result.add(nameAndKind(name, ScriptElementKind.scriptElement, extension));
         }
     }
