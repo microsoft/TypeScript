@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/dependentReturnType7.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== file.js ===
+/** @type {Map<string, string>} */
+const sources = new Map();
+>sources : Map<string, string>
+>        : ^^^^^^^^^^^^^^^^^^^
+>new Map() : Map<any, any>
+>          : ^^^^^^^^^^^^^
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+
+/**
+
+ * @param {string=} type the type of source that should be generated
+ * @returns {String}
+ */
+function source(type = "javascript") {
+>source : (type?: string | undefined) => string
+>       : ^    ^^^         ^^^^^^^^^^^^^^^^^^^^
+>type : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>"javascript" : "javascript"
+>             : ^^^^^^^^^^^^
+
+    return /** @type {String} */ (
+>(        type            ? sources.get(type)            : sources.get("some other thing")    ) : string
+>                                                                                               : ^^^^^^
+
+        type
+>type            ? sources.get(type)            : sources.get("some other thing") : string | undefined
+>                                                                                 : ^^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+
+            ? sources.get(type)
+>sources.get(type) : string | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
+>sources.get : (key: string) => string | undefined
+>            : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>sources : Map<string, string>
+>        : ^^^^^^^^^^^^^^^^^^^
+>get : (key: string) => string | undefined
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+
+            : sources.get("some other thing")
+>sources.get("some other thing") : string | undefined
+>                                : ^^^^^^^^^^^^^^^^^^
+>sources.get : (key: string) => string | undefined
+>            : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>sources : Map<string, string>
+>        : ^^^^^^^^^^^^^^^^^^^
+>get : (key: string) => string | undefined
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"some other thing" : "some other thing"
+>                   : ^^^^^^^^^^^^^^^^^^
+
+    );
+}
+
+/**
+ * @template {boolean} T
+ * @param {T} b
+ * @returns {T extends true ? 1 : T extends false ? 2 : never}
+ */
+function simple(b) {
+>simple : <T extends boolean>(b: T) => T extends true ? 1 : T extends false ? 2 : never
+>       : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                
+>b : T
+>  : ^
+
+    return b ? 1 : 2;
+>b ? 1 : 2 : 2 | 1
+>          : ^^^^^
+>b : T
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
