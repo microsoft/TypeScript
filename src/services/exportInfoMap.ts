@@ -604,7 +604,11 @@ export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChec
     exportKind: ExportKind;
 } | undefined {
     const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
-    if (exportEquals !== moduleSymbol) return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
+    if (exportEquals !== moduleSymbol) {
+        const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, exportEquals);
+        if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
+        return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
+    }
     const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
     if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
 }
