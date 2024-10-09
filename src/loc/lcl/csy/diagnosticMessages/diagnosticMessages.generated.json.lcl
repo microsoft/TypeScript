@@ -7893,11 +7893,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Generator_implicitly_has_yield_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_retu_7025" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Generator_implicitly_has_yield_type_0_Consider_supplying_a_return_type_annotation_7025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Generator implicitly has yield type '{0}' because it does not yield any values. Consider supplying a return type annotation.]]></Val>
+          <Val><![CDATA[Generator implicitly has yield type '{0}'. Consider supplying a return type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Generátor má implicitně typ yield {0}, protože nevydává žádné hodnoty. Zvažte možnost přidat anotaci návratového typu.]]></Val>
+            <Val><![CDATA[Generátor má implicitně typ yield {0}. Zvažte možnost přidat anotaci návratového typu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8429,6 +8429,15 @@
           <Val><![CDATA[Imported via {0} from file '{1}' with packageId '{2}' to import 'jsx' and 'jsxs' factory functions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Importováno přes {0} ze souboru {1} s packageId {2}, aby se provedl import výrobních funkcí jsx a jsxs]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_import_attribute_when_mod_1543" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Import souboru JSON do modulu ECMAScript vyžaduje atribut importu type: "json", pokud je možnost module nastavená na {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9849,6 +9858,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0_1544" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Pojmenované importy ze souboru JSON do modulu ECMAScript nejsou povolené, když je možnost module nastavená na {0}.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Named_property_0_of_types_1_and_2_are_not_identical_2319" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Named property '{0}' of types '{1}' and '{2}' are not identical.]]></Val>
@@ -10607,15 +10625,6 @@
           <Val><![CDATA[Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Možnost „--resolveJsonModule“ se nedá zadat, pokud je možnost „module“ nastavená na „none“, „system“ nebo „umd“.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Option_tsBuildInfoFile_cannot_be_specified_without_specifying_option_incremental_or_composite_or_if__5111" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Možnost „tsBuildInfoFile“ nelze zadat bez zadání možnosti „incremental“ nebo „composite“ nebo pokud není spuštěno „tsc -b“.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13068,6 +13077,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_i_6421" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přepište přípony souborů .ts, .tsx, .mts a .cts v relativních cestách importu na jejich javascriptový ekvivalent ve výstupních souborech.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish_2869" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Right operand of ?? is unreachable because the left operand is never nullish.]]></Val>
@@ -15099,6 +15117,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_JSX_tag_requires_0_to_be_in_scope_but_it_could_not_be_found_2874" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This JSX tag requires '{0}' to be in scope, but it could not be found.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tato značka JSX vyžaduje, aby objekt pro vytváření fragmentů {0} byl v oboru, ale nepovedlo se ho najít.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_types_fo_2875" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This JSX tag requires the module path '{0}' to exist, but none could be found. Make sure you have types for the appropriate package installed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tato značka JSX vyžaduje, aby existovala cesta k modulu {0}, ale žádná nebyla nalezena. Ujistěte se, že máte nainstalované typy pro příslušný balíček.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_JSX_tag_s_0_prop_expects_a_single_child_of_type_1_but_multiple_children_were_provided_2746" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag's '{0}' prop expects a single child of type '{1}', but multiple children were provided.]]></Val>
@@ -15248,6 +15284,24 @@
           <Val><![CDATA[This file already has a default export]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Tento soubor už má výchozí export.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_import_path_is_unsafe_to_rewrite_because_it_resolves_to_another_project_and_the_relative_path_b_2878" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přepsání této cesty importu není bezpečné, protože cesta se překládá na jiný projekt a relativní cesta mezi výstupními soubory projektů není stejná jako relativní cesta mezi příslušnými vstupními soubory.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_will_not_be_rewritten_duri_2877" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This import uses a '{0}' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tento import používá k překladu na vstupní soubor TypeScript rozšíření {0}, ale během generování se nepřepíše, protože se nejedná o relativní cestu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15455,6 +15509,15 @@
           <Val><![CDATA[This regular expression flag is only available when targeting '{0}' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Tento příznak regulárního výrazu je k dispozici pouze při cílení na „{0}“ nebo novější.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_relative_import_path_is_unsafe_to_rewrite_because_it_looks_like_a_file_name_but_actually_resolv_2876" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "{0}".]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přepsání této relativní cesty importu není bezpečné, protože cesta vypadá jako název souboru, ale ve skutečnosti se překládá na {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17030,6 +17093,15 @@
           <Val><![CDATA[Using '{0}' subpath '{1}' with target '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Používá se {0} dílčí cesta {1} s cílem {2}.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found_2879" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Using JSX fragments requires fragment factory '{0}' to be in scope, but it could not be found.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Použití fragmentů JSX vyžaduje, aby objekt pro vytváření fragmentů {0} byl v oboru, ale nepovedlo se ho najít.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
