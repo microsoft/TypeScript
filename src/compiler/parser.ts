@@ -5361,6 +5361,15 @@ namespace Parser {
                     return Tristate.True;
                 }
 
+                const isNextTokenGreater = lookAhead(() => {
+                    const third = nextToken();
+                    return third === SyntaxKind.GreaterThanToken;
+                });
+
+                if (isNextTokenGreater) {
+                    return Tristate.Unknown;
+                }
+
                 return Tristate.False;
             }
 
