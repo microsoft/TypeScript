@@ -26,11 +26,11 @@
 
 verify.completions({
     marker: ["1"],
-    exact: [],
+    exact: ["#internal"],
     isNewIdentifierLocation: true,
 });
 verify.completions({
     marker: ["2"],
-    exact: [],
+    exact: ["foo.js"],
     isNewIdentifierLocation: true,
 });

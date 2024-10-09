@@ -914,14 +914,16 @@ function addCompletionEntriesFromPathsOrExports(
     let pathResults: { results: NameAndKind[]; matchedPattern: boolean; }[] = [];
     let matchedPath: string | undefined;
     for (const key of keys) {
-        if (key === "." || (isExports || isImports) && hasTrailingDirectorySeparator(key)) continue;
-        const keyWithoutLeadingDotSlash = key.replace(/^\.\//, ""); // remove leading "./"
+        if (key === ".") continue;
+        const keyWithoutLeadingDotSlash = key
+            .replace(/^\.\//, "") // remove leading "./"
+            + (endsWith(key, "/") ? "*" : ""); // normalize trailing `/` to `/*`
         const patterns = getPatternsForKey(key);
         if (patterns) {
             const pathPattern = tryParsePattern(keyWithoutLeadingDotSlash);
             if (!pathPattern) continue;
             const isMatch = typeof pathPattern === "object" && isPatternMatch(pathPattern, fragment);
-            const isLongestMatch = isMatch && (matchedPath === undefined || comparePaths(key, matchedPath) === Comparison.LessThan);
+            const isLongestMatch = isMatch && (matchedPath === undefined || comparePaths(keyWithoutLeadingDotSlash, matchedPath) === Comparison.LessThan);
             if (isLongestMatch) {
                 // If this is a higher priority match than anything we've seen so far, previous results from matches are invalid, e.g.
                 // for `import {} from "some-package/|"` with a typesVersions:
@@ -934,10 +936,10 @@ function addCompletionEntriesFromPathsOrExports(
                 //                                 added by the '*' match, after typing `"some-package/foo/|"` we would get file results from both
                 //                                 ./dist/foo and ./foo, when only the latter will actually be resolvable.
                 //                                 See pathCompletionsTypesVersionsWildcard6.ts.
-                matchedPath = key;
+                matchedPath = keyWithoutLeadingDotSlash;
                 pathResults = pathResults.filter(r => !r.matchedPattern);
             }
-            if (typeof pathPattern === "string" || matchedPath === undefined || comparePaths(key, matchedPath) !== Comparison.GreaterThan) {
+            if (typeof pathPattern === "string" || matchedPath === undefined || comparePaths(keyWithoutLeadingDotSlash, matchedPath) !== Comparison.GreaterThan) {
                 pathResults.push({
                     matchedPattern: isMatch,
                     results: getCompletionsForPathMapping(keyWithoutLeadingDotSlash, patterns, fragment, baseDirectory, extensionOptions, (isExports || isImports) && endsWith(keyWithoutLeadingDotSlash, "*"), isImports, program, host, moduleSpecifierResolutionHost)
@@ -1034,7 +1036,13 @@ function getCompletionEntriesForNonRelativeModules(
                                 host,
                                 moduleSpecifierResolutionHost,
                                 keys,
-                                key => singleElementArray(getPatternFromFirstMatchingCondition(imports[key], conditions)),
+                                key => {
+                                    const pattern = getPatternFromFirstMatchingCondition(imports[key], conditions);
+                                    if (pattern === undefined) {
+                                        return undefined;
+                                    }
+                                    return singleElementArray(endsWith(key, "/") && endsWith(pattern, "/") ? pattern + "*" : pattern);
+                                },
                                 comparePatternKeys,
                             );
                             return;
@@ -1082,7 +1090,13 @@ function getCompletionEntriesForNonRelativeModules(
                                 host,
                                 moduleSpecifierResolutionHost,
                                 keys,
-                                key => singleElementArray(getPatternFromFirstMatchingCondition(exports[key], conditions)),
+                                key => {
+                                    const pattern = getPatternFromFirstMatchingCondition(exports[key], conditions);
+                                    if (pattern === undefined) {
+                                        return undefined;
+                                    }
+                                    return singleElementArray(endsWith(key, "/") && endsWith(pattern, "/") ? pattern + "*" : pattern);
+                                },
                                 comparePatternKeys,
                             );
                             return;

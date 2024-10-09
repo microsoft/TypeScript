@@ -461,7 +461,14 @@ Info seq  [hh:mm:ss:mss] response:
         "isGlobalCompletion": false,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": true,
-        "entries": [],
+        "entries": [
+          {
+            "name": "#internal",
+            "kind": "directory",
+            "kindModifiers": "",
+            "sortText": "11"
+          }
+        ],
         "defaultCommitCharacters": []
       }
     }
@@ -504,7 +511,14 @@ Info seq  [hh:mm:ss:mss] response:
         "isGlobalCompletion": false,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": true,
-        "entries": [],
+        "entries": [
+          {
+            "name": "foo.js",
+            "kind": "script",
+            "kindModifiers": ".js",
+            "sortText": "11"
+          }
+        ],
         "defaultCommitCharacters": []
       }
     }
