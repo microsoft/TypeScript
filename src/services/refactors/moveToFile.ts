@@ -948,7 +948,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
 
 function isGlobalType(checker: TypeChecker, location: Node, symbol: Symbol) {
     if (checker.resolveName(symbol.name, location, SymbolFlags.All, /*excludeGlobals*/ true)) return false;
-    return !!checker.resolveName(symbol.name, location, SymbolFlags.Type, /*excludeGlobals*/ false);
+    return !!checker.resolveName(symbol.name, /*location*/ undefined, SymbolFlags.Type, /*excludeGlobals*/ false);
 }
 
 function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {

@@ -9,7 +9,7 @@
 //// }
 
 // @Filename: /src/test.ts
-//// export interface Disposable {
+//// interface Disposable {
 ////     (): string;
 //// }
 //// export interface [|EditingService|] extends Disposable { }

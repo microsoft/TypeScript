@@ -9,20 +9,17 @@
 //// }
 
 // @Filename: /src/test.ts
-//// [|export interface Disposable {
-////     (): string;
-//// }
-//// export interface EditingService extends Disposable { }|]
-
+//// const Disposable = 1;
+//// export const [|EditingService|] = Disposable;
 
 verify.moveToNewFile({
     newFileContents: {
         "/src/test.ts": 
-``,
-        "/src/Disposable.ts":  // Reference to Disposable is moved to new file from `test.ts`
-`export interface Disposable {
-    (): string;
-}
-export interface EditingService extends Disposable { }
+`export const Disposable = 1;
+`,
+        "/src/EditingService.ts": // Reference to Disposable is still from `test.ts`
+`import { Disposable } from "./test";
+
+export const EditingService = Disposable;
 `
 }});
