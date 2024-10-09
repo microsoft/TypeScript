@@ -45645,7 +45645,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const functionFlags = getFunctionFlags(container);
         const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
         if (expr) {
-            const unwrappedExpr = skipParentheses(expr);
+            const unwrappedExpr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
             if (isConditionalExpression(unwrappedExpr)) {
                 return checkConditionalReturnExpression(container, returnType, node, unwrappedExpr);
             }
