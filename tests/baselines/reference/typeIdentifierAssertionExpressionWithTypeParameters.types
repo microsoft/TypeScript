@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/typeIdentifierAssertionExpressionWithTypeParameters.ts] ////
+
+=== typeIdentifierAssertionExpressionWithTypeParameters.ts ===
+const type = <T,>(x: T) => x;
+>type : <T>(x: T) => T
+>     : ^ ^^ ^^ ^^^^^^
+><T,>(x: T) => x : <T>(x: T) => T
+>                : ^ ^^ ^^ ^^^^^^
+>x : T
+>  : ^
+>x : T
+>  : ^
+
+type satisfies <T>(x: T) => T;
+>type satisfies <T>(x: T) => T : <T>(x: T) => T
+>                              : ^ ^^ ^^ ^^^^^^
+>type : <T>(x: T) => T
+>     : ^ ^^ ^^ ^^^^^^
+>x : T
+>  : ^
+
+type as <T>() => T;
+>type as <T>() => T : <T>() => T
+>                   : ^ ^^^^^^^ 
+>type : <T>(x: T) => T
+>     : ^ ^^ ^^ ^^^^^^
+
