@@ -1832,6 +1832,9 @@ export function createLanguageService(
         };
         program = createProgram(options);
 
+        // JSC memory leak ugly fix GH#58137
+        options.oldProgram = undefined;
+
         // 'getOrCreateSourceFile' depends on caching but should be used past this point.
         // After this point, the cache needs to be cleared to allow all collected snapshots to be released
         compilerHost = undefined;
