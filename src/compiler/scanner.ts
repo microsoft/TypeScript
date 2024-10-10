@@ -304,6 +304,120 @@ const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags
     [RegularExpressionFlags.Sticky, LanguageFeatureMinimumTarget.RegularExpressionFlagsSticky],
 ]);
 
+const enum TokenCategory {
+    IdentifierOrUnknown = 0,
+
+    /**
+     * Single-width tokens whose SyntaxKind value fits
+     * in the lower masked bits of the current value.
+     */
+    SimpleToken = 1 << 8, // must come first
+    Whitespace = 1 << 9,
+    LineBreak = 1 << 10,
+    Digit = 1 << 11,
+    /**
+     * Not a character that can be generically handled,
+     * but needs to be handled in some well-understood way.
+     */
+    RecognizedMisc = 1 << 12,
+
+    SimpleTokenMask = SimpleToken - 1,
+}
+
+const tokenCategoryLookup: TokenCategory[] = [];
+const tokenCategoryLookupUncommon = new Map<CharacterCodes, TokenCategory>();
+for (let i = 0; i < CharacterCodes.maxAsciiCharacter; i++) {
+    tokenCategoryLookup.push(TokenCategory.IdentifierOrUnknown);
+}
+
+for (
+    const [key, value] of [
+        // Line Break Whitespace
+        [CharacterCodes.lineFeed, TokenCategory.LineBreak],
+        [CharacterCodes.carriageReturn, TokenCategory.LineBreak],
+        [CharacterCodes.lineSeparator, TokenCategory.LineBreak],
+        [CharacterCodes.paragraphSeparator, TokenCategory.LineBreak],
+
+        // Single Line Whitespace
+        [CharacterCodes.space, TokenCategory.Whitespace],
+        [CharacterCodes.tab, TokenCategory.Whitespace],
+        [CharacterCodes.verticalTab, TokenCategory.Whitespace],
+        [CharacterCodes.formFeed, TokenCategory.Whitespace],
+        [CharacterCodes.nonBreakingSpace, TokenCategory.Whitespace],
+        [CharacterCodes.nextLine, TokenCategory.Whitespace],
+        [CharacterCodes.ogham, TokenCategory.Whitespace],
+        [CharacterCodes.enQuad, TokenCategory.Whitespace],
+        [CharacterCodes.emQuad, TokenCategory.Whitespace],
+        [CharacterCodes.enSpace, TokenCategory.Whitespace],
+        [CharacterCodes.emSpace, TokenCategory.Whitespace],
+        [CharacterCodes.threePerEmSpace, TokenCategory.Whitespace],
+        [CharacterCodes.fourPerEmSpace, TokenCategory.Whitespace],
+        [CharacterCodes.sixPerEmSpace, TokenCategory.Whitespace],
+        [CharacterCodes.figureSpace, TokenCategory.Whitespace],
+        [CharacterCodes.punctuationSpace, TokenCategory.Whitespace],
+        [CharacterCodes.thinSpace, TokenCategory.Whitespace],
+        [CharacterCodes.hairSpace, TokenCategory.Whitespace],
+        [CharacterCodes.zeroWidthSpace, TokenCategory.Whitespace],
+        [CharacterCodes.narrowNoBreakSpace, TokenCategory.Whitespace],
+        [CharacterCodes.mathematicalSpace, TokenCategory.Whitespace],
+        [CharacterCodes.ideographicSpace, TokenCategory.Whitespace],
+        [CharacterCodes.byteOrderMark, TokenCategory.Whitespace],
+
+        // Simple Single-Character Tokens
+        [CharacterCodes.openParen, TokenCategory.SimpleToken | SyntaxKind.OpenParenToken],
+        [CharacterCodes.closeParen, TokenCategory.SimpleToken | SyntaxKind.CloseParenToken],
+        [CharacterCodes.comma, TokenCategory.SimpleToken | SyntaxKind.CommaToken],
+        [CharacterCodes.colon, TokenCategory.SimpleToken | SyntaxKind.ColonToken],
+        [CharacterCodes.semicolon, TokenCategory.SimpleToken | SyntaxKind.SemicolonToken],
+        [CharacterCodes.openBracket, TokenCategory.SimpleToken | SyntaxKind.OpenBracketToken],
+        [CharacterCodes.closeBracket, TokenCategory.SimpleToken | SyntaxKind.CloseBracketToken],
+        [CharacterCodes.openBrace, TokenCategory.SimpleToken | SyntaxKind.OpenBraceToken],
+        [CharacterCodes.closeBrace, TokenCategory.SimpleToken | SyntaxKind.CloseBraceToken],
+        [CharacterCodes.tilde, TokenCategory.SimpleToken | SyntaxKind.TildeToken],
+        [CharacterCodes.at, TokenCategory.SimpleToken | SyntaxKind.AtToken],
+
+        // Digits
+        [CharacterCodes._0, TokenCategory.Digit],
+        [CharacterCodes._1, TokenCategory.Digit],
+        [CharacterCodes._2, TokenCategory.Digit],
+        [CharacterCodes._3, TokenCategory.Digit],
+        [CharacterCodes._4, TokenCategory.Digit],
+        [CharacterCodes._5, TokenCategory.Digit],
+        [CharacterCodes._6, TokenCategory.Digit],
+        [CharacterCodes._7, TokenCategory.Digit],
+        [CharacterCodes._8, TokenCategory.Digit],
+        [CharacterCodes._9, TokenCategory.Digit],
+
+        [CharacterCodes.exclamation, TokenCategory.RecognizedMisc],
+        [CharacterCodes.doubleQuote, TokenCategory.RecognizedMisc],
+        [CharacterCodes.singleQuote, TokenCategory.RecognizedMisc],
+        [CharacterCodes.backtick, TokenCategory.RecognizedMisc],
+        [CharacterCodes.percent, TokenCategory.RecognizedMisc],
+        [CharacterCodes.ampersand, TokenCategory.RecognizedMisc],
+        [CharacterCodes.asterisk, TokenCategory.RecognizedMisc],
+        [CharacterCodes.plus, TokenCategory.RecognizedMisc],
+        [CharacterCodes.minus, TokenCategory.RecognizedMisc],
+        [CharacterCodes.dot, TokenCategory.RecognizedMisc],
+        [CharacterCodes.slash, TokenCategory.RecognizedMisc],
+        [CharacterCodes.lessThan, TokenCategory.RecognizedMisc],
+        [CharacterCodes.equals, TokenCategory.RecognizedMisc],
+        [CharacterCodes.greaterThan, TokenCategory.RecognizedMisc],
+        [CharacterCodes.question, TokenCategory.RecognizedMisc],
+        [CharacterCodes.caret, TokenCategory.RecognizedMisc],
+        [CharacterCodes.bar, TokenCategory.RecognizedMisc],
+        [CharacterCodes.backslash, TokenCategory.RecognizedMisc],
+        [CharacterCodes.hash, TokenCategory.RecognizedMisc],
+        [CharacterCodes.replacementCharacter, TokenCategory.RecognizedMisc],
+    ]
+) {
+    if (key < tokenCategoryLookup.length) {
+        tokenCategoryLookup[key] = value;
+    }
+    else {
+        tokenCategoryLookupUncommon.set(key, value);
+    }
+}
+
 /*
     As per ECMAScript Language Specification 5th Edition, Section 7.6: ISyntaxToken Names and Identifiers
     IdentifierStart ::
@@ -1897,69 +2011,115 @@ export function createScanner(
             }
 
             const ch = codePointUnchecked(pos);
-            if (pos === 0) {
-                // Special handling for shebang
-                if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
-                    pos = scanShebangTrivia(text, pos);
-                    if (skipTrivia) {
-                        continue;
+
+            if (ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn) {
+                tokenFlags |= TokenFlags.PrecedingLineBreak;
+                if (skipTrivia) {
+                    pos++;
+                    continue;
+                }
+                else {
+                    if (ch === CharacterCodes.carriageReturn && pos + 1 < end && charCodeUnchecked(pos + 1) === CharacterCodes.lineFeed) {
+                        // consume both CR and LF
+                        pos += 2;
                     }
                     else {
-                        return token = SyntaxKind.ShebangTrivia;
+                        pos++;
                     }
+                    return token = SyntaxKind.NewLineTrivia;
                 }
             }
 
+            const tokenCategory = ch < tokenCategoryLookup.length ?
+                tokenCategoryLookup[ch] :
+                tokenCategoryLookupUncommon.get(ch) ?? TokenCategory.IdentifierOrUnknown;
+
+            if (tokenCategory === TokenCategory.IdentifierOrUnknown) {
+                const identifierKind = scanIdentifier(ch, languageVersion);
+                if (identifierKind) {
+                    return token = identifierKind;
+                }
+                const size = charSize(ch);
+                error(Diagnostics.Invalid_character, pos, size);
+                pos += size;
+                return token = SyntaxKind.Unknown;
+            }
+
+            if (tokenCategory & TokenCategory.Whitespace) {
+                pos++;
+                // Tight loop here on consecutive whitespace to avoid a table lookup.
+                while (pos < end) {
+                    const nextCh = charCodeUnchecked(pos);
+                    // Check for the original character to hitting the slow path.
+                    if (nextCh === ch || isWhiteSpaceSingleLine(nextCh)) {
+                        pos++;
+                        continue;
+                    }
+
+                    break;
+                }
+
+                if (skipTrivia) {
+                    continue;
+                }
+                else {
+                    return token = SyntaxKind.WhitespaceTrivia;
+                }
+            }
+
+            if (tokenCategory & TokenCategory.LineBreak) {
+                tokenFlags |= TokenFlags.PrecedingLineBreak;
+                pos += charSize(ch);
+                continue;
+            }
+
+            if (tokenCategory & TokenCategory.SimpleToken) {
+                pos++;
+                return token = tokenCategory & TokenCategory.SimpleTokenMask;
+            }
+
+            if (tokenCategory & TokenCategory.Digit) {
+                if (ch === CharacterCodes._0) {
+                    if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.X || charCodeUnchecked(pos + 1) === CharacterCodes.x)) {
+                        pos += 2;
+                        tokenValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
+                        if (!tokenValue) {
+                            error(Diagnostics.Hexadecimal_digit_expected);
+                            tokenValue = "0";
+                        }
+                        tokenValue = "0x" + tokenValue;
+                        tokenFlags |= TokenFlags.HexSpecifier;
+                        return token = checkBigIntSuffix();
+                    }
+                    else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.B || charCodeUnchecked(pos + 1) === CharacterCodes.b)) {
+                        pos += 2;
+                        tokenValue = scanBinaryOrOctalDigits(/* base */ 2);
+                        if (!tokenValue) {
+                            error(Diagnostics.Binary_digit_expected);
+                            tokenValue = "0";
+                        }
+                        tokenValue = "0b" + tokenValue;
+                        tokenFlags |= TokenFlags.BinarySpecifier;
+                        return token = checkBigIntSuffix();
+                    }
+                    else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.O || charCodeUnchecked(pos + 1) === CharacterCodes.o)) {
+                        pos += 2;
+                        tokenValue = scanBinaryOrOctalDigits(/* base */ 8);
+                        if (!tokenValue) {
+                            error(Diagnostics.Octal_digit_expected);
+                            tokenValue = "0";
+                        }
+                        tokenValue = "0o" + tokenValue;
+                        tokenFlags |= TokenFlags.OctalSpecifier;
+                        return token = checkBigIntSuffix();
+                    }
+                }
+
+                return token = scanNumber();
+            }
+
+            if (!(tokenCategory & TokenCategory.RecognizedMisc)) Debug.fail(`Unhandled token category ${tokenCategory}`);
             switch (ch) {
-                case CharacterCodes.lineFeed:
-                case CharacterCodes.carriageReturn:
-                    tokenFlags |= TokenFlags.PrecedingLineBreak;
-                    if (skipTrivia) {
-                        pos++;
-                        continue;
-                    }
-                    else {
-                        if (ch === CharacterCodes.carriageReturn && pos + 1 < end && charCodeUnchecked(pos + 1) === CharacterCodes.lineFeed) {
-                            // consume both CR and LF
-                            pos += 2;
-                        }
-                        else {
-                            pos++;
-                        }
-                        return token = SyntaxKind.NewLineTrivia;
-                    }
-                case CharacterCodes.tab:
-                case CharacterCodes.verticalTab:
-                case CharacterCodes.formFeed:
-                case CharacterCodes.space:
-                case CharacterCodes.nonBreakingSpace:
-                case CharacterCodes.ogham:
-                case CharacterCodes.enQuad:
-                case CharacterCodes.emQuad:
-                case CharacterCodes.enSpace:
-                case CharacterCodes.emSpace:
-                case CharacterCodes.threePerEmSpace:
-                case CharacterCodes.fourPerEmSpace:
-                case CharacterCodes.sixPerEmSpace:
-                case CharacterCodes.figureSpace:
-                case CharacterCodes.punctuationSpace:
-                case CharacterCodes.thinSpace:
-                case CharacterCodes.hairSpace:
-                case CharacterCodes.zeroWidthSpace:
-                case CharacterCodes.narrowNoBreakSpace:
-                case CharacterCodes.mathematicalSpace:
-                case CharacterCodes.ideographicSpace:
-                case CharacterCodes.byteOrderMark:
-                    if (skipTrivia) {
-                        pos++;
-                        continue;
-                    }
-                    else {
-                        while (pos < end && isWhiteSpaceSingleLine(charCodeUnchecked(pos))) {
-                            pos++;
-                        }
-                        return token = SyntaxKind.WhitespaceTrivia;
-                    }
                 case CharacterCodes.exclamation:
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
                         if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
@@ -1993,12 +2153,6 @@ export function createScanner(
                     }
                     pos++;
                     return token = SyntaxKind.AmpersandToken;
-                case CharacterCodes.openParen:
-                    pos++;
-                    return token = SyntaxKind.OpenParenToken;
-                case CharacterCodes.closeParen:
-                    pos++;
-                    return token = SyntaxKind.CloseParenToken;
                 case CharacterCodes.asterisk:
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
@@ -2029,9 +2183,6 @@ export function createScanner(
                     }
                     pos++;
                     return token = SyntaxKind.PlusToken;
-                case CharacterCodes.comma:
-                    pos++;
-                    return token = SyntaxKind.CommaToken;
                 case CharacterCodes.minus:
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.minus) {
                         return pos += 2, token = SyntaxKind.MinusMinusToken;
@@ -2129,57 +2280,6 @@ export function createScanner(
                     pos++;
                     return token = SyntaxKind.SlashToken;
 
-                case CharacterCodes._0:
-                    if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.X || charCodeUnchecked(pos + 1) === CharacterCodes.x)) {
-                        pos += 2;
-                        tokenValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
-                        if (!tokenValue) {
-                            error(Diagnostics.Hexadecimal_digit_expected);
-                            tokenValue = "0";
-                        }
-                        tokenValue = "0x" + tokenValue;
-                        tokenFlags |= TokenFlags.HexSpecifier;
-                        return token = checkBigIntSuffix();
-                    }
-                    else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.B || charCodeUnchecked(pos + 1) === CharacterCodes.b)) {
-                        pos += 2;
-                        tokenValue = scanBinaryOrOctalDigits(/* base */ 2);
-                        if (!tokenValue) {
-                            error(Diagnostics.Binary_digit_expected);
-                            tokenValue = "0";
-                        }
-                        tokenValue = "0b" + tokenValue;
-                        tokenFlags |= TokenFlags.BinarySpecifier;
-                        return token = checkBigIntSuffix();
-                    }
-                    else if (pos + 2 < end && (charCodeUnchecked(pos + 1) === CharacterCodes.O || charCodeUnchecked(pos + 1) === CharacterCodes.o)) {
-                        pos += 2;
-                        tokenValue = scanBinaryOrOctalDigits(/* base */ 8);
-                        if (!tokenValue) {
-                            error(Diagnostics.Octal_digit_expected);
-                            tokenValue = "0";
-                        }
-                        tokenValue = "0o" + tokenValue;
-                        tokenFlags |= TokenFlags.OctalSpecifier;
-                        return token = checkBigIntSuffix();
-                    }
-                // falls through
-                case CharacterCodes._1:
-                case CharacterCodes._2:
-                case CharacterCodes._3:
-                case CharacterCodes._4:
-                case CharacterCodes._5:
-                case CharacterCodes._6:
-                case CharacterCodes._7:
-                case CharacterCodes._8:
-                case CharacterCodes._9:
-                    return token = scanNumber();
-                case CharacterCodes.colon:
-                    pos++;
-                    return token = SyntaxKind.ColonToken;
-                case CharacterCodes.semicolon:
-                    pos++;
-                    return token = SyntaxKind.SemicolonToken;
                 case CharacterCodes.lessThan:
                     if (isConflictMarkerTrivia(text, pos)) {
                         pos = scanConflictMarkerTrivia(text, pos, error);
@@ -2256,21 +2356,12 @@ export function createScanner(
                     }
                     pos++;
                     return token = SyntaxKind.QuestionToken;
-                case CharacterCodes.openBracket:
-                    pos++;
-                    return token = SyntaxKind.OpenBracketToken;
-                case CharacterCodes.closeBracket:
-                    pos++;
-                    return token = SyntaxKind.CloseBracketToken;
                 case CharacterCodes.caret:
                     if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.CaretEqualsToken;
                     }
                     pos++;
                     return token = SyntaxKind.CaretToken;
-                case CharacterCodes.openBrace:
-                    pos++;
-                    return token = SyntaxKind.OpenBraceToken;
                 case CharacterCodes.bar:
                     if (isConflictMarkerTrivia(text, pos)) {
                         pos = scanConflictMarkerTrivia(text, pos, error);
@@ -2293,15 +2384,6 @@ export function createScanner(
                     }
                     pos++;
                     return token = SyntaxKind.BarToken;
-                case CharacterCodes.closeBrace:
-                    pos++;
-                    return token = SyntaxKind.CloseBraceToken;
-                case CharacterCodes.tilde:
-                    pos++;
-                    return token = SyntaxKind.TildeToken;
-                case CharacterCodes.at:
-                    pos++;
-                    return token = SyntaxKind.AtToken;
                 case CharacterCodes.backslash:
                     const extendedCookedChar = peekExtendedUnicodeEscape();
                     if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
@@ -2321,13 +2403,25 @@ export function createScanner(
                     pos++;
                     return token = SyntaxKind.Unknown;
                 case CharacterCodes.hash:
-                    if (pos !== 0 && text[pos + 1] === "!") {
-                        error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos, 2);
-                        pos++;
-                        return token = SyntaxKind.Unknown;
+                    const charAfterHash = codePointUnchecked(pos + 1);
+
+                    if (charAfterHash === CharacterCodes.exclamation) {
+                        if (pos === 0) {
+                            pos = scanShebangTrivia(text, pos);
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.ShebangTrivia;
+                            }
+                        }
+                        else if (pos !== 0) {
+                            error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos, 2);
+                            pos++;
+                            return token = SyntaxKind.Unknown;
+                        }
                     }
 
-                    const charAfterHash = codePointUnchecked(pos + 1);
                     if (charAfterHash === CharacterCodes.backslash) {
                         pos++;
                         const extendedCookedChar = peekExtendedUnicodeEscape();
@@ -2364,24 +2458,6 @@ export function createScanner(
                     error(Diagnostics.File_appears_to_be_binary, 0, 0);
                     pos = end;
                     return token = SyntaxKind.NonTextFileMarkerTrivia;
-                default:
-                    const identifierKind = scanIdentifier(ch, languageVersion);
-                    if (identifierKind) {
-                        return token = identifierKind;
-                    }
-                    else if (isWhiteSpaceSingleLine(ch)) {
-                        pos += charSize(ch);
-                        continue;
-                    }
-                    else if (isLineBreak(ch)) {
-                        tokenFlags |= TokenFlags.PrecedingLineBreak;
-                        pos += charSize(ch);
-                        continue;
-                    }
-                    const size = charSize(ch);
-                    error(Diagnostics.Invalid_character, pos, size);
-                    pos += size;
-                    return token = SyntaxKind.Unknown;
             }
         }
     }
