@@ -46768,6 +46768,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkInterfaceDeclaration(node: InterfaceDeclaration) {
         // Grammar checking
         if (!checkGrammarModifiers(node)) checkGrammarInterfaceDeclaration(node);
+        if (!allowBlockDeclarations(node.parent)) {
+            grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, "interface");
+        }
 
         checkTypeParameters(node.typeParameters);
         addLazyDiagnostic(() => {
@@ -46811,6 +46814,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Grammar checking
         checkGrammarModifiers(node);
         checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
+        if (!allowBlockDeclarations(node.parent)) {
+            grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, "type");
+        }
         checkExportsOnMergedDeclarations(node);
         checkTypeParameters(node.typeParameters);
         if (node.type.kind === SyntaxKind.IntrinsicKeyword) {
@@ -52042,7 +52048,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function allowLetAndConstDeclarations(parent: Node): boolean {
+    function allowBlockDeclarations(parent: Node): boolean {
         switch (parent.kind) {
             case SyntaxKind.IfStatement:
             case SyntaxKind.DoStatement:
@@ -52053,14 +52059,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ForOfStatement:
                 return false;
             case SyntaxKind.LabeledStatement:
-                return allowLetAndConstDeclarations(parent.parent);
+                return allowBlockDeclarations(parent.parent);
         }
 
         return true;
     }
 
     function checkGrammarForDisallowedBlockScopedVariableStatement(node: VariableStatement) {
-        if (!allowLetAndConstDeclarations(node.parent)) {
+        if (!allowBlockDeclarations(node.parent)) {
             const blockScopeKind = getCombinedNodeFlagsCached(node.declarationList) & NodeFlags.BlockScoped;
             if (blockScopeKind) {
                 const keyword = blockScopeKind === NodeFlags.Let ? "let" :
