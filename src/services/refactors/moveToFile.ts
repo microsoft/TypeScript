@@ -70,6 +70,7 @@ import {
     hasTSFileExtension,
     hostGetCanonicalFileName,
     Identifier,
+    idText,
     ImportDeclaration,
     ImportEqualsDeclaration,
     importFromModuleSpecifier,
@@ -104,6 +105,7 @@ import {
     isStatement,
     isStringLiteral,
     isStringLiteralLike,
+    isTransientSymbol,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
     isVariableDeclarationInitializedToRequire,
@@ -969,13 +971,18 @@ function forEachReference(node: Node, checker: TypeChecker, enclosingRange: Text
             if (enclosingRange && !rangeContainsRange(enclosingRange, node)) {
                 return;
             }
-            const sym = checker.getSymbolAtLocation(node);
+            const sym = resolveSymbol(checker, node);
             if (sym) onReference(sym, isValidTypeOnlyAliasUseSite(node));
         }
         else {
             node.forEachChild(cb);
         }
     });
+}
+
+function resolveSymbol(checker: TypeChecker, node: Identifier) {
+    const symbol = checker.getSymbolAtLocation(node);
+    return symbol === undefined || isTransientSymbol(symbol) ? checker.resolveName(idText(node), node, SymbolFlags.All, /*excludeGlobals*/ false) : symbol;
 }
 
 function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevelDeclaration) => T): T | undefined {
