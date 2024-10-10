@@ -246,6 +246,7 @@ import {
     InterfaceDeclaration,
     InternalEmitFlags,
     InternalSymbolName,
+    IntroducesNewScopeNode,
     isAccessor,
     isAnyDirectorySeparator,
     isArray,
@@ -322,6 +323,7 @@ import {
     isLeftHandSideExpression,
     isLineBreak,
     isLiteralTypeNode,
+    isMappedTypeNode,
     isMemberName,
     isMetaProperty,
     isMethodDeclaration,
@@ -2918,11 +2920,6 @@ export function isVariableLike(node: Node): node is VariableLikeDeclaration {
         }
     }
     return false;
-}
-
-/** @internal */
-export function isVariableLikeOrAccessor(node: Node): node is AccessorDeclaration | VariableLikeDeclaration {
-    return isVariableLike(node) || isAccessor(node);
 }
 
 /** @internal */
@@ -11938,6 +11935,9 @@ export function hasInferredType(node: Node): node is HasInferredType {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.ExportAssignment:
         case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.JSDocParameterTag:
+        case SyntaxKind.JSDocPropertyTag:
             return true;
         default:
             assertType<never>(node);
@@ -12076,4 +12076,10 @@ function getNodeAtPosition(sourceFile: SourceFile, position: number, includeJSDo
         }
         current = child;
     }
+}
+/** @internal */
+export function isNewScopeNode(node: Node): node is IntroducesNewScopeNode {
+    return isFunctionLike(node)
+        || isJSDocSignature(node)
+        || isMappedTypeNode(node);
 }

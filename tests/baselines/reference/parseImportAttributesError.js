@@ -47,5 +47,5 @@ ImportInterface;
 
 //// [index.d.ts]
 export type LocalInterface = import("pkg", { with: {} });
-export declare const a: any;
-export declare const b: any;
+export declare const a: import("pkg", { with: {} });
+export declare const b: import("pkg", { with: {} });

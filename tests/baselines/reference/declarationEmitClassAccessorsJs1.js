@@ -26,7 +26,7 @@ export class VFile {
     /**
      * @param {URL | string} path
      */
-    set path(path: string | URL);
+    set path(path: URL | string);
     /**
      * @returns {string}
      */

@@ -3,9 +3,9 @@
 === symbolProperty18.ts ===
 var i = {
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >{    [Symbol.iterator]: 0,    [Symbol.toStringTag]() { return "" },    set [Symbol.toPrimitive](p: boolean) { }} : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
->                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 
     [Symbol.iterator]: 0,
 >[Symbol.iterator] : number
@@ -50,7 +50,7 @@ var it = i[Symbol.iterator];
 >i[Symbol.iterator] : number
 >                   : ^^^^^^
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -66,7 +66,7 @@ var str = i[Symbol.toStringTag]();
 >i[Symbol.toStringTag] : () => string
 >                      : ^^^^^^^^^^^^
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >Symbol.toStringTag : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -80,7 +80,7 @@ i[Symbol.toPrimitive] = false;
 >i[Symbol.toPrimitive] : boolean
 >                      : ^^^^^^^
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >Symbol.toPrimitive : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
