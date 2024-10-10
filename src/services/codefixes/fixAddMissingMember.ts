@@ -681,7 +681,8 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
     }
     if (type.flags & TypeFlags.EnumLike) {
         const enumMember = type.symbol.exports ? firstOrUndefinedIterator(type.symbol.exports.values()) : type.symbol;
-        const name = checker.symbolToExpression(type.symbol.parent ? type.symbol.parent : type.symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ NodeBuilderFlags.UseFullyQualifiedType);
+        const symbol = type.symbol.parent && type.symbol.parent.flags & SymbolFlags.RegularEnum ? type.symbol.parent : type.symbol;
+        const name = checker.symbolToExpression(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ NodeBuilderFlags.UseFullyQualifiedType);
         return enumMember === undefined || name === undefined ? factory.createNumericLiteral(0) : factory.createPropertyAccessExpression(name, checker.symbolToString(enumMember));
     }
     if (type.flags & TypeFlags.NumberLiteral) {
