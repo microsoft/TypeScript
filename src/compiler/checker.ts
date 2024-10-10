@@ -6240,6 +6240,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 let annotationType = getTypeFromTypeNodeWithoutContext(existing);
+                if (isErrorType(annotationType)) {
+                    // allow "reusing" type nodes that resolve to error types
+                    // those can't truly be reused but it prevents cascading errors in isolatedDeclarations
+                    // for source with errors there is no guarantee to emit correct code anyway
+                    return true;
+                }
                 if (requiresAddingUndefined && annotationType) {
                     annotationType = getOptionalType(annotationType, !isParameter(node));
                 }
