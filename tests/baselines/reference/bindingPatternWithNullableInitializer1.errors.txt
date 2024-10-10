@@ -2,9 +2,10 @@ bindingPatternWithNullableInitializer1.ts(10,22): error TS18048: 't' is possibly
 bindingPatternWithNullableInitializer1.ts(14,22): error TS18047: 't' is possibly 'null'.
 bindingPatternWithNullableInitializer1.ts(18,22): error TS18049: 't' is possibly 'null' or 'undefined'.
 bindingPatternWithNullableInitializer1.ts(22,14): error TS2532: Object is possibly 'undefined'.
+bindingPatternWithNullableInitializer1.ts(31,18): error TS18048: 'input.a.b' is possibly 'undefined'.
 
 
-==== bindingPatternWithNullableInitializer1.ts (4 errors) ====
+==== bindingPatternWithNullableInitializer1.ts (5 errors) ====
     // https://github.com/microsoft/TypeScript/issues/60119
     
     interface T {
@@ -36,4 +37,14 @@ bindingPatternWithNullableInitializer1.ts(22,14): error TS2532: Object is possib
                  ~~~~~~~~~~
 !!! error TS2532: Object is possibly 'undefined'.
     }
+    
+    // https://github.com/microsoft/TypeScript/issues/60179
+    
+    const input: {
+      a?: { b?: { c: string } };
+    } = { a: undefined };
+    
+    const { ...b } = input.a?.b;
+                     ~~~~~~~~~~
+!!! error TS18048: 'input.a.b' is possibly 'undefined'.
     

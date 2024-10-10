@@ -89,3 +89,39 @@ function f4<L extends keyof T>(k: L, t: { f: T | undefined }) {
 >  : ^^^^^             ^^^
 }
 
+// https://github.com/microsoft/TypeScript/issues/60179
+
+const input: {
+>input : { a?: { b?: { c: string; }; }; }
+>      : ^^^^^^                       ^^^
+
+  a?: { b?: { c: string } };
+>a : { b?: { c: string; }; } | undefined
+>  : ^^^^^^              ^^^^^^^^^^^^^^^
+>b : { c: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
+>c : string
+>  : ^^^^^^
+
+} = { a: undefined };
+>{ a: undefined } : { a: undefined; }
+>                 : ^^^^^^^^^^^^^^^^^
+>a : undefined
+>  : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+const { ...b } = input.a?.b;
+>b : { c: string; }
+>  : ^^^^^      ^^^
+>input.a?.b : { c: string; } | undefined
+>           : ^^^^^      ^^^^^^^^^^^^^^^
+>input.a : { b?: { c: string; }; } | undefined
+>        : ^^^^^^              ^^^^^^^^^^^^^^^
+>input : { a?: { b?: { c: string; }; }; }
+>      : ^^^^^^                       ^^^
+>a : { b?: { c: string; }; } | undefined
+>  : ^^^^^^              ^^^^^^^^^^^^^^^
+>b : { c: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
+

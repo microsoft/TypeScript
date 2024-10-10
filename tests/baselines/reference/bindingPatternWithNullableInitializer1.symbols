@@ -78,3 +78,25 @@ function f4<L extends keyof T>(k: L, t: { f: T | undefined }) {
 >t : Symbol(t, Decl(bindingPatternWithNullableInitializer1.ts, 20, 36))
 }
 
+// https://github.com/microsoft/TypeScript/issues/60179
+
+const input: {
+>input : Symbol(input, Decl(bindingPatternWithNullableInitializer1.ts, 26, 5))
+
+  a?: { b?: { c: string } };
+>a : Symbol(a, Decl(bindingPatternWithNullableInitializer1.ts, 26, 14))
+>b : Symbol(b, Decl(bindingPatternWithNullableInitializer1.ts, 27, 7))
+>c : Symbol(c, Decl(bindingPatternWithNullableInitializer1.ts, 27, 13))
+
+} = { a: undefined };
+>a : Symbol(a, Decl(bindingPatternWithNullableInitializer1.ts, 28, 5))
+>undefined : Symbol(undefined)
+
+const { ...b } = input.a?.b;
+>b : Symbol(b, Decl(bindingPatternWithNullableInitializer1.ts, 30, 7))
+>input.a?.b : Symbol(b, Decl(bindingPatternWithNullableInitializer1.ts, 27, 7))
+>input.a : Symbol(a, Decl(bindingPatternWithNullableInitializer1.ts, 26, 14))
+>input : Symbol(input, Decl(bindingPatternWithNullableInitializer1.ts, 26, 5))
+>a : Symbol(a, Decl(bindingPatternWithNullableInitializer1.ts, 26, 14))
+>b : Symbol(b, Decl(bindingPatternWithNullableInitializer1.ts, 27, 7))
+

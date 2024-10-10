@@ -24,3 +24,11 @@ function f3<L extends keyof T>(k: L, t: T | null | undefined) {
 function f4<L extends keyof T>(k: L, t: { f: T | undefined }) {
   const { f: { [k]: v } } = t;
 }
+
+// https://github.com/microsoft/TypeScript/issues/60179
+
+const input: {
+  a?: { b?: { c: string } };
+} = { a: undefined };
+
+const { ...b } = input.a?.b;
