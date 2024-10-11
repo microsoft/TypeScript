@@ -180,6 +180,7 @@ const errorCodes: readonly number[] = [
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode.code,
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig.code,
     Diagnostics.Cannot_find_namespace_0_Did_you_mean_1.code,
+    Diagnostics.This_JSX_tag_requires_0_to_be_in_scope_but_it_could_not_be_found.code,
 ];
 
 registerCodeFix({
@@ -241,7 +242,7 @@ export function createImportAdder(sourceFile: SourceFile | FutureSourceFile, pro
 interface AddToExistingState {
     readonly importClauseOrBindingPattern: ImportClause | ObjectBindingPattern;
     defaultImport: Import | undefined;
-    readonly namedImports: Map<string, AddAsTypeOnly>;
+    readonly namedImports: Map<string, { addAsTypeOnly: AddAsTypeOnly; propertyName?: string | undefined; }>;
 }
 
 function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, program: Program, useAutoImportProvider: boolean, preferences: UserPreferences, host: LanguageServiceHost, cancellationToken: CancellationToken | undefined): ImportAdder {
@@ -290,6 +291,8 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         let fix = getImportFixForSymbol(sourceFile, exportInfo, program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
         if (fix) {
             const localName = tryCast(referenceImport?.name, isIdentifier)?.text ?? symbolName;
+            let addAsTypeOnly: AddAsTypeOnly | undefined;
+            let propertyName: string | undefined;
             if (
                 referenceImport
                 && isTypeOnlyImportDeclaration(referenceImport)
@@ -297,8 +300,19 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 && fix.addAsTypeOnly === AddAsTypeOnly.Allowed
             ) {
                 // Copy the type-only status from the reference import
-                fix = { ...fix, addAsTypeOnly: AddAsTypeOnly.Required };
+                addAsTypeOnly = AddAsTypeOnly.Required;
             }
+
+            if (exportedSymbol.name !== localName) {
+                // checks if the symbol was aliased at the referenced import
+                propertyName = exportedSymbol.name;
+            }
+
+            fix = {
+                ...fix,
+                ...(addAsTypeOnly === undefined ? {} : { addAsTypeOnly }),
+                ...(propertyName === undefined ? {} : { propertyName }),
+            };
             addImport({ fix, symbolName: localName ?? symbolName, errorIdentifierText: undefined });
         }
     }
@@ -335,6 +349,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 exportingFileName,
                 compilerOptions,
                 createModuleSpecifierResolutionHost(program, host),
+                preferences,
             );
             const importKind = getImportKind(futureExportingSourceFile, exportKind, program);
             const addAsTypeOnly = getAddAsTypeOnly(
@@ -374,14 +389,14 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 importType.push(fix);
                 break;
             case ImportFixKind.AddToExisting: {
-                const { importClauseOrBindingPattern, importKind, addAsTypeOnly } = fix;
+                const { importClauseOrBindingPattern, importKind, addAsTypeOnly, propertyName } = fix;
                 let entry = addToExisting.get(importClauseOrBindingPattern);
                 if (!entry) {
                     addToExisting.set(importClauseOrBindingPattern, entry = { importClauseOrBindingPattern, defaultImport: undefined, namedImports: new Map() });
                 }
                 if (importKind === ImportKind.Named) {
-                    const prevValue = entry?.namedImports.get(symbolName);
-                    entry.namedImports.set(symbolName, reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly));
+                    const prevTypeOnly = entry?.namedImports.get(symbolName)?.addAsTypeOnly;
+                    entry.namedImports.set(symbolName, { addAsTypeOnly: reduceAddAsTypeOnlyValues(prevTypeOnly, addAsTypeOnly), propertyName });
                 }
                 else {
                     Debug.assert(entry.defaultImport === undefined || entry.defaultImport.name === symbolName, "(Add to Existing) Default import should be missing or match symbolName");
@@ -393,7 +408,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 break;
             }
             case ImportFixKind.AddNew: {
-                const { moduleSpecifier, importKind, useRequire, addAsTypeOnly } = fix;
+                const { moduleSpecifier, importKind, useRequire, addAsTypeOnly, propertyName } = fix;
                 const entry = getNewImportEntry(moduleSpecifier, importKind, useRequire, addAsTypeOnly);
                 Debug.assert(entry.useRequire === useRequire, "(Add new) Tried to add an `import` and a `require` for the same module");
 
@@ -404,12 +419,12 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                         break;
                     case ImportKind.Named:
                         const prevValue = (entry.namedImports ||= new Map()).get(symbolName);
-                        entry.namedImports.set(symbolName, reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly));
+                        entry.namedImports.set(symbolName, [reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly), propertyName]);
                         break;
                     case ImportKind.CommonJS:
                         if (compilerOptions.verbatimModuleSyntax) {
                             const prevValue = (entry.namedImports ||= new Map()).get(symbolName);
-                            entry.namedImports.set(symbolName, reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly));
+                            entry.namedImports.set(symbolName, [reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly), propertyName]);
                         }
                         else {
                             Debug.assert(entry.namespaceLikeImport === undefined || entry.namespaceLikeImport.name === symbolName, "Namespacelike import shoudl be missing or match symbolName");
@@ -581,7 +596,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 sourceFile as SourceFile,
                 importClauseOrBindingPattern,
                 defaultImport,
-                arrayFrom(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
+                arrayFrom(namedImports.entries(), ([name, { addAsTypeOnly, propertyName }]) => ({ addAsTypeOnly, propertyName, name })),
                 importSpecifiersToRemoveWhileAdding,
                 preferences,
             );
@@ -595,7 +610,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 moduleSpecifier,
                 quotePreference,
                 defaultImport,
-                namedImports && arrayFrom(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
+                namedImports && arrayFrom(namedImports.entries(), ([name, [addAsTypeOnly, propertyName]]) => ({ addAsTypeOnly, propertyName, name })),
                 namespaceLikeImport,
                 compilerOptions,
                 preferences,
@@ -771,11 +786,13 @@ interface FixAddToExistingImport extends ImportFixBase {
     readonly importClauseOrBindingPattern: ImportClause | ObjectBindingPattern;
     readonly importKind: ImportKind.Default | ImportKind.Named;
     readonly addAsTypeOnly: AddAsTypeOnly;
+    readonly propertyName?: string;
 }
 interface FixAddNewImport extends ImportFixBase {
     readonly kind: ImportFixKind.AddNew;
     readonly importKind: ImportKind;
     readonly addAsTypeOnly: AddAsTypeOnly;
+    readonly propertyName?: string;
     readonly useRequire: boolean;
     readonly qualification?: Qualification;
 }
@@ -841,7 +858,7 @@ export function getImportCompletionAction(
 }
 
 /** @internal */
-export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbolToken: Identifier, program: Program, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences) {
+export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbolToken: Identifier, program: Program, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): CodeAction | undefined {
     const compilerOptions = program.getCompilerOptions();
     const symbolName = single(getSymbolNamesToImport(sourceFile, program.getTypeChecker(), symbolToken, compilerOptions));
     const fix = getTypeOnlyPromotionFix(sourceFile, symbolToken, symbolName, program);
@@ -1793,7 +1810,7 @@ function doAddExistingFix(
                 factory.createObjectBindingPattern([
                     ...clause.elements.filter(e => !removeExistingImportSpecifiers.has(e)),
                     ...defaultImport ? [factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ "default", defaultImport.name)] : emptyArray,
-                    ...namedImports.map(i => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i.name)),
+                    ...namedImports.map(i => factory.createBindingElement(/*dotDotDotToken*/ undefined, i.propertyName, i.name)),
                 ]),
             );
             return;
@@ -1802,7 +1819,7 @@ function doAddExistingFix(
             addElementToBindingPattern(clause, defaultImport.name, "default");
         }
         for (const specifier of namedImports) {
-            addElementToBindingPattern(clause, specifier.name, /*propertyName*/ undefined);
+            addElementToBindingPattern(clause, specifier.name, specifier.propertyName);
         }
         return;
     }
@@ -1822,7 +1839,7 @@ function doAddExistingFix(
             namedImports.map(namedImport =>
                 factory.createImportSpecifier(
                     (!clause.isTypeOnly || promoteFromTypeOnly) && shouldUseTypeOnly(namedImport, preferences),
-                    /*propertyName*/ undefined,
+                    namedImport.propertyName === undefined ? undefined : factory.createIdentifier(namedImport.propertyName),
                     factory.createIdentifier(namedImport.name),
                 )
             ),
@@ -1918,11 +1935,12 @@ function getImportTypePrefix(moduleSpecifier: string, quotePreference: QuotePref
 interface Import {
     readonly name: string;
     readonly addAsTypeOnly: AddAsTypeOnly;
+    readonly propertyName?: string; // Use when needing to generate an `ImportSpecifier with a `propertyName`; the name preceding "as" keyword (undefined when "as" is absent)
 }
 
 interface ImportsCollection {
     readonly defaultImport?: Import;
-    readonly namedImports?: Map<string, AddAsTypeOnly>;
+    readonly namedImports?: Map<string, [AddAsTypeOnly, /*propertyName*/ string?]>;
     readonly namespaceLikeImport?: {
         readonly importKind: ImportKind.CommonJS | ImportKind.Namespace;
         readonly name: string;
@@ -1963,7 +1981,7 @@ function getNewImports(
                 namedImports?.map(namedImport =>
                     factory.createImportSpecifier(
                         !topLevelTypeOnly && shouldUseTypeOnly(namedImport, preferences),
-                        /*propertyName*/ undefined,
+                        namedImport.propertyName === undefined ? undefined : factory.createIdentifier(namedImport.propertyName),
                         factory.createIdentifier(namedImport.name),
                     )
                 ),
@@ -2002,7 +2020,7 @@ function getNewRequires(moduleSpecifier: string, quotePreference: QuotePreferenc
     let statements: RequireVariableStatement | readonly RequireVariableStatement[] | undefined;
     // const { default: foo, bar, etc } = require('./mod');
     if (defaultImport || namedImports?.length) {
-        const bindingElements = namedImports?.map(({ name }) => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name)) || [];
+        const bindingElements = namedImports?.map(({ name, propertyName }) => factory.createBindingElement(/*dotDotDotToken*/ undefined, propertyName, name)) || [];
         if (defaultImport) {
             bindingElements.unshift(factory.createBindingElement(/*dotDotDotToken*/ undefined, "default", defaultImport.name));
         }

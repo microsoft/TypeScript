@@ -1076,3 +1076,249 @@ function example1(things: Thing[]) {
     }
 }
 
+class TestPropertyDeclaration1 {
+>TestPropertyDeclaration1 : TestPropertyDeclaration1
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  assert = (value: unknown): asserts value => {};
+>assert : (value: unknown) => asserts value
+>       : ^     ^^       ^^^^^             
+>(value: unknown): asserts value => {} : (value: unknown) => asserts value
+>                                      : ^     ^^       ^^^^^             
+>value : unknown
+>      : ^^^^^^^
+
+  other(x: unknown) {
+>other : (x: unknown) => void
+>      : ^ ^^       ^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+    this.assert(x); // error
+>this.assert(x) : void
+>               : ^^^^
+>this.assert : (value: unknown) => asserts value
+>            : ^     ^^       ^^^^^             
+>this : this
+>     : ^^^^
+>assert : (value: unknown) => asserts value
+>       : ^     ^^       ^^^^^             
+>x : unknown
+>  : ^^^^^^^
+
+    x;
+>x : unknown
+>  : ^^^^^^^
+  }
+}
+
+class TestPropertyDeclaration2 {
+>TestPropertyDeclaration2 : TestPropertyDeclaration2
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  assert: (v: unknown) => asserts v = (value) => {};
+>assert : (v: unknown) => asserts v
+>       : ^ ^^       ^^^^^         
+>v : unknown
+>  : ^^^^^^^
+>(value) => {} : (value: unknown) => void
+>              : ^     ^^^^^^^^^^^^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+
+  other(x: unknown) {
+>other : (x: unknown) => void
+>      : ^ ^^       ^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+    this.assert(x); // ok
+>this.assert(x) : void
+>               : ^^^^
+>this.assert : (v: unknown) => asserts v
+>            : ^ ^^       ^^^^^         
+>this : this
+>     : ^^^^
+>assert : (v: unknown) => asserts v
+>       : ^ ^^       ^^^^^         
+>x : unknown
+>  : ^^^^^^^
+
+    x;
+>x : {}
+>  : ^^
+  }
+}
+
+declare class ParentInheritedPropertyDeclaration {
+>ParentInheritedPropertyDeclaration : ParentInheritedPropertyDeclaration
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  assert: (value: unknown) => asserts value;
+>assert : (value: unknown) => asserts value
+>       : ^     ^^       ^^^^^             
+>value : unknown
+>      : ^^^^^^^
+}
+class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclaration {
+>ChildInheritedPropertyDeclaration : ChildInheritedPropertyDeclaration
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ParentInheritedPropertyDeclaration : ParentInheritedPropertyDeclaration
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  other(x: unknown) {
+>other : (x: unknown) => void
+>      : ^ ^^       ^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+    this.assert(x); // ok
+>this.assert(x) : void
+>               : ^^^^
+>this.assert : (value: unknown) => asserts value
+>            : ^     ^^       ^^^^^             
+>this : this
+>     : ^^^^
+>assert : (value: unknown) => asserts value
+>       : ^     ^^       ^^^^^             
+>x : unknown
+>  : ^^^^^^^
+
+    x;
+>x : {}
+>  : ^^
+  }
+}
+
+interface TestPropertySignature {
+  assert: (value: unknown) => asserts value;
+>assert : (value: unknown) => asserts value
+>       : ^     ^^       ^^^^^             
+>value : unknown
+>      : ^^^^^^^
+}
+function testPropertySignature(
+>testPropertySignature : (x: TestPropertySignature, y: unknown) => void
+>                      : ^ ^^                     ^^ ^^       ^^^^^^^^^
+
+  x: TestPropertySignature,
+>x : TestPropertySignature
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+  y: unknown,
+>y : unknown
+>  : ^^^^^^^
+
+) {
+  x.assert(y); // ok
+>x.assert(y) : void
+>            : ^^^^
+>x.assert : (value: unknown) => asserts value
+>         : ^     ^^       ^^^^^             
+>x : TestPropertySignature
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>assert : (value: unknown) => asserts value
+>       : ^     ^^       ^^^^^             
+>y : unknown
+>  : ^^^^^^^
+
+  x;
+>x : TestPropertySignature
+>  : ^^^^^^^^^^^^^^^^^^^^^
+}
+function testFunctionThisParameter1(
+>testFunctionThisParameter1 : (this: TestPropertySignature, x: unknown) => void
+>                           : ^    ^^                     ^^ ^^       ^^^^^^^^^
+
+  this: TestPropertySignature,
+>this : TestPropertySignature
+>     : ^^^^^^^^^^^^^^^^^^^^^
+
+  x: unknown,
+>x : unknown
+>  : ^^^^^^^
+
+) {
+  this.assert(x); // ok
+>this.assert(x) : void
+>               : ^^^^
+>this.assert : (value: unknown) => asserts value
+>            : ^     ^^       ^^^^^             
+>this : TestPropertySignature
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>assert : (value: unknown) => asserts value
+>       : ^     ^^       ^^^^^             
+>x : unknown
+>  : ^^^^^^^
+
+  x;
+>x : {}
+>  : ^^
+}
+
+interface TestMethodSignature {
+  assert(value: unknown): asserts value;
+>assert : (value: unknown) => asserts value
+>       : ^     ^^       ^^^^^             
+>value : unknown
+>      : ^^^^^^^
+}
+function testMethodSignature(
+>testMethodSignature : (x: TestMethodSignature, y: unknown) => void
+>                    : ^ ^^                   ^^ ^^       ^^^^^^^^^
+
+  x: TestMethodSignature,
+>x : TestMethodSignature
+>  : ^^^^^^^^^^^^^^^^^^^
+
+  y: unknown,
+>y : unknown
+>  : ^^^^^^^
+
+) {
+  x.assert(y); // ok
+>x.assert(y) : void
+>            : ^^^^
+>x.assert : (value: unknown) => asserts value
+>         : ^     ^^       ^^^^^             
+>x : TestMethodSignature
+>  : ^^^^^^^^^^^^^^^^^^^
+>assert : (value: unknown) => asserts value
+>       : ^     ^^       ^^^^^             
+>y : unknown
+>  : ^^^^^^^
+
+  x;
+>x : TestMethodSignature
+>  : ^^^^^^^^^^^^^^^^^^^
+}
+function testFunctionThisParameter2(
+>testFunctionThisParameter2 : (this: TestMethodSignature, x: unknown) => void
+>                           : ^    ^^                   ^^ ^^       ^^^^^^^^^
+
+  this: TestMethodSignature,
+>this : TestMethodSignature
+>     : ^^^^^^^^^^^^^^^^^^^
+
+  x: unknown,
+>x : unknown
+>  : ^^^^^^^
+
+) {
+  this.assert(x); // ok
+>this.assert(x) : void
+>               : ^^^^
+>this.assert : (value: unknown) => asserts value
+>            : ^     ^^       ^^^^^             
+>this : TestMethodSignature
+>     : ^^^^^^^^^^^^^^^^^^^
+>assert : (value: unknown) => asserts value
+>       : ^     ^^       ^^^^^             
+>x : unknown
+>  : ^^^^^^^
+
+  x;
+>x : {}
+>  : ^^
+}
+

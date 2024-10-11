@@ -697,8 +697,10 @@ export interface LanguageService {
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
     /** @internal */ mapCode(fileName: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly FileTextChanges[];
+    /** @internal */ getImports(fileName: string): readonly string[];
 
     dispose(): void;
+    preparePasteEditsForFile(fileName: string, copiedTextRanges: TextRange[]): boolean;
     getPasteEdits(
         args: PasteEditsArgs,
         formatOptions: FormatCodeSettings,
@@ -1232,7 +1234,7 @@ export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatC
 }
 
 /** @internal */
-export const testFormatSettings = getDefaultFormatCodeSettings("\n");
+export const testFormatSettings: FormatCodeSettings = getDefaultFormatCodeSettings("\n");
 
 export interface DefinitionInfo extends DocumentSpan {
     kind: ScriptElementKind;

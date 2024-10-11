@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/signatureCombiningRestParameters2.ts] ////
+
+=== signatureCombiningRestParameters2.ts ===
+interface Console {
+  log(message?: any, ...optionalParams: any[]): void;
+>log : { (...data: any[]): void; (message?: any, ...optionalParams: any[]): void; }
+>    : ^^^^^^    ^^     ^^^    ^^^       ^^^   ^^^^^              ^^     ^^^    ^^^
+>message : any
+>optionalParams : any[]
+>               : ^^^^^
+}
+
+let logs: string[] = [];
+>logs : string[]
+>     : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+let originalLog: typeof console.log;
+>originalLog : { (...data: any[]): void; (message?: any, ...optionalParams: any[]): void; }
+>            : ^^^^^^    ^^     ^^^    ^^^       ^^^   ^^^^^              ^^     ^^^    ^^^
+>console.log : { (...data: any[]): void; (message?: any, ...optionalParams: any[]): void; }
+>            : ^^^^^^    ^^     ^^^    ^^^       ^^^   ^^^^^              ^^     ^^^    ^^^
+>console : Console
+>        : ^^^^^^^
+>log : { (...data: any[]): void; (message?: any, ...optionalParams: any[]): void; }
+>    : ^^^^^^    ^^     ^^^    ^^^       ^^^   ^^^^^              ^^     ^^^    ^^^
+
+console.log = (...args) => {
+>console.log = (...args) => {  logs.push(...args);} : (args_0?: any, ...args: any[]) => void
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>console.log : { (...data: any[]): void; (message?: any, ...optionalParams: any[]): void; }
+>            : ^^^^^^    ^^     ^^^    ^^^       ^^^   ^^^^^              ^^     ^^^    ^^^
+>console : Console
+>        : ^^^^^^^
+>log : { (...data: any[]): void; (message?: any, ...optionalParams: any[]): void; }
+>    : ^^^^^^    ^^     ^^^    ^^^       ^^^   ^^^^^              ^^     ^^^    ^^^
+>(...args) => {  logs.push(...args);} : (args_0?: any, ...args: any[]) => void
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : [any?, ...any[]]
+>     : ^^^^^^^^^^^^^^^^
+
+  logs.push(...args);
+>logs.push(...args) : number
+>                   : ^^^^^^
+>logs.push : (...items: string[]) => number
+>          : ^^^^     ^^^^^^^^^^^^^^^      
+>logs : string[]
+>     : ^^^^^^^^
+>push : (...items: string[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
+>...args : any
+>args : [any?, ...any[]]
+>     : ^^^^^^^^^^^^^^^^
+
+};
+
