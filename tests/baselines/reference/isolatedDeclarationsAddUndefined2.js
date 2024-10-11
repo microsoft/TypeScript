@@ -23,6 +23,8 @@ export function test1(x?: Array | undefined): void {}
 
 export function test2(x?: Unresolved | undefined): void {}
 
+export function test3(x?: Unresolved): void {}
+
 
 //// [isolatedDeclarationsAddUndefined2.js]
 "use strict";
@@ -31,6 +33,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar4 = exports.Bar3 = exports.Bar2 = exports.Bar = void 0;
 exports.test1 = test1;
 exports.test2 = test2;
+exports.test3 = test3;
 var Bar = /** @class */ (function () {
     function Bar(x) {
         this.x = x;
@@ -61,6 +64,7 @@ var Bar4 = /** @class */ (function () {
 exports.Bar4 = Bar4;
 function test1(x) { }
 function test2(x) { }
+function test3(x) { }
 
 
 //// [isolatedDeclarationsAddUndefined2.d.ts]
@@ -82,3 +86,4 @@ export declare class Bar4 {
 }
 export declare function test1(x?: Array | undefined): void;
 export declare function test2(x?: Unresolved | undefined): void;
+export declare function test3(x?: Unresolved): void;

@@ -4,9 +4,10 @@ isolatedDeclarationsAddUndefined2.ts(12,28): error TS2314: Generic type 'Array<T
 isolatedDeclarationsAddUndefined2.ts(16,28): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
 isolatedDeclarationsAddUndefined2.ts(19,27): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
 isolatedDeclarationsAddUndefined2.ts(21,27): error TS2304: Cannot find name 'Unresolved'.
+isolatedDeclarationsAddUndefined2.ts(23,27): error TS2304: Cannot find name 'Unresolved'.
 
 
-==== isolatedDeclarationsAddUndefined2.ts (6 errors) ====
+==== isolatedDeclarationsAddUndefined2.ts (7 errors) ====
     // https://github.com/microsoft/TypeScript/issues/60123
     
     export class Bar {
@@ -38,6 +39,10 @@ isolatedDeclarationsAddUndefined2.ts(21,27): error TS2304: Cannot find name 'Unr
 !!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
     
     export function test2(x?: Unresolved | undefined): void {}
+                              ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Unresolved'.
+    
+    export function test3(x?: Unresolved): void {}
                               ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'Unresolved'.
     

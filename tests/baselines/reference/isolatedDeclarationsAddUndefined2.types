@@ -51,3 +51,9 @@ export function test2(x?: Unresolved | undefined): void {}
 >x : any
 >  : ^^^
 
+export function test3(x?: Unresolved): void {}
+>test3 : (x?: any) => void
+>      : ^ ^^^^^^^^^^^    
+>x : any
+>  : ^^^
+

@@ -23,3 +23,5 @@ export class Bar4 {
 export function test1(x?: Array | undefined): void {}
 
 export function test2(x?: Unresolved | undefined): void {}
+
+export function test3(x?: Unresolved): void {}

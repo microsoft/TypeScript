@@ -45,3 +45,8 @@ export function test2(x?: Unresolved | undefined): void {}
 >x : Symbol(x, Decl(isolatedDeclarationsAddUndefined2.ts, 20, 22))
 >Unresolved : Symbol(Unresolved)
 
+export function test3(x?: Unresolved): void {}
+>test3 : Symbol(test3, Decl(isolatedDeclarationsAddUndefined2.ts, 20, 58))
+>x : Symbol(x, Decl(isolatedDeclarationsAddUndefined2.ts, 22, 22))
+>Unresolved : Symbol(Unresolved)
+
