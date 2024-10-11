@@ -6348,6 +6348,7 @@ declare namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+        getTypeArgumentsForResolvedSignature(signature: Signature): readonly Type[] | undefined;
     }
     enum NodeBuilderFlags {
         None = 0,
