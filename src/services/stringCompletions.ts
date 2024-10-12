@@ -1245,16 +1245,7 @@ function getModulesForPathsPattern(
 
     const isExportsOrImportsWildcard = (isExports || isImports) && endsWith(pattern, "/*");
 
-    let matches = mapDefined(tryReadDirectory(host, baseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, includeGlobs), match => {
-        const trimmedWithPattern = trimPrefixAndSuffix(match, completePrefix);
-        if (trimmedWithPattern) {
-            if (containsSlash(trimmedWithPattern)) {
-                return directoryResult(getPathComponents(removeLeadingDirectorySeparator(trimmedWithPattern))[1]);
-            }
-            const { name, extension } = getFilenameWithExtensionOption(trimmedWithPattern, program, extensionOptions, isExportsOrImportsWildcard);
-            return nameAndKind(name, ScriptElementKind.scriptElement, extension);
-        }
-    });
+    let matches = getMatchesWithPrefix(baseDirectory, completePrefix);
 
     // If we had a suffix, we already recursively searched for all possible files that could match
     // it and returned the directories leading to those files. Otherwise, assume any directory could
@@ -1265,8 +1256,16 @@ function getModulesForPathsPattern(
 
     if (inputBaseDirectory && inputBaseDirectory !== baseDirectory) {
         const completeInputPrefix = fragmentHasPath ? inputBaseDirectory : ensureTrailingDirectorySeparator(inputBaseDirectory) + normalizedPrefixBase;
-        const inputMatches = mapDefined(tryReadDirectory(host, inputBaseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, includeGlobs), match => {
-            const trimmedWithPattern = trimPrefixAndSuffix(match, completeInputPrefix);
+        matches = concatenate(matches, getMatchesWithPrefix(inputBaseDirectory, completeInputPrefix));
+    }
+
+    matches = concatenate(matches, directories);
+
+    return matches;
+
+    function getMatchesWithPrefix(directory: string, prefix: string) {
+        return mapDefined(tryReadDirectory(host, directory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, includeGlobs), match => {
+            const trimmedWithPattern = trimPrefixAndSuffix(match, prefix);
             if (trimmedWithPattern) {
                 if (containsSlash(trimmedWithPattern)) {
                     return directoryResult(getPathComponents(removeLeadingDirectorySeparator(trimmedWithPattern))[1]);
@@ -1275,12 +1274,7 @@ function getModulesForPathsPattern(
                 return nameAndKind(name, ScriptElementKind.scriptElement, extension);
             }
         });
-        matches = concatenate(matches, inputMatches);
     }
-
-    matches = concatenate(matches, directories);
-
-    return matches;
 
     function trimPrefixAndSuffix(path: string, prefix: string): string | undefined {
         return firstDefined(matchingSuffixes, suffix => {
