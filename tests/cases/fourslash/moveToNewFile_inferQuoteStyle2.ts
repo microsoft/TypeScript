@@ -12,8 +12,8 @@
 
 verify.moveToNewFile({
     newFileContents: {
-        "/newFile.ts":
-`import { x } from "./a";
+        "/newFile.ts": // module specifier should have the same quotes as import in the original file 
+`import { x } from './a';
 
 x;
 `,
