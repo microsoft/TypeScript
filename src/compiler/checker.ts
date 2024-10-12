@@ -18582,6 +18582,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                 return objectType;
             }
+            if (indexType === neverType || indexType === implicitNeverType) {
+                return neverType;
+            }
             // If no index signature is applicable, we default to the string index signature. In effect, this means the string
             // index signature applies even when accessing with a symbol-like type.
             const indexInfo = getApplicableIndexInfo(objectType, indexType) || getIndexInfoOfType(objectType, stringType);
@@ -18617,9 +18620,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return getUnionType([indexInfo.type, missingType]);
                 }
                 return indexInfo.type;
-            }
-            if (indexType.flags & TypeFlags.Never) {
-                return neverType;
             }
             if (isJSLiteralType(objectType)) {
                 return anyType;
@@ -18948,7 +18948,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         objectType = getReducedType(objectType);
         // If the object type has a string index signature and no other members we know that the result will
         // always be the type of that index signature and we can simplify accordingly.
-        if (isStringIndexSignatureOnlyType(objectType) && !(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
+        if (isStringIndexSignatureOnlyType(objectType) && !(indexType.flags & TypeFlags.Nullable) && !(indexType.flags & TypeFlags.Never) && isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
             indexType = stringType;
         }
         // In noUncheckedIndexedAccess mode, indexed access operations that occur in an expression in a read position and resolve to
