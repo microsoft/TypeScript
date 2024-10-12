@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/typeIdentifierAssertionExpression.ts] ////
+
+=== typeIdentifierAssertionExpression.ts ===
+const type = 'x';
+>type : "x"
+>     : ^^^
+>'x' : "x"
+>    : ^^^
+
+type satisfies string;
+>type satisfies string : "x"
+>                      : ^^^
+>type : "x"
+>     : ^^^
+
+type as string;
+>type as string : string
+>               : ^^^^^^
+>type : "x"
+>     : ^^^
+
