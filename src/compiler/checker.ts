@@ -15456,7 +15456,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 isInJSFile(declaration) &&
                 isValueSignatureDeclaration(declaration) &&
                 !hasJSDocParameterTags(declaration) &&
-                !getJSDocType(declaration);
+                !getJSDocType(declaration) &&
+                !getContextualSignatureForFunctionLikeDeclaration(declaration);
             if (isUntypedSignatureInJSFile) {
                 flags |= SignatureFlags.IsUntypedSignatureInJSFile;
             }
