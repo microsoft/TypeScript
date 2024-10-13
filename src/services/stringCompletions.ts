@@ -1221,14 +1221,13 @@ function getModulesForPathsPattern(
 
     // Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
     const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + fragmentDirectory) : normalizedPrefixDirectory;
-
-    const normalizedSuffix = normalizePath(parsed.suffix);
-    const declarationExtension = normalizedSuffix && getDeclarationEmitExtensionForPath("_" + normalizedSuffix);
-    const inputExtension = isImports && normalizedSuffix ? getPossibleOriginalInputExtensionForExtension("_" + normalizedSuffix) : undefined;
-    const matchingSuffixes = [...(inputExtension ? inputExtension.map(ext => changeExtension(normalizedSuffix, ext)) : []), declarationExtension && changeExtension(normalizedSuffix, declarationExtension), normalizedSuffix].filter(isString);
     // Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
     const baseDirectory = normalizePath(combinePaths(packageDirectory, expandedPrefixDirectory));
     const inputBaseDirectory = isImports && getPossibleOriginalInputPathWithoutChangingExt(baseDirectory, !hostUsesCaseSensitiveFileNames(moduleSpecifierResolutionHost), program.getCompilerOptions().outDir, () => moduleSpecifierResolutionHost.getCommonSourceDirectory());
+    const normalizedSuffix = normalizePath(parsed.suffix);
+    const declarationExtension = normalizedSuffix && getDeclarationEmitExtensionForPath("_" + normalizedSuffix);
+    const inputExtension = inputBaseDirectory && inputBaseDirectory !== baseDirectory && normalizedSuffix ? getPossibleOriginalInputExtensionForExtension("_" + normalizedSuffix) : undefined;
+    const matchingSuffixes = [...(inputExtension ? inputExtension.map(ext => changeExtension(normalizedSuffix, ext)) : []), declarationExtension && changeExtension(normalizedSuffix, declarationExtension), normalizedSuffix].filter(isString);
     const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
 
     // If we have a suffix, then we read the directory all the way down to avoid returning completions for
