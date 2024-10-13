@@ -18910,9 +18910,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [index]);
         const templateMapper = combineTypeMappers(objectType.mapper, mapper);
         const instantiatedTemplateType = instantiateType(getTemplateTypeFromMappedType(objectType.target as MappedType || objectType), templateMapper);
-        const isOptional = getMappedTypeOptionality(objectType) > 0 || (isGenericType(objectType) ?
-            getCombinedMappedTypeOptionality(getModifiersTypeFromMappedType(objectType)) > 0 :
-            couldAccessOptionalProperty(objectType, index));
+        const isOptional = isGenericType(objectType) ?
+            getCombinedMappedTypeOptionality(objectType) > 0 :
+            getMappedTypeOptionality(objectType) > 0 || couldAccessOptionalProperty(objectType, index);
         return addOptionality(instantiatedTemplateType, /*isProperty*/ true, isOptional);
     }
 
