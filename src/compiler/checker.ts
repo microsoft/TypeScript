@@ -14794,14 +14794,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const modifiersType = getModifiersTypeFromMappedType(type);
             const baseConstraint = isGenericMappedType(modifiersType) ? getApparentTypeOfMappedType(modifiersType) : getBaseConstraintOfType(modifiersType);
             if (baseConstraint && everyType(baseConstraint, t => isArrayOrTupleType(t) || isArrayOrTupleOrIntersection(t))) {
-                return instantiateType(target, prependTypeMapping(typeVariable, baseConstraint, type.mapper));
+                const applicableConstraint = baseConstraint.flags & TypeFlags.Intersection ? getIntersectionType(filter((baseConstraint as IntersectionType).types, isArrayOrTupleType)) : baseConstraint;
+                return instantiateType(target, prependTypeMapping(typeVariable, applicableConstraint, type.mapper));
             }
         }
         return type;
     }
 
     function isArrayOrTupleOrIntersection(type: Type) {
-        return !!(type.flags & TypeFlags.Intersection) && every((type as IntersectionType).types, isArrayOrTupleType);
+        return !!(type.flags & TypeFlags.Intersection) && some((type as IntersectionType).types, isArrayOrTupleType);
     }
 
     function isMappedTypeGenericIndexedAccess(type: Type) {
@@ -20190,7 +20191,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return instantiateMappedTupleType(t, type, typeVariable!, mapper);
                     }
                     if (isArrayOrTupleOrIntersection(t)) {
-                        return getIntersectionType(map((t as IntersectionType).types, instantiateConstituent));
+                        return getIntersectionType(map(filter((t as IntersectionType).types, isArrayOrTupleType), instantiateConstituent));
                     }
                 }
                 return instantiateAnonymousType(type, prependTypeMapping(typeVariable!, t, mapper));
