@@ -5,7 +5,7 @@
 // @Filename: /package.json
 //// {
 ////   "types": "index.d.ts",
-////   "exports": {
+////   "imports": {
 ////     "#*": "dist/*",
 ////     "#foo/*": "dist/*",
 ////     "#bar/*": "dist/*",
@@ -49,16 +49,16 @@ edit.insert("#foo/");
 verify.completions({
   isNewIdentifierLocation: true,
   exact: [
-    { name: "#blah.js", kind: "script", kindModifiers: ".js" },
-    { name: "#index.js", kind: "script", kindModifiers: ".js" },
-    { name: "#foo", kind: "directory" },
-    { name: "#subfolder", kind: "directory" },
+    { name: "blah.js", kind: "script", kindModifiers: ".js" },
+    { name: "index.js", kind: "script", kindModifiers: ".js" },
+    { name: "foo", kind: "directory" },
+    { name: "subfolder", kind: "directory" },
   ],
 });
 
-edit.insert("#foo/");
+edit.insert("foo/");
 
 verify.completions({
   isNewIdentifierLocation: true,
-  exact: [{ name: "#onlyInFooFolder.js", kind: "script", kindModifiers: ".js" }],
+  exact: [{ name: "onlyInFooFolder.js", kind: "script", kindModifiers: ".js" }],
 });
