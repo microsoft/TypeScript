@@ -1246,19 +1246,20 @@ function getModulesForPathsPattern(
 
     let matches = getMatchesWithPrefix(baseDirectory, completePrefix);
 
-    // If we had a suffix, we already recursively searched for all possible files that could match
-    // it and returned the directories leading to those files. Otherwise, assume any directory could
-    // have something valid to import.
-    const directories = normalizedSuffix
-        ? emptyArray
-        : mapDefined(tryGetDirectories(host, baseDirectory), dir => dir === "node_modules" ? undefined : directoryResult(dir));
-
     if (inputBaseDirectory && inputBaseDirectory !== baseDirectory) {
         const completeInputPrefix = fragmentHasPath ? inputBaseDirectory : ensureTrailingDirectorySeparator(inputBaseDirectory) + normalizedPrefixBase;
         matches = concatenate(matches, getMatchesWithPrefix(inputBaseDirectory, completeInputPrefix));
     }
 
-    matches = concatenate(matches, directories);
+    // If we had a suffix, we already recursively searched for all possible files that could match
+    // it and returned the directories leading to those files. Otherwise, assume any directory could
+    // have something valid to import.
+    if (!normalizedSuffix) {
+        matches = concatenate(matches, getDirectoryMatches(baseDirectory));
+        if (inputBaseDirectory && inputBaseDirectory !== baseDirectory) {
+            matches = concatenate(matches, getDirectoryMatches(inputBaseDirectory));
+        }
+    }
 
     return matches;
 
@@ -1273,6 +1274,10 @@ function getModulesForPathsPattern(
                 return nameAndKind(name, ScriptElementKind.scriptElement, extension);
             }
         });
+    }
+
+    function getDirectoryMatches(directoryName: string) {
+        return mapDefined(tryGetDirectories(host, directoryName), dir => dir === "node_modules" ? undefined : directoryResult(dir));
     }
 
     function trimPrefixAndSuffix(path: string, prefix: string): string | undefined {
