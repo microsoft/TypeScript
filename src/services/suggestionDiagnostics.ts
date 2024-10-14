@@ -90,6 +90,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
             const module = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier, sourceFile)?.resolvedModule;
             const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
             if (resolvedFile && resolvedFile.externalModuleIndicator && resolvedFile.externalModuleIndicator !== true && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
+
                 diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));
             }
         }
@@ -98,9 +99,11 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
     addRange(diags, sourceFile.bindSuggestionDiagnostics);
     addRange(diags, program.getSuggestionDiagnostics(sourceFile, cancellationToken));
     diags.sort((d1, d2) => d1.start - d2.start);
+
     return diags;
 
     function check(node: Node) {
+
         if (isJsFile) {
             if (canBeConvertedToClass(node, checker)) {
                 diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
@@ -134,6 +137,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
         }
         node.forEachChild(check);
     }
+
 }
 
 // convertToEsModule only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.

@@ -1130,6 +1130,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    getJSDocExperimentalTag,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -2554,6 +2555,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return diagnostic;
     }
 
+    function addExperimentalSuggestionWorker(declarations: Node | Node[], diagnostic: DiagnosticWithLocation) {
+        const experimentalTag = Array.isArray(declarations) ? forEach(declarations, getJSDocExperimentalTag) : getJSDocDeprecatedTag(declarations);
+        if (experimentalTag) {
+            addRelatedInfo(
+                diagnostic,
+                createDiagnosticForNode(experimentalTag, Diagnostics.The_declaration_was_marked_as_experimental_here),
+            );
+        }
+        // We call `addRelatedInfo()` before adding the diagnostic to prevent duplicates.
+        suggestionDiagnostics.add(diagnostic);
+        return diagnostic;
+    }
+
+
+
     function isDeprecatedSymbol(symbol: Symbol) {
         const parentSymbol = getParentOfSymbol(symbol);
         if (parentSymbol && length(symbol.declarations) > 1) {
@@ -2563,8 +2579,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             || length(symbol.declarations) && every(symbol.declarations, isDeprecatedDeclaration);
     }
 
+    function isExperimentalSymbol(symbol: Symbol) {
+        const parentSymbol = getParentOfSymbol(symbol);
+        if (parentSymbol && length(symbol.declarations) > 1) {
+            return parentSymbol.flags & SymbolFlags.Interface ? some(symbol.declarations, isExperimentalDeclaration) : every(symbol.declarations, isExperimentalDeclaration);
+        }
+        return !!symbol.valueDeclaration && isExperimentalDeclaration(symbol.valueDeclaration)
+            || length(symbol.declarations) && every(symbol.declarations, isExperimentalDeclaration);
+    }
+
     function isDeprecatedDeclaration(declaration: Declaration) {
         return !!(getCombinedNodeFlagsCached(declaration) & NodeFlags.Deprecated);
+    }
+
+    function isExperimentalDeclaration(declaration: Declaration) {
+        return !!(getCombinedNodeFlagsCached(declaration) & NodeFlags.Experimental);
     }
 
     function addDeprecatedSuggestion(location: Node, declarations: Node[], deprecatedEntity: string) {
@@ -2572,11 +2601,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return addDeprecatedSuggestionWorker(declarations, diagnostic);
     }
 
+    function addExperimentalSuggestion(location: Node, declarations: Node[], experimentalEntity: string) {
+        const diagnostic = createDiagnosticForNode(location, Diagnostics._0_is_experimental, experimentalEntity);
+        return addExperimentalSuggestionWorker(declarations, diagnostic);
+    }
+
     function addDeprecatedSuggestionWithSignature(location: Node, declaration: Node, deprecatedEntity: string | undefined, signatureString: string) {
         const diagnostic = deprecatedEntity
             ? createDiagnosticForNode(location, Diagnostics.The_signature_0_of_1_is_deprecated, signatureString, deprecatedEntity)
             : createDiagnosticForNode(location, Diagnostics._0_is_deprecated, signatureString);
         return addDeprecatedSuggestionWorker(declaration, diagnostic);
+    }
+
+    function addExperimentalSuggestionWithSignature(location: Node, declaration: Node, experimentalEntity: string | undefined, signatureString: string) {
+        const diagnostic = experimentalEntity
+            ? createDiagnosticForNode(location, Diagnostics.The_signature_0_of_1_is_experimental, signatureString, experimentalEntity)
+            : createDiagnosticForNode(location, Diagnostics._0_is_experimental, signatureString);
+        return addExperimentalSuggestionWorker(declaration, diagnostic);
     }
 
     function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
@@ -18539,6 +18580,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
                     addDeprecatedSuggestion(deprecatedNode, prop.declarations, propName as string);
                 }
+                if (accessFlags & AccessFlags.ReportExperimental && accessNode && prop.declarations && isExperimentalSymbol(prop) && isUncalledFunctionReference(accessNode, prop)) {
+                    const experimentalNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
+                    addExperimentalSuggestion(experimentalNode, prop.declarations, propName as string);
+                }
                 if (accessExpression) {
                     markPropertyAsReferenced(prop, accessExpression, isSelfTypeAccess(accessExpression.expression, objectType.symbol));
                     if (isAssignmentToReadonlyEntity(accessExpression, prop, getAssignmentTargetKind(accessExpression))) {
@@ -19006,7 +19051,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 ? getIntersectionType(propTypes, IntersectionFlags.None, aliasSymbol, aliasTypeArguments)
                 : getUnionType(propTypes, UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
         }
-        return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, accessNode, accessFlags | AccessFlags.CacheSymbol | AccessFlags.ReportDeprecated);
+        return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, accessNode, accessFlags | AccessFlags.CacheSymbol | AccessFlags.ReportDeprecated | AccessFlags.ReportExperimental);
     }
 
     function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -30235,9 +30280,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
-        const targetSymbol = resolveAliasWithDeprecationCheck(localOrExportSymbol, node);
+        const targetSymbol = resolveAliasWithDeprecationAndExperimentalCheck(localOrExportSymbol, node);
         if (isDeprecatedSymbol(targetSymbol) && isUncalledFunctionReference(node, targetSymbol) && targetSymbol.declarations) {
             addDeprecatedSuggestion(node, targetSymbol.declarations, node.escapedText as string);
+        }
+        if (isExperimentalSymbol(targetSymbol) && isUncalledFunctionReference(node, targetSymbol) && targetSymbol.declarations) {
+            addExperimentalSuggestion(node, targetSymbol.declarations, node.escapedText as string);
         }
 
         const declaration = localOrExportSymbol.valueDeclaration;
@@ -32997,6 +33045,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (prop && prop.declarations && isDeprecatedSymbol(prop) && isIdentifier(attributeDecl.name)) {
                             addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
                         }
+                        if (prop && prop.declarations && isExperimentalSymbol(prop) && isIdentifier(attributeDecl.name)) {
+                            addExperimentalSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
+                        }
                     }
                     if (contextualType && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(attributeDecl)) {
                         const inferenceContext = getInferenceContext(attributes);
@@ -33484,6 +33535,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const sig = getResolvedSignature(node);
         checkDeprecatedSignature(sig, node);
+        checkExperimentalSignature(sig, node)
 
         if (isNodeOpeningLikeElement) {
             const jsxOpeningLikeNode = node;
@@ -34114,11 +34166,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (indexInfo.declaration && isDeprecatedDeclaration(indexInfo.declaration)) {
                 addDeprecatedSuggestion(right, [indexInfo.declaration], right.escapedText as string);
             }
+            if (indexInfo.declaration && isExperimentalDeclaration(indexInfo.declaration)) {
+                addExperimentalSuggestion(right, [indexInfo.declaration], right.escapedText as string);
+            }
         }
         else {
-            const targetPropSymbol = resolveAliasWithDeprecationCheck(prop, right);
+            const targetPropSymbol = resolveAliasWithDeprecationAndExperimentalCheck(prop, right);
             if (isDeprecatedSymbol(targetPropSymbol) && isUncalledFunctionReference(node, targetPropSymbol) && targetPropSymbol.declarations) {
                 addDeprecatedSuggestion(right, targetPropSymbol.declarations, right.escapedText as string);
+            }
+            if (isExperimentalSymbol(targetPropSymbol) && isUncalledFunctionReference(node, targetPropSymbol) && targetPropSymbol.declarations) {
+                addExperimentalSuggestion(right, targetPropSymbol.declarations, right.escapedText as string);
             }
             checkPropertyNotUsedBeforeDeclaration(prop, node, right);
             markPropertyAsReferenced(prop, node, isSelfTypeAccess(left, parentSymbol));
@@ -36952,6 +37010,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         checkDeprecatedSignature(signature, node);
+        checkExperimentalSignature(signature, node);
 
         if (node.expression.kind === SyntaxKind.SuperKeyword) {
             return voidType;
@@ -37022,6 +37081,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function checkExperimentalSignature(signature: Signature, node: CallLikeExpression) {
+        if (signature.flags & SignatureFlags.IsSignatureCandidateForOverloadFailure) return;
+        if (signature.declaration && signature.declaration.flags & NodeFlags.Experimental) {
+            const suggestionNode = getExperimentalSuggestionNode(node);
+            const name = tryGetPropertyAccessOrIdentifierToString(getInvokedExpression(node));
+            addExperimentalSuggestionWithSignature(suggestionNode, signature.declaration, name, signatureToString(signature));
+        }
+    }
+
     function getDeprecatedSuggestionNode(node: Node): Node {
         node = skipParentheses(node);
         switch (node.kind) {
@@ -37034,6 +37102,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxSelfClosingElement:
                 return getDeprecatedSuggestionNode((node as JsxOpeningLikeElement).tagName);
+            case SyntaxKind.ElementAccessExpression:
+                return (node as ElementAccessExpression).argumentExpression;
+            case SyntaxKind.PropertyAccessExpression:
+                return (node as PropertyAccessExpression).name;
+            case SyntaxKind.TypeReference:
+                const typeReference = node as TypeReferenceNode;
+                return isQualifiedName(typeReference.typeName) ? typeReference.typeName.right : typeReference;
+            default:
+                return node;
+        }
+    }
+
+    function getExperimentalSuggestionNode(node: Node): Node {
+        node = skipParentheses(node);
+        switch (node.kind) {
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.Decorator:
+            case SyntaxKind.NewExpression:
+                return getExperimentalSuggestionNode((node as Decorator | CallExpression | NewExpression).expression);
+            case SyntaxKind.TaggedTemplateExpression:
+                return getExperimentalSuggestionNode((node as TaggedTemplateExpression).tag);
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxSelfClosingElement:
+                return getExperimentalSuggestionNode((node as JsxOpeningLikeElement).tagName);
             case SyntaxKind.ElementAccessExpression:
                 return (node as ElementAccessExpression).argumentExpression;
             case SyntaxKind.PropertyAccessExpression:
@@ -37187,6 +37279,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const signature = getResolvedSignature(node);
         checkDeprecatedSignature(signature, node);
+        checkExperimentalSignature(signature, node);
         return getReturnTypeOfSignature(signature);
     }
 
@@ -41845,6 +41938,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         symbol.escapedName as string,
                     );
                 }
+                if (some(symbol.declarations, d => isTypeDeclaration(d) && !!(d.flags & NodeFlags.Experimental))) {
+                    addExperimentalSuggestion(
+                        getExperimentalSuggestionNode(node),
+                        symbol.declarations!,
+                        symbol.escapedName as string,
+                    );
+                }
             }
         }
     }
@@ -43016,6 +43116,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const signature = getResolvedSignature(node);
         checkDeprecatedSignature(signature, node);
+        checkExperimentalSignature(signature, node);
         const returnType = getReturnTypeOfSignature(signature);
         if (returnType.flags & TypeFlags.Any) {
             return;
@@ -47495,16 +47596,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (isImportSpecifier(node)) {
-                const targetSymbol = resolveAliasWithDeprecationCheck(symbol, node);
+                const targetSymbol = resolveAliasWithDeprecationAndExperimentalCheck(symbol, node);
                 if (isDeprecatedSymbol(targetSymbol) && targetSymbol.declarations) {
                     addDeprecatedSuggestion(node, targetSymbol.declarations, targetSymbol.escapedName as string);
+                }
+                if (isExperimentalSymbol(targetSymbol) && targetSymbol.declarations){
+                    addExperimentalSuggestion(node, targetSymbol.declarations, targetSymbol.escapedName as string);
                 }
             }
         }
     }
 
-    function resolveAliasWithDeprecationCheck(symbol: Symbol, location: Node) {
-        if (!(symbol.flags & SymbolFlags.Alias) || isDeprecatedSymbol(symbol) || !getDeclarationOfAliasSymbol(symbol)) {
+    function resolveAliasWithDeprecationAndExperimentalCheck(symbol: Symbol, location: Node) {
+        if (!(symbol.flags & SymbolFlags.Alias) || isDeprecatedSymbol(symbol) || isExperimentalSymbol(symbol) || !getDeclarationOfAliasSymbol(symbol)) {
             return symbol;
         }
 
@@ -47518,6 +47622,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (target.declarations && length(target.declarations)) {
                     if (isDeprecatedSymbol(target)) {
                         addDeprecatedSuggestion(location, target.declarations, target.escapedName as string);
+                        break;
+                    }
+                    else if (isExperimentalSymbol(target)){
+                        addExperimentalSuggestion(location, target.declarations, target.escapedName as string);
                         break;
                     }
                     else {

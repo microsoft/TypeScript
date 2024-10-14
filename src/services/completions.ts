@@ -155,6 +155,7 @@ import {
     isDeclarationName,
     isDecorator,
     isDeprecatedDeclaration,
+    isExperimentalDeclaration,
     isEntityName,
     isEnumMember,
     isEqualityOperatorKind,
@@ -421,6 +422,10 @@ export const SortText = {
 
     // Transformations
     Deprecated(sortText: SortText): SortText {
+        return "z" + sortText as SortText;
+    },
+
+    Experimental(sortText: SortText): SortText {
         return "z" + sortText as SortText;
     },
 
@@ -2689,7 +2694,9 @@ export function getCompletionEntriesFromSymbols(
 
         const { name, needsConvertPropertyAccess } = info;
         const originalSortText = symbolToSortTextMap?.[getSymbolId(symbol)] ?? SortText.LocationPriority;
-        const sortText = isDeprecated(symbol, typeChecker) ? SortText.Deprecated(originalSortText) : originalSortText;
+        const _isDeprecated = isDeprecated(symbol, typeChecker);
+        let sortText = _isDeprecated ? SortText.Deprecated(originalSortText) : originalSortText;
+        if (!_isDeprecated) sortText = isExperimental(symbol, typeChecker)? SortText.Experimental(originalSortText) : originalSortText;
         const entry = createCompletionEntry(
             symbol,
             sortText,
@@ -6066,6 +6073,11 @@ function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecke
 function isDeprecated(symbol: Symbol, checker: TypeChecker) {
     const declarations = skipAlias(symbol, checker).declarations;
     return !!length(declarations) && every(declarations, isDeprecatedDeclaration);
+}
+
+function isExperimental(symbol: Symbol, checker: TypeChecker) {
+    const declarations = skipAlias(symbol, checker).declarations;
+    return !!length(declarations) && every(declarations, isExperimentalDeclaration);
 }
 
 /**

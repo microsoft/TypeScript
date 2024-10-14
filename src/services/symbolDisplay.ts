@@ -851,7 +851,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
 
         if (allSignatures.length > 1 && documentation.length === 0 && tags.length === 0) {
             documentation = allSignatures[0].getDocumentationComment(typeChecker);
-            tags = allSignatures[0].getJsDocTags().filter(tag => tag.name !== "deprecated"); // should only include @deprecated JSDoc tag on the first overload (#49368)
+            tags = allSignatures[0].getJsDocTags().filter(tag => !(["deprecated", "experimental"].includes(tag.name))); // should only include @deprecated & @experimental JSDoc tags on the first overload (#49368)
         }
     }
 

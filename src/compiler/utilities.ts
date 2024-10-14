@@ -8599,6 +8599,8 @@ export function formatMessage(message: DiagnosticMessage, ...args: DiagnosticArg
 /** @internal */
 export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic {
     let text = getLocaleSpecificMessage(message);
+    //@ts-ignore
+    console.log(text)
 
     if (some(args)) {
         text = formatStringFromArgs(text, args);

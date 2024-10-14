@@ -1825,6 +1825,7 @@ export const enum ScriptElementKindModifier {
     optionalModifier = "optional",
 
     deprecatedModifier = "deprecated",
+    experimentalModifier = "experimental",
 
     dtsModifier = ".d.ts",
     tsModifier = ".ts",

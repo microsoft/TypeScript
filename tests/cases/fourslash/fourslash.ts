@@ -323,7 +323,7 @@ declare namespace FourSlashInterface {
          * to 'value'. Do not use this function with external modules as it is not supported.
          */
         eval(expr: string, value: any): void;
-        currentLineContentIs(text: string): void;
+        curentLineContentIs(text: string): void;
         currentFileContentIs(text: string): void;
         formatDocumentChangesNothing(): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
@@ -669,6 +669,7 @@ declare namespace FourSlashInterface {
         code: number;
         reportsUnnecessary?: true;
         reportsDeprecated?: true;
+        reportsExperimental?: true;
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch: ReadonlyArray<string>;

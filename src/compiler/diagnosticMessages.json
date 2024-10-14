@@ -8425,5 +8425,19 @@
     "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.": {
         "category": "Error",
         "code": 18057
+    },
+    "'{0}' is experimental.": {
+        "category": "Suggestion",
+        "code": 18058,
+        "reportsExperimental": true
+    },
+    "The declaration was marked as experimental here.": {
+        "category": "Message",
+        "code": 18059
+    },
+    "The signature '{0}' of '{1}' is experimental.": {
+        "category": "Suggestion",
+        "code": 18060,
+        "reportsExperimental": true
     }
 }
