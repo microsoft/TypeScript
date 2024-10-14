@@ -1,0 +1,56 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorInference.ts] ////
+
+=== autoAccessorInference.ts ===
+class A {
+>A : Symbol(A, Decl(autoAccessorInference.ts, 0, 0))
+
+    accessor value;
+>value : Symbol(A.value, Decl(autoAccessorInference.ts, 0, 9))
+
+    constructor(n: number) {
+>n : Symbol(n, Decl(autoAccessorInference.ts, 2, 16))
+
+        this.value = n
+>this.value : Symbol(A.value, Decl(autoAccessorInference.ts, 0, 9))
+>this : Symbol(A, Decl(autoAccessorInference.ts, 0, 0))
+>value : Symbol(A.value, Decl(autoAccessorInference.ts, 0, 9))
+>n : Symbol(n, Decl(autoAccessorInference.ts, 2, 16))
+
+        if (n < 0) {
+>n : Symbol(n, Decl(autoAccessorInference.ts, 2, 16))
+
+            this.value = null
+>this.value : Symbol(A.value, Decl(autoAccessorInference.ts, 0, 9))
+>this : Symbol(A, Decl(autoAccessorInference.ts, 0, 0))
+>value : Symbol(A.value, Decl(autoAccessorInference.ts, 0, 9))
+        }
+    }
+}
+
+declare var n: number;
+>n : Symbol(n, Decl(autoAccessorInference.ts, 10, 11))
+
+class B {
+>B : Symbol(B, Decl(autoAccessorInference.ts, 10, 22))
+
+    static accessor value;
+>value : Symbol(B.value, Decl(autoAccessorInference.ts, 11, 9))
+
+    static {
+        this.value = n;
+>this.value : Symbol(B.value, Decl(autoAccessorInference.ts, 11, 9))
+>this : Symbol(B, Decl(autoAccessorInference.ts, 10, 22))
+>value : Symbol(B.value, Decl(autoAccessorInference.ts, 11, 9))
+>n : Symbol(n, Decl(autoAccessorInference.ts, 10, 11))
+
+        if (n < 0) {
+>n : Symbol(n, Decl(autoAccessorInference.ts, 10, 11))
+
+            this.value = null;
+>this.value : Symbol(B.value, Decl(autoAccessorInference.ts, 11, 9))
+>this : Symbol(B, Decl(autoAccessorInference.ts, 10, 22))
+>value : Symbol(B.value, Decl(autoAccessorInference.ts, 11, 9))
+        }
+    }
+}
+
