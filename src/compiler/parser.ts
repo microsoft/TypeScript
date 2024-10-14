@@ -2779,10 +2779,12 @@ namespace Parser {
             case SyntaxKind.DefaultKeyword:
                 return nextTokenCanFollowDefaultKeyword();
             case SyntaxKind.StaticKeyword:
+                nextToken();
+                return canFollowModifier();
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
                 nextToken();
-                return canFollowModifier();
+                return canFollowGetOrSetKeyword();
             default:
                 return nextTokenIsOnSameLineAndCanFollowModifier();
         }
@@ -2810,6 +2812,11 @@ namespace Parser {
             || token() === SyntaxKind.OpenBraceToken
             || token() === SyntaxKind.AsteriskToken
             || token() === SyntaxKind.DotDotDotToken
+            || isLiteralPropertyName();
+    }
+
+    function canFollowGetOrSetKeyword(): boolean {
+        return token() === SyntaxKind.OpenBracketToken
             || isLiteralPropertyName();
     }
 
