@@ -1195,6 +1195,7 @@ interface IterationTypesResolver {
     getGlobalIteratorObjectType: (reportErrors: boolean) => GenericType;
     getGlobalGeneratorType: (reportErrors: boolean) => GenericType;
     getGlobalBuiltinIteratorTypes: () => readonly GenericType[];
+    getGlobalTupleGeneratorType: (reportErrors: boolean) => GenericType;
     resolveIterationType: (type: Type, errorNode: Node | undefined) => Type | undefined;
     mustHaveANextMethodDiagnostic: DiagnosticMessage;
     mustBeAMethodDiagnostic: DiagnosticMessage;
@@ -2174,6 +2175,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getGlobalIterableIteratorType: getGlobalAsyncIterableIteratorType,
         getGlobalIteratorObjectType: getGlobalAsyncIteratorObjectType,
         getGlobalGeneratorType: getGlobalAsyncGeneratorType,
+        getGlobalTupleGeneratorType,
         getGlobalBuiltinIteratorTypes: getGlobalBuiltinAsyncIteratorTypes,
         resolveIterationType: (type, errorNode) => getAwaitedType(type, errorNode, Diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member),
         mustHaveANextMethodDiagnostic: Diagnostics.An_async_iterator_must_have_a_next_method,
@@ -2190,6 +2192,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getGlobalIterableIteratorType,
         getGlobalIteratorObjectType,
         getGlobalGeneratorType,
+        getGlobalTupleGeneratorType,
         getGlobalBuiltinIteratorTypes,
         resolveIterationType: (type, _errorNode) => type,
         mustHaveANextMethodDiagnostic: Diagnostics.An_iterator_must_have_a_next_method,
@@ -2253,6 +2256,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var deferredGlobalIterableIteratorType: GenericType | undefined;
     var deferredGlobalIteratorObjectType: GenericType | undefined;
     var deferredGlobalGeneratorType: GenericType | undefined;
+    var deferredGlobalTupleGeneratorType: GenericType | undefined;
     var deferredGlobalIteratorYieldResultType: GenericType | undefined;
     var deferredGlobalIteratorReturnResultType: GenericType | undefined;
     var deferredGlobalAsyncIterableType: GenericType | undefined;
@@ -16897,6 +16901,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getGlobalGeneratorType(reportErrors: boolean) {
         return (deferredGlobalGeneratorType ||= getGlobalType("Generator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
+    }
+
+    function getGlobalTupleGeneratorType(reportErrors: boolean) {
+        return (deferredGlobalTupleGeneratorType ||= getGlobalType("TupleGenerator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
     }
 
     function getGlobalIteratorYieldResultType(reportErrors: boolean) {
@@ -32490,8 +32498,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkExternalEmitHelpers(e, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArray);
                 }
                 const spreadType = checkExpression((e as SpreadElement).expression, checkMode, forceTuple);
+                let maybeTuple: Type | undefined;
                 if (isArrayLikeType(spreadType)) {
                     elementTypes.push(spreadType);
+                    elementFlags.push(ElementFlags.Variadic);
+                }
+                else if ((maybeTuple = getTupleTypeFromIterableOrUndefined(spreadType))) {
+                    elementTypes.push(maybeTuple);
                     elementFlags.push(ElementFlags.Variadic);
                 }
                 else if (inDestructuringPattern) {
@@ -35447,6 +35460,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         effectiveArgs.push(syntheticArg);
                     });
                 }
+                else if (spreadType) {
+                    const spreadTypeArgs = getTupleTypeFromIterableOrUndefined(spreadType);
+                    if (spreadTypeArgs) {
+                        forEach(getElementTypes(spreadTypeArgs), (t, i) => {
+                            const flags = spreadTypeArgs.target.elementFlags[i];
+                            const syntheticArg = createSyntheticExpression(arg, flags & ElementFlags.Rest ? createArrayType(t) : t, !!(flags & ElementFlags.Variable), spreadTypeArgs.target.labeledElementDeclarations?.[i]);
+                            effectiveArgs.push(syntheticArg);
+                        });
+                    } else {
+                        effectiveArgs.push(arg);
+                    }
+                }
                 else {
                     effectiveArgs.push(arg);
                 }
@@ -35454,6 +35479,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return effectiveArgs;
         }
         return args;
+    }
+
+    function getTupleTypeFromIterableOrUndefined(type: Type) {
+        let maybeTuple = isReferenceToType(type, syncIterationTypesResolver.getGlobalTupleGeneratorType(/*reportErrors*/ false))
+            ? getTypeArguments(type as GenericType)[0]
+            : undefined;
+
+        if (!maybeTuple) {   
+            const method = getPropertyOfType(type, getPropertyNameForKnownSymbolName(syncIterationTypesResolver.iteratorSymbolName));
+            const methodType = method && !(method.flags & SymbolFlags.Optional) ? getTypeOfSymbol(method) : undefined;
+
+            if (isTypeAny(methodType)) {
+                return;
+            }
+            
+            const signatures = methodType && getSignaturesOfType(methodType, SignatureKind.Call);
+            if (!some(signatures)) {
+                return;
+            }
+
+            const returnTypes = getIntersectionType(map(signatures, getReturnTypeOfSignature))
+            if (isReferenceToType(returnTypes, syncIterationTypesResolver.getGlobalTupleGeneratorType(/*reportErrors*/ false))) {
+                maybeTuple = getTypeArguments(returnTypes as GenericType)[0];
+            }
+        }
+
+        if (maybeTuple && isTupleType(maybeTuple)) {
+            return maybeTuple;
+        }
     }
 
     /**
