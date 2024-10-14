@@ -6240,6 +6240,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 let annotationType = getTypeFromTypeNodeWithoutContext(existing);
+                if (isErrorType(annotationType)) {
+                    // allow "reusing" type nodes that resolve to error types
+                    // those can't truly be reused but it prevents cascading errors in isolatedDeclarations
+                    // for source with errors there is no guarantee to emit correct code anyway
+                    return true;
+                }
                 if (requiresAddingUndefined && annotationType) {
                     annotationType = getOptionalType(annotationType, !isParameter(node));
                 }
@@ -49681,7 +49687,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeNode = getNonlocalEffectiveTypeAnnotationNode(parameter);
         if (!typeNode) return false;
         const type = getTypeFromTypeNode(typeNode);
-        return containsUndefinedType(type);
+        // allow error type here to avoid confusing errors that the annotation has to contain undefined when it does in cases like this:
+        //
+        // export function fn(x?: Unresolved | undefined): void {}
+        return isErrorType(type) || containsUndefinedType(type);
     }
 
     function requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined) {
