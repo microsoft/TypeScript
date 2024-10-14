@@ -580,6 +580,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     category: Diagnostics.Language_and_Environment,
     description: Diagnostics.Set_the_JavaScript_language_version_for_emitted_JavaScript_and_include_compatible_library_declarations,
     defaultValueDescription: ScriptTarget.ES5,
+    mayBeESVersion: true,
 };
 
 /** @internal */
@@ -683,6 +684,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Specify_a_set_of_bundled_library_declaration_files_that_describe_the_target_runtime_environment,
         transpileOptionValue: undefined,
+        mayBeESVersion: true,
     },
     {
         name: "allowJs",

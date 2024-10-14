@@ -7689,6 +7689,7 @@ export interface CommandLineOptionBase {
     extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     disallowNullOrUndefined?: true;                         // If set option does not allow setting null
     allowConfigDirTemplateSubstitution?: true;              // If set option allows substitution of `${configDir}` in the value
+    mayBeESVersion?: true;                                  // true if the option accepts supported ECMAScript version numbers
 }
 
 /** @internal */
