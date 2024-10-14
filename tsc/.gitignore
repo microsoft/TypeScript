@@ -23,3 +23,15 @@ go.work.sum
 
 # env file
 .env
+
+**/.vscode/*
+!**/.vscode/tasks.json
+!**/.vscode/settings.template.json
+!**/.vscode/launch.template.json
+!**/.vscode/extensions.json
+
+# Built binaries
+cmd/tsgo/tsgo
+
+# Benchmarking results
+*.txt
