@@ -1815,7 +1815,7 @@ export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOpt
 }
 
 function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType, value: unknown, createDiagnostic: (message: DiagnosticMessage, ...args: DiagnosticArguments) => Diagnostic): Diagnostic {
-    if (opt.mayBeESVersion && typeof value === 'string') {
+    if (opt.mayBeESVersion && typeof value === "string") {
         // If the value looks like an ECMAScript version but not is a valid one,
         // remind the user that this TypeScript version may be outdated and
         // does not support that ECMAScript version.
