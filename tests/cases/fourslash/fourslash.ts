@@ -323,7 +323,7 @@ declare namespace FourSlashInterface {
          * to 'value'. Do not use this function with external modules as it is not supported.
          */
         eval(expr: string, value: any): void;
-        curentLineContentIs(text: string): void;
+        currentLineContentIs(text: string): void;
         currentFileContentIs(text: string): void;
         formatDocumentChangesNothing(): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;

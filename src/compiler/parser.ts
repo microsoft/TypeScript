@@ -1845,6 +1845,7 @@ namespace Parser {
     }
 
     let hasDeprecatedTag = false;
+    let hasExperimentalTag = false;
     function withJSDoc<T extends HasJSDoc>(node: T, hasJSDoc: boolean): T {
         if (!hasJSDoc) {
             return node;
@@ -1856,6 +1857,10 @@ namespace Parser {
         if (hasDeprecatedTag) {
             hasDeprecatedTag = false;
             (node as Mutable<T>).flags |= NodeFlags.Deprecated;
+        }
+        if (hasExperimentalTag) {
+            hasExperimentalTag = false;
+            (node as Mutable<T>).flags |= NodeFlags.Experimental;
         }
         return node;
     }
@@ -9090,6 +9095,10 @@ namespace Parser {
                     case "deprecated":
                         hasDeprecatedTag = true;
                         tag = parseSimpleTag(start, factory.createJSDocDeprecatedTag, tagName, margin, indentText);
+                        break;
+                    case "experimental":
+                        hasExperimentalTag = true;
+                        tag = parseSimpleTag(start, factory.createJSDocExperimentalTag, tagName, margin, indentText);
                         break;
                     case "this":
                         tag = parseThisTag(start, tagName, margin, indentText);

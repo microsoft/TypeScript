@@ -8582,6 +8582,7 @@ export function createFileDiagnostic(file: SourceFile, start: number, length: nu
         code: message.code,
         reportsUnnecessary: message.reportsUnnecessary,
         reportsDeprecated: message.reportsDeprecated,
+        reportsExperimental: message.reportsExperimental,
     };
 }
 
@@ -8599,8 +8600,6 @@ export function formatMessage(message: DiagnosticMessage, ...args: DiagnosticArg
 /** @internal */
 export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic {
     let text = getLocaleSpecificMessage(message);
-    //@ts-ignore
-    console.log(text)
 
     if (some(args)) {
         text = formatStringFromArgs(text, args);
@@ -8616,6 +8615,7 @@ export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: Di
         code: message.code,
         reportsUnnecessary: message.reportsUnnecessary,
         reportsDeprecated: message.reportsDeprecated,
+        reportsExperimental: message.reportsExperimental,
     };
 }
 
