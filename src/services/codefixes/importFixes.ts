@@ -494,8 +494,8 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
 
     function writeFixes(changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) {
         let quotePreference: QuotePreference;
-        if (isFullSourceFile(sourceFile) && sourceFile.imports.length === 0 && oldFileQuotePreference !== undefined) {
-            // If the target file has no imports, we must use the same quote preference as the file we are importing from.
+        if (sourceFile.imports !== undefined && sourceFile.imports.length === 0 && oldFileQuotePreference !== undefined) {
+            // If the target file (including future files) has no imports, we must use the same quote preference as the file we are importing from.
             quotePreference = oldFileQuotePreference;
         }
         else {
