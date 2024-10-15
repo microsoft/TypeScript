@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/promiseTry.ts] ////
+
+=== promiseTry.ts ===
+Promise.try(() => {
+>Promise.try(() => {    return "Sync result";}) : Promise<string>
+>                                               : ^^^^^^^^^^^^^^^
+>Promise.try : <T>(callbackFn: () => T | Promise<T>) => Promise<T>
+>            : ^ ^^          ^^                    ^^^^^          
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>try : <T>(callbackFn: () => T | Promise<T>) => Promise<T>
+>    : ^ ^^          ^^                    ^^^^^          
+>() => {    return "Sync result";} : () => string
+>                                  : ^^^^^^^^^^^^
+
+    return "Sync result";
+>"Sync result" : "Sync result"
+>              : ^^^^^^^^^^^^^
+
+});
+
+Promise.try(async () => {
+>Promise.try(async () => {    return "Async result";}) : Promise<string>
+>                                                      : ^^^^^^^^^^^^^^^
+>Promise.try : <T>(callbackFn: () => T | Promise<T>) => Promise<T>
+>            : ^ ^^          ^^                    ^^^^^          
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>try : <T>(callbackFn: () => T | Promise<T>) => Promise<T>
+>    : ^ ^^          ^^                    ^^^^^          
+>async () => {    return "Async result";} : () => Promise<string>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^
+
+    return "Async result";
+>"Async result" : "Async result"
+>               : ^^^^^^^^^^^^^^
+
+});
+

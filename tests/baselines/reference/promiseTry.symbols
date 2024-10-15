@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/promiseTry.ts] ////
+
+=== promiseTry.ts ===
+Promise.try(() => {
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+
+    return "Sync result";
+});
+
+Promise.try(async () => {
+>Promise.try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>try : Symbol(PromiseConstructor.try, Decl(lib.esnext.promise.d.ts, --, --))
+
+    return "Async result";
+});
+
