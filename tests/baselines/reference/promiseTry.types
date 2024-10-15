@@ -4,12 +4,12 @@
 Promise.try(() => {
 >Promise.try(() => {    return "Sync result";}) : Promise<string>
 >                                               : ^^^^^^^^^^^^^^^
->Promise.try : <T>(callbackFn: () => T | Promise<T>) => Promise<T>
->            : ^ ^^          ^^                    ^^^^^          
+>Promise.try : <T>(callbackFn: () => T | PromiseLike<T>) => Promise<T>
+>            : ^ ^^          ^^                        ^^^^^          
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->try : <T>(callbackFn: () => T | Promise<T>) => Promise<T>
->    : ^ ^^          ^^                    ^^^^^          
+>try : <T>(callbackFn: () => T | PromiseLike<T>) => Promise<T>
+>    : ^ ^^          ^^                        ^^^^^          
 >() => {    return "Sync result";} : () => string
 >                                  : ^^^^^^^^^^^^
 
@@ -22,12 +22,12 @@ Promise.try(() => {
 Promise.try(async () => {
 >Promise.try(async () => {    return "Async result";}) : Promise<string>
 >                                                      : ^^^^^^^^^^^^^^^
->Promise.try : <T>(callbackFn: () => T | Promise<T>) => Promise<T>
->            : ^ ^^          ^^                    ^^^^^          
+>Promise.try : <T>(callbackFn: () => T | PromiseLike<T>) => Promise<T>
+>            : ^ ^^          ^^                        ^^^^^          
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->try : <T>(callbackFn: () => T | Promise<T>) => Promise<T>
->    : ^ ^^          ^^                    ^^^^^          
+>try : <T>(callbackFn: () => T | PromiseLike<T>) => Promise<T>
+>    : ^ ^^          ^^                        ^^^^^          
 >async () => {    return "Async result";} : () => Promise<string>
 >                                         : ^^^^^^^^^^^^^^^^^^^^^
 

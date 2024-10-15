@@ -11,5 +11,5 @@ interface PromiseConstructor {
      * - Already rejected, if the callback synchronously throws an error.
      * - Asynchronously fulfilled or rejected, if the callback returns a promise.
      */
-    try<T>(callbackFn: () => T | Promise<T>): Promise<T>;
+    try<T>(callbackFn: () => T | PromiseLike<T>): Promise<T>;
 }
