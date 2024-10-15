@@ -132,9 +132,9 @@ class C5 {
 
         let f3 = (x: this) => (y: this) => this;
 >f3 : (x: this) => (y: this) => this
->   : ^ ^^    ^^^^^^ ^^    ^^^^^^^^^
+>   : ^ ^^    ^^^^^^       ^^^^^^^^^
 >(x: this) => (y: this) => this : (x: this) => (y: this) => this
->                               : ^ ^^    ^^^^^^ ^^    ^^^^^^^^^
+>                               : ^ ^^    ^^^^^^       ^^^^^^^^^
 >x : this
 >  : ^^^^
 >(y: this) => this : (y: this) => this

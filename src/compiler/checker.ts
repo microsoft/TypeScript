@@ -6171,10 +6171,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const overrideTypeNode = typeViaParent && jsDocProperty.typeExpression && getTypeFromTypeNode(context, jsDocProperty.typeExpression.type) !== typeViaParent ? typeToTypeNodeHelper(typeViaParent, context) : undefined;
                 return overrideTypeNode;
             },
-            enterNewScope(context, node) {
+            enterNewScope(context, node, expandParameters = true) {
                 if (isFunctionLike(node) || isJSDocSignature(node)) {
                     const signature = getSignatureFromDeclaration(node);
-                    const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
+                    const expandedParams = !expandParameters ? signature.parameters : getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
                     return enterNewScope(context as NodeBuilderContext, node, expandedParams, signature.typeParameters);
                 }
                 else {
