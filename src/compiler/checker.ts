@@ -11228,8 +11228,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return addOptionality(type, isProperty, isOptional);
         }
 
-        if (isPropertyDeclaration(declaration)) {
-            return getFlowTypeOfClassPropertyDeclaration(declaration, isOptional);
+        if (isPropertyDeclaration(declaration) && (noImplicitAny || isInJSFile(declaration))) {
+            // We have a property declaration with no type annotation or initializer, in noImplicitAny mode or a .js file.
+            // Use control flow analysis of this.xxx assignments in the constructor or static block to determine the type of the property.
+            if (!hasStaticModifier(declaration)) {
+                const constructor = findConstructorDeclaration(declaration.parent);
+                const type = constructor ? getFlowTypeInConstructor(declaration.symbol, constructor) :
+                    getEffectiveModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
+                    undefined;
+                return type && addOptionality(type, /*isProperty*/ true, isOptional);
+            }
+            else {
+                const staticBlocks = filter(declaration.parent.members, isClassStaticBlockDeclaration);
+                const type = staticBlocks.length ? getFlowTypeInStaticBlocks(declaration.symbol, staticBlocks) :
+                    getEffectiveModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
+                    undefined;
+                return type && addOptionality(type, /*isProperty*/ true, isOptional);
+            }
         }
 
         if (isJsxAttribute(declaration)) {
@@ -11339,27 +11354,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // We don't infer a type if assignments are only null or undefined.
         return everyType(flowType, isNullableType) ? undefined : convertAutoToAny(flowType);
-    }
-
-    function getFlowTypeOfClassPropertyDeclaration(declaration: PropertyDeclaration, isOptional: boolean) {
-        if (!noImplicitAny && !isInJSFile(declaration)) {
-            return;
-        }
-        // We have a class property declaration with no type annotation or initializer, in noImplicitAny mode or a .js file.
-        // Use control flow analysis of this.xxx assignments in the constructor or static block to determine the type of the property.
-        if (!hasStaticModifier(declaration)) {
-            const constructor = findConstructorDeclaration(declaration.parent);
-            const type = constructor ? getFlowTypeInConstructor(declaration.symbol, constructor) :
-                getEffectiveModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
-                undefined;
-            return type && addOptionality(type, /*isProperty*/ true, isOptional);
-        }
-
-        const staticBlocks = filter(declaration.parent.members, isClassStaticBlockDeclaration);
-        const type = staticBlocks.length ? getFlowTypeInStaticBlocks(declaration.symbol, staticBlocks) :
-            getEffectiveModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
-            undefined;
-        return type && addOptionality(type, /*isProperty*/ true, isOptional);
     }
 
     function getFlowTypeOfProperty(reference: Node, prop: Symbol | undefined) {
@@ -12011,7 +12005,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 getAnnotatedAccessorType(setter) ||
                 getAnnotatedAccessorType(accessor) ||
                 getter && getter.body && getReturnTypeFromBody(getter) ||
-                accessor && (accessor.initializer ? getWidenedTypeForVariableLikeDeclaration(accessor, /*reportErrors*/ true) : getFlowTypeOfClassPropertyDeclaration(accessor, /*isOptional*/ false));
+                accessor && getWidenedTypeForVariableLikeDeclaration(accessor, /*reportErrors*/ true);
             if (!type) {
                 if (setter && !isPrivateWithinAmbient(setter)) {
                     errorOrSuggestion(noImplicitAny, setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
