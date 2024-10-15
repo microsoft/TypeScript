@@ -925,11 +925,11 @@ function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeCh
     }
 }
 
-function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, allowedEndings: ModuleSpecifierEnding[], baseDirecotry: string, getCanonicalFileName: GetCanonicalFileName, host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
+function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, allowedEndings: ModuleSpecifierEnding[], baseDirectory: string, getCanonicalFileName: GetCanonicalFileName, host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
     for (const key in paths) {
         for (const patternText of paths[key]) {
             const normalized = normalizePath(patternText);
-            const pattern = getRelativePathIfInSameVolume(normalized, baseDirecotry, getCanonicalFileName) ?? normalized;
+            const pattern = getRelativePathIfInSameVolume(normalized, baseDirectory, getCanonicalFileName) ?? normalized;
             const indexOfStar = pattern.indexOf("*");
             // In module resolution, if `pattern` itself has an extension, a file with that extension is looked up directly,
             // meaning a '.ts' or '.d.ts' extension is allowed to resolve. This is distinct from the case where a '*' substitution
