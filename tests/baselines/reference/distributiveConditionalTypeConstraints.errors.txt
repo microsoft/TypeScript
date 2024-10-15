@@ -7,9 +7,30 @@ distributiveConditionalTypeConstraints.ts(15,9): error TS2322: Type 'IsArray<T>'
 distributiveConditionalTypeConstraints.ts(19,9): error TS2322: Type 'IsArray<T>' is not assignable to type 'true'.
   Type 'false' is not assignable to type 'true'.
 distributiveConditionalTypeConstraints.ts(38,9): error TS2322: Type 'boolean' is not assignable to type 'false'.
+distributiveConditionalTypeConstraints.ts(100,7): error TS2322: Type 'boolean' is not assignable to type 'true'.
+distributiveConditionalTypeConstraints.ts(101,7): error TS2322: Type 'boolean' is not assignable to type 'false'.
+distributiveConditionalTypeConstraints.ts(111,7): error TS2322: Type '1 | 2 | 3' is not assignable to type '1'.
+  Type '2' is not assignable to type '1'.
+distributiveConditionalTypeConstraints.ts(112,7): error TS2322: Type '1 | 2 | 3' is not assignable to type '2'.
+  Type '1' is not assignable to type '2'.
+distributiveConditionalTypeConstraints.ts(113,7): error TS2322: Type '1 | 2 | 3' is not assignable to type '3'.
+  Type '1' is not assignable to type '3'.
+distributiveConditionalTypeConstraints.ts(114,7): error TS2322: Type '1 | 2 | 3' is not assignable to type '1 | 2'.
+  Type '3' is not assignable to type '1 | 2'.
+distributiveConditionalTypeConstraints.ts(115,7): error TS2322: Type '1 | 2 | 3' is not assignable to type '1 | 3'.
+  Type '2' is not assignable to type '1 | 3'.
+distributiveConditionalTypeConstraints.ts(116,7): error TS2322: Type '1 | 2 | 3' is not assignable to type '2 | 3'.
+  Type '1' is not assignable to type '2 | 3'.
+distributiveConditionalTypeConstraints.ts(123,7): error TS2322: Type '1 | 2 | 3 | 4' is not assignable to type '1 | 2 | 4'.
+  Type '3' is not assignable to type '1 | 2 | 4'.
+distributiveConditionalTypeConstraints.ts(134,18): error TS2589: Type instantiation is excessively deep and possibly infinite.
+distributiveConditionalTypeConstraints.ts(145,7): error TS2322: Type '1 | 2' is not assignable to type '1'.
+  Type '2' is not assignable to type '1'.
+distributiveConditionalTypeConstraints.ts(146,7): error TS2322: Type '1 | 2' is not assignable to type '2'.
+  Type '1' is not assignable to type '2'.
 
 
-==== distributiveConditionalTypeConstraints.ts (6 errors) ====
+==== distributiveConditionalTypeConstraints.ts (18 errors) ====
     type IsArray<T> = T extends unknown[] ? true : false;
     
     function f1<T extends object>(x: IsArray<T>) {
@@ -90,7 +111,7 @@ distributiveConditionalTypeConstraints.ts(38,9): error TS2322: Type 'boolean' is
             y;  // T extends B ? string : number
         }
         const newY: string | number = y;
-        newY;  // number 
+        newY;  // number
     }
     
     function test3<T extends A>(y: T extends C ? number : string) {
@@ -113,5 +134,96 @@ distributiveConditionalTypeConstraints.ts(38,9): error TS2322: Type 'boolean' is
         }
         const newY: string | number = y;
         newY;  // string | number
+    }
+    
+    // https://github.com/microsoft/TypeScript/issues/59868
+    
+    type IsMatchingStringTwoLevels<T extends string> = T extends `a${string}`
+      ? T extends `${string}z`
+        ? true
+        : false
+      : false;
+    
+    function f5<S extends string>(x: IsMatchingStringTwoLevels<S>) {
+      let t: true = x; // Error
+          ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'true'.
+      let f: false = x; // Error
+          ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'false'.
+    }
+    
+    type IsMatchingStringTwoLevels2<T extends string> = T extends `a${string}`
+      ? 1
+      : T extends `${string}z`
+      ? 2
+      : 3;
+    
+    function f6<S extends string>(x: IsMatchingStringTwoLevels2<S>) {
+      let t1: 1 = x; // Error
+          ~~
+!!! error TS2322: Type '1 | 2 | 3' is not assignable to type '1'.
+!!! error TS2322:   Type '2' is not assignable to type '1'.
+      let t2: 2 = x; // Error
+          ~~
+!!! error TS2322: Type '1 | 2 | 3' is not assignable to type '2'.
+!!! error TS2322:   Type '1' is not assignable to type '2'.
+      let t3: 3 = x; // Error
+          ~~
+!!! error TS2322: Type '1 | 2 | 3' is not assignable to type '3'.
+!!! error TS2322:   Type '1' is not assignable to type '3'.
+      let t12: 1 | 2 = x; // Error
+          ~~~
+!!! error TS2322: Type '1 | 2 | 3' is not assignable to type '1 | 2'.
+!!! error TS2322:   Type '3' is not assignable to type '1 | 2'.
+      let t13: 1 | 3 = x; // Error
+          ~~~
+!!! error TS2322: Type '1 | 2 | 3' is not assignable to type '1 | 3'.
+!!! error TS2322:   Type '2' is not assignable to type '1 | 3'.
+      let t23: 2 | 3 = x; // Error
+          ~~~
+!!! error TS2322: Type '1 | 2 | 3' is not assignable to type '2 | 3'.
+!!! error TS2322:   Type '1' is not assignable to type '2 | 3'.
+    }
+    
+    type IsMatchingStringTwoLevelsNoTailRecursion<T extends string> =
+      T extends `a${string}` ? 1 : 2 | (T extends `${string}z` ? 3 : 4);
+    
+    function f7<S extends string>(x: IsMatchingStringTwoLevelsNoTailRecursion<S>) {
+      let t1: 1 | 2 | 4 = x; // Error
+          ~~
+!!! error TS2322: Type '1 | 2 | 3 | 4' is not assignable to type '1 | 2 | 4'.
+!!! error TS2322:   Type '3' is not assignable to type '1 | 2 | 4'.
+    }
+    
+    type IsMatchingStringInfiniteRecursionInFalseType<T extends string> =
+      T extends `a${string}`
+        ? true
+        : IsMatchingStringInfiniteRecursionInFalseType<T>;
+    
+    function f8<S extends string>(
+      x: IsMatchingStringInfiniteRecursionInFalseType<S>,
+    ) {
+      let t1: true = x; // Error
+                     ~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+    }
+    
+    type IsMatchingStringInfiniteRecursionInFalseType2<T extends string> =
+      T extends `a${string}`
+        ? 1
+        : (2 | IsMatchingStringInfiniteRecursionInFalseType2<T>);
+    
+    function f9<S extends string>(
+      x: IsMatchingStringInfiniteRecursionInFalseType2<S>,
+    ) {
+      let t1: 1 = x; // Error
+          ~~
+!!! error TS2322: Type '1 | 2' is not assignable to type '1'.
+!!! error TS2322:   Type '2' is not assignable to type '1'.
+      let t2: 2 = x; // Error
+          ~~
+!!! error TS2322: Type '1 | 2' is not assignable to type '2'.
+!!! error TS2322:   Type '1' is not assignable to type '2'.
     }
     

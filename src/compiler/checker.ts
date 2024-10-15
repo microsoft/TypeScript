@@ -2337,6 +2337,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var reverseMappedSourceStack: Type[] = [];
     var reverseMappedTargetStack: Type[] = [];
     var reverseExpandingFlags = ExpandingFlags.None;
+    var distributiveConditionalConstraintIdentityStack: object[] = [];
 
     var diagnostics = createDiagnosticCollection();
     var suggestionDiagnostics = createDiagnosticCollection();
@@ -14050,7 +14051,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const checkType = (type as ConditionalType).checkType;
                 const constraint = getLowerBoundOfKeyType(checkType);
                 if (constraint !== checkType) {
-                    return getConditionalTypeInstantiation(type as ConditionalType, prependTypeMapping((type as ConditionalType).root.checkType, constraint, (type as ConditionalType).mapper), /*forConstraint*/ false);
+                    return getConditionalTypeInstantiation(type as ConditionalType, prependTypeMapping((type as ConditionalType).root.checkType, constraint, (type as ConditionalType).mapper));
                 }
             }
             return type;
@@ -14518,7 +14519,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const simplified = getSimplifiedType(type.checkType, /*writing*/ false);
             const constraint = simplified === type.checkType ? getConstraintOfType(simplified) : simplified;
             if (constraint && constraint !== type.checkType) {
-                const instantiated = getConditionalTypeInstantiation(type, prependTypeMapping(type.root.checkType, constraint, type.mapper), /*forConstraint*/ true);
+                // push an item that can't conflict with true recursion identities
+                // thanks to it  `.length` can be checked to determine that the compiler is within `getConstraintOfDistributiveConditionalType` call
+                distributiveConditionalConstraintIdentityStack.push(unknownType);
+                const instantiated = getConditionalTypeInstantiation(type, prependTypeMapping(type.root.checkType, constraint, type.mapper));
+                distributiveConditionalConstraintIdentityStack.pop();
                 if (!(instantiated.flags & TypeFlags.Never)) {
                     type.resolvedConstraintOfDistributive = instantiated;
                     return instantiated;
@@ -19059,7 +19064,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isGenericType(type) || checkTuples && isTupleType(type) && some(getElementTypes(type), isGenericType);
     }
 
-    function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, forConstraint: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+    function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
         let result;
         let extraTypes: Type[] | undefined;
         let tailCount = 0;
@@ -19134,8 +19139,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // there are possible values of the check type that are also possible values of the extends type.
                     // We use a reverse assignability check as it is less expensive than the comparable relationship
                     // and avoids false positives of a non-empty intersection check.
-                    if (checkType.flags & TypeFlags.Any || forConstraint && !(inferredExtendsType.flags & TypeFlags.Never) && someType(getPermissiveInstantiation(inferredExtendsType), t => isTypeAssignableTo(t, getPermissiveInstantiation(checkType)))) {
-                        (extraTypes || (extraTypes = [])).push(instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper));
+                    if (checkType.flags & TypeFlags.Any || distributiveConditionalConstraintIdentityStack.length !== 0 && !(inferredExtendsType.flags & TypeFlags.Never) && someType(getPermissiveInstantiation(inferredExtendsType), t => isTypeAssignableTo(t, getPermissiveInstantiation(checkType)))) {
+                        (extraTypes ??= []).push(instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper));
                     }
                     // If falseType is an immediately nested conditional type that isn't distributive or has an
                     // identical checkType, switch to that type and loop.
@@ -19258,7 +19263,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 aliasSymbol,
                 aliasTypeArguments,
             };
-            links.resolvedType = getConditionalType(root, /*mapper*/ undefined, /*forConstraint*/ false);
+            links.resolvedType = getConditionalType(root, /*mapper*/ undefined);
             if (outerTypeParameters) {
                 root.instantiations = new Map<string, Type>();
                 root.instantiations.set(getTypeListId(outerTypeParameters), links.resolvedType);
@@ -20272,16 +20277,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper, forConstraint: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+    function getConditionalTypeInstantiation(type: ConditionalType, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
         const root = type.root;
         if (root.outerTypeParameters) {
             // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
             // mapper to the type parameters to produce the effective list of type arguments, and compute the
             // instantiation cache key from the type IDs of the type arguments.
             const typeArguments = map(root.outerTypeParameters, t => getMappedType(t, mapper));
-            const id = (forConstraint ? "C" : "") + getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
+            const forDistributiveConditionalConstraint = distributiveConditionalConstraintIdentityStack.length > 0;
+            const id = (forDistributiveConditionalConstraint ? "C" : "") + getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
             let result = root.instantiations!.get(id);
             if (!result) {
+                if (forDistributiveConditionalConstraint) {
+                    const identity = getRecursionIdentity(type);
+                    if (contains(distributiveConditionalConstraintIdentityStack, identity)) {
+                        return neverType;
+                    }
+                    distributiveConditionalConstraintIdentityStack.push(identity);
+                }
                 const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
                 const checkType = root.checkType;
                 const distributionType = root.isDistributive ? getReducedType(getMappedType(checkType, newMapper)) : undefined;
@@ -20289,9 +20302,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
                 // result is (A extends U ? X : Y) | (B extends U ? X : Y).
                 result = distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never) ?
-                    mapTypeWithAlias(distributionType, t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint), aliasSymbol, aliasTypeArguments) :
-                    getConditionalType(root, newMapper, forConstraint, aliasSymbol, aliasTypeArguments);
+                    mapTypeWithAlias(distributionType, t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments) :
+                    getConditionalType(root, newMapper, aliasSymbol, aliasTypeArguments);
                 root.instantiations!.set(id, result);
+                if (forDistributiveConditionalConstraint) {
+                    distributiveConditionalConstraintIdentityStack.pop();
+                }
             }
             return result;
         }
@@ -20372,7 +20388,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getIndexedAccessType(instantiateType((type as IndexedAccessType).objectType, mapper), instantiateType((type as IndexedAccessType).indexType, mapper), (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
         }
         if (flags & TypeFlags.Conditional) {
-            return getConditionalTypeInstantiation(type as ConditionalType, combineTypeMappers((type as ConditionalType).mapper, mapper), /*forConstraint*/ false, aliasSymbol, aliasTypeArguments);
+            return getConditionalTypeInstantiation(type as ConditionalType, combineTypeMappers((type as ConditionalType).mapper, mapper), aliasSymbol, aliasTypeArguments);
         }
         if (flags & TypeFlags.Substitution) {
             const newBaseType = instantiateType((type as SubstitutionType).baseType, mapper);
