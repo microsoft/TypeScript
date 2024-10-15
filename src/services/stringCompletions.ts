@@ -42,6 +42,7 @@ import {
     ensureTrailingDirectorySeparator,
     equateStringsCaseSensitive,
     escapeString,
+    every,
     Extension,
     fileExtensionIsOneOf,
     filter,
@@ -133,6 +134,7 @@ import {
     singleElementArray,
     skipConstraint,
     skipParentheses,
+    some,
     SourceFile,
     startsWith,
     StringLiteralLike,
@@ -141,6 +143,7 @@ import {
     supportedTSImplementationExtensions,
     Symbol,
     SyntaxKind,
+    TemplateLiteralType,
     textPart,
     TextSpan,
     tryAndIgnoreErrors,
@@ -270,19 +273,29 @@ function convertStringLiteralCompletions(
             };
         }
         case StringLiteralCompletionKind.Types: {
+            const textOfNode = getTextOfNode(contextToken);
             const quoteChar = contextToken.kind === SyntaxKind.NoSubstitutionTemplateLiteral
                 ? CharacterCodes.backtick
-                : startsWith(getTextOfNode(contextToken), "'")
+                : textOfNode.charCodeAt(0) === CharacterCodes.singleQuote
                 ? CharacterCodes.singleQuote
                 : CharacterCodes.doubleQuote;
-            const entries = completion.types.map(type => ({
-                name: escapeString(type.value, quoteChar),
-                kindModifiers: ScriptElementKindModifier.none,
-                kind: ScriptElementKind.string,
-                sortText: SortText.LocationPriority,
-                replacementSpan: getReplacementSpanForContextToken(contextToken, position),
-                commitCharacters: [],
-            }));
+            let tokenTextContent = textOfNode;
+            if (tokenTextContent) tokenTextContent = tokenTextContent.slice(1);
+            if (tokenTextContent.charCodeAt(tokenTextContent.length - 1) === quoteChar) tokenTextContent = tokenTextContent.slice(0, tokenTextContent.length - 1);
+            const uniques = new Map<string, true>();
+            const entries = mapDefined(completion.types, type => {
+                const name = type.isStringLiteral()
+                    ? escapeString(type.value, quoteChar)
+                    : getStringLiteralCompletionFromTemplateLiteralTypeAndTextOfNode(type, tokenTextContent, quoteChar);
+                return addToSeen(uniques, name) ? {
+                    name,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    kind: ScriptElementKind.string,
+                    sortText: SortText.LocationPriority,
+                    replacementSpan: getReplacementSpanForContextToken(contextToken, position),
+                    commitCharacters: [],
+                } : undefined;
+            });
             return {
                 isGlobalCompletion: false,
                 isMemberCompletion: false,
@@ -295,6 +308,22 @@ function convertStringLiteralCompletions(
         default:
             return Debug.assertNever(completion);
     }
+}
+
+function getStringLiteralCompletionFromTemplateLiteralTypeAndTextOfNode(type: TemplateLiteralType, tokenTextContent: string, quoteChar: CharacterCodes.backtick | CharacterCodes.singleQuote | CharacterCodes.doubleQuote) {
+    let firstUnusedCharacterIndex = 0;
+    let textIndex = 0;
+    for (; textIndex < type.texts.length - 1; textIndex++) {
+        const escapedText = escapeString(type.texts[textIndex], quoteChar);
+        const match = tokenTextContent.indexOf(escapedText, firstUnusedCharacterIndex);
+        if (match < 0) {
+            // The current text was not matched so we suggest appending it or replacing if we aren't passed the first ${string}.
+            return textIndex === 0 ? escapedText : tokenTextContent + escapedText;
+        }
+        firstUnusedCharacterIndex = match + escapedText.length;
+    }
+    // We can always suggest appending the last text, since if it is already present, it can be part of the last ${string}.
+    return tokenTextContent + escapeString(type.texts[textIndex], quoteChar);
 }
 
 /** @internal */
@@ -324,7 +353,7 @@ function stringLiteralCompletionDetails(name: string, location: Node, completion
             return match && createCompletionDetailsForSymbol(match, match.name, checker, sourceFile, location, cancellationToken);
         }
         case StringLiteralCompletionKind.Types:
-            return find(completion.types, t => t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.string, [textPart(name)]) : undefined;
+            return find(completion.types, t => t.isStringLiteral() && t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.string, [textPart(name)]) : undefined;
         default:
             return Debug.assertNever(completion);
     }
@@ -387,9 +416,10 @@ interface StringLiteralCompletionsFromProperties {
     readonly symbols: readonly Symbol[];
     readonly hasIndexSignature: boolean;
 }
+type StringLiteralLikeType = StringLiteralType | TemplateLiteralType;
 interface StringLiteralCompletionsFromTypes {
     readonly kind: StringLiteralCompletionKind.Types;
-    readonly types: readonly StringLiteralType[];
+    readonly types: readonly (StringLiteralLikeType)[];
     readonly isNewIdentifier: boolean;
 }
 type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths; readonly paths: readonly PathCompletion[]; } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
@@ -420,7 +450,11 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 //      });
                 return stringLiteralCompletionsForObjectLiteral(typeChecker, parent.parent);
             }
-            return fromContextualType() || fromContextualType(ContextFlags.None);
+            const fromContextualTypeWithCompletionFlag = fromContextualType();
+            if (fromContextualTypeWithCompletionFlag && some(fromContextualTypeWithCompletionFlag.types, t => t.isStringLiteral())) {
+                return fromContextualTypeWithCompletionFlag;
+            }
+            return fromContextualType(ContextFlags.None);
 
         case SyntaxKind.ElementAccessExpression: {
             const { expression, argumentExpression } = parent as ElementAccessExpression;
@@ -465,7 +499,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             if (!contextualTypes) {
                 return;
             }
-            const literals = contextualTypes.types.filter(literal => !tracker.hasValue(literal.value));
+            const literals = contextualTypes.types.filter(literal => literal.isStringLiteral() && !tracker.hasValue(literal.value));
             return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false };
 
         case SyntaxKind.ImportSpecifier:
@@ -485,8 +519,13 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
             return { kind: StringLiteralCompletionKind.Properties, symbols: uniques, hasIndexSignature: false };
 
-        default:
-            return fromContextualType() || fromContextualType(ContextFlags.None);
+        default: {
+            const fromContextualTypeWithCompletionFlag = fromContextualType();
+            if (fromContextualTypeWithCompletionFlag && some(fromContextualTypeWithCompletionFlag.types, t => t.isStringLiteral())) {
+                return fromContextualTypeWithCompletionFlag;
+            }
+            return fromContextualType(ContextFlags.None);
+        }
     }
 
     function fromUnionableLiteralType(grandParent: Node): StringLiteralCompletionsFromTypes | StringLiteralCompletionsFromProperties | undefined {
@@ -495,7 +534,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             case SyntaxKind.TypeReference: {
                 const typeArgument = findAncestor(parent, n => n.parent === grandParent) as LiteralTypeNode;
                 if (typeArgument) {
-                    return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
+                    return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralLikeTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
                 }
                 return undefined;
             }
@@ -520,7 +559,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 if (result.kind === StringLiteralCompletionKind.Properties) {
                     return { kind: StringLiteralCompletionKind.Properties, symbols: result.symbols.filter(sym => !contains(alreadyUsedTypes, sym.name)), hasIndexSignature: result.hasIndexSignature };
                 }
-                return { kind: StringLiteralCompletionKind.Types, types: result.types.filter(t => !contains(alreadyUsedTypes, t.value)), isNewIdentifier: false };
+                return { kind: StringLiteralCompletionKind.Types, types: result.types.filter(t => t.isStringLiteral() && !contains(alreadyUsedTypes, t.value)), isNewIdentifier: false };
             }
             default:
                 return undefined;
@@ -530,7 +569,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
     function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
-        const types = getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags));
+        const types = getStringLiteralLikeTypes(getContextualTypeFromParent(node, typeChecker, contextFlags));
         if (!types.length) {
             return;
         }
@@ -568,7 +607,7 @@ function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg:
             }
         }
         isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
-        return getStringLiteralTypes(type, uniques);
+        return getStringLiteralLikeTypes(type, uniques);
     });
     return length(types) ? { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier } : undefined;
 }
@@ -600,11 +639,12 @@ function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLi
     };
 }
 
-function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
+function getStringLiteralLikeTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralLikeType[] {
     if (!type) return emptyArray;
     type = skipConstraint(type);
-    return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques)) :
-        type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : emptyArray;
+    return type.isUnion() ? flatMap(type.types, t => getStringLiteralLikeTypes(t, uniques)) :
+        type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value)
+            || (type.flags & TypeFlags.TemplateLiteral && every((type as TemplateLiteralType).types, t => !!(TypeFlags.String & t.flags))) ? [type as StringLiteralLikeType] : emptyArray;
 }
 
 interface NameAndKind {
