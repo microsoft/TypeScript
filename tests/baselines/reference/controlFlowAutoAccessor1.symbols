@@ -88,3 +88,46 @@ class Example3 {
   }
 }
 
+declare var n: number;
+>n : Symbol(n, Decl(controlFlowAutoAccessor1.ts, 41, 11))
+
+class Example4 {
+>Example4 : Symbol(Example4, Decl(controlFlowAutoAccessor1.ts, 41, 22))
+
+  static accessor value;
+>value : Symbol(Example4.value, Decl(controlFlowAutoAccessor1.ts, 42, 16))
+
+  static {
+    this.value = n;
+>this.value : Symbol(Example4.value, Decl(controlFlowAutoAccessor1.ts, 42, 16))
+>this : Symbol(Example4, Decl(controlFlowAutoAccessor1.ts, 41, 22))
+>value : Symbol(Example4.value, Decl(controlFlowAutoAccessor1.ts, 42, 16))
+>n : Symbol(n, Decl(controlFlowAutoAccessor1.ts, 41, 11))
+
+    if (n < 0) {
+>n : Symbol(n, Decl(controlFlowAutoAccessor1.ts, 41, 11))
+
+      this.value = null;
+>this.value : Symbol(Example4.value, Decl(controlFlowAutoAccessor1.ts, 42, 16))
+>this : Symbol(Example4, Decl(controlFlowAutoAccessor1.ts, 41, 22))
+>value : Symbol(Example4.value, Decl(controlFlowAutoAccessor1.ts, 42, 16))
+    }
+  }
+}
+
+class Example5 {
+>Example5 : Symbol(Example5, Decl(controlFlowAutoAccessor1.ts, 50, 1))
+
+  static accessor value; // error
+>value : Symbol(Example5.value, Decl(controlFlowAutoAccessor1.ts, 52, 16))
+}
+Example5.value = 123;
+>Example5.value : Symbol(Example5.value, Decl(controlFlowAutoAccessor1.ts, 52, 16))
+>Example5 : Symbol(Example5, Decl(controlFlowAutoAccessor1.ts, 50, 1))
+>value : Symbol(Example5.value, Decl(controlFlowAutoAccessor1.ts, 52, 16))
+
+Example5.value++;
+>Example5.value : Symbol(Example5.value, Decl(controlFlowAutoAccessor1.ts, 52, 16))
+>Example5 : Symbol(Example5, Decl(controlFlowAutoAccessor1.ts, 50, 1))
+>value : Symbol(Example5.value, Decl(controlFlowAutoAccessor1.ts, 52, 16))
+

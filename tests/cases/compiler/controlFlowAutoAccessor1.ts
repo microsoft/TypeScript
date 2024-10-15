@@ -42,3 +42,20 @@ class Example3 {
     }
   }
 }
+
+declare var n: number;
+class Example4 {
+  static accessor value;
+  static {
+    this.value = n;
+    if (n < 0) {
+      this.value = null;
+    }
+  }
+}
+
+class Example5 {
+  static accessor value; // error
+}
+Example5.value = 123;
+Example5.value++;

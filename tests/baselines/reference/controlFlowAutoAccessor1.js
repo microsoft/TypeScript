@@ -42,6 +42,23 @@ class Example3 {
   }
 }
 
+declare var n: number;
+class Example4 {
+  static accessor value;
+  static {
+    this.value = n;
+    if (n < 0) {
+      this.value = null;
+    }
+  }
+}
+
+class Example5 {
+  static accessor value; // error
+}
+Example5.value = 123;
+Example5.value++;
+
 
 //// [controlFlowAutoAccessor1.js]
 "use strict";
@@ -76,6 +93,20 @@ class Example3 {
         }
     }
 }
+class Example4 {
+    static accessor value;
+    static {
+        this.value = n;
+        if (n < 0) {
+            this.value = null;
+        }
+    }
+}
+class Example5 {
+    static accessor value; // error
+}
+Example5.value = 123;
+Example5.value++;
 
 
 //// [controlFlowAutoAccessor1.d.ts]
@@ -92,4 +123,11 @@ declare class Example2 {
 declare class Example3 {
     accessor value: number | null;
     constructor(n: number);
+}
+declare var n: number;
+declare class Example4 {
+    static accessor value: number | null;
+}
+declare class Example5 {
+    static accessor value: any;
 }
