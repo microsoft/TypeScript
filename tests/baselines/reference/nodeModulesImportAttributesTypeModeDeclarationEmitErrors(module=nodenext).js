@@ -127,16 +127,16 @@ exports.b = null;
 
 //// [index.d.ts]
 export type LocalInterface = import("pkg", { with: { "resolution-mode": "foobar" } }).RequireInterface & import("pkg", { with: { "resolution-mode": "import" } }).ImportInterface;
-export declare const a: import("pkg").RequireInterface;
+export declare const a: import("pkg", { with: { "resolution-mode": "foobar" } }).RequireInterface;
 export declare const b: import("pkg", { with: { "resolution-mode": "import" } }).ImportInterface;
 //// [other.d.ts]
 export type LocalInterface = import("pkg", { with: {} });
-export declare const a: any;
-export declare const b: any;
+export declare const a: import("pkg", { with: {} });
+export declare const b: import("pkg", { with: {} });
 //// [other2.d.ts]
 export type LocalInterface = import("pkg", { with: { "bad": "require" } }).RequireInterface & import("pkg", { with: { "bad": "import" } }).ImportInterface;
-export declare const a: import("pkg").RequireInterface;
-export declare const b: any;
+export declare const a: import("pkg", { with: { "bad": "require" } }).RequireInterface;
+export declare const b: import("pkg", { with: { "bad": "import" } }).ImportInterface;
 //// [other3.d.ts]
 export type LocalInterface = import("pkg", { with: {} })[{
     "resolution-mode": "require";
@@ -145,9 +145,9 @@ export declare const a: any;
 export declare const b: any;
 //// [other4.d.ts]
 export type LocalInterface = import("pkg", { with: {} });
-export declare const a: any, Attribute1: any, RequireInterface: any;
-export declare const b: any, Attribute2: any, ImportInterface: any;
+export declare const a: import("pkg", { with: {} }), Attribute1: any, RequireInterface: any;
+export declare const b: import("pkg", { with: {} }), Attribute2: any, ImportInterface: any;
 //// [other5.d.ts]
 export type LocalInterface = import("pkg", { with: {} }).RequireInterface & import("pkg", { with: {} }).ImportInterface;
-export declare const a: import("pkg").RequireInterface;
-export declare const b: any;
+export declare const a: import("pkg", { with: {} }).RequireInterface;
+export declare const b: import("pkg", { with: {} }).ImportInterface;

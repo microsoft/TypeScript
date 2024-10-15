@@ -1,8 +1,8 @@
 // === goToSourceDefinition ===
-// === /node_modules/yargs/callback.js ===
+// === /home/src/workspaces/project/node_modules/yargs/callback.js ===
 // export class Yargs { [|positional|]() { } }
 
-// === /some/index.ts ===
+// === /home/src/workspaces/project/some/index.ts ===
 // import { random } from "../folder/random";
 // import { command } from "yargs";
 // command("foo", yargs => {

@@ -1,12 +1,12 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /a.ts
+// @Filename: /home/src/workspaces/project/a.ts
 //// [||]
 
-// @Filename: /b.ts
+// @Filename: /home/src/workspaces/project/b.ts
 //// export const b = 10;
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{ "files": ["a.ts", "b.ts"] }
 
 verify.pasteEdits({

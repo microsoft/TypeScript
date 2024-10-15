@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/compiler/lib.es5.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -12,15 +12,17 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 declare const eval: any
 
-//// [/compiler/lib.es2015.promise.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts]
 declare class Promise<T> {}
 
-//// [/src/app.ts]
+//// [/home/src/projects/project/app.ts]
 var x: Promise<string>;
 
-//// [/src/tsconfig.json]
+//// [/home/src/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "module": "commonjs",
@@ -33,13 +35,28 @@ var x: Promise<string>;
   }
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-/compiler/tsc.js -w -p /src/tsconfig.json
+
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96msrc/app.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2583: [0mCannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+[96mapp.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2583: [0mCannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 
 [7m1[0m var x: Promise<string>;
 [7m [0m [91m       ~~~~~~~[0m
@@ -48,25 +65,35 @@ Output::
 
 
 
-//// [/src/app.js]
+//// [/home/src/projects/project/app.js]
 var x;
 
 
 
+PolledWatches::
+/home/src/projects/node_modules: *new*
+  {"pollingInterval":500}
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/compiler/lib.es5.d.ts: *new*
+/home/src/projects/project/app.ts: *new*
   {}
-/src/app.ts: *new*
+/home/src/projects/project/tsconfig.json: *new*
   {}
-/src/tsconfig.json: *new*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/src: *new*
+/home/src/projects/project: *new*
   {}
 
 Program root files: [
-  "/src/app.ts"
+  "/home/src/projects/project/app.ts"
 ]
 Program options: {
   "module": 1,
@@ -77,28 +104,27 @@ Program options: {
     "lib.es5.d.ts"
   ],
   "watch": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/compiler/lib.es5.d.ts
-/src/app.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/projects/project/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/compiler/lib.es5.d.ts
-/src/app.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/projects/project/app.ts
 
 Shape signatures in builder refreshed for::
-/compiler/lib.es5.d.ts (used version)
-/src/app.ts (used version)
+/home/src/tslibs/ts/lib/lib.es5.d.ts (used version)
+/home/src/projects/project/app.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: Change the lib in config
 
 Input::
-//// [/src/tsconfig.json]
+//// [/home/src/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "module": "commonjs",
@@ -129,25 +155,35 @@ Output::
 
 
 
-//// [/src/app.js] file written with same contents
+//// [/home/src/projects/project/app.js] file written with same contents
+
+PolledWatches::
+/home/src/projects/node_modules:
+  {"pollingInterval":500}
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/compiler/lib.es2015.promise.d.ts: *new*
+/home/src/projects/project/app.ts:
   {}
-/compiler/lib.es5.d.ts:
+/home/src/projects/project/tsconfig.json:
   {}
-/src/app.ts:
+/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts: *new*
   {}
-/src/tsconfig.json:
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {}
 
 FsWatchesRecursive::
-/src:
+/home/src/projects/project:
   {}
 
 
 Program root files: [
-  "/src/app.ts"
+  "/home/src/projects/project/app.ts"
 ]
 Program options: {
   "module": 1,
@@ -159,22 +195,21 @@ Program options: {
     "lib.es2015.promise.d.ts"
   ],
   "watch": true,
-  "project": "/src/tsconfig.json",
-  "configFilePath": "/src/tsconfig.json"
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
 }
 Program structureReused: SafeModules
 Program files::
-/compiler/lib.es5.d.ts
-/compiler/lib.es2015.promise.d.ts
-/src/app.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts
+/home/src/projects/project/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/compiler/lib.es5.d.ts
-/compiler/lib.es2015.promise.d.ts
-/src/app.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
+/home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts
+/home/src/projects/project/app.ts
 
 Shape signatures in builder refreshed for::
-/compiler/lib.es2015.promise.d.ts (used version)
-/src/app.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.es2015.promise.d.ts (used version)
+/home/src/projects/project/app.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

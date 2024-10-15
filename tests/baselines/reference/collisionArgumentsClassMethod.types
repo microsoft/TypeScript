@@ -7,7 +7,7 @@ class c1 {
 
     public foo(i: number, ...arguments) { //arguments is error
 >foo : (i: number, ...arguments: any[]) => void
->    : ^ ^^      ^^^^^         ^^     ^^^^^^^^^
+>    : ^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >arguments : any[]

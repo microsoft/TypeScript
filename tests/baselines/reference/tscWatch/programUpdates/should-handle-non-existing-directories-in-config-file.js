@@ -1,9 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/src/app.ts]
+//// [/user/username/workspace/solution/projects/project/src/app.ts]
 let x = 1;
 
-//// [/a/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
   "compilerOptions": {},
   "include": [
@@ -12,7 +12,7 @@ let x = 1;
   ]
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -24,9 +24,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p /a/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w -p /user/username/workspace/solution/projects/project/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -35,46 +37,54 @@ Output::
 
 
 
-//// [/a/src/app.js]
+//// [/user/username/workspace/solution/projects/project/src/app.js]
 var x = 1;
 
 
 
 PolledWatches::
-/a/notexistingfolder: *new*
+/user/username/workspace/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/solution/projects/project/notexistingfolder: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/a/src/app.ts: *new*
+/user/username/workspace/solution/projects/project/src/app.ts: *new*
   {}
-/a/tsconfig.json: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a/src: *new*
+/user/username/workspace/solution/projects/project/src: *new*
   {}
 
 Program root files: [
-  "/a/src/app.ts"
+  "/user/username/workspace/solution/projects/project/src/app.ts"
 ]
 Program options: {
   "watch": true,
-  "project": "/a/tsconfig.json",
-  "configFilePath": "/a/tsconfig.json"
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/a/src/app.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/src/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/src/app.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/src/app.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/src/app.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/workspace/solution/projects/project/src/app.ts (used version)
 
 exitCode:: ExitStatus.undefined

@@ -54,8 +54,8 @@ new Int8Array().findLast((item) => item === 0);
 >                                               : ^^^
 >new Int8Array().findLast : any
 >                         : ^^^
->new Int8Array() : Int8Array
->                : ^^^^^^^^^
+>new Int8Array() : Int8Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
 >findLast : any
@@ -76,8 +76,8 @@ new Uint8Array().findLast((item) => item === 0);
 >                                                : ^^^
 >new Uint8Array().findLast : any
 >                          : ^^^
->new Uint8Array() : Uint8Array
->                 : ^^^^^^^^^^
+>new Uint8Array() : Uint8Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
@@ -98,8 +98,8 @@ new Uint8ClampedArray().findLast((item) => item === 0);
 >                                                       : ^^^
 >new Uint8ClampedArray().findLast : any
 >                                 : ^^^
->new Uint8ClampedArray() : Uint8ClampedArray
->                        : ^^^^^^^^^^^^^^^^^
+>new Uint8ClampedArray() : Uint8ClampedArray<ArrayBuffer>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
@@ -120,8 +120,8 @@ new Int16Array().findLast((item) => item === 0);
 >                                                : ^^^
 >new Int16Array().findLast : any
 >                          : ^^^
->new Int16Array() : Int16Array
->                 : ^^^^^^^^^^
+>new Int16Array() : Int16Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
@@ -142,8 +142,8 @@ new Uint16Array().findLast((item) => item === 0);
 >                                                 : ^^^
 >new Uint16Array().findLast : any
 >                           : ^^^
->new Uint16Array() : Uint16Array
->                  : ^^^^^^^^^^^
+>new Uint16Array() : Uint16Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
@@ -164,8 +164,8 @@ new Int32Array().findLast((item) => item === 0);
 >                                                : ^^^
 >new Int32Array().findLast : any
 >                          : ^^^
->new Int32Array() : Int32Array
->                 : ^^^^^^^^^^
+>new Int32Array() : Int32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
@@ -186,8 +186,8 @@ new Uint32Array().findLast((item) => item === 0);
 >                                                 : ^^^
 >new Uint32Array().findLast : any
 >                           : ^^^
->new Uint32Array() : Uint32Array
->                  : ^^^^^^^^^^^
+>new Uint32Array() : Uint32Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
@@ -208,8 +208,8 @@ new Float32Array().findLast((item) => item === 0);
 >                                                  : ^^^
 >new Float32Array().findLast : any
 >                            : ^^^
->new Float32Array() : Float32Array
->                   : ^^^^^^^^^^^^
+>new Float32Array() : Float32Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
@@ -230,8 +230,8 @@ new Float64Array().findLast((item) => item === 0);
 >                                                  : ^^^
 >new Float64Array().findLast : any
 >                            : ^^^
->new Float64Array() : Float64Array
->                   : ^^^^^^^^^^^^
+>new Float64Array() : Float64Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
@@ -252,8 +252,8 @@ new BigInt64Array().findLast((item) => item === BigInt(0));
 >                                                           : ^^^
 >new BigInt64Array().findLast : any
 >                             : ^^^
->new BigInt64Array() : BigInt64Array
->                    : ^^^^^^^^^^^^^
+>new BigInt64Array() : BigInt64Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
@@ -278,8 +278,8 @@ new BigUint64Array().findLast((item) => item === BigInt(0));
 >                                                            : ^^^
 >new BigUint64Array().findLast : any
 >                              : ^^^
->new BigUint64Array() : BigUint64Array
->                     : ^^^^^^^^^^^^^^
+>new BigUint64Array() : BigUint64Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >findLast : any
@@ -352,8 +352,8 @@ new Int8Array().findLastIndex((item) => item === 0);
 >                                                    : ^^^
 >new Int8Array().findLastIndex : any
 >                              : ^^^
->new Int8Array() : Int8Array
->                : ^^^^^^^^^
+>new Int8Array() : Int8Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
@@ -374,8 +374,8 @@ new Uint8Array().findLastIndex((item) => item === 0);
 >                                                     : ^^^
 >new Uint8Array().findLastIndex : any
 >                               : ^^^
->new Uint8Array() : Uint8Array
->                 : ^^^^^^^^^^
+>new Uint8Array() : Uint8Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
@@ -396,8 +396,8 @@ new Uint8ClampedArray().findLastIndex((item) => item === 0);
 >                                                            : ^^^
 >new Uint8ClampedArray().findLastIndex : any
 >                                      : ^^^
->new Uint8ClampedArray() : Uint8ClampedArray
->                        : ^^^^^^^^^^^^^^^^^
+>new Uint8ClampedArray() : Uint8ClampedArray<ArrayBuffer>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
@@ -418,8 +418,8 @@ new Int16Array().findLastIndex((item) => item === 0);
 >                                                     : ^^^
 >new Int16Array().findLastIndex : any
 >                               : ^^^
->new Int16Array() : Int16Array
->                 : ^^^^^^^^^^
+>new Int16Array() : Int16Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
@@ -440,8 +440,8 @@ new Uint16Array().findLastIndex((item) => item === 0);
 >                                                      : ^^^
 >new Uint16Array().findLastIndex : any
 >                                : ^^^
->new Uint16Array() : Uint16Array
->                  : ^^^^^^^^^^^
+>new Uint16Array() : Uint16Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
@@ -462,8 +462,8 @@ new Int32Array().findLastIndex((item) => item === 0);
 >                                                     : ^^^
 >new Int32Array().findLastIndex : any
 >                               : ^^^
->new Int32Array() : Int32Array
->                 : ^^^^^^^^^^
+>new Int32Array() : Int32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
@@ -484,8 +484,8 @@ new Uint32Array().findLastIndex((item) => item === 0);
 >                                                      : ^^^
 >new Uint32Array().findLastIndex : any
 >                                : ^^^
->new Uint32Array() : Uint32Array
->                  : ^^^^^^^^^^^
+>new Uint32Array() : Uint32Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
@@ -506,8 +506,8 @@ new Float32Array().findLastIndex((item) => item === 0);
 >                                                       : ^^^
 >new Float32Array().findLastIndex : any
 >                                 : ^^^
->new Float32Array() : Float32Array
->                   : ^^^^^^^^^^^^
+>new Float32Array() : Float32Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
@@ -528,8 +528,8 @@ new Float64Array().findLastIndex((item) => item === 0);
 >                                                       : ^^^
 >new Float64Array().findLastIndex : any
 >                                 : ^^^
->new Float64Array() : Float64Array
->                   : ^^^^^^^^^^^^
+>new Float64Array() : Float64Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
@@ -550,8 +550,8 @@ new BigInt64Array().findLastIndex((item) => item === BigInt(0));
 >                                                                : ^^^
 >new BigInt64Array().findLastIndex : any
 >                                  : ^^^
->new BigInt64Array() : BigInt64Array
->                    : ^^^^^^^^^^^^^
+>new BigInt64Array() : BigInt64Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any
@@ -576,8 +576,8 @@ new BigUint64Array().findLastIndex((item) => item === BigInt(0));
 >                                                                 : ^^^
 >new BigUint64Array().findLastIndex : any
 >                                   : ^^^
->new BigUint64Array() : BigUint64Array
->                     : ^^^^^^^^^^^^^^
+>new BigUint64Array() : BigUint64Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >findLastIndex : any

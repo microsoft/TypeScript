@@ -1,6 +1,36 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/workspaces/solution/utils/index.ts]
+export const enum E { A = 1 }
+
+//// [/home/src/workspaces/solution/utils/index.d.ts]
+export declare const enum E { A = 1 }
+
+//// [/home/src/workspaces/solution/utils/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "preserveConstEnums": true
+  }
+}
+
+//// [/home/src/workspaces/solution/project/index.ts]
+import { E } from "../utils"; E.A;
+
+//// [/home/src/workspaces/solution/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "isolatedModules": true
+  },
+  "references": [
+    {
+      "path": "../utils"
+    }
+  ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,47 +45,17 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/project/index.ts]
-import { E } from "../utils"; E.A;
 
-//// [/src/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "isolatedModules": true
-  },
-  "references": [
-    {
-      "path": "../utils"
-    }
-  ]
-}
-
-//// [/src/utils/index.d.ts]
-export declare const enum E { A = 1 }
-
-//// [/src/utils/index.ts]
-export const enum E { A = 1 }
-
-//// [/src/utils/tsconfig.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "declaration": true,
-    "preserveConstEnums": true
-  }
-}
-
-
-
+/home/src/tslibs/TS/Lib/tsc.js --p project
 Output::
-/lib/tsc --p src/project
-exitCode:: ExitStatus.Success
 
 
-//// [/src/project/index.js]
+//// [/home/src/workspaces/solution/project/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../utils");
 utils_1.E.A;
 
 
+
+exitCode:: ExitStatus.Success

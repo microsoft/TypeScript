@@ -1,4 +1,5 @@
-preact.tsx(3,11): error TS2307: Cannot find module 'preact/jsx-runtime' or its corresponding type declarations.
+preact.tsx(3,11): error TS2875: This JSX tag requires the module path 'preact/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+preact.tsx(3,11): error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
 
 
 ==== react.tsx (0 errors) ====
@@ -12,12 +13,14 @@ preact.tsx(3,11): error TS2307: Cannot find module 'preact/jsx-runtime' or its c
     </>
     
     export {};
-==== preact.tsx (1 errors) ====
+==== preact.tsx (2 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     /* @jsxImportSource preact */
     const a = <>
               ~~
-!!! error TS2307: Cannot find module 'preact/jsx-runtime' or its corresponding type declarations.
+!!! error TS2875: This JSX tag requires the module path 'preact/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+              ~~
+!!! error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
       <p></p>
       text
       <div className="foo"></div>
