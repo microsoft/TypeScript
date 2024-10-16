@@ -43,6 +43,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - run: git config --system core.longpaths true
+        if: matrix.os == 'windows-latest'
+
       - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
         with:
           submodules: true
