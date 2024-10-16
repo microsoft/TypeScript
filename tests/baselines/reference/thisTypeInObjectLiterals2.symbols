@@ -647,137 +647,131 @@ type Accessors<T> = { [K in keyof T]: (() => T[K]) | Computed<T[K]> };
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 198, 15))
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 198, 15))
 >K : Symbol(K, Decl(thisTypeInObjectLiterals2.ts, 198, 23))
->Computed : Symbol(Computed, Decl(thisTypeInObjectLiterals2.ts, 200, 39))
+>Computed : Symbol(Computed, Decl(thisTypeInObjectLiterals2.ts, 198, 70))
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 198, 15))
 >K : Symbol(K, Decl(thisTypeInObjectLiterals2.ts, 198, 23))
 
-type Dictionary<T> = { [x: string]: T }
->Dictionary : Symbol(Dictionary, Decl(thisTypeInObjectLiterals2.ts, 198, 70))
->T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 200, 16))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 200, 24))
->T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 200, 16))
-
 type Computed<T> = {
->Computed : Symbol(Computed, Decl(thisTypeInObjectLiterals2.ts, 200, 39))
->T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 202, 14))
+>Computed : Symbol(Computed, Decl(thisTypeInObjectLiterals2.ts, 198, 70))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 200, 14))
 
     get?(): T;
->get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 202, 20))
->T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 202, 14))
+>get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 200, 20))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 200, 14))
 
     set?(value: T): void;
->set : Symbol(set, Decl(thisTypeInObjectLiterals2.ts, 203, 14))
->value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 204, 9))
->T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 202, 14))
+>set : Symbol(set, Decl(thisTypeInObjectLiterals2.ts, 201, 14))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 202, 9))
+>T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 200, 14))
 }
 
 type VueOptions<D, M, P> = ThisType<D & M & P> & {
->VueOptions : Symbol(VueOptions, Decl(thisTypeInObjectLiterals2.ts, 205, 1))
->D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 207, 16))
->M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 207, 18))
->P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 207, 21))
+>VueOptions : Symbol(VueOptions, Decl(thisTypeInObjectLiterals2.ts, 203, 1))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 205, 16))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 205, 18))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 205, 21))
 >ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
->D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 207, 16))
->M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 207, 18))
->P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 207, 21))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 205, 16))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 205, 18))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 205, 21))
 
     data?: D | (() => D);
->data : Symbol(data, Decl(thisTypeInObjectLiterals2.ts, 207, 50))
->D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 207, 16))
->D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 207, 16))
+>data : Symbol(data, Decl(thisTypeInObjectLiterals2.ts, 205, 50))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 205, 16))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 205, 16))
 
     methods?: M;
->methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 208, 25))
->M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 207, 18))
+>methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 206, 25))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 205, 18))
 
     computed?: Accessors<P>;
->computed : Symbol(computed, Decl(thisTypeInObjectLiterals2.ts, 209, 16))
+>computed : Symbol(computed, Decl(thisTypeInObjectLiterals2.ts, 207, 16))
 >Accessors : Symbol(Accessors, Decl(thisTypeInObjectLiterals2.ts, 194, 22))
->P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 207, 21))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 205, 21))
 }
 
 declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
->Vue : Symbol(Vue, Decl(thisTypeInObjectLiterals2.ts, 213, 13))
->D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 213, 24))
->M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 213, 26))
->P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 213, 29))
->options : Symbol(options, Decl(thisTypeInObjectLiterals2.ts, 213, 33))
->VueOptions : Symbol(VueOptions, Decl(thisTypeInObjectLiterals2.ts, 205, 1))
->D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 213, 24))
->M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 213, 26))
->P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 213, 29))
->D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 213, 24))
->M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 213, 26))
->P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 213, 29))
+>Vue : Symbol(Vue, Decl(thisTypeInObjectLiterals2.ts, 211, 13))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 211, 24))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 211, 26))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 211, 29))
+>options : Symbol(options, Decl(thisTypeInObjectLiterals2.ts, 211, 33))
+>VueOptions : Symbol(VueOptions, Decl(thisTypeInObjectLiterals2.ts, 203, 1))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 211, 24))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 211, 26))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 211, 29))
+>D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 211, 24))
+>M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 211, 26))
+>P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 211, 29))
 
 let vue = new Vue({
->vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 215, 3))
->Vue : Symbol(Vue, Decl(thisTypeInObjectLiterals2.ts, 213, 13))
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 213, 3))
+>Vue : Symbol(Vue, Decl(thisTypeInObjectLiterals2.ts, 211, 13))
 
     data: () => ({ x: 1, y: 2 }),
->data : Symbol(data, Decl(thisTypeInObjectLiterals2.ts, 215, 19))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
->y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 216, 24))
+>data : Symbol(data, Decl(thisTypeInObjectLiterals2.ts, 213, 19))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 214, 18))
+>y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 214, 24))
 
     methods: {
->methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 216, 33))
+>methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 214, 33))
 
         f(x: string) {
->f : Symbol(f, Decl(thisTypeInObjectLiterals2.ts, 217, 14))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 218, 10))
+>f : Symbol(f, Decl(thisTypeInObjectLiterals2.ts, 215, 14))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 10))
 
             return this.x;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 214, 18))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 214, 18))
         }
     },
     computed: {
->computed : Symbol(computed, Decl(thisTypeInObjectLiterals2.ts, 221, 6))
+>computed : Symbol(computed, Decl(thisTypeInObjectLiterals2.ts, 219, 6))
 
         test(): number {
->test : Symbol(test, Decl(thisTypeInObjectLiterals2.ts, 222, 15))
+>test : Symbol(test, Decl(thisTypeInObjectLiterals2.ts, 220, 15))
 
             return this.x;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
+>this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 214, 18))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 214, 18))
 
         },
         hello: {
->hello : Symbol(hello, Decl(thisTypeInObjectLiterals2.ts, 225, 10))
+>hello : Symbol(hello, Decl(thisTypeInObjectLiterals2.ts, 223, 10))
 
             get() {
->get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 226, 16))
+>get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 224, 16))
 
                 return "hi";
             },
             set(value: string) {
->set : Symbol(set, Decl(thisTypeInObjectLiterals2.ts, 229, 14))
->value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 230, 16))
+>set : Symbol(set, Decl(thisTypeInObjectLiterals2.ts, 227, 14))
+>value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 228, 16))
             }
         }
     }
 });
 
 vue;
->vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 215, 3))
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 213, 3))
 
 vue.x;
->vue.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
->vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 215, 3))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 216, 18))
+>vue.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 214, 18))
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 213, 3))
+>x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 214, 18))
 
 vue.f("abc");
->vue.f : Symbol(f, Decl(thisTypeInObjectLiterals2.ts, 217, 14))
->vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 215, 3))
->f : Symbol(f, Decl(thisTypeInObjectLiterals2.ts, 217, 14))
+>vue.f : Symbol(f, Decl(thisTypeInObjectLiterals2.ts, 215, 14))
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 213, 3))
+>f : Symbol(f, Decl(thisTypeInObjectLiterals2.ts, 215, 14))
 
 vue.test;
->vue.test : Symbol(test, Decl(thisTypeInObjectLiterals2.ts, 222, 15))
->vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 215, 3))
->test : Symbol(test, Decl(thisTypeInObjectLiterals2.ts, 222, 15))
+>vue.test : Symbol(test, Decl(thisTypeInObjectLiterals2.ts, 220, 15))
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 213, 3))
+>test : Symbol(test, Decl(thisTypeInObjectLiterals2.ts, 220, 15))
 
 vue.hello;
->vue.hello : Symbol(hello, Decl(thisTypeInObjectLiterals2.ts, 225, 10))
->vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 215, 3))
->hello : Symbol(hello, Decl(thisTypeInObjectLiterals2.ts, 225, 10))
+>vue.hello : Symbol(hello, Decl(thisTypeInObjectLiterals2.ts, 223, 10))
+>vue : Symbol(vue, Decl(thisTypeInObjectLiterals2.ts, 213, 3))
+>hello : Symbol(hello, Decl(thisTypeInObjectLiterals2.ts, 223, 10))
 
