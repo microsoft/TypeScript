@@ -1074,7 +1074,6 @@ function getCompletionEntriesForNonRelativeModules(
                     if (tryFileExists(host, packageFile)) {
                         const packageJson = readJson(packageFile, host);
                         const exports = (packageJson as any).exports;
-                        const imports = (packageJson as any).imports;
                         if (exports) {
                             if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-restricted-syntax
                                 return; // null exports or entrypoint only, no sub-modules available
@@ -1104,30 +1103,6 @@ function getCompletionEntriesForNonRelativeModules(
                             );
                             return;
                         }
-                        if (!seenPackageScope && imports) {
-                            if (typeof imports !== "object" || imports === null) { // eslint-disable-line no-restricted-syntax
-                                return; // null imports or entrypoint only, no sub-modules available
-                            }
-                            const keys = getOwnKeys(imports);
-                            const fragmentSubpath = components.join("/") + (components.length && hasTrailingDirectorySeparator(fragment) ? "/" : "");
-                            const conditions = getConditions(compilerOptions, mode);
-                            addCompletionEntriesFromPathsOrExportsOrImports(
-                                result,
-                                /*isExports*/ false,
-                                /*isImports*/ true,
-                                fragmentSubpath,
-                                packageDirectory,
-                                extensionOptions,
-                                program,
-                                host,
-                                moduleSpecifierResolutionHost,
-                                keys,
-                                key => singleElementArray(getPatternFromFirstMatchingCondition(imports[key], conditions)),
-                                comparePatternKeys,
-                            );
-                            return;
-                        }
-                        seenPackageScope = true;
                     }
                     return nodeModulesDirectoryLookup(ancestor);
                 };
