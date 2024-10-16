@@ -5,11 +5,12 @@ interface PromiseConstructor {
      *
      * @param callbackFn A function that is called synchronously with no arguments. It can do anything: either return
      * a value, throw an error, or return a promise.
+     * @param args Additional arguments, that will be passed to the callback.
      *
      * @returns A Promise that is:
      * - Already fulfilled, if the callback synchronously returns a value.
      * - Already rejected, if the callback synchronously throws an error.
      * - Asynchronously fulfilled or rejected, if the callback returns a promise.
      */
-    try<T>(callbackFn: () => T | PromiseLike<T>): Promise<T>;
+    try<T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U): Promise<T>;
 }
