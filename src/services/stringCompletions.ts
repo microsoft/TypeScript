@@ -72,6 +72,7 @@ import {
     getPossibleOriginalInputPathWithoutChangingExt,
     getReplacementSpanForContextToken,
     getResolvePackageJsonExports,
+    getResolvePackageJsonImports,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
     getTextOfJsxAttributeName,
@@ -1010,13 +1011,15 @@ function getCompletionEntriesForNonRelativeModules(
             }
         }
         if (!foundGlobal) {
+            const resolvePackageJsonExports = getResolvePackageJsonExports(compilerOptions);
+            const resolvePackageJsonImports = getResolvePackageJsonImports(compilerOptions);
             let seenPackageScope = false;
             let ancestorLookup: (directory: string) => void | undefined = ancestor => {
                 const nodeModules = combinePaths(ancestor, "node_modules");
                 if (tryDirectoryExists(host, nodeModules)) {
                     getCompletionEntriesForDirectoryFragment(fragment, nodeModules, extensionOptions, program, host, moduleSpecifierResolutionHost, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
                 }
-                if (!seenPackageScope) {
+                if (resolvePackageJsonImports && !seenPackageScope) {
                     const packageFile = combinePaths(ancestor, "package.json");
                     if (seenPackageScope = tryFileExists(host, packageFile)) {
                         const packageJson = readJson(packageFile, host);
@@ -1053,21 +1056,24 @@ function getCompletionEntriesForNonRelativeModules(
                     }
                 }
             };
-            if (fragmentDirectory && getResolvePackageJsonExports(compilerOptions)) {
-                const nodeModulesDirectoryLookup = ancestorLookup;
+            if (fragmentDirectory && (resolvePackageJsonExports || resolvePackageJsonImports)) {
+                const nodeModulesDirectoryOrImportsLookup = ancestorLookup;
                 ancestorLookup = ancestor => {
                     const components = getPathComponents(fragment);
                     components.shift(); // shift off empty root
                     let packagePath = components.shift();
                     if (!packagePath) {
-                        return nodeModulesDirectoryLookup(ancestor);
+                        return nodeModulesDirectoryOrImportsLookup(ancestor);
                     }
                     if (startsWith(packagePath, "@")) {
                         const subName = components.shift();
                         if (!subName) {
-                            return nodeModulesDirectoryLookup(ancestor);
+                            return nodeModulesDirectoryOrImportsLookup(ancestor);
                         }
                         packagePath = combinePaths(packagePath, subName);
+                    }
+                    if (resolvePackageJsonImports && startsWith(packagePath, "#")) {
+                        return nodeModulesDirectoryOrImportsLookup(ancestor);
                     }
                     const packageDirectory = combinePaths(ancestor, "node_modules", packagePath);
                     const packageFile = combinePaths(packageDirectory, "package.json");
@@ -1104,7 +1110,7 @@ function getCompletionEntriesForNonRelativeModules(
                             return;
                         }
                     }
-                    return nodeModulesDirectoryLookup(ancestor);
+                    return nodeModulesDirectoryOrImportsLookup(ancestor);
                 };
             }
             forEachAncestorDirectoryStoppingAtGlobalCache(host, scriptPath, ancestorLookup);
