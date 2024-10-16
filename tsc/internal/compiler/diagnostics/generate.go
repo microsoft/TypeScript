@@ -10,6 +10,7 @@ import (
 	"go/format"
 	"log"
 	"os"
+	"path/filepath"
 	"regexp"
 	"slices"
 	"strconv"
@@ -17,6 +18,18 @@ import (
 	"unicode"
 	"unicode/utf8"
 )
+
+func findGoMod(dir string) string {
+	root := filepath.VolumeName(dir)
+	for dir != root {
+		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+			return dir
+		}
+		dir = filepath.Dir(dir)
+	}
+	log.Fatal("could not find go.mod")
+	panic("")
+}
 
 type diagnosticMessage struct {
 	Category                     string `json:"category"`
@@ -62,17 +75,27 @@ func (m *Message) ReportsDeprecated() bool            { return m.reportsDeprecat
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
-	// TODO(jakebailey): consider passing in . instead once submodule is in repo
-	input := flag.String("input", "", "path to the diagnosticMessages.json file")
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("failed to get current working directory: %v", err)
+		return
+	}
+
+	input := filepath.Join(findGoMod(cwd), "_submodules", "TypeScript", "src", "compiler", "diagnosticMessages.json")
+	if _, err := os.Stat(input); err != nil {
+		log.Fatalf("failed to find input file: %v", err)
+		return
+	}
+
 	output := flag.String("output", "", "path to the output diagnostics_generated.go file")
 	flag.Parse()
 
-	if *input == "" || *output == "" {
+	if *output == "" {
 		flag.Usage()
 		return
 	}
 
-	inputFile, err := os.Open(*input)
+	inputFile, err := os.Open(input)
 	if err != nil {
 		log.Fatalf("failed to open input file: %v", err)
 		return

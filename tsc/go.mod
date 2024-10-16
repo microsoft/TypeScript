@@ -1,3 +1,3 @@
 module github.com/microsoft/typescript-go
 
-go 1.23.1
+go 1.23.2

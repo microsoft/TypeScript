@@ -1,0 +1,37 @@
+{
+    "name": "typescript-go",
+    "author": "Microsoft Corp.",
+    "homepage": "https://www.typescriptlang.org/",
+    "version": "0.0.0",
+    "license": "Apache-2.0",
+    "description": "TypeScript is a language for application scale JavaScript development",
+    "keywords": [
+        "TypeScript",
+        "Microsoft",
+        "compiler",
+        "language",
+        "javascript"
+    ],
+    "bugs": {
+        "url": "https://github.com/microsoft/typescript-go/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/microsoft/typescript-go.git"
+    },
+    "devDependencies": {
+        "@types/node": "latest",
+        "dprint": "^0.47.2",
+        "execa": "^9.4.0",
+        "hereby": "^1.10.0"
+    },
+    "scripts": {
+        "build": "hereby build",
+        "test": "hereby test"
+    },
+    "packageManager": "npm@8.19.4",
+    "volta": {
+        "node": "20.1.0",
+        "npm": "8.19.4"
+    }
+}

@@ -5,5 +5,9 @@
         "editor.defaultFormatter": "golang.go",
         "editor.formatOnSave": true,
         "files.eol": "\n"
+    },
+    "[typescript][typescriptreact][javascript][javascriptreact][json][jsonc][yaml][github-actions-workflow]": {
+        "editor.defaultFormatter": "dprint.dprint",
+        "editor.formatOnSave": true
     }
 }
