@@ -57,6 +57,8 @@ describe("unittests:: config:: showConfig", () => {
 
     showTSConfigCorrectly("Show TSConfig with advanced options", ["--showConfig", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"]);
 
+    showTSConfigCorrectly("Show TSConfig with transitively implied options", ["--showConfig", "--module", "nodenext"]);
+
     showTSConfigCorrectly("Show TSConfig with compileOnSave and more", ["-p", "tsconfig.json"], {
         compilerOptions: {
             esModuleInterop: true,
