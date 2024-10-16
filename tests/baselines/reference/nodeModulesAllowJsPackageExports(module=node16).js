@@ -88,20 +88,6 @@ export { type };
     }
 }
 
-//// [index.js]
-// esm format file
-import * as cjs from "package/cjs";
-import * as mjs from "package/mjs";
-import * as type from "package";
-cjs;
-mjs;
-type;
-import * as cjsi from "inner/cjs";
-import * as mjsi from "inner/mjs";
-import * as typei from "inner";
-cjsi;
-mjsi;
-typei;
 //// [index.mjs]
 // esm format file
 import * as cjs from "package/cjs";
@@ -155,11 +141,25 @@ const typei = __importStar(require("inner"));
 cjsi;
 mjsi;
 typei;
+//// [index.js]
+// esm format file
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
+cjs;
+mjs;
+type;
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
+cjsi;
+mjsi;
+typei;
 
 
-//// [index.d.ts]
-export {};
 //// [index.d.mts]
 export {};
 //// [index.d.cts]
+export {};
+//// [index.d.ts]
 export {};
