@@ -1,7 +1,7 @@
 ===================================================================
 --- default
 +++ ParseForTypeInfo
-@@ -295,7 +295,7 @@
+@@ -296,7 +296,7 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],

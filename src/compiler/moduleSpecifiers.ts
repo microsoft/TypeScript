@@ -100,6 +100,7 @@ import {
     NodeModulePathParts,
     normalizePath,
     PackageJsonPathFields,
+    PartialSourceFile,
     pathContainsNodeModules,
     pathIsBareSpecifier,
     pathIsRelative,
@@ -183,7 +184,7 @@ export function getModuleSpecifierPreferences(
     { importModuleSpecifierPreference, importModuleSpecifierEnding, autoImportSpecifierExcludeRegexes }: UserPreferences,
     host: Pick<ModuleSpecifierResolutionHost, "getDefaultResolutionModeForFile">,
     compilerOptions: CompilerOptions,
-    importingSourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat">,
+    importingSourceFile: PartialSourceFile<"impliedNodeFormat" | "packageJsonScope">,
     oldImportSpecifier?: string,
 ): ModuleSpecifierPreferences {
     const filePreferredEnding = getPreferredEnding();
@@ -431,7 +432,7 @@ export function getModuleSpecifiersWithCacheInfo(
 
 /** @internal */
 export function getLocalModuleSpecifierBetweenFileNames(
-    importingFile: Pick<SourceFile, "fileName" | "impliedNodeFormat">,
+    importingFile: PartialSourceFile<"impliedNodeFormat">,
     targetFileName: string,
     compilerOptions: CompilerOptions,
     host: ModuleSpecifierResolutionHost,
@@ -1462,7 +1463,7 @@ function isPathRelativeToParent(path: string): boolean {
     return startsWith(path, "..");
 }
 
-function getDefaultResolutionModeForFile(file: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, host: Pick<ModuleSpecifierResolutionHost, "getDefaultResolutionModeForFile">, compilerOptions: CompilerOptions) {
+function getDefaultResolutionModeForFile(file: PartialSourceFile<"impliedNodeFormat" | "packageJsonScope">, host: Pick<ModuleSpecifierResolutionHost, "getDefaultResolutionModeForFile">, compilerOptions: CompilerOptions) {
     return isFullSourceFile(file) ? host.getDefaultResolutionModeForFile(file) : getDefaultResolutionModeForFileWorker(file, compilerOptions);
 }
 

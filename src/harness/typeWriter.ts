@@ -180,6 +180,7 @@ export class TypeWriterWalker {
     currentSourceFile!: ts.SourceFile;
 
     private checker: ts.TypeChecker;
+    private symbolTestOutputCache = new Map<ts.Declaration, string>();
 
     constructor(private program: ts.Program, private hadErrorBaseline: boolean) {
         // Consider getting both the diagnostics checker and the non-diagnostics checker to verify
@@ -314,8 +315,9 @@ export class TypeWriterWalker {
                 }
                 count++;
                 symbolString += ", ";
-                if ((declaration as any).__symbolTestOutputCache) {
-                    symbolString += (declaration as any).__symbolTestOutputCache;
+                const symbolTestOutputCacheEntry = this.symbolTestOutputCache.get(declaration);
+                if (symbolTestOutputCacheEntry) {
+                    symbolString += symbolTestOutputCacheEntry;
                     continue;
                 }
                 const declSourceFile = declaration.getSourceFile();
@@ -324,7 +326,7 @@ export class TypeWriterWalker {
                 const isLibFile = /lib.*\.d\.ts/i.test(fileName);
                 const declText = `Decl(${fileName}, ${isLibFile ? "--" : declLineAndCharacter.line}, ${isLibFile ? "--" : declLineAndCharacter.character})`;
                 symbolString += declText;
-                (declaration as any).__symbolTestOutputCache = declText;
+                this.symbolTestOutputCache.set(declaration, declText);
             }
         }
         symbolString += ")";

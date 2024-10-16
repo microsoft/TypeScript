@@ -10,12 +10,14 @@
             "kind": "JSDocTemplateTag",
             "pos": 8,
             "end": 25,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 17,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "template"
             },
@@ -24,12 +26,14 @@
                     "kind": "TypeParameter",
                     "pos": 18,
                     "end": 19,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 1,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,
                         "end": 19,
+                        "flags": "JSDoc",
                         "transformFlags": 0,
                         "escapedText": "K"
                     }
@@ -38,12 +42,14 @@
                     "kind": "TypeParameter",
                     "pos": 21,
                     "end": 22,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 1,
                     "name": {
                         "kind": "Identifier",
                         "pos": 21,
                         "end": 22,
+                        "flags": "JSDoc",
                         "transformFlags": 0,
                         "escapedText": "V"
                     }

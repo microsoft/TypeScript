@@ -5,11 +5,12 @@
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
-    "comment": {
+    "commentArray": {
         "0": {
             "kind": "JSDocText",
             "pos": 0,
             "end": 7,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "text": ""
@@ -18,12 +19,14 @@
             "kind": "JSDocLink",
             "pos": 7,
             "end": 21,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 14,
                 "end": 19,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "first"
             },
@@ -33,6 +36,7 @@
             "kind": "JSDocText",
             "pos": 21,
             "end": 32,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "text": "\nInside "
@@ -41,12 +45,14 @@
             "kind": "JSDocLink",
             "pos": 32,
             "end": 49,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 39,
                 "end": 43,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "link"
             },
@@ -56,6 +62,7 @@
             "kind": "JSDocText",
             "pos": 49,
             "end": 59,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "text": " thing"
@@ -71,20 +78,23 @@
             "kind": "JSDocParameterTag",
             "pos": 59,
             "end": 102,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 60,
                 "end": 65,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 70,
                     "end": 79,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": "See also "
@@ -93,18 +103,21 @@
                     "kind": "JSDocLink",
                     "pos": 79,
                     "end": 98,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "name": {
                         "kind": "QualifiedName",
                         "pos": 86,
                         "end": 97,
+                        "flags": "JSDoc",
                         "modifierFlagsCache": 0,
                         "transformFlags": 0,
                         "left": {
                             "kind": "Identifier",
                             "pos": 86,
                             "end": 87,
+                            "flags": "JSDoc",
                             "transformFlags": 0,
                             "escapedText": "A"
                         },
@@ -112,6 +125,7 @@
                             "kind": "Identifier",
                             "pos": 88,
                             "end": 97,
+                            "flags": "JSDoc",
                             "transformFlags": 0,
                             "escapedText": "Reference"
                         }
@@ -128,6 +142,7 @@
                 "kind": "Identifier",
                 "pos": 66,
                 "end": 69,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "foo"
             },
@@ -138,20 +153,23 @@
             "kind": "JSDocParameterTag",
             "pos": 102,
             "end": 589,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 103,
                 "end": 108,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 113,
                     "end": 120,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": "Or see "
@@ -160,12 +178,14 @@
                     "kind": "JSDocLink",
                     "pos": 120,
                     "end": 152,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 127,
                         "end": 131,
+                        "flags": "JSDoc",
                         "transformFlags": 0,
                         "escapedText": "http"
                     },
@@ -175,6 +195,7 @@
                     "kind": "JSDocText",
                     "pos": 152,
                     "end": 156,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": "\n"
@@ -183,18 +204,21 @@
                     "kind": "JSDocLink",
                     "pos": 156,
                     "end": 183,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "name": {
                         "kind": "QualifiedName",
                         "pos": 163,
                         "end": 181,
+                        "flags": "JSDoc",
                         "modifierFlagsCache": 0,
                         "transformFlags": 0,
                         "left": {
                             "kind": "Identifier",
                             "pos": 163,
                             "end": 173,
+                            "flags": "JSDoc",
                             "transformFlags": 0,
                             "escapedText": "Standalone"
                         },
@@ -202,6 +226,7 @@
                             "kind": "Identifier",
                             "pos": 174,
                             "end": 181,
+                            "flags": "JSDoc",
                             "transformFlags": 0,
                             "escapedText": "Complex"
                         }
@@ -212,6 +237,7 @@
                     "kind": "JSDocText",
                     "pos": 183,
                     "end": 203,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": "\nThis empty one: "
@@ -220,6 +246,7 @@
                     "kind": "JSDocLink",
                     "pos": 203,
                     "end": 210,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": ""
@@ -228,6 +255,7 @@
                     "kind": "JSDocText",
                     "pos": 210,
                     "end": 244,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": " is OK.\nThis double-space one: "
@@ -236,12 +264,14 @@
                     "kind": "JSDocLink",
                     "pos": 244,
                     "end": 262,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 252,
                         "end": 259,
+                        "flags": "JSDoc",
                         "transformFlags": 0,
                         "escapedText": "doubled"
                     },
@@ -251,6 +281,7 @@
                     "kind": "JSDocText",
                     "pos": 262,
                     "end": 326,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": " is OK too.\nThis should work, despite being badly formatted: "
@@ -259,18 +290,21 @@
                     "kind": "JSDocLink",
                     "pos": 326,
                     "end": 340,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "name": {
                         "kind": "QualifiedName",
                         "pos": 333,
                         "end": 338,
+                        "flags": "JSDoc",
                         "modifierFlagsCache": 0,
                         "transformFlags": 0,
                         "left": {
                             "kind": "Identifier",
                             "pos": 333,
                             "end": 335,
+                            "flags": "JSDoc",
                             "transformFlags": 0,
                             "escapedText": "oh"
                         },
@@ -278,6 +312,7 @@
                             "kind": "Identifier",
                             "pos": 336,
                             "end": 338,
+                            "flags": "JSDoc",
                             "transformFlags": 0,
                             "escapedText": "no"
                         }
@@ -288,6 +323,7 @@
                     "kind": "JSDocText",
                     "pos": 340,
                     "end": 369,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": "\nForgot to close this one "
@@ -296,12 +332,14 @@
                     "kind": "JSDocLink",
                     "pos": 369,
                     "end": 403,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 376,
                         "end": 381,
+                        "flags": "JSDoc",
                         "transformFlags": 0,
                         "escapedText": "https"
                     },
@@ -311,6 +349,7 @@
                     "kind": "JSDocText",
                     "pos": 403,
                     "end": 526,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": " * But it's still OK.\nAlthough it skips the newline so parses the asterisks in the wrong state.\nThis shouldn't work: "
@@ -319,6 +358,7 @@
                     "kind": "JSDocLink",
                     "pos": 526,
                     "end": 541,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": "* nope"
@@ -327,6 +367,7 @@
                     "kind": "JSDocText",
                     "pos": 541,
                     "end": 589,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": " * }, because of the intermediate asterisks."
@@ -341,6 +382,7 @@
                 "kind": "Identifier",
                 "pos": 109,
                 "end": 112,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "bar"
             },
@@ -351,20 +393,23 @@
             "kind": "JSDocAuthorTag",
             "pos": 589,
             "end": 672,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 590,
                 "end": 596,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": {
+            "commentArray": {
                 "0": {
                     "kind": "JSDocText",
                     "pos": 597,
                     "end": 624,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": "Alfa Romero <a@parsing.com>"
@@ -373,6 +418,7 @@
                     "kind": "JSDocText",
                     "pos": 624,
                     "end": 643,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "text": " See my home page: "
@@ -381,12 +427,14 @@
                     "kind": "JSDocLink",
                     "pos": 643,
                     "end": 670,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 650,
                         "end": 655,
+                        "flags": "JSDoc",
                         "transformFlags": 0,
                         "escapedText": "https"
                     },

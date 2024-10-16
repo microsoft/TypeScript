@@ -15,7 +15,7 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-    TypeAssertion,
+    TypeAssertionExpression,
 } from "../_namespaces/ts.js";
 
 const fixId = "addConvertToUnknownForNonOverlappingTypes";
@@ -38,14 +38,14 @@ registerCodeFix({
         }),
 });
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, assertion: AsExpression | TypeAssertion) {
+function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, assertion: AsExpression | TypeAssertionExpression) {
     const replacement = isAsExpression(assertion)
         ? factory.createAsExpression(assertion.expression, factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword))
         : factory.createTypeAssertion(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword), assertion.expression);
     changeTracker.replaceNode(sourceFile, assertion.expression, replacement);
 }
 
-function getAssertion(sourceFile: SourceFile, pos: number): AsExpression | TypeAssertion | undefined {
+function getAssertion(sourceFile: SourceFile, pos: number): AsExpression | TypeAssertionExpression | undefined {
     if (isInJSFile(sourceFile)) return undefined;
-    return findAncestor(getTokenAtPosition(sourceFile, pos), (n): n is AsExpression | TypeAssertion => isAsExpression(n) || isTypeAssertionExpression(n));
+    return findAncestor(getTokenAtPosition(sourceFile, pos), (n): n is AsExpression | TypeAssertionExpression => isAsExpression(n) || isTypeAssertionExpression(n));
 }

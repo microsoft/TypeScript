@@ -64,7 +64,7 @@ import {
     TextSpan,
     ThrowStatement,
     TryStatement,
-    TypeAssertion,
+    TypeAssertionExpression,
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
@@ -423,8 +423,8 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                             break;
                         case SyntaxKind.TypeAssertionExpression:
                             // Breakpoint in type assertion goes to its operand
-                            if ((node.parent as TypeAssertion).type === node) {
-                                return spanInNextNode((node.parent as TypeAssertion).type);
+                            if ((node.parent as TypeAssertionExpression).type === node) {
+                                return spanInNextNode((node.parent as TypeAssertionExpression).type);
                             }
                             break;
                         case SyntaxKind.VariableDeclaration:

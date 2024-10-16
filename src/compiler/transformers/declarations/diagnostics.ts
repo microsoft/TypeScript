@@ -31,6 +31,7 @@ import {
     getAllAccessorDeclarations,
     getNameOfDeclaration,
     getTextOfNode,
+    hasName,
     hasSyntacticModifier,
     ImportEqualsDeclaration,
     IndexSignatureDeclaration,
@@ -733,7 +734,7 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver): (nod
     function addParentDeclarationRelatedInfo(node: Node, diag: DiagnosticWithLocation) {
         const parentDeclaration = findNearestDeclaration(node);
         if (parentDeclaration) {
-            const targetStr = isExportAssignment(parentDeclaration) || !parentDeclaration.name ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
+            const targetStr = isExportAssignment(parentDeclaration) || !hasName(parentDeclaration) ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
             addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
         }
         return diag;
@@ -791,7 +792,7 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver): (nod
         const parentDeclaration = findNearestDeclaration(node);
         let diag: DiagnosticWithLocation;
         if (parentDeclaration) {
-            const targetStr = isExportAssignment(parentDeclaration) || !parentDeclaration.name ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
+            const targetStr = isExportAssignment(parentDeclaration) || !hasName(parentDeclaration) ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
             const parent = findAncestor(node.parent, n => isExportAssignment(n) || (isStatement(n) ? "quit" : !isParenthesizedExpression(n) && !isTypeAssertionExpression(n) && !isAsExpression(n)));
 
             if (parentDeclaration === parent) {

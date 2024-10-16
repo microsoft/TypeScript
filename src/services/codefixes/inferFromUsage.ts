@@ -521,7 +521,7 @@ function getFunctionReferences(containingFunction: SignatureDeclaration, sourceF
             const parent = containingFunction.parent;
             searchToken = (isVariableDeclaration(parent) || isPropertyDeclaration(parent)) && isIdentifier(parent.name) ?
                 parent.name :
-                containingFunction.name;
+                isFunctionExpression(containingFunction) ? containingFunction.name : undefined;
             break;
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.MethodDeclaration:
