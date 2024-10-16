@@ -17,7 +17,7 @@ const typeScriptSubmodulePath = path.join(__dirname, "_submodules", "TypeScript"
 function assertTypeScriptCloned() {
     try {
         const stat = fs.statSync(path.join(typeScriptSubmodulePath, "package.json"));
-        if (stat.isDirectory()) {
+        if (stat.isFile()) {
             return;
         }
     }
