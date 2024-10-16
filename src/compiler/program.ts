@@ -50,6 +50,7 @@ import {
     createSymlinkCache,
     createTypeChecker,
     createTypeReferenceDirectiveResolutionCache,
+    createTypeRootsCacheKey,
     CustomTransformers,
     Debug,
     DeclarationWithTypeParameterChildren,
@@ -117,6 +118,7 @@ import {
     getDeclarationDiagnostics as ts_getDeclarationDiagnostics,
     getDefaultLibFileName,
     getDirectoryPath,
+    getEffectiveTypeRoots as ts_getEffectiveTypeRoots,
     getEmitDeclarations,
     getEmitModuleKind,
     getEmitModuleResolutionKind,
@@ -274,7 +276,6 @@ import {
     removeSuffix,
     resolutionExtensionIsTSOrJson,
     ResolutionMode,
-    ResolutionWithFailedLookupLocations,
     resolveConfigFileProjectName,
     ResolvedConfigFileName,
     ResolvedModuleFull,
@@ -321,6 +322,7 @@ import {
     TypeChecker,
     typeDirectiveIsEqualTo,
     TypeReferenceDirectiveResolutionCache,
+    TypeRootsCacheKeyOrSpecifiedTypeRoots,
     unprefixedNodeCoreModules,
     VariableDeclaration,
     VariableStatement,
@@ -1020,7 +1022,8 @@ export function getResolutionModeOverride(node: ImportAttributes | undefined, gr
     return elem.value.text === "import" ? ModuleKind.ESNext : ModuleKind.CommonJS;
 }
 
-const emptyResolution: ResolvedModuleWithFailedLookupLocations & ResolvedTypeReferenceDirectiveWithFailedLookupLocations = {
+/** @internal */
+export const emptyResolution: ResolvedModuleWithFailedLookupLocations & ResolvedTypeReferenceDirectiveWithFailedLookupLocations = {
     resolvedModule: undefined,
     resolvedTypeReferenceDirective: undefined,
 };
@@ -1080,7 +1083,8 @@ function getTypeReferenceResolutionName<T extends FileReference | string>(entry:
     return !isString(entry) ? entry.fileName : entry;
 }
 
-const typeReferenceResolutionNameAndModeGetter: ResolutionNameAndModeGetter<FileReference | string, SourceFile | undefined> = {
+/** @internal */
+export const typeReferenceResolutionNameAndModeGetter: ResolutionNameAndModeGetter<FileReference | string, SourceFile | undefined> = {
     getName: getTypeReferenceResolutionName,
     getMode: (entry, file, compilerOptions) => getModeForFileReference(entry, file && getDefaultResolutionModeForFileWorker(file, compilerOptions)),
 };
@@ -1198,6 +1202,13 @@ function forEachProjectReference<T>(
 
 /** @internal */
 export const inferredTypesContainingFile = "__inferred type names__.ts";
+
+/** @internal */
+export function getAutomaticTypeDirectiveContainingFile(options: CompilerOptions, currentDirectory: string): string {
+    // This containingFilename needs to match with the one used in managed-side
+    const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
+    return combinePaths(containingDirectory, inferredTypesContainingFile);
+}
 
 /** @internal */
 export function getInferredLibraryNameResolveFrom(options: CompilerOptions, currentDirectory: string, libFileName: string): string {
@@ -1804,6 +1815,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let projectReferenceRedirects: Map<Path, ResolvedProjectReference | false> | undefined;
     let mapFromFileToProjectReferenceRedirects: Map<Path, Path> | undefined;
     let mapFromToProjectReferenceRedirectSource: Map<Path, SourceOfProjectReferenceRedirect> | undefined;
+    let typeRootsCacheKeys: Map<Path | undefined, TypeRootsCacheKeyOrSpecifiedTypeRoots> | undefined;
+    let processingTypeRootsCacheKeys: Map<Path | undefined, TypeRootsCacheKeyOrSpecifiedTypeRoots> | undefined;
+    let effectiveRoots: Map<Path | undefined, readonly string[] | false> | undefined;
 
     const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
         !options.disableSourceOfProjectReferenceRedirect;
@@ -1817,6 +1831,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         forEachResolvedProjectReference,
     });
     const readFile = host.readFile.bind(host) as typeof host.readFile;
+    const hostGetEffectiveTypeRoots = host.getEffectiveTypeRoots;
+    const hostGetTypeRootsCacheKey = host.getTypeRootsCacheKey;
+    host.getEffectiveTypeRoots = getEffectiveTypeRoots;
 
     tracing?.push(tracing.Phase.Program, "shouldProgramCreateNewSourceFiles", { hasOldProgram: !!oldProgram });
     const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
@@ -1872,10 +1889,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         automaticTypeDirectiveResolutions = createModeAwareCache();
         if (automaticTypeDirectiveNames.length) {
             tracing?.push(tracing.Phase.Program, "processTypeReferences", { count: automaticTypeDirectiveNames.length });
-            // This containingFilename needs to match with the one used in managed-side
-            const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
-            const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
-            const resolutions = resolveTypeReferenceDirectiveNamesReusingOldState(automaticTypeDirectiveNames, containingFilename);
+            const resolutions = resolveTypeReferenceDirectiveNamesReusingOldState(
+                automaticTypeDirectiveNames,
+                getAutomaticTypeDirectiveContainingFile(options, currentDirectory),
+                getTypeRootsCacheKey,
+            );
             for (let i = 0; i < automaticTypeDirectiveNames.length; i++) {
                 // under node16/nodenext module resolution, load `types`/ata include names as cjs resolution results by passing an `undefined` mode
                 automaticTypeDirectiveResolutions.set(automaticTypeDirectiveNames[i], /*mode*/ undefined, resolutions[i]);
@@ -1891,6 +1909,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 );
             }
             tracing?.pop();
+        }
+        else {
+            host.onReusedTypeReferenceDirectiveResolutions?.(/*reusedNames*/ undefined, /*containingSourceFile*/ undefined, /*redirectedReference*/ undefined, options);
         }
 
         // Do not process the default library if:
@@ -1960,6 +1981,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     resolvedLibProcessing = undefined;
     resolvedModulesProcessing = undefined;
     resolvedTypeReferenceDirectiveNamesProcessing = undefined;
+    effectiveRoots = undefined;
+    processingTypeRootsCacheKeys = undefined;
+    host.getEffectiveTypeRoots = hostGetEffectiveTypeRoots;
+    host.getTypeRootsCacheKey = hostGetTypeRootsCacheKey;
 
     const program: Program = {
         getRootFileNames: () => rootNames,
@@ -2024,6 +2049,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getResolvedProjectReferenceByPath,
         forEachResolvedProjectReference,
         isSourceOfProjectReferenceRedirect,
+        getRedirectReferenceForResolution,
         getRedirectReferenceForResolutionFromSourceOfProject,
         getCompilerOptionsForFile,
         getDefaultResolutionModeForFile,
@@ -2042,6 +2068,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         structureIsReused,
         writeFile,
         getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
+        getTypeRootsCacheKeys: () => typeRootsCacheKeys,
     };
 
     onProgramCreateComplete();
@@ -2239,6 +2266,51 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return result;
     }
 
+    function getEffectiveTypeRoots(options: CompilerOptions, redirect: ResolvedProjectReference | undefined) {
+        let result = effectiveRoots?.get(redirect?.sourceFile.path);
+        if (result === undefined) {
+            (effectiveRoots ??= new Map()).set(
+                redirect?.sourceFile.path,
+                result = (
+                    hostGetEffectiveTypeRoots ?
+                        hostGetEffectiveTypeRoots(options, redirect) :
+                        ts_getEffectiveTypeRoots(options, host)
+                ) ?? false,
+            );
+        }
+        return result || undefined;
+    }
+
+    function getTypeRootsCacheKey(options: CompilerOptions, redirect: ResolvedProjectReference | undefined): TypeRootsCacheKeyOrSpecifiedTypeRoots {
+        let result = typeRootsCacheKeys?.get(redirect?.sourceFile.path);
+        if (result === undefined) {
+            (typeRootsCacheKeys ??= new Map()).set(
+                redirect?.sourceFile.path,
+                result = processingTypeRootsCacheKeys?.get(redirect?.sourceFile.path) ??
+                    getTypeRootsCacheKeyWorker(options, redirect) ??
+                    false,
+            );
+        }
+        return result;
+    }
+
+    function getProcessingTypeRootsCacheKey(options: CompilerOptions, redirect: ResolvedProjectReference | undefined): TypeRootsCacheKeyOrSpecifiedTypeRoots {
+        let result = processingTypeRootsCacheKeys?.get(redirect?.sourceFile.path);
+        if (result === undefined) {
+            (processingTypeRootsCacheKeys ??= new Map()).set(
+                redirect?.sourceFile.path,
+                result = getTypeRootsCacheKeyWorker(options, redirect) ?? false,
+            );
+        }
+        return result;
+    }
+
+    function getTypeRootsCacheKeyWorker(options: CompilerOptions, redirect: ResolvedProjectReference | undefined): TypeRootsCacheKeyOrSpecifiedTypeRoots {
+        return hostGetTypeRootsCacheKey ?
+            hostGetTypeRootsCacheKey(options, redirect) :
+            createTypeRootsCacheKey(options, redirect, host);
+    }
+
     function getRedirectReferenceForResolution(file: SourceFile) {
         const redirect = getResolvedProjectReferenceToRedirect(file.originalFileName);
         if (redirect || !isDeclarationFileName(file.originalFileName)) return redirect;
@@ -2324,6 +2396,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             redirectedReference: getRedirectReferenceForResolution(containingFile),
             nameAndModeGetter: moduleResolutionNameAndModeGetter,
             resolutionWorker: resolveModuleNamesWorker,
+            onReusedResolutions: maybeBind(host, host.onReusedModuleResolutions),
             getResolutionFromOldProgram: (name, mode) => oldProgram?.getResolvedModule(containingFile, name, mode),
             getResolved: getResolvedModuleFromResolution,
             canReuseResolutionsInFile: () =>
@@ -2333,9 +2406,21 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: readonly FileReference[], containingFile: SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
-    function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: readonly string[], containingFile: string): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
-    function resolveTypeReferenceDirectiveNamesReusingOldState<T extends string | FileReference>(typeDirectiveNames: readonly T[], containingFile: string | SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
+    function resolveTypeReferenceDirectiveNamesReusingOldState(
+        typeDirectiveNames: readonly FileReference[],
+        containingFile: SourceFile,
+        getTypeRootsCacheKey: (options: CompilerOptions, redirects: ResolvedProjectReference | undefined) => TypeRootsCacheKeyOrSpecifiedTypeRoots,
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
+    function resolveTypeReferenceDirectiveNamesReusingOldState(
+        typeDirectiveNames: readonly string[],
+        containingFile: string,
+        getTypeRootsCacheKey: (options: CompilerOptions, redirects: ResolvedProjectReference | undefined) => TypeRootsCacheKeyOrSpecifiedTypeRoots,
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
+    function resolveTypeReferenceDirectiveNamesReusingOldState<T extends string | FileReference>(
+        typeDirectiveNames: readonly T[],
+        containingFile: string | SourceFile,
+        getTypeRootsCacheKey: (options: CompilerOptions, redirects: ResolvedProjectReference | undefined) => TypeRootsCacheKeyOrSpecifiedTypeRoots,
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
         const containingSourceFile = !isString(containingFile) ? containingFile : undefined;
         return resolveNamesReusingOldState({
             entries: typeDirectiveNames,
@@ -2344,6 +2429,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             redirectedReference: containingSourceFile && getRedirectReferenceForResolution(containingSourceFile),
             nameAndModeGetter: typeReferenceResolutionNameAndModeGetter,
             resolutionWorker: resolveTypeReferenceDirectiveNamesWorker,
+            onReusedResolutions: maybeBind(host, host.onReusedTypeReferenceDirectiveResolutions),
             getResolutionFromOldProgram: (name, mode) =>
                 containingSourceFile ?
                     oldProgram?.getResolvedTypeReferenceDirective(containingSourceFile, name, mode) :
@@ -2353,6 +2439,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 containingSourceFile ?
                     containingSourceFile === oldProgram?.getSourceFile(containingSourceFile.fileName) && !hasInvalidatedResolutions(containingSourceFile.path) :
                     !hasInvalidatedResolutions(toPath(containingFile as string)),
+            getTypeRootsCacheKey,
         });
     }
 
@@ -2367,10 +2454,19 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             containingFile: SourceFileOrString,
             reusedNames: readonly Entry[] | undefined,
         ) => readonly Resolution[];
+        onReusedResolutions:
+            | ((
+                resuedEntries: readonly Entry[] | undefined,
+                containingSourceFile: SourceFileOrUndefined,
+                redirectedReference: ResolvedProjectReference | undefined,
+                options: CompilerOptions,
+            ) => void)
+            | undefined;
         getResolutionFromOldProgram: (name: string, mode: ResolutionMode) => Resolution | undefined;
         getResolved: (oldResolution: Resolution) => ResolutionWithResolvedFileName | undefined;
         canReuseResolutionsInFile: () => boolean;
         resolveToOwnAmbientModule?: true;
+        getTypeRootsCacheKey?: (options: CompilerOptions, redirects: ResolvedProjectReference | undefined) => TypeRootsCacheKeyOrSpecifiedTypeRoots;
     }
 
     function resolveNamesReusingOldState<Entry, SourceFileOrString, SourceFileOrUndefined extends SourceFile | undefined, Resolution>({
@@ -2380,13 +2476,26 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         redirectedReference,
         nameAndModeGetter,
         resolutionWorker,
+        onReusedResolutions,
         getResolutionFromOldProgram,
         getResolved,
         canReuseResolutionsInFile,
         resolveToOwnAmbientModule,
+        getTypeRootsCacheKey,
     }: ResolveNamesReusingOldStateInput<Entry, SourceFileOrString, SourceFileOrUndefined, Resolution>): readonly Resolution[] {
-        if (!entries.length) return emptyArray;
+        if (!entries.length) {
+            onReusedResolutions?.(
+                entries,
+                containingSourceFile,
+                redirectedReference,
+                options,
+            );
+            return emptyArray;
+        }
+        // Ensure typeRootsCacheKey is cached
+        getTypeRootsCacheKey?.(redirectedReference?.commandLine.options ?? options, redirectedReference);
         if (structureIsReused === StructureIsReused.Not && (!resolveToOwnAmbientModule || !containingSourceFile!.ambientModuleNames.length)) {
+            host.getTypeRootsCacheKey = getTypeRootsCacheKey;
             // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
             // the best we can do is fallback to the default logic.
             return resolutionWorker(
@@ -2454,8 +2563,21 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             (unknownEntryIndices ??= []).push(i);
         }
 
-        if (!unknownEntries) return result!;
-        const resolutions = resolutionWorker(unknownEntries, containingFile, reusedNames);
+        if (!unknownEntries) {
+            onReusedResolutions?.(
+                reusedNames,
+                containingSourceFile,
+                redirectedReference,
+                options,
+            );
+            return result!;
+        }
+        host.getTypeRootsCacheKey = getTypeRootsCacheKey;
+        const resolutions = resolutionWorker(
+            unknownEntries,
+            containingFile,
+            reusedNames,
+        );
         if (!result) return resolutions;
         resolutions.forEach((resolution, index) => result[unknownEntryIndices![index]] = resolution);
         return result;
@@ -2660,7 +2782,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             );
             if (resolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
             const typesReferenceDirectives = newSourceFile.typeReferenceDirectives;
-            const typeReferenceResolutions = resolveTypeReferenceDirectiveNamesReusingOldState(typesReferenceDirectives, newSourceFile);
+            const typeReferenceResolutions = resolveTypeReferenceDirectiveNamesReusingOldState(
+                typesReferenceDirectives,
+                newSourceFile,
+                getProcessingTypeRootsCacheKey,
+            );
             (resolvedTypeReferenceDirectiveNamesProcessing ??= new Map()).set(newSourceFile.path, typeReferenceResolutions);
             // ensure that types resolutions are still correct
             const typeReferenceResolutionsChanged = hasChangesInResolutions(
@@ -2735,6 +2861,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         resolvedTypeReferenceDirectiveNames = oldProgram.resolvedTypeReferenceDirectiveNames;
         resolvedLibReferences = oldProgram.resolvedLibReferences;
         packageMap = oldProgram.getCurrentPackagesMap();
+        typeRootsCacheKeys = oldProgram.getTypeRootsCacheKeys();
 
         return StructureIsReused.Completely;
     }
@@ -3876,6 +4003,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
             (filesWithReferencesProcessed ??= new Set()).add(file.path);
         }
+        else {
+            host.onSourceFileNotCreated?.(sourceFileOptions);
+        }
         return file;
     }
 
@@ -4000,10 +4130,24 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function processTypeReferenceDirectives(file: SourceFile) {
         const typeDirectives = file.typeReferenceDirectives;
-        if (!typeDirectives.length) return;
+        if (!typeDirectives.length) {
+            host.onReusedTypeReferenceDirectiveResolutions?.(
+                /*reusedNames*/ undefined,
+                file,
+                getRedirectReferenceForResolution(file),
+                options,
+            );
+            return;
+        }
 
         const resolutions = resolvedTypeReferenceDirectiveNamesProcessing?.get(file.path) ||
-            resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectives, file);
+            resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectives, file, getTypeRootsCacheKey);
+        if (resolutions.length && resolvedTypeReferenceDirectiveNamesProcessing?.get(file.path)) {
+            // Ensure type reference key is cached from processing to actual
+            const redirect = getRedirectReferenceForResolution(file);
+            const value = processingTypeRootsCacheKeys?.get(redirect?.sourceFile.path);
+            if (value !== undefined) (typeRootsCacheKeys ??= new Map()).set(redirect?.sourceFile.path, value);
+        }
         const resolutionsInFile = createModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
         (resolvedTypeReferenceDirectiveNames ??= new Map()).set(file.path, resolutionsInFile);
         for (let index = 0; index < typeDirectives.length; index++) {
@@ -4136,7 +4280,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 resolveModuleNamesReusingOldState(moduleNames, file);
             Debug.assert(resolutions.length === moduleNames.length);
             const optionsForFile = getCompilerOptionsForFile(file);
-            const resolutionsInFile = createModeAwareCache<ResolutionWithFailedLookupLocations>();
+            const resolutionsInFile = createModeAwareCache<ResolvedModuleWithFailedLookupLocations>();
             (resolvedModules ??= new Map()).set(file.path, resolutionsInFile);
             for (let index = 0; index < moduleNames.length; index++) {
                 const resolution = resolutions[index].resolvedModule;
@@ -4192,6 +4336,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     currentNodeModulesDepth--;
                 }
             }
+        }
+        else {
+            host.onReusedModuleResolutions?.(
+                /*reusedNames*/ undefined,
+                file,
+                getRedirectReferenceForResolution(file),
+                options,
+            );
         }
     }
 

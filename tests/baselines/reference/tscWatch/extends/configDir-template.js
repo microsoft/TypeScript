@@ -129,8 +129,6 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/index.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
@@ -143,6 +141,8 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeFile
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
+FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/index.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts

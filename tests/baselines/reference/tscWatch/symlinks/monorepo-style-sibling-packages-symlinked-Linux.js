@@ -163,7 +163,6 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'package1' was not resolved. ========
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Failed Lookup Locations
@@ -177,6 +176,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/n
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Type roots

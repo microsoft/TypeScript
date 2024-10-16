@@ -99,36 +99,6 @@ describe("unittests:: canWatch::", () => {
         });
     }
 
-    [undefined, true].forEach(preferNonRecursiveWatch => {
-        baselineCanWatch(
-            `getDirectoryToWatchFailedLookupLocationFromTypeRoot${preferNonRecursiveWatch ? "NonRecursive" : ""}`,
-            () => `When watched typeRoot handler is invoked, this method determines the directory for which the failedLookupLocation would need to be invalidated.\r\nSince this is invoked only when watching default typeRoot and is used to handle flaky directory watchers, this is used as a fail safe where if failed lookup starts with returned directory we will invalidate that resolution.`,
-            (paths, longestPathLength, baseline) => {
-                const maxLength = longestPathLength + "/node_modules/@types".length;
-                const maxLengths = [maxLength, maxLength] as const;
-                baselineCanWatchForRoot(paths, baseline, (rootPathCompoments, root, isRootWatchable) => {
-                    pushHeader(baseline, ["Directory", "getDirectoryToWatchFailedLookupLocationFromTypeRoot"], maxLengths);
-                    paths.forEach(path => {
-                        path = combinePaths(path, "node_modules/@types");
-                        // This is invoked only on paths that are watched
-                        if (!ts.canWatchAtTypes(path)) return;
-                        const result = ts.getDirectoryToWatchFailedLookupLocationFromTypeRoot(
-                            path,
-                            path,
-                            root,
-                            rootPathCompoments,
-                            isRootWatchable,
-                            ts.returnUndefined,
-                            preferNonRecursiveWatch,
-                            ts.returnTrue,
-                        );
-                        pushRow(baseline, [path, result !== undefined ? result : ""], maxLengths);
-                    });
-                });
-            },
-        );
-    });
-
     function baselineCanWatchForRoot(
         paths: readonly ts.Path[],
         baseline: string[],

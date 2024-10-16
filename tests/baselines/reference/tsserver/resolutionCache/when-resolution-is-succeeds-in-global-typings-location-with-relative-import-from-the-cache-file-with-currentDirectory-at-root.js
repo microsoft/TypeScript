@@ -92,6 +92,8 @@ Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist.
@@ -105,8 +107,6 @@ Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/x.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Module name './x' was successfully resolved to '/home/src/Library/Caches/typescript/node_modules/@types/node/x.d.ts'. ========
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -212,13 +212,11 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -258,7 +256,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "allowJs": true
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -284,7 +281,6 @@ Info seq  [hh:mm:ss:mss] event:
           "allowJs": true
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }

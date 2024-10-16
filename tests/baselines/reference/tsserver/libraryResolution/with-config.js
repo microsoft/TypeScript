@@ -1756,13 +1756,13 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typesc
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/node_modules/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/projects/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/workspace/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/package.json 2000 undefined Project: /home/src/workspace/projects/project1/tsconfig.json WatchType: File location affecting resolution

@@ -1,12 +1,16 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
+import { getPathForTypeScriptTypingInstallerCacheTest } from "../helpers/contents.js";
 import {
-    compilerOptionsToConfigJson,
-    getPathForTypeScriptTypingInstallerCacheTest,
-} from "../helpers/contents.js";
+    forEachModuleCacheScenario,
+    forEachResolutionCacheLifeTimeScenario,
+    forEachTypeReferenceResolutionScenario,
+    ResolutionCacheLifeTimeScenarios,
+} from "../helpers/resolutionCache.js";
 import {
     baselineTsserverLogs,
+    forEachTscWatchEdit,
     openExternalProjectForSession,
     openFilesForSession,
     setCompilerOptionsForInferredProjectsRequestForSession,
@@ -622,72 +626,12 @@ export const x = 10;`,
 });
 
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with project references", () => {
-    it("sharing across references", () => {
-        const host = TestServerHost.createServerHost({
-            "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
-            "/users/username/projects/common/tsconfig.json": jsonToReadableText({
-                compilerOptions: compilerOptionsToConfigJson({
-                    composite: true,
-                    traceResolution: true,
-                }),
-            }),
-            "/users/username/projects/common/moduleA.ts": "export const a = 10;",
-            "/users/username/projects/common/moduleB.ts": dedent`
-                import { x } from "moduleX";
-                export const b = x;
-            `,
-            "/users/username/projects/app/tsconfig.json": jsonToReadableText({
-                compilerOptions: compilerOptionsToConfigJson({
-                    composite: true,
-                    traceResolution: true,
-                }),
-                references: [{ path: "../common" }],
-            }),
-            "/users/username/projects/app/appA.ts": dedent`
-                import { x } from "moduleX";
-                export const y = x;
-            `,
-            "/users/username/projects/app/appB.ts": dedent`
-                import { x } from "../common/moduleB";
-                export const y = x;
-            `,
+    forEachModuleCacheScenario(/*forTsserver*/ true, (scenario, getHost) => {
+        it(scenario, () => {
+            const session = new TestSession(getHost());
+            openFilesForSession(["/home/src/workspaces/project/app/appB.ts"], session);
+            baselineTsserverLogs("resolutionCache", scenario, session);
         });
-        const session = new TestSession(host);
-        openFilesForSession(["/users/username/projects/app/appB.ts"], session);
-        baselineTsserverLogs("resolutionCache", "sharing across references", session);
-    });
-
-    it("not sharing across references", () => {
-        const host = TestServerHost.createServerHost({
-            "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
-            "/users/username/projects/common/tsconfig.json": jsonToReadableText({
-                compilerOptions: { composite: true, traceResolution: true },
-            }),
-            "/users/username/projects/common/moduleA.ts": "export const a = 10;",
-            "/users/username/projects/common/moduleB.ts": dedent`
-                import { x } from "moduleX";
-                export const b = x;
-            `,
-            "/users/username/projects/app/tsconfig.json": jsonToReadableText({
-                compilerOptions: {
-                    composite: true,
-                    traceResolution: true,
-                    typeRoots: [], // Just some sample option that is different across the projects
-                },
-                references: [{ path: "../common" }],
-            }),
-            "/users/username/projects/app/appA.ts": dedent`
-                import { x } from "moduleX";
-                export const y = x;
-            `,
-            "/users/username/projects/app/appB.ts": dedent`
-                import { x } from "../common/moduleB";
-                export const y = x;
-            `,
-        });
-        const session = new TestSession(host);
-        openFilesForSession(["/users/username/projects/app/appB.ts"], session);
-        baselineTsserverLogs("resolutionCache", "not sharing across references", session);
     });
 });
 
@@ -748,4 +692,102 @@ describe("unittests:: tsserver:: resolutionCache:: global typings and inferred p
             })
         );
     }
+});
+describe("unittests:: tsserver:: resolutionCache:: resolution lifetime", () => {
+    forEachResolutionCacheLifeTimeScenario(
+        /*forTsserver*/ true,
+        (scenario, getHost, edits, _project, mainFile, kind) =>
+            it(scenario, () => {
+                const host = getHost();
+                const session = new TestSession(host);
+                openFilesForSession([mainFile], session);
+                forEachTscWatchEdit(session, edits(), ts.noop);
+                if (kind === ResolutionCacheLifeTimeScenarios.MultipleProjects) {
+                    // Try opening other project files
+                    applyOtherFileEdits(
+                        mainFile.endsWith("cMain.ts") ?
+                            mainFile.replace("cMain.ts", "bMain.ts") :
+                            mainFile.replace("bMain.ts", "cMain.ts"),
+                        mainFile.endsWith("cMain.ts") ? "bRandomFileForImport" : "cRandomFileForImport",
+                    );
+                    applyOtherFileEdits("/home/src/workspaces/project/aMain.ts", "aRandomFileForImport");
+                }
+                baselineTsserverLogs("resolutionCache", scenario, session);
+                function applyOtherFileEdits(mainFile: string, file: string) {
+                    openFilesForSession([mainFile], session);
+                    session.logger.info(`modify ${file} by adding import`);
+                    host.prependFile(`/home/src/workspaces/project/${file}.ts`, `export type { ImportInterface0 } from "pkg0";\n`);
+                    host.runQueuedTimeoutCallbacks();
+                }
+            }),
+    );
+});
+
+describe("unittests:: tsserver:: resolutionCache:: effective typeRoots", () => {
+    it("effective type roots affect type reference directives", () => {
+        const host = TestServerHost.createServerHost({
+            "/users/username/projects/replay/axios-src/test/module/ts-require/index.js": dedent`
+                export const a = 10;
+
+            `,
+            "/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/index.d.ts": dedent`
+                export const x = 10;
+            `,
+            "/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts": dedent`
+                /// <reference types="node" />
+                export const z = 10;
+            `,
+            "/users/username/projects/replay/axios-src/test/module/ts/index.js": dedent`
+                export const y = 10;
+            `,
+            "/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types/node/index.d.ts": dedent`
+                export const x = 10;
+            `,
+        });
+        const session = new TestSession({ host, disableAutomaticTypingAcquisition: true });
+        session.executeCommandSeq<ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
+            command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
+            arguments: {
+                options: { traceResolution: true },
+            },
+        });
+        // This will add responselike/index.d.ts and resolve the type ref "node" to "test/module/ts-require/node_modules/@types/node/index.d.ts" because of current directory
+        openFilesForSession(["/users/username/projects/replay/axios-src/test/module/ts-require/index.js"], session);
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({ // Schedule update
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
+            arguments: {
+                changedFiles: [{
+                    fileName: "/users/username/projects/replay/axios-src/test/module/ts-require/index.js",
+                    textChanges: [{
+                        newText: "//comment",
+                        start: { line: 2, offset: 1 },
+                        end: { line: 2, offset: 1 },
+                    }],
+                }],
+            },
+        });
+        // This will also use responselike/index.d.ts and needs to resolve node to "test/module/ts/node_modules/@types/node/index.d.ts" because of current directory
+        openFilesForSession(["/users/username/projects/replay/axios-src/test/module/ts/index.js"], session);
+        // Should not change any resolutions in inferredProject1
+        session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
+            command: ts.server.protocol.CommandTypes.Navto,
+            arguments: {
+                searchValue: "a",
+                maxResultCount: 256,
+            },
+        });
+        baselineTsserverLogs("resolutionCache", "effective type roots affect type reference directives", session);
+    });
+
+    forEachTypeReferenceResolutionScenario(/*forTsserver*/ true, (scenario, getHost, edits) => {
+        it(scenario, () => {
+            const session = new TestSession(getHost());
+            openFilesForSession([
+                "/home/src/workspaces/project/test/module/ts-require/index.ts",
+                "/home/src/workspaces/project/test/module/ts/index.ts",
+            ], session);
+            forEachTscWatchEdit(session, edits(), ts.noop);
+            baselineTsserverLogs("resolutionCache", scenario, session);
+        });
+    });
 });

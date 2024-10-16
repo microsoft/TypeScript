@@ -66,6 +66,12 @@ File '/home/user/projects/myproject/node_modules/a/index.tsx' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/user/projects/myproject/node_modules/a/index.d.ts', result '/home/user/projects/myproject/node_modules/reala/index.d.ts'.
 ======== Module name 'a' was successfully resolved to '/home/user/projects/myproject/node_modules/reala/index.d.ts'. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 File '/home/user/projects/myproject/node_modules/reala/package.json' does not exist.
 File '/home/user/projects/myproject/node_modules/package.json' does not exist.
 File '/home/user/projects/myproject/package.json' does not exist.
@@ -75,12 +81,6 @@ File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/package.json 2000 undefined File location affecting resolution
