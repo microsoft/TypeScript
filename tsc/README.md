@@ -1,14 +1,40 @@
-# Project
+# typescript-go
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+```console
+$ go run github.com/microsoft/typescript-go/cmd/tsgo@latest
+```
 
-As the maintainer of this project, please make a few updates:
+## Local development
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+This repo uses Go and TypeScript. For a full development experience, you'll need to have both installed.
+
+For tests and code generation, this repo contains a git submodule to the main TypeScript repo pointing to the commit being ported.
+When cloning, you'll want to clone with submodules:
+
+```console
+$ git clone --recurse-submodules https://github.com/microsoft/typescript-go.git
+```
+
+If you have already cloned the repo, you can initialize the submodule with:
+
+```console
+$ git submodule update --init --recursive
+```
+
+With the submodule in place and `npm ci`, you can run tasks via `hereby`, similar to the TypeScript repo:
+
+```console
+$ hereby build    # Verify that the project builds
+$ hereby test     # Run all tests
+$ hereby lint     # Run all linters
+$ hereby format   # Format all code
+$ hereby generate # Generate all Go code (e.g. diagnostics, committed to repo)
+```
+
+Additional tasks are a work in progress.
+
+`hereby` is not required to work on the repo; the regular `go` tooling (e.g., `go build`, `go test ./...`) will work as expected.
+`hereby` tasks are provided as a convenience for those familiar with the TypeScript repo.
 
 ## Contributing
 
