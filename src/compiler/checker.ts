@@ -16571,7 +16571,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (getTypeParameterFromMappedType(mappedType) === getActualTypeVariable(type)) {
                     const typeParameter = getHomomorphicTypeVariable(mappedType);
                     if (typeParameter) {
-                        const constraint = getConstraintOfTypeParameter(typeParameter);
+                        const constraint = getConstraintOfTypeParameter(getConditionalFlowTypeOfType(typeParameter, parent));
                         if (constraint && everyType(constraint, isArrayOrTupleType)) {
                             constraints = append(constraints, getUnionType([numberType, numericStringType]));
                         }
