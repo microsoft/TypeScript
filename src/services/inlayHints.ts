@@ -106,7 +106,6 @@ import {
     PrefixUnaryExpression,
     PropertyDeclaration,
     QuotePreference,
-    Signature,
     SignatureDeclarationBase,
     skipParentheses,
     some,
@@ -296,11 +295,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        const candidates: Signature[] = [];
-        const signature = checker.getResolvedSignatureForSignatureHelp(expr, candidates);
-        if (!signature || !candidates.length) {
-            return;
-        }
+        const signature = checker.getResolvedSignature(expr);
+        if (signature === undefined) return;
 
         let signatureParamPos = 0;
         for (const originalArg of args) {
