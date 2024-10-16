@@ -18803,7 +18803,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // (T | U)[K] -> T[K] & U[K] (writing)
         // (T & U)[K] -> T[K] & U[K]
         if (objectType.flags & TypeFlags.Union || objectType.flags & TypeFlags.Intersection && !shouldDeferIndexType(objectType)) {
-            const types = map((objectType as UnionOrIntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType), writing));
+            const types = map((objectType as UnionOrIntersectionType).types, t => getSimplifiedType(getIndexedAccessType(getSimplifiedType(t, writing), indexType), writing));
             return objectType.flags & TypeFlags.Intersection || writing ? getIntersectionType(types) : getUnionType(types);
         }
     }
