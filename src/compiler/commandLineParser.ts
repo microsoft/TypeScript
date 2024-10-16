@@ -2643,7 +2643,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
 }
 
 function optionDependsOn(option: string, dependsOn: Set<string>): boolean {
-    const seen = new Map<string, true>();
+    const seen = new Set<string>();
     return optionDependsOnRecursive(option);
 
     function optionDependsOnRecursive(option: string): boolean {
