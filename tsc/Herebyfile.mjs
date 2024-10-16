@@ -16,14 +16,15 @@ const typeScriptSubmodulePath = path.join(__dirname, "_submodules", "TypeScript"
 
 function assertTypeScriptCloned() {
     try {
-        const stat = fs.statSync(typeScriptSubmodulePath);
+        const stat = fs.statSync(path.join(typeScriptSubmodulePath, "package.json"));
         if (stat.isDirectory()) {
             return;
         }
     }
     catch {}
 
-    throw new Error("_submodules/TypeScript does not exist");
+    console.error("_submodules/TypeScript does not exist; try running `git submodule update --init --recursive`");
+    process.exit(1);
 }
 
 export const build = task({
