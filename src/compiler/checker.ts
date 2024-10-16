@@ -33726,7 +33726,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // get the original type -- represented as the type constraint of the 'this' type
             containingType = (containingType as TypeParameter).isThisType ? getConstraintOfTypeParameter(containingType as TypeParameter)! : getBaseConstraintOfType(containingType as TypeParameter)!; // TODO: GH#18217 Use a different variable that's allowed to be undefined
         }
-        if (!containingType || !hasBaseType(containingType, enclosingClass)) {
+        if (!containingType || !hasBaseType(containingType, enclosingClass) && !isNodeWithinClass(location, getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!)!)) {
             if (errorNode) {
                 error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1_This_is_an_instance_of_class_2, symbolToString(prop), typeToString(enclosingClass), typeToString(containingType));
             }
