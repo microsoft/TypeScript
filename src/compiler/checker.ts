@@ -7368,7 +7368,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const signatures = getSignaturesOfType(filterType(propertyType, t => !(t.flags & TypeFlags.Undefined)), SignatureKind.Call);
                 for (const signature of signatures) {
                     const methodDeclaration = signatureToSignatureDeclarationHelper(signature, SyntaxKind.MethodSignature, context, { name: propertyName, questionToken: optionalToken }) as MethodSignature;
-                    typeElements.push(preserveCommentsOn(methodDeclaration));
+                    typeElements.push(preserveCommentsOn(methodDeclaration, signature.declaration || propertySymbol.valueDeclaration));
                 }
                 if (signatures.length || !optionalToken) {
                     return;
@@ -7400,9 +7400,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 propertyTypeNode,
             );
 
-            typeElements.push(preserveCommentsOn(propertySignature));
+            typeElements.push(preserveCommentsOn(propertySignature, propertySymbol.valueDeclaration));
 
-            function preserveCommentsOn<T extends Node>(node: T) {
+            function preserveCommentsOn<T extends Node>(node: T, range: Node | undefined) {
                 const jsdocPropertyTag = propertySymbol.declarations?.find((d): d is JSDocPropertyTag => d.kind === SyntaxKind.JSDocPropertyTag);
                 if (jsdocPropertyTag) {
                     const commentText = getTextOfJSDocComment(jsdocPropertyTag.comment);
@@ -7410,9 +7410,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]);
                     }
                 }
-                else if (propertySymbol.valueDeclaration) {
+                else if (range) {
                     // Copy comments to node for declaration emit
-                    setCommentRange(context, node, propertySymbol.valueDeclaration);
+                    setCommentRange(context, node, range);
                 }
                 return node;
             }
