@@ -36,19 +36,19 @@
 ////   }
 //// }
 
-// @Filename: /home/src/workspaces/project/src/types/index.mts
+// @Filename: /home/src/workspaces/project/src/index.mts
 //// export const index = 0;
 
-// @Filename: /home/src/workspaces/project/src/types/index.ts
+// @Filename: /home/src/workspaces/project/src/index.ts
 //// export const index = 0;
 
-// @Filename: /home/src/workspaces/project/src/types/blah.mts
+// @Filename: /home/src/workspaces/project/src/blah.mts
 //// export const blah = 0;
 
-// @Filename: /home/src/workspaces/project/src/types/blah.ts
+// @Filename: /home/src/workspaces/project/src/blah.ts
 //// export const blah = 0;
 
-// @Filename: /home/src/workspaces/project/src/types/only-in-cjs/index.ts
+// @Filename: /home/src/workspaces/project/src/only-in-cjs/index.ts
 //// export const onlyInCjs = 0;
 
 // @Filename: /home/src/workspaces/project/src/index.mts

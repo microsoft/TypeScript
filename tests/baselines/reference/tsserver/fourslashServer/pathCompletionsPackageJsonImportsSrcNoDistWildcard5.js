@@ -37,22 +37,19 @@ lib.decorators.legacy.d.ts-Text
   }
 }
 
+//// [/home/src/workspaces/project/src/blah.mts]
+export const blah = 0;
+
+//// [/home/src/workspaces/project/src/blah.ts]
+export const blah = 0;
+
 //// [/home/src/workspaces/project/src/index.mts]
 import { } from "";
 
-//// [/home/src/workspaces/project/src/types/blah.mts]
-export const blah = 0;
-
-//// [/home/src/workspaces/project/src/types/blah.ts]
-export const blah = 0;
-
-//// [/home/src/workspaces/project/src/types/index.mts]
+//// [/home/src/workspaces/project/src/index.ts]
 export const index = 0;
 
-//// [/home/src/workspaces/project/src/types/index.ts]
-export const index = 0;
-
-//// [/home/src/workspaces/project/src/types/only-in-cjs/index.ts]
+//// [/home/src/workspaces/project/src/only-in-cjs/index.ts]
 export const onlyInCjs = 0;
 
 //// [/home/src/workspaces/project/tsconfig.json]
@@ -80,12 +77,11 @@ Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/projec
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  "rootNames": [
+  "/home/src/workspaces/project/src/blah.mts",
+  "/home/src/workspaces/project/src/blah.ts",
   "/home/src/workspaces/project/src/index.mts",
-  "/home/src/workspaces/project/src/types/blah.mts",
-  "/home/src/workspaces/project/src/types/blah.ts",
-  "/home/src/workspaces/project/src/types/index.mts",
-  "/home/src/workspaces/project/src/types/index.ts",
-  "/home/src/workspaces/project/src/types/only-in-cjs/index.ts"
+  "/home/src/workspaces/project/src/index.ts",
+  "/home/src/workspaces/project/src/only-in-cjs/index.ts"
  ],
  "options": {
   "module": 199,
@@ -107,17 +103,15 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/blah.mts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/blah.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/index.mts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/types/blah.mts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/types/blah.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/types/index.mts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/types/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/types/only-in-cjs/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/only-in-cjs/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/types/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/types/only-in-cjs/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/only-in-cjs/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.esnext.full.d.ts 500 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
@@ -125,28 +119,25 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
+	/home/src/workspaces/project/src/blah.mts Text-1 "export const blah = 0;"
+	/home/src/workspaces/project/src/blah.ts Text-1 "export const blah = 0;"
 	/home/src/workspaces/project/src/index.mts Text-1 "import { } from \"\";"
-	/home/src/workspaces/project/src/types/blah.mts Text-1 "export const blah = 0;"
-	/home/src/workspaces/project/src/types/blah.ts Text-1 "export const blah = 0;"
-	/home/src/workspaces/project/src/types/index.mts Text-1 "export const index = 0;"
-	/home/src/workspaces/project/src/types/index.ts Text-1 "export const index = 0;"
-	/home/src/workspaces/project/src/types/only-in-cjs/index.ts Text-1 "export const onlyInCjs = 0;"
+	/home/src/workspaces/project/src/index.ts Text-1 "export const index = 0;"
+	/home/src/workspaces/project/src/only-in-cjs/index.ts Text-1 "export const onlyInCjs = 0;"
 
 
+	src/blah.mts
+	  Matched by default include pattern '**/*'
+	src/blah.ts
+	  Matched by default include pattern '**/*'
+	  File is CommonJS module because 'package.json' does not have field "type"
 	src/index.mts
 	  Matched by default include pattern '**/*'
-	src/types/blah.mts
-	  Matched by default include pattern '**/*'
-	src/types/blah.ts
+	src/index.ts
 	  Matched by default include pattern '**/*'
 	  File is CommonJS module because 'package.json' does not have field "type"
-	src/types/index.mts
-	  Matched by default include pattern '**/*'
-	src/types/index.ts
-	  Matched by default include pattern '**/*'
-	  File is CommonJS module because 'package.json' does not have field "type"
-	src/types/only-in-cjs/index.ts
+	src/only-in-cjs/index.ts
 	  Matched by default include pattern '**/*'
 	  File is CommonJS module because 'package.json' does not have field "type"
 
@@ -267,7 +258,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -303,23 +294,19 @@ watchedFiles::
 /home/src/workspaces/project/package.json: *new*
   {"pollingInterval":2000}
   {"pollingInterval":250}
+/home/src/workspaces/project/src/blah.mts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/src/blah.ts: *new*
+  {"pollingInterval":500}
 /home/src/workspaces/project/src/index.mts: *new*
   {"pollingInterval":500}
+/home/src/workspaces/project/src/index.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/src/only-in-cjs/index.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspaces/project/src/only-in-cjs/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/project/src/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspaces/project/src/types/blah.mts: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/src/types/blah.ts: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/src/types/index.mts: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/src/types/index.ts: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/src/types/only-in-cjs/index.ts: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/src/types/only-in-cjs/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspaces/project/src/types/package.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -361,27 +348,23 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
+/home/src/workspaces/project/src/blah.mts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/src/blah.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/src/index.mts *new*
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/src/types/blah.mts *new*
+/home/src/workspaces/project/src/index.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/src/types/blah.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/src/types/index.mts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/src/types/index.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/src/types/only-in-cjs/index.ts *new*
+/home/src/workspaces/project/src/only-in-cjs/index.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
@@ -402,7 +385,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src/index.mts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/src/index.mts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -437,21 +420,17 @@ watchedFiles::
 /home/src/workspaces/project/package.json:
   {"pollingInterval":2000}
   {"pollingInterval":250}
+/home/src/workspaces/project/src/blah.mts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/src/blah.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/src/index.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/src/only-in-cjs/index.ts:
+  {"pollingInterval":500}
+/home/src/workspaces/project/src/only-in-cjs/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/project/src/package.json:
-  {"pollingInterval":2000}
-/home/src/workspaces/project/src/types/blah.mts:
-  {"pollingInterval":500}
-/home/src/workspaces/project/src/types/blah.ts:
-  {"pollingInterval":500}
-/home/src/workspaces/project/src/types/index.mts:
-  {"pollingInterval":500}
-/home/src/workspaces/project/src/types/index.ts:
-  {"pollingInterval":500}
-/home/src/workspaces/project/src/types/only-in-cjs/index.ts:
-  {"pollingInterval":500}
-/home/src/workspaces/project/src/types/only-in-cjs/package.json:
-  {"pollingInterval":2000}
-/home/src/workspaces/project/src/types/package.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}
@@ -497,28 +476,24 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
+/home/src/workspaces/project/src/blah.mts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
+/home/src/workspaces/project/src/blah.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/src/index.mts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
-/home/src/workspaces/project/src/types/blah.mts
+/home/src/workspaces/project/src/index.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/src/types/blah.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/src/types/index.mts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/src/types/index.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/src/types/only-in-cjs/index.ts
+/home/src/workspaces/project/src/only-in-cjs/index.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
@@ -566,7 +541,20 @@ Info seq  [hh:mm:ss:mss] response:
         "isGlobalCompletion": false,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": true,
-        "entries": [],
+        "entries": [
+          {
+            "name": "#blah",
+            "kind": "script",
+            "kindModifiers": "",
+            "sortText": "11"
+          },
+          {
+            "name": "#index",
+            "kind": "script",
+            "kindModifiers": "",
+            "sortText": "11"
+          }
+        ],
         "defaultCommitCharacters": []
       }
     }

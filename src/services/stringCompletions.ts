@@ -1172,16 +1172,21 @@ function getModulesForPathsPattern(
     const fragmentHasPath = containsSlash(fragment);
     const fragmentDirectory = fragmentHasPath ? hasTrailingDirectorySeparator(fragment) ? fragment : getDirectoryPath(fragment) : undefined;
 
+    const getCommonSourceDirectory = () => moduleSpecifierResolutionHost.getCommonSourceDirectory();
+    const ignoreCase = !hostUsesCaseSensitiveFileNames(moduleSpecifierResolutionHost);
+    const outDir = program.getCompilerOptions().outDir;
+    const declarationDir = program.getCompilerOptions().declarationDir;
+
     // Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
     const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + fragmentDirectory) : normalizedPrefixDirectory;
     // Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
     const baseDirectory = normalizePath(combinePaths(packageDirectory, expandedPrefixDirectory));
-    const inputBaseDirectory = isImports && getPossibleOriginalInputPathWithoutChangingExt(baseDirectory, !hostUsesCaseSensitiveFileNames(moduleSpecifierResolutionHost), program.getCompilerOptions().outDir, () => moduleSpecifierResolutionHost.getCommonSourceDirectory());
+    const possibleInputBaseDirectoryForOutDir = isImports && outDir && getPossibleOriginalInputPathWithoutChangingExt(baseDirectory, ignoreCase, outDir, getCommonSourceDirectory);
+    const possibleInputBaseDirectoryForDeclarationDir = isImports && declarationDir && getPossibleOriginalInputPathWithoutChangingExt(baseDirectory, ignoreCase, declarationDir, getCommonSourceDirectory);
     const normalizedSuffix = normalizePath(parsed.suffix);
     const declarationExtension = normalizedSuffix && getDeclarationEmitExtensionForPath("_" + normalizedSuffix);
-    const inputExtension = inputBaseDirectory && inputBaseDirectory !== baseDirectory && normalizedSuffix ? getPossibleOriginalInputExtensionForExtension("_" + normalizedSuffix) : undefined;
+    const inputExtension = (possibleInputBaseDirectoryForOutDir || possibleInputBaseDirectoryForDeclarationDir) && normalizedSuffix ? getPossibleOriginalInputExtensionForExtension("_" + normalizedSuffix) : undefined;
     const matchingSuffixes = [...(inputExtension ? inputExtension.map(ext => changeExtension(normalizedSuffix, ext)) : []), declarationExtension && changeExtension(normalizedSuffix, declarationExtension), normalizedSuffix].filter(isString);
-    const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
 
     // If we have a suffix, then we read the directory all the way down to avoid returning completions for
     // directories that don't contain files that would match the suffix. A previous comment here was concerned
@@ -1197,11 +1202,13 @@ function getModulesForPathsPattern(
 
     const isExportsOrImportsWildcard = (isExports || isImports) && endsWith(pattern, "/*");
 
-    let matches = getMatchesWithPrefix(baseDirectory, completePrefix);
+    let matches = getMatchesWithPrefix(baseDirectory);
 
-    if (inputBaseDirectory && inputBaseDirectory !== baseDirectory) {
-        const completeInputPrefix = fragmentHasPath ? inputBaseDirectory : ensureTrailingDirectorySeparator(inputBaseDirectory) + normalizedPrefixBase;
-        matches = concatenate(matches, getMatchesWithPrefix(inputBaseDirectory, completeInputPrefix));
+    if (possibleInputBaseDirectoryForOutDir) {
+        matches = concatenate(matches, getMatchesWithPrefix(possibleInputBaseDirectoryForOutDir));
+    }
+    if (possibleInputBaseDirectoryForDeclarationDir) {
+        matches = concatenate(matches, getMatchesWithPrefix(possibleInputBaseDirectoryForDeclarationDir));
     }
 
     // If we had a suffix, we already recursively searched for all possible files that could match
@@ -1209,16 +1216,20 @@ function getModulesForPathsPattern(
     // have something valid to import.
     if (!normalizedSuffix) {
         matches = concatenate(matches, getDirectoryMatches(baseDirectory));
-        if (inputBaseDirectory && inputBaseDirectory !== baseDirectory) {
-            matches = concatenate(matches, getDirectoryMatches(inputBaseDirectory));
+        if (possibleInputBaseDirectoryForOutDir) {
+            matches = concatenate(matches, getDirectoryMatches(possibleInputBaseDirectoryForOutDir));
+        }
+        if (possibleInputBaseDirectoryForDeclarationDir) {
+            matches = concatenate(matches, getDirectoryMatches(possibleInputBaseDirectoryForDeclarationDir));
         }
     }
 
     return matches;
 
-    function getMatchesWithPrefix(directory: string, prefix: string) {
+    function getMatchesWithPrefix(directory: string) {
+        const completePrefix = fragmentHasPath ? directory : ensureTrailingDirectorySeparator(directory) + normalizedPrefixBase;
         return mapDefined(tryReadDirectory(host, directory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, includeGlobs), match => {
-            const trimmedWithPattern = trimPrefixAndSuffix(match, prefix);
+            const trimmedWithPattern = trimPrefixAndSuffix(match, completePrefix);
             if (trimmedWithPattern) {
                 if (containsSlash(trimmedWithPattern)) {
                     return directoryResult(getPathComponents(removeLeadingDirectorySeparator(trimmedWithPattern))[1]);
