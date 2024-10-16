@@ -30143,7 +30143,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         links.flags &= ~NodeCheckFlags.InCheckIdentifier;
                         if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(rootDeclaration.kind === SyntaxKind.Parameter && isSomeSymbolAssigned(rootDeclaration))) {
                             const pattern = declaration.parent;
-                            const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
+                            const initialType = parent.initializer
+                                ? getFlowTypeOfReference(parent.initializer, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode)
+                                : parentTypeConstraint;
+                            const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, initialType, /*flowContainer*/ undefined, location.flowNode);
                             if (narrowedType.flags & TypeFlags.Never) {
                                 return neverType;
                             }
