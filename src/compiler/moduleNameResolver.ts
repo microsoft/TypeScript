@@ -2697,24 +2697,24 @@ function loadModuleFromExportsOrImports(extensions: Extensions, state: ModuleRes
     const loadModuleFromTargetExportOrImport = getLoadModuleFromTargetExportOrImport(extensions, state, cache, redirectedReference, moduleName, scope, isImports);
 
     if (!endsWith(moduleName, directorySeparator) && !moduleName.includes("*") && hasProperty(lookupTable, moduleName)) {
-        const target = (lookupTable as { [idx: string]: unknown; })[moduleName];
+        const target = (lookupTable as MapLike<unknown>)[moduleName];
         return loadModuleFromTargetExportOrImport(target, /*subpath*/ "", /*pattern*/ false, moduleName);
     }
     const expandingKeys = toSorted(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => hasOneAsterisk(k) || endsWith(k, "/")), comparePatternKeys);
     for (const potentialTarget of expandingKeys) {
         if (state.features & NodeResolutionFeatures.ExportsPatternTrailers && matchesPatternWithTrailer(potentialTarget, moduleName)) {
-            const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
+            const target = (lookupTable as MapLike<unknown>)[potentialTarget];
             const starPos = potentialTarget.indexOf("*");
             const subpath = moduleName.substring(potentialTarget.substring(0, starPos).length, moduleName.length - (potentialTarget.length - 1 - starPos));
             return loadModuleFromTargetExportOrImport(target, subpath, /*pattern*/ true, potentialTarget);
         }
         else if (endsWith(potentialTarget, "*") && startsWith(moduleName, potentialTarget.substring(0, potentialTarget.length - 1))) {
-            const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
+            const target = (lookupTable as MapLike<unknown>)[potentialTarget];
             const subpath = moduleName.substring(potentialTarget.length - 1);
             return loadModuleFromTargetExportOrImport(target, subpath, /*pattern*/ true, potentialTarget);
         }
         else if (startsWith(moduleName, potentialTarget)) {
-            const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
+            const target = (lookupTable as MapLike<unknown>)[potentialTarget];
             const subpath = moduleName.substring(potentialTarget.length);
             return loadModuleFromTargetExportOrImport(target, subpath, /*pattern*/ false, potentialTarget);
         }

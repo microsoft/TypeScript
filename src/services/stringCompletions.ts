@@ -1023,40 +1023,11 @@ function getCompletionEntriesForNonRelativeModules(
                     const packageFile = combinePaths(ancestor, "package.json");
                     if (seenPackageScope = tryFileExists(host, packageFile)) {
                         const packageJson = readJson(packageFile, host);
-                        const imports = (packageJson as any).imports;
-                        if (imports) {
-                            if (typeof imports !== "object" || imports === null) { // eslint-disable-line no-restricted-syntax
-                                return; // null imports or entrypoint only, no sub-modules available
-                            }
-
-                            const keys = getOwnKeys(imports);
-                            const conditions = getConditions(compilerOptions, mode);
-                            addCompletionEntriesFromPathsOrExportsOrImports(
-                                result,
-                                /*isExports*/ false,
-                                /*isImports*/ true,
-                                fragment,
-                                ancestor,
-                                extensionOptions,
-                                program,
-                                host,
-                                moduleSpecifierResolutionHost,
-                                keys,
-                                key => {
-                                    const pattern = getPatternFromFirstMatchingCondition(imports[key], conditions);
-                                    if (pattern === undefined) {
-                                        return undefined;
-                                    }
-                                    return singleElementArray(endsWith(key, "/") && endsWith(pattern, "/") ? pattern + "*" : pattern);
-                                },
-                                comparePatternKeys,
-                            );
-                            return;
-                        }
+                        exportsOrImportsLookup((packageJson as MapLike<unknown>).imports, fragment, ancestor, /*isExports*/ false, /*isImports*/ true);
                     }
                 }
             };
-            if (fragmentDirectory && (resolvePackageJsonExports || resolvePackageJsonImports)) {
+            if (fragmentDirectory && resolvePackageJsonExports) {
                 const nodeModulesDirectoryOrImportsLookup = ancestorLookup;
                 ancestorLookup = ancestor => {
                     const components = getPathComponents(fragment);
@@ -1079,36 +1050,9 @@ function getCompletionEntriesForNonRelativeModules(
                     const packageFile = combinePaths(packageDirectory, "package.json");
                     if (tryFileExists(host, packageFile)) {
                         const packageJson = readJson(packageFile, host);
-                        const exports = (packageJson as any).exports;
-                        if (exports) {
-                            if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-restricted-syntax
-                                return; // null exports or entrypoint only, no sub-modules available
-                            }
-                            const keys = getOwnKeys(exports);
-                            const fragmentSubpath = components.join("/") + (components.length && hasTrailingDirectorySeparator(fragment) ? "/" : "");
-                            const conditions = getConditions(compilerOptions, mode);
-                            addCompletionEntriesFromPathsOrExportsOrImports(
-                                result,
-                                /*isExports*/ true,
-                                /*isImports*/ false,
-                                fragmentSubpath,
-                                packageDirectory,
-                                extensionOptions,
-                                program,
-                                host,
-                                moduleSpecifierResolutionHost,
-                                keys,
-                                key => {
-                                    const pattern = getPatternFromFirstMatchingCondition(exports[key], conditions);
-                                    if (pattern === undefined) {
-                                        return undefined;
-                                    }
-                                    return singleElementArray(endsWith(key, "/") && endsWith(pattern, "/") ? pattern + "*" : pattern);
-                                },
-                                comparePatternKeys,
-                            );
-                            return;
-                        }
+                        const fragmentSubpath = components.join("/") + (components.length && hasTrailingDirectorySeparator(fragment) ? "/" : "");
+                        exportsOrImportsLookup((packageJson as MapLike<unknown>).exports, fragmentSubpath, packageDirectory, /*isExports*/ true, /*isImports*/ false);
+                        return;
                     }
                     return nodeModulesDirectoryOrImportsLookup(ancestor);
                 };
@@ -1118,6 +1062,34 @@ function getCompletionEntriesForNonRelativeModules(
     }
 
     return arrayFrom(result.values());
+
+    function exportsOrImportsLookup(lookupTable: unknown, fragment: string, baseDirectory: string, isExports: boolean, isImports: boolean) {
+        if (typeof lookupTable !== "object" || lookupTable === null) { // eslint-disable-line no-restricted-syntax
+            return; // null lookupTable or entrypoint only
+        }
+        const keys = getOwnKeys(lookupTable as MapLike<unknown>);
+        const conditions = getConditions(compilerOptions, mode);
+        addCompletionEntriesFromPathsOrExportsOrImports(
+            result,
+            isExports,
+            isImports,
+            fragment,
+            baseDirectory,
+            extensionOptions,
+            program,
+            host,
+            moduleSpecifierResolutionHost,
+            keys,
+            key => {
+                const pattern = getPatternFromFirstMatchingCondition((lookupTable as MapLike<unknown>)[key], conditions);
+                if (pattern === undefined) {
+                    return undefined;
+                }
+                return singleElementArray(endsWith(key, "/") && endsWith(pattern, "/") ? pattern + "*" : pattern);
+            },
+            comparePatternKeys,
+        );
+    }
 }
 
 function getPatternFromFirstMatchingCondition(target: unknown, conditions: readonly string[]): string | undefined {
