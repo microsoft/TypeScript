@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { createRequire } from "module";
 import {
     __importDefault,
@@ -19,7 +20,7 @@ console.log(`Testing ${typescript}...`);
 /** @type {[fn: (() => Promise<any>), shouldSucceed: boolean][]} */
 const fns = [
     [() => require(typescript).version, true],
-    [() => require(typescript).default.version, false],
+    [() => require(typescript).default.version, true],
     [() => __importDefault(require(typescript)).version, false],
     [() => __importDefault(require(typescript)).default.version, true],
     [() => __importStar(require(typescript)).version, true],
@@ -41,7 +42,7 @@ for (const [fn, shouldSucceed] of fns) {
         console.log(`${fn.toString()} ${status} as expected.`);
     }
     else {
-        console.log(`${fn.toString()} unexpectedly ${status}.`);
+        console.log(chalk.red(`${fn.toString()} unexpectedly ${status}.`));
         process.exitCode = 1;
     }
 }

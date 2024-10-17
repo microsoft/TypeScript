@@ -3,6 +3,7 @@ import fs from "fs";
 import net from "net";
 import os from "os";
 import readline from "readline";
+import { nodeCreateRequire } from "../compiler/nodeGetBuiltinModule.js";
 import {
     CharacterCodes,
     combinePaths,
@@ -277,8 +278,9 @@ export function initializeNodeSystem(): StartInput {
 
     let cancellationToken: ts.server.ServerCancellationToken;
     try {
-        const factory = require("./cancellationToken.js");
-        cancellationToken = factory(sys.args);
+        const require = nodeCreateRequire(import.meta.url);
+        const { createCancellationToken } = require("./cancellationToken.js");
+        cancellationToken = createCancellationToken(sys.args);
     }
     catch {
         cancellationToken = ts.server.nullCancellationToken;

@@ -17,6 +17,14 @@ const rulesDir = path.join(__dirname, "scripts", "eslint", "rules");
 const ext = ".cjs";
 const ruleFiles = fs.readdirSync(rulesDir).filter(p => p.endsWith(ext));
 
+const restrictedESMGlobals = [
+    { name: "__filename" },
+    { name: "__dirname" },
+    { name: "require" },
+    { name: "module" },
+    { name: "exports" },
+];
+
 export default tseslint.config(
     {
         files: ["**/*.{ts,tsx,cts,mts,js,cjs,mjs}"],
@@ -165,11 +173,7 @@ export default tseslint.config(
             // These globals don't exist outside of CJS files.
             "no-restricted-globals": [
                 "error",
-                { name: "__filename" },
-                { name: "__dirname" },
-                { name: "require" },
-                { name: "module" },
-                { name: "exports" },
+                ...restrictedESMGlobals,
             ],
         },
     },
@@ -204,6 +208,7 @@ export default tseslint.config(
                 { name: "setImmediate" },
                 { name: "clearImmediate" },
                 { name: "performance" },
+                ...restrictedESMGlobals,
             ],
             "local/no-direct-import": "error",
         },
@@ -211,7 +216,10 @@ export default tseslint.config(
     {
         files: ["src/harness/**", "src/testRunner/**"],
         rules: {
-            "no-restricted-globals": "off",
+            "no-restricted-globals": [
+                "error",
+                ...restrictedESMGlobals,
+            ],
             "regexp/no-super-linear-backtracking": "off",
             "local/no-direct-import": "off",
         },
