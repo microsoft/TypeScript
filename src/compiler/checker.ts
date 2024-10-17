@@ -27154,7 +27154,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function optionalChainContainsReference(source: Node, target: Node) {
         while (isOptionalChain(source)) {
             source = source.expression;
-            if (isMatchingReference(source, target)) {
+            if (isMatchingReference(target, source)) {
                 return true;
             }
         }
