@@ -34,7 +34,6 @@ interface NewableFunction {}
 interface IArguments {}
 interface Number { toExponential: any; }
 interface Object {}
-interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
@@ -59,7 +58,7 @@ export default _default;
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2022.full.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n","impliedFormat":99},{"version":"-1874019635-export default 42;","signature":"-5660511115-declare const _default: 42;\nexport default _default;\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/main.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2022.full.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n","impliedFormat":99},{"version":"-1874019635-export default 42;","signature":"-5660511115-declare const _default: 42;\nexport default _default;\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/main.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -76,12 +75,12 @@ export default _default;
   "fileInfos": {
     "../../tslibs/ts/lib/lib.es2022.full.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": 1
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
       "impliedFormat": "commonjs"
     },
@@ -124,7 +123,7 @@ export default _default;
   },
   "latestChangedDtsFile": "./src/main.d.ts",
   "version": "FakeTSVersion",
-  "size": 1091
+  "size": 1070
 }
 
 

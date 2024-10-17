@@ -40,8 +40,8 @@ class C6 extends Date { }
 class C7 extends RegExp { }
 >C7 : C7
 >   : ^^
->RegExp : RegExp
->       : ^^^^^^
+>RegExp : _RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags> & { readonly global: boolean; readonly ignoreCase: boolean; readonly multiline: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^       ^^^
 
 class C8 extends Error { }
 >C8 : C8

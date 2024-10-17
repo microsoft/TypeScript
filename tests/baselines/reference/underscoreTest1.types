@@ -1,7 +1,8 @@
 //// [tests/cases/compiler/underscoreTest1.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000
+Type Count: 2,500
+Instantiation count: 2,500
 
 === underscoreTest1_underscoreTests.ts ===
 /// <reference path="underscoreTest1_underscore.ts" />
@@ -2621,8 +2622,8 @@ _.isRegExp(/moe/);
 >  : ^^^^^^^^^^^^^^^^^
 >isRegExp : (object: any) => boolean
 >         : ^      ^^   ^^^^^       
->/moe/ : RegExp
->      : ^^^^^^
+>/moe/ : RegExp<["moe"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 _.isNaN(NaN);
 >_.isNaN(NaN) : boolean
@@ -3032,22 +3033,22 @@ compiled2({ epithet: "stooge" });
 >         : ^^^^^^^^
 
 _.templateSettings = {
->_.templateSettings = {    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; }
->                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>_.templateSettings = {    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp<[`{{${string}}}`, string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.templateSettings : Underscore.TemplateSettings
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >templateSettings : Underscore.TemplateSettings
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp<[`{{${string}}}`, string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interpolate: /\{\{(.+?)\}\}/g
->interpolate : RegExp
->            : ^^^^^^
->/\{\{(.+?)\}\}/g : RegExp
->                 : ^^^^^^
+>interpolate : RegExp<[`{{${string}}}`, string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/\{\{(.+?)\}\}/g : RegExp<[`{{${string}}}`, string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 var template2 = _.template("Hello {{ name }}!");
@@ -5350,16 +5351,16 @@ module Underscore {
 
     export interface TemplateSettings {
         evaluate?: RegExp;
->evaluate : RegExp
->         : ^^^^^^
+>evaluate : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         interpolate?: RegExp;
->interpolate : RegExp
->            : ^^^^^^
+>interpolate : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         escape?: RegExp;
->escape : RegExp
->       : ^^^^^^
+>escape : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         variable?: string;
 >variable : string

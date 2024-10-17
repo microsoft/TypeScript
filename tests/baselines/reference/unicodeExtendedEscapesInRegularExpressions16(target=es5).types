@@ -2,8 +2,8 @@
 
 === unicodeExtendedEscapesInRegularExpressions16.ts ===
 var x = /\u{ABCD}\u{EF12}\u{3456}\u{7890}/gu;
->x : RegExp
->  : ^^^^^^
->/\u{ABCD}\u{EF12}\u{3456}\u{7890}/gu : RegExp
->                                     : ^^^^^^
+>x : RegExp<["ꯍ㑖碐"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/\u{ABCD}\u{EF12}\u{3456}\u{7890}/gu : RegExp<["ꯍ㑖碐"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,33 +1,36 @@
 //// [tests/cases/conformance/controlFlow/controlFlowIfStatement.ts] ////
 
+=== Performance Stats ===
+Instantiation count: 1,000
+
 === controlFlowIfStatement.ts ===
 let x: string | number | boolean | RegExp;
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let cond: boolean;
 >cond : boolean
 >     : ^^^^^^^
 
 x = /a/;
->x = /a/ : RegExp
->        : ^^^^^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->/a/ : RegExp
->    : ^^^^^^
+>x = /a/ : RegExp<["a"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/a/ : RegExp<["a"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (x /* RegExp */, (x = true)) {
 >x /* RegExp */, (x = true) : true
 >                           : ^^^^
->x : RegExp
->  : ^^^^^^
+>x : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x = true) : true
 >           : ^^^^
 >x = true : true
 >         : ^^^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -38,8 +41,8 @@ if (x /* RegExp */, (x = true)) {
     x = "";
 >x = "" : ""
 >       : ^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 }
@@ -51,8 +54,8 @@ else {
     x = 42;
 >x = 42 : 42
 >       : ^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 }

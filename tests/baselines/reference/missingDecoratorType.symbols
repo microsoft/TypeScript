@@ -20,11 +20,8 @@ interface Number { }
 interface Function { }
 >Function : Symbol(Function, Decl(a.ts, 4, 20))
 
-interface RegExp { }
->RegExp : Symbol(RegExp, Decl(a.ts, 5, 22))
-
 interface IArguments { }
->IArguments : Symbol(IArguments, Decl(a.ts, 6, 20))
+>IArguments : Symbol(IArguments, Decl(a.ts, 5, 22))
 
 === b.ts ===
 declare function dec(t, k, d);

@@ -8,6 +8,6 @@ Foo(!/(\\?|&)adurl=/);
 >    : ^^^
 >!/(\\?|&)adurl=/ : boolean
 >                 : ^^^^^^^
->/(\\?|&)adurl=/ : RegExp
->                : ^^^^^^
+>/(\\?|&)adurl=/ : RegExp<["adurl=" | "\\adurl=" | "&adurl=", "" | "\\" | "&"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

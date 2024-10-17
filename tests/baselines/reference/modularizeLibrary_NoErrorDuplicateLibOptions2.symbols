@@ -150,12 +150,12 @@ Reflect.isExtensible({});
 // Using Es6 regexp
 var reg = new RegExp("/s");
 >reg : Symbol(reg, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 64, 3))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 reg.flags;
->reg.flags : Symbol(RegExp.flags, Decl(lib.es2015.core.d.ts, --, --))
+>reg.flags : Symbol(_RegExp.flags, Decl(lib.es2015.core.d.ts, --, --))
 >reg : Symbol(reg, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 64, 3))
->flags : Symbol(RegExp.flags, Decl(lib.es2015.core.d.ts, --, --))
+>flags : Symbol(_RegExp.flags, Decl(lib.es2015.core.d.ts, --, --))
 
 // Using ES6 string
 var str = "Hello world";

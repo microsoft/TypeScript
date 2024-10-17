@@ -2,42 +2,42 @@
 
 === firstMatchRegExpMatchArray.ts ===
 const match = ''.match(/ /)
->match : RegExpMatchArray | null
->      : ^^^^^^^^^^^^^^^^^^^^^^^
->''.match(/ /) : RegExpMatchArray | null
->              : ^^^^^^^^^^^^^^^^^^^^^^^
->''.match : (regexp: string | RegExp) => RegExpMatchArray | null
->         : ^      ^^               ^^^^^                       
+>match : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>''.match(/ /) : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>''.match : { <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray>(regexp: RegExp<CapturingGroups, NamedCapturingGroupsObject, { readonly global: true; }>): RegExpMatchArray<CapturingGroups> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: false; } = RegExpFlags & { readonly global: false; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags>): RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> = RegExpFlags>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string): RegExpMatchArray<CapturingGroups> | RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; }
+>         : ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                               ^^^                                        ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^      ^^                                                    ^^^                                                                    ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                    ^^^^^^^^^^^^^^^^      ^^                                                             ^^^                                                                                                        ^^^
 >'' : ""
 >   : ^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
->/ / : RegExp
->    : ^^^^^^
+>match : { <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray>(regexp: RegExp<CapturingGroups, NamedCapturingGroupsObject, { readonly global: true; }>): RegExpMatchArray<CapturingGroups> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: false; } = RegExpFlags & { readonly global: false; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags>): RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> = RegExpFlags>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string): RegExpMatchArray<CapturingGroups> | RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; }
+>      : ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                               ^^^                                        ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^      ^^                                                    ^^^                                                                    ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                    ^^^^^^^^^^^^^^^^      ^^                                                             ^^^                                                                                                        ^^^
+>/ / : RegExp<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (match !== null) {
 >match !== null : boolean
 >               : ^^^^^^^
->match : RegExpMatchArray | null
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>match : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const foo: string = match[0]
 >foo : string
 >    : ^^^^^^
->match[0] : string
->         : ^^^^^^
->match : RegExpMatchArray
->      : ^^^^^^^^^^^^^^^^
+>match[0] : " "
+>         : ^^^
+>match : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
     const bar: string = match[1]
 >bar : string
 >    : ^^^^^^
->match[1] : string | undefined
->         : ^^^^^^^^^^^^^^^^^^
->match : RegExpMatchArray
->      : ^^^^^^^^^^^^^^^^
+>match[1] : " " | undefined
+>         : ^^^^^^^^^^^^^^^
+>match : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }

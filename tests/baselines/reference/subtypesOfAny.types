@@ -63,8 +63,8 @@ interface I6 {
 >  : ^^^^^^
 
     foo: RegExp;
->foo : RegExp
->    : ^^^^^^
+>foo : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 

@@ -1,5 +1,5 @@
 parserRegularExpressionDivideAmbiguity3.ts(1,16): error TS1499: Unknown regular expression flag.
-parserRegularExpressionDivideAmbiguity3.ts(1,18): error TS2339: Property 'foo' does not exist on type 'RegExp'.
+parserRegularExpressionDivideAmbiguity3.ts(1,18): error TS2339: Property 'foo' does not exist on type 'RegExp<["regexp"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
 
 
 ==== parserRegularExpressionDivideAmbiguity3.ts (2 errors) ====
@@ -7,4 +7,4 @@ parserRegularExpressionDivideAmbiguity3.ts(1,18): error TS2339: Property 'foo' d
                    ~
 !!! error TS1499: Unknown regular expression flag.
                      ~~~
-!!! error TS2339: Property 'foo' does not exist on type 'RegExp'.
+!!! error TS2339: Property 'foo' does not exist on type 'RegExp<["regexp"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.

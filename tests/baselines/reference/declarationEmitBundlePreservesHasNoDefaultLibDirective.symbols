@@ -28,9 +28,6 @@ interface Number {}
 interface Object {}
 >Object : Symbol(Object, Decl(core.ts, 4, 19))
 
-interface RegExp {}
->RegExp : Symbol(RegExp, Decl(core.ts, 5, 19))
-
 interface String {}
->String : Symbol(String, Decl(core.ts, 6, 19))
+>String : Symbol(String, Decl(core.ts, 5, 19))
 

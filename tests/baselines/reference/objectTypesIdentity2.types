@@ -39,8 +39,8 @@ interface I {
 var a: { foo: RegExp; }
 >a : { foo: RegExp; }
 >  : ^^^^^^^      ^^^
->foo : RegExp
->    : ^^^^^^
+>foo : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 enum E { A }
 >E : E

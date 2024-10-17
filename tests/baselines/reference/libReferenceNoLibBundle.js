@@ -7,7 +7,6 @@ interface String { }
 interface Boolean { }
 interface Number { }
 interface Function { }
-interface RegExp { }
 interface IArguments { }
 
 
@@ -39,8 +38,6 @@ interface Boolean {
 interface Number {
 }
 interface Function {
-}
-interface RegExp {
 }
 interface IArguments {
 }

@@ -172,10 +172,10 @@ Reflect.isExtensible({});
 
 // Using Es6 regexp
 var reg = new RegExp("/s");
->reg : RegExp
->    : ^^^^^^
->new RegExp("/s") : RegExp
->                 : ^^^^^^
+>reg : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new RegExp("/s") : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >RegExp : RegExpConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >"/s" : "/s"
@@ -184,8 +184,8 @@ var reg = new RegExp("/s");
 reg.flags;
 >reg.flags : string
 >          : ^^^^^^
->reg : RegExp
->    : ^^^^^^
+>reg : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >flags : string
 >      : ^^^^^^
 

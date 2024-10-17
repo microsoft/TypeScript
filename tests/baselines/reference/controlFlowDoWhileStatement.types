@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/controlFlow/controlFlowDoWhileStatement.ts] ////
 
+=== Performance Stats ===
+Instantiation count: 1,000
+
 === controlFlowDoWhileStatement.ts ===
 let cond: boolean;
 >cond : boolean
@@ -191,14 +194,14 @@ function f() {
 >  : ^^^^^^^^^^
 
     let x: string | number | boolean | RegExp | Function;
->x : string | number | boolean | Function | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | Function | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
 >       : ^^
->x : string | number | boolean | Function | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | Function | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -210,8 +213,8 @@ function f() {
             x = 42;
 >x = 42 : 42
 >       : ^^
->x : string | number | boolean | Function | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | Function | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 
@@ -224,42 +227,42 @@ function f() {
             x = true;
 >x = true : true
 >         : ^^^^
->x : string | number | boolean | Function | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | Function | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
             continue;
         }
         x = /a/;
->x = /a/ : RegExp
->        : ^^^^^^
->x : string | number | boolean | Function | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->/a/ : RegExp
->    : ^^^^^^
+>x = /a/ : RegExp<["a"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | Function | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/a/ : RegExp<["a"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     } while (cond)
 >cond : boolean
 >     : ^^^^^^^
 
     x; // number | boolean | RegExp
->x : number | true | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>x : number | true | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 function g() {
 >g : () => void
 >  : ^^^^^^^^^^
 
     let x: string | number | boolean | RegExp | Function;
->x : string | number | boolean | Function | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | Function | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
 >       : ^^
->x : string | number | boolean | Function | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | Function | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -271,8 +274,8 @@ function g() {
             x = 42;
 >x = 42 : 42
 >       : ^^
->x : string | number | boolean | Function | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | Function | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 
@@ -285,20 +288,20 @@ function g() {
             x = true;
 >x = true : true
 >         : ^^^^
->x : string | number | boolean | Function | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | Function | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
             continue;
         }
         x = /a/;
->x = /a/ : RegExp
->        : ^^^^^^
->x : string | number | boolean | Function | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->/a/ : RegExp
->    : ^^^^^^
+>x = /a/ : RegExp<["a"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | Function | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/a/ : RegExp<["a"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     } while (true)
 >true : true

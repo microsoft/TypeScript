@@ -20,9 +20,9 @@
 verify.completions({
     marker: "1",
     exact: [
-        { name: "toLocaleString", text: "(method) toLocaleString(): string (+1 overload)", documentation: "Returns a date converted to a string using the current locale." },
-        { name: "toString", text: "(method) toString(): string (+1 overload)", documentation: "Returns a string representation of a string." },
-        { name: "valueOf", text: "(method) valueOf(): string | number", documentation: "Returns the primitive value of the specified object." },
+        { name: "toLocaleString", text: "(method) toLocaleString(): string (+1 overload)", documentation: "Returns a string representation of an object appropriate to the host environment's current locale." },
+        { name: "toString", text: "(method) toString(): string (+1 overload)", documentation: "Returns a string representation of the string, which in this case is the string itself." },
+        { name: "valueOf", text: "(method) valueOf(): string | number", documentation: "Returns the primitive value of the specified object, which in this case is the string itself." },
     ],
 });
 

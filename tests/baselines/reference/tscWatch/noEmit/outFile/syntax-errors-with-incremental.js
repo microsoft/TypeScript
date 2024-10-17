@@ -21,7 +21,6 @@ interface NewableFunction {}
 interface IArguments {}
 interface Number { toExponential: any; }
 interface Object {}
-interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
@@ -43,7 +42,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2,1],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2,1],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -52,7 +51,7 @@ Output::
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.d.ts": "2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "2464268576-const a = \"hello"
   },
   "root": [
@@ -69,7 +68,7 @@ Output::
     "../tslibs/ts/lib/lib.d.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 642
+  "size": 621
 }
 
 
@@ -136,7 +135,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3528887741-const a = \"hello\";"],"root":[2],"options":{"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3528887741-const a = \"hello\";"],"root":[2],"options":{"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -145,7 +144,7 @@ Output::
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.d.ts": "2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "3528887741-const a = \"hello\";"
   },
   "root": [
@@ -162,7 +161,7 @@ Output::
     false
   ],
   "version": "FakeTSVersion",
-  "size": 643
+  "size": 622
 }
 
 
@@ -219,7 +218,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3528887741-const a = \"hello\";"],"root":[2],"options":{"outFile":"./outFile.js"},"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3528887741-const a = \"hello\";"],"root":[2],"options":{"outFile":"./outFile.js"},"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -228,7 +227,7 @@ Output::
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.d.ts": "2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "3528887741-const a = \"hello\";"
   },
   "root": [
@@ -241,7 +240,7 @@ Output::
     "outFile": "./outFile.js"
   },
   "version": "FakeTSVersion",
-  "size": 623
+  "size": 602
 }
 
 //// [/home/src/projects/outFile.js]
@@ -351,7 +350,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"changeFileSet":[2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -360,7 +359,7 @@ Output::
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.d.ts": "2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "2464268576-const a = \"hello"
   },
   "root": [
@@ -376,7 +375,7 @@ Output::
     "./project/a.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 640
+  "size": 619
 }
 
 
@@ -436,7 +435,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2464268576-const a = \"hello"],"root":[2],"options":{"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -445,7 +444,7 @@ Output::
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.d.ts": "2112095415-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "2464268576-const a = \"hello"
   },
   "root": [
@@ -468,7 +467,7 @@ Output::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 655
+  "size": 634
 }
 
 //// [/home/src/projects/outFile.js]

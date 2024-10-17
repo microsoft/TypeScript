@@ -79,9 +79,9 @@ doYouNeedToChangeYourTargetLibraryES2015.ts(85,26): error TS2550: Property 'sub'
 doYouNeedToChangeYourTargetLibraryES2015.ts(86,26): error TS2550: Property 'sup' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 doYouNeedToChangeYourTargetLibraryES2015.ts(87,51): error TS2550: Property 'fromCodePoint' does not exist on type 'StringConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 doYouNeedToChangeYourTargetLibraryES2015.ts(88,41): error TS2550: Property 'raw' does not exist on type 'StringConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-doYouNeedToChangeYourTargetLibraryES2015.ts(89,32): error TS2550: Property 'flags' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-doYouNeedToChangeYourTargetLibraryES2015.ts(90,33): error TS2550: Property 'sticky' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-doYouNeedToChangeYourTargetLibraryES2015.ts(91,34): error TS2550: Property 'unicode' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+doYouNeedToChangeYourTargetLibraryES2015.ts(89,32): error TS2339: Property 'flags' does not exist on type 'RegExp<["abc"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
+doYouNeedToChangeYourTargetLibraryES2015.ts(90,33): error TS2339: Property 'sticky' does not exist on type 'RegExp<["abc"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
+doYouNeedToChangeYourTargetLibraryES2015.ts(91,34): error TS2339: Property 'unicode' does not exist on type 'RegExp<["abc"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
 
 
 ==== doYouNeedToChangeYourTargetLibraryES2015.ts (84 errors) ====
@@ -337,11 +337,11 @@ doYouNeedToChangeYourTargetLibraryES2015.ts(91,34): error TS2550: Property 'unic
 !!! error TS2550: Property 'raw' does not exist on type 'StringConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
     const testRegExpFlags = /abc/g.flags;
                                    ~~~~~
-!!! error TS2550: Property 'flags' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+!!! error TS2339: Property 'flags' does not exist on type 'RegExp<["abc"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
     const testRegExpSticky = /abc/g.sticky;
                                     ~~~~~~
-!!! error TS2550: Property 'sticky' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+!!! error TS2339: Property 'sticky' does not exist on type 'RegExp<["abc"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
     const testRegExpUnicode = /abc/g.unicode;
                                      ~~~~~~~
-!!! error TS2550: Property 'unicode' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+!!! error TS2339: Property 'unicode' does not exist on type 'RegExp<["abc"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
     

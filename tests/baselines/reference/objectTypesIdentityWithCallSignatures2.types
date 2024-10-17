@@ -67,8 +67,8 @@ var b = { foo(x: RegExp) { return ''; } };
 >                                  : ^^^^^^ ^^      ^^^^^^^^^^^^
 >foo : (x: RegExp) => string
 >    : ^ ^^      ^^^^^^^^^^^
->x : RegExp
->  : ^^^^^^
+>x : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 

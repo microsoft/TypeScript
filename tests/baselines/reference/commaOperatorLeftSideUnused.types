@@ -141,8 +141,8 @@ xx = (/323/, 5);
 >           : ^
 >/323/, 5 : 5
 >         : ^
->/323/ : RegExp
->      : ^^^^^^
+>/323/ : RegExp<["323"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >5 : 5
 >  : ^
 

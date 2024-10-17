@@ -151,8 +151,8 @@ function isEmpty(string) {
 >string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 79, 17))
 
    return !/[^\s]/.test(string);
->/[^\s]/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>/[^\s]/.test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 79, 17))
 }
 
@@ -168,8 +168,8 @@ function isConvertiblePixelValue(value) {
 >value : Symbol(value, Decl(controlFlowPropertyDeclarations.ts, 90, 33))
 
   return /^\d+px$/.test(value);
->/^\d+px$/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>/^\d+px$/.test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(controlFlowPropertyDeclarations.ts, 90, 33))
 }
 

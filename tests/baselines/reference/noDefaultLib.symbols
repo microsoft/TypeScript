@@ -23,6 +23,3 @@ interface Date {}
 interface Function {}
 >Function : Symbol(Function, Decl(noDefaultLib.ts, 7, 17))
 
-interface RegExp {}
->RegExp : Symbol(RegExp, Decl(noDefaultLib.ts, 8, 21))
-

@@ -18,8 +18,8 @@ import * as thing3 from "./mod.mjs" with { field: /a/g };
 >       : ^^^^^^^^^^^^^
 >field : any
 >      : ^^^
->/a/g : RegExp
->     : ^^^^^^
+>/a/g : RegExp<["a"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 import * as thing4 from "./mod.mjs" with { field: ["a"] };
 >thing4 : typeof thing1
