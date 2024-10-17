@@ -2,6 +2,7 @@ import {
     createCodeFixAction,
     createCombinedCodeActions,
     eachDiagnostic,
+    ImportTypeReplacement,
     registerCodeFix,
 } from "../_namespaces/ts.codefix.js";
 import {
@@ -227,6 +228,7 @@ export interface ImportAdder {
     hasFixes(): boolean;
     addImportFromDiagnostic: (diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) => void;
     addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) => void;
+    addImportFromImportTypeReplacement: (replacement: ImportTypeReplacement) => void;
     addImportForNonExistentExport: (exportName: string, exportingFileName: string, exportKind: ExportKind, exportedMeanings: SymbolFlags, isImportUsageValidAsTypeOnly: boolean) => void;
     addImportForUnresolvedIdentifier: (context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean) => void;
     addVerbatimImport: (declaration: AnyImportOrRequireStatement | ImportOrRequireAliasDeclaration) => void;
@@ -257,7 +259,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
     type NewImportsKey = `${0 | 1}|${string}`;
     /** Use `getNewImportEntry` for access */
     const newImports = new Map<NewImportsKey, Mutable<ImportsCollection & { useRequire: boolean; }>>();
-    return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes, hasFixes, addImportForUnresolvedIdentifier, addImportForNonExistentExport, removeExistingImport, addVerbatimImport };
+    return { addImportFromDiagnostic, addImportFromExportedSymbol, addImportFromImportTypeReplacement, writeFixes, hasFixes, addImportForUnresolvedIdentifier, addImportForNonExistentExport, removeExistingImport, addVerbatimImport };
 
     function addVerbatimImport(declaration: AnyImportOrRequireStatement | ImportOrRequireAliasDeclaration) {
         verbatimImports.add(declaration);
@@ -314,6 +316,23 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 ...(propertyName === undefined ? {} : { propertyName }),
             };
             addImport({ fix, symbolName: localName ?? symbolName, errorIdentifierText: undefined });
+        }
+    }
+
+    function addImportFromImportTypeReplacement(replacement: ImportTypeReplacement) {
+        const checker = program.getTypeChecker();
+        const symbol = checker.getMergedSymbol(skipAlias(replacement.symbol, checker));
+        const moduleSymbol = Debug.checkDefined(replacement.symbol.parent);
+        const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, replacement.referenceName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
+        if (!exportInfo) {
+            // If no exportInfo is found, this means export could not be resolved when we have filtered for autoImportFileExcludePatterns,
+            //     so we should not generate an import.
+            Debug.assert(preferences.autoImportFileExcludePatterns?.length);
+            return;
+        }
+        const fix = getImportFixForSymbol(sourceFile, exportInfo, program, /*position*/ undefined, /*isValidTypeOnlyUseSite*/ true, /*useRequire*/ false, host, preferences);
+        if (fix) {
+            addImport({ fix, symbolName: replacement.referenceName, errorIdentifierText: undefined });
         }
     }
 

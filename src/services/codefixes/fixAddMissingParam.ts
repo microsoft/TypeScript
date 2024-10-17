@@ -350,7 +350,7 @@ function isOptionalPos(declarations: ConvertibleSignatureDeclaration[], pos: num
 function getParameterType(importAdder: ImportAdder, typeNode: TypeNode | undefined, scriptTarget: ScriptTarget) {
     const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
     if (importableReference) {
-        importSymbols(importAdder, importableReference.symbols);
+        importSymbols(importAdder, importableReference.replacements);
         return importableReference.typeNode;
     }
     return typeNode;
