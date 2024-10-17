@@ -581,6 +581,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     category: Diagnostics.Language_and_Environment,
     description: Diagnostics.Set_the_JavaScript_language_version_for_emitted_JavaScript_and_include_compatible_library_declarations,
     defaultValueDescription: ScriptTarget.ES5,
+    mayBeESVersion: true,
 };
 
 /** @internal */
@@ -678,6 +679,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             name: "lib",
             type: libMap,
             defaultValueDescription: undefined,
+            mayBeESVersion: true,
         },
         affectsProgramStructure: true,
         showInSimplifiedHelpView: true,
@@ -1809,14 +1811,32 @@ export const defaultInitCompilerOptions: CompilerOptions = {
 };
 
 /** @internal */
-export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
-    return createDiagnosticForInvalidCustomType(opt, createCompilerDiagnostic);
+export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType, value: unknown): Diagnostic {
+    return createDiagnosticForInvalidCustomType(opt, value, createCompilerDiagnostic);
 }
 
-function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType, createDiagnostic: (message: DiagnosticMessage, ...args: DiagnosticArguments) => Diagnostic): Diagnostic {
+function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType, value: unknown, createDiagnostic: (message: DiagnosticMessage, ...args: DiagnosticArguments) => Diagnostic): Diagnostic {
+    if (opt.mayBeESVersion && typeof value === "string") {
+        // If the value looks like an ECMAScript version but not is a valid one,
+        // remind the user that this TypeScript version may be outdated and
+        // does not support that ECMAScript version.
+        const esVersion = extractECMAScriptVersion(value);
+        if (esVersion !== undefined && esVersion >= 2015) {
+            return createDiagnostic(Diagnostics.Argument_0_for_1_option_is_a_year_not_yet_supported_by_this_version_of_TypeScript, value, `--${opt.name}`);
+        }
+    }
+
     const namesOfType = arrayFrom(opt.type.keys());
     const stringNames = (opt.deprecatedKeys ? namesOfType.filter(k => !opt.deprecatedKeys!.has(k)) : namesOfType).map(key => `'${key}'`).join(", ");
     return createDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, stringNames);
+}
+
+function extractECMAScriptVersion(value: string): number | undefined {
+    const match = /^es(\d+)$/i.exec(value);
+    if (!match) {
+        return undefined;
+    }
+    return Number(match[1]);
 }
 
 /** @internal */
@@ -3809,7 +3829,7 @@ function convertJsonOptionOfCustomType(
         return validateJsonOptionValue(opt, val, errors, valueExpression, sourceFile);
     }
     else {
-        errors.push(createDiagnosticForInvalidCustomType(opt, (message, ...args) => createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, message, ...args)));
+        errors.push(createDiagnosticForInvalidCustomType(opt, value, (message, ...args) => createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, message, ...args)));
     }
 }
 
