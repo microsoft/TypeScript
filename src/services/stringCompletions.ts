@@ -1190,8 +1190,12 @@ function getModulesForPathsPattern(
     const possibleInputBaseDirectoryForDeclarationDir = isImports && declarationDir && getPossibleOriginalInputPathWithoutChangingExt(baseDirectory, ignoreCase, declarationDir, getCommonSourceDirectory);
     const normalizedSuffix = normalizePath(parsed.suffix);
     const declarationExtension = normalizedSuffix && getDeclarationEmitExtensionForPath("_" + normalizedSuffix);
-    const inputExtension = (possibleInputBaseDirectoryForOutDir || possibleInputBaseDirectoryForDeclarationDir) && normalizedSuffix ? getPossibleOriginalInputExtensionForExtension("_" + normalizedSuffix) : undefined;
-    const matchingSuffixes = [...(inputExtension ? inputExtension.map(ext => changeExtension(normalizedSuffix, ext)) : []), declarationExtension && changeExtension(normalizedSuffix, declarationExtension), normalizedSuffix].filter(isString);
+    const inputExtension = normalizedSuffix ? getPossibleOriginalInputExtensionForExtension("_" + normalizedSuffix) : undefined;
+    const matchingSuffixes = [
+        ...(inputExtension ? inputExtension.map(ext => changeExtension(normalizedSuffix, ext)) : []),
+        declarationExtension && changeExtension(normalizedSuffix, declarationExtension),
+        normalizedSuffix
+    ].filter(isString);
 
     // If we have a suffix, then we read the directory all the way down to avoid returning completions for
     // directories that don't contain files that would match the suffix. A previous comment here was concerned
