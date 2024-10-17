@@ -1,0 +1,114 @@
+//// [tests/cases/compiler/typeInterfaceDeclarationsInBlockStatements1.ts] ////
+
+=== typeInterfaceDeclarationsInBlockStatements1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60175
+
+function f1() {
+>f1 : () => void
+>   : ^^^^^^^^^^
+
+  if (true) type s = string;
+>true : true
+>     : ^^^^
+>s : string
+>  : ^^^^^^
+
+  console.log("" as s);
+>console.log("" as s) : void
+>                     : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"" as s : string
+>        : ^^^^^^
+>"" : ""
+>   : ^^
+}
+
+function f2() {
+>f2 : () => void
+>   : ^^^^^^^^^^
+
+  if (true) {
+>true : true
+>     : ^^^^
+
+    type s = string;
+>s : string
+>  : ^^^^^^
+  }
+  console.log("" as s);
+>console.log("" as s) : void
+>                     : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"" as s : s
+>        : ^
+>"" : ""
+>   : ^^
+}
+
+function f3() {
+>f3 : () => void
+>   : ^^^^^^^^^^
+
+  if (true)
+>true : true
+>     : ^^^^
+
+    interface s {
+      length: number;
+>length : number
+>       : ^^^^^^
+    }
+  console.log("" as s);
+>console.log("" as s) : void
+>                     : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"" as s : s
+>        : ^
+>"" : ""
+>   : ^^
+}
+
+function f4() {
+>f4 : () => void
+>   : ^^^^^^^^^^
+
+  if (true) {
+>true : true
+>     : ^^^^
+
+    interface s {
+      length: number;
+>length : number
+>       : ^^^^^^
+    }
+  }
+  console.log("" as s);
+>console.log("" as s) : void
+>                     : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"" as s : s
+>        : ^
+>"" : ""
+>   : ^^
+}
+
