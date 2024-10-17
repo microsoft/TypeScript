@@ -159,7 +159,6 @@ import {
     isMetaProperty,
     isModifierKind,
     isNonNullExpression,
-    isPrivateIdentifier,
     isSetAccessorDeclaration,
     isStringOrNumericLiteralLike,
     isTaggedTemplateExpression,
