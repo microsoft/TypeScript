@@ -1014,18 +1014,23 @@ function getCompletionEntriesForNonRelativeModules(
             const resolvePackageJsonExports = getResolvePackageJsonExports(compilerOptions);
             const resolvePackageJsonImports = getResolvePackageJsonImports(compilerOptions);
             let seenPackageScope = false;
+
+            const importsLookup = (directory: string) => {
+                if (resolvePackageJsonImports && !seenPackageScope) {
+                    const packageFile = combinePaths(directory, "package.json");
+                    if (seenPackageScope = tryFileExists(host, packageFile)) {
+                        const packageJson = readJson(packageFile, host);
+                        exportsOrImportsLookup((packageJson as MapLike<unknown>).imports, fragment, directory, /*isExports*/ false, /*isImports*/ true);
+                    }
+                }
+            };
+
             let ancestorLookup: (directory: string) => void | undefined = ancestor => {
                 const nodeModules = combinePaths(ancestor, "node_modules");
                 if (tryDirectoryExists(host, nodeModules)) {
                     getCompletionEntriesForDirectoryFragment(fragment, nodeModules, extensionOptions, program, host, moduleSpecifierResolutionHost, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
                 }
-                if (resolvePackageJsonImports && !seenPackageScope) {
-                    const packageFile = combinePaths(ancestor, "package.json");
-                    if (seenPackageScope = tryFileExists(host, packageFile)) {
-                        const packageJson = readJson(packageFile, host);
-                        exportsOrImportsLookup((packageJson as MapLike<unknown>).imports, fragment, ancestor, /*isExports*/ false, /*isImports*/ true);
-                    }
-                }
+                importsLookup(ancestor);
             };
             if (fragmentDirectory && resolvePackageJsonExports) {
                 const nodeModulesDirectoryOrImportsLookup = ancestorLookup;
@@ -1044,7 +1049,7 @@ function getCompletionEntriesForNonRelativeModules(
                         packagePath = combinePaths(packagePath, subName);
                     }
                     if (resolvePackageJsonImports && startsWith(packagePath, "#")) {
-                        return nodeModulesDirectoryOrImportsLookup(ancestor);
+                        return importsLookup(ancestor);
                     }
                     const packageDirectory = combinePaths(ancestor, "node_modules", packagePath);
                     const packageFile = combinePaths(packageDirectory, "package.json");
