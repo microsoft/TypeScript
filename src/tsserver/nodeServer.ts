@@ -3,7 +3,6 @@ import fs from "fs";
 import net from "net";
 import os from "os";
 import readline from "readline";
-import { ServerCancellationToken } from "../server/session.js";
 import {
     CharacterCodes,
     combinePaths,
@@ -674,7 +673,7 @@ function pipeExists(name: string): boolean {
     return fs.existsSync(name);
 }
 
-function createCancellationToken(args: string[]): ServerCancellationToken {
+function createCancellationToken(args: string[]): ts.server.ServerCancellationToken {
     let cancellationPipeName: string | undefined;
     for (let i = 0; i < args.length - 1; i++) {
         if (args[i] === "--cancellationPipeName") {
