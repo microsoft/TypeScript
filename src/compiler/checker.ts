@@ -34165,7 +34165,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // accessor, or optional method.
         const assignmentKind = getAssignmentTargetKind(node);
         if (assignmentKind === AssignmentKind.Definite) {
-            return removeMissingType(propType, !!(prop && prop.flags & SymbolFlags.Optional));
+            // since this is used as an assignment target we always want to remove the missing type
+            // usually this is done conditionally based on the `prop.flags`
+            // the prop might not be available here though if the assignment is done to a dynamic property
+            return removeMissingType(propType, /*isOptional*/ true);
         }
         if (
             prop &&
