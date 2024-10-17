@@ -44333,26 +44333,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkTestingKnownTruthyCallableOrAwaitableOrEnumMemberType(condExpr: Expression, condType: Type, body?: Statement | Expression) {
         if (!strictNullChecks) return;
-        bothHelper(condExpr, body);
 
-        function bothHelper(condExpr: Expression, body: Expression | Statement | undefined) {
+        bothHelper(condExpr, condType, body);
+
+        function bothHelper(condExpr: Expression, condType: Type, body: Expression | Statement | undefined) {
             condExpr = skipParentheses(condExpr);
-
-            helper(condExpr, body);
-
+            helper(condExpr, condType, body);
             while (isBinaryExpression(condExpr) && (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.QuestionQuestionToken)) {
                 condExpr = skipParentheses(condExpr.left);
-                helper(condExpr, body);
+                helper(condExpr, condType, body);
             }
         }
 
-        function helper(condExpr: Expression, body: Expression | Statement | undefined) {
-            const location = isLogicalOrCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
+        function helper(condExpr: Expression, condType: Type, body: Expression | Statement | undefined) {
+            let location = condExpr;
+            // let checkAwaitOnly = false;
+            while (isPrefixUnaryExpression(location)) {
+                location = skipParentheses(location.operand);
+                // checkAwaitOnly = true;
+            }
+            location = isLogicalOrCoalescingBinaryExpression(location) ? skipParentheses(location.right) : location;
             if (isModuleExportsAccessExpression(location)) {
                 return;
             }
             if (isLogicalOrCoalescingBinaryExpression(location)) {
-                bothHelper(location, body);
+                bothHelper(location, condType, body);
                 return;
             }
             const type = location === condExpr ? condType : checkExpression(location);
@@ -44394,6 +44399,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getTypeNameForErrorDisplay(type),
                     );
                 }
+                // else if (!checkAwaitOnly) {
                 else {
                     error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead);
                 }
