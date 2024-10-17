@@ -64,7 +64,6 @@ Using 'exports' subpath '.' with target './dist/index.js'.
 File '/user/username/projects/myproject/index.ts' exists - use it as a name resolution result.
 Resolved under condition 'default'.
 Exiting conditional exports.
-Resolving real path for '/user/username/projects/myproject/index.ts', result '/user/username/projects/myproject/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 File '/home/src/tslibs/TS/Lib/package.json' does not exist.

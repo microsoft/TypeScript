@@ -7,11 +7,13 @@ import {
     BindingElement,
     Bundle,
     cast,
+    changeExtension,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
+    CompilerOptions,
     CompoundAssignmentOperator,
     CoreTransformationContext,
     createExternalHelpersImportDeclarationIfNeeded,
@@ -21,6 +23,7 @@ import {
     ExportDeclaration,
     ExportSpecifier,
     Expression,
+    factory,
     filter,
     formatGeneratedName,
     FunctionDeclaration,
@@ -33,6 +36,7 @@ import {
     getNodeForGeneratedName,
     getNodeId,
     getOriginalNode,
+    getOutputExtension,
     hasDecorators,
     hasStaticModifier,
     hasSyntacticModifier,
@@ -61,6 +65,7 @@ import {
     isPrivateIdentifier,
     isPropertyDeclaration,
     isStatic,
+    isStringLiteral,
     isStringLiteralLike,
     isSuperCall,
     isTryStatement,
@@ -83,6 +88,9 @@ import {
     PrivateIdentifierAutoAccessorPropertyDeclaration,
     PrivateIdentifierMethodDeclaration,
     PropertyDeclaration,
+    setOriginalNode,
+    setTextRange,
+    shouldRewriteModuleSpecifier,
     skipParentheses,
     some,
     SourceFile,
@@ -671,9 +679,9 @@ function getDecoratorsOfParameters(node: FunctionLikeDeclaration | undefined) {
  *
  * @internal
  */
-export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorators | undefined {
+export function getAllDecoratorsOfClass(node: ClassLikeDeclaration, useLegacyDecorators: boolean): AllDecorators | undefined {
     const decorators = getDecorators(node);
-    const parameters = getDecoratorsOfParameters(getFirstConstructorWithBody(node));
+    const parameters = useLegacyDecorators ? getDecoratorsOfParameters(getFirstConstructorWithBody(node)) : undefined;
     if (!some(decorators) && !some(parameters)) {
         return undefined;
     }
@@ -697,12 +705,12 @@ export function getAllDecoratorsOfClassElement(member: ClassElement, parent: Cla
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
             if (!useLegacyDecorators) {
-                return getAllDecoratorsOfMethod(member as AccessorDeclaration);
+                return getAllDecoratorsOfMethod(member as AccessorDeclaration, /*useLegacyDecorators*/ false);
             }
-            return getAllDecoratorsOfAccessors(member as AccessorDeclaration, parent);
+            return getAllDecoratorsOfAccessors(member as AccessorDeclaration, parent, /*useLegacyDecorators*/ true);
 
         case SyntaxKind.MethodDeclaration:
-            return getAllDecoratorsOfMethod(member as MethodDeclaration);
+            return getAllDecoratorsOfMethod(member as MethodDeclaration, useLegacyDecorators);
 
         case SyntaxKind.PropertyDeclaration:
             return getAllDecoratorsOfProperty(member as PropertyDeclaration);
@@ -718,7 +726,7 @@ export function getAllDecoratorsOfClassElement(member: ClassElement, parent: Cla
  * @param parent The class node that contains the accessor.
  * @param accessor The class accessor member.
  */
-function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: ClassExpression | ClassDeclaration): AllDecorators | undefined {
+function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: ClassExpression | ClassDeclaration, useLegacyDecorators: boolean): AllDecorators | undefined {
     if (!accessor.body) {
         return undefined;
     }
@@ -733,7 +741,7 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
     }
 
     const decorators = getDecorators(firstAccessorWithDecorators);
-    const parameters = getDecoratorsOfParameters(setAccessor);
+    const parameters = useLegacyDecorators ? getDecoratorsOfParameters(setAccessor) : undefined;
     if (!some(decorators) && !some(parameters)) {
         return undefined;
     }
@@ -751,13 +759,13 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
  *
  * @param method The class method member.
  */
-function getAllDecoratorsOfMethod(method: MethodDeclaration | AccessorDeclaration): AllDecorators | undefined {
+function getAllDecoratorsOfMethod(method: MethodDeclaration | AccessorDeclaration, useLegacyDecorators: boolean): AllDecorators | undefined {
     if (!method.body) {
         return undefined;
     }
 
     const decorators = getDecorators(method);
-    const parameters = getDecoratorsOfParameters(method);
+    const parameters = useLegacyDecorators ? getDecoratorsOfParameters(method) : undefined;
     if (!some(decorators) && !some(parameters)) {
         return undefined;
     }
@@ -862,4 +870,17 @@ function isSimpleParameter(node: ParameterDeclaration) {
 /** @internal */
 export function isSimpleParameterList(nodes: NodeArray<ParameterDeclaration>): boolean {
     return every(nodes, isSimpleParameter);
+}
+
+/** @internal */
+export function rewriteModuleSpecifier(node: Expression, compilerOptions: CompilerOptions): Expression;
+/** @internal */
+export function rewriteModuleSpecifier(node: Expression | undefined, compilerOptions: CompilerOptions): Expression | undefined;
+/** @internal */
+export function rewriteModuleSpecifier(node: Expression | undefined, compilerOptions: CompilerOptions): Expression | undefined {
+    if (!node || !isStringLiteral(node) || !shouldRewriteModuleSpecifier(node.text, compilerOptions)) {
+        return node;
+    }
+    const updatedText = changeExtension(node.text, getOutputExtension(node.text, compilerOptions));
+    return updatedText !== node.text ? setOriginalNode(setTextRange(factory.createStringLiteral(updatedText, node.singleQuote), node), node) : node;
 }

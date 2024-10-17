@@ -3069,7 +3069,7 @@ export class TestState {
     private verifyFileContent(fileName: string, text: string) {
         const actual = this.getFileContent(fileName);
         if (actual !== text) {
-            throw new Error(`verifyFileContent failed:\n${showTextDiff(text, actual)}`);
+            throw new Error(`verifyFileContent in file '${fileName}' failed:\n${showTextDiff(text, actual)}`);
         }
     }
 
@@ -3404,10 +3404,11 @@ export class TestState {
         return ts.first(ranges);
     }
 
-    private verifyTextMatches(actualText: string, includeWhitespace: boolean, expectedText: string) {
+    private verifyTextMatches(actualText: string, includeWhitespace: boolean, expectedText: string, fileName?: string) {
         const removeWhitespace = (s: string): string => includeWhitespace ? s : this.removeWhitespace(s);
         if (removeWhitespace(actualText) !== removeWhitespace(expectedText)) {
-            this.raiseError(`Actual range text doesn't match expected text.\n${showTextDiff(expectedText, actualText)}`);
+            const addFileName = fileName ? ` in file '${fileName}'` : "";
+            this.raiseError(`Actual range text${addFileName} doesn't match expected text.\n${showTextDiff(expectedText, actualText)}`);
         }
     }
 
@@ -3485,7 +3486,7 @@ export class TestState {
             const newText = ts.textChanges.applyChanges(this.getFileContent(this.activeFile.fileName), change.textChanges);
             const newRange = updateTextRangeForTextChanges(this.getOnlyRange(this.activeFile.fileName), change.textChanges);
             const actualText = newText.slice(newRange.pos, newRange.end);
-            this.verifyTextMatches(actualText, /*includeWhitespace*/ true, newRangeContent);
+            this.verifyTextMatches(actualText, /*includeWhitespace*/ true, newRangeContent, change.fileName);
         }
         else {
             if (newFileContent === undefined) throw ts.Debug.fail();
@@ -3497,7 +3498,7 @@ export class TestState {
                 }
                 const oldText = this.tryGetFileContent(change.fileName);
                 const newContent = change.isNewFile ? ts.first(change.textChanges).newText : ts.textChanges.applyChanges(oldText!, change.textChanges);
-                this.verifyTextMatches(newContent, /*includeWhitespace*/ true, expectedNewContent);
+                this.verifyTextMatches(newContent, /*includeWhitespace*/ true, expectedNewContent, change.fileName);
             }
             for (const newFileName in newFileContent) {
                 ts.Debug.assert(changes.some(c => c.fileName === newFileName), "No change in file", () => newFileName);
@@ -3628,6 +3629,13 @@ export class TestState {
         });
 
         assert.deepEqual(actualModuleSpecifiers, moduleSpecifiers);
+    }
+
+    public verifyPreparePasteEdits(options: FourSlashInterface.PreparePasteEditsOptions): void {
+        const providePasteEdits = this.languageService.preparePasteEditsForFile(options.copiedFromFile, options.copiedTextRange);
+        if (providePasteEdits !== options.providePasteEdits) {
+            this.raiseError(`preparePasteEdits failed - Expected prepare paste edits to return ${options.providePasteEdits}, but got ${providePasteEdits}.`);
+        }
     }
 
     public verifyPasteEdits(options: FourSlashInterface.PasteEditsOptions): void {
@@ -4630,6 +4638,28 @@ ${changes.join("\n// ---\n")}
 // === MAPPED ===
 ${after}`;
         this.baseline("mapCode", baseline, ".mapCode.ts");
+    }
+
+    public verifyGetImports(fileName: string, expectedImports: string[]): void {
+        const actualImports = this.languageService.getImports(fileName);
+        if (actualImports.length !== expectedImports.length) {
+            throw new Error(`Expected ${expectedImports.length} imports for ${fileName}, got ${actualImports.length}
+    Expected:
+${expectedImports}
+    Actual:
+${actualImports}
+`);
+        }
+        for (let i = 0; i < expectedImports.length; i++) {
+            if (actualImports[i] !== expectedImports[i]) {
+                throw new Error(`Expected at ${fileName} index ${i}: ${expectedImports[i]}, got ${actualImports[i]}
+    Expected:
+${expectedImports}
+    Actual:
+${actualImports}
+`);
+            }
+        }
     }
 }
 

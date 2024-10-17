@@ -116,7 +116,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 {"synchron
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
 
 
-//// [/home/user/projects/myproject/src/file.js] Inode:: 114
+//// [/home/user/projects/myproject/src/file.js] Inode:: 118
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -363,7 +363,7 @@ FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/node_modules/pack
 
 
 
-//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 114
+//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 118
 
 PolledWatches::
 /home/src/tslibs/TS/Lib/package.json:

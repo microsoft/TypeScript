@@ -204,6 +204,7 @@ import {
     JSDocTypedefTag,
     JSDocTypeTag,
     JsxAttributeLike,
+    JsxCallLike,
     JsxChild,
     JsxExpression,
     JsxOpeningLikeElement,
@@ -1553,6 +1554,10 @@ export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnl
     return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node);
 }
 
+export function isPartOfTypeOnlyImportOrExportDeclaration(node: Node): boolean {
+    return findAncestor(node, isTypeOnlyImportOrExportDeclaration) !== undefined;
+}
+
 export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
     return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
 }
@@ -1953,13 +1958,16 @@ export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLike
 
 export function isCallLikeExpression(node: Node): node is CallLikeExpression {
     switch (node.kind) {
-        case SyntaxKind.JsxOpeningElement:
-        case SyntaxKind.JsxSelfClosingElement:
         case SyntaxKind.CallExpression:
         case SyntaxKind.NewExpression:
         case SyntaxKind.TaggedTemplateExpression:
         case SyntaxKind.Decorator:
+        case SyntaxKind.JsxOpeningElement:
+        case SyntaxKind.JsxSelfClosingElement:
+        case SyntaxKind.JsxOpeningFragment:
             return true;
+        case SyntaxKind.BinaryExpression:
+            return (node as BinaryExpression).operatorToken.kind === SyntaxKind.InstanceOfKeyword;
         default:
             return false;
     }
@@ -2473,6 +2481,13 @@ export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeEleme
     const kind = node.kind;
     return kind === SyntaxKind.JsxOpeningElement
         || kind === SyntaxKind.JsxSelfClosingElement;
+}
+
+export function isJsxCallLike(node: Node): node is JsxCallLike {
+    const kind = node.kind;
+    return kind === SyntaxKind.JsxOpeningElement
+        || kind === SyntaxKind.JsxSelfClosingElement
+        || kind === SyntaxKind.JsxOpeningFragment;
 }
 
 // Clauses

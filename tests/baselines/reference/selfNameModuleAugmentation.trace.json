@@ -17,7 +17,6 @@
     "'package.json' does not have a 'peerDependencies' field.",
     "Resolved under condition 'require'.",
     "Exiting conditional exports.",
-    "Resolving real path for '/node_modules/acorn-walk/dist/walk.d.ts', result '/node_modules/acorn-walk/dist/walk.d.ts'.",
     "======== Module name 'acorn-walk' was successfully resolved to '/node_modules/acorn-walk/dist/walk.d.ts' with Package ID 'acorn-walk/dist/walk.d.ts@8.2.0'. ========",
     "File '/package.json' does not exist.",
     "======== Resolving module 'acorn-walk' from '/index.ts'. ========",
