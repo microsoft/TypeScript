@@ -20031,16 +20031,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // parameters that are in scope (and therefore potentially referenced). For type literals that
             // aren't the right hand side of a generic type alias declaration we optimize by reducing the
             // set of type parameters to those that are possibly referenced in the literal.
-            let outerTypeParameters = getOuterTypeParameters(declaration, /*includeThisTypes*/ true);
+            const allDeclarations = type.objectFlags & (ObjectFlags.Reference | ObjectFlags.InstantiationExpressionType) ? [declaration] : type.symbol.declarations!;
+            let outerTypeParameters = [...flatMap(allDeclarations, declaration => getOuterTypeParameters(declaration, /*includeThisTypes*/ true))];
             if (isJSConstructor(declaration)) {
                 const templateTagParameters = getTypeParametersFromDeclaration(declaration as DeclarationWithTypeParameters);
                 outerTypeParameters = addRange(outerTypeParameters, templateTagParameters);
             }
-            typeParameters = outerTypeParameters || emptyArray;
-            const allDeclarations = type.objectFlags & (ObjectFlags.Reference | ObjectFlags.InstantiationExpressionType) ? [declaration] : type.symbol.declarations!;
             typeParameters = (target.objectFlags & (ObjectFlags.Reference | ObjectFlags.InstantiationExpressionType) || target.symbol.flags & SymbolFlags.Method || target.symbol.flags & SymbolFlags.TypeLiteral) && !target.aliasTypeArguments ?
-                filter(typeParameters, tp => some(allDeclarations, d => isTypeParameterPossiblyReferenced(tp, d))) :
-                typeParameters;
+                filter(outerTypeParameters, tp => some(allDeclarations, d => isTypeParameterPossiblyReferenced(tp, d))) :
+                outerTypeParameters;
             links.outerTypeParameters = typeParameters;
         }
         if (typeParameters.length) {
