@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/regularExpressionWithNonBMPFlags.ts] ////
 
+=== Performance Stats ===
+Type Count: 2,500
+Instantiation count: 10,000
+
 === regularExpressionWithNonBMPFlags.ts ===
 // The characters in the following regular expression are ASCII-lookalike characters found in Unicode, including:
 // - 𝘴 (U+1D634 Mathematical Sans-Serif Italic Small S)
@@ -8,8 +12,8 @@
 //
 // See https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
 const 𝘳𝘦𝘨𝘦𝘹 = /(?𝘴𝘪-𝘮:^𝘧𝘰𝘰.)/𝘨𝘮𝘶;
->𝘳𝘦𝘨𝘦𝘹 : RegExp
->           : ^^^^^^
->/(?𝘴𝘪-𝘮:^𝘧𝘰𝘰.)/𝘨𝘮𝘶 : RegExp
->                            : ^^^^^^
+>𝘳𝘦𝘨𝘦𝘹 : RegExp<[`\uD835\uDE27\uD835\uDE30\uD835\uDE30${string}`], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/(?𝘴𝘪-𝘮:^𝘧𝘰𝘰.)/𝘨𝘮𝘶 : RegExp<[`\uD835\uDE27\uD835\uDE30\uD835\uDE30${string}`], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

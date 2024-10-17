@@ -1,157 +1,146 @@
 //// [tests/cases/compiler/regularExpressionAnnexB.ts] ////
 
 === regularExpressionAnnexB.ts ===
-const regexes: RegExp[] = [
->regexes : RegExp[]
->        : ^^^^^^^^
->[  /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/,  /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/,  /\P[\P\w-_]/,  // Compare to  /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/u,  /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/u,  /\P[\P\w-_]/u,] : RegExp[]
->                                                                                                                                                                                                   : ^^^^^^^^
+{
+    /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/;
+>/\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/ : RegExp<[`q\\ui\\ck_\fo\\x-j\\ump${string}`], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/,
->/\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/ : RegExp
->                                 : ^^^^^^
+    /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/;
+>/[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/ : RegExp<[string], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/,
->/[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/ : RegExp
->                                   : ^^^^^^
+    /\P[\P\w-_]/;
+>/\P[\P\w-_]/ : RegExp<[`P${string}`], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    
+    // Compare to
+    /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/u;
+>/\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/u : RegExp<[`q\\ui\\k_\fo\\x-j\\ump${string}`], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /\P[\P\w-_]/,
->/\P[\P\w-_]/ : RegExp
->             : ^^^^^^
+    /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/u;
+>/[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/u : RegExp<[string], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  // Compare to
-  /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/u,
->/\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/u : RegExp
->                                  : ^^^^^^
+    /\P[\P\w-_]/u;
+>/\P[\P\w-_]/u : RegExp<[`P${string}`], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
 
-  /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/u,
->/[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/u : RegExp
->                                    : ^^^^^^
+// Regular expressions with braces
+{
+    /{??/;
+>/{??/ : RegExp<["" | "{"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /\P[\P\w-_]/u,
->/\P[\P\w-_]/u : RegExp
->              : ^^^^^^
+    /{,??/;
+>/{,??/ : RegExp<["{" | "{,"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-];
+    /{,1??/;
+>/{,1??/ : RegExp<["{," | "{,1"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-const regexesWithBraces: RegExp[] = [
->regexesWithBraces : RegExp[]
->                  : ^^^^^^^^
->[  /{??/,  /{,??/,  /{,1??/,  /{1??/,  /{1,??/,  /{1,2??/,  /{2,1??/,  /{}??/,  /{,}??/,  /{,1}??/,  /{1}??/,  /{1,}??/,  /{1,2}??/,  /{2,1}??/,  // Compare to  /{??/u,  /{,??/u,  /{,1??/u,  /{1??/u,  /{1,??/u,  /{1,2??/u,  /{2,1??/u,  /{}??/u,  /{,}??/u,  /{,1}??/u,  /{1}??/u,  /{1,}??/u,  /{1,2}??/u,  /{2,1}??/u,] : RegExp[]
->                                                                                                                                                                                                                                                                                                                              : ^^^^^^^^
+    /{1??/;
+>/{1??/ : RegExp<["" | "{1"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{??/,
->/{??/ : RegExp
->      : ^^^^^^
+    /{1,??/;
+>/{1,??/ : RegExp<["" | "{1,"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{,??/,
->/{,??/ : RegExp
->       : ^^^^^^
+    /{1,2??/;
+>/{1,2??/ : RegExp<["" | "{1,2"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{,1??/,
->/{,1??/ : RegExp
->        : ^^^^^^
+    /{2,1??/;
+>/{2,1??/ : RegExp<["" | "{2,1"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{1??/,
->/{1??/ : RegExp
->       : ^^^^^^
+    /{}??/;
+>/{}??/ : RegExp<["{" | "{}"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{1,??/,
->/{1,??/ : RegExp
->        : ^^^^^^
+    /{,}??/;
+>/{,}??/ : RegExp<["{," | "{,}"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{1,2??/,
->/{1,2??/ : RegExp
->         : ^^^^^^
+    /{,1}??/;
+>/{,1}??/ : RegExp<["{,1" | "{,1}"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{2,1??/,
->/{2,1??/ : RegExp
->         : ^^^^^^
+    /{1}??/;
+>/{1}??/ : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{}??/,
->/{}??/ : RegExp
->       : ^^^^^^
+    /{1,}??/;
+>/{1,}??/ : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{,}??/,
->/{,}??/ : RegExp
->        : ^^^^^^
+    /{1,2}??/;
+>/{1,2}??/ : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{,1}??/,
->/{,1}??/ : RegExp
->         : ^^^^^^
+    /{2,1}??/;
+>/{2,1}??/ : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{1}??/,
->/{1}??/ : RegExp
->        : ^^^^^^
+    // Compare to
+    /{??/u;
+>/{??/u : RegExp<["" | "{"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{1,}??/,
->/{1,}??/ : RegExp
->         : ^^^^^^
+    /{,??/u;
+>/{,??/u : RegExp<["" | "{,"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{1,2}??/,
->/{1,2}??/ : RegExp
->          : ^^^^^^
+    /{,1??/u;
+>/{,1??/u : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{2,1}??/,
->/{2,1}??/ : RegExp
->          : ^^^^^^
+    /{1??/u;
+>/{1??/u : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  // Compare to
-  /{??/u,
->/{??/u : RegExp
->       : ^^^^^^
+    /{1,??/u;
+>/{1,??/u : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{,??/u,
->/{,??/u : RegExp
->        : ^^^^^^
+    /{1,2??/u;
+>/{1,2??/u : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{,1??/u,
->/{,1??/u : RegExp
->         : ^^^^^^
+    /{2,1??/u;
+>/{2,1??/u : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{1??/u,
->/{1??/u : RegExp
->        : ^^^^^^
+    /{}??/u;
+>/{}??/u : RegExp<["{" | "{}"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{1,??/u,
->/{1,??/u : RegExp
->         : ^^^^^^
+    /{,}??/u;
+>/{,}??/u : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{1,2??/u,
->/{1,2??/u : RegExp
->          : ^^^^^^
+    /{,1}??/u;
+>/{,1}??/u : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{2,1??/u,
->/{2,1??/u : RegExp
->          : ^^^^^^
+    /{1}??/u;
+>/{1}??/u : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{}??/u,
->/{}??/u : RegExp
->        : ^^^^^^
+    /{1,}??/u;
+>/{1,}??/u : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{,}??/u,
->/{,}??/u : RegExp
->         : ^^^^^^
+    /{1,2}??/u;
+>/{1,2}??/u : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /{,1}??/u,
->/{,1}??/u : RegExp
->          : ^^^^^^
-
-  /{1}??/u,
->/{1}??/u : RegExp
->         : ^^^^^^
-
-  /{1,}??/u,
->/{1,}??/u : RegExp
->          : ^^^^^^
-
-  /{1,2}??/u,
->/{1,2}??/u : RegExp
->           : ^^^^^^
-
-  /{2,1}??/u,
->/{2,1}??/u : RegExp
->           : ^^^^^^
-
-];
+    /{2,1}??/u;  
+>/{2,1}??/u : RegExp<[""], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
 

@@ -8,9 +8,11 @@ import {
     CommentKind,
     CommentRange,
     compareValues,
+    createMultiMap,
     Debug,
     DiagnosticMessage,
     Diagnostics,
+    flatMap,
     forEach,
     getNameOfScriptTarget,
     getSpellingSuggestion,
@@ -22,14 +24,23 @@ import {
     LanguageFeatureMinimumTarget,
     LanguageVariant,
     LanugageFeatures,
+    last,
     LineAndCharacter,
     MapLike,
+    MultiMap,
     parsePseudoBigInt,
     positionIsSynthesized,
     PunctuationOrKeywordSyntaxKind,
+    RegularExpressionAnyString,
+    RegularExpressionDisjunctionScope,
     RegularExpressionFlags,
+    RegularExpressionPattern,
+    RegularExpressionPatternContent,
+    RegularExpressionPatternUnion,
     ScriptKind,
     ScriptTarget,
+    setLast,
+    some,
     SourceFileLike,
     SyntaxKind,
     TextRange,
@@ -61,6 +72,12 @@ export interface Scanner {
     getTokenPos(): number;
     getTokenText(): string;
     getTokenValue(): string;
+    /** @internal */
+    getRegExpFlags(): RegularExpressionFlags;
+    /** @internal */
+    getRegExpCapturingGroups(): RegularExpressionPatternUnion[];
+    /** @internal */
+    getRegExpCapturingGroupSpecifiers(): MultiMap<string, RegularExpressionPatternUnion> | undefined;
     hasUnicodeEscape(): boolean;
     hasExtendedUnicodeEscape(): boolean;
     hasPrecedingLineBreak(): boolean;
@@ -303,6 +320,11 @@ const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags
     [RegularExpressionFlags.UnicodeSets, LanguageFeatureMinimumTarget.RegularExpressionFlagsUnicodeSets],
     [RegularExpressionFlags.Sticky, LanguageFeatureMinimumTarget.RegularExpressionFlagsSticky],
 ]);
+
+const RegExpDigits = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) as RegularExpressionPatternUnion;
+
+/** @internal */
+export const RegExpAnyString = {} as RegularExpressionAnyString;
 
 /*
     As per ECMAScript Language Specification 5th Edition, Section 7.6: ISyntaxToken Names and Identifiers
@@ -1048,6 +1070,10 @@ export function createScanner(
     var tokenValue!: string;
     var tokenFlags: TokenFlags;
 
+    var regExpFlags: RegularExpressionFlags;
+    var regExpCapturingGroups: RegularExpressionPatternUnion[];
+    var regExpCapturingGroupSpecifiers: MultiMap<string, RegularExpressionPatternUnion> | undefined;
+
     var commentDirectives: CommentDirective[] | undefined;
     var skipJsDocLeadingAsterisks = 0;
 
@@ -1066,6 +1092,9 @@ export function createScanner(
         getTokenPos: () => tokenStart,
         getTokenText: () => text.substring(tokenStart, pos),
         getTokenValue: () => tokenValue,
+        getRegExpFlags: () => regExpFlags,
+        getRegExpCapturingGroups: () => regExpCapturingGroups,
+        getRegExpCapturingGroupSpecifiers: () => regExpCapturingGroupSpecifiers,
         hasUnicodeEscape: () => (tokenFlags & TokenFlags.UnicodeEscape) !== 0,
         hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
         hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
@@ -2469,7 +2498,7 @@ export function createScanner(
             const startOfRegExpBody = tokenStart + 1;
             pos = startOfRegExpBody;
             let inEscape = false;
-            let namedCaptureGroups = false;
+            let hasNamedCapturingGroups = false;
             // Although nested character classes are allowed in Unicode Sets mode,
             // an unescaped slash is nevertheless invalid even in a character class in any Unicode mode.
             // This is indicated by Section 12.9.5 Regular Expression Literals of the specification,
@@ -2516,7 +2545,7 @@ export function createScanner(
                     && charCodeChecked(pos + 3) !== CharacterCodes.equals
                     && charCodeChecked(pos + 3) !== CharacterCodes.exclamation
                 ) {
-                    namedCaptureGroups = true;
+                    hasNamedCapturingGroups = true;
                 }
                 pos++;
             }
@@ -2572,7 +2601,7 @@ export function createScanner(
             else {
                 // Consume the slash character
                 pos++;
-                let regExpFlags = RegularExpressionFlags.None;
+                regExpFlags = RegularExpressionFlags.None;
                 while (true) {
                     const ch = codePointChecked(pos);
                     if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
@@ -2597,11 +2626,11 @@ export function createScanner(
                     }
                     pos += size;
                 }
-                if (reportErrors) {
-                    scanRange(startOfRegExpBody, endOfRegExpBody - startOfRegExpBody, () => {
-                        scanRegularExpressionWorker(regExpFlags, /*annexB*/ true, namedCaptureGroups);
-                    });
-                }
+            }
+            if (reportErrors) {
+                scanRange(startOfRegExpBody, endOfRegExpBody - startOfRegExpBody, () => {
+                    scanRegularExpressionWorker(/*annexB*/ true, hasNamedCapturingGroups);
+                });
             }
             tokenValue = text.substring(tokenStart, pos);
             token = SyntaxKind.RegularExpressionLiteral;
@@ -2609,7 +2638,7 @@ export function createScanner(
         return token;
     }
 
-    function scanRegularExpressionWorker(regExpFlags: RegularExpressionFlags, annexB: boolean, namedCaptureGroups: boolean) {
+    function scanRegularExpressionWorker(annexB: boolean, hasNamedCapturingGroups: boolean) {
         // Why var? It avoids TDZ checks in the runtime which can be costly.
         // See: https://github.com/microsoft/TypeScript/issues/52924
         /* eslint-disable no-var */
@@ -2623,30 +2652,58 @@ export function createScanner(
         // when not using the looser interpretation of the syntax from ECMA-262 Annex B.
         var anyUnicodeModeOrNonAnnexB = anyUnicodeMode || !annexB;
 
+        /** This determines whether a character has more equivalents. @see {getCharacterEquivalents} */
+        var isCaseInsensitive = !!(regExpFlags & RegularExpressionFlags.IgnoreCase);
+
         /** @see {scanClassSetExpression} */
         var mayContainStrings = false;
 
         /** The number of all (named and unnamed) capturing groups defined in the regex. */
         var numberOfCapturingGroups = 0;
-        /** All named capturing groups defined in the regex. */
-        var groupSpecifiers: Set<string> | undefined;
         /** All references to named capturing groups in the regex. */
         var groupNameReferences: (TextRange & { name: string; })[] | undefined;
         /** All numeric backreferences within the regex. */
         var decimalEscapes: (TextRange & { value: number; })[] | undefined;
+        /** A stack of scopes for disjunction, including capturing groups, non-capturing groups, lookaheads and lookbehinds. */
+        var disjunctionsScopeStack: (RegularExpressionDisjunctionScope | undefined)[] = [];
+        var topDisjunctionsScope: RegularExpressionDisjunctionScope | undefined;
         /** A stack of scopes for named capturing groups. @see {scanGroupName} */
         var namedCapturingGroupsScopeStack: (Set<string> | undefined)[] = [];
         var topNamedCapturingGroupsScope: Set<string> | undefined;
         /* eslint-enable no-var */
+
+        regExpCapturingGroups = [];
+        regExpCapturingGroupSpecifiers = undefined;
+
+        function markAllInnerPatternUnionsAsPossiblyUndefined(patternUnion: RegularExpressionPatternUnion) {
+            for (const pattern of patternUnion) {
+                if (typeof pattern === "string") continue;
+                for (const content of pattern) {
+                    // if a pattern union is already marked, as do all pattern unions inside it
+                    if (content instanceof Set && !content.isPossiblyUndefined) {
+                        content.isPossiblyUndefined = true;
+                        markAllInnerPatternUnionsAsPossiblyUndefined(content);
+                    }
+                }
+            }
+        }
+
         // Disjunction ::= Alternative ('|' Alternative)*
-        function scanDisjunction(isInGroup: boolean) {
+        function scanDisjunction(isInGroup: boolean): RegularExpressionPatternUnion {
+            const patternUnion = new Set() as RegularExpressionPatternUnion;
+            disjunctionsScopeStack.push(topDisjunctionsScope);
+            topDisjunctionsScope = undefined;
+            namedCapturingGroupsScopeStack.push(topNamedCapturingGroupsScope);
+            topNamedCapturingGroupsScope = undefined;
             while (true) {
-                namedCapturingGroupsScopeStack.push(topNamedCapturingGroupsScope);
-                topNamedCapturingGroupsScope = undefined;
-                scanAlternative(isInGroup);
-                topNamedCapturingGroupsScope = namedCapturingGroupsScopeStack.pop();
+                patternUnion.add(scanAlternative(isInGroup));
                 if (charCodeChecked(pos) !== CharacterCodes.bar) {
-                    return;
+                    if (patternUnion.size > 1) {
+                        markAllInnerPatternUnionsAsPossiblyUndefined(patternUnion);
+                    }
+                    topDisjunctionsScope = disjunctionsScopeStack.pop();
+                    topNamedCapturingGroupsScope = namedCapturingGroupsScopeStack.pop();
+                    return patternUnion;
                 }
                 pos++;
             }
@@ -2681,14 +2738,15 @@ export function createScanner(
         // CharacterClass ::= unicodeMode
         //     ? '[' ClassRanges ']'
         //     : '[' ClassSetExpression ']'
-        function scanAlternative(isInGroup: boolean) {
+        function scanAlternative(isInGroup: boolean): RegularExpressionPattern {
+            const pattern = [] as unknown as RegularExpressionPattern;
             let isPreviousTermQuantifiable = false;
             while (true) {
                 const start = pos;
                 const ch = charCodeChecked(pos);
                 switch (ch) {
                     case CharacterCodes.EOF:
-                        return;
+                        return pattern;
                     case CharacterCodes.caret:
                     case CharacterCodes.$:
                         pos++;
@@ -2703,38 +2761,49 @@ export function createScanner(
                                 isPreviousTermQuantifiable = false;
                                 break;
                             default:
-                                scanAtomEscape();
+                                pattern.push(scanAtomEscape());
                                 isPreviousTermQuantifiable = true;
                                 break;
                         }
                         break;
                     case CharacterCodes.openParen:
                         pos++;
+                        const prevIsCaseInsensitive = isCaseInsensitive;
+                        let groupNumber: number | undefined;
+                        let groupName: string | undefined;
+                        let isNegativeAssertion = false;
                         if (charCodeChecked(pos) === CharacterCodes.question) {
                             pos++;
                             switch (charCodeChecked(pos)) {
-                                case CharacterCodes.equals:
                                 case CharacterCodes.exclamation:
+                                    isNegativeAssertion = true;
+                                // falls through
+                                case CharacterCodes.equals:
                                     pos++;
-                                    // In Annex B, `(?=Disjunction)` and `(?!Disjunction)` are quantifiable
-                                    isPreviousTermQuantifiable = !anyUnicodeModeOrNonAnnexB;
+                                    // Although `(?=Disjunction)` and `(?!Disjunction)` are quantifiable in Annex B,
+                                    // it's mostly likely a mistake to repeat an assertion.
+                                    // Additionally, the term prior to the assertion will be incorrectly replicated and
+                                    // fed into `pattern` by the quantifier below if the assertion is made quantifiable.
+                                    isPreviousTermQuantifiable = false;
                                     break;
                                 case CharacterCodes.lessThan:
                                     const groupNameStart = pos;
                                     pos++;
                                     switch (charCodeChecked(pos)) {
-                                        case CharacterCodes.equals:
                                         case CharacterCodes.exclamation:
+                                            isNegativeAssertion = true;
+                                        // falls through
+                                        case CharacterCodes.equals:
                                             pos++;
                                             isPreviousTermQuantifiable = false;
                                             break;
                                         default:
-                                            scanGroupName(/*isReference*/ false);
+                                            groupName = scanGroupName(/*isReference*/ false);
                                             scanExpectedChar(CharacterCodes.greaterThan);
                                             if (languageVersion < ScriptTarget.ES2018) {
                                                 error(Diagnostics.Named_capturing_groups_are_only_available_when_targeting_ES2018_or_later, groupNameStart, pos - groupNameStart);
                                             }
-                                            numberOfCapturingGroups++;
+                                            groupNumber = ++numberOfCapturingGroups;
                                             isPreviousTermQuantifiable = true;
                                             break;
                                     }
@@ -2755,10 +2824,28 @@ export function createScanner(
                             }
                         }
                         else {
-                            numberOfCapturingGroups++;
+                            groupNumber = ++numberOfCapturingGroups;
                             isPreviousTermQuantifiable = true;
                         }
-                        scanDisjunction(/*isInGroup*/ true);
+                        const patternUnion = scanDisjunction(/*isInGroup*/ true);
+                        isCaseInsensitive = prevIsCaseInsensitive;
+                        if (isPreviousTermQuantifiable) {
+                            // not an assertion
+                            pattern.push(patternUnion);
+                            if (groupNumber) {
+                                regExpCapturingGroups[groupNumber] = patternUnion;
+                                ((topDisjunctionsScope ??= {}).groups ??= [])[groupNumber] = patternUnion;
+                                if (groupName) {
+                                    (regExpCapturingGroupSpecifiers ??= createMultiMap()).add(groupName, patternUnion);
+                                    (topDisjunctionsScope.groupSpecifiers ??= createMultiMap()).add(groupName, patternUnion);
+                                }
+                            }
+                        }
+                        else if (isNegativeAssertion) {
+                            // Invalidate all capturing groups in the negative lookahead/lookbehind just closed
+                            // such that they won't be matched by backreferences
+                            topDisjunctionsScope = undefined;
+                        }
                         scanExpectedChar(CharacterCodes.closeParen);
                         break;
                     case CharacterCodes.openBrace:
@@ -2766,32 +2853,41 @@ export function createScanner(
                         const digitsStart = pos;
                         scanDigits();
                         const min = tokenValue;
+                        let max = "";
                         if (!anyUnicodeModeOrNonAnnexB && !min) {
+                            pattern.push(String.fromCharCode(ch));
                             isPreviousTermQuantifiable = true;
                             break;
                         }
                         if (charCodeChecked(pos) === CharacterCodes.comma) {
                             pos++;
                             scanDigits();
-                            const max = tokenValue;
+                            max = tokenValue;
                             if (!min) {
                                 if (max || charCodeChecked(pos) === CharacterCodes.closeBrace) {
                                     error(Diagnostics.Incomplete_quantifier_Digit_expected, digitsStart, 0);
                                 }
                                 else {
                                     error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
+                                    pattern.push(text.substring(start, pos));
                                     isPreviousTermQuantifiable = true;
                                     break;
                                 }
                             }
-                            else if (max && Number.parseInt(min) > Number.parseInt(max) && (anyUnicodeModeOrNonAnnexB || charCodeChecked(pos) === CharacterCodes.closeBrace)) {
-                                error(Diagnostics.Numbers_out_of_order_in_quantifier, digitsStart, pos - digitsStart);
+                            else if (max) {
+                                if (Number.parseInt(min) > Number.parseInt(max) && (anyUnicodeModeOrNonAnnexB || charCodeChecked(pos) === CharacterCodes.closeBrace)) {
+                                    error(Diagnostics.Numbers_out_of_order_in_quantifier, digitsStart, pos - digitsStart);
+                                }
+                            }
+                            else if (isPreviousTermQuantifiable) {
+                                setLast(pattern, RegExpAnyString);
                             }
                         }
                         else if (!min) {
                             if (anyUnicodeModeOrNonAnnexB) {
                                 error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
                             }
+                            pattern.push(text.substring(start, pos));
                             isPreviousTermQuantifiable = true;
                             break;
                         }
@@ -2801,8 +2897,37 @@ export function createScanner(
                                 pos--;
                             }
                             else {
+                                pattern.push(text.substring(start, pos));
                                 isPreviousTermQuantifiable = true;
                                 break;
+                            }
+                        }
+                        if (isPreviousTermQuantifiable) { // error is emitted below
+                            const lastTerm = last(pattern);
+                            if (lastTerm && lastTerm !== RegExpAnyString) {
+                                const minValue = Number.parseInt(min);
+                                if (minValue === 0) {
+                                    if (lastTerm instanceof Set) {
+                                        lastTerm.isPossiblyUndefined = true;
+                                        markAllInnerPatternUnionsAsPossiblyUndefined(lastTerm);
+                                    }
+                                    pattern.pop();
+                                }
+                                else {
+                                    for (let i = 1; i < minValue; i++) {
+                                        pattern.push(lastTerm);
+                                    }
+                                }
+                                if (max) {
+                                    const maxValue = Number.parseInt(max);
+                                    let currPattern = pattern;
+                                    for (let i = minValue; i < maxValue; i++) {
+                                        const innerPattern = [lastTerm] as unknown as RegularExpressionPattern;
+                                        const patternUnion = new Set(["", innerPattern]) as RegularExpressionPatternUnion;
+                                        currPattern.push(patternUnion);
+                                        currPattern = innerPattern;
+                                    }
+                                }
                             }
                         }
                     // falls through
@@ -2814,29 +2939,44 @@ export function createScanner(
                             // Non-greedy
                             pos++;
                         }
-                        if (!isPreviousTermQuantifiable) {
+                        if (isPreviousTermQuantifiable) {
+                            switch (ch) {
+                                case CharacterCodes.question:
+                                case CharacterCodes.asterisk:
+                                    const lastTerm = last(pattern);
+                                    if (lastTerm instanceof Set) {
+                                        lastTerm.isPossiblyUndefined = true;
+                                        markAllInnerPatternUnionsAsPossiblyUndefined(lastTerm);
+                                    }
+                                    if (ch === CharacterCodes.question) {
+                                        setLast(pattern, new Set(["", [lastTerm]]) as RegularExpressionPatternUnion);
+                                        break;
+                                    }
+                                // falls through
+                                case CharacterCodes.plus:
+                                    setLast(pattern, RegExpAnyString);
+                                    break;
+                            }
+                        }
+                        else {
                             error(Diagnostics.There_is_nothing_available_for_repetition, start, pos - start);
                         }
                         isPreviousTermQuantifiable = false;
                         break;
                     case CharacterCodes.dot:
                         pos++;
+                        pattern.push(RegExpAnyString);
                         isPreviousTermQuantifiable = true;
                         break;
                     case CharacterCodes.openBracket:
                         pos++;
-                        if (unicodeSetsMode) {
-                            scanClassSetExpression();
-                        }
-                        else {
-                            scanClassRanges();
-                        }
+                        pattern.push(unicodeSetsMode ? scanClassSetExpression() : scanClassRanges());
                         scanExpectedChar(CharacterCodes.closeBracket);
                         isPreviousTermQuantifiable = true;
                         break;
                     case CharacterCodes.closeParen:
                         if (isInGroup) {
-                            return;
+                            return pattern;
                         }
                     // falls through
                     case CharacterCodes.closeBracket:
@@ -2845,13 +2985,14 @@ export function createScanner(
                             error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
                         }
                         pos++;
+                        pattern.push(String.fromCharCode(ch));
                         isPreviousTermQuantifiable = true;
                         break;
                     case CharacterCodes.slash:
                     case CharacterCodes.bar:
-                        return;
+                        return pattern;
                     default:
-                        scanSourceCharacter();
+                        pattern.push(getCharacterEquivalents(scanSourceCharacter()));
                         isPreviousTermQuantifiable = true;
                         break;
                 }
@@ -2859,6 +3000,7 @@ export function createScanner(
         }
 
         function scanPatternModifiers(currFlags: RegularExpressionFlags): RegularExpressionFlags {
+            const isAddModifiers = currFlags === RegularExpressionFlags.None;
             while (true) {
                 const ch = codePointChecked(pos);
                 if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
@@ -2877,6 +3019,9 @@ export function createScanner(
                 }
                 else {
                     currFlags |= flag;
+                    if (flag & RegularExpressionFlags.IgnoreCase) {
+                        isCaseInsensitive = isAddModifiers;
+                    }
                     checkRegularExpressionFlagAvailability(flag, size);
                 }
                 pos += size;
@@ -2884,51 +3029,56 @@ export function createScanner(
             return currFlags;
         }
 
+        function getBackreferencePatternUnion(selector: (disjunctionScope: RegularExpressionDisjunctionScope | undefined) => RegularExpressionPatternUnion | RegularExpressionPatternUnion[] | undefined): RegularExpressionPatternContent {
+            disjunctionsScopeStack.push(topDisjunctionsScope);
+            const capturingGroups = flatMap(disjunctionsScopeStack, selector);
+            disjunctionsScopeStack.pop();
+            if (!capturingGroups.length) return "";
+            const patternUnion = new Set(capturingGroups as RegularExpressionPattern) as RegularExpressionPatternUnion;
+            if (some(capturingGroups, patternUnion => patternUnion.isPossiblyUndefined!)) {
+                patternUnion.add("");
+            }
+            return patternUnion;
+        }
+
         // AtomEscape ::=
         //     | DecimalEscape
         //     | CharacterClassEscape
         //     | CharacterEscape
         //     | 'k<' RegExpIdentifierName '>'
-        function scanAtomEscape() {
+        function scanAtomEscape(): RegularExpressionPatternContent {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
-            switch (charCodeChecked(pos)) {
-                case CharacterCodes.k:
+            const ch = charCodeChecked(pos);
+            if (ch === CharacterCodes.k && (anyUnicodeModeOrNonAnnexB || hasNamedCapturingGroups)) {
+                pos++;
+                if (charCodeChecked(pos) === CharacterCodes.lessThan) {
                     pos++;
-                    if (charCodeChecked(pos) === CharacterCodes.lessThan) {
-                        pos++;
-                        scanGroupName(/*isReference*/ true);
-                        scanExpectedChar(CharacterCodes.greaterThan);
-                    }
-                    else if (anyUnicodeModeOrNonAnnexB || namedCaptureGroups) {
-                        error(Diagnostics.k_must_be_followed_by_a_capturing_group_name_enclosed_in_angle_brackets, pos - 2, 2);
-                    }
-                    break;
-                case CharacterCodes.q:
-                    if (unicodeSetsMode) {
-                        pos++;
-                        error(Diagnostics.q_is_only_available_inside_character_class, pos - 2, 2);
-                        break;
-                    }
-                // falls through
-                default:
-                    // The scanEscapeSequence call in scanCharacterEscape must return non-empty strings
-                    // since there must not be line breaks in a regex literal
-                    Debug.assert(scanCharacterClassEscape() || scanDecimalEscape() || scanCharacterEscape(/*atomEscape*/ true));
-                    break;
+                    const groupName = scanGroupName(/*isReference*/ true);
+                    scanExpectedChar(CharacterCodes.greaterThan);
+                    return groupName ? getBackreferencePatternUnion(disjunctionsScope => disjunctionsScope?.groupSpecifiers?.get(groupName)) : "";
+                }
+                error(Diagnostics.k_must_be_followed_by_a_capturing_group_name_enclosed_in_angle_brackets, pos - 2, 2);
+                return getCharacterEquivalents(String.fromCharCode(ch));
             }
+            else if (ch === CharacterCodes.q && unicodeSetsMode) {
+                pos++;
+                error(Diagnostics.q_is_only_available_inside_character_class, pos - 2, 2);
+                return getCharacterEquivalents(String.fromCharCode(ch));
+            }
+            return scanCharacterClassEscape() ?? scanDecimalEscape() ?? scanCharacterEscape(/*atomEscape*/ true);
         }
 
         // DecimalEscape ::= [1-9] [0-9]*
-        function scanDecimalEscape(): boolean {
+        function scanDecimalEscape(): RegularExpressionPatternContent | undefined {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
             const ch = charCodeChecked(pos);
             if (ch >= CharacterCodes._1 && ch <= CharacterCodes._9) {
                 const start = pos;
                 scanDigits();
-                decimalEscapes = append(decimalEscapes, { pos: start, end: pos, value: +tokenValue });
-                return true;
+                const groupNumber = +tokenValue;
+                decimalEscapes = append(decimalEscapes, { pos: start, end: pos, value: groupNumber });
+                return getBackreferencePatternUnion(disjunctionsScope => disjunctionsScope?.groups?.[groupNumber]);
             }
-            return false;
         }
 
         // CharacterEscape ::=
@@ -2938,12 +3088,12 @@ export function createScanner(
         // IdentityEscape ::=
         //     | '^' | '$' | '/' | '\' | '.' | '*' | '+' | '?' | '(' | ')' | '[' | ']' | '{' | '}' | '|'
         //     | [~UnicodeMode] (any other non-identifier characters)
-        function scanCharacterEscape(atomEscape: boolean): string {
+        function scanCharacterEscape(atomEscape: boolean): RegularExpressionPatternContent {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
             let ch = charCodeChecked(pos);
             switch (ch) {
                 case CharacterCodes.EOF:
-                    error(Diagnostics.Undetermined_character_escape, pos - 1, 1);
+                    // no need to report an error, the initial scan will already have reported that the RegExp is unterminated.
                     return "\\";
                 case CharacterCodes.c:
                     pos++;
@@ -2964,7 +3114,7 @@ export function createScanner(
                         pos--;
                         return "\\";
                     }
-                    return String.fromCharCode(ch);
+                    return getCharacterEquivalents(String.fromCharCode(ch));
                 case CharacterCodes.caret:
                 case CharacterCodes.$:
                 case CharacterCodes.slash:
@@ -2984,16 +3134,16 @@ export function createScanner(
                     return String.fromCharCode(ch);
                 default:
                     pos--;
-                    return scanEscapeSequence(
+                    return getCharacterEquivalents(scanEscapeSequence(
                         EscapeSequenceScanningFlags.RegularExpression
                             | (annexB ? EscapeSequenceScanningFlags.AnnexB : 0)
                             | (anyUnicodeMode ? EscapeSequenceScanningFlags.AnyUnicodeMode : 0)
                             | (atomEscape ? EscapeSequenceScanningFlags.AtomEscape : 0),
-                    );
+                    ));
             }
         }
 
-        function scanGroupName(isReference: boolean) {
+        function scanGroupName(isReference: boolean): string | undefined {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.lessThan);
             tokenStart = pos;
             scanIdentifier(codePointChecked(pos), languageVersion);
@@ -3002,6 +3152,7 @@ export function createScanner(
             }
             else if (isReference) {
                 groupNameReferences = append(groupNameReferences, { pos: tokenStart, end: pos, name: tokenValue });
+                return tokenValue;
             }
             else if (topNamedCapturingGroupsScope?.has(tokenValue) || namedCapturingGroupsScopeStack.some(group => group?.has(tokenValue))) {
                 error(Diagnostics.Named_capturing_groups_with_the_same_name_must_be_mutually_exclusive_to_each_other, tokenStart, pos - tokenStart);
@@ -3009,8 +3160,7 @@ export function createScanner(
             else {
                 topNamedCapturingGroupsScope ??= new Set();
                 topNamedCapturingGroupsScope.add(tokenValue);
-                groupSpecifiers ??= new Set();
-                groupSpecifiers.add(tokenValue);
+                return tokenValue;
             }
         }
 
@@ -3018,46 +3168,85 @@ export function createScanner(
             return ch === CharacterCodes.closeBracket || ch === CharacterCodes.EOF || pos >= end;
         }
 
+        function addContentToPatternUnion(patternUnion: RegularExpressionPatternUnion | undefined, content: RegularExpressionPatternContent | undefined): RegularExpressionPatternUnion | undefined {
+            if (typeof content === "string") {
+                patternUnion?.add(content);
+            }
+            else if (patternUnion && content instanceof Set) {
+                content.forEach(char => {
+                    patternUnion!.add(char);
+                });
+            }
+            else if (content === RegExpAnyString) {
+                // We cannot determinate the set of characters any more, stop storing
+                patternUnion = undefined;
+            }
+            return patternUnion;
+        }
+
+        function addCharacterRangeToPatternUnion(patternUnion: RegularExpressionPatternUnion | undefined, minCharacter: string, maxCharacter: string, startPos: number): RegularExpressionPatternUnion | undefined {
+            const minCharacterValue = codePointAt(minCharacter, 0);
+            const maxCharacterValue = codePointAt(maxCharacter, 0);
+            if (
+                minCharacter.length === charSize(minCharacterValue) &&
+                maxCharacter.length === charSize(maxCharacterValue)
+            ) {
+                if (minCharacterValue > maxCharacterValue) {
+                    error(Diagnostics.Range_out_of_order_in_character_class, startPos, pos - startPos);
+                }
+                else if (patternUnion) {
+                    for (let i = minCharacterValue + 1; i <= maxCharacterValue; i++) {
+                        patternUnion = addContentToPatternUnion(patternUnion, getCharacterEquivalents(String.fromCodePoint(i)));
+                    }
+                }
+            }
+            return patternUnion;
+        }
+
         // ClassRanges ::= '^'? (ClassAtom ('-' ClassAtom)?)*
-        function scanClassRanges() {
+        function scanClassRanges(): RegularExpressionPatternContent {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.openBracket);
+            let patternUnion: RegularExpressionPatternUnion | undefined;
             if (charCodeChecked(pos) === CharacterCodes.caret) {
                 // character complement
                 pos++;
+                // impracticable to determine possible characters, don't initialize patternUnion
+            }
+            else {
+                patternUnion = new Set() as RegularExpressionPatternUnion;
             }
             while (true) {
                 const ch = charCodeChecked(pos);
                 if (isClassContentExit(ch)) {
-                    return;
+                    return patternUnion || RegExpAnyString;
                 }
                 const minStart = pos;
-                const minCharacter = scanClassAtom();
+                const minAtom = scanClassAtom();
+                patternUnion = addContentToPatternUnion(patternUnion, minAtom);
                 if (charCodeChecked(pos) === CharacterCodes.minus) {
                     pos++;
                     const ch = charCodeChecked(pos);
                     if (isClassContentExit(ch)) {
-                        return;
+                        return patternUnion || RegExpAnyString;
                     }
+                    const minCharacter = getCharacterFromClassAtomOrOprand(minAtom);
                     if (!minCharacter && anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, minStart, pos - 1 - minStart);
+                        patternUnion?.add("-"); // Treat it as a normal character
                     }
                     const maxStart = pos;
-                    const maxCharacter = scanClassAtom();
-                    if (!maxCharacter && anyUnicodeModeOrNonAnnexB) {
-                        error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, maxStart, pos - maxStart);
+                    const maxAtom = scanClassAtom();
+                    const maxCharacter = getCharacterFromClassAtomOrOprand(maxAtom);
+                    if (!maxCharacter) {
+                        if (anyUnicodeModeOrNonAnnexB) {
+                            error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, maxStart, pos - maxStart);
+                        }
+                        patternUnion?.add("-");
+                        patternUnion = addContentToPatternUnion(patternUnion, maxAtom);
                         continue;
                     }
-                    if (!minCharacter) {
-                        continue;
-                    }
-                    const minCharacterValue = codePointAt(minCharacter, 0);
-                    const maxCharacterValue = codePointAt(maxCharacter, 0);
-                    if (
-                        minCharacter.length === charSize(minCharacterValue) &&
-                        maxCharacter.length === charSize(maxCharacterValue) &&
-                        minCharacterValue > maxCharacterValue
-                    ) {
-                        error(Diagnostics.Range_out_of_order_in_character_class, minStart, pos - minStart);
+                    if (minCharacter) {
+                        addCharacterRangeToPatternUnion(patternUnion, minCharacter, maxCharacter, minStart);
                     }
                 }
             }
@@ -3078,29 +3267,33 @@ export function createScanner(
         // ClassIntersection ::= ClassSetOperand ('&&' ClassSetOperand)+
         // ClassSubtraction ::= ClassSetOperand ('--' ClassSetOperand)+
         // ClassSetRange ::= ClassSetCharacter '-' ClassSetCharacter
-        function scanClassSetExpression() {
+        function scanClassSetExpression(): RegularExpressionPatternContent {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.openBracket);
+            let patternUnion: RegularExpressionPatternUnion | undefined;
             let isCharacterComplement = false;
             if (charCodeChecked(pos) === CharacterCodes.caret) {
                 pos++;
                 isCharacterComplement = true;
+                // impracticable to determine possible characters, don't initialize patternUnion
+            }
+            else {
+                patternUnion = new Set() as RegularExpressionPatternUnion;
             }
             let expressionMayContainStrings = false;
             let ch = charCodeChecked(pos);
             if (isClassContentExit(ch)) {
-                return;
+                // An empty character class matches nothing
+                return new Set() as RegularExpressionPatternUnion;
             }
             let start = pos;
-            let operand!: string;
-            switch (text.slice(pos, pos + 2)) { // TODO: don't use slice
-                case "--":
-                case "&&":
-                    error(Diagnostics.Expected_a_class_set_operand);
-                    mayContainStrings = false;
-                    break;
-                default:
-                    operand = scanClassSetOperand();
-                    break;
+            let operand!: RegularExpressionPatternContent;
+            if (ch === charCodeChecked(pos + 1) && (ch === CharacterCodes.minus || ch === CharacterCodes.ampersand)) {
+                error(Diagnostics.Expected_a_class_set_operand);
+                mayContainStrings = false;
+            }
+            else {
+                operand = scanClassSetOperand();
+                patternUnion = addContentToPatternUnion(patternUnion, operand);
             }
             switch (charCodeChecked(pos)) {
                 case CharacterCodes.minus:
@@ -3109,20 +3302,20 @@ export function createScanner(
                             error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, pos - start);
                         }
                         expressionMayContainStrings = mayContainStrings;
-                        scanClassSetSubExpression(ClassSetExpressionType.ClassSubtraction);
+                        patternUnion = scanClassSetSubExpression(patternUnion, ClassSetExpressionType.ClassSubtraction);
                         mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
-                        return;
+                        return patternUnion || RegExpAnyString;
                     }
                     break;
                 case CharacterCodes.ampersand:
                     if (charCodeChecked(pos + 1) === CharacterCodes.ampersand) {
-                        scanClassSetSubExpression(ClassSetExpressionType.ClassIntersection);
+                        patternUnion = scanClassSetSubExpression(patternUnion, ClassSetExpressionType.ClassIntersection);
                         if (isCharacterComplement && mayContainStrings) {
                             error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, pos - start);
                         }
                         expressionMayContainStrings = mayContainStrings;
                         mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
-                        return;
+                        return patternUnion || RegExpAnyString;
                     }
                     else {
                         error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
@@ -3146,18 +3339,21 @@ export function createScanner(
                         ch = charCodeChecked(pos);
                         if (isClassContentExit(ch)) {
                             mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
-                            return;
+                            return patternUnion || RegExpAnyString;
                         }
                         if (ch === CharacterCodes.minus) {
                             pos++;
                             error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
                             start = pos - 2;
                             operand = text.slice(start, pos);
+                            patternUnion?.add(operand);
                             continue;
                         }
                         else {
-                            if (!operand) {
+                            const minCharacter = getCharacterFromClassAtomOrOprand(operand);
+                            if (!minCharacter) {
                                 error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, start, pos - 1 - start);
+                                patternUnion?.add("-");
                             }
                             const secondStart = pos;
                             const secondOperand = scanClassSetOperand();
@@ -3165,21 +3361,15 @@ export function createScanner(
                                 error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, secondStart, pos - secondStart);
                             }
                             expressionMayContainStrings ||= mayContainStrings;
-                            if (!secondOperand) {
+                            const maxCharacter = getCharacterFromClassAtomOrOprand(secondOperand);
+                            if (!maxCharacter) {
                                 error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, secondStart, pos - secondStart);
+                                patternUnion?.add("-");
+                                patternUnion = addContentToPatternUnion(patternUnion, secondOperand);
                                 break;
                             }
-                            if (!operand) {
-                                break;
-                            }
-                            const minCharacterValue = codePointAt(operand, 0);
-                            const maxCharacterValue = codePointAt(secondOperand, 0);
-                            if (
-                                operand.length === charSize(minCharacterValue) &&
-                                secondOperand.length === charSize(maxCharacterValue) &&
-                                minCharacterValue > maxCharacterValue
-                            ) {
-                                error(Diagnostics.Range_out_of_order_in_character_class, start, pos - start);
+                            if (minCharacter) {
+                                addCharacterRangeToPatternUnion(patternUnion, minCharacter, maxCharacter, start);
                             }
                         }
                         break;
@@ -3198,28 +3388,30 @@ export function createScanner(
                             error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos - 1, 1, String.fromCharCode(ch));
                         }
                         operand = text.slice(start, pos);
+                        patternUnion?.add(operand);
                         continue;
                 }
                 if (isClassContentExit(charCodeChecked(pos))) {
                     break;
                 }
+                ch = charCodeChecked(pos);
                 start = pos;
-                switch (text.slice(pos, pos + 2)) { // TODO: don't use slice
-                    case "--":
-                    case "&&":
-                        error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 2);
-                        pos += 2;
-                        operand = text.slice(start, pos);
-                        break;
-                    default:
-                        operand = scanClassSetOperand();
-                        break;
+                if (ch === charCodeChecked(pos + 1) && (ch === CharacterCodes.minus || ch === CharacterCodes.ampersand)) {
+                    error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 2);
+                    pos += 2;
+                    operand = text.slice(start, pos);
+                    patternUnion?.add(operand);
+                }
+                else {
+                    operand = scanClassSetOperand();
+                    patternUnion = addContentToPatternUnion(patternUnion, operand);
                 }
             }
             mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
+            return patternUnion || RegExpAnyString;
         }
 
-        function scanClassSetSubExpression(expressionType: ClassSetExpressionType) {
+        function scanClassSetSubExpression(patternUnion: RegularExpressionPatternUnion | undefined, expressionType: ClassSetExpressionType): RegularExpressionPatternUnion | undefined {
             let expressionMayContainStrings = mayContainStrings;
             while (true) {
                 let ch = charCodeChecked(pos);
@@ -3274,11 +3466,47 @@ export function createScanner(
                     error(Diagnostics.Expected_a_class_set_operand);
                     break;
                 }
-                scanClassSetOperand();
+                const operand = scanClassSetOperand();
+                if (patternUnion) {
+                    if (typeof operand === "string") {
+                        switch (expressionType) {
+                            case ClassSetExpressionType.ClassSubtraction:
+                                patternUnion.delete(operand);
+                                break;
+                            case ClassSetExpressionType.ClassIntersection:
+                                patternUnion.forEach(element => {
+                                    if (element !== operand) patternUnion!.delete(element);
+                                });
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (operand instanceof Set) {
+                        switch (expressionType) {
+                            case ClassSetExpressionType.ClassSubtraction:
+                                operand.forEach(element => {
+                                    patternUnion!.delete(element);
+                                });
+                                break;
+                            case ClassSetExpressionType.ClassIntersection:
+                                patternUnion.forEach(element => {
+                                    if (!operand.has(element)) patternUnion!.delete(element);
+                                });
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (operand === RegExpAnyString) {
+                        patternUnion = undefined;
+                    }
+                }
                 // Used only if expressionType is Intersection
                 expressionMayContainStrings &&= mayContainStrings;
             }
             mayContainStrings = expressionMayContainStrings;
+            return patternUnion;
         }
 
         // ClassSetOperand ::=
@@ -3286,32 +3514,33 @@ export function createScanner(
         //     | '\' CharacterClassEscape
         //     | '\q{' ClassStringDisjunctionContents '}'
         //     | ClassSetCharacter
-        function scanClassSetOperand(): string {
+        function scanClassSetOperand(): RegularExpressionPatternContent {
             mayContainStrings = false;
             switch (charCodeChecked(pos)) {
                 case CharacterCodes.EOF:
                     return "";
                 case CharacterCodes.openBracket:
                     pos++;
-                    scanClassSetExpression();
+                    const patternUnion = scanClassSetExpression();
                     scanExpectedChar(CharacterCodes.closeBracket);
-                    return "";
+                    return patternUnion;
                 case CharacterCodes.backslash:
                     pos++;
-                    if (scanCharacterClassEscape()) {
-                        return "";
+                    const characterClassEscape = scanCharacterClassEscape();
+                    if (characterClassEscape) {
+                        return characterClassEscape;
                     }
                     else if (charCodeChecked(pos) === CharacterCodes.q) {
                         pos++;
                         if (charCodeChecked(pos) === CharacterCodes.openBrace) {
                             pos++;
-                            scanClassStringDisjunctionContents();
+                            const patternUnion = scanClassStringDisjunctionContents();
                             scanExpectedChar(CharacterCodes.closeBrace);
-                            return "";
+                            return patternUnion;
                         }
                         else {
                             error(Diagnostics.q_must_be_followed_by_string_alternatives_enclosed_in_braces, pos - 2, 2);
-                            return "q";
+                            return getCharacterEquivalents("q");
                         }
                     }
                     pos--;
@@ -3322,30 +3551,29 @@ export function createScanner(
         }
 
         // ClassStringDisjunctionContents ::= ClassSetCharacter* ('|' ClassSetCharacter*)*
-        function scanClassStringDisjunctionContents() {
+        function scanClassStringDisjunctionContents(): RegularExpressionPatternUnion {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.openBrace);
-            let characterCount = 0;
+            const patternUnion = new Set() as RegularExpressionPatternUnion;
+            let pattern = [] as unknown as RegularExpressionPattern;
             while (true) {
                 const ch = charCodeChecked(pos);
                 switch (ch) {
                     case CharacterCodes.EOF:
-                        return;
                     case CharacterCodes.closeBrace:
-                        if (characterCount !== 1) {
+                    case CharacterCodes.bar:
+                        if (pattern.length !== 1) {
                             mayContainStrings = true;
                         }
-                        return;
-                    case CharacterCodes.bar:
-                        if (characterCount !== 1) {
-                            mayContainStrings = true;
+                        patternUnion.add(pattern);
+                        if (ch !== CharacterCodes.bar) {
+                            return patternUnion;
                         }
                         pos++;
                         start = pos;
-                        characterCount = 0;
+                        pattern = [] as unknown as RegularExpressionPattern;
                         break;
                     default:
-                        scanClassSetCharacter();
-                        characterCount++;
+                        pattern.push(scanClassSetCharacter());
                         break;
                 }
             }
@@ -3354,7 +3582,7 @@ export function createScanner(
         // ClassSetCharacter ::=
         //     | SourceCharacter -- ClassSetSyntaxCharacter -- ClassSetReservedDoublePunctuator
         //     | '\' (CharacterEscape | ClassSetReservedPunctuator | 'b')
-        function scanClassSetCharacter(): string {
+        function scanClassSetCharacter(): RegularExpressionPatternContent {
             const ch = charCodeChecked(pos);
             if (ch === CharacterCodes.EOF) {
                 // no need to report an error, the initial scan will already have reported that the RegExp is unterminated.
@@ -3425,7 +3653,7 @@ export function createScanner(
                     pos++;
                     return String.fromCharCode(ch);
             }
-            return scanSourceCharacter();
+            return getCharacterEquivalents(scanSourceCharacter());
         }
 
         // ClassAtom ::=
@@ -3436,7 +3664,7 @@ export function createScanner(
         //     | '-'
         //     | CharacterClassEscape
         //     | CharacterEscape
-        function scanClassAtom(): string {
+        function scanClassAtom(): RegularExpressionPatternContent {
             if (charCodeChecked(pos) === CharacterCodes.backslash) {
                 pos++;
                 const ch = charCodeChecked(pos);
@@ -3447,35 +3675,42 @@ export function createScanner(
                     case CharacterCodes.minus:
                         pos++;
                         return String.fromCharCode(ch);
-                    default:
-                        if (scanCharacterClassEscape()) {
-                            return "";
+                    case CharacterCodes.k:
+                        if (anyUnicodeModeOrNonAnnexB || hasNamedCapturingGroups) {
+                            pos++;
+                            error(Diagnostics.k_is_only_available_outside_character_class, pos - 2, 2);
+                            return getCharacterEquivalents(String.fromCharCode(ch));
                         }
-                        return scanCharacterEscape(/*atomEscape*/ false);
+                    // falls through
+                    default:
+                        return scanCharacterClassEscape() || scanCharacterEscape(/*atomEscape*/ false);
                 }
             }
             else {
-                return scanSourceCharacter();
+                return getCharacterEquivalents(scanSourceCharacter());
             }
         }
 
         // CharacterClassEscape ::=
         //     | 'd' | 'D' | 's' | 'S' | 'w' | 'W'
         //     | [+UnicodeMode] ('P' | 'p') '{' UnicodePropertyValueExpression '}'
-        function scanCharacterClassEscape(): boolean {
+        function scanCharacterClassEscape(): RegularExpressionPatternContent | undefined {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
             let isCharacterComplement = false;
             const start = pos - 1;
             const ch = charCodeChecked(pos);
             switch (ch) {
                 case CharacterCodes.d:
+                    pos++;
+                    // Too frequently used, special case it
+                    return RegExpDigits;
                 case CharacterCodes.D:
                 case CharacterCodes.s:
                 case CharacterCodes.S:
                 case CharacterCodes.w:
                 case CharacterCodes.W:
                     pos++;
-                    return true;
+                    return RegExpAnyString;
                 case CharacterCodes.P:
                     isCharacterComplement = true;
                 // falls through
@@ -3538,17 +3773,16 @@ export function createScanner(
                         if (!anyUnicodeMode) {
                             error(Diagnostics.Unicode_property_value_expressions_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
                         }
+                        return RegExpAnyString;
                     }
                     else if (anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics._0_must_be_followed_by_a_Unicode_property_value_expression_enclosed_in_braces, pos - 2, 2, String.fromCharCode(ch));
+                        return getCharacterEquivalents(String.fromCharCode(ch));
                     }
                     else {
                         pos--;
-                        return false;
                     }
-                    return true;
             }
-            return false;
         }
 
         function scanWordCharacters(): string {
@@ -3570,6 +3804,32 @@ export function createScanner(
             return size > 0 ? text.substring(pos - size, pos) : "";
         }
 
+        function getCharacterEquivalents(ch: string): RegularExpressionPatternContent {
+            if (!isCaseInsensitive || ch.length !== charSize(codePointAt(ch, 0))) return ch;
+            // In any Unicode mode, a character is canonicalized by the `toCasefold` method of the Unicode Default Case Folding algorithm.
+            // The simple case folding variant of the algorithm does not perform a full (one-to-many characters) case folding and
+            // only takes account of the Simple_Case_Folding property.
+            // In non-Unicode mode, the `toUppercase` method of the Unicode Default Case Conversion algorithm is used instead.
+            // However, it does not perform a full case conversion and only takes account of the Simple_Uppercase_Mapping property.
+            // See `caseFoldEquivalents` and `upperCaseEquivalents` for full descriptions.
+            const equivalents = anyUnicodeMode ? caseFoldEquivalents[codePointAt(ch, 0)] : upperCaseEquivalents[ch.charCodeAt(0)];
+            if (!equivalents) return ch;
+            const equivalentsSet = (typeof equivalents === "number"
+                ? new Set([ch, String.fromCodePoint(equivalents)])
+                : new Set([ch, ...String.fromCodePoint(...equivalents)])) as RegularExpressionPatternUnion;
+            equivalentsSet.isCharacterEquivalents = true;
+            return equivalentsSet;
+        }
+
+        function getCharacterFromClassAtomOrOprand(content: RegularExpressionPatternContent) {
+            if (typeof content === "string") return content;
+            if (content instanceof Set && content.isCharacterEquivalents) {
+                for (const ch of content) {
+                    return ch as string;
+                }
+            }
+        }
+
         function scanExpectedChar(ch: CharacterCodes) {
             if (charCodeChecked(pos) === ch) {
                 pos++;
@@ -3579,13 +3839,13 @@ export function createScanner(
             }
         }
 
-        scanDisjunction(/*isInGroup*/ false);
+        regExpCapturingGroups[0] = scanDisjunction(/*isInGroup*/ false);
 
         forEach(groupNameReferences, reference => {
-            if (!groupSpecifiers?.has(reference.name)) {
+            if (!regExpCapturingGroupSpecifiers?.has(reference.name)) {
                 error(Diagnostics.There_is_no_capturing_group_named_0_in_this_regular_expression, reference.pos, reference.end - reference.pos, reference.name);
-                if (groupSpecifiers) {
-                    const suggestion = getSpellingSuggestion(reference.name, groupSpecifiers, identity);
+                if (regExpCapturingGroupSpecifiers) {
+                    const suggestion = getSpellingSuggestion(reference.name, regExpCapturingGroupSpecifiers, ([groupName]) => groupName);
                     if (suggestion) {
                         error(Diagnostics.Did_you_mean_0, reference.pos, reference.end - reference.pos, suggestion);
                     }
@@ -4098,3 +4358,25 @@ const valuesOfNonBinaryUnicodeProperties = {
 // The Script_Extensions property of a character contains one or more Script values. See https://www.unicode.org/reports/tr24/#Script_Extensions
 // Here since each Unicode property value expression only allows a single value, its values can be considered the same as those of the Script property.
 valuesOfNonBinaryUnicodeProperties.Script_Extensions = valuesOfNonBinaryUnicodeProperties.Script;
+
+// upperCaseEquivalents.get(x) is the set of all characters y such that x !== y and either x === toUppercase(y) or y === toUppercase(x),
+// according to the Unicode Default Case Conversion algorithm.
+// Only the Simple_Uppercase_Mapping property values from UnicodeData.txt are necessary since SpecialCasing.txt only contains non-simple
+// (one-to-many characters), context-dependent or locale-specific case mappings.
+// Step 9 in Section 22.2.2.7.3 Canonicalize (If the numeric value of ch ≥ 128 and the numeric value of cu < 128, return ch.) prevents two
+// characters, U+0131 ı LATIN SMALL LETTER DOTLESS I and U+017F ſ LATIN SMALL LETTER LONG S, from equating with "i" and "s" respectively.
+// Additionally, characters outside BMP are excluded since the source is interpreted as code units when HasEitherUnicodeFlag(rer) is false.
+// For details, see https://tc39.es/ecma262/#sec-runtime-semantics-canonicalize-ch.
+// Arrays are not used for keys with only a single value for lesser memory.
+// Generated from Unicode 16.0 data files
+// dprint-ignore
+const upperCaseEquivalents: Record<number, number | number[] | undefined> = { 65: 97, 66: 98, 67: 99, 68: 100, 69: 101, 70: 102, 71: 103, 72: 104, 73: 105, 74: 106, 75: 107, 76: 108, 77: 109, 78: 110, 79: 111, 80: 112, 81: 113, 82: 114, 83: 115, 84: 116, 85: 117, 86: 118, 87: 119, 88: 120, 89: 121, 90: 122, 97: 65, 98: 66, 99: 67, 100: 68, 101: 69, 102: 70, 103: 71, 104: 72, 105: 73, 106: 74, 107: 75, 108: 76, 109: 77, 110: 78, 111: 79, 112: 80, 113: 81, 114: 82, 115: 83, 116: 84, 117: 85, 118: 86, 119: 87, 120: 88, 121: 89, 122: 90, 181: [924, 956], 192: 224, 193: 225, 194: 226, 195: 227, 196: 228, 197: 229, 198: 230, 199: 231, 200: 232, 201: 233, 202: 234, 203: 235, 204: 236, 205: 237, 206: 238, 207: 239, 208: 240, 209: 241, 210: 242, 211: 243, 212: 244, 213: 245, 214: 246, 216: 248, 217: 249, 218: 250, 219: 251, 220: 252, 221: 253, 222: 254, 224: 192, 225: 193, 226: 194, 227: 195, 228: 196, 229: 197, 230: 198, 231: 199, 232: 200, 233: 201, 234: 202, 235: 203, 236: 204, 237: 205, 238: 206, 239: 207, 240: 208, 241: 209, 242: 210, 243: 211, 244: 212, 245: 213, 246: 214, 248: 216, 249: 217, 250: 218, 251: 219, 252: 220, 253: 221, 254: 222, 255: 376, 256: 257, 257: 256, 258: 259, 259: 258, 260: 261, 261: 260, 262: 263, 263: 262, 264: 265, 265: 264, 266: 267, 267: 266, 268: 269, 269: 268, 270: 271, 271: 270, 272: 273, 273: 272, 274: 275, 275: 274, 276: 277, 277: 276, 278: 279, 279: 278, 280: 281, 281: 280, 282: 283, 283: 282, 284: 285, 285: 284, 286: 287, 287: 286, 288: 289, 289: 288, 290: 291, 291: 290, 292: 293, 293: 292, 294: 295, 295: 294, 296: 297, 297: 296, 298: 299, 299: 298, 300: 301, 301: 300, 302: 303, 303: 302, 306: 307, 307: 306, 308: 309, 309: 308, 310: 311, 311: 310, 313: 314, 314: 313, 315: 316, 316: 315, 317: 318, 318: 317, 319: 320, 320: 319, 321: 322, 322: 321, 323: 324, 324: 323, 325: 326, 326: 325, 327: 328, 328: 327, 330: 331, 331: 330, 332: 333, 333: 332, 334: 335, 335: 334, 336: 337, 337: 336, 338: 339, 339: 338, 340: 341, 341: 340, 342: 343, 343: 342, 344: 345, 345: 344, 346: 347, 347: 346, 348: 349, 349: 348, 350: 351, 351: 350, 352: 353, 353: 352, 354: 355, 355: 354, 356: 357, 357: 356, 358: 359, 359: 358, 360: 361, 361: 360, 362: 363, 363: 362, 364: 365, 365: 364, 366: 367, 367: 366, 368: 369, 369: 368, 370: 371, 371: 370, 372: 373, 373: 372, 374: 375, 375: 374, 376: 255, 377: 378, 378: 377, 379: 380, 380: 379, 381: 382, 382: 381, 384: 579, 385: 595, 386: 387, 387: 386, 388: 389, 389: 388, 390: 596, 391: 392, 392: 391, 393: 598, 394: 599, 395: 396, 396: 395, 398: 477, 399: 601, 400: 603, 401: 402, 402: 401, 403: 608, 404: 611, 405: 502, 406: 617, 407: 616, 408: 409, 409: 408, 410: 573, 411: 42972, 412: 623, 413: 626, 414: 544, 415: 629, 416: 417, 417: 416, 418: 419, 419: 418, 420: 421, 421: 420, 422: 640, 423: 424, 424: 423, 425: 643, 428: 429, 429: 428, 430: 648, 431: 432, 432: 431, 433: 650, 434: 651, 435: 436, 436: 435, 437: 438, 438: 437, 439: 658, 440: 441, 441: 440, 444: 445, 445: 444, 447: 503, 452: [453, 454], 453: [452, 454], 454: [452, 453], 455: [456, 457], 456: [455, 457], 457: [455, 456], 458: [459, 460], 459: [458, 460], 460: [458, 459], 461: 462, 462: 461, 463: 464, 464: 463, 465: 466, 466: 465, 467: 468, 468: 467, 469: 470, 470: 469, 471: 472, 472: 471, 473: 474, 474: 473, 475: 476, 476: 475, 477: 398, 478: 479, 479: 478, 480: 481, 481: 480, 482: 483, 483: 482, 484: 485, 485: 484, 486: 487, 487: 486, 488: 489, 489: 488, 490: 491, 491: 490, 492: 493, 493: 492, 494: 495, 495: 494, 497: [498, 499], 498: [497, 499], 499: [497, 498], 500: 501, 501: 500, 502: 405, 503: 447, 504: 505, 505: 504, 506: 507, 507: 506, 508: 509, 509: 508, 510: 511, 511: 510, 512: 513, 513: 512, 514: 515, 515: 514, 516: 517, 517: 516, 518: 519, 519: 518, 520: 521, 521: 520, 522: 523, 523: 522, 524: 525, 525: 524, 526: 527, 527: 526, 528: 529, 529: 528, 530: 531, 531: 530, 532: 533, 533: 532, 534: 535, 535: 534, 536: 537, 537: 536, 538: 539, 539: 538, 540: 541, 541: 540, 542: 543, 543: 542, 544: 414, 546: 547, 547: 546, 548: 549, 549: 548, 550: 551, 551: 550, 552: 553, 553: 552, 554: 555, 555: 554, 556: 557, 557: 556, 558: 559, 559: 558, 560: 561, 561: 560, 562: 563, 563: 562, 570: 11365, 571: 572, 572: 571, 573: 410, 574: 11366, 575: 11390, 576: 11391, 577: 578, 578: 577, 579: 384, 580: 649, 581: 652, 582: 583, 583: 582, 584: 585, 585: 584, 586: 587, 587: 586, 588: 589, 589: 588, 590: 591, 591: 590, 592: 11375, 593: 11373, 594: 11376, 595: 385, 596: 390, 598: 393, 599: 394, 601: 399, 603: 400, 604: 42923, 608: 403, 609: 42924, 611: 404, 612: 42955, 613: 42893, 614: 42922, 616: 407, 617: 406, 618: 42926, 619: 11362, 620: 42925, 623: 412, 625: 11374, 626: 413, 629: 415, 637: 11364, 640: 422, 642: 42949, 643: 425, 647: 42929, 648: 430, 649: 580, 650: 433, 651: 434, 652: 581, 658: 439, 669: 42930, 670: 42928, 837: [921, 953, 8126], 880: 881, 881: 880, 882: 883, 883: 882, 886: 887, 887: 886, 891: 1021, 892: 1022, 893: 1023, 895: 1011, 902: 940, 904: 941, 905: 942, 906: 943, 908: 972, 910: 973, 911: 974, 913: 945, 914: [946, 976], 915: 947, 916: 948, 917: [949, 1013], 918: 950, 919: 951, 920: [952, 977], 921: [837, 953, 8126], 922: [954, 1008], 923: 955, 924: [181, 956], 925: 957, 926: 958, 927: 959, 928: [960, 982], 929: [961, 1009], 931: [962, 963], 932: 964, 933: 965, 934: [966, 981], 935: 967, 936: 968, 937: 969, 938: 970, 939: 971, 940: 902, 941: 904, 942: 905, 943: 906, 945: 913, 946: [914, 976], 947: 915, 948: 916, 949: [917, 1013], 950: 918, 951: 919, 952: [920, 977], 953: [837, 921, 8126], 954: [922, 1008], 955: 923, 956: [181, 924], 957: 925, 958: 926, 959: 927, 960: [928, 982], 961: [929, 1009], 962: [931, 963], 963: [931, 962], 964: 932, 965: 933, 966: [934, 981], 967: 935, 968: 936, 969: 937, 970: 938, 971: 939, 972: 908, 973: 910, 974: 911, 975: 983, 976: [914, 946], 977: [920, 952], 981: [934, 966], 982: [928, 960], 983: 975, 984: 985, 985: 984, 986: 987, 987: 986, 988: 989, 989: 988, 990: 991, 991: 990, 992: 993, 993: 992, 994: 995, 995: 994, 996: 997, 997: 996, 998: 999, 999: 998, 1000: 1001, 1001: 1000, 1002: 1003, 1003: 1002, 1004: 1005, 1005: 1004, 1006: 1007, 1007: 1006, 1008: [922, 954], 1009: [929, 961], 1010: 1017, 1011: 895, 1013: [917, 949], 1015: 1016, 1016: 1015, 1017: 1010, 1018: 1019, 1019: 1018, 1021: 891, 1022: 892, 1023: 893, 1024: 1104, 1025: 1105, 1026: 1106, 1027: 1107, 1028: 1108, 1029: 1109, 1030: 1110, 1031: 1111, 1032: 1112, 1033: 1113, 1034: 1114, 1035: 1115, 1036: 1116, 1037: 1117, 1038: 1118, 1039: 1119, 1040: 1072, 1041: 1073, 1042: [1074, 7296], 1043: 1075, 1044: [1076, 7297], 1045: 1077, 1046: 1078, 1047: 1079, 1048: 1080, 1049: 1081, 1050: 1082, 1051: 1083, 1052: 1084, 1053: 1085, 1054: [1086, 7298], 1055: 1087, 1056: 1088, 1057: [1089, 7299], 1058: [1090, 7300, 7301], 1059: 1091, 1060: 1092, 1061: 1093, 1062: 1094, 1063: 1095, 1064: 1096, 1065: 1097, 1066: [1098, 7302], 1067: 1099, 1068: 1100, 1069: 1101, 1070: 1102, 1071: 1103, 1072: 1040, 1073: 1041, 1074: [1042, 7296], 1075: 1043, 1076: [1044, 7297], 1077: 1045, 1078: 1046, 1079: 1047, 1080: 1048, 1081: 1049, 1082: 1050, 1083: 1051, 1084: 1052, 1085: 1053, 1086: [1054, 7298], 1087: 1055, 1088: 1056, 1089: [1057, 7299], 1090: [1058, 7300, 7301], 1091: 1059, 1092: 1060, 1093: 1061, 1094: 1062, 1095: 1063, 1096: 1064, 1097: 1065, 1098: [1066, 7302], 1099: 1067, 1100: 1068, 1101: 1069, 1102: 1070, 1103: 1071, 1104: 1024, 1105: 1025, 1106: 1026, 1107: 1027, 1108: 1028, 1109: 1029, 1110: 1030, 1111: 1031, 1112: 1032, 1113: 1033, 1114: 1034, 1115: 1035, 1116: 1036, 1117: 1037, 1118: 1038, 1119: 1039, 1120: 1121, 1121: 1120, 1122: [1123, 7303], 1123: [1122, 7303], 1124: 1125, 1125: 1124, 1126: 1127, 1127: 1126, 1128: 1129, 1129: 1128, 1130: 1131, 1131: 1130, 1132: 1133, 1133: 1132, 1134: 1135, 1135: 1134, 1136: 1137, 1137: 1136, 1138: 1139, 1139: 1138, 1140: 1141, 1141: 1140, 1142: 1143, 1143: 1142, 1144: 1145, 1145: 1144, 1146: 1147, 1147: 1146, 1148: 1149, 1149: 1148, 1150: 1151, 1151: 1150, 1152: 1153, 1153: 1152, 1162: 1163, 1163: 1162, 1164: 1165, 1165: 1164, 1166: 1167, 1167: 1166, 1168: 1169, 1169: 1168, 1170: 1171, 1171: 1170, 1172: 1173, 1173: 1172, 1174: 1175, 1175: 1174, 1176: 1177, 1177: 1176, 1178: 1179, 1179: 1178, 1180: 1181, 1181: 1180, 1182: 1183, 1183: 1182, 1184: 1185, 1185: 1184, 1186: 1187, 1187: 1186, 1188: 1189, 1189: 1188, 1190: 1191, 1191: 1190, 1192: 1193, 1193: 1192, 1194: 1195, 1195: 1194, 1196: 1197, 1197: 1196, 1198: 1199, 1199: 1198, 1200: 1201, 1201: 1200, 1202: 1203, 1203: 1202, 1204: 1205, 1205: 1204, 1206: 1207, 1207: 1206, 1208: 1209, 1209: 1208, 1210: 1211, 1211: 1210, 1212: 1213, 1213: 1212, 1214: 1215, 1215: 1214, 1216: 1231, 1217: 1218, 1218: 1217, 1219: 1220, 1220: 1219, 1221: 1222, 1222: 1221, 1223: 1224, 1224: 1223, 1225: 1226, 1226: 1225, 1227: 1228, 1228: 1227, 1229: 1230, 1230: 1229, 1231: 1216, 1232: 1233, 1233: 1232, 1234: 1235, 1235: 1234, 1236: 1237, 1237: 1236, 1238: 1239, 1239: 1238, 1240: 1241, 1241: 1240, 1242: 1243, 1243: 1242, 1244: 1245, 1245: 1244, 1246: 1247, 1247: 1246, 1248: 1249, 1249: 1248, 1250: 1251, 1251: 1250, 1252: 1253, 1253: 1252, 1254: 1255, 1255: 1254, 1256: 1257, 1257: 1256, 1258: 1259, 1259: 1258, 1260: 1261, 1261: 1260, 1262: 1263, 1263: 1262, 1264: 1265, 1265: 1264, 1266: 1267, 1267: 1266, 1268: 1269, 1269: 1268, 1270: 1271, 1271: 1270, 1272: 1273, 1273: 1272, 1274: 1275, 1275: 1274, 1276: 1277, 1277: 1276, 1278: 1279, 1279: 1278, 1280: 1281, 1281: 1280, 1282: 1283, 1283: 1282, 1284: 1285, 1285: 1284, 1286: 1287, 1287: 1286, 1288: 1289, 1289: 1288, 1290: 1291, 1291: 1290, 1292: 1293, 1293: 1292, 1294: 1295, 1295: 1294, 1296: 1297, 1297: 1296, 1298: 1299, 1299: 1298, 1300: 1301, 1301: 1300, 1302: 1303, 1303: 1302, 1304: 1305, 1305: 1304, 1306: 1307, 1307: 1306, 1308: 1309, 1309: 1308, 1310: 1311, 1311: 1310, 1312: 1313, 1313: 1312, 1314: 1315, 1315: 1314, 1316: 1317, 1317: 1316, 1318: 1319, 1319: 1318, 1320: 1321, 1321: 1320, 1322: 1323, 1323: 1322, 1324: 1325, 1325: 1324, 1326: 1327, 1327: 1326, 1329: 1377, 1330: 1378, 1331: 1379, 1332: 1380, 1333: 1381, 1334: 1382, 1335: 1383, 1336: 1384, 1337: 1385, 1338: 1386, 1339: 1387, 1340: 1388, 1341: 1389, 1342: 1390, 1343: 1391, 1344: 1392, 1345: 1393, 1346: 1394, 1347: 1395, 1348: 1396, 1349: 1397, 1350: 1398, 1351: 1399, 1352: 1400, 1353: 1401, 1354: 1402, 1355: 1403, 1356: 1404, 1357: 1405, 1358: 1406, 1359: 1407, 1360: 1408, 1361: 1409, 1362: 1410, 1363: 1411, 1364: 1412, 1365: 1413, 1366: 1414, 1377: 1329, 1378: 1330, 1379: 1331, 1380: 1332, 1381: 1333, 1382: 1334, 1383: 1335, 1384: 1336, 1385: 1337, 1386: 1338, 1387: 1339, 1388: 1340, 1389: 1341, 1390: 1342, 1391: 1343, 1392: 1344, 1393: 1345, 1394: 1346, 1395: 1347, 1396: 1348, 1397: 1349, 1398: 1350, 1399: 1351, 1400: 1352, 1401: 1353, 1402: 1354, 1403: 1355, 1404: 1356, 1405: 1357, 1406: 1358, 1407: 1359, 1408: 1360, 1409: 1361, 1410: 1362, 1411: 1363, 1412: 1364, 1413: 1365, 1414: 1366, 4256: 11520, 4257: 11521, 4258: 11522, 4259: 11523, 4260: 11524, 4261: 11525, 4262: 11526, 4263: 11527, 4264: 11528, 4265: 11529, 4266: 11530, 4267: 11531, 4268: 11532, 4269: 11533, 4270: 11534, 4271: 11535, 4272: 11536, 4273: 11537, 4274: 11538, 4275: 11539, 4276: 11540, 4277: 11541, 4278: 11542, 4279: 11543, 4280: 11544, 4281: 11545, 4282: 11546, 4283: 11547, 4284: 11548, 4285: 11549, 4286: 11550, 4287: 11551, 4288: 11552, 4289: 11553, 4290: 11554, 4291: 11555, 4292: 11556, 4293: 11557, 4295: 11559, 4301: 11565, 4304: 7312, 4305: 7313, 4306: 7314, 4307: 7315, 4308: 7316, 4309: 7317, 4310: 7318, 4311: 7319, 4312: 7320, 4313: 7321, 4314: 7322, 4315: 7323, 4316: 7324, 4317: 7325, 4318: 7326, 4319: 7327, 4320: 7328, 4321: 7329, 4322: 7330, 4323: 7331, 4324: 7332, 4325: 7333, 4326: 7334, 4327: 7335, 4328: 7336, 4329: 7337, 4330: 7338, 4331: 7339, 4332: 7340, 4333: 7341, 4334: 7342, 4335: 7343, 4336: 7344, 4337: 7345, 4338: 7346, 4339: 7347, 4340: 7348, 4341: 7349, 4342: 7350, 4343: 7351, 4344: 7352, 4345: 7353, 4346: 7354, 4349: 7357, 4350: 7358, 4351: 7359, 5024: 43888, 5025: 43889, 5026: 43890, 5027: 43891, 5028: 43892, 5029: 43893, 5030: 43894, 5031: 43895, 5032: 43896, 5033: 43897, 5034: 43898, 5035: 43899, 5036: 43900, 5037: 43901, 5038: 43902, 5039: 43903, 5040: 43904, 5041: 43905, 5042: 43906, 5043: 43907, 5044: 43908, 5045: 43909, 5046: 43910, 5047: 43911, 5048: 43912, 5049: 43913, 5050: 43914, 5051: 43915, 5052: 43916, 5053: 43917, 5054: 43918, 5055: 43919, 5056: 43920, 5057: 43921, 5058: 43922, 5059: 43923, 5060: 43924, 5061: 43925, 5062: 43926, 5063: 43927, 5064: 43928, 5065: 43929, 5066: 43930, 5067: 43931, 5068: 43932, 5069: 43933, 5070: 43934, 5071: 43935, 5072: 43936, 5073: 43937, 5074: 43938, 5075: 43939, 5076: 43940, 5077: 43941, 5078: 43942, 5079: 43943, 5080: 43944, 5081: 43945, 5082: 43946, 5083: 43947, 5084: 43948, 5085: 43949, 5086: 43950, 5087: 43951, 5088: 43952, 5089: 43953, 5090: 43954, 5091: 43955, 5092: 43956, 5093: 43957, 5094: 43958, 5095: 43959, 5096: 43960, 5097: 43961, 5098: 43962, 5099: 43963, 5100: 43964, 5101: 43965, 5102: 43966, 5103: 43967, 5104: 5112, 5105: 5113, 5106: 5114, 5107: 5115, 5108: 5116, 5109: 5117, 5112: 5104, 5113: 5105, 5114: 5106, 5115: 5107, 5116: 5108, 5117: 5109, 7296: [1042, 1074], 7297: [1044, 1076], 7298: [1054, 1086], 7299: [1057, 1089], 7300: [1058, 1090, 7301], 7301: [1058, 1090, 7300], 7302: [1066, 1098], 7303: [1122, 1123], 7304: [42570, 42571], 7305: 7306, 7306: 7305, 7312: 4304, 7313: 4305, 7314: 4306, 7315: 4307, 7316: 4308, 7317: 4309, 7318: 4310, 7319: 4311, 7320: 4312, 7321: 4313, 7322: 4314, 7323: 4315, 7324: 4316, 7325: 4317, 7326: 4318, 7327: 4319, 7328: 4320, 7329: 4321, 7330: 4322, 7331: 4323, 7332: 4324, 7333: 4325, 7334: 4326, 7335: 4327, 7336: 4328, 7337: 4329, 7338: 4330, 7339: 4331, 7340: 4332, 7341: 4333, 7342: 4334, 7343: 4335, 7344: 4336, 7345: 4337, 7346: 4338, 7347: 4339, 7348: 4340, 7349: 4341, 7350: 4342, 7351: 4343, 7352: 4344, 7353: 4345, 7354: 4346, 7357: 4349, 7358: 4350, 7359: 4351, 7545: 42877, 7549: 11363, 7566: 42950, 7680: 7681, 7681: 7680, 7682: 7683, 7683: 7682, 7684: 7685, 7685: 7684, 7686: 7687, 7687: 7686, 7688: 7689, 7689: 7688, 7690: 7691, 7691: 7690, 7692: 7693, 7693: 7692, 7694: 7695, 7695: 7694, 7696: 7697, 7697: 7696, 7698: 7699, 7699: 7698, 7700: 7701, 7701: 7700, 7702: 7703, 7703: 7702, 7704: 7705, 7705: 7704, 7706: 7707, 7707: 7706, 7708: 7709, 7709: 7708, 7710: 7711, 7711: 7710, 7712: 7713, 7713: 7712, 7714: 7715, 7715: 7714, 7716: 7717, 7717: 7716, 7718: 7719, 7719: 7718, 7720: 7721, 7721: 7720, 7722: 7723, 7723: 7722, 7724: 7725, 7725: 7724, 7726: 7727, 7727: 7726, 7728: 7729, 7729: 7728, 7730: 7731, 7731: 7730, 7732: 7733, 7733: 7732, 7734: 7735, 7735: 7734, 7736: 7737, 7737: 7736, 7738: 7739, 7739: 7738, 7740: 7741, 7741: 7740, 7742: 7743, 7743: 7742, 7744: 7745, 7745: 7744, 7746: 7747, 7747: 7746, 7748: 7749, 7749: 7748, 7750: 7751, 7751: 7750, 7752: 7753, 7753: 7752, 7754: 7755, 7755: 7754, 7756: 7757, 7757: 7756, 7758: 7759, 7759: 7758, 7760: 7761, 7761: 7760, 7762: 7763, 7763: 7762, 7764: 7765, 7765: 7764, 7766: 7767, 7767: 7766, 7768: 7769, 7769: 7768, 7770: 7771, 7771: 7770, 7772: 7773, 7773: 7772, 7774: 7775, 7775: 7774, 7776: [7777, 7835], 7777: [7776, 7835], 7778: 7779, 7779: 7778, 7780: 7781, 7781: 7780, 7782: 7783, 7783: 7782, 7784: 7785, 7785: 7784, 7786: 7787, 7787: 7786, 7788: 7789, 7789: 7788, 7790: 7791, 7791: 7790, 7792: 7793, 7793: 7792, 7794: 7795, 7795: 7794, 7796: 7797, 7797: 7796, 7798: 7799, 7799: 7798, 7800: 7801, 7801: 7800, 7802: 7803, 7803: 7802, 7804: 7805, 7805: 7804, 7806: 7807, 7807: 7806, 7808: 7809, 7809: 7808, 7810: 7811, 7811: 7810, 7812: 7813, 7813: 7812, 7814: 7815, 7815: 7814, 7816: 7817, 7817: 7816, 7818: 7819, 7819: 7818, 7820: 7821, 7821: 7820, 7822: 7823, 7823: 7822, 7824: 7825, 7825: 7824, 7826: 7827, 7827: 7826, 7828: 7829, 7829: 7828, 7835: [7776, 7777], 7840: 7841, 7841: 7840, 7842: 7843, 7843: 7842, 7844: 7845, 7845: 7844, 7846: 7847, 7847: 7846, 7848: 7849, 7849: 7848, 7850: 7851, 7851: 7850, 7852: 7853, 7853: 7852, 7854: 7855, 7855: 7854, 7856: 7857, 7857: 7856, 7858: 7859, 7859: 7858, 7860: 7861, 7861: 7860, 7862: 7863, 7863: 7862, 7864: 7865, 7865: 7864, 7866: 7867, 7867: 7866, 7868: 7869, 7869: 7868, 7870: 7871, 7871: 7870, 7872: 7873, 7873: 7872, 7874: 7875, 7875: 7874, 7876: 7877, 7877: 7876, 7878: 7879, 7879: 7878, 7880: 7881, 7881: 7880, 7882: 7883, 7883: 7882, 7884: 7885, 7885: 7884, 7886: 7887, 7887: 7886, 7888: 7889, 7889: 7888, 7890: 7891, 7891: 7890, 7892: 7893, 7893: 7892, 7894: 7895, 7895: 7894, 7896: 7897, 7897: 7896, 7898: 7899, 7899: 7898, 7900: 7901, 7901: 7900, 7902: 7903, 7903: 7902, 7904: 7905, 7905: 7904, 7906: 7907, 7907: 7906, 7908: 7909, 7909: 7908, 7910: 7911, 7911: 7910, 7912: 7913, 7913: 7912, 7914: 7915, 7915: 7914, 7916: 7917, 7917: 7916, 7918: 7919, 7919: 7918, 7920: 7921, 7921: 7920, 7922: 7923, 7923: 7922, 7924: 7925, 7925: 7924, 7926: 7927, 7927: 7926, 7928: 7929, 7929: 7928, 7930: 7931, 7931: 7930, 7932: 7933, 7933: 7932, 7934: 7935, 7935: 7934, 7936: 7944, 7937: 7945, 7938: 7946, 7939: 7947, 7940: 7948, 7941: 7949, 7942: 7950, 7943: 7951, 7944: 7936, 7945: 7937, 7946: 7938, 7947: 7939, 7948: 7940, 7949: 7941, 7950: 7942, 7951: 7943, 7952: 7960, 7953: 7961, 7954: 7962, 7955: 7963, 7956: 7964, 7957: 7965, 7960: 7952, 7961: 7953, 7962: 7954, 7963: 7955, 7964: 7956, 7965: 7957, 7968: 7976, 7969: 7977, 7970: 7978, 7971: 7979, 7972: 7980, 7973: 7981, 7974: 7982, 7975: 7983, 7976: 7968, 7977: 7969, 7978: 7970, 7979: 7971, 7980: 7972, 7981: 7973, 7982: 7974, 7983: 7975, 7984: 7992, 7985: 7993, 7986: 7994, 7987: 7995, 7988: 7996, 7989: 7997, 7990: 7998, 7991: 7999, 7992: 7984, 7993: 7985, 7994: 7986, 7995: 7987, 7996: 7988, 7997: 7989, 7998: 7990, 7999: 7991, 8000: 8008, 8001: 8009, 8002: 8010, 8003: 8011, 8004: 8012, 8005: 8013, 8008: 8000, 8009: 8001, 8010: 8002, 8011: 8003, 8012: 8004, 8013: 8005, 8017: 8025, 8019: 8027, 8021: 8029, 8023: 8031, 8025: 8017, 8027: 8019, 8029: 8021, 8031: 8023, 8032: 8040, 8033: 8041, 8034: 8042, 8035: 8043, 8036: 8044, 8037: 8045, 8038: 8046, 8039: 8047, 8040: 8032, 8041: 8033, 8042: 8034, 8043: 8035, 8044: 8036, 8045: 8037, 8046: 8038, 8047: 8039, 8048: 8122, 8049: 8123, 8050: 8136, 8051: 8137, 8052: 8138, 8053: 8139, 8054: 8154, 8055: 8155, 8056: 8184, 8057: 8185, 8058: 8170, 8059: 8171, 8060: 8186, 8061: 8187, 8064: 8072, 8065: 8073, 8066: 8074, 8067: 8075, 8068: 8076, 8069: 8077, 8070: 8078, 8071: 8079, 8072: 8064, 8073: 8065, 8074: 8066, 8075: 8067, 8076: 8068, 8077: 8069, 8078: 8070, 8079: 8071, 8080: 8088, 8081: 8089, 8082: 8090, 8083: 8091, 8084: 8092, 8085: 8093, 8086: 8094, 8087: 8095, 8088: 8080, 8089: 8081, 8090: 8082, 8091: 8083, 8092: 8084, 8093: 8085, 8094: 8086, 8095: 8087, 8096: 8104, 8097: 8105, 8098: 8106, 8099: 8107, 8100: 8108, 8101: 8109, 8102: 8110, 8103: 8111, 8104: 8096, 8105: 8097, 8106: 8098, 8107: 8099, 8108: 8100, 8109: 8101, 8110: 8102, 8111: 8103, 8112: 8120, 8113: 8121, 8115: 8124, 8120: 8112, 8121: 8113, 8122: 8048, 8123: 8049, 8124: 8115, 8126: [837, 921, 953], 8131: 8140, 8136: 8050, 8137: 8051, 8138: 8052, 8139: 8053, 8140: 8131, 8144: 8152, 8145: 8153, 8152: 8144, 8153: 8145, 8154: 8054, 8155: 8055, 8160: 8168, 8161: 8169, 8165: 8172, 8168: 8160, 8169: 8161, 8170: 8058, 8171: 8059, 8172: 8165, 8179: 8188, 8184: 8056, 8185: 8057, 8186: 8060, 8187: 8061, 8188: 8179, 8498: 8526, 8526: 8498, 8544: 8560, 8545: 8561, 8546: 8562, 8547: 8563, 8548: 8564, 8549: 8565, 8550: 8566, 8551: 8567, 8552: 8568, 8553: 8569, 8554: 8570, 8555: 8571, 8556: 8572, 8557: 8573, 8558: 8574, 8559: 8575, 8560: 8544, 8561: 8545, 8562: 8546, 8563: 8547, 8564: 8548, 8565: 8549, 8566: 8550, 8567: 8551, 8568: 8552, 8569: 8553, 8570: 8554, 8571: 8555, 8572: 8556, 8573: 8557, 8574: 8558, 8575: 8559, 8579: 8580, 8580: 8579, 9398: 9424, 9399: 9425, 9400: 9426, 9401: 9427, 9402: 9428, 9403: 9429, 9404: 9430, 9405: 9431, 9406: 9432, 9407: 9433, 9408: 9434, 9409: 9435, 9410: 9436, 9411: 9437, 9412: 9438, 9413: 9439, 9414: 9440, 9415: 9441, 9416: 9442, 9417: 9443, 9418: 9444, 9419: 9445, 9420: 9446, 9421: 9447, 9422: 9448, 9423: 9449, 9424: 9398, 9425: 9399, 9426: 9400, 9427: 9401, 9428: 9402, 9429: 9403, 9430: 9404, 9431: 9405, 9432: 9406, 9433: 9407, 9434: 9408, 9435: 9409, 9436: 9410, 9437: 9411, 9438: 9412, 9439: 9413, 9440: 9414, 9441: 9415, 9442: 9416, 9443: 9417, 9444: 9418, 9445: 9419, 9446: 9420, 9447: 9421, 9448: 9422, 9449: 9423, 11264: 11312, 11265: 11313, 11266: 11314, 11267: 11315, 11268: 11316, 11269: 11317, 11270: 11318, 11271: 11319, 11272: 11320, 11273: 11321, 11274: 11322, 11275: 11323, 11276: 11324, 11277: 11325, 11278: 11326, 11279: 11327, 11280: 11328, 11281: 11329, 11282: 11330, 11283: 11331, 11284: 11332, 11285: 11333, 11286: 11334, 11287: 11335, 11288: 11336, 11289: 11337, 11290: 11338, 11291: 11339, 11292: 11340, 11293: 11341, 11294: 11342, 11295: 11343, 11296: 11344, 11297: 11345, 11298: 11346, 11299: 11347, 11300: 11348, 11301: 11349, 11302: 11350, 11303: 11351, 11304: 11352, 11305: 11353, 11306: 11354, 11307: 11355, 11308: 11356, 11309: 11357, 11310: 11358, 11311: 11359, 11312: 11264, 11313: 11265, 11314: 11266, 11315: 11267, 11316: 11268, 11317: 11269, 11318: 11270, 11319: 11271, 11320: 11272, 11321: 11273, 11322: 11274, 11323: 11275, 11324: 11276, 11325: 11277, 11326: 11278, 11327: 11279, 11328: 11280, 11329: 11281, 11330: 11282, 11331: 11283, 11332: 11284, 11333: 11285, 11334: 11286, 11335: 11287, 11336: 11288, 11337: 11289, 11338: 11290, 11339: 11291, 11340: 11292, 11341: 11293, 11342: 11294, 11343: 11295, 11344: 11296, 11345: 11297, 11346: 11298, 11347: 11299, 11348: 11300, 11349: 11301, 11350: 11302, 11351: 11303, 11352: 11304, 11353: 11305, 11354: 11306, 11355: 11307, 11356: 11308, 11357: 11309, 11358: 11310, 11359: 11311, 11360: 11361, 11361: 11360, 11362: 619, 11363: 7549, 11364: 637, 11365: 570, 11366: 574, 11367: 11368, 11368: 11367, 11369: 11370, 11370: 11369, 11371: 11372, 11372: 11371, 11373: 593, 11374: 625, 11375: 592, 11376: 594, 11378: 11379, 11379: 11378, 11381: 11382, 11382: 11381, 11390: 575, 11391: 576, 11392: 11393, 11393: 11392, 11394: 11395, 11395: 11394, 11396: 11397, 11397: 11396, 11398: 11399, 11399: 11398, 11400: 11401, 11401: 11400, 11402: 11403, 11403: 11402, 11404: 11405, 11405: 11404, 11406: 11407, 11407: 11406, 11408: 11409, 11409: 11408, 11410: 11411, 11411: 11410, 11412: 11413, 11413: 11412, 11414: 11415, 11415: 11414, 11416: 11417, 11417: 11416, 11418: 11419, 11419: 11418, 11420: 11421, 11421: 11420, 11422: 11423, 11423: 11422, 11424: 11425, 11425: 11424, 11426: 11427, 11427: 11426, 11428: 11429, 11429: 11428, 11430: 11431, 11431: 11430, 11432: 11433, 11433: 11432, 11434: 11435, 11435: 11434, 11436: 11437, 11437: 11436, 11438: 11439, 11439: 11438, 11440: 11441, 11441: 11440, 11442: 11443, 11443: 11442, 11444: 11445, 11445: 11444, 11446: 11447, 11447: 11446, 11448: 11449, 11449: 11448, 11450: 11451, 11451: 11450, 11452: 11453, 11453: 11452, 11454: 11455, 11455: 11454, 11456: 11457, 11457: 11456, 11458: 11459, 11459: 11458, 11460: 11461, 11461: 11460, 11462: 11463, 11463: 11462, 11464: 11465, 11465: 11464, 11466: 11467, 11467: 11466, 11468: 11469, 11469: 11468, 11470: 11471, 11471: 11470, 11472: 11473, 11473: 11472, 11474: 11475, 11475: 11474, 11476: 11477, 11477: 11476, 11478: 11479, 11479: 11478, 11480: 11481, 11481: 11480, 11482: 11483, 11483: 11482, 11484: 11485, 11485: 11484, 11486: 11487, 11487: 11486, 11488: 11489, 11489: 11488, 11490: 11491, 11491: 11490, 11499: 11500, 11500: 11499, 11501: 11502, 11502: 11501, 11506: 11507, 11507: 11506, 11520: 4256, 11521: 4257, 11522: 4258, 11523: 4259, 11524: 4260, 11525: 4261, 11526: 4262, 11527: 4263, 11528: 4264, 11529: 4265, 11530: 4266, 11531: 4267, 11532: 4268, 11533: 4269, 11534: 4270, 11535: 4271, 11536: 4272, 11537: 4273, 11538: 4274, 11539: 4275, 11540: 4276, 11541: 4277, 11542: 4278, 11543: 4279, 11544: 4280, 11545: 4281, 11546: 4282, 11547: 4283, 11548: 4284, 11549: 4285, 11550: 4286, 11551: 4287, 11552: 4288, 11553: 4289, 11554: 4290, 11555: 4291, 11556: 4292, 11557: 4293, 11559: 4295, 11565: 4301, 42560: 42561, 42561: 42560, 42562: 42563, 42563: 42562, 42564: 42565, 42565: 42564, 42566: 42567, 42567: 42566, 42568: 42569, 42569: 42568, 42570: [7304, 42571], 42571: [7304, 42570], 42572: 42573, 42573: 42572, 42574: 42575, 42575: 42574, 42576: 42577, 42577: 42576, 42578: 42579, 42579: 42578, 42580: 42581, 42581: 42580, 42582: 42583, 42583: 42582, 42584: 42585, 42585: 42584, 42586: 42587, 42587: 42586, 42588: 42589, 42589: 42588, 42590: 42591, 42591: 42590, 42592: 42593, 42593: 42592, 42594: 42595, 42595: 42594, 42596: 42597, 42597: 42596, 42598: 42599, 42599: 42598, 42600: 42601, 42601: 42600, 42602: 42603, 42603: 42602, 42604: 42605, 42605: 42604, 42624: 42625, 42625: 42624, 42626: 42627, 42627: 42626, 42628: 42629, 42629: 42628, 42630: 42631, 42631: 42630, 42632: 42633, 42633: 42632, 42634: 42635, 42635: 42634, 42636: 42637, 42637: 42636, 42638: 42639, 42639: 42638, 42640: 42641, 42641: 42640, 42642: 42643, 42643: 42642, 42644: 42645, 42645: 42644, 42646: 42647, 42647: 42646, 42648: 42649, 42649: 42648, 42650: 42651, 42651: 42650, 42786: 42787, 42787: 42786, 42788: 42789, 42789: 42788, 42790: 42791, 42791: 42790, 42792: 42793, 42793: 42792, 42794: 42795, 42795: 42794, 42796: 42797, 42797: 42796, 42798: 42799, 42799: 42798, 42802: 42803, 42803: 42802, 42804: 42805, 42805: 42804, 42806: 42807, 42807: 42806, 42808: 42809, 42809: 42808, 42810: 42811, 42811: 42810, 42812: 42813, 42813: 42812, 42814: 42815, 42815: 42814, 42816: 42817, 42817: 42816, 42818: 42819, 42819: 42818, 42820: 42821, 42821: 42820, 42822: 42823, 42823: 42822, 42824: 42825, 42825: 42824, 42826: 42827, 42827: 42826, 42828: 42829, 42829: 42828, 42830: 42831, 42831: 42830, 42832: 42833, 42833: 42832, 42834: 42835, 42835: 42834, 42836: 42837, 42837: 42836, 42838: 42839, 42839: 42838, 42840: 42841, 42841: 42840, 42842: 42843, 42843: 42842, 42844: 42845, 42845: 42844, 42846: 42847, 42847: 42846, 42848: 42849, 42849: 42848, 42850: 42851, 42851: 42850, 42852: 42853, 42853: 42852, 42854: 42855, 42855: 42854, 42856: 42857, 42857: 42856, 42858: 42859, 42859: 42858, 42860: 42861, 42861: 42860, 42862: 42863, 42863: 42862, 42873: 42874, 42874: 42873, 42875: 42876, 42876: 42875, 42877: 7545, 42878: 42879, 42879: 42878, 42880: 42881, 42881: 42880, 42882: 42883, 42883: 42882, 42884: 42885, 42885: 42884, 42886: 42887, 42887: 42886, 42891: 42892, 42892: 42891, 42893: 613, 42896: 42897, 42897: 42896, 42898: 42899, 42899: 42898, 42900: 42948, 42902: 42903, 42903: 42902, 42904: 42905, 42905: 42904, 42906: 42907, 42907: 42906, 42908: 42909, 42909: 42908, 42910: 42911, 42911: 42910, 42912: 42913, 42913: 42912, 42914: 42915, 42915: 42914, 42916: 42917, 42917: 42916, 42918: 42919, 42919: 42918, 42920: 42921, 42921: 42920, 42922: 614, 42923: 604, 42924: 609, 42925: 620, 42926: 618, 42928: 670, 42929: 647, 42930: 669, 42931: 43859, 42932: 42933, 42933: 42932, 42934: 42935, 42935: 42934, 42936: 42937, 42937: 42936, 42938: 42939, 42939: 42938, 42940: 42941, 42941: 42940, 42942: 42943, 42943: 42942, 42944: 42945, 42945: 42944, 42946: 42947, 42947: 42946, 42948: 42900, 42949: 642, 42950: 7566, 42951: 42952, 42952: 42951, 42953: 42954, 42954: 42953, 42955: 612, 42956: 42957, 42957: 42956, 42960: 42961, 42961: 42960, 42966: 42967, 42967: 42966, 42968: 42969, 42969: 42968, 42970: 42971, 42971: 42970, 42972: 411, 42997: 42998, 42998: 42997, 43859: 42931, 43888: 5024, 43889: 5025, 43890: 5026, 43891: 5027, 43892: 5028, 43893: 5029, 43894: 5030, 43895: 5031, 43896: 5032, 43897: 5033, 43898: 5034, 43899: 5035, 43900: 5036, 43901: 5037, 43902: 5038, 43903: 5039, 43904: 5040, 43905: 5041, 43906: 5042, 43907: 5043, 43908: 5044, 43909: 5045, 43910: 5046, 43911: 5047, 43912: 5048, 43913: 5049, 43914: 5050, 43915: 5051, 43916: 5052, 43917: 5053, 43918: 5054, 43919: 5055, 43920: 5056, 43921: 5057, 43922: 5058, 43923: 5059, 43924: 5060, 43925: 5061, 43926: 5062, 43927: 5063, 43928: 5064, 43929: 5065, 43930: 5066, 43931: 5067, 43932: 5068, 43933: 5069, 43934: 5070, 43935: 5071, 43936: 5072, 43937: 5073, 43938: 5074, 43939: 5075, 43940: 5076, 43941: 5077, 43942: 5078, 43943: 5079, 43944: 5080, 43945: 5081, 43946: 5082, 43947: 5083, 43948: 5084, 43949: 5085, 43950: 5086, 43951: 5087, 43952: 5088, 43953: 5089, 43954: 5090, 43955: 5091, 43956: 5092, 43957: 5093, 43958: 5094, 43959: 5095, 43960: 5096, 43961: 5097, 43962: 5098, 43963: 5099, 43964: 5100, 43965: 5101, 43966: 5102, 43967: 5103, 65313: 65345, 65314: 65346, 65315: 65347, 65316: 65348, 65317: 65349, 65318: 65350, 65319: 65351, 65320: 65352, 65321: 65353, 65322: 65354, 65323: 65355, 65324: 65356, 65325: 65357, 65326: 65358, 65327: 65359, 65328: 65360, 65329: 65361, 65330: 65362, 65331: 65363, 65332: 65364, 65333: 65365, 65334: 65366, 65335: 65367, 65336: 65368, 65337: 65369, 65338: 65370, 65345: 65313, 65346: 65314, 65347: 65315, 65348: 65316, 65349: 65317, 65350: 65318, 65351: 65319, 65352: 65320, 65353: 65321, 65354: 65322, 65355: 65323, 65356: 65324, 65357: 65325, 65358: 65326, 65359: 65327, 65360: 65328, 65361: 65329, 65362: 65330, 65363: 65331, 65364: 65332, 65365: 65333, 65366: 65334, 65367: 65335, 65368: 65336, 65369: 65337, 65370: 65338 };
+
+// caseFoldEquivalents.get(x) is the set of all characters y such that x !== y and either x === toCasefold(y) or y === toCasefold(x),
+// according to the simple case folding variant of the Unicode Default Case Folding algorithm.
+// Only the Simple_Case_Folding property values (mappings with status field values "C" and "S" in the CaseFolding.txt file) are considered.
+// For details, see https://tc39.es/ecma262/#sec-runtime-semantics-canonicalize-ch.
+// Arrays are not used for keys with only a single value for lesser memory.
+// Generated from Unicode 16.0 data files
+// dprint-ignore
+const caseFoldEquivalents: Record<number, number | number[] | undefined> = { 65: 97, 66: 98, 67: 99, 68: 100, 69: 101, 70: 102, 71: 103, 72: 104, 73: 105, 74: 106, 75: [107, 8490], 76: 108, 77: 109, 78: 110, 79: 111, 80: 112, 81: 113, 82: 114, 83: [115, 383], 84: 116, 85: 117, 86: 118, 87: 119, 88: 120, 89: 121, 90: 122, 97: 65, 98: 66, 99: 67, 100: 68, 101: 69, 102: 70, 103: 71, 104: 72, 105: 73, 106: 74, 107: [75, 8490], 108: 76, 109: 77, 110: 78, 111: 79, 112: 80, 113: 81, 114: 82, 115: [83, 383], 116: 84, 117: 85, 118: 86, 119: 87, 120: 88, 121: 89, 122: 90, 181: [924, 956], 192: 224, 193: 225, 194: 226, 195: 227, 196: 228, 197: [229, 8491], 198: 230, 199: 231, 200: 232, 201: 233, 202: 234, 203: 235, 204: 236, 205: 237, 206: 238, 207: 239, 208: 240, 209: 241, 210: 242, 211: 243, 212: 244, 213: 245, 214: 246, 216: 248, 217: 249, 218: 250, 219: 251, 220: 252, 221: 253, 222: 254, 223: 7838, 224: 192, 225: 193, 226: 194, 227: 195, 228: 196, 229: [197, 8491], 230: 198, 231: 199, 232: 200, 233: 201, 234: 202, 235: 203, 236: 204, 237: 205, 238: 206, 239: 207, 240: 208, 241: 209, 242: 210, 243: 211, 244: 212, 245: 213, 246: 214, 248: 216, 249: 217, 250: 218, 251: 219, 252: 220, 253: 221, 254: 222, 255: 376, 256: 257, 257: 256, 258: 259, 259: 258, 260: 261, 261: 260, 262: 263, 263: 262, 264: 265, 265: 264, 266: 267, 267: 266, 268: 269, 269: 268, 270: 271, 271: 270, 272: 273, 273: 272, 274: 275, 275: 274, 276: 277, 277: 276, 278: 279, 279: 278, 280: 281, 281: 280, 282: 283, 283: 282, 284: 285, 285: 284, 286: 287, 287: 286, 288: 289, 289: 288, 290: 291, 291: 290, 292: 293, 293: 292, 294: 295, 295: 294, 296: 297, 297: 296, 298: 299, 299: 298, 300: 301, 301: 300, 302: 303, 303: 302, 306: 307, 307: 306, 308: 309, 309: 308, 310: 311, 311: 310, 313: 314, 314: 313, 315: 316, 316: 315, 317: 318, 318: 317, 319: 320, 320: 319, 321: 322, 322: 321, 323: 324, 324: 323, 325: 326, 326: 325, 327: 328, 328: 327, 330: 331, 331: 330, 332: 333, 333: 332, 334: 335, 335: 334, 336: 337, 337: 336, 338: 339, 339: 338, 340: 341, 341: 340, 342: 343, 343: 342, 344: 345, 345: 344, 346: 347, 347: 346, 348: 349, 349: 348, 350: 351, 351: 350, 352: 353, 353: 352, 354: 355, 355: 354, 356: 357, 357: 356, 358: 359, 359: 358, 360: 361, 361: 360, 362: 363, 363: 362, 364: 365, 365: 364, 366: 367, 367: 366, 368: 369, 369: 368, 370: 371, 371: 370, 372: 373, 373: 372, 374: 375, 375: 374, 376: 255, 377: 378, 378: 377, 379: 380, 380: 379, 381: 382, 382: 381, 383: [83, 115], 384: 579, 385: 595, 386: 387, 387: 386, 388: 389, 389: 388, 390: 596, 391: 392, 392: 391, 393: 598, 394: 599, 395: 396, 396: 395, 398: 477, 399: 601, 400: 603, 401: 402, 402: 401, 403: 608, 404: 611, 405: 502, 406: 617, 407: 616, 408: 409, 409: 408, 410: 573, 411: 42972, 412: 623, 413: 626, 414: 544, 415: 629, 416: 417, 417: 416, 418: 419, 419: 418, 420: 421, 421: 420, 422: 640, 423: 424, 424: 423, 425: 643, 428: 429, 429: 428, 430: 648, 431: 432, 432: 431, 433: 650, 434: 651, 435: 436, 436: 435, 437: 438, 438: 437, 439: 658, 440: 441, 441: 440, 444: 445, 445: 444, 447: 503, 452: [453, 454], 453: [452, 454], 454: [452, 453], 455: [456, 457], 456: [455, 457], 457: [455, 456], 458: [459, 460], 459: [458, 460], 460: [458, 459], 461: 462, 462: 461, 463: 464, 464: 463, 465: 466, 466: 465, 467: 468, 468: 467, 469: 470, 470: 469, 471: 472, 472: 471, 473: 474, 474: 473, 475: 476, 476: 475, 477: 398, 478: 479, 479: 478, 480: 481, 481: 480, 482: 483, 483: 482, 484: 485, 485: 484, 486: 487, 487: 486, 488: 489, 489: 488, 490: 491, 491: 490, 492: 493, 493: 492, 494: 495, 495: 494, 497: [498, 499], 498: [497, 499], 499: [497, 498], 500: 501, 501: 500, 502: 405, 503: 447, 504: 505, 505: 504, 506: 507, 507: 506, 508: 509, 509: 508, 510: 511, 511: 510, 512: 513, 513: 512, 514: 515, 515: 514, 516: 517, 517: 516, 518: 519, 519: 518, 520: 521, 521: 520, 522: 523, 523: 522, 524: 525, 525: 524, 526: 527, 527: 526, 528: 529, 529: 528, 530: 531, 531: 530, 532: 533, 533: 532, 534: 535, 535: 534, 536: 537, 537: 536, 538: 539, 539: 538, 540: 541, 541: 540, 542: 543, 543: 542, 544: 414, 546: 547, 547: 546, 548: 549, 549: 548, 550: 551, 551: 550, 552: 553, 553: 552, 554: 555, 555: 554, 556: 557, 557: 556, 558: 559, 559: 558, 560: 561, 561: 560, 562: 563, 563: 562, 570: 11365, 571: 572, 572: 571, 573: 410, 574: 11366, 575: 11390, 576: 11391, 577: 578, 578: 577, 579: 384, 580: 649, 581: 652, 582: 583, 583: 582, 584: 585, 585: 584, 586: 587, 587: 586, 588: 589, 589: 588, 590: 591, 591: 590, 592: 11375, 593: 11373, 594: 11376, 595: 385, 596: 390, 598: 393, 599: 394, 601: 399, 603: 400, 604: 42923, 608: 403, 609: 42924, 611: 404, 612: 42955, 613: 42893, 614: 42922, 616: 407, 617: 406, 618: 42926, 619: 11362, 620: 42925, 623: 412, 625: 11374, 626: 413, 629: 415, 637: 11364, 640: 422, 642: 42949, 643: 425, 647: 42929, 648: 430, 649: 580, 650: 433, 651: 434, 652: 581, 658: 439, 669: 42930, 670: 42928, 837: [921, 953, 8126], 880: 881, 881: 880, 882: 883, 883: 882, 886: 887, 887: 886, 891: 1021, 892: 1022, 893: 1023, 895: 1011, 902: 940, 904: 941, 905: 942, 906: 943, 908: 972, 910: 973, 911: 974, 912: 8147, 913: 945, 914: [946, 976], 915: 947, 916: 948, 917: [949, 1013], 918: 950, 919: 951, 920: [952, 977, 1012], 921: [837, 953, 8126], 922: [954, 1008], 923: 955, 924: [181, 956], 925: 957, 926: 958, 927: 959, 928: [960, 982], 929: [961, 1009], 931: [962, 963], 932: 964, 933: 965, 934: [966, 981], 935: 967, 936: 968, 937: [969, 8486], 938: 970, 939: 971, 940: 902, 941: 904, 942: 905, 943: 906, 944: 8163, 945: 913, 946: [914, 976], 947: 915, 948: 916, 949: [917, 1013], 950: 918, 951: 919, 952: [920, 977, 1012], 953: [837, 921, 8126], 954: [922, 1008], 955: 923, 956: [181, 924], 957: 925, 958: 926, 959: 927, 960: [928, 982], 961: [929, 1009], 962: [931, 963], 963: [931, 962], 964: 932, 965: 933, 966: [934, 981], 967: 935, 968: 936, 969: [937, 8486], 970: 938, 971: 939, 972: 908, 973: 910, 974: 911, 975: 983, 976: [914, 946], 977: [920, 952, 1012], 981: [934, 966], 982: [928, 960], 983: 975, 984: 985, 985: 984, 986: 987, 987: 986, 988: 989, 989: 988, 990: 991, 991: 990, 992: 993, 993: 992, 994: 995, 995: 994, 996: 997, 997: 996, 998: 999, 999: 998, 1000: 1001, 1001: 1000, 1002: 1003, 1003: 1002, 1004: 1005, 1005: 1004, 1006: 1007, 1007: 1006, 1008: [922, 954], 1009: [929, 961], 1010: 1017, 1011: 895, 1012: [920, 952, 977], 1013: [917, 949], 1015: 1016, 1016: 1015, 1017: 1010, 1018: 1019, 1019: 1018, 1021: 891, 1022: 892, 1023: 893, 1024: 1104, 1025: 1105, 1026: 1106, 1027: 1107, 1028: 1108, 1029: 1109, 1030: 1110, 1031: 1111, 1032: 1112, 1033: 1113, 1034: 1114, 1035: 1115, 1036: 1116, 1037: 1117, 1038: 1118, 1039: 1119, 1040: 1072, 1041: 1073, 1042: [1074, 7296], 1043: 1075, 1044: [1076, 7297], 1045: 1077, 1046: 1078, 1047: 1079, 1048: 1080, 1049: 1081, 1050: 1082, 1051: 1083, 1052: 1084, 1053: 1085, 1054: [1086, 7298], 1055: 1087, 1056: 1088, 1057: [1089, 7299], 1058: [1090, 7300, 7301], 1059: 1091, 1060: 1092, 1061: 1093, 1062: 1094, 1063: 1095, 1064: 1096, 1065: 1097, 1066: [1098, 7302], 1067: 1099, 1068: 1100, 1069: 1101, 1070: 1102, 1071: 1103, 1072: 1040, 1073: 1041, 1074: [1042, 7296], 1075: 1043, 1076: [1044, 7297], 1077: 1045, 1078: 1046, 1079: 1047, 1080: 1048, 1081: 1049, 1082: 1050, 1083: 1051, 1084: 1052, 1085: 1053, 1086: [1054, 7298], 1087: 1055, 1088: 1056, 1089: [1057, 7299], 1090: [1058, 7300, 7301], 1091: 1059, 1092: 1060, 1093: 1061, 1094: 1062, 1095: 1063, 1096: 1064, 1097: 1065, 1098: [1066, 7302], 1099: 1067, 1100: 1068, 1101: 1069, 1102: 1070, 1103: 1071, 1104: 1024, 1105: 1025, 1106: 1026, 1107: 1027, 1108: 1028, 1109: 1029, 1110: 1030, 1111: 1031, 1112: 1032, 1113: 1033, 1114: 1034, 1115: 1035, 1116: 1036, 1117: 1037, 1118: 1038, 1119: 1039, 1120: 1121, 1121: 1120, 1122: [1123, 7303], 1123: [1122, 7303], 1124: 1125, 1125: 1124, 1126: 1127, 1127: 1126, 1128: 1129, 1129: 1128, 1130: 1131, 1131: 1130, 1132: 1133, 1133: 1132, 1134: 1135, 1135: 1134, 1136: 1137, 1137: 1136, 1138: 1139, 1139: 1138, 1140: 1141, 1141: 1140, 1142: 1143, 1143: 1142, 1144: 1145, 1145: 1144, 1146: 1147, 1147: 1146, 1148: 1149, 1149: 1148, 1150: 1151, 1151: 1150, 1152: 1153, 1153: 1152, 1162: 1163, 1163: 1162, 1164: 1165, 1165: 1164, 1166: 1167, 1167: 1166, 1168: 1169, 1169: 1168, 1170: 1171, 1171: 1170, 1172: 1173, 1173: 1172, 1174: 1175, 1175: 1174, 1176: 1177, 1177: 1176, 1178: 1179, 1179: 1178, 1180: 1181, 1181: 1180, 1182: 1183, 1183: 1182, 1184: 1185, 1185: 1184, 1186: 1187, 1187: 1186, 1188: 1189, 1189: 1188, 1190: 1191, 1191: 1190, 1192: 1193, 1193: 1192, 1194: 1195, 1195: 1194, 1196: 1197, 1197: 1196, 1198: 1199, 1199: 1198, 1200: 1201, 1201: 1200, 1202: 1203, 1203: 1202, 1204: 1205, 1205: 1204, 1206: 1207, 1207: 1206, 1208: 1209, 1209: 1208, 1210: 1211, 1211: 1210, 1212: 1213, 1213: 1212, 1214: 1215, 1215: 1214, 1216: 1231, 1217: 1218, 1218: 1217, 1219: 1220, 1220: 1219, 1221: 1222, 1222: 1221, 1223: 1224, 1224: 1223, 1225: 1226, 1226: 1225, 1227: 1228, 1228: 1227, 1229: 1230, 1230: 1229, 1231: 1216, 1232: 1233, 1233: 1232, 1234: 1235, 1235: 1234, 1236: 1237, 1237: 1236, 1238: 1239, 1239: 1238, 1240: 1241, 1241: 1240, 1242: 1243, 1243: 1242, 1244: 1245, 1245: 1244, 1246: 1247, 1247: 1246, 1248: 1249, 1249: 1248, 1250: 1251, 1251: 1250, 1252: 1253, 1253: 1252, 1254: 1255, 1255: 1254, 1256: 1257, 1257: 1256, 1258: 1259, 1259: 1258, 1260: 1261, 1261: 1260, 1262: 1263, 1263: 1262, 1264: 1265, 1265: 1264, 1266: 1267, 1267: 1266, 1268: 1269, 1269: 1268, 1270: 1271, 1271: 1270, 1272: 1273, 1273: 1272, 1274: 1275, 1275: 1274, 1276: 1277, 1277: 1276, 1278: 1279, 1279: 1278, 1280: 1281, 1281: 1280, 1282: 1283, 1283: 1282, 1284: 1285, 1285: 1284, 1286: 1287, 1287: 1286, 1288: 1289, 1289: 1288, 1290: 1291, 1291: 1290, 1292: 1293, 1293: 1292, 1294: 1295, 1295: 1294, 1296: 1297, 1297: 1296, 1298: 1299, 1299: 1298, 1300: 1301, 1301: 1300, 1302: 1303, 1303: 1302, 1304: 1305, 1305: 1304, 1306: 1307, 1307: 1306, 1308: 1309, 1309: 1308, 1310: 1311, 1311: 1310, 1312: 1313, 1313: 1312, 1314: 1315, 1315: 1314, 1316: 1317, 1317: 1316, 1318: 1319, 1319: 1318, 1320: 1321, 1321: 1320, 1322: 1323, 1323: 1322, 1324: 1325, 1325: 1324, 1326: 1327, 1327: 1326, 1329: 1377, 1330: 1378, 1331: 1379, 1332: 1380, 1333: 1381, 1334: 1382, 1335: 1383, 1336: 1384, 1337: 1385, 1338: 1386, 1339: 1387, 1340: 1388, 1341: 1389, 1342: 1390, 1343: 1391, 1344: 1392, 1345: 1393, 1346: 1394, 1347: 1395, 1348: 1396, 1349: 1397, 1350: 1398, 1351: 1399, 1352: 1400, 1353: 1401, 1354: 1402, 1355: 1403, 1356: 1404, 1357: 1405, 1358: 1406, 1359: 1407, 1360: 1408, 1361: 1409, 1362: 1410, 1363: 1411, 1364: 1412, 1365: 1413, 1366: 1414, 1377: 1329, 1378: 1330, 1379: 1331, 1380: 1332, 1381: 1333, 1382: 1334, 1383: 1335, 1384: 1336, 1385: 1337, 1386: 1338, 1387: 1339, 1388: 1340, 1389: 1341, 1390: 1342, 1391: 1343, 1392: 1344, 1393: 1345, 1394: 1346, 1395: 1347, 1396: 1348, 1397: 1349, 1398: 1350, 1399: 1351, 1400: 1352, 1401: 1353, 1402: 1354, 1403: 1355, 1404: 1356, 1405: 1357, 1406: 1358, 1407: 1359, 1408: 1360, 1409: 1361, 1410: 1362, 1411: 1363, 1412: 1364, 1413: 1365, 1414: 1366, 4256: 11520, 4257: 11521, 4258: 11522, 4259: 11523, 4260: 11524, 4261: 11525, 4262: 11526, 4263: 11527, 4264: 11528, 4265: 11529, 4266: 11530, 4267: 11531, 4268: 11532, 4269: 11533, 4270: 11534, 4271: 11535, 4272: 11536, 4273: 11537, 4274: 11538, 4275: 11539, 4276: 11540, 4277: 11541, 4278: 11542, 4279: 11543, 4280: 11544, 4281: 11545, 4282: 11546, 4283: 11547, 4284: 11548, 4285: 11549, 4286: 11550, 4287: 11551, 4288: 11552, 4289: 11553, 4290: 11554, 4291: 11555, 4292: 11556, 4293: 11557, 4295: 11559, 4301: 11565, 4304: 7312, 4305: 7313, 4306: 7314, 4307: 7315, 4308: 7316, 4309: 7317, 4310: 7318, 4311: 7319, 4312: 7320, 4313: 7321, 4314: 7322, 4315: 7323, 4316: 7324, 4317: 7325, 4318: 7326, 4319: 7327, 4320: 7328, 4321: 7329, 4322: 7330, 4323: 7331, 4324: 7332, 4325: 7333, 4326: 7334, 4327: 7335, 4328: 7336, 4329: 7337, 4330: 7338, 4331: 7339, 4332: 7340, 4333: 7341, 4334: 7342, 4335: 7343, 4336: 7344, 4337: 7345, 4338: 7346, 4339: 7347, 4340: 7348, 4341: 7349, 4342: 7350, 4343: 7351, 4344: 7352, 4345: 7353, 4346: 7354, 4349: 7357, 4350: 7358, 4351: 7359, 5024: 43888, 5025: 43889, 5026: 43890, 5027: 43891, 5028: 43892, 5029: 43893, 5030: 43894, 5031: 43895, 5032: 43896, 5033: 43897, 5034: 43898, 5035: 43899, 5036: 43900, 5037: 43901, 5038: 43902, 5039: 43903, 5040: 43904, 5041: 43905, 5042: 43906, 5043: 43907, 5044: 43908, 5045: 43909, 5046: 43910, 5047: 43911, 5048: 43912, 5049: 43913, 5050: 43914, 5051: 43915, 5052: 43916, 5053: 43917, 5054: 43918, 5055: 43919, 5056: 43920, 5057: 43921, 5058: 43922, 5059: 43923, 5060: 43924, 5061: 43925, 5062: 43926, 5063: 43927, 5064: 43928, 5065: 43929, 5066: 43930, 5067: 43931, 5068: 43932, 5069: 43933, 5070: 43934, 5071: 43935, 5072: 43936, 5073: 43937, 5074: 43938, 5075: 43939, 5076: 43940, 5077: 43941, 5078: 43942, 5079: 43943, 5080: 43944, 5081: 43945, 5082: 43946, 5083: 43947, 5084: 43948, 5085: 43949, 5086: 43950, 5087: 43951, 5088: 43952, 5089: 43953, 5090: 43954, 5091: 43955, 5092: 43956, 5093: 43957, 5094: 43958, 5095: 43959, 5096: 43960, 5097: 43961, 5098: 43962, 5099: 43963, 5100: 43964, 5101: 43965, 5102: 43966, 5103: 43967, 5104: 5112, 5105: 5113, 5106: 5114, 5107: 5115, 5108: 5116, 5109: 5117, 5112: 5104, 5113: 5105, 5114: 5106, 5115: 5107, 5116: 5108, 5117: 5109, 7296: [1042, 1074], 7297: [1044, 1076], 7298: [1054, 1086], 7299: [1057, 1089], 7300: [1058, 1090, 7301], 7301: [1058, 1090, 7300], 7302: [1066, 1098], 7303: [1122, 1123], 7304: [42570, 42571], 7305: 7306, 7306: 7305, 7312: 4304, 7313: 4305, 7314: 4306, 7315: 4307, 7316: 4308, 7317: 4309, 7318: 4310, 7319: 4311, 7320: 4312, 7321: 4313, 7322: 4314, 7323: 4315, 7324: 4316, 7325: 4317, 7326: 4318, 7327: 4319, 7328: 4320, 7329: 4321, 7330: 4322, 7331: 4323, 7332: 4324, 7333: 4325, 7334: 4326, 7335: 4327, 7336: 4328, 7337: 4329, 7338: 4330, 7339: 4331, 7340: 4332, 7341: 4333, 7342: 4334, 7343: 4335, 7344: 4336, 7345: 4337, 7346: 4338, 7347: 4339, 7348: 4340, 7349: 4341, 7350: 4342, 7351: 4343, 7352: 4344, 7353: 4345, 7354: 4346, 7357: 4349, 7358: 4350, 7359: 4351, 7545: 42877, 7549: 11363, 7566: 42950, 7680: 7681, 7681: 7680, 7682: 7683, 7683: 7682, 7684: 7685, 7685: 7684, 7686: 7687, 7687: 7686, 7688: 7689, 7689: 7688, 7690: 7691, 7691: 7690, 7692: 7693, 7693: 7692, 7694: 7695, 7695: 7694, 7696: 7697, 7697: 7696, 7698: 7699, 7699: 7698, 7700: 7701, 7701: 7700, 7702: 7703, 7703: 7702, 7704: 7705, 7705: 7704, 7706: 7707, 7707: 7706, 7708: 7709, 7709: 7708, 7710: 7711, 7711: 7710, 7712: 7713, 7713: 7712, 7714: 7715, 7715: 7714, 7716: 7717, 7717: 7716, 7718: 7719, 7719: 7718, 7720: 7721, 7721: 7720, 7722: 7723, 7723: 7722, 7724: 7725, 7725: 7724, 7726: 7727, 7727: 7726, 7728: 7729, 7729: 7728, 7730: 7731, 7731: 7730, 7732: 7733, 7733: 7732, 7734: 7735, 7735: 7734, 7736: 7737, 7737: 7736, 7738: 7739, 7739: 7738, 7740: 7741, 7741: 7740, 7742: 7743, 7743: 7742, 7744: 7745, 7745: 7744, 7746: 7747, 7747: 7746, 7748: 7749, 7749: 7748, 7750: 7751, 7751: 7750, 7752: 7753, 7753: 7752, 7754: 7755, 7755: 7754, 7756: 7757, 7757: 7756, 7758: 7759, 7759: 7758, 7760: 7761, 7761: 7760, 7762: 7763, 7763: 7762, 7764: 7765, 7765: 7764, 7766: 7767, 7767: 7766, 7768: 7769, 7769: 7768, 7770: 7771, 7771: 7770, 7772: 7773, 7773: 7772, 7774: 7775, 7775: 7774, 7776: [7777, 7835], 7777: [7776, 7835], 7778: 7779, 7779: 7778, 7780: 7781, 7781: 7780, 7782: 7783, 7783: 7782, 7784: 7785, 7785: 7784, 7786: 7787, 7787: 7786, 7788: 7789, 7789: 7788, 7790: 7791, 7791: 7790, 7792: 7793, 7793: 7792, 7794: 7795, 7795: 7794, 7796: 7797, 7797: 7796, 7798: 7799, 7799: 7798, 7800: 7801, 7801: 7800, 7802: 7803, 7803: 7802, 7804: 7805, 7805: 7804, 7806: 7807, 7807: 7806, 7808: 7809, 7809: 7808, 7810: 7811, 7811: 7810, 7812: 7813, 7813: 7812, 7814: 7815, 7815: 7814, 7816: 7817, 7817: 7816, 7818: 7819, 7819: 7818, 7820: 7821, 7821: 7820, 7822: 7823, 7823: 7822, 7824: 7825, 7825: 7824, 7826: 7827, 7827: 7826, 7828: 7829, 7829: 7828, 7835: [7776, 7777], 7838: 223, 7840: 7841, 7841: 7840, 7842: 7843, 7843: 7842, 7844: 7845, 7845: 7844, 7846: 7847, 7847: 7846, 7848: 7849, 7849: 7848, 7850: 7851, 7851: 7850, 7852: 7853, 7853: 7852, 7854: 7855, 7855: 7854, 7856: 7857, 7857: 7856, 7858: 7859, 7859: 7858, 7860: 7861, 7861: 7860, 7862: 7863, 7863: 7862, 7864: 7865, 7865: 7864, 7866: 7867, 7867: 7866, 7868: 7869, 7869: 7868, 7870: 7871, 7871: 7870, 7872: 7873, 7873: 7872, 7874: 7875, 7875: 7874, 7876: 7877, 7877: 7876, 7878: 7879, 7879: 7878, 7880: 7881, 7881: 7880, 7882: 7883, 7883: 7882, 7884: 7885, 7885: 7884, 7886: 7887, 7887: 7886, 7888: 7889, 7889: 7888, 7890: 7891, 7891: 7890, 7892: 7893, 7893: 7892, 7894: 7895, 7895: 7894, 7896: 7897, 7897: 7896, 7898: 7899, 7899: 7898, 7900: 7901, 7901: 7900, 7902: 7903, 7903: 7902, 7904: 7905, 7905: 7904, 7906: 7907, 7907: 7906, 7908: 7909, 7909: 7908, 7910: 7911, 7911: 7910, 7912: 7913, 7913: 7912, 7914: 7915, 7915: 7914, 7916: 7917, 7917: 7916, 7918: 7919, 7919: 7918, 7920: 7921, 7921: 7920, 7922: 7923, 7923: 7922, 7924: 7925, 7925: 7924, 7926: 7927, 7927: 7926, 7928: 7929, 7929: 7928, 7930: 7931, 7931: 7930, 7932: 7933, 7933: 7932, 7934: 7935, 7935: 7934, 7936: 7944, 7937: 7945, 7938: 7946, 7939: 7947, 7940: 7948, 7941: 7949, 7942: 7950, 7943: 7951, 7944: 7936, 7945: 7937, 7946: 7938, 7947: 7939, 7948: 7940, 7949: 7941, 7950: 7942, 7951: 7943, 7952: 7960, 7953: 7961, 7954: 7962, 7955: 7963, 7956: 7964, 7957: 7965, 7960: 7952, 7961: 7953, 7962: 7954, 7963: 7955, 7964: 7956, 7965: 7957, 7968: 7976, 7969: 7977, 7970: 7978, 7971: 7979, 7972: 7980, 7973: 7981, 7974: 7982, 7975: 7983, 7976: 7968, 7977: 7969, 7978: 7970, 7979: 7971, 7980: 7972, 7981: 7973, 7982: 7974, 7983: 7975, 7984: 7992, 7985: 7993, 7986: 7994, 7987: 7995, 7988: 7996, 7989: 7997, 7990: 7998, 7991: 7999, 7992: 7984, 7993: 7985, 7994: 7986, 7995: 7987, 7996: 7988, 7997: 7989, 7998: 7990, 7999: 7991, 8000: 8008, 8001: 8009, 8002: 8010, 8003: 8011, 8004: 8012, 8005: 8013, 8008: 8000, 8009: 8001, 8010: 8002, 8011: 8003, 8012: 8004, 8013: 8005, 8017: 8025, 8019: 8027, 8021: 8029, 8023: 8031, 8025: 8017, 8027: 8019, 8029: 8021, 8031: 8023, 8032: 8040, 8033: 8041, 8034: 8042, 8035: 8043, 8036: 8044, 8037: 8045, 8038: 8046, 8039: 8047, 8040: 8032, 8041: 8033, 8042: 8034, 8043: 8035, 8044: 8036, 8045: 8037, 8046: 8038, 8047: 8039, 8048: 8122, 8049: 8123, 8050: 8136, 8051: 8137, 8052: 8138, 8053: 8139, 8054: 8154, 8055: 8155, 8056: 8184, 8057: 8185, 8058: 8170, 8059: 8171, 8060: 8186, 8061: 8187, 8064: 8072, 8065: 8073, 8066: 8074, 8067: 8075, 8068: 8076, 8069: 8077, 8070: 8078, 8071: 8079, 8072: 8064, 8073: 8065, 8074: 8066, 8075: 8067, 8076: 8068, 8077: 8069, 8078: 8070, 8079: 8071, 8080: 8088, 8081: 8089, 8082: 8090, 8083: 8091, 8084: 8092, 8085: 8093, 8086: 8094, 8087: 8095, 8088: 8080, 8089: 8081, 8090: 8082, 8091: 8083, 8092: 8084, 8093: 8085, 8094: 8086, 8095: 8087, 8096: 8104, 8097: 8105, 8098: 8106, 8099: 8107, 8100: 8108, 8101: 8109, 8102: 8110, 8103: 8111, 8104: 8096, 8105: 8097, 8106: 8098, 8107: 8099, 8108: 8100, 8109: 8101, 8110: 8102, 8111: 8103, 8112: 8120, 8113: 8121, 8115: 8124, 8120: 8112, 8121: 8113, 8122: 8048, 8123: 8049, 8124: 8115, 8126: [837, 921, 953], 8131: 8140, 8136: 8050, 8137: 8051, 8138: 8052, 8139: 8053, 8140: 8131, 8144: 8152, 8145: 8153, 8147: 912, 8152: 8144, 8153: 8145, 8154: 8054, 8155: 8055, 8160: 8168, 8161: 8169, 8163: 944, 8165: 8172, 8168: 8160, 8169: 8161, 8170: 8058, 8171: 8059, 8172: 8165, 8179: 8188, 8184: 8056, 8185: 8057, 8186: 8060, 8187: 8061, 8188: 8179, 8486: [937, 969], 8490: [75, 107], 8491: [197, 229], 8498: 8526, 8526: 8498, 8544: 8560, 8545: 8561, 8546: 8562, 8547: 8563, 8548: 8564, 8549: 8565, 8550: 8566, 8551: 8567, 8552: 8568, 8553: 8569, 8554: 8570, 8555: 8571, 8556: 8572, 8557: 8573, 8558: 8574, 8559: 8575, 8560: 8544, 8561: 8545, 8562: 8546, 8563: 8547, 8564: 8548, 8565: 8549, 8566: 8550, 8567: 8551, 8568: 8552, 8569: 8553, 8570: 8554, 8571: 8555, 8572: 8556, 8573: 8557, 8574: 8558, 8575: 8559, 8579: 8580, 8580: 8579, 9398: 9424, 9399: 9425, 9400: 9426, 9401: 9427, 9402: 9428, 9403: 9429, 9404: 9430, 9405: 9431, 9406: 9432, 9407: 9433, 9408: 9434, 9409: 9435, 9410: 9436, 9411: 9437, 9412: 9438, 9413: 9439, 9414: 9440, 9415: 9441, 9416: 9442, 9417: 9443, 9418: 9444, 9419: 9445, 9420: 9446, 9421: 9447, 9422: 9448, 9423: 9449, 9424: 9398, 9425: 9399, 9426: 9400, 9427: 9401, 9428: 9402, 9429: 9403, 9430: 9404, 9431: 9405, 9432: 9406, 9433: 9407, 9434: 9408, 9435: 9409, 9436: 9410, 9437: 9411, 9438: 9412, 9439: 9413, 9440: 9414, 9441: 9415, 9442: 9416, 9443: 9417, 9444: 9418, 9445: 9419, 9446: 9420, 9447: 9421, 9448: 9422, 9449: 9423, 11264: 11312, 11265: 11313, 11266: 11314, 11267: 11315, 11268: 11316, 11269: 11317, 11270: 11318, 11271: 11319, 11272: 11320, 11273: 11321, 11274: 11322, 11275: 11323, 11276: 11324, 11277: 11325, 11278: 11326, 11279: 11327, 11280: 11328, 11281: 11329, 11282: 11330, 11283: 11331, 11284: 11332, 11285: 11333, 11286: 11334, 11287: 11335, 11288: 11336, 11289: 11337, 11290: 11338, 11291: 11339, 11292: 11340, 11293: 11341, 11294: 11342, 11295: 11343, 11296: 11344, 11297: 11345, 11298: 11346, 11299: 11347, 11300: 11348, 11301: 11349, 11302: 11350, 11303: 11351, 11304: 11352, 11305: 11353, 11306: 11354, 11307: 11355, 11308: 11356, 11309: 11357, 11310: 11358, 11311: 11359, 11312: 11264, 11313: 11265, 11314: 11266, 11315: 11267, 11316: 11268, 11317: 11269, 11318: 11270, 11319: 11271, 11320: 11272, 11321: 11273, 11322: 11274, 11323: 11275, 11324: 11276, 11325: 11277, 11326: 11278, 11327: 11279, 11328: 11280, 11329: 11281, 11330: 11282, 11331: 11283, 11332: 11284, 11333: 11285, 11334: 11286, 11335: 11287, 11336: 11288, 11337: 11289, 11338: 11290, 11339: 11291, 11340: 11292, 11341: 11293, 11342: 11294, 11343: 11295, 11344: 11296, 11345: 11297, 11346: 11298, 11347: 11299, 11348: 11300, 11349: 11301, 11350: 11302, 11351: 11303, 11352: 11304, 11353: 11305, 11354: 11306, 11355: 11307, 11356: 11308, 11357: 11309, 11358: 11310, 11359: 11311, 11360: 11361, 11361: 11360, 11362: 619, 11363: 7549, 11364: 637, 11365: 570, 11366: 574, 11367: 11368, 11368: 11367, 11369: 11370, 11370: 11369, 11371: 11372, 11372: 11371, 11373: 593, 11374: 625, 11375: 592, 11376: 594, 11378: 11379, 11379: 11378, 11381: 11382, 11382: 11381, 11390: 575, 11391: 576, 11392: 11393, 11393: 11392, 11394: 11395, 11395: 11394, 11396: 11397, 11397: 11396, 11398: 11399, 11399: 11398, 11400: 11401, 11401: 11400, 11402: 11403, 11403: 11402, 11404: 11405, 11405: 11404, 11406: 11407, 11407: 11406, 11408: 11409, 11409: 11408, 11410: 11411, 11411: 11410, 11412: 11413, 11413: 11412, 11414: 11415, 11415: 11414, 11416: 11417, 11417: 11416, 11418: 11419, 11419: 11418, 11420: 11421, 11421: 11420, 11422: 11423, 11423: 11422, 11424: 11425, 11425: 11424, 11426: 11427, 11427: 11426, 11428: 11429, 11429: 11428, 11430: 11431, 11431: 11430, 11432: 11433, 11433: 11432, 11434: 11435, 11435: 11434, 11436: 11437, 11437: 11436, 11438: 11439, 11439: 11438, 11440: 11441, 11441: 11440, 11442: 11443, 11443: 11442, 11444: 11445, 11445: 11444, 11446: 11447, 11447: 11446, 11448: 11449, 11449: 11448, 11450: 11451, 11451: 11450, 11452: 11453, 11453: 11452, 11454: 11455, 11455: 11454, 11456: 11457, 11457: 11456, 11458: 11459, 11459: 11458, 11460: 11461, 11461: 11460, 11462: 11463, 11463: 11462, 11464: 11465, 11465: 11464, 11466: 11467, 11467: 11466, 11468: 11469, 11469: 11468, 11470: 11471, 11471: 11470, 11472: 11473, 11473: 11472, 11474: 11475, 11475: 11474, 11476: 11477, 11477: 11476, 11478: 11479, 11479: 11478, 11480: 11481, 11481: 11480, 11482: 11483, 11483: 11482, 11484: 11485, 11485: 11484, 11486: 11487, 11487: 11486, 11488: 11489, 11489: 11488, 11490: 11491, 11491: 11490, 11499: 11500, 11500: 11499, 11501: 11502, 11502: 11501, 11506: 11507, 11507: 11506, 11520: 4256, 11521: 4257, 11522: 4258, 11523: 4259, 11524: 4260, 11525: 4261, 11526: 4262, 11527: 4263, 11528: 4264, 11529: 4265, 11530: 4266, 11531: 4267, 11532: 4268, 11533: 4269, 11534: 4270, 11535: 4271, 11536: 4272, 11537: 4273, 11538: 4274, 11539: 4275, 11540: 4276, 11541: 4277, 11542: 4278, 11543: 4279, 11544: 4280, 11545: 4281, 11546: 4282, 11547: 4283, 11548: 4284, 11549: 4285, 11550: 4286, 11551: 4287, 11552: 4288, 11553: 4289, 11554: 4290, 11555: 4291, 11556: 4292, 11557: 4293, 11559: 4295, 11565: 4301, 42560: 42561, 42561: 42560, 42562: 42563, 42563: 42562, 42564: 42565, 42565: 42564, 42566: 42567, 42567: 42566, 42568: 42569, 42569: 42568, 42570: [7304, 42571], 42571: [7304, 42570], 42572: 42573, 42573: 42572, 42574: 42575, 42575: 42574, 42576: 42577, 42577: 42576, 42578: 42579, 42579: 42578, 42580: 42581, 42581: 42580, 42582: 42583, 42583: 42582, 42584: 42585, 42585: 42584, 42586: 42587, 42587: 42586, 42588: 42589, 42589: 42588, 42590: 42591, 42591: 42590, 42592: 42593, 42593: 42592, 42594: 42595, 42595: 42594, 42596: 42597, 42597: 42596, 42598: 42599, 42599: 42598, 42600: 42601, 42601: 42600, 42602: 42603, 42603: 42602, 42604: 42605, 42605: 42604, 42624: 42625, 42625: 42624, 42626: 42627, 42627: 42626, 42628: 42629, 42629: 42628, 42630: 42631, 42631: 42630, 42632: 42633, 42633: 42632, 42634: 42635, 42635: 42634, 42636: 42637, 42637: 42636, 42638: 42639, 42639: 42638, 42640: 42641, 42641: 42640, 42642: 42643, 42643: 42642, 42644: 42645, 42645: 42644, 42646: 42647, 42647: 42646, 42648: 42649, 42649: 42648, 42650: 42651, 42651: 42650, 42786: 42787, 42787: 42786, 42788: 42789, 42789: 42788, 42790: 42791, 42791: 42790, 42792: 42793, 42793: 42792, 42794: 42795, 42795: 42794, 42796: 42797, 42797: 42796, 42798: 42799, 42799: 42798, 42802: 42803, 42803: 42802, 42804: 42805, 42805: 42804, 42806: 42807, 42807: 42806, 42808: 42809, 42809: 42808, 42810: 42811, 42811: 42810, 42812: 42813, 42813: 42812, 42814: 42815, 42815: 42814, 42816: 42817, 42817: 42816, 42818: 42819, 42819: 42818, 42820: 42821, 42821: 42820, 42822: 42823, 42823: 42822, 42824: 42825, 42825: 42824, 42826: 42827, 42827: 42826, 42828: 42829, 42829: 42828, 42830: 42831, 42831: 42830, 42832: 42833, 42833: 42832, 42834: 42835, 42835: 42834, 42836: 42837, 42837: 42836, 42838: 42839, 42839: 42838, 42840: 42841, 42841: 42840, 42842: 42843, 42843: 42842, 42844: 42845, 42845: 42844, 42846: 42847, 42847: 42846, 42848: 42849, 42849: 42848, 42850: 42851, 42851: 42850, 42852: 42853, 42853: 42852, 42854: 42855, 42855: 42854, 42856: 42857, 42857: 42856, 42858: 42859, 42859: 42858, 42860: 42861, 42861: 42860, 42862: 42863, 42863: 42862, 42873: 42874, 42874: 42873, 42875: 42876, 42876: 42875, 42877: 7545, 42878: 42879, 42879: 42878, 42880: 42881, 42881: 42880, 42882: 42883, 42883: 42882, 42884: 42885, 42885: 42884, 42886: 42887, 42887: 42886, 42891: 42892, 42892: 42891, 42893: 613, 42896: 42897, 42897: 42896, 42898: 42899, 42899: 42898, 42900: 42948, 42902: 42903, 42903: 42902, 42904: 42905, 42905: 42904, 42906: 42907, 42907: 42906, 42908: 42909, 42909: 42908, 42910: 42911, 42911: 42910, 42912: 42913, 42913: 42912, 42914: 42915, 42915: 42914, 42916: 42917, 42917: 42916, 42918: 42919, 42919: 42918, 42920: 42921, 42921: 42920, 42922: 614, 42923: 604, 42924: 609, 42925: 620, 42926: 618, 42928: 670, 42929: 647, 42930: 669, 42931: 43859, 42932: 42933, 42933: 42932, 42934: 42935, 42935: 42934, 42936: 42937, 42937: 42936, 42938: 42939, 42939: 42938, 42940: 42941, 42941: 42940, 42942: 42943, 42943: 42942, 42944: 42945, 42945: 42944, 42946: 42947, 42947: 42946, 42948: 42900, 42949: 642, 42950: 7566, 42951: 42952, 42952: 42951, 42953: 42954, 42954: 42953, 42955: 612, 42956: 42957, 42957: 42956, 42960: 42961, 42961: 42960, 42966: 42967, 42967: 42966, 42968: 42969, 42969: 42968, 42970: 42971, 42971: 42970, 42972: 411, 42997: 42998, 42998: 42997, 43859: 42931, 43888: 5024, 43889: 5025, 43890: 5026, 43891: 5027, 43892: 5028, 43893: 5029, 43894: 5030, 43895: 5031, 43896: 5032, 43897: 5033, 43898: 5034, 43899: 5035, 43900: 5036, 43901: 5037, 43902: 5038, 43903: 5039, 43904: 5040, 43905: 5041, 43906: 5042, 43907: 5043, 43908: 5044, 43909: 5045, 43910: 5046, 43911: 5047, 43912: 5048, 43913: 5049, 43914: 5050, 43915: 5051, 43916: 5052, 43917: 5053, 43918: 5054, 43919: 5055, 43920: 5056, 43921: 5057, 43922: 5058, 43923: 5059, 43924: 5060, 43925: 5061, 43926: 5062, 43927: 5063, 43928: 5064, 43929: 5065, 43930: 5066, 43931: 5067, 43932: 5068, 43933: 5069, 43934: 5070, 43935: 5071, 43936: 5072, 43937: 5073, 43938: 5074, 43939: 5075, 43940: 5076, 43941: 5077, 43942: 5078, 43943: 5079, 43944: 5080, 43945: 5081, 43946: 5082, 43947: 5083, 43948: 5084, 43949: 5085, 43950: 5086, 43951: 5087, 43952: 5088, 43953: 5089, 43954: 5090, 43955: 5091, 43956: 5092, 43957: 5093, 43958: 5094, 43959: 5095, 43960: 5096, 43961: 5097, 43962: 5098, 43963: 5099, 43964: 5100, 43965: 5101, 43966: 5102, 43967: 5103, 64261: 64262, 64262: 64261, 65313: 65345, 65314: 65346, 65315: 65347, 65316: 65348, 65317: 65349, 65318: 65350, 65319: 65351, 65320: 65352, 65321: 65353, 65322: 65354, 65323: 65355, 65324: 65356, 65325: 65357, 65326: 65358, 65327: 65359, 65328: 65360, 65329: 65361, 65330: 65362, 65331: 65363, 65332: 65364, 65333: 65365, 65334: 65366, 65335: 65367, 65336: 65368, 65337: 65369, 65338: 65370, 65345: 65313, 65346: 65314, 65347: 65315, 65348: 65316, 65349: 65317, 65350: 65318, 65351: 65319, 65352: 65320, 65353: 65321, 65354: 65322, 65355: 65323, 65356: 65324, 65357: 65325, 65358: 65326, 65359: 65327, 65360: 65328, 65361: 65329, 65362: 65330, 65363: 65331, 65364: 65332, 65365: 65333, 65366: 65334, 65367: 65335, 65368: 65336, 65369: 65337, 65370: 65338, 66560: 66600, 66561: 66601, 66562: 66602, 66563: 66603, 66564: 66604, 66565: 66605, 66566: 66606, 66567: 66607, 66568: 66608, 66569: 66609, 66570: 66610, 66571: 66611, 66572: 66612, 66573: 66613, 66574: 66614, 66575: 66615, 66576: 66616, 66577: 66617, 66578: 66618, 66579: 66619, 66580: 66620, 66581: 66621, 66582: 66622, 66583: 66623, 66584: 66624, 66585: 66625, 66586: 66626, 66587: 66627, 66588: 66628, 66589: 66629, 66590: 66630, 66591: 66631, 66592: 66632, 66593: 66633, 66594: 66634, 66595: 66635, 66596: 66636, 66597: 66637, 66598: 66638, 66599: 66639, 66600: 66560, 66601: 66561, 66602: 66562, 66603: 66563, 66604: 66564, 66605: 66565, 66606: 66566, 66607: 66567, 66608: 66568, 66609: 66569, 66610: 66570, 66611: 66571, 66612: 66572, 66613: 66573, 66614: 66574, 66615: 66575, 66616: 66576, 66617: 66577, 66618: 66578, 66619: 66579, 66620: 66580, 66621: 66581, 66622: 66582, 66623: 66583, 66624: 66584, 66625: 66585, 66626: 66586, 66627: 66587, 66628: 66588, 66629: 66589, 66630: 66590, 66631: 66591, 66632: 66592, 66633: 66593, 66634: 66594, 66635: 66595, 66636: 66596, 66637: 66597, 66638: 66598, 66639: 66599, 66736: 66776, 66737: 66777, 66738: 66778, 66739: 66779, 66740: 66780, 66741: 66781, 66742: 66782, 66743: 66783, 66744: 66784, 66745: 66785, 66746: 66786, 66747: 66787, 66748: 66788, 66749: 66789, 66750: 66790, 66751: 66791, 66752: 66792, 66753: 66793, 66754: 66794, 66755: 66795, 66756: 66796, 66757: 66797, 66758: 66798, 66759: 66799, 66760: 66800, 66761: 66801, 66762: 66802, 66763: 66803, 66764: 66804, 66765: 66805, 66766: 66806, 66767: 66807, 66768: 66808, 66769: 66809, 66770: 66810, 66771: 66811, 66776: 66736, 66777: 66737, 66778: 66738, 66779: 66739, 66780: 66740, 66781: 66741, 66782: 66742, 66783: 66743, 66784: 66744, 66785: 66745, 66786: 66746, 66787: 66747, 66788: 66748, 66789: 66749, 66790: 66750, 66791: 66751, 66792: 66752, 66793: 66753, 66794: 66754, 66795: 66755, 66796: 66756, 66797: 66757, 66798: 66758, 66799: 66759, 66800: 66760, 66801: 66761, 66802: 66762, 66803: 66763, 66804: 66764, 66805: 66765, 66806: 66766, 66807: 66767, 66808: 66768, 66809: 66769, 66810: 66770, 66811: 66771, 66928: 66967, 66929: 66968, 66930: 66969, 66931: 66970, 66932: 66971, 66933: 66972, 66934: 66973, 66935: 66974, 66936: 66975, 66937: 66976, 66938: 66977, 66940: 66979, 66941: 66980, 66942: 66981, 66943: 66982, 66944: 66983, 66945: 66984, 66946: 66985, 66947: 66986, 66948: 66987, 66949: 66988, 66950: 66989, 66951: 66990, 66952: 66991, 66953: 66992, 66954: 66993, 66956: 66995, 66957: 66996, 66958: 66997, 66959: 66998, 66960: 66999, 66961: 67000, 66962: 67001, 66964: 67003, 66965: 67004, 66967: 66928, 66968: 66929, 66969: 66930, 66970: 66931, 66971: 66932, 66972: 66933, 66973: 66934, 66974: 66935, 66975: 66936, 66976: 66937, 66977: 66938, 66979: 66940, 66980: 66941, 66981: 66942, 66982: 66943, 66983: 66944, 66984: 66945, 66985: 66946, 66986: 66947, 66987: 66948, 66988: 66949, 66989: 66950, 66990: 66951, 66991: 66952, 66992: 66953, 66993: 66954, 66995: 66956, 66996: 66957, 66997: 66958, 66998: 66959, 66999: 66960, 67000: 66961, 67001: 66962, 67003: 66964, 67004: 66965, 68736: 68800, 68737: 68801, 68738: 68802, 68739: 68803, 68740: 68804, 68741: 68805, 68742: 68806, 68743: 68807, 68744: 68808, 68745: 68809, 68746: 68810, 68747: 68811, 68748: 68812, 68749: 68813, 68750: 68814, 68751: 68815, 68752: 68816, 68753: 68817, 68754: 68818, 68755: 68819, 68756: 68820, 68757: 68821, 68758: 68822, 68759: 68823, 68760: 68824, 68761: 68825, 68762: 68826, 68763: 68827, 68764: 68828, 68765: 68829, 68766: 68830, 68767: 68831, 68768: 68832, 68769: 68833, 68770: 68834, 68771: 68835, 68772: 68836, 68773: 68837, 68774: 68838, 68775: 68839, 68776: 68840, 68777: 68841, 68778: 68842, 68779: 68843, 68780: 68844, 68781: 68845, 68782: 68846, 68783: 68847, 68784: 68848, 68785: 68849, 68786: 68850, 68800: 68736, 68801: 68737, 68802: 68738, 68803: 68739, 68804: 68740, 68805: 68741, 68806: 68742, 68807: 68743, 68808: 68744, 68809: 68745, 68810: 68746, 68811: 68747, 68812: 68748, 68813: 68749, 68814: 68750, 68815: 68751, 68816: 68752, 68817: 68753, 68818: 68754, 68819: 68755, 68820: 68756, 68821: 68757, 68822: 68758, 68823: 68759, 68824: 68760, 68825: 68761, 68826: 68762, 68827: 68763, 68828: 68764, 68829: 68765, 68830: 68766, 68831: 68767, 68832: 68768, 68833: 68769, 68834: 68770, 68835: 68771, 68836: 68772, 68837: 68773, 68838: 68774, 68839: 68775, 68840: 68776, 68841: 68777, 68842: 68778, 68843: 68779, 68844: 68780, 68845: 68781, 68846: 68782, 68847: 68783, 68848: 68784, 68849: 68785, 68850: 68786, 68944: 68976, 68945: 68977, 68946: 68978, 68947: 68979, 68948: 68980, 68949: 68981, 68950: 68982, 68951: 68983, 68952: 68984, 68953: 68985, 68954: 68986, 68955: 68987, 68956: 68988, 68957: 68989, 68958: 68990, 68959: 68991, 68960: 68992, 68961: 68993, 68962: 68994, 68963: 68995, 68964: 68996, 68965: 68997, 68976: 68944, 68977: 68945, 68978: 68946, 68979: 68947, 68980: 68948, 68981: 68949, 68982: 68950, 68983: 68951, 68984: 68952, 68985: 68953, 68986: 68954, 68987: 68955, 68988: 68956, 68989: 68957, 68990: 68958, 68991: 68959, 68992: 68960, 68993: 68961, 68994: 68962, 68995: 68963, 68996: 68964, 68997: 68965, 71840: 71872, 71841: 71873, 71842: 71874, 71843: 71875, 71844: 71876, 71845: 71877, 71846: 71878, 71847: 71879, 71848: 71880, 71849: 71881, 71850: 71882, 71851: 71883, 71852: 71884, 71853: 71885, 71854: 71886, 71855: 71887, 71856: 71888, 71857: 71889, 71858: 71890, 71859: 71891, 71860: 71892, 71861: 71893, 71862: 71894, 71863: 71895, 71864: 71896, 71865: 71897, 71866: 71898, 71867: 71899, 71868: 71900, 71869: 71901, 71870: 71902, 71871: 71903, 71872: 71840, 71873: 71841, 71874: 71842, 71875: 71843, 71876: 71844, 71877: 71845, 71878: 71846, 71879: 71847, 71880: 71848, 71881: 71849, 71882: 71850, 71883: 71851, 71884: 71852, 71885: 71853, 71886: 71854, 71887: 71855, 71888: 71856, 71889: 71857, 71890: 71858, 71891: 71859, 71892: 71860, 71893: 71861, 71894: 71862, 71895: 71863, 71896: 71864, 71897: 71865, 71898: 71866, 71899: 71867, 71900: 71868, 71901: 71869, 71902: 71870, 71903: 71871, 93760: 93792, 93761: 93793, 93762: 93794, 93763: 93795, 93764: 93796, 93765: 93797, 93766: 93798, 93767: 93799, 93768: 93800, 93769: 93801, 93770: 93802, 93771: 93803, 93772: 93804, 93773: 93805, 93774: 93806, 93775: 93807, 93776: 93808, 93777: 93809, 93778: 93810, 93779: 93811, 93780: 93812, 93781: 93813, 93782: 93814, 93783: 93815, 93784: 93816, 93785: 93817, 93786: 93818, 93787: 93819, 93788: 93820, 93789: 93821, 93790: 93822, 93791: 93823, 93792: 93760, 93793: 93761, 93794: 93762, 93795: 93763, 93796: 93764, 93797: 93765, 93798: 93766, 93799: 93767, 93800: 93768, 93801: 93769, 93802: 93770, 93803: 93771, 93804: 93772, 93805: 93773, 93806: 93774, 93807: 93775, 93808: 93776, 93809: 93777, 93810: 93778, 93811: 93779, 93812: 93780, 93813: 93781, 93814: 93782, 93815: 93783, 93816: 93784, 93817: 93785, 93818: 93786, 93819: 93787, 93820: 93788, 93821: 93789, 93822: 93790, 93823: 93791, 125184: 125218, 125185: 125219, 125186: 125220, 125187: 125221, 125188: 125222, 125189: 125223, 125190: 125224, 125191: 125225, 125192: 125226, 125193: 125227, 125194: 125228, 125195: 125229, 125196: 125230, 125197: 125231, 125198: 125232, 125199: 125233, 125200: 125234, 125201: 125235, 125202: 125236, 125203: 125237, 125204: 125238, 125205: 125239, 125206: 125240, 125207: 125241, 125208: 125242, 125209: 125243, 125210: 125244, 125211: 125245, 125212: 125246, 125213: 125247, 125214: 125248, 125215: 125249, 125216: 125250, 125217: 125251, 125218: 125184, 125219: 125185, 125220: 125186, 125221: 125187, 125222: 125188, 125223: 125189, 125224: 125190, 125225: 125191, 125226: 125192, 125227: 125193, 125228: 125194, 125229: 125195, 125230: 125196, 125231: 125197, 125232: 125198, 125233: 125199, 125234: 125200, 125235: 125201, 125236: 125202, 125237: 125203, 125238: 125204, 125239: 125205, 125240: 125206, 125241: 125207, 125242: 125208, 125243: 125209, 125244: 125210, 125245: 125211, 125246: 125212, 125247: 125213, 125248: 125214, 125249: 125215, 125250: 125216, 125251: 125217 };

@@ -65,8 +65,8 @@ interface NotString {
     match(regexp: RegExp): RegExpMatchArray;
 >match : { (regexp: string): RegExpMatchArray; (regexp: RegExp): RegExpMatchArray; }
 >      : ^^^      ^^      ^^^                ^^^      ^^      ^^^                ^^^
->regexp : RegExp
->       : ^^^^^^
+>regexp : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     replace(searchValue: string, replaceValue: string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
@@ -91,16 +91,16 @@ interface NotString {
     replace(searchValue: RegExp, replaceValue: string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
 >        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
->searchValue : RegExp
->            : ^^^^^^
+>searchValue : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >replaceValue : string
 >             : ^^^^^^
 
     replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
 >        : ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^           ^^      ^^            ^^      ^^^      ^^^           ^^      ^^            ^^                                             ^^^      ^^^
->searchValue : RegExp
->            : ^^^^^^
+>searchValue : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >replaceValue : (substring: string, ...args: any[]) => string
 >             : ^         ^^      ^^^^^    ^^     ^^^^^      
 >substring : string
@@ -117,8 +117,8 @@ interface NotString {
     search(regexp: RegExp): number;
 >search : { (regexp: string): number; (regexp: RegExp): number; }
 >       : ^^^      ^^      ^^^      ^^^      ^^      ^^^      ^^^
->regexp : RegExp
->       : ^^^^^^
+>regexp : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     slice(start?: number, end?: number): string;
 >slice : (start?: number, end?: number) => string
@@ -139,8 +139,8 @@ interface NotString {
     split(separator: RegExp, limit?: number): string[];
 >split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
 >      : ^^^         ^^      ^^     ^^^      ^^^        ^^^         ^^      ^^     ^^^      ^^^        ^^^
->separator : RegExp
->          : ^^^^^^
+>separator : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >limit : number
 >      : ^^^^^^
 

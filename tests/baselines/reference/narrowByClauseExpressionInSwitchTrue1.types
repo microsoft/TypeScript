@@ -177,8 +177,8 @@ declare function isSomeType(x: unknown): x is SomeType;
 function processInput(input: string | RegExp | SomeType) {
 >processInput : (input: string | RegExp | SomeType) => void
 >             : ^     ^^                          ^^^^^^^^^
->input : string | RegExp | SomeType
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : string | SomeType | RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   switch (true) {
 >true : true
@@ -189,8 +189,8 @@ function processInput(input: string | RegExp | SomeType) {
 >                          : ^^^^^^^
 >typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->input : string | RegExp | SomeType
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : string | SomeType | RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
@@ -202,14 +202,14 @@ function processInput(input: string | RegExp | SomeType) {
     case input instanceof RegExp:
 >input instanceof RegExp : boolean
 >                        : ^^^^^^^
->input : string | RegExp | SomeType
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : string | SomeType | RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >RegExp : RegExpConstructor
 >       : ^^^^^^^^^^^^^^^^^
 
       input;
->input : RegExp
->      : ^^^^^^
+>input : RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       break;
     case isSomeType(input):
@@ -217,8 +217,8 @@ function processInput(input: string | RegExp | SomeType) {
 >                  : ^^^^^^^
 >isSomeType : (x: unknown) => x is SomeType
 >           : ^ ^^       ^^^^^             
->input : string | RegExp | SomeType
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : string | SomeType | RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       input;
 >input : SomeType

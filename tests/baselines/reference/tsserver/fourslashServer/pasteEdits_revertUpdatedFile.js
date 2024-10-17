@@ -419,6 +419,18 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "11"
           },
           {
+            "name": "_RegExp",
+            "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "_RegExpExecArray",
+            "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "any",
             "kind": "keyword",
             "kindModifiers": "",
@@ -516,6 +528,12 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Capitalize",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "CapturingGroupsArray",
             "kind": "type",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -833,6 +851,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "NamedCapturingGroupsObject",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "never",
             "kind": "keyword",
             "kindModifiers": "",
@@ -1038,13 +1062,25 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "RegExpExecArray",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "RegExpFlags",
+            "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "RegExpIndices",
             "kind": "interface",
             "kindModifiers": "declare",
             "sortText": "15"
           },
           {
             "name": "RegExpMatchArray",
-            "kind": "interface",
+            "kind": "type",
             "kindModifiers": "declare",
             "sortText": "15"
           },
@@ -1075,6 +1111,24 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "StringConstructor",
             "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "StringReplaceCallbackIncludeNamedCapturingGroups",
+            "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "StringReplaceCallbackOptions",
+            "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "StringReplaceCallbackSignature",
+            "kind": "type",
             "kindModifiers": "declare",
             "sortText": "15"
           },

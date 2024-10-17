@@ -111,8 +111,8 @@ class D4 extends Base {
 >     : ^^^^
 
     foo: RegExp;
->foo : RegExp
->    : ^^^^^^
+>foo : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 class D5 extends Base {

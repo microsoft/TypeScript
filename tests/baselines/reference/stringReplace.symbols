@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/es5/stringReplace.ts] ////
+
+=== stringReplace.ts ===
+// String.prototype.replace should accept a union of string and RegExp as the first argument
+// and a union of string and replace callback as the second argument
+"foo".replace(Math.random() >= 0.5 ? "foo" : /foo/, Math.random() >= 0.5 ? "bar" : () => "bar");
+>"foo".replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+

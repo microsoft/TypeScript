@@ -5,8 +5,8 @@ unionSubtypeIfEveryConstituentTypeIsSubtype.ts(28,5): error TS2411: Property 'fo
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(29,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'boolean'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(35,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'Date'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(36,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'Date'.
-unionSubtypeIfEveryConstituentTypeIsSubtype.ts(42,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'RegExp'.
-unionSubtypeIfEveryConstituentTypeIsSubtype.ts(43,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'RegExp'.
+unionSubtypeIfEveryConstituentTypeIsSubtype.ts(42,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
+unionSubtypeIfEveryConstituentTypeIsSubtype.ts(43,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(49,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type '{ bar: number; }'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(50,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type '{ bar: number; }'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(56,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'number[]'.
@@ -88,10 +88,10 @@ unionSubtypeIfEveryConstituentTypeIsSubtype.ts(129,5): error TS2411: Property 'f
         [x: string]: RegExp;
         foo: string | number;
         ~~~
-!!! error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'RegExp'.
+!!! error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
         foo2: e | number;
         ~~~~
-!!! error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'RegExp'.
+!!! error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
     }
     
     

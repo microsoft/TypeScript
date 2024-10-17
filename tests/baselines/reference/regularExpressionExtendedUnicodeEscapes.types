@@ -1,23 +1,15 @@
 //// [tests/cases/compiler/regularExpressionExtendedUnicodeEscapes.ts] ////
 
 === regularExpressionExtendedUnicodeEscapes.ts ===
-const regexes: RegExp[] = [
->regexes : RegExp[]
->        : ^^^^^^^^
->[	/\u{10000}[\u{10000}]/,	/\u{10000}[\u{10000}]/u,	/\u{10000}[\u{10000}]/v,] : RegExp[]
->                                                                             : ^^^^^^^^
+/\u{10000}[\u{10000}]/;
+>/\u{10000}[\u{10000}]/ : RegExp<["𐀀𐀀"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	/\u{10000}[\u{10000}]/,
->/\u{10000}[\u{10000}]/ : RegExp
->                       : ^^^^^^
+/\u{10000}[\u{10000}]/u;
+>/\u{10000}[\u{10000}]/u : RegExp<["𐀀𐀀"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-	/\u{10000}[\u{10000}]/u,
->/\u{10000}[\u{10000}]/u : RegExp
->                        : ^^^^^^
-
-	/\u{10000}[\u{10000}]/v,
->/\u{10000}[\u{10000}]/v : RegExp
->                        : ^^^^^^
-
-];
+/\u{10000}[\u{10000}]/v;
+>/\u{10000}[\u{10000}]/v : RegExp<["𐀀𐀀"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: true; sticky: false; }>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -27,9 +27,6 @@ interface Number {}
 interface Object {}
 >Object : Symbol(Object, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 8, 19))
 
-interface RegExp {}
->RegExp : Symbol(RegExp, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 9, 19))
-
 interface String {}
->String : Symbol(String, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 10, 19))
+>String : Symbol(String, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 9, 19))
 

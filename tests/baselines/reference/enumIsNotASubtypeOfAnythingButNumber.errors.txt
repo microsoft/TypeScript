@@ -1,7 +1,7 @@
 enumIsNotASubtypeOfAnythingButNumber.ts(18,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'string'.
 enumIsNotASubtypeOfAnythingButNumber.ts(24,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'boolean'.
 enumIsNotASubtypeOfAnythingButNumber.ts(30,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'Date'.
-enumIsNotASubtypeOfAnythingButNumber.ts(36,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'RegExp'.
+enumIsNotASubtypeOfAnythingButNumber.ts(36,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
 enumIsNotASubtypeOfAnythingButNumber.ts(42,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type '{ bar: number; }'.
 enumIsNotASubtypeOfAnythingButNumber.ts(48,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'number[]'.
 enumIsNotASubtypeOfAnythingButNumber.ts(54,5): error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'I8'.
@@ -60,7 +60,7 @@ enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of 
         [x: string]: RegExp;
         foo: E;
         ~~~
-!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'RegExp'.
+!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
     }
     
     

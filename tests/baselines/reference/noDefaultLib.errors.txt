@@ -17,4 +17,3 @@ noDefaultLib.ts(4,11): error TS2317: Global type 'Array' must have 1 type parame
     interface Object {}
     interface Date {}
     interface Function {}
-    interface RegExp {}

@@ -8,8 +8,8 @@ if (1) /regexp/a.foo();
 >                : ^^^
 >/regexp/a.foo : any
 >              : ^^^
->/regexp/a : RegExp
->          : ^^^^^^
+>/regexp/a : RegExp<["regexp"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
 >    : ^^^
 

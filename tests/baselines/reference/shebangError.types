@@ -12,8 +12,8 @@ var foo = 'Shebang is only allowed on the first line';
 >              : ^^^^^^
 >!/usr/bin : boolean
 >          : ^^^^^^^
->/usr/bin : RegExp
->         : ^^^^^^
+>/usr/bin : RegExp<["usr" | "usR" | "uSr" | "uSR" | "Usr" | "UsR" | "USr" | "USR"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >env : any
 >    : ^^^
 >node : any

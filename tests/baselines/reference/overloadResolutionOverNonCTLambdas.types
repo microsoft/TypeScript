@@ -1,5 +1,8 @@
 //// [tests/cases/compiler/overloadResolutionOverNonCTLambdas.ts] ////
 
+=== Performance Stats ===
+Instantiation count: 1,000
+
 === overloadResolutionOverNonCTLambdas.ts ===
 module Bugs {
 >Bugs : typeof Bugs
@@ -24,51 +27,55 @@ module Bugs {
 >       : ^^^^^^
 >message.replace(/\{(\d+)\}/g, function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    }) : string
 >                                                                                                                                                                            : ^^^^^^
->message.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
+>message.replace : { <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = { [name: string]: string; }>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; }
+>                : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
 >message : string
 >        : ^^^^^^
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
->/\{(\d+)\}/g : RegExp
->             : ^^^^^^
->function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    } : (match: string, ...rest: any[]) => any
->                                                                                                                                             : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
->match : string
->      : ^^^^^^
->rest : any[]
->     : ^^^^^
+>replace : { <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = { [name: string]: string; }>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; }
+>        : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
+>/\{(\d+)\}/g : RegExp<[`{${string}}`, string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    } : (match: `{${string}}`, rest_0: string, index: number, input: string) => any
+>                                                                                                                                             : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match : `{${string}}`
+>      : ^^^^^^^^^^^^^
+>rest : [string, index: number, input: string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       var index= rest[0];
->index : any
->rest[0] : any
->rest : any[]
->     : ^^^^^
+>index : string
+>      : ^^^^^^
+>rest[0] : string
+>        : ^^^^^^
+>rest : [string, index: number, input: string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
       return typeof args[index] !== 'undefined'
->typeof args[index] !== 'undefined'        ? args[index]        : match : any
+>typeof args[index] !== 'undefined'        ? args[index]        : match : error
 >typeof args[index] !== 'undefined' : boolean
 >                                   : ^^^^^^^
 >typeof args[index] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->args[index] : any
+>args[index] : error
 >args : any[]
 >     : ^^^^^
->index : any
+>index : string
+>      : ^^^^^^
 >'undefined' : "undefined"
 >            : ^^^^^^^^^^^
 
         ? args[index]
->args[index] : any
+>args[index] : error
 >args : any[]
 >     : ^^^^^
->index : any
+>index : string
+>      : ^^^^^^
 
         : match;
->match : string
->      : ^^^^^^
+>match : `{${string}}`
+>      : ^^^^^^^^^^^^^
 
     });
     return result;

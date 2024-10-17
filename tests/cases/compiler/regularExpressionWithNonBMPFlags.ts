@@ -1,3 +1,4 @@
+// @strict: true
 // @target: esnext
 
 // The characters in the following regular expression are ASCII-lookalike characters found in Unicode, including:

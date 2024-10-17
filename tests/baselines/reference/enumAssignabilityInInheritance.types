@@ -154,8 +154,8 @@ var r4 = foo4(E.A);
 declare function foo5(x: RegExp): RegExp;
 >foo5 : { (x: RegExp): RegExp; (x: E): E; }
 >     : ^^^ ^^      ^^^      ^^^ ^^ ^^^ ^^^
->x : RegExp
->  : ^^^^^^
+>x : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function foo5(x: E): E;
 >foo5 : { (x: RegExp): RegExp; (x: E): E; }

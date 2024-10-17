@@ -1,0 +1,74 @@
+//// [tests/cases/conformance/es6/regularExpressions/regExpConstructor.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 1,000
+Type Count: 5,000
+Instantiation count: 10,000
+
+=== regExpConstructor.ts ===
+// Flags should be copied
+const regex1 = new RegExp(/foo/i);
+>regex1 : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new RegExp(/foo/i) : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>RegExp : RegExpConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>/foo/i : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Flags should be copied
+const regex2 = new RegExp(/foo/i, undefined);
+>regex2 : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, RegExpFlags>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new RegExp(/foo/i, undefined) : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, RegExpFlags>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>RegExp : RegExpConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>/foo/i : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+// Flags should not be copied
+const regex3 = new RegExp(/foo/i, "dgi");
+>regex3 : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, RegExpFlags>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new RegExp(/foo/i, "dgi") : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, RegExpFlags>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>RegExp : RegExpConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>/foo/i : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"dgi" : "dgi"
+>      : ^^^^^
+
+// Flags should not be copied
+const regex4 = new RegExp(/foo/i, Math.random() >= 0.5 ? "dgi" : undefined);
+>regex4 : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, RegExpFlags>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new RegExp(/foo/i, Math.random() >= 0.5 ? "dgi" : undefined) : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, RegExpFlags>
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>RegExp : RegExpConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>/foo/i : RegExp<["foo" | "foO" | "fOo" | "fOO" | "Foo" | "FoO" | "FOo" | "FOO"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() >= 0.5 ? "dgi" : undefined : "dgi" | undefined
+>                                         : ^^^^^^^^^^^^^^^^^
+>Math.random() >= 0.5 : boolean
+>                     : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"dgi" : "dgi"
+>      : ^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+

@@ -46,8 +46,8 @@ var b = { new(x: RegExp) { return ''; } }; // not a construct signature, functio
 >                                  : ^^^^^^^^ ^^      ^^^^^^^^^^^^
 >new : (x: RegExp) => string
 >    : ^ ^^      ^^^^^^^^^^^
->x : RegExp
->  : ^^^^^^
+>x : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 

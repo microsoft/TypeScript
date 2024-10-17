@@ -118,8 +118,8 @@ x = <foo>x</foo>, x = <foo/>;
 >              : ^^^^^^^
 >/foo/.test : (string: string) => boolean
 >           : ^      ^^      ^^^^^       
->/foo/ : RegExp
->      : ^^^^^^
+>/foo/ : RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : (string: string) => boolean
 >     : ^      ^^      ^^^^^       
 >x : any

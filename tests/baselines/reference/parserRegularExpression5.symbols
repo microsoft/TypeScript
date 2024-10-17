@@ -2,6 +2,6 @@
 
 === parserRegularExpression5.ts ===
 if (a) / (\\ ? | & ) rct = j / .test(c.href);
->/ (\\ ? | & ) rct = j / .test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>/ (\\ ? | & ) rct = j / .test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 

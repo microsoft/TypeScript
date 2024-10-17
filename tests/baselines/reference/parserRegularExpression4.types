@@ -40,8 +40,8 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >                             : ^^^^^^^
 >/(\\?|&)adurl=/.test : (string: string) => boolean
 >                     : ^      ^^      ^^^^^       
->/(\\?|&)adurl=/ : RegExp
->                : ^^^^^^
+>/(\\?|&)adurl=/ : RegExp<["adurl=" | "\\adurl=" | "&adurl=", "" | "\\" | "&"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : (string: string) => boolean
 >     : ^      ^^      ^^^^^       
 >c.href : any
@@ -56,8 +56,8 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >                         : ^^^^^^^
 >/(\\?|&)q=/.test : (string: string) => boolean
 >                 : ^      ^^      ^^^^^       
->/(\\?|&)q=/ : RegExp
->            : ^^^^^^
+>/(\\?|&)q=/ : RegExp<["q=" | "\\q=" | "&q=", "" | "\\" | "&"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : (string: string) => boolean
 >     : ^      ^^      ^^^^^       
 >c.href : any
@@ -76,8 +76,8 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >                                      : ^^^^^^^
 >/ (\\ ? | & ) rct = j / .test : (string: string) => boolean
 >                              : ^      ^^      ^^^^^       
->/ (\\ ? | & ) rct = j / : RegExp
->                        : ^^^^^^
+>/ (\\ ? | & ) rct = j / : RegExp<[" \\  rct = j " | " \\   rct = j " | "  &  rct = j ", "\\ " | "\\  " | " & "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : (string: string) => boolean
 >     : ^      ^^      ^^^^^       
 >c.href : any
@@ -100,8 +100,8 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >                         : ^^^^^^^
 >/(\\?|&)q=/.test : (string: string) => boolean
 >                 : ^      ^^      ^^^^^       
->/(\\?|&)q=/ : RegExp
->            : ^^^^^^
+>/(\\?|&)q=/ : RegExp<["q=" | "\\q=" | "&q=", "" | "\\" | "&"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : (string: string) => boolean
 >     : ^      ^^      ^^^^^       
 >c.href : any

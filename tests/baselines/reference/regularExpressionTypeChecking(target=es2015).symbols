@@ -1,0 +1,479 @@
+//// [tests/cases/compiler/regularExpressionTypeChecking.ts] ////
+
+=== regularExpressionTypeChecking.ts ===
+"foo_foo_bar".replace(/foo/g, (match, index, input, ...args) => {
+>"foo_foo_bar".replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 0, 31))
+>index : Symbol(index, Decl(regularExpressionTypeChecking.ts, 0, 37))
+>input : Symbol(input, Decl(regularExpressionTypeChecking.ts, 0, 44))
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 0, 51))
+
+    match; // "foo"
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 0, 31))
+
+    index; // number
+>index : Symbol(index, Decl(regularExpressionTypeChecking.ts, 0, 37))
+
+    input; // string
+>input : Symbol(input, Decl(regularExpressionTypeChecking.ts, 0, 44))
+
+    args; // []
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 0, 51))
+
+    return match;
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 0, 31))
+
+});
+
+"foo42_foo24_bar".replace(/foo(\d+)/g, (match, id, index, input, ...args) => {
+>"foo42_foo24_bar".replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 8, 40))
+>id : Symbol(id, Decl(regularExpressionTypeChecking.ts, 8, 46))
+>index : Symbol(index, Decl(regularExpressionTypeChecking.ts, 8, 50))
+>input : Symbol(input, Decl(regularExpressionTypeChecking.ts, 8, 57))
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 8, 64))
+
+    match; // `foo${string}`
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 8, 40))
+
+    id; // string
+>id : Symbol(id, Decl(regularExpressionTypeChecking.ts, 8, 46))
+
+    index; // number
+>index : Symbol(index, Decl(regularExpressionTypeChecking.ts, 8, 50))
+
+    input; // string
+>input : Symbol(input, Decl(regularExpressionTypeChecking.ts, 8, 57))
+
+    args; // []
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 8, 64))
+
+    return match;
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 8, 40))
+
+});
+
+"foo42_foo24_bar".replace(/foo(?<id>\d+)/g, (match, id, index, input, capturingGroups, ...args) => {
+>"foo42_foo24_bar".replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 17, 45))
+>id : Symbol(id, Decl(regularExpressionTypeChecking.ts, 17, 51))
+>index : Symbol(index, Decl(regularExpressionTypeChecking.ts, 17, 55))
+>input : Symbol(input, Decl(regularExpressionTypeChecking.ts, 17, 62))
+>capturingGroups : Symbol(capturingGroups, Decl(regularExpressionTypeChecking.ts, 17, 69))
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 17, 86))
+
+    match; // `foo${string}`
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 17, 45))
+
+    id; // string
+>id : Symbol(id, Decl(regularExpressionTypeChecking.ts, 17, 51))
+
+    index; // number
+>index : Symbol(index, Decl(regularExpressionTypeChecking.ts, 17, 55))
+
+    input; // string
+>input : Symbol(input, Decl(regularExpressionTypeChecking.ts, 17, 62))
+
+    // for target ≥ ES2018
+    capturingGroups.id; // string
+>capturingGroups : Symbol(capturingGroups, Decl(regularExpressionTypeChecking.ts, 17, 69))
+
+    capturingGroups.foo; // error
+>capturingGroups : Symbol(capturingGroups, Decl(regularExpressionTypeChecking.ts, 17, 69))
+
+    args; // []
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 17, 86))
+
+    return match;
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 17, 45))
+
+});
+
+"foo_foo_bar".replace(/foo(?<empty>){0}/g, (match, empty, index, input, capturingGroups, ...args) => {
+>"foo_foo_bar".replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 29, 44))
+>empty : Symbol(empty, Decl(regularExpressionTypeChecking.ts, 29, 50))
+>index : Symbol(index, Decl(regularExpressionTypeChecking.ts, 29, 57))
+>input : Symbol(input, Decl(regularExpressionTypeChecking.ts, 29, 64))
+>capturingGroups : Symbol(capturingGroups, Decl(regularExpressionTypeChecking.ts, 29, 71))
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 29, 88))
+
+    match; // "foo"
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 29, 44))
+
+    empty; // undefined
+>empty : Symbol(empty, Decl(regularExpressionTypeChecking.ts, 29, 50))
+
+    index; // number
+>index : Symbol(index, Decl(regularExpressionTypeChecking.ts, 29, 57))
+
+    input; // string
+>input : Symbol(input, Decl(regularExpressionTypeChecking.ts, 29, 64))
+
+    // for target ≥ ES2018
+    capturingGroups.empty; // undefined
+>capturingGroups : Symbol(capturingGroups, Decl(regularExpressionTypeChecking.ts, 29, 71))
+
+    capturingGroups.foo; // error
+>capturingGroups : Symbol(capturingGroups, Decl(regularExpressionTypeChecking.ts, 29, 71))
+
+    args; // []
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 29, 88))
+
+    return match;
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 29, 44))
+
+});
+
+const dateTimeString = "2048-10-24 12:34:56";
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeChecking.ts, 41, 5))
+
+// a very loosey Temporal (Zoned)DateTime format regex, see `regularExpressionTypeChecking.ts` for an explanation
+{
+    const dateTimeRegex = /^(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?:Z|[+-](?<timeZone>(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?$/i;
+>dateTimeRegex : Symbol(dateTimeRegex, Decl(regularExpressionTypeChecking.ts, 45, 9))
+
+    let match = dateTimeString.match(dateTimeRegex)!; // RegExpExecArray
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>dateTimeString.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeChecking.ts, 41, 5))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>dateTimeRegex : Symbol(dateTimeRegex, Decl(regularExpressionTypeChecking.ts, 45, 9))
+
+    match.index; // number
+>match.index : Symbol(_RegExpExecArray.index, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>index : Symbol(_RegExpExecArray.index, Decl(lib.es5.d.ts, --, --))
+
+    match.input; // string
+>match.input : Symbol(_RegExpExecArray.input, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>input : Symbol(_RegExpExecArray.input, Decl(lib.es5.d.ts, --, --))
+
+    match[0].length; // number
+>match[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>0 : Symbol(0)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[1].length; // number
+>match[1].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>1 : Symbol(1)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[2].length; // number
+>match[2].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>2 : Symbol(2)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[3]?.length; // number | undefined
+>match[3]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>3 : Symbol(3)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[4].length; // number
+>match[4].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>4 : Symbol(4)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[5].length; // number
+>match[5].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>5 : Symbol(5)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[6]?.length; // number | undefined
+>match[6]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>6 : Symbol(6)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[15]?.length; // number | undefined
+>match[15]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>15 : Symbol(15)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[16].length; // error
+>match[16].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.date.length; // number
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    match.groups.year.length; // number
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    match.groups.month.length; // number
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    match.groups.day.length; // number
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    match.groups.time?.length; // number | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    match.groups.hour?.length; // number | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    match.groups.minute?.length; // number | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    match.groups.second?.length; // number | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    match.groups.timeZone?.length; // number | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    match.groups.timeZoneSecond?.length; // number | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    match.groups.foo.length; // error
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    match.indices; // error
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    let execMatch = dateTimeRegex.exec(dateTimeString)!;
+>execMatch : Symbol(execMatch, Decl(regularExpressionTypeChecking.ts, 72, 7))
+>dateTimeRegex.exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>dateTimeRegex : Symbol(dateTimeRegex, Decl(regularExpressionTypeChecking.ts, 45, 9))
+>exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeChecking.ts, 41, 5))
+
+    match = execMatch;
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+>execMatch : Symbol(execMatch, Decl(regularExpressionTypeChecking.ts, 72, 7))
+
+    execMatch = match;
+>execMatch : Symbol(execMatch, Decl(regularExpressionTypeChecking.ts, 72, 7))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
+
+    dateTimeString.replace(dateTimeRegex, (...args) => {
+>dateTimeString.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeChecking.ts, 41, 5))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>dateTimeRegex : Symbol(dateTimeRegex, Decl(regularExpressionTypeChecking.ts, 45, 9))
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 76, 43))
+
+        args;
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 76, 43))
+
+        return args[0];
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 76, 43))
+>0 : Symbol(0)
+
+    });
+}
+
+{
+    const globalDateTimeRegex = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?:Z|[+-](?<timeZone>(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/ig;
+>globalDateTimeRegex : Symbol(globalDateTimeRegex, Decl(regularExpressionTypeChecking.ts, 83, 9))
+
+    const match = dateTimeString.match(globalDateTimeRegex)!; // RegExpMatchArray
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 85, 9))
+>dateTimeString.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeChecking.ts, 41, 5))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>globalDateTimeRegex : Symbol(globalDateTimeRegex, Decl(regularExpressionTypeChecking.ts, 83, 9))
+
+    match.index; // error
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 85, 9))
+
+    match.input; // error
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 85, 9))
+
+    match[0].length; // number
+>match[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 85, 9))
+>0 : Symbol(0)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[1]?.length; // number | undefined
+>match[1]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 85, 9))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[99]?.length; // number | undefined
+>match[99]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 85, 9))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups; // error
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 85, 9))
+
+    match.indices; // error
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 85, 9))
+
+    dateTimeString.replace(globalDateTimeRegex, (...args) => {
+>dateTimeString.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeChecking.ts, 41, 5))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>globalDateTimeRegex : Symbol(globalDateTimeRegex, Decl(regularExpressionTypeChecking.ts, 83, 9))
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 94, 49))
+
+        args;
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 94, 49))
+
+        return args[0];
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 94, 49))
+>0 : Symbol(0)
+
+    });
+}
+
+{
+    const dateTimeRegexWithIndices = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?:Z|[+-](?<timeZone>(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/id;
+>dateTimeRegexWithIndices : Symbol(dateTimeRegexWithIndices, Decl(regularExpressionTypeChecking.ts, 101, 9))
+
+    let match = dateTimeString.match(dateTimeRegexWithIndices)!; // RegExpExecArray
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+>dateTimeString.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeChecking.ts, 41, 5))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>dateTimeRegexWithIndices : Symbol(dateTimeRegexWithIndices, Decl(regularExpressionTypeChecking.ts, 101, 9))
+
+    match.index; // number
+>match.index : Symbol(_RegExpExecArray.index, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+>index : Symbol(_RegExpExecArray.index, Decl(lib.es5.d.ts, --, --))
+
+    match.input; // string
+>match.input : Symbol(_RegExpExecArray.input, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+>input : Symbol(_RegExpExecArray.input, Decl(lib.es5.d.ts, --, --))
+
+    match[0].length; // number
+>match[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+>0 : Symbol(0)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[1].length; // number
+>match[1].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+>1 : Symbol(1)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[15]?.length; // number | undefined
+>match[15]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+>15 : Symbol(15)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[16].length; // error
+>match[16].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.date.length; // number
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.groups.timeZoneSecond?.length; // number | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.groups.foo.length; // error
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    // Each element is of type [startIndex: number, endIndex: number]
+    match.indices[0].length; // 2
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices[1].length; // 2
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices[2].length; // 2
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices[3]?.length; // 2 | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices[4].length; // 2
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices[5].length; // 2
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices[6]?.length; // 2 | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices[15]?.length; // 2 | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices[16].length; // error
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices.groups.date.length; // 2
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices.groups.year.length; // 2
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices.groups.month.length; // 2
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices.groups.day.length; // 2
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices.groups.time?.length; // 2 | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices.groups.hour?.length; // 2 | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices.groups.minute?.length; // 2 | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices.groups.second?.length; // 2 | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices.groups.timeZone?.length; // 2 | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices.groups.timeZoneSecond?.length; // 2 | undefined
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    match.indices.groups.foo.length; // error
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    let execMatch = dateTimeRegexWithIndices.exec(dateTimeString)!;
+>execMatch : Symbol(execMatch, Decl(regularExpressionTypeChecking.ts, 136, 7))
+>dateTimeRegexWithIndices.exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>dateTimeRegexWithIndices : Symbol(dateTimeRegexWithIndices, Decl(regularExpressionTypeChecking.ts, 101, 9))
+>exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeChecking.ts, 41, 5))
+
+    match = execMatch;
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+>execMatch : Symbol(execMatch, Decl(regularExpressionTypeChecking.ts, 136, 7))
+
+    execMatch = match;
+>execMatch : Symbol(execMatch, Decl(regularExpressionTypeChecking.ts, 136, 7))
+>match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
+
+    dateTimeString.replace(dateTimeRegexWithIndices, (...args) => {
+>dateTimeString.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeChecking.ts, 41, 5))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>dateTimeRegexWithIndices : Symbol(dateTimeRegexWithIndices, Decl(regularExpressionTypeChecking.ts, 101, 9))
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 140, 54))
+
+        args;
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 140, 54))
+
+        return args[0];
+>args : Symbol(args, Decl(regularExpressionTypeChecking.ts, 140, 54))
+>0 : Symbol(0)
+
+    });
+}
+

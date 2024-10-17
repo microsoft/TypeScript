@@ -2797,6 +2797,32 @@ export const enum RegularExpressionFlags {
     Modifiers      = IgnoreCase | Multiline | DotAll,
 }
 
+/** @internal */
+export interface RegularExpressionDisjunctionScope {
+    groups?: RegularExpressionPatternUnion[];
+    groupSpecifiers?: MultiMap<string, RegularExpressionPatternUnion>;
+}
+
+/** @internal */
+export interface RegularExpressionAnyString {
+    _regularExpressionAnyStringBrand: any;
+}
+
+/** @internal */
+export type RegularExpressionPatternContent = string | RegularExpressionAnyString | RegularExpressionPatternUnion;
+
+/** @internal */
+export interface RegularExpressionPattern extends Array<RegularExpressionPatternContent> {
+    _regularExpressionPatternBrand: any;
+}
+
+/** @internal */
+export interface RegularExpressionPatternUnion extends Set<string | RegularExpressionPattern> {
+    _regularExpressionPatternUnionBrand: any;
+    isPossiblyUndefined?: boolean;
+    isCharacterEquivalents?: boolean;
+}
+
 export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
     readonly kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     /** @internal */

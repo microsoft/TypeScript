@@ -348,46 +348,60 @@ interface ReadonlyArray<T> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
 }
 
-interface RegExp {
+interface _RegExp<
+    CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+    NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+    Flags extends Partial<RegExpFlags> = RegExpFlags,
+> {
     /**
-     * Returns a string indicating the flags of the regular expression in question. This field is read-only.
-     * The characters in this string are sequenced and concatenated in the following order:
-     *
-     *    - "g" for global
-     *    - "i" for ignoreCase
-     *    - "m" for multiline
-     *    - "u" for unicode
-     *    - "y" for sticky
-     *
+     * A string indicating the flags of the regular expression in alphabetical order. Read-only.
      * If no flags are set, the value is the empty string.
      */
     readonly flags: string;
+}
 
-    /**
-     * Returns a Boolean value indicating the state of the sticky flag (y) used with a regular
-     * expression. Default is false. Read-only.
-     */
+interface RegExpFlags {
+    /** A Boolean value indicating the state of the sticky flag (y) on the regular expression. Read-only. */
     readonly sticky: boolean;
 
-    /**
-     * Returns a Boolean value indicating the state of the Unicode flag (u) used with a regular
-     * expression. Default is false. Read-only.
-     */
+    /** A Boolean value indicating the state of the Unicode flag (u) on the regular expression. Read-only. */
     readonly unicode: boolean;
 }
 
 interface RegExpConstructor {
-    new (pattern: RegExp | string, flags?: string): RegExp;
-    (pattern: RegExp | string, flags?: string): RegExp;
+    new <
+        CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+        NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+    >(pattern: RegExp<CapturingGroups, NamedCapturingGroups> | string, flags: string): RegExp<CapturingGroups, NamedCapturingGroups>;
+
+    // The order is important - redeclaring this overload from `es5.d.ts` such that `Flags` are copied
+    new <T extends RegExp>(pattern: T | string): T;
+
+    new <
+        CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+        NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+    >(pattern: RegExp<CapturingGroups, NamedCapturingGroups> | string, flags?: string): RegExp<CapturingGroups, NamedCapturingGroups>;
+
+    <
+        CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+        NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+    >(pattern: RegExp<CapturingGroups, NamedCapturingGroups> | string, flags: string): RegExp<CapturingGroups, NamedCapturingGroups>;
+
+    // The order is important - redeclaring this overload from `es5.d.ts` such that `Flags` are copied
+    <T extends RegExp>(pattern: T | string): T;
+
+    <
+        CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+        NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+    >(pattern: RegExp<CapturingGroups, NamedCapturingGroups> | string, flags?: string): RegExp<CapturingGroups, NamedCapturingGroups>;
 }
 
 interface String {
     /**
-     * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point
-     * value of the UTF-16 encoded code point starting at the string element at position pos in
-     * the String resulting from converting this object to a String.
-     * If there is no element at that position, the result is undefined.
-     * If a valid UTF-16 surrogate pair does not begin at pos, the result is the code unit at pos.
+     * Returns a non-negative integer less than 1114112 (0x110000) that is the code point value starting at the string at the specified index,
+     * or `undefined` if there is no character at the specified index.
+     * If a UTF-16 surrogate pair does not begin at `pos`, the result is the code unit at `pos`.
+     * @param pos The zero-based index of the desired code point.
      */
     codePointAt(pos: number): number | undefined;
 
@@ -401,123 +415,118 @@ interface String {
     includes(searchString: string, position?: number): boolean;
 
     /**
-     * Returns true if the sequence of elements of searchString converted to a String is the
-     * same as the corresponding elements of this object (converted to a String) starting at
-     * endPosition – length(this). Otherwise returns false.
+     * Determines whether the string ends with a substring, ending at the specified index.
+     * @param searchString The string to search for.
+     * @param endPosition The index at which to begin searching for. The default value is the length of `searchString`.
      */
     endsWith(searchString: string, endPosition?: number): boolean;
 
     /**
      * Returns the String value result of normalizing the string into the normalization form
      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
-     * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
-     * is "NFC"
+     * @param form The normalization form to be used. The default value is "NFC".
      */
     normalize(form: "NFC" | "NFD" | "NFKC" | "NFKD"): string;
 
     /**
      * Returns the String value result of normalizing the string into the normalization form
      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
-     * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
-     * is "NFC"
+     * @param form The normalization form to be used. The default value is "NFC".
      */
     normalize(form?: string): string;
 
     /**
      * Returns a String value that is made from count copies appended together. If count is 0,
      * the empty string is returned.
-     * @param count number of copies to append
+     * @param count The number of copies to append.
      */
     repeat(count: number): string;
 
     /**
-     * Returns true if the sequence of elements of searchString converted to a String is the
-     * same as the corresponding elements of this object (converted to a String) starting at
-     * position. Otherwise returns false.
+     * Determines whether the string starts with a substring, beginning at the specified index.
+     * @param searchString The string to search for.
+     * @param position The index at which to begin searching for. The default value is 0.
      */
     startsWith(searchString: string, position?: number): boolean;
 
     /**
-     * Returns an `<a>` HTML anchor element and sets the name attribute to the text value
+     * Returns an `<a>` HTML element with a `name` attribute as a literal string.
      * @deprecated A legacy feature for browser compatibility
-     * @param name
+     * @param name The value of the `name` attribute.
      */
     anchor(name: string): string;
 
     /**
-     * Returns a `<big>` HTML element
+     * Returns a `<big>` HTML element as a literal string.
      * @deprecated A legacy feature for browser compatibility
      */
     big(): string;
 
     /**
-     * Returns a `<blink>` HTML element
+     * Returns a `<blink>` HTML element as a literal string.
      * @deprecated A legacy feature for browser compatibility
      */
     blink(): string;
 
     /**
-     * Returns a `<b>` HTML element
+     * Returns a `<b>` HTML element as a literal string.
      * @deprecated A legacy feature for browser compatibility
      */
     bold(): string;
 
     /**
-     * Returns a `<tt>` HTML element
+     * Returns a `<tt>` HTML element as a literal string.
      * @deprecated A legacy feature for browser compatibility
      */
     fixed(): string;
 
     /**
-     * Returns a `<font>` HTML element and sets the color attribute value
+     * Returns a `<font>` HTML element with a `color` attribute as a literal string.
      * @deprecated A legacy feature for browser compatibility
+     * @param color The value of the `color` attribute.
      */
     fontcolor(color: string): string;
 
     /**
-     * Returns a `<font>` HTML element and sets the size attribute value
+     * Returns a `<font>` HTML element with a `size` attribute as a literal string.
      * @deprecated A legacy feature for browser compatibility
+     * @param size The value of the `size` attribute.
      */
-    fontsize(size: number): string;
+    fontsize(size: number | string): string;
 
     /**
-     * Returns a `<font>` HTML element and sets the size attribute value
-     * @deprecated A legacy feature for browser compatibility
-     */
-    fontsize(size: string): string;
-
-    /**
-     * Returns an `<i>` HTML element
+     * Returns an `<i>` HTML element as a literal string.
      * @deprecated A legacy feature for browser compatibility
      */
     italics(): string;
 
     /**
-     * Returns an `<a>` HTML element and sets the href attribute value
+     * Returns an `<a>` HTML element with a `href` attribute as a literal string.
      * @deprecated A legacy feature for browser compatibility
+     * @param href The value of the `href` attribute.
      */
-    link(url: string): string;
+    link(href: string): string;
 
     /**
-     * Returns a `<small>` HTML element
+     * Returns a `<small>` HTML element as a literal string.
      * @deprecated A legacy feature for browser compatibility
      */
     small(): string;
 
     /**
-     * Returns a `<strike>` HTML element
+     * Returns a `<strike>` HTML element as a literal string.
      * @deprecated A legacy feature for browser compatibility
      */
     strike(): string;
 
     /**
-     * Returns a `<sub>` HTML element
+     * Returns a `<sub>` HTML element as a literal string.
      * @deprecated A legacy feature for browser compatibility
      */
     sub(): string;
 
     /**
-     * Returns a `<sup>` HTML element
+     * Returns a `<sup>` HTML element as a literal string.
      * @deprecated A legacy feature for browser compatibility
      */
     sup(): string;
@@ -525,8 +534,8 @@ interface String {
 
 interface StringConstructor {
     /**
-     * Return the String value whose elements are, in order, the elements in the List elements.
-     * If length is 0, the empty string is returned.
+     * Returns a string created by a sequence of code points, or the empty string if no arguments are given.
+     * @param codePoints A sequence of code points.
      */
     fromCodePoint(...codePoints: number[]): string;
 
