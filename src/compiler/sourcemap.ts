@@ -320,13 +320,20 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
     function toJSON(): RawSourceMap {
         commitPendingMapping();
         flushMappingBuffer();
+
+        let finalMappings = mappings;
+        if (sources.length === 1 && finalMappings === "") {
+            // Prevent generating a source map with empty mappings
+            finalMappings = "AAAA";
+        }
+
         return {
             version: 3,
             file,
             sourceRoot,
             sources,
             names,
-            mappings,
+            mappings: finalMappings,
             sourcesContent,
         };
     }
