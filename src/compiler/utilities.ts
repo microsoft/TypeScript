@@ -4668,10 +4668,10 @@ export function getParameterSymbolFromJSDoc(node: JSDocParameterTag): Symbol | u
 }
 
 /** @internal */
-export function getEffectiveContainerForJSDocTemplateTag(node: JSDocTemplateTag): SignatureDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | undefined {
+export function getEffectiveContainerForJSDocTemplateTag(node: JSDocTemplateTag): SignatureDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocOverloadTag | JSDocEnumTag | undefined {
     if (isJSDoc(node.parent) && node.parent.tags) {
-        // A @template tag belongs to any @typedef, @callback, or @enum tags in the same comment block, if they exist.
-        const typeAlias = find(node.parent.tags, isJSDocTypeAlias);
+        // A @template tag belongs to any @overload, @typedef, @callback, or @enum tags in the same comment block, if they exist.
+        const typeAlias = find(node.parent.tags, tag => isJSDocOverloadTag(tag) || isJSDocTypeAlias(tag));
         if (typeAlias) {
             return typeAlias;
         }

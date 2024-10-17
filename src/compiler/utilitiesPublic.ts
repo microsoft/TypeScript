@@ -2296,6 +2296,7 @@ export function canHaveLocals(node: Node): node is HasLocals {
         case SyntaxKind.JSDocFunctionType:
         case SyntaxKind.JSDocSignature:
         case SyntaxKind.JSDocTypedefTag:
+        case SyntaxKind.JSDocOverloadTag:
         case SyntaxKind.MappedType:
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.MethodSignature:
