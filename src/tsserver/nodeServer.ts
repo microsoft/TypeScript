@@ -682,11 +682,7 @@ function createCancellationToken(args: string[]): ts.server.ServerCancellationTo
         }
     }
     if (!cancellationPipeName) {
-        return {
-            isCancellationRequested: () => false,
-            setRequest: (_requestId: number): void => void 0,
-            resetRequest: (_requestId: number): void => void 0,
-        };
+        return ts.server.nullCancellationToken;
     }
     // cancellationPipeName is a string without '*' inside that can optionally end with '*'
     // when client wants to signal cancellation it should create a named pipe with name=<cancellationPipeName>
