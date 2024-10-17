@@ -163,6 +163,16 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/projects/shared/src 1 undefined Config: /home/src/workspaces/solution/projects/shared/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/projects/shared/src 1 undefined Config: /home/src/workspaces/solution/projects/shared/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/projects/shared/src/package.json 2000 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/projects/shared/package.json 2000 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/projects/package.json 2000 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/package.json 2000 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/projects/server/src/package.json 2000 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/projects/server/package.json 2000 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/projects/server/node_modules/@types 1 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/projects/server/node_modules/@types 1 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/solution/projects/node_modules/@types 1 undefined Project: /home/src/workspaces/solution/projects/server/tsconfig.json WatchType: Type roots
@@ -290,14 +300,34 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/workspaces/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/solution/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/workspaces/solution/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/solution/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/workspaces/solution/projects/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/solution/projects/server/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/workspaces/solution/projects/server/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/solution/projects/server/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/solution/projects/shared/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/solution/projects/shared/src/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*

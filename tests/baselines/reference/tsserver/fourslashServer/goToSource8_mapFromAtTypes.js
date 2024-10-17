@@ -112,6 +112,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/lodash/common/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/lodash/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/lodash/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -142,9 +145,11 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Root file specified for compilation
 	../@types/lodash/common/math.d.ts
 	  Referenced via './common/math.d.ts' from file '../@types/lodash/index.d.ts'
+	  File is CommonJS module because '../@types/lodash/package.json' does not have field "type"
 	../@types/lodash/index.d.ts
 	  Entry point for implicit type library 'lodash' with packageId '@types/lodash/index.d.ts@4.14.97'
 	  Imported via "../index" from file '../@types/lodash/common/math.d.ts' with packageId '@types/lodash/index.d.ts@4.14.97'
+	  File is CommonJS module because '../@types/lodash/package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -173,6 +178,12 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/lodash/common/math.d.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/@types/lodash/common/package.json: *new*
@@ -257,7 +268,12 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/lodash/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/lodash/common/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
@@ -281,10 +297,12 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
 	node_modules/@types/lodash/common/math.d.ts
 	  Referenced via './common/math.d.ts' from file 'node_modules/@types/lodash/index.d.ts'
+	  File is CommonJS module because 'node_modules/@types/lodash/package.json' does not have field "type"
 	node_modules/@types/lodash/index.d.ts
 	  Imported via 'lodash' from file 'index.ts' with packageId '@types/lodash/index.d.ts@4.14.97'
 	  Imported via "../index" from file 'node_modules/@types/lodash/common/math.d.ts' with packageId '@types/lodash/index.d.ts@4.14.97'
 	  Entry point for implicit type library 'lodash' with packageId '@types/lodash/index.d.ts@4.14.97'
+	  File is CommonJS module because 'node_modules/@types/lodash/package.json' does not have field "type"
 	index.ts
 	  Root file specified for compilation
 
@@ -321,6 +339,17 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
+/home/src/workspaces/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/lodash/common/math.d.ts:
@@ -342,6 +371,8 @@ watchedFiles::
 /home/src/workspaces/project/node_modules/lodash/tsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/package.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -429,6 +460,8 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/auxiliaryProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/lodash/package.json 2000 undefined Project: /dev/null/auxiliaryProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /dev/null/auxiliaryProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /dev/null/auxiliaryProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/auxiliaryProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/auxiliaryProject1*' (Auxiliary)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -503,6 +536,18 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
+/home/src/workspaces/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/lodash/common/math.d.ts:
@@ -528,6 +573,9 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/tsconfig.json:
   {"pollingInterval":2000}
+/home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
 /home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}
 

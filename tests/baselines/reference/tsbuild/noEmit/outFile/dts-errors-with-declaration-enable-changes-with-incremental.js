@@ -39,7 +39,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","7752727223-const a = class { private p = 10; };"],"root":[2],"options":{"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"7752727223-const a = class { private p = 10; };","impliedFormat":1}],"root":[2],"options":{"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -48,8 +48,22 @@ Output::
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./project/a.ts": "7752727223-const a = class { private p = 10; };"
+    "../tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./project/a.ts": {
+      "original": {
+        "version": "7752727223-const a = class { private p = 10; };",
+        "impliedFormat": 1
+      },
+      "version": "7752727223-const a = class { private p = 10; };",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -65,7 +79,7 @@ Output::
     false
   ],
   "version": "FakeTSVersion",
-  "size": 659
+  "size": 719
 }
 
 
@@ -137,7 +151,7 @@ Found 1 error.
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","7752727223-const a = class { private p = 10; };"],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"pendingEmit":17,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"7752727223-const a = class { private p = 10; };","impliedFormat":1}],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"pendingEmit":17,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -146,8 +160,22 @@ Found 1 error.
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./project/a.ts": "7752727223-const a = class { private p = 10; };"
+    "../tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./project/a.ts": {
+      "original": {
+        "version": "7752727223-const a = class { private p = 10; };",
+        "impliedFormat": 1
+      },
+      "version": "7752727223-const a = class { private p = 10; };",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -187,7 +215,7 @@ Found 1 error.
     17
   ],
   "version": "FakeTSVersion",
-  "size": 979
+  "size": 1039
 }
 
 
@@ -242,7 +270,7 @@ Found 1 error.
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","7752727223-const a = class { private p = 10; };"],"root":[2],"options":{"declaration":true,"declarationMap":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"pendingEmit":49,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"7752727223-const a = class { private p = 10; };","impliedFormat":1}],"root":[2],"options":{"declaration":true,"declarationMap":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"pendingEmit":49,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -251,8 +279,22 @@ Found 1 error.
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./project/a.ts": "7752727223-const a = class { private p = 10; };"
+    "../tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./project/a.ts": {
+      "original": {
+        "version": "7752727223-const a = class { private p = 10; };",
+        "impliedFormat": 1
+      },
+      "version": "7752727223-const a = class { private p = 10; };",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -293,7 +335,7 @@ Found 1 error.
     49
   ],
   "version": "FakeTSVersion",
-  "size": 1001
+  "size": 1061
 }
 
 
@@ -365,7 +407,7 @@ Found 1 error.
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","7752727223-const a = class { private p = 10; };"],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"7752727223-const a = class { private p = 10; };","impliedFormat":1}],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -374,8 +416,22 @@ Found 1 error.
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./project/a.ts": "7752727223-const a = class { private p = 10; };"
+    "../tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./project/a.ts": {
+      "original": {
+        "version": "7752727223-const a = class { private p = 10; };",
+        "impliedFormat": 1
+      },
+      "version": "7752727223-const a = class { private p = 10; };",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -411,7 +467,7 @@ Found 1 error.
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 962
+  "size": 1022
 }
 
 //// [/home/src/projects/outFile.js]
@@ -464,7 +520,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9520728827-const a = class { public p = 10; };"],"root":[2],"options":{"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"9520728827-const a = class { public p = 10; };","impliedFormat":1}],"root":[2],"options":{"outFile":"./outFile.js"},"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -473,8 +529,22 @@ Output::
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./project/a.ts": "9520728827-const a = class { public p = 10; };"
+    "../tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./project/a.ts": {
+      "original": {
+        "version": "9520728827-const a = class { public p = 10; };",
+        "impliedFormat": 1
+      },
+      "version": "9520728827-const a = class { public p = 10; };",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -490,7 +560,7 @@ Output::
     false
   ],
   "version": "FakeTSVersion",
-  "size": 658
+  "size": 718
 }
 
 
@@ -533,7 +603,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9520728827-const a = class { public p = 10; };"],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"pendingEmit":17,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"9520728827-const a = class { public p = 10; };","impliedFormat":1}],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"pendingEmit":17,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -542,8 +612,22 @@ Output::
     "./project/a.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./project/a.ts": "9520728827-const a = class { public p = 10; };"
+    "../tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./project/a.ts": {
+      "original": {
+        "version": "9520728827-const a = class { public p = 10; };",
+        "impliedFormat": 1
+      },
+      "version": "9520728827-const a = class { public p = 10; };",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -560,7 +644,7 @@ Output::
     17
   ],
   "version": "FakeTSVersion",
-  "size": 674
+  "size": 734
 }
 
 

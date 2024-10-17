@@ -60,7 +60,7 @@ Found 1 error in src/main.ts[90m:2[0m
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5014788164-export interface A {\n    name: string;\n}\n","5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"start":53,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":53,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"affectedFilesPendingEmit":[[2,17],[3,17],[4,17]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","impliedFormat":1},{"version":"5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n","impliedFormat":1},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","impliedFormat":1}],"root":[[2,4]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"referencedMap":[[3,1]],"emitDiagnosticsPerFile":[[3,[{"start":53,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":53,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"affectedFilesPendingEmit":[[2,17],[3,17],[4,17]],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -79,23 +79,40 @@ Found 1 error in src/main.ts[90m:2[0m
     "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "../shared/types/db.ts": {
+      "original": {
+        "version": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "impliedFormat": 1
+      },
       "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-      "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+      "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
+      "impliedFormat": "commonjs"
     },
     "../src/main.ts": {
+      "original": {
+        "version": "5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n",
+        "impliedFormat": 1
+      },
       "version": "5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n",
-      "signature": "5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n"
+      "signature": "5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n",
+      "impliedFormat": "commonjs"
     },
     "../src/other.ts": {
+      "original": {
+        "version": "9084524823-console.log(\"hi\");\nexport { }\n",
+        "impliedFormat": 1
+      },
       "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-      "signature": "9084524823-console.log(\"hi\");\nexport { }\n"
+      "signature": "9084524823-console.log(\"hi\");\nexport { }\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -168,7 +185,7 @@ Found 1 error in src/main.ts[90m:2[0m
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1332
+  "size": 1440
 }
 
 
@@ -266,7 +283,7 @@ Output::
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5014788164-export interface A {\n    name: string;\n}\n",{"version":"-614304812-import { A } from \"../shared/types/db\";\nexport const a = class { p = 10; };\n","signature":"4346604020-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n"},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"referencedMap":[[3,1]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","impliedFormat":1},{"version":"-614304812-import { A } from \"../shared/types/db\";\nexport const a = class { p = 10; };\n","signature":"4346604020-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n","impliedFormat":1},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[[2,4]],"options":{"declaration":true,"noEmitOnError":true,"outDir":"./"},"referencedMap":[[3,1]],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -285,31 +302,42 @@ Output::
     "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "../shared/types/db.ts": {
+      "original": {
+        "version": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "impliedFormat": 1
+      },
       "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-      "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+      "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
+      "impliedFormat": "commonjs"
     },
     "../src/main.ts": {
       "original": {
         "version": "-614304812-import { A } from \"../shared/types/db\";\nexport const a = class { p = 10; };\n",
-        "signature": "4346604020-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n"
+        "signature": "4346604020-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n",
+        "impliedFormat": 1
       },
       "version": "-614304812-import { A } from \"../shared/types/db\";\nexport const a = class { p = 10; };\n",
-      "signature": "4346604020-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n"
+      "signature": "4346604020-export declare const a: {\n    new (): {\n        p: number;\n    };\n};\n",
+      "impliedFormat": "commonjs"
     },
     "../src/other.ts": {
       "original": {
         "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-3531856636-export {};\n",
+        "impliedFormat": 1
       },
       "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-      "signature": "-3531856636-export {};\n"
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -336,7 +364,7 @@ Output::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1131
+  "size": 1215
 }
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]

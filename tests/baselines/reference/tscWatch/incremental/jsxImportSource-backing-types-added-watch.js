@@ -53,7 +53,7 @@ exports.App = App;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-14760199789-export const App = () => <div propA={true}></div>;"],"root":[2],"options":{"jsx":4,"jsxImportSource":"react","module":1},"semanticDiagnosticsPerFile":[[2,[{"start":25,"length":24,"messageText":"This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.","category":1,"code":2875}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14760199789-export const App = () => <div propA={true}></div>;","impliedFormat":1}],"root":[2],"options":{"jsx":4,"jsxImportSource":"react","module":1},"semanticDiagnosticsPerFile":[[2,[{"start":25,"length":24,"messageText":"This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.","category":1,"code":2875}]]],"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -65,15 +65,22 @@ exports.App = App;
     "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./index.tsx": {
+      "original": {
+        "version": "-14760199789-export const App = () => <div propA={true}></div>;",
+        "impliedFormat": 1
+      },
       "version": "-14760199789-export const App = () => <div propA={true}></div>;",
-      "signature": "-14760199789-export const App = () => <div propA={true}></div>;"
+      "signature": "-14760199789-export const App = () => <div propA={true}></div>;",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -102,19 +109,29 @@ exports.App = App;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 988
+  "size": 1036
 }
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -179,14 +196,24 @@ export const Fragment: unique symbol;
 
 
 PolledWatches *deleted*::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/node_modules:
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules:
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -210,7 +237,7 @@ Output::
 
 //// [/users/username/projects/project/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./node_modules/react/jsx-runtime/index.d.ts","./index.tsx"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-35656056833-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propA?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n","impliedFormat":1},{"version":"-14760199789-export const App = () => <div propA={true}></div>;","signature":"-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n"}],"root":[3],"options":{"jsx":4,"jsxImportSource":"react","module":1},"referencedMap":[[3,1]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./node_modules/react/jsx-runtime/index.d.ts","./index.tsx"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-35656056833-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propA?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n","impliedFormat":1},{"version":"-14760199789-export const App = () => <div propA={true}></div>;","signature":"-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n","impliedFormat":1}],"root":[3],"options":{"jsx":4,"jsxImportSource":"react","module":1},"referencedMap":[[3,1]],"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -228,11 +255,13 @@ Output::
     "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./node_modules/react/jsx-runtime/index.d.ts": {
       "original": {
@@ -246,10 +275,12 @@ Output::
     "./index.tsx": {
       "original": {
         "version": "-14760199789-export const App = () => <div propA={true}></div>;",
-        "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n"
+        "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n",
+        "impliedFormat": 1
       },
       "version": "-14760199789-export const App = () => <div propA={true}></div>;",
-      "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n"
+      "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -269,16 +300,26 @@ Output::
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1261
+  "size": 1297
 }
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/react/jsx-runtime/package.json: *new*
+  {"pollingInterval":2000}
+/users/username/projects/project/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::

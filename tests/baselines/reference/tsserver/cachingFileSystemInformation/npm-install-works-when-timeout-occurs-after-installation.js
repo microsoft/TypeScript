@@ -122,6 +122,10 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/ro
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/user/username/projects/project/a/node_modules/@types 1 undefined Project: /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
@@ -233,6 +237,12 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/rootfolder/node_modules: *new*
   {"pollingInterval":500}
 /user/username/rootfolder/node_modules/@types: *new*
@@ -268,6 +278,8 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/user/username/rootfolder/otherfolder/user/username/projects/project/a/b/package.json: *new*
   {}
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json: *new*
   {}
@@ -727,6 +739,12 @@ exports['default'] = result;
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/rootfolder/node_modules:
   {"pollingInterval":500}
 /user/username/rootfolder/node_modules/@types:
@@ -764,6 +782,8 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/rootfolder/otherfolder/user/username/projects/project/a/b/package.json:
   {}
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json:
   {}
@@ -1255,6 +1275,12 @@ After partial npm install
 //// [/user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041] deleted
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/rootfolder/node_modules:
   {"pollingInterval":500}
 /user/username/rootfolder/node_modules/@types:
@@ -1290,6 +1316,8 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/rootfolder/otherfolder/user/username/projects/project/a/b/package.json:
   {}
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json:
   {}
@@ -2122,6 +2150,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	node_modules/@types/lodash/index.d.ts
 	  Imported via 'lodash' from file 'app.ts' with packageId '@types/lodash/index.d.ts@4.14.74'
 	  Entry point for implicit type library 'lodash' with packageId '@types/lodash/index.d.ts@4.14.74'
+	  File is CommonJS module because 'node_modules/@types/lodash/package.json' does not have field "type"
 	app.ts
 	  Matched by default include pattern '**/*'
 
@@ -2158,6 +2187,12 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/rootfolder/node_modules/@types:
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/node_modules/@types:
@@ -2195,6 +2230,8 @@ FsWatches::
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/@types/lodash/package.json: *new*
   {}
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/node_modules/lodash/package.json: *new*
+  {}
+/user/username/rootfolder/otherfolder/user/username/projects/project/a/b/package.json:
   {}
 /user/username/rootfolder/otherfolder/user/username/projects/project/a/b/tsconfig.json:
   {}

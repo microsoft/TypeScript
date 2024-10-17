@@ -172,6 +172,24 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project1/tsconfig.json'...
 
+File '/home/src/workspace/projects/project1/package.json' does not exist.
+File '/home/src/workspace/projects/package.json' does not exist.
+File '/home/src/workspace/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+File '/home/src/workspace/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -190,11 +208,11 @@ Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/l
 File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist.
-File '/home/src/workspace/projects/package.json' does not exist.
-File '/home/src/workspace/package.json' does not exist.
-File '/home/src/package.json' does not exist.
-File '/home/package.json' does not exist.
-File '/package.json' does not exist.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -241,10 +259,30 @@ File '/home/src/workspace/package.json' does not exist according to earlier cach
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/project1/typeroot1/sometype/package.json' does not exist.
+File '/home/src/workspace/projects/project1/typeroot1/package.json' does not exist.
+File '/home/src/workspace/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1'. ========
 Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1'.
 File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
-File '/home/src/workspace/projects/project1/typeroot1/sometype/package.json' does not exist.
+File '/home/src/workspace/projects/project1/typeroot1/sometype/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
@@ -297,6 +335,18 @@ project1/typeroot1/sometype/index.d.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project2/tsconfig.json'...
 
+File '/home/src/workspace/projects/project2/package.json' does not exist.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/project2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@typescript/lib-es5' from '/home/src/workspace/projects/project2/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -341,6 +391,18 @@ project2/utils.d.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project3/tsconfig.json'...
 
+File '/home/src/workspace/projects/project3/package.json' does not exist.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/project3/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@typescript/lib-es5' from '/home/src/workspace/projects/project3/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -385,6 +447,18 @@ project3/utils.d.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project4/tsconfig.json'...
 
+File '/home/src/workspace/projects/project4/package.json' does not exist.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/project4/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@typescript/lib-esnext' from '/home/src/workspace/projects/project4/__lib_node_modules_lookup_lib.esnext.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-esnext' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -461,33 +535,38 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/file2.ts 
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/index.ts 250 undefined Source file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/utils.d.ts 250 undefined Source file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts 250 undefined Source file /home/src/workspace/projects/project1/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1/sometype/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2/tsconfig.json 2000 undefined Config file /home/src/workspace/projects/project2/tsconfig.json
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2 1 undefined Wild card directory /home/src/workspace/projects/project2/tsconfig.json
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2 1 undefined Wild card directory /home/src/workspace/projects/project2/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2/index.ts 250 undefined Source file /home/src/workspace/projects/project2/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2/utils.d.ts 250 undefined Source file /home/src/workspace/projects/project2/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2/package.json 2000 undefined package.json file /home/src/workspace/projects/project2/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project3/tsconfig.json 2000 undefined Config file /home/src/workspace/projects/project3/tsconfig.json
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project3 1 undefined Wild card directory /home/src/workspace/projects/project3/tsconfig.json
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project3 1 undefined Wild card directory /home/src/workspace/projects/project3/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project3/index.ts 250 undefined Source file /home/src/workspace/projects/project3/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project3/utils.d.ts 250 undefined Source file /home/src/workspace/projects/project3/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project3/package.json 2000 undefined package.json file /home/src/workspace/projects/project3/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4/tsconfig.json 2000 undefined Config file /home/src/workspace/projects/project4/tsconfig.json
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4 1 undefined Wild card directory /home/src/workspace/projects/project4/tsconfig.json
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4 1 undefined Wild card directory /home/src/workspace/projects/project4/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4/index.ts 250 undefined Source file /home/src/workspace/projects/project4/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4/utils.d.ts 250 undefined Source file /home/src/workspace/projects/project4/tsconfig.json
+FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4/package.json 2000 undefined package.json file /home/src/workspace/projects/project4/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-esnext/package.json 2000 undefined package.json file /home/src/workspace/projects/project4/tsconfig.json
 
 
@@ -523,7 +602,7 @@ export declare const x = "type1";
 
 
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo]
-{"fileNames":["../node_modules/@typescript/lib-webworker/index.d.ts","../node_modules/@typescript/lib-scripthost/index.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5403980302-interface ScriptHostInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},"-15683237936-export const core = 10;",{"version":"-16628394009-export const file = 10;","signature":"-9025507999-export declare const file = 10;\n"},{"version":"-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n","signature":"5381-"},{"version":"-11532698187-export const x = \"type1\";","signature":"-5899226897-export declare const x = \"type1\";\n"},"-13729955264-export const y = 10;","-12476477079-export type TheNum = \"type1\";"],"root":[[5,10]],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../node_modules/@typescript/lib-webworker/index.d.ts","../node_modules/@typescript/lib-scripthost/index.d.ts","../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5403980302-interface ScriptHostInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15683237936-export const core = 10;","impliedFormat":1},{"version":"-16628394009-export const file = 10;","signature":"-9025507999-export declare const file = 10;\n","impliedFormat":1},{"version":"-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n","signature":"5381-","impliedFormat":1},{"version":"-11532698187-export const x = \"type1\";","signature":"-5899226897-export declare const x = \"type1\";\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1},{"version":"-12476477079-export type TheNum = \"type1\";","impliedFormat":1}],"root":[[5,10]],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -585,40 +664,61 @@ export declare const x = "type1";
       "impliedFormat": "commonjs"
     },
     "./core.d.ts": {
+      "original": {
+        "version": "-15683237936-export const core = 10;",
+        "impliedFormat": 1
+      },
       "version": "-15683237936-export const core = 10;",
-      "signature": "-15683237936-export const core = 10;"
+      "signature": "-15683237936-export const core = 10;",
+      "impliedFormat": "commonjs"
     },
     "./file.ts": {
       "original": {
         "version": "-16628394009-export const file = 10;",
-        "signature": "-9025507999-export declare const file = 10;\n"
+        "signature": "-9025507999-export declare const file = 10;\n",
+        "impliedFormat": 1
       },
       "version": "-16628394009-export const file = 10;",
-      "signature": "-9025507999-export declare const file = 10;\n"
+      "signature": "-9025507999-export declare const file = 10;\n",
+      "impliedFormat": "commonjs"
     },
     "./file2.ts": {
       "original": {
         "version": "-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n",
-        "signature": "5381-"
+        "signature": "5381-",
+        "impliedFormat": 1
       },
       "version": "-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n",
-      "signature": "5381-"
+      "signature": "5381-",
+      "impliedFormat": "commonjs"
     },
     "./index.ts": {
       "original": {
         "version": "-11532698187-export const x = \"type1\";",
-        "signature": "-5899226897-export declare const x = \"type1\";\n"
+        "signature": "-5899226897-export declare const x = \"type1\";\n",
+        "impliedFormat": 1
       },
       "version": "-11532698187-export const x = \"type1\";",
-      "signature": "-5899226897-export declare const x = \"type1\";\n"
+      "signature": "-5899226897-export declare const x = \"type1\";\n",
+      "impliedFormat": "commonjs"
     },
     "./utils.d.ts": {
+      "original": {
+        "version": "-13729955264-export const y = 10;",
+        "impliedFormat": 1
+      },
       "version": "-13729955264-export const y = 10;",
-      "signature": "-13729955264-export const y = 10;"
+      "signature": "-13729955264-export const y = 10;",
+      "impliedFormat": "commonjs"
     },
     "./typeroot1/sometype/index.d.ts": {
+      "original": {
+        "version": "-12476477079-export type TheNum = \"type1\";",
+        "impliedFormat": 1
+      },
       "version": "-12476477079-export type TheNum = \"type1\";",
-      "signature": "-12476477079-export type TheNum = \"type1\";"
+      "signature": "-12476477079-export type TheNum = \"type1\";",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -642,7 +742,7 @@ export declare const x = "type1";
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1752
+  "size": 1896
 }
 
 //// [/home/src/workspace/projects/project2/index.js]
@@ -657,7 +757,7 @@ export declare const y = 10;
 
 
 //// [/home/src/workspace/projects/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11999455899-export const y = 10","signature":"-7152472870-export declare const y = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11999455899-export const y = 10","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[3,4],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -693,14 +793,21 @@ export declare const y = 10;
     "./index.ts": {
       "original": {
         "version": "-11999455899-export const y = 10",
-        "signature": "-7152472870-export declare const y = 10;\n"
+        "signature": "-7152472870-export declare const y = 10;\n",
+        "impliedFormat": 1
       },
       "version": "-11999455899-export const y = 10",
-      "signature": "-7152472870-export declare const y = 10;\n"
+      "signature": "-7152472870-export declare const y = 10;\n",
+      "impliedFormat": "commonjs"
     },
     "./utils.d.ts": {
+      "original": {
+        "version": "-13729955264-export const y = 10;",
+        "impliedFormat": 1
+      },
       "version": "-13729955264-export const y = 10;",
-      "signature": "-13729955264-export const y = 10;"
+      "signature": "-13729955264-export const y = 10;",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -718,7 +825,7 @@ export declare const y = 10;
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 995
+  "size": 1043
 }
 
 //// [/home/src/workspace/projects/project3/index.js]
@@ -733,7 +840,7 @@ export declare const z = 10;
 
 
 //// [/home/src/workspace/projects/project3/tsconfig.tsbuildinfo]
-{"fileNames":["../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../node_modules/@typescript/lib-es5/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[3,4],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -769,14 +876,21 @@ export declare const z = 10;
     "./index.ts": {
       "original": {
         "version": "-11960320506-export const z = 10",
-        "signature": "-7483702853-export declare const z = 10;\n"
+        "signature": "-7483702853-export declare const z = 10;\n",
+        "impliedFormat": 1
       },
       "version": "-11960320506-export const z = 10",
-      "signature": "-7483702853-export declare const z = 10;\n"
+      "signature": "-7483702853-export declare const z = 10;\n",
+      "impliedFormat": "commonjs"
     },
     "./utils.d.ts": {
+      "original": {
+        "version": "-13729955264-export const y = 10;",
+        "impliedFormat": 1
+      },
       "version": "-13729955264-export const y = 10;",
-      "signature": "-13729955264-export const y = 10;"
+      "signature": "-13729955264-export const y = 10;",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -794,7 +908,7 @@ export declare const z = 10;
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 995
+  "size": 1043
 }
 
 //// [/home/src/workspace/projects/project4/index.js]
@@ -809,7 +923,7 @@ export declare const z = 10;
 
 
 //// [/home/src/workspace/projects/project4/tsconfig.tsbuildinfo]
-{"fileNames":["../node_modules/@typescript/lib-esnext/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","../node_modules/@typescript/lib-webworker/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[4,5],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../node_modules/@typescript/lib-esnext/index.d.ts","../node_modules/@typescript/lib-dom/index.d.ts","../node_modules/@typescript/lib-webworker/index.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[4,5],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspace/projects/project4/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -857,14 +971,21 @@ export declare const z = 10;
     "./index.ts": {
       "original": {
         "version": "-11960320506-export const z = 10",
-        "signature": "-7483702853-export declare const z = 10;\n"
+        "signature": "-7483702853-export declare const z = 10;\n",
+        "impliedFormat": 1
       },
       "version": "-11960320506-export const z = 10",
-      "signature": "-7483702853-export declare const z = 10;\n"
+      "signature": "-7483702853-export declare const z = 10;\n",
+      "impliedFormat": "commonjs"
     },
     "./utils.d.ts": {
+      "original": {
+        "version": "-13729955264-export const y = 10;",
+        "impliedFormat": 1
+      },
       "version": "-13729955264-export const y = 10;",
-      "signature": "-13729955264-export const y = 10;"
+      "signature": "-13729955264-export const y = 10;",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -882,7 +1003,7 @@ export declare const z = 10;
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1156
+  "size": 1204
 }
 
 
@@ -909,7 +1030,17 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json: *new*
   {"pollingInterval":2000}
+/home/src/workspace/projects/project1/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspace/projects/project1/typeroot1/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspace/projects/project1/typeroot1/sometype/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspace/projects/project2/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspace/projects/project3/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspace/projects/project4/package.json: *new*
   {"pollingInterval":2000}
 /package.json: *new*
   {"pollingInterval":2000}

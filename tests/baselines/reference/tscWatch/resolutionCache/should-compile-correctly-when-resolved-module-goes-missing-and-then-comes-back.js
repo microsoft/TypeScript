@@ -40,10 +40,20 @@ define(["require", "exports"], function (require, exports) {
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -110,14 +120,24 @@ Output::
 //// [/users/username/projects/project/foo.js] file written with same contents
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -191,10 +211,20 @@ Output::
 //// [/users/username/projects/project/foo.js] file written with same contents
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/node_modules:

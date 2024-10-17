@@ -145,7 +145,7 @@ Info seq  [hh:mm:ss:mss] event:
 Custom watchFile:: Added:: {"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules/something/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -153,11 +153,11 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "createFileWatcher",
       "body": {
         "id": 7,
-        "path": "c:/projects/myproject/node_modules/something/package.json"
+        "path": "c:/home/src/tslibs/TS/Lib/package.json"
       }
     }
-Custom watchFile:: Added:: {"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Custom watchFile:: Added:: {"id":7,"path":"c:/home/src/tslibs/TS/Lib/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -165,11 +165,11 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "createFileWatcher",
       "body": {
         "id": 8,
-        "path": "c:/projects/myproject/node_modules/package.json"
+        "path": "c:/home/src/tslibs/TS/package.json"
       }
     }
-Custom watchFile:: Added:: {"id":8,"path":"c:/projects/myproject/node_modules/package.json"}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Custom watchFile:: Added:: {"id":8,"path":"c:/home/src/tslibs/TS/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -177,11 +177,11 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "createFileWatcher",
       "body": {
         "id": 9,
-        "path": "c:/projects/myproject/package.json"
+        "path": "c:/home/src/tslibs/package.json"
       }
     }
-Custom watchFile:: Added:: {"id":9,"path":"c:/projects/myproject/package.json"}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Custom watchFile:: Added:: {"id":9,"path":"c:/home/src/tslibs/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -189,10 +189,70 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "createFileWatcher",
       "body": {
         "id": 10,
+        "path": "c:/home/src/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":10,"path":"c:/home/src/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 11,
+        "path": "c:/home/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":11,"path":"c:/home/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 12,
+        "path": "c:/projects/myproject/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":12,"path":"c:/projects/myproject/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 13,
         "path": "c:/projects/package.json"
       }
     }
-Custom watchFile:: Added:: {"id":10,"path":"c:/projects/package.json"}
+Custom watchFile:: Added:: {"id":13,"path":"c:/projects/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules/something/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 14,
+        "path": "c:/projects/myproject/node_modules/something/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":14,"path":"c:/projects/myproject/node_modules/something/package.json"}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules/package.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createFileWatcher",
+      "body": {
+        "id": 15,
+        "path": "c:/projects/myproject/node_modules/package.json"
+      }
+    }
+Custom watchFile:: Added:: {"id":15,"path":"c:/projects/myproject/node_modules/package.json"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules/@types 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -200,13 +260,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 11,
+        "id": 16,
         "path": "c:/projects/myproject/node_modules/@types",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":16,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules/@types 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/projects/node_modules/@types 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
@@ -215,13 +275,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 12,
+        "id": 17,
         "path": "c:/projects/node_modules/@types",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":17,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/projects/node_modules/@types 1 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
@@ -241,6 +301,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Matched by default include pattern '**/*'
 	node_modules/something/index.d.ts
 	  Imported via "something" from file 'm.ts'
+	  File is CommonJS module because 'package.json' was not found
 	m.ts
 	  Matched by default include pattern '**/*'
 
@@ -327,22 +388,32 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+c:/home/package.json: *new*
+  {"event":{"id":11,"path":"c:/home/package.json"}}
+c:/home/src/package.json: *new*
+  {"event":{"id":10,"path":"c:/home/src/package.json"}}
 c:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/package.json: *new*
+  {"event":{"id":7,"path":"c:/home/src/tslibs/TS/Lib/package.json"}}
+c:/home/src/tslibs/TS/package.json: *new*
+  {"event":{"id":8,"path":"c:/home/src/tslibs/TS/package.json"}}
+c:/home/src/tslibs/package.json: *new*
+  {"event":{"id":9,"path":"c:/home/src/tslibs/package.json"}}
 c:/projects/myproject/b.ts: *new*
   {"event":{"id":3,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/m.ts: *new*
   {"event":{"id":4,"path":"c:/projects/myproject/m.ts"}}
 c:/projects/myproject/node_modules/package.json: *new*
-  {"event":{"id":8,"path":"c:/projects/myproject/node_modules/package.json"}}
+  {"event":{"id":15,"path":"c:/projects/myproject/node_modules/package.json"}}
 c:/projects/myproject/node_modules/something/package.json: *new*
-  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}}
+  {"event":{"id":14,"path":"c:/projects/myproject/node_modules/something/package.json"}}
 c:/projects/myproject/package.json: *new*
-  {"event":{"id":9,"path":"c:/projects/myproject/package.json"}}
+  {"event":{"id":12,"path":"c:/projects/myproject/package.json"}}
 c:/projects/myproject/tsconfig.json: *new*
   {"event":{"id":1,"path":"c:/projects/myproject/tsconfig.json"}}
 c:/projects/package.json: *new*
-  {"event":{"id":10,"path":"c:/projects/package.json"}}
+  {"event":{"id":13,"path":"c:/projects/package.json"}}
 
 FsWatchesRecursive::
 c:/projects/myproject: *new*
@@ -350,9 +421,9 @@ c:/projects/myproject: *new*
 c:/projects/myproject/node_modules: *new*
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 c:/projects/myproject/node_modules/@types: *new*
-  {"event":{"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":16,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 c:/projects/node_modules/@types: *new*
-  {"event":{"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":17,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 Projects::
 c:/projects/myproject/tsconfig.json (Configured) *new*
@@ -434,11 +505,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createFileWatcher",
       "body": {
-        "id": 13,
+        "id": 18,
         "path": "c:/projects/myproject/c.ts"
       }
     }
-Custom watchFile:: Added:: {"id":13,"path":"c:/projects/myproject/c.ts"}
+Custom watchFile:: Added:: {"id":18,"path":"c:/projects/myproject/c.ts"}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
@@ -459,6 +530,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Matched by default include pattern '**/*'
 	node_modules/something/index.d.ts
 	  Imported via "something" from file 'm.ts'
+	  File is CommonJS module because 'package.json' was not found
 	m.ts
 	  Matched by default include pattern '**/*'
 	c.ts
@@ -497,24 +569,34 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
+c:/home/package.json:
+  {"event":{"id":11,"path":"c:/home/package.json"}}
+c:/home/src/package.json:
+  {"event":{"id":10,"path":"c:/home/src/package.json"}}
 c:/home/src/tslibs/TS/Lib/lib.d.ts:
   {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/package.json:
+  {"event":{"id":7,"path":"c:/home/src/tslibs/TS/Lib/package.json"}}
+c:/home/src/tslibs/TS/package.json:
+  {"event":{"id":8,"path":"c:/home/src/tslibs/TS/package.json"}}
+c:/home/src/tslibs/package.json:
+  {"event":{"id":9,"path":"c:/home/src/tslibs/package.json"}}
 c:/projects/myproject/b.ts:
   {"event":{"id":3,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/c.ts: *new*
-  {"event":{"id":13,"path":"c:/projects/myproject/c.ts"}}
+  {"event":{"id":18,"path":"c:/projects/myproject/c.ts"}}
 c:/projects/myproject/m.ts:
   {"event":{"id":4,"path":"c:/projects/myproject/m.ts"}}
 c:/projects/myproject/node_modules/package.json:
-  {"event":{"id":8,"path":"c:/projects/myproject/node_modules/package.json"}}
+  {"event":{"id":15,"path":"c:/projects/myproject/node_modules/package.json"}}
 c:/projects/myproject/node_modules/something/package.json:
-  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}}
+  {"event":{"id":14,"path":"c:/projects/myproject/node_modules/something/package.json"}}
 c:/projects/myproject/package.json:
-  {"event":{"id":9,"path":"c:/projects/myproject/package.json"}}
+  {"event":{"id":12,"path":"c:/projects/myproject/package.json"}}
 c:/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"c:/projects/myproject/tsconfig.json"}}
 c:/projects/package.json:
-  {"event":{"id":10,"path":"c:/projects/package.json"}}
+  {"event":{"id":13,"path":"c:/projects/package.json"}}
 
 FsWatchesRecursive::
 c:/projects/myproject:
@@ -522,9 +604,9 @@ c:/projects/myproject:
 c:/projects/myproject/node_modules:
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 c:/projects/myproject/node_modules/@types:
-  {"event":{"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":16,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 c:/projects/node_modules/@types:
-  {"event":{"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":17,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 Projects::
 c:/projects/myproject/tsconfig.json (Configured) *changed*
@@ -749,22 +831,32 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+c:/home/package.json:
+  {"event":{"id":11,"path":"c:/home/package.json"}}
+c:/home/src/package.json:
+  {"event":{"id":10,"path":"c:/home/src/package.json"}}
 c:/home/src/tslibs/TS/Lib/lib.d.ts:
   {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/package.json:
+  {"event":{"id":7,"path":"c:/home/src/tslibs/TS/Lib/package.json"}}
+c:/home/src/tslibs/TS/package.json:
+  {"event":{"id":8,"path":"c:/home/src/tslibs/TS/package.json"}}
+c:/home/src/tslibs/package.json:
+  {"event":{"id":9,"path":"c:/home/src/tslibs/package.json"}}
 c:/projects/myproject/c.ts:
-  {"event":{"id":13,"path":"c:/projects/myproject/c.ts"}}
+  {"event":{"id":18,"path":"c:/projects/myproject/c.ts"}}
 c:/projects/myproject/m.ts:
   {"event":{"id":4,"path":"c:/projects/myproject/m.ts"}}
 c:/projects/myproject/node_modules/package.json:
-  {"event":{"id":8,"path":"c:/projects/myproject/node_modules/package.json"}}
+  {"event":{"id":15,"path":"c:/projects/myproject/node_modules/package.json"}}
 c:/projects/myproject/node_modules/something/package.json:
-  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}}
+  {"event":{"id":14,"path":"c:/projects/myproject/node_modules/something/package.json"}}
 c:/projects/myproject/package.json:
-  {"event":{"id":9,"path":"c:/projects/myproject/package.json"}}
+  {"event":{"id":12,"path":"c:/projects/myproject/package.json"}}
 c:/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"c:/projects/myproject/tsconfig.json"}}
 c:/projects/package.json:
-  {"event":{"id":10,"path":"c:/projects/package.json"}}
+  {"event":{"id":13,"path":"c:/projects/package.json"}}
 
 PolledWatches *deleted*::
 c:/projects/myproject/b.ts:
@@ -776,9 +868,9 @@ c:/projects/myproject:
 c:/projects/myproject/node_modules:
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 c:/projects/myproject/node_modules/@types:
-  {"event":{"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":16,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 c:/projects/node_modules/@types:
-  {"event":{"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":17,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 ScriptInfos::
 c:/home/src/tslibs/TS/Lib/lib.d.ts
@@ -825,11 +917,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createFileWatcher",
       "body": {
-        "id": 14,
+        "id": 19,
         "path": "c:/projects/myproject/b.ts"
       }
     }
-Custom watchFile:: Added:: {"id":14,"path":"c:/projects/myproject/b.ts"}
+Custom watchFile:: Added:: {"id":19,"path":"c:/projects/myproject/b.ts"}
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 
@@ -848,24 +940,34 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+c:/home/package.json:
+  {"event":{"id":11,"path":"c:/home/package.json"}}
+c:/home/src/package.json:
+  {"event":{"id":10,"path":"c:/home/src/package.json"}}
 c:/home/src/tslibs/TS/Lib/lib.d.ts:
   {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/package.json:
+  {"event":{"id":7,"path":"c:/home/src/tslibs/TS/Lib/package.json"}}
+c:/home/src/tslibs/TS/package.json:
+  {"event":{"id":8,"path":"c:/home/src/tslibs/TS/package.json"}}
+c:/home/src/tslibs/package.json:
+  {"event":{"id":9,"path":"c:/home/src/tslibs/package.json"}}
 c:/projects/myproject/b.ts: *new*
-  {"event":{"id":14,"path":"c:/projects/myproject/b.ts"}}
+  {"event":{"id":19,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/c.ts:
-  {"event":{"id":13,"path":"c:/projects/myproject/c.ts"}}
+  {"event":{"id":18,"path":"c:/projects/myproject/c.ts"}}
 c:/projects/myproject/m.ts:
   {"event":{"id":4,"path":"c:/projects/myproject/m.ts"}}
 c:/projects/myproject/node_modules/package.json:
-  {"event":{"id":8,"path":"c:/projects/myproject/node_modules/package.json"}}
+  {"event":{"id":15,"path":"c:/projects/myproject/node_modules/package.json"}}
 c:/projects/myproject/node_modules/something/package.json:
-  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}}
+  {"event":{"id":14,"path":"c:/projects/myproject/node_modules/something/package.json"}}
 c:/projects/myproject/package.json:
-  {"event":{"id":9,"path":"c:/projects/myproject/package.json"}}
+  {"event":{"id":12,"path":"c:/projects/myproject/package.json"}}
 c:/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"c:/projects/myproject/tsconfig.json"}}
 c:/projects/package.json:
-  {"event":{"id":10,"path":"c:/projects/package.json"}}
+  {"event":{"id":13,"path":"c:/projects/package.json"}}
 
 FsWatchesRecursive::
 c:/projects/myproject:
@@ -873,9 +975,9 @@ c:/projects/myproject:
 c:/projects/myproject/node_modules:
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 c:/projects/myproject/node_modules/@types:
-  {"event":{"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":16,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 c:/projects/node_modules/@types:
-  {"event":{"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":17,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 ScriptInfos::
 c:/home/src/tslibs/TS/Lib/lib.d.ts
@@ -904,7 +1006,7 @@ c:/projects/myproject/node_modules/something/index.d.ts
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
 
-Custom watchFile:: Triggered:: {"id":13,"path":"c:/projects/myproject/c.ts"}:: c:\projects\myproject\c.ts updated
+Custom watchFile:: Triggered:: {"id":18,"path":"c:/projects/myproject/c.ts"}:: c:\projects\myproject\c.ts updated
 Custom watchDirectory:: Triggered Ignored:: {"id":2,"path":"c:/projects/myproject","recursive":true,"ignoreUpdate":true}:: c:\projects\myproject\c.ts updated
 Before running Timeout callback:: count: 0
 //// [c:/projects/myproject/c.ts]
@@ -919,7 +1021,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "watchChange",
       "arguments": {
-        "id": 13,
+        "id": 18,
         "updated": [
           "c:\\projects\\myproject\\c.ts"
         ]
@@ -1060,7 +1162,7 @@ export class a { prop = "hello"; foo() { return this.prop; } }
 
 After running Timeout callback:: count: 0
 
-Custom watchFile:: Triggered:: {"id":13,"path":"c:/projects/myproject/c.ts"}:: c:\projects\myproject\c.ts updated
+Custom watchFile:: Triggered:: {"id":18,"path":"c:/projects/myproject/c.ts"}:: c:\projects\myproject\c.ts updated
 Custom watchDirectory:: Triggered Ignored:: {"id":2,"path":"c:/projects/myproject","recursive":true,"ignoreUpdate":true}:: c:\projects\myproject\c.ts updated
 Before running Timeout callback:: count: 0
 //// [c:/projects/myproject/c.ts]
@@ -1092,7 +1194,7 @@ Info seq  [hh:mm:ss:mss] request:
           ]
         },
         {
-          "id": 13,
+          "id": 18,
           "updated": [
             "c:\\projects\\myproject\\c.ts"
           ]
@@ -1164,11 +1266,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createFileWatcher",
       "body": {
-        "id": 15,
+        "id": 20,
         "path": "c:/projects/myproject/d.ts"
       }
     }
-Custom watchFile:: Added:: {"id":15,"path":"c:/projects/myproject/d.ts"}
+Custom watchFile:: Added:: {"id":20,"path":"c:/projects/myproject/d.ts"}
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/e.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1176,11 +1278,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createFileWatcher",
       "body": {
-        "id": 16,
+        "id": 21,
         "path": "c:/projects/myproject/e.ts"
       }
     }
-Custom watchFile:: Added:: {"id":16,"path":"c:/projects/myproject/e.ts"}
+Custom watchFile:: Added:: {"id":21,"path":"c:/projects/myproject/e.ts"}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 5 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
@@ -1203,6 +1305,7 @@ Info seq  [hh:mm:ss:mss] 	Files (8)
 	  Matched by default include pattern '**/*'
 	node_modules/something/index.d.ts
 	  Imported via "something" from file 'm.ts'
+	  File is CommonJS module because 'package.json' was not found
 	m.ts
 	  Matched by default include pattern '**/*'
 	c.ts
@@ -1245,28 +1348,38 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
+c:/home/package.json:
+  {"event":{"id":11,"path":"c:/home/package.json"}}
+c:/home/src/package.json:
+  {"event":{"id":10,"path":"c:/home/src/package.json"}}
 c:/home/src/tslibs/TS/Lib/lib.d.ts:
   {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/package.json:
+  {"event":{"id":7,"path":"c:/home/src/tslibs/TS/Lib/package.json"}}
+c:/home/src/tslibs/TS/package.json:
+  {"event":{"id":8,"path":"c:/home/src/tslibs/TS/package.json"}}
+c:/home/src/tslibs/package.json:
+  {"event":{"id":9,"path":"c:/home/src/tslibs/package.json"}}
 c:/projects/myproject/b.ts:
-  {"event":{"id":14,"path":"c:/projects/myproject/b.ts"}}
+  {"event":{"id":19,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/c.ts:
-  {"event":{"id":13,"path":"c:/projects/myproject/c.ts"}}
+  {"event":{"id":18,"path":"c:/projects/myproject/c.ts"}}
 c:/projects/myproject/d.ts: *new*
-  {"event":{"id":15,"path":"c:/projects/myproject/d.ts"}}
+  {"event":{"id":20,"path":"c:/projects/myproject/d.ts"}}
 c:/projects/myproject/e.ts: *new*
-  {"event":{"id":16,"path":"c:/projects/myproject/e.ts"}}
+  {"event":{"id":21,"path":"c:/projects/myproject/e.ts"}}
 c:/projects/myproject/m.ts:
   {"event":{"id":4,"path":"c:/projects/myproject/m.ts"}}
 c:/projects/myproject/node_modules/package.json:
-  {"event":{"id":8,"path":"c:/projects/myproject/node_modules/package.json"}}
+  {"event":{"id":15,"path":"c:/projects/myproject/node_modules/package.json"}}
 c:/projects/myproject/node_modules/something/package.json:
-  {"event":{"id":7,"path":"c:/projects/myproject/node_modules/something/package.json"}}
+  {"event":{"id":14,"path":"c:/projects/myproject/node_modules/something/package.json"}}
 c:/projects/myproject/package.json:
-  {"event":{"id":9,"path":"c:/projects/myproject/package.json"}}
+  {"event":{"id":12,"path":"c:/projects/myproject/package.json"}}
 c:/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"c:/projects/myproject/tsconfig.json"}}
 c:/projects/package.json:
-  {"event":{"id":10,"path":"c:/projects/package.json"}}
+  {"event":{"id":13,"path":"c:/projects/package.json"}}
 
 FsWatchesRecursive::
 c:/projects/myproject:
@@ -1274,9 +1387,9 @@ c:/projects/myproject:
 c:/projects/myproject/node_modules:
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 c:/projects/myproject/node_modules/@types:
-  {"event":{"id":11,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":16,"path":"c:/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 c:/projects/node_modules/@types:
-  {"event":{"id":12,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":17,"path":"c:/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 Projects::
 c:/projects/myproject/tsconfig.json (Configured) *changed*

@@ -1,4 +1,5 @@
-// @moduleResolution: nodenext
+// @target: es5
+// @module: nodenext
 // @traceResolution: true
 
 // @filename: /a/node_modules/foo.d.ts
