@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/declarationEmitComputedNamesInaccessible.ts] ////
+
+=== declarationEmitComputedNamesInaccessible.ts ===
+export function f1() {
+>f1 : () => typeof ParameterizedHolder
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const localClassFieldName = Math.random() > 0.5 ? "g1" : "g2";
+>localClassFieldName : "g1" | "g2"
+>                    : ^^^^^^^^^^^
+>Math.random() > 0.5 ? "g1" : "g2" : "g1" | "g2"
+>                                  : ^^^^^^^^^^^
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"g1" : "g1"
+>     : ^^^^
+>"g2" : "g2"
+>     : ^^^^
+
+    const localOtherField = localClassFieldName === "g1" ? "g2" : "g1";
+>localOtherField : "g1" | "g2"
+>                : ^^^^^^^^^^^
+>localClassFieldName === "g1" ? "g2" : "g1" : "g1" | "g2"
+>                                           : ^^^^^^^^^^^
+>localClassFieldName === "g1" : boolean
+>                             : ^^^^^^^
+>localClassFieldName : "g1" | "g2"
+>                    : ^^^^^^^^^^^
+>"g1" : "g1"
+>     : ^^^^
+>"g2" : "g2"
+>     : ^^^^
+>"g1" : "g1"
+>     : ^^^^
+
+    const localStaticField = Math.random() > 0.5 ? "s1" : "s2";
+>localStaticField : "s1" | "s2"
+>                 : ^^^^^^^^^^^
+>Math.random() > 0.5 ? "s1" : "s2" : "s1" | "s2"
+>                                  : ^^^^^^^^^^^
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"s1" : "s1"
+>     : ^^^^
+>"s2" : "s2"
+>     : ^^^^
+
+    return class ParameterizedHolder {
+>class ParameterizedHolder {        [localClassFieldName]() {            return "value";        }        [localOtherField]() {            return 42;        }        static [localStaticField]() {            return { static: true };        }        static [localStaticField]() {            return { static: "sometimes" };        }    } : typeof ParameterizedHolder
+>                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ParameterizedHolder : typeof ParameterizedHolder
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        [localClassFieldName]() {
+>[localClassFieldName] : () => string
+>                      : ^^^^^^^^^^^^
+>localClassFieldName : "g1" | "g2"
+>                    : ^^^^^^^^^^^
+
+            return "value";
+>"value" : "value"
+>        : ^^^^^^^
+        }
+        [localOtherField]() {
+>[localOtherField] : () => number
+>                  : ^^^^^^^^^^^^
+>localOtherField : "g1" | "g2"
+>                : ^^^^^^^^^^^
+
+            return 42;
+>42 : 42
+>   : ^^
+        }
+        static [localStaticField]() {
+>[localStaticField] : () => { static: boolean; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>localStaticField : "s1" | "s2"
+>                 : ^^^^^^^^^^^
+
+            return { static: true };
+>{ static: true } : { static: boolean; }
+>                 : ^^^^^^^^^^^^^^^^^^^^
+>static : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+        }
+        static [localStaticField]() {
+>[localStaticField] : () => { static: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>localStaticField : "s1" | "s2"
+>                 : ^^^^^^^^^^^
+
+            return { static: "sometimes" };
+>{ static: "sometimes" } : { static: string; }
+>                        : ^^^^^^^^^^^^^^^^^^^
+>static : string
+>       : ^^^^^^
+>"sometimes" : "sometimes"
+>            : ^^^^^^^^^^^
+        }
+    }
+}

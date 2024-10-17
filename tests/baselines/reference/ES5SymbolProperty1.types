@@ -11,10 +11,10 @@ var Symbol: SymbolConstructor;
 >       : ^^^^^^^^^^^^^^^^^
 
 var obj = {
->obj : { [x: string]: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
->{    [Symbol.foo]: 0} : { [x: string]: number; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { [Symbol.foo]: number; }
+>    : ^^              ^^^^^^ ^^
+>{    [Symbol.foo]: 0} : { [Symbol.foo]: number; }
+>                      : ^^              ^^^^^^ ^^
 
     [Symbol.foo]: 0
 >[Symbol.foo] : number
@@ -32,8 +32,8 @@ var obj = {
 obj[Symbol.foo];
 >obj[Symbol.foo] : number
 >                : ^^^^^^
->obj : { [x: string]: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { [Symbol.foo]: number; }
+>    : ^^              ^^^^^^ ^^
 >Symbol.foo : string
 >           : ^^^^^^
 >Symbol : SymbolConstructor
