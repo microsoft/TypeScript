@@ -14793,14 +14793,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // mapped type because we protect again circular constraints in getTypeFromMappedTypeNode.
             const modifiersType = getModifiersTypeFromMappedType(type);
             const baseConstraint = isGenericMappedType(modifiersType) ? getApparentTypeOfMappedType(modifiersType) : getBaseConstraintOfType(modifiersType);
-            if (baseConstraint && everyType(baseConstraint, t => isArrayOrTupleType(t) || isArrayOrTupleOrIntersection(t))) {
+            if (baseConstraint && everyType(baseConstraint, t => isArrayOrTupleType(t) || isArrayOrTupleIntersection(t))) {
                 return instantiateType(target, prependTypeMapping(typeVariable, baseConstraint, type.mapper));
             }
         }
         return type;
     }
 
-    function isArrayOrTupleOrIntersection(type: Type) {
+    function isArrayOrTupleIntersection(type: Type) {
         return !!(type.flags & TypeFlags.Intersection) && every((type as IntersectionType).types, isArrayOrTupleType);
     }
 
@@ -16571,8 +16571,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (getTypeParameterFromMappedType(mappedType) === getActualTypeVariable(type)) {
                     const typeParameter = getHomomorphicTypeVariable(mappedType);
                     if (typeParameter) {
-                        const constraint = getConstraintOfTypeParameter(typeParameter);
-                        if (constraint && everyType(constraint, isArrayOrTupleType)) {
+                        const constraint = getConstraintOfType(getConditionalFlowTypeOfType(typeParameter, node));
+                        if (constraint && everyType(constraint, t => isArrayOrTupleType(t) || isArrayOrTupleIntersection(t))) {
                             constraints = append(constraints, getUnionType([numberType, numericStringType]));
                         }
                     }
@@ -20189,7 +20189,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (isTupleType(t)) {
                         return instantiateMappedTupleType(t, type, typeVariable!, mapper);
                     }
-                    if (isArrayOrTupleOrIntersection(t)) {
+                    if (isArrayOrTupleIntersection(t)) {
                         return getIntersectionType(map((t as IntersectionType).types, instantiateConstituent));
                     }
                 }
