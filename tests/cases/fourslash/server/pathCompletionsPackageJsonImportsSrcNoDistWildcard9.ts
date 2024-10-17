@@ -6,7 +6,7 @@
 ////     "module": "nodenext",
 ////     "rootDir": "src",
 ////     "outDir": "dist",
-////     "allowJs": "true"
+////     "allowJs": true
 ////   }
 //// }
 

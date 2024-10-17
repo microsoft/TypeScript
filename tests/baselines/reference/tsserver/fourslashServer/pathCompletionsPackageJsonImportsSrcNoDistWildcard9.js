@@ -31,7 +31,7 @@ import { } from "";
     "module": "nodenext",
     "rootDir": "src",
     "outDir": "dist",
-    "allowJs": "true"
+    "allowJs": true
   }
 }
 
@@ -50,12 +50,14 @@ Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/projec
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  "rootNames": [
+  "/home/src/workspaces/project/src/blah.js",
   "/home/src/workspaces/project/src/index.mts"
  ],
  "options": {
   "module": 199,
   "rootDir": "/home/src/workspaces/project/src",
   "outDir": "/home/src/workspaces/project/dist",
+  "allowJs": true,
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  }
 }
@@ -71,8 +73,11 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Config: /home/src/workspaces/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/blah.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/index.mts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.esnext.full.d.ts 500 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
@@ -80,10 +85,14 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/workspaces/project/src/blah.js Text-1 "export const blah = 0;"
 	/home/src/workspaces/project/src/index.mts Text-1 "import { } from \"\";"
 
 
+	src/blah.js
+	  Matched by default include pattern '**/*'
+	  File is CommonJS module because 'package.json' does not have field "type"
 	src/index.mts
 	  Matched by default include pattern '**/*'
 
@@ -150,20 +159,6 @@ Info seq  [hh:mm:ss:mss] event:
             "text": "Cannot find global type 'String'.",
             "code": 2318,
             "category": "error"
-          },
-          {
-            "start": {
-              "line": 6,
-              "offset": 16
-            },
-            "end": {
-              "line": 6,
-              "offset": 22
-            },
-            "text": "Compiler option 'allowJs' requires a value of type boolean.",
-            "code": 5024,
-            "category": "error",
-            "fileName": "/home/src/workspaces/project/tsconfig.json"
           }
         ]
       }
@@ -189,7 +184,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"nodenext\",\n    \"rootDir\": \"src\",\n    \"outDir\": \"dist\",\n    \"allowJs\": \"true\"\n  }\n}"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"nodenext\",\n    \"rootDir\": \"src\",\n    \"outDir\": \"dist\",\n    \"allowJs\": true\n  }\n}"
 
 
 	../../tslibs/TS/Lib/lib.d.ts
@@ -204,7 +199,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -238,9 +233,14 @@ watchedFiles::
 /home/src/workspaces/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/package.json: *new*
+  {"pollingInterval":2000}
   {"pollingInterval":250}
+/home/src/workspaces/project/src/blah.js: *new*
+  {"pollingInterval":500}
 /home/src/workspaces/project/src/index.mts: *new*
   {"pollingInterval":500}
+/home/src/workspaces/project/src/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -281,6 +281,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
+/home/src/workspaces/project/src/blah.js *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/src/index.mts *new*
     version: Text-1
     containingProjects: 1
@@ -302,7 +306,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src/index.mts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/src/index.mts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -335,7 +339,12 @@ watchedFiles::
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
   {"pollingInterval":250}
+/home/src/workspaces/project/src/blah.js:
+  {"pollingInterval":500}
+/home/src/workspaces/project/src/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/project/tsconfig.json:
   {"pollingInterval":2000}
 
@@ -380,6 +389,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
+/home/src/workspaces/project/src/blah.js
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/src/index.mts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -429,7 +442,14 @@ Info seq  [hh:mm:ss:mss] response:
         "isGlobalCompletion": false,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": true,
-        "entries": [],
+        "entries": [
+          {
+            "name": "#blah",
+            "kind": "script",
+            "kindModifiers": "",
+            "sortText": "11"
+          }
+        ],
         "defaultCommitCharacters": []
       }
     }
