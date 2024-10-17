@@ -885,7 +885,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const unusedImportsFromOldFile = new Set<Symbol>();
     for (const statement of toMove) {
         forEachReference(statement, checker, enclosingRange, (symbol, isValidTypeOnlyUseSite) => {
-            if (!symbol.declarations || isGlobalType(checker, symbol)) {
+            if (!symbol.declarations || (isGlobalType(checker, oldFile, symbol))) {
                 return;
             }
             if (existingTargetLocals.has(skipAlias(symbol, checker))) {
@@ -946,7 +946,9 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     }
 }
 
-function isGlobalType(checker: TypeChecker, symbol: Symbol) {
+function isGlobalType(checker: TypeChecker, location: Node, symbol: Symbol) {
+    const resolvedLocal = checker.resolveName(symbol.name, location, SymbolFlags.All, /*excludeGlobals*/ true);
+    if (resolvedLocal !== undefined && checker.getMergedSymbol(symbol) === checker.getMergedSymbol(resolvedLocal)) return false;
     return !!checker.resolveName(symbol.name, /*location*/ undefined, SymbolFlags.Type, /*excludeGlobals*/ false);
 }
 
