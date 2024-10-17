@@ -9,8 +9,10 @@ class A {
         return new A();
     }
     constructor() {
-        this?.#b;           // Error
-        this?.a.#b;         // Error
-        this?.getA().#b;    // Error
+        this.a = this;
+        // None of these should error
+        this?.#b;
+        this?.a.#b;
+        this?.getA().#b;
     }
 }

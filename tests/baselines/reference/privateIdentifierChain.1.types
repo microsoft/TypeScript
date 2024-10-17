@@ -24,23 +24,36 @@ class A {
 >  : ^^^^^^^^
     }
     constructor() {
-        this?.#b;           // Error
+        this.a = this;
+>this.a = this : this
+>              : ^^^^
+>this.a : A | undefined
+>       : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>a : A | undefined
+>  : ^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+
+        // None of these should error
+        this?.#b;
 >this?.#b : A | undefined
 >         : ^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 
-        this?.a.#b;         // Error
+        this?.a.#b;
 >this?.a.#b : A | undefined
 >           : ^^^^^^^^^^^^^
->this?.a : A | undefined
->        : ^^^^^^^^^^^^^
+>this?.a : A
+>        : ^
 >this : this
 >     : ^^^^
->a : A | undefined
->  : ^^^^^^^^^^^^^
+>a : A
+>  : ^
 
-        this?.getA().#b;    // Error
+        this?.getA().#b;
 >this?.getA().#b : A | undefined
 >                : ^^^^^^^^^^^^^
 >this?.getA() : A
