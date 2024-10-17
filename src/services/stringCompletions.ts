@@ -1194,7 +1194,7 @@ function getModulesForPathsPattern(
     const matchingSuffixes = [
         declarationExtension && changeExtension(normalizedSuffix, declarationExtension),
         ...(inputExtension ? inputExtension.map(ext => changeExtension(normalizedSuffix, ext)) : []),
-        normalizedSuffix
+        normalizedSuffix,
     ].filter(isString);
 
     // If we have a suffix, then we read the directory all the way down to avoid returning completions for
