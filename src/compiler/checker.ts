@@ -5215,7 +5215,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (nodeIsSynthesized(importRef)) continue; // Synthetic names can't be resolved by `resolveExternalModuleName` - they'll cause a debug assert if they error
                 const resolvedModule = resolveExternalModuleName(enclosingDeclaration, importRef, /*ignoreErrors*/ true);
                 if (!resolvedModule) continue;
-                const ref = getAliasForSymbolInContainer(resolvedModule, symbol);
+                const ref = getAliasChainForSymbolInContainer(resolvedModule, symbol);
                 if (!ref) continue;
                 results = append(results, resolvedModule);
             }
@@ -5232,7 +5232,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const file of otherFiles) {
             if (!isExternalModule(file)) continue;
             const sym = getSymbolOfDeclaration(file);
-            const ref = getAliasForSymbolInContainer(sym, symbol);
+            const ref = getAliasChainForSymbolInContainer(sym, symbol);
             if (!ref) continue;
             results = append(results, sym);
         }
@@ -5271,7 +5271,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!length(candidates)) {
             return undefined;
         }
-        const containers = mapDefined(candidates, candidate => getAliasForSymbolInContainer(candidate, symbol) ? candidate : undefined);
+        const containers = mapDefined(candidates, candidate => getAliasChainForSymbolInContainer(candidate, symbol) ? candidate : undefined);
 
         let bestContainers: Symbol[] = [];
         let alternativeContainers: Symbol[] = [];
@@ -5337,27 +5337,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return exported && getSymbolIfSameReference(exported, container) ? fileSymbol : undefined;
     }
 
-    function getAliasForSymbolInContainer(container: Symbol, symbol: Symbol) {
+    function getAliasChainForSymbolInContainer(container: Symbol, symbol: Symbol) {
         if (container === getParentOfSymbol(symbol)) {
             // fast path, `symbol` is either already the alias or isn't aliased
-            return symbol;
+            return [symbol];
         }
         // Check if container is a thing with an `export=` which points directly at `symbol`, and if so, return
         // the container itself as the alias for the symbol
         const exportEquals = container.exports && container.exports.get(InternalSymbolName.ExportEquals);
         if (exportEquals && getSymbolIfSameReference(exportEquals, symbol)) {
-            return container;
+            return [container];
         }
-        const exports = getExportsOfSymbol(container);
-        const quick = exports.get(symbol.escapedName);
-        if (quick && getSymbolIfSameReference(quick, symbol)) {
-            return quick;
-        }
-        return forEachEntry(exports, exported => {
-            if (getSymbolIfSameReference(exported, symbol)) {
-                return exported;
+        return getAliasChainRecursively(container);
+
+        function getAliasChainRecursively(container: Symbol): Symbol[] | undefined {
+            const exports = getExportsOfSymbol(container);
+            const quick = exports.get(symbol.escapedName);
+            if (quick && getSymbolIfSameReference(quick, symbol)) {
+                return [quick];
             }
-        });
+            return forEachEntry(exports, exported => {
+                if (getSymbolIfSameReference(exported, symbol)) {
+                    return [exported];
+                }
+                if (exported.flags & SymbolFlags.Alias) {
+                    const aliasChain = getAliasChainRecursively(resolveAlias(exported));
+                    if (aliasChain) {
+                        aliasChain.unshift(exported);
+                        return aliasChain;
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -8025,7 +8036,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     accessibleSymbolChain = parentChain;
                                     break;
                                 }
-                                accessibleSymbolChain = parentChain.concat(accessibleSymbolChain || [getAliasForSymbolInContainer(parent, symbol) || symbol]);
+                                if (accessibleSymbolChain) {
+                                    accessibleSymbolChain = parentChain.concat(accessibleSymbolChain);
+                                    break;
+                                }
+                                const aliasChain = getAliasChainForSymbolInContainer(parent, symbol);
+                                if (aliasChain) {
+                                    accessibleSymbolChain = parentChain.concat(aliasChain);
+                                    break;
+                                }
+                                accessibleSymbolChain = parentChain.concat(symbol);
                                 break;
                             }
                         }
