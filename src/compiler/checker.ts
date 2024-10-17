@@ -17262,6 +17262,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Spread variadic elements with tuple types into the resulting tuple.
                     forEach(elements, (t, n) => addElement(t, type.target.elementFlags[n], type.target.labeledElementDeclarations?.[n]));
                 }
+                else if (getReducedApparentType(type).flags & TypeFlags.Never) {
+                    return neverType;
+                }
                 else {
                     // Treat everything else as an array type and create a rest element.
                     addElement(isArrayLikeType(type) && getIndexTypeOfType(type, numberType) || errorType, ElementFlags.Rest, target.labeledElementDeclarations?.[i]);
