@@ -16580,7 +16580,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             node = parent;
         }
-        return constraints ? getSubstitutionType(type, getIntersectionType(constraints)) : type;
+        if (!constraints) {
+            return type;
+        }
+        if (isNoInferType(type)) {
+            constraints = append(constraints, (type as SubstitutionType).baseType);
+            return getNoInferType(getIntersectionType(constraints));
+        }
+        return getSubstitutionType(type, getIntersectionType(constraints));
     }
 
     function isJSDocTypeReference(node: Node): node is TypeReferenceNode {
