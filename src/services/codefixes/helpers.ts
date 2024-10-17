@@ -992,7 +992,7 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
                 ? replaceFirstIdentifierOfEntityName(node.qualifier, factory.createIdentifier(referenceName))
                 : node.qualifier;
 
-            replacements = append(replacements, { symbol: firstIdentifier.symbol, exportName: firstIdentifier.text, referenceName });
+            replacements = append(replacements, { symbol: firstIdentifier.symbol, referenceName });
             const typeArguments = visitNodes(node.typeArguments, visit, isTypeNode);
             return factory.createTypeReferenceNode(qualifier, typeArguments);
         }
