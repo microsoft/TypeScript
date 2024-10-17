@@ -71,6 +71,7 @@ import {
     isPropertyName,
     isRightSideOfPropertyAccess,
     isStaticModifier,
+    isStringLiteralLike,
     isSwitchStatement,
     isTypeAliasDeclaration,
     isTypeReferenceNode,
@@ -183,6 +184,16 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
             pos = skipTrivia(sourceFile.text, pos);
             return createDefinitionInfoFromName(typeChecker, staticBlock, ScriptElementKind.constructorImplementationElement, "static {}", containerName, /*unverified*/ false, failedAliasResolution, { start: pos, length: "static".length });
         });
+    }
+
+    if (isStringLiteralLike(node)) {
+        const contextualOriginType = typeChecker.getContextualOriginTypeForStringDefinition(node);
+        if (contextualOriginType?.isIndexType() && !contextualOriginType.type.isUnion()) {
+            const symbol = contextualOriginType.type.getProperty(node.text);
+            if (symbol) {
+                return getDefinitionFromSymbol(typeChecker, symbol, node);
+            }
+        }
     }
 
     let { symbol, failedAliasResolution } = getSymbol(node, typeChecker, stopAtAlias);
