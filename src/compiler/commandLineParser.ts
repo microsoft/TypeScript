@@ -1821,7 +1821,7 @@ function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType
         // does not support that ECMAScript version.
         const esVersion = extractECMAScriptVersion(value);
         if (esVersion !== undefined && esVersion >= 2015) {
-            return createDiagnostic(Diagnostics.Argument_0_for_1_option_is_a_year_not_yet_supported_by_this_version_of_TypeScript, value, opt.name);
+            return createDiagnostic(Diagnostics.Argument_0_for_1_option_is_a_year_not_yet_supported_by_this_version_of_TypeScript, value, `--${opt.name}`);
         }
     }
 
