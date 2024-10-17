@@ -38593,25 +38593,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const functionFlags = getFunctionFlags(func);
         if (functionFlags !== FunctionFlags.Normal) return undefined;
 
-        // Only attempt to infer a type predicate if there's exactly one return.
-        let singleReturn: Expression | undefined;
+        // Collect the returns; bail early if there's a non-boolean.
+        let returns: Expression[] = [];
         if (func.body && func.body.kind !== SyntaxKind.Block) {
-            singleReturn = func.body; // arrow function
+            returns = [func.body]; // arrow function
         }
         else {
             const bailedEarly = forEachReturnStatement(func.body as Block, returnStatement => {
-                if (singleReturn || !returnStatement.expression) return true;
-                singleReturn = returnStatement.expression;
+                if (!returnStatement.expression) return true;
+                const expr = skipParentheses(returnStatement.expression, /*excludeJSDocTypeAssertions*/ true);
+                returns.push(expr);
             });
-            if (bailedEarly || !singleReturn || functionHasImplicitReturn(func)) return undefined;
+            if (bailedEarly || !returns.length || functionHasImplicitReturn(func)) return undefined;
         }
-        return checkIfExpressionRefinesAnyParameter(func, singleReturn);
+        return checkIfExpressionsRefineAnyParameter(func, returns);
     }
 
-    function checkIfExpressionRefinesAnyParameter(func: FunctionLikeDeclaration, expr: Expression): TypePredicate | undefined {
-        expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
-        const returnType = checkExpressionCached(expr);
-        if (!(returnType.flags & TypeFlags.Boolean)) return undefined;
+    function checkIfExpressionsRefineAnyParameter(func: FunctionLikeDeclaration, returns: readonly Expression[]): TypePredicate | undefined {
+        const allBoolean = every(returns, expr => {
+            const returnType = checkExpressionCached(expr);
+            return !!(returnType.flags & (TypeFlags.Boolean | TypeFlags.BooleanLiteral));
+        });
+        if (!allBoolean) return undefined;
 
         return forEach(func.parameters, (param, i) => {
             const initType = getTypeOfSymbol(param.symbol);
@@ -38619,27 +38622,42 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
                 return;
             }
-            const trueType = checkIfExpressionRefinesParameter(func, expr, param, initType);
+            const trueType = checkIfExpressionsRefineParameter(func, returns, param, initType);
+
             if (trueType) {
                 return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, trueType);
             }
         });
     }
 
-    function checkIfExpressionRefinesParameter(func: FunctionLikeDeclaration, expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
-        const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
-            expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
-            createFlowNode(FlowFlags.Start, /*node*/ undefined, /*antecedent*/ undefined);
-        const trueCondition = createFlowNode(FlowFlags.TrueCondition, expr, antecedent);
+    function checkIfExpressionsRefineParameter(func: FunctionLikeDeclaration, returns: readonly Expression[], param: ParameterDeclaration, initType: Type): Type | undefined {
+        const trueTypes: Type[] = [];
+        const anyNonNarrowing = forEach(returns, expr => {
+            if (expr.kind === SyntaxKind.FalseKeyword) return;
+            const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
+                expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
+                createFlowNode(FlowFlags.Start, /*node*/ undefined, /*antecedent*/ undefined);
+            const trueCondition = expr.kind === SyntaxKind.TrueKeyword ? antecedent : createFlowNode(FlowFlags.TrueCondition, expr, antecedent);
+            const localTrueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
 
-        const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
-        if (trueType === initType) return undefined;
+            if (localTrueType === initType) return true;
+            trueTypes.push(localTrueType);
+        });
+        if (anyNonNarrowing || !trueTypes.length) return;
+        const trueType = getUnionType(trueTypes, UnionReduction.Subtype);
 
         // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
-        // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
-        const falseCondition = createFlowNode(FlowFlags.FalseCondition, expr, antecedent);
-        const falseSubtype = getFlowTypeOfReference(param.name, initType, trueType, func, falseCondition);
-        return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
+        // This means that if the function is called with an argument of type trueType, it should be narrowed to never whenever it returns false.
+        const reducesToNever = every(returns, expr => {
+            if (expr.kind === SyntaxKind.TrueKeyword) return true;
+            const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
+                expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
+                createFlowNode(FlowFlags.Start, /*node*/ undefined, /*antecedent*/ undefined);
+            const falseCondition = expr.kind === SyntaxKind.FalseKeyword ? antecedent : createFlowNode(FlowFlags.FalseCondition, expr, antecedent);
+            const falseSubtype = getFlowTypeOfReference(param.name, initType, trueType, func, falseCondition);
+            return !!(falseSubtype.flags & TypeFlags.Never);
+        });
+        return reducesToNever ? trueType : undefined;
     }
 
     /**

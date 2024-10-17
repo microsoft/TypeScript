@@ -1059,8 +1059,8 @@ function areBothNums(x: string|number, y: string|number) {
 
 // Could potentially infer a type guard here but it would require more bookkeeping.
 function doubleReturn(x: string|number) {
->doubleReturn : (x: string | number) => boolean
->             : ^ ^^               ^^^^^^^^^^^^
+>doubleReturn : (x: string | number) => x is string
+>             : ^ ^^               ^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -1647,5 +1647,252 @@ if (foobarPred(foobar)) {
 >       : ^^^^^^^^     ^^^^^^^      ^^^
 >foo : number
 >    : ^^^^^^
+}
+
+// Returning true can result in a predicate if the function throws earlier.
+function assertReturnTrue(x: string | number | Date) {
+>assertReturnTrue : (x: string | number | Date) => x is string | number
+>                 : ^ ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | Date
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+  if (x instanceof Date) {
+>x instanceof Date : boolean
+>                  : ^^^^^^^
+>x : string | number | Date
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+
+    throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+  }
+  return true;
+>true : true
+>     : ^^^^
+}
+
+function isStringForWhichWeHaveACaseHandler(anyString: string) {
+>isStringForWhichWeHaveACaseHandler : (anyString: string) => anyString is "a" | "b" | "c"
+>                                   : ^         ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>anyString : string
+>          : ^^^^^^
+
+  switch (anyString) {
+>anyString : string
+>          : ^^^^^^
+
+    case 'a':
+>'a' : "a"
+>    : ^^^
+
+    case 'b':
+>'b' : "b"
+>    : ^^^
+
+    case 'c':
+>'c' : "c"
+>    : ^^^
+
+      return true
+>true : true
+>     : ^^^^
+
+    default:
+      return false
+>false : false
+>      : ^^^^^
+  }
+}
+
+function twoReturnExpressions(x: string | number) {
+>twoReturnExpressions : (x: string | number) => x is 10 | "a" | "b" | 11
+>                     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  switch (typeof x) {
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    case 'string':
+>'string' : "string"
+>         : ^^^^^^^^
+
+      return x === 'a' || x === 'b';
+>x === 'a' || x === 'b' : boolean
+>                       : ^^^^^^^
+>x === 'a' : boolean
+>          : ^^^^^^^
+>x : string
+>  : ^^^^^^
+>'a' : "a"
+>    : ^^^
+>x === 'b' : boolean
+>          : ^^^^^^^
+>x : string
+>  : ^^^^^^
+>'b' : "b"
+>    : ^^^
+
+    case 'number':
+>'number' : "number"
+>         : ^^^^^^^^
+
+      return x === 10 || x === 11;
+>x === 10 || x === 11 : boolean
+>                     : ^^^^^^^
+>x === 10 : boolean
+>         : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+>x === 11 : boolean
+>         : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>11 : 11
+>   : ^^
+  }
+}
+
+function oneNarrowingOneNot(x: string | number) {
+>oneNarrowingOneNot : (x: string | number) => boolean
+>                   : ^ ^^               ^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  switch (typeof x) {
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    case 'string':
+>'string' : "string"
+>         : ^^^^^^^^
+
+      return x === 'a' || x === 'b';
+>x === 'a' || x === 'b' : boolean
+>                       : ^^^^^^^
+>x === 'a' : boolean
+>          : ^^^^^^^
+>x : string
+>  : ^^^^^^
+>'a' : "a"
+>    : ^^^
+>x === 'b' : boolean
+>          : ^^^^^^^
+>x : string
+>  : ^^^^^^
+>'b' : "b"
+>    : ^^^
+
+    case 'number':
+>'number' : "number"
+>         : ^^^^^^^^
+
+      return x >= 0 && x <= 10;
+>x >= 0 && x <= 10 : boolean
+>                  : ^^^^^^^
+>x >= 0 : boolean
+>       : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>x <= 10 : boolean
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+  }
+}
+
+function ifElseIfPredicate(x: Date | string | number) {
+>ifElseIfPredicate : (x: Date | string | number) => x is string | Date
+>                  : ^ ^^                      ^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | Date
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+  if (x instanceof Date) {
+>x instanceof Date : boolean
+>                  : ^^^^^^^
+>x : string | number | Date
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+
+    return true;
+>true : true
+>     : ^^^^
+
+  } else if (typeof x === 'string') {
+>typeof x === 'string' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+    return true;
+>true : true
+>     : ^^^^
+  }
+  return false;
+>false : false
+>      : ^^^^^
+}
+
+function isArrayOfStrings(x: unknown) {
+>isArrayOfStrings : (x: unknown) => x is string[]
+>                 : ^ ^^       ^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+  if (!(x instanceof Array)) return false;
+>!(x instanceof Array) : boolean
+>                      : ^^^^^^^
+>(x instanceof Array) : boolean
+>                     : ^^^^^^^
+>x instanceof Array : boolean
+>                   : ^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+  return x.every((y) => typeof y === 'string');
+>x.every((y) => typeof y === 'string') : boolean
+>                                      : ^^^^^^^
+>x.every : { <S extends any>(predicate: (value: any, index: number, array: any[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any): boolean; }
+>        : ^^^ ^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
+>x : any[]
+>  : ^^^^^
+>every : { <S extends any>(predicate: (value: any, index: number, array: any[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any): boolean; }
+>      : ^^^ ^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
+>(y) => typeof y === 'string' : (y: any) => y is string
+>                             : ^ ^^^^^^^^^^^^^^^^^^^^^
+>y : any
+>  : ^^^
+>typeof y === 'string' : boolean
+>                      : ^^^^^^^
+>typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : any
+>  : ^^^
+>'string' : "string"
+>         : ^^^^^^^^
 }
 
