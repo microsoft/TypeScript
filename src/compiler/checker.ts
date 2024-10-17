@@ -31874,6 +31874,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
+    function filterContextualTypeForLiteralExpressionOfObject(node: Node, contextualType: Type) {
+        if (!isLiteralExpressionOfObject(node)) {
+            return contextualType;
+        }
+        return filterType(contextualType, t => {
+            if (!t.symbol || !(t.symbol.flags & SymbolFlags.Class)) {
+                return true;
+            }
+            return every(getPropertiesOfType(t), p => !p.valueDeclaration || !isNamedDeclaration(p.valueDeclaration) || (!isPrivateIdentifier(p.valueDeclaration.name) && !(getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier)));
+        });
+    }
+
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
     // be "pushed" onto a node using the contextualType property.
     function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
@@ -31968,6 +31980,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (index >= 0) {
             return contextualTypes[index];
         }
+        const contextualType = getContextualTypeWorker(node, contextFlags);
+        if (!contextualType) {
+            return undefined;
+        }
+        return filterContextualTypeForLiteralExpressionOfObject(node, contextualType);
+    }
+
+    function getContextualTypeWorker(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
         const { parent } = node;
         switch (parent.kind) {
             case SyntaxKind.VariableDeclaration:
@@ -40408,6 +40428,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
+        contextualType = filterContextualTypeForLiteralExpressionOfObject(node, contextualType);
         const contextNode = getContextNode(node);
         pushContextualType(contextNode, contextualType, /*isCache*/ false);
         pushInferenceContext(contextNode, inferenceContext);
