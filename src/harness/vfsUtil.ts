@@ -1148,7 +1148,7 @@ export class FileSystem {
         for (const key of Object.keys(files)) {
             const value = normalizeFileSetEntry(files[key]);
             const path = dirname ? vpath.resolve(dirname, key) : key;
-            vpath.validate(path, vpath.ValidationFlags.Absolute);
+            vpath.validate(path, vpath.ValidationFlags.Absolute | vpath.ValidationFlags.AllowWildcard);
 
             // eslint-disable-next-line no-restricted-syntax
             if (value === null || value === undefined || value instanceof Rmdir || value instanceof Unlink) {
