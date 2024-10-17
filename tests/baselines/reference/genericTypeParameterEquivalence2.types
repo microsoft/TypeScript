@@ -178,7 +178,7 @@ function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
 
     return function (ay: A) {
 >function (ay: A) {        return function (by: B) {            return f(ay, by);        };    } : (ay: A) => (by: B) => C
->                                                                                                : ^  ^^ ^^^^^^  ^^ ^^^^^^
+>                                                                                                : ^  ^^ ^^^^^^     ^^^^^^
 >ay : A
 >   : ^
 

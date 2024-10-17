@@ -874,7 +874,7 @@ declare class Bag<T> {
 
 function asFunction<A extends any[], B>(cf: new (...args: A) => B) {
 >asFunction : <A extends any[], B>(cf: new (...args: A) => B) => (...args: A) => B
->           : ^ ^^^^^^^^^     ^^ ^^  ^^                     ^^^^^^^^^    ^^ ^^^^^^
+>           : ^ ^^^^^^^^^     ^^ ^^  ^^                     ^^^^^^          ^^^^^^
 >cf : new (...args: A) => B
 >   : ^^^^^^^^    ^^ ^^^^^ 
 >args : A
@@ -901,7 +901,7 @@ const newPoint = asFunction(Point);
 >asFunction(Point) : (x: number, y: number) => Point
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >asFunction : <A extends any[], B>(cf: new (...args: A) => B) => (...args: A) => B
->           : ^ ^^^^^^^^^     ^^ ^^  ^^                     ^^^^^^^^^    ^^ ^^^^^^
+>           : ^ ^^^^^^^^^     ^^ ^^  ^^                     ^^^^^^          ^^^^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
 
@@ -911,7 +911,7 @@ const newBag = asFunction(Bag);
 >asFunction(Bag) : <T>(...args: T[]) => Bag<T>
 >                : ^ ^^^^^    ^^^^^^^^^^^^^^^^
 >asFunction : <A extends any[], B>(cf: new (...args: A) => B) => (...args: A) => B
->           : ^ ^^^^^^^^^     ^^ ^^  ^^                     ^^^^^^^^^    ^^ ^^^^^^
+>           : ^ ^^^^^^^^^     ^^ ^^  ^^                     ^^^^^^          ^^^^^^
 >Bag : typeof Bag
 >    : ^^^^^^^^^^
 
@@ -1197,9 +1197,9 @@ var actual = flip(zip);
 
 const map = <T, U>(transform: (t: T) => U) =>
 >map : <T, U>(transform: (t: T) => U) => (arr: T[]) => U[]
->    : ^ ^^ ^^         ^^           ^^^^^^   ^^   ^^^^^^^^
+>    : ^ ^^ ^^         ^^           ^^^^^^        ^^^^^^^^
 ><T, U>(transform: (t: T) => U) =>    (arr: T[]) => arr.map(transform) : <T, U>(transform: (t: T) => U) => (arr: T[]) => U[]
->                                                                      : ^ ^^ ^^         ^^           ^^^^^^   ^^   ^^^^^^^^
+>                                                                      : ^ ^^ ^^         ^^           ^^^^^^        ^^^^^^^^
 >transform : (t: T) => U
 >          : ^ ^^ ^^^^^ 
 >t : T
@@ -1239,7 +1239,7 @@ const arr: string[] = map(identityStr)(['a']);
 >map(identityStr) : (arr: string[]) => string[]
 >                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^
 >map : <T, U>(transform: (t: T) => U) => (arr: T[]) => U[]
->    : ^ ^^ ^^         ^^           ^^^^^^   ^^   ^^^^^^^^
+>    : ^ ^^ ^^         ^^           ^^^^^^        ^^^^^^^^
 >identityStr : (t: string) => string
 >            : ^ ^^      ^^^^^^^^^^^
 >['a'] : string[]
@@ -1255,7 +1255,7 @@ const arr1: string[] = map(identity)(['a']);
 >map(identity) : <T>(arr: T[]) => T[]
 >              : ^ ^^   ^^^^^^^^^^^^^
 >map : <T, U>(transform: (t: T) => U) => (arr: T[]) => U[]
->    : ^ ^^ ^^         ^^           ^^^^^^   ^^   ^^^^^^^^
+>    : ^ ^^ ^^         ^^           ^^^^^^        ^^^^^^^^
 >identity : <T>(value: T) => T
 >         : ^ ^^     ^^ ^^^^^ 
 >['a'] : string[]
