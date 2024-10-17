@@ -1192,8 +1192,8 @@ function getModulesForPathsPattern(
     const declarationExtension = normalizedSuffix && getDeclarationEmitExtensionForPath("_" + normalizedSuffix);
     const inputExtension = normalizedSuffix ? getPossibleOriginalInputExtensionForExtension("_" + normalizedSuffix) : undefined;
     const matchingSuffixes = [
-        ...(inputExtension ? inputExtension.map(ext => changeExtension(normalizedSuffix, ext)) : []),
         declarationExtension && changeExtension(normalizedSuffix, declarationExtension),
+        ...(inputExtension ? inputExtension.map(ext => changeExtension(normalizedSuffix, ext)) : []),
         normalizedSuffix
     ].filter(isString);
 
