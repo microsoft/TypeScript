@@ -30,15 +30,15 @@ function Multimap(ik, iv) {
 
     // without type annotation
     this._map2 = { [ik]: iv };
->this._map2 = { [ik]: iv } : { [x: string]: V; }
->                          : ^^^^^^^^^^^^^^^^^^^
+>this._map2 = { [ik]: iv } : { [ik]: V; }
+>                          : ^^      ^ ^^
 >this._map2 : any
 >this : this
 >     : ^^^^
 >_map2 : any
 >      : ^^^
->{ [ik]: iv } : { [x: string]: V; }
->             : ^^^^^^^^^^^^^^^^^^^
+>{ [ik]: iv } : { [ik]: V; }
+>             : ^^      ^ ^^
 >[ik] : V
 >     : ^
 >ik : string
