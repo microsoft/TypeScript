@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/excessPropertyCheckSpreadInlineObject.ts] ////
+
+=== excessPropertyCheckSpreadInlineObject.ts ===
+type MyObject = { foo: number; bar?: number };
+>MyObject : MyObject
+>         : ^^^^^^^^
+>foo : number
+>    : ^^^^^^
+>bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+const b: MyObject = {
+>b : MyObject
+>  : ^^^^^^^^
+>{    foo: 1,    ...{        bar: 2,        excessProperty: 3,    },} : { bar: number; excessProperty: number; foo: number; }
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...{
+>{        bar: 2,        excessProperty: 3,    } : { bar: number; excessProperty: number; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        bar: 2,
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+        excessProperty: 3,
+>excessProperty : number
+>               : ^^^^^^
+>3 : 3
+>  : ^
+
+    },
+};
+
+const b2 = {
+>b2 : { bar: number; excessProperty: number; foo: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    foo: 1,    ...{        bar: 2,        excessProperty: 3,    },} satisfies MyObject : { bar: number; excessProperty: number; foo: number; }
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    foo: 1,    ...{        bar: 2,        excessProperty: 3,    },} : { bar: number; excessProperty: number; foo: number; }
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...{
+>{        bar: 2,        excessProperty: 3,    } : { bar: number; excessProperty: number; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        bar: 2,
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+        excessProperty: 3,
+>excessProperty : number
+>               : ^^^^^^
+>3 : 3
+>  : ^
+
+    },
+} satisfies MyObject;
