@@ -37,6 +37,12 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/src/main.ts","/home/src/workspaces/project/src/app/services/generated/index.ts"]
   options: {"watch":true,"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
+File '/home/src/workspaces/project/src/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/main.ts 250 undefined Source file
 ======== Resolving module './app/services/generated' from '/home/src/workspaces/project/src/main.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -49,8 +55,32 @@ File '/home/src/workspaces/project/src/app/services/generated/index.ts' exists -
 ======== Module name './app/services/generated' was successfully resolved to '/home/src/workspaces/project/src/app/services/generated/index.ts'. ========
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
+File '/home/src/workspaces/project/src/app/services/generated/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/src/app/services/package.json' does not exist.
+File '/home/src/workspaces/project/src/app/package.json' does not exist.
+File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
@@ -81,10 +111,28 @@ var x = generated_1.y;
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/workspaces/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/workspaces/project/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/src/app/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/src/app/services/generated/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/src/app/services/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/src/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -177,6 +225,12 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/src/main.ts"]
   options: {"watch":true,"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
+File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './app/services/generated' from '/home/src/workspaces/project/src/main.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, Declaration.
@@ -189,7 +243,16 @@ File '/home/src/workspaces/project/src/app/services/generated.js' does not exist
 File '/home/src/workspaces/project/src/app/services/generated.jsx' does not exist.
 Directory '/home/src/workspaces/project/src/app/services/generated' does not exist, skipping all lookups in it.
 ======== Module name './app/services/generated' was not resolved. ========
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
+FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src/app/services/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src/app/package.json 2000 undefined File location affecting resolution
 [96msrc/main.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './app/services/generated' or its corresponding type declarations.
 
 [7m1[0m import { y } from "./app/services/generated";
@@ -202,10 +265,30 @@ FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src/app/services/g
 //// [/home/src/workspaces/project/src/main.js] file written with same contents
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/node_modules/@types:
   {"pollingInterval":500}
+/home/src/workspaces/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/src/package.json:
+  {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/home/src/workspaces/project/src/app/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/src/app/services/generated/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/src/app/services/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -299,6 +382,12 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/src/main.ts","/home/src/workspaces/project/src/app/services/generated/index.ts"]
   options: {"watch":true,"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
+File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './app/services/generated' from '/home/src/workspaces/project/src/main.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, Declaration.
@@ -308,7 +397,25 @@ File '/home/src/workspaces/project/src/app/services/generated.d.ts' does not exi
 File '/home/src/workspaces/project/src/app/services/generated/package.json' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated/index.ts' exists - use it as a name resolution result.
 ======== Module name './app/services/generated' was successfully resolved to '/home/src/workspaces/project/src/app/services/generated/index.ts'. ========
+File '/home/src/workspaces/project/src/app/services/generated/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/src/app/services/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/src/app/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
@@ -328,10 +435,28 @@ exports.y = 10;
 
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/node_modules/@types:
   {"pollingInterval":500}
+/home/src/workspaces/package.json:
+  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/workspaces/project/package.json:
+  {"pollingInterval":2000}
+/home/src/workspaces/project/src/app/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/src/app/services/generated/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/src/app/services/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/workspaces/project/src/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

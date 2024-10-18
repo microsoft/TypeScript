@@ -796,6 +796,11 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/proj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_99.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/project/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /home/src/project/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /home/src/project/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /home/src/project/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/package.json 2000 undefined Project: /home/src/project/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/package.json 2000 undefined Project: /home/src/project/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
@@ -1178,106 +1183,157 @@ Info seq  [hh:mm:ss:mss] 	Files (51)
 
 	node_modules/dep-a/file_0.ts
 	  Imported via "./file_0" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_1.ts
 	  Imported via "./file_1" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_2.ts
 	  Imported via "./file_2" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_3.ts
 	  Imported via "./file_3" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_4.ts
 	  Imported via "./file_4" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_5.ts
 	  Imported via "./file_5" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_6.ts
 	  Imported via "./file_6" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_7.ts
 	  Imported via "./file_7" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_8.ts
 	  Imported via "./file_8" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_9.ts
 	  Imported via "./file_9" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_10.ts
 	  Imported via "./file_10" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_11.ts
 	  Imported via "./file_11" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_12.ts
 	  Imported via "./file_12" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_13.ts
 	  Imported via "./file_13" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_14.ts
 	  Imported via "./file_14" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_15.ts
 	  Imported via "./file_15" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_16.ts
 	  Imported via "./file_16" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_17.ts
 	  Imported via "./file_17" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_18.ts
 	  Imported via "./file_18" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_19.ts
 	  Imported via "./file_19" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_20.ts
 	  Imported via "./file_20" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_21.ts
 	  Imported via "./file_21" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_22.ts
 	  Imported via "./file_22" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_23.ts
 	  Imported via "./file_23" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_24.ts
 	  Imported via "./file_24" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_25.ts
 	  Imported via "./file_25" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_26.ts
 	  Imported via "./file_26" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_27.ts
 	  Imported via "./file_27" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_28.ts
 	  Imported via "./file_28" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_29.ts
 	  Imported via "./file_29" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_30.ts
 	  Imported via "./file_30" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_31.ts
 	  Imported via "./file_31" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_32.ts
 	  Imported via "./file_32" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_33.ts
 	  Imported via "./file_33" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_34.ts
 	  Imported via "./file_34" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_35.ts
 	  Imported via "./file_35" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_36.ts
 	  Imported via "./file_36" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_37.ts
 	  Imported via "./file_37" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_38.ts
 	  Imported via "./file_38" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_39.ts
 	  Imported via "./file_39" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_40.ts
 	  Imported via "./file_40" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_41.ts
 	  Imported via "./file_41" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_42.ts
 	  Imported via "./file_42" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_43.ts
 	  Imported via "./file_43" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_44.ts
 	  Imported via "./file_44" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_45.ts
 	  Imported via "./file_45" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_46.ts
 	  Imported via "./file_46" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_47.ts
 	  Imported via "./file_47" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_48.ts
 	  Imported via "./file_48" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/file_49.ts
 	  Imported via "./file_49" from file 'node_modules/dep-a/index.d.ts'
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 	node_modules/dep-a/index.d.ts
 	  Root file specified for compilation
+	  File is CommonJS module because 'node_modules/dep-a/package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -1371,8 +1427,16 @@ After request
 PolledWatches::
 /home/src/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/project/project/lib/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/project/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/project/project/lib/a_0.ts: *new*

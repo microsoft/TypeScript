@@ -73,12 +73,28 @@ a_2.b;
 
 
 PolledWatches::
+c:/home/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 c:/workspaces/node_modules/@types: *new*
   {"pollingInterval":500}
+c:/workspaces/package.json: *new*
+  {"pollingInterval":2000}
 c:/workspaces/solution/node_modules/@types: *new*
   {"pollingInterval":500}
+c:/workspaces/solution/package.json: *new*
+  {"pollingInterval":2000}
 c:/workspaces/solution/project/node_modules/@types: *new*
   {"pollingInterval":500}
+c:/workspaces/solution/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 c:/home/src/tslibs/TS/Lib/lib.d.ts: *new*

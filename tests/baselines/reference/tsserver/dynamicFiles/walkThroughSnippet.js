@@ -33,6 +33,26 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: walkThroughSnippet:/us
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/Vscode/Projects/bin
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/browser/editor/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/browser/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/typings/@epic/Core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/typings/@epic/Shell.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -77,14 +97,54 @@ After request
 PolledWatches::
 /home/src/Vscode/Projects/bin/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/Vscode/Projects/bin/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/typings/@epic/Core.d.ts: *new*
   {"pollingInterval":500}
 /home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/typings/@epic/Shell.d.ts: *new*
   {"pollingInterval":500}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/browser/editor/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/browser/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/app/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/code/resources/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/Vscode/Projects/bin/walkThroughSnippet:/usr/share/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/Vscode/Projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/Vscode/Projects/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/Vscode/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/Vscode/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*

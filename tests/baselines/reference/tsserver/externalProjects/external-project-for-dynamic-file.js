@@ -37,6 +37,12 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Creating ExternalProject: ^ScriptDocument1 file1.ts, currentDirectory: 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: ^ScriptDocument1 file1.ts
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: ^ScriptDocument1 file1.ts WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: ^ScriptDocument1 file1.ts WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: ^ScriptDocument1 file1.ts WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/package.json 2000 undefined Project: ^ScriptDocument1 file1.ts WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/package.json 2000 undefined Project: ^ScriptDocument1 file1.ts WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Vscode/package.json 2000 undefined Project: ^ScriptDocument1 file1.ts WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: ^ScriptDocument1 file1.ts WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: ^ScriptDocument1 file1.ts WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: ^ScriptDocument1 file1.ts WatchType: Type roots
@@ -111,10 +117,22 @@ After request
 PolledWatches::
 /home/src/Vscode/Projects/bin/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/Vscode/Projects/bin/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/Vscode/Projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/Vscode/Projects/package.json: *new*
+  {"pollingInterval":2000}
 /home/src/Vscode/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/Vscode/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*

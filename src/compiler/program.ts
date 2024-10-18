@@ -1419,12 +1419,9 @@ export function getImpliedNodeFormatForFileWorker(
     host: ModuleResolutionHost,
     options: CompilerOptions,
 ): ResolutionMode | Partial<CreateSourceFileOptions> | undefined {
-    const moduleResolution = getEmitModuleResolutionKind(options);
-    const shouldLookupFromPackageJson = ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext
-        || pathContainsNodeModules(fileName);
     return fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs]) ? ModuleKind.ESNext :
         fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
-        shouldLookupFromPackageJson && fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson() :
+        fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson() :
         undefined; // other extensions, like `json` or `tsbuildinfo`, are set as `undefined` here but they should never be fed through the transformer pipeline
 
     function lookupFromPackageJson(): Partial<CreateSourceFileOptions> {
@@ -3784,22 +3781,20 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         let redirectedPath: Path | undefined;
-        if (!useSourceOfProjectReferenceRedirect) {
-            const redirectProject = getProjectReferenceRedirectProject(fileName);
-            if (redirectProject) {
-                if (redirectProject.commandLine.options.outFile) {
-                    // Shouldnt create many to 1 mapping file in --out scenario
-                    return undefined;
-                }
-                const redirect = getProjectReferenceOutputName(redirectProject, fileName);
-                fileName = redirect;
-                // Once we start redirecting to a file, we can potentially come back to it
-                // via a back-reference from another file in the .d.ts folder. If that happens we'll
-                // end up trying to add it to the program *again* because we were tracking it via its
-                // original (un-redirected) name. So we have to map both the original path and the redirected path
-                // to the source file we're about to find/create
-                redirectedPath = toPath(redirect);
+        const redirectProject = getProjectReferenceRedirectProject(fileName);
+        if (!useSourceOfProjectReferenceRedirect && redirectProject) {
+            if (redirectProject.commandLine.options.outFile) {
+                // Shouldnt create many to 1 mapping file in --out scenario
+                return undefined;
             }
+            const redirect = getProjectReferenceOutputName(redirectProject, fileName);
+            fileName = redirect;
+            // Once we start redirecting to a file, we can potentially come back to it
+            // via a back-reference from another file in the .d.ts folder. If that happens we'll
+            // end up trying to add it to the program *again* because we were tracking it via its
+            // original (un-redirected) name. So we have to map both the original path and the redirected path
+            // to the source file we're about to find/create
+            redirectedPath = toPath(redirect);
         }
 
         // We haven't looked for this file, do so now and cache result
@@ -5211,24 +5206,13 @@ export function getEmitModuleFormatOfFileWorker(sourceFile: Pick<SourceFile, "fi
 /** @internal Prefer `program.getImpliedNodeFormatForEmit` when possible. */
 export function getImpliedNodeFormatForEmitWorker(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
     const moduleKind = getEmitModuleKind(options);
-    if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
+    if (
+        ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext
+        || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Dcts, Extension.Cjs, Extension.Mts, Extension.Dmts, Extension.Mjs])
+        || pathContainsNodeModules(sourceFile.fileName)
+    ) {
         return sourceFile.impliedNodeFormat;
     }
-    if (
-        sourceFile.impliedNodeFormat === ModuleKind.CommonJS
-        && (sourceFile.packageJsonScope?.contents.packageJsonContent.type === "commonjs"
-            || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cjs, Extension.Cts]))
-    ) {
-        return ModuleKind.CommonJS;
-    }
-    if (
-        sourceFile.impliedNodeFormat === ModuleKind.ESNext
-        && (sourceFile.packageJsonScope?.contents.packageJsonContent.type === "module"
-            || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Mjs, Extension.Mts]))
-    ) {
-        return ModuleKind.ESNext;
-    }
-    return undefined;
 }
 /** @internal Prefer `program.getDefaultResolutionModeForFile` when possible. */
 export function getDefaultResolutionModeForFileWorker(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {

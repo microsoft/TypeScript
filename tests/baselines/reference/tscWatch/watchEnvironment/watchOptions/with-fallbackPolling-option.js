@@ -55,8 +55,16 @@ var y = 1;
 PolledWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"pollingInterval":250}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/project: *new*
   {"pollingInterval":500}
 /user/username/projects/project/commonFile1.ts: *new*
@@ -65,6 +73,8 @@ PolledWatches::
   {"pollingInterval":250}
 /user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 

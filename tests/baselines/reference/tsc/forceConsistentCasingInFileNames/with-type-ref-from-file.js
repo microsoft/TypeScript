@@ -29,6 +29,12 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js -p /user/username/projects/myproject --explainFiles --traceResolution
 Output::
+File '/user/username/projects/myproject/src/package.json' does not exist.
+File '/user/username/projects/myproject/package.json' does not exist.
+File '/user/username/projects/package.json' does not exist.
+File '/user/username/package.json' does not exist.
+File '/user/package.json' does not exist.
+File '/package.json' does not exist.
 ======== Resolving type reference directive './fileOne.d.ts', containing file '/user/username/projects/myproject/src/file2.d.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/user/username/projects/myproject/node_modules/@types, /user/username/projects/node_modules/@types, /user/username/node_modules/@types, /user/node_modules/@types, /node_modules/@types'.
 Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
@@ -42,6 +48,18 @@ File name '/user/username/projects/myproject/src/fileOne.d.ts' has a '.d.ts' ext
 File '/user/username/projects/myproject/src/fileOne.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/src/fileOne.d.ts', result '/user/username/projects/myproject/src/fileOne.d.ts'.
 ======== Type reference directive './fileOne.d.ts' was successfully resolved to '/user/username/projects/myproject/src/fileOne.d.ts', primary: false. ========
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist according to earlier cached lookups.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 src/fileOne.d.ts

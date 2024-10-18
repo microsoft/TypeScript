@@ -64,6 +64,13 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/a/tsconfig.json'...
 
+File '/home/src/workspaces/project/a/src/package.json' does not exist.
+File '/home/src/workspaces/project/a/package.json' does not exist.
+File '/home/src/workspaces/project/package.json' does not exist.
+File '/home/src/workspaces/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 ======== Resolving type reference directive 'pg', containing file '/home/src/workspaces/project/a/__inferred type names__.ts', root directory '/home/src/workspaces/project/a/node_modules/@types,/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/home/src/workspaces/project/a/node_modules/@types, /home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
 Directory '/home/src/workspaces/project/a/node_modules/@types' does not exist, skipping all lookups in it.
@@ -75,12 +82,19 @@ File '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts' exists - u
 Resolving real path for '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', result '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', primary: true. ========
 File '/home/src/workspaces/project/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a/src/index.ts
   Matched by default include pattern '**/*'
 node_modules/@types/pg/index.d.ts
   Entry point for implicit type library 'pg'
+  File is CommonJS module because 'node_modules/@types/pg/package.json' does not have field "type"
 [[90mHH:MM:SS AM[0m] Project 'b/tsconfig.json' is out of date because output file 'b/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/project/b/tsconfig.json'...
@@ -112,12 +126,12 @@ File '/home/src/workspaces/project/node_modules/@types/pg/package.json' exists a
 File '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', result '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', primary: true. ========
-File '/home/src/tslibs/TS/Lib/package.json' does not exist.
-File '/home/src/tslibs/TS/package.json' does not exist.
-File '/home/src/tslibs/package.json' does not exist.
-File '/home/src/package.json' does not exist.
-File '/home/package.json' does not exist.
-File '/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ../../tslibs/TS/Lib/lib.es2022.full.d.ts
   Default library for target 'es2022'
 node_modules/@types/pg/index.d.ts
