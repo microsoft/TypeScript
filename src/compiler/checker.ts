@@ -38894,17 +38894,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // should not be checking assignability of a promise to the return type. Instead, we need to
                 // check assignability of the awaited type of the expression body against the promised type of
                 // its return type annotation.
-                const exprType = checkExpression(node.body);
                 const returnOrPromisedType = returnType && unwrapReturnType(returnType, functionFlags);
                 if (returnOrPromisedType) {
                     const effectiveCheckNode = getEffectiveCheckNode(node.body);
-                    if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) { // Async function
-                        const awaitedType = checkAwaitedType(exprType, /*withAlias*/ false, effectiveCheckNode, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
-                        checkTypeAssignableToAndOptionallyElaborate(awaitedType, returnOrPromisedType, effectiveCheckNode, effectiveCheckNode);
-                    }
-                    else { // Normal function
-                        checkTypeAssignableToAndOptionallyElaborate(exprType, returnOrPromisedType, effectiveCheckNode, effectiveCheckNode);
-                    }
+                    checkReturnExpression(node, returnOrPromisedType, effectiveCheckNode, effectiveCheckNode);
                 }
             }
         }
@@ -45633,7 +45626,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (getReturnTypeFromAnnotation(container)) {
-                checkReturnStatementExpression(container, returnType, node, node.expression);
+                const unwrappedReturnType = unwrapReturnType(returnType, getFunctionFlags(container)) ?? returnType;
+                checkReturnExpression(container, unwrappedReturnType, node, node.expression);
             }
         }
         else if (container.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeUndefinedVoidOrAny(container, returnType)) {
@@ -45642,22 +45636,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function checkReturnStatementExpression(
+    // When checking an arrow expression such as `(x) => exp`, then `node` is the expression `exp`.
+    // Otherwise, `node` is a return statement.
+    function checkReturnExpression(
         container: SignatureDeclaration,
-        returnType: Type,
-        node: ReturnStatement,
+        unwrappedReturnType: Type,
+        node: ReturnStatement | Expression,
         expr: Expression | undefined,
     ): void {
+        const excludeJSDocTypeAssertions = isInJSFile(node);
         const functionFlags = getFunctionFlags(container);
-        const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
         if (expr) {
-            const unwrappedExpr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
+            const unwrappedExpr = skipParentheses(expr, excludeJSDocTypeAssertions);
             if (isConditionalExpression(unwrappedExpr)) {
-                return checkConditionalReturnExpression(container, returnType, node, unwrappedExpr);
+                return checkConditionalReturnExpression(container, unwrappedReturnType, node, unwrappedExpr);
             }
         }
 
-        const exprType = expr ? checkExpressionCached(expr) : undefinedType;
+        const inReturnStatement = node.kind === SyntaxKind.ReturnStatement;
+        const exprType = expr
+            ? inReturnStatement
+                ? checkExpressionCached(expr)
+                : checkExpression(expr)
+            : undefinedType;
         const unwrappedExprType = functionFlags & FunctionFlags.Async
             ? checkAwaitedType(
                 exprType,
@@ -45667,17 +45668,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             )
             : exprType;
 
-        const errorNode = node.expression && isConditionalExpression(skipParentheses(node.expression)) ? expr : node;
-        // Check if type of return expression is assignable to original return type;
-        // If so, we don't need to narrow.
-        if (checkTypeAssignableTo(unwrappedExprType, unwrappedReturnType, /*errorNode*/ undefined)) {
-            return;
-        }
-
+        const returnExpression = inReturnStatement ? (node as ReturnStatement).expression : node;
+        const isInConditionalExpression = returnExpression
+            && isConditionalExpression(skipParentheses(returnExpression, excludeJSDocTypeAssertions));
+        const errorNode = isInConditionalExpression ? expr : node;
         if (!(unwrappedReturnType.flags & (TypeFlags.IndexedAccess | TypeFlags.Conditional)) || !couldContainTypeVariables(unwrappedReturnType)) {
             checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, expr);
             return;
         }
+        // Check if type of return expression is assignable to original return type;
+        // If so, we don't need to narrow, even if we could.
+        if (checkTypeAssignableTo(unwrappedExprType, unwrappedReturnType, /*errorNode*/ undefined)) {
+            return;
+        }
+
         const allTypeParameters = appendTypeParameters(getOuterTypeParameters(container, /*includeThisTypes*/ false), getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
         const narrowableTypeParameters = allTypeParameters && getNarrowableTypeParameters(allTypeParameters);
 
@@ -45704,7 +45708,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //       |return;|
         // }`
         let narrowPosition: Node = node;
-        let narrowFlowNode = node.flowNode;
+        let narrowFlowNode = inReturnStatement && (node as ReturnStatement).flowNode;
         if (expr && isConditionalExpression(expr.parent)) {
             narrowFlowNode = expr.parent.whenTrue === expr ? expr.parent.flowNodeWhenTrue : expr.parent.flowNodeWhenFalse;
             narrowPosition = expr;
@@ -45766,12 +45770,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkConditionalReturnExpression(
         container: SignatureDeclaration,
         returnType: Type,
-        node: ReturnStatement,
+        node: ReturnStatement | Expression,
         expr: ConditionalExpression,
     ): void {
         checkExpression(expr.condition);
-        checkReturnStatementExpression(container, returnType, node, expr.whenTrue);
-        checkReturnStatementExpression(container, returnType, node, expr.whenFalse);
+        checkReturnExpression(container, returnType, node, expr.whenTrue);
+        checkReturnExpression(container, returnType, node, expr.whenFalse);
     }
 
     // Narrowable type parameters are type parameters that:
