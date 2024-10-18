@@ -1,0 +1,96 @@
+//// [tests/cases/compiler/returnTypeWithGenericAsyncFunction.ts] ////
+
+=== /index.ts ===
+type MockFactoryWithHelper<M = unknown> = (
+>MockFactoryWithHelper : MockFactoryWithHelper<M>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  importOriginal: <T extends M = M>() => Promise<T>
+>importOriginal : <T extends M = M>() => Promise<T>
+>               : ^ ^^^^^^^^^ ^^^^^^^^^^^          
+
+) => Partial<Record<keyof M, any>>;
+type PromiseMockFactoryWithHelper<M = unknown> = (
+>PromiseMockFactoryWithHelper : PromiseMockFactoryWithHelper<M>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  importOriginal: <T extends M = M>() => Promise<T>
+>importOriginal : <T extends M = M>() => Promise<T>
+>               : ^ ^^^^^^^^^ ^^^^^^^^^^^          
+
+) => Promise<Partial<Record<keyof M, any>>>;
+
+const util: {
+>util : { mock<T>(module: Promise<T>, factory?: MockFactoryWithHelper<T>): void; mock<T>(module: Promise<T>, factory?: PromiseMockFactoryWithHelper<T>): void; }
+>     : ^^^^^^^ ^^      ^^          ^^       ^^^                        ^^^    ^^^^^^^ ^^      ^^          ^^       ^^^                               ^^^    ^^^
+
+  mock<T>(module: Promise<T>, factory?: MockFactoryWithHelper<T>): void;
+>mock : { <T>(module: Promise<T>, factory?: MockFactoryWithHelper<T>): void; <T_1>(module: Promise<T_1>, factory?: PromiseMockFactoryWithHelper<T_1>): void; }
+>     : ^^^ ^^      ^^          ^^       ^^^                        ^^^    ^^^^^^^^      ^^            ^^       ^^^                                 ^^^    ^^^
+>module : Promise<T>
+>       : ^^^^^^^^^^
+>factory : MockFactoryWithHelper<T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  mock<T>(module: Promise<T>, factory?: PromiseMockFactoryWithHelper<T>): void;
+>mock : { <T_1>(module: Promise<T_1>, factory?: MockFactoryWithHelper<T_1>): void; <T>(module: Promise<T>, factory?: PromiseMockFactoryWithHelper<T>): void; }
+>     : ^^^^^^^^      ^^            ^^       ^^^                          ^^^    ^^^ ^^      ^^          ^^       ^^^                               ^^^    ^^^
+>module : Promise<T>
+>       : ^^^^^^^^^^
+>factory : PromiseMockFactoryWithHelper<T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+} = {
+>{  mock: (() => {}) as any,} : { mock: any; }
+>                             : ^^^^^^^^   ^^^
+
+  mock: (() => {}) as any,
+>mock : any
+>(() => {}) as any : any
+>(() => {}) : () => void
+>           : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+};
+
+util.mock(import("pkg"), async (importOriginal) => ({
+>util.mock(import("pkg"), async (importOriginal) => ({  ...(await importOriginal()),})) : void
+>                                                                                       : ^^^^
+>util.mock : { <T>(module: Promise<T>, factory?: MockFactoryWithHelper<T>): void; <T>(module: Promise<T>, factory?: PromiseMockFactoryWithHelper<T>): void; }
+>          : ^^^ ^^      ^^          ^^       ^^^                        ^^^    ^^^ ^^      ^^          ^^       ^^^                               ^^^    ^^^
+>util : { mock<T>(module: Promise<T>, factory?: MockFactoryWithHelper<T>): void; mock<T>(module: Promise<T>, factory?: PromiseMockFactoryWithHelper<T>): void; }
+>     : ^^^^^^^ ^^      ^^          ^^       ^^^                        ^^^    ^^^^^^^ ^^      ^^          ^^       ^^^                               ^^^    ^^^
+>mock : { <T>(module: Promise<T>, factory?: MockFactoryWithHelper<T>): void; <T>(module: Promise<T>, factory?: PromiseMockFactoryWithHelper<T>): void; }
+>     : ^^^ ^^      ^^          ^^       ^^^                        ^^^    ^^^ ^^      ^^          ^^       ^^^                               ^^^    ^^^
+>import("pkg") : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"pkg" : "pkg"
+>      : ^^^^^
+>async (importOriginal) => ({  ...(await importOriginal()),}) : (importOriginal: <T extends { default: typeof import("/node_modules/pkg/import"); } = { default: typeof import("/node_modules/pkg/import"); }>() => Promise<T>) => Promise<{ default?: any; }>
+>                                                             : ^              ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>importOriginal : <T extends { default: typeof import("/node_modules/pkg/import"); } = { default: typeof import("/node_modules/pkg/import"); }>() => Promise<T>
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({  ...(await importOriginal()),}) : { default?: any; }
+>                                   : ^^^^^^^^^^^^^^^^^^
+>{  ...(await importOriginal()),} : { default?: any; }
+>                                 : ^^^^^^^^^^^^^^^^^^
+
+  ...(await importOriginal()),
+>(await importOriginal()) : Partial<Record<"default", any>>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await importOriginal() : Partial<Record<"default", any>>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>importOriginal() : Promise<Partial<Record<"default", any>>>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>importOriginal : <T extends { default: typeof import("/node_modules/pkg/import"); } = { default: typeof import("/node_modules/pkg/import"); }>() => Promise<T>
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+}));
+
+=== /node_modules/pkg/import.d.ts ===
+
+export interface ImportInterface {}
+=== /node_modules/pkg/require.d.ts ===
+
+export interface RequireInterface {}
