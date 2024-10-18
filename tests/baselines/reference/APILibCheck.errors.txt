@@ -1,0 +1,48 @@
+tsserverlibrary.d.ts(17,15): error TS2498: Module '"typescript"' uses 'export =' and cannot be used with 'export *'.
+tsserverlibrary.internal.d.ts(17,15): error TS2498: Module '"typescript.internal"' uses 'export =' and cannot be used with 'export *'.
+
+
+==== node_modules/typescript/package.json (0 errors) ====
+    {
+        "name": "typescript",
+        "type": "module",
+        "exports": "./lib/typescript.d.ts"
+    }
+    
+==== node_modules/typescript-internal/package.json (0 errors) ====
+    {
+        "name": "typescript-internal",
+        "type": "module",
+        "exports": "./lib/typescript.internal.d.ts"
+    }
+    
+==== node_modules/tsserverlibrary/package.json (0 errors) ====
+    {
+        "name": "tsserverlibrary",
+        "type": "module",
+        "exports": "./lib/tsserverlibrary.d.ts"
+    }
+    
+==== node_modules/tsserverlibrary-internal/package.json (0 errors) ====
+    {
+        "name": "tsserverlibrary-internal",
+        "type": "module",
+        "exports": "./lib/tsserverlibrary.internal.d.ts"
+    }
+    
+==== package.json (0 errors) ====
+    {
+        "name": "project",
+        "type": "module"
+    }
+    
+==== index.ts (0 errors) ====
+    import * as ts from "typescript";
+    import tsDefault from "typescript";
+    import * as tsInternal from "typescript-internal";
+    import tsInternalDefault from "typescript-internal";
+    import * as tsserverlibrary from "tsserverlibrary";
+    import tsserverlibraryDefault from "tsserverlibrary";
+    import * as tsserverlibraryInternal from "tsserverlibrary-internal";
+    import tsserverlibraryInternalDefault from "tsserverlibrary-internal";
+    

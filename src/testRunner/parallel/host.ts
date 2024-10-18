@@ -33,6 +33,9 @@ import {
 import * as ts from "../_namespaces/ts.js";
 import * as Utils from "../_namespaces/Utils.js";
 
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 export function start(importTests: () => Promise<unknown>): void {
     const Base = Mocha.reporters.Base;
     const color = Base.color;
