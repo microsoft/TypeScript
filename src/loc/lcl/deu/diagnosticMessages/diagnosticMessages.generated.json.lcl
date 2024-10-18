@@ -2781,11 +2781,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations_9009" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations_9009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[At least one accessor must have an explicit return type annotation with --isolatedDeclarations.]]></Val>
+          <Val><![CDATA[At least one accessor must have an explicit type annotation with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Mindestens ein Accessor muss eine explizite Rückgabetypanmerkung mit "--isolatedDeclarations" aufweisen.]]></Val>
+            <Val><![CDATA[Mindestens ein Accessor muss über eine explizite Typanmerkung mit „--isolatedDeclarations“ verfügen.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5037,11 +5037,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_it_s_type_This_is_not_su_9025" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_its_type_This_is_not_sup_9025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.]]></Val>
+          <Val><![CDATA[Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Die Deklarationsausgabe für diesen Parameter erfordert das implizit undefinierte Hinzufügen zum Typ. Dies wird mit "--isolatedDeclarations" nicht unterstützt.]]></Val>
+            <Val><![CDATA[Die Deklarationsausgabe für diesen Parameter erfordert das implizit undefinierte Hinzufügen zum Typ. Dies wird mit „--isolatedDeclarations“ nicht unterstützt.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

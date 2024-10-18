@@ -8193,15 +8193,11 @@ export function getLastChild(node: Node): Node | undefined {
  *
  * @internal
  */
-export function addToSeen<K>(seen: Map<K, true>, key: K): boolean;
-/** @internal */
-export function addToSeen<K, T>(seen: Map<K, T>, key: K, value: T): boolean;
-/** @internal */
-export function addToSeen<K, T>(seen: Map<K, T>, key: K, value: T = true as any): boolean {
+export function addToSeen<K>(seen: Set<K>, key: K): boolean {
     if (seen.has(key)) {
         return false;
     }
-    seen.set(key, value);
+    seen.add(key);
     return true;
 }
 

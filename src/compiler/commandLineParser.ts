@@ -1,4 +1,5 @@
 import {
+    addToSeen,
     AlternateModeDiagnostics,
     append,
     arrayFrom,
@@ -2629,7 +2630,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
     const providedKeys = new Set(optionMap.keys());
     const impliedCompilerOptions: Record<string, CompilerOptionsValue> = {};
     for (const option in computedOptions) {
-        if (!providedKeys.has(option) && some(computedOptions[option].dependencies, dep => providedKeys.has(dep))) {
+        if (!providedKeys.has(option) && optionDependsOn(option, providedKeys)) {
             const implied = computedOptions[option].computeValue(configParseResult.options);
             const defaultValue = computedOptions[option].computeValue({});
             if (implied !== defaultValue) {
@@ -2639,6 +2640,18 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
     }
     assign(config.compilerOptions, optionMapToObject(serializeCompilerOptions(impliedCompilerOptions, pathOptions)));
     return config;
+}
+
+function optionDependsOn(option: string, dependsOn: Set<string>): boolean {
+    const seen = new Set<string>();
+    return optionDependsOnRecursive(option);
+
+    function optionDependsOnRecursive(option: string): boolean {
+        if (addToSeen(seen, option)) {
+            return some(computedOptions[option]?.dependencies, dep => dependsOn.has(dep) || optionDependsOnRecursive(dep));
+        }
+        return false;
+    }
 }
 
 /** @internal */
