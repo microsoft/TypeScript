@@ -6235,6 +6235,7 @@ export interface NodeLinks {
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
     spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
+    contextualReturnType?: Type;        // If the node is a return statement's expression, then this is the contextual return type.
     fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
     potentialThisCollisions?: Node[];
@@ -6501,6 +6502,8 @@ export const enum ObjectFlags {
     IsGenericIndexType = 1 << 23, // Union or intersection contains generic index type
     /** @internal */
     IsGenericType = IsGenericObjectType | IsGenericIndexType,
+    /** @internal */
+    IsNarrowedType = 1 << 24, // Substitution type that comes from type narrowing
 
     // Flags that require TypeFlags.Union
     /** @internal */
