@@ -6349,6 +6349,8 @@ declare namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+        unwrapNoInferType(type: Type): Type;
+        unwrapNoInferType(type: Type | undefined): Type | undefined;
     }
     enum NodeBuilderFlags {
         None = 0,
