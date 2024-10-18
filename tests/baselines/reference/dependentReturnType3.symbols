@@ -517,12 +517,13 @@ export function transformDatesForAPI<T extends string | undefined>(
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >end : Symbol(end, Decl(dependentReturnType3.ts, 160, 78))
 
-    return end !== undefined ? // Ok
+    if (end !== undefined) {
 >end : Symbol(end, Decl(dependentReturnType3.ts, 158, 18))
 >undefined : Symbol(undefined)
-        {
+
+        return {
             start: mapDateForAPI(start),
->start : Symbol(start, Decl(dependentReturnType3.ts, 162, 9))
+>start : Symbol(start, Decl(dependentReturnType3.ts, 162, 16))
 >mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType3.ts, 153, 1))
 >start : Symbol(start, Decl(dependentReturnType3.ts, 157, 67))
 
@@ -531,119 +532,120 @@ export function transformDatesForAPI<T extends string | undefined>(
 >mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType3.ts, 153, 1))
 >end : Symbol(end, Decl(dependentReturnType3.ts, 158, 18))
 
-        } :
-        {
-            start: mapDateForAPI(start),
->start : Symbol(start, Decl(dependentReturnType3.ts, 166, 9))
+        };
+    }
+    return {
+        start: mapDateForAPI(start),
+>start : Symbol(start, Decl(dependentReturnType3.ts, 167, 12))
 >mapDateForAPI : Symbol(mapDateForAPI, Decl(dependentReturnType3.ts, 153, 1))
 >start : Symbol(start, Decl(dependentReturnType3.ts, 157, 67))
 
-            end: undefined
->end : Symbol(end, Decl(dependentReturnType3.ts, 167, 40))
+        end: undefined
+>end : Symbol(end, Decl(dependentReturnType3.ts, 168, 36))
 >undefined : Symbol(undefined)
 
-        };
+    };
 }
 
 // File: Rocket.Chat/packages/agenda/src/Agenda.ts
 type RepeatOptions = object;
->RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 170, 1))
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 171, 1))
 
 type Job = object;
->Job : Symbol(Job, Decl(dependentReturnType3.ts, 173, 28))
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 174, 28))
 
 type IJob = { data: object };
->IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 174, 18))
->data : Symbol(data, Decl(dependentReturnType3.ts, 175, 13))
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 175, 18))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 176, 13))
 
 class NewAgenda {
->NewAgenda : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 175, 29))
+>NewAgenda : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 176, 29))
 
     public async _createIntervalJob(interval: string | number, name: string, data: IJob['data'], options: RepeatOptions): Promise<Job> { return undefined as any; }
->_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 176, 17))
->interval : Symbol(interval, Decl(dependentReturnType3.ts, 177, 36))
->name : Symbol(name, Decl(dependentReturnType3.ts, 177, 62))
->data : Symbol(data, Decl(dependentReturnType3.ts, 177, 76))
->IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 174, 18))
->options : Symbol(options, Decl(dependentReturnType3.ts, 177, 96))
->RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 170, 1))
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 177, 17))
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 178, 36))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 178, 62))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 178, 76))
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 175, 18))
+>options : Symbol(options, Decl(dependentReturnType3.ts, 178, 96))
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 171, 1))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Job : Symbol(Job, Decl(dependentReturnType3.ts, 173, 28))
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 174, 28))
 >undefined : Symbol(undefined)
 
     private _createIntervalJobs(
->_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 177, 163))
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 178, 163))
 
         interval: string | number,
->interval : Symbol(interval, Decl(dependentReturnType3.ts, 178, 32))
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 179, 32))
 
         names: string[],
->names : Symbol(names, Decl(dependentReturnType3.ts, 179, 34))
+>names : Symbol(names, Decl(dependentReturnType3.ts, 180, 34))
 
         data: IJob['data'],
->data : Symbol(data, Decl(dependentReturnType3.ts, 180, 24))
->IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 174, 18))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 181, 24))
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 175, 18))
 
         options: RepeatOptions,
->options : Symbol(options, Decl(dependentReturnType3.ts, 181, 27))
->RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 170, 1))
+>options : Symbol(options, Decl(dependentReturnType3.ts, 182, 27))
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 171, 1))
 
     ): Promise<Job[]> | undefined { return undefined as any; }
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Job : Symbol(Job, Decl(dependentReturnType3.ts, 173, 28))
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 174, 28))
 >undefined : Symbol(undefined)
 
     public async newEvery<T extends string | string[]>(
->newEvery : Symbol(NewAgenda.newEvery, Decl(dependentReturnType3.ts, 183, 62))
->T : Symbol(T, Decl(dependentReturnType3.ts, 185, 26))
+>newEvery : Symbol(NewAgenda.newEvery, Decl(dependentReturnType3.ts, 184, 62))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 186, 26))
 
         interval: string | number,
->interval : Symbol(interval, Decl(dependentReturnType3.ts, 185, 55))
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 186, 55))
 
         name: T,
->name : Symbol(name, Decl(dependentReturnType3.ts, 186, 34))
->T : Symbol(T, Decl(dependentReturnType3.ts, 185, 26))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 187, 34))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 186, 26))
 
         data: IJob['data'],
->data : Symbol(data, Decl(dependentReturnType3.ts, 187, 16))
->IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 174, 18))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 188, 16))
+>IJob : Symbol(IJob, Decl(dependentReturnType3.ts, 175, 18))
 
         options: RepeatOptions): Promise<HelperCond<T, string, Job, string[], Job[] | undefined>> {
->options : Symbol(options, Decl(dependentReturnType3.ts, 188, 27))
->RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 170, 1))
+>options : Symbol(options, Decl(dependentReturnType3.ts, 189, 27))
+>RepeatOptions : Symbol(RepeatOptions, Decl(dependentReturnType3.ts, 171, 1))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >HelperCond : Symbol(HelperCond, Decl(dependentReturnType3.ts, 0, 0))
->T : Symbol(T, Decl(dependentReturnType3.ts, 185, 26))
->Job : Symbol(Job, Decl(dependentReturnType3.ts, 173, 28))
->Job : Symbol(Job, Decl(dependentReturnType3.ts, 173, 28))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 186, 26))
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 174, 28))
+>Job : Symbol(Job, Decl(dependentReturnType3.ts, 174, 28))
 
         if (typeof name === 'string') {
->name : Symbol(name, Decl(dependentReturnType3.ts, 186, 34))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 187, 34))
 
             return this._createIntervalJob(interval, name, data, options); // Ok
->this._createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 176, 17))
->this : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 175, 29))
->_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 176, 17))
->interval : Symbol(interval, Decl(dependentReturnType3.ts, 185, 55))
->name : Symbol(name, Decl(dependentReturnType3.ts, 186, 34))
->data : Symbol(data, Decl(dependentReturnType3.ts, 187, 16))
->options : Symbol(options, Decl(dependentReturnType3.ts, 188, 27))
+>this._createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 177, 17))
+>this : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 176, 29))
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(dependentReturnType3.ts, 177, 17))
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 186, 55))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 187, 34))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 188, 16))
+>options : Symbol(options, Decl(dependentReturnType3.ts, 189, 27))
         }
 
         if (Array.isArray(name)) {
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->name : Symbol(name, Decl(dependentReturnType3.ts, 186, 34))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 187, 34))
 
             return this._createIntervalJobs(interval, name, data, options); // Ok
->this._createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 177, 163))
->this : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 175, 29))
->_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 177, 163))
->interval : Symbol(interval, Decl(dependentReturnType3.ts, 185, 55))
->name : Symbol(name, Decl(dependentReturnType3.ts, 186, 34))
->data : Symbol(data, Decl(dependentReturnType3.ts, 187, 16))
->options : Symbol(options, Decl(dependentReturnType3.ts, 188, 27))
+>this._createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 178, 163))
+>this : Symbol(NewAgenda, Decl(dependentReturnType3.ts, 176, 29))
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(dependentReturnType3.ts, 178, 163))
+>interval : Symbol(interval, Decl(dependentReturnType3.ts, 186, 55))
+>name : Symbol(name, Decl(dependentReturnType3.ts, 187, 34))
+>data : Symbol(data, Decl(dependentReturnType3.ts, 188, 16))
+>options : Symbol(options, Decl(dependentReturnType3.ts, 189, 27))
 
             // Possible bug in original: createIntervalJobs can return undefined, but the original overload did not acount for that.
         }
@@ -656,24 +658,24 @@ class NewAgenda {
 // File: angular/packages/common/src/pipes/case_conversion_pipes.ts
 
 function transform1<T extends string | null | undefined>(value: T): HelperCond<T, string, string, null | undefined, null> {
->transform1 : Symbol(transform1, Decl(dependentReturnType3.ts, 201, 1))
->T : Symbol(T, Decl(dependentReturnType3.ts, 205, 20))
->value : Symbol(value, Decl(dependentReturnType3.ts, 205, 57))
->T : Symbol(T, Decl(dependentReturnType3.ts, 205, 20))
+>transform1 : Symbol(transform1, Decl(dependentReturnType3.ts, 202, 1))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 206, 20))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 206, 57))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 206, 20))
 >HelperCond : Symbol(HelperCond, Decl(dependentReturnType3.ts, 0, 0))
->T : Symbol(T, Decl(dependentReturnType3.ts, 205, 20))
+>T : Symbol(T, Decl(dependentReturnType3.ts, 206, 20))
 
     if (value == null) return null; // Ok
->value : Symbol(value, Decl(dependentReturnType3.ts, 205, 57))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 206, 57))
 
     if (typeof value !== 'string') {
->value : Symbol(value, Decl(dependentReturnType3.ts, 205, 57))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 206, 57))
 
         throw new Error();
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
     return value.toLowerCase(); // Ok
 >value.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
->value : Symbol(value, Decl(dependentReturnType3.ts, 205, 57))
+>value : Symbol(value, Decl(dependentReturnType3.ts, 206, 57))
 >toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 }

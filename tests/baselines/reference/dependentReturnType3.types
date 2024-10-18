@@ -748,16 +748,15 @@ export function transformDatesForAPI<T extends string | undefined>(
 >end : undefined
 >    : ^^^^^^^^^
 
-    return end !== undefined ? // Ok
->end !== undefined ? // Ok        {            start: mapDateForAPI(start),            end: mapDateForAPI(end),        } :        {            start: mapDateForAPI(start),            end: undefined        } : { start: Date; end: Date; } | { start: Date; end: undefined; }
->                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    if (end !== undefined) {
 >end !== undefined : boolean
 >                  : ^^^^^^^
 >end : T | undefined
 >    : ^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
-        {
+
+        return {
 >{            start: mapDateForAPI(start),            end: mapDateForAPI(end),        } : { start: Date; end: Date; }
 >                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -781,12 +780,13 @@ export function transformDatesForAPI<T extends string | undefined>(
 >end : string
 >    : ^^^^^^
 
-        } :
-        {
->{            start: mapDateForAPI(start),            end: undefined        } : { start: Date; end: undefined; }
->                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        };
+    }
+    return {
+>{        start: mapDateForAPI(start),        end: undefined    } : { start: Date; end: undefined; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-            start: mapDateForAPI(start),
+        start: mapDateForAPI(start),
 >start : Date
 >      : ^^^^
 >mapDateForAPI(start) : Date
@@ -796,13 +796,13 @@ export function transformDatesForAPI<T extends string | undefined>(
 >start : string
 >      : ^^^^^^
 
-            end: undefined
+        end: undefined
 >end : undefined
 >    : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
-        };
+    };
 }
 
 // File: Rocket.Chat/packages/agenda/src/Agenda.ts

@@ -436,12 +436,13 @@ function transformDatesForAPI(start, end) {
 >start : Symbol(start, Decl(file.js, 217, 30))
 >end : Symbol(end, Decl(file.js, 217, 36))
 
-    return end !== undefined ?
+    if (end !== undefined) {
 >end : Symbol(end, Decl(file.js, 217, 36))
 >undefined : Symbol(undefined)
-        {
+
+        return {
             start: mapDateForAPI(start),
->start : Symbol(start, Decl(file.js, 219, 9))
+>start : Symbol(start, Decl(file.js, 219, 16))
 >mapDateForAPI : Symbol(mapDateForAPI, Decl(file.js, 199, 1))
 >start : Symbol(start, Decl(file.js, 217, 30))
 
@@ -450,18 +451,19 @@ function transformDatesForAPI(start, end) {
 >mapDateForAPI : Symbol(mapDateForAPI, Decl(file.js, 199, 1))
 >end : Symbol(end, Decl(file.js, 217, 36))
 
-        } :
-        {
-            start: mapDateForAPI(start),
->start : Symbol(start, Decl(file.js, 223, 9))
+        };
+    }
+    return {
+        start: mapDateForAPI(start),
+>start : Symbol(start, Decl(file.js, 224, 12))
 >mapDateForAPI : Symbol(mapDateForAPI, Decl(file.js, 199, 1))
 >start : Symbol(start, Decl(file.js, 217, 30))
 
-            end: undefined
->end : Symbol(end, Decl(file.js, 224, 40))
+        end: undefined
+>end : Symbol(end, Decl(file.js, 225, 36))
 >undefined : Symbol(undefined)
 
-        };
+    };
 }
 
 // File: Rocket.Chat/packages/agenda/src/Agenda.ts
@@ -479,7 +481,7 @@ function transformDatesForAPI(start, end) {
  * @property {MyObj} data
  */
 class NewAgenda {
->NewAgenda : Symbol(NewAgenda, Decl(file.js, 227, 1))
+>NewAgenda : Symbol(NewAgenda, Decl(file.js, 228, 1))
 
     /**
      * @param {string | number} interval
@@ -489,11 +491,11 @@ class NewAgenda {
      * @returns {Promise<Job>}
      */
     async _createIntervalJob(interval, name, data, options) {
->_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(file.js, 243, 17))
->interval : Symbol(interval, Decl(file.js, 251, 29))
->name : Symbol(name, Decl(file.js, 251, 38))
->data : Symbol(data, Decl(file.js, 251, 44))
->options : Symbol(options, Decl(file.js, 251, 50))
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(file.js, 244, 17))
+>interval : Symbol(interval, Decl(file.js, 252, 29))
+>name : Symbol(name, Decl(file.js, 252, 38))
+>data : Symbol(data, Decl(file.js, 252, 44))
+>options : Symbol(options, Decl(file.js, 252, 50))
 
         return /** @type {any} */ (undefined);
 >undefined : Symbol(undefined)
@@ -507,11 +509,11 @@ class NewAgenda {
      * @returns {Promise<Job[]> | undefined}
      */
     _createIntervalJobs(interval, names, data, options) {
->_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(file.js, 253, 5))
->interval : Symbol(interval, Decl(file.js, 262, 24))
->names : Symbol(names, Decl(file.js, 262, 33))
->data : Symbol(data, Decl(file.js, 262, 40))
->options : Symbol(options, Decl(file.js, 262, 46))
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(file.js, 254, 5))
+>interval : Symbol(interval, Decl(file.js, 263, 24))
+>names : Symbol(names, Decl(file.js, 263, 33))
+>data : Symbol(data, Decl(file.js, 263, 40))
+>options : Symbol(options, Decl(file.js, 263, 46))
 
         return undefined;
 >undefined : Symbol(undefined)
@@ -526,39 +528,39 @@ class NewAgenda {
      * @returns {Promise<HelperCond<T, string, Job, string[], Job[] | undefined>>}
      */
     async newEvery(interval, name, data, options) {
->newEvery : Symbol(NewAgenda.newEvery, Decl(file.js, 264, 5))
->interval : Symbol(interval, Decl(file.js, 274, 19))
->name : Symbol(name, Decl(file.js, 274, 28))
->data : Symbol(data, Decl(file.js, 274, 34))
->options : Symbol(options, Decl(file.js, 274, 40))
+>newEvery : Symbol(NewAgenda.newEvery, Decl(file.js, 265, 5))
+>interval : Symbol(interval, Decl(file.js, 275, 19))
+>name : Symbol(name, Decl(file.js, 275, 28))
+>data : Symbol(data, Decl(file.js, 275, 34))
+>options : Symbol(options, Decl(file.js, 275, 40))
 
         if (typeof name === 'string') {
->name : Symbol(name, Decl(file.js, 274, 28))
+>name : Symbol(name, Decl(file.js, 275, 28))
 
             return this._createIntervalJob(interval, name, data, options); // Ok
->this._createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(file.js, 243, 17))
->this : Symbol(NewAgenda, Decl(file.js, 227, 1))
->_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(file.js, 243, 17))
->interval : Symbol(interval, Decl(file.js, 274, 19))
->name : Symbol(name, Decl(file.js, 274, 28))
->data : Symbol(data, Decl(file.js, 274, 34))
->options : Symbol(options, Decl(file.js, 274, 40))
+>this._createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(file.js, 244, 17))
+>this : Symbol(NewAgenda, Decl(file.js, 228, 1))
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(file.js, 244, 17))
+>interval : Symbol(interval, Decl(file.js, 275, 19))
+>name : Symbol(name, Decl(file.js, 275, 28))
+>data : Symbol(data, Decl(file.js, 275, 34))
+>options : Symbol(options, Decl(file.js, 275, 40))
         }
 
         if (Array.isArray(name)) {
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->name : Symbol(name, Decl(file.js, 274, 28))
+>name : Symbol(name, Decl(file.js, 275, 28))
 
             return this._createIntervalJobs(interval, name, data, options); // Ok
->this._createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(file.js, 253, 5))
->this : Symbol(NewAgenda, Decl(file.js, 227, 1))
->_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(file.js, 253, 5))
->interval : Symbol(interval, Decl(file.js, 274, 19))
->name : Symbol(name, Decl(file.js, 274, 28))
->data : Symbol(data, Decl(file.js, 274, 34))
->options : Symbol(options, Decl(file.js, 274, 40))
+>this._createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(file.js, 254, 5))
+>this : Symbol(NewAgenda, Decl(file.js, 228, 1))
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(file.js, 254, 5))
+>interval : Symbol(interval, Decl(file.js, 275, 19))
+>name : Symbol(name, Decl(file.js, 275, 28))
+>data : Symbol(data, Decl(file.js, 275, 34))
+>options : Symbol(options, Decl(file.js, 275, 40))
         }
 
         throw new Error('Unexpected error: Invalid job name(s)');
@@ -574,21 +576,21 @@ class NewAgenda {
  * @returns {HelperCond<T, string, string, null | undefined, null>}
  */
 function transform1(value) {
->transform1 : Symbol(transform1, Decl(file.js, 285, 1))
->value : Symbol(value, Decl(file.js, 294, 20))
+>transform1 : Symbol(transform1, Decl(file.js, 286, 1))
+>value : Symbol(value, Decl(file.js, 295, 20))
 
     if (value == null) return null; // Ok
->value : Symbol(value, Decl(file.js, 294, 20))
+>value : Symbol(value, Decl(file.js, 295, 20))
 
     if (typeof value !== 'string') {
->value : Symbol(value, Decl(file.js, 294, 20))
+>value : Symbol(value, Decl(file.js, 295, 20))
 
         throw new Error();
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
     }
     return value.toLowerCase(); // Ok
 >value.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
->value : Symbol(value, Decl(file.js, 294, 20))
+>value : Symbol(value, Decl(file.js, 295, 20))
 >toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 }
 

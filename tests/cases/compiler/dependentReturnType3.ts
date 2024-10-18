@@ -163,15 +163,16 @@ export function transformDatesForAPI<T extends string | undefined>(
     start: string,
     end?: T
 ): HelperCond<T, string, { start: Date, end: Date }, undefined, { start: Date, end: undefined }> {
-    return end !== undefined ? // Ok
-        {
+    if (end !== undefined) {
+        return {
             start: mapDateForAPI(start),
             end: mapDateForAPI(end),
-        } :
-        {
-            start: mapDateForAPI(start),
-            end: undefined
         };
+    }
+    return {
+        start: mapDateForAPI(start),
+        end: undefined
+    };
 }
 
 // File: Rocket.Chat/packages/agenda/src/Agenda.ts

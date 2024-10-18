@@ -186,7 +186,8 @@ interface Aa {
 
 function trivialConditional<T extends 1 | 2 | 3>(x: T): Aa[T] {
     if (x !== 1) {
-        return x === 2 ? "" : true;
+        if (x === 2) return "";
+        return true;
     }
     else {
         return 0;
@@ -195,13 +196,13 @@ function trivialConditional<T extends 1 | 2 | 3>(x: T): Aa[T] {
 
 function conditional<T extends boolean>(x: T):
  T extends true ? 1 : T extends false ? 2 : never {
-    return x ? 1 : 2; // Ok
+    return x ? 1 : 2;
 }
 
 function contextualConditional<T extends "a" | "b">(
     x: T
 ): T extends "a" ? "a" : T extends "b" ? number : never {
-    return x === "a" ? x : parseInt(x); // Ok
+    return x === "a" ? x : parseInt(x);
 }
 
 function conditionalWithError<T extends "a" | "b">(

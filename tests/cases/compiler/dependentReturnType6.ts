@@ -10,7 +10,8 @@ function outer<T extends boolean>(x: T): number {
     return inner();
 
     function inner(): T extends true ? 1 : T extends false ? 2 : never {
-        return x ? 1 : 2;
+        if (x) return 1;
+        return 2;
     }
 }
 
@@ -19,7 +20,11 @@ function fun6<T extends boolean>(x: T, y: string): T extends true ? string : T e
 function fun6<T extends boolean>(x: T, y: undefined): T extends true ? 1 : T extends false ? 2 : never;
 function fun6(x: boolean): 1 | 2 | string;
 function fun6<T extends boolean>(x: T, y?: string): T extends true ? 1 | string : T extends false ? 2 : never {
-    return x ? y !== undefined ? y : 1 : 2;
+    if (x) {
+        if (y !== undefined) return y;
+        return 1;
+    }
+    return 2;
 }
 
 // Indexed access with conditional inside
@@ -32,9 +37,11 @@ interface SomeInterfaceBad<T> {
 
 function fun4bad<T, U extends keyof SomeInterfaceBad<unknown>>(x: T, y: U): SomeInterfaceBad<T>[U] {
     if (y === "prop1") {
-        return x === 1 ? true : false;
+        if (x === 1) return true;
+        return false;
     }
-    return x ? 1 : 2;
+    if (x) return 1;
+    return 2;
 }
 
 // Narrows nested conditional type of right shape
@@ -45,9 +52,11 @@ interface SomeInterfaceGood<T> {
 
 function fun4good<T extends boolean, U extends keyof SomeInterfaceGood<unknown>>(x: T, y: U): SomeInterfaceGood<T>[U] {
     if (y === "prop1") {
-        return x ? 2 : 1;
+        if (x) return 2;
+        return 1;
     }
-    return x ? 1 : 2;
+    if (x) return 1;
+    return 2;
 }
 
 // Indexed access with indexed access inside - OK, narrows
@@ -98,7 +107,8 @@ class Sub2 extends SomeClass {
 
 // Detection of type parameter reference in presence of typeof
 function fun2<T extends boolean>(x: T, y: typeof x): T extends true ? 1 : T extends false ? 2 : never {
-    return x ? 1 : 2;
+    if (x) return 1;
+    return 2;
 }
 
 // Contextually-typed lambdas

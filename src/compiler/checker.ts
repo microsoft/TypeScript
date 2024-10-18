@@ -45644,12 +45644,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     ): void {
         const functionFlags = getFunctionFlags(container);
         const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
-        if (expr) {
-            const unwrappedExpr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
-            if (isConditionalExpression(unwrappedExpr)) {
-                return checkConditionalReturnExpression(container, returnType, node, unwrappedExpr);
-            }
-        }
 
         const exprType = expr ? checkExpressionCached(expr) : undefinedType;
         const unwrappedExprType = functionFlags & FunctionFlags.Async
@@ -45684,26 +45678,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return;
         }
 
-        // There are two cases for obtaining a position in the control-flow graph on which references will be analyzed:
-        // - When the return expression is defined, and it is one of the two branches of a conditional expression, then the position is the expression itself:
-        // `function foo(...) {
-        //       return cond ? |expr| : ...
-        // }`
-        // - When the return expression is undefined, or it is defined and it is not one of the branches of a conditional expression, then the position is the return statement itself:
-        // `function foo(...) {
-        //       |return expr;|
-        // }`
-        // or
-        // `function foo(...) {
-        //       |return;|
-        // }`
-        let narrowPosition: Node = node;
-        let narrowFlowNode = node.flowNode;
-        if (expr && isConditionalExpression(expr.parent)) {
-            narrowFlowNode = expr.parent.whenTrue === expr ? expr.parent.flowNodeWhenTrue : expr.parent.flowNodeWhenFalse;
-            narrowPosition = expr;
-        }
-
+        const narrowPosition: Node = node;
+        const narrowFlowNode = node.flowNode;
         if (!narrowFlowNode) {
             checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, expr);
             return;
@@ -45755,17 +45731,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             )
             : narrowedExprType;
         checkTypeAssignableToAndOptionallyElaborate(narrowedUnwrappedExprType, narrowedReturnType, errorNode, expr);
-    }
-
-    function checkConditionalReturnExpression(
-        container: SignatureDeclaration,
-        returnType: Type,
-        node: ReturnStatement,
-        expr: ConditionalExpression,
-    ): void {
-        checkExpression(expr.condition);
-        checkReturnStatementExpression(container, returnType, node, expr.whenTrue);
-        checkReturnStatementExpression(container, returnType, node, expr.whenFalse);
     }
 
     // Narrowable type parameters are type parameters that:

@@ -543,7 +543,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var preSwitchCaseFlow: FlowNode | undefined;
     var activeLabelList: ActiveLabel | undefined;
     var hasExplicitReturn: boolean;
-    var inReturnStatement: boolean;
     var hasFlowEffects: boolean;
 
     // state used for emit helpers
@@ -623,7 +622,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentExceptionTarget = undefined;
         activeLabelList = undefined;
         hasExplicitReturn = false;
-        inReturnStatement = false;
         hasFlowEffects = false;
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
@@ -1573,10 +1571,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
-        const oldInReturnStatement = inReturnStatement;
-        inReturnStatement = true;
         bind(node.expression);
-        inReturnStatement = oldInReturnStatement;
         if (node.kind === SyntaxKind.ReturnStatement) {
             hasExplicitReturn = true;
             if (currentReturnTarget) {
@@ -2021,16 +2016,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         hasFlowEffects = false;
         bindCondition(node.condition, trueLabel, falseLabel);
         currentFlow = finishFlowLabel(trueLabel);
-        if (inReturnStatement) {
-            node.flowNodeWhenTrue = currentFlow;
-        }
         bind(node.questionToken);
         bind(node.whenTrue);
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(falseLabel);
-        if (inReturnStatement) {
-            node.flowNodeWhenFalse = currentFlow;
-        }
         bind(node.colonToken);
         bind(node.whenFalse);
         addAntecedent(postExpressionLabel, currentFlow);

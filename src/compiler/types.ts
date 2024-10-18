@@ -2735,10 +2735,6 @@ export interface ConditionalExpression extends Expression {
     readonly whenTrue: Expression;
     readonly colonToken: ColonToken;
     readonly whenFalse: Expression;
-    /** @internal*/
-    flowNodeWhenTrue: FlowNode | undefined;
-    /** @internal */
-    flowNodeWhenFalse: FlowNode | undefined;
 }
 
 export type FunctionBody = Block;

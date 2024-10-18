@@ -744,16 +744,15 @@ function transformDatesForAPI(start, end) {
 >end : T | undefined
 >    : ^^^^^^^^^^^^^
 
-    return end !== undefined ?
->end !== undefined ?        {            start: mapDateForAPI(start),            end: mapDateForAPI(end),        } :        {            start: mapDateForAPI(start),            end: undefined        } : { start: Date; end: Date; } | { start: Date; end: undefined; }
->                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    if (end !== undefined) {
 >end !== undefined : boolean
 >                  : ^^^^^^^
 >end : T | undefined
 >    : ^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
-        {
+
+        return {
 >{            start: mapDateForAPI(start),            end: mapDateForAPI(end),        } : { start: Date; end: Date; }
 >                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -777,12 +776,13 @@ function transformDatesForAPI(start, end) {
 >end : string
 >    : ^^^^^^
 
-        } :
-        {
->{            start: mapDateForAPI(start),            end: undefined        } : { start: Date; end: undefined; }
->                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        };
+    }
+    return {
+>{        start: mapDateForAPI(start),        end: undefined    } : { start: Date; end: undefined; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-            start: mapDateForAPI(start),
+        start: mapDateForAPI(start),
 >start : Date
 >      : ^^^^
 >mapDateForAPI(start) : Date
@@ -792,13 +792,13 @@ function transformDatesForAPI(start, end) {
 >start : string
 >      : ^^^^^^
 
-            end: undefined
+        end: undefined
 >end : undefined
 >    : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
-        };
+    };
 }
 
 // File: Rocket.Chat/packages/agenda/src/Agenda.ts

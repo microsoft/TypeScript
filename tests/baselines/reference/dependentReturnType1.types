@@ -723,9 +723,7 @@ function trivialConditional<T extends 1 | 2 | 3>(x: T): Aa[T] {
 >1 : 1
 >  : ^
 
-        return x === 2 ? "" : true;
->x === 2 ? "" : true : true | ""
->                    : ^^^^^^^^^
+        if (x === 2) return "";
 >x === 2 : boolean
 >        : ^^^^^^^
 >x : T
@@ -734,6 +732,8 @@ function trivialConditional<T extends 1 | 2 | 3>(x: T): Aa[T] {
 >  : ^
 >"" : ""
 >   : ^^
+
+        return true;
 >true : true
 >     : ^^^^
     }
@@ -756,7 +756,7 @@ function conditional<T extends boolean>(x: T):
 >false : false
 >      : ^^^^^
 
-    return x ? 1 : 2; // Ok
+    return x ? 1 : 2;
 >x ? 1 : 2 : 1 | 2
 >          : ^^^^^
 >x : T
@@ -776,17 +776,17 @@ function contextualConditional<T extends "a" | "b">(
 >  : ^
 
 ): T extends "a" ? "a" : T extends "b" ? number : never {
-    return x === "a" ? x : parseInt(x); // Ok
->x === "a" ? x : parseInt(x) : number | "a"
->                            : ^^^^^^^^^^^^
+    return x === "a" ? x : parseInt(x);
+>x === "a" ? x : parseInt(x) : number | T
+>                            : ^^^^^^^^^^
 >x === "a" : boolean
 >          : ^^^^^^^
 >x : T
 >  : ^
 >"a" : "a"
 >    : ^^^
->x : "a"
->  : ^^^
+>x : T
+>  : ^
 >parseInt(x) : number
 >            : ^^^^^^
 >parseInt : (string: string, radix?: number) => number
@@ -805,16 +805,16 @@ function conditionalWithError<T extends "a" | "b">(
 
 ): T extends "a" ? number : T extends "b" ? string : never {
     return x === "a" ? x : parseInt(x); // Error
->x === "a" ? x : parseInt(x) : number | "a"
->                            : ^^^^^^^^^^^^
+>x === "a" ? x : parseInt(x) : number | T
+>                            : ^^^^^^^^^^
 >x === "a" : boolean
 >          : ^^^^^^^
 >x : T
 >  : ^
 >"a" : "a"
 >    : ^^^
->x : "a"
->  : ^^^
+>x : T
+>  : ^
 >parseInt(x) : number
 >            : ^^^^^^
 >parseInt : (string: string, radix?: number) => number

@@ -222,15 +222,16 @@ function mapDateForAPI(x) {
  * @returns {HelperCond<T, string, { start: Date, end: Date }, undefined, { start: Date, end: undefined }>}
  */
 function transformDatesForAPI(start, end) {
-    return end !== undefined ?
-        {
+    if (end !== undefined) {
+        return {
             start: mapDateForAPI(start),
             end: mapDateForAPI(end),
-        } :
-        {
-            start: mapDateForAPI(start),
-            end: undefined
         };
+    }
+    return {
+        start: mapDateForAPI(start),
+        end: undefined
+    };
 }
 
 // File: Rocket.Chat/packages/agenda/src/Agenda.ts

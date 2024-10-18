@@ -17,34 +17,42 @@ dependentReturnType1.ts(169,13): error TS2322: Type 'this' is not assignable to 
   Type 'Unnamed' is not assignable to type 'string'.
 dependentReturnType1.ts(172,9): error TS2322: Type 'T & {}' is not assignable to type 'this'.
   'this' could be instantiated with an arbitrary type which could be unrelated to 'T & {}'.
-dependentReturnType1.ts(206,24): error TS2322: Type 'string' is not assignable to type 'number'.
-dependentReturnType1.ts(206,28): error TS2322: Type 'number' is not assignable to type 'string'.
-dependentReturnType1.ts(243,9): error TS2322: Type '""' is not assignable to type 'T extends 1 | 2 ? T extends 1 ? string : T extends 2 ? boolean : never : T extends 3 ? number : never'.
-dependentReturnType1.ts(245,9): error TS2322: Type 'true' is not assignable to type 'T extends 1 | 2 ? T extends 1 ? string : T extends 2 ? boolean : never : T extends 3 ? number : never'.
-dependentReturnType1.ts(247,5): error TS2322: Type '3' is not assignable to type 'T extends 1 | 2 ? T extends 1 ? string : T extends 2 ? boolean : never : T extends 3 ? number : never'.
-dependentReturnType1.ts(275,9): error TS2322: Type '1' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
-dependentReturnType1.ts(278,9): error TS2322: Type '2' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
-dependentReturnType1.ts(280,5): error TS2322: Type '0' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
-dependentReturnType1.ts(302,9): error TS2322: Type 'string' is not assignable to type 'string[]'.
-dependentReturnType1.ts(311,9): error TS2322: Type 'undefined' is not assignable to type 'T extends {} ? void : T extends undefined ? number : never'.
-dependentReturnType1.ts(313,5): error TS2322: Type 'number' is not assignable to type 'T extends {} ? void : T extends undefined ? number : never'.
-dependentReturnType1.ts(334,9): error TS2322: Type '1' is not assignable to type '4'.
-dependentReturnType1.ts(367,13): error TS2322: Type 'number' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : never'.
-dependentReturnType1.ts(369,9): error TS2322: Type 'string' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : never'.
-dependentReturnType1.ts(392,9): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
-dependentReturnType1.ts(402,13): error TS2322: Type 'number' is not assignable to type 'string'.
-dependentReturnType1.ts(412,9): error TS2322: Type 'true' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : never'.
-dependentReturnType1.ts(414,5): error TS2322: Type '""' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : never'.
-dependentReturnType1.ts(439,15): error TS2322: Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
-dependentReturnType1.ts(441,11): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
-dependentReturnType1.ts(470,13): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
-dependentReturnType1.ts(472,13): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
-dependentReturnType1.ts(474,13): error TS2322: Type 'T' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
-dependentReturnType1.ts(488,9): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
-dependentReturnType1.ts(514,5): error TS2322: Type '1' is not assignable to type 'never'.
+dependentReturnType1.ts(195,12): error TS2322: Type '1 | 2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+  Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+dependentReturnType1.ts(201,12): error TS2322: Type 'number | T' is not assignable to type 'T extends "a" ? "a" : T extends "b" ? number : never'.
+  Type 'number' is not assignable to type 'T extends "a" ? "a" : T extends "b" ? number : never'.
+dependentReturnType1.ts(207,12): error TS2322: Type 'number | T' is not assignable to type 'T extends "a" ? number : T extends "b" ? string : never'.
+  Type 'number' is not assignable to type 'T extends "a" ? number : T extends "b" ? string : never'.
+dependentReturnType1.ts(244,9): error TS2322: Type '""' is not assignable to type 'T extends 1 | 2 ? T extends 1 ? string : T extends 2 ? boolean : never : T extends 3 ? number : never'.
+dependentReturnType1.ts(246,9): error TS2322: Type 'true' is not assignable to type 'T extends 1 | 2 ? T extends 1 ? string : T extends 2 ? boolean : never : T extends 3 ? number : never'.
+dependentReturnType1.ts(248,5): error TS2322: Type '3' is not assignable to type 'T extends 1 | 2 ? T extends 1 ? string : T extends 2 ? boolean : never : T extends 3 ? number : never'.
+dependentReturnType1.ts(276,9): error TS2322: Type '1' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
+dependentReturnType1.ts(279,9): error TS2322: Type '2' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
+dependentReturnType1.ts(281,5): error TS2322: Type '0' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
+dependentReturnType1.ts(303,9): error TS2322: Type 'string' is not assignable to type 'string[]'.
+dependentReturnType1.ts(312,9): error TS2322: Type 'undefined' is not assignable to type 'T extends {} ? void : T extends undefined ? number : never'.
+dependentReturnType1.ts(314,5): error TS2322: Type 'number' is not assignable to type 'T extends {} ? void : T extends undefined ? number : never'.
+dependentReturnType1.ts(335,9): error TS2322: Type '1' is not assignable to type '4'.
+dependentReturnType1.ts(368,13): error TS2322: Type 'number' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : never'.
+dependentReturnType1.ts(370,9): error TS2322: Type 'string' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : never'.
+dependentReturnType1.ts(393,9): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+dependentReturnType1.ts(403,13): error TS2322: Type 'number' is not assignable to type 'string'.
+dependentReturnType1.ts(413,9): error TS2322: Type 'true' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : never'.
+dependentReturnType1.ts(415,5): error TS2322: Type '""' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : never'.
+dependentReturnType1.ts(440,15): error TS2322: Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+dependentReturnType1.ts(442,11): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+dependentReturnType1.ts(471,13): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
+dependentReturnType1.ts(473,13): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
+dependentReturnType1.ts(475,13): error TS2322: Type 'T' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
+dependentReturnType1.ts(489,9): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
+dependentReturnType1.ts(499,12): error TS2322: Type '1 | 2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+  Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+dependentReturnType1.ts(504,12): error TS2322: Type '0 | "one" | "two"' is not assignable to type 'T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never'.
+  Type '0' is not assignable to type 'T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never'.
+dependentReturnType1.ts(515,5): error TS2322: Type '1' is not assignable to type 'never'.
 
 
-==== dependentReturnType1.ts (39 errors) ====
+==== dependentReturnType1.ts (42 errors) ====
     interface A {
         1: number;
         2: string;
@@ -262,7 +270,8 @@ dependentReturnType1.ts(514,5): error TS2322: Type '1' is not assignable to type
     
     function trivialConditional<T extends 1 | 2 | 3>(x: T): Aa[T] {
         if (x !== 1) {
-            return x === 2 ? "" : true;
+            if (x === 2) return "";
+            return true;
         }
         else {
             return 0;
@@ -271,23 +280,28 @@ dependentReturnType1.ts(514,5): error TS2322: Type '1' is not assignable to type
     
     function conditional<T extends boolean>(x: T):
      T extends true ? 1 : T extends false ? 2 : never {
-        return x ? 1 : 2; // Ok
+        return x ? 1 : 2;
+               ~~~~~~~~~
+!!! error TS2322: Type '1 | 2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+!!! error TS2322:   Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
     }
     
     function contextualConditional<T extends "a" | "b">(
         x: T
     ): T extends "a" ? "a" : T extends "b" ? number : never {
-        return x === "a" ? x : parseInt(x); // Ok
+        return x === "a" ? x : parseInt(x);
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number | T' is not assignable to type 'T extends "a" ? "a" : T extends "b" ? number : never'.
+!!! error TS2322:   Type 'number' is not assignable to type 'T extends "a" ? "a" : T extends "b" ? number : never'.
     }
     
     function conditionalWithError<T extends "a" | "b">(
         x: T
     ): T extends "a" ? number : T extends "b" ? string : never {
         return x === "a" ? x : parseInt(x); // Error
-                           ~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
-                               ~~~~~~~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number | T' is not assignable to type 'T extends "a" ? number : T extends "b" ? string : never'.
+!!! error TS2322:   Type 'number' is not assignable to type 'T extends "a" ? number : T extends "b" ? string : never'.
     }
     
     // Multiple indexed type reductions
@@ -624,11 +638,17 @@ dependentReturnType1.ts(514,5): error TS2322: Type '1' is not assignable to type
     // Return conditional expressions with parentheses
     function returnStuff1<T extends boolean>(x: T ): T extends true ? 1 : T extends false ? 2 : never {
         return (x ? (1) : 2);
+               ~~~~~~~~~~~~~
+!!! error TS2322: Type '1 | 2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+!!! error TS2322:   Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
     }
     
     function returnStuff2<T extends 1 | 2 | "a">(x: T ):
         T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never {
         return (typeof x === "string" ? 0 : (x === 1 ? ("one") : "two"));
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '0 | "one" | "two"' is not assignable to type 'T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never'.
+!!! error TS2322:   Type '0' is not assignable to type 'T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never'.
     }
     
     // If the conditional type's input is `never`, then it resolves to `never`:

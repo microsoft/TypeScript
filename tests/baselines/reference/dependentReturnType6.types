@@ -25,13 +25,13 @@ function outer<T extends boolean>(x: T): number {
 >false : false
 >      : ^^^^^
 
-        return x ? 1 : 2;
->x ? 1 : 2 : 1 | 2
->          : ^^^^^
+        if (x) return 1;
 >x : T
 >  : ^
 >1 : 1
 >  : ^
+
+        return 2;
 >2 : 2
 >  : ^
     }
@@ -80,13 +80,11 @@ function fun6<T extends boolean>(x: T, y?: string): T extends true ? 1 | string 
 >false : false
 >      : ^^^^^
 
-    return x ? y !== undefined ? y : 1 : 2;
->x ? y !== undefined ? y : 1 : 2 : string | 1 | 2
->                                : ^^^^^^^^^^^^^^
+    if (x) {
 >x : T
 >  : ^
->y !== undefined ? y : 1 : string | 1
->                        : ^^^^^^^^^^
+
+        if (y !== undefined) return y;
 >y !== undefined : boolean
 >                : ^^^^^^^
 >y : string | undefined
@@ -95,8 +93,12 @@ function fun6<T extends boolean>(x: T, y?: string): T extends true ? 1 | string 
 >          : ^^^^^^^^^
 >y : string
 >  : ^^^^^^
+
+        return 1;
 >1 : 1
 >  : ^
+    }
+    return 2;
 >2 : 2
 >  : ^
 }
@@ -138,9 +140,7 @@ function fun4bad<T, U extends keyof SomeInterfaceBad<unknown>>(x: T, y: U): Some
 >"prop1" : "prop1"
 >        : ^^^^^^^
 
-        return x === 1 ? true : false;
->x === 1 ? true : false : boolean
->                       : ^^^^^^^
+        if (x === 1) return true;
 >x === 1 : boolean
 >        : ^^^^^^^
 >x : T
@@ -149,16 +149,18 @@ function fun4bad<T, U extends keyof SomeInterfaceBad<unknown>>(x: T, y: U): Some
 >  : ^
 >true : true
 >     : ^^^^
+
+        return false;
 >false : false
 >      : ^^^^^
     }
-    return x ? 1 : 2;
->x ? 1 : 2 : 1 | 2
->          : ^^^^^
+    if (x) return 1;
 >x : T
 >  : ^
 >1 : 1
 >  : ^
+
+    return 2;
 >2 : 2
 >  : ^
 }
@@ -198,23 +200,23 @@ function fun4good<T extends boolean, U extends keyof SomeInterfaceGood<unknown>>
 >"prop1" : "prop1"
 >        : ^^^^^^^
 
-        return x ? 2 : 1;
->x ? 2 : 1 : 1 | 2
->          : ^^^^^
+        if (x) return 2;
 >x : T
 >  : ^
 >2 : 2
 >  : ^
+
+        return 1;
 >1 : 1
 >  : ^
     }
-    return x ? 1 : 2;
->x ? 1 : 2 : 1 | 2
->          : ^^^^^
+    if (x) return 1;
 >x : T
 >  : ^
 >1 : 1
 >  : ^
+
+    return 2;
 >2 : 2
 >  : ^
 }
@@ -380,13 +382,13 @@ function fun2<T extends boolean>(x: T, y: typeof x): T extends true ? 1 : T exte
 >false : false
 >      : ^^^^^
 
-    return x ? 1 : 2;
->x ? 1 : 2 : 1 | 2
->          : ^^^^^
+    if (x) return 1;
 >x : T
 >  : ^
 >1 : 1
 >  : ^
+
+    return 2;
 >2 : 2
 >  : ^
 }
