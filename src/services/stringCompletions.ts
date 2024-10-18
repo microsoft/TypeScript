@@ -12,6 +12,7 @@ import {
     addToSeen,
     altDirectorySeparator,
     arrayFrom,
+    BinaryExpression,
     CallLikeExpression,
     CancellationToken,
     CaseClause,
@@ -484,7 +485,19 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             const existing = new Set(namedImportsOrExports.elements.map(n => moduleExportNameTextEscaped(n.propertyName || n.name)));
             const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
             return { kind: StringLiteralCompletionKind.Properties, symbols: uniques, hasIndexSignature: false };
-
+        case SyntaxKind.BinaryExpression:
+            if ((parent as BinaryExpression).operatorToken.kind === SyntaxKind.InKeyword) {
+                const { left, right } = parent as BinaryExpression;
+                const leftOrRight = findAncestor(node, n => n.parent.kind === SyntaxKind.BinaryExpression);
+                const type = typeChecker.getTypeAtLocation(leftOrRight === right ? left : right);
+                const properties = type.isUnion() ? typeChecker.getAllPossiblePropertiesOfTypes(type.types) : type.getApparentProperties();
+                return {
+                    kind: StringLiteralCompletionKind.Properties,
+                    symbols: properties.filter(prop => !prop.valueDeclaration || !isPrivateIdentifierClassElementDeclaration(prop.valueDeclaration)),
+                    hasIndexSignature: false,
+                };
+            }
+            return fromContextualType(ContextFlags.None);
         default:
             return fromContextualType() || fromContextualType(ContextFlags.None);
     }
