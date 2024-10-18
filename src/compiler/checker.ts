@@ -1927,6 +1927,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         isTypeParameterPossiblyReferenced,
         typeHasCallOrConstructSignatures,
         getSymbolFlags,
+        unwrapNoInferType,
     };
 
     function getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node) {
@@ -16513,6 +16514,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(type.flags & TypeFlags.Substitution && (type as SubstitutionType).constraint.flags & TypeFlags.Unknown);
     }
 
+    function unwrapNoInferType(type: Type): Type;
+    function unwrapNoInferType(type: Type | undefined): Type | undefined;
+    function unwrapNoInferType(type: Type | undefined) {
+        return type && mapType(type, t => isNoInferType(t) ? (t as SubstitutionType).baseType : t);
+    }
+
     function getSubstitutionType(baseType: Type, constraint: Type) {
         return constraint.flags & TypeFlags.AnyOrUnknown || constraint === baseType || baseType.flags & TypeFlags.Any ?
             baseType :
@@ -29677,9 +29684,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode) {
-        if (isNoInferType(type)) {
-            type = (type as SubstitutionType).baseType;
-        }
+        type = unwrapNoInferType(type);
         // When the type of a reference is or contains an instantiable type with a union type constraint, and
         // when the reference is in a constraint position (where it is known we'll obtain the apparent type) or
         // has a contextual type containing no top-level instantiables (meaning constraints will determine
