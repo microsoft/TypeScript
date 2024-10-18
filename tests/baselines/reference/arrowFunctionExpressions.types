@@ -245,15 +245,15 @@ class MyClass {
 // Arrow function used in arrow function
 var arrrr = () => (m: number) => () => (n: number) => m + n;
 >arrrr : () => (m: number) => () => (n: number) => number
->      : ^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
+>      : ^^^^^^^         ^^^^^^^^^^^^         ^^^^^^^^^^^
 >() => (m: number) => () => (n: number) => m + n : () => (m: number) => () => (n: number) => number
->                                                : ^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
+>                                                : ^^^^^^^         ^^^^^^^^^^^^         ^^^^^^^^^^^
 >(m: number) => () => (n: number) => m + n : (m: number) => () => (n: number) => number
->                                          : ^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
+>                                          : ^ ^^      ^^^^^^^^^^^^         ^^^^^^^^^^^
 >m : number
 >  : ^^^^^^
 >() => (n: number) => m + n : () => (n: number) => number
->                           : ^^^^^^^ ^^      ^^^^^^^^^^^
+>                           : ^^^^^^^         ^^^^^^^^^^^
 >(n: number) => m + n : (n: number) => number
 >                     : ^ ^^      ^^^^^^^^^^^
 >n : number
@@ -273,11 +273,11 @@ var e = arrrr()(3)()(4);
 >arrrr()(3)() : (n: number) => number
 >             : ^ ^^      ^^^^^^^^^^^
 >arrrr()(3) : () => (n: number) => number
->           : ^^^^^^^ ^^      ^^^^^^^^^^^
+>           : ^^^^^^^         ^^^^^^^^^^^
 >arrrr() : (m: number) => () => (n: number) => number
->        : ^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
+>        : ^ ^^      ^^^^^^^^^^^^         ^^^^^^^^^^^
 >arrrr : () => (m: number) => () => (n: number) => number
->      : ^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
+>      : ^^^^^^^         ^^^^^^^^^^^^         ^^^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -294,9 +294,9 @@ function someFn() {
 
     var arr = (n: number) => (p: number) => p * n;
 >arr : (n: number) => (p: number) => number
->    : ^ ^^      ^^^^^^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^         ^^^^^^^^^^^
 >(n: number) => (p: number) => p * n : (n: number) => (p: number) => number
->                                    : ^ ^^      ^^^^^^ ^^      ^^^^^^^^^^^
+>                                    : ^ ^^      ^^^^^^         ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >(p: number) => p * n : (p: number) => number
@@ -320,7 +320,7 @@ function someFn() {
 >arr(3) : (p: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >arr : (n: number) => (p: number) => number
->    : ^ ^^      ^^^^^^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^         ^^^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4

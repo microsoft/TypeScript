@@ -14,11 +14,11 @@ type Narrow<A> = (A extends Narrowable ? A : never) | ({
 
 const satisfies =
 >satisfies : <TWide>() => <TNarrow extends TWide>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
->          : ^     ^^^^^^^^       ^^^^^^^^^     ^^      ^^               ^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^                     ^^                       ^^^^^^^^^^^^^^^^^^^^
 
   <TWide,>() =>
 ><TWide,>() =>  <TNarrow extends TWide>(narrow: Narrow<TNarrow>) =>    narrow : <TWide>() => <TNarrow extends TWide>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
->                                                                             : ^     ^^^^^^^^       ^^^^^^^^^     ^^      ^^               ^^^^^^^^^^^^^^^^^^^^
+>                                                                             : ^     ^^^^^^^^                     ^^                       ^^^^^^^^^^^^^^^^^^^^
 
   <TNarrow extends TWide>(narrow: Narrow<TNarrow>) =>
 ><TNarrow extends TWide>(narrow: Narrow<TNarrow>) =>    narrow : <TNarrow extends TWide>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
@@ -58,7 +58,7 @@ const item1 = satisfies<Item>()({ value: "1" });
 >satisfies<Item>() : <TNarrow extends Item>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
 >                  : ^       ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >satisfies : <TWide>() => <TNarrow extends TWide>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
->          : ^     ^^^^^^^^       ^^^^^^^^^     ^^      ^^               ^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^                     ^^                       ^^^^^^^^^^^^^^^^^^^^
 >{ value: "1" } : { value: "1"; }
 >               : ^^^^^^^^^^^^^^^
 >value : "1"
@@ -74,7 +74,7 @@ const item2 = satisfies<Item>()({ value: "2" });
 >satisfies<Item>() : <TNarrow extends Item>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
 >                  : ^       ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >satisfies : <TWide>() => <TNarrow extends TWide>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
->          : ^     ^^^^^^^^       ^^^^^^^^^     ^^      ^^               ^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^                     ^^                       ^^^^^^^^^^^^^^^^^^^^
 >{ value: "2" } : { value: "2"; }
 >               : ^^^^^^^^^^^^^^^
 >value : "2"
@@ -90,7 +90,7 @@ const item3 = satisfies<Item>()({ value: null });
 >satisfies<Item>() : <TNarrow extends Item>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
 >                  : ^       ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >satisfies : <TWide>() => <TNarrow extends TWide>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
->          : ^     ^^^^^^^^       ^^^^^^^^^     ^^      ^^               ^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^                     ^^                       ^^^^^^^^^^^^^^^^^^^^
 >{ value: null } : { value: null; }
 >                : ^^^^^^^^^^^^^^^^
 >value : null
