@@ -5,13 +5,15 @@ restInvalidArgumentType.ts(40,13): error TS2700: Rest types may only be created 
 restInvalidArgumentType.ts(42,13): error TS2700: Rest types may only be created from object types.
 restInvalidArgumentType.ts(43,13): error TS2700: Rest types may only be created from object types.
 restInvalidArgumentType.ts(45,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(45,20): error TS18048: 'u' is possibly 'undefined'.
 restInvalidArgumentType.ts(46,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(46,20): error TS18047: 'n' is possibly 'null'.
 restInvalidArgumentType.ts(50,13): error TS2700: Rest types may only be created from object types.
 restInvalidArgumentType.ts(51,13): error TS2700: Rest types may only be created from object types.
 restInvalidArgumentType.ts(53,13): error TS2700: Rest types may only be created from object types.
 
 
-==== restInvalidArgumentType.ts (11 errors) ====
+==== restInvalidArgumentType.ts (13 errors) ====
     enum E { v1, v2 };
     
     function f<T extends { b: string }>(p1: T, p2: T[]) {
@@ -71,9 +73,13 @@ restInvalidArgumentType.ts(53,13): error TS2700: Rest types may only be created 
         var {...r14} = u;  // error, undefined-only not allowed
                 ~~~
 !!! error TS2700: Rest types may only be created from object types.
+                       ~
+!!! error TS18048: 'u' is possibly 'undefined'.
         var {...r15} = n;  // error, null-only not allowed
                 ~~~
 !!! error TS2700: Rest types may only be created from object types.
+                       ~
+!!! error TS18047: 'n' is possibly 'null'.
     
         var {...r16} = a;  // OK
     
