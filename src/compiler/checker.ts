@@ -4241,7 +4241,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
         const typeOnlyExportStarTargets = typeOnlyDeclarationIsExportStar && typeOnlyResolution ? getExportsOfModule(typeOnlyResolution) : undefined;
         let flags = excludeLocalMeanings ? SymbolFlags.None : symbol.flags;
-        let seenSymbols;
+        let seenSymbols: Set<Symbol> | undefined;
         while (symbol.flags & SymbolFlags.Alias) {
             const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));
             if (
@@ -28816,8 +28816,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function narrowTypeByBooleanComparison(type: Type, expr: Expression, bool: BooleanLiteral, operator: BinaryOperator, assumeTrue: boolean): Type {
-            assumeTrue = (assumeTrue !== (bool.kind === SyntaxKind.TrueKeyword)) !== (operator !== SyntaxKind.ExclamationEqualsEqualsToken && operator !== SyntaxKind.ExclamationEqualsToken);
-            return narrowType(type, expr, assumeTrue);
+            const isTrueLiteral = bool.kind === SyntaxKind.TrueKeyword;
+            const equalsOperator = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
+            // pass down `assumeTrue` computed using boolean xors
+            const narrowedType = narrowType(type, expr, (assumeTrue !== isTrueLiteral) !== equalsOperator);
+            if (!assumeTrue && type.flags & TypeFlags.Union && optionalChainContainsReference(expr, reference)) {
+                const types = [narrowedType];
+                if (containsUndefinedType(type)) {
+                    types.push(undefinedType);
+                }
+                if (containsType((type as UnionType).types, nullType)) {
+                    types.push(nullType);
+                }
+                return getUnionType(types);
+            }
+            return narrowedType;
         }
 
         function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -29311,7 +29324,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
             if (hasMatchingArgument(callExpression, reference)) {
-                const signature = assumeTrue || !isCallChain(callExpression) ? getEffectsSignature(callExpression) : undefined;
+                const signature = getEffectsSignature(callExpression);
                 const predicate = signature && getTypePredicateOfSignature(signature);
                 if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
                     return narrowTypeByTypePredicate(type, predicate, callExpression, assumeTrue);
