@@ -193,3 +193,28 @@ const iter3 = iter2.flatMap(() => g1);
 >flatMap : Symbol(IteratorObject.flatMap, Decl(lib.esnext.iterator.d.ts, --, --))
 >g1 : Symbol(g1, Decl(builtinIterator.ts, 68, 13))
 
+// Iterator.from pass-through of return value
+const customGenerator = function* () {
+>customGenerator : Symbol(customGenerator, Decl(builtinIterator.ts, 75, 5))
+
+  return 42;
+}();
+const withHelpers = Iterator.from(customGenerator);
+>withHelpers : Symbol(withHelpers, Decl(builtinIterator.ts, 78, 5))
+>Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>from : Symbol(IteratorConstructor.from, Decl(lib.esnext.iterator.d.ts, --, --))
+>customGenerator : Symbol(customGenerator, Decl(builtinIterator.ts, 75, 5))
+
+const result = withHelpers.next();
+>result : Symbol(result, Decl(builtinIterator.ts, 79, 5))
+>withHelpers.next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+>withHelpers : Symbol(withHelpers, Decl(builtinIterator.ts, 78, 5))
+>next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const resultValue: number = result.value; // this should work
+>resultValue : Symbol(resultValue, Decl(builtinIterator.ts, 80, 5))
+>result.value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>result : Symbol(result, Decl(builtinIterator.ts, 79, 5))
+>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
