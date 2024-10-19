@@ -31,12 +31,11 @@ func exists(i interface{}) bool {
 // NodeFactory
 
 type NodeFactory struct {
-	nodePool       Pool[Node]
 	identifierPool Pool[Identifier]
 }
 
 func (f *NodeFactory) NewNode(kind SyntaxKind, data NodeData) *Node {
-	n := f.nodePool.New()
+	n := data.AsNode()
 	n.kind = kind
 	n.data = data
 	return n
@@ -402,6 +401,7 @@ func (n *Node) AsTupleTypeNode() *TupleTypeNode {
 // NodeData
 
 type NodeData interface {
+	AsNode() *Node
 	ForEachChild(v Visitor) bool
 	Symbol() *Symbol
 	LocalSymbol() *Symbol
@@ -418,8 +418,11 @@ type NodeData interface {
 
 // NodeDefault
 
-type NodeDefault struct{}
+type NodeDefault struct{
+	Node
+}
 
+func (node *NodeDefault) AsNode() *Node 							{ return &node.Node }
 func (node *NodeDefault) ForEachChild(v Visitor) bool               { return false }
 func (node *NodeDefault) Symbol() *Symbol                           { return nil }
 func (node *NodeDefault) LocalSymbol() *Symbol                      { return nil }
@@ -596,18 +599,15 @@ func (f *NodeFactory) NewToken(kind SyntaxKind) *Node {
 // Identifier
 
 type Identifier struct {
-	node Node
 	ExpressionBase
 	FlowNodeBase
 	text string
 }
 
 func (f *NodeFactory) NewIdentifier(text string) *Node {
-	result := f.identifierPool.New()
-	result.node.kind = SyntaxKindIdentifier
-	result.node.data = result
-	result.text = text
-	return &result.node
+	data := f.identifierPool.New()
+	data.text = text
+	return f.NewNode(SyntaxKindIdentifier, data)
 }
 
 func isIdentifier(node *Node) bool {
@@ -4066,7 +4066,6 @@ type SourceFile struct {
 	NodeBase
 	DeclarationBase
 	LocalsContainerBase
-	node                        *Node
 	text                        string
 	fileName                    string
 	path                        string
@@ -4099,9 +4098,7 @@ func (f *NodeFactory) NewSourceFile(text string, fileName string, statements []*
 	data.fileName = fileName
 	data.statements = statements
 	data.languageVersion = ScriptTargetLatest
-	node := f.NewNode(SyntaxKindSourceFile, data)
-	data.node = node
-	return node
+	return f.NewNode(SyntaxKindSourceFile, data)
 }
 
 func (node *SourceFile) FileName() string {

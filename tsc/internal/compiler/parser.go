@@ -5849,8 +5849,8 @@ func isAnExternalModuleIndicatorNode(node *Statement) bool {
 }
 
 func getImportMetaIfNecessary(sourceFile *SourceFile) *Node {
-	if sourceFile.node.flags&NodeFlagsPossiblyContainsImportMeta != 0 {
-		return findChildNode(sourceFile.node, isImportMeta)
+	if sourceFile.AsNode().flags&NodeFlagsPossiblyContainsImportMeta != 0 {
+		return findChildNode(sourceFile.AsNode(), isImportMeta)
 	}
 	return nil
 }

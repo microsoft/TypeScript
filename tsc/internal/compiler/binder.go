@@ -92,7 +92,7 @@ func bindSourceFile(file *SourceFile, options *CompilerOptions) {
 		b.options = options
 		b.languageVersion = getEmitScriptTarget(options)
 		b.classifiableNames = make(map[string]bool)
-		b.bind(file.node)
+		b.bind(file.AsNode())
 		file.isBound = true
 		file.symbolCount = b.symbolCount
 		file.classifiableNames = b.classifiableNames
@@ -421,7 +421,7 @@ func (b *Binder) declareSourceFileMember(node *Node, symbolFlags SymbolFlags, sy
 	if isExternalModule(b.file) {
 		return b.declareModuleMember(node, symbolFlags, symbolExcludes)
 	}
-	return b.declareSymbol(getLocals(b.file.node), nil /*parent*/, node, symbolFlags, symbolExcludes)
+	return b.declareSymbol(getLocals(b.file.AsNode()), nil /*parent*/, node, symbolFlags, symbolExcludes)
 }
 
 func (b *Binder) declareSymbolAndAddToSymbolTable(node *Node, symbolFlags SymbolFlags, symbolExcludes SymbolFlags) *Symbol {
@@ -745,7 +745,7 @@ func (b *Binder) bindPropertyWorker(node *Node) {
 }
 
 func (b *Binder) bindSourceFileIfExternalModule() {
-	b.setExportContextFlag(b.file.node)
+	b.setExportContextFlag(b.file.AsNode())
 	if isExternalModule(b.file) {
 		b.bindSourceFileAsExternalModule()
 	}
@@ -761,7 +761,7 @@ func (b *Binder) bindSourceFileIfExternalModule() {
 
 func (b *Binder) bindSourceFileAsExternalModule() {
 	// !!! Remove file extension from module name
-	b.bindAnonymousDeclaration(b.file.node, SymbolFlagsValueModule, "\""+b.file.fileName+"\"")
+	b.bindAnonymousDeclaration(b.file.AsNode(), SymbolFlagsValueModule, "\""+b.file.fileName+"\"")
 }
 
 func (b *Binder) bindModuleDeclaration(node *Node) {

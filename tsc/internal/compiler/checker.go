@@ -637,7 +637,7 @@ func (c *Checker) getSymbol(symbols SymbolTable, name string, meaning SymbolFlag
 }
 
 func (c *Checker) checkSourceFile(sourceFile *SourceFile) {
-	node := sourceFile.node
+	node := sourceFile.AsNode()
 	links := c.nodeLinks.get(node)
 	if links.flags&NodeCheckFlagsTypeChecked == 0 {
 		c.checkSourceElement(node)
