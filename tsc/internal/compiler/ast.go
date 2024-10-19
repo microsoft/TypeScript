@@ -418,11 +418,11 @@ type NodeData interface {
 
 // NodeDefault
 
-type NodeDefault struct{
+type NodeDefault struct {
 	Node
 }
 
-func (node *NodeDefault) AsNode() *Node 							{ return &node.Node }
+func (node *NodeDefault) AsNode() *Node                             { return &node.Node }
 func (node *NodeDefault) ForEachChild(v Visitor) bool               { return false }
 func (node *NodeDefault) Symbol() *Symbol                           { return nil }
 func (node *NodeDefault) LocalSymbol() *Symbol                      { return nil }
