@@ -159,7 +159,7 @@ func (p *Parser) parseSourceFileWorker() *SourceFile {
 		p.contextFlags |= NodeFlagsAmbient
 	}
 	pos := p.nodePos()
-	statements := parseList(p, PCSourceElements, p.parseStatement)
+	statements := p.parseList(PCSourceElements, (*Parser).parseStatement)
 	node := p.factory.NewSourceFile(p.sourceText, p.fileName, statements)
 	p.finishNode(node, pos)
 	result := node.AsSourceFile()
@@ -169,13 +169,13 @@ func (p *Parser) parseSourceFileWorker() *SourceFile {
 	return result
 }
 
-func parseList(p *Parser, kind ParsingContext, parseElement func() *Node) []*Node {
+func (p *Parser) parseList(kind ParsingContext, parseElement func(p *Parser) *Node) []*Node {
 	saveParsingContexts := p.parsingContexts
 	p.parsingContexts |= 1 << kind
 	list := []*Node{}
 	for !p.isListTerminator(kind) {
 		if p.isListElement(kind, false /*inErrorRecovery*/) {
-			list = append(list, parseElement())
+			list = append(list, parseElement(p))
 			continue
 		}
 		if p.abortParsingListOrMoveToNextToken(kind) {
@@ -187,14 +187,14 @@ func parseList(p *Parser, kind ParsingContext, parseElement func() *Node) []*Nod
 }
 
 // Return a non-nil (but possibly empty) slice if parsing was successful, or nil if parseElement returned nil
-func parseDelimitedList(p *Parser, kind ParsingContext, parseElement func() *Node) []*Node {
+func (p *Parser) parseDelimitedList(kind ParsingContext, parseElement func(p *Parser) *Node) []*Node {
 	saveParsingContexts := p.parsingContexts
 	p.parsingContexts |= 1 << kind
 	list := []*Node{}
 	for {
 		if p.isListElement(kind, false /*inErrorRecovery*/) {
 			startPos := p.nodePos()
-			element := parseElement()
+			element := parseElement(p)
 			if element == nil {
 				p.parsingContexts = saveParsingContexts
 				// Return nil list to indicate parseElement failed
@@ -245,9 +245,9 @@ func parseDelimitedList(p *Parser, kind ParsingContext, parseElement func() *Nod
 
 // Return a non-nil (but possibly empty) slice if parsing was successful, or nil if opening token wasn't found
 // or parseElement returned nil
-func parseBracketedList(p *Parser, kind ParsingContext, parseElement func() *Node, open SyntaxKind, close SyntaxKind) []*Node {
+func (p *Parser) parseBracketedList(kind ParsingContext, parseElement func(p *Parser) *Node, open SyntaxKind, close SyntaxKind) []*Node {
 	if p.parseExpected(open) {
-		result := parseDelimitedList(p, kind, parseElement)
+		result := p.parseDelimitedList(kind, parseElement)
 		p.parseExpected(close)
 		return result
 	}
@@ -685,7 +685,7 @@ func (p *Parser) parseBlock(ignoreMissingOpenBrace bool, diagnosticMessage *diag
 	var statements []*Statement
 	if openBraceParsed || ignoreMissingOpenBrace {
 		multiline = p.hasPrecedingLineBreak()
-		statements = parseList(p, PCBlockStatements, p.parseStatement)
+		statements = p.parseList(PCBlockStatements, (*Parser).parseStatement)
 		p.parseExpectedMatchingBrackets(SyntaxKindOpenBraceToken, SyntaxKindCloseBraceToken, openBraceParsed, openBracePosition)
 		if p.token == SyntaxKindEqualsToken {
 			p.parseErrorAtCurrentToken(diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_whole_assignment_in_parentheses)
@@ -772,13 +772,13 @@ func (p *Parser) parseForOrForInOrForOfStatement() *Node {
 			p.token == SyntaxKindAwaitKeyword && p.lookAhead(p.nextIsUsingKeywordThenBindingIdentifierOrStartOfObjectDestructuringOnSameLine) {
 			initializer = p.parseVariableDeclarationList(true /*inForStatementInitializer*/)
 		} else {
-			initializer = doInContext(p, NodeFlagsDisallowInContext, true, p.parseExpression)
+			initializer = doInContext(p, NodeFlagsDisallowInContext, true, (*Parser).parseExpression)
 		}
 	}
 	var result *Statement
 	switch {
 	case awaitToken != nil && p.parseExpected(SyntaxKindOfKeyword) || awaitToken == nil && p.parseOptional(SyntaxKindOfKeyword):
-		expression := doInContext(p, NodeFlagsDisallowInContext, false, p.parseAssignmentExpressionOrHigher)
+		expression := doInContext(p, NodeFlagsDisallowInContext, false, (*Parser).parseAssignmentExpressionOrHigher)
 		p.parseExpected(SyntaxKindCloseParenToken)
 		result = p.factory.NewForInOrOfStatement(SyntaxKindForOfStatement, awaitToken, initializer, expression, p.parseStatement())
 	case p.parseOptional(SyntaxKindInKeyword):
@@ -854,7 +854,7 @@ func (p *Parser) parseWithStatement() *Node {
 	openParenParsed := p.parseExpected(SyntaxKindOpenParenToken)
 	expression := p.parseExpressionAllowIn()
 	p.parseExpectedMatchingBrackets(SyntaxKindOpenParenToken, SyntaxKindCloseParenToken, openParenParsed, openParenPosition)
-	statement := doInContext(p, NodeFlagsInWithStatement, true, p.parseStatement)
+	statement := doInContext(p, NodeFlagsInWithStatement, true, (*Parser).parseStatement)
 	result := p.factory.NewWithStatement(expression, statement)
 	p.finishNode(result, pos)
 	return result
@@ -866,7 +866,7 @@ func (p *Parser) parseCaseClause() *Node {
 	p.parseExpected(SyntaxKindCaseKeyword)
 	expression := p.parseExpressionAllowIn()
 	p.parseExpected(SyntaxKindColonToken)
-	statements := parseList(p, PCSwitchClauseStatements, p.parseStatement)
+	statements := p.parseList(PCSwitchClauseStatements, (*Parser).parseStatement)
 	result := p.factory.NewCaseOrDefaultClause(SyntaxKindCaseClause, expression, statements)
 	p.finishNode(result, pos)
 	return result
@@ -877,7 +877,7 @@ func (p *Parser) parseDefaultClause() *Node {
 	//const hasJSDoc = hasPrecedingJSDocComment();
 	p.parseExpected(SyntaxKindDefaultKeyword)
 	p.parseExpected(SyntaxKindColonToken)
-	statements := parseList(p, PCSwitchClauseStatements, p.parseStatement)
+	statements := p.parseList(PCSwitchClauseStatements, (*Parser).parseStatement)
 	result := p.factory.NewCaseOrDefaultClause(SyntaxKindDefaultClause, nil /*expression*/, statements)
 	p.finishNode(result, pos)
 	return result
@@ -893,7 +893,7 @@ func (p *Parser) parseCaseOrDefaultClause() *Node {
 func (p *Parser) parseCaseBlock() *Node {
 	pos := p.nodePos()
 	p.parseExpected(SyntaxKindOpenBraceToken)
-	clauses := parseList(p, PCSwitchClauses, p.parseCaseOrDefaultClause)
+	clauses := p.parseList(PCSwitchClauses, (*Parser).parseCaseOrDefaultClause)
 	p.parseExpected(SyntaxKindCloseBraceToken)
 	result := p.factory.NewCaseBlock(clauses)
 	p.finishNode(result, pos)
@@ -1049,7 +1049,7 @@ func (p *Parser) parseVariableDeclarationList(inForStatementInitializer bool) *N
 	} else {
 		saveContextFlags := p.contextFlags
 		p.setContextFlags(NodeFlagsDisallowInContext, inForStatementInitializer)
-		declarations = parseDelimitedList(p, PCVariableDeclarations, ifElse(inForStatementInitializer, p.parseVariableDeclaration, p.parseVariableDeclarationAllowExclamation))
+		declarations = p.parseDelimitedList(PCVariableDeclarations, ifElse(inForStatementInitializer, (*Parser).parseVariableDeclaration, (*Parser).parseVariableDeclarationAllowExclamation))
 		p.contextFlags = saveContextFlags
 	}
 	result := p.factory.NewVariableDeclarationList(flags, declarations)
@@ -1111,7 +1111,7 @@ func (p *Parser) parseArrayBindingPattern() *Node {
 	p.parseExpected(SyntaxKindOpenBracketToken)
 	saveContextFlags := p.contextFlags
 	p.setContextFlags(NodeFlagsDisallowInContext, false)
-	elements := parseDelimitedList(p, PCArrayBindingElements, p.parseArrayBindingElement)
+	elements := p.parseDelimitedList(PCArrayBindingElements, (*Parser).parseArrayBindingElement)
 	p.contextFlags = saveContextFlags
 	p.parseExpected(SyntaxKindCloseBracketToken)
 	result := p.factory.NewBindingPattern(SyntaxKindArrayBindingPattern, elements)
@@ -1140,7 +1140,7 @@ func (p *Parser) parseObjectBindingPattern() *Node {
 	p.parseExpected(SyntaxKindOpenBraceToken)
 	saveContextFlags := p.contextFlags
 	p.setContextFlags(NodeFlagsDisallowInContext, false)
-	elements := parseDelimitedList(p, PCObjectBindingElements, p.parseObjectBindingElement)
+	elements := p.parseDelimitedList(PCObjectBindingElements, (*Parser).parseObjectBindingElement)
 	p.contextFlags = saveContextFlags
 	p.parseExpected(SyntaxKindCloseBraceToken)
 	result := p.factory.NewBindingPattern(SyntaxKindObjectBindingPattern, elements)
@@ -1254,7 +1254,7 @@ func (p *Parser) parseClassDeclarationOrExpression(pos int, hasJSDoc bool, modif
 	if p.parseExpected(SyntaxKindOpenBraceToken) {
 		// ClassTail[Yield,Await] : (Modified) See 14.5
 		//      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
-		members = parseList(p, PCClassMembers, p.parseClassElement)
+		members = p.parseList(PCClassMembers, (*Parser).parseClassElement)
 		p.parseExpected(SyntaxKindCloseBraceToken)
 	}
 	p.contextFlags = saveContextFlags
@@ -1297,7 +1297,7 @@ func (p *Parser) parseHeritageClauses() []*Node {
 	// ClassTail[Yield,Await] : (Modified) See 14.5
 	//      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
 	if p.isHeritageClause() {
-		return parseList(p, PCHeritageClauses, p.parseHeritageClause)
+		return p.parseList(PCHeritageClauses, (*Parser).parseHeritageClause)
 	}
 	return []*Node{}
 }
@@ -1306,7 +1306,7 @@ func (p *Parser) parseHeritageClause() *Node {
 	pos := p.nodePos()
 	kind := p.token
 	p.nextToken()
-	types := parseDelimitedList(p, PCHeritageClauseElement, p.parseExpressionWithTypeArguments)
+	types := p.parseDelimitedList(PCHeritageClauseElement, (*Parser).parseExpressionWithTypeArguments)
 	result := p.factory.NewHeritageClause(kind, types)
 	p.finishNode(result, pos)
 	return result
@@ -1452,7 +1452,7 @@ func (p *Parser) parsePropertyDeclaration(pos int, hasJSDoc bool, modifiers *Nod
 		postfixToken = p.parseOptionalToken(SyntaxKindExclamationToken)
 	}
 	typeNode := p.parseTypeAnnotation()
-	initializer := doInContext(p, NodeFlagsYieldContext|NodeFlagsAwaitContext|NodeFlagsDisallowInContext, false, p.parseInitializer)
+	initializer := doInContext(p, NodeFlagsYieldContext|NodeFlagsAwaitContext|NodeFlagsDisallowInContext, false, (*Parser).parseInitializer)
 	p.parseSemicolonAfterPropertyName(name, typeNode, initializer)
 	result := p.factory.NewPropertyDeclaration(modifiers, name, postfixToken, typeNode, initializer)
 	p.finishNode(result, pos)
@@ -1595,7 +1595,7 @@ func (p *Parser) parseEnumMember() *Node {
 	pos := p.nodePos()
 	// hasJSDoc := p.hasPrecedingJSDocComment()
 	name := p.parsePropertyName()
-	initializer := doInContext(p, NodeFlagsDisallowInContext, false, p.parseInitializer)
+	initializer := doInContext(p, NodeFlagsDisallowInContext, false, (*Parser).parseInitializer)
 	result := p.factory.NewEnumMember(name, initializer)
 	p.finishNode(result, pos)
 	return result
@@ -1608,7 +1608,7 @@ func (p *Parser) parseEnumDeclaration(pos int, hasJSDoc bool, modifiers *Node) *
 	if p.parseExpected(SyntaxKindOpenBraceToken) {
 		saveContextFlags := p.contextFlags
 		p.setContextFlags(NodeFlagsYieldContext|NodeFlagsAwaitContext, false)
-		members = parseDelimitedList(p, PCEnumMembers, p.parseEnumMember)
+		members = p.parseDelimitedList(PCEnumMembers, (*Parser).parseEnumMember)
 		p.contextFlags = saveContextFlags
 		p.parseExpected(SyntaxKindCloseBraceToken)
 	}
@@ -1662,7 +1662,7 @@ func (p *Parser) parseModuleBlock() *Node {
 	pos := p.nodePos()
 	var statements []*Statement
 	if p.parseExpected(SyntaxKindOpenBraceToken) {
-		statements = parseList(p, PCBlockStatements, p.parseStatement)
+		statements = p.parseList(PCBlockStatements, (*Parser).parseStatement)
 		p.parseExpected(SyntaxKindCloseBraceToken)
 	}
 	result := p.factory.NewModuleBlock(statements)
@@ -1832,7 +1832,7 @@ func (p *Parser) parseNamedImports() *Node {
 	//  { }
 	//  { ImportsList }
 	//  { ImportsList, }
-	imports := parseBracketedList(p, PCImportOrExportSpecifiers, p.parseImportSpecifier, SyntaxKindOpenBraceToken, SyntaxKindCloseBraceToken)
+	imports := p.parseBracketedList(PCImportOrExportSpecifiers, (*Parser).parseImportSpecifier, SyntaxKindOpenBraceToken, SyntaxKindCloseBraceToken)
 	result := p.factory.NewNamedImports(imports)
 	p.finishNode(result, pos)
 	return result
@@ -2017,7 +2017,7 @@ func (p *Parser) parseNamedExports() *Node {
 	//  { }
 	//  { ImportsList }
 	//  { ImportsList, }
-	exports := parseBracketedList(p, PCImportOrExportSpecifiers, p.parseExportSpecifier, SyntaxKindOpenBraceToken, SyntaxKindCloseBraceToken)
+	exports := p.parseBracketedList(PCImportOrExportSpecifiers, (*Parser).parseExportSpecifier, SyntaxKindOpenBraceToken, SyntaxKindCloseBraceToken)
 	result := p.factory.NewNamedExports(exports)
 	p.finishNode(result, pos)
 	return result
@@ -2044,11 +2044,11 @@ func (p *Parser) parseType() *TypeNode {
 		typeNode = p.parseUnionTypeOrHigher()
 		if !p.inDisallowConditionalTypesContext() && !p.hasPrecedingLineBreak() && p.parseOptional(SyntaxKindExtendsKeyword) {
 			// The type following 'extends' is not permitted to be another conditional type
-			extendsType := doInContext(p, NodeFlagsDisallowConditionalTypesContext, true, p.parseType)
+			extendsType := doInContext(p, NodeFlagsDisallowConditionalTypesContext, true, (*Parser).parseType)
 			p.parseExpected(SyntaxKindQuestionToken)
-			trueType := doInContext(p, NodeFlagsDisallowConditionalTypesContext, false, p.parseType)
+			trueType := doInContext(p, NodeFlagsDisallowConditionalTypesContext, false, (*Parser).parseType)
 			p.parseExpected(SyntaxKindColonToken)
-			falseType := doInContext(p, NodeFlagsDisallowConditionalTypesContext, false, p.parseType)
+			falseType := doInContext(p, NodeFlagsDisallowConditionalTypesContext, false, (*Parser).parseType)
 			conditionalType := p.factory.NewConditionalTypeNode(typeNode, extendsType, trueType, falseType)
 			p.finishNode(conditionalType, pos)
 			typeNode = conditionalType
@@ -2059,14 +2059,14 @@ func (p *Parser) parseType() *TypeNode {
 }
 
 func (p *Parser) parseUnionTypeOrHigher() *TypeNode {
-	return p.parseUnionOrIntersectionType(SyntaxKindBarToken, p.parseIntersectionTypeOrHigher)
+	return p.parseUnionOrIntersectionType(SyntaxKindBarToken, (*Parser).parseIntersectionTypeOrHigher)
 }
 
 func (p *Parser) parseIntersectionTypeOrHigher() *TypeNode {
-	return p.parseUnionOrIntersectionType(SyntaxKindAmpersandToken, p.parseTypeOperatorOrHigher)
+	return p.parseUnionOrIntersectionType(SyntaxKindAmpersandToken, (*Parser).parseTypeOperatorOrHigher)
 }
 
-func (p *Parser) parseUnionOrIntersectionType(operator SyntaxKind, parseConstituentType func() *TypeNode) *TypeNode {
+func (p *Parser) parseUnionOrIntersectionType(operator SyntaxKind, parseConstituentType func(p *Parser) *TypeNode) *TypeNode {
 	pos := p.nodePos()
 	isUnionType := operator == SyntaxKindBarToken
 	hasLeadingOperator := p.parseOptional(operator)
@@ -2074,7 +2074,7 @@ func (p *Parser) parseUnionOrIntersectionType(operator SyntaxKind, parseConstitu
 	if hasLeadingOperator {
 		typeNode = p.parseFunctionOrConstructorTypeToError(isUnionType, parseConstituentType)
 	} else {
-		typeNode = parseConstituentType()
+		typeNode = parseConstituentType(p)
 	}
 	if p.token == operator || hasLeadingOperator {
 		types := []*TypeNode{typeNode}
@@ -2106,7 +2106,7 @@ func (p *Parser) parseTypeOperatorOrHigher() *TypeNode {
 	case SyntaxKindInferKeyword:
 		return p.parseInferType()
 	}
-	return doInContext(p, NodeFlagsDisallowConditionalTypesContext, false, p.parsePostfixTypeOrHigher)
+	return doInContext(p, NodeFlagsDisallowConditionalTypesContext, false, (*Parser).parsePostfixTypeOrHigher)
 }
 
 func (p *Parser) parseTypeOperator(operator SyntaxKind) *Node {
@@ -2137,7 +2137,7 @@ func (p *Parser) parseTypeParameterOfInferType() *Node {
 func (p *Parser) tryParseConstraintOfInferType() *Node {
 	state := p.mark()
 	if p.parseOptional(SyntaxKindExtendsKeyword) {
-		constraint := doInContext(p, NodeFlagsDisallowConditionalTypesContext, true, p.parseType)
+		constraint := doInContext(p, NodeFlagsDisallowConditionalTypesContext, true, (*Parser).parseType)
 		if p.inDisallowConditionalTypesContext() || p.token != SyntaxKindQuestionToken {
 			return constraint
 		}
@@ -2429,7 +2429,7 @@ func (p *Parser) parseTypeArgumentsOfTypeReference() *Node {
 func (p *Parser) parseTypeArguments() *Node {
 	if p.token == SyntaxKindLessThanToken {
 		pos := p.nodePos()
-		typeArguments := parseBracketedList(p, PCTypeArguments, p.parseType, SyntaxKindLessThanToken, SyntaxKindGreaterThanToken)
+		typeArguments := p.parseBracketedList(PCTypeArguments, (*Parser).parseType, SyntaxKindLessThanToken, SyntaxKindGreaterThanToken)
 		if typeArguments != nil {
 			result := p.factory.NewTypeArgumentList(typeArguments)
 			p.finishNode(result, pos)
@@ -2513,7 +2513,7 @@ func (p *Parser) parseImportAttributes(token SyntaxKind, skipKeyword bool) *Node
 	openBracePosition := p.scanner.TokenStart()
 	if p.parseExpected(SyntaxKindOpenBraceToken) {
 		multiLine = p.hasPrecedingLineBreak()
-		elements = parseDelimitedList(p, PCImportAttributes, p.parseImportAttribute)
+		elements = p.parseDelimitedList(PCImportAttributes, (*Parser).parseImportAttribute)
 		if !p.parseExpected(SyntaxKindCloseBraceToken) {
 			if len(p.diagnostics) != 0 {
 				lastDiagnostic := p.diagnostics[len(p.diagnostics)-1]
@@ -2580,7 +2580,7 @@ func (p *Parser) parseMappedType() *Node {
 	}
 	typeNode := p.parseTypeAnnotation()
 	p.parseSemicolon()
-	members := parseList(p, PCTypeMembers, p.parseTypeMember)
+	members := p.parseList(PCTypeMembers, (*Parser).parseTypeMember)
 	p.parseExpected(SyntaxKindCloseBraceToken)
 	result := p.factory.NewMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, typeNode, members)
 	p.finishNode(result, pos)
@@ -2647,7 +2647,7 @@ func (p *Parser) parseSignatureMember(kind SyntaxKind) *Node {
 func (p *Parser) parseTypeParameters() *Node {
 	if p.token == SyntaxKindLessThanToken {
 		pos := p.nodePos()
-		typeParameters := parseBracketedList(p, PCTypeParameters, p.parseTypeParameter, SyntaxKindLessThanToken, SyntaxKindGreaterThanToken)
+		typeParameters := p.parseBracketedList(PCTypeParameters, (*Parser).parseTypeParameter, SyntaxKindLessThanToken, SyntaxKindGreaterThanToken)
 		if typeParameters != nil {
 			result := p.factory.NewTypeParameterList(typeParameters)
 			p.finishNode(result, pos)
@@ -2733,7 +2733,7 @@ func (p *Parser) parseParametersWorker(flags SignatureFlags, allowAmbiguity bool
 	p.setContextFlags(NodeFlagsAwaitContext, flags&SignatureFlagsAwait != 0)
 	// const parameters = flags & SignatureFlags.JSDoc ?
 	// 	parseDelimitedList(ParsingContext.JSDocParameters, parseJSDocParameter) :
-	parameters := parseDelimitedList(p, PCParameters, func() *Node {
+	parameters := p.parseDelimitedList(PCParameters, func(p *Parser) *Node {
 		return p.parseParameterWithOptions(inAwaitContext, allowAmbiguity)
 	})
 	p.contextFlags = saveContextFlags
@@ -2811,7 +2811,7 @@ func (p *Parser) parseNameOfParameter(modifiers *Node) *Node {
 
 func (p *Parser) parseReturnType(returnToken SyntaxKind, isType bool) *TypeNode {
 	if p.shouldParseReturnType(returnToken, isType) {
-		return doInContext(p, NodeFlagsDisallowConditionalTypesContext, false, p.parseTypeOrTypePredicate)
+		return doInContext(p, NodeFlagsDisallowConditionalTypesContext, false, (*Parser).parseTypeOrTypePredicate)
 	}
 	return nil
 }
@@ -2990,7 +2990,7 @@ func (p *Parser) nextIsUnambiguouslyIndexSignature() bool {
 }
 
 func (p *Parser) parseIndexSignatureDeclaration(pos int, hasJSDoc bool, modifiers *Node) *Node {
-	parameters := parseBracketedList(p, PCParameters, p.parseParameter, SyntaxKindOpenBracketToken, SyntaxKindCloseBracketToken)
+	parameters := p.parseBracketedList(PCParameters, (*Parser).parseParameter, SyntaxKindOpenBracketToken, SyntaxKindCloseBracketToken)
 	typeNode := p.parseTypeAnnotation()
 	p.parseTypeMemberSemicolon()
 	result := p.factory.NewIndexSignatureDeclaration(modifiers, parameters, typeNode)
@@ -3037,7 +3037,7 @@ func (p *Parser) parseTypeLiteral() *Node {
 func (p *Parser) parseObjectTypeMembers() []*Node {
 	var members []*Node
 	if p.parseExpected(SyntaxKindOpenBraceToken) {
-		members = parseList(p, PCTypeMembers, p.parseTypeMember)
+		members = p.parseList(PCTypeMembers, (*Parser).parseTypeMember)
 		p.parseExpected(SyntaxKindCloseBraceToken)
 	}
 	return members
@@ -3045,7 +3045,7 @@ func (p *Parser) parseObjectTypeMembers() []*Node {
 
 func (p *Parser) parseTupleType() *Node {
 	pos := p.nodePos()
-	result := p.factory.NewTupleTypeNode(parseBracketedList(p, PCTupleElementTypes, p.parseTupleElementNameOrTupleElementType, SyntaxKindOpenBracketToken, SyntaxKindCloseBracketToken))
+	result := p.factory.NewTupleTypeNode(p.parseBracketedList(PCTupleElementTypes, (*Parser).parseTupleElementNameOrTupleElementType, SyntaxKindOpenBracketToken, SyntaxKindCloseBracketToken))
 	p.finishNode(result, pos)
 	return result
 }
@@ -3195,7 +3195,7 @@ func (p *Parser) parseTemplateMiddleOrTail() *Node {
 	return result
 }
 
-func (p *Parser) parseFunctionOrConstructorTypeToError(isInUnionType bool, parseConstituentType func() *TypeNode) *TypeNode {
+func (p *Parser) parseFunctionOrConstructorTypeToError(isInUnionType bool, parseConstituentType func(p *Parser) *TypeNode) *TypeNode {
 	// the function type and constructor type shorthand notation
 	// are not allowed directly in unions and intersections, but we'll
 	// try to parse them gracefully and issue a helpful message.
@@ -3214,7 +3214,7 @@ func (p *Parser) parseFunctionOrConstructorTypeToError(isInUnionType bool, parse
 		p.parseErrorAtRange(typeNode.loc, diagnostic)
 		return typeNode
 	}
-	return parseConstituentType()
+	return parseConstituentType(p)
 }
 
 func (p *Parser) isStartOfFunctionTypeOrConstructorType() bool {
@@ -3348,7 +3348,7 @@ func (p *Parser) parseModifiersWithOptions(allowDecorators bool, permitConstAsMo
 func (p *Parser) parseDecorator() *Node {
 	pos := p.nodePos()
 	p.parseExpected(SyntaxKindAtToken)
-	expression := doInContext(p, NodeFlagsDecoratorContext, true, p.parseDecoratorExpression)
+	expression := doInContext(p, NodeFlagsDecoratorContext, true, (*Parser).parseDecoratorExpression)
 	result := p.factory.NewDecorator(expression)
 	p.finishNode(result, pos)
 	return result
@@ -3517,7 +3517,7 @@ func (p *Parser) parseExpression() *Expression {
 }
 
 func (p *Parser) parseExpressionAllowIn() *Expression {
-	return doInContext(p, NodeFlagsDisallowInContext, false, p.parseExpression)
+	return doInContext(p, NodeFlagsDisallowInContext, false, (*Parser).parseExpression)
 }
 
 func (p *Parser) parseAssignmentExpressionOrHigher() *Expression {
@@ -4447,7 +4447,7 @@ func (p *Parser) parseJsxTagName() *Expression {
 
 func (p *Parser) parseJsxAttributes() *Node {
 	pos := p.nodePos()
-	result := p.factory.NewJsxAttributes(parseList(p, PCJsxAttributes, p.parseJsxAttribute))
+	result := p.factory.NewJsxAttributes(p.parseList(PCJsxAttributes, (*Parser).parseJsxAttribute))
 	p.finishNode(result, pos)
 	return result
 }
@@ -4717,7 +4717,7 @@ func (p *Parser) tryParseTypeArgumentsInExpression() *Node {
 	if p.contextFlags&NodeFlagsJavaScriptFile == 0 && p.reScanLessThanToken() == SyntaxKindLessThanToken {
 		pos := p.nodePos()
 		p.nextToken()
-		typeArguments := parseDelimitedList(p, PCTypeArguments, p.parseType)
+		typeArguments := p.parseDelimitedList(PCTypeArguments, (*Parser).parseType)
 		// If it doesn't have the closing `>` then it's definitely not an type argument list.
 		if p.reScanGreaterThanToken() == SyntaxKindGreaterThanToken {
 			p.nextToken()
@@ -4956,13 +4956,13 @@ func (p *Parser) parseCallExpressionRest(pos int, expression *Expression) *Expre
 
 func (p *Parser) parseArgumentList() []*Expression {
 	p.parseExpected(SyntaxKindOpenParenToken)
-	result := parseDelimitedList(p, PCArgumentExpressions, p.parseArgumentExpression)
+	result := p.parseDelimitedList(PCArgumentExpressions, (*Parser).parseArgumentExpression)
 	p.parseExpected(SyntaxKindCloseParenToken)
 	return result
 }
 
 func (p *Parser) parseArgumentExpression() *Expression {
-	return doInContext(p, NodeFlagsDisallowInContext|NodeFlagsDecoratorContext, false, p.parseArgumentOrArrayLiteralElement)
+	return doInContext(p, NodeFlagsDisallowInContext|NodeFlagsDecoratorContext, false, (*Parser).parseArgumentOrArrayLiteralElement)
 }
 
 func (p *Parser) parseArgumentOrArrayLiteralElement() *Expression {
@@ -5089,7 +5089,7 @@ func (p *Parser) parseArrayLiteralExpression() *Expression {
 	openBracketPosition := p.scanner.TokenStart()
 	openBracketParsed := p.parseExpected(SyntaxKindOpenBracketToken)
 	multiLine := p.hasPrecedingLineBreak()
-	elements := parseDelimitedList(p, PCArrayLiteralMembers, p.parseArgumentOrArrayLiteralElement)
+	elements := p.parseDelimitedList(PCArrayLiteralMembers, (*Parser).parseArgumentOrArrayLiteralElement)
 	p.parseExpectedMatchingBrackets(SyntaxKindOpenBracketToken, SyntaxKindCloseBracketToken, openBracketParsed, openBracketPosition)
 	result := p.factory.NewArrayLiteralExpression(elements, multiLine)
 	p.finishNode(result, pos)
@@ -5101,7 +5101,7 @@ func (p *Parser) parseObjectLiteralExpression() *Expression {
 	openBracePosition := p.scanner.TokenStart()
 	openBraceParsed := p.parseExpected(SyntaxKindOpenBraceToken)
 	multiLine := p.hasPrecedingLineBreak()
-	properties := parseDelimitedList(p, PCObjectLiteralMembers, p.parseObjectLiteralElement)
+	properties := p.parseDelimitedList(PCObjectLiteralMembers, (*Parser).parseObjectLiteralElement)
 	p.parseExpectedMatchingBrackets(SyntaxKindOpenBraceToken, SyntaxKindCloseBraceToken, openBraceParsed, openBracePosition)
 	result := p.factory.NewObjectLiteralExpression(properties, multiLine)
 	p.finishNode(result, pos)
@@ -5146,12 +5146,12 @@ func (p *Parser) parseObjectLiteralElement() *Node {
 	if isShorthandPropertyAssignment {
 		var initializer *Expression
 		if p.parseOptional(SyntaxKindEqualsToken) {
-			initializer = doInContext(p, NodeFlagsDisallowInContext, false, p.parseAssignmentExpressionOrHigher)
+			initializer = doInContext(p, NodeFlagsDisallowInContext, false, (*Parser).parseAssignmentExpressionOrHigher)
 		}
 		node = p.factory.NewShorthandPropertyAssignment(modifiers, name, postfixToken, initializer)
 	} else {
 		p.parseExpected(SyntaxKindColonToken)
-		initializer := doInContext(p, NodeFlagsDisallowInContext, false, p.parseAssignmentExpressionOrHigher)
+		initializer := doInContext(p, NodeFlagsDisallowInContext, false, (*Parser).parseAssignmentExpressionOrHigher)
 		node = p.factory.NewPropertyAssignment(modifiers, name, postfixToken, initializer)
 	}
 	p.finishNode(node, pos)
@@ -5177,11 +5177,11 @@ func (p *Parser) parseFunctionExpression() *Expression {
 	var name *Node
 	switch {
 	case isGenerator && isAsync:
-		name = doInContext(p, NodeFlagsYieldContext|NodeFlagsAwaitContext, true, p.parseOptionalBindingIdentifier)
+		name = doInContext(p, NodeFlagsYieldContext|NodeFlagsAwaitContext, true, (*Parser).parseOptionalBindingIdentifier)
 	case isGenerator:
-		name = doInContext(p, NodeFlagsYieldContext, true, p.parseOptionalBindingIdentifier)
+		name = doInContext(p, NodeFlagsYieldContext, true, (*Parser).parseOptionalBindingIdentifier)
 	case isAsync:
-		name = doInContext(p, NodeFlagsAwaitContext, true, p.parseOptionalBindingIdentifier)
+		name = doInContext(p, NodeFlagsAwaitContext, true, (*Parser).parseOptionalBindingIdentifier)
 	default:
 		name = p.parseOptionalBindingIdentifier()
 	}
@@ -5774,10 +5774,10 @@ func (p *Parser) setContextFlags(flags NodeFlags, value bool) {
 	}
 }
 
-func doInContext[T any](p *Parser, flags NodeFlags, value bool, f func() T) T {
+func doInContext[T any](p *Parser, flags NodeFlags, value bool, f func(p *Parser) T) T {
 	saveContextFlags := p.contextFlags
 	p.setContextFlags(flags, value)
-	result := f()
+	result := f(p)
 	p.contextFlags = saveContextFlags
 	return result
 }
