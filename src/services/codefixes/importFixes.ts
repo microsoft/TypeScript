@@ -280,7 +280,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
     }
 
     function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) {
-        const moduleSymbol = Debug.checkDefined(exportedSymbol.parent, "Expected exported symbol to have a parent");
+        const moduleSymbol = Debug.checkDefined(exportedSymbol.parent, "Expected exported symbol to have module symbol as parent");
         const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
         const checker = program.getTypeChecker();
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
@@ -322,7 +322,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
     }
 
     function addImportForModuleSymbol(symbolAlias: Symbol, isValidTypeOnlyUseSite: boolean, referenceImport: ImportOrRequireAliasDeclaration) {
-        // Adds import for module, will be aliased as symbolAlias.name
+        // Adds import for module, import alias will be symbolAlias.name
         const checker = program.getTypeChecker();
         const moduleSymbol = checker.getAliasedSymbol(symbolAlias);
         Debug.assert(moduleSymbol.flags & SymbolFlags.Module, "Expected symbol to be a module");
