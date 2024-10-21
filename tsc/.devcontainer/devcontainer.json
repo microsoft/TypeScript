@@ -1,0 +1,33 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/universal
+{
+    "name": "TypeScript Compiler Development",
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+
+    // Features to add to the dev container. More info: https://containers.dev/features.
+    // "features": {},
+
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+
+    // Use 'postCreateCommand' to run commands after the container is created.
+    "postCreateCommand": {
+        "Configure Node.js Build Tools": "sudo corepack enable npm; sudo npm install -g hereby; npm ci",
+        "Initialize Submodules": "git submodule update --init --recursive; cd _submodules/TypeScript; npm ci",
+        "Install pprof": "go install github.com/google/pprof@latest",
+        "Install Graphviz": "sudo apt update; sudo apt install graphviz"
+    },
+
+    // Configure tool-specific properties.
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dprint.dprint",
+                "golang.go"
+            ]
+        }
+    }
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    // "remoteUser": "root"
+}
