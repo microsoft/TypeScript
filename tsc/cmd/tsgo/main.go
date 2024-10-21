@@ -1,3 +1,4 @@
+// tsgo is a test bed for the Go port of TypeScript.
 package main
 
 import (
