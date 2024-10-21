@@ -40,7 +40,7 @@
     "exec": {
         "cwd": "${configDir}",
         "commands": [
-            { "command": "gofmt", "exts": ["go"] }
+            { "command": "gofmt -s", "exts": ["go"] }
         ]
     },
     "excludes": [
