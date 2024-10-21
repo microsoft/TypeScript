@@ -1910,25 +1910,31 @@ function nodeModuleNameResolverWorker(
         }
 
         if (!isExternalModuleNameRelative(moduleName)) {
-            let resolved: SearchResult<Resolved> | undefined;
             if (features & NodeResolutionFeatures.Imports && startsWith(moduleName, "#")) {
-                resolved = loadModuleFromImports(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
-            }
-            if (!resolved && features & NodeResolutionFeatures.SelfName) {
-                resolved = loadModuleFromSelfNameReference(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
-            }
-            if (!resolved) {
-                if (moduleName.includes(":")) {
-                    if (traceEnabled) {
-                        trace(host, Diagnostics.Skipping_module_0_that_looks_like_an_absolute_URI_target_file_types_Colon_1, moduleName, formatExtensions(extensions));
-                    }
-                    return undefined;
+                const resolved = loadModuleFromImports(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
+                if (resolved) {
+                    return resolved.value && { value: { resolved: resolved.value, isExternalLibraryImport: false } };
                 }
+            }
+
+            if (features & NodeResolutionFeatures.SelfName) {
+                const resolved = loadModuleFromSelfNameReference(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
+                if (resolved) {
+                    return resolved.value && { value: { resolved: resolved.value, isExternalLibraryImport: false } };
+                }
+            }
+
+            if (moduleName.includes(":")) {
                 if (traceEnabled) {
-                    trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_types_Colon_1, moduleName, formatExtensions(extensions));
+                    trace(host, Diagnostics.Skipping_module_0_that_looks_like_an_absolute_URI_target_file_types_Colon_1, moduleName, formatExtensions(extensions));
                 }
-                resolved = loadModuleFromNearestNodeModulesDirectory(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
+                return undefined;
             }
+
+            if (traceEnabled) {
+                trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_types_Colon_1, moduleName, formatExtensions(extensions));
+            }
+            let resolved = loadModuleFromNearestNodeModulesDirectory(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
             if (extensions & Extensions.Declaration) {
                 resolved ??= resolveFromTypeRoot(moduleName, state);
             }

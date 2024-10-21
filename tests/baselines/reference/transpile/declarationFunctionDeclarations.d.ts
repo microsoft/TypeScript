@@ -125,15 +125,15 @@ export {};
 
 
 //// [Diagnostics reported]
-fnDecl.ts(12,27): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
-fnDecl.ts(16,36): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
-fnDecl.ts(20,26): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
-fnDecl.ts(24,56): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
-fnDecl.ts(28,46): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
-fnDecl.ts(32,45): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
-fnDecl.ts(37,47): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
-fnDecl.ts(41,37): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
-fnDecl.ts(45,35): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
+fnDecl.ts(12,27): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
+fnDecl.ts(16,36): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
+fnDecl.ts(20,26): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
+fnDecl.ts(24,56): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
+fnDecl.ts(28,46): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
+fnDecl.ts(32,45): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
+fnDecl.ts(37,47): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
+fnDecl.ts(41,37): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
+fnDecl.ts(45,35): error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 
 
 ==== fnDecl.ts (9 errors) ====
@@ -150,42 +150,42 @@ fnDecl.ts(45,35): error TS9025: Declaration emit for this parameter requires imp
     export function fnDeclHasUndefined(p: T | undefined = [], rParam: string): void { };
     export function fnDeclBad(p: T = [], rParam: string): void { };
                               ~~~~~~~~~
-!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
+!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 !!! related TS9028 fnDecl.ts:12:27: Add a type annotation to the parameter p.
     
     export const fnExprOk1 = function (array: number[] = [], rParam: string): void { };
     export const fnExprOk2 = function (array: T | undefined = [], rParam: string): void { };
     export const fnExprBad = function (array: T = [], rParam: string): void { };
                                        ~~~~~~~~~~~~~
-!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
+!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 !!! related TS9028 fnDecl.ts:16:36: Add a type annotation to the parameter array.
     
     export const arrowOk1 = (array: number[] = [], rParam: string): void => { };
     export const arrowOk2 = (array: T | undefined = [], rParam: string): void => { };
     export const arrowBad = (array: T = [], rParam: string): void => { };
                              ~~~~~~~~~~~~~
-!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
+!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 !!! related TS9028 fnDecl.ts:20:26: Add a type annotation to the parameter array.
     
     export const inObjectLiteralFnExprOk1 = { o: function (array: number[] = [], rParam: string): void { } };
     export const inObjectLiteralFnExprOk2 = { o: function (array: T | undefined = [], rParam: string): void { } };
     export const inObjectLiteralFnExprBad = { o: function (array: T = [], rParam: string): void { } };
                                                            ~~~~~~~~~~~~~
-!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
+!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 !!! related TS9028 fnDecl.ts:24:56: Add a type annotation to the parameter array.
     
     export const inObjectLiteralArrowOk1 = { o: (array: number[] = [], rParam: string): void => { } };
     export const inObjectLiteralArrowOk2 = { o: (array: T | undefined = [], rParam: string): void => { } };
     export const inObjectLiteralArrowBad = { o: (array: T = [], rParam: string): void => { } };
                                                  ~~~~~~~~~~~~~
-!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
+!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 !!! related TS9028 fnDecl.ts:28:46: Add a type annotation to the parameter array.
     
     export const inObjectLiteralMethodOk1 = { o(array: number[] = [], rParam: string): void { } };
     export const inObjectLiteralMethodOk2 = { o(array: T | undefined = [], rParam: string): void { } };
     export const inObjectLiteralMethodBad = { o(array: T = [], rParam: string): void { } };
                                                 ~~~~~~~~~~~~~
-!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
+!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 !!! related TS9028 fnDecl.ts:32:45: Add a type annotation to the parameter array.
     
     
@@ -193,21 +193,21 @@ fnDecl.ts(45,35): error TS9025: Declaration emit for this parameter requires imp
     export class InClassFnExprOk2 { o = function (array: T | undefined = [], rParam: string): void { } };
     export class InClassFnExprBad { o = function (array: T = [], rParam: string): void { } };
                                                   ~~~~~~~~~~~~~
-!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
+!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 !!! related TS9028 fnDecl.ts:37:47: Add a type annotation to the parameter array.
     
     export class InClassArrowOk1 { o = (array: number[] = [], rParam: string): void => { } };
     export class InClassArrowOk2 { o = (array: T | undefined = [], rParam: string): void => { } };
     export class InClassArrowBad { o = (array: T = [], rParam: string): void => { } };
                                         ~~~~~~~~~~~~~
-!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
+!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 !!! related TS9028 fnDecl.ts:41:37: Add a type annotation to the parameter array.
     
     export class InClassMethodOk1 { o(array: number[] = [], rParam: string): void { } };
     export class InClassMethodOk2 { o(array: T | undefined = [], rParam: string): void { } };
     export class InClassMethodBad { o(array: T = [], rParam: string): void { } };
                                       ~~~~~~~~~~~~~
-!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.
+!!! error TS9025: Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.
 !!! related TS9028 fnDecl.ts:45:35: Add a type annotation to the parameter array.
     
     

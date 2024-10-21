@@ -6240,6 +6240,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 let annotationType = getTypeFromTypeNodeWithoutContext(existing);
+                if (isErrorType(annotationType)) {
+                    // allow "reusing" type nodes that resolve to error types
+                    // those can't truly be reused but it prevents cascading errors in isolatedDeclarations
+                    // for source with errors there is no guarantee to emit correct code anyway
+                    return true;
+                }
                 if (requiresAddingUndefined && annotationType) {
                     annotationType = getOptionalType(annotationType, !isParameter(node));
                 }
@@ -11999,7 +12005,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 getAnnotatedAccessorType(setter) ||
                 getAnnotatedAccessorType(accessor) ||
                 getter && getter.body && getReturnTypeFromBody(getter) ||
-                accessor && accessor.initializer && getWidenedTypeForVariableLikeDeclaration(accessor, /*reportErrors*/ true);
+                accessor && getWidenedTypeForVariableLikeDeclaration(accessor, /*reportErrors*/ true);
             if (!type) {
                 if (setter && !isPrivateWithinAmbient(setter)) {
                     errorOrSuggestion(noImplicitAny, setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
@@ -46768,6 +46774,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkInterfaceDeclaration(node: InterfaceDeclaration) {
         // Grammar checking
         if (!checkGrammarModifiers(node)) checkGrammarInterfaceDeclaration(node);
+        if (!allowBlockDeclarations(node.parent)) {
+            grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, "interface");
+        }
 
         checkTypeParameters(node.typeParameters);
         addLazyDiagnostic(() => {
@@ -46811,6 +46820,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Grammar checking
         checkGrammarModifiers(node);
         checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
+        if (!allowBlockDeclarations(node.parent)) {
+            grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, "type");
+        }
         checkExportsOnMergedDeclarations(node);
         checkTypeParameters(node.typeParameters);
         if (node.type.kind === SyntaxKind.IntrinsicKeyword) {
@@ -49681,7 +49693,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeNode = getNonlocalEffectiveTypeAnnotationNode(parameter);
         if (!typeNode) return false;
         const type = getTypeFromTypeNode(typeNode);
-        return containsUndefinedType(type);
+        // allow error type here to avoid confusing errors that the annotation has to contain undefined when it does in cases like this:
+        //
+        // export function fn(x?: Unresolved | undefined): void {}
+        return isErrorType(type) || containsUndefinedType(type);
     }
 
     function requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined) {
@@ -52042,7 +52057,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function allowLetAndConstDeclarations(parent: Node): boolean {
+    function allowBlockDeclarations(parent: Node): boolean {
         switch (parent.kind) {
             case SyntaxKind.IfStatement:
             case SyntaxKind.DoStatement:
@@ -52053,14 +52068,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ForOfStatement:
                 return false;
             case SyntaxKind.LabeledStatement:
-                return allowLetAndConstDeclarations(parent.parent);
+                return allowBlockDeclarations(parent.parent);
         }
 
         return true;
     }
 
     function checkGrammarForDisallowedBlockScopedVariableStatement(node: VariableStatement) {
-        if (!allowLetAndConstDeclarations(node.parent)) {
+        if (!allowBlockDeclarations(node.parent)) {
             const blockScopeKind = getCombinedNodeFlagsCached(node.declarationList) & NodeFlags.BlockScoped;
             if (blockScopeKind) {
                 const keyword = blockScopeKind === NodeFlags.Let ? "let" :

@@ -555,7 +555,7 @@ export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, h
     try {
         forEachExternalModuleToImportFrom(program, host, preferences, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
             if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
-            const seenExports = new Map<__String, true>();
+            const seenExports = new Set<__String>();
             const checker = program.getTypeChecker();
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker);
             // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
@@ -604,7 +604,11 @@ export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChec
     exportKind: ExportKind;
 } | undefined {
     const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
-    if (exportEquals !== moduleSymbol) return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
+    if (exportEquals !== moduleSymbol) {
+        const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, exportEquals);
+        if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
+        return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
+    }
     const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
     if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
 }
@@ -630,7 +634,7 @@ function getNamesForExportedSymbol(defaultExport: Symbol, checker: TypeChecker, 
 export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: TypeChecker, scriptTarget: ScriptTarget | undefined, cb: (name: string, capitalizedName?: string) => T | undefined): T | undefined {
     let chain: Symbol[] | undefined;
     let current: Symbol | undefined = defaultExport;
-    const seen = new Map<Symbol, true>();
+    const seen = new Set<Symbol>();
 
     while (current) {
         // The predecessor to this function also looked for a name on the `localSymbol`
