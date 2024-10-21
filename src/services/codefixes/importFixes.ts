@@ -80,10 +80,12 @@ import {
     ImportSpecifier,
     insertImports,
     InternalSymbolName,
+    isDefaultImport,
     isExternalModuleReference,
     isFullSourceFile,
     isIdentifier,
     isImportable,
+    isImportClause,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isImportSpecifier,
@@ -341,8 +343,10 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         addAsTypeOnly = addAsTypeOnly === AddAsTypeOnly.Allowed && isTypeOnlyImportDeclaration(referenceImport) ? AddAsTypeOnly.Required : AddAsTypeOnly.Allowed;
 
         // Copy the kind of import
-        const importKind = isNamespaceImport(referenceImport) ? ImportKind.Namespace : isImportSpecifier(referenceImport) ? ImportKind.Named : ImportKind.Default;
-
+        const importKind = isImportDeclaration(referenceImport) ?
+            isDefaultImport(referenceImport) ? ImportKind.Default : ImportKind.Namespace :
+            isImportSpecifier(referenceImport) ? ImportKind.Named :
+            isImportClause(referenceImport) && !!referenceImport.name ? ImportKind.Default : ImportKind.Namespace;
         const fix: FixAddNewImport = {
             kind: ImportFixKind.AddNew,
             moduleSpecifierKind: moduleSpecifierResult.kind,

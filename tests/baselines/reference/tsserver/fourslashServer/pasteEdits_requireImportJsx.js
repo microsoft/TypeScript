@@ -11,22 +11,27 @@ lib.decorators.d.ts-Text
 //// [/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts]
 lib.decorators.legacy.d.ts-Text
 
-//// [/home/src/workspaces/project/a.ts]
-export const abc = 10;
+//// [/home/src/workspaces/project/b.jsx]
+import React = require("./react");
 
-//// [/home/src/workspaces/project/b.ts]
-import { abc } from "./a";
+class MyComponent extends React.Component {
+    render() {
+        return <div />;
+    }
+}
 
-console.log(abc);
+//// [/home/src/workspaces/project/folder/c.jsx]
 
 
-console.log("abc");
-
-//// [/home/src/workspaces/project/folder/c.ts]
-
+//// [/home/src/workspaces/project/react.d.ts]
+export = React;
+export as namespace React;
+declare namespace React {
+    class Component {}
+}
 
 //// [/home/src/workspaces/project/tsconfig.json]
-{ "files": ["folder/c.ts", "a.ts", "b.ts"] }
+{ "files": ["folder/c.jsx", "react.d.ts", "b.jsx"] }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -34,18 +39,18 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/home/src/workspaces/project/folder/c.ts"
+        "file": "/home/src/workspaces/project/folder/c.jsx"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/folder/c.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/folder/c.jsx ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/tsconfig.json, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  "rootNames": [
-  "/home/src/workspaces/project/folder/c.ts",
-  "/home/src/workspaces/project/a.ts",
-  "/home/src/workspaces/project/b.ts"
+  "/home/src/workspaces/project/folder/c.jsx",
+  "/home/src/workspaces/project/react.d.ts",
+  "/home/src/workspaces/project/b.jsx"
  ],
  "options": {
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
@@ -58,12 +63,14 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/home/src/workspaces/project/tsconfig.json",
-        "reason": "Creating possible configured project for /home/src/workspaces/project/folder/c.ts to open"
+        "reason": "Creating possible configured project for /home/src/workspaces/project/folder/c.jsx to open"
       }
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/react.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b.jsx 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -81,9 +88,9 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/folder/c.ts SVC-1-0 ""
-	/home/src/workspaces/project/a.ts Text-1 "export const abc = 10;"
-	/home/src/workspaces/project/b.ts Text-1 "import { abc } from \"./a\";\n\nconsole.log(abc);\n\n\nconsole.log(\"abc\");"
+	/home/src/workspaces/project/folder/c.jsx SVC-1-0 ""
+	/home/src/workspaces/project/react.d.ts Text-1 "export = React;\nexport as namespace React;\ndeclare namespace React {\n    class Component {}\n}"
+	/home/src/workspaces/project/b.jsx Text-1 "import React = require(\"./react\");\n\nclass MyComponent extends React.Component {\n    render() {\n        return <div />;\n    }\n}"
 
 
 	../../tslibs/TS/Lib/lib.d.ts
@@ -92,12 +99,12 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Library referenced via 'decorators' from file '../../tslibs/TS/Lib/lib.d.ts'
 	../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
 	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
-	folder/c.ts
+	folder/c.jsx
 	  Part of 'files' list in tsconfig.json
-	a.ts
+	react.d.ts
 	  Part of 'files' list in tsconfig.json
-	  Imported via "./a" from file 'b.ts'
-	b.ts
+	  Imported via "./react" from file 'b.jsx'
+	b.jsx
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -116,7 +123,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/home/src/workspaces/project/folder/c.ts",
+        "triggerFile": "/home/src/workspaces/project/folder/c.jsx",
         "configFile": "/home/src/workspaces/project/tsconfig.json",
         "diagnostics": []
       }
@@ -126,7 +133,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/folder/c.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/folder/c.jsx ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -147,12 +154,16 @@ watchedFiles::
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
-/home/src/workspaces/project/a.ts: *new*
+/home/src/workspaces/project/b.jsx: *new*
   {"pollingInterval":500}
-/home/src/workspaces/project/b.ts: *new*
+/home/src/workspaces/project/react.d.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
+
+watchedDirectories::
+/home/src/workspaces/project: *new*
+  {}
 
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules: *new*
@@ -183,18 +194,18 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/a.ts *new*
+/home/src/workspaces/project/b.jsx *new*
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/b.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/folder/c.ts (Open) *new*
+/home/src/workspaces/project/folder/c.jsx (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/react.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -242,9 +253,9 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request",
       "arguments": {
-        "file": "/home/src/workspaces/project/folder/c.ts",
+        "file": "/home/src/workspaces/project/folder/c.jsx",
         "pastedText": [
-          "console.log(abc);"
+          "class MyComponent extends React.Component {\n    render() {\n        return <div />;\n    }\n}"
         ],
         "pasteLocations": [
           {
@@ -259,7 +270,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ],
         "copiedFrom": {
-          "file": "/home/src/workspaces/project/b.ts",
+          "file": "/home/src/workspaces/project/b.jsx",
           "spans": [
             {
               "start": {
@@ -267,8 +278,8 @@ Info seq  [hh:mm:ss:mss] request:
                 "offset": 1
               },
               "end": {
-                "line": 5,
-                "offset": 1
+                "line": 7,
+                "offset": 2
               }
             }
           ]
@@ -283,13 +294,11 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/folder/c.ts SVC-1-1 "console.log(abc);"
-	/home/src/workspaces/project/a.ts Text-1 "export const abc = 10;"
-	/home/src/workspaces/project/b.ts Text-1 "import { abc } from \"./a\";\n\nconsole.log(abc);\n\n\nconsole.log(\"abc\");"
+	/home/src/workspaces/project/folder/c.jsx SVC-1-1 "class MyComponent extends React.Component {\n    render() {\n        return <div />;\n    }\n}"
+	/home/src/workspaces/project/react.d.ts Text-1 "export = React;\nexport as namespace React;\ndeclare namespace React {\n    class Component {}\n}"
+	/home/src/workspaces/project/b.jsx Text-1 "import React = require(\"./react\");\n\nclass MyComponent extends React.Component {\n    render() {\n        return <div />;\n    }\n}"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
-Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -303,7 +312,7 @@ Info seq  [hh:mm:ss:mss] response:
       "body": {
         "edits": [
           {
-            "fileName": "/home/src/workspaces/project/folder/c.ts",
+            "fileName": "/home/src/workspaces/project/folder/c.jsx",
             "textChanges": [
               {
                 "start": {
@@ -314,7 +323,7 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "import { abc } from \"../a\";\n\n"
+                "newText": "const React = require(\"../react\");\n\n"
               },
               {
                 "start": {
@@ -325,7 +334,7 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "console.log(abc);"
+                "newText": "class MyComponent extends React.Component {\n    render() {\n        return <div />;\n    }\n}"
               }
             ]
           }
@@ -354,15 +363,15 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/a.ts
+/home/src/workspaces/project/b.jsx
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/b.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/folder/c.ts (Open) *changed*
+/home/src/workspaces/project/folder/c.jsx (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
+/home/src/workspaces/project/react.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/workspaces/project/tsconfig.json
