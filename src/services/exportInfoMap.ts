@@ -73,6 +73,7 @@ export const enum ExportKind {
     Named,
     Default,
     ExportEquals,
+    Module,
     UMD,
 }
 
@@ -557,6 +558,18 @@ export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, h
             if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
             const seenExports = new Set<__String>();
             const checker = program.getTypeChecker();
+            if (isImportableSymbol(moduleSymbol, checker)) {
+                cache.add(
+                    importingFile.path,
+                    moduleSymbol,
+                    moduleSymbol.escapedName,
+                    moduleSymbol,
+                    moduleFile,
+                    ExportKind.Module,
+                    isFromPackageJson,
+                    checker,
+                );
+            }
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker);
             // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
             // can cause it to happen: see 'completionsImport_mergedReExport.ts'

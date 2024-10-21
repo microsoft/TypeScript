@@ -81,6 +81,7 @@ import {
     insertImports,
     InternalSymbolName,
     isExternalModuleReference,
+    isExternalModuleSymbol,
     isFullSourceFile,
     isIdentifier,
     isImportable,
@@ -276,7 +277,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
     }
 
     function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) {
-        const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
+        const moduleSymbol = Debug.checkDefined(isExternalModuleSymbol(exportedSymbol) ? exportedSymbol : exportedSymbol.parent);
         const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
         const checker = program.getTypeChecker();
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
@@ -1447,6 +1448,8 @@ export function getImportKind(importingFile: SourceFile | FutureSourceFile, expo
             return ImportKind.Named;
         case ExportKind.Default:
             return ImportKind.Default;
+        case ExportKind.Module:
+            return ImportKind.Namespace;
         case ExportKind.ExportEquals:
             return getExportEqualsImportKind(importingFile, program.getCompilerOptions(), !!forceImportKeyword);
         case ExportKind.UMD:

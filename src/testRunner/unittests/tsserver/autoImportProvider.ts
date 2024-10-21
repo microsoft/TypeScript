@@ -323,9 +323,12 @@ describe("unittests:: tsserver:: autoImportProvider::", () => {
             assert.lengthOf(info, 1);
             seenSymbolNames.add(symbolName);
         });
-        assert.equal(seenSymbolNames.size, 2);
+        assert.equal(seenSymbolNames.size, 5);
         assert.ok(seenSymbolNames.has("Stats"));
         assert.ok(seenSymbolNames.has("Volume"));
+        assert.ok(seenSymbolNames.has('"/user/username/projects/project/index"'));
+        assert.ok(seenSymbolNames.has('"/user/username/projects/project/node_modules/@types/node/index"'));
+        assert.ok(seenSymbolNames.has('"/user/username/projects/project/node_modules/memfs/lib/index"'));
         baselineTsserverLogs("autoImportProvider", "Shared source files between AutoImportProvider and main program", session);
     });
 });
