@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/typeInterfaceDeclarationsInBlockStatements1.ts] ////
+
+=== typeInterfaceDeclarationsInBlockStatements1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60175
+
+function f1() {
+>f1 : Symbol(f1, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 0, 0))
+
+  if (true) type s = string;
+>s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 3, 11))
+
+  console.log("" as s);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 3, 11))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 5, 1))
+
+  if (true) {
+    type s = string;
+>s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 8, 13))
+  }
+  console.log("" as s);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>s : Symbol(s)
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 12, 1))
+
+  if (true)
+    interface s {
+>s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 15, 11))
+
+      length: number;
+>length : Symbol(s.length, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 16, 17))
+    }
+  console.log("" as s);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 15, 11))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 20, 1))
+
+  if (true) {
+    interface s {
+>s : Symbol(s, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 23, 13))
+
+      length: number;
+>length : Symbol(s.length, Decl(typeInterfaceDeclarationsInBlockStatements1.ts, 24, 17))
+    }
+  }
+  console.log("" as s);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>s : Symbol(s)
+}
+

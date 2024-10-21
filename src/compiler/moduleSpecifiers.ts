@@ -613,7 +613,7 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
             prefersTsExtension(allowedEndings),
         );
 
-    const fromPaths = pathsOnly || fromPackageJsonImports === undefined ? paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, host, compilerOptions) : undefined;
+    const fromPaths = pathsOnly || fromPackageJsonImports === undefined ? paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, baseDirectory, getCanonicalFileName, host, compilerOptions) : undefined;
     if (pathsOnly) {
         return fromPaths;
     }
@@ -925,10 +925,11 @@ function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeCh
     }
 }
 
-function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, allowedEndings: ModuleSpecifierEnding[], host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
+function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, allowedEndings: ModuleSpecifierEnding[], baseDirectory: string, getCanonicalFileName: GetCanonicalFileName, host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
     for (const key in paths) {
         for (const patternText of paths[key]) {
-            const pattern = normalizePath(patternText);
+            const normalized = normalizePath(patternText);
+            const pattern = getRelativePathIfInSameVolume(normalized, baseDirectory, getCanonicalFileName) ?? normalized;
             const indexOfStar = pattern.indexOf("*");
             // In module resolution, if `pattern` itself has an extension, a file with that extension is looked up directly,
             // meaning a '.ts' or '.d.ts' extension is allowed to resolve. This is distinct from the case where a '*' substitution
@@ -1290,6 +1291,8 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                     subModuleName,
                     versionPaths.paths,
                     allowedEndings,
+                    packageRootPath,
+                    getCanonicalFileName,
                     host,
                     options,
                 );

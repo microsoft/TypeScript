@@ -555,7 +555,7 @@ function getAlreadyUsedTypesInStringLiteralUnion(union: UnionTypeNode, current: 
 
 function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes | undefined {
     let isNewIdentifier = false;
-    const uniques = new Map<string, true>();
+    const uniques = new Set<string>();
     const editingArgument = isJsxOpeningLikeElement(call) ? Debug.checkDefined(findAncestor(arg.parent, isJsxAttribute)) : arg;
     const candidates = checker.getCandidateSignaturesForStringLiteralCompletions(call, editingArgument);
     const types = flatMap(candidates, candidate => {
@@ -600,7 +600,7 @@ function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLi
     };
 }
 
-function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
+function getStringLiteralTypes(type: Type | undefined, uniques = new Set<string>()): readonly StringLiteralType[] {
     if (!type) return emptyArray;
     type = skipConstraint(type);
     return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques)) :
