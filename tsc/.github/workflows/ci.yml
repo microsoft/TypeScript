@@ -122,6 +122,7 @@ jobs:
       - lint
       - format
       - generate
+      - tidy
 
     steps:
       - name: Check required jobs
