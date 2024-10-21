@@ -182,7 +182,7 @@ registerCodeFix({
     getAllCodeActions: context => {
         const { program, fixId } = context;
         const checker = program.getTypeChecker();
-        const seen = new Map<string, true>();
+        const seen = new Set<string>();
         const typeDeclToMembers = new Map<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, TypeLikeDeclarationInfo[]>();
 
         return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {

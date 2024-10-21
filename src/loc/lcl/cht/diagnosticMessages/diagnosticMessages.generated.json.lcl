@@ -2784,11 +2784,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations_9009" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations_9009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[At least one accessor must have an explicit return type annotation with --isolatedDeclarations.]]></Val>
+          <Val><![CDATA[At least one accessor must have an explicit type annotation with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[至少一個存取子必須有具備 --isolatedDeclarations 的明確傳回類型註解。]]></Val>
+            <Val><![CDATA[至少一個存取子必須有具備 --isolatedDeclarations 的明確型別註釋。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5040,11 +5040,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_it_s_type_This_is_not_su_9025" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_its_type_This_is_not_sup_9025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.]]></Val>
+          <Val><![CDATA[Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此參數發出的宣告需要隱含地新增未定義值至其類型。該情況不受 --isolatedDeclarations 支援。]]></Val>
+            <Val><![CDATA[此參數發出的宣告需要隱含地新增未定義值至其類型。此情況不受 --isolatedDeclarations 支援。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
