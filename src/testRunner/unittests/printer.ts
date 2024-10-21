@@ -360,12 +360,11 @@ describe("unittests:: PrinterAPI", () => {
             ));
 
         // https://github.com/microsoft/TypeScript/issues/59150
-        printsCorrectly("template string", {}, printer => 
+        printsCorrectly("template string", {}, printer =>
             printer.printNode(
                 ts.EmitHint.Unspecified,
                 ts.factory.createNoSubstitutionTemplateLiteral("\n"),
-                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext)
-            )
-        );
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
     });
 });
