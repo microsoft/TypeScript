@@ -3243,18 +3243,20 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     }
                     return factory.updatePartiallyEmittedExpression(
                         node as PartiallyEmittedExpression,
-                        parenthesizeExpressionForNoAsi((node as PartiallyEmittedExpression).expression)
+                        parenthesizeExpressionForNoAsi((node as PartiallyEmittedExpression).expression),
                     );
                 case SyntaxKind.PropertyAccessExpression:
                     return factory.updatePropertyAccessExpression(
                         node as PropertyAccessExpression,
                         parenthesizeExpressionForNoAsi((node as PropertyAccessExpression).expression),
-                        (node as PropertyAccessExpression).name);
+                        (node as PropertyAccessExpression).name,
+                    );
                 case SyntaxKind.ElementAccessExpression:
                     return factory.updateElementAccessExpression(
                         node as ElementAccessExpression,
                         parenthesizeExpressionForNoAsi((node as ElementAccessExpression).expression),
-                        (node as ElementAccessExpression).argumentExpression);
+                        (node as ElementAccessExpression).argumentExpression,
+                    );
                 case SyntaxKind.CallExpression:
                     return factory.updateCallExpression(
                         node as CallExpression,
@@ -3272,7 +3274,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 case SyntaxKind.PostfixUnaryExpression:
                     return factory.updatePostfixUnaryExpression(
                         node as PostfixUnaryExpression,
-                        parenthesizeExpressionForNoAsi((node as PostfixUnaryExpression).operand)
+                        parenthesizeExpressionForNoAsi((node as PostfixUnaryExpression).operand),
                     );
                 case SyntaxKind.BinaryExpression:
                     return factory.updateBinaryExpression(
@@ -3294,18 +3296,18 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return factory.updateAsExpression(
                         node as AsExpression,
                         parenthesizeExpressionForNoAsi((node as AsExpression).expression),
-                        (node as AsExpression).type
+                        (node as AsExpression).type,
                     );
                 case SyntaxKind.SatisfiesExpression:
                     return factory.updateSatisfiesExpression(
                         node as SatisfiesExpression,
                         parenthesizeExpressionForNoAsi((node as SatisfiesExpression).expression),
-                        (node as SatisfiesExpression).type
+                        (node as SatisfiesExpression).type,
                     );
                 case SyntaxKind.NonNullExpression:
                     return factory.updateNonNullExpression(
                         node as NonNullExpression,
-                        parenthesizeExpressionForNoAsi((node as NonNullExpression).expression)
+                        parenthesizeExpressionForNoAsi((node as NonNullExpression).expression),
                     );
             }
         }
