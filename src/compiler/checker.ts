@@ -44504,9 +44504,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return PredicateSemantics.Sometimes;
                 }
                 return PredicateSemantics.Always;
+            case SyntaxKind.BigIntLiteral:
+                if ((node as BigIntLiteral).text === "0n") {
+                    // unlike `while(0)`, `while (0n)` is not idiomatic.
+                    return PredicateSemantics.Never;
+                }
+                return PredicateSemantics.Always;
+            // handle negative numbers
+            case SyntaxKind.PrefixUnaryExpression:
+                const prefixUnaryExpression = node as PrefixUnaryExpression;
+                if (prefixUnaryExpression.operator === SyntaxKind.MinusToken) {
+                    const operand = prefixUnaryExpression.operand;
+                    if (operand.kind === SyntaxKind.NumericLiteral) {
+                        if ((operand as NumericLiteral).text === "0") {
+                            return PredicateSemantics.Never
+                        } else {
+                            return PredicateSemantics.Always
+                        }
+                    } else if (operand.kind === SyntaxKind.BigIntLiteral) {
+                        if ((operand as BigIntLiteral).text === "0n") {
+                            return PredicateSemantics.Never
+                        } else {
+                            return PredicateSemantics.Always
+                        }
+                    }
+                }
+                return PredicateSemantics.Sometimes
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrowFunction:
-            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.JsxElement:

@@ -42,3 +42,24 @@ function foo(this: Object | undefined) {
     // Should be OK
     return this ?? 0;
 }
+
+// Not OK; always truthy.
+if (1n) { }
+
+// Not OK; always falsy.
+if (0n) { } 
+// Not OK; always falsy.
+if (-0n) { }
+
+// negative numbers
+// not OK - truthy
+if (-1.2) { }
+// not OK - falsy
+if (-0.0000){}
+// not OK - falsy
+if (-0n){}
+// not OK - truthy
+if (-13n){}
+
+// OK
+if (-identifier) {}
