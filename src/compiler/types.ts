@@ -6657,13 +6657,17 @@ export interface UnionOrIntersectionType extends Type {
     /** @internal */
     propertyCacheWithoutObjectFunctionPropertyAugment?: SymbolTable; // Cache of resolved properties that does not augment function or object type properties
     /** @internal */
-    resolvedProperties: Symbol[];
+    resolvedProperties?: Symbol[];
     /** @internal */
-    resolvedIndexType: IndexType;
+    resolvedIndexType?: IndexType;
     /** @internal */
-    resolvedStringIndexType: IndexType;
+    resolvedStringIndexType?: IndexType;
     /** @internal */
-    resolvedBaseConstraint: Type;
+    resolvedBaseConstraint?: Type;
+    /** @internal */
+    partiallyResolvedProperties?: Symbol[];
+    /** @internal */
+    partiallyResolvedPropertiesGenerator?: Generator<Symbol, void>;
 }
 
 export interface UnionType extends UnionOrIntersectionType {
