@@ -572,7 +572,7 @@ func finishFlowLabel(label *FlowLabel) *FlowNode {
 }
 
 func (b *Binder) bind(node *Node) bool {
-	if !exists(node) {
+	if node == nil {
 		return false
 	}
 	node.parent = b.parent

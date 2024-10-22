@@ -1000,7 +1000,7 @@ func isClassLike(node *Node) bool {
 }
 
 func declarationNameToString(name *Node) string {
-	if !exists(name) || name.Pos() == name.End() {
+	if name == nil || name.Pos() == name.End() {
 		return "(Missing)"
 	}
 	return getTextOfNode(name)
