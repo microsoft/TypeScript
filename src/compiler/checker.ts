@@ -26198,10 +26198,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 inferToMultipleTypes(source, (target as UnionOrIntersectionType).types, target.flags);
             }
             else if (source.flags & TypeFlags.Union) {
-                // Source is a union or intersection type, infer from each constituent type
-                const sourceTypes = (source as UnionOrIntersectionType).types;
-                for (const sourceType of sourceTypes) {
-                    inferFromTypes(sourceType, target);
+                const singleSignature = getSingleCallOrConstructSignature(source);
+                if (singleSignature) {
+                    inferFromTypes(getOrCreateTypeFromSignature(singleSignature), target);
+                }
+                else {
+                    // Source is a union type, infer from each constituent type
+                    const sourceTypes = (source as UnionType).types;
+                    for (const sourceType of sourceTypes) {
+                        inferFromTypes(sourceType, target);
+                    }
                 }
             }
             else if (target.flags & TypeFlags.TemplateLiteral) {
@@ -34922,8 +34928,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSingleSignature(type: Type, kind: SignatureKind, allowMembers: boolean): Signature | undefined {
-        if (type.flags & TypeFlags.Object) {
-            const resolved = resolveStructuredTypeMembers(type as ObjectType);
+        if (type.flags & TypeFlags.StructuredType) {
+            const resolved = resolveStructuredTypeMembers(type as StructuredType);
             if (allowMembers || resolved.properties.length === 0 && resolved.indexInfos.length === 0) {
                 if (kind === SignatureKind.Call && resolved.callSignatures.length === 1 && resolved.constructSignatures.length === 0) {
                     return resolved.callSignatures[0];
