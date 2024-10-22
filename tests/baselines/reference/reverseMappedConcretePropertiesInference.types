@@ -1,0 +1,272 @@
+//// [tests/cases/compiler/reverseMappedConcretePropertiesInference.ts] ////
+
+=== reverseMappedConcretePropertiesInference.ts ===
+declare function test<T extends Record<string, { foo: unknown; bar: unknown }>>(a: {
+>test : <T extends Record<string, { foo: unknown; bar: unknown; }>>(a: { [K in keyof T]: { foo: T[K]["foo"]; onFoo: (fooArg: T[K]["foo"]) => void; bar: T[K]["bar"]; onBar: (barArg: T[K]["bar"]) => void; }; }) => T
+>     : ^ ^^^^^^^^^                                               ^^ ^^                                                                                                                                        ^^^^^ 
+>foo : unknown
+>    : ^^^^^^^
+>bar : unknown
+>    : ^^^^^^^
+>a : { [K in keyof T]: { foo: T[K]["foo"]; onFoo: (fooArg: T[K]["foo"]) => void; bar: T[K]["bar"]; onBar: (barArg: T[K]["bar"]) => void; }; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^                             ^^^^^^^           ^^^^^^^^^                             ^^^^^^
+
+  [K in keyof T]: {
+    foo: T[K]["foo"];
+>foo : T[K]["foo"]
+>    : ^^^^^^^^^^^
+
+    onFoo: (fooArg: T[K]["foo"]) => void;
+>onFoo : (fooArg: T[K]["foo"]) => void
+>      : ^      ^^           ^^^^^    
+>fooArg : T[K]["foo"]
+>       : ^^^^^^^^^^^
+
+    bar: T[K]["bar"];
+>bar : T[K]["bar"]
+>    : ^^^^^^^^^^^
+
+    onBar: (barArg: T[K]["bar"]) => void;
+>onBar : (barArg: T[K]["bar"]) => void
+>      : ^      ^^           ^^^^^    
+>barArg : T[K]["bar"]
+>       : ^^^^^^^^^^^
+
+  };
+}): T;
+
+const res = test({
+>res : { a: { foo: string; } & { bar: number; }; b: { foo: boolean; } & { bar: number[]; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test({    a: {        foo: 'answer',        onFoo: (arg) => arg.length,        bar: 42,        onBar: (arg) => arg + 10    },    b: {        foo: true,        onFoo: (arg) => !!arg,        bar: [1, 2, 3],        onBar: (arg) => [arg, arg]    },}) : { a: { foo: string; } & { bar: number; }; b: { foo: boolean; } & { bar: number[]; }; }
+>                                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test : <T extends Record<string, { foo: unknown; bar: unknown; }>>(a: { [K in keyof T]: { foo: T[K]["foo"]; onFoo: (fooArg: T[K]["foo"]) => void; bar: T[K]["bar"]; onBar: (barArg: T[K]["bar"]) => void; }; }) => T
+>     : ^ ^^^^^^^^^                                               ^^ ^^                                                                                                                                        ^^^^^ 
+>{    a: {        foo: 'answer',        onFoo: (arg) => arg.length,        bar: 42,        onBar: (arg) => arg + 10    },    b: {        foo: true,        onFoo: (arg) => !!arg,        bar: [1, 2, 3],        onBar: (arg) => [arg, arg]    },} : { a: { foo: string; onFoo: (arg: string) => number; bar: number; onBar: (arg: number) => number; }; b: { foo: true; onFoo: (arg: boolean) => boolean; bar: number[]; onBar: (arg: number[]) => number[][]; }; }
+>                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: {
+>a : { foo: string; onFoo: (arg: string) => number; bar: number; onBar: (arg: number) => number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
+>{        foo: 'answer',        onFoo: (arg) => arg.length,        bar: 42,        onBar: (arg) => arg + 10    } : { foo: string; onFoo: (arg: string) => number; bar: number; onBar: (arg: number) => number; }
+>                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
+
+        foo: 'answer',
+>foo : string
+>    : ^^^^^^
+>'answer' : "answer"
+>         : ^^^^^^^^
+
+        onFoo: (arg) => arg.length,
+>onFoo : (arg: string) => number
+>      : ^   ^^^^^^^^^^^^^^^^^^^
+>(arg) => arg.length : (arg: string) => number
+>                    : ^   ^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+>arg.length : number
+>           : ^^^^^^
+>arg : string
+>    : ^^^^^^
+>length : number
+>       : ^^^^^^
+
+        bar: 42,
+>bar : number
+>    : ^^^^^^
+>42 : 42
+>   : ^^
+
+        onBar: (arg) => arg + 10
+>onBar : (arg: number) => number
+>      : ^   ^^^^^^^^^^^^^^^^^^^
+>(arg) => arg + 10 : (arg: number) => number
+>                  : ^   ^^^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+>arg + 10 : number
+>         : ^^^^^^
+>arg : number
+>    : ^^^^^^
+>10 : 10
+>   : ^^
+
+    },
+    b: {
+>b : { foo: true; onFoo: (arg: boolean) => boolean; bar: number[]; onBar: (arg: number[]) => number[][]; }
+>  : ^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        foo: true,        onFoo: (arg) => !!arg,        bar: [1, 2, 3],        onBar: (arg) => [arg, arg]    } : { foo: true; onFoo: (arg: boolean) => boolean; bar: number[]; onBar: (arg: number[]) => number[][]; }
+>                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        foo: true,
+>foo : true
+>    : ^^^^
+>true : true
+>     : ^^^^
+
+        onFoo: (arg) => !!arg,
+>onFoo : (arg: boolean) => boolean
+>      : ^   ^^^^^^^^^^^^^^^^^^^^^
+>(arg) => !!arg : (arg: boolean) => boolean
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
+>arg : boolean
+>    : ^^^^^^^
+>!!arg : boolean
+>      : ^^^^^^^
+>!arg : boolean
+>     : ^^^^^^^
+>arg : boolean
+>    : ^^^^^^^
+
+        bar: [1, 2, 3],
+>bar : number[]
+>    : ^^^^^^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+        onBar: (arg) => [arg, arg]
+>onBar : (arg: number[]) => number[][]
+>      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>(arg) => [arg, arg] : (arg: number[]) => number[][]
+>                    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : number[]
+>    : ^^^^^^^^
+>[arg, arg] : number[][]
+>           : ^^^^^^^^^^
+>arg : number[]
+>    : ^^^^^^^^
+>arg : number[]
+>    : ^^^^^^^^
+
+    },
+})
+
+interface QueryFunctionContext<TQueryKey extends string> {
+  queryKey: TQueryKey;
+>queryKey : TQueryKey
+>         : ^^^^^^^^^
+}
+
+type QueryOptions = {
+>QueryOptions : QueryOptions
+>             : ^^^^^^^^^^^^
+
+  key: string;
+>key : string
+>    : ^^^^^^
+
+  fnData?: unknown;
+>fnData : unknown
+>       : ^^^^^^^
+
+};
+
+type UseQueriesOptions<T extends ReadonlyArray<QueryOptions>> = {
+>UseQueriesOptions : UseQueriesOptions<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T]: {
+    queryKey: T[K]["key"];
+>queryKey : T[K]["key"]
+>         : ^^^^^^^^^^^
+
+    queryFn?: (
+>queryFn : ((ctx: QueryFunctionContext<T[K]["key"]>) => Promise<T[K]["fnData"]> | T[K]["fnData"]) | undefined
+>        : ^^   ^^                                 ^^^^^                                        ^^^^^^^^^^^^^
+
+      ctx: QueryFunctionContext<T[K]["key"]>
+>ctx : QueryFunctionContext<T[K]["key"]>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    ) => Promise<T[K]["fnData"]> | T[K]["fnData"];
+  };
+};
+
+declare function useQueries<T extends ReadonlyArray<QueryOptions>>(
+>useQueries : <T extends ReadonlyArray<QueryOptions>>(queries: [...UseQueriesOptions<T>]) => T
+>           : ^ ^^^^^^^^^                           ^^       ^^                         ^^^^^ 
+
+  queries: [...UseQueriesOptions<T>]
+>queries : [...UseQueriesOptions<T>]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): T;
+
+const resQueries = useQueries([
+>resQueries : [{ key: "users"; } & { fnData: { name: string; }[]; }, { key: "posts"; } & { fnData: { title: string; }[]; }]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useQueries([  {    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  },  {    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  }]) : [{ key: "users"; } & { fnData: { name: string; }[]; }, { key: "posts"; } & { fnData: { title: string; }[]; }]
+>                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useQueries : <T extends ReadonlyArray<QueryOptions>>(queries: [...UseQueriesOptions<T>]) => T
+>           : ^ ^^^^^^^^^                           ^^       ^^                         ^^^^^ 
+>[  {    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  },  {    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  }] : [{ queryKey: "users"; queryFn: (key: QueryFunctionContext<"users">) => { name: string; }[]; }, { queryKey: "posts"; queryFn: (key: QueryFunctionContext<"posts">) => Promise<{ title: string; }[]>; }]
+>                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  {
+>{    queryKey: "users",    queryFn: (key) => [{ name: "Andarist" }],  } : { queryKey: "users"; queryFn: (key: QueryFunctionContext<"users">) => { name: string; }[]; }
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    queryKey: "users",
+>queryKey : "users"
+>         : ^^^^^^^
+>"users" : "users"
+>        : ^^^^^^^
+
+    queryFn: (key) => [{ name: "Andarist" }],
+>queryFn : (key: QueryFunctionContext<"users">) => { name: string; }[]
+>        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(key) => [{ name: "Andarist" }] : (key: QueryFunctionContext<"users">) => { name: string; }[]
+>                                : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : QueryFunctionContext<"users">
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ name: "Andarist" }] : { name: string; }[]
+>                       : ^^^^^^^^^^^^^^^^^^^
+>{ name: "Andarist" } : { name: string; }
+>                     : ^^^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>"Andarist" : "Andarist"
+>           : ^^^^^^^^^^
+
+  },
+  {
+>{    queryKey: "posts",    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),  } : { queryKey: "posts"; queryFn: (key: QueryFunctionContext<"posts">) => Promise<{ title: string; }[]>; }
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    queryKey: "posts",
+>queryKey : "posts"
+>         : ^^^^^^^
+>"posts" : "posts"
+>        : ^^^^^^^
+
+    queryFn: (key) => Promise.resolve([{ title: 'TS 5.1' }]),
+>queryFn : (key: QueryFunctionContext<"posts">) => Promise<{ title: string; }[]>
+>        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(key) => Promise.resolve([{ title: 'TS 5.1' }]) : (key: QueryFunctionContext<"posts">) => Promise<{ title: string; }[]>
+>                                                : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : QueryFunctionContext<"posts">
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve([{ title: 'TS 5.1' }]) : Promise<{ title: string; }[]>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>[{ title: 'TS 5.1' }] : { title: string; }[]
+>                      : ^^^^^^^^^^^^^^^^^^^^
+>{ title: 'TS 5.1' } : { title: string; }
+>                    : ^^^^^^^^^^^^^^^^^^
+>title : string
+>      : ^^^^^^
+>'TS 5.1' : "TS 5.1"
+>         : ^^^^^^^^
+  }
+]);
+
