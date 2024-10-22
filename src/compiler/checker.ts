@@ -45658,11 +45658,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const effectiveExpr = expr && getEffectiveCheckNode(expr); // The effective expression for diagnostics purposes.
 
         const inReturnStatement = node.kind === SyntaxKind.ReturnStatement;
-        // const exprType = expr
-        //     ? inReturnStatement
-        //         ? checkExpressionCached(expr)
-        //         : checkExpression(expr)
-        //     : undefinedType;
         const unwrappedExprType = functionFlags & FunctionFlags.Async
             ? checkAwaitedType(
                 exprType,
