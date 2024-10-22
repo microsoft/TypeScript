@@ -725,7 +725,6 @@ import {
     isRightSideOfQualifiedNameOrPropertyAccess,
     isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName,
     isSameEntityName,
-    isSatisfiesExpression,
     isSetAccessor,
     isSetAccessorDeclaration,
     isShorthandAmbientModuleSymbol,
@@ -35288,8 +35287,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getEffectiveCheckNode(argument: Expression): Expression {
-        argument = skipParentheses(argument);
-        return isSatisfiesExpression(argument) ? skipParentheses(argument.expression) : argument;
+        const flags = isInJSFile(argument)
+            ? OuterExpressionKinds.Parentheses | OuterExpressionKinds.Satisfies | OuterExpressionKinds.ExcludeJSDocTypeAssertion
+            : OuterExpressionKinds.Parentheses | OuterExpressionKinds.Satisfies;
+        return skipOuterExpressions(argument, flags);
     }
 
     function getSignatureApplicabilityError(

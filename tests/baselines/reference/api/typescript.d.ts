@@ -7426,8 +7426,9 @@ declare namespace ts {
         NonNullAssertions = 4,
         PartiallyEmittedExpressions = 8,
         ExpressionsWithTypeArguments = 16,
-        Assertions = 6,
-        All = 31,
+        Satisfies = 32,
+        Assertions = 38,
+        All = 63,
         ExcludeJSDocTypeAssertion = -2147483648,
     }
     type ImmediatelyInvokedFunctionExpression = CallExpression & {
