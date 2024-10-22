@@ -21660,7 +21660,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
-        const result = isRelatedTo(source, target, RecursionFlags.Both, /*reportErrors*/ !!errorNode, headMessage);
+        const result = isRelatedTo(source, target, IntersectionState.None, RecursionFlags.Both, /*reportErrors*/ !!errorNode, headMessage);
         if (incompatibleStack) {
             reportIncompatibleStack();
         }
@@ -21999,17 +21999,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
 
-        function isRelatedToWorker(source: Type, target: Type, reportErrors?: boolean) {
-            return isRelatedTo(source, target, RecursionFlags.Both, reportErrors);
-        }
-
         /**
          * Compare two types and return
          * * Ternary.True if they are related with no assumptions,
          * * Ternary.Maybe if they are related with assumptions of other relationships, or
          * * Ternary.False if they are not related.
          */
-        function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
+        function isRelatedTo(originalSource: Type, originalTarget: Type, intersectionState: IntersectionState, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage): Ternary {
             if (originalSource === originalTarget) return Ternary.True;
 
             // Before normalization: if `source` is type an object type, and `target` is primitive,
@@ -22073,7 +22069,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable) {
                 const isPerformingExcessPropertyChecks = !(intersectionState & IntersectionState.Target) && (isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral);
                 if (isPerformingExcessPropertyChecks) {
-                    if (hasExcessProperties(source as FreshObjectLiteralType, target, reportErrors)) {
+                    if (hasExcessProperties(source as FreshObjectLiteralType, target, reportErrors, intersectionState)) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, originalTarget.aliasSymbol ? originalTarget : target);
                         }
@@ -22094,8 +22090,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const calls = getSignaturesOfType(source, SignatureKind.Call);
                         const constructs = getSignaturesOfType(source, SignatureKind.Construct);
                         if (
-                            calls.length > 0 && isRelatedTo(getReturnTypeOfSignature(calls[0]), target, RecursionFlags.Source, /*reportErrors*/ false) ||
-                            constructs.length > 0 && isRelatedTo(getReturnTypeOfSignature(constructs[0]), target, RecursionFlags.Source, /*reportErrors*/ false)
+                            calls.length > 0 && isRelatedTo(getReturnTypeOfSignature(calls[0]), target, intersectionState, RecursionFlags.Source, /*reportErrors*/ false) ||
+                            constructs.length > 0 && isRelatedTo(getReturnTypeOfSignature(constructs[0]), target, intersectionState, RecursionFlags.Source, /*reportErrors*/ false)
                         ) {
                             reportError(Diagnostics.Value_of_type_0_has_no_properties_in_common_with_type_1_Did_you_mean_to_call_it, sourceString, targetString);
                         }
@@ -22230,7 +22226,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getUnionType(reduceLeft(types, appendPropType, /*initial*/ undefined) || emptyArray);
         }
 
-        function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
+        function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean, intersectionState: IntersectionState): boolean {
             if (!isExcessPropertyCheckTarget(target) || !noImplicitAny && getObjectFlags(target) & ObjectFlags.JSLiteral) {
                 return false; // Disable excess property checks on JS literals to simulate having an implicit "index signature" - but only outside of noImplicitAny
             }
@@ -22244,8 +22240,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let reducedTarget = target;
             let checkTypes: Type[] | undefined;
             if (target.flags & TypeFlags.Union) {
-                reducedTarget = findMatchingDiscriminantType(source, target as UnionType, isRelatedTo) || filterPrimitivesIfContainsNonPrimitive(target as UnionType);
+                reducedTarget = findMatchingDiscriminantType(source, target as UnionType, isRelatedToWorker) || filterPrimitivesIfContainsNonPrimitive(target as UnionType);
                 checkTypes = reducedTarget.flags & TypeFlags.Union ? (reducedTarget as UnionType).types : [reducedTarget];
+                function isRelatedToWorker(source: Type, target: Type) {
+                    return isRelatedTo(source, target, intersectionState);
+                }
             }
             for (const prop of getPropertiesOfType(source)) {
                 if (shouldCheckAsExcessProperty(prop, source.symbol) && !isIgnoredJsxProperty(source, prop)) {
@@ -22301,7 +22300,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         return true;
                     }
-                    if (checkTypes && !isRelatedTo(getTypeOfSymbol(prop), getTypeOfPropertyInTypes(checkTypes, prop.escapedName), RecursionFlags.Both, reportErrors)) {
+                    if (checkTypes && !isRelatedTo(getTypeOfSymbol(prop), getTypeOfPropertyInTypes(checkTypes, prop.escapedName), intersectionState, RecursionFlags.Both, reportErrors)) {
                         if (reportErrors) {
                             reportIncompatibleError(Diagnostics.Types_of_property_0_are_incompatible, symbolToString(prop));
                         }
@@ -22342,7 +22341,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState);
             }
             if (target.flags & TypeFlags.Union) {
-                return typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), target as UnionType, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive), intersectionState);
+                return typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), target as UnionType, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive), intersectionState); // TODO(jakebailey): .Target?
             }
             if (target.flags & TypeFlags.Intersection) {
                 return typeRelatedToEachType(source, target as IntersectionType, reportErrors, IntersectionState.Target);
@@ -22360,8 +22359,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return Ternary.False;
                     }
                     if (!(source.flags & TypeFlags.Intersection)) {
-                        return isRelatedTo(source, target, RecursionFlags.Source, /*reportErrors*/ false) ||
-                            isRelatedTo(target, source, RecursionFlags.Source, /*reportErrors*/ false);
+                        return isRelatedTo(source, target, intersectionState, RecursionFlags.Source, /*reportErrors*/ false) ||
+                            isRelatedTo(target, source, intersectionState, RecursionFlags.Source, /*reportErrors*/ false);
                     }
                 }
             }
@@ -22372,11 +22371,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return someTypeRelatedToType(source as IntersectionType, target, /*reportErrors*/ false, IntersectionState.Source);
         }
 
-        function eachTypeRelatedToSomeType(source: UnionOrIntersectionType, target: UnionOrIntersectionType): Ternary {
+        function eachTypeRelatedToSomeType(source: UnionOrIntersectionType, target: UnionOrIntersectionType, intersectionState: IntersectionState): Ternary {
             let result = Ternary.True;
             const sourceTypes = source.types;
             for (const sourceType of sourceTypes) {
-                const related = typeRelatedToSomeType(sourceType, target, /*reportErrors*/ false, IntersectionState.None);
+                const related = typeRelatedToSomeType(sourceType, target, /*reportErrors*/ false, intersectionState);
                 if (!related) {
                     return Ternary.False;
                 }
@@ -22412,23 +22411,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const match = getMatchingUnionConstituentForType(target as UnionType, source);
                 if (match) {
-                    const related = isRelatedTo(source, match, RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                    const related = isRelatedTo(source, match, intersectionState, RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined);
                     if (related) {
                         return related;
                     }
                 }
             }
             for (const type of targetTypes) {
-                const related = isRelatedTo(source, type, RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                const related = isRelatedTo(source, type, intersectionState, RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined);
                 if (related) {
                     return related;
                 }
             }
             if (reportErrors) {
                 // Elaborate only if we can find a best matching type in the target union
-                const bestMatchingType = getBestMatchingType(source, target, isRelatedTo);
+                const bestMatchingType = getBestMatchingType(source, target, isRelatedToWorker);
                 if (bestMatchingType) {
-                    isRelatedTo(source, bestMatchingType, RecursionFlags.Target, /*reportErrors*/ true, /*headMessage*/ undefined, intersectionState);
+                    isRelatedTo(source, bestMatchingType, intersectionState, RecursionFlags.Target, /*reportErrors*/ true);
+                }
+
+                function isRelatedToWorker(source: Type, target: Type) {
+                    return isRelatedTo(source, target, intersectionState);
                 }
             }
             return Ternary.False;
@@ -22438,7 +22441,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let result = Ternary.True;
             const targetTypes = target.types;
             for (const targetType of targetTypes) {
-                const related = isRelatedTo(source, targetType, RecursionFlags.Target, reportErrors, /*headMessage*/ undefined, intersectionState);
+                const related = isRelatedTo(source, targetType, intersectionState, RecursionFlags.Target, reportErrors, /*headMessage*/ undefined);
                 if (!related) {
                     return Ternary.False;
                 }
@@ -22454,7 +22457,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const len = sourceTypes.length;
             for (let i = 0; i < len; i++) {
-                const related = isRelatedTo(sourceTypes[i], target, RecursionFlags.Source, reportErrors && i === len - 1, /*headMessage*/ undefined, intersectionState);
+                const related = isRelatedTo(sourceTypes[i], target, intersectionState, RecursionFlags.Source, reportErrors && i === len - 1, /*headMessage*/ undefined);
                 if (related) {
                     return related;
                 }
@@ -22486,13 +22489,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // union has a union of objects intersected with it. In such cases, if the input was, eg `("a" | "b" | "c") & (string | boolean | {} | {whatever})`,
                     // the result will have the structure `"a" | "b" | "c" | "a" & {} | "b" & {} | "c" & {} | "a" & {whatever} | "b" & {whatever} | "c" & {whatever}`
                     // - the resulting union has a length which is a multiple of the original union, and the elements correspond modulo the length of the original union
-                    const related = isRelatedTo(sourceType, (undefinedStrippedTarget as UnionType).types[i % (undefinedStrippedTarget as UnionType).types.length], RecursionFlags.Both, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                    const related = isRelatedTo(sourceType, (undefinedStrippedTarget as UnionType).types[i % (undefinedStrippedTarget as UnionType).types.length], intersectionState, RecursionFlags.Both, /*reportErrors*/ false, /*headMessage*/ undefined);
                     if (related) {
                         result &= related;
                         continue;
                     }
                 }
-                const related = isRelatedTo(sourceType, target, RecursionFlags.Source, reportErrors, /*headMessage*/ undefined, intersectionState);
+                const related = isRelatedTo(sourceType, target, intersectionState, RecursionFlags.Source, reportErrors, /*headMessage*/ undefined);
                 if (!related) {
                     return Ternary.False;
                 }
@@ -22522,31 +22525,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // Even an `Unmeasurable` variance works out without a structural check if the source and target are _identical_.
                         // We can't simply assume invariance, because `Unmeasurable` marks nonlinear relations, for example, a relation tained by
                         // the `-?` modifier in a mapped type (where, no matter how the inputs are related, the outputs still might not be)
-                        related = relation === identityRelation ? isRelatedTo(s, t, RecursionFlags.Both, /*reportErrors*/ false) : compareTypesIdentical(s, t);
+                        related = relation === identityRelation ? isRelatedTo(s, t, intersectionState, RecursionFlags.Both, /*reportErrors*/ false) : compareTypesIdentical(s, t);
                     }
                     else if (variance === VarianceFlags.Covariant) {
-                        related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                        related = isRelatedTo(s, t, intersectionState, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined);
                     }
                     else if (variance === VarianceFlags.Contravariant) {
-                        related = isRelatedTo(t, s, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                        related = isRelatedTo(t, s, intersectionState, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined);
                     }
                     else if (variance === VarianceFlags.Bivariant) {
                         // In the bivariant case we first compare contravariantly without reporting
                         // errors. Then, if that doesn't succeed, we compare covariantly with error
                         // reporting. Thus, error elaboration will be based on the the covariant check,
                         // which is generally easier to reason about.
-                        related = isRelatedTo(t, s, RecursionFlags.Both, /*reportErrors*/ false);
+                        related = isRelatedTo(t, s, intersectionState, RecursionFlags.Both, /*reportErrors*/ false);
                         if (!related) {
-                            related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                            related = isRelatedTo(s, t, intersectionState, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined);
                         }
                     }
                     else {
                         // In the invariant case we first compare covariantly, and only when that
                         // succeeds do we proceed to compare contravariantly. Thus, error elaboration
                         // will typically be based on the covariant check.
-                        related = isRelatedTo(s, t, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                        related = isRelatedTo(s, t, intersectionState, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined);
                         if (related) {
-                            related &= isRelatedTo(t, s, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                            related &= isRelatedTo(t, s, intersectionState, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined);
                         }
                     }
                     if (!related) {
@@ -22734,7 +22737,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types : [source], !!(target.flags & TypeFlags.Union));
                     if (constraint && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
                         // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
-                        result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                        result = isRelatedTo(constraint, target, intersectionState, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined);
                     }
                 }
                 // When the target is an intersection we need an extra property check in order to detect nested excess
@@ -22797,28 +22800,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (relation === identityRelation) {
                 // We've already checked that source.flags and target.flags are identical
                 if (sourceFlags & TypeFlags.UnionOrIntersection) {
-                    let result = eachTypeRelatedToSomeType(source as UnionOrIntersectionType, target as UnionOrIntersectionType);
+                    let result = eachTypeRelatedToSomeType(source as UnionOrIntersectionType, target as UnionOrIntersectionType, intersectionState);
                     if (result) {
-                        result &= eachTypeRelatedToSomeType(target as UnionOrIntersectionType, source as UnionOrIntersectionType);
+                        result &= eachTypeRelatedToSomeType(target as UnionOrIntersectionType, source as UnionOrIntersectionType, intersectionState);
                     }
                     return result;
                 }
                 if (sourceFlags & TypeFlags.Index) {
-                    return isRelatedTo((source as IndexType).type, (target as IndexType).type, RecursionFlags.Both, /*reportErrors*/ false);
+                    return isRelatedTo((source as IndexType).type, (target as IndexType).type, intersectionState, RecursionFlags.Both, /*reportErrors*/ false);
                 }
                 if (sourceFlags & TypeFlags.IndexedAccess) {
-                    if (result = isRelatedTo((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType, RecursionFlags.Both, /*reportErrors*/ false)) {
-                        if (result &= isRelatedTo((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType, RecursionFlags.Both, /*reportErrors*/ false)) {
+                    if (result = isRelatedTo((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType, intersectionState, RecursionFlags.Both, /*reportErrors*/ false)) {
+                        if (result &= isRelatedTo((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType, intersectionState, RecursionFlags.Both, /*reportErrors*/ false)) {
                             return result;
                         }
                     }
                 }
                 if (sourceFlags & TypeFlags.Conditional) {
                     if ((source as ConditionalType).root.isDistributive === (target as ConditionalType).root.isDistributive) {
-                        if (result = isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType, RecursionFlags.Both, /*reportErrors*/ false)) {
-                            if (result &= isRelatedTo((source as ConditionalType).extendsType, (target as ConditionalType).extendsType, RecursionFlags.Both, /*reportErrors*/ false)) {
-                                if (result &= isRelatedTo(getTrueTypeFromConditionalType(source as ConditionalType), getTrueTypeFromConditionalType(target as ConditionalType), RecursionFlags.Both, /*reportErrors*/ false)) {
-                                    if (result &= isRelatedTo(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target as ConditionalType), RecursionFlags.Both, /*reportErrors*/ false)) {
+                        if (result = isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType, intersectionState, RecursionFlags.Both, /*reportErrors*/ false)) {
+                            if (result &= isRelatedTo((source as ConditionalType).extendsType, (target as ConditionalType).extendsType, intersectionState, RecursionFlags.Both, /*reportErrors*/ false)) {
+                                if (result &= isRelatedTo(getTrueTypeFromConditionalType(source as ConditionalType), getTrueTypeFromConditionalType(target as ConditionalType), intersectionState, RecursionFlags.Both, /*reportErrors*/ false)) {
+                                    if (result &= isRelatedTo(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target as ConditionalType), intersectionState, RecursionFlags.Both, /*reportErrors*/ false)) {
                                         return result;
                                     }
                                 }
@@ -22827,8 +22830,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 if (sourceFlags & TypeFlags.Substitution) {
-                    if (result = isRelatedTo((source as SubstitutionType).baseType, (target as SubstitutionType).baseType, RecursionFlags.Both, /*reportErrors*/ false)) {
-                        if (result &= isRelatedTo((source as SubstitutionType).constraint, (target as SubstitutionType).constraint, RecursionFlags.Both, /*reportErrors*/ false)) {
+                    if (result = isRelatedTo((source as SubstitutionType).baseType, (target as SubstitutionType).baseType, intersectionState, RecursionFlags.Both, /*reportErrors*/ false)) {
+                        if (result &= isRelatedTo((source as SubstitutionType).constraint, (target as SubstitutionType).constraint, intersectionState, RecursionFlags.Both, /*reportErrors*/ false)) {
                             return result;
                         }
                     }
@@ -22880,19 +22883,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // For a generic type T and a type U that is assignable to T, [...U] is assignable to T, U is assignable to readonly [...T],
             // and U is assignable to [...T] when U is constrained to a mutable array or tuple type.
             if (
-                isSingleElementGenericTupleType(source) && !source.target.readonly && (result = isRelatedTo(getTypeArguments(source)[0], target, RecursionFlags.Source)) ||
-                isSingleElementGenericTupleType(target) && (target.target.readonly || isMutableArrayOrTuple(getBaseConstraintOfType(source) || source)) && (result = isRelatedTo(source, getTypeArguments(target)[0], RecursionFlags.Target))
+                isSingleElementGenericTupleType(source) && !source.target.readonly && (result = isRelatedTo(getTypeArguments(source)[0], target, intersectionState, RecursionFlags.Source)) ||
+                isSingleElementGenericTupleType(target) && (target.target.readonly || isMutableArrayOrTuple(getBaseConstraintOfType(source) || source)) && (result = isRelatedTo(source, getTypeArguments(target)[0], intersectionState, RecursionFlags.Target))
             ) {
                 return result;
             }
 
             if (targetFlags & TypeFlags.TypeParameter) {
                 // A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
-                if (getObjectFlags(source) & ObjectFlags.Mapped && !(source as MappedType).declaration.nameType && isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(source as MappedType), RecursionFlags.Both)) {
+                if (getObjectFlags(source) & ObjectFlags.Mapped && !(source as MappedType).declaration.nameType && isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(source as MappedType), intersectionState, RecursionFlags.Both)) {
                     if (!(getMappedTypeModifiers(source as MappedType) & MappedTypeModifiers.IncludeOptional)) {
                         const templateType = getTemplateTypeFromMappedType(source as MappedType);
                         const indexedAccessType = getIndexedAccessType(target, getTypeParameterFromMappedType(source as MappedType));
-                        if (result = isRelatedTo(templateType, indexedAccessType, RecursionFlags.Both, reportErrors)) {
+                        if (result = isRelatedTo(templateType, indexedAccessType, intersectionState, RecursionFlags.Both, reportErrors)) {
                             return result;
                         }
                     }
@@ -22903,7 +22906,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let constraint = getConstraintOfTypeParameter(source);
                     if (constraint) {
                         while (constraint && someType(constraint, c => !!(c.flags & TypeFlags.TypeParameter))) {
-                            if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false)) {
+                            if (result = isRelatedTo(constraint, target, intersectionState, RecursionFlags.Source, /*reportErrors*/ false)) {
                                 return result;
                             }
                             constraint = getConstraintOfTypeParameter(constraint);
@@ -22916,14 +22919,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const targetType = (target as IndexType).type;
                 // A keyof S is related to a keyof T if T is related to S.
                 if (sourceFlags & TypeFlags.Index) {
-                    if (result = isRelatedTo(targetType, (source as IndexType).type, RecursionFlags.Both, /*reportErrors*/ false)) {
+                    if (result = isRelatedTo(targetType, (source as IndexType).type, intersectionState, RecursionFlags.Both, /*reportErrors*/ false)) {
                         return result;
                     }
                 }
                 if (isTupleType(targetType)) {
                     // An index type can have a tuple type target when the tuple type contains variadic elements.
                     // Check if the source is related to the known keys of the tuple type.
-                    if (result = isRelatedTo(source, getKnownKeysOfTupleType(targetType), RecursionFlags.Target, reportErrors)) {
+                    if (result = isRelatedTo(source, getKnownKeysOfTupleType(targetType), intersectionState, RecursionFlags.Target, reportErrors)) {
                         return result;
                     }
                 }
@@ -22936,7 +22939,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // false positives. For example, given 'T extends { [K in keyof T]: string }',
                         // 'keyof T' has itself as its constraint and produces a Ternary.Maybe when
                         // related to other types.
-                        if (isRelatedTo(source, getIndexType(constraint, (target as IndexType).indexFlags | IndexFlags.NoReducibleCheck), RecursionFlags.Target, reportErrors) === Ternary.True) {
+                        if (isRelatedTo(source, getIndexType(constraint, (target as IndexType).indexFlags | IndexFlags.NoReducibleCheck), intersectionState, RecursionFlags.Target, reportErrors) === Ternary.True) {
                             return Ternary.True;
                         }
                     }
@@ -22958,7 +22961,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         else {
                             targetKeys = nameType || constraintType;
                         }
-                        if (isRelatedTo(source, targetKeys, RecursionFlags.Target, reportErrors) === Ternary.True) {
+                        if (isRelatedTo(source, targetKeys, intersectionState, RecursionFlags.Target, reportErrors) === Ternary.True) {
                             return Ternary.True;
                         }
                     }
@@ -22968,8 +22971,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (sourceFlags & TypeFlags.IndexedAccess) {
                     // Relate components directly before falling back to constraint relationships
                     // A type S[K] is related to a type T[J] if S is related to T and K is related to J.
-                    if (result = isRelatedTo((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType, RecursionFlags.Both, reportErrors)) {
-                        result &= isRelatedTo((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType, RecursionFlags.Both, reportErrors);
+                    if (result = isRelatedTo((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType, intersectionState, RecursionFlags.Both, reportErrors)) {
+                        result &= isRelatedTo((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType, intersectionState, RecursionFlags.Both, reportErrors);
                     }
                     if (result) {
                         return result;
@@ -22993,7 +22996,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 // create a new chain for the constraint error
                                 resetErrorInfo(saveErrorInfo);
                             }
-                            if (result = isRelatedTo(source, constraint, RecursionFlags.Target, reportErrors, /*headMessage*/ undefined, intersectionState)) {
+                            if (result = isRelatedTo(source, constraint, intersectionState, RecursionFlags.Target, reportErrors, /*headMessage*/ undefined)) {
                                 return result;
                             }
                             // prefer the shorter chain of the constraint comparison chain, and the direct comparison chain
@@ -23036,7 +23039,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (
                             includeOptional
                                 ? !(filteredByApplicability!.flags & TypeFlags.Never)
-                                : isRelatedTo(targetKeys, sourceKeys, RecursionFlags.Both)
+                                : isRelatedTo(targetKeys, sourceKeys, intersectionState, RecursionFlags.Both)
                         ) {
                             const templateType = getTemplateTypeFromMappedType(target);
                             const typeParameter = getTypeParameterFromMappedType(target);
@@ -23045,7 +23048,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // to avoid creating the (potentially very large) number of new intermediate types made by manufacturing `S[P]`.
                             const nonNullComponent = extractTypesOfKind(templateType, ~TypeFlags.Nullable);
                             if (!keysRemapped && nonNullComponent.flags & TypeFlags.IndexedAccess && (nonNullComponent as IndexedAccessType).indexType === typeParameter) {
-                                if (result = isRelatedTo(source, (nonNullComponent as IndexedAccessType).objectType, RecursionFlags.Target, reportErrors)) {
+                                if (result = isRelatedTo(source, (nonNullComponent as IndexedAccessType).objectType, intersectionState, RecursionFlags.Target, reportErrors)) {
                                     return result;
                                 }
                             }
@@ -23066,7 +23069,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     : typeParameter;
                                 const indexedAccessType = getIndexedAccessType(source, indexingType);
                                 // Compare `S[indexingType]` to `T`, where `T` is the type of a property of the target type.
-                                if (result = isRelatedTo(indexedAccessType, templateType, RecursionFlags.Both, reportErrors)) {
+                                if (result = isRelatedTo(indexedAccessType, templateType, intersectionState, RecursionFlags.Both, reportErrors)) {
                                     return result;
                                 }
                             }
@@ -23092,8 +23095,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const skipTrue = !isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType));
                     const skipFalse = !skipTrue && isTypeAssignableTo(getRestrictiveInstantiation(c.checkType), getRestrictiveInstantiation(c.extendsType));
                     // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
-                    if (result = skipTrue ? Ternary.True : isRelatedTo(source, getTrueTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
-                        result &= skipFalse ? Ternary.True : isRelatedTo(source, getFalseTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                    if (result = skipTrue ? Ternary.True : isRelatedTo(source, getTrueTypeFromConditionalType(c), intersectionState, RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined)) {
+                        result &= skipFalse ? Ternary.True : isRelatedTo(source, getFalseTypeFromConditionalType(c), intersectionState, RecursionFlags.Target, /*reportErrors*/ false, /*headMessage*/ undefined);
                         if (result) {
                             return result;
                         }
@@ -23126,11 +23129,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!(sourceFlags & TypeFlags.IndexedAccess && targetFlags & TypeFlags.IndexedAccess)) {
                     const constraint = getConstraintOfType(source as TypeVariable) || unknownType;
                     // hi-speed no-this-instantiation check (less accurate, but avoids costly `this`-instantiation when the constraint will suffice), see #28231 for report on why this is needed
-                    if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                    if (result = isRelatedTo(constraint, target, intersectionState, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined)) {
                         return result;
                     }
                     // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
-                    else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && constraint !== unknownType && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
+                    else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, intersectionState, RecursionFlags.Source, reportErrors && constraint !== unknownType && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined)) {
                         return result;
                     }
                     if (isMappedTypeGenericIndexedAccess(source)) {
@@ -23138,7 +23141,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // substituted for P. We also want to explore type { [P in K]: E }[C], where C is the constraint of X.
                         const indexConstraint = getConstraintOfType((source as IndexedAccessType).indexType);
                         if (indexConstraint) {
-                            if (result = isRelatedTo(getIndexedAccessType((source as IndexedAccessType).objectType, indexConstraint), target, RecursionFlags.Source, reportErrors)) {
+                            if (result = isRelatedTo(getIndexedAccessType((source as IndexedAccessType).objectType, indexConstraint), target, intersectionState, RecursionFlags.Source, reportErrors)) {
                                 return result;
                             }
                         }
@@ -23147,7 +23150,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (sourceFlags & TypeFlags.Index) {
                 const isDeferredMappedIndex = shouldDeferIndexType((source as IndexType).type, (source as IndexType).indexFlags) && getObjectFlags((source as IndexType).type) & ObjectFlags.Mapped;
-                if (result = isRelatedTo(stringNumberSymbolType, target, RecursionFlags.Source, reportErrors && !isDeferredMappedIndex)) {
+                if (result = isRelatedTo(stringNumberSymbolType, target, intersectionState, RecursionFlags.Source, reportErrors && !isDeferredMappedIndex)) {
                     return result;
                 }
                 if (isDeferredMappedIndex) {
@@ -23159,7 +23162,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // eg, `keyof {[X in keyof A]: Obj[X]}` should be assignable to `keyof {[Y in keyof A]: Tup[Y]}` because both map over the same set of keys (`keyof A`).
                     // Without this source-side breakdown, a `keyof {[X in keyof A]: Obj[X]}` style type won't be assignable to anything except itself, which is much too strict.
                     const sourceMappedKeys = nameType && isMappedTypeWithKeyofConstraintDeclaration(mappedType) ? getApparentMappedTypeKeys(nameType, mappedType) : (nameType || getConstraintTypeFromMappedType(mappedType));
-                    if (result = isRelatedTo(sourceMappedKeys, target, RecursionFlags.Source, reportErrors)) {
+                    if (result = isRelatedTo(sourceMappedKeys, target, intersectionState, RecursionFlags.Source, reportErrors)) {
                         return result;
                     }
                 }
@@ -23167,7 +23170,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (sourceFlags & TypeFlags.TemplateLiteral && !(targetFlags & TypeFlags.Object)) {
                 if (!(targetFlags & TypeFlags.TemplateLiteral)) {
                     const constraint = getBaseConstraintOfType(source);
-                    if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
+                    if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, intersectionState, RecursionFlags.Source, reportErrors))) {
                         return result;
                     }
                 }
@@ -23177,13 +23180,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if ((source as StringMappingType).symbol !== (target as StringMappingType).symbol) {
                         return Ternary.False;
                     }
-                    if (result = isRelatedTo((source as StringMappingType).type, (target as StringMappingType).type, RecursionFlags.Both, reportErrors)) {
+                    if (result = isRelatedTo((source as StringMappingType).type, (target as StringMappingType).type, intersectionState, RecursionFlags.Both, reportErrors)) {
                         return result;
                     }
                 }
                 else {
                     const constraint = getBaseConstraintOfType(source);
-                    if (constraint && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
+                    if (constraint && (result = isRelatedTo(constraint, target, intersectionState, RecursionFlags.Source, reportErrors))) {
                         return result;
                     }
                 }
@@ -23207,13 +23210,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         inferTypes(ctx.inferences, (target as ConditionalType).extendsType, sourceExtends, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
                         sourceExtends = instantiateType(sourceExtends, ctx.mapper);
                         mapper = ctx.mapper;
+
+                        function isRelatedToWorker(source: Type, target: Type, reportErrors?: boolean) {
+                            return isRelatedTo(source, target, IntersectionState.None, RecursionFlags.Both, reportErrors);
+                        }
                     }
                     if (
                         isTypeIdenticalTo(sourceExtends, (target as ConditionalType).extendsType) &&
-                        (isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType, RecursionFlags.Both) || isRelatedTo((target as ConditionalType).checkType, (source as ConditionalType).checkType, RecursionFlags.Both))
+                        (isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType, intersectionState, RecursionFlags.Both) || isRelatedTo((target as ConditionalType).checkType, (source as ConditionalType).checkType, intersectionState, RecursionFlags.Both))
                     ) {
-                        if (result = isRelatedTo(instantiateType(getTrueTypeFromConditionalType(source as ConditionalType), mapper), getTrueTypeFromConditionalType(target as ConditionalType), RecursionFlags.Both, reportErrors)) {
-                            result &= isRelatedTo(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target as ConditionalType), RecursionFlags.Both, reportErrors);
+                        if (result = isRelatedTo(instantiateType(getTrueTypeFromConditionalType(source as ConditionalType), mapper), getTrueTypeFromConditionalType(target as ConditionalType), intersectionState, RecursionFlags.Both, reportErrors)) {
+                            result &= isRelatedTo(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target as ConditionalType), intersectionState, RecursionFlags.Both, reportErrors);
                         }
                         if (result) {
                             return result;
@@ -23224,7 +23231,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // when `O` is a conditional (`never` is trivially assignable to `O`, as is `O`!).
                 const defaultConstraint = getDefaultConstraintOfConditionalType(source as ConditionalType);
                 if (defaultConstraint) {
-                    if (result = isRelatedTo(defaultConstraint, target, RecursionFlags.Source, reportErrors)) {
+                    if (result = isRelatedTo(defaultConstraint, target, intersectionState, RecursionFlags.Source, reportErrors)) {
                         return result;
                     }
                 }
@@ -23233,7 +23240,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const distributiveConstraint = !(targetFlags & TypeFlags.Conditional) && hasNonCircularBaseConstraint(source) ? getConstraintOfDistributiveConditionalType(source as ConditionalType) : undefined;
                 if (distributiveConstraint) {
                     resetErrorInfo(saveErrorInfo);
-                    if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Source, reportErrors)) {
+                    if (result = isRelatedTo(distributiveConstraint, target, intersectionState, RecursionFlags.Source, reportErrors)) {
                         return result;
                     }
                 }
@@ -23245,7 +23252,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (isGenericMappedType(target)) {
                     if (isGenericMappedType(source)) {
-                        if (result = mappedTypeRelatedTo(source, target, reportErrors)) {
+                        if (result = mappedTypeRelatedTo(source, target, reportErrors, intersectionState)) {
                             return result;
                         }
                     }
@@ -23285,7 +23292,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 else if (isReadonlyArrayType(target) ? everyType(source, isArrayOrTupleType) : isArrayType(target) && everyType(source, t => isTupleType(t) && !t.target.readonly)) {
                     if (relation !== identityRelation) {
-                        return isRelatedTo(getIndexTypeOfType(source, numberType) || anyType, getIndexTypeOfType(target, numberType) || anyType, RecursionFlags.Both, reportErrors);
+                        return isRelatedTo(getIndexTypeOfType(source, numberType) || anyType, getIndexTypeOfType(target, numberType) || anyType, intersectionState, RecursionFlags.Both, reportErrors);
                     }
                     else {
                         // By flags alone, we know that the `target` is a readonly array while the source is a normal array or tuple
@@ -23296,7 +23303,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (isGenericTupleType(source) && isTupleType(target) && !isGenericTupleType(target)) {
                     const constraint = getBaseConstraintOrType(source);
                     if (constraint !== source) {
-                        return isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors);
+                        return isRelatedTo(constraint, target, intersectionState, RecursionFlags.Source, reportErrors);
                     }
                 }
                 // A fresh empty object type is never a subtype of a non-empty object type. This ensures fresh({}) <: { [x: string]: xxx }
@@ -23396,17 +23403,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // A type [P in S]: X is related to a type [Q in T]: Y if T is related to S and X' is
         // related to Y, where X' is an instantiation of X in which P is replaced with Q. Notice
         // that S and T are contra-variant whereas X and Y are co-variant.
-        function mappedTypeRelatedTo(source: MappedType, target: MappedType, reportErrors: boolean): Ternary {
+        function mappedTypeRelatedTo(source: MappedType, target: MappedType, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             const modifiersRelated = relation === comparableRelation || (relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
                 getCombinedMappedTypeOptionality(source) <= getCombinedMappedTypeOptionality(target));
             if (modifiersRelated) {
                 let result: Ternary;
                 const targetConstraint = getConstraintTypeFromMappedType(target);
                 const sourceConstraint = instantiateType(getConstraintTypeFromMappedType(source), getCombinedMappedTypeOptionality(source) < 0 ? reportUnmeasurableMapper : reportUnreliableMapper);
-                if (result = isRelatedTo(targetConstraint, sourceConstraint, RecursionFlags.Both, reportErrors)) {
+                if (result = isRelatedTo(targetConstraint, sourceConstraint, intersectionState, RecursionFlags.Both, reportErrors)) {
                     const mapper = createTypeMapper([getTypeParameterFromMappedType(source)], [getTypeParameterFromMappedType(target)]);
                     if (instantiateType(getNameTypeFromMappedType(source), mapper) === instantiateType(getNameTypeFromMappedType(target), mapper)) {
-                        return result & isRelatedTo(instantiateType(getTemplateTypeFromMappedType(source), mapper), getTemplateTypeFromMappedType(target), RecursionFlags.Both, reportErrors);
+                        return result & isRelatedTo(instantiateType(getTemplateTypeFromMappedType(source), mapper), getTemplateTypeFromMappedType(target), intersectionState, RecursionFlags.Both, reportErrors);
                     }
                 }
             }
@@ -23529,7 +23536,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const targetIsOptional = strictNullChecks && !!(getCheckFlags(targetProp) & CheckFlags.Partial);
             const effectiveTarget = addOptionality(getNonMissingTypeOfSymbol(targetProp), /*isProperty*/ false, targetIsOptional);
             const effectiveSource = getTypeOfSourceProperty(sourceProp);
-            return isRelatedTo(effectiveSource, effectiveTarget, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+            return isRelatedTo(effectiveSource, effectiveTarget, intersectionState, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined);
         }
 
         function propertyRelatedTo(source: Type, target: Type, sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, intersectionState: IntersectionState, skipOptional: boolean): Ternary {
@@ -23657,7 +23664,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean, excludedProperties: Set<__String> | undefined, optionalsOnly: boolean, intersectionState: IntersectionState): Ternary {
             if (relation === identityRelation) {
-                return propertiesIdenticalTo(source, target, excludedProperties);
+                return propertiesIdenticalTo(source, target, excludedProperties, intersectionState);
             }
             let result = Ternary.True;
             if (isTupleType(target)) {
@@ -23742,7 +23749,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                         const targetCheckType = sourceFlags & ElementFlags.Variadic && targetFlags & ElementFlags.Rest ? createArrayType(targetType) :
                             removeMissingType(targetType, !!(targetFlags & ElementFlags.Optional));
-                        const related = isRelatedTo(sourceType, targetCheckType, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                        const related = isRelatedTo(sourceType, targetCheckType, intersectionState, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined);
                         if (!related) {
                             if (reportErrors && (targetArity > 1 || sourceArity > 1)) {
                                 if (targetHasRestElement && sourcePosition >= targetStartCount && sourcePositionFromEnd >= targetEndCount && targetStartCount !== sourceArity - targetEndCount - 1) {
@@ -23803,7 +23810,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
-        function propertiesIdenticalTo(source: Type, target: Type, excludedProperties: Set<__String> | undefined): Ternary {
+        function propertiesIdenticalTo(source: Type, target: Type, excludedProperties: Set<__String> | undefined, intersectionState: IntersectionState): Ternary {
             if (!(source.flags & TypeFlags.Object && target.flags & TypeFlags.Object)) {
                 return Ternary.False;
             }
@@ -23818,18 +23825,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!targetProp) {
                     return Ternary.False;
                 }
-                const related = compareProperties(sourceProp, targetProp, isRelatedTo);
+                const related = compareProperties(sourceProp, targetProp, isRelatedToWorker);
                 if (!related) {
                     return Ternary.False;
                 }
                 result &= related;
             }
             return result;
+
+            function isRelatedToWorker(source: Type, target: Type) {
+                return isRelatedTo(source, target, intersectionState);
+            }
         }
 
         function signaturesRelatedTo(source: Type, target: Type, kind: SignatureKind, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             if (relation === identityRelation) {
-                return signaturesIdenticalTo(source, target, kind);
+                return signaturesIdenticalTo(source, target, kind, intersectionState);
             }
             if (target === anyFunctionType || source === anyFunctionType) {
                 return Ternary.True;
@@ -23971,11 +23982,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 SignatureCheckMode.None;
             return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target, checkMode, reportErrors, reportError, incompatibleReporter, isRelatedToWorker, reportUnreliableMapper);
             function isRelatedToWorker(source: Type, target: Type, reportErrors?: boolean) {
-                return isRelatedTo(source, target, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                return isRelatedTo(source, target, intersectionState, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined);
             }
         }
 
-        function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
+        function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind, intersectionState: IntersectionState): Ternary {
             const sourceSignatures = getSignaturesOfType(source, kind);
             const targetSignatures = getSignaturesOfType(target, kind);
             if (sourceSignatures.length !== targetSignatures.length) {
@@ -23983,13 +23994,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             let result = Ternary.True;
             for (let i = 0; i < sourceSignatures.length; i++) {
-                const related = compareSignaturesIdentical(sourceSignatures[i], targetSignatures[i], /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ false, isRelatedTo);
+                const related = compareSignaturesIdentical(sourceSignatures[i], targetSignatures[i], /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ false, isRelatedToWorker);
                 if (!related) {
                     return Ternary.False;
                 }
                 result &= related;
             }
             return result;
+
+            function isRelatedToWorker(source: Type, target: Type) {
+                return isRelatedTo(source, target, intersectionState);
+            }
         }
 
         function membersRelatedToIndexInfo(source: Type, targetInfo: IndexInfo, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
@@ -24006,7 +24021,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const type = exactOptionalPropertyTypes || propType.flags & TypeFlags.Undefined || keyType === numberType || !(prop.flags & SymbolFlags.Optional)
                         ? propType
                         : getTypeWithFacts(propType, TypeFacts.NEUndefined);
-                    const related = isRelatedTo(type, targetInfo.type, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+                    const related = isRelatedTo(type, targetInfo.type, intersectionState, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined);
                     if (!related) {
                         if (reportErrors) {
                             reportError(Diagnostics.Property_0_is_incompatible_with_index_signature, symbolToString(prop));
@@ -24029,7 +24044,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function indexInfoRelatedTo(sourceInfo: IndexInfo, targetInfo: IndexInfo, reportErrors: boolean, intersectionState: IntersectionState) {
-            const related = isRelatedTo(sourceInfo.type, targetInfo.type, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
+            const related = isRelatedTo(sourceInfo.type, targetInfo.type, intersectionState, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined);
             if (!related && reportErrors) {
                 if (sourceInfo.keyType === targetInfo.keyType) {
                     reportError(Diagnostics._0_index_signatures_are_incompatible, typeToString(sourceInfo.keyType));
@@ -24043,14 +24058,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function indexSignaturesRelatedTo(source: Type, target: Type, sourceIsPrimitive: boolean, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             if (relation === identityRelation) {
-                return indexSignaturesIdenticalTo(source, target);
+                return indexSignaturesIdenticalTo(source, target, intersectionState);
             }
             const indexInfos = getIndexInfosOfType(target);
             const targetHasStringIndex = some(indexInfos, info => info.keyType === stringType);
             let result = Ternary.True;
             for (const targetInfo of indexInfos) {
                 const related = relation !== strictSubtypeRelation && !sourceIsPrimitive && targetHasStringIndex && targetInfo.type.flags & TypeFlags.Any ? Ternary.True :
-                    isGenericMappedType(source) && targetHasStringIndex ? isRelatedTo(getTemplateTypeFromMappedType(source), targetInfo.type, RecursionFlags.Both, reportErrors) :
+                    isGenericMappedType(source) && targetHasStringIndex ? isRelatedTo(getTemplateTypeFromMappedType(source), targetInfo.type, intersectionState, RecursionFlags.Both, reportErrors) :
                     typeRelatedToIndexInfo(source, targetInfo, reportErrors, intersectionState);
                 if (!related) {
                     return Ternary.False;
@@ -24077,7 +24092,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return Ternary.False;
         }
 
-        function indexSignaturesIdenticalTo(source: Type, target: Type): Ternary {
+        function indexSignaturesIdenticalTo(source: Type, target: Type, intersectionState: IntersectionState): Ternary {
             const sourceInfos = getIndexInfosOfType(source);
             const targetInfos = getIndexInfosOfType(target);
             if (sourceInfos.length !== targetInfos.length) {
@@ -24085,7 +24100,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             for (const targetInfo of targetInfos) {
                 const sourceInfo = getIndexInfoOfType(source, targetInfo.keyType);
-                if (!(sourceInfo && isRelatedTo(sourceInfo.type, targetInfo.type, RecursionFlags.Both) && sourceInfo.isReadonly === targetInfo.isReadonly)) {
+                if (!(sourceInfo && isRelatedTo(sourceInfo.type, targetInfo.type, intersectionState, RecursionFlags.Both) && sourceInfo.isReadonly === targetInfo.isReadonly)) {
                     return Ternary.False;
                 }
             }
