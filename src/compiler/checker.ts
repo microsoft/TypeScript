@@ -38894,9 +38894,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // should not be checking assignability of a promise to the return type. Instead, we need to
                 // check assignability of the awaited type of the expression body against the promised type of
                 // its return type annotation.
+                const exprType = checkExpression(node.body);
                 const returnOrPromisedType = returnType && unwrapReturnType(returnType, functionFlags);
                 if (returnOrPromisedType) {
-                    checkReturnExpression(node, returnOrPromisedType, node.body, node.body);
+                    checkReturnExpression(node, returnOrPromisedType, node.body, node.body, exprType);
                 }
             }
         }
@@ -45613,6 +45614,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const signature = getSignatureFromDeclaration(container);
         const returnType = getReturnTypeOfSignature(signature);
         if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
+            const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
             if (container.kind === SyntaxKind.SetAccessor) {
                 if (node.expression) {
                     error(node, Diagnostics.Setters_cannot_return_a_value);
@@ -45626,7 +45628,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (getReturnTypeFromAnnotation(container)) {
                 const unwrappedReturnType = unwrapReturnType(returnType, getFunctionFlags(container)) ?? returnType;
-                checkReturnExpression(container, unwrappedReturnType, node, node.expression);
+                checkReturnExpression(container, unwrappedReturnType, node, node.expression, exprType);
             }
         }
         else if (container.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeUndefinedVoidOrAny(container, returnType)) {
@@ -45642,6 +45644,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         unwrappedReturnType: Type,
         node: ReturnStatement | Expression,
         expr: Expression | undefined,
+        exprType: Type,
         inConditionalExpression = false,
     ): void {
         const excludeJSDocTypeAssertions = isInJSFile(node);
@@ -45655,11 +45658,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const effectiveExpr = expr && getEffectiveCheckNode(expr); // The effective expression for diagnostics purposes.
 
         const inReturnStatement = node.kind === SyntaxKind.ReturnStatement;
-        const exprType = expr
-            ? inReturnStatement
-                ? checkExpressionCached(expr)
-                : checkExpression(expr)
-            : undefinedType;
+        // const exprType = expr
+        //     ? inReturnStatement
+        //         ? checkExpressionCached(expr)
+        //         : checkExpression(expr)
+        //     : undefinedType;
         const unwrappedExprType = functionFlags & FunctionFlags.Async
             ? checkAwaitedType(
                 exprType,
@@ -45771,9 +45774,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         node: ReturnStatement | Expression,
         expr: ConditionalExpression,
     ): void {
-        checkExpression(expr.condition);
-        checkReturnExpression(container, returnType, node, expr.whenTrue, /*inConditionalExpression*/ true);
-        checkReturnExpression(container, returnType, node, expr.whenFalse, /*inConditionalExpression*/ true);
+        checkReturnExpression(container, returnType, node, expr.whenTrue, checkExpression(expr.whenTrue), /*inConditionalExpression*/ true);
+        checkReturnExpression(container, returnType, node, expr.whenFalse, checkExpression(expr.whenFalse), /*inConditionalExpression*/ true);
     }
 
     // Narrowable type parameters are type parameters that:
