@@ -171,6 +171,7 @@ import {
     EnumMember,
     EnumType,
     equateValues,
+    ErrorOutputContainer,
     escapeLeadingUnderscores,
     escapeString,
     EvaluatorResult,
@@ -1130,7 +1131,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    ErrorOutputContainer,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
