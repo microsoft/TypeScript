@@ -23439,7 +23439,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (numCombinations > 25) {
                     // We've reached the complexity limit.
                     tracing?.instant(tracing.Phase.CheckTypes, "typeRelatedToDiscriminatedType_DepthLimit", { sourceId: source.id, targetId: target.id, numCombinations });
-                    return Ternary.False;
+                    return Ternary.Unknown;
                 }
             }
 
