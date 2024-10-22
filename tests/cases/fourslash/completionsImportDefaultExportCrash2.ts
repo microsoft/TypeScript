@@ -30,13 +30,22 @@
 //// export default methods.$;
 
 // @Filename: /swipe-back.js
-//// import $ from './dom7.js';
 //// /*1*/
 
 verify.completions({
   marker: "1",
-  // some kind of a check should be added here
+  includes: [{
+    name: "$",
+    hasAction: true,
+    source: 'dom7',
+    sortText: completion.SortText.AutoImportSuggestions,
+  }, {
+    name: "Dom7",
+    hasAction: true,
+    source: './dom7',
+    sortText: completion.SortText.AutoImportSuggestions,
+  }],
   preferences: {
-      includeCompletionsForModuleExports: true,
+    includeCompletionsForModuleExports: true,
   }
 });
