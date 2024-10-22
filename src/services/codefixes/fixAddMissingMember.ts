@@ -85,6 +85,7 @@ import {
     isSourceFileJS,
     isTransientSymbol,
     isTypeLiteralNode,
+    isYieldExpression,
     JsxOpeningLikeElement,
     LanguageVariant,
     lastOrUndefined,
@@ -324,20 +325,16 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         return { kind: InfoKind.ObjectLiteral, token: param.name, identifier: param.name.text, properties, parentDeclaration: parent };
     }
 
-    if (token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent)) {
-        const targetType = checker.getContextualType(parent) || checker.getTypeAtLocation(parent);
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
-        if (!length(properties)) return undefined;
+    if (token.kind === SyntaxKind.OpenBraceToken || isSatisfiesExpression(parent) || isReturnStatement(parent)) {
+        const expression = (isSatisfiesExpression(parent) || isReturnStatement(parent)) && parent.expression ? parent.expression : parent;
+        if (isObjectLiteralExpression(expression)) {
+            const targetType = isSatisfiesExpression(parent) ? checker.getTypeFromTypeNode(parent.type) :
+                checker.getContextualType(expression) || checker.getTypeAtLocation(expression);
+            const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
+            if (!length(properties)) return undefined;
 
-        return { kind: InfoKind.ObjectLiteral, token: parent, identifier: undefined, properties, parentDeclaration: parent };
-    }
-
-    if (isSatisfiesExpression(parent) && isObjectLiteralExpression(parent.expression)) {
-        const targetType = checker.getTypeFromTypeNode(parent.type);
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
-        if (!length(properties)) return undefined;
-
-        return { kind: InfoKind.ObjectLiteral, token: parent, identifier: undefined, properties, parentDeclaration: parent.expression };
+            return { kind: InfoKind.ObjectLiteral, token: parent, identifier: undefined, properties, parentDeclaration: expression, indentation: isReturnStatement(expression.parent) || isYieldExpression(expression.parent) ? 0 : undefined };
+        }
     }
 
     if (!isMemberName(token)) return undefined;
