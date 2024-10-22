@@ -672,7 +672,7 @@ export function concatenate<T>(array1: readonly T[] | undefined, array2: readonl
 export function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined {
     if (array2 === undefined || array2.length === 0) return array1;
     if (array1 === undefined || array1.length === 0) return array2;
-    return [...array1, ...array2];
+    return array1.concat(array2);
 }
 
 function selectIndex(_: unknown, i: number) {
