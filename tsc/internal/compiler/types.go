@@ -1,5 +1,7 @@
 package compiler
 
+//go:generate go run golang.org/x/tools/cmd/stringer -type=SyntaxKind,SignatureKind,ScriptKind,ScriptTarget,LanguageVariant,Tristate -output=stringer_generated.go
+
 type SyntaxKind int16
 
 const (
