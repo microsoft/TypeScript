@@ -10,12 +10,14 @@
             "kind": "JSDocImportTag",
             "pos": 8,
             "end": 30,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 15,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "import"
             },
@@ -23,6 +25,7 @@
                 "kind": "ImportClause",
                 "pos": 16,
                 "end": 19,
+                "flags": "JSDoc",
                 "modifierFlagsCache": 0,
                 "transformFlags": 1,
                 "isTypeOnly": true,
@@ -30,6 +33,7 @@
                     "kind": "Identifier",
                     "pos": 16,
                     "end": 19,
+                    "flags": "JSDoc",
                     "transformFlags": 0,
                     "escapedText": "foo"
                 }
@@ -38,6 +42,7 @@
                 "kind": "StringLiteral",
                 "pos": 24,
                 "end": 30,
+                "flags": "JSDoc",
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "text": "foo"

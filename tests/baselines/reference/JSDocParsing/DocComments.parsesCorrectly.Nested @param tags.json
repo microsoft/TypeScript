@@ -10,12 +10,14 @@
             "kind": "JSDocParameterTag",
             "pos": 6,
             "end": 64,
+            "flags": "JSDoc",
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 7,
                 "end": 12,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "param"
             },
@@ -24,12 +26,14 @@
                 "kind": "JSDocTypeExpression",
                 "pos": 34,
                 "end": 64,
+                "flags": "JSDoc",
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "type": {
                     "kind": "JSDocTypeLiteral",
                     "pos": 34,
                     "end": 64,
+                    "flags": "JSDoc",
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
                     "jsDocPropertyTags": {
@@ -37,12 +41,14 @@
                             "kind": "JSDocParameterTag",
                             "pos": 34,
                             "end": 64,
+                            "flags": "JSDoc",
                             "modifierFlagsCache": 0,
                             "transformFlags": 0,
                             "tagName": {
                                 "kind": "Identifier",
                                 "pos": 35,
                                 "end": 40,
+                                "flags": "JSDoc",
                                 "transformFlags": 0,
                                 "escapedText": "param"
                             },
@@ -51,12 +57,14 @@
                                 "kind": "JSDocTypeExpression",
                                 "pos": 41,
                                 "end": 49,
+                                "flags": "JSDoc",
                                 "modifierFlagsCache": 0,
                                 "transformFlags": 0,
                                 "type": {
                                     "kind": "StringKeyword",
                                     "pos": 42,
                                     "end": 48,
+                                    "flags": "JSDoc",
                                     "transformFlags": 1
                                 }
                             },
@@ -64,12 +72,14 @@
                                 "kind": "QualifiedName",
                                 "pos": 50,
                                 "end": 53,
+                                "flags": "JSDoc",
                                 "modifierFlagsCache": 0,
                                 "transformFlags": 0,
                                 "left": {
                                     "kind": "Identifier",
                                     "pos": 50,
                                     "end": 51,
+                                    "flags": "JSDoc",
                                     "transformFlags": 0,
                                     "escapedText": "o"
                                 },
@@ -77,6 +87,7 @@
                                     "kind": "Identifier",
                                     "pos": 52,
                                     "end": 53,
+                                    "flags": "JSDoc",
                                     "transformFlags": 0,
                                     "escapedText": "f"
                                 }
@@ -97,6 +108,7 @@
                 "kind": "Identifier",
                 "pos": 22,
                 "end": 23,
+                "flags": "JSDoc",
                 "transformFlags": 0,
                 "escapedText": "o"
             },

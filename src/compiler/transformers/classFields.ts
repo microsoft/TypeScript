@@ -16,6 +16,7 @@ import {
     BindingElement,
     Bundle,
     CallExpression,
+    canHaveAsteriskToken,
     chainBundle,
     ClassDeclaration,
     ClassElement,
@@ -851,7 +852,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     functionName,
                     factory.createFunctionExpression(
                         filter(node.modifiers, (m): m is Modifier => isModifier(m) && !isStaticModifier(m) && !isAccessorModifier(m)),
-                        node.asteriskToken,
+                        tryCast(node, canHaveAsteriskToken)?.asteriskToken,
                         functionName,
                         /*typeParameters*/ undefined,
                         visitParameterList(node.parameters, visitor, context),
@@ -3300,7 +3301,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 // constructor references in static property initializers.
                 const declaration = resolver.getReferencedValueDeclaration(node);
                 if (declaration) {
-                    const classAlias = classAliases[declaration.id!]; // TODO: GH#18217
+                    const classAlias = classAliases[declaration.id]; // TODO: GH#18217
                     if (classAlias) {
                         const clone = factory.cloneNode(classAlias);
                         setSourceMapRange(clone, node);

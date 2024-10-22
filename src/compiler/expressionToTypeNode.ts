@@ -141,7 +141,7 @@ import {
     SyntacticTypeNodeBuilderContext,
     SyntacticTypeNodeBuilderResolver,
     SyntaxKind,
-    TypeAssertion,
+    TypeAssertionExpression,
     TypeElement,
     TypeNode,
     TypeOperatorNode,
@@ -707,7 +707,7 @@ export function createSyntacticTypeNodeBuilder(
         if (!result && node.kind === SyntaxKind.PropertyAssignment) {
             const initializer = node.initializer;
             const type = isJSDocTypeAssertion(initializer) ? getJSDocTypeAssertionType(initializer) :
-                initializer.kind === SyntaxKind.AsExpression || initializer.kind === SyntaxKind.TypeAssertionExpression ? (initializer as AsExpression | TypeAssertion).type :
+                initializer.kind === SyntaxKind.AsExpression || initializer.kind === SyntaxKind.TypeAssertionExpression ? (initializer as AsExpression | TypeAssertionExpression).type :
                 undefined;
 
             if (type && !isConstTypeReference(type)) {
@@ -915,7 +915,7 @@ export function createSyntacticTypeNodeBuilder(
                 return withNewScope(context, node, () => typeFromFunctionLikeExpression(node, context));
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
-                const asExpression = node as AsExpression | TypeAssertion;
+                const asExpression = node as AsExpression | TypeAssertionExpression;
                 return typeFromTypeAssertion(asExpression.expression, asExpression.type, context, requiresAddingUndefined);
             case SyntaxKind.PrefixUnaryExpression:
                 const unaryExpression = node as PrefixUnaryExpression;

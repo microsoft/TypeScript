@@ -17,6 +17,7 @@ import {
     BreakOrContinueStatement,
     Bundle,
     CallExpression,
+    canHaveAsteriskToken,
     CaseBlock,
     CaseClause,
     cast,
@@ -76,6 +77,7 @@ import {
     getSourceMapRange,
     getSuperCallFromStatement,
     getUseDefineForClassFields,
+    hasName,
     hasStaticModifier,
     hasSyntacticModifier,
     Identifier,
@@ -2527,7 +2529,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             setTextRange(
                 factory.createFunctionExpression(
                     /*modifiers*/ undefined,
-                    node.asteriskToken,
+                    tryCast(node, canHaveAsteriskToken)?.asteriskToken,
                     name,
                     /*typeParameters*/ undefined,
                     parameters,
@@ -3318,7 +3320,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             if (
                 (property.transformFlags & TransformFlags.ContainsYield &&
                     hierarchyFacts & HierarchyFacts.AsyncFunctionBody)
-                || (hasComputed = Debug.checkDefined(property.name).kind === SyntaxKind.ComputedPropertyName)
+                || (hasComputed = cast(property, hasName).name.kind === SyntaxKind.ComputedPropertyName)
             ) {
                 numInitialProperties = i;
                 break;
@@ -4733,6 +4735,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     }
 
     function visitSpanOfNonSpreads(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): SpreadSegment {
+        if (last(chunk).kind === SyntaxKind.OmittedExpression) {
+            hasTrailingComma = true;
+        }
         const expression = factory.createArrayLiteralExpression(
             visitNodes(factory.createNodeArray(chunk, hasTrailingComma), visitor, isExpression),
             multiLine,

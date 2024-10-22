@@ -29,6 +29,7 @@ import {
     getTextOfConstantValue,
     getTextOfIdentifierOrLiteral,
     getTextOfNode,
+    hasName,
     hasSyntacticModifier,
     idText,
     ImportEqualsDeclaration,
@@ -509,7 +510,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                         displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                         displayParts.push(spacePart());
                     }
-                    else if (declaration.kind !== SyntaxKind.CallSignature && declaration.name) {
+                    else if (declaration.kind !== SyntaxKind.CallSignature && hasName(declaration)) {
                         addFullSymbolName(declaration.symbol);
                     }
                     addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));

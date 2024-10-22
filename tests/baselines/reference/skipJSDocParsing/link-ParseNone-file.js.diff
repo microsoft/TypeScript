@@ -15,7 +15,7 @@
 -                    "flags": "JSDoc",
 -                    "modifierFlagsCache": 0,
 -                    "transformFlags": 0,
--                    "comment": {
+-                    "commentArray": {
 -                        "0": {
 -                            "kind": "JSDocText",
 -                            "pos": 32,
@@ -55,7 +55,7 @@
          "length": 2,
          "pos": 0,
          "end": 70,
-@@ -214,7 +171,6 @@
+@@ -213,7 +170,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],

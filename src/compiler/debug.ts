@@ -11,53 +11,12 @@ import {
     FlowLabel,
     FlowNode,
     FlowSwitchClause,
-    getEffectiveModifierFlagsNoCache,
-    getEmitFlags,
     getOwnKeys,
-    getParseTreeNode,
     getSourceFileOfNode,
     getSourceTextOfNodeFromSourceFile,
     hasProperty,
-    idText,
     IntrinsicType,
-    isArrayTypeNode,
-    isBigIntLiteral,
-    isCallSignatureDeclaration,
-    isConditionalTypeNode,
-    isConstructorDeclaration,
-    isConstructorTypeNode,
-    isConstructSignatureDeclaration,
     isDefaultClause,
-    isFunctionTypeNode,
-    isGeneratedIdentifier,
-    isGetAccessorDeclaration,
-    isIdentifier,
-    isImportTypeNode,
-    isIndexedAccessTypeNode,
-    isIndexSignatureDeclaration,
-    isInferTypeNode,
-    isIntersectionTypeNode,
-    isLiteralTypeNode,
-    isMappedTypeNode,
-    isNamedTupleMember,
-    isNumericLiteral,
-    isOptionalTypeNode,
-    isParameter,
-    isParenthesizedTypeNode,
-    isParseTreeNode,
-    isPrivateIdentifier,
-    isRestTypeNode,
-    isSetAccessorDeclaration,
-    isStringLiteral,
-    isThisTypeNode,
-    isTupleTypeNode,
-    isTypeLiteralNode,
-    isTypeOperatorNode,
-    isTypeParameterDeclaration,
-    isTypePredicateNode,
-    isTypeQueryNode,
-    isTypeReferenceNode,
-    isUnionTypeNode,
     LiteralType,
     map,
     MatchingKeys,
@@ -67,7 +26,6 @@ import {
     NodeArray,
     NodeCheckFlags,
     NodeFlags,
-    nodeIsSynthesized,
     noop,
     objectAllocator,
     ObjectFlags,
@@ -275,6 +233,8 @@ export namespace Debug {
         return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
     }
 
+    export function assertNeverTypeOnly(_: never): void {}
+
     export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T>, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U>;
     export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
     export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T> | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U> | undefined;
@@ -362,8 +322,7 @@ export namespace Debug {
      * This is useful in cases where we switch on `node.kind` and can be reasonably sure the type is accurate, and
      * as a result can reduce the number of unnecessary casts.
      */
-    export function type<T>(value: unknown): asserts value is T;
-    export function type(_value: unknown) {}
+    export function type<T>(value: unknown): asserts value is T {}
 
     export function getFunctionName(func: AnyFunction): string {
         if (typeof func !== "function") {
@@ -607,6 +566,16 @@ export namespace Debug {
         }
     }
 
+    const debugInfoRegistrations: (() => void)[] = [];
+    export function registerDebugInfo(cb: () => void): void {
+        if (isDebugInfoEnabled) {
+            cb();
+        }
+        else {
+            debugInfoRegistrations.push(cb);
+        }
+    }
+
     /**
      * Injects debug information into frequently used types.
      */
@@ -615,8 +584,6 @@ export namespace Debug {
 
         // avoid recomputing
         const weakTypeTextMap = new WeakMap<Type, string>();
-        const weakNodeTextMap = new WeakMap<Node, string>();
-
         // Add additional properties in debug mode to assist with debugging.
         Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
             // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
@@ -702,106 +669,10 @@ export namespace Debug {
             },
         });
 
-        const nodeConstructors = [
-            objectAllocator.getNodeConstructor(),
-            objectAllocator.getIdentifierConstructor(),
-            objectAllocator.getTokenConstructor(),
-            objectAllocator.getSourceFileConstructor(),
-        ];
-
-        for (const ctor of nodeConstructors) {
-            if (!hasProperty(ctor.prototype, "__debugKind")) {
-                Object.defineProperties(ctor.prototype, {
-                    // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
-                    __tsDebuggerDisplay: {
-                        value(this: Node) {
-                            const nodeHeader = isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
-                                isIdentifier(this) ? `Identifier '${idText(this)}'` :
-                                isPrivateIdentifier(this) ? `PrivateIdentifier '${idText(this)}'` :
-                                isStringLiteral(this) ? `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
-                                isNumericLiteral(this) ? `NumericLiteral ${this.text}` :
-                                isBigIntLiteral(this) ? `BigIntLiteral ${this.text}n` :
-                                isTypeParameterDeclaration(this) ? "TypeParameterDeclaration" :
-                                isParameter(this) ? "ParameterDeclaration" :
-                                isConstructorDeclaration(this) ? "ConstructorDeclaration" :
-                                isGetAccessorDeclaration(this) ? "GetAccessorDeclaration" :
-                                isSetAccessorDeclaration(this) ? "SetAccessorDeclaration" :
-                                isCallSignatureDeclaration(this) ? "CallSignatureDeclaration" :
-                                isConstructSignatureDeclaration(this) ? "ConstructSignatureDeclaration" :
-                                isIndexSignatureDeclaration(this) ? "IndexSignatureDeclaration" :
-                                isTypePredicateNode(this) ? "TypePredicateNode" :
-                                isTypeReferenceNode(this) ? "TypeReferenceNode" :
-                                isFunctionTypeNode(this) ? "FunctionTypeNode" :
-                                isConstructorTypeNode(this) ? "ConstructorTypeNode" :
-                                isTypeQueryNode(this) ? "TypeQueryNode" :
-                                isTypeLiteralNode(this) ? "TypeLiteralNode" :
-                                isArrayTypeNode(this) ? "ArrayTypeNode" :
-                                isTupleTypeNode(this) ? "TupleTypeNode" :
-                                isOptionalTypeNode(this) ? "OptionalTypeNode" :
-                                isRestTypeNode(this) ? "RestTypeNode" :
-                                isUnionTypeNode(this) ? "UnionTypeNode" :
-                                isIntersectionTypeNode(this) ? "IntersectionTypeNode" :
-                                isConditionalTypeNode(this) ? "ConditionalTypeNode" :
-                                isInferTypeNode(this) ? "InferTypeNode" :
-                                isParenthesizedTypeNode(this) ? "ParenthesizedTypeNode" :
-                                isThisTypeNode(this) ? "ThisTypeNode" :
-                                isTypeOperatorNode(this) ? "TypeOperatorNode" :
-                                isIndexedAccessTypeNode(this) ? "IndexedAccessTypeNode" :
-                                isMappedTypeNode(this) ? "MappedTypeNode" :
-                                isLiteralTypeNode(this) ? "LiteralTypeNode" :
-                                isNamedTupleMember(this) ? "NamedTupleMember" :
-                                isImportTypeNode(this) ? "ImportTypeNode" :
-                                formatSyntaxKind(this.kind);
-                            return `${nodeHeader}${this.flags ? ` (${formatNodeFlags(this.flags)})` : ""}`;
-                        },
-                    },
-                    __debugKind: {
-                        get(this: Node) {
-                            return formatSyntaxKind(this.kind);
-                        },
-                    },
-                    __debugNodeFlags: {
-                        get(this: Node) {
-                            return formatNodeFlags(this.flags);
-                        },
-                    },
-                    __debugModifierFlags: {
-                        get(this: Node) {
-                            return formatModifierFlags(getEffectiveModifierFlagsNoCache(this));
-                        },
-                    },
-                    __debugTransformFlags: {
-                        get(this: Node) {
-                            return formatTransformFlags(this.transformFlags);
-                        },
-                    },
-                    __debugIsParseTreeNode: {
-                        get(this: Node) {
-                            return isParseTreeNode(this);
-                        },
-                    },
-                    __debugEmitFlags: {
-                        get(this: Node) {
-                            return formatEmitFlags(getEmitFlags(this));
-                        },
-                    },
-                    __debugGetText: {
-                        value(this: Node, includeTrivia?: boolean) {
-                            if (nodeIsSynthesized(this)) return "";
-                            // avoid recomputing
-                            let text = weakNodeTextMap.get(this);
-                            if (text === undefined) {
-                                const parseNode = getParseTreeNode(this);
-                                const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                                text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
-                                weakNodeTextMap.set(this, text);
-                            }
-                            return text;
-                        },
-                    },
-                });
-            }
+        for (const cb of debugInfoRegistrations) {
+            cb();
         }
+        debugInfoRegistrations.length = 0;
 
         isDebugInfoEnabled = true;
     }

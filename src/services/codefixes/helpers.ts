@@ -6,6 +6,7 @@ import {
     ArrowFunction,
     Block,
     CallExpression,
+    canHaveAsteriskToken,
     CharacterCodes,
     CheckFlags,
     ClassLikeDeclaration,
@@ -469,7 +470,7 @@ export function createSignatureDeclarationFromSignature(
     }
 
     const questionToken = optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
-    const asteriskToken = signatureDeclaration.asteriskToken;
+    const asteriskToken = tryCast(signatureDeclaration, canHaveAsteriskToken)?.asteriskToken;
     if (isFunctionExpression(signatureDeclaration)) {
         return factory.updateFunctionExpression(signatureDeclaration, modifiers, signatureDeclaration.asteriskToken, tryCast(name, isIdentifier), typeParameters, parameters, type, body ?? signatureDeclaration.body);
     }

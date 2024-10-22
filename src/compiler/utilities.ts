@@ -24,6 +24,14 @@ import {
     AssignmentDeclarationKind,
     AssignmentExpression,
     AssignmentOperatorToken,
+    AstBinaryExpression,
+    AstExpression,
+    AstHasJSDoc,
+    AstModifierLike,
+    AstNewExpression,
+    AstNode,
+    AstPostfixUnaryExpression,
+    AstPrefixUnaryExpression,
     BarBarEqualsToken,
     BinaryExpression,
     binarySearch,
@@ -172,21 +180,12 @@ import {
     getDirectoryPath,
     getImpliedNodeFormatForEmitWorker,
     getJSDocAugmentsTag,
-    getJSDocDeprecatedTagNoCache,
     getJSDocImplementsTags,
-    getJSDocOverrideTagNoCache,
     getJSDocParameterTags,
-    getJSDocParameterTagsNoCache,
-    getJSDocPrivateTagNoCache,
-    getJSDocProtectedTagNoCache,
-    getJSDocPublicTagNoCache,
-    getJSDocReadonlyTagNoCache,
     getJSDocReturnType,
     getJSDocSatisfiesTag,
     getJSDocTags,
     getJSDocType,
-    getJSDocTypeParameterTags,
-    getJSDocTypeParameterTagsNoCache,
     getJSDocTypeTag,
     getLeadingCommentRanges,
     getLineAndCharacterOfPosition,
@@ -213,7 +212,6 @@ import {
     HasFlowNode,
     HasInferredType,
     HasInitializer,
-    hasInitializer,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -253,7 +251,7 @@ import {
     isArrayLiteralExpression,
     isArrowFunction,
     isAssertionExpression,
-    isAutoAccessorPropertyDeclaration,
+    astIsJSDocTypeExpression,
     isBigIntLiteral,
     isBinaryExpression,
     isBindingElement,
@@ -320,7 +318,6 @@ import {
     isJsxNamespacedName,
     isJsxOpeningLikeElement,
     isJsxText,
-    isLeftHandSideExpression,
     isLineBreak,
     isLiteralTypeNode,
     isMappedTypeNode,
@@ -328,7 +325,6 @@ import {
     isMetaProperty,
     isMethodDeclaration,
     isMethodOrAccessor,
-    isModifierLike,
     isModuleDeclaration,
     isModuleOrEnumDeclaration,
     isNamedDeclaration,
@@ -347,7 +343,6 @@ import {
     isParameterPropertyDeclaration,
     isParenthesizedExpression,
     isParenthesizedTypeNode,
-    isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyAssignment,
@@ -367,7 +362,6 @@ import {
     isTypeElement,
     isTypeLiteralNode,
     isTypeNode,
-    isTypeParameterDeclaration,
     isTypeQueryNode,
     isTypeReferenceNode,
     isVariableDeclaration,
@@ -510,6 +504,7 @@ import {
     shouldAllowImportingTsExtension,
     Signature,
     SignatureDeclaration,
+    SignatureDeclarationBase,
     SignatureFlags,
     singleElementArray,
     singleOrUndefined,
@@ -540,7 +535,6 @@ import {
     targetOptionDeclaration,
     TemplateExpression,
     TemplateLiteral,
-    TemplateLiteralLikeNode,
     TemplateLiteralToken,
     TemplateLiteralTypeSpan,
     TemplateSpan,
@@ -563,7 +557,7 @@ import {
     TupleTypeNode,
     Type,
     TypeAliasDeclaration,
-    TypeAssertion,
+    TypeAssertionExpression,
     TypeChecker,
     TypeCheckerHost,
     TypeElement,
@@ -592,7 +586,127 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     YieldExpression,
+    AstCallExpression,
+    astIsCallExpression,
+    AstBindableObjectDefinePropertyCall,
+    astIsPropertyAccessExpression,
+    astIsIdentifier,
+    astIdText,
+    astIsStringOrNumericLiteralLike,
+    AstBindableStaticNameExpression,
+    AstEntityNameExpression,
+    AstPropertyAccessEntityNameExpression,
+    AstBindableStaticAccessExpression,
+    AstBindableStaticElementAccessExpression,
+    astIsObjectLiteralExpression,
+    AstIdentifier,
+    RefineNode,
+    AstLiteralLikeElementAccessExpression,
+    AstPropertyAccessExpression,
+    AstAccessExpression,
+    AstPrivateIdentifier,
+    AstStringLiteralLike,
+    AstNumericLiteral,
+    AstElementAccessExpression,
+    astSkipOuterExpressions,
+    astIsElementAccessExpression,
+    AstAssignmentExpression,
+    astIsBinaryExpression,
+    astIsLeftHandSideExpression,
+    astIsVoidExpression,
+    astIsNumericLiteral,
+    AstDeclarationName,
+    astIsStringLiteralLike,
+    astIsPrefixUnaryExpression,
+    AstJSDocEnumTag,
+    AstJSDocCallbackTag,
+    AstJSDocTypedefTag,
+    astGetName,
+    AstQualifiedName,
+    AstImportSpecifier,
+    AstBindingElement,
+    AstThisContainer,
+    AstComputedPropertyName,
+    AstArrowFunction,
+    astIsClassLike,
+    astIsClassElement,
+    astIsClassDeclaration,
+    astIsFunctionDeclaration,
+    astIsSourceFile,
+    AstDeclaration,
+    AstDynamicNamedBinaryExpression,
+    AstDynamicNamedDeclaration,
+    astGetNameOfDeclaration,
+    astCanHaveModifiers,
+    astIsParameter,
+    AstVariableLikeDeclaration,
+    astHasJSDocNodes,
+    astGetInitializer,
+    AstParameterDeclaration,
+    AstTypeParameterDeclaration,
+    astGetJSDocParameterTagsNoCache,
+    astGetJSDocParameterTags,
+    astGetJSDocTypeParameterTagsNoCache,
+    astGetJSDocTypeParameterTags,
+    astIsModuleDeclaration,
+    AstVariableDeclaration,
+    astIsVariableStatement,
+    AstPropertyDeclaration,
+    AstPropertyAssignment,
+    astIsExpressionStatement,
+    astGetJSDocPublicTagNoCache,
+    astGetJSDocPrivateTagNoCache,
+    astGetJSDocProtectedTagNoCache,
+    astGetJSDocReadonlyTagNoCache,
+    astGetJSDocOverrideTagNoCache,
+    astGetJSDocDeprecatedTagNoCache,
+    AstModuleExportName,
+    astForEachChild,
+    AstSourceFile,
+    AstNodeArray,
+    astIsTypeParameterDeclaration,
+    astIsClassStaticBlockDeclaration,
+    astIsPropertySignature,
+    astIsPropertyDeclaration,
+    astIsPropertyAssignment,
+    astIsShorthandPropertyAssignment,
+    astIsMethodDeclaration,
+    astIsConstructorDeclaration,
+    astIsGetAccessorDeclaration,
+    astIsSetAccessorDeclaration,
+    astIsNamespaceExportDeclaration,
+    astIsAutoAccessorPropertyDeclaration,
+    astIsModifierLike,
+    AstStatement,
+    AstPrologueDirective,
+    AstExpressionStatement,
+    astGetJSDoc,
+    astIsDecorator,
+    astGetModifiers,
+    astCanHaveDecorators,
+    astIsExportDeclaration,
+    astIsNamespaceExport,
+    AstLiteralLikeNode,
+    AstStringLiteralLikeNode,
+    astIsBigIntLiteral,
+    AstStringLiteral,
+    astGetRawText,
+    astGetText,
+    AstRegularExpressionLiteral,
+    astGetCombinedNodeFlags,
+    AstAmbientModuleDeclaration,
+    AstModuleDeclaration,
+    astIsStringLiteral,
+    AstNonGlobalAmbientModuleDeclaration,
+    NonGlobalAmbientModuleDeclaration,
+    astIsFunctionLikeOrClassStaticBlockDeclaration,
+    astIsExternalModule,
+    astIsJSDocNode,
+    astIsBindingPattern,
+    astIsDeclaration,
+    astCanHaveName,
 } from "./_namespaces/ts.js";
+import { ReadonlyArrayView } from "./readonlyArray.js";
 
 /** @internal */
 export const resolvingEmptyArray: never[] = [];
@@ -721,6 +835,17 @@ export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefi
     }
 }
 
+/** @internal */
+export function astForEachAncestor<T>(node: AstNode, callback: (n: AstNode) => T | undefined | "quit"): T | undefined {
+    while (node) {
+        const res = callback(node);
+        if (res === "quit") return undefined;
+        if (res !== undefined) return res;
+        if (astIsSourceFile(node)) return undefined;
+        node = node.parent;
+    }
+}
+
 /**
  * Calls `callback` for each entry in the map, returning the first truthy result.
  * Use `map.forEach` instead for normal iteration.
@@ -780,6 +905,11 @@ export function usingSingleLineStringWriter(action: (writer: EmitTextWriter) => 
 
 /** @internal */
 export function getFullWidth(node: Node): number {
+    return astGetFullWidth(node.ast);
+}
+
+/** @internal */
+export function astGetFullWidth(node: AstNode): number {
     return node.end - node.pos;
 }
 
@@ -934,56 +1064,102 @@ export function hasChangesInResolutions<K, V>(
 }
 
 // Returns true if this node contains a parse error anywhere underneath it.
-/** @internal */
+/**
+ * @deprecated use {@link astContainsParseError}
+ * @internal
+ */
 export function containsParseError(node: Node): boolean {
-    aggregateChildData(node);
+    return astContainsParseError(node.ast);
+}
+
+// Returns true if this node contains a parse error anywhere underneath it.
+/** @internal */
+export function astContainsParseError(node: AstNode): boolean {
+    astAggregateChildData(node);
     return (node.flags & NodeFlags.ThisNodeOrAnySubNodesHasError) !== 0;
 }
 
-function aggregateChildData(node: Node): void {
+function astAggregateChildData(node: AstNode): void {
     if (!(node.flags & NodeFlags.HasAggregatedChildData)) {
         // A node is considered to contain a parse error if:
         //  a) the parser explicitly marked that it had an error
         //  b) any of it's children reported that it had an error.
         const thisNodeOrAnySubNodesHasError = ((node.flags & NodeFlags.ThisNodeHasError) !== 0) ||
-            forEachChild(node, containsParseError);
+            astForEachChild(node, astContainsParseError);
 
         // If so, mark ourselves accordingly.
         if (thisNodeOrAnySubNodesHasError) {
-            (node as Mutable<Node>).flags |= NodeFlags.ThisNodeOrAnySubNodesHasError;
+            node.flags |= NodeFlags.ThisNodeOrAnySubNodesHasError;
         }
 
         // Also mark that we've propagated the child information to this node.  This way we can
         // always consult the bit directly on this node without needing to check its children
         // again.
-        (node as Mutable<Node>).flags |= NodeFlags.HasAggregatedChildData;
+        node.flags |= NodeFlags.HasAggregatedChildData;
     }
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astGetSourceFileOfNode}
+ * @internal
+ */
 export function getSourceFileOfNode(node: Node): SourceFile;
-/** @internal */
+/**
+ * @deprecated use {@link astGetSourceFileOfNode}
+ * @internal
+ */
 export function getSourceFileOfNode(node: Node | undefined): SourceFile | undefined;
-/** @internal */
 export function getSourceFileOfNode(node: Node | undefined): SourceFile | undefined {
+    return astGetSourceFileOfNode(node?.ast)?.node;
+}
+
+/** @internal */
+export function astGetSourceFileOfNode(node: AstNode): AstSourceFile;
+/** @internal */
+export function astGetSourceFileOfNode(node: AstNode | undefined): AstSourceFile | undefined;
+export function astGetSourceFileOfNode(node: AstNode | undefined): AstSourceFile | undefined {
     while (node && node.kind !== SyntaxKind.SourceFile) {
         node = node.parent;
     }
-    return node as SourceFile;
+    return node as AstSourceFile;
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astGetSourceFileOfModule}
+ * @internal
+ */
 export function getSourceFileOfModule(module: Symbol): SourceFile | undefined {
     return getSourceFileOfNode(module.valueDeclaration || getNonAugmentationDeclaration(module));
 }
 
 /** @internal */
+export function astGetSourceFileOfModule(module: Symbol): AstSourceFile | undefined {
+    return astGetSourceFileOfNode(module.valueDeclaration?.ast || getNonAugmentationDeclaration(module)?.ast);
+}
+
+/**
+ * @deprecated use {@link astIsPlainJsFile}
+ * @internal
+ */
 export function isPlainJsFile(file: SourceFile | undefined, checkJs: boolean | undefined): boolean {
-    return !!file && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX) && !file.checkJsDirective && checkJs === undefined;
+    return astIsPlainJsFile(file?.ast, checkJs);
 }
 
 /** @internal */
+export function astIsPlainJsFile(file: AstSourceFile | undefined, checkJs: boolean | undefined): boolean {
+    return !!file && (file.data.scriptKind === ScriptKind.JS || file.data.scriptKind === ScriptKind.JSX) && !file.data.checkJsDirective && checkJs === undefined;
+}
+
+/**
+ * @deprecated use {@link astIsStatementWithLocals}
+ * @internal
+ */
 export function isStatementWithLocals(node: Node): boolean {
+    return astIsStatementWithLocals(node.ast);
+}
+
+/** @internal */
+export function astIsStatementWithLocals(node: AstNode): boolean {
     switch (node.kind) {
         case SyntaxKind.Block:
         case SyntaxKind.CaseBlock:
@@ -1041,10 +1217,41 @@ export function getEndLinePosition(line: number, sourceFile: SourceFileLike): nu
  * Returns a value indicating whether a name is unique globally or within the current file.
  * Note: This does not consider whether a name appears as a free identifier or not, so at the expression `x.y` this includes both `x` and `y`.
  *
+ * @deprecated use {@link astIsFileLevelUniqueName}
  * @internal
  */
 export function isFileLevelUniqueName(sourceFile: SourceFile, name: string, hasGlobalName?: PrintHandlers["hasGlobalName"]): boolean {
-    return !(hasGlobalName && hasGlobalName(name)) && !sourceFile.identifiers.has(name);
+    return astIsFileLevelUniqueName(sourceFile.ast, name, hasGlobalName);
+}
+
+/**
+ * Returns a value indicating whether a name is unique globally or within the current file.
+ * Note: This does not consider whether a name appears as a free identifier or not, so at the expression `x.y` this includes both `x` and `y`.
+ *
+ * @internal
+ */
+export function astIsFileLevelUniqueName(sourceFile: AstSourceFile, name: string, hasGlobalName?: PrintHandlers["hasGlobalName"]): boolean {
+    return !(hasGlobalName && hasGlobalName(name)) && !sourceFile.data.identifiers.has(name);
+}
+
+// Returns true if this node is missing from the actual source code. A 'missing' node is different
+// from 'undefined/defined'. When a node is undefined (which can happen for optional nodes
+// in the tree), it is definitely missing. However, a node may be defined, but still be
+// missing.  This happens whenever the parser knows it needs to parse something, but can't
+// get anything in the source code that it expects at that location. For example:
+//
+//          let a: ;
+//
+// Here, the Type in the Type-Annotation is not-optional (as there is a colon in the source
+// code). So the parser will attempt to parse out a type, and will create an actual node.
+// However, this node will be 'missing' in the sense that no actual source-code/tokens are
+// contained within it.
+/**
+ * @deprecated use {@link astNodeIsMissing}
+ * @internal
+ */
+export function nodeIsMissing(node: Node | undefined): boolean {
+    return astNodeIsMissing(node?.ast);
 }
 
 // Returns true if this node is missing from the actual source code. A 'missing' node is different
@@ -1060,7 +1267,7 @@ export function isFileLevelUniqueName(sourceFile: SourceFile, name: string, hasG
 // However, this node will be 'missing' in the sense that no actual source-code/tokens are
 // contained within it.
 /** @internal */
-export function nodeIsMissing(node: Node | undefined): boolean {
+export function astNodeIsMissing(node: AstNode | undefined): boolean {
     if (node === undefined) {
         return true;
     }
@@ -1068,36 +1275,66 @@ export function nodeIsMissing(node: Node | undefined): boolean {
     return node.pos === node.end && node.pos >= 0 && node.kind !== SyntaxKind.EndOfFileToken;
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astNodeIsPresent}
+ * @internal
+ */
 export function nodeIsPresent(node: Node | undefined): boolean {
     return !nodeIsMissing(node);
+}
+
+/** @internal */
+export function astNodeIsPresent(node: AstNode | undefined): boolean {
+    return !astNodeIsMissing(node);
+}
+
+/**
+ * Tests whether `child` is a grammar error on `parent`.
+ * @deprecated use {@link astIsGrammarError}
+ * @internal
+ */
+export function isGrammarError(parent: Node, child: Node | NodeArray<Node>): boolean {
+    return astIsGrammarError(parent.ast, child.ast);
 }
 
 /**
  * Tests whether `child` is a grammar error on `parent`.
  * @internal
  */
-export function isGrammarError(parent: Node, child: Node | NodeArray<Node>): boolean {
-    if (isTypeParameterDeclaration(parent)) return child === parent.expression;
-    if (isClassStaticBlockDeclaration(parent)) return child === parent.modifiers;
-    if (isPropertySignature(parent)) return child === parent.initializer;
-    if (isPropertyDeclaration(parent)) return child === parent.questionToken && isAutoAccessorPropertyDeclaration(parent);
-    if (isPropertyAssignment(parent)) return child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
-    if (isShorthandPropertyAssignment(parent)) return child === parent.equalsToken || child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
-    if (isMethodDeclaration(parent)) return child === parent.exclamationToken;
-    if (isConstructorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
-    if (isGetAccessorDeclaration(parent)) return child === parent.typeParameters || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
-    if (isSetAccessorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
-    if (isNamespaceExportDeclaration(parent)) return child === parent.modifiers || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+export function astIsGrammarError(parent: AstNode, child: AstNode | AstNodeArray<AstNode>): boolean {
+    if (astIsTypeParameterDeclaration(parent)) return child === parent.data.expression;
+    if (astIsClassStaticBlockDeclaration(parent)) return child === parent.data.modifiers;
+    if (astIsPropertySignature(parent)) return child === parent.data.initializer;
+    if (astIsPropertyDeclaration(parent)) return child === parent.data.questionToken && astIsAutoAccessorPropertyDeclaration(parent);
+    if (astIsPropertyAssignment(parent)) return child === parent.data.modifiers || child === parent.data.questionToken || child === parent.data.exclamationToken || astIsGrammarErrorElement(parent.data.modifiers, child, astIsModifierLike);
+    if (astIsShorthandPropertyAssignment(parent)) return child === parent.data.equalsToken || child === parent.data.modifiers || child === parent.data.questionToken || child === parent.data.exclamationToken || astIsGrammarErrorElement(parent.data.modifiers, child, astIsModifierLike);
+    if (astIsMethodDeclaration(parent)) return child === parent.data.exclamationToken;
+    if (astIsConstructorDeclaration(parent)) return child === parent.data.typeParameters || child === parent.data.type || astIsGrammarErrorElement(parent.data.typeParameters, child, astIsTypeParameterDeclaration);
+    if (astIsGetAccessorDeclaration(parent)) return child === parent.data.typeParameters || astIsGrammarErrorElement(parent.data.typeParameters, child, astIsTypeParameterDeclaration);
+    if (astIsSetAccessorDeclaration(parent)) return child === parent.data.typeParameters || child === parent.data.type || astIsGrammarErrorElement(parent.data.typeParameters, child, astIsTypeParameterDeclaration);
+    if (astIsNamespaceExportDeclaration(parent)) return child === parent.data.modifiers || astIsGrammarErrorElement(parent.data.modifiers, child, astIsModifierLike);
     return false;
 }
 
-function isGrammarErrorElement<T extends Node>(nodeArray: NodeArray<T> | undefined, child: Node | NodeArray<Node>, isElement: (node: Node) => node is T) {
-    if (!nodeArray || isArray(child) || !isElement(child)) return false;
-    return contains(nodeArray, child);
+function astIsGrammarErrorElement<T extends AstNode>(nodeArray: AstNodeArray<T> | undefined, child: AstNode | AstNodeArray<AstNode>, isElement: (node: AstNode) => node is T) {
+    if (!nodeArray || child instanceof AstNodeArray || !isElement(child)) return false;
+    return contains(nodeArray.items, child);
 }
 
 function insertStatementsAfterPrologue<T extends Statement>(to: T[], from: readonly T[] | undefined, isPrologueDirective: (node: Node) => boolean): T[] {
+    if (from === undefined || from.length === 0) return to;
+    let statementIndex = 0;
+    // skip all prologue directives to insert at the correct position
+    for (; statementIndex < to.length; ++statementIndex) {
+        if (!isPrologueDirective(to[statementIndex])) {
+            break;
+        }
+    }
+    to.splice(statementIndex, 0, ...from);
+    return to;
+}
+
+function astInsertStatementsAfterPrologue<T extends AstStatement>(to: T[], from: readonly T[] | undefined, isPrologueDirective: (node: AstNode) => boolean): T[] {
     if (from === undefined || from.length === 0) return to;
     let statementIndex = 0;
     // skip all prologue directives to insert at the correct position
@@ -1123,8 +1360,35 @@ function insertStatementAfterPrologue<T extends Statement>(to: T[], statement: T
     return to;
 }
 
+function astInsertStatementAfterPrologue<T extends AstStatement>(to: T[], statement: T | undefined, isPrologueDirective: (node: AstNode) => boolean): T[] {
+    if (statement === undefined) return to;
+    let statementIndex = 0;
+    // skip all prologue directives to insert at the correct position
+    for (; statementIndex < to.length; ++statementIndex) {
+        if (!isPrologueDirective(to[statementIndex])) {
+            break;
+        }
+    }
+    to.splice(statementIndex, 0, statement);
+    return to;
+}
+
 function isAnyPrologueDirective(node: Node) {
-    return isPrologueDirective(node) || !!(getEmitFlags(node) & EmitFlags.CustomPrologue);
+    return astIsAnyPrologueDirective(node.ast);
+}
+
+function astIsAnyPrologueDirective(node: AstNode) {
+    return astIsPrologueDirective(node) || !!(astGetEmitFlags(node) & EmitFlags.CustomPrologue);
+}
+
+/**
+ * Prepends statements to an array while taking care of prologue directives.
+ *
+ * @deprecated use {@link astInsertStatementsAfterStandardPrologue}
+ * @internal
+ */
+export function insertStatementsAfterStandardPrologue<T extends Statement>(to: T[], from: readonly T[] | undefined): T[] {
+    return insertStatementsAfterPrologue(to, from, isPrologueDirective);
 }
 
 /**
@@ -1132,13 +1396,32 @@ function isAnyPrologueDirective(node: Node) {
  *
  * @internal
  */
-export function insertStatementsAfterStandardPrologue<T extends Statement>(to: T[], from: readonly T[] | undefined): T[] {
-    return insertStatementsAfterPrologue(to, from, isPrologueDirective);
+export function astInsertStatementsAfterStandardPrologue<T extends AstStatement>(to: T[], from: readonly T[] | undefined): T[] {
+    return astInsertStatementsAfterPrologue(to, from, astIsPrologueDirective);
+}
+
+/**
+ * @deprecated use {@link astInsertStatementsAfterCustomPrologue}
+ * @internal
+ */
+export function insertStatementsAfterCustomPrologue<T extends Statement>(to: T[], from: readonly T[] | undefined): T[] {
+    return insertStatementsAfterPrologue(to, from, isAnyPrologueDirective);
 }
 
 /** @internal */
-export function insertStatementsAfterCustomPrologue<T extends Statement>(to: T[], from: readonly T[] | undefined): T[] {
-    return insertStatementsAfterPrologue(to, from, isAnyPrologueDirective);
+export function astInsertStatementsAfterCustomPrologue<T extends AstStatement>(to: T[], from: readonly T[] | undefined): T[] {
+    return astInsertStatementsAfterPrologue(to, from, astIsAnyPrologueDirective);
+}
+
+/**
+ * Prepends statements to an array while taking care of prologue directives.
+ *
+ * @deprecated use {@link astInsertStatementAfterStandardPrologue}
+ * @internal
+ * @knipignore
+ */
+export function insertStatementAfterStandardPrologue<T extends Statement>(to: T[], statement: T | undefined): T[] {
+    return insertStatementAfterPrologue(to, statement, isPrologueDirective);
 }
 
 /**
@@ -1147,13 +1430,21 @@ export function insertStatementsAfterCustomPrologue<T extends Statement>(to: T[]
  * @internal
  * @knipignore
  */
-export function insertStatementAfterStandardPrologue<T extends Statement>(to: T[], statement: T | undefined): T[] {
-    return insertStatementAfterPrologue(to, statement, isPrologueDirective);
+export function astInsertStatementAfterStandardPrologue<T extends AstStatement>(to: T[], statement: T | undefined): T[] {
+    return astInsertStatementAfterPrologue(to, statement, astIsPrologueDirective);
+}
+
+/**
+ * @deprecated use {@link astInsertStatementAfterCustomPrologue}
+ * @internal
+ */
+export function insertStatementAfterCustomPrologue<T extends Statement>(to: T[], statement: T | undefined): T[] {
+    return insertStatementAfterPrologue(to, statement, isAnyPrologueDirective);
 }
 
 /** @internal */
-export function insertStatementAfterCustomPrologue<T extends Statement>(to: T[], statement: T | undefined): T[] {
-    return insertStatementAfterPrologue(to, statement, isAnyPrologueDirective);
+export function astInsertStatementAfterCustomPrologue<T extends AstStatement>(to: T[], statement: T | undefined): T[] {
+    return astInsertStatementAfterPrologue(to, statement, astIsAnyPrologueDirective);
 }
 
 /**
@@ -1218,21 +1509,39 @@ export function createCommentDirectivesMap(sourceFile: SourceFile, commentDirect
     }
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astGetTokenPosOfNode}
+ * @internal
+ */
 export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, includeJsDoc?: boolean): number {
+    return astGetTokenPosOfNode(node.ast, sourceFile, includeJsDoc);
+}
+
+function getTextOfContainingSourceFile(node: AstNode, sourceFile: SourceFileLike | AstSourceFile | undefined) {
+    if (sourceFile instanceof AstNode) {
+        return sourceFile.data.text;
+    }
+    return sourceFile?.text ?? astGetSourceFileOfNode(node).data.text;
+}
+
+/** @internal */
+export function astGetTokenPosOfNode(node: AstNode, sourceFile?: SourceFileLike | AstSourceFile, includeJsDoc?: boolean): number {
     // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
     // want to skip trivia because this will launch us forward to the next token.
-    if (nodeIsMissing(node)) {
+    if (astNodeIsMissing(node)) {
         return node.pos;
     }
 
-    if (isJSDocNode(node) || node.kind === SyntaxKind.JsxText) {
+    if (astIsJSDocNode(node) || node.kind === SyntaxKind.JsxText) {
         // JsxText cannot actually contain comments, even though the scanner will think it sees comments
-        return skipTrivia((sourceFile ?? getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+        return skipTrivia(getTextOfContainingSourceFile(node, sourceFile), node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true); // TODO(rbuckton): don't instantiate `.node`
     }
 
-    if (includeJsDoc && hasJSDocNodes(node)) {
-        return getTokenPosOfNode(node.jsDoc![0], sourceFile);
+    if (includeJsDoc) {
+        const jsDoc = firstOrUndefined(astGetJSDoc(node));
+        if (jsDoc) {
+            return astGetTokenPosOfNode(jsDoc.ast, sourceFile);
+        }
     }
 
     // For a syntax list, it is possible that one of its children has JSDocComment nodes, while
@@ -1240,64 +1549,129 @@ export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, inclu
     // trivia for the list, we may have skipped the JSDocComment as well. So we should process its
     // first child to determine the actual position of its first token.
     if (node.kind === SyntaxKind.SyntaxList) {
-        sourceFile ??= getSourceFileOfNode(node);
-        const first = firstOrUndefined(getNodeChildren(node, sourceFile));
+        sourceFile ??= astGetSourceFileOfNode(node);
+        if (sourceFile instanceof AstNode) {
+            sourceFile = sourceFile.node; // TODO(rbuckton): don't instantiate `.node`
+        }
+        const first = firstOrUndefined(getNodeChildren(node.node, sourceFile)); // TODO(rbuckton): don't instantiate `.node`
         if (first) {
-            return getTokenPosOfNode(first, sourceFile, includeJsDoc);
+            return astGetTokenPosOfNode(first.ast, sourceFile, includeJsDoc);
         }
     }
 
     return skipTrivia(
-        (sourceFile ?? getSourceFileOfNode(node)).text,
+        getTextOfContainingSourceFile(node, sourceFile),
         node.pos,
         /*stopAfterLineBreak*/ false,
         /*stopAtComments*/ false,
-        isInJSDoc(node),
+        astIsInJSDoc(node),
     );
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astGetNonDecoratorTokenPosOfNode}
+ * @internal
+ */
 export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
-    const lastDecorator = !nodeIsMissing(node) && canHaveModifiers(node) ? findLast(node.modifiers, isDecorator) : undefined;
+    return astGetNonDecoratorTokenPosOfNode(node.ast, sourceFile);
+}
+
+/** @internal */
+export function astGetNonDecoratorTokenPosOfNode(node: AstNode, sourceFile?: AstSourceFile | SourceFileLike): number {
+    const lastDecorator = !astNodeIsMissing(node) && astCanHaveDecorators(node) ? findLast(astGetModifiers(node)?.items, astIsDecorator) : undefined;
     if (!lastDecorator) {
-        return getTokenPosOfNode(node, sourceFile);
+        return astGetTokenPosOfNode(node, sourceFile);
     }
 
-    return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastDecorator.end);
+    return skipTrivia(getTextOfContainingSourceFile(node, sourceFile), lastDecorator.end);
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astGetNonModifierTokenPosOfNode}
+ * @internal
+ */
 export function getNonModifierTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
-    const lastModifier = !nodeIsMissing(node) && canHaveModifiers(node) && node.modifiers ? last(node.modifiers) : undefined;
+    return astGetNonModifierTokenPosOfNode(node.ast, sourceFile);
+}
+
+/** @internal */
+export function astGetNonModifierTokenPosOfNode(node: AstNode, sourceFile?: AstSourceFile | SourceFileLike): number {
+    const lastModifier = !astNodeIsMissing(node) ? lastOrUndefined(astGetModifiers(node)?.items) : undefined;
     if (!lastModifier) {
-        return getTokenPosOfNode(node, sourceFile);
+        return astGetTokenPosOfNode(node, sourceFile);
     }
 
-    return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastModifier.end);
+    return skipTrivia(getTextOfContainingSourceFile(node, sourceFile), lastModifier.end);
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astGetSourceTextOfNodeFromSourceFile}
+ * @internal
+ */
 export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
-    return getTextOfNodeFromSourceText(sourceFile.text, node, includeTrivia);
-}
-
-function isJSDocTypeExpressionOrChild(node: Node): boolean {
-    return !!findAncestor(node, isJSDocTypeExpression);
+    return astGetSourceTextOfNodeFromSourceFile(sourceFile.ast, node.ast, includeTrivia);
 }
 
 /** @internal */
+export function astGetSourceTextOfNodeFromSourceFile(sourceFile: AstSourceFile, node: AstNode, includeTrivia = false): string {
+    return astGetTextOfNodeFromSourceText(sourceFile.data.text, node, includeTrivia);
+}
+
+function isJSDocTypeExpressionOrChild(node: Node | AstNode): boolean {
+    return node instanceof AstNode ?
+        !!findAncestor(node, astIsJSDocTypeExpression) :
+        !!findAncestor(node, isJSDocTypeExpression);
+}
+
+/**
+ * @deprecated use {@link astIsExportNamespaceAsDefaultDeclaration}
+ * @internal
+ */
 export function isExportNamespaceAsDefaultDeclaration(node: Node): boolean {
-    return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && moduleExportNameIsDefault(node.exportClause.name));
+    return astIsExportNamespaceAsDefaultDeclaration(node.ast);
 }
 
 /** @internal */
+export function astIsExportNamespaceAsDefaultDeclaration(node: AstNode): boolean {
+    return !!(astIsExportDeclaration(node) && node.data.exportClause && astIsNamespaceExport(node.data.exportClause) && astModuleExportNameIsDefault(node.data.exportClause.data.name));
+}
+
+/**
+ * @deprecated use {@link astModuleExportNameTextUnescaped}
+ * @internal
+ */
 export function moduleExportNameTextUnescaped(node: ModuleExportName): string {
-    return node.kind === SyntaxKind.StringLiteral ? node.text : unescapeLeadingUnderscores(node.escapedText);
+    return astModuleExportNameTextUnescaped(node.ast);
 }
 
 /** @internal */
+export function astModuleExportNameTextUnescaped(node: AstModuleExportName): string {
+    return node.kind === SyntaxKind.StringLiteral ? node.data.text : unescapeLeadingUnderscores(node.data.escapedText);
+}
+
+/**
+ * @deprecated use {@link astModuleExportNameTextEscaped}
+ * @internal
+ */
 export function moduleExportNameTextEscaped(node: ModuleExportName): __String {
-    return node.kind === SyntaxKind.StringLiteral ? escapeLeadingUnderscores(node.text) : node.escapedText;
+    return astModuleExportNameTextEscaped(node.ast);
+}
+
+/** @internal */
+export function astModuleExportNameTextEscaped(node: AstModuleExportName): __String {
+    return node.kind === SyntaxKind.StringLiteral ? escapeLeadingUnderscores(node.data.text) : node.data.escapedText;
+}
+
+/**
+ * Equality checks against a keyword without underscores don't need to bother
+ * to turn "__" into "___" or vice versa, since they will never be equal in
+ * either case. So we can ignore those cases to improve performance.
+ *
+ * @deprecated use {@link astModuleExportNameIsDefault}
+ * @internal
+ */
+export function moduleExportNameIsDefault(node: ModuleExportName): boolean {
+    return astModuleExportNameIsDefault(node.ast);
 }
 
 /**
@@ -1307,11 +1681,14 @@ export function moduleExportNameTextEscaped(node: ModuleExportName): __String {
  *
  * @internal
  */
-export function moduleExportNameIsDefault(node: ModuleExportName): boolean {
-    return (node.kind === SyntaxKind.StringLiteral ? node.text : node.escapedText) === InternalSymbolName.Default;
+export function astModuleExportNameIsDefault(node: AstModuleExportName): boolean {
+    return (node.kind === SyntaxKind.StringLiteral ? node.data.text : node.data.escapedText) === InternalSymbolName.Default;
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astGetTextOfNodeFromSourceText}
+ * @internal
+ */
 export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
     if (nodeIsMissing(node)) {
         return "";
@@ -1328,11 +1705,50 @@ export function getTextOfNodeFromSourceText(sourceText: string, node: Node, incl
 }
 
 /** @internal */
+export function astGetTextOfNodeFromSourceText(sourceText: string, node: AstNode, includeTrivia = false): string {
+    if (astNodeIsMissing(node)) {
+        return "";
+    }
+
+    let text = sourceText.substring(includeTrivia ? node.pos : skipTrivia(sourceText, node.pos), node.end);
+
+    if (isJSDocTypeExpressionOrChild(node)) {
+        // strip space + asterisk at line start
+        text = text.split(/\r\n|\n|\r/).map(line => line.replace(/^\s*\*/, "").trimStart()).join("\n");
+    }
+
+    return text;
+}
+
+/**
+ * @deprecated use {@link astGetTextOfNode}
+ * @internal
+ */
 export function getTextOfNode(node: Node, includeTrivia = false): string {
-    return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
+    return astGetTextOfNode(node.ast, includeTrivia);
+}
+
+/** @internal */
+export function astGetTextOfNode(node: AstNode, includeTrivia = false): string {
+    return astGetSourceTextOfNodeFromSourceFile(astGetSourceFileOfNode(node), node, includeTrivia);
 }
 
 function getPos(range: Node) {
+    return astGetPos(range.ast);
+}
+
+/**
+ * Note: it is expected that the `nodeArray` and the `node` are within the same file.
+ * For example, searching for a `SourceFile` in a `SourceFile[]` wouldn't work.
+ *
+ * @deprecated use {@link astIndexOfNode}
+ * @internal
+ */
+export function indexOfNode(nodeArray: readonly Node[], node: Node): number {
+    return binarySearch(nodeArray, node, getPos, compareValues);
+}
+
+function astGetPos(range: AstNode) {
     return range.pos;
 }
 
@@ -1342,8 +1758,18 @@ function getPos(range: Node) {
  *
  * @internal
  */
-export function indexOfNode(nodeArray: readonly Node[], node: Node): number {
-    return binarySearch(nodeArray, node, getPos, compareValues);
+export function astIndexOfNode(nodeArray: readonly AstNode[], node: AstNode): number {
+    return binarySearch(nodeArray, node, astGetPos, compareValues);
+}
+
+/**
+ * Gets flags that control emit behavior of a node.
+ *
+ * @deprecated use {@link astGetEmitFlags}
+ * @internal
+ */
+export function getEmitFlags(node: Node): EmitFlags {
+    return astGetEmitFlags(node.ast);
 }
 
 /**
@@ -1351,7 +1777,7 @@ export function indexOfNode(nodeArray: readonly Node[], node: Node): number {
  *
  * @internal
  */
-export function getEmitFlags(node: Node): EmitFlags {
+export function astGetEmitFlags(node: AstNode): EmitFlags {
     const emitNode = node.emitNode;
     return emitNode && emitNode.flags || 0;
 }
@@ -1359,9 +1785,19 @@ export function getEmitFlags(node: Node): EmitFlags {
 /**
  * Gets flags that control emit behavior of a node.
  *
+ * @deprecated use {@link astGetInternalEmitFlags}
  * @internal
  */
 export function getInternalEmitFlags(node: Node): InternalEmitFlags {
+    return astGetInternalEmitFlags(node.ast);
+}
+
+/**
+ * Gets flags that control emit behavior of a node.
+ *
+ * @internal
+ */
+export function astGetInternalEmitFlags(node: AstNode): InternalEmitFlags {
     const emitNode = node.emitNode;
     return emitNode && emitNode.internalFlags || 0;
 }
@@ -1898,12 +2334,37 @@ export const enum GetLiteralTextFlags {
     AllowNumericSeparator = 1 << 3,
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astGetLiteralText}
+ * @internal
+ */
 export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile | undefined, flags: GetLiteralTextFlags): string {
+    return astGetLiteralText(node.ast, sourceFile?.ast, flags);
+}
+
+function astCanUseOriginalText(node: AstLiteralLikeNode, flags: GetLiteralTextFlags): boolean {
+    if (astNodeIsSynthesized(node) || !node.parent || (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && (node as AstStringLiteralLikeNode).data.isUnterminated)) {
+        return false;
+    }
+
+    if (astIsNumericLiteral(node)) {
+        if (node.data.numericLiteralFlags & TokenFlags.IsInvalid) {
+            return false;
+        }
+        if (node.data.numericLiteralFlags & TokenFlags.ContainsSeparator) {
+            return !!(flags & GetLiteralTextFlags.AllowNumericSeparator);
+        }
+    }
+
+    return !astIsBigIntLiteral(node);
+}
+
+/** @internal */
+export function astGetLiteralText(node: AstLiteralLikeNode, sourceFile: AstSourceFile | undefined, flags: GetLiteralTextFlags): string {
     // If we don't need to downlevel and we can reach the original source text using
     // the node's parent reference, then simply get the text as it was originally written.
-    if (sourceFile && canUseOriginalText(node, flags)) {
-        return getSourceTextOfNodeFromSourceFile(sourceFile, node);
+    if (sourceFile && astCanUseOriginalText(node, flags)) {
+        return astGetSourceTextOfNodeFromSourceFile(sourceFile, node);
     }
 
     // If we can't reach the original source text, use the canonical form if it's a number,
@@ -1911,13 +2372,13 @@ export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile | u
     switch (node.kind) {
         case SyntaxKind.StringLiteral: {
             const escapeText = flags & GetLiteralTextFlags.JsxAttributeEscape ? escapeJsxAttributeString :
-                flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+                flags & GetLiteralTextFlags.NeverAsciiEscape || (astGetEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                 escapeNonAsciiString;
-            if ((node as StringLiteral).singleQuote) {
-                return "'" + escapeText(node.text, CharacterCodes.singleQuote) + "'";
+            if ((node as AstStringLiteral).data.singleQuote) {
+                return "'" + escapeText(node.data.text, CharacterCodes.singleQuote) + "'";
             }
             else {
-                return '"' + escapeText(node.text, CharacterCodes.doubleQuote) + '"';
+                return '"' + escapeText(node.data.text, CharacterCodes.doubleQuote) + '"';
             }
         }
         case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -1926,10 +2387,10 @@ export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile | u
         case SyntaxKind.TemplateTail: {
             // If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
             // had to include a backslash: `not \${a} substitution`.
-            const escapeText = flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+            const escapeText = flags & GetLiteralTextFlags.NeverAsciiEscape || (astGetEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                 escapeNonAsciiString;
 
-            const rawText = (node as TemplateLiteralLikeNode).rawText ?? escapeTemplateSubstitution(escapeText(node.text, CharacterCodes.backtick));
+            const rawText = astGetRawText(node) ?? escapeTemplateSubstitution(escapeText(astGetText(node), CharacterCodes.backtick));
             switch (node.kind) {
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return "`" + rawText + "`";
@@ -1944,32 +2405,15 @@ export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile | u
         }
         case SyntaxKind.NumericLiteral:
         case SyntaxKind.BigIntLiteral:
-            return node.text;
+            return node.data.text;
         case SyntaxKind.RegularExpressionLiteral:
-            if (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) {
-                return node.text + (node.text.charCodeAt(node.text.length - 1) === CharacterCodes.backslash ? " /" : "/");
+            if (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && (node as AstRegularExpressionLiteral).data.isUnterminated) {
+                return node.data.text + (node.data.text.charCodeAt(node.data.text.length - 1) === CharacterCodes.backslash ? " /" : "/");
             }
-            return node.text;
+            return node.data.text;
     }
 
     return Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
-}
-
-function canUseOriginalText(node: LiteralLikeNode, flags: GetLiteralTextFlags): boolean {
-    if (nodeIsSynthesized(node) || !node.parent || (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated)) {
-        return false;
-    }
-
-    if (isNumericLiteral(node)) {
-        if (node.numericLiteralFlags & TokenFlags.IsInvalid) {
-            return false;
-        }
-        if (node.numericLiteralFlags & TokenFlags.ContainsSeparator) {
-            return !!(flags & GetLiteralTextFlags.AllowNumericSeparator);
-        }
-    }
-
-    return !isBigIntLiteral(node);
 }
 
 /** @internal */
@@ -1984,31 +2428,66 @@ export function makeIdentifierFromModuleName(moduleName: string): string {
     return getBaseFileName(moduleName).replace(/^(\d)/, "_$1").replace(/\W/g, "_");
 }
 
-/** @internal */
+/**
+ * @deprecated Use {@link astIsBlockOrCatchScoped}
+ * @internal
+ */
 export function isBlockOrCatchScoped(declaration: Declaration): boolean {
-    return (getCombinedNodeFlags(declaration) & NodeFlags.BlockScoped) !== 0 ||
-        isCatchClauseVariableDeclarationOrBindingElement(declaration);
+    return astIsBlockOrCatchScoped(declaration.ast);
 }
 
 /** @internal */
+export function astIsBlockOrCatchScoped(declaration: AstDeclaration): boolean {
+    return (astGetCombinedNodeFlags(declaration) & NodeFlags.BlockScoped) !== 0 ||
+        astIsCatchClauseVariableDeclarationOrBindingElement(declaration);
+}
+
+/**
+ * @deprecated Use {@link astIsCatchClauseVariableDeclarationOrBindingElement}
+ * @internal
+ */
 export function isCatchClauseVariableDeclarationOrBindingElement(declaration: Declaration): boolean {
-    const node = getRootDeclaration(declaration);
+    return astIsCatchClauseVariableDeclarationOrBindingElement(declaration.ast);
+}
+
+/** @internal */
+export function astIsCatchClauseVariableDeclarationOrBindingElement(declaration: AstDeclaration): boolean {
+    const node = astGetRootDeclaration(declaration);
     return node.kind === SyntaxKind.VariableDeclaration && node.parent.kind === SyntaxKind.CatchClause;
 }
 
-/** @internal */
+/**
+ * @deprecated Use {@link astIsAmbientModule}
+ * @internal
+ */
 export function isAmbientModule(node: Node): node is AmbientModuleDeclaration {
-    return isModuleDeclaration(node) && (node.name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(node));
+    return astIsAmbientModule(node.ast);
 }
 
 /** @internal */
+export function astIsAmbientModule(node: AstNode): node is AstAmbientModuleDeclaration {
+    return astIsModuleDeclaration(node) && (node.data.name.kind === SyntaxKind.StringLiteral || astIsGlobalScopeAugmentation(node));
+}
+
+/**
+ * @deprecated Use {@link astIsNonGlobalAmbientModule}
+ * @internal
+ */
 export function isModuleWithStringLiteralName(node: Node): node is ModuleDeclaration {
-    return isModuleDeclaration(node) && node.name.kind === SyntaxKind.StringLiteral;
+    return astIsNonGlobalAmbientModule(node.ast);
+}
+
+/**
+ * @deprecated Use {@link astIsNonGlobalAmbientModule}
+ * @internal
+ */
+export function isNonGlobalAmbientModule(node: Node): node is NonGlobalAmbientModuleDeclaration {
+    return astIsNonGlobalAmbientModule(node.ast);
 }
 
 /** @internal */
-export function isNonGlobalAmbientModule(node: Node): node is ModuleDeclaration & { name: StringLiteral; } {
-    return isModuleDeclaration(node) && isStringLiteral(node.name);
+export function astIsNonGlobalAmbientModule(node: AstNode): node is AstNonGlobalAmbientModuleDeclaration {
+    return astIsModuleDeclaration(node) && astIsStringLiteral(node.data.name);
 }
 
 /**
@@ -2017,8 +2496,8 @@ export function isNonGlobalAmbientModule(node: Node): node is ModuleDeclaration 
  * 2. A Javascript declaration, which is:
  *    An identifier in a nested property access expression: Y in `X.Y.Z = { ... }`
  */
-function isEffectiveModuleDeclaration(node: Node) {
-    return isModuleDeclaration(node) || isIdentifier(node);
+function astIsEffectiveModuleDeclaration(node: AstNode) {
+    return astIsModuleDeclaration(node) || astIsIdentifier(node);
 }
 
 /**
@@ -2027,41 +2506,73 @@ function isEffectiveModuleDeclaration(node: Node) {
  * @internal
  */
 export function isShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
-    return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
+    return isShorthandAmbientModule(moduleSymbol.astValueDeclaration);
 }
 
-function isShorthandAmbientModule(node: Node | undefined): boolean {
+function isShorthandAmbientModule(node: AstNode | undefined): boolean {
     // The only kind of module that can be missing a body is a shorthand ambient module.
-    return !!node && node.kind === SyntaxKind.ModuleDeclaration && (!(node as ModuleDeclaration).body);
+    return !!node && node.kind === SyntaxKind.ModuleDeclaration && (!(node as AstModuleDeclaration).data.body);
+}
+
+/**
+ * @deprecated Use {@link astIsBlockScopedContainerTopLevel}
+ * @internal
+ */
+export function isBlockScopedContainerTopLevel(node: Node): boolean {
+    return astIsBlockScopedContainerTopLevel(node.ast);
 }
 
 /** @internal */
-export function isBlockScopedContainerTopLevel(node: Node): boolean {
+export function astIsBlockScopedContainerTopLevel(node: AstNode): boolean {
     return node.kind === SyntaxKind.SourceFile ||
         node.kind === SyntaxKind.ModuleDeclaration ||
-        isFunctionLikeOrClassStaticBlockDeclaration(node);
+        astIsFunctionLikeOrClassStaticBlockDeclaration(node);
+}
+
+/**
+ * @deprecated Use {@link astIsGlobalScopeAugmentation}
+ * @internal
+ */
+export function isGlobalScopeAugmentation(module: ModuleDeclaration): boolean {
+    return astIsGlobalScopeAugmentation(module.ast);
 }
 
 /** @internal */
-export function isGlobalScopeAugmentation(module: ModuleDeclaration): boolean {
+export function astIsGlobalScopeAugmentation(module: AstModuleDeclaration): boolean {
     return !!(module.flags & NodeFlags.GlobalAugmentation);
 }
 
-/** @internal */
+/**
+ * @deprecated Use {@link astIsExternalModuleAugmentation}
+ * @internal
+ */
 export function isExternalModuleAugmentation(node: Node): node is AmbientModuleDeclaration {
     return isAmbientModule(node) && isModuleAugmentationExternal(node);
 }
 
 /** @internal */
+export function astIsExternalModuleAugmentation(node: AstNode): node is AstAmbientModuleDeclaration {
+    return astIsAmbientModule(node) && astIsModuleAugmentationExternal(node);
+}
+
+/**
+ * @deprecated Use {@link astIsModuleAugmentationExternal}
+ * @internal
+ */
 export function isModuleAugmentationExternal(node: AmbientModuleDeclaration): boolean {
+    return astIsModuleAugmentationExternal(node.ast);
+}
+
+/** @internal */
+export function astIsModuleAugmentationExternal(node: AstAmbientModuleDeclaration): boolean {
     // external module augmentation is a ambient module declaration that is either:
     // - defined in the top level scope and source file is an external module
     // - defined inside ambient module declaration located in the top level scope and source file not an external module
     switch (node.parent.kind) {
         case SyntaxKind.SourceFile:
-            return isExternalModule(node.parent);
+            return astIsExternalModule(node.parent);
         case SyntaxKind.ModuleBlock:
-            return isAmbientModule(node.parent.parent) && isSourceFile(node.parent.parent.parent) && !isExternalModule(node.parent.parent.parent);
+            return astIsAmbientModule(node.parent.parent) && astIsSourceFile(node.parent.parent.parent) && !astIsExternalModule(node.parent.parent.parent);
     }
     return false;
 }
@@ -2071,13 +2582,26 @@ export function getNonAugmentationDeclaration(symbol: Symbol): Declaration | und
     return symbol.declarations?.find(d => !isExternalModuleAugmentation(d) && !(isModuleDeclaration(d) && isGlobalScopeAugmentation(d)));
 }
 
+/** @internal */
+export function astGetNonAugmentationDeclaration(symbol: Symbol): AstDeclaration | undefined {
+    return symbol.astDeclarations?.find(d => !astIsExternalModuleAugmentation(d) && !(astIsModuleDeclaration(d) && astIsGlobalScopeAugmentation(d)));
+}
+
 function isCommonJSContainingModuleKind(kind: ModuleKind) {
     return kind === ModuleKind.CommonJS || kind === ModuleKind.Node16 || kind === ModuleKind.NodeNext;
 }
 
-/** @internal */
+/**
+ * @deprecated Use {@link astIsEffectiveExternalModule}
+ * @internal
+ */
 export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions): boolean {
-    return isExternalModule(node) || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
+    return astIsEffectiveExternalModule(node.ast, compilerOptions);
+}
+
+/** @internal */
+export function astIsEffectiveExternalModule(node: AstSourceFile, compilerOptions: CompilerOptions): boolean {
+    return astIsExternalModule(node) || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.data.commonJsModuleIndicator);
 }
 
 /**
@@ -2641,10 +3165,18 @@ export function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode {
     return isImportTypeNode(n) && isLiteralTypeNode(n.argument) && isStringLiteral(n.argument.literal);
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astIsPrologueDirective}
+ * @internal
+ */
 export function isPrologueDirective(node: Node): node is PrologueDirective {
+    return astIsPrologueDirective(node.ast);
+}
+
+/** @internal */
+export function astIsPrologueDirective(node: AstNode): node is AstPrologueDirective {
     return node.kind === SyntaxKind.ExpressionStatement
-        && (node as ExpressionStatement).expression.kind === SyntaxKind.StringLiteral;
+        && (node as AstExpressionStatement).data.expression.kind === SyntaxKind.StringLiteral;
 }
 
 /** @internal */
@@ -2676,7 +3208,7 @@ export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: Sour
 }
 
 /** @internal */
-export function getJSDocCommentRanges(node: Node, text: string): CommentRange[] | undefined {
+export function getJSDocCommentRanges(node: Node | AstNode, text: string): CommentRange[] | undefined {
     const commentRanges = (node.kind === SyntaxKind.Parameter ||
             node.kind === SyntaxKind.TypeParameter ||
             node.kind === SyntaxKind.FunctionExpression ||
@@ -2785,7 +3317,7 @@ export function isPartOfTypeNode(node: Node): boolean {
                 case SyntaxKind.IndexSignature:
                     return node === (parent as SignatureDeclaration).type;
                 case SyntaxKind.TypeAssertionExpression:
-                    return node === (parent as TypeAssertion).type;
+                    return node === (parent as TypeAssertionExpression).type;
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.TaggedTemplateExpression:
@@ -2855,7 +3387,7 @@ export function forEachYieldExpression(body: Block, visitor: (expr: YieldExpress
                 return;
             default:
                 if (isFunctionLike(node)) {
-                    if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
+                    if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.ComputedPropertyName) {
                         // Note that we will not include methods/accessors of a class because they would require
                         // first descending into the class. This is by design.
                         traverse(node.name.expression);
@@ -2906,6 +3438,11 @@ export function getMembersOfDeclaration(node: Declaration): NodeArray<ClassEleme
 
 /** @internal */
 export function isVariableLike(node: Node): node is VariableLikeDeclaration {
+    return astIsVariableLike(node?.ast);
+}
+
+/** @internal */
+export function astIsVariableLike(node: AstNode): node is AstVariableLikeDeclaration {
     if (node) {
         switch (node.kind) {
             case SyntaxKind.BindingElement:
@@ -3107,6 +3644,18 @@ export function getThisContainer(node: Node, includeArrowFunctions: boolean, inc
 /** @internal */
 export function getThisContainer(node: Node, includeArrowFunctions: boolean, includeClassComputedPropertyName: boolean): ThisContainer | ArrowFunction | ComputedPropertyName;
 export function getThisContainer(node: Node, includeArrowFunctions: boolean, includeClassComputedPropertyName: boolean) {
+    return astGetThisContainer(node.ast, includeArrowFunctions, includeClassComputedPropertyName).node;
+}
+
+/** @internal */
+export function astGetThisContainer(node: AstNode, includeArrowFunctions: false, includeClassComputedPropertyName: false): AstThisContainer;
+/** @internal */
+export function astGetThisContainer(node: AstNode, includeArrowFunctions: false, includeClassComputedPropertyName: boolean): AstThisContainer | AstComputedPropertyName;
+/** @internal */
+export function astGetThisContainer(node: AstNode, includeArrowFunctions: boolean, includeClassComputedPropertyName: false): AstThisContainer | AstArrowFunction;
+/** @internal */
+export function astGetThisContainer(node: AstNode, includeArrowFunctions: boolean, includeClassComputedPropertyName: boolean): AstThisContainer | AstArrowFunction | AstComputedPropertyName;
+export function astGetThisContainer(node: AstNode, includeArrowFunctions: boolean, includeClassComputedPropertyName: boolean) {
     Debug.assert(node.kind !== SyntaxKind.SourceFile);
     while (true) {
         node = node.parent;
@@ -3119,8 +3668,8 @@ export function getThisContainer(node: Node, includeArrowFunctions: boolean, inc
                 // then the computed property is not a 'this' container.
                 // A computed property name in a class needs to be a this container
                 // so that we can error on it.
-                if (includeClassComputedPropertyName && isClassLike(node.parent.parent)) {
-                    return node as ComputedPropertyName;
+                if (includeClassComputedPropertyName && astIsClassLike(node.parent.parent)) {
+                    return node as AstComputedPropertyName;
                 }
                 // If this is a computed property, then the parent should not
                 // make it a this container. The parent might be a property
@@ -3131,12 +3680,12 @@ export function getThisContainer(node: Node, includeArrowFunctions: boolean, inc
                 break;
             case SyntaxKind.Decorator:
                 // Decorators are always applied outside of the body of a class or method.
-                if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                if (node.parent.kind === SyntaxKind.Parameter && astIsClassElement(node.parent.parent)) {
                     // If the decorator's parent is a Parameter, we resolve the this container from
                     // the grandparent class declaration.
                     node = node.parent.parent;
                 }
-                else if (isClassElement(node.parent)) {
+                else if (astIsClassElement(node.parent)) {
                     // If the decorator's parent is a class element, we resolve the 'this' container
                     // from the parent class declaration.
                     node = node.parent;
@@ -3164,7 +3713,7 @@ export function getThisContainer(node: Node, includeArrowFunctions: boolean, inc
             case SyntaxKind.IndexSignature:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.SourceFile:
-                return node as ThisContainer | ArrowFunction;
+                return node as AstThisContainer | AstArrowFunction;
         }
     }
 }
@@ -3207,6 +3756,16 @@ export function isInTopLevelContext(node: Node): boolean {
     }
     const container = getThisContainer(node, /*includeArrowFunctions*/ true, /*includeClassComputedPropertyName*/ false);
     return isSourceFile(container);
+}
+
+/** @internal */
+export function astIsInTopLevelContext(node: AstNode): boolean {
+    // The name of a class or function declaration is a BindingIdentifier in its surrounding scope.
+    if (astIsIdentifier(node) && (astIsClassDeclaration(node.parent) || astIsFunctionDeclaration(node.parent)) && node.parent.data.name === node) {
+        node = node.parent;
+    }
+    const container = astGetThisContainer(node, /*includeArrowFunctions*/ true, /*includeClassComputedPropertyName*/ false);
+    return astIsSourceFile(container);
 }
 
 /** @internal */
@@ -3676,6 +4235,11 @@ export function isInExpressionContext(node: Node): boolean {
 
 /** @internal */
 export function isPartOfTypeQuery(node: Node): boolean {
+    return astIsPartOfTypeQuery(node.ast);
+}
+
+/** @internal */
+export function astIsPartOfTypeQuery(node: AstNode): boolean {
     while (node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.Identifier) {
         node = node.parent;
     }
@@ -3720,6 +4284,11 @@ export function isSourceFileJS(file: SourceFile): boolean {
 
 /** @internal */
 export function isInJSFile(node: Node | undefined): boolean {
+    return astIsInJSFile(node?.ast);
+}
+
+/** @internal */
+export function astIsInJSFile(node: AstNode | undefined): boolean {
     return !!node && !!(node.flags & NodeFlags.JavaScriptFile);
 }
 
@@ -3733,8 +4302,16 @@ export function isSourceFileNotJson(file: SourceFile): boolean {
     return !isJsonSourceFile(file);
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astIsInJSDoc}
+ * @internal
+ */
 export function isInJSDoc(node: Node | undefined): boolean {
+    return astIsInJSDoc(node?.ast);
+}
+
+/** @internal */
+export function astIsInJSDoc(node: AstNode | undefined): boolean {
     return !!node && !!(node.flags & NodeFlags.JSDoc);
 }
 
@@ -3824,7 +4401,12 @@ export function isStringDoubleQuoted(str: StringLiteralLike, sourceFile: SourceF
 
 /** @internal */
 export function isAssignmentDeclaration(decl: Declaration): boolean {
-    return isBinaryExpression(decl) || isAccessExpression(decl) || isIdentifier(decl) || isCallExpression(decl);
+    return astIsAssignmentDeclaration(decl.ast);
+}
+
+/** @internal */
+export function astIsAssignmentDeclaration(decl: AstDeclaration): boolean {
+    return astIsBinaryExpression(decl) || astIsAccessExpression(decl) || astIsIdentifier(decl) || astIsCallExpression(decl);
 }
 
 /**
@@ -3988,46 +4570,78 @@ export function isSameEntityName(name: Expression, initializer: Expression): boo
 
 /** @internal */
 export function getRightMostAssignedExpression(node: Expression): Expression {
-    while (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
-        node = node.right;
+    return astGetRightMostAssignedExpression(node.ast).node;
+}
+
+/** @internal */
+export function astGetRightMostAssignedExpression(node: AstExpression): AstExpression {
+    while (astIsAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
+        node = node.data.right;
     }
     return node;
 }
 
 /** @internal */
 export function isExportsIdentifier(node: Node): boolean {
-    return isIdentifier(node) && node.escapedText === "exports";
+    return astIsExportsIdentifier(node.ast);
+}
+
+/** @internal */
+export function astIsExportsIdentifier(node: AstNode): boolean {
+    return astIsIdentifier(node) && node.data.escapedText === "exports";
 }
 
 /** @internal */
 export function isModuleIdentifier(node: Node): boolean {
-    return isIdentifier(node) && node.escapedText === "module";
+    return astIsModuleIdentifier(node.ast);
+}
+
+/** @internal */
+export function astIsModuleIdentifier(node: AstNode): boolean {
+    return astIsIdentifier(node) && node.data.escapedText === "module";
 }
 
 /** @internal */
 export function isModuleExportsAccessExpression(node: Node): node is LiteralLikeElementAccessExpression & { expression: Identifier; } {
-    return (isPropertyAccessExpression(node) || isLiteralLikeElementAccess(node))
-        && isModuleIdentifier(node.expression)
-        && getElementOrPropertyAccessName(node) === "exports";
+    return astIsModuleExportsAccessExpression(node.ast);
+}
+
+/** @internal */
+export function astIsModuleExportsAccessExpression(node: AstNode): node is AstNode<RefineNode<LiteralLikeElementAccessExpression, { expression: Identifier }>> {
+    return (astIsPropertyAccessExpression(node) || astIsLiteralLikeElementAccess(node))
+        && astIsModuleIdentifier(node.data.expression)
+        && astGetElementOrPropertyAccessName(node) === "exports";
 }
 
 /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
 /// assignments we treat as special in the binder
 /** @internal */
 export function getAssignmentDeclarationKind(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
-    const special = getAssignmentDeclarationKindWorker(expr);
-    return special === AssignmentDeclarationKind.Property || isInJSFile(expr) ? special : AssignmentDeclarationKind.None;
+    return astGetAssignmentDeclarationKind(expr.ast);
+}
+
+/// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
+/// assignments we treat as special in the binder
+/** @internal */
+export function astGetAssignmentDeclarationKind(expr: AstBinaryExpression | AstCallExpression): AssignmentDeclarationKind {
+    const special = astGetAssignmentDeclarationKindWorker(expr);
+    return special === AssignmentDeclarationKind.Property || astIsInJSFile(expr) ? special : AssignmentDeclarationKind.None;
 }
 
 /** @internal */
 export function isBindableObjectDefinePropertyCall(expr: CallExpression): expr is BindableObjectDefinePropertyCall {
-    return length(expr.arguments) === 3 &&
-        isPropertyAccessExpression(expr.expression) &&
-        isIdentifier(expr.expression.expression) &&
-        idText(expr.expression.expression) === "Object" &&
-        idText(expr.expression.name) === "defineProperty" &&
-        isStringOrNumericLiteralLike(expr.arguments[1]) &&
-        isBindableStaticNameExpression(expr.arguments[0], /*excludeThisKeyword*/ true);
+    return astIsBindableObjectDefinePropertyCall(expr.ast);
+}
+
+/** @internal */
+export function astIsBindableObjectDefinePropertyCall(expr: AstCallExpression): expr is AstBindableObjectDefinePropertyCall {
+    return length(expr.data.arguments.items) === 3 &&
+        astIsPropertyAccessExpression(expr.data.expression) &&
+        astIsIdentifier(expr.data.expression.data.expression) &&
+        astIdText(expr.data.expression.data.expression) === "Object" &&
+        astIdText(expr.data.expression.data.name) === "defineProperty" &&
+        astIsStringOrNumericLiteralLike(expr.data.arguments.items[1]) &&
+        astIsBindableStaticNameExpression(expr.data.arguments.items[0], /*excludeThisKeyword*/ true);
 }
 
 /**
@@ -4041,7 +4655,14 @@ function isLiteralLikeAccess(node: Node): node is LiteralLikeElementAccessExpres
  * x[0] OR x['a'] OR x[Symbol.y]
  */
 function isLiteralLikeElementAccess(node: Node): node is LiteralLikeElementAccessExpression {
-    return isElementAccessExpression(node) && isStringOrNumericLiteralLike(node.argumentExpression);
+    return astIsLiteralLikeElementAccess(node.ast);
+}
+
+/**
+ * x[0] OR x['a'] OR x[Symbol.y]
+ */
+function astIsLiteralLikeElementAccess(node: AstNode): node is AstLiteralLikeElementAccessExpression {
+    return astIsElementAccessExpression(node) && astIsStringOrNumericLiteralLike(node.data.argumentExpression);
 }
 
 /**
@@ -4050,8 +4671,17 @@ function isLiteralLikeElementAccess(node: Node): node is LiteralLikeElementAcces
  * @internal
  */
 export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticAccessExpression {
-    return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isIdentifier(node.name) && isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
-        || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
+    return astIsBindableStaticAccessExpression(node.ast, excludeThisKeyword);
+}
+
+/**
+ * Any series of property and element accesses.
+ *
+ * @internal
+ */
+export function astIsBindableStaticAccessExpression(node: AstNode, excludeThisKeyword?: boolean): node is AstBindableStaticAccessExpression {
+    return astIsPropertyAccessExpression(node) && (!excludeThisKeyword && node.data.expression.kind === SyntaxKind.ThisKeyword || astIsIdentifier(node.data.name) && astIsBindableStaticNameExpression(node.data.expression, /*excludeThisKeyword*/ true))
+        || astIsBindableStaticElementAccessExpression(node, excludeThisKeyword);
 }
 
 /**
@@ -4060,15 +4690,29 @@ export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?
  * @internal
  */
 export function isBindableStaticElementAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticElementAccessExpression {
-    return isLiteralLikeElementAccess(node)
-        && ((!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword) ||
-            isEntityNameExpression(node.expression) ||
-            isBindableStaticAccessExpression(node.expression, /*excludeThisKeyword*/ true));
+    return astIsBindableStaticElementAccessExpression(node.ast, excludeThisKeyword);
+}
+
+/**
+ * Any series of property and element accesses, ending in a literal element access
+ *
+ * @internal
+ */
+export function astIsBindableStaticElementAccessExpression(node: AstNode, excludeThisKeyword?: boolean): node is AstBindableStaticElementAccessExpression {
+    return astIsLiteralLikeElementAccess(node)
+        && ((!excludeThisKeyword && node.data.expression.kind === SyntaxKind.ThisKeyword) ||
+            astIsEntityNameExpression(node.data.expression) ||
+            astIsBindableStaticAccessExpression(node.data.expression, /*excludeThisKeyword*/ true));
 }
 
 /** @internal */
 export function isBindableStaticNameExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticNameExpression {
-    return isEntityNameExpression(node) || isBindableStaticAccessExpression(node, excludeThisKeyword);
+    return astIsBindableStaticNameExpression(node.ast, excludeThisKeyword);
+}
+
+/** @internal */
+export function astIsBindableStaticNameExpression(node: AstNode, excludeThisKeyword?: boolean): node is AstBindableStaticNameExpression {
+    return astIsEntityNameExpression(node) || astIsBindableStaticAccessExpression(node, excludeThisKeyword);
 }
 
 /** @internal */
@@ -4079,32 +4723,32 @@ export function getNameOrArgument(expr: PropertyAccessExpression | LiteralLikeEl
     return expr.argumentExpression;
 }
 
-function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
-    if (isCallExpression(expr)) {
-        if (!isBindableObjectDefinePropertyCall(expr)) {
+function astGetAssignmentDeclarationKindWorker(expr: AstBinaryExpression | AstCallExpression): AssignmentDeclarationKind {
+    if (astIsCallExpression(expr)) {
+        if (!astIsBindableObjectDefinePropertyCall(expr)) {
             return AssignmentDeclarationKind.None;
         }
-        const entityName = expr.arguments[0];
-        if (isExportsIdentifier(entityName) || isModuleExportsAccessExpression(entityName)) {
+        const entityName = expr.data.arguments.items[0];
+        if (astIsExportsIdentifier(entityName) || astIsModuleExportsAccessExpression(entityName)) {
             return AssignmentDeclarationKind.ObjectDefinePropertyExports;
         }
-        if (isBindableStaticAccessExpression(entityName) && getElementOrPropertyAccessName(entityName) === "prototype") {
+        if (astIsBindableStaticAccessExpression(entityName) && astGetElementOrPropertyAccessName(entityName) === "prototype") {
             return AssignmentDeclarationKind.ObjectDefinePrototypeProperty;
         }
         return AssignmentDeclarationKind.ObjectDefinePropertyValue;
     }
-    if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || !isAccessExpression(expr.left) || isVoidZero(getRightMostAssignedExpression(expr))) {
+    if (expr.data.operatorToken.kind !== SyntaxKind.EqualsToken || !astIsAccessExpression(expr.data.left) || astIsVoidZero(astGetRightMostAssignedExpression(expr))) {
         return AssignmentDeclarationKind.None;
     }
-    if (isBindableStaticNameExpression(expr.left.expression, /*excludeThisKeyword*/ true) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+    if (astIsBindableStaticNameExpression(expr.data.left.data.expression, /*excludeThisKeyword*/ true) && astGetElementOrPropertyAccessName(expr.data.left) === "prototype" && astIsObjectLiteralExpression(astGetInitializerOfBinaryExpression(expr))) {
         // F.prototype = { ... }
         return AssignmentDeclarationKind.Prototype;
     }
-    return getAssignmentDeclarationPropertyAccessKind(expr.left);
+    return astGetAssignmentDeclarationPropertyAccessKind(expr.data.left);
 }
 
-function isVoidZero(node: Node) {
-    return isVoidExpression(node) && isNumericLiteral(node.expression) && node.expression.text === "0";
+function astIsVoidZero(node: AstNode) {
+    return astIsVoidExpression(node) && astIsNumericLiteral(node.data.expression) && node.data.expression.data.text === "0";
 }
 
 /**
@@ -4114,11 +4758,21 @@ function isVoidZero(node: Node) {
  * @internal
  */
 export function getElementOrPropertyAccessArgumentExpressionOrName(node: AccessExpression): Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
-    if (isPropertyAccessExpression(node)) {
-        return node.name;
+    return astGetElementOrPropertyAccessArgumentExpressionOrName(node.ast)?.node;
+}
+
+/**
+ * Does not handle signed numeric names like `a[+0]` - handling those would require handling prefix unary expressions
+ * throughout late binding handling as well, which is awkward (but ultimately probably doable if there is demand)
+ *
+ * @internal
+ */
+export function astGetElementOrPropertyAccessArgumentExpressionOrName(node: AstAccessExpression): AstIdentifier | AstPrivateIdentifier | AstStringLiteralLike | AstNumericLiteral | AstElementAccessExpression | undefined {
+    if (astIsPropertyAccessExpression(node)) {
+        return node.data.name;
     }
-    const arg = skipParentheses(node.argumentExpression);
-    if (isNumericLiteral(arg) || isStringLiteralLike(arg)) {
+    const arg = astSkipParentheses(node.data.argumentExpression);
+    if (astIsNumericLiteral(arg) || astIsStringLiteralLike(arg)) {
         return arg;
     }
     return node;
@@ -4130,13 +4784,22 @@ export function getElementOrPropertyAccessName(node: LiteralLikeElementAccessExp
 export function getElementOrPropertyAccessName(node: AccessExpression): __String | undefined;
 /** @internal */
 export function getElementOrPropertyAccessName(node: AccessExpression): __String | undefined {
-    const name = getElementOrPropertyAccessArgumentExpressionOrName(node);
+    return astGetElementOrPropertyAccessName(node.ast);
+}
+
+/** @internal */
+export function astGetElementOrPropertyAccessName(node: AstLiteralLikeElementAccessExpression | AstPropertyAccessExpression): __String;
+/** @internal */
+export function astGetElementOrPropertyAccessName(node: AstAccessExpression): __String | undefined;
+/** @internal */
+export function astGetElementOrPropertyAccessName(node: AstAccessExpression): __String | undefined {
+    const name = astGetElementOrPropertyAccessArgumentExpressionOrName(node);
     if (name) {
-        if (isIdentifier(name)) {
-            return name.escapedText;
+        if (astIsIdentifier(name)) {
+            return name.data.escapedText;
         }
-        if (isStringLiteralLike(name) || isNumericLiteral(name)) {
-            return escapeLeadingUnderscores(name.text);
+        if (astIsStringLiteralLike(name) || astIsNumericLiteral(name)) {
+            return escapeLeadingUnderscores(name.data.text);
         }
     }
     return undefined;
@@ -4144,34 +4807,39 @@ export function getElementOrPropertyAccessName(node: AccessExpression): __String
 
 /** @internal */
 export function getAssignmentDeclarationPropertyAccessKind(lhs: AccessExpression): AssignmentDeclarationKind {
-    if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
+    return astGetAssignmentDeclarationPropertyAccessKind(lhs.ast);
+}
+
+/** @internal */
+export function astGetAssignmentDeclarationPropertyAccessKind(lhs: AstAccessExpression): AssignmentDeclarationKind {
+    if (lhs.data.expression.kind === SyntaxKind.ThisKeyword) {
         return AssignmentDeclarationKind.ThisProperty;
     }
-    else if (isModuleExportsAccessExpression(lhs)) {
+    else if (astIsModuleExportsAccessExpression(lhs)) {
         // module.exports = expr
         return AssignmentDeclarationKind.ModuleExports;
     }
-    else if (isBindableStaticNameExpression(lhs.expression, /*excludeThisKeyword*/ true)) {
-        if (isPrototypeAccess(lhs.expression)) {
+    else if (astIsBindableStaticNameExpression(lhs.data.expression, /*excludeThisKeyword*/ true)) {
+        if (astIsPrototypeAccess(lhs.data.expression)) {
             // F.G....prototype.x = expr
             return AssignmentDeclarationKind.PrototypeProperty;
         }
 
         let nextToLast = lhs;
-        while (!isIdentifier(nextToLast.expression)) {
-            nextToLast = nextToLast.expression as Exclude<BindableStaticNameExpression, Identifier>;
+        while (!astIsIdentifier(nextToLast.data.expression)) {
+            nextToLast = nextToLast.data.expression as Exclude<AstBindableStaticNameExpression, AstIdentifier>;
         }
-        const id = nextToLast.expression;
+        const id = nextToLast.data.expression;
         if (
-            (id.escapedText === "exports" ||
-                id.escapedText === "module" && getElementOrPropertyAccessName(nextToLast) === "exports") &&
+            (id.data.escapedText === "exports" ||
+                id.data.escapedText === "module" && astGetElementOrPropertyAccessName(nextToLast) === "exports") &&
             // ExportsProperty does not support binding with computed names
-            isBindableStaticAccessExpression(lhs)
+            astIsBindableStaticAccessExpression(lhs)
         ) {
             // exports.name = expr OR module.exports.name = expr OR exports["name"] = expr ...
             return AssignmentDeclarationKind.ExportsProperty;
         }
-        if (isBindableStaticNameExpression(lhs, /*excludeThisKeyword*/ true) || (isElementAccessExpression(lhs) && isDynamicName(lhs))) {
+        if (astIsBindableStaticNameExpression(lhs, /*excludeThisKeyword*/ true) || (astIsElementAccessExpression(lhs) && astIsDynamicName(lhs))) {
             // F.G...x = expr
             return AssignmentDeclarationKind.Property;
         }
@@ -4182,10 +4850,15 @@ export function getAssignmentDeclarationPropertyAccessKind(lhs: AccessExpression
 
 /** @internal */
 export function getInitializerOfBinaryExpression(expr: BinaryExpression): Expression {
-    while (isBinaryExpression(expr.right)) {
-        expr = expr.right;
+    return astGetInitializerOfBinaryExpression(expr.ast).node;
+}
+
+/** @internal */
+export function astGetInitializerOfBinaryExpression(expr: AstBinaryExpression): AstExpression {
+    while (astIsBinaryExpression(expr.data.right)) {
+        expr = expr.data.right;
     }
-    return expr.right;
+    return expr.data.right;
 }
 
 /** @internal */
@@ -4201,23 +4874,33 @@ export function isPrototypePropertyAssignment(node: Node): node is PrototypeProp
 
 /** @internal */
 export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | ElementAccessExpression): expr is PropertyAccessExpression | LiteralLikeElementAccessExpression {
-    return isInJSFile(expr) &&
+    return astIsSpecialPropertyDeclaration(expr.ast);
+}
+
+/** @internal */
+export function astIsSpecialPropertyDeclaration(expr: AstPropertyAccessExpression | AstElementAccessExpression): expr is AstPropertyAccessExpression | AstLiteralLikeElementAccessExpression {
+    return astIsInJSFile(expr) &&
         expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
-        (!isElementAccessExpression(expr) || isLiteralLikeElementAccess(expr)) &&
-        !!getJSDocTypeTag(expr.parent);
+        (!astIsElementAccessExpression(expr) || astIsLiteralLikeElementAccess(expr)) &&
+        !!getJSDocTypeTag(expr.parent.node); // TODO(rbuckton): do not instantiate `.node`
 }
 
 /** @internal */
 export function setValueDeclaration(symbol: Symbol, node: Declaration): void {
-    const { valueDeclaration } = symbol;
+    astSetValueDeclaration(symbol, node.ast);
+}
+
+/** @internal */
+export function astSetValueDeclaration(symbol: Symbol, node: AstDeclaration): void {
+    const { astValueDeclaration } = symbol;
     if (
-        !valueDeclaration ||
-        !(node.flags & NodeFlags.Ambient && !isInJSFile(node) && !(valueDeclaration.flags & NodeFlags.Ambient)) &&
-            (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
-        (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))
+        !astValueDeclaration ||
+        !(node.flags & NodeFlags.Ambient && !astIsInJSFile(node) && !(astValueDeclaration.flags & NodeFlags.Ambient)) &&
+            (astIsAssignmentDeclaration(astValueDeclaration) && !astIsAssignmentDeclaration(node)) ||
+        (astValueDeclaration.kind !== node.kind && astIsEffectiveModuleDeclaration(astValueDeclaration))
     ) {
         // other kinds of value declarations take precedence over modules and assignment declarations
-        symbol.valueDeclaration = node;
+        symbol.astValueDeclaration = node;
     }
 }
 
@@ -4384,6 +5067,11 @@ export function isJSDocConstructSignature(node: Node): boolean {
 
 /** @internal */
 export function isJSDocTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag {
+    return astIsJSDocTypeAlias(node.ast);
+}
+
+/** @internal */
+export function astIsJSDocTypeAlias(node: AstNode): node is AstJSDocTypedefTag | AstJSDocCallbackTag | AstJSDocEnumTag {
     return node.kind === SyntaxKind.JSDocTypedefTag || node.kind === SyntaxKind.JSDocCallbackTag || node.kind === SyntaxKind.JSDocEnumTag;
 }
 
@@ -4401,37 +5089,55 @@ function getSourceOfAssignment(node: Node): Node | undefined {
 }
 
 function getSourceOfDefaultedAssignment(node: Node): Node | undefined {
-    return isExpressionStatement(node) &&
-            isBinaryExpression(node.expression) &&
-            getAssignmentDeclarationKind(node.expression) !== AssignmentDeclarationKind.None &&
-            isBinaryExpression(node.expression.right) &&
-            (node.expression.right.operatorToken.kind === SyntaxKind.BarBarToken || node.expression.right.operatorToken.kind === SyntaxKind.QuestionQuestionToken)
-        ? node.expression.right.right
+    return astGetSourceOfDefaultedAssignment(node.ast)?.node;
+}
+
+function astGetSourceOfDefaultedAssignment(node: AstNode): AstNode | undefined {
+    return astIsExpressionStatement(node) &&
+            astIsBinaryExpression(node.data.expression) &&
+            astGetAssignmentDeclarationKind(node.data.expression) !== AssignmentDeclarationKind.None &&
+            astIsBinaryExpression(node.data.expression.data.right) &&
+            (node.data.expression.data.right.data.operatorToken.kind === SyntaxKind.BarBarToken ||
+                node.data.expression.data.right.data.operatorToken.kind === SyntaxKind.QuestionQuestionToken)
+        ? node.data.expression.data.right.data.right
         : undefined;
 }
 
 function getSingleInitializerOfVariableStatementOrPropertyDeclaration(node: Node): Expression | undefined {
+    return astGetSingleInitializerOfVariableStatementOrPropertyDeclaration(node.ast)?.node;
+}
+
+function astGetSingleInitializerOfVariableStatementOrPropertyDeclaration(node: AstNode): AstExpression | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableStatement:
-            const v = getSingleVariableOfVariableStatement(node);
-            return v && v.initializer;
+            const v = astGetSingleVariableOfVariableStatement(node);
+            return v && astGetInitializer(v);
         case SyntaxKind.PropertyDeclaration:
-            return (node as PropertyDeclaration).initializer;
+            return (node as AstPropertyDeclaration).data.initializer;
         case SyntaxKind.PropertyAssignment:
-            return (node as PropertyAssignment).initializer;
+            return (node as AstPropertyAssignment).data.initializer;
     }
 }
 
 /** @internal */
 export function getSingleVariableOfVariableStatement(node: Node): VariableDeclaration | undefined {
-    return isVariableStatement(node) ? firstOrUndefined(node.declarationList.declarations) : undefined;
+    return astGetSingleVariableOfVariableStatement(node.ast)?.node;
+}
+
+/** @internal */
+export function astGetSingleVariableOfVariableStatement(node: AstNode): AstVariableDeclaration | undefined {
+    return astIsVariableStatement(node) ? firstOrUndefined(node.data.declarationList.data.declarations.items) : undefined;
 }
 
 function getNestedModuleDeclaration(node: Node): Node | undefined {
-    return isModuleDeclaration(node) &&
-            node.body &&
-            node.body.kind === SyntaxKind.ModuleDeclaration
-        ? node.body
+    return astGetNestedModuleDeclaration(node.ast)?.node;
+}
+
+function astGetNestedModuleDeclaration(node: AstNode): AstNode | undefined {
+    return astIsModuleDeclaration(node) &&
+            node.data.body &&
+            node.data.body.kind === SyntaxKind.ModuleDeclaration
+        ? node.data.body
         : undefined;
 }
 
@@ -4462,7 +5168,10 @@ export function canHaveFlowNode(node: Node): node is HasFlowNode {
 }
 
 /** @internal */
-export function canHaveJSDoc(node: Node): node is HasJSDoc {
+export function canHaveJSDoc(node: Node): node is HasJSDoc;
+/** @internal */
+export function canHaveJSDoc(node: AstNode): node is AstHasJSDoc;
+export function canHaveJSDoc(node: Node | AstNode) {
     switch (node.kind) {
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.BinaryExpression:
@@ -4560,36 +5269,66 @@ export function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDoc
 // eslint-disable-next-line @typescript-eslint/unified-signatures
 export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[];
 export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
+    return astGetJSDocCommentsAndTags(hostNode.ast, noCache);
+}
+
+/**
+ * This function checks multiple locations for JSDoc comments that apply to a host node.
+ * At each location, the whole comment may apply to the node, or only a specific tag in
+ * the comment. In the first case, location adds the entire {@link JSDoc} object. In the
+ * second case, it adds the applicable {@link JSDocTag}.
+ *
+ * For example, a JSDoc comment before a parameter adds the entire {@link JSDoc}. But a
+ * `@param` tag on the parent function only adds the {@link JSDocTag} for the `@param`.
+ *
+ * ```ts
+ * /** JSDoc will be returned for `a` *\/
+ * const a = 0
+ * /**
+ *  * Entire JSDoc will be returned for `b`
+ *  * @param c JSDocTag will be returned for `c`
+ *  *\/
+ * function b(/** JSDoc will be returned for `c` *\/ c) {}
+ * ```
+ */
+export function astGetJSDocCommentsAndTags(hostNode: AstNode): readonly (JSDoc | JSDocTag)[];
+/** @internal separate signature so that stripInternal can remove noCache from the public API */
+// eslint-disable-next-line @typescript-eslint/unified-signatures
+export function astGetJSDocCommentsAndTags(hostNode: AstNode, noCache?: boolean): readonly (JSDoc | JSDocTag)[];
+export function astGetJSDocCommentsAndTags(hostNode: AstNode, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
     let result: (JSDoc | JSDocTag)[] | undefined;
     // Pull parameter comments from declaring function as well
-    if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
-        result = addRange(result, filterOwnedJSDocTags(hostNode, hostNode.initializer.jsDoc!));
+    if (astIsVariableLike(hostNode)) {
+        const initializer = astGetInitializer(hostNode);
+        if (initializer && astHasJSDocNodes(initializer)) {
+            result = addRange(result, astFilterOwnedJSDocTags(hostNode, initializer.data.jsDoc!));
+        }
     }
 
-    let node: Node | undefined = hostNode;
+    let node: AstNode | undefined = hostNode;
     while (node && node.parent) {
-        if (hasJSDocNodes(node)) {
-            result = addRange(result, filterOwnedJSDocTags(hostNode, node.jsDoc!));
+        if (astHasJSDocNodes(node)) {
+            result = addRange(result, astFilterOwnedJSDocTags(hostNode, node.data.jsDoc!));
         }
 
         if (node.kind === SyntaxKind.Parameter) {
-            result = addRange(result, (noCache ? getJSDocParameterTagsNoCache : getJSDocParameterTags)(node as ParameterDeclaration));
+            result = addRange(result, (noCache ? astGetJSDocParameterTagsNoCache : astGetJSDocParameterTags)(node as AstParameterDeclaration));
             break;
         }
         if (node.kind === SyntaxKind.TypeParameter) {
-            result = addRange(result, (noCache ? getJSDocTypeParameterTagsNoCache : getJSDocTypeParameterTags)(node as TypeParameterDeclaration));
+            result = addRange(result, (noCache ? astGetJSDocTypeParameterTagsNoCache : astGetJSDocTypeParameterTags)(node as AstTypeParameterDeclaration));
             break;
         }
-        node = getNextJSDocCommentLocation(node);
+        node = astGetNextJSDocCommentLocation(node);
     }
     return result || emptyArray;
 }
 
-function filterOwnedJSDocTags(hostNode: Node, comments: JSDocArray) {
+function astFilterOwnedJSDocTags(hostNode: AstNode, comments: JSDocArray) {
     const lastJsDoc = last(comments);
     return flatMap<JSDoc, JSDoc | JSDocTag>(comments, jsDoc => {
         if (jsDoc === lastJsDoc) {
-            const ownedTags = filter(jsDoc.tags, tag => ownsJSDocTag(hostNode, tag));
+            const ownedTags = filter(jsDoc.tags, tag => astOwnsJSDocTag(hostNode, tag));
             return jsDoc.tags === ownedTags ? [jsDoc] : ownedTags;
         }
         else {
@@ -4602,16 +5341,21 @@ function filterOwnedJSDocTags(hostNode: Node, comments: JSDocArray) {
  * Determines whether a host node owns a jsDoc tag. A `@type`/`@satisfies` tag attached to a
  * a ParenthesizedExpression belongs only to the ParenthesizedExpression.
  */
-function ownsJSDocTag(hostNode: Node, tag: JSDocTag) {
+function astOwnsJSDocTag(hostNode: AstNode, tag: JSDocTag) {
     return !(isJSDocTypeTag(tag) || isJSDocSatisfiesTag(tag))
         || !tag.parent
         || !isJSDoc(tag.parent)
         || !isParenthesizedExpression(tag.parent.parent)
-        || tag.parent.parent === hostNode;
+        || tag.parent.parent.ast === hostNode;
 }
 
 /** @internal */
 export function getNextJSDocCommentLocation(node: Node): Node | undefined {
+    return astGetNextJSDocCommentLocation(node.ast)?.node;
+}
+
+/** @internal */
+export function astGetNextJSDocCommentLocation(node: AstNode): AstNode | undefined {
     const parent = node.parent;
     if (
         parent.kind === SyntaxKind.PropertyAssignment ||
@@ -4619,8 +5363,8 @@ export function getNextJSDocCommentLocation(node: Node): Node | undefined {
         parent.kind === SyntaxKind.PropertyDeclaration ||
         parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
         parent.kind === SyntaxKind.ReturnStatement ||
-        getNestedModuleDeclaration(parent) ||
-        isAssignmentExpression(node)
+        astGetNestedModuleDeclaration(parent) ||
+        astIsAssignmentExpression(node)
     ) {
         return parent;
     }
@@ -4632,15 +5376,15 @@ export function getNextJSDocCommentLocation(node: Node): Node | undefined {
     // var x = function(name) { return name.length; }
     else if (
         parent.parent &&
-        (getSingleVariableOfVariableStatement(parent.parent) === node || isAssignmentExpression(parent))
+        (astGetSingleVariableOfVariableStatement(parent.parent) === node || astIsAssignmentExpression(parent))
     ) {
         return parent.parent;
     }
     else if (
         parent.parent && parent.parent.parent &&
-        (getSingleVariableOfVariableStatement(parent.parent.parent) ||
-            getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node ||
-            getSourceOfDefaultedAssignment(parent.parent.parent))
+        (astGetSingleVariableOfVariableStatement(parent.parent.parent) ||
+            astGetSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node ||
+            astGetSourceOfDefaultedAssignment(parent.parent.parent))
     ) {
         return parent.parent.parent;
     }
@@ -4739,6 +5483,7 @@ export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { par
 
 /** @internal @knipignore */
 export function hasTypeArguments(node: Node): node is HasTypeArguments {
+    // TODO: switch on kind
     return !!(node as HasTypeArguments).typeArguments;
 }
 
@@ -4947,10 +5692,19 @@ export function skipParentheses(node: Expression, excludeJSDocTypeAssertions?: b
 export function skipParentheses(node: Node, excludeJSDocTypeAssertions?: boolean): Node;
 /** @internal */
 export function skipParentheses(node: Node, excludeJSDocTypeAssertions?: boolean): Node {
+    return astSkipParentheses(node.ast, excludeJSDocTypeAssertions).node;
+}
+
+/** @internal */
+export function astSkipParentheses(node: AstExpression, excludeJSDocTypeAssertions?: boolean): AstExpression;
+/** @internal */
+export function astSkipParentheses(node: AstNode, excludeJSDocTypeAssertions?: boolean): AstNode;
+/** @internal */
+export function astSkipParentheses(node: AstNode, excludeJSDocTypeAssertions?: boolean): AstNode {
     const flags = excludeJSDocTypeAssertions ?
         OuterExpressionKinds.Parentheses | OuterExpressionKinds.ExcludeJSDocTypeAssertion :
         OuterExpressionKinds.Parentheses;
-    return skipOuterExpressions(node, flags);
+    return astSkipOuterExpressions(node, flags);
 }
 
 // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
@@ -4976,6 +5730,12 @@ export function isNodeDescendantOf(node: Node, ancestor: Node | undefined): bool
 /** @internal */
 export function isDeclarationName(name: Node): boolean {
     return !isSourceFile(name) && !isBindingPattern(name) && isDeclaration(name.parent) && name.parent.name === name;
+}
+
+// True if `name` is the name of a declaration node
+/** @internal */
+export function astIsDeclarationName(name: AstNode): boolean {
+    return !astIsSourceFile(name) && !astIsBindingPattern(name) && astIsDeclaration(name.parent) && astCanHaveName(name.parent) && name.parent.data.name === name;
 }
 
 // See GH#16030
@@ -5022,6 +5782,12 @@ export function isLiteralComputedPropertyDeclarationName(node: Node): boolean {
 // Return true if the given identifier is classified as an IdentifierName
 /** @internal */
 export function isIdentifierName(node: Identifier): boolean {
+    return astIsIdentifier(node.ast);
+}
+
+// Return true if the given identifier is classified as an IdentifierName
+/** @internal */
+export function astIsIdentifierName(node: AstIdentifier): boolean {
     const parent = node.parent;
     switch (parent.kind) {
         case SyntaxKind.PropertyDeclaration:
@@ -5034,14 +5800,14 @@ export function isIdentifierName(node: Identifier): boolean {
         case SyntaxKind.PropertyAssignment:
         case SyntaxKind.PropertyAccessExpression:
             // Name in member declaration or property name in property access
-            return (parent as NamedDeclaration | PropertyAccessExpression).name === node;
+            return astGetName(parent) === node;
         case SyntaxKind.QualifiedName:
             // Name on right hand side of dot in a type query or type reference
-            return (parent as QualifiedName).right === node;
+            return (parent as AstQualifiedName).data.right === node;
         case SyntaxKind.BindingElement:
+            return (parent as AstBindingElement).data.propertyName === node;
         case SyntaxKind.ImportSpecifier:
-            // Property name in binding element or import specifier
-            return (parent as BindingElement | ImportSpecifier).propertyName === node;
+            return (parent as AstImportSpecifier).data.propertyName === node;
         case SyntaxKind.ExportSpecifier:
         case SyntaxKind.JsxAttribute:
         case SyntaxKind.JsxSelfClosingElement:
@@ -5250,13 +6016,16 @@ export function getFunctionFlags(node: SignatureDeclaration | undefined): Functi
 
 /** @internal */
 export function isAsyncFunction(node: Node): boolean {
+    Debug.type<FunctionLikeDeclaration>(node);
     switch (node.kind) {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.FunctionExpression:
-        case SyntaxKind.ArrowFunction:
         case SyntaxKind.MethodDeclaration:
-            return (node as FunctionLikeDeclaration).body !== undefined
-                && (node as FunctionLikeDeclaration).asteriskToken === undefined
+            return node.body !== undefined
+                && node.asteriskToken === undefined
+                && hasSyntacticModifier(node, ModifierFlags.Async);
+        case SyntaxKind.ArrowFunction:
+            return node.body !== undefined
                 && hasSyntacticModifier(node, ModifierFlags.Async);
     }
     return false;
@@ -5269,7 +6038,12 @@ export function isStringOrNumericLiteralLike(node: Node): node is StringLiteralL
 
 /** @internal */
 export function isSignedNumericLiteral(node: Node): node is PrefixUnaryExpression & { operand: NumericLiteral; } {
-    return isPrefixUnaryExpression(node) && (node.operator === SyntaxKind.PlusToken || node.operator === SyntaxKind.MinusToken) && isNumericLiteral(node.operand);
+    return astIsSignedNumericLiteral(node.ast);
+}
+
+/** @internal */
+export function astIsSignedNumericLiteral(node: AstNode): node is AstNode<PrefixUnaryExpression & { operand: NumericLiteral; data: { operand: AstNumericLiteral; } }> {
+    return astIsPrefixUnaryExpression(node) && (node.data.operator === SyntaxKind.PlusToken || node.data.operator === SyntaxKind.MinusToken) && astIsNumericLiteral(node.data.operand);
 }
 
 /**
@@ -5283,18 +6057,37 @@ export function isSignedNumericLiteral(node: Node): node is PrefixUnaryExpressio
  * @internal
  */
 export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration | DynamicNamedBinaryExpression {
-    const name = getNameOfDeclaration(declaration);
-    return !!name && isDynamicName(name);
+    return astHasDynamicName(declaration.ast);
+}
+
+/**
+ * A declaration has a dynamic name if all of the following are true:
+ *   1. The declaration has a computed property name.
+ *   2. The computed name is *not* expressed as a StringLiteral.
+ *   3. The computed name is *not* expressed as a NumericLiteral.
+ *   4. The computed name is *not* expressed as a PlusToken or MinusToken
+ *      immediately followed by a NumericLiteral.
+ *
+ * @internal
+ */
+export function astHasDynamicName(declaration: AstDeclaration): declaration is AstDynamicNamedDeclaration | AstDynamicNamedBinaryExpression {
+    const name = astGetNameOfDeclaration(declaration);
+    return !!name && astIsDynamicName(name);
 }
 
 /** @internal */
 export function isDynamicName(name: DeclarationName): boolean {
+    return astIsDynamicName(name.ast);
+}
+
+/** @internal */
+export function astIsDynamicName(name: AstDeclarationName): boolean {
     if (!(name.kind === SyntaxKind.ComputedPropertyName || name.kind === SyntaxKind.ElementAccessExpression)) {
         return false;
     }
-    const expr = isElementAccessExpression(name) ? skipParentheses(name.argumentExpression) : name.expression;
-    return !isStringOrNumericLiteralLike(expr) &&
-        !isSignedNumericLiteral(expr);
+    const expr = astIsElementAccessExpression(name) ? astSkipParentheses(name.data.argumentExpression) : name.data.expression;
+    return !astIsStringOrNumericLiteralLike(expr) &&
+        !astIsSignedNumericLiteral(expr);
 }
 
 /** @internal */
@@ -5503,8 +6296,16 @@ export function isPartOfParameterDeclaration(node: Declaration): boolean {
     return root.kind === SyntaxKind.Parameter;
 }
 
-/** @internal */
+/**
+ * @deprecated Use {@link astGetRootDeclaration}
+ * @internal
+ */
 export function getRootDeclaration(node: Node): Node {
+    return astGetRootDeclaration(node.ast).node;
+}
+
+/** @internal */
+export function astGetRootDeclaration(node: AstNode): AstNode {
     while (node.kind === SyntaxKind.BindingElement) {
         node = node.parent.parent;
     }
@@ -5526,7 +6327,15 @@ export function nodeStartsNewLexicalEnvironment(node: Node): boolean {
 }
 
 /** @internal */
-export function nodeIsSynthesized(range: TextRange): boolean {
+export function nodeIsSynthesized(range: TextRange & { node?: never }): boolean {
+    return positionIsSynthesized(range.pos)
+        || positionIsSynthesized(range.end);
+}
+
+/**
+ * A copy of `nodeIsSynthesized` for `AstNode` to ensure the function remains monomorphic
+ * @internal */
+export function astNodeIsSynthesized(range: AstNode): boolean {
     return positionIsSynthesized(range.pos)
         || positionIsSynthesized(range.end);
 }
@@ -5538,9 +6347,9 @@ export const enum Associativity {
 }
 
 /** @internal */
-export function getExpressionAssociativity(expression: Expression): Associativity {
+export function getExpressionAssociativity(expression: Expression | AstExpression): Associativity {
     const operator = getOperator(expression);
-    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression as NewExpression).arguments !== undefined;
+    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression instanceof AstNode ? (expression as AstNewExpression).data.arguments !== undefined : (expression as NewExpression).arguments !== undefined);
     return getOperatorAssociativity(expression.kind, operator, hasArguments);
 }
 
@@ -5585,18 +6394,18 @@ export function getOperatorAssociativity(kind: SyntaxKind, operator: SyntaxKind,
 }
 
 /** @internal */
-export function getExpressionPrecedence(expression: Expression): OperatorPrecedence {
+export function getExpressionPrecedence(expression: Expression | AstExpression): OperatorPrecedence {
     const operator = getOperator(expression);
-    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression as NewExpression).arguments !== undefined;
+    const hasArguments = expression.kind === SyntaxKind.NewExpression && (expression instanceof AstNode ? (expression as AstNewExpression).data.arguments !== undefined : (expression as NewExpression).arguments !== undefined);
     return getOperatorPrecedence(expression.kind, operator, hasArguments);
 }
 
-function getOperator(expression: Expression): SyntaxKind {
+function getOperator(expression: Expression | AstExpression): SyntaxKind {
     if (expression.kind === SyntaxKind.BinaryExpression) {
-        return (expression as BinaryExpression).operatorToken.kind;
+        return expression instanceof AstNode ? (expression as AstBinaryExpression).data.operatorToken.kind : (expression as BinaryExpression).operatorToken.kind;
     }
     else if (expression.kind === SyntaxKind.PrefixUnaryExpression || expression.kind === SyntaxKind.PostfixUnaryExpression) {
-        return (expression as PrefixUnaryExpression | PostfixUnaryExpression).operator;
+        return expression instanceof AstNode ? (expression as AstPrefixUnaryExpression | AstPostfixUnaryExpression).data.operator : (expression as PrefixUnaryExpression | PostfixUnaryExpression).operator;
     }
     else {
         return expression.kind;
@@ -6781,14 +7590,15 @@ export function getAllAccessorDeclarations(declarations: readonly Declaration[] 
 export function getEffectiveTypeAnnotationNode(node: Node): TypeNode | undefined {
     if (!isInJSFile(node) && isFunctionDeclaration(node)) return undefined;
     if (isTypeAliasDeclaration(node)) return undefined; // has a .type, is not a type annotation
-    const type = (node as HasType).type;
+    const type = getTypeAnnotationNode(node);
     if (type || !isInJSFile(node)) return type;
     return isJSDocPropertyLikeTag(node) ? node.typeExpression && node.typeExpression.type : getJSDocType(node);
 }
 
 /** @internal */
 export function getTypeAnnotationNode(node: Node): TypeNode | undefined {
-    return (node as HasType).type;
+    const type = (node as HasType).type;
+    return !type || isJSDocReturnTag(type) ? undefined : type;
 }
 
 /**
@@ -7082,7 +7892,12 @@ export function hasEffectiveModifier(node: Node, flags: ModifierFlags): boolean 
 
 /** @internal */
 export function hasSyntacticModifier(node: Node, flags: ModifierFlags): boolean {
-    return !!getSelectedSyntacticModifierFlags(node, flags);
+    return astHasSyntacticModifier(node.ast, flags);
+}
+
+/** @internal */
+export function astHasSyntacticModifier(node: AstNode, flags: ModifierFlags): boolean {
+    return !!astGetSelectedSyntacticModifierFlags(node, flags);
 }
 
 /** @internal */
@@ -7111,9 +7926,17 @@ export function hasAmbientModifier(node: Node): boolean {
     return hasSyntacticModifier(node, ModifierFlags.Ambient);
 }
 
-/** @internal */
+/**
+ * @deprecated use {@link astHasAccessorModifier}
+ * @internal
+ */
 export function hasAccessorModifier(node: Node): boolean {
-    return hasSyntacticModifier(node, ModifierFlags.Accessor);
+    return astHasAccessorModifier(node.ast);
+}
+
+/** @internal */
+export function astHasAccessorModifier(node: AstNode): boolean {
+    return astHasSyntacticModifier(node, ModifierFlags.Accessor);
 }
 
 /** @internal */
@@ -7133,21 +7956,30 @@ export function getSelectedEffectiveModifierFlags(node: Node, flags: ModifierFla
 
 /** @internal @knipignore */
 export function getSelectedSyntacticModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
-    return getSyntacticModifierFlags(node) & flags;
+    return astGetSelectedSyntacticModifierFlags(node.ast, flags);
+}
+
+/** @internal @knipignore */
+export function astGetSelectedSyntacticModifierFlags(node: AstNode, flags: ModifierFlags): ModifierFlags {
+    return astGetSyntacticModifierFlags(node) & flags;
 }
 
 function getModifierFlagsWorker(node: Node, includeJSDoc: boolean, alwaysIncludeJSDoc?: boolean): ModifierFlags {
+    return astGetModifierFlagsWorker(node.ast, includeJSDoc, alwaysIncludeJSDoc);
+}
+
+function astGetModifierFlagsWorker(node: AstNode, includeJSDoc: boolean, alwaysIncludeJSDoc?: boolean): ModifierFlags {
     if (node.kind >= SyntaxKind.FirstToken && node.kind <= SyntaxKind.LastToken) {
         return ModifierFlags.None;
     }
 
     if (!(node.modifierFlagsCache & ModifierFlags.HasComputedFlags)) {
-        node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
+        node.modifierFlagsCache = astGetSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
     }
 
-    if (alwaysIncludeJSDoc || includeJSDoc && isInJSFile(node)) {
+    if (alwaysIncludeJSDoc || includeJSDoc && astIsInJSFile(node)) {
         if (!(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && node.parent) {
-            node.modifierFlagsCache |= getRawJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
+            node.modifierFlagsCache |= astGetRawJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
         }
         return selectEffectiveModifierFlags(node.modifierFlagsCache);
     }
@@ -7179,20 +8011,35 @@ export function getEffectiveModifierFlagsAlwaysIncludeJSDoc(node: Node): Modifie
  * @internal
  */
 export function getSyntacticModifierFlags(node: Node): ModifierFlags {
-    return getModifierFlagsWorker(node, /*includeJSDoc*/ false);
+    return astGetSyntacticModifierFlags(node.ast);
+}
+
+/**
+ * Gets the ModifierFlags for syntactic modifiers on the provided node. The modifiers will be cached on the node to improve performance.
+ *
+ * NOTE: This function does not use `parent` pointers and will not include modifiers from JSDoc.
+ *
+ * @internal
+ */
+export function astGetSyntacticModifierFlags(node: AstNode): ModifierFlags {
+    return astGetModifierFlagsWorker(node, /*includeJSDoc*/ false);
 }
 
 function getRawJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
+    return astGetRawJSDocModifierFlagsNoCache(node.ast);
+}
+
+function astGetRawJSDocModifierFlagsNoCache(node: AstNode): ModifierFlags {
     let flags = ModifierFlags.None;
-    if (!!node.parent && !isParameter(node)) {
-        if (isInJSFile(node)) {
-            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.JSDocPublic;
-            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.JSDocPrivate;
-            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.JSDocProtected;
-            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.JSDocReadonly;
-            if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.JSDocOverride;
+    if (!!node.parent && !astIsParameter(node)) {
+        if (astIsInJSFile(node)) {
+            if (astGetJSDocPublicTagNoCache(node)) flags |= ModifierFlags.JSDocPublic;
+            if (astGetJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.JSDocPrivate;
+            if (astGetJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.JSDocProtected;
+            if (astGetJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.JSDocReadonly;
+            if (astGetJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.JSDocOverride;
         }
-        if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
+        if (astGetJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
     }
 
     return flags;
@@ -7231,7 +8078,19 @@ export function getEffectiveModifierFlagsNoCache(node: Node): ModifierFlags {
  * @knipignore
  */
 export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
-    let flags = canHaveModifiers(node) ? modifiersToFlags(node.modifiers) : ModifierFlags.None;
+    return astGetSyntacticModifierFlagsNoCache(node.ast);
+}
+
+/**
+ * Gets the ModifierFlags for syntactic modifiers on the provided node. The modifier flags cache on the node is ignored.
+ *
+ * NOTE: This function does not use `parent` pointers and will not include modifiers from JSDoc.
+ *
+ * @internal
+ * @knipignore
+ */
+export function astGetSyntacticModifierFlagsNoCache(node: AstNode): ModifierFlags {
+    let flags = astCanHaveModifiers(node) ? astModifiersToFlags(node.data.modifiers?.items) : ModifierFlags.None;
     if (node.flags & NodeFlags.NestedNamespace || node.kind === SyntaxKind.Identifier && node.flags & NodeFlags.IdentifierIsInJSDocNamespace) {
         flags |= ModifierFlags.Export;
     }
@@ -7240,6 +8099,17 @@ export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
 
 /** @internal */
 export function modifiersToFlags(modifiers: readonly ModifierLike[] | undefined): ModifierFlags {
+    let flags = ModifierFlags.None;
+    if (modifiers) {
+        for (const modifier of modifiers) {
+            flags |= modifierToFlag(modifier.kind);
+        }
+    }
+    return flags;
+}
+
+/** @internal */
+export function astModifiersToFlags(modifiers: readonly AstModifierLike[] | undefined): ModifierFlags {
     let flags = ModifierFlags.None;
     if (modifiers) {
         for (const modifier of modifiers) {
@@ -7362,11 +8232,20 @@ export function isAssignmentExpression(node: Node, excludeCompoundAssignment: tr
 export function isAssignmentExpression(node: Node, excludeCompoundAssignment?: false): node is AssignmentExpression<AssignmentOperatorToken>;
 /** @internal */
 export function isAssignmentExpression(node: Node, excludeCompoundAssignment?: boolean): node is AssignmentExpression<AssignmentOperatorToken> {
-    return isBinaryExpression(node)
+    return astIsAssignmentExpression(node.ast, excludeCompoundAssignment);
+}
+
+/** @internal */
+export function astIsAssignmentExpression(node: AstNode, excludeCompoundAssignment: true): node is AstAssignmentExpression<EqualsToken>;
+/** @internal */
+export function astIsAssignmentExpression(node: AstNode, excludeCompoundAssignment?: boolean): node is AstAssignmentExpression<AssignmentOperatorToken>;
+/** @internal */
+export function astIsAssignmentExpression(node: AstNode, excludeCompoundAssignment?: boolean): node is AstAssignmentExpression<AssignmentOperatorToken> {
+    return astIsBinaryExpression(node)
         && (excludeCompoundAssignment
-            ? node.operatorToken.kind === SyntaxKind.EqualsToken
-            : isAssignmentOperator(node.operatorToken.kind))
-        && isLeftHandSideExpression(node.left);
+            ? node.data.operatorToken.kind === SyntaxKind.EqualsToken
+            : isAssignmentOperator(node.data.operatorToken.kind))
+        && astIsLeftHandSideExpression(node.data.left);
 }
 
 /** @internal */
@@ -7387,7 +8266,12 @@ export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): n
 
 /** @internal */
 export function isEntityNameExpression(node: Node): node is EntityNameExpression {
-    return node.kind === SyntaxKind.Identifier || isPropertyAccessEntityNameExpression(node);
+    return astIsEntityNameExpression(node.ast);
+}
+
+/** @internal */
+export function astIsEntityNameExpression(node: AstNode): node is AstEntityNameExpression {
+    return node.kind === SyntaxKind.Identifier || astIsPropertyAccessEntityNameExpression(node);
 }
 
 /** @internal */
@@ -7422,7 +8306,12 @@ export function isDottedName(node: Expression): boolean {
 
 /** @internal */
 export function isPropertyAccessEntityNameExpression(node: Node): node is PropertyAccessEntityNameExpression {
-    return isPropertyAccessExpression(node) && isIdentifier(node.name) && isEntityNameExpression(node.expression);
+    return astIsPropertyAccessEntityNameExpression(node.ast);
+}
+
+/** @internal */
+export function astIsPropertyAccessEntityNameExpression(node: AstNode): node is AstPropertyAccessEntityNameExpression {
+    return astIsPropertyAccessExpression(node) && astIsIdentifier(node.data.name) && astIsEntityNameExpression(node.data.expression);
 }
 
 /** @internal */
@@ -7450,7 +8339,12 @@ export function tryGetPropertyAccessOrIdentifierToString(expr: Expression | JsxT
 
 /** @internal */
 export function isPrototypeAccess(node: Node): node is BindableStaticAccessExpression {
-    return isBindableStaticAccessExpression(node) && getElementOrPropertyAccessName(node) === "prototype";
+    return astIsPrototypeAccess(node.ast);
+}
+
+/** @internal */
+export function astIsPrototypeAccess(node: AstNode): node is AstBindableStaticAccessExpression {
+    return astIsBindableStaticAccessExpression(node) && astGetElementOrPropertyAccessName(node) === "prototype";
 }
 
 /** @internal */
@@ -8233,6 +9127,11 @@ export function isTypeNodeKind(kind: SyntaxKind): kind is TypeNodeSyntaxKind {
 
 /** @internal */
 export function isAccessExpression(node: Node): node is AccessExpression {
+    return astIsAccessExpression(node.ast);
+}
+
+/** @internal */
+export function astIsAccessExpression(node: AstNode): node is AstAccessExpression {
     return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression;
 }
 
@@ -8337,34 +9236,42 @@ export function getLeftmostExpression(node: Expression, stopAtCallExpressions: b
 
 /** @internal */
 export interface ObjectAllocator {
-    getNodeConstructor(): new (kind: SyntaxKind, pos: number, end: number) => Node;
-    getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos: number, end: number) => Token<TKind>;
-    getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
-    getPrivateIdentifierConstructor(): new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier;
-    getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile;
     getSymbolConstructor(): new (flags: SymbolFlags, name: __String) => Symbol;
     getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
     getSignatureConstructor(): new (checker: TypeChecker, flags: SignatureFlags) => Signature;
     getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 }
 
-function Symbol(this: Symbol, flags: SymbolFlags, name: __String): void {
-    // Note: if modifying this, be sure to update SymbolObject in src/services/services.ts
-    this.flags = flags;
-    this.escapedName = name;
-    this.declarations = undefined;
-    this.valueDeclaration = undefined;
-    this.id = 0;
-    this.mergeId = 0;
-    this.parent = undefined;
-    this.members = undefined;
-    this.exports = undefined;
-    this.exportSymbol = undefined;
-    this.constEnumOnlyModule = undefined;
-    this.isReferenced = undefined;
-    this.lastAssignmentPos = undefined;
-    (this as any).links = undefined; // used by TransientSymbol
-}
+// dprint-ignore
+const Symbol: new (flags: SymbolFlags, name: __String) => Symbol = class implements Symbol {
+    flags: SymbolFlags = 0;
+    escapedName: __String = "" as __String;
+    private _declarations: readonly Declaration[] | undefined = undefined;
+    astValueDeclaration: AstDeclaration | undefined = undefined;
+    astDeclarations: AstDeclaration[] | undefined = undefined;
+    id: number = 0;
+    mergeId: number = 0;
+    parent: Symbol | undefined = undefined;
+    members: SymbolTable | undefined = undefined;
+    exports: SymbolTable | undefined = undefined;
+    exportSymbol: Symbol | undefined = undefined;
+    constEnumOnlyModule: boolean | undefined = undefined;
+    isReferenced: SymbolFlags | undefined = undefined;
+    lastAssignmentPos: number | undefined = undefined;
+    globalExports: SymbolTable | undefined = undefined;
+    isReplaceableByMethod: boolean | undefined = undefined;
+    assignmentDeclarationMembers: Map<number, Declaration> | undefined = undefined;
+    links: unknown = undefined; // used by TransientSymbol
+
+    constructor(flags: SymbolFlags, name: __String) {
+        this.flags = flags;
+        this.escapedName = name;
+    }
+
+    get valueDeclaration() { return this.astValueDeclaration?.node; }
+    set valueDeclaration(value) { this.astValueDeclaration = value?.ast; }
+    get declarations() { return this._declarations ??= this.astDeclarations && new ReadonlyArrayView(this.astDeclarations, ast => ast.node); }
+};
 
 function Type(this: Type, checker: TypeChecker, flags: TypeFlags): void {
     // Note: if modifying this, be sure to update TypeObject in src/services/services.ts
@@ -8382,45 +9289,6 @@ function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags)
     }
 }
 
-function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number): void {
-    // Note: if modifying this, be sure to update NodeObject in src/services/services.ts
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.modifierFlagsCache = ModifierFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
-    this.emitNode = undefined;
-}
-
-function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number): void {
-    // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.emitNode = undefined;
-}
-
-function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number): void {
-    // Note: if modifying this, be sure to update TokenOrIdentifierObject in src/services/services.ts
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
-    this.emitNode = undefined;
-}
-
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number): void {
     // Note: if modifying this, be sure to update SourceMapSourceObject in src/services/services.ts
     this.fileName = fileName;
@@ -8430,11 +9298,6 @@ function SourceMapSource(this: SourceMapSource, fileName: string, text: string, 
 
 /** @internal */
 export const objectAllocator: ObjectAllocator = {
-    getNodeConstructor: () => Node as any,
-    getTokenConstructor: () => Token as any,
-    getIdentifierConstructor: () => Identifier as any,
-    getPrivateIdentifierConstructor: () => Node as any,
-    getSourceFileConstructor: () => Node as any,
     getSymbolConstructor: () => Symbol as any,
     getTypeConstructor: () => Type as any,
     getSignatureConstructor: () => Signature as any,
@@ -10554,11 +11417,11 @@ export function setNodeFlags<T extends Node>(node: T | undefined, newFlags: Node
  *
  * @internal
  */
-export function setParent<T extends Node>(child: T, parent: T["parent"] | undefined): T;
+export function setParent<T extends Node | AstNode>(child: T, parent: T["parent"] | undefined): T;
 /** @internal */
-export function setParent<T extends Node>(child: T | undefined, parent: T["parent"] | undefined): T | undefined;
+export function setParent<T extends Node | AstNode>(child: T | undefined, parent: T["parent"] | undefined): T | undefined;
 /** @internal */
-export function setParent<T extends Node>(child: T | undefined, parent: T["parent"] | undefined): T | undefined {
+export function setParent<T extends Node | AstNode>(child: T | undefined, parent: T["parent"] | undefined): T | undefined {
     if (child && parent) {
         (child as Mutable<T>).parent = parent;
     }
@@ -11830,13 +12693,16 @@ export function createNameResolver({
             return isTypeQueryNode(location) || ((
                 isFunctionLikeDeclaration(location) ||
                 (location.kind === SyntaxKind.PropertyDeclaration && !isStatic(location))
-            ) && (!lastLocation || lastLocation !== (location as SignatureDeclaration | PropertyDeclaration).name)); // A name is evaluated within the enclosing scope - so it shouldn't count as deferred
+                // TODO(rbuckton): unchecked cast can result in wrong map deopt for missing `name` property
+            ) && (!lastLocation || lastLocation !== (location as SignatureDeclarationBase | PropertyDeclaration).name)); // A name is evaluated within the enclosing scope - so it shouldn't count as deferred
         }
-        if (lastLocation && lastLocation === (location as FunctionExpression | ArrowFunction).name) {
+        // TODO(rbuckton): unchecked cast can result in wrong map deopt for missing `name` property
+        if (lastLocation && lastLocation === (location as FunctionExpression).name) {
             return false;
         }
         // generator functions and async functions are not inlined in control flow when immediately invoked
-        if ((location as FunctionExpression | ArrowFunction).asteriskToken || hasSyntacticModifier(location, ModifierFlags.Async)) {
+        // TODO(rbuckton): unchecked cast can result in wrong map deopt for missing `asteriskToken` property
+        if ((location as FunctionExpression).asteriskToken || hasSyntacticModifier(location, ModifierFlags.Async)) {
             return true;
         }
         return !getImmediatelyInvokedFunctionExpression(location);

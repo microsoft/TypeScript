@@ -9,6 +9,7 @@ import {
     Bundle,
     CallSignatureDeclaration,
     canHaveModifiers,
+    canHaveName,
     canProduceDiagnostics,
     ClassDeclaration,
     ClassElement,
@@ -691,7 +692,7 @@ export function transformDeclarations(context: TransformationContext): Transform
         }
 
         const oldErrorNameNode = errorNameNode;
-        errorNameNode = node.name;
+        errorNameNode = canHaveName(node) ? node.name : undefined;
         let oldDiag: typeof getSymbolAccessibilityDiagnostic;
         if (!suppressNewDiagnosticContexts) {
             oldDiag = getSymbolAccessibilityDiagnostic;

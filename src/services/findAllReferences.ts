@@ -96,6 +96,7 @@ import {
     GoToDefinition,
     hasEffectiveModifier,
     hasInitializer,
+    hasName,
     hasSyntacticModifier,
     hasType,
     HighlightSpan,
@@ -388,9 +389,9 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
     }
 
     if (
-        node.parent.name === node || // node is name of declaration, use parent
-        isConstructorDeclaration(node.parent) ||
         isExportAssignment(node.parent) ||
+        isConstructorDeclaration(node.parent) ||
+        node.parent.name === node || // node is name of declaration, use parent
         // Property name of the import export specifier or binding pattern, use parent
         ((isImportOrExportSpecifier(node.parent) || isBindingElement(node.parent))
             && node.parent.propertyName === node) ||
@@ -1751,7 +1752,7 @@ export namespace Core {
         checker: TypeChecker,
         cb: (name: Identifier, call?: CallExpression) => boolean,
     ): boolean {
-        if (!signature.name || !isIdentifier(signature.name)) return false;
+        if (!hasName(signature) || !isIdentifier(signature.name)) return false;
 
         const symbol = Debug.checkDefined(checker.getSymbolAtLocation(signature.name));
 

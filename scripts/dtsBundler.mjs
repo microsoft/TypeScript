@@ -307,33 +307,61 @@ function symbolsConflict(s1, s2) {
  */
 function verifyMatchingSymbols(decl, isInternal) {
     ts.visitEachChild(decl, /** @type {(node: ts.Node) => ts.Node} */ function visit(node) {
-        if (ts.isIdentifier(node) && ts.isPartOfTypeNode(node)) {
-            if (ts.isQualifiedName(node.parent) && node !== node.parent.left) {
-                return node;
-            }
-            if (ts.isParameter(node.parent) && node === node.parent.name) {
-                return node;
-            }
-            if (ts.isNamedTupleMember(node.parent) && node === node.parent.name) {
-                return node;
-            }
-
-            const symbolOfNode = typeChecker.getSymbolAtLocation(node);
-            if (!symbolOfNode) {
-                fail(`No symbol for node at ${nodeToLocation(node)}`);
-            }
-            const symbolInScope = findInScope(symbolOfNode.name);
-            if (!symbolInScope) {
-                if (symbolOfNode.declarations?.every(d => isLocalDeclaration(d) && d.getSourceFile() === decl.getSourceFile()) && !isSelfReference(node, symbolOfNode)) {
-                    // The symbol is a local that needs to be copied into the scope.
-                    scopeStack[scopeStack.length - 1].locals.set(symbolOfNode.name, { symbol: symbolOfNode, writeTarget: isInternal ? WriteTarget.Internal : WriteTarget.Both });
+        if (ts.isIdentifier(node)) {
+            let meaning = ts.SymbolFlags.None;
+            if (ts.isPartOfTypeNode(node)) {
+                if (ts.isQualifiedName(node.parent) && node !== node.parent.left) {
+                    return node;
                 }
-                // We didn't find the symbol in scope at all. Just allow it and we'll fail at test time.
-                return node;
+                if (ts.isParameter(node.parent) && node === node.parent.name) {
+                    return node;
+                }
+                if (ts.isNamedTupleMember(node.parent) && node === node.parent.name) {
+                    return node;
+                }
+                meaning = ts.SymbolFlags.Type;
+            }
+            else if (ts.isExpressionWithTypeArguments(node.parent) &&
+                ts.isHeritageClause(node.parent.parent) &&
+                ts.isClassLike(node.parent.parent.parent)) {
+                meaning = ts.SymbolFlags.Value;
             }
 
-            if (symbolsConflict(symbolOfNode, symbolInScope)) {
-                fail(`Declaration at ${nodeToLocation(decl)}\n    references ${symbolOfNode.name} at ${symbolOfNode.declarations && nodeToLocation(symbolOfNode.declarations[0])},\n    but containing scope contains a symbol with the same name declared at ${symbolInScope.declarations && nodeToLocation(symbolInScope.declarations[0])}`);
+            if (meaning) {
+                const symbolOfNode = typeChecker.getSymbolAtLocation(node);
+                if (!symbolOfNode) {
+                    fail(`No symbol for node at ${nodeToLocation(node)}`);
+                }
+                const symbolInScope = findInScope(symbolOfNode.name);
+                if (!symbolInScope) {
+                    /** @type {ts.Declaration[]} */
+                    const declarations = [];
+                    if (meaning === ts.SymbolFlags.Type && symbolOfNode.declarations) {
+                        declarations.push(...symbolOfNode.declarations);
+                    }
+                    else if (meaning === ts.SymbolFlags.Value && symbolOfNode.valueDeclaration) {
+                        declarations.push(symbolOfNode.valueDeclaration);
+                    }
+                    if (declarations.every(d => isLocalDeclaration(d) && d.getSourceFile() === decl.getSourceFile()) && !isSelfReference(node, symbolOfNode)) {
+                        // The symbol is a local that needs to be copied into the scope.
+                        const locals = scopeStack[scopeStack.length - 1].locals;
+                        if (!locals.has(symbolOfNode.name)) {
+                            locals.set(symbolOfNode.name, { symbol: symbolOfNode, writeTarget: isInternal ? WriteTarget.Internal : WriteTarget.Both });
+                            if (symbolOfNode.valueDeclaration) {
+                                const statement = getDeclarationStatement(symbolOfNode.valueDeclaration);
+                                if (statement) {
+                                    verifyMatchingSymbols(statement, isInternal);
+                                }
+                            }
+                        }
+                    }
+                    // We didn't find the symbol in scope at all. Just allow it and we'll fail at test time.
+                    return node;
+                }
+    
+                if (symbolsConflict(symbolOfNode, symbolInScope)) {
+                    fail(`Declaration at ${nodeToLocation(decl)}\n    references ${symbolOfNode.name} at ${symbolOfNode.declarations && nodeToLocation(symbolOfNode.declarations[0])},\n    but containing scope contains a symbol with the same name declared at ${symbolInScope.declarations && nodeToLocation(symbolInScope.declarations[0])}`);
+                }
             }
         }
 
@@ -345,9 +373,10 @@ function verifyMatchingSymbols(decl, isInternal) {
  * @param {ts.Declaration} decl
  */
 function isLocalDeclaration(decl) {
-    return ts.canHaveModifiers(decl)
-        && !ts.getModifiers(decl)?.some(m => m.kind === ts.SyntaxKind.ExportKeyword)
-        && !!getDeclarationStatement(decl);
+    const statement = getDeclarationStatement(decl);
+    return !!statement
+        && ts.canHaveModifiers(statement)
+        && !ts.getModifiers(statement)?.some(m => m.kind === ts.SyntaxKind.ExportKeyword);
 }
 
 /**
@@ -456,7 +485,34 @@ function emitAsNamespace(name, parent, moduleSymbol, needExportModifier) {
         symbol.declarations?.forEach(decl => {
             // We already checked that getDeclarationStatement(decl) works for each declaration.
             const statement = getDeclarationStatement(decl);
-            writeNode(/** @type {ts.Statement} */ (statement), decl.getSourceFile(), writeTarget);
+            if (!statement) return;
+
+            if (writeTarget & WriteTarget.Public) {
+                if (!ts.isInternalDeclaration(statement)) {
+                    const publicStatement = ts.visitEachChild(statement, node => {
+                        // No @internal comments in the public API.
+                        if (ts.isInternalDeclaration(node)) {
+                            return undefined;
+                        }
+                        // TODO: remove after https://github.com/microsoft/TypeScript/pull/58187 is released
+                        if (ts.canHaveModifiers(node)) {
+                            for (const modifier of ts.getModifiers(node) ?? []) {
+                                if (modifier.kind === ts.SyntaxKind.PrivateKeyword) {
+                                    removeAllComments(node);
+                                    break;
+                                }
+                            }
+                        }
+                        return removeDeclareConstExport(node, /*needExportModifier*/ false);
+                    }, /*context*/ undefined);
+                    writeNode(/** @type {ts.Statement} */ (publicStatement), decl.getSourceFile(), WriteTarget.Public);
+                }
+            }
+
+            if (writeTarget & WriteTarget.Internal) {
+                const updated = ts.visitEachChild(statement, node => removeDeclareConstExport(node, childrenNeedExportModifier), /*context*/ undefined);
+                writeNode(/** @type {ts.Statement} */ (updated), decl.getSourceFile(), WriteTarget.Internal);
+            }
         });
     });
 

@@ -1,6 +1,5 @@
 import {
     __String,
-    AccessExpression,
     AccessorDeclaration,
     ArrayBindingElement,
     ArrayBindingOrAssignmentElement,
@@ -11,7 +10,6 @@ import {
     AssignmentPattern,
     AutoAccessorPropertyDeclaration,
     BinaryExpression,
-    BindableObjectDefinePropertyCall,
     BindingElement,
     BindingName,
     BindingOrAssignmentElement,
@@ -51,13 +49,11 @@ import {
     Diagnostics,
     diagnosticsEqualityComparer,
     ElementAccessChain,
-    ElementAccessExpression,
     emptyArray,
     EntityName,
     entityNameToString,
     EnumDeclaration,
     every,
-    ExportAssignment,
     ExportDeclaration,
     ExportSpecifier,
     Expression,
@@ -76,11 +72,9 @@ import {
     GeneratedIdentifierFlags,
     GeneratedPrivateIdentifier,
     GetAccessorDeclaration,
-    getAssignmentDeclarationKind,
     getDirectoryPath,
     getEffectiveModifierFlags,
     getEffectiveModifierFlagsAlwaysIncludeJSDoc,
-    getElementOrPropertyAccessArgumentExpressionOrName,
     getEmitScriptTarget,
     getJSDocCommentsAndTags,
     getJSDocRoot,
@@ -106,21 +100,17 @@ import {
     ImportEqualsDeclaration,
     ImportSpecifier,
     ImportTypeNode,
-    isAccessExpression,
     isAmbientModule,
     isAnyImportOrReExport,
     isArrowFunction,
     isAssignmentExpression,
-    isBinaryExpression,
     isBindableStaticAccessExpression,
-    isBindableStaticElementAccessExpression,
     isBindableStaticNameExpression,
     isBindingElement,
     isBlock,
     isCallExpression,
     isCallSignatureDeclaration,
     isClassExpression,
-    isClassStaticBlockDeclaration,
     isDecorator,
     isElementAccessExpression,
     isExpandoPropertyDeclaration,
@@ -163,7 +153,6 @@ import {
     isParameter,
     isPrivateIdentifier,
     isPropertyAccessExpression,
-    isPropertyAssignment,
     isPropertyDeclaration,
     isPrototypeAccess,
     isRootedDiskPath,
@@ -227,6 +216,7 @@ import {
     ModuleDeclaration,
     ModuleReference,
     NamedDeclaration,
+    HasName,
     NamedExportBindings,
     NamedImportBindings,
     NamespaceBody,
@@ -291,6 +281,60 @@ import {
     TypeReferenceType,
     UnaryExpression,
     VariableDeclaration,
+    HasQuestionToken,
+    HasAsteriskToken,
+    AsteriskToken,
+    AstNode,
+    AstIdentifier,
+    AstPrivateIdentifier,
+    AstClassLikeDeclaration,
+    AstClassElement,
+    AstDeclaration,
+    AstExpression,
+    AstDeclarationName,
+    astIsFunctionExpression,
+    astIsArrowFunction,
+    astIsClassExpression,
+    AstJSDocPropertyLikeTag,
+    AstCallExpression,
+    AstBinaryExpression,
+    astGetAssignmentDeclarationKind,
+    astGetElementOrPropertyAccessArgumentExpressionOrName,
+    AstAccessExpression,
+    AstBindableObjectDefinePropertyCall,
+    AstJSDocTypedefTag,
+    AstJSDocEnumTag,
+    AstExportAssignment,
+    astIsIdentifier,
+    AstElementAccessExpression,
+    astIsBindableStaticElementAccessExpression,
+    astGetName,
+    AstNamedDeclaration,
+    astIsInJSFile,
+    astIsExpression,
+    AstPropertyAccessExpression,
+    astCanHaveJSDoc,
+    astGetJSDocCommentsAndTags,
+    AstParameterDeclaration,
+    AstTypeParameterDeclaration,
+    astIsPropertyAssignment,
+    astIsBindingElement,
+    astIsBinaryExpression,
+    astIsAccessExpression,
+    astIsVariableDeclaration,
+    AstAutoAccessorPropertyDeclaration,
+    astIsPropertyDeclaration,
+    astHasAccessorModifier,
+    AstModifierLike,
+    AstModifier,
+    astIsDecorator,
+    AstBindingElement,
+    AstVariableDeclaration,
+    AstSignatureDeclaration,
+    AstClassStaticBlockDeclaration,
+    astIsClassStaticBlockDeclaration,
+    isDeclarationName,
+    AstBindingPattern,
 } from "./_namespaces/ts.js";
 
 export function isExternalModuleNameRelative(moduleName: string): boolean {
@@ -633,9 +677,36 @@ export function walkUpBindingElementsAndPatterns(binding: BindingElement): Varia
     return node.parent;
 }
 
+/** @internal */
+export function astWalkUpBindingElementsAndPatterns(binding: AstBindingElement): AstVariableDeclaration | AstParameterDeclaration {
+    let node = binding.parent;
+    while (astIsBindingElement(node.parent)) {
+        node = node.parent.parent;
+    }
+    return node.parent;
+}
+
 function getCombinedFlags(node: Node, getFlags: (n: Node) => number): number {
     if (isBindingElement(node)) {
         node = walkUpBindingElementsAndPatterns(node);
+    }
+    let flags = getFlags(node);
+    if (node.kind === SyntaxKind.VariableDeclaration) {
+        node = node.parent;
+    }
+    if (node && node.kind === SyntaxKind.VariableDeclarationList) {
+        flags |= getFlags(node);
+        node = node.parent;
+    }
+    if (node && node.kind === SyntaxKind.VariableStatement) {
+        flags |= getFlags(node);
+    }
+    return flags;
+}
+
+function astGetCombinedFlags(node: AstNode, getFlags: (n: AstNode) => number): number {
+    if (astIsBindingElement(node)) {
+        node = astWalkUpBindingElementsAndPatterns(node);
     }
     let flags = getFlags(node);
     if (node.kind === SyntaxKind.VariableDeclaration) {
@@ -668,10 +739,22 @@ export function getCombinedNodeFlagsAlwaysIncludeJSDoc(node: Declaration): Modif
 // list.  By calling this function, all those flags are combined so that the client can treat
 // the node as if it actually had those flags.
 export function getCombinedNodeFlags(node: Node): NodeFlags {
-    return getCombinedFlags(node, getNodeFlags);
+    return astGetCombinedNodeFlags(node.ast);
 }
 
-function getNodeFlags(node: Node) {
+// Returns the node flags for this node and all relevant parent nodes.  This is done so that
+// nodes like variable declarations and binding elements can returned a view of their flags
+// that includes the modifiers from their container.  i.e. flags like export/declare aren't
+// stored on the variable declaration directly, but on the containing variable statement
+// (if it has one).  Similarly, flags for let/const are stored on the variable declaration
+// list.  By calling this function, all those flags are combined so that the client can treat
+// the node as if it actually had those flags.
+/** @internal */
+export function astGetCombinedNodeFlags(node: AstNode): NodeFlags {
+    return astGetCombinedFlags(node, astGetNodeFlags);
+}
+
+function astGetNodeFlags(node: AstNode) {
     return node.flags;
 }
 
@@ -769,6 +852,18 @@ export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest
     return nodeTest(node) ? node : undefined;
 }
 
+interface AncestorTraversable<T extends AncestorTraversable<T>> {
+    parent: T | undefined;
+}
+
+/**
+ * Iterates through the parent chain of a node and performs the callback on each parent until the callback
+ * returns a truthy value, then returns that value.
+ * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
+ * At that point findAncestor returns undefined.
+ * @internal
+ */
+export function findAncestor<T extends AstNode>(node: AstNode | undefined, callback: (element: AstNode) => element is T): T | undefined;
 /**
  * Iterates through the parent chain of a node and performs the callback on each parent until the callback
  * returns a truthy value, then returns that value.
@@ -776,8 +871,10 @@ export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest
  * At that point findAncestor returns undefined.
  */
 export function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
+/** @internal */
+export function findAncestor(node: AstNode | undefined, callback: (element: AstNode) => boolean | "quit"): AstNode | undefined;
 export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
-export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined {
+export function findAncestor<T extends AncestorTraversable<T>>(node: T | T | undefined, callback: (element: T) => boolean | "quit"): T | undefined {
     while (node) {
         const result = callback(node);
         if (result === "quit") {
@@ -796,7 +893,10 @@ export function findAncestor(node: Node | undefined, callback: (element: Node) =
  *
  * @param node The node to test.
  */
-export function isParseTreeNode(node: Node): boolean {
+export function isParseTreeNode(node: Node): boolean;
+/** @internal */
+export function isParseTreeNode(node: Node | AstNode<Node>): boolean; // eslint-disable-line @typescript-eslint/unified-signatures
+export function isParseTreeNode(node: Node | AstNode<Node>): boolean {
     return (node.flags & NodeFlags.Synthesized) === 0;
 }
 
@@ -850,12 +950,28 @@ export function idText(identifierOrPrivateName: Identifier | PrivateIdentifier):
     return unescapeLeadingUnderscores(identifierOrPrivateName.escapedText);
 }
 
+export function astIdText(identifierOrPrivateName: AstIdentifier | AstPrivateIdentifier): string {
+    // NOTE: each branch is duplicated to remain monomorphic
+    switch (identifierOrPrivateName.kind) {
+        case SyntaxKind.Identifier: return unescapeLeadingUnderscores(identifierOrPrivateName.data.escapedText);
+        case SyntaxKind.PrivateIdentifier: return unescapeLeadingUnderscores(identifierOrPrivateName.data.escapedText);
+    }
+}
+
 /**
  * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
  * SyntaxKind for the matching keyword.
  */
 export function identifierToKeywordKind(node: Identifier): KeywordSyntaxKind | undefined {
-    const token = stringToToken(node.escapedText as string);
+    return astIdentifierToKeywordKind(node.ast);
+}
+
+/**
+ * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
+ * SyntaxKind for the matching keyword.
+ */
+export function astIdentifierToKeywordKind(node: AstIdentifier): KeywordSyntaxKind | undefined {
+    const token = stringToToken(node.data.escapedText as string);
     return token ? tryCast(token, isKeyword) : undefined;
 }
 
@@ -872,51 +988,60 @@ export function symbolName(symbol: Symbol): string {
  * will be merged with)
  */
 function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | PrivateIdentifier | undefined {
+    return astNameForNamelessJSDocTypedef(declaration.ast)?.node;
+}
+
+/**
+ * A JSDocTypedef tag has an _optional_ name field - if a name is not directly present, we should
+ * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol
+ * will be merged with)
+ */
+function astNameForNamelessJSDocTypedef(declaration: AstJSDocTypedefTag | AstJSDocEnumTag): AstIdentifier | AstPrivateIdentifier | undefined {
     const hostNode = declaration.parent.parent;
     if (!hostNode) {
         return undefined;
     }
     // Covers classes, functions - any named declaration host node
-    if (isDeclaration(hostNode)) {
-        return getDeclarationIdentifier(hostNode);
+    if (astIsDeclaration(hostNode)) {
+        return astGetDeclarationIdentifier(hostNode);
     }
     // Covers remaining cases (returning undefined if none match).
     switch (hostNode.kind) {
         case SyntaxKind.VariableStatement:
-            if (hostNode.declarationList && hostNode.declarationList.declarations[0]) {
-                return getDeclarationIdentifier(hostNode.declarationList.declarations[0]);
+            if (hostNode.data.declarationList?.data.declarations.items[0]) {
+                return astGetDeclarationIdentifier(hostNode.data.declarationList.data.declarations.items[0]);
             }
             break;
         case SyntaxKind.ExpressionStatement:
-            let expr = hostNode.expression;
-            if (expr.kind === SyntaxKind.BinaryExpression && (expr as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                expr = (expr as BinaryExpression).left;
+            let expr = hostNode.data.expression;
+            if (expr.kind === SyntaxKind.BinaryExpression && (expr as AstBinaryExpression).data.operatorToken.kind === SyntaxKind.EqualsToken) {
+                expr = (expr as AstBinaryExpression).data.left;
             }
             switch (expr.kind) {
                 case SyntaxKind.PropertyAccessExpression:
-                    return (expr as PropertyAccessExpression).name;
+                    return (expr as AstPropertyAccessExpression).data.name;
                 case SyntaxKind.ElementAccessExpression:
-                    const arg = (expr as ElementAccessExpression).argumentExpression;
-                    if (isIdentifier(arg)) {
+                    const arg = (expr as AstElementAccessExpression).data.argumentExpression;
+                    if (astIsIdentifier(arg)) {
                         return arg;
                     }
             }
             break;
         case SyntaxKind.ParenthesizedExpression: {
-            return getDeclarationIdentifier(hostNode.expression);
+            return astGetDeclarationIdentifier(hostNode.data.expression);
         }
         case SyntaxKind.LabeledStatement: {
-            if (isDeclaration(hostNode.statement) || isExpression(hostNode.statement)) {
-                return getDeclarationIdentifier(hostNode.statement);
+            if (astIsDeclaration(hostNode.data.statement) || astIsExpression(hostNode.data.statement)) {
+                return astGetDeclarationIdentifier(hostNode.data.statement);
             }
             break;
         }
     }
 }
 
-function getDeclarationIdentifier(node: Declaration | Expression): Identifier | undefined {
-    const name = getNameOfDeclaration(node);
-    return name && isIdentifier(name) ? name : undefined;
+function astGetDeclarationIdentifier(node: AstDeclaration | AstExpression): AstIdentifier | undefined {
+    const name = astGetNameOfDeclaration(node);
+    return name && astIsIdentifier(name) ? name : undefined;
 }
 
 /** @internal */
@@ -934,56 +1059,176 @@ export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier 
     return declaration.name || nameForNamelessJSDocTypedef(declaration);
 }
 
+export function astGetNameOfJSDocTypedef(declaration: AstJSDocTypedefTag): AstIdentifier | AstPrivateIdentifier | undefined {
+    return declaration.data.name || astNameForNamelessJSDocTypedef(declaration);
+}
+
 /** @internal */
 export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName; } {
     return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
 }
 
 /** @internal */
+export function canHaveName(node: Node): node is HasName {
+    switch (node.kind) {
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.EnumMember:
+        case SyntaxKind.ExportSpecifier:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.ImportAttribute:
+        case SyntaxKind.ImportClause:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ImportSpecifier:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.JSDocCallbackTag:
+        case SyntaxKind.JSDocLink:
+        case SyntaxKind.JSDocLinkCode:
+        case SyntaxKind.JSDocLinkPlain:
+        case SyntaxKind.JSDocNameReference:
+        case SyntaxKind.JSDocParameterTag:
+        case SyntaxKind.JSDocPropertyTag:
+        case SyntaxKind.JSDocSeeTag:
+        case SyntaxKind.JSDocTypedefTag:
+        case SyntaxKind.JsxAttribute:
+        case SyntaxKind.JsxNamespacedName:
+        case SyntaxKind.MetaProperty:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.MissingDeclaration:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.NamedTupleMember:
+        case SyntaxKind.NamespaceExport:
+        case SyntaxKind.NamespaceExportDeclaration:
+        case SyntaxKind.NamespaceImport:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.VariableDeclaration:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export function hasName(node: Node): node is HasName & { name: DeclarationName } {
+    return canHaveName(node) && !!node.name;
+}
+
+/** @internal */
+export function canHaveQuestionToken(node: Node): node is HasQuestionToken {
+    switch (node.kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.MappedType:
+        case SyntaxKind.NamedTupleMember:
+        case SyntaxKind.ConditionalExpression:
+        case SyntaxKind.PropertyAssignment:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export function canHaveAsteriskToken(node: Node): node is HasAsteriskToken {
+    switch (node.kind) {
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.YieldExpression:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export function hasAsteriskToken(node: Node): node is HasAsteriskToken & { asteriskToken: AsteriskToken } {
+    return canHaveAsteriskToken(node) && !!node.asteriskToken;
+}
+
+/** @internal */
 export function getNonAssignedNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
+    return astGetNonAssignedNameOfDeclaration(declaration.ast)?.node;
+}
+
+/** @internal */
+export function astGetNonAssignedNameOfDeclaration(declaration: AstDeclaration | AstExpression): AstDeclarationName | undefined {
     switch (declaration.kind) {
         case SyntaxKind.Identifier:
-            return declaration as Identifier;
+            return declaration as AstIdentifier;
         case SyntaxKind.JSDocPropertyTag:
         case SyntaxKind.JSDocParameterTag: {
-            const { name } = declaration as JSDocPropertyLikeTag;
+            const { data: { name } } = declaration as AstJSDocPropertyLikeTag;
             if (name.kind === SyntaxKind.QualifiedName) {
-                return name.right;
+                return name.data.right;
             }
             break;
         }
         case SyntaxKind.CallExpression:
         case SyntaxKind.BinaryExpression: {
-            const expr = declaration as BinaryExpression | CallExpression;
-            switch (getAssignmentDeclarationKind(expr)) {
+            const expr = declaration as AstBinaryExpression | AstCallExpression;
+            switch (astGetAssignmentDeclarationKind(expr)) {
                 case AssignmentDeclarationKind.ExportsProperty:
                 case AssignmentDeclarationKind.ThisProperty:
                 case AssignmentDeclarationKind.Property:
                 case AssignmentDeclarationKind.PrototypeProperty:
-                    return getElementOrPropertyAccessArgumentExpressionOrName((expr as BinaryExpression).left as AccessExpression);
+                    return astGetElementOrPropertyAccessArgumentExpressionOrName((expr as AstBinaryExpression).data.left as AstAccessExpression);
                 case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                 case AssignmentDeclarationKind.ObjectDefinePropertyExports:
                 case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
-                    return (expr as BindableObjectDefinePropertyCall).arguments[1];
+                    return (expr as AstBindableObjectDefinePropertyCall).data.arguments.items[1];
                 default:
                     return undefined;
             }
         }
         case SyntaxKind.JSDocTypedefTag:
-            return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
+            return astGetNameOfJSDocTypedef(declaration as AstJSDocTypedefTag);
         case SyntaxKind.JSDocEnumTag:
-            return nameForNamelessJSDocTypedef(declaration as JSDocEnumTag);
+            return astNameForNamelessJSDocTypedef(declaration as AstJSDocEnumTag);
         case SyntaxKind.ExportAssignment: {
-            const { expression } = declaration as ExportAssignment;
-            return isIdentifier(expression) ? expression : undefined;
+            const { data: { expression } } = declaration as AstExportAssignment;
+            return astIsIdentifier(expression) ? expression : undefined;
         }
         case SyntaxKind.ElementAccessExpression:
-            const expr = declaration as ElementAccessExpression;
-            if (isBindableStaticElementAccessExpression(expr)) {
-                return expr.argumentExpression;
+            const expr = declaration as AstElementAccessExpression;
+            if (astIsBindableStaticElementAccessExpression(expr)) {
+                return expr.data.argumentExpression;
             }
     }
-    return (declaration as NamedDeclaration).name;
+    const name = astGetName(declaration);
+    if (name) {
+        Debug.type<AstDeclarationName>(name);
+        switch (name.kind) {
+            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateIdentifier:
+            case SyntaxKind.ComputedPropertyName:
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.JsxNamespacedName:
+                return name;
+            default:
+                Debug.assertNeverTypeOnly(name);
+        }
+    }
+    return undefined;
 }
 
 export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
@@ -992,24 +1237,39 @@ export function getNameOfDeclaration(declaration: Declaration | Expression | und
         (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
 }
 
+export function astGetNameOfDeclaration(declaration: AstDeclaration | AstExpression | undefined): AstDeclarationName | undefined {
+    if (declaration === undefined) return undefined;
+    return astGetNonAssignedNameOfDeclaration(declaration) ||
+        (astIsFunctionExpression(declaration) || astIsArrowFunction(declaration) || astIsClassExpression(declaration) ? astGetAssignedName(declaration) : undefined);
+}
+
 /** @internal */
 export function getAssignedName(node: Node): DeclarationName | undefined {
+    return astGetAssignedName(node.ast)?.node;
+}
+
+/** @internal */
+export function astGetAssignedName(node: AstNode): AstDeclarationName | undefined {
+    // NOTE: branches may be repeated to remain monomorphic
     if (!node.parent) {
         return undefined;
     }
-    else if (isPropertyAssignment(node.parent) || isBindingElement(node.parent)) {
-        return node.parent.name;
+    else if (astIsPropertyAssignment(node.parent)) {
+        return node.parent.data.name;
     }
-    else if (isBinaryExpression(node.parent) && node === node.parent.right) {
-        if (isIdentifier(node.parent.left)) {
-            return node.parent.left;
+    else if (astIsBindingElement(node.parent)) {
+        return node.parent.data.name;
+    }
+    else if (astIsBinaryExpression(node.parent) && node === node.parent.data.right) {
+        if (astIsIdentifier(node.parent.data.left)) {
+            return node.parent.data.left;
         }
-        else if (isAccessExpression(node.parent.left)) {
-            return getElementOrPropertyAccessArgumentExpressionOrName(node.parent.left);
+        else if (astIsAccessExpression(node.parent.data.left)) {
+            return astGetElementOrPropertyAccessArgumentExpressionOrName(node.parent.data.left);
         }
     }
-    else if (isVariableDeclaration(node.parent) && isIdentifier(node.parent.name)) {
-        return node.parent.name;
+    else if (astIsVariableDeclaration(node.parent) && astIsIdentifier(node.parent.data.name)) {
+        return node.parent.data.name;
     }
 }
 
@@ -1025,16 +1285,16 @@ export function getModifiers(node: HasModifiers): readonly Modifier[] | undefine
     }
 }
 
-function getJSDocParameterTagsWorker(param: ParameterDeclaration, noCache?: boolean): readonly JSDocParameterTag[] {
-    if (param.name) {
-        if (isIdentifier(param.name)) {
-            const name = param.name.escapedText;
-            return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
+    function astGetJSDocParameterTagsWorker(param: AstParameterDeclaration, noCache?: boolean): readonly JSDocParameterTag[] {
+    if (param.data.name) {
+        if (astIsIdentifier(param.data.name)) {
+            const name = param.data.name.data.escapedText;
+            return astGetJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
         }
         else {
-            const i = param.parent.parameters.indexOf(param);
+            const i = param.parent.data.parameters.items.indexOf(param);
             Debug.assert(i > -1, "Parameters should always be in their parents' parameter list");
-            const paramTags = getJSDocTagsWorker(param.parent, noCache).filter(isJSDocParameterTag);
+            const paramTags = astGetJSDocTagsWorker(param.parent, noCache).filter(isJSDocParameterTag);
             if (i < paramTags.length) {
                 return [paramTags[i]];
             }
@@ -1057,17 +1317,38 @@ function getJSDocParameterTagsWorker(param: ParameterDeclaration, noCache?: bool
  * For binding patterns, parameter tags are matched by position.
  */
 export function getJSDocParameterTags(param: ParameterDeclaration): readonly JSDocParameterTag[] {
-    return getJSDocParameterTagsWorker(param, /*noCache*/ false);
+    return astGetJSDocParameterTags(param.ast);
+}
+
+/**
+ * Gets the JSDoc parameter tags for the node if present.
+ *
+ * @remarks Returns any JSDoc param tag whose name matches the provided
+ * parameter, whether a param tag on a containing function
+ * expression, or a param tag on a variable declaration whose
+ * initializer is the containing function. The tags closest to the
+ * node are returned first, so in the previous example, the param
+ * tag on the containing function expression would be first.
+ *
+ * For binding patterns, parameter tags are matched by position.
+ */
+export function astGetJSDocParameterTags(param: AstParameterDeclaration): readonly JSDocParameterTag[] {
+    return astGetJSDocParameterTagsWorker(param, /*noCache*/ false);
 }
 
 /** @internal */
 export function getJSDocParameterTagsNoCache(param: ParameterDeclaration): readonly JSDocParameterTag[] {
-    return getJSDocParameterTagsWorker(param, /*noCache*/ true);
+    return astGetJSDocParameterTagsNoCache(param.ast);
 }
 
-function getJSDocTypeParameterTagsWorker(param: TypeParameterDeclaration, noCache?: boolean): readonly JSDocTemplateTag[] {
-    const name = param.name.escapedText;
-    return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag => isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
+/** @internal */
+export function astGetJSDocParameterTagsNoCache(param: AstParameterDeclaration): readonly JSDocParameterTag[] {
+    return astGetJSDocParameterTagsWorker(param, /*noCache*/ true);
+}
+
+function astGetJSDocTypeParameterTagsWorker(param: AstTypeParameterDeclaration, noCache?: boolean): readonly JSDocTemplateTag[] {
+    const name = param.data.name.data.escapedText;
+    return astGetJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag => isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
 }
 
 /**
@@ -1081,12 +1362,31 @@ function getJSDocTypeParameterTagsWorker(param: TypeParameterDeclaration, noCach
  * tag on the containing function expression would be first.
  */
 export function getJSDocTypeParameterTags(param: TypeParameterDeclaration): readonly JSDocTemplateTag[] {
-    return getJSDocTypeParameterTagsWorker(param, /*noCache*/ false);
+    return astGetJSDocTypeParameterTags(param.ast);
+}
+
+/**
+ * Gets the JSDoc type parameter tags for the node if present.
+ *
+ * @remarks Returns any JSDoc template tag whose names match the provided
+ * parameter, whether a template tag on a containing function
+ * expression, or a template tag on a variable declaration whose
+ * initializer is the containing function. The tags closest to the
+ * node are returned first, so in the previous example, the template
+ * tag on the containing function expression would be first.
+ */
+export function astGetJSDocTypeParameterTags(param: AstTypeParameterDeclaration): readonly JSDocTemplateTag[] {
+    return astGetJSDocTypeParameterTagsWorker(param, /*noCache*/ false);
 }
 
 /** @internal */
 export function getJSDocTypeParameterTagsNoCache(param: TypeParameterDeclaration): readonly JSDocTemplateTag[] {
-    return getJSDocTypeParameterTagsWorker(param, /*noCache*/ true);
+    return astGetJSDocTypeParameterTagsNoCache(param.ast);
+}
+
+/** @internal */
+export function astGetJSDocTypeParameterTagsNoCache(param: AstTypeParameterDeclaration): readonly JSDocTemplateTag[] {
+    return astGetJSDocTypeParameterTagsWorker(param, /*noCache*/ true);
 }
 
 /**
@@ -1121,7 +1421,12 @@ export function getJSDocPublicTag(node: Node): JSDocPublicTag | undefined {
 
 /** @internal */
 export function getJSDocPublicTagNoCache(node: Node): JSDocPublicTag | undefined {
-    return getFirstJSDocTag(node, isJSDocPublicTag, /*noCache*/ true);
+    return astGetJSDocPublicTagNoCache(node.ast);
+}
+
+/** @internal */
+export function astGetJSDocPublicTagNoCache(node: AstNode): JSDocPublicTag | undefined {
+    return astGetFirstJSDocTag(node, isJSDocPublicTag, /*noCache*/ true);
 }
 
 /** Gets the JSDoc private tag for the node if present */
@@ -1131,7 +1436,12 @@ export function getJSDocPrivateTag(node: Node): JSDocPrivateTag | undefined {
 
 /** @internal */
 export function getJSDocPrivateTagNoCache(node: Node): JSDocPrivateTag | undefined {
-    return getFirstJSDocTag(node, isJSDocPrivateTag, /*noCache*/ true);
+    return astGetJSDocPrivateTagNoCache(node.ast);
+}
+
+/** @internal */
+export function astGetJSDocPrivateTagNoCache(node: AstNode): JSDocPrivateTag | undefined {
+    return astGetFirstJSDocTag(node, isJSDocPrivateTag, /*noCache*/ true);
 }
 
 /** Gets the JSDoc protected tag for the node if present */
@@ -1141,7 +1451,12 @@ export function getJSDocProtectedTag(node: Node): JSDocProtectedTag | undefined 
 
 /** @internal */
 export function getJSDocProtectedTagNoCache(node: Node): JSDocProtectedTag | undefined {
-    return getFirstJSDocTag(node, isJSDocProtectedTag, /*noCache*/ true);
+    return astGetJSDocProtectedTagNoCache(node.ast);
+}
+
+/** @internal */
+export function astGetJSDocProtectedTagNoCache(node: AstNode): JSDocProtectedTag | undefined {
+    return astGetFirstJSDocTag(node, isJSDocProtectedTag, /*noCache*/ true);
 }
 
 /** Gets the JSDoc protected tag for the node if present */
@@ -1151,11 +1466,26 @@ export function getJSDocReadonlyTag(node: Node): JSDocReadonlyTag | undefined {
 
 /** @internal */
 export function getJSDocReadonlyTagNoCache(node: Node): JSDocReadonlyTag | undefined {
-    return getFirstJSDocTag(node, isJSDocReadonlyTag, /*noCache*/ true);
+    return astGetJSDocReadonlyTagNoCache(node.ast);
 }
 
+/** @internal */
+export function astGetJSDocReadonlyTagNoCache(node: AstNode): JSDocReadonlyTag | undefined {
+    return astGetFirstJSDocTag(node, isJSDocReadonlyTag, /*noCache*/ true);
+}
+
+export function getJSDocOverrideTag(node: Node): JSDocOverrideTag | undefined {
+    return getFirstJSDocTag(node, isJSDocOverrideTag);
+}
+
+/** @internal */
 export function getJSDocOverrideTagNoCache(node: Node): JSDocOverrideTag | undefined {
-    return getFirstJSDocTag(node, isJSDocOverrideTag, /*noCache*/ true);
+    return astGetJSDocOverrideTagNoCache(node.ast);
+}
+
+/** @internal */
+export function astGetJSDocOverrideTagNoCache(node: AstNode): JSDocOverrideTag | undefined {
+    return astGetFirstJSDocTag(node, isJSDocOverrideTag, /*noCache*/ true);
 }
 
 /** Gets the JSDoc deprecated tag for the node if present */
@@ -1165,7 +1495,12 @@ export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefine
 
 /** @internal */
 export function getJSDocDeprecatedTagNoCache(node: Node): JSDocDeprecatedTag | undefined {
-    return getFirstJSDocTag(node, isJSDocDeprecatedTag, /*noCache*/ true);
+    return astGetJSDocDeprecatedTagNoCache(node.ast);
+}
+
+/** @internal */
+export function astGetJSDocDeprecatedTagNoCache(node: AstNode): JSDocDeprecatedTag | undefined {
+    return astGetFirstJSDocTag(node, isJSDocDeprecatedTag, /*noCache*/ true);
 }
 
 /** Gets the JSDoc enum tag for the node if present */
@@ -1262,6 +1597,22 @@ function getJSDocTagsWorker(node: Node, noCache?: boolean): readonly JSDocTag[] 
     return tags;
 }
 
+function astGetJSDocTagsWorker(node: AstNode, noCache?: boolean): readonly JSDocTag[] {
+    if (!astCanHaveJSDoc(node)) return emptyArray;
+    let tags = node.data.jsDoc?.jsDocCache;
+    // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
+    if (tags === undefined || noCache) {
+        const comments = astGetJSDocCommentsAndTags(node, noCache);
+        Debug.assert(comments.length < 2 || comments[0] !== comments[1]);
+        tags = flatMap(comments, j => isJSDoc(j) ? j.tags : j);
+        if (!noCache) {
+            node.data.jsDoc ??= [];
+            node.data.jsDoc.jsDocCache = tags;
+        }
+    }
+    return tags;
+}
+
 /** Get all JSDoc tags related to a node, including those on parent nodes. */
 export function getJSDocTags(node: Node): readonly JSDocTag[] {
     return getJSDocTagsWorker(node, /*noCache*/ false);
@@ -1269,7 +1620,12 @@ export function getJSDocTags(node: Node): readonly JSDocTag[] {
 
 /** Get the first JSDoc tag of a specified kind, or undefined if not present. */
 function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T, noCache?: boolean): T | undefined {
-    return find(getJSDocTagsWorker(node, noCache), predicate);
+    return astGetFirstJSDocTag(node.ast, predicate, noCache);
+}
+
+/** Get the first JSDoc tag of a specified kind, or undefined if not present. */
+function astGetFirstJSDocTag<T extends JSDocTag>(node: AstNode, predicate: (tag: JSDocTag) => tag is T, noCache?: boolean): T | undefined {
+    return find(astGetJSDocTagsWorker(node, noCache), predicate);
 }
 
 /** Gets all JSDoc tags that match a specified predicate */
@@ -1477,7 +1833,7 @@ export function isToken(n: Node): boolean {
 
 /** @internal */
 export function isNodeArray<T extends Node>(array: readonly T[]): array is NodeArray<T> {
-    return hasProperty(array, "pos") && hasProperty(array, "end");
+    return hasProperty(array, "pos") && hasProperty(array, "end") || array instanceof NodeArray;
 }
 
 // Literals
@@ -1636,6 +1992,11 @@ export function isClassMemberModifier(idToken: SyntaxKind): boolean {
 }
 
 export function isModifier(node: Node): node is Modifier {
+    return astIsModifier(node.ast);
+}
+
+/** @internal */
+export function astIsModifier(node: AstNode): node is AstModifier {
     return isModifierKind(node.kind);
 }
 
@@ -1667,9 +2028,17 @@ export function isFunctionLike(node: Node | undefined): node is SignatureDeclara
     return !!node && isFunctionLikeKind(node.kind);
 }
 
-/** @internal */
+/**
+ * @deprecated Use {@link astIsFunctionLikeOrClassStaticBlockDeclaration}
+ * @internal
+ */
 export function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is SignatureDeclaration | ClassStaticBlockDeclaration {
-    return !!node && (isFunctionLikeKind(node.kind) || isClassStaticBlockDeclaration(node));
+    return astIsFunctionLikeOrClassStaticBlockDeclaration(node?.ast);
+}
+
+/** @internal */
+export function astIsFunctionLikeOrClassStaticBlockDeclaration(node: AstNode | undefined): node is AstSignatureDeclaration | AstClassStaticBlockDeclaration {
+    return !!node && (isFunctionLikeKind(node.kind) || astIsClassStaticBlockDeclaration(node));
 }
 
 /** @internal */
@@ -1721,6 +2090,11 @@ export function isFunctionOrModuleBlock(node: Node): boolean {
 
 // Classes
 export function isClassElement(node: Node): node is ClassElement {
+    return astIsClassElement(node.ast);
+}
+
+// Classes
+export function astIsClassElement(node: AstNode): node is AstClassElement {
     const kind = node.kind;
     return kind === SyntaxKind.Constructor
         || kind === SyntaxKind.PropertyDeclaration
@@ -1733,6 +2107,10 @@ export function isClassElement(node: Node): node is ClassElement {
 }
 
 export function isClassLike(node: Node): node is ClassLikeDeclaration {
+    return node && astIsClassLike(node.ast);
+}
+
+export function astIsClassLike(node: AstNode): node is AstClassLikeDeclaration {
     return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
 }
 
@@ -1742,6 +2120,11 @@ export function isAccessor(node: Node): node is AccessorDeclaration {
 
 export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAccessorPropertyDeclaration {
     return isPropertyDeclaration(node) && hasAccessorModifier(node);
+}
+
+/** @internal */
+export function astIsAutoAccessorPropertyDeclaration(node: AstNode): node is AstAutoAccessorPropertyDeclaration {
+    return astIsPropertyDeclaration(node) && astHasAccessorModifier(node);
 }
 
 /** @internal */
@@ -1767,7 +2150,12 @@ export function isMethodOrAccessor(node: Node): node is MethodDeclaration | Acce
 // Type members
 
 export function isModifierLike(node: Node): node is ModifierLike {
-    return isModifier(node) || isDecorator(node);
+    return astIsModifierLike(node.ast);
+}
+
+/** @intenral */
+export function astIsModifierLike(node: AstNode): node is AstModifierLike {
+    return astIsModifier(node) || astIsDecorator(node);
 }
 
 export function isTypeElement(node: Node): node is TypeElement {
@@ -1819,8 +2207,13 @@ export function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTyp
 
 // Binding patterns
 
-/** @internal */
+/** @deprecated @internal */
 export function isBindingPattern(node: Node | undefined): node is BindingPattern {
+    return astIsBindingPattern(node?.ast);
+}
+
+/** @internal */
+export function astIsBindingPattern(node: AstNode | undefined): node is AstBindingPattern {
     if (node) {
         const kind = node.kind;
         return kind === SyntaxKind.ArrayBindingPattern
@@ -1987,7 +2380,8 @@ export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpres
     return isLeftHandSideExpressionKind(skipPartiallyEmittedExpressions(node).kind);
 }
 
-function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
+/** @internal */
+export function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
     switch (kind) {
         case SyntaxKind.PropertyAccessExpression:
         case SyntaxKind.ElementAccessExpression:
@@ -2031,7 +2425,8 @@ export function isUnaryExpression(node: Node): node is UnaryExpression {
     return isUnaryExpressionKind(skipPartiallyEmittedExpressions(node).kind);
 }
 
-function isUnaryExpressionKind(kind: SyntaxKind): boolean {
+/** @internal */
+export function isUnaryExpressionKind(kind: SyntaxKind): boolean {
     switch (kind) {
         case SyntaxKind.PrefixUnaryExpression:
         case SyntaxKind.PostfixUnaryExpression:
@@ -2078,7 +2473,8 @@ export function isExpression(node: Node): node is Expression {
     return isExpressionKind(skipPartiallyEmittedExpressions(node).kind);
 }
 
-function isExpressionKind(kind: SyntaxKind): boolean {
+/** @internal */
+export function isExpressionKind(kind: SyntaxKind): boolean {
     switch (kind) {
         case SyntaxKind.ConditionalExpression:
         case SyntaxKind.YieldExpression:
@@ -2387,8 +2783,13 @@ function isStatementKindButNotDeclarationKind(kind: SyntaxKind) {
 
 /** @internal */
 export function isDeclaration(node: Node): node is NamedDeclaration {
+    return astIsDeclaration(node.ast);
+}
+
+/** @internal */
+export function astIsDeclaration(node: AstNode): node is AstNamedDeclaration {
     if (node.kind === SyntaxKind.TypeParameter) {
-        return (node.parent && node.parent.kind !== SyntaxKind.JSDocTemplateTag) || isInJSFile(node);
+        return (node.parent && node.parent.kind !== SyntaxKind.JSDocTemplateTag) || astIsInJSFile(node);
     }
 
     return isDeclarationKind(node.kind);
@@ -2509,6 +2910,15 @@ export function isJSDocNode(node: Node): boolean {
     return node.kind >= SyntaxKind.FirstJSDocNode && node.kind <= SyntaxKind.LastJSDocNode;
 }
 
+/**
+ * True if node is of some JSDoc syntax kind.
+ *
+ * @internal
+ */
+export function astIsJSDocNode(node: AstNode): boolean {
+    return node.kind >= SyntaxKind.FirstJSDocNode && node.kind <= SyntaxKind.LastJSDocNode;
+}
+
 /** True if node is of a kind that may contain comment text. */
 export function isJSDocCommentContainingNode(node: Node): boolean {
     return node.kind === SyntaxKind.JSDoc
@@ -2553,6 +2963,7 @@ export function hasJSDocNodes(node: Node): node is HasJSDoc {
  * @internal
  */
 export function hasType(node: Node): node is HasType {
+    // TODO: switch on kind
     return !!(node as HasType).type;
 }
 
@@ -2562,6 +2973,7 @@ export function hasType(node: Node): node is HasType {
  * @internal
  */
 export function hasInitializer(node: Node): node is HasInitializer {
+    // TODO: switch on kind
     return !!(node as HasInitializer).initializer;
 }
 

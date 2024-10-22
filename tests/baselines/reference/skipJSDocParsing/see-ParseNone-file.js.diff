@@ -1,7 +1,7 @@
 ===================================================================
 --- default
 +++ ParseNone
-@@ -38,235 +38,9 @@
+@@ -39,235 +39,9 @@
                      "end": 108,
                      "hasTrailingComma": false,
                      "transformFlags": 0
@@ -93,7 +93,7 @@
 -                                "transformFlags": 0,
 -                                "escapedText": "see"
 -                            },
--                            "comment": {
+-                            "commentArray": {
 -                                "0": {
 -                                    "kind": "JSDocText",
 -                                    "pos": 42,
@@ -142,7 +142,7 @@
 -                                "transformFlags": 0,
 -                                "escapedText": "see"
 -                            },
--                            "comment": {
+-                            "commentArray": {
 -                                "0": {
 -                                    "kind": "JSDocText",
 -                                    "pos": 60,
@@ -191,7 +191,7 @@
 -                                "transformFlags": 0,
 -                                "escapedText": "see"
 -                            },
--                            "comment": {
+-                            "commentArray": {
 -                                "0": {
 -                                    "kind": "JSDocText",
 -                                    "pos": 82,
@@ -238,7 +238,7 @@
          "length": 1,
          "pos": 0,
          "end": 109,
-@@ -295,7 +69,6 @@
+@@ -296,7 +70,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],

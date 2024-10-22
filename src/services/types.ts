@@ -14,6 +14,7 @@ import {
     GetEffectiveTypeRootsHost,
     HasChangedAutomaticTypeDirectiveNames,
     HasInvalidatedResolutions,
+    IScriptSnapshot,
     JSDocParsingMode,
     LineAndCharacter,
     MinimalResolutionCacheHost,
@@ -45,56 +46,12 @@ import {
 
 declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
-    export interface Node {
-        getSourceFile(): SourceFile;
-        getChildCount(sourceFile?: SourceFile): number;
-        getChildAt(index: number, sourceFile?: SourceFile): Node;
-        getChildren(sourceFile?: SourceFile): readonly Node[];
-        /** @internal */
-        getChildren(sourceFile?: SourceFileLike): readonly Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
-        getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
-        /** @internal */
-        getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
-        getFullStart(): number;
-        getEnd(): number;
-        getWidth(sourceFile?: SourceFileLike): number;
-        getFullWidth(): number;
-        getLeadingTriviaWidth(sourceFile?: SourceFile): number;
-        getFullText(sourceFile?: SourceFile): string;
-        getText(sourceFile?: SourceFile): string;
-        getFirstToken(sourceFile?: SourceFile): Node | undefined;
-        /** @internal */
-        getFirstToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-        getLastToken(sourceFile?: SourceFile): Node | undefined;
-        /** @internal */
-        getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-        // See ts.forEachChild for documentation.
-        forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
-    }
-}
-
-declare module "../compiler/types.js" {
-    // Module transform: converted from interface augmentation
-    export interface Identifier {
-        readonly text: string;
-    }
-}
-
-declare module "../compiler/types.js" {
-    // Module transform: converted from interface augmentation
-    export interface PrivateIdentifier {
-        readonly text: string;
-    }
-}
-
-declare module "../compiler/types.js" {
-    // Module transform: converted from interface augmentation
     export interface Symbol {
         readonly name: string;
         getFlags(): SymbolFlags;
         getEscapedName(): __String;
         getName(): string;
-        getDeclarations(): Declaration[] | undefined;
+        getDeclarations(): readonly Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         /** @internal */
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[];
@@ -158,25 +115,6 @@ declare module "../compiler/types.js" {
 
 declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
-    export interface SourceFile {
-        /** @internal */ version: string;
-        /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
-        /** @internal */ nameTable: Map<__String, number> | undefined;
-
-        /** @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
-
-        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
-        getLineEndOfPosition(pos: number): number;
-        getLineStarts(): readonly number[];
-        getPositionOfLineAndCharacter(line: number, character: number): number;
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
-
-        /** @internal */ sourceMapper?: DocumentPositionMapper;
-    }
-}
-
-declare module "../compiler/types.js" {
-    // Module transform: converted from interface augmentation
     export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
@@ -187,32 +125,6 @@ declare module "../compiler/types.js" {
     export interface SourceMapSource {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
-}
-
-/**
- * Represents an immutable snapshot of a script at a specified time.Once acquired, the
- * snapshot is observably immutable. i.e. the same calls with the same parameters will return
- * the same values.
- */
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export interface IScriptSnapshot {
-    /** Gets a portion of the script snapshot specified by [start, end). */
-    getText(start: number, end: number): string;
-
-    /** Gets the length of this script snapshot. */
-    getLength(): number;
-
-    /**
-     * Gets the TextChangeRange that describe how the text changed between this text and
-     * an older version.  This information is used by the incremental parser to determine
-     * what sections of the script need to be re-parsed.  'undefined' can be returned if the
-     * change range cannot be determined.  However, in that case, incremental parsing will
-     * not happen and the entire document will be re - parsed.
-     */
-    getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
-
-    /** Releases all resources held by this script snapshot */
-    dispose?(): void;
 }
 
 export namespace ScriptSnapshot {
