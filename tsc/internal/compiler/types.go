@@ -951,6 +951,7 @@ type CompilerOptions struct {
 	AllowUnreachableCode         Tristate
 	AllowUnusedLabels            Tristate
 	CheckJs                      Tristate
+	CustomConditions             []string
 	ESModuleInterop              Tristate
 	ExactOptionalPropertyTypes   Tristate
 	IsolatedModules              Tristate
@@ -962,6 +963,7 @@ type CompilerOptions struct {
 	Strict                       Tristate
 	StrictNullChecks             Tristate
 	Target                       ScriptTarget
+	TraceResolution              Tristate
 	Types                        []string
 	UseDefineForClassFields      Tristate
 	UseUnknownInCatchVariables   Tristate
@@ -996,9 +998,7 @@ type ModuleResolutionKind int32
 
 const (
 	ModuleResolutionKindUnknown ModuleResolutionKind = 0
-	ModuleResolutionKindClassic ModuleResolutionKind = 1
-	ModuleResolutionKindNode10  ModuleResolutionKind = 2
-	// Starting with node12, node's module resolver has significant departures from traditional cjs resolution
+	// Starting with node16, node's module resolver has significant departures from traditional cjs resolution
 	// to better support ECMAScript modules and their use within node - however more features are still being added.
 	// TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable
 	// version that supports both pattern trailers - *but*, Node 16 is the first version that also supports ECMAScript 2022.
@@ -1007,6 +1007,19 @@ const (
 	ModuleResolutionKindNodeNext ModuleResolutionKind = 99 // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
 	ModuleResolutionKindBundler  ModuleResolutionKind = 100
 )
+
+func (m ModuleResolutionKind) String() string {
+	switch m {
+	case ModuleResolutionKindNode16:
+		return "Node16"
+	case ModuleResolutionKindNodeNext:
+		return "NodeNext"
+	case ModuleResolutionKindBundler:
+		return "Bundler"
+	default:
+		panic("Unhandled case in formatModuleResolutionKind")
+	}
+}
 
 type NodeCheckFlags uint32
 

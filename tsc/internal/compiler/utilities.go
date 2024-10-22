@@ -441,6 +441,14 @@ func formatStringFromArgs(text string, args []any) string {
 	})
 }
 
+func formatMessage(message *diagnostics.Message, args ...any) string {
+	text := message.Message()
+	if len(args) != 0 {
+		text = formatStringFromArgs(text, args)
+	}
+	return text
+}
+
 func filter[T any](slice []T, predicate func(T) bool) []T {
 	var result []T
 	for _, value := range slice {
@@ -1952,15 +1960,16 @@ func getEmitModuleResolutionKind(options *CompilerOptions) ModuleResolutionKind 
 	}
 	switch getEmitModuleKind(options) {
 	case ModuleKindCommonJS:
-		return ModuleResolutionKindNode10
+		return ModuleResolutionKindBundler
 	case ModuleKindNode16:
 		return ModuleResolutionKindNode16
 	case ModuleKindNodeNext:
 		return ModuleResolutionKindNodeNext
 	case ModuleKindPreserve:
 		return ModuleResolutionKindBundler
+	default:
+		panic("Unhandled case in getEmitModuleResolutionKind")
 	}
-	return ModuleResolutionKindClassic
 }
 
 func getESModuleInterop(options *CompilerOptions) bool {
@@ -3083,8 +3092,8 @@ func pathIsRelative(path string) bool {
 	return makeRegexp(`^\.\.?(?:$|[\\/])`).MatchString(path)
 }
 
-func isRootedDiskPath(path string) bool {
-	return false // !!!
+func extensionIsTs(ext string) bool {
+	return ext == ExtensionTs || ext == ExtensionTsx || ext == ExtensionDts || ext == ExtensionMts || ext == ExtensionDmts || ext == ExtensionCts || ext == ExtensionDcts || len(ext) >= 7 && ext[:3] == ".d." && ext[len(ext)-3:] == ".ts"
 }
 
 func isShorthandAmbientModuleSymbol(moduleSymbol *Symbol) bool {

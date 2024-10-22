@@ -2039,10 +2039,7 @@ func (c *Checker) markSymbolOfAliasDeclarationIfTypeOnlyWorker(aliasDeclarationL
 }
 
 func (c *Checker) resolveExternalModuleName(location *Node, moduleReferenceExpression *Node, ignoreErrors bool) *Symbol {
-	isClassic := getEmitModuleResolutionKind(c.compilerOptions) == ModuleResolutionKindClassic
-	errorMessage := ifElse(isClassic,
-		diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option,
-		diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations)
+	errorMessage := diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations
 	return c.resolveExternalModuleNameWorker(location, moduleReferenceExpression, ifElse(ignoreErrors, nil, errorMessage), ignoreErrors, false /*isForAugmentation*/)
 }
 
