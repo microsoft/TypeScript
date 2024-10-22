@@ -13,10 +13,10 @@
 
     // Use 'postCreateCommand' to run commands after the container is created.
     "postCreateCommand": {
-        "Configure Node.js Build Tools": "sudo corepack enable npm; sudo npm install -g hereby; npm ci",
+        "Configure Node.js Build Tools": "npm install -g hereby; npm ci",
         "Initialize Submodules": "git submodule update --init --recursive; cd _submodules/TypeScript; npm ci",
         "Install pprof": "go install github.com/google/pprof@latest",
-        "Install Graphviz": "sudo apt update; sudo apt install graphviz"
+        "Install Graphviz": "sudo apt update -y; sudo apt install -y graphviz"
     },
 
     // Configure tool-specific properties.
