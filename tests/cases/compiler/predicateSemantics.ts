@@ -1,3 +1,5 @@
+// @target: esnext
+
 declare let cond: any;
 
 // OK: One or other operand is possibly nullish
@@ -42,3 +44,9 @@ function foo(this: Object | undefined) {
     // Should be OK
     return this ?? 0;
 }
+
+// https://github.com/microsoft/TypeScript/issues/60320
+if (0n) {}
+if (!0n) {}
+if (1n) {}
+if (!1n) {}

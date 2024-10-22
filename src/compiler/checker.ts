@@ -44504,9 +44504,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return PredicateSemantics.Sometimes;
                 }
                 return PredicateSemantics.Always;
+            case SyntaxKind.BigIntLiteral:
+                return (node as BigIntLiteral).text !== "0n" ? PredicateSemantics.Always : PredicateSemantics.Never;
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrowFunction:
-            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.JsxElement:

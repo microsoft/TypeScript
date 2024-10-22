@@ -234,3 +234,25 @@ function foo(this: Object | undefined) {
 >0 : 0
 >  : ^
 }
+
+// https://github.com/microsoft/TypeScript/issues/60320
+if (0n) {}
+>0n : 0n
+>   : ^^
+
+if (!0n) {}
+>!0n : true
+>    : ^^^^
+>0n : 0n
+>   : ^^
+
+if (1n) {}
+>1n : 1n
+>   : ^^
+
+if (!1n) {}
+>!1n : boolean
+>    : ^^^^^^^
+>1n : 1n
+>   : ^^
+

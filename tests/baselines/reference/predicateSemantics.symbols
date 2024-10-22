@@ -79,3 +79,10 @@ function foo(this: Object | undefined) {
     return this ?? 0;
 >this : Symbol(this, Decl(predicateSemantics.ts, 40, 13))
 }
+
+// https://github.com/microsoft/TypeScript/issues/60320
+if (0n) {}
+if (!0n) {}
+if (1n) {}
+if (!1n) {}
+
