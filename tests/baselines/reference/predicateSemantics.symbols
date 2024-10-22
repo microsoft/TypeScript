@@ -80,6 +80,10 @@ function foo(this: Object | undefined) {
 >this : Symbol(this, Decl(predicateSemantics.ts, 40, 13))
 }
 
+// positive numbers
+while (+2) {}
+while (+0.000) {}
+
 // Not OK; always truthy.
 if (1n) { }
 

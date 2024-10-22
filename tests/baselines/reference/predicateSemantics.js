@@ -46,6 +46,10 @@ function foo(this: Object | undefined) {
     return this ?? 0;
 }
 
+// positive numbers
+while (+2) {}
+while (+0.000) {}
+
 // Not OK; always truthy.
 if (1n) { }
 
@@ -109,6 +113,9 @@ function foo() {
     // Should be OK
     return this !== null && this !== void 0 ? this : 0;
 }
+// positive numbers
+while (+2) { }
+while (+0.000) { }
 // Not OK; always truthy.
 if (1n) { }
 // Not OK; always falsy.

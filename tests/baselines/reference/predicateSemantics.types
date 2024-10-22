@@ -235,6 +235,19 @@ function foo(this: Object | undefined) {
 >  : ^
 }
 
+// positive numbers
+while (+2) {}
+>+2 : 2
+>   : ^
+>2 : 2
+>  : ^
+
+while (+0.000) {}
+>+0.000 : 0
+>       : ^
+>0.000 : 0
+>      : ^
+
 // Not OK; always truthy.
 if (1n) { }
 >1n : 1n

@@ -44510,26 +44510,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return PredicateSemantics.Never;
                 }
                 return PredicateSemantics.Always;
-            // handle negative numbers
+            // handle +123, -123, -123n, etc.
             case SyntaxKind.PrefixUnaryExpression:
                 const prefixUnaryExpression = node as PrefixUnaryExpression;
-                if (prefixUnaryExpression.operator === SyntaxKind.MinusToken) {
-                    const operand = prefixUnaryExpression.operand;
-                    if (operand.kind === SyntaxKind.NumericLiteral) {
-                        if ((operand as NumericLiteral).text === "0") {
-                            return PredicateSemantics.Never
-                        } else {
-                            return PredicateSemantics.Always
-                        }
-                    } else if (operand.kind === SyntaxKind.BigIntLiteral) {
-                        if ((operand as BigIntLiteral).text === "0n") {
-                            return PredicateSemantics.Never
-                        } else {
-                            return PredicateSemantics.Always
-                        }
+                const { operator, operand } = prefixUnaryExpression;
+                if (operand.kind === SyntaxKind.NumericLiteral && (operator === SyntaxKind.MinusToken || operator === SyntaxKind.PlusToken)) {
+                    if ((operand as NumericLiteral).text === "0") {
+                        return PredicateSemantics.Never;
+                    }
+                    else {
+                        return PredicateSemantics.Always;
                     }
                 }
-                return PredicateSemantics.Sometimes
+                else if (operand.kind === SyntaxKind.BigIntLiteral && operator === SyntaxKind.MinusToken) {
+                    if ((operand as BigIntLiteral).text === "0n") {
+                        return PredicateSemantics.Never;
+                    }
+                    else {
+                        return PredicateSemantics.Always;
+                    }
+                }
+                return PredicateSemantics.Sometimes;
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.ClassExpression:
