@@ -23,14 +23,13 @@ function assertTypeScriptCloned() {
     }
     catch {}
 
-    console.error("_submodules/TypeScript does not exist; try running `git submodule update --init --recursive`");
-    process.exit(1);
+    throw new Error("_submodules/TypeScript does not exist; try running `git submodule update --init --recursive`");
 }
 
 export const build = task({
     name: "build",
     run: async () => {
-        await $`go build ./...`;
+        await $`go build -o ./bin/ ./cmd/...`;
     },
 });
 
@@ -68,5 +67,15 @@ export const checkFormat = task({
     name: "check:format",
     run: async () => {
         await $`dprint check`;
+    },
+});
+
+export const postinstall = task({
+    name: "postinstall",
+    hiddenFromTaskList: true,
+    run: () => {
+        // Ensure the go command doesn't waste time looking into node_modules.
+        // Remove once https://github.com/golang/go/issues/42965 is fixed.
+        fs.writeFileSync(path.join(__dirname, "node_modules", "go.mod"), `module example.org/ignoreme\n`);
     },
 });

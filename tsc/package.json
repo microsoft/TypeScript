@@ -26,6 +26,7 @@
         "hereby": "^1.10.0"
     },
     "scripts": {
+        "postinstall": "hereby postinstall",
         "build": "hereby build",
         "test": "hereby test"
     },

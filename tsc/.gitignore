@@ -162,7 +162,9 @@ go.work.sum
 !**/.vscode/extensions.json
 
 # Built binaries
-cmd/tsgo/tsgo
+/bin
+/cmd/tsgo/tsgo
+/tsgo
 
 # Benchmarking results
 *.txt
