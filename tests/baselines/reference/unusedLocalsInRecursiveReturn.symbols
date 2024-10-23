@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/unusedLocalsInRecursiveReturn.ts] ////
+
+=== unusedLocalsInRecursiveReturn.ts ===
+function recursive(arg: string, other: string) {
+>recursive : Symbol(recursive, Decl(unusedLocalsInRecursiveReturn.ts, 0, 0))
+>arg : Symbol(arg, Decl(unusedLocalsInRecursiveReturn.ts, 0, 19))
+>other : Symbol(other, Decl(unusedLocalsInRecursiveReturn.ts, 0, 31))
+
+    const someLocalVar = arg + other;
+>someLocalVar : Symbol(someLocalVar, Decl(unusedLocalsInRecursiveReturn.ts, 1, 9))
+>arg : Symbol(arg, Decl(unusedLocalsInRecursiveReturn.ts, 0, 19))
+>other : Symbol(other, Decl(unusedLocalsInRecursiveReturn.ts, 0, 31))
+
+    return recursive(someLocalVar, arg);
+>recursive : Symbol(recursive, Decl(unusedLocalsInRecursiveReturn.ts, 0, 0))
+>someLocalVar : Symbol(someLocalVar, Decl(unusedLocalsInRecursiveReturn.ts, 1, 9))
+>arg : Symbol(arg, Decl(unusedLocalsInRecursiveReturn.ts, 0, 19))
+}
