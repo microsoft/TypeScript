@@ -1,3 +1,5 @@
 *.js linguist-language=TypeScript
 **/*.json linguist-language=jsonc
 * -text
+src/compiler/diagnosticInformationMap.generated.ts linguist-generated=true
+src/compiler/diagnosticMessages.generated.json linguist-generated=true
