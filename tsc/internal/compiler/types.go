@@ -1,6 +1,6 @@
 package compiler
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=SyntaxKind,SignatureKind,ScriptKind,ScriptTarget,LanguageVariant,Tristate -output=stringer_generated.go
+//go:generate go run golang.org/x/tools/cmd/stringer -type=LanguageVariant,ModuleResolutionKind,ScriptKind,ScriptTarget,SignatureKind,SyntaxKind,Tristate -output=stringer_generated.go
 
 type SyntaxKind int16
 
@@ -1009,19 +1009,6 @@ const (
 	ModuleResolutionKindNodeNext ModuleResolutionKind = 99 // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
 	ModuleResolutionKindBundler  ModuleResolutionKind = 100
 )
-
-func (m ModuleResolutionKind) String() string {
-	switch m {
-	case ModuleResolutionKindNode16:
-		return "Node16"
-	case ModuleResolutionKindNodeNext:
-		return "NodeNext"
-	case ModuleResolutionKindBundler:
-		return "Bundler"
-	default:
-		panic("Unhandled case in formatModuleResolutionKind")
-	}
-}
 
 type NodeCheckFlags uint32
 
