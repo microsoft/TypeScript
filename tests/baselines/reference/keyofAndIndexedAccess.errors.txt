@@ -1,3 +1,5 @@
+keyofAndIndexedAccess.ts(176,16): error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.
+keyofAndIndexedAccess.ts(177,16): error TS2341: Property 'z' is private and only accessible within class 'C'.
 keyofAndIndexedAccess.ts(205,24): error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.
   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
     Type 'T[string]' is not assignable to type 'object'.
@@ -15,7 +17,7 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
       Type 'T[string]' is not assignable to type '{}'.
 
 
-==== keyofAndIndexedAccess.ts (5 errors) ====
+==== keyofAndIndexedAccess.ts (7 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -192,7 +194,11 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
         type Z = C["z"];
         let x: X = c["x"];
         let y: Y = c["y"];
+                   ~
+!!! error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.
         let z: Z = c["z"];
+                   ~
+!!! error TS2341: Property 'z' is private and only accessible within class 'C'.
     }
     
     function f50<T>(k: keyof T, s: string) {
