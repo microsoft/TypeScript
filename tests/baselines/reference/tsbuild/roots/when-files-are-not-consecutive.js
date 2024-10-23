@@ -71,7 +71,7 @@ export declare const y = "world";
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./file1.ts","./random.d.ts","./file2.ts"],"fileIdsList":[[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},"-12516578989-export const random = \"world\";",{"version":"-12123221340-import { random } from \"./random\";\nexport const y = \"world\";\n","signature":"-5502661211-export declare const y = \"world\";\n"}],"root":[2,4],"options":{"composite":true},"referencedMap":[[4,1]],"latestChangedDtsFile":"./file2.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./file1.ts","./random.d.ts","./file2.ts"],"fileIdsList":[[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n","impliedFormat":1},{"version":"-12516578989-export const random = \"world\";","impliedFormat":1},{"version":"-12123221340-import { random } from \"./random\";\nexport const y = \"world\";\n","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1}],"root":[2,4],"options":{"composite":true},"referencedMap":[[4,1]],"latestChangedDtsFile":"./file2.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -90,31 +90,42 @@ export declare const y = "world";
     "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./file1.ts": {
       "original": {
         "version": "-10637577098-export const x = \"hello\";",
-        "signature": "-6425002032-export declare const x = \"hello\";\n"
+        "signature": "-6425002032-export declare const x = \"hello\";\n",
+        "impliedFormat": 1
       },
       "version": "-10637577098-export const x = \"hello\";",
-      "signature": "-6425002032-export declare const x = \"hello\";\n"
+      "signature": "-6425002032-export declare const x = \"hello\";\n",
+      "impliedFormat": "commonjs"
     },
     "./random.d.ts": {
+      "original": {
+        "version": "-12516578989-export const random = \"world\";",
+        "impliedFormat": 1
+      },
       "version": "-12516578989-export const random = \"world\";",
-      "signature": "-12516578989-export const random = \"world\";"
+      "signature": "-12516578989-export const random = \"world\";",
+      "impliedFormat": "commonjs"
     },
     "./file2.ts": {
       "original": {
         "version": "-12123221340-import { random } from \"./random\";\nexport const y = \"world\";\n",
-        "signature": "-5502661211-export declare const y = \"world\";\n"
+        "signature": "-5502661211-export declare const y = \"world\";\n",
+        "impliedFormat": 1
       },
       "version": "-12123221340-import { random } from \"./random\";\nexport const y = \"world\";\n",
-      "signature": "-5502661211-export declare const y = \"world\";\n"
+      "signature": "-5502661211-export declare const y = \"world\";\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -137,7 +148,7 @@ export declare const y = "world";
   },
   "latestChangedDtsFile": "./file2.d.ts",
   "version": "FakeTSVersion",
-  "size": 1057
+  "size": 1141
 }
 
 
@@ -162,7 +173,7 @@ Output::
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./random.d.ts","./file2.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-12516578989-export const random = \"world\";",{"version":"-12123221340-import { random } from \"./random\";\nexport const y = \"world\";\n","signature":"-5502661211-export declare const y = \"world\";\n"}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./file2.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./random.d.ts","./file2.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12516578989-export const random = \"world\";","impliedFormat":1},{"version":"-12123221340-import { random } from \"./random\";\nexport const y = \"world\";\n","signature":"-5502661211-export declare const y = \"world\";\n","impliedFormat":1}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./file2.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -180,23 +191,32 @@ Output::
     "../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./random.d.ts": {
+      "original": {
+        "version": "-12516578989-export const random = \"world\";",
+        "impliedFormat": 1
+      },
       "version": "-12516578989-export const random = \"world\";",
-      "signature": "-12516578989-export const random = \"world\";"
+      "signature": "-12516578989-export const random = \"world\";",
+      "impliedFormat": "commonjs"
     },
     "./file2.ts": {
       "original": {
         "version": "-12123221340-import { random } from \"./random\";\nexport const y = \"world\";\n",
-        "signature": "-5502661211-export declare const y = \"world\";\n"
+        "signature": "-5502661211-export declare const y = \"world\";\n",
+        "impliedFormat": 1
       },
       "version": "-12123221340-import { random } from \"./random\";\nexport const y = \"world\";\n",
-      "signature": "-5502661211-export declare const y = \"world\";\n"
+      "signature": "-5502661211-export declare const y = \"world\";\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -215,7 +235,7 @@ Output::
   },
   "latestChangedDtsFile": "./file2.d.ts",
   "version": "FakeTSVersion",
-  "size": 923
+  "size": 989
 }
 
 

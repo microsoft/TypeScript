@@ -75,11 +75,19 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/projects/myProject/src/node_modules/@types: *new*
   {"pollingInterval":500}
+/a/b/projects/myProject/src/package.json: *new*
+  {"pollingInterval":2000}
 /a/b/projects/node_modules: *new*
   {"pollingInterval":500}
 /a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/b/projects/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::

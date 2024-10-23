@@ -39,6 +39,20 @@ Output::
 
 
 
+PolledWatches::
+/a/username/projects/package.json: *new*
+  {"pollingInterval":2000}
+/a/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
+/a/username/projects/project/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
+
 FsWatches::
 /a/username/projects/project/src/file1.ts: *new*
   {"inode":6}
@@ -85,8 +99,20 @@ sysLog:: /a/username/projects/project/src/file1.ts:: Changing watcher to Missing
 
 
 PolledWatches::
+/a/username/projects/package.json:
+  {"pollingInterval":2000}
+/a/username/projects/project/package.json:
+  {"pollingInterval":2000}
 /a/username/projects/project/src/file1.ts: *new*
   {"pollingInterval":250}
+/a/username/projects/project/src/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/username/projects/project/tsconfig.json:
@@ -132,6 +158,20 @@ Output::
 //// [/a/username/projects/project/src/file2.js] Inode:: 110
 
 
+
+PolledWatches::
+/a/username/projects/package.json:
+  {"pollingInterval":2000}
+/a/username/projects/project/package.json:
+  {"pollingInterval":2000}
+/a/username/projects/project/src/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /a/username/projects/project/src/file1.ts:

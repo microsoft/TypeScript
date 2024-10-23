@@ -4,7 +4,7 @@
     "File '/package.json' does not exist.",
     "Found 'package.json' at '/a/b/c/d/e/package.json'.",
     "======== Resolving module 'foo' from '/a/b/c/d/e/app.ts'. ========",
-    "Explicitly specified module resolution kind: 'NodeNext'.",
+    "Module resolution kind is not specified, using 'NodeNext'.",
     "Resolving in ESM mode with conditions 'import', 'types', 'node'.",
     "File '/a/b/c/d/e/package.json' exists according to earlier cached lookups.",
     "Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.",

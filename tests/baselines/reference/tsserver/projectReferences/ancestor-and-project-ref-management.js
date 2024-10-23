@@ -119,7 +119,7 @@ declare namespace container {
 //# sourceMappingURL=lib.d.ts.map
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-14968179652-namespace container {\n    export const myConst = 30;\n}\n"],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../lib/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"-14968179652-namespace container {\n    export const myConst = 30;\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"declarationMap":true,"outFile":"./lib.js"},"outSignature":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","latestChangedDtsFile":"./lib.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/lib.tsbuildinfo.readable.baseline.txt]
 {
@@ -128,8 +128,22 @@ declare namespace container {
     "../../lib/index.ts"
   ],
   "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "../../lib/index.ts": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n"
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "../../lib/index.ts": {
+      "original": {
+        "version": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n",
+        "impliedFormat": 1
+      },
+      "version": "-14968179652-namespace container {\n    export const myConst = 30;\n}\n",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -145,7 +159,7 @@ declare namespace container {
   "outSignature": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
   "latestChangedDtsFile": "./lib.d.ts",
   "version": "FakeTSVersion",
-  "size": 850
+  "size": 910
 }
 
 //// [/user/username/projects/container/built/local/exec.js]
@@ -190,7 +204,7 @@ declare namespace container {
 //# sourceMappingURL=compositeExec.d.ts.map
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4250822250-declare namespace container {\n    const myConst = 30;\n}\n","-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","./lib.d.ts","../../compositeexec/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"4250822250-declare namespace container {\n    const myConst = 30;\n}\n","impliedFormat":1},{"version":"-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"declarationMap":true,"outFile":"./compositeExec.js"},"outSignature":"6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n","latestChangedDtsFile":"./compositeExec.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/container/built/local/compositeExec.tsbuildinfo.readable.baseline.txt]
 {
@@ -200,9 +214,30 @@ declare namespace container {
     "../../compositeexec/index.ts"
   ],
   "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./lib.d.ts": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
-    "../../compositeexec/index.ts": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"
+    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+      "original": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "impliedFormat": 1
+      },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "impliedFormat": "commonjs"
+    },
+    "./lib.d.ts": {
+      "original": {
+        "version": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
+        "impliedFormat": 1
+      },
+      "version": "4250822250-declare namespace container {\n    const myConst = 30;\n}\n",
+      "impliedFormat": "commonjs"
+    },
+    "../../compositeexec/index.ts": {
+      "original": {
+        "version": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n",
+        "impliedFormat": 1
+      },
+      "version": "-4062145979-namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n",
+      "impliedFormat": "commonjs"
+    }
   },
   "root": [
     [
@@ -218,7 +253,7 @@ declare namespace container {
   "outSignature": "6546330589-declare namespace container {\n    function getMyConst(): number;\n}\n",
   "latestChangedDtsFile": "./compositeExec.d.ts",
   "version": "FakeTSVersion",
-  "size": 1012
+  "size": 1102
 }
 
 
@@ -276,6 +311,13 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/container/lib/tsconfig.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
@@ -392,12 +434,26 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/container/compositeExec/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/container/compositeExec/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/container/lib/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/container/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/container/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
@@ -452,6 +508,11 @@ Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -500,16 +561,32 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/compositeExec/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/container/lib/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/temp/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -585,6 +662,12 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
@@ -795,6 +878,13 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
@@ -965,20 +1055,38 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/compositeExec/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/exec/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/container/exec/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/container/lib/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/container/lib/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/temp/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/temp/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/temp/tsconfig.json:
   {"pollingInterval":2000}
 
@@ -1101,18 +1209,36 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/compositeExec/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/exec/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/lib/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/lib/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/temp/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/temp/jsconfig.json:
@@ -1251,20 +1377,38 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/compositeExec/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/exec/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/lib/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/lib/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/temp/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -1390,20 +1534,38 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/compositeExec/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/exec/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/lib/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/lib/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/temp/jsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/temp/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/temp/tsconfig.json:
   {"pollingInterval":2000}
 
@@ -1528,18 +1690,36 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/compositeExec/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/exec/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/lib/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/lib/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/temp/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/temp/jsconfig.json:
@@ -1660,6 +1840,13 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/compositeExec/package.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
@@ -1692,6 +1879,12 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
@@ -1716,6 +1909,13 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/lib/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/package.json 2000 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/exec/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
@@ -1746,24 +1946,42 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/temp/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/temp/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/container/compositeExec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/compositeExec/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/exec/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/exec/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/lib/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/lib/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/container/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/container/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

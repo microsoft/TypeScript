@@ -72,7 +72,16 @@ Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all 
 Info seq  [hh:mm:ss:mss] ======== Module name 'worker_threads' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Auto discovery for typings is enabled in project '/dev/null/inferredProject1*'. Running extra resolution pass for module 'node' using cache location '/home/src/Library/Caches/typescript'.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/Library/Caches/typescript/node_modules' does not exist, skipping all lookups in it.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -89,6 +98,14 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 //// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 11
 
+
+PolledWatches::
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*

@@ -65,6 +65,10 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/proj
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/project 1 undefined Config: /Volumes/git/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Volumes/git/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/package.json 2000 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/node_modules/@types 1 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/node_modules/@types 1 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/node_modules/@types 1 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: Type roots
@@ -169,6 +173,12 @@ PolledWatches::
   {"pollingInterval":500}
 /Volumes/git/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /Volumes/git/projects/project/package.json: *new*
@@ -275,6 +285,12 @@ PolledWatches::
   {"pollingInterval":500}
 /Volumes/git/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /Volumes/git/projects/project/Bar.ts: *new*

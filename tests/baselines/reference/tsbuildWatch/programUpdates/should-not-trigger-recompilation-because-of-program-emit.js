@@ -146,7 +146,7 @@ export declare function multiply(a: number, b: number): number;
 //# sourceMappingURL=index.d.ts.map
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n","impliedFormat":1},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedFormat":1},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -160,36 +160,44 @@ export declare function multiply(a: number, b: number): number;
     "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./anothermodule.ts": {
       "original": {
         "version": "-3090574810-export const World = \"hello\";",
-        "signature": "-9234818176-export declare const World = \"hello\";\n"
+        "signature": "-9234818176-export declare const World = \"hello\";\n",
+        "impliedFormat": 1
       },
       "version": "-3090574810-export const World = \"hello\";",
-      "signature": "-9234818176-export declare const World = \"hello\";\n"
+      "signature": "-9234818176-export declare const World = \"hello\";\n",
+      "impliedFormat": "commonjs"
     },
     "./index.ts": {
       "original": {
         "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
-        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
+        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
+        "impliedFormat": 1
       },
       "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
-      "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
+      "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
+      "impliedFormat": "commonjs"
     },
     "./some_decl.d.ts": {
       "original": {
         "version": "-7959511260-declare const dts: any;",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "-7959511260-declare const dts: any;",
       "signature": "-7959511260-declare const dts: any;",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -213,9 +221,33 @@ export declare function multiply(a: number, b: number): number;
   },
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1397
+  "size": 1469
 }
 
+
+PolledWatches::
+/home/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
+/package.json: *new*
+  {"pollingInterval":2000}
+/user/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/sample1/core/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/sample1/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/sample1/core/anotherModule.ts: *new*
@@ -301,7 +333,7 @@ Output::
 
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./anothermodule.ts","./file3.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n"},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,5]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"latestChangedDtsFile":"./file3.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./anothermodule.ts","./file3.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n","impliedFormat":1},{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n","impliedFormat":1},{"version":"-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","impliedFormat":1},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"latestChangedDtsFile":"./file3.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -316,44 +348,54 @@ Output::
     "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./anothermodule.ts": {
       "original": {
         "version": "-3090574810-export const World = \"hello\";",
-        "signature": "-9234818176-export declare const World = \"hello\";\n"
+        "signature": "-9234818176-export declare const World = \"hello\";\n",
+        "impliedFormat": 1
       },
       "version": "-3090574810-export const World = \"hello\";",
-      "signature": "-9234818176-export declare const World = \"hello\";\n"
+      "signature": "-9234818176-export declare const World = \"hello\";\n",
+      "impliedFormat": "commonjs"
     },
     "./file3.ts": {
       "original": {
         "version": "-13729955264-export const y = 10;",
-        "signature": "-7152472870-export declare const y = 10;\n"
+        "signature": "-7152472870-export declare const y = 10;\n",
+        "impliedFormat": 1
       },
       "version": "-13729955264-export const y = 10;",
-      "signature": "-7152472870-export declare const y = 10;\n"
+      "signature": "-7152472870-export declare const y = 10;\n",
+      "impliedFormat": "commonjs"
     },
     "./index.ts": {
       "original": {
         "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
-        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
+        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
+        "impliedFormat": 1
       },
       "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
-      "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
+      "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
+      "impliedFormat": "commonjs"
     },
     "./some_decl.d.ts": {
       "original": {
         "version": "-7959511260-declare const dts: any;",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "-7959511260-declare const dts: any;",
       "signature": "-7959511260-declare const dts: any;",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -378,7 +420,7 @@ Output::
   },
   "latestChangedDtsFile": "./file3.d.ts",
   "version": "FakeTSVersion",
-  "size": 1515
+  "size": 1605
 }
 
 //// [/user/username/projects/sample1/core/file3.js]
@@ -395,6 +437,30 @@ exports.y = 10;
 export declare const y = 10;
 //# sourceMappingURL=file3.d.ts.map
 
+
+PolledWatches::
+/home/package.json:
+  {"pollingInterval":2000}
+/home/src/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
+/package.json:
+  {"pollingInterval":2000}
+/user/package.json:
+  {"pollingInterval":2000}
+/user/username/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/sample1/core/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/sample1/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/sample1/core/anotherModule.ts:

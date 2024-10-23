@@ -50,6 +50,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/fooo/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
@@ -70,6 +73,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Default library for target 'es5'
 	node_modules/fooo/index.d.ts
 	  Imported via "fooo" from file 'app.js'
+	  File is CommonJS module because 'package.json' was not found
 	app.js
 	  Root file specified for compilation
 
@@ -94,6 +98,12 @@ PolledWatches::
 /home/src/projects/project/package.json: *new*
   {"pollingInterval":2000}
 /home/src/projects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
@@ -271,6 +281,12 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/projects/project/tsconfig.json:
   {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -440,16 +456,21 @@ Info seq  [hh:mm:ss:mss] 	Files (7)
 	  Default library for target 'es5'
 	../../Library/Caches/typescript/node_modules/foo/a/a.d.ts
 	  Imported via "foo/a/a" from file 'app.js'
+	  File is CommonJS module because '../../Library/Caches/typescript/package.json' does not have field "type"
 	../../Library/Caches/typescript/node_modules/foo/a/b.d.ts
 	  Imported via "foo/a/b" from file 'app.js'
+	  File is CommonJS module because '../../Library/Caches/typescript/package.json' does not have field "type"
 	../../Library/Caches/typescript/node_modules/foo/a/c.d.ts
 	  Imported via "foo/a/c" from file 'app.js'
+	  File is CommonJS module because '../../Library/Caches/typescript/package.json' does not have field "type"
 	node_modules/fooo/index.d.ts
 	  Imported via "fooo" from file 'app.js'
+	  File is CommonJS module because 'package.json' was not found
 	app.js
 	  Root file specified for compilation
 	../../Library/Caches/typescript/node_modules/foo/index.d.ts
 	  Root file specified for compilation
+	  File is CommonJS module because '../../Library/Caches/typescript/package.json' does not have field "type"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: [hh:mm:ss:mss] Got install request
@@ -572,6 +593,12 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/projects/project/tsconfig.json:
   {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
@@ -642,12 +669,16 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Default library for target 'es5'
 	../../Library/Caches/typescript/node_modules/foo/a/a.d.ts
 	  Imported via "foo/a/a" from file 'app.js'
+	  File is CommonJS module because '../../Library/Caches/typescript/package.json' does not have field "type"
 	../../Library/Caches/typescript/node_modules/foo/a/b.d.ts
 	  Imported via "foo/a/b" from file 'app.js'
+	  File is CommonJS module because '../../Library/Caches/typescript/package.json' does not have field "type"
 	../../Library/Caches/typescript/node_modules/foo/a/c.d.ts
 	  Imported via "foo/a/c" from file 'app.js'
+	  File is CommonJS module because '../../Library/Caches/typescript/package.json' does not have field "type"
 	node_modules/fooo/index.d.ts
 	  Imported via "fooo" from file 'app.js'
+	  File is CommonJS module because 'package.json' was not found
 	app.js
 	  Root file specified for compilation
 

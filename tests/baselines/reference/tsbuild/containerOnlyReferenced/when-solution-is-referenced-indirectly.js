@@ -114,7 +114,7 @@ export declare const b = 10;
 
 
 //// [/home/src/workspaces/solution/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/b.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/b.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -126,19 +126,23 @@ export declare const b = 10;
     "../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./src/b.ts": {
       "original": {
         "version": "-13368947479-export const b = 10;",
-        "signature": "-3829150557-export declare const b = 10;\n"
+        "signature": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": 1
       },
       "version": "-13368947479-export const b = 10;",
-      "signature": "-3829150557-export declare const b = 10;\n"
+      "signature": "-3829150557-export declare const b = 10;\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -152,7 +156,7 @@ export declare const b = 10;
   },
   "latestChangedDtsFile": "./src/b.d.ts",
   "version": "FakeTSVersion",
-  "size": 764
+  "size": 800
 }
 
 //// [/home/src/workspaces/solution/project3/src/c.js]
@@ -167,7 +171,7 @@ export declare const c = 10;
 
 
 //// [/home/src/workspaces/solution/project3/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/c.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12077479510-export const c = 10;","signature":"-4160380540-export declare const c = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/c.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/c.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12077479510-export const c = 10;","signature":"-4160380540-export declare const c = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/c.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -179,19 +183,23 @@ export declare const c = 10;
     "../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./src/c.ts": {
       "original": {
         "version": "-12077479510-export const c = 10;",
-        "signature": "-4160380540-export declare const c = 10;\n"
+        "signature": "-4160380540-export declare const c = 10;\n",
+        "impliedFormat": 1
       },
       "version": "-12077479510-export const c = 10;",
-      "signature": "-4160380540-export declare const c = 10;\n"
+      "signature": "-4160380540-export declare const c = 10;\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -205,7 +213,7 @@ export declare const c = 10;
   },
   "latestChangedDtsFile": "./src/c.d.ts",
   "version": "FakeTSVersion",
-  "size": 764
+  "size": 800
 }
 
 //// [/home/src/workspaces/solution/project4/src/d.js]
@@ -220,7 +228,7 @@ export declare const d = 10;
 
 
 //// [/home/src/workspaces/solution/project4/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10786011541-export const d = 10;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/d.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-10786011541-export const d = 10;","signature":"-4491610523-export declare const d = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/d.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project4/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -232,19 +240,23 @@ export declare const d = 10;
     "../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./src/d.ts": {
       "original": {
         "version": "-10786011541-export const d = 10;",
-        "signature": "-4491610523-export declare const d = 10;\n"
+        "signature": "-4491610523-export declare const d = 10;\n",
+        "impliedFormat": 1
       },
       "version": "-10786011541-export const d = 10;",
-      "signature": "-4491610523-export declare const d = 10;\n"
+      "signature": "-4491610523-export declare const d = 10;\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -258,7 +270,7 @@ export declare const d = 10;
   },
   "latestChangedDtsFile": "./src/d.d.ts",
   "version": "FakeTSVersion",
-  "size": 764
+  "size": 800
 }
 
 
@@ -313,7 +325,7 @@ export declare const cc = 10;
 
 
 //// [/home/src/workspaces/solution/project3/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/c.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12481904019-export const cc = 10;","signature":"-2549218137-export declare const cc = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/c.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/c.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12481904019-export const cc = 10;","signature":"-2549218137-export declare const cc = 10;\n","impliedFormat":1}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/c.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -325,19 +337,23 @@ export declare const cc = 10;
     "../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": 1
       },
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
     },
     "./src/c.ts": {
       "original": {
         "version": "-12481904019-export const cc = 10;",
-        "signature": "-2549218137-export declare const cc = 10;\n"
+        "signature": "-2549218137-export declare const cc = 10;\n",
+        "impliedFormat": 1
       },
       "version": "-12481904019-export const cc = 10;",
-      "signature": "-2549218137-export declare const cc = 10;\n"
+      "signature": "-2549218137-export declare const cc = 10;\n",
+      "impliedFormat": "commonjs"
     }
   },
   "root": [
@@ -351,7 +367,7 @@ export declare const cc = 10;
   },
   "latestChangedDtsFile": "./src/c.d.ts",
   "version": "FakeTSVersion",
-  "size": 766
+  "size": 802
 }
 
 //// [/home/src/workspaces/solution/project4/tsconfig.tsbuildinfo] file changed its modified time

@@ -91,11 +91,15 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/fp-ts/lib/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/fp-ts/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/src/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
@@ -119,6 +123,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Imported via "fp-ts/lib/struct" from file 'src/Struct.d.ts'
 	  Imported via "fp-ts/lib/Struct" from file 'src/oneMore.ts'
 	  Imported via "fp-ts/lib/struct" from file 'src/oneMore.ts'
+	  File is CommonJS module because 'package.json' was not found
 	src/Struct.d.ts
 	  Imported via "./Struct" from file 'src/anotherFile.ts'
 	  Imported via "./Struct" from file 'src/Struct.d.ts'
@@ -229,6 +234,14 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/projects/project/package.json: *new*
   {"pollingInterval":2000}
+/home/src/projects/project/src/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/projects/project/src/anotherFile.ts: *new*
@@ -333,7 +346,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 2,
               "offset": 40
             },
-            "text": "File name '/home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.\n  The file is in the program because:\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/anotherFile.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/anotherFile.ts'\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/Struct.d.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/Struct.d.ts'\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/oneMore.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/oneMore.ts'",
+            "text": "File name '/home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.\n  The file is in the program because:\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/anotherFile.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/anotherFile.ts'\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/Struct.d.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/Struct.d.ts'\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/oneMore.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/oneMore.ts'\n  File is CommonJS module because 'package.json' was not found",
             "code": 1149,
             "category": "error",
             "relatedInformation": [
@@ -897,7 +910,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 2,
               "offset": 40
             },
-            "text": "File name '/home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.\n  The file is in the program because:\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/anotherFile.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/anotherFile.ts'\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/Struct.d.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/Struct.d.ts'\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/oneMore.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/oneMore.ts'",
+            "text": "File name '/home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.\n  The file is in the program because:\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/anotherFile.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/anotherFile.ts'\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/Struct.d.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/Struct.d.ts'\n    Imported via \"fp-ts/lib/Struct\" from file '/home/src/projects/project/src/oneMore.ts'\n    Imported via \"fp-ts/lib/struct\" from file '/home/src/projects/project/src/oneMore.ts'\n  File is CommonJS module because 'package.json' was not found",
             "code": 1149,
             "category": "error",
             "relatedInformation": [

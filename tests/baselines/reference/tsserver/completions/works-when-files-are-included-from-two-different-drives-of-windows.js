@@ -162,6 +162,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/src/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -184,14 +191,18 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	../node_modules/@types/prop-types/index.d.ts
 	  Imported via 'prop-types' from file '../node_modules/@types/react/index.d.ts' with packageId '@types/prop-types/index.d.ts@15.7.3'
 	  Entry point for implicit type library 'prop-types' with packageId '@types/prop-types/index.d.ts@15.7.3'
+	  File is CommonJS module because '../node_modules/@types/prop-types/package.json' does not have field "type"
 	../node_modules/@types/react/index.d.ts
 	  Imported via 'react' from file 'app.js' with packageId '@types/react/index.d.ts@16.9.14'
 	  Entry point for implicit type library 'react' with packageId '@types/react/index.d.ts@16.9.14'
+	  File is CommonJS module because '../node_modules/@types/react/package.json' does not have field "type"
 	c:/typescript/node_modules/@types/react/index.d.ts
 	  Imported via 'react' from file 'c:/typescript/node_modules/@types/react-router-dom/index.d.ts' with packageId '@types/react/index.d.ts@16.9.14'
 	  File redirects to file '../node_modules/@types/react/index.d.ts'
+	  File is CommonJS module because 'c:/typescript/node_modules/@types/react/package.json' does not have field "type"
 	c:/typescript/node_modules/@types/react-router-dom/index.d.ts
 	  Imported via "react-router-dom" from file 'app.js' with packageId '@types/react-router-dom/index.d.ts@5.1.2'
+	  File is CommonJS module because 'c:/typescript/node_modules/@types/react-router-dom/package.json' does not have field "type"
 	app.js
 	  Root file specified for compilation
 
@@ -199,6 +210,16 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
+c:/home/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 e:/solution/myproject/jsconfig.json: *new*
   {"pollingInterval":2000}
 e:/solution/myproject/src/jsconfig.json: *new*
@@ -207,6 +228,8 @@ e:/solution/myproject/src/node_modules: *new*
   {"pollingInterval":500}
 e:/solution/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
+e:/solution/myproject/src/package.json: *new*
+  {"pollingInterval":2000}
 e:/solution/myproject/src/tsconfig.json: *new*
   {"pollingInterval":2000}
 e:/solution/myproject/tsconfig.json: *new*
@@ -228,6 +251,8 @@ e:/solution/myproject/node_modules/@types/prop-types/package.json: *new*
 e:/solution/myproject/node_modules/@types/react/package.json: *new*
   {}
 e:/solution/myproject/node_modules/react-router-dom/package.json: *new*
+  {}
+e:/solution/myproject/package.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -396,6 +421,16 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+c:/home/package.json:
+  {"pollingInterval":2000}
+c:/home/src/package.json:
+  {"pollingInterval":2000}
+c:/home/src/tslibs/TS/Lib/package.json:
+  {"pollingInterval":2000}
+c:/home/src/tslibs/TS/package.json:
+  {"pollingInterval":2000}
+c:/home/src/tslibs/package.json:
+  {"pollingInterval":2000}
 e:/solution/myproject/jsconfig.json:
   {"pollingInterval":2000}
 e:/solution/myproject/src/bower_components: *new*
@@ -406,6 +441,8 @@ e:/solution/myproject/src/node_modules:
   {"pollingInterval":500}
 e:/solution/myproject/src/node_modules/@types:
   {"pollingInterval":500}
+e:/solution/myproject/src/package.json:
+  {"pollingInterval":2000}
 e:/solution/myproject/src/tsconfig.json:
   {"pollingInterval":2000}
 e:/solution/myproject/tsconfig.json:
@@ -428,7 +465,7 @@ e:/solution/myproject/node_modules/@types/react/package.json:
   {}
 e:/solution/myproject/node_modules/react-router-dom/package.json:
   {}
-e:/solution/myproject/package.json: *new*
+e:/solution/myproject/package.json:
   {}
 
 FsWatchesRecursive::

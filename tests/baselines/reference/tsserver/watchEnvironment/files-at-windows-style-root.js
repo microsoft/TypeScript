@@ -64,6 +64,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/package.json 2000 undefined Project: c:/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/package.json 2000 undefined Project: c:/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/package.json 2000 undefined Project: c:/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/package.json 2000 undefined Project: c:/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/package.json 2000 undefined Project: c:/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/package.json 2000 undefined Project: c:/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/project/node_modules/@types 1 undefined Project: c:/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/project/node_modules/@types 1 undefined Project: c:/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -164,8 +170,20 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+c:/home/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+c:/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 c:/project/node_modules/@types: *new*
   {"pollingInterval":500}
+c:/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 c:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
