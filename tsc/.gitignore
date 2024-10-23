@@ -168,3 +168,6 @@ go.work.sum
 
 # Benchmarking results
 *.txt
+
+# Local baselines
+testdata/baselines/local

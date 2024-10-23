@@ -17,19 +17,9 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
-)
 
-func findGoMod(dir string) string {
-	root := filepath.VolumeName(dir)
-	for dir != root {
-		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
-			return dir
-		}
-		dir = filepath.Dir(dir)
-	}
-	log.Fatal("could not find go.mod")
-	panic("")
-}
+	"github.com/microsoft/typescript-go/internal/repo"
+)
 
 type diagnosticMessage struct {
 	Category                     string `json:"category"`
@@ -75,13 +65,7 @@ func (m *Message) ReportsDeprecated() bool            { return m.reportsDeprecat
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
-	cwd, err := os.Getwd()
-	if err != nil {
-		log.Fatalf("failed to get current working directory: %v", err)
-		return
-	}
-
-	input := filepath.Join(findGoMod(cwd), "_submodules", "TypeScript", "src", "compiler", "diagnosticMessages.json")
+	input := filepath.Join(repo.TypeScriptSubmodulePath, "src", "compiler", "diagnosticMessages.json")
 	if _, err := os.Stat(input); err != nil {
 		log.Fatalf("failed to find input file: %v", err)
 		return
