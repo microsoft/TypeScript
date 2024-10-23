@@ -56,7 +56,7 @@ jobs:
 
       - run: npm ci
 
-      - run: npx hereby test
+      - run: npx hereby test --race
 
   lint:
     runs-on: ubuntu-latest
