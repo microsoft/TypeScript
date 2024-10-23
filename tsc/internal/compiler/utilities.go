@@ -450,13 +450,26 @@ func formatMessage(message *diagnostics.Message, args ...any) string {
 }
 
 func filter[T any](slice []T, predicate func(T) bool) []T {
-	var result []T
-	for _, value := range slice {
-		if predicate(value) {
-			result = append(result, value)
+	result, _ := sameFilter(slice, predicate)
+	return result
+}
+
+func sameFilter[T any](slice []T, predicate func(T) bool) ([]T, bool) {
+	for i, value := range slice {
+		if !predicate(value) {
+			result := slice[0:i]
+			i++
+			for i < len(slice) {
+				value = slice[i]
+				if predicate(value) {
+					result = append(result, value)
+				}
+				i++
+			}
+			return result, false
 		}
 	}
-	return result
+	return slice, true
 }
 
 func mapf[T, U any](slice []T, f func(T) U) []U {
@@ -497,6 +510,22 @@ func sameMap[T comparable](slice []T, f func(T) T) ([]T, bool) {
 	return slice, true
 }
 
+func sameMapIndex[T comparable](slice []T, f func(T, int) T) ([]T, bool) {
+	for i, value := range slice {
+		mapped := f(value, i)
+		if mapped != value {
+			result := make([]T, len(slice))
+			copy(result, slice[:i])
+			result[i] = mapped
+			for i, value := range slice[i+1:] {
+				result[i] = f(value, i)
+			}
+			return result, false
+		}
+	}
+	return slice, true
+}
+
 func some[T any](array []T, predicate func(T) bool) bool {
 	for _, value := range array {
 		if predicate(value) {
@@ -513,12 +542,6 @@ func every[T any](array []T, predicate func(T) bool) bool {
 		}
 	}
 	return true
-}
-
-func forEach[T any](array []T, action func(T)) {
-	for _, value := range array {
-		action(value)
-	}
 }
 
 func insertSorted[T any](slice []T, element T, cmp func(T, T) int) []T {
@@ -576,6 +599,22 @@ func concatenate[T any](s1 []T, s2 []T) []T {
 		return s2
 	}
 	return slices.Concat(s1, s2)
+}
+
+func countWhere[T any](slice []T, predicate func(T) bool) int {
+	count := 0
+	for _, value := range slice {
+		if predicate(value) {
+			count++
+		}
+	}
+	return count
+}
+
+func replaceElement[T any](slice []T, i int, t T) []T {
+	result := slices.Clone(slice)
+	result[i] = t
+	return result
 }
 
 func boolToTristate(b bool) Tristate {
@@ -3640,16 +3679,8 @@ func isObjectLiteralType(t *Type) bool {
 	return t.objectFlags&ObjectFlagsObjectLiteral != 0
 }
 
-func isTupleType(t *Type) bool {
-	return t.objectFlags&ObjectFlagsReference != 0 && t.TypeReference().target.objectFlags&ObjectFlagsTuple != 0
-}
-
 func isDeclarationReadonly(declaration *Node) bool {
 	return getCombinedModifierFlags(declaration)&ModifierFlagsReadonly != 0 && !isParameterPropertyDeclaration(declaration, declaration.parent)
-}
-
-func isFreshLiteralType(t *Type) bool {
-	return t.flags&TypeFlagsFreshable != 0 && t.LiteralType().freshType == t
 }
 
 func getPostfixTokenFromNode(node *Node) *Node {
@@ -3681,4 +3712,30 @@ func isLogicalExpression(node *Node) bool {
 			return isLogicalOrCoalescingBinaryExpression(node)
 		}
 	}
+}
+
+type orderedMap[K comparable, V any] struct {
+	valuesByKey map[K]V
+	values      []V
+}
+
+func (m *orderedMap[K, V]) contains(key K) bool {
+	_, ok := m.valuesByKey[key]
+	return ok
+}
+
+func (m *orderedMap[K, V]) add(key K, value V) {
+	if m.valuesByKey == nil {
+		m.valuesByKey = make(map[K]V)
+	}
+	m.valuesByKey[key] = value
+	m.values = append(m.values, value)
+}
+
+func getContainingFunction(node *Node) *Node {
+	return findAncestor(node.parent, isFunctionLike)
+}
+
+func isTypeReferenceType(node *Node) bool {
+	return node.kind == SyntaxKindTypeReference || node.kind == SyntaxKindExpressionWithTypeArguments
 }

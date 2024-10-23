@@ -14,6 +14,7 @@ import (
 var quiet = false
 var singleThreaded = false
 var parseAndBindOnly = false
+var printTypes = false
 
 func printDiagnostic(d *ts.Diagnostic, level int) {
 	file := d.File()
@@ -32,8 +33,9 @@ func main() {
 	flag.BoolVar(&quiet, "q", false, "Quiet output")
 	flag.BoolVar(&singleThreaded, "s", false, "Single threaded")
 	flag.BoolVar(&parseAndBindOnly, "p", false, "Parse and bind only")
+	flag.BoolVar(&printTypes, "t", false, "Print type aliases defined in main.ts")
 	flag.Parse()
-	compilerOptions := &ts.CompilerOptions{Target: ts.ScriptTargetESNext, ModuleKind: ts.ModuleKindNodeNext}
+	compilerOptions := &ts.CompilerOptions{Strict: ts.TSTrue, Target: ts.ScriptTargetESNext, ModuleKind: ts.ModuleKindNodeNext}
 	programOptions := ts.ProgramOptions{RootPath: flag.Arg(0), Options: compilerOptions, SingleThreaded: singleThreaded}
 	startTime := time.Now()
 	program := ts.NewProgram(programOptions)
@@ -54,6 +56,9 @@ func main() {
 		for _, diagnostic := range diagnostics {
 			printDiagnostic(diagnostic, 0)
 		}
+	}
+	if printTypes {
+		program.PrintTypeAliases()
 	}
 	fmt.Printf("Files:         %v\n", len(program.SourceFiles()))
 	fmt.Printf("Compile time:  %v\n", compileTime)

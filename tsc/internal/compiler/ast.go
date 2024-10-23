@@ -389,6 +389,21 @@ func (n *Node) AsArrayTypeNode() *ArrayTypeNode {
 func (n *Node) AsTupleTypeNode() *TupleTypeNode {
 	return n.data.(*TupleTypeNode)
 }
+func (n *Node) AsUnionTypeNode() *UnionTypeNode {
+	return n.data.(*UnionTypeNode)
+}
+func (n *Node) AsIntersectionTypeNode() *IntersectionTypeNode {
+	return n.data.(*IntersectionTypeNode)
+}
+func (n *Node) AsRestTypeNode() *RestTypeNode {
+	return n.data.(*RestTypeNode)
+}
+func (n *Node) AsNamedTupleMember() *NamedTupleMember {
+	return n.data.(*NamedTupleMember)
+}
+func (n *Node) AsOptionalTypeNode() *OptionalTypeNode {
+	return n.data.(*OptionalTypeNode)
+}
 
 // NodeData
 
@@ -3567,6 +3582,10 @@ func (f *NodeFactory) NewNamedTupleTypeMember(dotDotDotToken *Node, name *Node, 
 
 func (node *NamedTupleMember) ForEachChild(v Visitor) bool {
 	return visit(v, node.dotDotDotToken) || visit(v, node.name) || visit(v, node.questionToken) || visit(v, node.typeNode)
+}
+
+func isNamedTupleMember(node *Node) bool {
+	return node.kind == SyntaxKindNamedTupleMember
 }
 
 // OptionalTypeNode
