@@ -2800,7 +2800,7 @@ type NonNullExpression struct {
 func (f *NodeFactory) NewNonNullExpression(expression *Node) *Node {
 	data := &NonNullExpression{}
 	data.expression = expression
-	return f.NewNode(SyntaxKindNewExpression, data)
+	return f.NewNode(SyntaxKindNonNullExpression, data)
 }
 
 func (node *NonNullExpression) ForEachChild(v Visitor) bool {
