@@ -1,0 +1,107 @@
+//// [tests/cases/compiler/useBeforeAssignedAutoType2.ts] ////
+
+=== useBeforeAssignedAutoType2.ts ===
+declare function is(...arg: string[]): boolean;
+>is : Symbol(is, Decl(useBeforeAssignedAutoType2.ts, 0, 0))
+>arg : Symbol(arg, Decl(useBeforeAssignedAutoType2.ts, 0, 20))
+
+declare class AST_Case {
+>AST_Case : Symbol(AST_Case, Decl(useBeforeAssignedAutoType2.ts, 0, 47))
+
+  constructor(_: { body: any });
+>_ : Symbol(_, Decl(useBeforeAssignedAutoType2.ts, 2, 14))
+>body : Symbol(body, Decl(useBeforeAssignedAutoType2.ts, 2, 18))
+}
+declare class AST_Default {
+>AST_Default : Symbol(AST_Default, Decl(useBeforeAssignedAutoType2.ts, 3, 1))
+
+  constructor(_: { body: any });
+>_ : Symbol(_, Decl(useBeforeAssignedAutoType2.ts, 5, 14))
+>body : Symbol(body, Decl(useBeforeAssignedAutoType2.ts, 5, 18))
+}
+declare class AST_Statement {
+>AST_Statement : Symbol(AST_Statement, Decl(useBeforeAssignedAutoType2.ts, 6, 1))
+
+  children: any[];
+>children : Symbol(AST_Statement.children, Decl(useBeforeAssignedAutoType2.ts, 7, 29))
+}
+declare function statement(): AST_Statement;
+>statement : Symbol(statement, Decl(useBeforeAssignedAutoType2.ts, 9, 1))
+>AST_Statement : Symbol(AST_Statement, Decl(useBeforeAssignedAutoType2.ts, 6, 1))
+
+declare function unexpected(): void;
+>unexpected : Symbol(unexpected, Decl(useBeforeAssignedAutoType2.ts, 10, 44))
+
+function switch_body_() {
+>switch_body_ : Symbol(switch_body_, Decl(useBeforeAssignedAutoType2.ts, 11, 36))
+
+  var a = [],
+>a : Symbol(a, Decl(useBeforeAssignedAutoType2.ts, 14, 5))
+
+    branch,
+>branch : Symbol(branch, Decl(useBeforeAssignedAutoType2.ts, 14, 13))
+
+    cur;
+>cur : Symbol(cur, Decl(useBeforeAssignedAutoType2.ts, 15, 11))
+
+  while (!is("punc", "}")) {
+>is : Symbol(is, Decl(useBeforeAssignedAutoType2.ts, 0, 0))
+
+    if (is("keyword", "case")) {
+>is : Symbol(is, Decl(useBeforeAssignedAutoType2.ts, 0, 0))
+
+      cur = [];
+>cur : Symbol(cur, Decl(useBeforeAssignedAutoType2.ts, 15, 11))
+
+      branch = new AST_Case({
+>branch : Symbol(branch, Decl(useBeforeAssignedAutoType2.ts, 14, 13))
+>AST_Case : Symbol(AST_Case, Decl(useBeforeAssignedAutoType2.ts, 0, 47))
+
+        body: cur,
+>body : Symbol(body, Decl(useBeforeAssignedAutoType2.ts, 21, 29))
+>cur : Symbol(cur, Decl(useBeforeAssignedAutoType2.ts, 15, 11))
+
+      });
+      a.push(branch);
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(useBeforeAssignedAutoType2.ts, 14, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>branch : Symbol(branch, Decl(useBeforeAssignedAutoType2.ts, 14, 13))
+
+    } else if (is("keyword", "default")) {
+>is : Symbol(is, Decl(useBeforeAssignedAutoType2.ts, 0, 0))
+
+      cur = [];
+>cur : Symbol(cur, Decl(useBeforeAssignedAutoType2.ts, 15, 11))
+
+      branch = new AST_Default({
+>branch : Symbol(branch, Decl(useBeforeAssignedAutoType2.ts, 14, 13))
+>AST_Default : Symbol(AST_Default, Decl(useBeforeAssignedAutoType2.ts, 3, 1))
+
+        body: cur,
+>body : Symbol(body, Decl(useBeforeAssignedAutoType2.ts, 27, 32))
+>cur : Symbol(cur, Decl(useBeforeAssignedAutoType2.ts, 15, 11))
+
+      });
+      a.push(branch);
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(useBeforeAssignedAutoType2.ts, 14, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>branch : Symbol(branch, Decl(useBeforeAssignedAutoType2.ts, 14, 13))
+
+    } else {
+      if (!cur) unexpected();
+>cur : Symbol(cur, Decl(useBeforeAssignedAutoType2.ts, 15, 11))
+>unexpected : Symbol(unexpected, Decl(useBeforeAssignedAutoType2.ts, 10, 44))
+
+      cur.push(statement());
+>cur.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>cur : Symbol(cur, Decl(useBeforeAssignedAutoType2.ts, 15, 11))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>statement : Symbol(statement, Decl(useBeforeAssignedAutoType2.ts, 9, 1))
+    }
+  }
+  return a;
+>a : Symbol(a, Decl(useBeforeAssignedAutoType2.ts, 14, 5))
+}
+
