@@ -334,7 +334,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     if (!isMemberName(token)) return undefined;
 
     if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
-        const targetType = (checker.getContextualType(token) || checker.getTypeAtLocation(token))?.getNonNullableType();;
+        const targetType = (checker.getContextualType(token) || checker.getTypeAtLocation(token))?.getNonNullableType();
         const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
 
