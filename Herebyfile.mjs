@@ -1,6 +1,5 @@
 // @ts-check
 import { CancelToken } from "@esfx/canceltoken";
-import assert from "assert";
 import chalk from "chalk";
 import chokidar from "chokidar";
 import esbuild from "esbuild";
@@ -172,7 +171,6 @@ async function runDtsBundler(entrypoint, output) {
  * @param {BundlerTaskOptions} [taskOptions]
  *
  * @typedef BundlerTaskOptions
- * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
  * @property {boolean} [usePublicAPI]
  * @property {() => void} [onWatchRebuild]
@@ -180,17 +178,15 @@ async function runDtsBundler(entrypoint, output) {
 function createBundler(entrypoint, outfile, taskOptions = {}) {
     const getOptions = memoize(async () => {
         const copyright = await getCopyrightHeader();
-        const banner = taskOptions.exportIsTsObject ? "var ts = {}; ((module) => {" : "";
-
         /** @type {esbuild.BuildOptions} */
         const options = {
             entryPoints: [entrypoint],
-            banner: { js: copyright + banner },
+            banner: { js: copyright },
             bundle: true,
             outfile,
             platform: "node",
             target: ["es2020", "node14.17"],
-            format: "cjs",
+            format: "esm",
             sourcemap: "linked",
             sourcesContent: false,
             treeShaking: taskOptions.treeShaking,
@@ -200,64 +196,15 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
         };
 
         if (taskOptions.usePublicAPI) {
-            options.external = ["./typescript.js"];
             options.plugins = options.plugins || [];
             options.plugins.push({
-                name: "remap-typescript-to-require",
+                name: "remap-typescript-to-public-api",
                 setup(build) {
-                    build.onLoad({ filter: /src[\\/]typescript[\\/]typescript\.ts$/ }, () => {
-                        return { contents: `export * from "./typescript.js"` };
+                    build.onResolve({ filter: /^(?:\.\.[\\/])*typescript[\\/]typescript\.js$/ }, () => {
+                        return { path: "./typescript.js", external: true };
                     });
                 },
             });
-        }
-
-        if (taskOptions.exportIsTsObject) {
-            // Monaco bundles us as ESM by wrapping our code with something that defines module.exports
-            // but then does not use it, instead using the `ts` variable. Ensure that if we think we're CJS
-            // that we still set `ts` to the module.exports object.
-            options.footer = { js: `})({ get exports() { return ts; }, set exports(v) { ts = v; if (typeof module !== "undefined" && module.exports) { module.exports = v; } } })` };
-
-            // esbuild converts calls to "require" to "__require"; this function
-            // calls the real require if it exists, or throws if it does not (rather than
-            // throwing an error like "require not defined"). But, since we want typescript
-            // to be consumable by other bundlers, we need to convert these calls back to
-            // require so our imports are visible again.
-            //
-            // To fix this, we redefine "require" to a name we're unlikely to use with the
-            // same length as "require", then replace it back to "require" after bundling,
-            // ensuring that source maps still work.
-            //
-            // See: https://github.com/evanw/esbuild/issues/1905
-            const require = "require";
-            const fakeName = "Q".repeat(require.length);
-            const fakeNameRegExp = new RegExp(fakeName, "g");
-            options.define = { [require]: fakeName };
-
-            // For historical reasons, TypeScript does not set __esModule. Hack esbuild's __toCommonJS to be a noop.
-            // We reference `__copyProps` to ensure the final bundle doesn't have any unreferenced code.
-            const toCommonJsRegExp = /var __toCommonJS .*/;
-            const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod); // Modified helper to skip setting __esModule.";
-
-            options.plugins = options.plugins || [];
-            options.plugins.push(
-                {
-                    name: "post-process",
-                    setup: build => {
-                        build.onEnd(async () => {
-                            let contents = await fs.promises.readFile(outfile, "utf-8");
-                            contents = contents.replace(fakeNameRegExp, require);
-                            let matches = 0;
-                            contents = contents.replace(toCommonJsRegExp, () => {
-                                matches++;
-                                return toCommonJsRegExpReplacement;
-                            });
-                            assert(matches === 1, "Expected exactly one match for __toCommonJS");
-                            await fs.promises.writeFile(outfile, contents);
-                        });
-                    },
-                },
-            );
         }
 
         return options;
@@ -305,6 +252,7 @@ let printedWatchWarning = false;
  * @param {string} options.output
  * @param {boolean} [options.enableCompileCache]
  * @param {Task[]} [options.mainDeps]
+ * @param {boolean} [options.reexportDefault]
  * @param {BundlerTaskOptions} [options.bundlerOptions]
  */
 function entrypointBuildTask(options) {
@@ -329,13 +277,13 @@ function entrypointBuildTask(options) {
                 const moduleSpecifier = path.relative(outDir, output);
                 const lines = [
                     `// This file is a shim which defers loading the real module until the compile cache is enabled.`,
-                    `try {`,
-                    `  const { enableCompileCache } = require("node:module");`,
-                    `  if (enableCompileCache) {`,
-                    `    enableCompileCache();`,
-                    `  }`,
-                    `} catch {}`,
-                    `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}");`,
+                    `import mod from "node:module";`,
+                    `if (mod.enableCompileCache) {`,
+                    `  mod.enableCompileCache();`,
+                    `}`,
+                    `// Keep this synchronous so downstream people who required this file do not see TLA.`,
+                    `const require = mod.createRequire(import.meta.url);`,
+                    `require("./${moduleSpecifier.replace(/[\\/]/g, "/")}");`,
                 ];
                 await fs.promises.writeFile(originalOutput, lines.join("\n") + "\n");
             },
@@ -355,13 +303,13 @@ function entrypointBuildTask(options) {
     });
 
     /**
-     * Writes a CJS module that reexports another CJS file. E.g. given
+     * Writes a module that reexports another file. E.g. given
      * `options.builtEntrypoint = "./built/local/tsc/tsc.js"` and
      * `options.output = "./built/local/tsc.js"`, this will create a file
      * named "./built/local/tsc.js" containing:
      *
      * ```
-     * module.exports = require("./tsc/tsc.js")
+     * export * from "./tsc/tsc.js";
      * ```
      */
     const shim = task({
@@ -369,8 +317,19 @@ function entrypointBuildTask(options) {
         run: async () => {
             const outDir = path.dirname(output);
             await fs.promises.mkdir(outDir, { recursive: true });
-            const moduleSpecifier = path.relative(outDir, options.builtEntrypoint);
-            await fs.promises.writeFile(output, `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}")`);
+            const moduleSpecifier = path.relative(outDir, options.builtEntrypoint).replace(/[\\/]/g, "/");
+            const lines = [
+                `export * from "./${moduleSpecifier}";`,
+            ];
+
+            if (options.reexportDefault) {
+                lines.push(
+                    `import _default from "./${moduleSpecifier}";`,
+                    `export default _default;`,
+                );
+            }
+
+            await fs.promises.writeFile(output, lines.join("\n") + "\n");
         },
     });
 
@@ -435,7 +394,7 @@ const { main: services, build: buildServices, watch: watchServices } = entrypoin
     builtEntrypoint: "./built/local/typescript/typescript.js",
     output: "./built/local/typescript.js",
     mainDeps: [generateLibs],
-    bundlerOptions: { exportIsTsObject: true },
+    reexportDefault: true,
 });
 export { services, watchServices };
 
@@ -477,25 +436,22 @@ export const watchMin = task({
     dependencies: [watchTsc, watchTsserver],
 });
 
-// This is technically not enough to make tsserverlibrary loadable in the
-// browser, but it's unlikely that anyone has actually been doing that.
 const lsslJs = `
-if (typeof module !== "undefined" && module.exports) {
-    module.exports = require("./typescript.js");
-}
-else {
-    throw new Error("tsserverlibrary requires CommonJS; use typescript.js instead");
-}
+import ts from "./typescript.js";
+export * from "./typescript.js";
+export default ts;
 `;
 
 const lsslDts = `
-import ts = require("./typescript.js");
-export = ts;
+import ts from "./typescript.js";
+export * from "./typescript.js";
+export default ts;
 `;
 
 const lsslDtsInternal = `
-import ts = require("./typescript.internal.js");
-export = ts;
+import ts from "./typescript.internal.js";
+export * from "./typescript.internal.js";
+export default ts;
 `;
 
 /**
@@ -536,7 +492,7 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
     description: "Builds the test infrastructure",
     buildDeps: [generateDiagnostics],
     project: "src/testRunner",
-    srcEntrypoint: "./src/testRunner/_namespaces/Harness.ts",
+    srcEntrypoint: "./src/testRunner/runner.ts",
     builtEntrypoint: "./built/local/testRunner/runner.js",
     output: testRunner,
     mainDeps: [generateLibs],
