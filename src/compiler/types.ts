@@ -3979,12 +3979,12 @@ export interface JSDocUnknownTag extends JSDocTag {
  */
 export interface JSDocAugmentsTag extends JSDocTag {
     readonly kind: SyntaxKind.JSDocAugmentsTag;
-    readonly class: ExpressionWithTypeArguments & { readonly expression: Identifier | PropertyAccessEntityNameExpression; };
+    readonly class: ExpressionWithTypeArguments;
 }
 
 export interface JSDocImplementsTag extends JSDocTag {
     readonly kind: SyntaxKind.JSDocImplementsTag;
-    readonly class: ExpressionWithTypeArguments & { readonly expression: Identifier | PropertyAccessEntityNameExpression; };
+    readonly class: ExpressionWithTypeArguments;
 }
 
 export interface JSDocAuthorTag extends JSDocTag {
