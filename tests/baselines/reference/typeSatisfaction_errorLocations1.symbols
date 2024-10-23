@@ -129,3 +129,9 @@ function fn6(): number {
 >a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 47, 6))
 >obj1 : Symbol(obj1, Decl(typeSatisfaction_errorLocations1.ts, 0, 5))
 
+((): { a: true } => (({}) satisfies unknown) satisfies unknown)();
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 49, 6))
+
+((): { a: true } => ((({}) satisfies unknown)) satisfies unknown)();
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 50, 6))
+

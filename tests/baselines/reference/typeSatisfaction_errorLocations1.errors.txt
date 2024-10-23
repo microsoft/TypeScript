@@ -31,9 +31,11 @@ typeSatisfaction_errorLocations1.ts(47,24): error TS2322: Type 'number' is not a
 typeSatisfaction_errorLocations1.ts(48,21): error TS2322: Type '{ a: number; }' is not assignable to type '{ a: true; }'.
   Types of property 'a' are incompatible.
     Type 'number' is not assignable to type 'true'.
+typeSatisfaction_errorLocations1.ts(50,23): error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: true; }'.
+typeSatisfaction_errorLocations1.ts(51,24): error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: true; }'.
 
 
-==== typeSatisfaction_errorLocations1.ts (22 errors) ====
+==== typeSatisfaction_errorLocations1.ts (24 errors) ====
     const obj1 = { a: 1 };
     
     const fn1 = (s: { a: true }) => {};
@@ -143,4 +145,13 @@ typeSatisfaction_errorLocations1.ts(48,21): error TS2322: Type '{ a: number; }' 
 !!! error TS2322: Type '{ a: number; }' is not assignable to type '{ a: true; }'.
 !!! error TS2322:   Types of property 'a' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'true'.
+    
+    ((): { a: true } => (({}) satisfies unknown) satisfies unknown)();
+                          ~~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: true; }'.
+!!! related TS2728 typeSatisfaction_errorLocations1.ts:50:8: 'a' is declared here.
+    ((): { a: true } => ((({}) satisfies unknown)) satisfies unknown)();
+                           ~~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: true; }'.
+!!! related TS2728 typeSatisfaction_errorLocations1.ts:51:8: 'a' is declared here.
     
