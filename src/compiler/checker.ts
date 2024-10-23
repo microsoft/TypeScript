@@ -35779,6 +35779,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const links = getNodeLinks(node);
         if (links.resolvedSignature !== resolvingSignature && !candidatesOutArray) {
+            // There are 2 situations in which it's good to preemptively return the cached result here:
+            //
+            // 1. if the signature resolution originated on a node that itself depends on the contextual type
+            // then it's possible that the resolved signature might not be the same as the one that would be computed in source order
+            // since resolving such signature leads to resolving the potential outer signature, its arguments and thus the very same signature
+            // it's possible that this inner resolution sets the resolvedSignature first.
+            // In such a case we ignore the local result and reuse the correct one that was cached.
+            //
+            // 2. In certain circular-like situations it's possible that the compiler reentries this function for the same node.
+            // It's possible to resolve the inner call against preemptively set empty members (for example in `resolveAnonymousTypeMembers`) of some type.
+            // When that happens the compiler might report an error for that inner call but at the same time it might end up resolving the actual members of the other type.
+            // This in turn creates a situation in which the outer call fails in `getSignatureApplicabilityError` due to a cached `RelationComparisonResult.Failed`
+            // but when the compiler tries to report that error (in the code below) it also tries to elaborate it and that can succeed as types would be related against the *resolved* members of the other type.
+            // This can hit `No error for last overload signature` assert but since that error was already reported when the inner call failed we can skip this step altogether here by returning the cached signature early.
             Debug.assert(links.resolvedSignature);
             return links.resolvedSignature;
         }
