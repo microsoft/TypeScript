@@ -1,12 +1,14 @@
 conditionalOperatorConditionIsNumberType.ts(27,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsNumberType.ts(28,1): error TS2872: This kind of expression is always truthy.
 conditionalOperatorConditionIsNumberType.ts(29,1): error TS2872: This kind of expression is always truthy.
 conditionalOperatorConditionIsNumberType.ts(30,1): error TS2872: This kind of expression is always truthy.
 conditionalOperatorConditionIsNumberType.ts(53,23): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsNumberType.ts(54,23): error TS2872: This kind of expression is always truthy.
 conditionalOperatorConditionIsNumberType.ts(55,23): error TS2872: This kind of expression is always truthy.
 conditionalOperatorConditionIsNumberType.ts(56,32): error TS2872: This kind of expression is always truthy.
 
 
-==== conditionalOperatorConditionIsNumberType.ts (6 errors) ====
+==== conditionalOperatorConditionIsNumberType.ts (8 errors) ====
     //Cond ? Expr1 : Expr2,  Cond is of number type, Expr1 and Expr2 have the same type
     var condNumber: number;
     
@@ -37,6 +39,8 @@ conditionalOperatorConditionIsNumberType.ts(56,32): error TS2872: This kind of e
     ~~~~~~~~~~~
 !!! error TS2872: This kind of expression is always truthy.
     - 10000000000000 ? exprString1 : exprString2;
+    ~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     1000000000000 ? exprIsObject1 : exprIsObject2;
     ~~~~~~~~~~~~~
 !!! error TS2872: This kind of expression is always truthy.
@@ -69,6 +73,8 @@ conditionalOperatorConditionIsNumberType.ts(56,32): error TS2872: This kind of e
                           ~~~~~~~~~~~
 !!! error TS2872: This kind of expression is always truthy.
     var resultIsString2 = - 10000000000000 ? exprString1 : exprString2;
+                          ~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsObject2 = 1000000000000 ? exprIsObject1 : exprIsObject2;
                           ~~~~~~~~~~~~~
 !!! error TS2872: This kind of expression is always truthy.
