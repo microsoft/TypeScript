@@ -1,7 +1,7 @@
-//// [tests/cases/compiler/exportDefaultNamespace.ts] ////
+//// [tests/cases/compiler/exportDefaultModule.ts] ////
 
 === a.ts ===
-export default namespace A {
+export default module A {
 >A : Symbol(A, Decl(a.ts, 0, 0))
 
     export const Foo = 1;
@@ -12,7 +12,7 @@ export default namespace A {
 import A from "./a"
 >A : Symbol(A, Decl(b.ts, 0, 6))
 
-A.Foo
+A.Foo;
 >A.Foo : Symbol(A.Foo, Decl(a.ts, 1, 16))
 >A : Symbol(A, Decl(b.ts, 0, 6))
 >Foo : Symbol(A.Foo, Decl(a.ts, 1, 16))
