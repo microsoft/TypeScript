@@ -347,14 +347,45 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
             isDefaultImport(referenceImport) ? ImportKind.Default : ImportKind.Namespace :
             isImportSpecifier(referenceImport) ? ImportKind.Named :
             isImportClause(referenceImport) && !!referenceImport.name ? ImportKind.Default : ImportKind.Namespace;
-        const fix: FixAddNewImport = {
-            kind: ImportFixKind.AddNew,
-            moduleSpecifierKind: moduleSpecifierResult.kind,
-            moduleSpecifier: first(moduleSpecifierResult.moduleSpecifiers),
-            importKind,
-            addAsTypeOnly,
+
+        const exportInfo = [{
+            symbol: symbolAlias,
+            moduleSymbol,
+            moduleFileName: moduleSymbol.declarations?.[0]?.getSourceFile()?.fileName,
+            exportKind: ExportKind.Module,
+            targetFlags: symbolAlias.flags,
+            isFromPackageJson: false,
+        }];
+
+        const existingFix = getImportFixForSymbol(
+            sourceFile,
+            exportInfo,
+            program,
+            /*position*/ undefined,
+            !!isValidTypeOnlyUseSite,
             useRequire,
-        };
+            host,
+            preferences,
+        );
+
+        let fix: FixAddNewImport | ImportFixWithModuleSpecifier;
+        if (existingFix && importKind !== ImportKind.Namespace) {
+            fix = {
+                ...existingFix,
+                addAsTypeOnly,
+                importKind,
+            };
+        }
+        else {
+            fix = {
+                kind: ImportFixKind.AddNew,
+                moduleSpecifierKind: existingFix !== undefined ? existingFix.moduleSpecifierKind : moduleSpecifierResult.kind,
+                moduleSpecifier: existingFix !== undefined ? existingFix.moduleSpecifier : first(moduleSpecifierResult.moduleSpecifiers),
+                importKind,
+                addAsTypeOnly,
+                useRequire,
+            };
+        }
         addImport({ fix, symbolName: symbolAlias.name, errorIdentifierText: undefined });
     }
 
@@ -1492,6 +1523,8 @@ export function getImportKind(importingFile: SourceFile | FutureSourceFile, expo
             return getExportEqualsImportKind(importingFile, program.getCompilerOptions(), !!forceImportKeyword);
         case ExportKind.UMD:
             return getUmdImportKind(importingFile, program, !!forceImportKeyword);
+        case ExportKind.Module:
+            return ImportKind.Namespace;
         default:
             return Debug.assertNever(exportKind);
     }
