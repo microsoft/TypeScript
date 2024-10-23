@@ -5,3 +5,9 @@
     "exclude": ["**/node_modules/**"],
     "mergeAsync": true
 }
+#import cmath for complex number operations
+import cmath
+
+#find whether a complex number is infinite or not
+print (cmath.isinf(complex(10 + float('inf'))))
+print (cmath.isinf(11 + 4j))
