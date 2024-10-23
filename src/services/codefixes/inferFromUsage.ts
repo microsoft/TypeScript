@@ -439,7 +439,7 @@ function tryReplaceImportTypeNodeWithAutoImport(
 ): boolean {
     const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
     if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeNode)) {
-        forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
+        forEach(importableReference.replacements, importAdder.addImportFromImportTypeReplacement);
         return true;
     }
     return false;

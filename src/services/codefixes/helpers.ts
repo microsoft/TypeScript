@@ -230,7 +230,7 @@ export function addNewNodeForMemberSymbol(
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
                 if (importableReference) {
                     typeNode = importableReference.typeNode;
-                    importSymbols(importAdder, importableReference.symbols);
+                    importSymbols(importAdder, importableReference.replacements);
                 }
             }
             addClassElement(factory.createPropertyDeclaration(
@@ -253,7 +253,7 @@ export function addNewNodeForMemberSymbol(
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
                 if (importableReference) {
                     typeNode = importableReference.typeNode;
-                    importSymbols(importAdder, importableReference.symbols);
+                    importSymbols(importAdder, importableReference.replacements);
                 }
             }
             for (const accessor of orderedAccessors) {
@@ -415,14 +415,14 @@ export function createSignatureDeclarationFromSignature(
                     const importableReference = tryGetAutoImportableReferenceFromTypeNode(constraint, scriptTarget);
                     if (importableReference) {
                         constraint = importableReference.typeNode;
-                        importSymbols(importAdder, importableReference.symbols);
+                        importSymbols(importAdder, importableReference.replacements);
                     }
                 }
                 if (defaultType) {
                     const importableReference = tryGetAutoImportableReferenceFromTypeNode(defaultType, scriptTarget);
                     if (importableReference) {
                         defaultType = importableReference.typeNode;
-                        importSymbols(importAdder, importableReference.symbols);
+                        importSymbols(importAdder, importableReference.replacements);
                     }
                 }
                 return factory.updateTypeParameterDeclaration(
@@ -443,7 +443,7 @@ export function createSignatureDeclarationFromSignature(
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(type, scriptTarget);
                 if (importableReference) {
                     type = importableReference.typeNode;
-                    importSymbols(importAdder, importableReference.symbols);
+                    importSymbols(importAdder, importableReference.replacements);
                 }
             }
             return factory.updateParameterDeclaration(
@@ -463,7 +463,7 @@ export function createSignatureDeclarationFromSignature(
             const importableReference = tryGetAutoImportableReferenceFromTypeNode(type, scriptTarget);
             if (importableReference) {
                 type = importableReference.typeNode;
-                importSymbols(importAdder, importableReference.symbols);
+                importSymbols(importAdder, importableReference.replacements);
             }
         }
     }
@@ -609,7 +609,7 @@ export function typeNodeToAutoImportableTypeNode(typeNode: TypeNode, importAdder
     if (typeNode && isImportTypeNode(typeNode)) {
         const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
         if (importableReference) {
-            importSymbols(importAdder, importableReference.symbols);
+            importSymbols(importAdder, importableReference.replacements);
             typeNode = importableReference.typeNode;
         }
     }
@@ -658,7 +658,7 @@ export function typePredicateToAutoImportableTypeNode(checker: TypeChecker, impo
     if (typePredicateNode?.type && isImportTypeNode(typePredicateNode.type)) {
         const importableReference = tryGetAutoImportableReferenceFromTypeNode(typePredicateNode.type, scriptTarget);
         if (importableReference) {
-            importSymbols(importAdder, importableReference.symbols);
+            importSymbols(importAdder, importableReference.replacements);
             typePredicateNode = factory.updateTypePredicateNode(typePredicateNode, typePredicateNode.assertsModifier, typePredicateNode.parameterName, importableReference.typeNode);
         }
     }
@@ -946,6 +946,19 @@ function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyA
 }
 
 /**
+ * @internal
+ * Information about an `import("...").SomeType` replaced by an auto-importable type reference.
+ */
+export interface ImportTypeReplacement {
+    symbol: Symbol;
+    /**
+     * The text of the new identifier generated to reference the symbol. May differ from
+     * `symbol.name` for default exports and aliased exports like `export { Foo as Bar }`.
+     */
+    referenceName: string;
+}
+
+/**
  * Given a type node containing 'import("./a").SomeType<import("./b").OtherType<...>>',
  * returns an equivalent type reference node with any nested ImportTypeNodes also replaced
  * with type references, and a list of symbols that must be imported to use the type reference.
@@ -954,12 +967,12 @@ function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyA
  */
 export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined, scriptTarget: ScriptTarget): {
     typeNode: TypeNode;
-    symbols: Symbol[];
+    replacements: ImportTypeReplacement[];
 } | undefined {
-    let symbols: Symbol[] | undefined;
+    let replacements: ImportTypeReplacement[] | undefined;
     const typeNode = visitNode(importTypeNode, visit, isTypeNode);
-    if (symbols && typeNode) {
-        return { typeNode, symbols };
+    if (replacements && typeNode) {
+        return { typeNode, replacements };
     }
 
     function visit(node: Node): Node {
@@ -972,12 +985,14 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
                 // it can't refer to reserved internal symbol names and such
                 return visitEachChild(node, visit, /*context*/ undefined);
             }
-            const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
-            const qualifier = name !== firstIdentifier.text
-                ? replaceFirstIdentifierOfEntityName(node.qualifier, factory.createIdentifier(name))
+            const referenceName = firstIdentifier.text === "default"
+                ? getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget)
+                : firstIdentifier.text;
+            const qualifier = referenceName !== firstIdentifier.text
+                ? replaceFirstIdentifierOfEntityName(node.qualifier, factory.createIdentifier(referenceName))
                 : node.qualifier;
 
-            symbols = append(symbols, firstIdentifier.symbol);
+            replacements = append(replacements, { symbol: firstIdentifier.symbol, referenceName });
             const typeArguments = visitNodes(node.typeArguments, visit, isTypeNode);
             return factory.createTypeReferenceNode(qualifier, typeArguments);
         }
@@ -993,8 +1008,8 @@ function replaceFirstIdentifierOfEntityName(name: EntityName, newIdentifier: Ide
 }
 
 /** @internal */
-export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]): void {
-    symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
+export function importSymbols(importAdder: ImportAdder, symbols: readonly ImportTypeReplacement[]): void {
+    symbols.forEach(importAdder.addImportFromImportTypeReplacement);
 }
 
 /** @internal */
