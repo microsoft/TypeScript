@@ -130,4 +130,4 @@ type OptionalNullableString = string | null | undefined;
 declare function allowsNull(val?: OptionalNullableString): void;
 declare function removeUndefinedButNotFalse(x?: boolean): false | undefined;
 declare const cond: boolean;
-declare function removeNothing(y?: boolean | undefined): boolean;
+declare function removeNothing(y?: boolean | undefined): y is true | undefined;

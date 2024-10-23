@@ -777,3 +777,107 @@ if (foobarPred(foobar)) {
 >foo : Symbol(foo, Decl(inferTypePredicates.ts, 271, 18))
 }
 
+// Returning true can result in a predicate if the function throws earlier.
+function assertReturnTrue(x: string | number | Date) {
+>assertReturnTrue : Symbol(assertReturnTrue, Decl(inferTypePredicates.ts, 277, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 280, 26))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  if (x instanceof Date) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 280, 26))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+  return true;
+}
+
+function isStringForWhichWeHaveACaseHandler(anyString: string) {
+>isStringForWhichWeHaveACaseHandler : Symbol(isStringForWhichWeHaveACaseHandler, Decl(inferTypePredicates.ts, 285, 1))
+>anyString : Symbol(anyString, Decl(inferTypePredicates.ts, 287, 44))
+
+  switch (anyString) {
+>anyString : Symbol(anyString, Decl(inferTypePredicates.ts, 287, 44))
+
+    case 'a':
+    case 'b':
+    case 'c':
+      return true
+    default:
+      return false
+  }
+}
+
+function twoReturnExpressions(x: string | number) {
+>twoReturnExpressions : Symbol(twoReturnExpressions, Decl(inferTypePredicates.ts, 296, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 298, 30))
+
+  switch (typeof x) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 298, 30))
+
+    case 'string':
+      return x === 'a' || x === 'b';
+>x : Symbol(x, Decl(inferTypePredicates.ts, 298, 30))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 298, 30))
+
+    case 'number':
+      return x === 10 || x === 11;
+>x : Symbol(x, Decl(inferTypePredicates.ts, 298, 30))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 298, 30))
+  }
+}
+
+function oneNarrowingOneNot(x: string | number) {
+>oneNarrowingOneNot : Symbol(oneNarrowingOneNot, Decl(inferTypePredicates.ts, 305, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 307, 28))
+
+  switch (typeof x) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 307, 28))
+
+    case 'string':
+      return x === 'a' || x === 'b';
+>x : Symbol(x, Decl(inferTypePredicates.ts, 307, 28))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 307, 28))
+
+    case 'number':
+      return x >= 0 && x <= 10;
+>x : Symbol(x, Decl(inferTypePredicates.ts, 307, 28))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 307, 28))
+  }
+}
+
+function ifElseIfPredicate(x: Date | string | number) {
+>ifElseIfPredicate : Symbol(ifElseIfPredicate, Decl(inferTypePredicates.ts, 314, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 316, 27))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  if (x instanceof Date) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 316, 27))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    return true;
+  } else if (typeof x === 'string') {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 316, 27))
+
+    return true;
+  }
+  return false;
+}
+
+function isArrayOfStrings(x: unknown) {
+>isArrayOfStrings : Symbol(isArrayOfStrings, Decl(inferTypePredicates.ts, 323, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 325, 26))
+
+  if (!(x instanceof Array)) return false;
+>x : Symbol(x, Decl(inferTypePredicates.ts, 325, 26))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  return x.every((y) => typeof y === 'string');
+>x.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 325, 26))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(inferTypePredicates.ts, 328, 18))
+>y : Symbol(y, Decl(inferTypePredicates.ts, 328, 18))
+}
+
