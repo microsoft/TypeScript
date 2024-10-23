@@ -169,6 +169,7 @@ import {
     isExternalModule,
     isExternalModuleImportEqualsDeclaration,
     isExternalModuleReference,
+    isExternalModuleSymbol,
     isFileLevelUniqueName,
     isForInStatement,
     isForOfStatement,
@@ -4027,7 +4028,13 @@ export function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string 
             return tryCast(d.propertyName, isIdentifier)?.text;
         }
         // GH#52694
-        return tryCast(getNameOfDeclaration(d), isIdentifier)?.text;
+        const name = tryCast(getNameOfDeclaration(d), isIdentifier)?.text;
+        if (name) {
+            return name;
+        }
+        if (symbol.parent && !isExternalModuleSymbol(symbol.parent)) {
+            return symbol.parent.getName();
+        }
     });
 }
 

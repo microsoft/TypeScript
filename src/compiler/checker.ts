@@ -171,6 +171,7 @@ import {
     EnumMember,
     EnumType,
     equateValues,
+    ErrorOutputContainer,
     escapeLeadingUnderscores,
     escapeString,
     EvaluatorResult,
@@ -7368,7 +7369,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const signatures = getSignaturesOfType(filterType(propertyType, t => !(t.flags & TypeFlags.Undefined)), SignatureKind.Call);
                 for (const signature of signatures) {
                     const methodDeclaration = signatureToSignatureDeclarationHelper(signature, SyntaxKind.MethodSignature, context, { name: propertyName, questionToken: optionalToken }) as MethodSignature;
-                    typeElements.push(preserveCommentsOn(methodDeclaration));
+                    typeElements.push(preserveCommentsOn(methodDeclaration, signature.declaration || propertySymbol.valueDeclaration));
                 }
                 if (signatures.length || !optionalToken) {
                     return;
@@ -7400,9 +7401,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 propertyTypeNode,
             );
 
-            typeElements.push(preserveCommentsOn(propertySignature));
+            typeElements.push(preserveCommentsOn(propertySignature, propertySymbol.valueDeclaration));
 
-            function preserveCommentsOn<T extends Node>(node: T) {
+            function preserveCommentsOn<T extends Node>(node: T, range: Node | undefined) {
                 const jsdocPropertyTag = propertySymbol.declarations?.find((d): d is JSDocPropertyTag => d.kind === SyntaxKind.JSDocPropertyTag);
                 if (jsdocPropertyTag) {
                     const commentText = getTextOfJSDocComment(jsdocPropertyTag.comment);
@@ -7410,9 +7411,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]);
                     }
                 }
-                else if (propertySymbol.valueDeclaration) {
+                else if (range) {
                     // Copy comments to node for declaration emit
-                    setCommentRange(context, node, propertySymbol.valueDeclaration);
+                    setCommentRange(context, node, range);
                 }
                 return node;
             }
@@ -20608,7 +20609,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         expr: Expression | undefined,
         headMessage: DiagnosticMessage | undefined,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
-        errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } | undefined,
+        errorOutputContainer: ErrorOutputContainer | undefined,
     ): boolean {
         if (isTypeRelatedTo(source, target, relation)) return true;
         if (!errorNode || !elaborateError(expr, source, target, relation, headMessage, containingMessageChain, errorOutputContainer)) {
@@ -20628,7 +20629,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         relation: Map<string, RelationComparisonResult>,
         headMessage: DiagnosticMessage | undefined,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
-        errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } | undefined,
+        errorOutputContainer: ErrorOutputContainer | undefined,
     ): boolean {
         if (!node || isOrHasGenericConditional(target)) return false;
         if (
@@ -20672,7 +20673,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         relation: Map<string, RelationComparisonResult>,
         headMessage: DiagnosticMessage | undefined,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
-        errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } | undefined,
+        errorOutputContainer: ErrorOutputContainer | undefined,
     ): boolean {
         const callSignatures = getSignaturesOfType(source, SignatureKind.Call);
         const constructSignatures = getSignaturesOfType(source, SignatureKind.Construct);
@@ -20705,7 +20706,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         target: Type,
         relation: Map<string, RelationComparisonResult>,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
-        errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } | undefined,
+        errorOutputContainer: ErrorOutputContainer | undefined,
     ): boolean {
         // Don't elaborate blocks
         if (isBlock(node.body)) {
@@ -20796,7 +20797,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         target: Type,
         relation: Map<string, RelationComparisonResult>,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
-        errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } | undefined,
+        errorOutputContainer: ErrorOutputContainer | undefined,
     ) {
         // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
         let reportedError = false;
@@ -20876,7 +20877,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         target: Type,
         relation: Map<string, RelationComparisonResult>,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
-        errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } | undefined,
+        errorOutputContainer: ErrorOutputContainer | undefined,
     ) {
         const tupleOrArrayLikeTargetParts = filterType(target, isArrayOrTupleLikeType);
         const nonTupleOrArrayLikeTargetParts = filterType(target, t => !isArrayOrTupleLikeType(t));
@@ -20978,7 +20979,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         target: Type,
         relation: Map<string, RelationComparisonResult>,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
-        errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } | undefined,
+        errorOutputContainer: ErrorOutputContainer | undefined,
     ) {
         let result = elaborateElementwise(generateJsxAttributes(node), source, target, relation, containingMessageChain, errorOutputContainer);
         let invalidTextDiagnostic: DiagnosticMessage | undefined;
@@ -21092,7 +21093,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         target: Type,
         relation: Map<string, RelationComparisonResult>,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
-        errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } | undefined,
+        errorOutputContainer: ErrorOutputContainer | undefined,
     ) {
         if (target.flags & (TypeFlags.Primitive | TypeFlags.Never)) return false;
         if (isTupleLikeType(source)) {
@@ -21139,7 +21140,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         target: Type,
         relation: Map<string, RelationComparisonResult>,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
-        errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } | undefined,
+        errorOutputContainer: ErrorOutputContainer | undefined,
     ) {
         if (target.flags & (TypeFlags.Primitive | TypeFlags.Never)) return false;
         return elaborateElementwise(generateObjectLiteralElements(node), source, target, relation, containingMessageChain, errorOutputContainer);
@@ -21637,7 +21638,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         errorNode: Node | undefined,
         headMessage?: DiagnosticMessage,
         containingMessageChain?: () => DiagnosticMessageChain | undefined,
-        errorOutputContainer?: { errors?: Diagnostic[]; skipLogging?: boolean; },
+        errorOutputContainer?: ErrorOutputContainer,
     ): boolean {
         let errorInfo: DiagnosticMessageChain | undefined;
         let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
@@ -35186,7 +35187,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkMode: CheckMode,
         reportErrors: boolean,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
-        errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; },
+        errorOutputContainer: ErrorOutputContainer,
     ) {
         // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
         // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
@@ -35302,7 +35303,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         inferenceContext: InferenceContext | undefined,
     ): readonly Diagnostic[] | undefined {
-        const errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } = { errors: undefined, skipLogging: true };
+        const errorOutputContainer: ErrorOutputContainer = { errors: undefined, skipLogging: true };
         if (isJsxCallLike(node)) {
             if (!checkApplicableSignatureForJsxCallLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain, errorOutputContainer)) {
                 Debug.assert(!reportErrors || !!errorOutputContainer.errors, "jsx should have errors when reporting errors");
@@ -44934,7 +44935,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (!(type.flags & TypeFlags.Union)) {
-            const errorOutputContainer: { errors: Diagnostic[] | undefined; } | undefined = errorNode ? { errors: undefined } : undefined;
+            const errorOutputContainer: ErrorOutputContainer | undefined = errorNode ? { errors: undefined, skipLogging: true } : undefined;
             const iterationTypes = getIterationTypesOfIterableWorker(type, use, errorNode, errorOutputContainer);
             if (iterationTypes === noIterationTypes) {
                 if (errorNode) {
@@ -44959,7 +44960,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         let allIterationTypes: IterationTypes[] | undefined;
         for (const constituent of (type as UnionType).types) {
-            const errorOutputContainer: { errors: Diagnostic[] | undefined; } | undefined = errorNode ? { errors: undefined } : undefined;
+            const errorOutputContainer: ErrorOutputContainer | undefined = errorNode ? { errors: undefined } : undefined;
             const iterationTypes = getIterationTypesOfIterableWorker(constituent, use, errorNode, errorOutputContainer);
             if (iterationTypes === noIterationTypes) {
                 if (errorNode) {
@@ -45010,7 +45011,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * NOTE: You probably don't want to call this directly and should be calling
      * `getIterationTypesOfIterable` instead.
      */
-    function getIterationTypesOfIterableWorker(type: Type, use: IterationUse, errorNode: Node | undefined, errorOutputContainer: { errors: Diagnostic[] | undefined; } | undefined) {
+    function getIterationTypesOfIterableWorker(type: Type, use: IterationUse, errorNode: Node | undefined, errorOutputContainer: ErrorOutputContainer | undefined) {
         if (isTypeAny(type)) {
             return anyIterationTypes;
         }
@@ -45152,19 +45153,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * NOTE: You probably don't want to call this directly and should be calling
      * `getIterationTypesOfIterable` instead.
      */
-    function getIterationTypesOfIterableSlow(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined, errorOutputContainer: { errors: Diagnostic[] | undefined; } | undefined, noCache: boolean) {
+    function getIterationTypesOfIterableSlow(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined, errorOutputContainer: ErrorOutputContainer | undefined, noCache: boolean) {
         const method = getPropertyOfType(type, getPropertyNameForKnownSymbolName(resolver.iteratorSymbolName));
         const methodType = method && !(method.flags & SymbolFlags.Optional) ? getTypeOfSymbol(method) : undefined;
         if (isTypeAny(methodType)) {
             return noCache ? anyIterationTypes : setCachedIterationTypes(type, resolver.iterableCacheKey, anyIterationTypes);
         }
 
-        const signatures = methodType ? getSignaturesOfType(methodType, SignatureKind.Call) : undefined;
-        if (!some(signatures)) {
+        const allSignatures = methodType ? getSignaturesOfType(methodType, SignatureKind.Call) : undefined;
+        const validSignatures = filter(allSignatures, sig => getMinArgumentCount(sig) === 0);
+        if (!some(validSignatures)) {
+            if (errorNode && some(allSignatures)) {
+                checkTypeAssignableTo(type, resolver.getGlobalIterableType(/*reportErrors*/ true), errorNode, /*headMessage*/ undefined, /*containingMessageChain*/ undefined, errorOutputContainer);
+            }
             return noCache ? noIterationTypes : setCachedIterationTypes(type, resolver.iterableCacheKey, noIterationTypes);
         }
 
-        const iteratorType = getIntersectionType(map(signatures, getReturnTypeOfSignature));
+        const iteratorType = getIntersectionType(map(validSignatures, getReturnTypeOfSignature));
         const iterationTypes = getIterationTypesOfIteratorWorker(iteratorType, resolver, errorNode, errorOutputContainer, noCache) ?? noIterationTypes;
         return noCache ? iterationTypes : setCachedIterationTypes(type, resolver.iterableCacheKey, iterationTypes);
     }
@@ -45193,7 +45198,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * If we successfully found the *yield*, *return*, and *next* types, an `IterationTypes`
      * record is returned. Otherwise, `undefined` is returned.
      */
-    function getIterationTypesOfIterator(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined, errorOutputContainer: { errors: Diagnostic[] | undefined; } | undefined) {
+    function getIterationTypesOfIterator(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined, errorOutputContainer: ErrorOutputContainer | undefined) {
         return getIterationTypesOfIteratorWorker(type, resolver, errorNode, errorOutputContainer, /*noCache*/ false);
     }
 
@@ -45206,7 +45211,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * NOTE: You probably don't want to call this directly and should be calling
      * `getIterationTypesOfIterator` instead.
      */
-    function getIterationTypesOfIteratorWorker(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined, errorOutputContainer: { errors: Diagnostic[] | undefined; } | undefined, noCache: boolean) {
+    function getIterationTypesOfIteratorWorker(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined, errorOutputContainer: ErrorOutputContainer | undefined, noCache: boolean) {
         if (isTypeAny(type)) {
             return anyIterationTypes;
         }
@@ -45348,7 +45353,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * If we successfully found the *yield*, *return*, and *next* types, an `IterationTypes`
      * record is returned. Otherwise, we return `undefined`.
      */
-    function getIterationTypesOfMethod(type: Type, resolver: IterationTypesResolver, methodName: "next" | "return" | "throw", errorNode: Node | undefined, errorOutputContainer: { errors: Diagnostic[] | undefined; } | undefined): IterationTypes | undefined {
+    function getIterationTypesOfMethod(type: Type, resolver: IterationTypesResolver, methodName: "next" | "return" | "throw", errorNode: Node | undefined, errorOutputContainer: ErrorOutputContainer | undefined): IterationTypes | undefined {
         const method = getPropertyOfType(type, methodName as __String);
 
         // Ignore 'return' or 'throw' if they are missing.
@@ -45468,7 +45473,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * NOTE: You probably don't want to call this directly and should be calling
      * `getIterationTypesOfIterator` instead.
      */
-    function getIterationTypesOfIteratorSlow(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined, errorOutputContainer: { errors: Diagnostic[] | undefined; } | undefined, noCache: boolean) {
+    function getIterationTypesOfIteratorSlow(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined, errorOutputContainer: ErrorOutputContainer | undefined, noCache: boolean) {
         const iterationTypes = combineIterationTypes([
             getIterationTypesOfMethod(type, resolver, "next", errorNode, errorOutputContainer),
             getIterationTypesOfMethod(type, resolver, "return", errorNode, errorOutputContainer),
