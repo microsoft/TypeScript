@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/promiseType.ts] ////
 
 === Performance Stats ===
-Instantiation count: 2,500
+Instantiation count: 1,000
 
 === promiseType.ts ===
 declare var p: Promise<boolean>;
@@ -10,6 +10,10 @@ declare var p: Promise<boolean>;
 
 declare var x: any;
 >x : any
+
+declare var b: bigint;
+>b : bigint
+>  : ^^^^^^
 
 async function A() {
 >A : () => Promise<boolean>
@@ -436,6 +440,34 @@ const p19 = p.catch(() => Promise.resolve(1));
 >1 : 1
 >  : ^
 
+const p19a = p.catch(() => b && Promise.resolve(1));
+>p19a : Promise<number | boolean>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>p.catch(() => b && Promise.resolve(1)) : Promise<number | boolean>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>p.catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<boolean | TResult>
+>        : ^       ^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<boolean | TResult>
+>      : ^       ^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
 const p20 = p.then(undefined);
 >p20 : Promise<boolean>
 >    : ^^^^^^^^^^^^^^^^
@@ -566,6 +598,34 @@ const p28 = p.then(() => Promise.resolve(1));
 >     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => Promise.resolve(1) : () => Promise<number>
 >                         : ^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
+const p28a = p.then(() => b && Promise.resolve(1));
+>p28a : Promise<number>
+>     : ^^^^^^^^^^^^^^^
+>p.then(() => b && Promise.resolve(1)) : Promise<number>
+>                                      : ^^^^^^^^^^^^^^^
+>p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>       : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -760,6 +820,36 @@ const p38 = p.then(undefined, () => Promise.resolve(1));
 >1 : 1
 >  : ^
 
+const p38a = p.then(undefined, () => b && Promise.resolve(1));
+>p38a : Promise<number | boolean>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>p.then(undefined, () => b && Promise.resolve(1)) : Promise<number | boolean>
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>       : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
 const p39 = p.then(undefined, () => Promise.reject(1));
 >p39 : Promise<boolean>
 >    : ^^^^^^^^^^^^^^^^
@@ -916,6 +1006,34 @@ const p48 = p.then(null, () => Promise.resolve(1));
 >     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => Promise.resolve(1) : () => Promise<number>
 >                         : ^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
+const p48a = p.then(null, () => b && Promise.resolve(1));
+>p48a : Promise<number | boolean>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>p.then(null, () => b && Promise.resolve(1)) : Promise<number | boolean>
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>       : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -1128,6 +1246,38 @@ const p58 = p.then(() => "1", () => Promise.resolve(1));
 >1 : 1
 >  : ^
 
+const p58a = p.then(() => "1", () => b && Promise.resolve(1));
+>p58a : Promise<string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>p.then(() => "1", () => b && Promise.resolve(1)) : Promise<string | number>
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>       : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => "1" : () => string
+>          : ^^^^^^^^^^^^
+>"1" : "1"
+>    : ^^^
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
 const p59 = p.then(() => "1", () => Promise.reject(1));
 >p59 : Promise<string>
 >    : ^^^^^^^^^^^^^^^
@@ -1313,6 +1463,37 @@ const p68 = p.then(() => x, () => Promise.resolve(1));
 >x : any
 >() => Promise.resolve(1) : () => Promise<number>
 >                         : ^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
+const p68a = p.then(() => x, () => b && Promise.resolve(1));
+>p68a : Promise<any>
+>     : ^^^^^^^^^^^^
+>p.then(() => x, () => b && Promise.resolve(1)) : Promise<any>
+>                                               : ^^^^^^^^^^^^
+>p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>       : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => x : () => any
+>        : ^^^^^^^^^
+>x : any
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -1528,6 +1709,38 @@ const p78 = p.then(() => undefined, () => Promise.resolve(1));
 >1 : 1
 >  : ^
 
+const p78a = p.then(() => undefined, () => b && Promise.resolve(1));
+>p78a : Promise<any>
+>     : ^^^^^^^^^^^^
+>p.then(() => undefined, () => b && Promise.resolve(1)) : Promise<any>
+>                                                       : ^^^^^^^^^^^^
+>p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>       : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => undefined : () => any
+>                : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
 const p79 = p.then(() => undefined, () => Promise.reject(1));
 >p79 : Promise<any>
 >    : ^^^^^^^^^^^^
@@ -1715,6 +1928,36 @@ const p88 = p.then(() => null, () => Promise.resolve(1));
 >1 : 1
 >  : ^
 
+const p88a = p.then(() => null, () => b && Promise.resolve(1));
+>p88a : Promise<any>
+>     : ^^^^^^^^^^^^
+>p.then(() => null, () => b && Promise.resolve(1)) : Promise<any>
+>                                                  : ^^^^^^^^^^^^
+>p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>       : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => null : () => any
+>           : ^^^^^^^^^
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
 const p89 = p.then(() => null, () => Promise.reject(1));
 >p89 : Promise<any>
 >    : ^^^^^^^^^^^^
@@ -1889,6 +2132,36 @@ const p98 = p.then(() => {}, () => Promise.resolve(1));
 >         : ^^^^^^^^^^
 >() => Promise.resolve(1) : () => Promise<number>
 >                         : ^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
+const p98a = p.then(() => {}, () => b && Promise.resolve(1));
+>p98a : Promise<number | void>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+>p.then(() => {}, () => b && Promise.resolve(1)) : Promise<number | void>
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^
+>p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>       : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -2092,6 +2365,38 @@ const pa8 = p.then(() => {throw 1}, () => Promise.resolve(1));
 >  : ^
 >() => Promise.resolve(1) : () => Promise<number>
 >                         : ^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
+const pa8a = p.then(() => {throw 1}, () => b && Promise.resolve(1));
+>pa8a : Promise<number>
+>     : ^^^^^^^^^^^^^^^
+>p.then(() => {throw 1}, () => b && Promise.resolve(1)) : Promise<number>
+>                                                       : ^^^^^^^^^^^^^^^
+>p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>       : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {throw 1} : () => never
+>                : ^^^^^^^^^^^
+>1 : 1
+>  : ^
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -2380,6 +2685,46 @@ const pb8 = p.then(() => Promise.resolve("1"), () => Promise.resolve(1));
 >1 : 1
 >  : ^
 
+const pb8a = p.then(() => Promise.resolve("1"), () => b && Promise.resolve(1));
+>pb8a : Promise<string | number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>p.then(() => Promise.resolve("1"), () => b && Promise.resolve(1)) : Promise<string | number>
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>       : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => Promise.resolve("1") : () => Promise<string>
+>                           : ^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve("1") : Promise<string>
+>                     : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>"1" : "1"
+>    : ^^^
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
 const pb9 = p.then(() => Promise.resolve("1"), () => Promise.reject(1));
 >pb9 : Promise<string>
 >    : ^^^^^^^^^^^^^^^
@@ -2654,6 +2999,46 @@ const pc8 = p.then(() => Promise.reject("1"), () => Promise.resolve(1));
 >    : ^^^
 >() => Promise.resolve(1) : () => Promise<number>
 >                         : ^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve(1) : Promise<number>
+>                   : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>1 : 1
+>  : ^
+
+const pc8a = p.then(() => Promise.reject("1"), () => b && Promise.resolve(1));
+>pc8a : Promise<number>
+>     : ^^^^^^^^^^^^^^^
+>p.then(() => Promise.reject("1"), () => b && Promise.resolve(1)) : Promise<number>
+>                                                                 : ^^^^^^^^^^^^^^^
+>p.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>       : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : Promise<boolean>
+>  : ^^^^^^^^^^^^^^^^
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: (value: boolean) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => Promise.reject("1") : () => Promise<never>
+>                          : ^^^^^^^^^^^^^^^^^^^^
+>Promise.reject("1") : Promise<never>
+>                    : ^^^^^^^^^^^^^^
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
+>               : ^ ^^^^^^^^^^      ^^^   ^^^^^          
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>reject : <T = never>(reason?: any) => Promise<T>
+>       : ^ ^^^^^^^^^^      ^^^   ^^^^^          
+>"1" : "1"
+>    : ^^^
+>() => b && Promise.resolve(1) : () => Promise<number>
+>                              : ^^^^^^^^^^^^^^^^^^^^^
+>b && Promise.resolve(1) : Promise<number>
+>                        : ^^^^^^^^^^^^^^^
+>b : bigint
+>  : ^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
