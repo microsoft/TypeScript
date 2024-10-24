@@ -1,0 +1,31 @@
+file.js(22,12): error TS2322: Type '1 | 2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+  Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+
+
+==== file.js (1 errors) ====
+    /** @type {Map<string, string>} */
+    const sources = new Map();
+    /**
+    
+     * @param {string=} type the type of source that should be generated
+     * @returns {String}
+     */
+    function source(type = "javascript") {
+        return /** @type {String} */ (
+            type
+                ? sources.get(type)
+                : sources.get("some other thing")
+        );
+    }
+    
+    /**
+     * @template {boolean} T
+     * @param {T} b
+     * @returns {T extends true ? 1 : T extends false ? 2 : never}
+     */
+    function simple(b) {
+        return b ? 1 : 2;
+               ~~~~~~~~~
+!!! error TS2322: Type '1 | 2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+!!! error TS2322:   Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : never'.
+    }

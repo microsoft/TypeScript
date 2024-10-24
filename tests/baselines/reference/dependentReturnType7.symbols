@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/dependentReturnType7.ts] ////
+
+=== file.js ===
+/** @type {Map<string, string>} */
+const sources = new Map();
+>sources : Symbol(sources, Decl(file.js, 1, 5))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+/**
+
+ * @param {string=} type the type of source that should be generated
+ * @returns {String}
+ */
+function source(type = "javascript") {
+>source : Symbol(source, Decl(file.js, 1, 26))
+>type : Symbol(type, Decl(file.js, 7, 16))
+
+    return /** @type {String} */ (
+        type
+>type : Symbol(type, Decl(file.js, 7, 16))
+
+            ? sources.get(type)
+>sources.get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
+>sources : Symbol(sources, Decl(file.js, 1, 5))
+>get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
+>type : Symbol(type, Decl(file.js, 7, 16))
+
+            : sources.get("some other thing")
+>sources.get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
+>sources : Symbol(sources, Decl(file.js, 1, 5))
+>get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
+
+    );
+}
+
+/**
+ * @template {boolean} T
+ * @param {T} b
+ * @returns {T extends true ? 1 : T extends false ? 2 : never}
+ */
+function simple(b) {
+>simple : Symbol(simple, Decl(file.js, 13, 1))
+>b : Symbol(b, Decl(file.js, 20, 16))
+
+    return b ? 1 : 2;
+>b : Symbol(b, Decl(file.js, 20, 16))
+}
