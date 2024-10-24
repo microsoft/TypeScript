@@ -99,12 +99,13 @@ function pasteEdits(
                 }
                 statements.push(...statementsInSourceFile.slice(startNodeIndex, endNodeIndex === -1 ? statementsInSourceFile.length : endNodeIndex + 1));
             });
+            Debug.assertIsDefined(originalProgram, "no original program found");
+            const originalProgramTypeChecker = originalProgram.getTypeChecker();
             const usageInfoRange = getUsageInfoRangeForPasteEdits(copiedFrom);
-            const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()), usageInfoRange);
-            Debug.assertIsDefined(originalProgram);
+            const usage = getUsageInfo(copiedFrom.file, statements, originalProgramTypeChecker, getExistingLocals(updatedFile, statements, originalProgramTypeChecker), usageInfoRange);
             const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFile.fileName, originalProgram, host, !!copiedFrom.file.commonJsModuleIndicator);
             addExportsInOldFile(copiedFrom.file, usage.targetFileImportsFromOldFile, changes, useEsModuleSyntax);
-            addTargetFileImports(copiedFrom.file, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, originalProgram.getTypeChecker(), updatedProgram, importAdder);
+            addTargetFileImports(copiedFrom.file, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, originalProgramTypeChecker, updatedProgram, importAdder);
         }
         else {
             const context: CodeFixContextBase = {
@@ -123,6 +124,8 @@ function pasteEdits(
             // For each child of that node, we checked for unresolved identifiers
             // within the updated range and try importing it.
             let offset = 0;
+            Debug.assertIsDefined(updatedProgram, "no original program found");
+            const updatedProgramTypeChecker = updatedProgram.getTypeChecker();
             pasteLocations.forEach((location, i) => {
                 const oldTextLength = location.end - location.pos;
                 const textToBePasted = actualPastedText ?? pastedText[i];
@@ -140,7 +143,7 @@ function pasteEdits(
                 forEachChild(enclosingNode, function importUnresolvedIdentifiers(node) {
                     const isImportCandidate = isIdentifier(node) &&
                         rangeContainsPosition(range, node.getStart(updatedFile)) &&
-                        !updatedProgram?.getTypeChecker().resolveName(
+                        updatedProgramTypeChecker.resolveName(
                             node.text,
                             node,
                             SymbolFlags.All,
