@@ -5,7 +5,7 @@ function f1() {
     type A = [s: string];
     type C = [...A, ...A];
 
-    return function fn(...args: C) { }
+    return function fn(...args: C) { } satisfies any
 }
 
 function f2() {
@@ -14,7 +14,7 @@ function f2() {
     type C = [c: string];
     type D = [...A, ...A, ...B, ...A, ...B, ...B, ...A, ...C];
 
-    return function fn(...args: D) { }
+    return function fn(...args: D) { } satisfies any;
 }
 
 

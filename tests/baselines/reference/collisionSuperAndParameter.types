@@ -11,9 +11,9 @@ class Foo {
 
         var lamda = (_super: number) => { // No Error 
 >lamda : (_super: number) => (x: any) => this
->      : ^      ^^      ^^^^^^ ^^^^^^^^^^^^^^
+>      : ^      ^^      ^^^^^^   ^^^^^^^^^^^^
 >(_super: number) => { // No Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => this
->                                                                                                                             : ^      ^^      ^^^^^^ ^^^^^^^^^^^^^^
+>                                                                                                                             : ^      ^^      ^^^^^^   ^^^^^^^^^^^^
 >_super : number
 >       : ^^^^^^
 
@@ -33,9 +33,9 @@ class Foo {
 
         var lambda = () => {
 >lambda : () => (x: any) => this
->       : ^^^^^^^ ^^^^^^^^^^^^^^
+>       : ^^^^^^^   ^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
+>                                                                                                  : ^^^^^^^   ^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this
@@ -64,9 +64,9 @@ class Foo2 extends Foo {
 
         var lamda = (_super: number) => { // Error 
 >lamda : (_super: number) => (x: any) => this
->      : ^      ^^      ^^^^^^ ^^^^^^^^^^^^^^
+>      : ^      ^^      ^^^^^^   ^^^^^^^^^^^^
 >(_super: number) => { // Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => this
->                                                                                                                          : ^      ^^      ^^^^^^ ^^^^^^^^^^^^^^
+>                                                                                                                          : ^      ^^      ^^^^^^   ^^^^^^^^^^^^
 >_super : number
 >       : ^^^^^^
 
@@ -86,9 +86,9 @@ class Foo2 extends Foo {
 
         var lambda = () => {
 >lambda : () => (x: any) => this
->       : ^^^^^^^ ^^^^^^^^^^^^^^
+>       : ^^^^^^^   ^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
+>                                                                                                  : ^^^^^^^   ^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this
@@ -218,9 +218,9 @@ class Foo4 extends Foo {
 
         var lambda = () => {
 >lambda : () => (x: any) => this
->       : ^^^^^^^ ^^^^^^^^^^^^^^
+>       : ^^^^^^^   ^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
+>                                                                                                  : ^^^^^^^   ^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this

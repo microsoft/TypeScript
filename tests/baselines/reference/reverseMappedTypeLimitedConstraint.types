@@ -33,9 +33,9 @@ foo_({x: 1, y: 'foo'});
 
 const checkType_ = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value;
 >checkType_ : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^           ^^                                          ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->                                                                           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                           : ^ ^^^^^^^^           ^^                                          ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
 >                                                                  : ^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { [K in keyof U & keyof T]: U[K]; }
@@ -51,7 +51,7 @@ const checked_ = checkType_<{x: number, y: string}>()({
 >checkType_<{x: number, y: string}>() : <U extends { x: number; y: string; }>(value: { [K in keyof U & ("x" | "y")]: U[K]; }) => { [K in keyof U & ("x" | "y")]: U[K]; }
 >                                     : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >checkType_ : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^           ^^                                          ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string

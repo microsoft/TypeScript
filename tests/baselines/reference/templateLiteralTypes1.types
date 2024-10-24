@@ -9,9 +9,9 @@ Instantiation count: 2,500
 
 const createScopedActionType = <S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}`;
 >createScopedActionType : <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`
->                       : ^ ^^^^^^^^^      ^^     ^^ ^^^^^^ ^^^^^^^^^      ^^    ^^ ^^^^^           
+>                       : ^ ^^^^^^^^^      ^^     ^^ ^^^^^^                ^^       ^^^^^           
 ><S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}` : <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`
->                                                                                                 : ^ ^^^^^^^^^      ^^     ^^ ^^^^^^ ^^^^^^^^^      ^^    ^^ ^^^^^           
+>                                                                                                 : ^ ^^^^^^^^^      ^^     ^^ ^^^^^^                ^^       ^^^^^           
 >scope : S
 >      : ^
 ><T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}` : <T extends string>(type: T) => `${S}/${T}`
@@ -33,7 +33,7 @@ const createActionInMyScope = createScopedActionType("MyScope");  // <T extends 
 >createScopedActionType("MyScope") : <T extends string>(type: T) => `MyScope/${T}`
 >                                  : ^ ^^^^^^^^^      ^^    ^^^^^^^^^^^^^^^^^^^^^^
 >createScopedActionType : <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`
->                       : ^ ^^^^^^^^^      ^^     ^^ ^^^^^^ ^^^^^^^^^      ^^    ^^ ^^^^^           
+>                       : ^ ^^^^^^^^^      ^^     ^^ ^^^^^^                ^^       ^^^^^           
 >"MyScope" : "MyScope"
 >          : ^^^^^^^^^
 
