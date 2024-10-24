@@ -224,6 +224,7 @@ import {
     JSDocComment,
     JSDocDeprecatedTag,
     JSDocEnumTag,
+    JSDocExperimentalTag,
     JSDocFunctionType,
     JSDocImplementsTag,
     JSDocImportTag,
@@ -938,6 +939,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         },
         get updateJSDocDeprecatedTag() {
             return getJSDocSimpleTagUpdateFunction<JSDocDeprecatedTag>(SyntaxKind.JSDocDeprecatedTag);
+        },
+        get createJSDocExperimentalTag() {
+            return getJSDocSimpleTagCreateFunction<JSDocExperimentalTag>(SyntaxKind.JSDocExperimentalTag);
+        },
+        get updateJSDocExperimentalTag() {
+            return getJSDocSimpleTagUpdateFunction<JSDocExperimentalTag>(SyntaxKind.JSDocExperimentalTag);
         },
         get createJSDocThrowsTag() {
             return getJSDocTypeLikeTagCreateFunction<JSDocThrowsTag>(SyntaxKind.JSDocThrowsTag);

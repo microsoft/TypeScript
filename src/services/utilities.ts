@@ -2176,6 +2176,7 @@ export function getNodeModifiers(node: Node, excludeFlags: ModifierFlags = Modif
     if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
     if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
     if (flags & ModifierFlags.Deprecated) result.push(ScriptElementKindModifier.deprecatedModifier);
+    if (flags & ModifierFlags.Experimental) result.push(ScriptElementKindModifier.experimentalModifier);
     if (node.flags & NodeFlags.Ambient) result.push(ScriptElementKindModifier.ambientModifier);
     if (node.kind === SyntaxKind.ExportAssignment) result.push(ScriptElementKindModifier.exportedModifier);
 
@@ -4128,6 +4129,11 @@ export function startsWithUnderscore(name: string): boolean {
 /** @internal */
 export function isDeprecatedDeclaration(decl: Declaration): boolean {
     return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
+}
+
+/** @internal */
+export function isExperimentalDeclaration(decl: Declaration): boolean {
+    return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Experimental);
 }
 
 /** @internal */

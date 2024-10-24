@@ -244,6 +244,7 @@ function formatDiag(fileName: NormalizedPath, project: Project, diag: Diagnostic
         category: diagnosticCategoryName(diag),
         reportsUnnecessary: diag.reportsUnnecessary,
         reportsDeprecated: diag.reportsDeprecated,
+        reportsExperimental: diag.reportsExperimental,
         source: diag.source,
         relatedInformation: map(diag.relatedInformation, formatRelatedInformation),
     };
@@ -292,6 +293,7 @@ export function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: bo
         category,
         reportsUnnecessary: diag.reportsUnnecessary,
         reportsDeprecated: diag.reportsDeprecated,
+        reportsExperimental: diag.reportsExperimental,
         source,
         relatedInformation: map(diag.relatedInformation, formatRelatedInformation),
     };
@@ -1555,6 +1557,7 @@ export class Session<TMessage = string> implements EventSender {
             endLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start! + d.length!)))!, // TODO: GH#18217
             reportsUnnecessary: d.reportsUnnecessary,
             reportsDeprecated: d.reportsDeprecated,
+            reportsExperimental: d.reportsExperimental,
             relatedInformation: map(d.relatedInformation, formatRelatedInformation),
         }));
     }
@@ -1586,6 +1589,7 @@ export class Session<TMessage = string> implements EventSender {
                 endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start! + d.length!),
                 reportsUnnecessary: d.reportsUnnecessary,
                 reportsDeprecated: d.reportsDeprecated,
+                reportsExperimental: d.reportsExperimental,
                 relatedInformation: map(d.relatedInformation, formatRelatedInformation),
             }) as protocol.DiagnosticWithLinePosition
         );

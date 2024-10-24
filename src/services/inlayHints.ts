@@ -228,7 +228,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function addTypeHints(hintText: string | InlayHintDisplayPart[], position: number) {
         result.push({
-            text: typeof hintText === "string" ? `: ${hintText}` : "",
+            text: typeof hintText === "string" ? ": " + hintText : "",
             displayParts: typeof hintText === "string" ? undefined : [{ text: ": " }, ...hintText],
             position,
             kind: InlayHintKind.Type,
