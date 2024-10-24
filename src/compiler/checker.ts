@@ -25992,6 +25992,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isTupleType(type) && getTupleElementType(type, 0) === getIndexedAccessType(typeParameter, getNumberLiteralType(0)) && !getTypeOfPropertyOfType(type, "1" as __String);
     }
 
+    function isAwaitedLikeType(type: Type) {
+        if (type.flags & TypeFlags.Union) {
+            let typeVariable: Type | undefined;
+            let promisedType: Type | undefined;
+            for (const t of (type as UnionType).types) {
+                if (t.flags & TypeFlags.TypeVariable) {
+                    if (typeVariable) {
+                        return false;
+                    }
+                    typeVariable = t;
+                    if (promisedType) {
+                        return typeVariable === promisedType;
+                    }
+                    continue;
+                }
+                if (isPromiseType(t)) {
+                    if (promisedType) {
+                        return false;
+                    }
+                    [promisedType] = getTypeArguments(t as TypeReference);
+                    if (typeVariable) {
+                        return typeVariable === promisedType;
+                    }
+                    continue;
+                }
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority = InferencePriority.None, contravariant = false) {
         let bivariant = false;
         let propagationType: Type;
@@ -26015,6 +26047,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 inferFromTypes(target, target);
                 propagationType = savePropagationType;
                 return;
+            }
+            // If the target is either `T | Promise<T>` or `T | PromiseLike<T>`, continue inferring types with the
+            // `AwaitedLikeType` priority.
+            if (!(priority & InferencePriority.AwaitedLikeType) && isAwaitedLikeType(target)) {
+                priority |= InferencePriority.AwaitedLikeType;
             }
             if (source.aliasSymbol && source.aliasSymbol === target.aliasSymbol) {
                 if (source.aliasTypeArguments) {
@@ -26165,7 +26202,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (
                 getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (
-                    (source as TypeReference).target === (target as TypeReference).target || isArrayType(source) && isArrayType(target)
+                    (source as TypeReference).target === (target as TypeReference).target ||
+                    isArrayType(source) && isArrayType(target) ||
+                    isPromiseType(source) && isPromiseType(target)
                 ) &&
                 !((source as TypeReference).node && (target as TypeReference).node)
             ) {
@@ -26583,7 +26622,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function inferFromObjectTypes(source: Type, target: Type) {
             if (
                 getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (
-                    (source as TypeReference).target === (target as TypeReference).target || isArrayType(source) && isArrayType(target)
+                    (source as TypeReference).target === (target as TypeReference).target ||
+                    isArrayType(source) && isArrayType(target) ||
+                    isPromiseType(source) && isPromiseType(target)
                 )
             ) {
                 // If source and target are references to the same generic type, infer from type arguments
@@ -42486,6 +42527,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return Debug.failBadSyntaxKind(d);
             }
         }
+    }
+
+    function isPromiseType(type: Type) {
+        return isReferenceToSomeType(type, [getGlobalPromiseType(/*reportErrors*/ false), getGlobalPromiseLikeType(/*reportErrors*/ false)]);
     }
 
     function getAwaitedTypeOfPromise(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, ...args: DiagnosticArguments): Type | undefined {
