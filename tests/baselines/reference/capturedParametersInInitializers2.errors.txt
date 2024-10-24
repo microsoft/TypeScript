@@ -1,11 +1,10 @@
 capturedParametersInInitializers2.ts(3,20): error TS2373: Parameter 'y' cannot reference identifier 'x' declared after it.
 capturedParametersInInitializers2.ts(4,14): error TS2373: Parameter 'y' cannot reference identifier 'x' declared after it.
 capturedParametersInInitializers2.ts(6,10): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
-capturedParametersInInitializers2.ts(13,26): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 capturedParametersInInitializers2.ts(13,27): error TS2373: Parameter 'y' cannot reference identifier 'x' declared after it.
 
 
-==== capturedParametersInInitializers2.ts (5 errors) ====
+==== capturedParametersInInitializers2.ts (4 errors) ====
     function foo(
         y = class {
             static c = x;
@@ -25,8 +24,6 @@ capturedParametersInInitializers2.ts(13,27): error TS2373: Parameter 'y' cannot 
         y.c
     }
     function foo2(y = class {[x] = x}, x = 1) {
-                             ~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
                               ~
 !!! error TS2373: Parameter 'y' cannot reference identifier 'x' declared after it.
     }

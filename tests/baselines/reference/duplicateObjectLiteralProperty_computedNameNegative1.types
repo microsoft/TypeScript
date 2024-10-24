@@ -49,8 +49,8 @@ function bar(props: { x?: string; y?: string }) {
 }
 
 function foo({ x = "", y = "" }: { x?: string; y?: string }) {
->foo : ({ x, y }: { x?: string; y?: string; }) => { [x: string]: number; }
->    : ^        ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : ({ x, y }: { x?: string; y?: string; }) => { [x]: number; [y]: number; }
+>    : ^        ^^                           ^^^^^^^     ^^^^^^ ^     ^^^^^^ ^^
 >x : string
 >  : ^^^^^^
 >"" : ""
@@ -65,8 +65,8 @@ function foo({ x = "", y = "" }: { x?: string; y?: string }) {
 >  : ^^^^^^^^^^^^^^^^^^
 
   return {
->{    [x]: 1,    [y]: 2,  } : { [x: string]: number; }
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{    [x]: 1,    [y]: 2,  } : { [x]: number; [y]: number; }
+>                           : ^^     ^^^^^^ ^     ^^^^^^ ^^
 
     [x]: 1,
 >[x] : number

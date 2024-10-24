@@ -1564,8 +1564,8 @@ type A = Record<IdType, string>;
 const a: A = { [id]: 'test' }
 >a : A
 >  : ^
->{ [id]: 'test' } : { [x: string]: string; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [id]: 'test' } : { [id]: string; }
+>                 : ^^      ^^^^^^ ^^
 >[id] : string
 >     : ^^^^^^
 >id : `${number}-${number}-${number}-${number}`
