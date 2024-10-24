@@ -5,3 +5,4 @@
 /// <reference lib="esnext.collection" />
 /// <reference lib="esnext.array" />
 /// <reference lib="esnext.iterator" />
+/// <reference lib="esnext.promise" />
