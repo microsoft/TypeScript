@@ -22,7 +22,7 @@ export interface testInterface {
 //// [/home/src/workspaces/project/b.ts]
 import * as test from "./a";
 
-function foo(abc: test.testInterface, def: test.testInterface) {
+function foo(abc: test.abc, def: test.def) {
    console.log(abc);
    console.log(def);
 }
@@ -89,7 +89,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/folder/c.ts SVC-1-0 ""
 	/home/src/workspaces/project/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
-	/home/src/workspaces/project/b.ts Text-1 "import * as test from \"./a\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
+	/home/src/workspaces/project/b.ts Text-1 "import * as test from \"./a\";\n\nfunction foo(abc: test.abc, def: test.def) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 
 	../../tslibs/TS/Lib/lib.d.ts
@@ -291,7 +291,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/folder/c.ts SVC-1-1 "function foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}"
 	/home/src/workspaces/project/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
-	/home/src/workspaces/project/b.ts Text-1 "import * as test from \"./a\";\n\nfunction foo(abc: test.testInterface, def: test.testInterface) {\n   console.log(abc);\n   console.log(def);\n}\n"
+	/home/src/workspaces/project/b.ts Text-1 "import * as test from \"./a\";\n\nfunction foo(abc: test.abc, def: test.def) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:

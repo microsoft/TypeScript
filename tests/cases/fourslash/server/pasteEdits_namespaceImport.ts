@@ -15,7 +15,7 @@
 // @Filename: /home/src/workspaces/project/b.ts
 //// import * as test from "./a";
 ////
-//// [|function foo(abc: test.testInterface, def: test.testInterface) {
+//// [|function foo(abc: test.abc, def: test.def) {
 ////    console.log(abc);
 ////    console.log(def);
 //// }|]
