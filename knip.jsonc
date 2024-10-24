@@ -3,7 +3,6 @@
     "includeEntryExports": true,
     "entry": [
         "Herebyfile.mjs",
-        "src/cancellationToken/cancellationToken.ts",
         "src/testRunner/_namespaces/Harness.ts",
         "src/tsc/tsc.ts",
         "src/tsserver/server.ts",

@@ -604,14 +604,6 @@ export const knip = task({
     run: () => exec(process.execPath, ["node_modules/knip/bin/knip.js", "--tags=+internal,-knipignore", "--exclude=duplicates,enumMembers", ...(cmdLineOptions.fix ? ["--fix"] : [])]),
 });
 
-const { main: cancellationToken, watch: watchCancellationToken } = entrypointBuildTask({
-    name: "cancellation-token",
-    project: "src/cancellationToken",
-    srcEntrypoint: "./src/cancellationToken/cancellationToken.ts",
-    builtEntrypoint: "./built/local/cancellationToken/cancellationToken.js",
-    output: "./built/local/cancellationToken.js",
-});
-
 const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuildTask({
     name: "typings-installer",
     buildDeps: [generateDiagnostics],
@@ -661,14 +653,14 @@ const copyBuiltLocalDiagnosticMessages = task({
 export const otherOutputs = task({
     name: "other-outputs",
     description: "Builds miscelaneous scripts and documents distributed with the LKG",
-    dependencies: [cancellationToken, typingsInstaller, watchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
+    dependencies: [typingsInstaller, watchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
 export const watchOtherOutputs = task({
     name: "watch-other-outputs",
     description: "Builds miscelaneous scripts and documents distributed with the LKG",
     hiddenFromTaskList: true,
-    dependencies: [watchCancellationToken, watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
+    dependencies: [watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
 export const local = task({
@@ -916,7 +908,6 @@ export const produceLKG = task({
         }
 
         const expectedFiles = [
-            "built/local/cancellationToken.js",
             "built/local/tsc.js",
             "built/local/_tsc.js",
             "built/local/tsserver.js",
