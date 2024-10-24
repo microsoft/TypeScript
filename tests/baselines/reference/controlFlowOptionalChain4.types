@@ -1,0 +1,154 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain4.ts] ////
+
+=== controlFlowOptionalChain4.ts ===
+declare class Base {
+>Base : Base
+>     : ^^^^
+
+  IsA(): this is A;
+>IsA : () => this is A
+>    : ^^^^^^         
+
+  IsB(): this is B;
+>IsB : () => this is B
+>    : ^^^^^^         
+}
+declare class A extends Base {
+>A : A
+>  : ^
+>Base : Base
+>     : ^^^^
+
+  _a: true;
+>_a : true
+>   : ^^^^
+>true : true
+>     : ^^^^
+}
+declare class B extends Base {
+>B : B
+>  : ^
+>Base : Base
+>     : ^^^^
+
+  _b: true;
+>_b : true
+>   : ^^^^
+>true : true
+>     : ^^^^
+}
+
+declare const obj: A | B | undefined;
+>obj : A | B | undefined
+>    : ^^^^^^^^^^^^^^^^^
+
+function test1() {
+>test1 : () => void
+>      : ^^^^^^^^^^
+
+  if (!obj?.IsA()) {
+>!obj?.IsA() : boolean
+>            : ^^^^^^^
+>obj?.IsA() : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
+>obj?.IsA : (() => this is A) | (() => this is A) | undefined
+>         : ^^^^^^^         ^^^^^^^^^^^         ^^^^^^^^^^^^^
+>obj : A | B | undefined
+>    : ^^^^^^^^^^^^^^^^^
+>IsA : (() => this is A) | (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^         ^^^^^^^^^^^^^
+
+    obj; // B | undefined
+>obj : B | undefined
+>    : ^^^^^^^^^^^^^
+
+    return;
+  }
+  obj; // A
+>obj : A
+>    : ^
+}
+
+function test2() {
+>test2 : () => void
+>      : ^^^^^^^^^^
+
+  if (obj?.IsA() === false) {
+>obj?.IsA() === false : boolean
+>                     : ^^^^^^^
+>obj?.IsA() : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
+>obj?.IsA : (() => this is A) | (() => this is A) | undefined
+>         : ^^^^^^^         ^^^^^^^^^^^         ^^^^^^^^^^^^^
+>obj : A | B | undefined
+>    : ^^^^^^^^^^^^^^^^^
+>IsA : (() => this is A) | (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^         ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+    obj; // B
+>obj : B
+>    : ^
+
+    return;
+  }
+  obj; // A | undefined
+>obj : A | undefined
+>    : ^^^^^^^^^^^^^
+}
+
+function test3() {
+>test3 : () => void
+>      : ^^^^^^^^^^
+
+  if (obj?.IsA()) {
+>obj?.IsA() : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
+>obj?.IsA : (() => this is A) | (() => this is A) | undefined
+>         : ^^^^^^^         ^^^^^^^^^^^         ^^^^^^^^^^^^^
+>obj : A | B | undefined
+>    : ^^^^^^^^^^^^^^^^^
+>IsA : (() => this is A) | (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^         ^^^^^^^^^^^^^
+
+    obj; // A
+>obj : A
+>    : ^
+
+    return;
+  }
+  obj; // B | undefined
+>obj : B | undefined
+>    : ^^^^^^^^^^^^^
+}
+
+function test4() {
+>test4 : () => void
+>      : ^^^^^^^^^^
+
+  if (obj?.IsA() === true) {
+>obj?.IsA() === true : boolean
+>                    : ^^^^^^^
+>obj?.IsA() : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
+>obj?.IsA : (() => this is A) | (() => this is A) | undefined
+>         : ^^^^^^^         ^^^^^^^^^^^         ^^^^^^^^^^^^^
+>obj : A | B | undefined
+>    : ^^^^^^^^^^^^^^^^^
+>IsA : (() => this is A) | (() => this is A) | undefined
+>    : ^^^^^^^         ^^^^^^^^^^^         ^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+    obj; // A
+>obj : A
+>    : ^
+
+    return;
+  }
+  obj; // B | undefined
+>obj : B | undefined
+>    : ^^^^^^^^^^^^^
+}
+
