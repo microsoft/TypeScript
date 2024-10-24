@@ -266,8 +266,8 @@ declare function assertNode(node: Node | undefined, test: ((node: Node) => boole
 >     : ^^^^
 
 function foo(node: FunctionDeclaration | CaseClause) {
->foo : (node: FunctionDeclaration | CaseClause) => void
->    : ^    ^^                                ^^^^^^^^^
+>foo : (node: FunctionDeclaration | CaseClause) => asserts node is FunctionDeclaration
+>    : ^    ^^                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >node : CaseClause | FunctionDeclaration
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

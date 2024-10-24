@@ -777,3 +777,362 @@ if (foobarPred(foobar)) {
 >foo : Symbol(foo, Decl(inferTypePredicates.ts, 271, 18))
 }
 
+function assertIsNumber(x: unknown) {
+>assertIsNumber : Symbol(assertIsNumber, Decl(inferTypePredicates.ts, 277, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 279, 24))
+
+  if (typeof x !== 'number') {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 279, 24))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+function assertIsSmallNumber(x: unknown) {
+>assertIsSmallNumber : Symbol(assertIsSmallNumber, Decl(inferTypePredicates.ts, 283, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 285, 29))
+
+  if (typeof x === 'number' && x < 10) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 285, 29))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 285, 29))
+
+    return;
+  }
+  throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function assertMultipleReturns(x: unknown) {
+>assertMultipleReturns : Symbol(assertMultipleReturns, Decl(inferTypePredicates.ts, 290, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 292, 31))
+
+  if (x instanceof Date) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 292, 31))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    return;
+  } else if (x instanceof RegExp) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 292, 31))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    return;
+  } else {
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+function assertChained(x: number | string) {
+>assertChained : Symbol(assertChained, Decl(inferTypePredicates.ts, 300, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 302, 23))
+
+  assertIsNumber(x);
+>assertIsNumber : Symbol(assertIsNumber, Decl(inferTypePredicates.ts, 277, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 302, 23))
+}
+
+function assertOneParam(a: unknown, b: unknown) {
+>assertOneParam : Symbol(assertOneParam, Decl(inferTypePredicates.ts, 304, 1))
+>a : Symbol(a, Decl(inferTypePredicates.ts, 306, 24))
+>b : Symbol(b, Decl(inferTypePredicates.ts, 306, 35))
+
+  assertIsSmallNumber(b);
+>assertIsSmallNumber : Symbol(assertIsSmallNumber, Decl(inferTypePredicates.ts, 283, 1))
+>b : Symbol(b, Decl(inferTypePredicates.ts, 306, 35))
+}
+
+function nonAssertion(a: number | string) {
+>nonAssertion : Symbol(nonAssertion, Decl(inferTypePredicates.ts, 308, 1))
+>a : Symbol(a, Decl(inferTypePredicates.ts, 310, 22))
+
+  if (typeof a === 'number') {
+>a : Symbol(a, Decl(inferTypePredicates.ts, 310, 22))
+
+    return;
+  } else if (typeof a === 'string') {
+>a : Symbol(a, Decl(inferTypePredicates.ts, 310, 22))
+
+    return;
+  }
+  throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function justAssert(x: unknown) {
+>justAssert : Symbol(justAssert, Decl(inferTypePredicates.ts, 317, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 319, 20))
+
+  throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function assertMultiple(a: unknown, b: unknown) {
+>assertMultiple : Symbol(assertMultiple, Decl(inferTypePredicates.ts, 321, 1))
+>a : Symbol(a, Decl(inferTypePredicates.ts, 323, 24))
+>b : Symbol(b, Decl(inferTypePredicates.ts, 323, 35))
+
+  assertIsNumber(a);
+>assertIsNumber : Symbol(assertIsNumber, Decl(inferTypePredicates.ts, 277, 1))
+>a : Symbol(a, Decl(inferTypePredicates.ts, 323, 24))
+
+  assertIsNumber(b);
+>assertIsNumber : Symbol(assertIsNumber, Decl(inferTypePredicates.ts, 277, 1))
+>b : Symbol(b, Decl(inferTypePredicates.ts, 323, 35))
+}
+
+// should not return "asserts x is Date | undefined".
+function assertOptional(x?: Date) {
+>assertOptional : Symbol(assertOptional, Decl(inferTypePredicates.ts, 326, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 329, 24))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  if (x) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 329, 24))
+
+    return;
+  }
+}
+
+// should not return "asserts x is {} | null | undefined".
+function splitUnknown(x: unknown) {
+>splitUnknown : Symbol(splitUnknown, Decl(inferTypePredicates.ts, 333, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 336, 22))
+
+  if (x === null) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 336, 22))
+
+    return;
+  } else if (x === undefined) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 336, 22))
+>undefined : Symbol(undefined)
+
+    return;
+  }
+}
+
+function assertionViaInfiniteLoop(x: string | number) {
+>assertionViaInfiniteLoop : Symbol(assertionViaInfiniteLoop, Decl(inferTypePredicates.ts, 342, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 344, 34))
+
+  if (typeof x === 'string') {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 344, 34))
+
+    for (;;) {}
+  }
+}
+
+function booleanOrVoid(a: boolean | void) {
+>booleanOrVoid : Symbol(booleanOrVoid, Decl(inferTypePredicates.ts, 348, 1))
+>a : Symbol(a, Decl(inferTypePredicates.ts, 350, 23))
+
+  if (typeof a === "undefined") {
+>a : Symbol(a, Decl(inferTypePredicates.ts, 350, 23))
+
+    a
+>a : Symbol(a, Decl(inferTypePredicates.ts, 350, 23))
+  }
+  a
+>a : Symbol(a, Decl(inferTypePredicates.ts, 350, 23))
+}
+
+function assertTrue(x: boolean) {
+>assertTrue : Symbol(assertTrue, Decl(inferTypePredicates.ts, 355, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 357, 20))
+
+  if (!x) throw new Error();
+>x : Symbol(x, Decl(inferTypePredicates.ts, 357, 20))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function assertNonNullish<T>(x: T) {
+>assertNonNullish : Symbol(assertNonNullish, Decl(inferTypePredicates.ts, 359, 1))
+>T : Symbol(T, Decl(inferTypePredicates.ts, 361, 26))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 361, 29))
+>T : Symbol(T, Decl(inferTypePredicates.ts, 361, 26))
+
+  if (x != null) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 361, 29))
+
+    return;
+  }
+  throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function assertIsShortString(x: unknown) {
+>assertIsShortString : Symbol(assertIsShortString, Decl(inferTypePredicates.ts, 366, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 368, 29))
+
+  if (typeof x !== 'string') {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 368, 29))
+
+    throw new Error('Expected string');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  } else if (x.length > 10) {
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 368, 29))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    throw new Error('Expected short string');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+function assertABC(x: 'A' | 'B' | 'C' | 'D' | 'E') {
+>assertABC : Symbol(assertABC, Decl(inferTypePredicates.ts, 374, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 376, 19))
+
+  if (x === 'A') {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 376, 19))
+
+    return;  // type of x here is 'A'
+  } else if (x === 'B' || x === 'C') {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 376, 19))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 376, 19))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+  // implicit return; type of x here is 'D' | E'
+}
+
+// this is not expected to be inferred as an assertion type predicate
+// due to https://github.com/microsoft/TypeScript/issues/34523
+const assertNumberArrow = (base: string | number) => {
+>assertNumberArrow : Symbol(assertNumberArrow, Decl(inferTypePredicates.ts, 387, 5))
+>base : Symbol(base, Decl(inferTypePredicates.ts, 387, 27))
+
+  if (typeof base !== 'number') {
+>base : Symbol(base, Decl(inferTypePredicates.ts, 387, 27))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+};
+
+assertNumberArrow('hello'); // should ok
+>assertNumberArrow : Symbol(assertNumberArrow, Decl(inferTypePredicates.ts, 387, 5))
+
+class Test {
+>Test : Symbol(Test, Decl(inferTypePredicates.ts, 393, 27))
+
+  // Methods are not inferred as assertion type predicates becasue you
+  // can easily run into TS2776 (https://github.com/microsoft/TypeScript/pull/33622).
+  assert(value: unknown) {
+>assert : Symbol(Test.assert, Decl(inferTypePredicates.ts, 395, 12))
+>value : Symbol(value, Decl(inferTypePredicates.ts, 398, 9))
+
+    if (typeof value === 'number') {
+>value : Symbol(value, Decl(inferTypePredicates.ts, 398, 9))
+
+      return;
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+function fTest(x: unknown) {
+>fTest : Symbol(fTest, Decl(inferTypePredicates.ts, 404, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 406, 15))
+
+  const t1 = new Test();
+>t1 : Symbol(t1, Decl(inferTypePredicates.ts, 407, 7))
+>Test : Symbol(Test, Decl(inferTypePredicates.ts, 393, 27))
+
+  t1.assert(typeof x === "string"); // should ok
+>t1.assert : Symbol(Test.assert, Decl(inferTypePredicates.ts, 395, 12))
+>t1 : Symbol(t1, Decl(inferTypePredicates.ts, 407, 7))
+>assert : Symbol(Test.assert, Decl(inferTypePredicates.ts, 395, 12))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 406, 15))
+
+  const t2: Test = new Test();
+>t2 : Symbol(t2, Decl(inferTypePredicates.ts, 410, 7))
+>Test : Symbol(Test, Decl(inferTypePredicates.ts, 393, 27))
+>Test : Symbol(Test, Decl(inferTypePredicates.ts, 393, 27))
+
+  t2.assert(typeof x === "string"); // should ok
+>t2.assert : Symbol(Test.assert, Decl(inferTypePredicates.ts, 395, 12))
+>t2 : Symbol(t2, Decl(inferTypePredicates.ts, 410, 7))
+>assert : Symbol(Test.assert, Decl(inferTypePredicates.ts, 395, 12))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 406, 15))
+}
+
+interface Named {
+>Named : Symbol(Named, Decl(inferTypePredicates.ts, 412, 1))
+
+  name: string;
+>name : Symbol(Named.name, Decl(inferTypePredicates.ts, 414, 17))
+}
+
+declare function assertName(x: any): asserts x is Named;
+>assertName : Symbol(assertName, Decl(inferTypePredicates.ts, 416, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 418, 28))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 418, 28))
+>Named : Symbol(Named, Decl(inferTypePredicates.ts, 412, 1))
+
+declare function isNamed(x: any): x is Named;
+>isNamed : Symbol(isNamed, Decl(inferTypePredicates.ts, 418, 56))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 419, 25))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 419, 25))
+>Named : Symbol(Named, Decl(inferTypePredicates.ts, 412, 1))
+
+function inferFromTypePred(x: unknown) {
+>inferFromTypePred : Symbol(inferFromTypePred, Decl(inferTypePredicates.ts, 419, 45))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 421, 27))
+
+  if (!isNamed(x)) {
+>isNamed : Symbol(isNamed, Decl(inferTypePredicates.ts, 418, 56))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 421, 27))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+function inferFromTypePredAny(x: any) {
+>inferFromTypePredAny : Symbol(inferFromTypePredAny, Decl(inferTypePredicates.ts, 425, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 427, 30))
+
+  if (!isNamed(x)) {
+>isNamed : Symbol(isNamed, Decl(inferTypePredicates.ts, 418, 56))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 427, 30))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+// should return void, not "asserts pattern is string"
+const assertWithFuncExpr = function (pattern: unknown) {
+>assertWithFuncExpr : Symbol(assertWithFuncExpr, Decl(inferTypePredicates.ts, 434, 5))
+>pattern : Symbol(pattern, Decl(inferTypePredicates.ts, 434, 37))
+
+  if (typeof pattern !== 'string') {
+>pattern : Symbol(pattern, Decl(inferTypePredicates.ts, 434, 37))
+
+    throw new TypeError('invalid pattern')
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+
+  if (pattern.length > 1024) {
+>pattern.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>pattern : Symbol(pattern, Decl(inferTypePredicates.ts, 434, 37))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    throw new TypeError('pattern is too long')
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+function useAssertWithFuncExpr(pattern: string) {
+>useAssertWithFuncExpr : Symbol(useAssertWithFuncExpr, Decl(inferTypePredicates.ts, 442, 1))
+>pattern : Symbol(pattern, Decl(inferTypePredicates.ts, 444, 31))
+
+  assertWithFuncExpr(pattern);
+>assertWithFuncExpr : Symbol(assertWithFuncExpr, Decl(inferTypePredicates.ts, 434, 5))
+>pattern : Symbol(pattern, Decl(inferTypePredicates.ts, 444, 31))
+}
+
