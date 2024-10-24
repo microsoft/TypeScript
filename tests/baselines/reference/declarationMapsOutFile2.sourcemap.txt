@@ -59,20 +59,27 @@ sourceFile:a.ts
 1 >Emitted(4, 6) Source(2, 27) + SourceIndex(0)
 ---
 >>>        b: number;
+1->^^^^^^^^
+2 >        ^
+1->) {
+  >        return {
+2 >        b
+1->Emitted(5, 9) Source(3, 17) + SourceIndex(0)
+2 >Emitted(5, 10) Source(3, 18) + SourceIndex(0)
+---
 >>>    };
 >>>    static make(): Foo;
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^
 3 >          ^
 4 >           ^^^^
-1->) {
-  >        return {b: x.a};
+1 >: x.a};
   >    }
   >    
 2 >    static
 3 >           
 4 >           make
-1->Emitted(7, 5) Source(5, 5) + SourceIndex(0)
+1 >Emitted(7, 5) Source(5, 5) + SourceIndex(0)
 2 >Emitted(7, 11) Source(5, 11) + SourceIndex(0)
 3 >Emitted(7, 12) Source(5, 12) + SourceIndex(0)
 4 >Emitted(7, 16) Source(5, 16) + SourceIndex(0)
@@ -129,13 +136,20 @@ sourceFile:index.ts
 4 >Emitted(10, 14) Source(4, 6) + SourceIndex(1)
 ---
 >>>    b: number;
+1->^^^^
+2 >    ^
+1-> = c.doThin
+2 >    g
+1->Emitted(11, 5) Source(4, 17) + SourceIndex(1)
+2 >Emitted(11, 6) Source(4, 18) + SourceIndex(1)
+---
 >>>};
-1->^
+1 >^
 2 > ^
 3 >  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1-> = c.doThing({a: 12})
+1 >({a: 12})
 2 > ;
-1->Emitted(12, 2) Source(4, 27) + SourceIndex(1)
+1 >Emitted(12, 2) Source(4, 27) + SourceIndex(1)
 2 >Emitted(12, 3) Source(4, 28) + SourceIndex(1)
 ---
 >>>//# sourceMappingURL=bundle.d.ts.map
