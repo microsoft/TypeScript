@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/jsxGenericArrowFunction.tsx] ////
+
+=== jsxGenericArrowFunction.tsx ===
+const a = <T>(b: T) => b
+>a : <T>(b: T) => T
+>  : ^ ^^ ^^ ^^^^^^
+><T>(b: T) => b : <T>(b: T) => T
+>               : ^ ^^ ^^ ^^^^^^
+>b : T
+>  : ^
+>b : T
+>  : ^
+
