@@ -124,8 +124,6 @@ function pasteEdits(
             // For each child of that node, we checked for unresolved identifiers
             // within the updated range and try importing it.
             let offset = 0;
-            Debug.assertIsDefined(updatedProgram, "no original program found");
-            const updatedProgramTypeChecker = updatedProgram.getTypeChecker();
             pasteLocations.forEach((location, i) => {
                 const oldTextLength = location.end - location.pos;
                 const textToBePasted = actualPastedText ?? pastedText[i];
@@ -143,7 +141,7 @@ function pasteEdits(
                 forEachChild(enclosingNode, function importUnresolvedIdentifiers(node) {
                     const isImportCandidate = isIdentifier(node) &&
                         rangeContainsPosition(range, node.getStart(updatedFile)) &&
-                        updatedProgramTypeChecker.resolveName(
+                        !updatedProgram?.getTypeChecker().resolveName(
                             node.text,
                             node,
                             SymbolFlags.All,
