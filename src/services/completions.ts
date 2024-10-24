@@ -5637,6 +5637,7 @@ export function getPropertiesForObjectExpression(contextualType: Type, completio
 }
 
 function getApparentProperties(type: Type, node: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker) {
+    type = checker.unwrapNoInferType(type);
     if (!type.isUnion()) return type.getApparentProperties();
     return checker.getAllPossiblePropertiesOfTypes(filter(type.types, memberType =>
         !(memberType.flags & TypeFlags.Primitive

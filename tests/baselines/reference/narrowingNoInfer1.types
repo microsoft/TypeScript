@@ -139,21 +139,21 @@ test2({ type: 'a' as const }, { type: 'b' as const }, (thing) => {
 >                   : ^^^^^^^
 >thing.type : "a" | "b"
 >           : ^^^^^^^^^
->thing : NoInfer<{ type: "a"; }> | NoInfer<{ type: "b"; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>thing : { type: "a"; } | { type: "b"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "a" | "b"
 >     : ^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 
     thing;
->thing : NoInfer<{ type: "a"; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>thing : { type: "a"; }
+>      : ^^^^^^^^^^^^^^
 
   } else {
     thing;
->thing : NoInfer<{ type: "b"; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>thing : { type: "b"; }
+>      : ^^^^^^^^^^^^^^
   }
 });
 
