@@ -74,6 +74,7 @@ export const enum ExportKind {
     Default,
     ExportEquals,
     UMD,
+    Module,
 }
 
 /** @internal */

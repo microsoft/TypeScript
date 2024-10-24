@@ -12,21 +12,16 @@ lib.decorators.d.ts-Text
 lib.decorators.legacy.d.ts-Text
 
 //// [/home/src/workspaces/project/a.ts]
-export const abc = 10;
-
-//// [/home/src/workspaces/project/b.ts]
-import { abc } from "./a";
-
-console.log(abc);
-
-
-console.log("abc");
+const b = foo("bar");
+ export default function foo(name: string): void {
+     console.log(name);
+ }
 
 //// [/home/src/workspaces/project/folder/c.ts]
 
 
 //// [/home/src/workspaces/project/tsconfig.json]
-{ "files": ["folder/c.ts", "a.ts", "b.ts"] }
+{ "files": ["folder/c.ts", "a.ts"] }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -44,8 +39,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  "rootNames": [
   "/home/src/workspaces/project/folder/c.ts",
-  "/home/src/workspaces/project/a.ts",
-  "/home/src/workspaces/project/b.ts"
+  "/home/src/workspaces/project/a.ts"
  ],
  "options": {
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
@@ -62,7 +56,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -77,13 +70,12 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/folder/c.ts SVC-1-0 ""
-	/home/src/workspaces/project/a.ts Text-1 "export const abc = 10;"
-	/home/src/workspaces/project/b.ts Text-1 "import { abc } from \"./a\";\n\nconsole.log(abc);\n\n\nconsole.log(\"abc\");"
+	/home/src/workspaces/project/a.ts Text-1 "const b = foo(\"bar\");\n export default function foo(name: string): void {\n     console.log(name);\n }"
 
 
 	../../tslibs/TS/Lib/lib.d.ts
@@ -95,9 +87,6 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	folder/c.ts
 	  Part of 'files' list in tsconfig.json
 	a.ts
-	  Part of 'files' list in tsconfig.json
-	  Imported via "./a" from file 'b.ts'
-	b.ts
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -122,7 +111,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -148,8 +137,6 @@ watchedFiles::
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/a.ts: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/b.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -184,10 +171,6 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/a.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/b.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
@@ -244,7 +227,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/home/src/workspaces/project/folder/c.ts",
         "pastedText": [
-          "console.log(abc);"
+          "const b = foo(\"bar\");"
         ],
         "pasteLocations": [
           {
@@ -259,16 +242,16 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ],
         "copiedFrom": {
-          "file": "/home/src/workspaces/project/b.ts",
+          "file": "/home/src/workspaces/project/a.ts",
           "spans": [
             {
               "start": {
-                "line": 3,
+                "line": 1,
                 "offset": 1
               },
               "end": {
-                "line": 5,
-                "offset": 1
+                "line": 1,
+                "offset": 22
               }
             }
           ]
@@ -279,17 +262,14 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/folder/c.ts SVC-1-1 "console.log(abc);"
-	/home/src/workspaces/project/a.ts Text-1 "export const abc = 10;"
-	/home/src/workspaces/project/b.ts Text-1 "import { abc } from \"./a\";\n\nconsole.log(abc);\n\n\nconsole.log(\"abc\");"
+	/home/src/workspaces/project/folder/c.ts SVC-1-1 "const b = foo(\"bar\");"
+	/home/src/workspaces/project/a.ts Text-1 "const b = foo(\"bar\");\n export default function foo(name: string): void {\n     console.log(name);\n }"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
-Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -314,7 +294,7 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "import { abc } from \"../a\";\n\n"
+                "newText": "import foo from \"../a\";\n\n"
               },
               {
                 "start": {
@@ -325,7 +305,7 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "console.log(abc);"
+                "newText": "const b = foo(\"bar\");"
               }
             ]
           }
@@ -355,10 +335,6 @@ ScriptInfos::
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
 /home/src/workspaces/project/a.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/b.ts
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
