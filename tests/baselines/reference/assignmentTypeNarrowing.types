@@ -1,15 +1,19 @@
 //// [tests/cases/conformance/expressions/assignmentOperator/assignmentTypeNarrowing.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
 === assignmentTypeNarrowing.ts ===
 let x: string | number | boolean | RegExp;
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 x = "";
 >x = "" : ""
 >       : ^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -20,10 +24,10 @@ x; // string
 [x] = [true];
 >[x] = [true] : [true]
 >             : ^^^^^^
->[x] : [string | number | boolean | RegExp]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[x] : [string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[true] : [true]
 >       : ^^^^^^
 >true : true
@@ -40,8 +44,8 @@ x; // boolean
 >         : ^^^^^^^^
 >x = "" : ""
 >       : ^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 >[1] : [number]
@@ -58,10 +62,10 @@ x; // string | number
 >                  : ^^^^^^^^^^^^
 >{x} = {x: true} : { x: true; }
 >                : ^^^^^^^^^^^^
->{x} : { x: string | number | boolean | RegExp; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{x} : { x: string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{x: true} : { x: true; }
 >          : ^^^^^^^^^^^^
 >x : true
@@ -78,12 +82,12 @@ x; // boolean
 >                  : ^^^^^^^^^^^^^^
 >{y: x} = {y: 1} : { y: number; }
 >                : ^^^^^^^^^^^^^^
->{y: x} : { y: string | number | boolean | RegExp; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->y : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{y: x} : { y: string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{y: 1} : { y: number; }
 >       : ^^^^^^^^^^^^^^
 >y : number
@@ -100,10 +104,10 @@ x; // number
 >                       : ^^^^^^^^^^^^^
 >{x = ""} = {x: true} : { x?: true; }
 >                     : ^^^^^^^^^^^^^
->{x = ""} : { x?: string | number | boolean | RegExp; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{x = ""} : { x?: string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 >{x: true} : { x?: true; }
@@ -122,16 +126,16 @@ x; // string | boolean
 >                        : ^^^^^^^^^^^^^^^
 >{y: x = /a/} = {y: 1} : { y?: number; }
 >                      : ^^^^^^^^^^^^^^^
->{y: x = /a/} : { y?: RegExp; }
->             : ^^^^^^^^^^^^^^^
->y : RegExp
->  : ^^^^^^
->x = /a/ : RegExp
->        : ^^^^^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->/a/ : RegExp
->    : ^^^^^^
+>{y: x = /a/} : { y?: RegExp<["a"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : RegExp<["a"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x = /a/ : RegExp<["a"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/a/ : RegExp<["a"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{y: 1} : { y?: number; }
 >       : ^^^^^^^^^^^^^^^
 >y : number
@@ -140,16 +144,16 @@ x; // string | boolean
 >  : ^
 
 x; // number | RegExp
->x : number | RegExp
->  : ^^^^^^^^^^^^^^^
+>x : number | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let a: string[];
 >a : string[]
 >  : ^^^^^^^^
 
 for (x of a) {
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string[]
 >  : ^^^^^^^^
 

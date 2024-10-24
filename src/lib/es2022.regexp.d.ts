@@ -1,21 +1,13 @@
-interface RegExpMatchArray {
-    indices?: RegExpIndicesArray;
+type RegExpGroupsValueToIndices<T> = { [K in keyof T]: T[K] extends string ? [startIndex: number, endIndex: number] : T[K]; };
+
+interface RegExpIndices<
+    CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+    NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+> {
+    indices: RegExpGroupsValueToIndices<CapturingGroups> & { groups: RegExpGroupsValueToIndices<NamedCapturingGroups>; };
 }
 
-interface RegExpExecArray {
-    indices?: RegExpIndicesArray;
-}
-
-interface RegExpIndicesArray extends Array<[number, number]> {
-    groups?: {
-        [key: string]: [number, number];
-    };
-}
-
-interface RegExp {
-    /**
-     * Returns a Boolean value indicating the state of the hasIndices flag (d) used with a regular expression.
-     * Default is false. Read-only.
-     */
+interface RegExpFlags {
+    /** A Boolean value indicating the state of the hasIndices flag (d) on the regular expression. Read-only. */
     readonly hasIndices: boolean;
 }

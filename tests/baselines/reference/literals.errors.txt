@@ -4,9 +4,11 @@ literals.ts(9,9): error TS18050: The value 'undefined' cannot be used here.
 literals.ts(9,21): error TS18050: The value 'undefined' cannot be used here.
 literals.ts(19,9): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
 literals.ts(24,9): error TS1121: Octal literals are not allowed. Use the syntax '-0o3'.
+literals.ts(36,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r' must be of type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>', but here has type 'RegExp<["what"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
+literals.ts(37,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r' must be of type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>', but here has type 'RegExp<["\\\\"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
 
 
-==== literals.ts (6 errors) ====
+==== literals.ts (8 errors) ====
     //typeof null is Null
     //typeof true is Boolean
     //typeof false is Boolean
@@ -55,5 +57,11 @@ literals.ts(24,9): error TS1121: Octal literals are not allowed. Use the syntax 
     
     var r: RegExp;
     var r = /what/;
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r' must be of type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>', but here has type 'RegExp<["what"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
+!!! related TS6203 literals.ts:35:5: 'r' was also declared here.
     var r = /\\\\/;
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r' must be of type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>', but here has type 'RegExp<["\\\\"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
+!!! related TS6203 literals.ts:35:5: 'r' was also declared here.
     

@@ -154,11 +154,6 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "error"
           },
           {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
             "text": "Cannot find global type 'String'.",
             "code": 2318,
             "category": "error"

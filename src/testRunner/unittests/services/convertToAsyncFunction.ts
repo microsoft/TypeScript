@@ -270,7 +270,6 @@ interface PromiseConstructor {
 }
 
 declare var Promise: PromiseConstructor;
-interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> {}`,
 };

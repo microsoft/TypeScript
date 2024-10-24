@@ -6,7 +6,7 @@ modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(25,6): error TS2585
 modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(29,18): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
 modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(33,13): error TS2304: Cannot find name 'Proxy'.
 modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(36,1): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(40,5): error TS2550: Property 'flags' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(40,5): error TS2339: Property 'flags' does not exist on type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
 modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(44,5): error TS2550: Property 'includes' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(47,9): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
 modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(51,6): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
@@ -70,7 +70,7 @@ modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(51,6): error TS2585
     var reg = new RegExp("/s");
     reg.flags;
         ~~~~~
-!!! error TS2550: Property 'flags' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+!!! error TS2339: Property 'flags' does not exist on type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
     
     // Using ES6 string
     var str = "Hello world";

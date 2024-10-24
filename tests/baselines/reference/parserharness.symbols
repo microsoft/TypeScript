@@ -231,9 +231,9 @@ module Harness {
 
             var bugs = content.match(/\bbug (\d+)/i);
 >bugs : Symbol(bugs, Decl(parserharness.ts, 95, 15))
->content.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>content.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >content : Symbol(content, Decl(parserharness.ts, 94, 29))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
             if (bugs) {
 >bugs : Symbol(bugs, Decl(parserharness.ts, 95, 15))
@@ -2263,8 +2263,8 @@ module Harness {
 >filename : Symbol(filename, Decl(parserharness.ts, 759, 38))
 
             return /\.d\.ts$/.test(filename);
->/\.d\.ts$/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>/\.d\.ts$/.test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >filename : Symbol(filename, Decl(parserharness.ts, 759, 38))
         }
 
@@ -3502,10 +3502,10 @@ module Harness {
                     } else {
                         var match = errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/);
 >match : Symbol(match, Decl(parserharness.ts, 1187, 27))
->errorLines[i].match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>errorLines[i].match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >errorLines : Symbol(errorLines, Decl(parserharness.ts, 1175, 92))
 >i : Symbol(i, Decl(parserharness.ts, 1182, 24))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
                         if (match) {
 >match : Symbol(match, Decl(parserharness.ts, 1187, 27))
@@ -3518,11 +3518,15 @@ module Harness {
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >CompilerError : Symbol(CompilerError, Decl(parserharness.ts, 1206, 9))
 >match : Symbol(match, Decl(parserharness.ts, 1187, 27))
+>1 : Symbol(1)
 >parseFloat : Symbol(parseFloat, Decl(lib.es5.d.ts, --, --))
 >match : Symbol(match, Decl(parserharness.ts, 1187, 27))
+>2 : Symbol(2)
 >parseFloat : Symbol(parseFloat, Decl(lib.es5.d.ts, --, --))
 >match : Symbol(match, Decl(parserharness.ts, 1187, 27))
+>3 : Symbol(3)
 >match : Symbol(match, Decl(parserharness.ts, 1187, 27))
+>4 : Symbol(4)
                         }
                         else {
                             WScript.Echo("non-match on: " + errorLines[i]);
@@ -3808,10 +3812,10 @@ module Harness {
 
             var filename = path.match(/[^\/]*$/)[0];
 >filename : Symbol(filename, Decl(parserharness.ts, 1287, 15))
->path.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>path.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >path : Symbol(path, Decl(parserharness.ts, 1285, 36))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
->0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>0 : Symbol(0)
 
             var code = readFile(path);
 >code : Symbol(code, Decl(parserharness.ts, 1288, 15))
@@ -3943,13 +3947,13 @@ module Harness {
 
             var unitName = switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/)[0];
 >unitName : Symbol(unitName, Decl(parserharness.ts, 1327, 15))
->switchToForwardSlashes(lastUnit.name).match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>switchToForwardSlashes(lastUnit.name).match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >switchToForwardSlashes : Symbol(switchToForwardSlashes, Decl(parserharness.ts, 25, 22))
 >lastUnit.name : Symbol(TestCaseParser.TestUnitData.name, Decl(parserharness.ts, 1422, 28))
 >lastUnit : Symbol(lastUnit, Decl(parserharness.ts, 1326, 15))
 >name : Symbol(TestCaseParser.TestUnitData.name, Decl(parserharness.ts, 1422, 28))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
->0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>0 : Symbol(0)
 
             var dependencies = units.slice(0, units.length - 1);
 >dependencies : Symbol(dependencies, Decl(parserharness.ts, 1329, 15))
@@ -4344,8 +4348,8 @@ module Harness {
 
                 var isTripleSlashReference = /[\/]{3}\s*<reference path/.test(line);
 >isTripleSlashReference : Symbol(isTripleSlashReference, Decl(parserharness.ts, 1464, 19))
->/[\/]{3}\s*<reference path/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>/[\/]{3}\s*<reference path/.test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >line : Symbol(line, Decl(parserharness.ts, 1463, 19))
 
                 var testMetaData = optionRegex.exec(line);
@@ -4358,9 +4362,9 @@ module Harness {
 
                     var isRef = line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/);
 >isRef : Symbol(isRef, Decl(parserharness.ts, 1468, 23))
->line.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>line.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >line : Symbol(line, Decl(parserharness.ts, 1463, 19))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
                     if (isRef) {
 >isRef : Symbol(isRef, Decl(parserharness.ts, 1468, 23))
@@ -4383,6 +4387,7 @@ module Harness {
                             path: isRef[1],
 >path : Symbol(path, Decl(parserharness.ts, 1474, 39))
 >isRef : Symbol(isRef, Decl(parserharness.ts, 1468, 23))
+>1 : Symbol(1)
 
                             isResident: false
 >isResident : Symbol(isResident, Decl(parserharness.ts, 1475, 43))
@@ -5699,10 +5704,10 @@ module Harness {
 >runString : Symbol(runString, Decl(parserharness.ts, 1899, 9))
 >readFile : Symbol(readFile, Decl(parserharness.ts, 207, 5))
 >path : Symbol(path, Decl(parserharness.ts, 1869, 38))
->path.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>path.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >path : Symbol(path, Decl(parserharness.ts, 1869, 38))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
->0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>0 : Symbol(0)
 >callback : Symbol(callback, Decl(parserharness.ts, 1869, 51))
         }
 

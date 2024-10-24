@@ -53,7 +53,6 @@ interface NewableFunction {}
 interface IArguments {}
 interface Number { toExponential: any; }
 interface Object {}
-interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
@@ -133,7 +132,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/test/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/test/test.ts SVC-1-0 "class TestClass1 {\n\n    constructor() {\n        var l = new TestLib();\n\n    }\n\n    public test2() {\n        var x = new BrokenTest('',0,0,null);\n\n    }\n}"
 	/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts Text-1 "declare class BrokenTest {\n    constructor(name: string, width: number, height: number, onSelect: Function);\n    Name: string;\n    SelectedFile: string;\n}"
 	/user/username/projects/myproject/lib/@app/lib/index.d.ts Text-1 "/// <reference types=\"UpperCasePackage\" />\ndeclare class TestLib {\n    issue: BrokenTest;\n    constructor();\n    test(): void;\n}"
@@ -178,7 +177,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 3,
-            "dtsSize": 695,
+            "dtsSize": 675,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -334,7 +333,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'UpperCa
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/test/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/test/test.ts SVC-1-0 "class TestClass1 {\n\n    constructor() {\n        var l = new TestLib();\n\n    }\n\n    public test2() {\n        var x = new BrokenTest('',0,0,null);\n\n    }\n}"
 	/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts Text-1 "declare class BrokenTest {\n    constructor(name: string, width: number, height: number, onSelect: Function);\n    Name: string;\n    SelectedFile: string;\n}"
 	/user/username/projects/myproject/lib/@app/lib/index.d.ts Text-2 "/// <reference types=\"UpperCasePackage\" />\ndeclare class TestLib {\n    issue: BrokenTest;\n    constructor();\n    test2(): void;\n}"

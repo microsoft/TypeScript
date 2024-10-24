@@ -1151,8 +1151,8 @@ const testRegExpFlags = /abc/g.flags;
 >                : ^^^
 >/abc/g.flags : any
 >             : ^^^
->/abc/g : RegExp
->       : ^^^^^^
+>/abc/g : RegExp<["abc"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >flags : any
 >      : ^^^
 
@@ -1161,8 +1161,8 @@ const testRegExpSticky = /abc/g.sticky;
 >                 : ^^^
 >/abc/g.sticky : any
 >              : ^^^
->/abc/g : RegExp
->       : ^^^^^^
+>/abc/g : RegExp<["abc"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sticky : any
 >       : ^^^
 
@@ -1171,8 +1171,8 @@ const testRegExpUnicode = /abc/g.unicode;
 >                  : ^^^
 >/abc/g.unicode : any
 >               : ^^^
->/abc/g : RegExp
->       : ^^^^^^
+>/abc/g : RegExp<["abc"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unicode : any
 >        : ^^^
 

@@ -6,8 +6,8 @@ let obj: number[];
 >    : ^^^^^^^^
 
 let x: string | number | boolean | RegExp;
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function a() {
 >a : () => void
@@ -16,22 +16,22 @@ function a() {
     x = true;
 >x = true : true
 >         : ^^^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
     for (x of obj) {
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
         x = x.toExponential();
 >x = x.toExponential() : string
 >                      : ^^^^^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.toExponential() : string
 >                  : ^^^^^^
 >x.toExponential : (fractionDigits?: number) => string

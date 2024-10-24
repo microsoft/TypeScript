@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts'/>
-
+// @strict: true
 ////interface Numeric {
 ////    [x: number]: Date;
 ////}
@@ -64,12 +64,12 @@
 verify.quickInfos({
     1: "var r1: Date",
     2: "var r2: Date",
-    3: "var r3: RegExp",
-    4: "var r4: RegExp",
+    3: "var r3: RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>",
+    4: "var r4: RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>",
     5: "var r5: Date",
     6: "var r6: Date",
-    7: "var r7: RegExp",
-    8: "var r8: RegExp",
+    7: "var r7: RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>",
+    8: "var r8: RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>",
     9: "var r9: Date",
     10: "var r10: Date",
     11: "var r11: Date",

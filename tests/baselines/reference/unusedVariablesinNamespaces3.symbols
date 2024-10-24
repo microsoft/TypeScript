@@ -21,9 +21,9 @@ namespace Validation {
 >s2 : Symbol(s2, Decl(unusedVariablesinNamespaces3.ts, 6, 21))
 
             return lettersRegexp.test(s2);
->lettersRegexp.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>lettersRegexp.test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >lettersRegexp : Symbol(lettersRegexp, Decl(unusedVariablesinNamespaces3.ts, 1, 9))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >s2 : Symbol(s2, Decl(unusedVariablesinNamespaces3.ts, 6, 21))
         }
     }

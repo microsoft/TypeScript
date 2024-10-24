@@ -82,8 +82,8 @@ interface I1<T> {
 >     : ^^^^
 
     foo7: RegExp; // error
->foo7 : RegExp
->     : ^^^^^^
+>foo7 : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     foo8: { bar: number }; // error
 >foo8 : { bar: number; }
@@ -169,8 +169,8 @@ interface I2<T> {
 >     : ^^^^
 
     foo7: RegExp; // error
->foo7 : RegExp
->     : ^^^^^^
+>foo7 : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     foo8: { bar: number }; // error
 >foo8 : { bar: number; }

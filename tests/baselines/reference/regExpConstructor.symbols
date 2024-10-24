@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/es6/regularExpressions/regExpConstructor.ts] ////
+
+=== regExpConstructor.ts ===
+// Flags should be copied
+const regex1 = new RegExp(/foo/i);
+>regex1 : Symbol(regex1, Decl(regExpConstructor.ts, 1, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// Flags should be copied
+const regex2 = new RegExp(/foo/i, undefined);
+>regex2 : Symbol(regex2, Decl(regExpConstructor.ts, 4, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+// Flags should not be copied
+const regex3 = new RegExp(/foo/i, "dgi");
+>regex3 : Symbol(regex3, Decl(regExpConstructor.ts, 7, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// Flags should not be copied
+const regex4 = new RegExp(/foo/i, Math.random() >= 0.5 ? "dgi" : undefined);
+>regex4 : Symbol(regex4, Decl(regExpConstructor.ts, 10, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+

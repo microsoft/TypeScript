@@ -1705,10 +1705,6 @@
         "category": "Error",
         "code": 1512
     },
-    "Undetermined character escape.": {
-        "category": "Error",
-        "code": 1513
-    },
     "Expected a capturing group name.": {
         "category": "Error",
         "code": 1514
@@ -1833,6 +1829,10 @@
     "Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to '{0}'.": {
         "category": "Error",
         "code": 1544
+    },
+    "'\\k' is only available outside character class.": {
+        "category": "Error",
+        "code": 1545
     },
 
     "The types of '{0}' are incompatible between these types.": {

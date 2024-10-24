@@ -30,8 +30,8 @@ declare module "express" {
             post(path: RegExp, handler: (req: Function) => void ): void;
 >post : (path: RegExp, handler: (req: Function) => void) => void
 >     : ^    ^^      ^^       ^^                       ^^^^^    
->path : RegExp
->     : ^^^^^^
+>path : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >handler : (req: Function) => void
 >        : ^   ^^        ^^^^^    
 >req : Function

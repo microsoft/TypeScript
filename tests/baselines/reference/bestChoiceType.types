@@ -1,31 +1,35 @@
 //// [tests/cases/compiler/bestChoiceType.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
 === bestChoiceType.ts ===
 // Repro from #10041
 
 (''.match(/ /) || []).map(s => s.toLowerCase());
 >(''.match(/ /) || []).map(s => s.toLowerCase()) : any[]
 >                                                : ^^^^^
->(''.match(/ /) || []).map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
->                          : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
->(''.match(/ /) || []) : RegExpMatchArray | []
->                      : ^^^^^^^^^^^^^^^^^^^^^
->''.match(/ /) || [] : RegExpMatchArray | []
->                    : ^^^^^^^^^^^^^^^^^^^^^
->''.match(/ /) : RegExpMatchArray | null
->              : ^^^^^^^^^^^^^^^^^^^^^^^
->''.match : (regexp: string | RegExp) => RegExpMatchArray | null
->         : ^      ^^               ^^^^^                       
+>(''.match(/ /) || []).map : (<U>(callbackfn: (value: " ", index: number, array: " "[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>                          : ^^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>(''.match(/ /) || []) : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | []
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>''.match(/ /) || [] : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | []
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>''.match(/ /) : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>''.match : { <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray>(regexp: RegExp<CapturingGroups, NamedCapturingGroupsObject, { readonly global: true; }>): RegExpMatchArray<CapturingGroups> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: false; } = RegExpFlags & { readonly global: false; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags>): RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> = RegExpFlags>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string): RegExpMatchArray<CapturingGroups> | RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; }
+>         : ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                               ^^^                                        ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^      ^^                                                    ^^^                                                                    ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                    ^^^^^^^^^^^^^^^^      ^^                                                             ^^^                                                                                                        ^^^
 >'' : ""
 >   : ^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
->/ / : RegExp
->    : ^^^^^^
+>match : { <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray>(regexp: RegExp<CapturingGroups, NamedCapturingGroupsObject, { readonly global: true; }>): RegExpMatchArray<CapturingGroups> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: false; } = RegExpFlags & { readonly global: false; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags>): RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> = RegExpFlags>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string): RegExpMatchArray<CapturingGroups> | RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; }
+>      : ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                               ^^^                                        ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^      ^^                                                    ^^^                                                                    ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                    ^^^^^^^^^^^^^^^^      ^^                                                             ^^^                                                                                                        ^^^
+>/ / : RegExp<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
 >   : ^^
->map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
->    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>map : (<U>(callbackfn: (value: " ", index: number, array: " "[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>    : ^^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >s => s.toLowerCase() : (s: any) => any
 >                     : ^ ^^^^^^^^^^^^^
 >s : any
@@ -43,26 +47,26 @@ function f1() {
 >   : ^^^^^^^^^^
 
     let x = ''.match(/ /);
->x : RegExpMatchArray | null
->  : ^^^^^^^^^^^^^^^^^^^^^^^
->''.match(/ /) : RegExpMatchArray | null
->              : ^^^^^^^^^^^^^^^^^^^^^^^
->''.match : (regexp: string | RegExp) => RegExpMatchArray | null
->         : ^      ^^               ^^^^^                       
+>x : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>''.match(/ /) : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>''.match : { <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray>(regexp: RegExp<CapturingGroups, NamedCapturingGroupsObject, { readonly global: true; }>): RegExpMatchArray<CapturingGroups> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: false; } = RegExpFlags & { readonly global: false; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags>): RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> = RegExpFlags>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string): RegExpMatchArray<CapturingGroups> | RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; }
+>         : ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                               ^^^                                        ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^      ^^                                                    ^^^                                                                    ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                    ^^^^^^^^^^^^^^^^      ^^                                                             ^^^                                                                                                        ^^^
 >'' : ""
 >   : ^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
->/ / : RegExp
->    : ^^^^^^
+>match : { <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray>(regexp: RegExp<CapturingGroups, NamedCapturingGroupsObject, { readonly global: true; }>): RegExpMatchArray<CapturingGroups> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: false; } = RegExpFlags & { readonly global: false; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags>): RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> = RegExpFlags>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string): RegExpMatchArray<CapturingGroups> | RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; }
+>      : ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                               ^^^                                        ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^      ^^                                                    ^^^                                                                    ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                    ^^^^^^^^^^^^^^^^      ^^                                                             ^^^                                                                                                        ^^^
+>/ / : RegExp<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let y = x || [];
->y : RegExpMatchArray | []
->  : ^^^^^^^^^^^^^^^^^^^^^
->x || [] : RegExpMatchArray | []
->        : ^^^^^^^^^^^^^^^^^^^^^
->x : RegExpMatchArray | null
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>y : [] | RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x || [] : [] | RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
 >   : ^^
 
@@ -71,12 +75,12 @@ function f1() {
 >  : ^^^^^
 >y.map(s => s.toLowerCase()) : any[]
 >                            : ^^^^^
->y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
->      : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
->y : RegExpMatchArray | []
->  : ^^^^^^^^^^^^^^^^^^^^^
->map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
->    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>y.map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: " ", index: number, array: " "[]) => U, thisArg?: any) => U[])
+>      : ^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>y : [] | RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: " ", index: number, array: " "[]) => U, thisArg?: any) => U[])
+>    : ^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >s => s.toLowerCase() : (s: any) => any
 >                     : ^ ^^^^^^^^^^^^^
 >s : any
@@ -93,28 +97,28 @@ function f2() {
 >   : ^^^^^^^^^^
 
     let x = ''.match(/ /);
->x : RegExpMatchArray | null
->  : ^^^^^^^^^^^^^^^^^^^^^^^
->''.match(/ /) : RegExpMatchArray | null
->              : ^^^^^^^^^^^^^^^^^^^^^^^
->''.match : (regexp: string | RegExp) => RegExpMatchArray | null
->         : ^      ^^               ^^^^^                       
+>x : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>''.match(/ /) : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>''.match : { <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray>(regexp: RegExp<CapturingGroups, NamedCapturingGroupsObject, { readonly global: true; }>): RegExpMatchArray<CapturingGroups> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: false; } = RegExpFlags & { readonly global: false; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags>): RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> = RegExpFlags>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string): RegExpMatchArray<CapturingGroups> | RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; }
+>         : ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                               ^^^                                        ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^      ^^                                                    ^^^                                                                    ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                    ^^^^^^^^^^^^^^^^      ^^                                                             ^^^                                                                                                        ^^^
 >'' : ""
 >   : ^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
->/ / : RegExp
->    : ^^^^^^
+>match : { <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray>(regexp: RegExp<CapturingGroups, NamedCapturingGroupsObject, { readonly global: true; }>): RegExpMatchArray<CapturingGroups> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: false; } = RegExpFlags & { readonly global: false; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags>): RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> = RegExpFlags>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string): RegExpMatchArray<CapturingGroups> | RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null; }
+>      : ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                               ^^^                                        ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^      ^^                                                    ^^^                                                                    ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                    ^^^^^^^^^^^^^^^^      ^^                                                             ^^^                                                                                                        ^^^
+>/ / : RegExp<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let y = x ? x : [];
->y : RegExpMatchArray | never[]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->x ? x : [] : RegExpMatchArray | never[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : RegExpMatchArray | null
->  : ^^^^^^^^^^^^^^^^^^^^^^^
->x : RegExpMatchArray
->  : ^^^^^^^^^^^^^^^^
+>y : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | never[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x ? x : [] : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | never[]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : never[]
 >   : ^^^^^^^
 
@@ -123,12 +127,12 @@ function f2() {
 >  : ^^^^^
 >y.map(s => s.toLowerCase()) : any[]
 >                            : ^^^^^
->y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
->      : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
->y : RegExpMatchArray | never[]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
->    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>y.map : (<U>(callbackfn: (value: " ", index: number, array: " "[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>      : ^^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>y : RegExpExecArray<[" "], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | never[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : (<U>(callbackfn: (value: " ", index: number, array: " "[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>    : ^^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >s => s.toLowerCase() : (s: any) => any
 >                     : ^ ^^^^^^^^^^^^^
 >s : any

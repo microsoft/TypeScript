@@ -1123,6 +1123,12 @@ export function last<T>(array: readonly T[]): T {
     return array[array.length - 1];
 }
 
+/** @internal */
+export function setLast<T>(array: T[], value: T): T {
+    Debug.assert(array.length !== 0);
+    return array[array.length - 1] = value;
+}
+
 /**
  * Returns the only element of an array if it contains only one element, `undefined` otherwise.
  *

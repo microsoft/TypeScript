@@ -71,8 +71,8 @@ declare var a;
 (<any>/regexp/g); 
 >(<any>/regexp/g) : any
 ><any>/regexp/g : any
->/regexp/g : RegExp
->          : ^^^^^^
+>/regexp/g : RegExp<["regexp"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (<any>false); 
 >(<any>false) : any

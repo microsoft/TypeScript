@@ -34,7 +34,6 @@ interface NewableFunction {}
 interface IArguments {}
 interface Number { toExponential: any; }
 interface Object {}
-interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
@@ -201,11 +200,6 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
             "code": 2318,
             "category": "error"
           },
@@ -401,11 +395,6 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
             "code": 2318,
             "category": "error"
           },

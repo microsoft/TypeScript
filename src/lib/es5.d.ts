@@ -109,7 +109,7 @@ interface Object {
     /** Returns a string representation of an object. */
     toString(): string;
 
-    /** Returns a date converted to a string using the current locale. */
+    /** Returns a string representation of an object appropriate to the host environment's current locale. */
     toLocaleString(): string;
 
     /** Returns the primitive value of the specified object. */
@@ -389,8 +389,35 @@ interface IArguments {
     callee: Function;
 }
 
+interface StringReplaceCallbackOptions {}
+
+interface StringReplaceCallbackIncludeNamedCapturingGroups {
+    readonly includeNamedCapturingGroups: unique symbol;
+}
+
+// Used by `String.replace`, `String.replaceAll` and `RegExp[Symbol.replace]`
+type StringReplaceCallbackSignature<
+    CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+    NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+> = (
+    ...args: [
+        ...capturingGroups: CapturingGroups,
+        index: number,
+        input: string,
+        ...([StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []),
+    ]
+) => string;
+
+/**
+ * The array returned by `String.prototype.match` when the global (`g`) flag is set on the specified RegExp.
+ * The first match will always be present because `null` will be returned if there are no matches.
+ */
+type RegExpMatchArray<CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray> = [CapturingGroups[0], ...CapturingGroups[0][]];
+
 interface String {
-    /** Returns a string representation of a string. */
+    /**
+     * Returns a string representation of the string, which in this case is the string itself.
+     */
     toString(): string;
 
     /**
@@ -400,114 +427,179 @@ interface String {
     charAt(pos: number): string;
 
     /**
-     * Returns the Unicode value of the character at the specified location.
-     * @param index The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.
+     * Returns a non-negative integer less than 65536 (0x10000) that is the code unit value of the character at the specified index,
+     * or `NaN` if there is no character at the specified index.
+     * @param index The zero-based index of the desired character.
      */
     charCodeAt(index: number): number;
 
     /**
-     * Returns a string that contains the concatenation of two or more strings.
+     * Returns a string that contains the concatenation of the string and the arguments.
      * @param strings The strings to append to the end of the string.
      */
     concat(...strings: string[]): string;
 
     /**
-     * Returns the position of the first occurrence of a substring.
-     * @param searchString The substring to search for in the string
-     * @param position The index at which to begin searching the String object. If omitted, search starts at the beginning of the string.
+     * Returns the index of the first occurrence of a substring in the string.
+     * @param searchString The substring to search for.
+     * @param position The index at which to begin searching the string. If omitted, search starts at the beginning of the string.
      */
     indexOf(searchString: string, position?: number): number;
 
     /**
-     * Returns the last occurrence of a substring in the string.
+     * Returns the index of the last occurrence of a substring in the string.
      * @param searchString The substring to search for.
      * @param position The index at which to begin searching. If omitted, the search begins at the end of the string.
      */
     lastIndexOf(searchString: string, position?: number): number;
 
     /**
-     * Determines whether two strings are equivalent in the current locale.
-     * @param that String to compare to target string
+     * Determines whether the reference string comes before, after or is equivalent to the specified string in the host environment's current locale.
+     * Returns a negative integer if it comes before, a positive number if it comes after, and 0 if they are equivalent.
+     * @param that The string to compare to.
      */
     localeCompare(that: string): number;
 
     /**
-     * Matches a string with a regular expression, and returns an array containing the results of that search.
-     * @param regexp A variable name or string literal containing the regular expression pattern and flags.
+     * Matches the string with a regular expression.
+     * @param regexp The regular expression with the global (`g`) flag set.
+     * @returns A {@linkcode RegExpMatchArray} that contains all the matched substrings, or `null` if no matches are present.
      */
-    match(regexp: string | RegExp): RegExpMatchArray | null;
+    match<
+        CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+    >(regexp: RegExp<CapturingGroups, NamedCapturingGroupsObject, { readonly global: true; }>): RegExpMatchArray<CapturingGroups> | null;
 
     /**
-     * Replaces text in a string, using a regular expression or search string.
-     * @param searchValue A string or regular expression to search for.
-     * @param replaceValue A string containing the text to replace. When the {@linkcode searchValue} is a `RegExp`, all matches are replaced if the `g` flag is set (or only those matches at the beginning, if the `y` flag is also present). Otherwise, only the first match of {@linkcode searchValue} is replaced.
+     * Matches the string with a regular expression.
+     * @param regexp The regular expression with the global (`g`) flag unset.
+     * @returns A {@linkcode RegExpExecArray} which is identical to the return value of `regexp.exec(string)`,
+     * or `null` if no matches are present.
      */
-    replace(searchValue: string | RegExp, replaceValue: string): string;
+    match<
+        CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+        NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+        Flags extends Partial<RegExpFlags> & { readonly global: false; } = RegExpFlags & { readonly global: false; },
+    >(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags>): RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null;
 
     /**
-     * Replaces text in a string, using a regular expression or search string.
+     * Matches the string with a regular expression.
+     * @param regexp The regular expression for searching. If the provided value is not a RegExp,
+     * it is implicitly converted to a RegExp without flags by `new RegExp(regexp)`.
+     * @returns Either a {@linkcode RegExpMatchArray} that contains all the matched substrings when the global (`g`) flag is set on the specified RegExp,
+     * a {@linkcode RegExpExecArray} which is identical to the return value of `regexp.exec(string)`, or `null` if no matches are present.
+     */
+    match<
+        CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+        NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+        Flags extends Partial<RegExpFlags> = RegExpFlags,
+    >(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string): RegExpMatchArray<CapturingGroups> | RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null;
+
+    /**
+     * Replaces the first occurrence of a search string in the target string.
      * @param searchValue A string to search for.
-     * @param replacer A function that returns the replacement text.
+     * @param replaceValue The replacement text, or a callback function that returns the replacement text.
      */
-    replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
+    replace<T extends string>(
+        searchValue: T,
+        replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>,
+    ): string;
 
     /**
-     * Finds the first substring match in a regular expression search.
-     * @param regexp The regular expression pattern and applicable flags.
+     * Replaces one or more occurrences of substrings that match a search string or a regular expression.
+     * When the {@linkcode searchValue} is a `RegExp`, all matches are replaced if the `g` (global) flag is set
+     * (or only those matches at the beginning, if the `y` (sticky) flag is also present).
+     * Otherwise, only the first match of {@linkcode searchValue} is replaced.
+     * @param searchValue A string or regular expression to search for.
+     * @param replaceValue The replacement text, or a callback function that returns the replacement text.
+     */
+    replace<
+        CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+        NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+    >(
+        searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>,
+        replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>,
+    ): string;
+
+    /**
+     * Returns the index of the first occurrence that match a regular expression, or `-1` if no matches are present.
+     * @param regexp The regular expression for searching. If the provided value is not a RegExp,
+     * it is implicitly converted to a RegExp without flags by `new RegExp(regexp)`.
      */
     search(regexp: string | RegExp): number;
 
     /**
-     * Returns a section of a string.
-     * @param start The index to the beginning of the specified portion of stringObj.
-     * @param end The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end.
-     * If this value is not specified, the substring continues to the end of stringObj.
+     * Returns a section of the string.
+     * @param start The index to the beginning of the specified portion of the string.
+     * @param end The index to the end of the specified portion of the string. The substring includes the characters up to, but not including, the character indicated by end.
+     * If this value is not specified, the substring continues to the end of the string.
      */
     slice(start?: number, end?: number): string;
 
     /**
-     * Split a string into substrings using the specified separator and return them as an array.
-     * @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
-     * @param limit A value used to limit the number of elements returned in the array.
+     * Returns an array of substrings that were delimited by separators in the string.
+     * @param separator A string or a regular expression that identifies character(s) to use in separating the string.
+     * If omitted, a single-element array containing the entire string is returned.
+     *
+     * If the regular expression contains capturing parentheses, then each time this
+     * regular expression matches, the results (including any undefined results) of the
+     * capturing parentheses are spliced.
+     *
+     * @param limit If specified, the output array is truncated so that it contains no more than `limit` elements.
      */
     split(separator: string | RegExp, limit?: number): string[];
 
     /**
-     * Returns the substring at the specified location within a String object.
-     * @param start The zero-based index number indicating the beginning of the substring.
-     * @param end Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.
+     * Returns the substring beginning at the specified index within a string.
+     * @param start The zero-based index indicating the beginning of the substring.
+     * @param end The zero-based index indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.
      * If end is omitted, the characters from start through the end of the original string are returned.
      */
     substring(start: number, end?: number): string;
 
-    /** Converts all the alphabetic characters in a string to lowercase. */
+    /**
+     * Converts all alphabetic characters in a string to lowercase.
+     */
     toLowerCase(): string;
 
-    /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
+    /**
+     * Converts all alphabetic characters in a string to lowercase, taking locale-specific conversion rules into account.
+     * @param locales One or more locales that the conversion should take into account. Defaults to the host environment's current locale.
+     */
     toLocaleLowerCase(locales?: string | string[]): string;
 
-    /** Converts all the alphabetic characters in a string to uppercase. */
+    /**
+     * Converts all alphabetic characters in a string to uppercase.
+     */
     toUpperCase(): string;
 
-    /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
+    /**
+     * Converts all alphabetic characters in a string to uppercase, taking locale-specific conversion rules into account.
+     * @param locales One or more locales that the conversion should take into account. Defaults to the host environment's current locale.
+     */
     toLocaleUpperCase(locales?: string | string[]): string;
 
-    /** Removes the leading and trailing white space and line terminator characters from a string. */
+    /**
+     * Removes the leading and trailing white space and line terminator characters from a string.
+     */
     trim(): string;
 
-    /** Returns the length of a String object. */
+    /**
+     * Returns the number of code units of the string.
+     */
     readonly length: number;
 
     // IE extensions
     /**
-     * Gets a substring beginning at the specified location and having the specified length.
+     * Gets a substring beginning at the specified index and having the specified length.
      * @deprecated A legacy feature for browser compatibility
-     * @param from The starting position of the desired substring. The index of the first character in the string is zero.
+     * @param from The starting index of the desired substring. The index of the first character in the string is zero.
      * @param length The number of characters to include in the returned substring.
      */
     substr(from: number, length?: number): string;
 
-    /** Returns the primitive value of the specified object. */
+    /**
+     * Returns the primitive value of the specified object, which in this case is the string itself.
+     */
     valueOf(): string;
 
     readonly [index: number]: string;
@@ -521,7 +613,7 @@ interface StringConstructor {
 }
 
 /**
- * Allows manipulation and formatting of text strings and determination and location of substrings within strings.
+ * Allows manipulation and formatting of text strings and determination of location of substrings within strings.
  */
 declare var String: StringConstructor;
 
@@ -942,22 +1034,25 @@ interface DateConstructor {
 
 declare var Date: DateConstructor;
 
-interface RegExpMatchArray extends Array<string> {
-    /**
-     * The index of the search at which the result was found.
-     */
-    index?: number;
-    /**
-     * A copy of the search string.
-     */
-    input?: string;
-    /**
-     * The first match. This will always be present because `null` will be returned if there are no matches.
-     */
-    0: string;
-}
+// `RegExpExecArray` can't extend `[string, ...(string | undefined)[]]` correctly, see issue #51751
+type CapturingGroupsArray = { 0: string; } & (string | undefined)[];
+type NamedCapturingGroupsObject = { [name: string]: string | undefined; } | undefined;
 
-interface RegExpExecArray extends Array<string> {
+// `CapturingGroups` can't be extended directly, see issue #2225
+// `NamedCapturingGroups` is used from ES2018
+type RegExpExecArray<
+    CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+    NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+    Flags extends Partial<RegExpFlags> = RegExpFlags,
+> =
+    & CapturingGroups
+    & _RegExpExecArray<CapturingGroups, NamedCapturingGroups>
+    & (Flags extends { readonly hasIndices: true; } ? RegExpIndices : unknown);
+
+interface _RegExpExecArray<
+    CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+    NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+> {
     /**
      * The index of the search at which the result was found.
      */
@@ -966,48 +1061,72 @@ interface RegExpExecArray extends Array<string> {
      * A copy of the search string.
      */
     input: string;
-    /**
-     * The first match. This will always be present because `null` will be returned if there are no matches.
-     */
-    0: string;
 }
 
-interface RegExp {
+// Used from ES2022
+interface RegExpIndices<
+    CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+    NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+> {}
+
+type RegExp<
+    CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+    NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+    Flags extends Partial<RegExpFlags> = RegExpFlags,
+> =
+    & _RegExp<CapturingGroups, NamedCapturingGroups, Flags>
+    & { readonly [P in keyof RegExpFlags]: Flags[P] & RegExpFlags[P]; }; // Exclude flags not in specified libraries
+
+interface _RegExp<
+    CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
+    NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
+    Flags extends Partial<RegExpFlags> = RegExpFlags,
+> {
     /**
-     * Executes a search on a string using a regular expression pattern, and returns an array containing the results of that search.
-     * @param string The String object or string literal on which to perform the search.
+     * Searches a string for the pattern identified by the regular expression, and returns an {@linkcode RegExpExecArray} containing the results of that search.
+     * @param string The string on which to perform the search.
      */
-    exec(string: string): RegExpExecArray | null;
+    exec(string: string): RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags> | null;
 
     /**
-     * Returns a Boolean value that indicates whether or not a pattern exists in a searched string.
-     * @param string String on which to perform the search.
+     * Returns a Boolean value that indicates whether or not the pattern identified by the regular expression exists in a searched string.
+     * @param string The string on which to perform the search.
      */
     test(string: string): boolean;
 
-    /** Returns a copy of the text of the regular expression pattern. Read-only. The regExp argument is a Regular expression object. It can be a variable name or a literal. */
+    /**
+     * The body of the regular expression, that is the text between the two forward slashes `/`. Read-only.
+     */
     readonly source: string;
 
-    /** Returns a Boolean value indicating the state of the global flag (g) used with a regular expression. Default is false. Read-only. */
-    readonly global: boolean;
-
-    /** Returns a Boolean value indicating the state of the ignoreCase flag (i) used with a regular expression. Default is false. Read-only. */
-    readonly ignoreCase: boolean;
-
-    /** Returns a Boolean value indicating the state of the multiline flag (m) used with a regular expression. Default is false. Read-only. */
-    readonly multiline: boolean;
-
+    /**
+     * Gets or sets the index at which the {@linkcode RegExp.exec()} or {@linkcode RegExp.test()} methods start searching for a match in an arbitrary string.
+     * After each execution of {@linkcode RegExp.exec()} or {@linkcode RegExp.test()}, `lastIndex` will be set to the end index of the matched string,
+     * or 0 if a match was not found.
+     * The initial value before any executions of {@linkcode RegExp.exec()} or {@linkcode RegExp.test()} is 0.
+     */
     lastIndex: number;
 
     // Non-standard extensions
     /** @deprecated A legacy feature for browser compatibility */
-    compile(pattern: string, flags?: string): this;
+    compile(pattern: string, flags?: string): RegExp;
+}
+
+interface RegExpFlags {
+    /** A Boolean value indicating the state of the global flag (g) on the regular expression. Read-only. */
+    readonly global: boolean;
+
+    /** A Boolean value indicating the state of the ignoreCase flag (i) on the regular expression. Read-only. */
+    readonly ignoreCase: boolean;
+
+    /** A Boolean value indicating the state of the multiline flag (m) on the regular expression. Read-only. */
+    readonly multiline: boolean;
 }
 
 interface RegExpConstructor {
-    new (pattern: RegExp | string): RegExp;
+    new <T extends RegExp = RegExp>(pattern: T | string): T;
     new (pattern: string, flags?: string): RegExp;
-    (pattern: RegExp | string): RegExp;
+    <T extends RegExp = RegExp>(pattern: T | string): T;
     (pattern: string, flags?: string): RegExp;
     readonly "prototype": RegExp;
 
@@ -4529,8 +4648,8 @@ interface String {
     /**
      * Determines whether two strings are equivalent in the current or specified locale.
      * @param that String to compare to target string
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
-     * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
+     * @param locales A locale string or array of locale strings that contain one or more BCP 47 language tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the host environment is used.
+     * @param options An object that contains one or more properties that specify comparison options.
      */
     localeCompare(that: string, locales?: string | string[], options?: Intl.CollatorOptions): number;
 }
@@ -4538,7 +4657,7 @@ interface String {
 interface Number {
     /**
      * Converts a number to a string by using the current or specified locale.
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+     * @param locales A locale string or array of locale strings that contain one or more BCP 47 language tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the host environment is used.
      * @param options An object that contains one or more properties that specify comparison options.
      */
     toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;

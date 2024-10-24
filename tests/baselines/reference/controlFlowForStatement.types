@@ -154,14 +154,14 @@ function e() {
 >  : ^^^^^^^^^^
 
     let x: string | number | boolean | RegExp;
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     for (x = "" || 0; typeof x !== "string"; x = "" || true) {
 >x = "" || 0 : 0
 >            : ^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" || 0 : 0
 >        : ^
 >"" : ""
@@ -178,8 +178,8 @@ function e() {
 >         : ^^^^^^^^
 >x = "" || true : true
 >               : ^^^^
->x : string | number | boolean | RegExp
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" || true : true
 >           : ^^^^
 >"" : ""

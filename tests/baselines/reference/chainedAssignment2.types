@@ -18,8 +18,8 @@ var d: Date;
 >  : ^^^^
 
 var e: RegExp;
->e : RegExp
->  : ^^^^^^
+>e : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 a = b = c = d = e = null;
 >a = b = c = d = e = null : null
@@ -40,7 +40,7 @@ a = b = c = d = e = null;
 >  : ^^^^
 >e = null : null
 >         : ^^^^
->e : RegExp
->  : ^^^^^^
+>e : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 

@@ -4,7 +4,6 @@ interface Boolean {}
 interface IArguments {}
 interface Function {}
 interface Number {}
-interface RegExp {}
 interface Object {}
 interface String {}
 

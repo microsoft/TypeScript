@@ -25,6 +25,7 @@ module Bugs {
       var index= rest[0];
 >index : Symbol(index, Decl(overloadResolutionOverNonCTLambdas.ts, 7, 9))
 >rest : Symbol(rest, Decl(overloadResolutionOverNonCTLambdas.ts, 6, 61))
+>0 : Symbol(0)
 
       return typeof args[index] !== 'undefined'
 >args : Symbol(args, Decl(overloadResolutionOverNonCTLambdas.ts, 5, 31))

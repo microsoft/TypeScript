@@ -1,23 +1,15 @@
 //// [tests/cases/compiler/regExpWithOpenBracketInCharClass.ts] ////
 
 === regExpWithOpenBracketInCharClass.ts ===
-const regexes: RegExp[] = [
->regexes : RegExp[]
->        : ^^^^^^^^
->[  /[[]/,  // Valid  /[[]/u, // Valid  /[[]/v, // Well-terminated regex with an incomplete character class] : RegExp[]
->                                                                                                            : ^^^^^^^^
+/[[]/;  // Valid
+>/[[]/ : RegExp<["["], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /[[]/,  // Valid
->/[[]/ : RegExp
->      : ^^^^^^
+/[[]/u; // Valid
+>/[[]/u : RegExp<["["], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  /[[]/u, // Valid
->/[[]/u : RegExp
->       : ^^^^^^
-
-  /[[]/v, // Well-terminated regex with an incomplete character class
->/[[]/v : RegExp
->       : ^^^^^^
-
-];
+/[[]/v; // Well-terminated regex with an incomplete character class
+>/[[]/v : RegExp<[never], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: true; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

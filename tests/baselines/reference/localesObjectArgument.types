@@ -222,24 +222,24 @@ bigint.toLocaleString([deDE, jaJP]);
 str.toLocaleLowerCase(enUS);
 >str.toLocaleLowerCase(enUS) : string
 >                            : ^^^^^^
->str.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
->                      : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>str.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: string | string[] | Intl.LocalesArgument): string; }
+>                      : ^^^       ^^^                 ^^^      ^^^       ^^^                                        ^^^      ^^^
 >str : ""
 >    : ^^
->toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
->                  : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: string | string[] | Intl.LocalesArgument): string; }
+>                  : ^^^       ^^^                 ^^^      ^^^       ^^^                                        ^^^      ^^^
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 str.toLocaleLowerCase([deDE, jaJP]);
 >str.toLocaleLowerCase([deDE, jaJP]) : string
 >                                    : ^^^^^^
->str.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
->                      : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>str.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: string | string[] | Intl.LocalesArgument): string; }
+>                      : ^^^       ^^^                 ^^^      ^^^       ^^^                                        ^^^      ^^^
 >str : ""
 >    : ^^
->toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
->                  : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: string | string[] | Intl.LocalesArgument): string; }
+>                  : ^^^       ^^^                 ^^^      ^^^       ^^^                                        ^^^      ^^^
 >[deDE, jaJP] : Intl.Locale[]
 >             : ^^^^^^^^^^^^^
 >deDE : Intl.Locale
@@ -250,24 +250,24 @@ str.toLocaleLowerCase([deDE, jaJP]);
 str.toLocaleUpperCase(enUS);
 >str.toLocaleUpperCase(enUS) : string
 >                            : ^^^^^^
->str.toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
->                      : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>str.toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: string | string[] | Intl.LocalesArgument): string; }
+>                      : ^^^       ^^^                 ^^^      ^^^       ^^^                                        ^^^      ^^^
 >str : ""
 >    : ^^
->toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
->                  : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: string | string[] | Intl.LocalesArgument): string; }
+>                  : ^^^       ^^^                 ^^^      ^^^       ^^^                                        ^^^      ^^^
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 str.toLocaleUpperCase([deDE, jaJP]);
 >str.toLocaleUpperCase([deDE, jaJP]) : string
 >                                    : ^^^^^^
->str.toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
->                      : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>str.toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: string | string[] | Intl.LocalesArgument): string; }
+>                      : ^^^       ^^^                 ^^^      ^^^       ^^^                                        ^^^      ^^^
 >str : ""
 >    : ^^
->toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
->                  : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: string | string[] | Intl.LocalesArgument): string; }
+>                  : ^^^       ^^^                 ^^^      ^^^       ^^^                                        ^^^      ^^^
 >[deDE, jaJP] : Intl.Locale[]
 >             : ^^^^^^^^^^^^^
 >deDE : Intl.Locale
@@ -278,12 +278,12 @@ str.toLocaleUpperCase([deDE, jaJP]);
 str.localeCompare(str, enUS);
 >str.localeCompare(str, enUS) : number
 >                             : ^^^^^^
->str.localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; (that: string, locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
->                  : ^^^    ^^      ^^^      ^^^    ^^      ^^       ^^^                 ^^       ^^^                    ^^^      ^^^    ^^      ^^       ^^^                    ^^       ^^^                    ^^^      ^^^
+>str.localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; (that: string, locales?: string | string[] | Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
+>                  : ^^^    ^^      ^^^      ^^^    ^^      ^^       ^^^                 ^^       ^^^                    ^^^      ^^^    ^^      ^^       ^^^                                        ^^       ^^^                    ^^^      ^^^
 >str : ""
 >    : ^^
->localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; (that: string, locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
->              : ^^^    ^^      ^^^      ^^^    ^^      ^^       ^^^                 ^^       ^^^                    ^^^      ^^^    ^^      ^^       ^^^                    ^^       ^^^                    ^^^      ^^^
+>localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; (that: string, locales?: string | string[] | Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
+>              : ^^^    ^^      ^^^      ^^^    ^^      ^^       ^^^                 ^^       ^^^                    ^^^      ^^^    ^^      ^^       ^^^                                        ^^       ^^^                    ^^^      ^^^
 >str : ""
 >    : ^^
 >enUS : Intl.Locale
@@ -292,12 +292,12 @@ str.localeCompare(str, enUS);
 str.localeCompare(str, [deDE, jaJP]);
 >str.localeCompare(str, [deDE, jaJP]) : number
 >                                     : ^^^^^^
->str.localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; (that: string, locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
->                  : ^^^    ^^      ^^^      ^^^    ^^      ^^       ^^^                 ^^       ^^^                    ^^^      ^^^    ^^      ^^       ^^^                    ^^       ^^^                    ^^^      ^^^
+>str.localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; (that: string, locales?: string | string[] | Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
+>                  : ^^^    ^^      ^^^      ^^^    ^^      ^^       ^^^                 ^^       ^^^                    ^^^      ^^^    ^^      ^^       ^^^                                        ^^       ^^^                    ^^^      ^^^
 >str : ""
 >    : ^^
->localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; (that: string, locales?: Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
->              : ^^^    ^^      ^^^      ^^^    ^^      ^^       ^^^                 ^^       ^^^                    ^^^      ^^^    ^^      ^^       ^^^                    ^^       ^^^                    ^^^      ^^^
+>localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; (that: string, locales?: string | string[] | Intl.LocalesArgument, options?: Intl.CollatorOptions): number; }
+>              : ^^^    ^^      ^^^      ^^^    ^^      ^^       ^^^                 ^^       ^^^                    ^^^      ^^^    ^^      ^^       ^^^                                        ^^       ^^^                    ^^^      ^^^
 >str : ""
 >    : ^^
 >[deDE, jaJP] : Intl.Locale[]

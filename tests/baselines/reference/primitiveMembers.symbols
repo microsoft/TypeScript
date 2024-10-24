@@ -8,9 +8,9 @@ var r = /yo/;
 >r : Symbol(r, Decl(primitiveMembers.ts, 1, 3))
 
 r.source;
->r.source : Symbol(RegExp.source, Decl(lib.es5.d.ts, --, --))
+>r.source : Symbol(_RegExp.source, Decl(lib.es5.d.ts, --, --))
 >r : Symbol(r, Decl(primitiveMembers.ts, 1, 3))
->source : Symbol(RegExp.source, Decl(lib.es5.d.ts, --, --))
+>source : Symbol(_RegExp.source, Decl(lib.es5.d.ts, --, --))
 
 x.toBAZ();
 >x : Symbol(x, Decl(primitiveMembers.ts, 0, 3))

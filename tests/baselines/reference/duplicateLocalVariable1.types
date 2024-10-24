@@ -226,10 +226,10 @@ export class TestRunner {
 >        : ^^^
 
                         var regex = new RegExp(testcase.errorMessageRegEx);
->regex : RegExp
->      : ^^^^^^
->new RegExp(testcase.errorMessageRegEx) : RegExp
->                                       : ^^^^^^
+>regex : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new RegExp(testcase.errorMessageRegEx) : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >RegExp : RegExpConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >testcase.errorMessageRegEx : string
@@ -248,8 +248,8 @@ export class TestRunner {
 >                      : ^^^^^^^
 >regex.test : (string: string) => boolean
 >           : ^      ^^      ^^^^^       
->regex : RegExp
->      : ^^^^^^
+>regex : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : (string: string) => boolean
 >     : ^      ^^      ^^^^^       
 >e.message : any

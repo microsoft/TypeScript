@@ -1,6 +1,6 @@
 subtypesOfUnion.ts(16,5): error TS2411: Property 'foo4' of type 'boolean' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(18,5): error TS2411: Property 'foo6' of type 'Date' is not assignable to 'string' index type 'string | number'.
-subtypesOfUnion.ts(19,5): error TS2411: Property 'foo7' of type 'RegExp' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(19,5): error TS2411: Property 'foo7' of type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(20,5): error TS2411: Property 'foo8' of type '{ bar: number; }' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(21,5): error TS2411: Property 'foo9' of type 'I8' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(22,5): error TS2411: Property 'foo10' of type 'A' is not assignable to 'string' index type 'string | number'.
@@ -15,7 +15,7 @@ subtypesOfUnion.ts(30,5): error TS2411: Property 'foo18' of type '{}' is not ass
 subtypesOfUnion.ts(35,5): error TS2411: Property 'foo2' of type 'string' is not assignable to 'string' index type 'number'.
 subtypesOfUnion.ts(37,5): error TS2411: Property 'foo4' of type 'boolean' is not assignable to 'string' index type 'number'.
 subtypesOfUnion.ts(39,5): error TS2411: Property 'foo6' of type 'Date' is not assignable to 'string' index type 'number'.
-subtypesOfUnion.ts(40,5): error TS2411: Property 'foo7' of type 'RegExp' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(40,5): error TS2411: Property 'foo7' of type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>' is not assignable to 'string' index type 'number'.
 subtypesOfUnion.ts(41,5): error TS2411: Property 'foo8' of type '{ bar: number; }' is not assignable to 'string' index type 'number'.
 subtypesOfUnion.ts(42,5): error TS2411: Property 'foo9' of type 'I8' is not assignable to 'string' index type 'number'.
 subtypesOfUnion.ts(43,5): error TS2411: Property 'foo10' of type 'A' is not assignable to 'string' index type 'number'.
@@ -54,7 +54,7 @@ subtypesOfUnion.ts(51,5): error TS2411: Property 'foo18' of type '{}' is not ass
 !!! error TS2411: Property 'foo6' of type 'Date' is not assignable to 'string' index type 'string | number'.
         foo7: RegExp; // error
         ~~~~
-!!! error TS2411: Property 'foo7' of type 'RegExp' is not assignable to 'string' index type 'string | number'.
+!!! error TS2411: Property 'foo7' of type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>' is not assignable to 'string' index type 'string | number'.
         foo8: { bar: number }; // error
         ~~~~
 !!! error TS2411: Property 'foo8' of type '{ bar: number; }' is not assignable to 'string' index type 'string | number'.
@@ -105,7 +105,7 @@ subtypesOfUnion.ts(51,5): error TS2411: Property 'foo18' of type '{}' is not ass
 !!! error TS2411: Property 'foo6' of type 'Date' is not assignable to 'string' index type 'number'.
         foo7: RegExp; // error
         ~~~~
-!!! error TS2411: Property 'foo7' of type 'RegExp' is not assignable to 'string' index type 'number'.
+!!! error TS2411: Property 'foo7' of type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>' is not assignable to 'string' index type 'number'.
         foo8: { bar: number }; // error
         ~~~~
 !!! error TS2411: Property 'foo8' of type '{ bar: number; }' is not assignable to 'string' index type 'number'.

@@ -125,9 +125,9 @@ export class TestRunner {
 
                         testResult = regex.test(e.message);
 >testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
->regex.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>regex.test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >regex : Symbol(regex, Decl(duplicateLocalVariable1.ts, 38, 27))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >e : Symbol(e, Decl(duplicateLocalVariable1.ts, 31, 19))
                     }
                 } 

@@ -1,18 +1,18 @@
-regularExpressionCharacterClassRangeOrder.ts(7,5): error TS1517: Range out of order in character class.
-regularExpressionCharacterClassRangeOrder.ts(7,12): error TS1517: Range out of order in character class.
-regularExpressionCharacterClassRangeOrder.ts(8,11): error TS1517: Range out of order in character class.
-regularExpressionCharacterClassRangeOrder.ts(9,11): error TS1517: Range out of order in character class.
-regularExpressionCharacterClassRangeOrder.ts(11,4): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
-regularExpressionCharacterClassRangeOrder.ts(11,14): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
-regularExpressionCharacterClassRangeOrder.ts(11,25): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
-regularExpressionCharacterClassRangeOrder.ts(11,25): error TS1517: Range out of order in character class.
-regularExpressionCharacterClassRangeOrder.ts(11,35): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
-regularExpressionCharacterClassRangeOrder.ts(12,25): error TS1517: Range out of order in character class.
-regularExpressionCharacterClassRangeOrder.ts(13,25): error TS1517: Range out of order in character class.
-regularExpressionCharacterClassRangeOrder.ts(15,10): error TS1517: Range out of order in character class.
-regularExpressionCharacterClassRangeOrder.ts(15,37): error TS1517: Range out of order in character class.
-regularExpressionCharacterClassRangeOrder.ts(16,31): error TS1517: Range out of order in character class.
-regularExpressionCharacterClassRangeOrder.ts(17,31): error TS1517: Range out of order in character class.
+regularExpressionCharacterClassRangeOrder.ts(7,4): error TS1517: Range out of order in character class.
+regularExpressionCharacterClassRangeOrder.ts(7,11): error TS1517: Range out of order in character class.
+regularExpressionCharacterClassRangeOrder.ts(8,10): error TS1517: Range out of order in character class.
+regularExpressionCharacterClassRangeOrder.ts(9,10): error TS1517: Range out of order in character class.
+regularExpressionCharacterClassRangeOrder.ts(11,3): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionCharacterClassRangeOrder.ts(11,13): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionCharacterClassRangeOrder.ts(11,24): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionCharacterClassRangeOrder.ts(11,24): error TS1517: Range out of order in character class.
+regularExpressionCharacterClassRangeOrder.ts(11,34): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionCharacterClassRangeOrder.ts(12,24): error TS1517: Range out of order in character class.
+regularExpressionCharacterClassRangeOrder.ts(13,24): error TS1517: Range out of order in character class.
+regularExpressionCharacterClassRangeOrder.ts(15,9): error TS1517: Range out of order in character class.
+regularExpressionCharacterClassRangeOrder.ts(15,36): error TS1517: Range out of order in character class.
+regularExpressionCharacterClassRangeOrder.ts(16,30): error TS1517: Range out of order in character class.
+regularExpressionCharacterClassRangeOrder.ts(17,30): error TS1517: Range out of order in character class.
 
 
 ==== regularExpressionCharacterClassRangeOrder.ts (15 errors) ====
@@ -21,47 +21,46 @@ regularExpressionCharacterClassRangeOrder.ts(17,31): error TS1517: Range out of 
     // - 𝘡 (U+1D621 Mathematical Sans-Serif Italic Capital Z)
     //
     // See https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
-    const regexes: RegExp[] = [
-    	/[𝘈-𝘡][𝘡-𝘈]/,
-    	   ~~~
+    
+    /[𝘈-𝘡][𝘡-𝘈]/;
+       ~~~
 !!! error TS1517: Range out of order in character class.
-    	          ~~~
+              ~~~
 !!! error TS1517: Range out of order in character class.
-    	/[𝘈-𝘡][𝘡-𝘈]/u,
-    	         ~~~~~
+    /[𝘈-𝘡][𝘡-𝘈]/u;
+             ~~~~~
 !!! error TS1517: Range out of order in character class.
-    	/[𝘈-𝘡][𝘡-𝘈]/v,
-    	         ~~~~~
+    /[𝘈-𝘡][𝘡-𝘈]/v;
+             ~~~~~
 !!! error TS1517: Range out of order in character class.
     
-    	/[\u{1D608}-\u{1D621}][\u{1D621}-\u{1D608}]/,
-    	  ~~~~~~~~~
+    /[\u{1D608}-\u{1D621}][\u{1D621}-\u{1D608}]/;
+      ~~~~~~~~~
 !!! error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
-    	            ~~~~~~~~~
+                ~~~~~~~~~
 !!! error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
-    	                       ~~~~~~~~~
+                           ~~~~~~~~~
 !!! error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
-    	                       ~~~~~~~~~~~~~~~~~~~
+                           ~~~~~~~~~~~~~~~~~~~
 !!! error TS1517: Range out of order in character class.
-    	                                 ~~~~~~~~~
+                                     ~~~~~~~~~
 !!! error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
-    	/[\u{1D608}-\u{1D621}][\u{1D621}-\u{1D608}]/u,
-    	                       ~~~~~~~~~~~~~~~~~~~
+    /[\u{1D608}-\u{1D621}][\u{1D621}-\u{1D608}]/u;
+                           ~~~~~~~~~~~~~~~~~~~
 !!! error TS1517: Range out of order in character class.
-    	/[\u{1D608}-\u{1D621}][\u{1D621}-\u{1D608}]/v,
-    	                       ~~~~~~~~~~~~~~~~~~~
+    /[\u{1D608}-\u{1D621}][\u{1D621}-\u{1D608}]/v;
+                           ~~~~~~~~~~~~~~~~~~~
 !!! error TS1517: Range out of order in character class.
     
-    	/[\uD835\uDE08-\uD835\uDE21][\uD835\uDE21-\uD835\uDE08]/,
-    	        ~~~~~~~~~~~~~
+    /[\uD835\uDE08-\uD835\uDE21][\uD835\uDE21-\uD835\uDE08]/;
+            ~~~~~~~~~~~~~
 !!! error TS1517: Range out of order in character class.
-    	                                   ~~~~~~~~~~~~~
+                                       ~~~~~~~~~~~~~
 !!! error TS1517: Range out of order in character class.
-    	/[\uD835\uDE08-\uD835\uDE21][\uD835\uDE21-\uD835\uDE08]/u,
-    	                             ~~~~~~~~~~~~~~~~~~~~~~~~~
+    /[\uD835\uDE08-\uD835\uDE21][\uD835\uDE21-\uD835\uDE08]/u;
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1517: Range out of order in character class.
-    	/[\uD835\uDE08-\uD835\uDE21][\uD835\uDE21-\uD835\uDE08]/v,
-    	                             ~~~~~~~~~~~~~~~~~~~~~~~~~
+    /[\uD835\uDE08-\uD835\uDE21][\uD835\uDE21-\uD835\uDE08]/v;
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1517: Range out of order in character class.
-    ];
     
