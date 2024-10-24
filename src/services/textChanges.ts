@@ -352,7 +352,7 @@ function getAdjustedRange(sourceFile: SourceFile, startNode: Node, endNode: Node
     return { pos: getAdjustedStartPosition(sourceFile, startNode, options), end: getAdjustedEndPosition(sourceFile, endNode, options) };
 }
 
-function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd, hasTrailingComment = false) {
+function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd, hasTrailingComment = false): number {
     const { leadingTriviaOption } = options;
     if (leadingTriviaOption === LeadingTriviaOption.Exclude) {
         return node.getStart(sourceFile);
@@ -436,7 +436,8 @@ function getEndPositionOfMultilineTrailingComment(sourceFile: SourceFile, node: 
     return undefined;
 }
 
-function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd): number {
+/** @internal */
+export function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd): number {
     const { end } = node;
     const { trailingTriviaOption } = options;
     if (trailingTriviaOption === TrailingTriviaOption.Exclude) {
