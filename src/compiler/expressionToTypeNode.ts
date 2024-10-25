@@ -879,7 +879,7 @@ export function createSyntacticTypeNodeBuilder(
     }
 
     function withNewScope<R>(context: SyntacticTypeNodeBuilderContext, node: IntroducesNewScopeNode | ConditionalTypeNode, fn: () => R) {
-        const cleanup = resolver.enterNewScope(context, node, /*expandParameters*/ false);
+        const cleanup = resolver.enterNewScope(context, node);
         const result = fn();
         cleanup();
         return result;
