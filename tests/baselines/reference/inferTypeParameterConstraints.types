@@ -90,3 +90,85 @@ m.child; // ok
 >child : boolean
 >      : ^^^^^^^
 
+// https://github.com/microsoft/TypeScript/issues/60299
+
+type Data = [a: 1, b: 2, ...c: 3[]];
+>Data : Data
+>     : ^^^^
+
+type TestType1<T extends any[]> = T extends [
+>TestType1 : TestType1<T>
+>          : ^^^^^^^^^^^^
+
+  ...infer R extends [any, any],
+  ...any[],
+]
+  ? R
+  : never;
+type test1 = TestType1<Data>;
+>test1 : [a: 1, b: 2]
+>      : ^^^^^^^^^^^^
+
+type TestType2<T extends any[], Mask extends any[] = [any, any]> = T extends [
+>TestType2 : TestType2<T, Mask>
+>          : ^^^^^^^^^^^^^^^^^^
+
+  ...infer R extends Mask,
+  ...any[],
+]
+  ? R
+  : never;
+type test2 = TestType2<Data>;
+>test2 : [a: 1, b: 2]
+>      : ^^^^^^^^^^^^
+
+type ExcludeRest<T extends any[]> = Inner<T>;
+>ExcludeRest : ExcludeRest<T>
+>            : ^^^^^^^^^^^^^^
+
+type Inner<
+>Inner : Inner<T, Copy, Mask>
+>      : ^^^^^^^^^^^^^^^^^^^^
+
+  T extends any[],
+  Copy extends any[] = T,
+  Mask extends any[] = [],
+> = Copy extends [any, ...infer Rest]
+  ? Inner<T, Rest, [...Mask, any]>
+  : Required<Copy> extends [any, ...infer Rest]
+  ? Inner<T, Rest, [...Mask, any?]>
+  : T extends [...infer Result extends Mask, ...any[]]
+  ? Result
+  : never;
+
+type test3 = ExcludeRest<[a: 1, b: 2, c?: 3, ...d: 4[]]>;
+>test3 : [a: 1, b: 2, c?: 3 | undefined]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type Interpolable = string | number | bigint | boolean | null | undefined;
+>Interpolable : Interpolable
+>             : ^^^^^^^^^^^^
+
+type TestWithInterpolable1<
+>TestWithInterpolable1 : TestWithInterpolable1<T, TOutput>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  T extends string,
+  TOutput extends Interpolable = number,
+> = T extends `${infer R extends TOutput}` ? R : never;
+
+type ResultWithInterpolable1 = TestWithInterpolable1<`100`>;
+>ResultWithInterpolable1 : 100
+>                        : ^^^
+
+type TestWithInterpolable2<
+>TestWithInterpolable2 : TestWithInterpolable2<T, TOutput>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  T extends string,
+  TOutput extends Interpolable,
+> = T extends `${infer R extends TOutput}` ? R : never;
+type ResultWithInterpolable2 = TestWithInterpolable2<`100`, number>;
+>ResultWithInterpolable2 : 100
+>                        : ^^^
+
