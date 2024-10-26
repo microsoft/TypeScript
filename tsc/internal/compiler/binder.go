@@ -261,7 +261,7 @@ func (b *Binder) declareSymbolEx(symbolTable SymbolTable, parent *Symbol, node *
 						diag = b.createDiagnosticForNode(decl, message)
 					}
 					if multipleDefaultExports {
-						addRelatedInfo(diag, b.createDiagnosticForNode(declarationName, ifElse(index == 0, diagnostics.Another_export_default_is_here, diagnostics.X_and_here)))
+						diag.addRelatedInfo(b.createDiagnosticForNode(declarationName, ifElse(index == 0, diagnostics.Another_export_default_is_here, diagnostics.X_and_here)))
 					}
 					b.addDiagnostic(diag)
 					if multipleDefaultExports {
@@ -274,7 +274,8 @@ func (b *Binder) declareSymbolEx(symbolTable SymbolTable, parent *Symbol, node *
 				} else {
 					diag = b.createDiagnosticForNode(declarationName, message)
 				}
-				b.addDiagnostic(addRelatedInfo(diag, relatedInformation...))
+				diag.addRelatedInfo(relatedInformation...)
+				b.addDiagnostic(diag)
 				symbol = b.newSymbol(SymbolFlagsNone, name)
 			}
 		}
@@ -1017,7 +1018,7 @@ func (b *Binder) hasExportDeclarations(node *Node) bool {
 		statements = node.AsSourceFile().statements
 	case SyntaxKindModuleDeclaration:
 		body := node.AsModuleDeclaration().body
-		if isModuleBlock(body) {
+		if body != nil && isModuleBlock(body) {
 			statements = body.AsModuleBlock().statements
 		}
 	}

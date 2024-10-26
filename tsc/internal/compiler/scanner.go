@@ -1297,7 +1297,6 @@ func (s *Scanner) scanNumber() SyntaxKind {
 	fractionalPart := ""
 	exponentPreamble := ""
 	exponentPart := ""
-	bigIntSuffix := ""
 	if s.char() == '.' {
 		s.pos++
 		fractionalPart = s.scanNumberFragment()
@@ -1317,10 +1316,6 @@ func (s *Scanner) scanNumber() SyntaxKind {
 			exponentPreamble = s.text[end:startNumericPart]
 			end = s.pos
 		}
-	} else if s.char() == 'n' {
-		bigIntSuffix = "n"
-		s.pos++
-		end = s.pos
 	}
 	if s.tokenFlags&TokenFlagsContainsSeparator != 0 {
 		s.tokenValue = fixedPart
@@ -1330,33 +1325,39 @@ func (s *Scanner) scanNumber() SyntaxKind {
 		if exponentPart != "" {
 			s.tokenValue += exponentPreamble + exponentPart
 		}
-		s.tokenValue += bigIntSuffix
 	} else {
 		s.tokenValue = s.text[start:end]
 	}
 	if s.tokenFlags&TokenFlagsContainsLeadingZero != 0 {
 		s.errorAt(diagnostics.Decimals_with_leading_zeros_are_not_allowed, start, s.pos-start)
+		s.tokenValue = numberToString(stringToNumber(s.tokenValue))
 		return SyntaxKindNumericLiteral
+	}
+	var result SyntaxKind
+	if fixedPartEnd == s.pos {
+		result = s.scanBigIntSuffix()
+	} else {
+		s.tokenValue = numberToString(stringToNumber(s.tokenValue))
+		result = SyntaxKindNumericLiteral
 	}
 	ch, _ := s.charAndSize()
 	if isIdentifierStart(ch, s.languageVersion) {
 		idStart := s.pos
 		id := s.scanIdentifierParts()
-		if len(id) == 1 && s.text[idStart] == 'n' {
+		if result != SyntaxKindBigintLiteral && len(id) == 1 && s.text[idStart] == 'n' {
 			if s.tokenFlags&TokenFlagsScientific != 0 {
 				s.errorAt(diagnostics.A_bigint_literal_cannot_use_exponential_notation, start, s.pos-start)
-			} else if fixedPartEnd < idStart {
+				return result
+			}
+			if fixedPartEnd < idStart {
 				s.errorAt(diagnostics.A_bigint_literal_must_be_an_integer, start, s.pos-start)
-			} else {
-				s.errorAt(diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, idStart, s.pos-idStart)
-				s.pos = idStart
+				return result
 			}
 		}
+		s.errorAt(diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, idStart, s.pos-idStart)
+		s.pos = idStart
 	}
-	if bigIntSuffix != "" {
-		return SyntaxKindBigintLiteral
-	}
-	return SyntaxKindNumericLiteral
+	return result
 }
 
 func (s *Scanner) scanNumberFragment() string {
@@ -1412,16 +1413,16 @@ func (s *Scanner) scanDigits() (string, bool) {
 }
 
 func (s *Scanner) scanHexDigits(minCount int, scanAsManyAsPossible bool, canHaveSeparators bool) string {
-	result := ""
+	var sb strings.Builder
 	allowSeparator := false
 	isPreviousTokenSeparator := false
-	for len(result) < minCount || scanAsManyAsPossible {
+	for sb.Len() < minCount || scanAsManyAsPossible {
 		ch := s.char()
 		if isHexDigit(ch) {
 			if ch >= 'A' && ch <= 'F' {
 				ch += 'a' - 'A' // standardize hex literals to lowercase
 			}
-			result += string(ch)
+			sb.WriteByte(byte(ch))
 			allowSeparator = canHaveSeparators
 			isPreviousTokenSeparator = false
 		} else if canHaveSeparators && ch == '_' {
@@ -1442,20 +1443,20 @@ func (s *Scanner) scanHexDigits(minCount int, scanAsManyAsPossible bool, canHave
 	if isPreviousTokenSeparator {
 		s.errorAt(diagnostics.Numeric_separators_are_not_allowed_here, s.pos-1, 1)
 	}
-	if len(result) < minCount {
-		result = ""
+	if sb.Len() < minCount {
+		return ""
 	}
-	return result
+	return sb.String()
 }
 
 func (s *Scanner) scanBinaryOrOctalDigits(base int32) string {
-	result := ""
+	var sb strings.Builder
 	allowSeparator := false
 	isPreviousTokenSeparator := false
 	for {
 		ch := s.char()
 		if isDigit(ch) && ch-'0' < base {
-			result += string(ch)
+			sb.WriteByte(byte(ch))
 			allowSeparator = true
 			isPreviousTokenSeparator = false
 		} else if ch == '_' {
@@ -1476,14 +1477,25 @@ func (s *Scanner) scanBinaryOrOctalDigits(base int32) string {
 	if isPreviousTokenSeparator {
 		s.errorAt(diagnostics.Numeric_separators_are_not_allowed_here, s.pos-1, 1)
 	}
-	return result
+	return sb.String()
 }
 
 func (s *Scanner) scanBigIntSuffix() SyntaxKind {
 	if s.char() == 'n' {
 		s.pos++
+		s.tokenValue += "n"
+		// !!! Convert all bigint tokens to their normalized decimal representation
 		return SyntaxKindBigintLiteral
 	}
+	// !!! Once stringToNumber supports parsing of non-decimal values we should also convert non-decimal
+	// tokens to their normalized decimal representation
+	if len(s.tokenValue) >= 2 {
+		firstTwo := s.tokenValue[:2]
+		if firstTwo == "0x" || firstTwo == "0o" || firstTwo == "0b" {
+			return SyntaxKindNumericLiteral
+		}
+	}
+	s.tokenValue = numberToString(stringToNumber(s.tokenValue))
 	return SyntaxKindNumericLiteral
 }
 

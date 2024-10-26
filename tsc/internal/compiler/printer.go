@@ -1,7 +1,6 @@
 package compiler
 
 import (
-	"strconv"
 	"strings"
 )
 
@@ -91,6 +90,8 @@ func (p *Printer) printType(t *Type) {
 		p.printUnionType(t)
 	case t.flags&TypeFlagsIntersection != 0:
 		p.printIntersectionType(t)
+	case t.flags&TypeFlagsIndexedAccess != 0:
+		p.printIndexedAccessType(t)
 	}
 }
 
@@ -118,7 +119,7 @@ func (p *Printer) printStringLiteral(s string) {
 }
 
 func (p *Printer) printNumberLiteral(f float64) {
-	p.print(strconv.FormatFloat(f, 'g', -1, 64))
+	p.print(numberToString(f))
 }
 
 func (p *Printer) printBooleanLiteral(b bool) {
@@ -178,7 +179,7 @@ func (p *Printer) printTypeReference(t *Type) {
 }
 
 func (p *Printer) printArrayType(t *Type) {
-	d := t.AsParameterizedType()
+	d := t.AsTypeReference()
 	if d.target != p.c.globalArrayType {
 		p.print("readonly ")
 	}
@@ -189,7 +190,7 @@ func (p *Printer) printArrayType(t *Type) {
 func (p *Printer) printTupleType(t *Type) {
 	tail := false
 	p.print("[")
-	elementInfos := t.TargetInterfaceType().tupleData.elementInfos
+	elementInfos := t.TargetTupleType().elementInfos
 	for i, t := range p.c.getTypeArguments(t) {
 		if tail {
 			p.print(", ")
@@ -213,7 +214,7 @@ func (p *Printer) printTupleType(t *Type) {
 }
 
 func (p *Printer) printAnonymousType(t *Type) {
-	if p.depth != 0 {
+	if p.depth >= 2 {
 		p.print("???")
 		return
 	}
@@ -274,6 +275,13 @@ func (p *Printer) printIntersectionType(t *Type) {
 		p.printTypeEx(t, TypePrecedenceIntersection)
 		tail = true
 	}
+}
+
+func (p *Printer) printIndexedAccessType(t *Type) {
+	p.printType(t.AsIndexedAccessType().objectType)
+	p.print("[")
+	p.printType(t.AsIndexedAccessType().indexType)
+	p.print("]")
 }
 
 func (p *Printer) printTypeAlias(d *TypeAliasDeclaration) {

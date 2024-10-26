@@ -404,6 +404,15 @@ func (n *Node) AsNamedTupleMember() *NamedTupleMember {
 func (n *Node) AsOptionalTypeNode() *OptionalTypeNode {
 	return n.data.(*OptionalTypeNode)
 }
+func (n *Node) AsTypeReferenceNode() *TypeReferenceNode {
+	return n.data.(*TypeReferenceNode)
+}
+func (n *Node) AsTypeQueryNode() *TypeQueryNode {
+	return n.data.(*TypeQueryNode)
+}
+func (n *Node) AsIndexedAccessTypeNode() *IndexedAccessTypeNode {
+	return n.data.(*IndexedAccessTypeNode)
+}
 
 // NodeData
 
@@ -3288,6 +3297,10 @@ func (node *IndexedAccessTypeNode) ForEachChild(v Visitor) bool {
 	return visit(v, node.objectType) || visit(v, node.indexType)
 }
 
+func isIndexedAccessTypeNode(node *Node) bool {
+	return node.kind == SyntaxKindIndexedAccessType
+}
+
 // TypeArgumentList
 
 type TypeArgumentList struct {
@@ -3310,7 +3323,7 @@ func (node *TypeArgumentList) ForEachChild(v Visitor) bool {
 type TypeReferenceNode struct {
 	TypeNodeBase
 	typeName      *Node
-	typeArguments *Node
+	typeArguments *Node // TypeArgumentList
 }
 
 func (f *NodeFactory) NewTypeReferenceNode(typeName *Node, typeArguments *Node) *Node {
@@ -3968,7 +3981,7 @@ type JsxSpreadAttribute struct {
 func (f *NodeFactory) NewJsxSpreadAttribute(expression *Node) *Node {
 	data := &JsxSpreadAttribute{}
 	data.expression = expression
-	return f.NewNode(SyntaxKindJsxAttribute, data)
+	return f.NewNode(SyntaxKindJsxSpreadAttribute, data)
 }
 
 func (node *JsxSpreadAttribute) ForEachChild(v Visitor) bool {

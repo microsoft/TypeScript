@@ -155,6 +155,13 @@ func (p *Program) GetGlobalDiagnostics() []*Diagnostic {
 	return sortAndDeduplicateDiagnostics(p.getTypeChecker().GetGlobalDiagnostics())
 }
 
+func (p *Program) TypeCount() int {
+	if p.checker == nil {
+		return 0
+	}
+	return int(p.checker.typeCount)
+}
+
 func (p *Program) getTypeChecker() *Checker {
 	if p.checker == nil {
 		p.checker = NewChecker(p)

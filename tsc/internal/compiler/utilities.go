@@ -3,6 +3,7 @@ package compiler
 import (
 	"fmt"
 	"maps"
+	"math"
 	"path/filepath"
 	"regexp"
 	"slices"
@@ -119,22 +120,6 @@ type Diagnostic struct {
 	relatedInformation []*Diagnostic
 }
 
-type MessageChain struct {
-	code         int32
-	category     diagnostics.Category
-	message      string
-	messageChain []*MessageChain
-}
-
-func (d *Diagnostic) File() *SourceFile                 { return d.file }
-func (d *Diagnostic) Loc() TextRange                    { return d.loc }
-func (d *Diagnostic) Code() int32                       { return d.code }
-func (d *Diagnostic) Category() diagnostics.Category    { return d.category }
-func (d *Diagnostic) Message() string                   { return d.message }
-func (d *Diagnostic) RelatedInformation() []*Diagnostic { return d.relatedInformation }
-
-func (d *Diagnostic) SetCategory(category diagnostics.Category) { d.category = category }
-
 func NewDiagnostic(file *SourceFile, loc TextRange, message *diagnostics.Message, args ...any) *Diagnostic {
 	text := message.Message()
 	if len(args) != 0 {
@@ -159,9 +144,49 @@ func NewDiagnosticForNode(node *Node, message *diagnostics.Message, args ...any)
 	return NewDiagnostic(file, loc, message, args...)
 }
 
-func addRelatedInfo(diagnostic *Diagnostic, relatedInformation ...*Diagnostic) *Diagnostic {
-	diagnostic.relatedInformation = append(diagnostic.relatedInformation, relatedInformation...)
-	return diagnostic
+func (d *Diagnostic) File() *SourceFile                         { return d.file }
+func (d *Diagnostic) Loc() TextRange                            { return d.loc }
+func (d *Diagnostic) Code() int32                               { return d.code }
+func (d *Diagnostic) Category() diagnostics.Category            { return d.category }
+func (d *Diagnostic) Message() string                           { return d.message }
+func (d *Diagnostic) RelatedInformation() []*Diagnostic         { return d.relatedInformation }
+func (d *Diagnostic) SetCategory(category diagnostics.Category) { d.category = category }
+
+func (d *Diagnostic) addMessageChain(messageChain ...*MessageChain) *Diagnostic {
+	d.messageChain = append(d.messageChain, messageChain...)
+	return d
+}
+
+func (d *Diagnostic) addRelatedInfo(relatedInformation ...*Diagnostic) *Diagnostic {
+	d.relatedInformation = append(d.relatedInformation, relatedInformation...)
+	return d
+}
+
+// MessaheChain
+
+type MessageChain struct {
+	code         int32
+	category     diagnostics.Category
+	message      string
+	messageChain []*MessageChain
+}
+
+func NewMessageChain(details []*MessageChain, message *diagnostics.Message, args ...any) *MessageChain {
+	text := message.Message()
+	if len(args) != 0 {
+		text = formatStringFromArgs(text, args)
+	}
+	return &MessageChain{
+		code:         message.Code(),
+		category:     message.Category(),
+		message:      text,
+		messageChain: details,
+	}
+}
+
+func (m *MessageChain) addMessageChain(messageChain ...*MessageChain) *MessageChain {
+	m.messageChain = append(m.messageChain, messageChain...)
+	return m
 }
 
 type OperatorPrecedence int
@@ -501,8 +526,8 @@ func sameMap[T comparable](slice []T, f func(T) T) ([]T, bool) {
 			result := make([]T, len(slice))
 			copy(result, slice[:i])
 			result[i] = mapped
-			for i, value := range slice[i+1:] {
-				result[i] = f(value)
+			for j := i + 1; j < len(slice); j++ {
+				result[j] = f(slice[j])
 			}
 			return result, false
 		}
@@ -582,6 +607,16 @@ func findLast[T any](slice []T, predicate func(T) bool) T {
 	return *new(T)
 }
 
+func findLastIndex[T any](slice []T, predicate func(T) bool) int {
+	for i := len(slice) - 1; i >= 0; i-- {
+		value := slice[i]
+		if predicate(value) {
+			return i
+		}
+	}
+	return -1
+}
+
 func findInMap[K comparable, V any](m map[K]V, predicate func(V) bool) V {
 	for _, value := range m {
 		if predicate(value) {
@@ -615,6 +650,13 @@ func replaceElement[T any](slice []T, i int, t T) []T {
 	result := slices.Clone(slice)
 	result[i] = t
 	return result
+}
+
+func identical[T any](s1 []T, s2 []T) bool {
+	if len(s1) == len(s2) {
+		return len(s1) == 0 || &s1[0] == &s2[0]
+	}
+	return false
 }
 
 func boolToTristate(b bool) Tristate {
@@ -1814,6 +1856,14 @@ func getAssignmentTarget(node *Node) *Node {
 	}
 }
 
+func isDeleteTarget(node *Node) bool {
+	if !isAccessExpression(node) {
+		return false
+	}
+	node = walkUpParenthesizedExpressions(node.parent)
+	return node != nil && node.kind == SyntaxKindDeleteExpression
+}
+
 func isInCompoundLikeAssignment(node *Node) bool {
 	target := getAssignmentTarget(node)
 	return target != nil && isAssignmentExpression(target /*excludeCompoundAssignment*/, true) && isCompoundLikeAssignment(target)
@@ -2219,6 +2269,14 @@ func getBodyOfNode(node *Node) *Node {
 	bodyData := node.BodyData()
 	if bodyData != nil {
 		return bodyData.body
+	}
+	return nil
+}
+
+func getFlowNodeOfNode(node *Node) *FlowNode {
+	flowNodeData := node.FlowNodeData()
+	if flowNodeData != nil {
+		return flowNodeData.flowNode
 	}
 	return nil
 }
@@ -3364,6 +3422,14 @@ func getEffectiveTypeParameterDeclarations(node *Node) []*Node {
 	return nil
 }
 
+func getTypeParameterNodesFromNode(node *Node) []*Node {
+	typeParameterList := getTypeParameterListFromNode(node)
+	if typeParameterList != nil {
+		return typeParameterList.AsTypeParameterList().parameters
+	}
+	return nil
+}
+
 func getTypeParameterListFromNode(node *Node) *Node {
 	if isFunctionLike(node) {
 		return node.FunctionLikeData().typeParameters
@@ -3379,6 +3445,34 @@ func getTypeParameterListFromNode(node *Node) *Node {
 		return node.AsTypeAliasDeclaration().typeParameters
 	}
 	panic("Unhandled case in getTypeParameterListFromNode")
+}
+
+func getTypeArgumentNodesFromNode(node *Node) []*Node {
+	typeArgumentList := getTypeArgumentListFromNode(node)
+	if typeArgumentList != nil {
+		return typeArgumentList.AsTypeArgumentList().arguments
+	}
+	return nil
+}
+
+func getTypeArgumentListFromNode(node *Node) *Node {
+	switch node.kind {
+	case SyntaxKindCallExpression:
+		return node.AsCallExpression().typeArguments
+	case SyntaxKindNewExpression:
+		return node.AsNewExpression().typeArguments
+	case SyntaxKindTaggedTemplateExpression:
+		return node.AsTaggedTemplateExpression().typeArguments
+	case SyntaxKindTypeReference:
+		return node.AsTypeReference().typeArguments
+	case SyntaxKindExpressionWithTypeArguments:
+		return node.AsExpressionWithTypeArguments().typeArguments
+	case SyntaxKindImportType:
+		return node.AsImportTypeNode().typeArguments
+	case SyntaxKindTypeQuery:
+		return node.AsTypeQueryNode().typeArguments
+	}
+	panic("Unhandled case in getTypeArgumentListFromNode")
 }
 
 func getInitializerFromNode(node *Node) *Node {
@@ -3738,4 +3832,113 @@ func getContainingFunction(node *Node) *Node {
 
 func isTypeReferenceType(node *Node) bool {
 	return node.kind == SyntaxKindTypeReference || node.kind == SyntaxKindExpressionWithTypeArguments
+}
+
+func isNodeDescendantOf(node *Node, ancestor *Node) bool {
+	for node != nil {
+		if node == ancestor {
+			return true
+		}
+		node = node.parent
+	}
+	return false
+}
+
+func isTypeUsableAsPropertyName(t *Type) bool {
+	return t.flags&TypeFlagsStringOrNumberLiteralOrUnique != 0
+}
+
+/**
+ * Gets the symbolic name for a member from its type.
+ */
+func getPropertyNameFromType(t *Type) string {
+	switch {
+	case t.flags&TypeFlagsStringLiteral != 0:
+		return t.AsLiteralType().value.(string)
+	case t.flags&TypeFlagsNumberLiteral != 0:
+		return numberToString(t.AsLiteralType().value.(float64))
+	case t.flags&TypeFlagsUniqueESSymbol != 0:
+		return t.AsUniqueESSymbolType().name
+	}
+	panic("Unhandled case in getPropertyNameFromType")
+}
+
+func isNumericLiteralName(name string) bool {
+	// The intent of numeric names is that
+	//     - they are names with text in a numeric form, and that
+	//     - setting properties/indexing with them is always equivalent to doing so with the numeric literal 'numLit',
+	//         acquired by applying the abstract 'ToNumber' operation on the name's text.
+	//
+	// The subtlety is in the latter portion, as we cannot reliably say that anything that looks like a numeric literal is a numeric name.
+	// In fact, it is the case that the text of the name must be equal to 'ToString(numLit)' for this to hold.
+	//
+	// Consider the property name '"0xF00D"'. When one indexes with '0xF00D', they are actually indexing with the value of 'ToString(0xF00D)'
+	// according to the ECMAScript specification, so it is actually as if the user indexed with the string '"61453"'.
+	// Thus, the text of all numeric literals equivalent to '61543' such as '0xF00D', '0xf00D', '0170015', etc. are not valid numeric names
+	// because their 'ToString' representation is not equal to their original text.
+	// This is motivated by ECMA-262 sections 9.3.1, 9.8.1, 11.1.5, and 11.2.1.
+	//
+	// Here, we test whether 'ToString(ToNumber(name))' is exactly equal to 'name'.
+	// The '+' prefix operator is equivalent here to applying the abstract ToNumber operation.
+	// Applying the 'toString()' method on a number gives us the abstract ToString operation on a number.
+	//
+	// Note that this accepts the values 'Infinity', '-Infinity', and 'NaN', and that this is intentional.
+	// This is desired behavior, because when indexing with them as numeric entities, you are indexing
+	// with the strings '"Infinity"', '"-Infinity"', and '"NaN"' respectively.
+	return numberToString(stringToNumber(name)) == name
+}
+
+func isPropertyName(node *Node) bool {
+	switch node.kind {
+	case SyntaxKindIdentifier, SyntaxKindPrivateIdentifier, SyntaxKindStringLiteral, SyntaxKindNumericLiteral, SyntaxKindComputedPropertyName:
+		return true
+	}
+	return false
+}
+
+func getPropertyNameForPropertyNameNode(name *Node) string {
+	switch name.kind {
+	case SyntaxKindIdentifier, SyntaxKindPrivateIdentifier, SyntaxKindStringLiteral, SyntaxKindNoSubstitutionTemplateLiteral,
+		SyntaxKindNumericLiteral, SyntaxKindBigintLiteral:
+		return getTextOfIdentifierOrLiteral(name)
+	case SyntaxKindComputedPropertyName:
+		nameExpression := name.AsComputedPropertyName().expression
+		if isStringOrNumericLiteralLike(nameExpression) {
+			return getTextOfIdentifierOrLiteral(nameExpression)
+		}
+		if isSignedNumericLiteral(nameExpression) {
+			text := getTextOfIdentifierOrLiteral(nameExpression.AsPrefixUnaryExpression().operand)
+			if nameExpression.AsPrefixUnaryExpression().operator == SyntaxKindMinusToken {
+				text = "-" + text
+			}
+			return text
+		}
+		return InternalSymbolNameMissing
+	case SyntaxKindJsxNamespacedName:
+		return getTextOfJsxNamespacedName(name)
+	}
+	panic("Unhandled case in getPropertyNameForPropertyNameNode")
+}
+
+func getTextOfJsxNamespacedName(node *Node) string {
+	return getTextOfIdentifierOrLiteral(node.AsJsxNamespacedName().namespace) + ":" + getTextOfIdentifierOrLiteral(node.AsJsxNamespacedName().name)
+}
+
+func isThisProperty(node *Node) bool {
+	return (isPropertyAccessExpression(node) || isElementAccessExpression(node)) && getAccessedExpression(node).kind == SyntaxKindThisKeyword
+}
+
+func numberToString(f float64) string {
+	// !!! This function should behave identically to the expression `"" + f` in JS
+	return strconv.FormatFloat(f, 'g', -1, 64)
+}
+
+func stringToNumber(s string) float64 {
+	// !!! This function should behave identically to the expression `+s` in JS
+	// This includes parsing binary, octal, and hex numeric strings
+	value, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		return math.NaN()
+	}
+	return value
 }
