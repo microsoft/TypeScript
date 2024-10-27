@@ -44589,6 +44589,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Then check that the RHS is assignable to it.
         if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
             checkVariableDeclarationList(node.initializer as VariableDeclarationList);
+            const blockScopeKind = getCombinedNodeFlagsCached(node.initializer) & NodeFlags.BlockScoped;
+            if (blockScopeKind === NodeFlags.AwaitUsing) {
+                const globalAsyncDisposableType = getGlobalAsyncDisposableType(/*reportErrors*/ true);
+                const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
+                if (globalAsyncDisposableType !== emptyObjectType && globalDisposableType !== emptyObjectType) {
+                    Debug.assertNode(node.initializer, isVariableDeclarationList);
+                    const declaration = node.initializer.declarations[0];
+                    const optionalDisposableType = getUnionType([globalAsyncDisposableType, globalDisposableType, nullType, undefinedType]);
+                    checkTypeAssignableTo(widenTypeForVariableLikeDeclaration(checkRightHandSideOfForOf(node), declaration), optionalDisposableType, node.expression, Diagnostics.Type_of_iterated_elements_of_a_for_of_loop_with_await_using_declaration_must_be_either_an_object_with_a_Symbol_asyncDispose_or_Symbol_dispose_method_or_be_null_or_undefined);
+                }
+            }
+            else if (blockScopeKind === NodeFlags.Using) {
+                const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
+                if (globalDisposableType !== emptyObjectType) {
+                    Debug.assertNode(node.initializer, isVariableDeclarationList);
+                    const declaration = node.initializer.declarations[0];
+                    const optionalDisposableType = getUnionType([globalDisposableType, nullType, undefinedType]);
+                    checkTypeAssignableTo(widenTypeForVariableLikeDeclaration(checkRightHandSideOfForOf(node), declaration), optionalDisposableType, node.expression, Diagnostics.Type_of_iterated_elements_of_a_for_of_loop_with_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined);
+                }
+            }
         }
         else {
             const varExpr = node.initializer;

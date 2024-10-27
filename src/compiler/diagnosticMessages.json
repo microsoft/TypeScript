@@ -3980,6 +3980,14 @@
         "category": "Error",
         "code": 2879
     },
+    "Type of iterated elements of a 'for-of' loop with 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 2880
+    },
+    "Type of iterated elements of a 'for-of' loop with 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 2881
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

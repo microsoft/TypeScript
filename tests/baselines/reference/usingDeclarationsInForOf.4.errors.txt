@@ -1,0 +1,82 @@
+usingDeclarationsInForOf.4.ts(1,17): error TS2880: Type of iterated elements of a 'for-of' loop with 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+usingDeclarationsInForOf.4.ts(3,17): error TS2880: Type of iterated elements of a 'for-of' loop with 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+  Property '[Symbol.dispose]' is missing in type '{}' but required in type 'Disposable'.
+usingDeclarationsInForOf.4.ts(12,17): error TS2880: Type of iterated elements of a 'for-of' loop with 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+usingDeclarationsInForOf.4.ts(18,17): error TS2880: Type of iterated elements of a 'for-of' loop with 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+  Type 'number' is not assignable to type 'Disposable'.
+usingDeclarationsInForOf.4.ts(20,23): error TS2881: Type of iterated elements of a 'for-of' loop with 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+usingDeclarationsInForOf.4.ts(22,23): error TS2881: Type of iterated elements of a 'for-of' loop with 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+usingDeclarationsInForOf.4.ts(31,23): error TS2881: Type of iterated elements of a 'for-of' loop with 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+usingDeclarationsInForOf.4.ts(37,23): error TS2881: Type of iterated elements of a 'for-of' loop with 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+  Type 'number' is not assignable to type 'Disposable | AsyncDisposable | null | undefined'.
+usingDeclarationsInForOf.4.ts(40,23): error TS2881: Type of iterated elements of a 'for-of' loop with 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+  Type 'number' is not assignable to type 'Disposable | AsyncDisposable | null | undefined'.
+
+
+==== usingDeclarationsInForOf.4.ts (9 errors) ====
+    for (using x of [1, 2]) {}
+                    ~~~~~~
+!!! error TS2880: Type of iterated elements of a 'for-of' loop with 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+    
+    for (using x of [{}]) {}
+                    ~~~~
+!!! error TS2880: Type of iterated elements of a 'for-of' loop with 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+!!! error TS2880:   Property '[Symbol.dispose]' is missing in type '{}' but required in type 'Disposable'.
+!!! related TS2728 lib.esnext.disposable.d.ts:--:--: '[Symbol.dispose]' is declared here.
+    
+    for (using x of [null, undefined]) {}
+    
+    for (using x of [{ [Symbol.dispose]() {} }]) {}
+    
+    for (using x of [{ [Symbol.dispose]() {}, value: null }]) {}
+    
+    declare const gen1: Generator<number, void, void>;
+    for (using x of gen1) {}
+                    ~~~~
+!!! error TS2880: Type of iterated elements of a 'for-of' loop with 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+    
+    declare const gen2: Generator<Disposable, void, void>;
+    for (using x of gen2) {}
+    
+    declare const gen3: Generator<Disposable | number, void, void>;
+    for (using x of gen3) {}
+                    ~~~~
+!!! error TS2880: Type of iterated elements of a 'for-of' loop with 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+!!! error TS2880:   Type 'number' is not assignable to type 'Disposable'.
+    
+    for (await using x of [1, 2]) {}
+                          ~~~~~~
+!!! error TS2881: Type of iterated elements of a 'for-of' loop with 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+    
+    for (await using x of [{}]) {}
+                          ~~~~
+!!! error TS2881: Type of iterated elements of a 'for-of' loop with 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+    
+    for (await using x of [null, undefined]) {}
+    
+    for (await using x of [{ async [Symbol.asyncDispose]() {} }]) {}
+    
+    for (await using x of [{ async [Symbol.asyncDispose]() {}, value: null }]) {}
+    
+    declare const gen4: Generator<number, void, void>;
+    for (await using x of gen4) {}
+                          ~~~~
+!!! error TS2881: Type of iterated elements of a 'for-of' loop with 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+    
+    declare const gen5: Generator<AsyncDisposable, void, void>;
+    for (await using x of gen5) {}
+    
+    declare const gen6: Generator<AsyncDisposable | number, void, void>;
+    for (await using x of gen6) {}
+                          ~~~~
+!!! error TS2881: Type of iterated elements of a 'for-of' loop with 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+!!! error TS2881:   Type 'number' is not assignable to type 'Disposable | AsyncDisposable | null | undefined'.
+    
+    for (await using x of gen2) {}
+    for (await using x of gen3) {}
+                          ~~~~
+!!! error TS2881: Type of iterated elements of a 'for-of' loop with 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+!!! error TS2881:   Type 'number' is not assignable to type 'Disposable | AsyncDisposable | null | undefined'.
+    
+    export {};
+    
