@@ -44058,6 +44058,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type === autoType ? anyType : type === autoArrayType ? anyArrayType : type;
     }
 
+    function checkIfUsingDisposables(declaration: Declaration, type: Type) {
+        const isForOf = declaration.parent.parent.kind === SyntaxKind.ForOfStatement;
+        const errorNode = isForOf ? (declaration.parent.parent as ForOfStatement).expression : tryCast(declaration, hasOnlyExpressionInitializer)?.initializer;
+        Debug.assert(errorNode);
+        const blockScopeKind = getCombinedNodeFlagsCached(declaration) & NodeFlags.BlockScoped;
+        if (blockScopeKind === NodeFlags.AwaitUsing) {
+            const globalAsyncDisposableType = getGlobalAsyncDisposableType(/*reportErrors*/ true);
+            const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
+            if (globalAsyncDisposableType !== emptyObjectType && globalDisposableType !== emptyObjectType) {
+                const optionalDisposableType = getUnionType([globalAsyncDisposableType, globalDisposableType, nullType, undefinedType]);
+                const diagnostic = isForOf
+                    ? Diagnostics.Type_of_iterated_elements_of_a_for_of_loop_with_await_using_declaration_must_be_either_an_object_with_a_Symbol_asyncDispose_or_Symbol_dispose_method_or_be_null_or_undefined
+                    : Diagnostics.The_initializer_of_an_await_using_declaration_must_be_either_an_object_with_a_Symbol_asyncDispose_or_Symbol_dispose_method_or_be_null_or_undefined;
+                checkTypeAssignableTo(widenTypeForVariableLikeDeclaration(type, declaration), optionalDisposableType, errorNode, diagnostic);
+            }
+        }
+        else if (blockScopeKind === NodeFlags.Using) {
+            const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
+            if (globalDisposableType !== emptyObjectType) {
+                const optionalDisposableType = getUnionType([globalDisposableType, nullType, undefinedType]);
+                const diagnostic = isForOf
+                    ? Diagnostics.Type_of_iterated_elements_of_a_for_of_loop_with_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined
+                    : Diagnostics.The_initializer_of_a_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined;
+                checkTypeAssignableTo(widenTypeForVariableLikeDeclaration(type, declaration), optionalDisposableType, errorNode, diagnostic);
+            }
+        }
+    }
+
     // Check variable, parameter, or property declaration
     function checkVariableLikeDeclaration(node: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement) {
         checkDecorators(node);
@@ -44191,20 +44219,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const initializerType = checkExpressionCached(initializer);
                     checkTypeAssignableToAndOptionallyElaborate(initializerType, type, node, initializer, /*headMessage*/ undefined);
                     const blockScopeKind = getCombinedNodeFlagsCached(node) & NodeFlags.BlockScoped;
-                    if (blockScopeKind === NodeFlags.AwaitUsing) {
-                        const globalAsyncDisposableType = getGlobalAsyncDisposableType(/*reportErrors*/ true);
-                        const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
-                        if (globalAsyncDisposableType !== emptyObjectType && globalDisposableType !== emptyObjectType) {
-                            const optionalDisposableType = getUnionType([globalAsyncDisposableType, globalDisposableType, nullType, undefinedType]);
-                            checkTypeAssignableTo(widenTypeForVariableLikeDeclaration(initializerType, node), optionalDisposableType, initializer, Diagnostics.The_initializer_of_an_await_using_declaration_must_be_either_an_object_with_a_Symbol_asyncDispose_or_Symbol_dispose_method_or_be_null_or_undefined);
-                        }
-                    }
-                    else if (blockScopeKind === NodeFlags.Using) {
-                        const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
-                        if (globalDisposableType !== emptyObjectType) {
-                            const optionalDisposableType = getUnionType([globalDisposableType, nullType, undefinedType]);
-                            checkTypeAssignableTo(widenTypeForVariableLikeDeclaration(initializerType, node), optionalDisposableType, initializer, Diagnostics.The_initializer_of_a_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined);
-                        }
+                    if (blockScopeKind & NodeFlags.Using) {
+                        checkIfUsingDisposables(node, initializerType);
                     }
                 }
             }
@@ -44588,26 +44604,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // If the LHS is an expression, check the LHS, as a destructuring assignment or as a reference.
         // Then check that the RHS is assignable to it.
         if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
-            checkVariableDeclarationList(node.initializer as VariableDeclarationList);
-            const blockScopeKind = getCombinedNodeFlagsCached(node.initializer) & NodeFlags.BlockScoped;
-            if (blockScopeKind === NodeFlags.AwaitUsing) {
-                const globalAsyncDisposableType = getGlobalAsyncDisposableType(/*reportErrors*/ true);
-                const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
-                if (globalAsyncDisposableType !== emptyObjectType && globalDisposableType !== emptyObjectType) {
-                    Debug.assertNode(node.initializer, isVariableDeclarationList);
-                    const declaration = node.initializer.declarations[0];
-                    const optionalDisposableType = getUnionType([globalAsyncDisposableType, globalDisposableType, nullType, undefinedType]);
-                    checkTypeAssignableTo(widenTypeForVariableLikeDeclaration(checkRightHandSideOfForOf(node), declaration), optionalDisposableType, node.expression, Diagnostics.Type_of_iterated_elements_of_a_for_of_loop_with_await_using_declaration_must_be_either_an_object_with_a_Symbol_asyncDispose_or_Symbol_dispose_method_or_be_null_or_undefined);
-                }
-            }
-            else if (blockScopeKind === NodeFlags.Using) {
-                const globalDisposableType = getGlobalDisposableType(/*reportErrors*/ true);
-                if (globalDisposableType !== emptyObjectType) {
-                    Debug.assertNode(node.initializer, isVariableDeclarationList);
-                    const declaration = node.initializer.declarations[0];
-                    const optionalDisposableType = getUnionType([globalDisposableType, nullType, undefinedType]);
-                    checkTypeAssignableTo(widenTypeForVariableLikeDeclaration(checkRightHandSideOfForOf(node), declaration), optionalDisposableType, node.expression, Diagnostics.Type_of_iterated_elements_of_a_for_of_loop_with_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined);
-                }
+            Debug.assertNode(node.initializer, isVariableDeclarationList);
+
+            checkVariableDeclarationList(node.initializer);
+
+            const declaration = node.initializer.declarations[0];
+            const blockScopeKind = declaration ? getCombinedNodeFlagsCached(declaration) & NodeFlags.BlockScoped : 0;
+
+            if (blockScopeKind & NodeFlags.Using) {
+                checkIfUsingDisposables(declaration, checkRightHandSideOfForOf(node));
             }
         }
         else {
