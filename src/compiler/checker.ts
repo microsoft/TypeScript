@@ -19362,7 +19362,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!links.resolvedType) {
             // Deferred resolution of members is handled by resolveObjectTypeMembers
             const aliasSymbol = getAliasSymbolForTypeNode(node);
-            if (getMembersOfSymbol(node.symbol).size === 0 && !aliasSymbol) {
+            if (!node.symbol || getMembersOfSymbol(node.symbol).size === 0 && !aliasSymbol) {
                 links.resolvedType = emptyTypeLiteralType;
             }
             else {
