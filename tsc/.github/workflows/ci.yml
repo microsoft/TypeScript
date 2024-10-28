@@ -39,6 +39,13 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macos-latest
+        submodules:
+          - true
+        include:
+          - os: ubuntu-latest
+            submodules: false
+
+    name: test (${{ matrix.os }}${{ (!matrix.submodules && ' without submodules') || '' }})
 
     runs-on: ${{ matrix.os }}
 
@@ -48,7 +55,7 @@ jobs:
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          submodules: true
+          submodules: ${{ matrix.submodules }}
       - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
       - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
         with:
