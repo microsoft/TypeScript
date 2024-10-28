@@ -58,6 +58,9 @@ jobs:
 
       - run: npx hereby test --race
 
+      - run: git add .
+      - run: git diff --exit-code --stat
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -99,7 +102,8 @@ jobs:
 
       - run: npx hereby generate
 
-      - run: git diff --exit-code
+      - run: git add .
+      - run: git diff --exit-code --stat
 
   tidy:
     runs-on: ubuntu-latest
@@ -111,7 +115,8 @@ jobs:
 
       - run: go mod tidy
 
-      - run: git diff --exit-code
+      - run: git add .
+      - run: git diff --exit-code --stat
 
   required:
     runs-on: ubuntu-latest
