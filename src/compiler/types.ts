@@ -9982,6 +9982,12 @@ export interface TextChangeRange {
 }
 
 /** @internal */
+export interface ErrorOutputContainer {
+    errors?: Diagnostic[];
+    skipLogging?: boolean;
+}
+
+/** @internal */
 export interface DiagnosticCollection {
     // Adds a diagnostic to this diagnostic collection.
     add(diagnostic: Diagnostic): void;

@@ -315,13 +315,13 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         const param = signature.parameters[argIndex].valueDeclaration;
         if (!(param && isParameter(param) && isIdentifier(param.name))) return undefined;
 
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
+        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex).getNonNullableType(), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
         return { kind: InfoKind.ObjectLiteral, token: param.name, identifier: param.name.text, properties, parentDeclaration: parent };
     }
 
     if (token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent)) {
-        const targetType = checker.getContextualType(parent) || checker.getTypeAtLocation(parent);
+        const targetType = (checker.getContextualType(parent) || checker.getTypeAtLocation(parent))?.getNonNullableType();
         const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
 
@@ -334,7 +334,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     if (!isMemberName(token)) return undefined;
 
     if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
-        const targetType = checker.getContextualType(token) || checker.getTypeAtLocation(token);
+        const targetType = (checker.getContextualType(token) || checker.getTypeAtLocation(token))?.getNonNullableType();
         const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
 
