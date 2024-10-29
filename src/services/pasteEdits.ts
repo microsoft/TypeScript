@@ -176,8 +176,10 @@ function pasteEdits(
     });
 }
 
+/**
+ * Adjusts the range for `getUsageInfo` to correctly include identifiers at the edges of the copied text.
+ */
 function getUsageInfoRangeForPasteEdits({ file: sourceFile, range }: CopiedFromInfo) {
-    // This function adjusts the range so that identifiers at the edges of the copied text are correctly included for imports.
     // We do not need to adjust range when the tokens at the edges are not identifiers.
     const pos = range[0].pos;
     const end = range[range.length - 1].end;
