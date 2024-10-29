@@ -11,6 +11,7 @@ declare const array: string[];
 >array : string[]
 >      : ^^^^^^^^
 
+// Arrow function with expression body
 const getObject =
 >getObject : <T extends string | undefined>(group: T) => T extends string ? string[] : T extends undefined ? Record<string, string[]> : never
 >          : ^ ^^^^^^^^^                  ^^     ^^ ^^^^^                                                                                    

@@ -1,9 +1,10 @@
-//// [tests/cases/compiler/dependentReturnType7.ts] ////
+//// [tests/cases/compiler/returnConditionalExpressionJSDocCast.ts] ////
 
 === file.js ===
+// Don't peek into conditional return expression if it's wrapped in a cast
 /** @type {Map<string, string>} */
 const sources = new Map();
->sources : Symbol(sources, Decl(file.js, 1, 5))
+>sources : Symbol(sources, Decl(file.js, 2, 5))
 >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 /**
@@ -12,36 +13,23 @@ const sources = new Map();
  * @returns {String}
  */
 function source(type = "javascript") {
->source : Symbol(source, Decl(file.js, 1, 26))
->type : Symbol(type, Decl(file.js, 7, 16))
+>source : Symbol(source, Decl(file.js, 2, 26))
+>type : Symbol(type, Decl(file.js, 8, 16))
 
     return /** @type {String} */ (
         type
->type : Symbol(type, Decl(file.js, 7, 16))
+>type : Symbol(type, Decl(file.js, 8, 16))
 
             ? sources.get(type)
 >sources.get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
->sources : Symbol(sources, Decl(file.js, 1, 5))
+>sources : Symbol(sources, Decl(file.js, 2, 5))
 >get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
->type : Symbol(type, Decl(file.js, 7, 16))
+>type : Symbol(type, Decl(file.js, 8, 16))
 
             : sources.get("some other thing")
 >sources.get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
->sources : Symbol(sources, Decl(file.js, 1, 5))
+>sources : Symbol(sources, Decl(file.js, 2, 5))
 >get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
 
     );
-}
-
-/**
- * @template {boolean} T
- * @param {T} b
- * @returns {T extends true ? 1 : T extends false ? 2 : never}
- */
-function simple(b) {
->simple : Symbol(simple, Decl(file.js, 13, 1))
->b : Symbol(b, Decl(file.js, 20, 16))
-
-    return b ? 1 : 2;
->b : Symbol(b, Decl(file.js, 20, 16))
 }

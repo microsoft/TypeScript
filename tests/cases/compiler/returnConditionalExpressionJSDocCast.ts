@@ -4,6 +4,8 @@
 // @checkJs: true
 // @filename: file.js
 
+
+// Don't peek into conditional return expression if it's wrapped in a cast
 /** @type {Map<string, string>} */
 const sources = new Map();
 /**
@@ -17,13 +19,4 @@ function source(type = "javascript") {
             ? sources.get(type)
             : sources.get("some other thing")
     );
-}
-
-/**
- * @template {boolean} T
- * @param {T} b
- * @returns {T extends true ? 1 : T extends false ? 2 : never}
- */
-function simple(b) {
-    return b ? 1 : 2;
 }
