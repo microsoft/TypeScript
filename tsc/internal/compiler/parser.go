@@ -67,11 +67,68 @@ func NewParser() *Parser {
 
 func ParseSourceFile(fileName string, sourceText string, languageVersion ScriptTarget) *SourceFile {
 	var p Parser
+	p.initializeState(fileName, sourceText, languageVersion, ScriptKindUnknown)
+	p.nextToken()
+	return p.parseSourceFileWorker()
+}
+
+func ParseJSONText(fileName string, sourceText string) *SourceFile {
+	var p Parser
+	p.initializeState(fileName, sourceText, ScriptTargetES2015, ScriptKindJSON)
+	p.nextToken()
+	pos := p.nodePos()
+	var expressions []*Node
+	for p.token != SyntaxKindEndOfFile {
+		var expression *Node
+		switch p.token {
+		case SyntaxKindOpenBracketToken:
+			expression = p.parseArrayLiteralExpression()
+		case SyntaxKindTrueKeyword, SyntaxKindFalseKeyword, SyntaxKindNullKeyword:
+			expression = p.parseTokenNode()
+		case SyntaxKindMinusToken:
+			if p.lookAhead(func() bool { return p.nextToken() == SyntaxKindNumericLiteral && p.nextToken() != SyntaxKindColonToken }) {
+				expression = p.parsePrefixUnaryExpression()
+			} else {
+				expression = p.parseObjectLiteralExpression()
+			}
+		case SyntaxKindNumericLiteral, SyntaxKindStringLiteral:
+			if p.lookAhead(func() bool { return p.nextToken() != SyntaxKindColonToken }) {
+				expression = p.parseLiteralExpression()
+			}
+			fallthrough
+		default:
+			expression = p.parseObjectLiteralExpression()
+		}
+
+		// Error recovery: collect multiple top-level expressions
+		expressions = append(expressions, expression)
+		if p.token != SyntaxKindEndOfFile {
+			p.parseErrorAtCurrentToken(diagnostics.Unexpected_token)
+		}
+	}
+
+	var statement *Node
+	if len(expressions) == 1 {
+		statement = p.factory.NewExpressionStatement(expressions[0])
+	} else {
+		arr := p.factory.NewArrayLiteralExpression(expressions, false)
+		p.finishNode(arr, pos)
+		statement = p.factory.NewExpressionStatement(arr)
+	}
+	p.finishNode(statement, pos)
+	node := p.factory.NewSourceFile(p.sourceText, p.fileName, []*Node{statement})
+	p.finishNode(node, pos)
+	result := node.AsSourceFile()
+	result.diagnostics = attachFileToDiagnostics(p.diagnostics, result)
+	return result
+}
+
+func (p *Parser) initializeState(fileName string, sourceText string, languageVersion ScriptTarget, scriptKind ScriptKind) {
 	p.scanner = NewScanner()
 	p.fileName = path.Clean(fileName)
 	p.sourceText = sourceText
 	p.languageVersion = languageVersion
-	p.scriptKind = ensureScriptKind(fileName, ScriptKindUnknown)
+	p.scriptKind = ensureScriptKind(fileName, scriptKind)
 	p.languageVariant = getLanguageVariant(p.scriptKind)
 	switch p.scriptKind {
 	case ScriptKindJS, ScriptKindJSX:
@@ -85,8 +142,6 @@ func ParseSourceFile(fileName string, sourceText string, languageVersion ScriptT
 	p.scanner.SetOnError(p.scanError)
 	p.scanner.SetScriptTarget(p.languageVersion)
 	p.scanner.SetLanguageVariant(p.languageVariant)
-	p.nextToken()
-	return p.parseSourceFileWorker()
 }
 
 func (p *Parser) scanError(message *diagnostics.Message, pos int, len int, args ...any) {
