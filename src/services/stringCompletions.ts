@@ -487,9 +487,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             return { kind: StringLiteralCompletionKind.Properties, symbols: uniques, hasIndexSignature: false };
         case SyntaxKind.BinaryExpression:
             if ((parent as BinaryExpression).operatorToken.kind === SyntaxKind.InKeyword) {
-                const { left, right } = parent as BinaryExpression;
-                const leftOrRight = findAncestor(node, n => n.parent.kind === SyntaxKind.BinaryExpression);
-                const type = typeChecker.getTypeAtLocation(leftOrRight === right ? left : right);
+                const type = typeChecker.getTypeAtLocation((parent as BinaryExpression).right);
                 const properties = type.isUnion() ? typeChecker.getAllPossiblePropertiesOfTypes(type.types) : type.getApparentProperties();
                 return {
                     kind: StringLiteralCompletionKind.Properties,
