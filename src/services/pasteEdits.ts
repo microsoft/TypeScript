@@ -180,11 +180,11 @@ function pasteEdits(
  * Adjusts the range for `getUsageInfo` to correctly include identifiers at the edges of the copied text.
  */
 function getUsageInfoRangeForPasteEdits({ file: sourceFile, range }: CopiedFromInfo) {
-    // We do not need to adjust range when the tokens at the edges are not identifiers.
     const pos = range[0].pos;
     const end = range[range.length - 1].end;
     const startToken = getTokenAtPosition(sourceFile, pos);
     const endToken = findTokenOnLeftOfPosition(sourceFile, pos) ?? getTokenAtPosition(sourceFile, end);
+    // Since the range is only used to check identifiers, we do not need to adjust range when the tokens at the edges are not identifiers.
     return {
         pos: isIdentifier(startToken) && pos <= startToken.getStart(sourceFile) ? startToken.getFullStart() : pos,
         end: isIdentifier(endToken) && end === endToken.getEnd() ? textChanges.getAdjustedEndPosition(sourceFile, endToken, {}) : end,
