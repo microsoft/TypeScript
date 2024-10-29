@@ -370,7 +370,7 @@ func (p *Program) collectModuleReferences(file *SourceFile, node *Statement, inA
 	}
 	if isModuleDeclaration(node) && isAmbientModule(node) && (inAmbientModule || hasSyntacticModifier(node, ModifierFlagsAmbient) || file.isDeclarationFile) {
 		setParentInChildren(node)
-		nameText := getTextOfIdentifierOrLiteral(node.AsModuleDeclaration().name)
+		nameText := node.AsModuleDeclaration().name.Text()
 		// Ambient module declarations can be interpreted as augmentations for some existing external modules.
 		// This will happen in two cases:
 		// - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope

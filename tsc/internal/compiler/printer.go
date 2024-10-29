@@ -90,6 +90,8 @@ func (p *Printer) printType(t *Type) {
 		p.printUnionType(t)
 	case t.flags&TypeFlagsIntersection != 0:
 		p.printIntersectionType(t)
+	case t.flags&TypeFlagsIndex != 0:
+		p.printIndexType(t)
 	case t.flags&TypeFlagsIndexedAccess != 0:
 		p.printIndexedAccessType(t)
 	}
@@ -219,10 +221,56 @@ func (p *Printer) printAnonymousType(t *Type) {
 		return
 	}
 	p.depth++
+	p.printAnonymousTypeWorker(t)
+	p.depth--
+}
+
+func (p *Printer) printAnonymousTypeWorker(t *Type) {
 	props := p.c.getPropertiesOfObjectType(t)
+	callSignatures := p.c.getSignaturesOfType(t, SignatureKindCall)
+	constructSignatures := p.c.getSignaturesOfType(t, SignatureKindConstruct)
+	if len(props) == 0 {
+		if len(callSignatures) == 1 && len(constructSignatures) == 0 {
+			p.printSignature(callSignatures[0], " => ")
+			return
+		}
+		if len(callSignatures) == 0 && len(constructSignatures) == 1 {
+			p.print("new")
+			p.printSignature(constructSignatures[0], " => ")
+			return
+		}
+	}
 	sortSymbols(props)
 	p.print("{")
 	var tail bool
+	for _, sig := range callSignatures {
+		if tail {
+			p.print(",")
+		}
+		p.print(" ")
+		p.printSignature(sig, ": ")
+		tail = true
+	}
+	for _, sig := range constructSignatures {
+		if tail {
+			p.print(",")
+		}
+		p.print(" new")
+		p.printSignature(sig, ": ")
+		tail = true
+	}
+	for _, info := range p.c.getIndexInfosOfType(t) {
+		if tail {
+			p.print(",")
+		}
+		p.print(" [")
+		p.print(getNameFromIndexInfo(info))
+		p.print(": ")
+		p.printType(info.keyType)
+		p.print("]: ")
+		p.printType(info.valueType)
+		tail = true
+	}
 	for _, prop := range props {
 		if tail {
 			p.print(",")
@@ -238,6 +286,42 @@ func (p *Printer) printAnonymousType(t *Type) {
 	}
 	p.print("}")
 	p.depth--
+}
+
+func (p *Printer) printSignature(sig *Signature, returnSeparator string) {
+	if len(sig.typeParameters) != 0 {
+		p.print("<")
+		var tail bool
+		for _, tp := range sig.typeParameters {
+			if tail {
+				p.print(", ")
+			}
+			p.print(tp.symbol.name)
+			tail = true
+		}
+		p.print(">")
+	}
+	p.print("(")
+	var tail bool
+	for i, param := range sig.parameters {
+		if tail {
+			p.print(", ")
+		}
+		if sig.flags&SignatureFlagsHasRestParameter != 0 && i == len(sig.parameters)-1 {
+			p.print("...")
+			p.print(param.name)
+		} else {
+			p.print(param.name)
+			if i >= int(sig.minArgumentCount) {
+				p.print("?")
+			}
+		}
+		p.print(": ")
+		p.printType(p.c.getTypeOfSymbol(param))
+	}
+	p.print(")")
+	p.print(returnSeparator)
+	p.printType(p.c.getReturnTypeOfSignature(sig))
 }
 
 func (p *Printer) printTypeParameter(t *Type) {
@@ -275,6 +359,11 @@ func (p *Printer) printIntersectionType(t *Type) {
 		p.printTypeEx(t, TypePrecedenceIntersection)
 		tail = true
 	}
+}
+
+func (p *Printer) printIndexType(t *Type) {
+	p.print("keyof ")
+	p.printTypeEx(t.AsIndexType().target, TypePrecedenceTypeOperator)
 }
 
 func (p *Printer) printIndexedAccessType(t *Type) {

@@ -742,6 +742,36 @@ func isLeftHandSideExpressionKind(kind SyntaxKind) bool {
 	return false
 }
 
+func isUnaryExpression(node *Node) bool {
+	return isUnaryExpressionKind(node.kind)
+}
+
+func isUnaryExpressionKind(kind SyntaxKind) bool {
+	switch kind {
+	case SyntaxKindPrefixUnaryExpression, SyntaxKindPostfixUnaryExpression, SyntaxKindDeleteExpression, SyntaxKindTypeOfExpression,
+		SyntaxKindVoidExpression, SyntaxKindAwaitExpression, SyntaxKindTypeAssertionExpression:
+		return true
+	}
+	return isLeftHandSideExpressionKind(kind)
+}
+
+/**
+ * Determines whether a node is an expression based only on its kind.
+ */
+func isExpression(node *Node) bool {
+	return isExpressionKind(node.kind)
+}
+
+func isExpressionKind(kind SyntaxKind) bool {
+	switch kind {
+	case SyntaxKindConditionalExpression, SyntaxKindYieldExpression, SyntaxKindArrowFunction, SyntaxKindBinaryExpression,
+		SyntaxKindSpreadElement, SyntaxKindAsExpression, SyntaxKindOmittedExpression, SyntaxKindCommaListExpression,
+		SyntaxKindPartiallyEmittedExpression, SyntaxKindSatisfiesExpression:
+		return true
+	}
+	return isUnaryExpressionKind(kind)
+}
+
 func isAssignmentOperator(token SyntaxKind) bool {
 	return token >= SyntaxKindFirstAssignment && token <= SyntaxKindLastAssignment
 }
@@ -894,31 +924,9 @@ func isOuterExpression(node *Node, kinds OuterExpressionKinds) bool {
 	return false
 }
 
-func getInnerExpression(node *Node) *Node {
-	switch node.kind {
-	case SyntaxKindParenthesizedExpression:
-		return node.AsParenthesizedExpression().expression
-	case SyntaxKindTypeAssertionExpression:
-		return node.AsTypeAssertion().expression
-	case SyntaxKindAsExpression:
-		return node.AsAsExpression().expression
-	case SyntaxKindSatisfiesExpression:
-		return node.AsSatisfiesExpression().expression
-	case SyntaxKindExpressionWithTypeArguments:
-		return node.AsExpressionWithTypeArguments().expression
-	case SyntaxKindNonNullExpression:
-		return node.AsNonNullExpression().expression
-	}
-	panic("Unhandled case in getInnerExpression")
-}
-
-func getSymbolFromNode(node *Node) *Symbol {
-	return node.Symbol()
-}
-
 func skipOuterExpressions(node *Node, kinds OuterExpressionKinds) *Node {
 	for isOuterExpression(node, kinds) {
-		node = getInnerExpression(node)
+		node = node.Expression()
 	}
 	return node
 }
@@ -1194,6 +1202,10 @@ func hasEffectiveModifier(node *Node, flags ModifierFlags) bool {
 	return getEffectiveModifierFlags(node)&flags != 0
 }
 
+func hasEffectiveReadonlyModifier(node *Node) bool {
+	return hasEffectiveModifier(node, ModifierFlagsReadonly)
+}
+
 func getImmediatelyInvokedFunctionExpression(fn *Node) *Node {
 	if fn.kind == SyntaxKindFunctionExpression || fn.kind == SyntaxKindArrowFunction {
 		prev := fn
@@ -1223,26 +1235,6 @@ func getElementOrPropertyAccessArgumentExpressionOrName(node *Node) *Node {
 		return node
 	}
 	panic("Unhandled case in getElementOrPropertyAccessArgumentExpressionOrName")
-}
-
-func getAccessedExpression(node *Node) *Node {
-	switch node.kind {
-	case SyntaxKindPropertyAccessExpression:
-		return node.AsPropertyAccessExpression().expression
-	case SyntaxKindElementAccessExpression:
-		return node.AsElementAccessExpression().expression
-	case SyntaxKindCallExpression:
-		return node.AsCallExpression().expression
-	case SyntaxKindParenthesizedExpression:
-		return node.AsParenthesizedExpression().expression
-	case SyntaxKindNonNullExpression:
-		return node.AsNonNullExpression().expression
-	case SyntaxKindTypeAssertionExpression:
-		return node.AsTypeAssertion().expression
-	case SyntaxKindAsExpression:
-		return node.AsAsExpression().expression
-	}
-	panic("Unhandled case in getAccessedExpression")
 }
 
 func getQuestionDotToken(node *Node) *Node {
@@ -1398,26 +1390,6 @@ func isPropertyNameLiteral(node *Node) bool {
 	return false
 }
 
-func getTextOfIdentifierOrLiteral(node *Node) string {
-	switch node.kind {
-	case SyntaxKindIdentifier:
-		return node.AsIdentifier().text
-	case SyntaxKindPrivateIdentifier:
-		return node.AsPrivateIdentifier().text
-	case SyntaxKindStringLiteral:
-		return node.AsStringLiteral().text
-	case SyntaxKindNumericLiteral:
-		return node.AsNumericLiteral().text
-	case SyntaxKindBigintLiteral:
-		return node.AsBigintLiteral().text
-	case SyntaxKindNoSubstitutionTemplateLiteral:
-		return node.AsNoSubstitutionTemplateLiteral().text
-		// case isJsxNamespacedName(node):
-		// 	return getTextOfJsxNamespacedName(node)
-	}
-	panic("Unhandled case in getTextOfIdentifierOrLiteral")
-}
-
 func isMemberName(node *Node) bool {
 	return node.kind == SyntaxKindIdentifier || node.kind == SyntaxKindPrivateIdentifier
 }
@@ -1488,7 +1460,7 @@ func isVariableDeclarationInitializedWithRequireHelper(node *Node, allowAccessed
 
 func getLeftmostAccessExpression(expr *Node) *Node {
 	for isAccessExpression(expr) {
-		expr = getAccessedExpression(expr)
+		expr = expr.Expression()
 	}
 	return expr
 }
@@ -1716,7 +1688,7 @@ func isOutermostOptionalChain(node *Node) bool {
 	parent := node.parent
 	return !isOptionalChain(parent) || // cases 1, 2, and 3
 		isOptionalChainRoot(parent) || // case 4
-		node != getAccessedExpression(parent) // case 5
+		node != parent.Expression() // case 5
 }
 
 func isNullishCoalesce(node *Node) bool {
@@ -1728,7 +1700,7 @@ func isDottedName(node *Node) bool {
 	case SyntaxKindIdentifier, SyntaxKindThisKeyword, SyntaxKindSuperKeyword, SyntaxKindMetaProperty:
 		return true
 	case SyntaxKindPropertyAccessExpression, SyntaxKindParenthesizedExpression:
-		return isDottedName(getAccessedExpression(node))
+		return isDottedName(node.Expression())
 	}
 	return false
 }
@@ -1753,7 +1725,7 @@ func isTopLevelLogicalExpression(node *Node) bool {
 	for isParenthesizedExpression(node.parent) || isPrefixUnaryExpression(node.parent) && node.parent.AsPrefixUnaryExpression().operator == SyntaxKindExclamationToken {
 		node = node.parent
 	}
-	return !isStatementCondition(node) && !isLogicalExpression(node.parent) && !(isOptionalChain(node.parent) && getAccessedExpression(node.parent) == node)
+	return !isStatementCondition(node) && !isLogicalExpression(node.parent) && !(isOptionalChain(node.parent) && node.parent.Expression() == node)
 }
 
 func isStatementCondition(node *Node) bool {
@@ -1897,7 +1869,7 @@ func isOptionalChainRoot(node *Node) bool {
  * Determines whether a node is the expression preceding an optional chain (i.e. `a` in `a?.b`).
  */
 func isExpressionOfOptionalChainRoot(node *Node) bool {
-	return isOptionalChainRoot(node.parent) && getAccessedExpression(node.parent) == node
+	return isOptionalChainRoot(node.parent) && node.parent.Expression() == node
 }
 
 func isEntityNameExpression(node *Node) bool {
@@ -2404,7 +2376,7 @@ loop:
 					// at a higher level than type parameters would normally be
 					if meaning&result.flags&SymbolFlagsType != 0 && lastLocation.kind != SyntaxKindJSDoc {
 						useResult = result.flags&SymbolFlagsTypeParameter != 0 && (lastLocation.flags&NodeFlagsSynthesized != 0 ||
-							lastLocation == location.FunctionLikeData().returnType ||
+							lastLocation == location.ReturnType() ||
 							isParameterLikeOrReturnTag(lastLocation))
 					}
 					if meaning&result.flags&SymbolFlagsVariable != 0 {
@@ -2418,7 +2390,7 @@ loop:
 							// to make sure that they reference no variables declared after them.
 							useResult = lastLocation.kind == SyntaxKindParameter ||
 								lastLocation.flags&NodeFlagsSynthesized != 0 ||
-								lastLocation == location.FunctionLikeData().returnType && findAncestor(result.valueDeclaration, isParameter) != nil
+								lastLocation == location.ReturnType() && findAncestor(result.valueDeclaration, isParameter) != nil
 						}
 					}
 				} else if location.kind == SyntaxKindConditionalType {
@@ -2689,7 +2661,7 @@ func (r *NameResolver) useOuterVariableScopeInParameter(result *Symbol, location
 				functionLocation := location
 				declarationRequiresScopeChange := r.getRequiresScopeChangeCache(functionLocation)
 				if declarationRequiresScopeChange == TSUnknown {
-					declarationRequiresScopeChange = boolToTristate(some(functionLocation.FunctionLikeData().parameters, r.requiresScopeChange))
+					declarationRequiresScopeChange = boolToTristate(some(functionLocation.Parameters(), r.requiresScopeChange))
 					r.setRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange)
 				}
 				return declarationRequiresScopeChange == TSTrue
@@ -3038,7 +3010,7 @@ func isPartOfTypeNodeInParent(node *Node) bool {
 	case SyntaxKindFunctionDeclaration, SyntaxKindFunctionExpression, SyntaxKindArrowFunction, SyntaxKindConstructor, SyntaxKindMethodDeclaration,
 		SyntaxKindMethodSignature, SyntaxKindGetAccessor, SyntaxKindSetAccessor, SyntaxKindCallSignature, SyntaxKindConstructSignature,
 		SyntaxKindIndexSignature:
-		return node == parent.FunctionLikeData().returnType
+		return node == parent.ReturnType()
 	case SyntaxKindTypeAssertionExpression:
 		return node == parent.AsTypeAssertion().typeNode
 	case SyntaxKindCallExpression:
@@ -3405,7 +3377,7 @@ func getEffectiveTypeParameterDeclarations(node *Node) []*Node {
 	// 		}
 	// 	})
 	// }
-	typeParameters := getTypeParameterListFromNode(node)
+	typeParameters := node.TypeParameters()
 	if typeParameters != nil {
 		return typeParameters.AsTypeParameterList().parameters
 	}
@@ -3423,28 +3395,11 @@ func getEffectiveTypeParameterDeclarations(node *Node) []*Node {
 }
 
 func getTypeParameterNodesFromNode(node *Node) []*Node {
-	typeParameterList := getTypeParameterListFromNode(node)
+	typeParameterList := node.TypeParameters()
 	if typeParameterList != nil {
 		return typeParameterList.AsTypeParameterList().parameters
 	}
 	return nil
-}
-
-func getTypeParameterListFromNode(node *Node) *Node {
-	if isFunctionLike(node) {
-		return node.FunctionLikeData().typeParameters
-	}
-	switch node.kind {
-	case SyntaxKindClassDeclaration:
-		return node.AsClassDeclaration().typeParameters
-	case SyntaxKindClassExpression:
-		return node.AsClassExpression().typeParameters
-	case SyntaxKindInterfaceDeclaration:
-		return node.AsInterfaceDeclaration().typeParameters
-	case SyntaxKindTypeAliasDeclaration:
-		return node.AsTypeAliasDeclaration().typeParameters
-	}
-	panic("Unhandled case in getTypeParameterListFromNode")
 }
 
 func getTypeArgumentNodesFromNode(node *Node) []*Node {
@@ -3505,9 +3460,6 @@ func getInitializerFromNode(node *Node) *Node {
  * functions only the JSDoc case.
  */
 func getEffectiveTypeAnnotationNode(node *Node) *Node {
-	if isTypeAliasDeclaration(node) {
-		return nil
-	}
 	switch node.kind {
 	case SyntaxKindVariableDeclaration:
 		return node.AsVariableDeclaration().typeNode
@@ -3530,8 +3482,8 @@ func getEffectiveTypeAnnotationNode(node *Node) *Node {
 	case SyntaxKindAsExpression:
 		return node.AsAsExpression().typeNode
 	default:
-		if isFunctionLike(node) && !isFunctionDeclaration(node) {
-			return node.FunctionLikeData().returnType
+		if isFunctionLike(node) {
+			return node.ReturnType()
 		}
 	}
 	return nil
@@ -3551,12 +3503,20 @@ func isQuestionToken(node *Node) bool {
 
 func isOptionalDeclaration(declaration *Node) bool {
 	switch declaration.kind {
+	case SyntaxKindParameter:
+		return declaration.AsParameterDeclaration().questionToken != nil
 	case SyntaxKindPropertyDeclaration:
 		return isQuestionToken(declaration.AsPropertyDeclaration().postfixToken)
 	case SyntaxKindPropertySignature:
 		return isQuestionToken(declaration.AsPropertySignatureDeclaration().postfixToken)
-	case SyntaxKindParameter:
-		return declaration.AsParameterDeclaration().questionToken != nil
+	case SyntaxKindMethodDeclaration:
+		return isQuestionToken(declaration.AsMethodDeclaration().postfixToken)
+	case SyntaxKindMethodSignature:
+		return isQuestionToken(declaration.AsMethodSignatureDeclaration().postfixToken)
+	case SyntaxKindPropertyAssignment:
+		return isQuestionToken(declaration.AsPropertyAssignment().postfixToken)
+	case SyntaxKindShorthandPropertyAssignment:
+		return isQuestionToken(declaration.AsShorthandPropertyAssignment().postfixToken)
 	}
 	return false
 }
@@ -3657,7 +3617,11 @@ func identifierIsThisKeyword(id *Node) bool {
 	return id.AsIdentifier().text == "this"
 }
 
-func getDeclarationModifierFlagsFromSymbol(s *Symbol, isWrite bool) ModifierFlags {
+func getDeclarationModifierFlagsFromSymbol(s *Symbol) ModifierFlags {
+	return getDeclarationModifierFlagsFromSymbolEx(s, false /*isWrite*/)
+}
+
+func getDeclarationModifierFlagsFromSymbolEx(s *Symbol, isWrite bool) ModifierFlags {
 	if s.valueDeclaration != nil {
 		var declaration *Node
 		if isWrite {
@@ -3826,6 +3790,34 @@ func (m *orderedMap[K, V]) add(key K, value V) {
 	m.values = append(m.values, value)
 }
 
+type set[T comparable] struct {
+	m map[T]struct{}
+}
+
+func (s *set[T]) has(key T) bool {
+	_, ok := s.m[key]
+	return ok
+}
+
+func (s *set[T]) add(key T) {
+	if s.m == nil {
+		s.m = make(map[T]struct{})
+	}
+	s.m[key] = struct{}{}
+}
+
+func (s *set[T]) delete(key T) {
+	delete(s.m, key)
+}
+
+func (s *set[T]) len() int {
+	return len(s.m)
+}
+
+func (s *set[T]) keys() map[T]struct{} {
+	return s.m
+}
+
 func getContainingFunction(node *Node) *Node {
 	return findAncestor(node.parent, isFunctionLike)
 }
@@ -3899,33 +3891,27 @@ func isPropertyName(node *Node) bool {
 func getPropertyNameForPropertyNameNode(name *Node) string {
 	switch name.kind {
 	case SyntaxKindIdentifier, SyntaxKindPrivateIdentifier, SyntaxKindStringLiteral, SyntaxKindNoSubstitutionTemplateLiteral,
-		SyntaxKindNumericLiteral, SyntaxKindBigintLiteral:
-		return getTextOfIdentifierOrLiteral(name)
+		SyntaxKindNumericLiteral, SyntaxKindBigintLiteral, SyntaxKindJsxNamespacedName:
+		return name.Text()
 	case SyntaxKindComputedPropertyName:
 		nameExpression := name.AsComputedPropertyName().expression
 		if isStringOrNumericLiteralLike(nameExpression) {
-			return getTextOfIdentifierOrLiteral(nameExpression)
+			return nameExpression.Text()
 		}
 		if isSignedNumericLiteral(nameExpression) {
-			text := getTextOfIdentifierOrLiteral(nameExpression.AsPrefixUnaryExpression().operand)
+			text := nameExpression.AsPrefixUnaryExpression().operand.Text()
 			if nameExpression.AsPrefixUnaryExpression().operator == SyntaxKindMinusToken {
 				text = "-" + text
 			}
 			return text
 		}
 		return InternalSymbolNameMissing
-	case SyntaxKindJsxNamespacedName:
-		return getTextOfJsxNamespacedName(name)
 	}
 	panic("Unhandled case in getPropertyNameForPropertyNameNode")
 }
 
-func getTextOfJsxNamespacedName(node *Node) string {
-	return getTextOfIdentifierOrLiteral(node.AsJsxNamespacedName().namespace) + ":" + getTextOfIdentifierOrLiteral(node.AsJsxNamespacedName().name)
-}
-
 func isThisProperty(node *Node) bool {
-	return (isPropertyAccessExpression(node) || isElementAccessExpression(node)) && getAccessedExpression(node).kind == SyntaxKindThisKeyword
+	return (isPropertyAccessExpression(node) || isElementAccessExpression(node)) && node.Expression().kind == SyntaxKindThisKeyword
 }
 
 func numberToString(f float64) string {
@@ -3941,4 +3927,64 @@ func stringToNumber(s string) float64 {
 		return math.NaN()
 	}
 	return value
+}
+
+func isValidESSymbolDeclaration(node *Node) bool {
+	if isVariableDeclaration(node) {
+		return isVarConst(node) && isIdentifier(node.AsVariableDeclaration().name) && isVariableDeclarationInVariableStatement(node)
+	}
+	if isPropertyDeclaration(node) {
+		return hasEffectiveReadonlyModifier(node) && hasStaticModifier(node)
+	}
+	return isPropertySignatureDeclaration(node) && hasEffectiveReadonlyModifier(node)
+}
+
+func isVarConst(node *Node) bool {
+	return getCombinedNodeFlags(node)&NodeFlagsBlockScoped == NodeFlagsConst
+}
+
+func isVariableDeclarationInVariableStatement(node *Node) bool {
+	return isVariableDeclarationList(node.parent) && isVariableStatement(node.parent.parent)
+}
+
+func isKnownSymbol(symbol *Symbol) bool {
+	return isLateBoundName(symbol.name)
+}
+
+func isLateBoundName(name string) bool {
+	return len(name) >= 2 && name[0] == '\xfe' && name[1] == '@'
+}
+
+func getSymbolTable(data *SymbolTable) SymbolTable {
+	if *data == nil {
+		*data = make(SymbolTable)
+	}
+	return *data
+}
+
+func getMembers(symbol *Symbol) SymbolTable {
+	return getSymbolTable(&symbol.members)
+}
+
+func getExports(symbol *Symbol) SymbolTable {
+	return getSymbolTable(&symbol.exports)
+}
+
+func getLocals(container *Node) SymbolTable {
+	return getSymbolTable(&container.LocalsContainerData().locals)
+}
+
+func getThisParameter(signature *Node) *Node {
+	// callback tags do not currently support this parameters
+	if len(signature.Parameters()) != 0 {
+		thisParameter := signature.Parameters()[0]
+		if parameterIsThisKeyword(thisParameter) {
+			return thisParameter
+		}
+	}
+	return nil
+}
+
+func parameterIsThisKeyword(parameter *Node) bool {
+	return isThisIdentifier(parameter.Name())
 }

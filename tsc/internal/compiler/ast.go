@@ -46,22 +46,72 @@ type Node struct {
 	data   NodeData
 }
 
-// Node accessors
+// Node accessors. Some accessors are implemented as methods on NodeData, others are implemented though
+// type switches. Either approach is fine. Interface methods are likely more performant, but have higher
+// code size costs because we have hundreds of implementations of the NodeData interface.
 
 func (n *Node) Pos() int                                  { return n.loc.Pos() }
 func (n *Node) End() int                                  { return n.loc.End() }
 func (n *Node) ForEachChild(v Visitor) bool               { return n.data.ForEachChild(v) }
-func (n *Node) Symbol() *Symbol                           { return n.data.Symbol() }
-func (n *Node) LocalSymbol() *Symbol                      { return n.data.LocalSymbol() }
-func (n *Node) Modifiers() *ModifierListNode              { return n.data.Modifiers() }
 func (n *Node) Name() *DeclarationName                    { return n.data.Name() }
+func (n *Node) Modifiers() *ModifierListNode              { return n.data.Modifiers() }
+func (n *Node) TypeParameters() *TypeParameterListNode    { return n.data.TypeParameters() }
 func (n *Node) FlowNodeData() *FlowNodeBase               { return n.data.FlowNodeData() }
 func (n *Node) DeclarationData() *DeclarationBase         { return n.data.DeclarationData() }
+func (n *Node) Symbol() *Symbol                           { return n.data.DeclarationData().symbol }
 func (n *Node) ExportableData() *ExportableBase           { return n.data.ExportableData() }
+func (n *Node) LocalSymbol() *Symbol                      { return n.data.ExportableData().localSymbol }
 func (n *Node) LocalsContainerData() *LocalsContainerBase { return n.data.LocalsContainerData() }
+func (n *Node) Locals() SymbolTable                       { return n.data.LocalsContainerData().locals }
 func (n *Node) FunctionLikeData() *FunctionLikeBase       { return n.data.FunctionLikeData() }
+func (n *Node) Parameters() []*ParameterDeclarationNode   { return n.data.FunctionLikeData().parameters }
+func (n *Node) ReturnType() *TypeNode                     { return n.data.FunctionLikeData().returnType }
 func (n *Node) ClassLikeData() *ClassLikeBase             { return n.data.ClassLikeData() }
 func (n *Node) BodyData() *BodyBase                       { return n.data.BodyData() }
+
+func (n *Node) Text() string {
+	switch n.kind {
+	case SyntaxKindIdentifier:
+		return n.AsIdentifier().text
+	case SyntaxKindPrivateIdentifier:
+		return n.AsPrivateIdentifier().text
+	case SyntaxKindStringLiteral:
+		return n.AsStringLiteral().text
+	case SyntaxKindNumericLiteral:
+		return n.AsNumericLiteral().text
+	case SyntaxKindBigintLiteral:
+		return n.AsBigintLiteral().text
+	case SyntaxKindNoSubstitutionTemplateLiteral:
+		return n.AsNoSubstitutionTemplateLiteral().text
+	case SyntaxKindJsxNamespacedName:
+		return n.AsJsxNamespacedName().namespace.Text() + ":" + n.AsJsxNamespacedName().name.Text()
+	}
+	panic("Unhandled case in Node.Text")
+}
+
+func (node *Node) Expression() *Node {
+	switch node.kind {
+	case SyntaxKindPropertyAccessExpression:
+		return node.AsPropertyAccessExpression().expression
+	case SyntaxKindElementAccessExpression:
+		return node.AsElementAccessExpression().expression
+	case SyntaxKindParenthesizedExpression:
+		return node.AsParenthesizedExpression().expression
+	case SyntaxKindCallExpression:
+		return node.AsCallExpression().expression
+	case SyntaxKindExpressionWithTypeArguments:
+		return node.AsExpressionWithTypeArguments().expression
+	case SyntaxKindNonNullExpression:
+		return node.AsNonNullExpression().expression
+	case SyntaxKindTypeAssertionExpression:
+		return node.AsTypeAssertion().expression
+	case SyntaxKindAsExpression:
+		return node.AsAsExpression().expression
+	case SyntaxKindSatisfiesExpression:
+		return node.AsSatisfiesExpression().expression
+	}
+	panic("Unhandled case in Node.Expression")
+}
 
 // Node casts
 
@@ -413,16 +463,21 @@ func (n *Node) AsTypeQueryNode() *TypeQueryNode {
 func (n *Node) AsIndexedAccessTypeNode() *IndexedAccessTypeNode {
 	return n.data.(*IndexedAccessTypeNode)
 }
+func (n *Node) AsGetAccessorDeclaration() *GetAccessorDeclaration {
+	return n.data.(*GetAccessorDeclaration)
+}
+func (n *Node) AsSetAccessorDeclaration() *SetAccessorDeclaration {
+	return n.data.(*SetAccessorDeclaration)
+}
 
 // NodeData
 
 type NodeData interface {
 	AsNode() *Node
 	ForEachChild(v Visitor) bool
-	Symbol() *Symbol
-	LocalSymbol() *Symbol
-	Modifiers() *ModifierListNode
 	Name() *DeclarationName
+	Modifiers() *ModifierListNode
+	TypeParameters() *TypeParameterListNode
 	FlowNodeData() *FlowNodeBase
 	DeclarationData() *DeclarationBase
 	ExportableData() *ExportableBase
@@ -440,10 +495,9 @@ type NodeDefault struct {
 
 func (node *NodeDefault) AsNode() *Node                             { return &node.Node }
 func (node *NodeDefault) ForEachChild(v Visitor) bool               { return false }
-func (node *NodeDefault) Symbol() *Symbol                           { return nil }
-func (node *NodeDefault) LocalSymbol() *Symbol                      { return nil }
-func (node *NodeDefault) Modifiers() *ModifierListNode              { return nil }
 func (node *NodeDefault) Name() *DeclarationName                    { return nil }
+func (node *NodeDefault) Modifiers() *ModifierListNode              { return nil }
+func (node *NodeDefault) TypeParameters() *TypeParameterListNode    { return nil }
 func (node *NodeDefault) FlowNodeData() *FlowNodeBase               { return nil }
 func (node *NodeDefault) DeclarationData() *DeclarationBase         { return nil }
 func (node *NodeDefault) ExportableData() *ExportableBase           { return nil }
@@ -521,8 +575,11 @@ type DeclarationBase struct {
 	symbol *Symbol // Symbol declared by node (initialized by binding)
 }
 
-func (node *DeclarationBase) Symbol() *Symbol                   { return node.symbol }
 func (node *DeclarationBase) DeclarationData() *DeclarationBase { return node }
+
+func isDeclarationNode(node *Node) bool {
+	return node.DeclarationData() != nil
+}
 
 // DeclarationBase
 
@@ -530,7 +587,6 @@ type ExportableBase struct {
 	localSymbol *Symbol // Local symbol declared by node (initialized by binding only for exported nodes)
 }
 
-func (node *ExportableBase) LocalSymbol() *Symbol            { return node.localSymbol }
 func (node *ExportableBase) ExportableData() *ExportableBase { return node }
 
 // ModifiersBase
@@ -563,6 +619,7 @@ type FunctionLikeBase struct {
 	returnType     *TypeNode // Optional
 }
 
+func (node *FunctionLikeBase) TypeParameters() *TypeParameterListNode { return node.typeParameters }
 func (node *FunctionLikeBase) LocalsContainerData() *LocalsContainerBase {
 	return &node.LocalsContainerBase
 }
@@ -586,6 +643,9 @@ type FunctionLikeWithBodyBase struct {
 	BodyBase
 }
 
+func (node *FunctionLikeWithBodyBase) TypeParameters() *TypeParameterListNode {
+	return node.typeParameters
+}
 func (node *FunctionLikeWithBodyBase) LocalsContainerData() *LocalsContainerBase {
 	return &node.LocalsContainerBase
 }
@@ -1243,6 +1303,10 @@ func (node *VariableDeclarationList) ForEachChild(v Visitor) bool {
 	return visitNodes(v, node.declarations)
 }
 
+func isVariableDeclarationList(node *Node) bool {
+	return node.kind == SyntaxKindVariableDeclarationList
+}
+
 // BindingPattern (SyntaxBindObjectBindingPattern | SyntaxKindArrayBindingPattern)
 
 type BindingPattern struct {
@@ -1413,11 +1477,9 @@ func (node *ClassLikeBase) ForEachChild(v Visitor) bool {
 		visitNodes(v, node.heritageClauses) || visitNodes(v, node.members)
 }
 
-func (node *ClassLikeBase) Name() *DeclarationName {
-	return node.name
-}
-
-func (node *ClassLikeBase) ClassLikeData() *ClassLikeBase { return node }
+func (node *ClassLikeBase) Name() *DeclarationName                 { return node.name }
+func (node *ClassLikeBase) TypeParameters() *TypeParameterListNode { return node.typeParameters }
+func (node *ClassLikeBase) ClassLikeData() *ClassLikeBase          { return node }
 
 // ClassDeclaration
 
@@ -1514,9 +1576,8 @@ func (node *InterfaceDeclaration) ForEachChild(v Visitor) bool {
 		visitNodes(v, node.heritageClauses) || visitNodes(v, node.members)
 }
 
-func (node *InterfaceDeclaration) Name() *DeclarationName {
-	return node.name
-}
+func (node *InterfaceDeclaration) Name() *DeclarationName                 { return node.name }
+func (node *InterfaceDeclaration) TypeParameters() *TypeParameterListNode { return node.typeParameters }
 
 func isInterfaceDeclaration(node *Node) bool {
 	return node.kind == SyntaxKindInterfaceDeclaration
@@ -1548,9 +1609,8 @@ func (node *TypeAliasDeclaration) ForEachChild(v Visitor) bool {
 	return visit(v, node.modifiers) || visit(v, node.name) || visit(v, node.typeParameters) || visit(v, node.typeNode)
 }
 
-func (node *TypeAliasDeclaration) Name() *DeclarationName {
-	return node.name
-}
+func (node *TypeAliasDeclaration) Name() *DeclarationName                 { return node.name }
+func (node *TypeAliasDeclaration) TypeParameters() *TypeParameterListNode { return node.typeParameters }
 
 func isTypeAliasDeclaration(node *Node) bool {
 	return node.kind == SyntaxKindTypeAliasDeclaration
@@ -2028,7 +2088,6 @@ type NamedMemberBase struct {
 	postfixToken *TokenNode
 }
 
-func (node *NamedMemberBase) Symbol() *Symbol                   { return node.symbol }
 func (node *NamedMemberBase) DeclarationData() *DeclarationBase { return &node.DeclarationBase }
 func (node *NamedMemberBase) Modifiers() *ModifierListNode      { return node.modifiers }
 func (node *NamedMemberBase) Name() *DeclarationName            { return node.name }
@@ -2190,6 +2249,10 @@ func (f *NodeFactory) NewIndexSignatureDeclaration(modifiers *Node, parameters [
 
 func (node *IndexSignatureDeclaration) ForEachChild(v Visitor) bool {
 	return visit(v, node.modifiers) || visitNodes(v, node.parameters) || visit(v, node.returnType)
+}
+
+func isIndexSignatureDeclaration(node *Node) bool {
+	return node.kind == SyntaxKindIndexSignature
 }
 
 // MethodSignatureDeclaration
@@ -3702,6 +3765,10 @@ func (f *NodeFactory) NewConstructorTypeNode(modifiers *Node, typeParameters *No
 	return f.NewNode(SyntaxKindConstructorType, data)
 }
 
+func isConstructorTypeNode(node *Node) bool {
+	return node.kind == SyntaxKindConstructorType
+}
+
 // TemplateLiteralLikeBase
 
 type TemplateLiteralLikeBase struct {
@@ -4109,7 +4176,7 @@ type SourceFile struct {
 	moduleReferencesProcessed   bool
 	usesUriStyleNodeCoreModules Tristate
 	symbolCount                 int
-	classifiableNames           map[string]bool
+	classifiableNames           set[string]
 	imports                     []*LiteralLikeNode
 	moduleAugmentations         []*ModuleName
 	patternAmbientModules       []PatternAmbientModule
