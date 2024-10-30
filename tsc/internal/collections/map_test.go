@@ -1,10 +1,12 @@
 package collections_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"slices"
 	"testing"
 
+	json2 "github.com/go-json-experiment/json"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"gotest.tools/v3/assert"
 )
@@ -155,4 +157,36 @@ func TestMapWithSizeHint(t *testing.T) {
 	})
 
 	assert.Assert(t, allocs < 10, "allocs = %v", allocs)
+}
+
+func TestMapUnmarshalJSON(t *testing.T) {
+	t.Parallel()
+
+	t.Run("UnmarshalJSON", func(t *testing.T) {
+		t.Parallel()
+		testMapUnmarshalJSON(t, json.Unmarshal)
+	})
+	t.Run("UnmarshalJSONV2", func(t *testing.T) {
+		t.Parallel()
+		testMapUnmarshalJSON(t, func(in []byte, out any) error { return json2.Unmarshal(in, out) })
+	})
+}
+
+func testMapUnmarshalJSON(t *testing.T, unmarshal func([]byte, any) error) {
+	var m collections.Map[string, any]
+	err := unmarshal([]byte(`{"a": 1, "b": "two", "c": { "d": 4 } }`), &m)
+	assert.NilError(t, err)
+
+	assert.Equal(t, m.Size(), 3)
+	assert.Equal(t, m.GetOrZero("a"), float64(1))
+
+	err = unmarshal([]byte(`null`), &m)
+	assert.NilError(t, err)
+
+	err = unmarshal([]byte(`"foo"`), &m)
+	assert.ErrorContains(t, err, "cannot unmarshal non-object JSON value into Map")
+
+	var invalidMap collections.Map[int, any]
+	err = unmarshal([]byte(`{"a": 1, "b": "two"}`), &invalidMap)
+	assert.ErrorContains(t, err, "unmarshal")
 }

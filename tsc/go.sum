@@ -1,3 +1,5 @@
+github.com/go-json-experiment/json v0.0.0-20240815175050-ebd3a8989ca1 h1:xcuWappghOVI8iNWoF2OKahVejd1LSVi/v4JED44Amo=
+github.com/go-json-experiment/json v0.0.0-20240815175050-ebd3a8989ca1/go.mod h1:BWmvoE1Xia34f3l/ibJweyhrT+aROb/FQ6d+37F0e2s=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 golang.org/x/mod v0.21.0 h1:vvrHzRwRfVKSiLrG+d4FMl/Qi4ukBCE6kZlTUkDYRT0=
