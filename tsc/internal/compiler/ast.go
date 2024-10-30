@@ -2866,7 +2866,7 @@ func (f *NodeFactory) NewMetaProperty(keywordToken SyntaxKind, name *Node) *Node
 	data := &MetaProperty{}
 	data.keywordToken = keywordToken
 	data.name = name
-	return f.NewNode(SyntaxKindNewExpression, data)
+	return f.NewNode(SyntaxKindMetaProperty, data)
 }
 
 func (node *MetaProperty) ForEachChild(v Visitor) bool {
