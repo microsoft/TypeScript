@@ -79,8 +79,8 @@ func (n *Node) Text() string {
 		return n.AsStringLiteral().text
 	case SyntaxKindNumericLiteral:
 		return n.AsNumericLiteral().text
-	case SyntaxKindBigintLiteral:
-		return n.AsBigintLiteral().text
+	case SyntaxKindBigIntLiteral:
+		return n.AsBigIntLiteral().text
 	case SyntaxKindNoSubstitutionTemplateLiteral:
 		return n.AsNoSubstitutionTemplateLiteral().text
 	case SyntaxKindJsxNamespacedName:
@@ -187,8 +187,8 @@ func (n *Node) AsStringLiteral() *StringLiteral {
 func (n *Node) AsNumericLiteral() *NumericLiteral {
 	return n.data.(*NumericLiteral)
 }
-func (n *Node) AsBigintLiteral() *BigintLiteral {
-	return n.data.(*BigintLiteral)
+func (n *Node) AsBigIntLiteral() *BigIntLiteral {
+	return n.data.(*BigIntLiteral)
 }
 func (n *Node) AsNoSubstitutionTemplateLiteral() *NoSubstitutionTemplateLiteral {
 	return n.data.(*NoSubstitutionTemplateLiteral)
@@ -541,8 +541,8 @@ type JsxAttributeLike = Node            // JsxAttribute | JsxSpreadAttribute
 type JsxAttributeName = Node            // Identifier | JsxNamespacedName
 type ClassLikeDeclaration = Node        // ClassDeclaration | ClassExpression
 type AccessorDeclaration = Node         // GetAccessorDeclaration | SetAccessorDeclaration
-type LiteralLikeNode = Node             // StringLiteral | NumericLiteral | BigintLiteral | RegularExpressionLiteral | TemplateLiteralLikeNode | JsxText
-type LiteralExpression = Node           // StringLiteral | NumericLiteral | BigintLiteral | RegularExpressionLiteral | NoSubstitutionTemplateLiteral
+type LiteralLikeNode = Node             // StringLiteral | NumericLiteral | BigIntLiteral | RegularExpressionLiteral | TemplateLiteralLikeNode | JsxText
+type LiteralExpression = Node           // StringLiteral | NumericLiteral | BigIntLiteral | RegularExpressionLiteral | NoSubstitutionTemplateLiteral
 type UnionOrIntersectionTypeNode = Node // UnionTypeNode | IntersectionTypeNode
 type TemplateLiteralLikeNode = Node     // TemplateHead | TemplateMiddle | TemplateTail
 type TemplateMiddleOrTail = Node        // TemplateMiddle | TemplateTail
@@ -2487,17 +2487,17 @@ func (f *NodeFactory) NewNumericLiteral(text string) *Node {
 	return f.NewNode(SyntaxKindNumericLiteral, data)
 }
 
-// BigintLiteral
+// BigIntLiteral
 
-type BigintLiteral struct {
+type BigIntLiteral struct {
 	ExpressionBase
 	LiteralLikeBase
 }
 
-func (f *NodeFactory) NewBigintLiteral(text string) *Node {
-	data := &BigintLiteral{}
+func (f *NodeFactory) NewBigIntLiteral(text string) *Node {
+	data := &BigIntLiteral{}
 	data.text = text
-	return f.NewNode(SyntaxKindBigintLiteral, data)
+	return f.NewNode(SyntaxKindBigIntLiteral, data)
 }
 
 // RegularExpressionLiteral

@@ -150,7 +150,7 @@ type Checker struct {
 	globals                            SymbolTable
 	stringLiteralTypes                 map[string]*Type
 	numberLiteralTypes                 map[float64]*Type
-	bigintLiteralTypes                 map[PseudoBigint]*Type
+	bigintLiteralTypes                 map[PseudoBigInt]*Type
 	enumLiteralTypes                   map[EnumLiteralKey]*Type
 	indexedAccessTypes                 map[string]*Type
 	uniqueESSymbolTypes                map[*Symbol]*Type
@@ -268,7 +268,7 @@ func NewChecker(program *Program) *Checker {
 	c.globals = make(SymbolTable)
 	c.stringLiteralTypes = make(map[string]*Type)
 	c.numberLiteralTypes = make(map[float64]*Type)
-	c.bigintLiteralTypes = make(map[PseudoBigint]*Type)
+	c.bigintLiteralTypes = make(map[PseudoBigInt]*Type)
 	c.enumLiteralTypes = make(map[EnumLiteralKey]*Type)
 	c.indexedAccessTypes = make(map[string]*Type)
 	c.uniqueESSymbolTypes = make(map[*Symbol]*Type)
@@ -307,7 +307,7 @@ func NewChecker(program *Program) *Checker {
 	c.nullWideningType = c.createWideningType(c.nullType)
 	c.stringType = c.newIntrinsicType(TypeFlagsString, "string")
 	c.numberType = c.newIntrinsicType(TypeFlagsNumber, "number")
-	c.bigintType = c.newIntrinsicType(TypeFlagsBigint, "bigint")
+	c.bigintType = c.newIntrinsicType(TypeFlagsBigInt, "bigint")
 	c.regularFalseType = c.newLiteralType(TypeFlagsBooleanLiteral, false, nil)
 	c.falseType = c.newLiteralType(TypeFlagsBooleanLiteral, false, c.regularFalseType)
 	c.regularFalseType.AsLiteralType().freshType = c.falseType
@@ -773,7 +773,7 @@ func (c *Checker) checkSourceElementWorker(node *Node) {
 			!(isQualifiedName(node.parent) && node.parent.AsQualifiedName().right == node) {
 			_ = c.checkExpression(node)
 		}
-	case SyntaxKindStringLiteral, SyntaxKindNumericLiteral, SyntaxKindBigintLiteral:
+	case SyntaxKindStringLiteral, SyntaxKindNumericLiteral, SyntaxKindBigIntLiteral:
 		if isExpressionNode(node) {
 			c.checkExpression(node)
 		}
@@ -875,11 +875,11 @@ func (c *Checker) checkExpressionWorker(node *Node, checkMode CheckMode) *Type {
 		// !!! Revise this to handle NaN, Infinity, etc. in the same manner as JS
 		value := stringToNumber(node.AsNumericLiteral().text)
 		return c.getFreshTypeOfLiteralType(c.getNumberLiteralType(value))
-	case SyntaxKindBigintLiteral:
+	case SyntaxKindBigIntLiteral:
 		// !!! checkGrammarBigIntLiteral(node as BigIntLiteral);
-		return c.getFreshTypeOfLiteralType(c.getBigintLiteralType(PseudoBigint{
+		return c.getFreshTypeOfLiteralType(c.getBigIntLiteralType(PseudoBigInt{
 			negative:    false,
-			base10Value: parsePseudoBigint(node.AsBigintLiteral().text),
+			base10Value: parsePseudoBigInt(node.AsBigIntLiteral().text),
 		}))
 	case SyntaxKindTrueKeyword:
 		return c.trueType
@@ -6385,7 +6385,7 @@ func (c *Checker) getTypeFromIntersectionTypeNode(node *Node) *Type {
 			emptyIndex := slices.Index(types, c.emptyTypeLiteralType)
 			if emptyIndex >= 0 {
 				t := types[1-emptyIndex]
-				noSupertypeReduction = t.flags&(TypeFlagsString|TypeFlagsNumber|TypeFlagsBigint) != 0 || t.flags&TypeFlagsTemplateLiteral != 0 && c.isPatternLiteralType(t)
+				noSupertypeReduction = t.flags&(TypeFlagsString|TypeFlagsNumber|TypeFlagsBigInt) != 0 || t.flags&TypeFlagsTemplateLiteral != 0 && c.isPatternLiteralType(t)
 			}
 		}
 		links.resolvedType = c.getIntersectionTypeEx(types, ifElse(noSupertypeReduction, IntersectionFlagsNoSupertypeReduction, 0), alias)
@@ -6994,10 +6994,10 @@ func (c *Checker) getNumberLiteralType(value float64) *Type {
 	return t
 }
 
-func (c *Checker) getBigintLiteralType(value PseudoBigint) *Type {
+func (c *Checker) getBigIntLiteralType(value PseudoBigInt) *Type {
 	t := c.bigintLiteralTypes[value]
 	if t == nil {
-		t = c.newLiteralType(TypeFlagsBigintLiteral, value, nil)
+		t = c.newLiteralType(TypeFlagsBigIntLiteral, value, nil)
 		c.bigintLiteralTypes[value] = t
 	}
 	return t
@@ -7048,7 +7048,7 @@ func (c *Checker) getBaseTypeOfLiteralType(t *Type) *Type {
 		return c.stringType
 	case t.flags&TypeFlagsNumberLiteral != 0:
 		return c.numberType
-	case t.flags&TypeFlagsBigintLiteral != 0:
+	case t.flags&TypeFlagsBigIntLiteral != 0:
 		return c.bigintType
 	case t.flags&TypeFlagsBooleanLiteral != 0:
 		return c.booleanType
@@ -7083,7 +7083,7 @@ func (c *Checker) getWidenedLiteralType(t *Type) *Type {
 		return c.stringType
 	case t.flags&TypeFlagsNumberLiteral != 0 && isFreshLiteralType(t):
 		return c.numberType
-	case t.flags&TypeFlagsBigintLiteral != 0 && isFreshLiteralType(t):
+	case t.flags&TypeFlagsBigIntLiteral != 0 && isFreshLiteralType(t):
 		return c.bigintType
 	case t.flags&TypeFlagsBooleanLiteral != 0 && isFreshLiteralType(t):
 		return c.booleanType
@@ -7371,7 +7371,7 @@ func (c *Checker) removeRedundantLiteralTypes(types []*Type, includes TypeFlags,
 		flags := t.flags
 		remove := flags&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 && includes&TypeFlagsString != 0 ||
 			flags&TypeFlagsNumberLiteral != 0 && includes&TypeFlagsNumber != 0 ||
-			flags&TypeFlagsBigintLiteral != 0 && includes&TypeFlagsBigint != 0 ||
+			flags&TypeFlagsBigIntLiteral != 0 && includes&TypeFlagsBigInt != 0 ||
 			flags&TypeFlagsUniqueESSymbol != 0 && includes&TypeFlagsESSymbol != 0 ||
 			reduceVoidUndefined && flags&TypeFlagsUndefined != 0 && includes&TypeFlagsVoid != 0 ||
 			isFreshLiteralType(t) && containsType(types, t.AsLiteralType().regularType)
@@ -7471,7 +7471,7 @@ func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, 
 	}
 	if includes&TypeFlagsString != 0 && includes&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
 		includes&TypeFlagsNumber != 0 && includes&TypeFlagsNumberLiteral != 0 ||
-		includes&TypeFlagsBigint != 0 && includes&TypeFlagsBigintLiteral != 0 ||
+		includes&TypeFlagsBigInt != 0 && includes&TypeFlagsBigIntLiteral != 0 ||
 		includes&TypeFlagsESSymbol != 0 && includes&TypeFlagsUniqueESSymbol != 0 ||
 		includes&TypeFlagsVoid != 0 && includes&TypeFlagsUndefined != 0 ||
 		includes&TypeFlagsIncludesEmptyObject != 0 && includes&TypeFlagsDefinitelyNonNullable != 0 {
@@ -7659,7 +7659,7 @@ func (c *Checker) removeRedundantSupertypes(types []*Type, includes TypeFlags) [
 		t := types[i]
 		remove := t.flags&TypeFlagsString != 0 && includes&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 ||
 			t.flags&TypeFlagsNumber != 0 && includes&TypeFlagsNumberLiteral != 0 ||
-			t.flags&TypeFlagsBigint != 0 && includes&TypeFlagsBigintLiteral != 0 ||
+			t.flags&TypeFlagsBigInt != 0 && includes&TypeFlagsBigIntLiteral != 0 ||
 			t.flags&TypeFlagsESSymbol != 0 && includes&TypeFlagsUniqueESSymbol != 0 ||
 			t.flags&TypeFlagsVoid != 0 && includes&TypeFlagsUndefined != 0 ||
 			c.isEmptyAnonymousObjectType(t) && includes&TypeFlagsDefinitelyNonNullable != 0
@@ -7751,7 +7751,7 @@ func (c *Checker) eachUnionContains(unionTypes []*Type, t *Type) bool {
 				primitive = c.stringType
 			case t.flags&(TypeFlagsEnum|TypeFlagsNumberLiteral) != 0:
 				primitive = c.numberType
-			case t.flags&TypeFlagsBigintLiteral != 0:
+			case t.flags&TypeFlagsBigIntLiteral != 0:
 				primitive = c.bigintType
 			case t.flags&TypeFlagsUniqueESSymbol != 0:
 				primitive = c.esSymbolType
@@ -7833,7 +7833,7 @@ func (c *Checker) isPatternLiteralPlaceholderType(t *Type) bool {
 		}
 		return seenPlaceholder
 	}
-	return t.flags&(TypeFlagsAny|TypeFlagsString|TypeFlagsNumber|TypeFlagsBigint) != 0 || c.isPatternLiteralType(t)
+	return t.flags&(TypeFlagsAny|TypeFlagsString|TypeFlagsNumber|TypeFlagsBigInt) != 0 || c.isPatternLiteralType(t)
 }
 
 func (c *Checker) isPatternLiteralType(t *Type) bool {
@@ -8394,13 +8394,13 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 	}
 	if accessNode != nil {
 		indexNode := getIndexNodeForAccessExpression(accessNode)
-		if indexNode.kind != SyntaxKindBigintLiteral && indexType.flags&(TypeFlagsStringLiteral|TypeFlagsNumberLiteral) != 0 {
+		if indexNode.kind != SyntaxKindBigIntLiteral && indexType.flags&(TypeFlagsStringLiteral|TypeFlagsNumberLiteral) != 0 {
 			c.error(indexNode, diagnostics.Property_0_does_not_exist_on_type_1, indexType.AsLiteralType().value, c.typeToString(objectType))
 		} else if indexType.flags&(TypeFlagsString|TypeFlagsNumber) != 0 {
 			c.error(indexNode, diagnostics.Type_0_has_no_matching_index_signature_for_type_1, c.typeToString(objectType), c.typeToString(indexType))
 		} else {
 			var typeString string
-			if indexNode.kind == SyntaxKindBigintLiteral {
+			if indexNode.kind == SyntaxKindBigIntLiteral {
 				typeString = "bigint"
 			} else {
 				typeString = c.typeToString(indexType)

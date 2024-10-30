@@ -12,7 +12,7 @@ const (
 	SyntaxKindConflictMarkerTrivia
 	SyntaxKindNonTextFileMarkerTrivia
 	SyntaxKindNumericLiteral
-	SyntaxKindBigintLiteral
+	SyntaxKindBigIntLiteral
 	SyntaxKindStringLiteral
 	SyntaxKindJsxText
 	SyntaxKindJsxTextAllWhiteSpaces
@@ -1152,12 +1152,12 @@ const (
 	TypeFlagsNumber          TypeFlags = 1 << 3
 	TypeFlagsBoolean         TypeFlags = 1 << 4
 	TypeFlagsEnum            TypeFlags = 1 << 5 // Numeric computed enum member value
-	TypeFlagsBigint          TypeFlags = 1 << 6
+	TypeFlagsBigInt          TypeFlags = 1 << 6
 	TypeFlagsStringLiteral   TypeFlags = 1 << 7
 	TypeFlagsNumberLiteral   TypeFlags = 1 << 8
 	TypeFlagsBooleanLiteral  TypeFlags = 1 << 9
 	TypeFlagsEnumLiteral     TypeFlags = 1 << 10 // Always combined with StringLiteral, NumberLiteral, or Union
-	TypeFlagsBigintLiteral   TypeFlags = 1 << 11
+	TypeFlagsBigIntLiteral   TypeFlags = 1 << 11
 	TypeFlagsESSymbol        TypeFlags = 1 << 12 // Type of symbol primitive introduced in ES6
 	TypeFlagsUniqueESSymbol  TypeFlags = 1 << 13 // unique symbol
 	TypeFlagsVoid            TypeFlags = 1 << 14
@@ -1181,17 +1181,17 @@ const (
 
 	TypeFlagsAnyOrUnknown                  = TypeFlagsAny | TypeFlagsUnknown
 	TypeFlagsNullable                      = TypeFlagsUndefined | TypeFlagsNull
-	TypeFlagsLiteral                       = TypeFlagsStringLiteral | TypeFlagsNumberLiteral | TypeFlagsBigintLiteral | TypeFlagsBooleanLiteral
+	TypeFlagsLiteral                       = TypeFlagsStringLiteral | TypeFlagsNumberLiteral | TypeFlagsBigIntLiteral | TypeFlagsBooleanLiteral
 	TypeFlagsUnit                          = TypeFlagsEnum | TypeFlagsLiteral | TypeFlagsUniqueESSymbol | TypeFlagsNullable
 	TypeFlagsFreshable                     = TypeFlagsEnum | TypeFlagsLiteral
 	TypeFlagsStringOrNumberLiteral         = TypeFlagsStringLiteral | TypeFlagsNumberLiteral
 	TypeFlagsStringOrNumberLiteralOrUnique = TypeFlagsStringLiteral | TypeFlagsNumberLiteral | TypeFlagsUniqueESSymbol
-	TypeFlagsDefinitelyFalsy               = TypeFlagsStringLiteral | TypeFlagsNumberLiteral | TypeFlagsBigintLiteral | TypeFlagsBooleanLiteral | TypeFlagsVoid | TypeFlagsUndefined | TypeFlagsNull
-	TypeFlagsPossiblyFalsy                 = TypeFlagsDefinitelyFalsy | TypeFlagsString | TypeFlagsNumber | TypeFlagsBigint | TypeFlagsBoolean
-	TypeFlagsIntrinsic                     = TypeFlagsAny | TypeFlagsUnknown | TypeFlagsString | TypeFlagsNumber | TypeFlagsBigint | TypeFlagsESSymbol | TypeFlagsVoid | TypeFlagsUndefined | TypeFlagsNull | TypeFlagsNever | TypeFlagsNonPrimitive
+	TypeFlagsDefinitelyFalsy               = TypeFlagsStringLiteral | TypeFlagsNumberLiteral | TypeFlagsBigIntLiteral | TypeFlagsBooleanLiteral | TypeFlagsVoid | TypeFlagsUndefined | TypeFlagsNull
+	TypeFlagsPossiblyFalsy                 = TypeFlagsDefinitelyFalsy | TypeFlagsString | TypeFlagsNumber | TypeFlagsBigInt | TypeFlagsBoolean
+	TypeFlagsIntrinsic                     = TypeFlagsAny | TypeFlagsUnknown | TypeFlagsString | TypeFlagsNumber | TypeFlagsBigInt | TypeFlagsESSymbol | TypeFlagsVoid | TypeFlagsUndefined | TypeFlagsNull | TypeFlagsNever | TypeFlagsNonPrimitive
 	TypeFlagsStringLike                    = TypeFlagsString | TypeFlagsStringLiteral | TypeFlagsTemplateLiteral | TypeFlagsStringMapping
 	TypeFlagsNumberLike                    = TypeFlagsNumber | TypeFlagsNumberLiteral | TypeFlagsEnum
-	TypeFlagsBigIntLike                    = TypeFlagsBigint | TypeFlagsBigintLiteral
+	TypeFlagsBigIntLike                    = TypeFlagsBigInt | TypeFlagsBigIntLiteral
 	TypeFlagsBooleanLike                   = TypeFlagsBoolean | TypeFlagsBooleanLiteral
 	TypeFlagsEnumLike                      = TypeFlagsEnum | TypeFlagsEnumLiteral
 	TypeFlagsESSymbolLike                  = TypeFlagsESSymbol | TypeFlagsUniqueESSymbol
@@ -1208,7 +1208,7 @@ const (
 	TypeFlagsStructuredOrInstantiable      = TypeFlagsStructuredType | TypeFlagsInstantiable
 	TypeFlagsObjectFlagsType               = TypeFlagsAny | TypeFlagsNullable | TypeFlagsNever | TypeFlagsObject | TypeFlagsUnion | TypeFlagsIntersection
 	TypeFlagsSimplifiable                  = TypeFlagsIndexedAccess | TypeFlagsConditional
-	TypeFlagsSingleton                     = TypeFlagsAny | TypeFlagsUnknown | TypeFlagsString | TypeFlagsNumber | TypeFlagsBoolean | TypeFlagsBigint | TypeFlagsESSymbol | TypeFlagsVoid | TypeFlagsUndefined | TypeFlagsNull | TypeFlagsNever | TypeFlagsNonPrimitive
+	TypeFlagsSingleton                     = TypeFlagsAny | TypeFlagsUnknown | TypeFlagsString | TypeFlagsNumber | TypeFlagsBoolean | TypeFlagsBigInt | TypeFlagsESSymbol | TypeFlagsVoid | TypeFlagsUndefined | TypeFlagsNull | TypeFlagsNever | TypeFlagsNonPrimitive
 	// 'TypeFlagsNarrowable' types are types where narrowing actually narrows.
 	// This *should* be every type other than null, undefined, void, and never
 	TypeFlagsNarrowable = TypeFlagsAny | TypeFlagsUnknown | TypeFlagsStructuredOrInstantiable | TypeFlagsStringLike | TypeFlagsNumberLike | TypeFlagsBigIntLike | TypeFlagsBooleanLike | TypeFlagsESSymbol | TypeFlagsUniqueESSymbol | TypeFlagsNonPrimitive
@@ -1398,7 +1398,7 @@ type LiteralType struct {
 	regularType *Type // Regular version of type
 }
 
-type PseudoBigint struct {
+type PseudoBigInt struct {
 	negative    bool
 	base10Value string
 }

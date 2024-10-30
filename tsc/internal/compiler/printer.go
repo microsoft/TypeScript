@@ -108,8 +108,8 @@ func (p *Printer) printLiteralType(t *Type) {
 			p.printNumberLiteral(value)
 		case bool:
 			p.printBooleanLiteral(value)
-		case PseudoBigint:
-			p.printBigintLiteral(value)
+		case PseudoBigInt:
+			p.printBigIntLiteral(value)
 		}
 	}
 }
@@ -128,7 +128,7 @@ func (p *Printer) printBooleanLiteral(b bool) {
 	p.print(ifElse(b, "true", "false"))
 }
 
-func (p *Printer) printBigintLiteral(b PseudoBigint) {
+func (p *Printer) printBigIntLiteral(b PseudoBigInt) {
 	if b.negative {
 		p.print("-")
 	}

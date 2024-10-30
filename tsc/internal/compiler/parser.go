@@ -1408,7 +1408,7 @@ func (p *Parser) parseClassElement() *Node {
 	}
 	// It is very important that we check this *after* checking indexers because
 	// the [ token can start an index signature or a computed property name
-	if tokenIsIdentifierOrKeyword(p.token) || p.token == SyntaxKindStringLiteral || p.token == SyntaxKindNumericLiteral || p.token == SyntaxKindBigintLiteral || p.token == SyntaxKindAsteriskToken || p.token == SyntaxKindOpenBracketToken {
+	if tokenIsIdentifierOrKeyword(p.token) || p.token == SyntaxKindStringLiteral || p.token == SyntaxKindNumericLiteral || p.token == SyntaxKindBigIntLiteral || p.token == SyntaxKindAsteriskToken || p.token == SyntaxKindOpenBracketToken {
 		isAmbient := modifierList != nil && some(modifierList.AsModifierList().modifiers, isDeclareModifier)
 		if isAmbient {
 			for _, m := range modifierList.AsModifierList().modifiers {
@@ -2270,7 +2270,7 @@ func (p *Parser) parseNonArrayType() *Node {
 		// 	return p.parseJSDocFunctionType()
 		// case SyntaxKindExclamationToken:
 		// 	return p.parseJSDocNonNullableType()
-	case SyntaxKindNoSubstitutionTemplateLiteral, SyntaxKindStringLiteral, SyntaxKindNumericLiteral, SyntaxKindBigintLiteral, SyntaxKindTrueKeyword,
+	case SyntaxKindNoSubstitutionTemplateLiteral, SyntaxKindStringLiteral, SyntaxKindNumericLiteral, SyntaxKindBigIntLiteral, SyntaxKindTrueKeyword,
 		SyntaxKindFalseKeyword, SyntaxKindNullKeyword:
 		return p.parseLiteralTypeNode(false /*negative*/)
 	case SyntaxKindMinusToken:
@@ -2934,7 +2934,7 @@ func (p *Parser) parsePropertyName() *Node {
 }
 
 func (p *Parser) parsePropertyNameWorker(allowComputedPropertyNames bool) *Node {
-	if p.token == SyntaxKindStringLiteral || p.token == SyntaxKindNumericLiteral || p.token == SyntaxKindBigintLiteral {
+	if p.token == SyntaxKindStringLiteral || p.token == SyntaxKindNumericLiteral || p.token == SyntaxKindBigIntLiteral {
 		literal := p.parseLiteralExpression()
 		p.internIdentifier(literal.Text())
 		return literal
@@ -3513,7 +3513,7 @@ func (p *Parser) nextTokenIsIdentifierOrKeywordOnSameLine() bool {
 }
 
 func (p *Parser) nextTokenIsIdentifierOrKeywordOrLiteralOnSameLine() bool {
-	return (p.nextTokenIsIdentifierOrKeyword() || p.token == SyntaxKindNumericLiteral || p.token == SyntaxKindBigintLiteral || p.token == SyntaxKindStringLiteral) && !p.hasPrecedingLineBreak()
+	return (p.nextTokenIsIdentifierOrKeyword() || p.token == SyntaxKindNumericLiteral || p.token == SyntaxKindBigIntLiteral || p.token == SyntaxKindStringLiteral) && !p.hasPrecedingLineBreak()
 }
 
 func (p *Parser) nextTokenIsClassKeywordOnSameLine() bool {
@@ -5086,7 +5086,7 @@ func (p *Parser) parsePrimaryExpression() *Expression {
 			p.reScanTemplateToken(false /*isTaggedTemplate*/)
 		}
 		fallthrough
-	case SyntaxKindNumericLiteral, SyntaxKindBigintLiteral, SyntaxKindStringLiteral:
+	case SyntaxKindNumericLiteral, SyntaxKindBigIntLiteral, SyntaxKindStringLiteral:
 		return p.parseLiteralExpression()
 	case SyntaxKindThisKeyword, SyntaxKindSuperKeyword, SyntaxKindNullKeyword, SyntaxKindTrueKeyword, SyntaxKindFalseKeyword:
 		return p.parseKeywordExpression()
@@ -5312,8 +5312,8 @@ func (p *Parser) parseLiteralExpression() *Node {
 		result = p.factory.NewStringLiteral(text)
 	case SyntaxKindNumericLiteral:
 		result = p.factory.NewNumericLiteral(text)
-	case SyntaxKindBigintLiteral:
-		result = p.factory.NewBigintLiteral(text)
+	case SyntaxKindBigIntLiteral:
+		result = p.factory.NewBigIntLiteral(text)
 	case SyntaxKindRegularExpressionLiteral:
 		result = p.factory.NewRegularExpressionLiteral(text)
 	case SyntaxKindNoSubstitutionTemplateLiteral:
@@ -5513,7 +5513,7 @@ func (p *Parser) parseSemicolon() bool {
 }
 
 func (p *Parser) isLiteralPropertyName() bool {
-	return tokenIsIdentifierOrKeyword(p.token) || p.token == SyntaxKindStringLiteral || p.token == SyntaxKindNumericLiteral || p.token == SyntaxKindBigintLiteral
+	return tokenIsIdentifierOrKeyword(p.token) || p.token == SyntaxKindStringLiteral || p.token == SyntaxKindNumericLiteral || p.token == SyntaxKindBigIntLiteral
 }
 
 func (p *Parser) isStartOfStatement() bool {
@@ -5649,7 +5649,7 @@ func (p *Parser) isStartOfExpression() bool {
 func (p *Parser) isStartOfLeftHandSideExpression() bool {
 	switch p.token {
 	case SyntaxKindThisKeyword, SyntaxKindSuperKeyword, SyntaxKindNullKeyword, SyntaxKindTrueKeyword, SyntaxKindFalseKeyword,
-		SyntaxKindNumericLiteral, SyntaxKindBigintLiteral, SyntaxKindStringLiteral, SyntaxKindNoSubstitutionTemplateLiteral, SyntaxKindTemplateHead,
+		SyntaxKindNumericLiteral, SyntaxKindBigIntLiteral, SyntaxKindStringLiteral, SyntaxKindNoSubstitutionTemplateLiteral, SyntaxKindTemplateHead,
 		SyntaxKindOpenParenToken, SyntaxKindOpenBracketToken, SyntaxKindOpenBraceToken, SyntaxKindFunctionKeyword, SyntaxKindClassKeyword,
 		SyntaxKindNewKeyword, SyntaxKindSlashToken, SyntaxKindSlashEqualsToken, SyntaxKindIdentifier:
 		return true
@@ -5665,7 +5665,7 @@ func (p *Parser) isStartOfType(inStartOfParameter bool) bool {
 		SyntaxKindBooleanKeyword, SyntaxKindReadonlyKeyword, SyntaxKindSymbolKeyword, SyntaxKindUniqueKeyword, SyntaxKindVoidKeyword,
 		SyntaxKindUndefinedKeyword, SyntaxKindNullKeyword, SyntaxKindThisKeyword, SyntaxKindTypeOfKeyword, SyntaxKindNeverKeyword,
 		SyntaxKindOpenBraceToken, SyntaxKindOpenBracketToken, SyntaxKindLessThanToken, SyntaxKindBarToken, SyntaxKindAmpersandToken,
-		SyntaxKindNewKeyword, SyntaxKindStringLiteral, SyntaxKindNumericLiteral, SyntaxKindBigintLiteral, SyntaxKindTrueKeyword,
+		SyntaxKindNewKeyword, SyntaxKindStringLiteral, SyntaxKindNumericLiteral, SyntaxKindBigIntLiteral, SyntaxKindTrueKeyword,
 		SyntaxKindFalseKeyword, SyntaxKindObjectKeyword, SyntaxKindAsteriskToken, SyntaxKindQuestionToken, SyntaxKindExclamationToken,
 		SyntaxKindDotDotDotToken, SyntaxKindInferKeyword, SyntaxKindImportKeyword, SyntaxKindAssertsKeyword, SyntaxKindNoSubstitutionTemplateLiteral,
 		SyntaxKindTemplateHead:
@@ -5684,7 +5684,7 @@ func (p *Parser) isStartOfType(inStartOfParameter bool) bool {
 
 func (p *Parser) nextTokenIsNumericOrBigIntLiteral() bool {
 	p.nextToken()
-	return p.token == SyntaxKindNumericLiteral || p.token == SyntaxKindBigintLiteral
+	return p.token == SyntaxKindNumericLiteral || p.token == SyntaxKindBigIntLiteral
 }
 
 func (p *Parser) nextIsParenthesizedOrFunctionType() bool {

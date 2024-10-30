@@ -1344,7 +1344,7 @@ func (s *Scanner) scanNumber() SyntaxKind {
 	if isIdentifierStart(ch, s.languageVersion) {
 		idStart := s.pos
 		id := s.scanIdentifierParts()
-		if result != SyntaxKindBigintLiteral && len(id) == 1 && s.text[idStart] == 'n' {
+		if result != SyntaxKindBigIntLiteral && len(id) == 1 && s.text[idStart] == 'n' {
 			if s.tokenFlags&TokenFlagsScientific != 0 {
 				s.errorAt(diagnostics.A_bigint_literal_cannot_use_exponential_notation, start, s.pos-start)
 				return result
@@ -1485,7 +1485,7 @@ func (s *Scanner) scanBigIntSuffix() SyntaxKind {
 		s.pos++
 		s.tokenValue += "n"
 		// !!! Convert all bigint tokens to their normalized decimal representation
-		return SyntaxKindBigintLiteral
+		return SyntaxKindBigIntLiteral
 	}
 	// !!! Once stringToNumber supports parsing of non-decimal values we should also convert non-decimal
 	// tokens to their normalized decimal representation
