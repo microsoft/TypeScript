@@ -16517,7 +16517,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isNarrowingSubstitutionType(type: Type): boolean {
-        return !!(type.flags & TypeFlags.Substitution && (type as SubstitutionType).objectFlags & ObjectFlags.IsNarrowedType);
+        return !!(type.flags & TypeFlags.Substitution && (type as SubstitutionType).objectFlags & ObjectFlags.IsNarrowingType);
     }
 
     function getSubstitutionType(baseType: Type, constraint: Type, isNarrowed?: boolean) {
@@ -16536,7 +16536,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         result.baseType = baseType;
         result.constraint = constraint;
         if (isNarrowed) {
-            result.objectFlags |= ObjectFlags.IsNarrowedType;
+            result.objectFlags |= ObjectFlags.IsNarrowingType;
         }
         substitutionTypes.set(id, result);
         return result;
@@ -27844,11 +27844,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
+
+        if (toIntersection) {
+            return mappedTypes && getIntersectionType(mappedTypes);
+        }
+
         return changed
-            ? mappedTypes &&
-                (toIntersection
-                    ? getIntersectionType(mappedTypes)
-                    : getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal))
+            ? mappedTypes && getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal)
             : type;
     }
 
@@ -45652,10 +45654,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (expr) {
             const unwrappedExpr = skipParentheses(expr, excludeJSDocTypeAssertions);
             if (isConditionalExpression(unwrappedExpr)) {
-                return checkConditionalReturnExpression(container, unwrappedReturnType, node, unwrappedExpr);
+                checkReturnExpression(container, unwrappedReturnType, node, unwrappedExpr.whenTrue, checkExpression(unwrappedExpr.whenTrue), /*inConditionalExpression*/ true);
+                checkReturnExpression(container, unwrappedReturnType, node, unwrappedExpr.whenFalse, checkExpression(unwrappedExpr.whenFalse), /*inConditionalExpression*/ true);
+                return;
             }
         }
-        const effectiveExpr = expr && getEffectiveCheckNode(expr); // The effective expression for diagnostics purposes.
 
         const inReturnStatement = node.kind === SyntaxKind.ReturnStatement;
         const unwrappedExprType = functionFlags & FunctionFlags.Async
@@ -45667,26 +45670,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             )
             : exprType;
 
+        const effectiveExpr = expr && getEffectiveCheckNode(expr); // The effective expression for diagnostics purposes.
         const errorNode = inReturnStatement && !inConditionalExpression ? node : effectiveExpr;
+
+        // If the return type is not narrowable, we simply check if the return expression type is assignable to the return type.
         if (!(unwrappedReturnType.flags & (TypeFlags.IndexedAccess | TypeFlags.Conditional)) || !couldContainTypeVariables(unwrappedReturnType)) {
             checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, effectiveExpr);
             return;
         }
-        // Check if type of return expression is assignable to original return type;
-        // If so, we don't need to narrow, even if we could.
+
+        // If type of return expression is assignable to original return type, we don't need to narrow the return type.
         if (checkTypeAssignableTo(unwrappedExprType, unwrappedReturnType, /*errorNode*/ undefined)) {
-            return;
-        }
-
-        const allTypeParameters = appendTypeParameters(getOuterTypeParameters(container, /*includeThisTypes*/ false), getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
-        const narrowableTypeParameters = allTypeParameters && getNarrowableTypeParameters(allTypeParameters);
-
-        if (
-            !narrowableTypeParameters ||
-            !narrowableTypeParameters.length ||
-            !isNarrowableReturnType(unwrappedReturnType as ConditionalType | IndexedAccessType)
-        ) {
-            checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, effectiveExpr);
             return;
         }
 
@@ -45714,7 +45708,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, effectiveExpr);
             return;
         }
-        const narrowed: [TypeParameter, Type][] = mapDefined(narrowableTypeParameters, ([typeParam, symbol, reference]) => {
+
+        const allTypeParameters = appendTypeParameters(getOuterTypeParameters(container, /*includeThisTypes*/ false), getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
+        const narrowableTypeParameters = allTypeParameters && getNarrowableTypeParameters(allTypeParameters);
+
+        if (
+            !narrowableTypeParameters ||
+            !narrowableTypeParameters.length ||
+            !isNarrowableReturnType(unwrappedReturnType as ConditionalType | IndexedAccessType)
+        ) {
+            checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, effectiveExpr);
+            return;
+        }
+
+        const narrowedTypeParameters: TypeParameter[] = [];
+        const narrowedTypes: Type[] = [];
+        for (const [typeParam, symbol, reference] of narrowableTypeParameters) {
             const narrowReference = factory.cloneNode(reference); // Construct a reference that can be narrowed.
             // Don't reuse the original reference's node id,
             // because that could cause us to get a type that was cached for the original reference.
@@ -45726,19 +45735,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             narrowReference.flowNode = narrowFlowNode;
             const initialType = getNarrowableTypeForReference(typeParam, narrowReference, /*checkMode*/ undefined, /*forReturnTypeNarrowing*/ true);
             if (initialType === typeParam) {
-                return undefined;
+                continue;
             }
             const flowType = getFlowTypeOfReference(narrowReference, initialType);
             const exprType = getTypeFromFlowType(flowType);
-            // Don't narrow the return type if narrowing didn't produce a narrower type for the expression.
-            if (isTypeAny(exprType) || isErrorType(exprType) || exprType === typeParam || exprType === mapType(typeParam, getBaseConstraintOrType)) {
-                return undefined;
+            // If attempting to narrow the expression type did not produce a narrower type,
+            // then discard this type parameter from narrowing.
+            if (
+                exprType.flags & TypeFlags.AnyOrUnknown
+                || isErrorType(exprType)
+                || exprType === typeParam
+                || exprType === mapType(typeParam, getBaseConstraintOrType)
+            ) {
+                continue;
             }
             const narrowedType = getSubstitutionType(typeParam, exprType, /*isNarrowed*/ true);
-            return [typeParam, narrowedType];
-        });
+            narrowedTypeParameters.push(typeParam);
+            narrowedTypes.push(narrowedType);
+        }
 
-        const narrowMapper = createTypeMapper(narrowed.map(([tp, _]) => tp), narrowed.map(([_, t]) => t));
+        const narrowMapper = createTypeMapper(narrowedTypeParameters, narrowedTypes);
         const narrowedReturnType = instantiateType(
             unwrappedReturnType,
             narrowMapper,
@@ -45763,19 +45779,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkTypeAssignableToAndOptionallyElaborate(narrowedUnwrappedExprType, narrowedReturnType, errorNode, effectiveExpr);
     }
 
-    function checkConditionalReturnExpression(
-        container: SignatureDeclaration,
-        returnType: Type,
-        node: ReturnStatement | Expression,
-        expr: ConditionalExpression,
-    ): void {
-        checkReturnExpression(container, returnType, node, expr.whenTrue, checkExpression(expr.whenTrue), /*inConditionalExpression*/ true);
-        checkReturnExpression(container, returnType, node, expr.whenFalse, checkExpression(expr.whenFalse), /*inConditionalExpression*/ true);
-    }
-
-    // Narrowable type parameters are type parameters that:
-    // (1) have a union type constraint;
-    // (2) are used as the type of a single parameter in the function, and nothing else
+    /**
+     * Narrowable type parameters are type parameters that:
+     * (1) have a union type constraint;
+     * (2) are used as the type of a single parameter in the function, and nothing else
+     */
     function getNarrowableTypeParameters(candidates: TypeParameter[]): [TypeParameter, Symbol, Identifier][] {
         const narrowableParams: [TypeParameter, Symbol, Identifier][] = [];
         for (const typeParam of candidates) {
@@ -45797,15 +45805,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             isReferenceToTypeParameter(typeParam, typeNode) &&
                             (candidateReference = getValidParameterReference(paramDecl, constraint))
                         ) {
+                            // Type parameter has more than one valid reference.
                             if (reference) {
                                 hasInvalidReference = true;
                                 break;
                             }
                             reference = candidateReference;
-                            continue;
                         }
-                        hasInvalidReference = true;
-                        break;
+                        else { // Type parameter has invalid reference.
+                            hasInvalidReference = true;
+                            break;
+                        }
                     }
                 }
                 if (!hasInvalidReference && reference) {

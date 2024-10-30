@@ -6507,7 +6507,7 @@ export const enum ObjectFlags {
     /** @internal */
     IsGenericType = IsGenericObjectType | IsGenericIndexType,
     /** @internal */
-    IsNarrowedType = 1 << 24, // Substitution type that comes from type narrowing
+    IsNarrowingType = 1 << 24, // Substitution type that comes from type narrowing
 
     // Flags that require TypeFlags.Union
     /** @internal */
@@ -6907,12 +6907,16 @@ export interface StringMappingType extends InstantiableType {
 }
 
 // Type parameter substitution (TypeFlags.Substitution)
-// Substitution types are created for type parameters or indexed access types that occur in the
+// - Substitution types are created for type parameters or indexed access types that occur in the
 // true branch of a conditional type. For example, in 'T extends string ? Foo<T> : Bar<T>', the
 // reference to T in Foo<T> is resolved as a substitution type that substitutes 'string & T' for T.
 // Thus, if Foo has a 'string' constraint on its type parameter, T will satisfy it.
-// Substitution type are also created for NoInfer<T> types. Those are represented as substitution
+// - Substitution types are also created for NoInfer<T> types. Those are represented as substitution
 // types where the constraint is type 'unknown' (which is never generated for the case above).
+// - Substitution types are also created for return type narrowing:
+// if a type parameter `T` is linked to a parameter `x` and `x`'s narrowed type is `S`,
+// we represent that with a substitution type with base `T` and constraint `S`.
+// The resulting substitution type has `ObjectFlags.IsNarrowedType` set.
 export interface SubstitutionType extends InstantiableType {
     objectFlags: ObjectFlags;
     baseType: Type; // Target type
