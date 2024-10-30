@@ -31877,19 +31877,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function discriminateContextualTypeByArrayElements(node: ArrayLiteralExpression, contextualType: UnionType) {
         const key = `D${getNodeId(node)},${getTypeId(contextualType)}`;
-        return getCachedType(key) ?? setCachedType(
-            key,
-            discriminateTypeByDiscriminableItems(
-                contextualType,
-                node.elements.map((element, index) => {
-                    const name = ("" + index) as __String
-                    return isPossiblyDiscriminantValue(element) && isDiscriminantProperty(contextualType, name) ?
-                        [() => getContextFreeTypeOfExpression(element), name] as const :
-                        undefined
-                }).filter(e => !!e),
-                isTypeAssignableTo,
-            ),
-        );
+        const cached = getCachedType(key);
+        if (cached) return cached;
+
+        if (!contextualType.types.every(type => getObjectFlags(getTargetType(type)) & ObjectFlags.Tuple))
+            return setCachedType(key, contextualType)
+        
+        const elementsLength = node.elements.length;
+        const filteredTupleTypesByLength = filter(contextualType.types, type => {
+            const tupleType = ((type as TypeReference).target as TupleType);
+            return (
+                elementsLength >= tupleType.minLength &&
+                ((tupleType.combinedFlags & ElementFlags.Variable) !== 0 || elementsLength <= tupleType.fixedLength)
+            )
+        })
+        if (filteredTupleTypesByLength !== contextualType.types) {
+            if (filteredTupleTypesByLength.length < 2)
+                return setCachedType(key, filteredTupleTypesByLength.length ? filteredTupleTypesByLength[0] : contextualType);
+            contextualType = getUnionType(filteredTupleTypesByLength, UnionReduction.None) as UnionType;
+        }
+        
+        return setCachedType(key, discriminateTypeByDiscriminableItems(
+            contextualType,
+            node.elements.map((element, index) => {
+                const name = ("" + index) as __String
+                return isPossiblyDiscriminantValue(element) && isDiscriminantProperty(contextualType, name) ?
+                    [() => getContextFreeTypeOfExpression(element), name] as const :
+                    undefined
+            }).filter(discriminator => !!discriminator),
+            isTypeAssignableTo,
+        ));
     }
 
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
