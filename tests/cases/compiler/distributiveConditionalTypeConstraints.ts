@@ -66,7 +66,7 @@ function test2<T extends A>(y: T extends B ? string : number) {
         y;  // T extends B ? string : number
     }
     const newY: string | number = y;
-    newY;  // number 
+    newY;  // number
 }
 
 function test3<T extends A>(y: T extends C ? number : string) {
@@ -89,4 +89,62 @@ function test4<T extends A>(y: T extends C ? string : number) {
     }
     const newY: string | number = y;
     newY;  // string | number
+}
+
+// https://github.com/microsoft/TypeScript/issues/59868
+
+type IsMatchingStringTwoLevels<T extends string> = T extends `a${string}`
+  ? T extends `${string}z`
+    ? true
+    : false
+  : false;
+
+function f5<S extends string>(x: IsMatchingStringTwoLevels<S>) {
+  let t: true = x; // Error
+  let f: false = x; // Error
+}
+
+type IsMatchingStringTwoLevels2<T extends string> = T extends `a${string}`
+  ? 1
+  : T extends `${string}z`
+  ? 2
+  : 3;
+
+function f6<S extends string>(x: IsMatchingStringTwoLevels2<S>) {
+  let t1: 1 = x; // Error
+  let t2: 2 = x; // Error
+  let t3: 3 = x; // Error
+  let t12: 1 | 2 = x; // Error
+  let t13: 1 | 3 = x; // Error
+  let t23: 2 | 3 = x; // Error
+}
+
+type IsMatchingStringTwoLevelsNoTailRecursion<T extends string> =
+  T extends `a${string}` ? 1 : 2 | (T extends `${string}z` ? 3 : 4);
+
+function f7<S extends string>(x: IsMatchingStringTwoLevelsNoTailRecursion<S>) {
+  let t1: 1 | 2 | 4 = x; // Error
+}
+
+type IsMatchingStringInfiniteRecursionInFalseType<T extends string> =
+  T extends `a${string}`
+    ? true
+    : IsMatchingStringInfiniteRecursionInFalseType<T>;
+
+function f8<S extends string>(
+  x: IsMatchingStringInfiniteRecursionInFalseType<S>,
+) {
+  let t1: true = x; // Error
+}
+
+type IsMatchingStringInfiniteRecursionInFalseType2<T extends string> =
+  T extends `a${string}`
+    ? 1
+    : (2 | IsMatchingStringInfiniteRecursionInFalseType2<T>);
+
+function f9<S extends string>(
+  x: IsMatchingStringInfiniteRecursionInFalseType2<S>,
+) {
+  let t1: 1 = x; // Error
+  let t2: 2 = x; // Error
 }

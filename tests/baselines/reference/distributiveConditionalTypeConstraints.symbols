@@ -184,7 +184,7 @@ function test2<T extends A>(y: T extends B ? string : number) {
 >newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 64, 9))
 >y : Symbol(y, Decl(distributiveConditionalTypeConstraints.ts, 57, 28))
 
-    newY;  // number 
+    newY;  // number
 >newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 64, 9))
 }
 
@@ -238,5 +238,157 @@ function test4<T extends A>(y: T extends C ? string : number) {
 
     newY;  // string | number
 >newY : Symbol(newY, Decl(distributiveConditionalTypeConstraints.ts, 86, 9))
+}
+
+// https://github.com/microsoft/TypeScript/issues/59868
+
+type IsMatchingStringTwoLevels<T extends string> = T extends `a${string}`
+>IsMatchingStringTwoLevels : Symbol(IsMatchingStringTwoLevels, Decl(distributiveConditionalTypeConstraints.ts, 88, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 92, 31))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 92, 31))
+
+  ? T extends `${string}z`
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 92, 31))
+
+    ? true
+    : false
+  : false;
+
+function f5<S extends string>(x: IsMatchingStringTwoLevels<S>) {
+>f5 : Symbol(f5, Decl(distributiveConditionalTypeConstraints.ts, 96, 10))
+>S : Symbol(S, Decl(distributiveConditionalTypeConstraints.ts, 98, 12))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 98, 30))
+>IsMatchingStringTwoLevels : Symbol(IsMatchingStringTwoLevels, Decl(distributiveConditionalTypeConstraints.ts, 88, 1))
+>S : Symbol(S, Decl(distributiveConditionalTypeConstraints.ts, 98, 12))
+
+  let t: true = x; // Error
+>t : Symbol(t, Decl(distributiveConditionalTypeConstraints.ts, 99, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 98, 30))
+
+  let f: false = x; // Error
+>f : Symbol(f, Decl(distributiveConditionalTypeConstraints.ts, 100, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 98, 30))
+}
+
+type IsMatchingStringTwoLevels2<T extends string> = T extends `a${string}`
+>IsMatchingStringTwoLevels2 : Symbol(IsMatchingStringTwoLevels2, Decl(distributiveConditionalTypeConstraints.ts, 101, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 103, 32))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 103, 32))
+
+  ? 1
+  : T extends `${string}z`
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 103, 32))
+
+  ? 2
+  : 3;
+
+function f6<S extends string>(x: IsMatchingStringTwoLevels2<S>) {
+>f6 : Symbol(f6, Decl(distributiveConditionalTypeConstraints.ts, 107, 6))
+>S : Symbol(S, Decl(distributiveConditionalTypeConstraints.ts, 109, 12))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 109, 30))
+>IsMatchingStringTwoLevels2 : Symbol(IsMatchingStringTwoLevels2, Decl(distributiveConditionalTypeConstraints.ts, 101, 1))
+>S : Symbol(S, Decl(distributiveConditionalTypeConstraints.ts, 109, 12))
+
+  let t1: 1 = x; // Error
+>t1 : Symbol(t1, Decl(distributiveConditionalTypeConstraints.ts, 110, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 109, 30))
+
+  let t2: 2 = x; // Error
+>t2 : Symbol(t2, Decl(distributiveConditionalTypeConstraints.ts, 111, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 109, 30))
+
+  let t3: 3 = x; // Error
+>t3 : Symbol(t3, Decl(distributiveConditionalTypeConstraints.ts, 112, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 109, 30))
+
+  let t12: 1 | 2 = x; // Error
+>t12 : Symbol(t12, Decl(distributiveConditionalTypeConstraints.ts, 113, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 109, 30))
+
+  let t13: 1 | 3 = x; // Error
+>t13 : Symbol(t13, Decl(distributiveConditionalTypeConstraints.ts, 114, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 109, 30))
+
+  let t23: 2 | 3 = x; // Error
+>t23 : Symbol(t23, Decl(distributiveConditionalTypeConstraints.ts, 115, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 109, 30))
+}
+
+type IsMatchingStringTwoLevelsNoTailRecursion<T extends string> =
+>IsMatchingStringTwoLevelsNoTailRecursion : Symbol(IsMatchingStringTwoLevelsNoTailRecursion, Decl(distributiveConditionalTypeConstraints.ts, 116, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 118, 46))
+
+  T extends `a${string}` ? 1 : 2 | (T extends `${string}z` ? 3 : 4);
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 118, 46))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 118, 46))
+
+function f7<S extends string>(x: IsMatchingStringTwoLevelsNoTailRecursion<S>) {
+>f7 : Symbol(f7, Decl(distributiveConditionalTypeConstraints.ts, 119, 68))
+>S : Symbol(S, Decl(distributiveConditionalTypeConstraints.ts, 121, 12))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 121, 30))
+>IsMatchingStringTwoLevelsNoTailRecursion : Symbol(IsMatchingStringTwoLevelsNoTailRecursion, Decl(distributiveConditionalTypeConstraints.ts, 116, 1))
+>S : Symbol(S, Decl(distributiveConditionalTypeConstraints.ts, 121, 12))
+
+  let t1: 1 | 2 | 4 = x; // Error
+>t1 : Symbol(t1, Decl(distributiveConditionalTypeConstraints.ts, 122, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 121, 30))
+}
+
+type IsMatchingStringInfiniteRecursionInFalseType<T extends string> =
+>IsMatchingStringInfiniteRecursionInFalseType : Symbol(IsMatchingStringInfiniteRecursionInFalseType, Decl(distributiveConditionalTypeConstraints.ts, 123, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 125, 50))
+
+  T extends `a${string}`
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 125, 50))
+
+    ? true
+    : IsMatchingStringInfiniteRecursionInFalseType<T>;
+>IsMatchingStringInfiniteRecursionInFalseType : Symbol(IsMatchingStringInfiniteRecursionInFalseType, Decl(distributiveConditionalTypeConstraints.ts, 123, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 125, 50))
+
+function f8<S extends string>(
+>f8 : Symbol(f8, Decl(distributiveConditionalTypeConstraints.ts, 128, 54))
+>S : Symbol(S, Decl(distributiveConditionalTypeConstraints.ts, 130, 12))
+
+  x: IsMatchingStringInfiniteRecursionInFalseType<S>,
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 130, 30))
+>IsMatchingStringInfiniteRecursionInFalseType : Symbol(IsMatchingStringInfiniteRecursionInFalseType, Decl(distributiveConditionalTypeConstraints.ts, 123, 1))
+>S : Symbol(S, Decl(distributiveConditionalTypeConstraints.ts, 130, 12))
+
+) {
+  let t1: true = x; // Error
+>t1 : Symbol(t1, Decl(distributiveConditionalTypeConstraints.ts, 133, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 130, 30))
+}
+
+type IsMatchingStringInfiniteRecursionInFalseType2<T extends string> =
+>IsMatchingStringInfiniteRecursionInFalseType2 : Symbol(IsMatchingStringInfiniteRecursionInFalseType2, Decl(distributiveConditionalTypeConstraints.ts, 134, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 136, 51))
+
+  T extends `a${string}`
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 136, 51))
+
+    ? 1
+    : (2 | IsMatchingStringInfiniteRecursionInFalseType2<T>);
+>IsMatchingStringInfiniteRecursionInFalseType2 : Symbol(IsMatchingStringInfiniteRecursionInFalseType2, Decl(distributiveConditionalTypeConstraints.ts, 134, 1))
+>T : Symbol(T, Decl(distributiveConditionalTypeConstraints.ts, 136, 51))
+
+function f9<S extends string>(
+>f9 : Symbol(f9, Decl(distributiveConditionalTypeConstraints.ts, 139, 61))
+>S : Symbol(S, Decl(distributiveConditionalTypeConstraints.ts, 141, 12))
+
+  x: IsMatchingStringInfiniteRecursionInFalseType2<S>,
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 141, 30))
+>IsMatchingStringInfiniteRecursionInFalseType2 : Symbol(IsMatchingStringInfiniteRecursionInFalseType2, Decl(distributiveConditionalTypeConstraints.ts, 134, 1))
+>S : Symbol(S, Decl(distributiveConditionalTypeConstraints.ts, 141, 12))
+
+) {
+  let t1: 1 = x; // Error
+>t1 : Symbol(t1, Decl(distributiveConditionalTypeConstraints.ts, 144, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 141, 30))
+
+  let t2: 2 = x; // Error
+>t2 : Symbol(t2, Decl(distributiveConditionalTypeConstraints.ts, 145, 5))
+>x : Symbol(x, Decl(distributiveConditionalTypeConstraints.ts, 141, 30))
 }
 
