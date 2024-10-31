@@ -38627,7 +38627,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkIfExpressionRefinesParameter(func: FunctionLikeDeclaration, expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
-        const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
+        const antecedent = canHaveFlowNode(expr) && expr.flowNode ||
             expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
             createFlowNode(FlowFlags.Start, /*node*/ undefined, /*antecedent*/ undefined);
         const trueCondition = createFlowNode(FlowFlags.TrueCondition, expr, antecedent);
