@@ -45924,14 +45924,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // (4)
         const trueType = getTrueTypeFromConditionalType(type);
-        const falseType = getFalseTypeFromConditionalType(type);
         const isValidTrueType = isConditionalType(trueType)
             ? isNarrowableConditionalType(trueType)
             : true;
+        if (!isValidTrueType) return false;
+        const falseType = getFalseTypeFromConditionalType(type);
         const isValidFalseType = isConditionalType(falseType)
             ? isNarrowableConditionalType(falseType)
             : falseType === neverType;
-        return isValidTrueType && isValidFalseType;
+        return isValidFalseType;
     }
 
     function isConditionalType(type: Type): type is ConditionalType {
