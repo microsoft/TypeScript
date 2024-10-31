@@ -20316,7 +20316,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // result is (A extends U ? X : Y) | (B extends U ? X : Y).
                 if (distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never)) {
                     if (narrowingBaseType) {
-                        result = mapType(
+                        result = mapTypeToIntersection(
                             distributionType,
                             (t: Type) =>
                                 getConditionalType(
@@ -20327,8 +20327,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     /*aliasTypeArguments*/ undefined,
                                     forNarrowing,
                                 ),
-                            /*noReductions*/ undefined,
-                            /*toIntersection*/ true,
                         );
                     }
                     else {
@@ -27818,10 +27816,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Apply a mapping function to a type and return the resulting type. If the source type
     // is a union type, the mapping function is applied to each constituent type and a union
-    // (or intersection, if `toIntersection` is set) of the resulting types is returned.
-    function mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean, toIntersection?: boolean): Type;
-    function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean, toIntersection?: boolean): Type | undefined;
-    function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean, toIntersection?: boolean): Type | undefined {
+    // of the resulting types is returned.
+    function mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean): Type;
+    function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined;
+    function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined {
         if (type.flags & TypeFlags.Never) {
             return type;
         }
@@ -27844,14 +27842,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
+        return changed ? mappedTypes && getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal) : type;
+    }
 
-        if (toIntersection) {
-            return mappedTypes && getIntersectionType(mappedTypes);
+    /**
+     * Similar to {@link mapType}, but creates an intersection with the result of mapping over a union type.
+     */
+    function mapTypeToIntersection(type: Type, mapper: (t: Type) => Type): Type {
+        if (type.flags & TypeFlags.Never) {
+            return type;
         }
+        if (!(type.flags & TypeFlags.Union)) {
+            return mapper(type);
+        }
+        const origin = (type as UnionType).origin;
+        const types = origin && origin.flags & TypeFlags.Union ? (origin as UnionType).types : (type as UnionType).types;
+        const mappedTypes = types.map(t => t.flags & TypeFlags.Union ? mapTypeToIntersection(t, mapper) : mapper(t));
 
-        return changed
-            ? mappedTypes && getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal)
-            : type;
+        return getIntersectionType(mappedTypes);
     }
 
     function mapTypeWithAlias(type: Type, mapper: (t: Type) => Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
