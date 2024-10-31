@@ -137,15 +137,8 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
     }
 
+    // for switch statments
     switch (node.kind) {
-        case SyntaxKind.ReturnKeyword:
-            const functionDeclaration = findAncestor(node.parent, n =>
-                isClassStaticBlockDeclaration(n)
-                    ? "quit"
-                    : isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
-            return functionDeclaration
-                ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)]
-                : undefined;
         case SyntaxKind.DefaultKeyword:
             if (!isDefaultClause(node.parent)) {
                 break;
@@ -159,16 +152,31 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
             break;
     }
 
-    if (node.kind === SyntaxKind.AwaitKeyword) {
-        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n));
-        const isAsyncFunction = functionDeclaration && some(functionDeclaration.modifiers, node => node.kind === SyntaxKind.AsyncKeyword);
-        return isAsyncFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+    // for functions with keyword modifiers
+    let findFunctionDecl: ((n: Node) => boolean | "quit") | undefined;
+    let checkFunctionDeclaration: ((decl: FunctionLikeDeclaration) => boolean) | undefined;
+    switch (node.kind) {
+        case SyntaxKind.ReturnKeyword:
+            findFunctionDecl = n => {
+                return isClassStaticBlockDeclaration(n)
+                    ? "quit"
+                    : isFunctionLikeDeclaration(n);
+            };
+            break;
+        case SyntaxKind.AwaitKeyword:
+            findFunctionDecl = isFunctionLikeDeclaration;
+            checkFunctionDeclaration = (functionDeclaration: FunctionLikeDeclaration) => some(functionDeclaration.modifiers, node => node.kind === SyntaxKind.AsyncKeyword);
+            break;
+        case SyntaxKind.YieldKeyword:
+            findFunctionDecl = isFunctionLikeDeclaration;
+            checkFunctionDeclaration = functionDeclaration => !!functionDeclaration.asteriskToken;
+            break;
     }
 
-    if (node.kind === SyntaxKind.YieldKeyword) {
-        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n));
-        const isGeneratorFunction = functionDeclaration && functionDeclaration.asteriskToken;
-        return isGeneratorFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+    if (findFunctionDecl) {
+        const functionDeclaration = findAncestor(node, findFunctionDecl) as FunctionLikeDeclaration | undefined;
+        const isCorrectDeclaration = functionDeclaration && (!checkFunctionDeclaration || checkFunctionDeclaration(functionDeclaration));
+        return isCorrectDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
     }
 
     if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
