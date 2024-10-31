@@ -66,6 +66,7 @@ import {
     isJumpStatementTarget,
     isModifier,
     isModuleSpecifierLike,
+    isNamedDeclaration,
     isNameOfFunctionDeclaration,
     isNewExpressionTarget,
     isObjectBindingPattern,
@@ -156,7 +157,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
             break;
     }
 
-    // for keywords related to function or method declarations
+    // for keywords related to function or method definitions
     let findFunctionDecl: ((n: Node) => boolean | "quit") | undefined;
     let checkFunctionDeclaration: ((decl: FunctionLikeDeclaration) => boolean) | undefined;
     switch (node.kind) {
@@ -167,15 +168,12 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
                     : isFunctionLikeDeclaration(n);
             };
             break;
-        case SyntaxKind.AsyncKeyword:
         case SyntaxKind.AwaitKeyword:
-            findFunctionDecl = isFunctionLikeDeclaration;
             checkFunctionDeclaration = (functionDeclaration: FunctionLikeDeclaration) => some(functionDeclaration.modifiers, node => node.kind === SyntaxKind.AsyncKeyword);
+            findFunctionDecl = isFunctionLikeDeclaration;
             break;
         case SyntaxKind.YieldKeyword:
             checkFunctionDeclaration = functionDeclaration => !!functionDeclaration.asteriskToken;
-            // falls through
-        case SyntaxKind.ExportKeyword:
             findFunctionDecl = isFunctionLikeDeclaration;
             break;
     }
@@ -231,7 +229,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         }
     }
 
-    if (isModifier(node) && isClassElement(parent)) {
+    if (isModifier(node) && (isClassElement(parent) || isNamedDeclaration(parent))) {
         symbol = parent.symbol;
     }
 

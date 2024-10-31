@@ -1,30 +1,96 @@
 // === goToDefinition ===
 // === /a.ts ===
-// /*GOTO DEF*/export class A {
+// /*GOTO DEF*/<|export class [|A|] {
 // 
 //     private z: string;
 // 
-// --- (line: 5) skipped ---
+//     readonly x: string;
+// 
+//     async a() {  }
+// 
+//     override b() {}
+// 
+//     public async c() { }
+// }|>
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "A",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
 
 
 
 // === goToDefinition ===
 // === /a.ts ===
-// expo/*GOTO DEF*/rt class A {
+// <|expo/*GOTO DEF*/rt class [|A|] {
 // 
 //     private z: string;
 // 
-// --- (line: 5) skipped ---
+//     readonly x: string;
+// 
+//     async a() {  }
+// 
+//     override b() {}
+// 
+//     public async c() { }
+// }|>
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "A",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
 
 
 
 // === goToDefinition ===
 // === /a.ts ===
-// export/*GOTO DEF*/ class A {
+// <|export/*GOTO DEF*/ class [|A|] {
 // 
 //     private z: string;
 // 
-// --- (line: 5) skipped ---
+//     readonly x: string;
+// 
+//     async a() {  }
+// 
+//     override b() {}
+// 
+//     public async c() { }
+// }|>
+// 
+// export function foo() { }
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "A",
+    "containerName": "\"/a\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
 
 
 
@@ -100,7 +166,8 @@
     "containerName": "A",
     "isLocal": false,
     "isAmbient": false,
-    "unverified": false
+    "unverified": false,
+    "failedAliasResolution": false
    }
   ]
 
@@ -205,6 +272,7 @@
     "containerName": "A",
     "isLocal": false,
     "isAmbient": false,
-    "unverified": false
+    "unverified": false,
+    "failedAliasResolution": false
    }
   ]
