@@ -1750,3 +1750,36 @@ func getEndLinePosition(sourceFile *SourceFile, line int) int {
 		pos += size
 	}
 }
+
+func GetPositionOfLineAndCharacter(sourceFile *SourceFile, line int, character int) TextPos {
+	return ComputePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character)
+}
+
+func ComputePositionOfLineAndCharacter(lineStarts []TextPos, line int, character int) TextPos {
+	/// !!! debugText, allowEdits
+	if line < 0 || line >= len(lineStarts) {
+		// if (allowEdits) {
+		//     // Clamp line to nearest allowable value
+		//     line = line < 0 ? 0 : line >= lineStarts.length ? lineStarts.length - 1 : line;
+		// }
+		panic(fmt.Sprintf("Bad line number. Line: %d, lineStarts.length: %d.", line, len(lineStarts)))
+	}
+
+	res := (lineStarts[line]) + TextPos(character)
+
+	// !!!
+	// if (allowEdits) {
+	//     // Clamp to nearest allowable values to allow the underlying to be edited without crashing (accuracy is lost, instead)
+	//     // TODO: Somehow track edits between file as it was during the creation of sourcemap we have and the current file and
+	//     // apply them to the computed position to improve accuracy
+	//     return res > lineStarts[line + 1] ? lineStarts[line + 1] : typeof debugText === "string" && res > debugText.length ? debugText.length : res;
+	// }
+	if line < len(lineStarts)-1 && res >= lineStarts[line+1] {
+		panic("Computed position is beyond that of the following line.")
+	}
+	// !!!
+	// else if (debugText !== undefined) {
+	//     Debug.assert(res <= debugText.length); // Allow single character overflow for trailing newline
+	// }
+	return res
+}
