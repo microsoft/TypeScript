@@ -6016,7 +6016,6 @@ export interface SymbolLinks {
     exportsChecked?: boolean;                   // True if exports of external module have been checked
     typeParametersChecked?: boolean;            // True if type parameters of merged class and interface declarations have been checked.
     isDeclarationWithCollidingName?: boolean;   // True if symbol is block scoped redeclaration
-    bindingElement?: BindingElement;            // Binding element associated with property symbol
     originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
     lateSymbol?: Symbol;                        // Late-bound symbol for a computed property
     specifierCache?: Map<ModeAwareCacheKey, string>; // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings

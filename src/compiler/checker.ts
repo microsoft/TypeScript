@@ -11677,7 +11677,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const flags = SymbolFlags.Property | (e.initializer ? SymbolFlags.Optional : 0);
             const symbol = createSymbol(flags, text);
             symbol.links.type = getTypeFromBindingElement(e, includePatternInType, reportErrors);
-            symbol.links.bindingElement = e;
             members.set(symbol.escapedName, symbol);
         });
         const result = createAnonymousType(/*symbol*/ undefined, members, emptyArray, emptyArray, stringIndexInfo ? [stringIndexInfo] : emptyArray);
