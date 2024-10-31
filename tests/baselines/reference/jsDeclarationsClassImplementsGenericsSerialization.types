@@ -21,14 +21,14 @@ export class Encoder {
      * @param {T} value 
      */
     encode(value) {
->encode : (value: T) => Uint8Array
->       : ^     ^^ ^^^^^^^^^^^^^^^
+>encode : (value: T) => Uint8Array<ArrayBuffer>
+>       : ^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : T
 >      : ^
 
         return new Uint8Array(0)
->new Uint8Array(0) : Uint8Array
->                  : ^^^^^^^^^^
+>new Uint8Array(0) : Uint8Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >0 : 0

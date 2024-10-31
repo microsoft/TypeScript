@@ -1,17 +1,17 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /file2.ts
+// @Filename: /home/src/workspaces/project/file2.ts
 //// const a = 10;
 //// const b = 10;
 //// [||]const c = 10;
 
-// @Filename: /file1.ts
+// @Filename: /home/src/workspaces/project/file1.ts
 //// export interface Test1 {}
 //// export interface Test2 {}
 //// export interface Test3 {}
 //// export interface Test4 {}
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{ "files": ["file1.ts", "file2.ts"] }
 
 verify.pasteEdits({
@@ -25,7 +25,7 @@ verify.pasteEdits({
     pasteLocations: test.ranges(),
     },
     newFileContents: {
-        "/file2.ts":
+        "/home/src/workspaces/project/file2.ts":
 `import { Test1, Test2, Test3, Test4 } from "./file1";
 
 const a = 10;

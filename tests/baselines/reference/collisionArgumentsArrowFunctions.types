@@ -3,9 +3,9 @@
 === collisionArgumentsArrowFunctions.ts ===
 var f1 = (i: number, ...arguments) => { //arguments is error
 >f1 : (i: number, ...arguments: any[]) => void
->   : ^ ^^      ^^^^^         ^^     ^^^^^^^^^
+>   : ^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >(i: number, ...arguments) => { //arguments is error    var arguments: any[]; // no error} : (i: number, ...arguments: any[]) => void
->                                                                                          : ^ ^^      ^^^^^         ^^     ^^^^^^^^^
+>                                                                                          : ^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >arguments : any[]

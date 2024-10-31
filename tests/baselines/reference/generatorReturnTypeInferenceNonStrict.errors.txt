@@ -4,7 +4,7 @@ generatorReturnTypeInferenceNonStrict.ts(74,15): error TS7057: 'yield' expressio
 generatorReturnTypeInferenceNonStrict.ts(79,11): error TS7055: 'g301', which lacks return-type annotation, implicitly has an 'any' yield type.
 generatorReturnTypeInferenceNonStrict.ts(89,11): error TS7055: 'g303', which lacks return-type annotation, implicitly has an 'any' yield type.
 generatorReturnTypeInferenceNonStrict.ts(126,11): error TS7055: 'g310', which lacks return-type annotation, implicitly has an 'any' yield type.
-generatorReturnTypeInferenceNonStrict.ts(131,10): error TS7025: Generator implicitly has yield type 'any' because it does not yield any values. Consider supplying a return type annotation.
+generatorReturnTypeInferenceNonStrict.ts(131,10): error TS7025: Generator implicitly has yield type 'any'. Consider supplying a return type annotation.
 
 
 ==== generatorReturnTypeInferenceNonStrict.ts (7 errors) ====
@@ -152,7 +152,7 @@ generatorReturnTypeInferenceNonStrict.ts(131,10): error TS7025: Generator implic
     function* g311() { // Generator<any (implicit), void, string>
     	yield* (function*() {
     	        ~~~~~~~~
-!!! error TS7025: Generator implicitly has yield type 'any' because it does not yield any values. Consider supplying a return type annotation.
+!!! error TS7025: Generator implicitly has yield type 'any'. Consider supplying a return type annotation.
     		const y: string = yield;
     	})();
     }

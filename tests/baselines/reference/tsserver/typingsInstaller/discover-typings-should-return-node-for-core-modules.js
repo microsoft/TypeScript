@@ -1,15 +1,29 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
 
-//// [/a/b/app.js]
+//// [/home/src/projects/project/app.js]
 
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -31,17 +45,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -63,17 +77,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -95,17 +109,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -127,17 +141,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -159,17 +173,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -191,17 +205,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -223,17 +237,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -255,17 +269,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -287,17 +301,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -319,17 +333,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -351,17 +365,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -383,17 +397,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -415,17 +429,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -447,17 +461,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -479,17 +493,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -511,17 +525,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -543,17 +557,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -575,17 +589,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -607,17 +621,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -639,17 +653,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -671,17 +685,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -703,17 +717,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -735,17 +749,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -767,17 +781,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -799,17 +813,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -831,17 +845,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -863,17 +877,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -895,17 +909,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -927,17 +941,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -959,17 +973,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -991,17 +1005,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1023,17 +1037,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1055,17 +1069,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1087,17 +1101,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1119,17 +1133,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1151,17 +1165,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1183,17 +1197,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1215,17 +1229,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1247,17 +1261,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1279,17 +1293,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1311,17 +1325,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1343,17 +1357,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1375,17 +1389,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1407,17 +1421,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1439,17 +1453,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1471,17 +1485,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1503,17 +1517,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1535,17 +1549,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1567,17 +1581,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1599,17 +1613,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1631,17 +1645,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1663,17 +1677,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1695,17 +1709,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1727,17 +1741,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1759,17 +1773,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1791,17 +1805,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1823,17 +1837,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1855,17 +1869,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1887,17 +1901,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1919,17 +1933,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1951,17 +1965,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -1983,17 +1997,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2015,17 +2029,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2047,17 +2061,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2079,17 +2093,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2111,17 +2125,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2143,17 +2157,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2175,17 +2189,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2207,17 +2221,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2239,17 +2253,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2271,17 +2285,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2303,17 +2317,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2335,17 +2349,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2367,17 +2381,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2399,17 +2413,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2431,17 +2445,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2463,17 +2477,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2495,17 +2509,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2527,17 +2541,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2559,17 +2573,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2591,17 +2605,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2623,17 +2637,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2655,17 +2669,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2687,17 +2701,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2719,17 +2733,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2751,17 +2765,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2783,17 +2797,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2815,17 +2829,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2847,17 +2861,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2879,17 +2893,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2911,17 +2925,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2943,17 +2957,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -2975,17 +2989,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3007,17 +3021,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3039,17 +3053,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3071,17 +3085,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3103,17 +3117,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3135,17 +3149,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3167,17 +3181,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3199,17 +3213,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3231,17 +3245,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3263,17 +3277,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3295,17 +3309,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3327,17 +3341,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3359,17 +3373,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3391,17 +3405,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3423,17 +3437,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3455,17 +3469,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3487,17 +3501,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3519,17 +3533,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3551,17 +3565,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3583,17 +3597,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3615,17 +3629,17 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -3647,7 +3661,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "somename"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }

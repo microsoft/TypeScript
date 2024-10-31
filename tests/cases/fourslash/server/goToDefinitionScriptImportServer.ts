@@ -1,14 +1,14 @@
 /// <reference path="../fourslash.ts" />
 
-// @filename: /scriptThing.ts
+// @Filename: /home/src/workspaces/project/scriptThing.ts
 //// /*1d*/console.log("woooo side effects")
 
-// @filename: /stylez.css
+// @Filename: /home/src/workspaces/project/stylez.css
 //// /*2d*/div {
 ////   color: magenta;
 //// }
 
-// @filename: /moduleThing.ts
+// @Filename: /home/src/workspaces/project/moduleThing.ts
 
 // not a module, but we should let you jump to it.
 //// import [|/*1*/"./scriptThing"|];

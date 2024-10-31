@@ -1,9 +1,43 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
 Before request
-//// [/a/b/f1.js]
+//// [/user/username/projects/project/f1.js]
 export let x = 5; import { s } from "s"
 
-//// [/a/lib/lib.d.ts]
+//// [/user/username/projects/project/constructor.js]
+const x = 10;
+
+//// [/user/username/projects/project/bliss.js]
+export function is() { return true; }
+
+//// [/home/src/tslibs/TS/Lib/typesMap.json]
+{
+  "typesMap": {
+    "jquery": {
+      "match": "jquery(-(\\.?\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
+      "types": [
+        "jquery"
+      ]
+    },
+    "quack": {
+      "match": "/duckquack-(\\d+)\\.min\\.js",
+      "types": [
+        "duck-types"
+      ]
+    }
+  },
+  "simpleMap": {
+    "Bacon": "baconjs",
+    "bliss": "blissfuljs",
+    "commander": "commander",
+    "cordova": "cordova",
+    "react": "react",
+    "lodash": "lodash"
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,34 +49,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/a/b/constructor.js]
-const x = 10;
-
-//// [/a/b/bliss.js]
-export function is() { return true; }
-
-//// [/typesMap.json]
-{
-            "typesMap": {
-                "jquery": {
-                    "match": "jquery(-(\\.?\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
-                    "types": ["jquery"]
-                },
-                "quack": {
-                    "match": "/duckquack-(\\d+)\\.min\\.js",
-                    "types": ["duck-types"]
-                }
-            },
-            "simpleMap": {
-                "Bacon": "baconjs",
-                "bliss": "blissfuljs",
-                "commander": "commander",
-                "cordova": "cordova",
-                "react": "react",
-                "lodash": "lodash"
-            }
-        }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -53,48 +61,71 @@ Info seq  [hh:mm:ss:mss] request:
         "options": {},
         "rootFiles": [
           {
-            "fileName": "/a/b/f1.js"
+            "fileName": "/user/username/projects/project/f1.js"
           },
           {
-            "fileName": "/a/b/constructor.js"
+            "fileName": "/user/username/projects/project/constructor.js"
           },
           {
-            "fileName": "/a/b/bliss.js"
+            "fileName": "/user/username/projects/project/bliss.js"
           }
         ]
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Excluded '/a/b/bliss.js' because it matched bliss from the legacy safelist
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f1.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/constructor.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Excluded '/user/username/projects/project/bliss.js' because it matched bliss from the legacy safelist
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: project, currentDirectory: 
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/f1.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/constructor.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: project
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: project WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: project WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: project WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: project WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: project WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: project projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'project' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/a/b/f1.js Text-1 "export let x = 5; import { s } from \"s\""
-	/a/b/constructor.js Text-1 "const x = 10;"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/f1.js Text-1 "export let x = 5; import { s } from \"s\""
+	/user/username/projects/project/constructor.js Text-1 "const x = 10;"
 
 
-	a/lib/lib.d.ts
+	../../../tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
-	a/b/f1.js
+	../../../../../user/username/projects/project/f1.js
 	  Root file specified for compilation
-	a/b/constructor.js
+	../../../../../user/username/projects/project/constructor.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
+PolledWatches::
+/home/src/Vscode/Projects/bin/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/Vscode/Projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/Vscode/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/a/b/constructor.js: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/a/b/f1.js: *new*
+/user/username/projects/project/constructor.js: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/project/f1.js: *new*
   {}
 
 Projects::
@@ -103,33 +134,33 @@ project (External) *new*
     projectProgramVersion: 0
 
 ScriptInfos::
-/a/b/constructor.js *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         project
-/a/b/f1.js *new*
+/user/username/projects/project/constructor.js *new*
     version: Text-1
     containingProjects: 1
         project
-/a/lib/lib.d.ts *new*
+/user/username/projects/project/f1.js *new*
     version: Text-1
     containingProjects: 1
         project
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/a/data/package.json]
+//// [/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [/a/data/node_modules/types-registry/index.json]
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
@@ -139,10 +170,10 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "project",
       "fileNames": [
-        "/a/lib/lib.d.ts",
-        "/a/b/f1.js",
-        "/a/b/constructor.js",
-        "/a/b/bliss.js"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/f1.js",
+        "/user/username/projects/project/constructor.js",
+        "/user/username/projects/project/bliss.js"
       ],
       "compilerOptions": {
         "allowNonTsExtensions": true,
@@ -158,10 +189,10 @@ TI:: [hh:mm:ss:mss] Got install request
       "unresolvedImports": [
         "s"
       ],
-      "projectRootPath": "/",
+      "projectRootPath": "/home/src/Vscode/Projects/bin",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["blissfuljs"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["blissfuljs"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["s"]
@@ -173,10 +204,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "s"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules",
-        "/bower_components",
-        "/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
       ]
     }
 TI:: [hh:mm:ss:mss] Sending response:
@@ -184,18 +215,20 @@ TI:: [hh:mm:ss:mss] Sending response:
       "kind": "action::watchTypingLocations",
       "projectName": "project",
       "files": [
-        "/a/b/bower_components",
-        "/a/b/node_modules",
-        "/bower_components",
-        "/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/home/src/Vscode/Projects/bin/bower_components",
+        "/home/src/Vscode/Projects/bin/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["blissfuljs","s"]
 TI:: [hh:mm:ss:mss] 'blissfuljs':: Entry for package 'blissfuljs' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] 's':: Entry for package 's' does not exist in local types registry - skipping...
@@ -264,7 +297,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -298,21 +331,29 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/bower_components: *new*
+/home/src/Vscode/Projects/bin/bower_components: *new*
   {"pollingInterval":500}
-/node_modules: *new*
+/home/src/Vscode/Projects/bin/node_modules: *new*
+  {"pollingInterval":500}
+/home/src/Vscode/Projects/bin/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/Vscode/Projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/Vscode/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/project/bower_components: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/constructor.js:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/a/b/f1.js:
+/user/username/projects/project/constructor.js:
   {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a: *new*
+/user/username/projects/project/f1.js:
   {}
 
 Projects::
