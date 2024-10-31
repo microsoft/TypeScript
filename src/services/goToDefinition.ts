@@ -64,6 +64,7 @@ import {
     isJSDocOverrideTag,
     isJsxOpeningLikeElement,
     isJumpStatementTarget,
+    isModifier,
     isModuleSpecifierLike,
     isNameOfFunctionDeclaration,
     isNewExpressionTarget,
@@ -128,7 +129,10 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     const typeChecker = program.getTypeChecker();
 
     if (node.kind === SyntaxKind.OverrideKeyword || (isIdentifier(node) && isJSDocOverrideTag(parent) && parent.tagName === node)) {
-        return getDefinitionFromOverriddenMember(typeChecker, node) || emptyArray;
+        const def = getDefinitionFromOverriddenMember(typeChecker, node);
+        if (def !== undefined || node.kind !== SyntaxKind.OverrideKeyword) {
+            return def || emptyArray;
+        }
     }
 
     // Labels
@@ -152,7 +156,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
             break;
     }
 
-    // for functions with keyword modifiers
+    // for keywords related to function or method declarations
     let findFunctionDecl: ((n: Node) => boolean | "quit") | undefined;
     let checkFunctionDeclaration: ((decl: FunctionLikeDeclaration) => boolean) | undefined;
     switch (node.kind) {
@@ -163,16 +167,18 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
                     : isFunctionLikeDeclaration(n);
             };
             break;
+        case SyntaxKind.AsyncKeyword:
         case SyntaxKind.AwaitKeyword:
             findFunctionDecl = isFunctionLikeDeclaration;
             checkFunctionDeclaration = (functionDeclaration: FunctionLikeDeclaration) => some(functionDeclaration.modifiers, node => node.kind === SyntaxKind.AsyncKeyword);
             break;
         case SyntaxKind.YieldKeyword:
-            findFunctionDecl = isFunctionLikeDeclaration;
             checkFunctionDeclaration = functionDeclaration => !!functionDeclaration.asteriskToken;
+            // falls through
+        case SyntaxKind.ExportKeyword:
+            findFunctionDecl = isFunctionLikeDeclaration;
             break;
     }
-
     if (findFunctionDecl) {
         const functionDeclaration = findAncestor(node, findFunctionDecl) as FunctionLikeDeclaration | undefined;
         const isCorrectDeclaration = functionDeclaration && (!checkFunctionDeclaration || checkFunctionDeclaration(functionDeclaration));
@@ -223,6 +229,10 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
                 unverified: fallbackNode !== node,
             }];
         }
+    }
+
+    if (isModifier(node) && isClassElement(parent)) {
+        symbol = parent.symbol;
     }
 
     // Could not find a symbol e.g. node is string or number keyword,
