@@ -823,7 +823,7 @@ func (s *Scanner) ReScanSlashToken() SyntaxKind {
 		}
 		for {
 			ch, size := s.charAndSize()
-			if size == 0 || !isIdentifierPart(ch, s.languageVersion, s.languageVariant) {
+			if size == 0 || !isIdentifierPart(ch, s.languageVersion) {
 				break
 			}
 			s.pos += size
@@ -983,7 +983,7 @@ func (s *Scanner) scanIdentifier(prefixLength int) bool {
 		for {
 			s.pos += size
 			ch, size = s.charAndSize()
-			if !isIdentifierPart(ch, s.languageVersion, s.languageVariant) {
+			if !isIdentifierPart(ch, s.languageVersion) {
 				break
 			}
 		}
@@ -1001,13 +1001,13 @@ func (s *Scanner) scanIdentifierParts() string {
 	start := s.pos
 	for {
 		ch, size := s.charAndSize()
-		if isIdentifierPart(ch, s.languageVersion, s.languageVariant) {
+		if isIdentifierPart(ch, s.languageVersion) {
 			s.pos += size
 			continue
 		}
 		if ch == '\\' {
 			escaped := s.peekUnicodeEscape()
-			if escaped >= 0 && isIdentifierPart(escaped, s.languageVersion, s.languageVariant) {
+			if escaped >= 0 && isIdentifierPart(escaped, s.languageVersion) {
 				sb.WriteString(s.text[start:s.pos])
 				sb.WriteString(string(s.scanUnicodeEscape(true)))
 				start = s.pos
@@ -1215,7 +1215,7 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 		// case CharacterCodes.paragraphSeparator !!!
 		return ""
 	default:
-		if flags&EscapeSequenceScanningFlagsAnyUnicodeMode != 0 || flags&EscapeSequenceScanningFlagsRegularExpression != 0 && flags&EscapeSequenceScanningFlagsAnnexB == 0 && isIdentifierPart(ch, s.languageVersion, LanguageVariantStandard) {
+		if flags&EscapeSequenceScanningFlagsAnyUnicodeMode != 0 || flags&EscapeSequenceScanningFlagsRegularExpression != 0 && flags&EscapeSequenceScanningFlagsAnnexB == 0 && isIdentifierPart(ch, s.languageVersion) {
 			s.errorAt(diagnostics.This_character_cannot_be_escaped_in_a_regular_expression, s.pos-2, 2)
 		}
 		return string(rune(ch))
@@ -1605,11 +1605,8 @@ func isIdentifierStart(ch rune, languageVersion ScriptTarget) bool {
 	return isASCIILetter(ch) || ch == '_' || ch == '$' || ch > 0x7F && isUnicodeIdentifierStart(ch, languageVersion)
 }
 
-func isIdentifierPart(ch rune, languageVersion ScriptTarget, identifierVariant LanguageVariant) bool {
-	return isWordCharacter(ch) || ch == '$' ||
-		// "-" and ":" are valid in JSX Identifiers
-		identifierVariant == LanguageVariantJSX && (ch == '-' || ch == ':') ||
-		ch > 0x7F && isUnicodeIdentifierPart(ch, languageVersion)
+func isIdentifierPart(ch rune, languageVersion ScriptTarget) bool {
+	return isWordCharacter(ch) || ch == '$' || ch > 0x7F && isUnicodeIdentifierPart(ch, languageVersion)
 }
 
 func isUnicodeIdentifierStart(ch rune, languageVersion ScriptTarget) bool {
