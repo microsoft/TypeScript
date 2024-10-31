@@ -63,24 +63,29 @@ if (-0n) { }
 if (-1.2) { }
 // not OK - falsy
 if (-0.0000){}
+if (+0){}
 // not OK - falsy
 if (-0n){}
 // not OK - truthy
 if (-13n){}
 
+// not ok - just a truthy number
+if (-1){}
+if (+1){}
+
+declare const identifier: any;
 // OK
 if (-identifier) {}
 
 //// [predicateSemantics.js]
-var _a, _b, _c, _d, _e, _f;
 // OK: One or other operand is possibly nullish
-var test1 = (_a = (cond ? undefined : 32)) !== null && _a !== void 0 ? _a : "possibly reached";
+const test1 = (cond ? undefined : 32) ?? "possibly reached";
 // Not OK: Both operands nullish
-var test2 = (_b = (cond ? undefined : null)) !== null && _b !== void 0 ? _b : "always reached";
+const test2 = (cond ? undefined : null) ?? "always reached";
 // Not OK: Both operands non-nullish
-var test3 = (_c = (cond ? 132 : 17)) !== null && _c !== void 0 ? _c : "unreachable";
+const test3 = (cond ? 132 : 17) ?? "unreachable";
 // Parens
-var test4 = (_d = (cond ? (undefined) : (17))) !== null && _d !== void 0 ? _d : 42;
+const test4 = (cond ? (undefined) : (17)) ?? 42;
 // Should be OK (special case)
 if (!!true) {
 }
@@ -89,19 +94,13 @@ while (0) { }
 while (1) { }
 while (true) { }
 while (false) { }
-var p5 = (_e = {}) !== null && _e !== void 0 ? _e : null;
-var p6 = (_f = 0 > 1) !== null && _f !== void 0 ? _f : null;
-var p7 = null !== null && null !== void 0 ? null : null;
-var p8 = (/** @class */ (function () {
-    function foo() {
-    }
-    return foo;
-}())) && null;
-var p9 = (/** @class */ (function () {
-    function foo() {
-    }
-    return foo;
-}())) || null;
+const p5 = {} ?? null;
+const p6 = 0 > 1 ?? null;
+const p7 = null ?? null;
+const p8 = (class foo {
+}) && null;
+const p9 = (class foo {
+}) || null;
 // Outer expression tests
 while ({}) { }
 while ({}) { }
@@ -111,7 +110,7 @@ while ((({}))) { }
 console.log((cond || undefined) && 1 / cond);
 function foo() {
     // Should be OK
-    return this !== null && this !== void 0 ? this : 0;
+    return this ?? 0;
 }
 // positive numbers
 while (+2) { }
@@ -127,9 +126,13 @@ if (-0n) { }
 if (-1.2) { }
 // not OK - falsy
 if (-0.0000) { }
+if (+0) { }
 // not OK - falsy
 if (-0n) { }
 // not OK - truthy
 if (-13n) { }
+// not ok - just a truthy number
+if (-1) { }
+if (+1) { }
 // OK
 if (-identifier) { }

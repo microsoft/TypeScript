@@ -11,22 +11,19 @@ predicateSemantics.ts(35,8): error TS2872: This kind of expression is always tru
 predicateSemantics.ts(36,8): error TS2872: This kind of expression is always truthy.
 predicateSemantics.ts(47,8): error TS2872: This kind of expression is always truthy.
 predicateSemantics.ts(48,8): error TS2873: This kind of expression is always falsy.
-predicateSemantics.ts(51,5): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 predicateSemantics.ts(51,5): error TS2872: This kind of expression is always truthy.
-predicateSemantics.ts(54,5): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 predicateSemantics.ts(54,5): error TS2873: This kind of expression is always falsy.
 predicateSemantics.ts(56,5): error TS2873: This kind of expression is always falsy.
-predicateSemantics.ts(56,6): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 predicateSemantics.ts(60,5): error TS2872: This kind of expression is always truthy.
 predicateSemantics.ts(62,5): error TS2873: This kind of expression is always falsy.
-predicateSemantics.ts(64,5): error TS2873: This kind of expression is always falsy.
-predicateSemantics.ts(64,6): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-predicateSemantics.ts(66,5): error TS2872: This kind of expression is always truthy.
-predicateSemantics.ts(66,6): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-predicateSemantics.ts(69,6): error TS2304: Cannot find name 'identifier'.
+predicateSemantics.ts(63,5): error TS2873: This kind of expression is always falsy.
+predicateSemantics.ts(65,5): error TS2873: This kind of expression is always falsy.
+predicateSemantics.ts(67,5): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(70,5): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(71,5): error TS2872: This kind of expression is always truthy.
 
 
-==== predicateSemantics.ts (26 errors) ====
+==== predicateSemantics.ts (23 errors) ====
     declare let cond: any;
     
     // OK: One or other operand is possibly nullish
@@ -105,22 +102,16 @@ predicateSemantics.ts(69,6): error TS2304: Cannot find name 'identifier'.
     // Not OK; always truthy.
     if (1n) { }
         ~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
-        ~~
 !!! error TS2872: This kind of expression is always truthy.
     
     // Not OK; always falsy.
     if (0n) { } 
-        ~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
         ~~
 !!! error TS2873: This kind of expression is always falsy.
     // Not OK; always falsy.
     if (-0n) { }
         ~~~
 !!! error TS2873: This kind of expression is always falsy.
-         ~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     
     // negative numbers
     // not OK - truthy
@@ -131,20 +122,26 @@ predicateSemantics.ts(69,6): error TS2304: Cannot find name 'identifier'.
     if (-0.0000){}
         ~~~~~~~
 !!! error TS2873: This kind of expression is always falsy.
+    if (+0){}
+        ~~
+!!! error TS2873: This kind of expression is always falsy.
     // not OK - falsy
     if (-0n){}
         ~~~
 !!! error TS2873: This kind of expression is always falsy.
-         ~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     // not OK - truthy
     if (-13n){}
         ~~~~
 !!! error TS2872: This kind of expression is always truthy.
-         ~~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     
+    // not ok - just a truthy number
+    if (-1){}
+        ~~
+!!! error TS2872: This kind of expression is always truthy.
+    if (+1){}
+        ~~
+!!! error TS2872: This kind of expression is always truthy.
+    
+    declare const identifier: any;
     // OK
     if (-identifier) {}
-         ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'identifier'.

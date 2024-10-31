@@ -280,6 +280,12 @@ if (-0.0000){}
 >0.0000 : 0
 >       : ^
 
+if (+0){}
+>+0 : 0
+>   : ^
+>0 : 0
+>  : ^
+
 // not OK - falsy
 if (-0n){}
 >-0n : 0n
@@ -293,6 +299,23 @@ if (-13n){}
 >     : ^^^^
 >13n : 13n
 >    : ^^^
+
+// not ok - just a truthy number
+if (-1){}
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+
+if (+1){}
+>+1 : 1
+>   : ^
+>1 : 1
+>  : ^
+
+declare const identifier: any;
+>identifier : any
+>           : ^^^
 
 // OK
 if (-identifier) {}

@@ -1,3 +1,5 @@
+// @target: esnext
+
 declare let cond: any;
 
 // OK: One or other operand is possibly nullish
@@ -60,10 +62,16 @@ if (-0n) { }
 if (-1.2) { }
 // not OK - falsy
 if (-0.0000){}
+if (+0){}
 // not OK - falsy
 if (-0n){}
 // not OK - truthy
 if (-13n){}
 
+// not ok - just a truthy number
+if (-1){}
+if (+1){}
+
+declare const identifier: any;
 // OK
 if (-identifier) {}
