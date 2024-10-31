@@ -2624,8 +2624,8 @@ function loadModuleFromExports(scope: PackageJsonInfo, extensions: Extensions, s
             mainExport = (scope.contents.packageJsonContent.exports as MapLike<unknown>)["."];
         }
         if (mainExport) {
-            const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(extensions, state, cache, redirectedReference, subpath, scope, /*isImports*/ false);
-            return loadModuleFromTargetImportOrExport(mainExport, "", /*pattern*/ false, ".");
+            const loadModuleFromTargetExportOrImport = getLoadModuleFromTargetExportOrImport(extensions, state, cache, redirectedReference, subpath, scope, /*isImports*/ false);
+            return loadModuleFromTargetExportOrImport(mainExport, "", /*pattern*/ false, ".");
         }
     }
     else if (allKeysStartWithDot(scope.contents.packageJsonContent.exports as MapLike<unknown>)) {
@@ -2635,7 +2635,7 @@ function loadModuleFromExports(scope: PackageJsonInfo, extensions: Extensions, s
             }
             return toSearchResult(/*value*/ undefined);
         }
-        const result = loadModuleFromImportsOrExports(extensions, state, cache, redirectedReference, subpath, scope.contents.packageJsonContent.exports, scope, /*isImports*/ false);
+        const result = loadModuleFromExportsOrImports(extensions, state, cache, redirectedReference, subpath, scope.contents.packageJsonContent.exports, scope, /*isImports*/ false);
         if (result) {
             return result;
         }
@@ -2669,7 +2669,7 @@ function loadModuleFromImports(extensions: Extensions, moduleName: string, direc
         return toSearchResult(/*value*/ undefined);
     }
 
-    const result = loadModuleFromImportsOrExports(extensions, state, cache, redirectedReference, moduleName, scope.contents.packageJsonContent.imports, scope, /*isImports*/ true);
+    const result = loadModuleFromExportsOrImports(extensions, state, cache, redirectedReference, moduleName, scope.contents.packageJsonContent.imports, scope, /*isImports*/ true);
     if (result) {
         return result;
     }
@@ -2699,30 +2699,30 @@ export function comparePatternKeys(a: string, b: string): Comparison {
     return Comparison.EqualTo;
 }
 
-function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, lookupTable: object, scope: PackageJsonInfo, isImports: boolean): SearchResult<Resolved> | undefined {
-    const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(extensions, state, cache, redirectedReference, moduleName, scope, isImports);
+function loadModuleFromExportsOrImports(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, lookupTable: object, scope: PackageJsonInfo, isImports: boolean): SearchResult<Resolved> | undefined {
+    const loadModuleFromTargetExportOrImport = getLoadModuleFromTargetExportOrImport(extensions, state, cache, redirectedReference, moduleName, scope, isImports);
 
     if (!endsWith(moduleName, directorySeparator) && !moduleName.includes("*") && hasProperty(lookupTable, moduleName)) {
-        const target = (lookupTable as { [idx: string]: unknown; })[moduleName];
-        return loadModuleFromTargetImportOrExport(target, /*subpath*/ "", /*pattern*/ false, moduleName);
+        const target = (lookupTable as MapLike<unknown>)[moduleName];
+        return loadModuleFromTargetExportOrImport(target, /*subpath*/ "", /*pattern*/ false, moduleName);
     }
     const expandingKeys = toSorted(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => hasOneAsterisk(k) || endsWith(k, "/")), comparePatternKeys);
     for (const potentialTarget of expandingKeys) {
         if (state.features & NodeResolutionFeatures.ExportsPatternTrailers && matchesPatternWithTrailer(potentialTarget, moduleName)) {
-            const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
+            const target = (lookupTable as MapLike<unknown>)[potentialTarget];
             const starPos = potentialTarget.indexOf("*");
             const subpath = moduleName.substring(potentialTarget.substring(0, starPos).length, moduleName.length - (potentialTarget.length - 1 - starPos));
-            return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ true, potentialTarget);
+            return loadModuleFromTargetExportOrImport(target, subpath, /*pattern*/ true, potentialTarget);
         }
         else if (endsWith(potentialTarget, "*") && startsWith(moduleName, potentialTarget.substring(0, potentialTarget.length - 1))) {
-            const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
+            const target = (lookupTable as MapLike<unknown>)[potentialTarget];
             const subpath = moduleName.substring(potentialTarget.length - 1);
-            return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ true, potentialTarget);
+            return loadModuleFromTargetExportOrImport(target, subpath, /*pattern*/ true, potentialTarget);
         }
         else if (startsWith(moduleName, potentialTarget)) {
-            const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
+            const target = (lookupTable as MapLike<unknown>)[potentialTarget];
             const subpath = moduleName.substring(potentialTarget.length);
-            return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ false, potentialTarget);
+            return loadModuleFromTargetExportOrImport(target, subpath, /*pattern*/ false, potentialTarget);
         }
     }
 
@@ -2742,9 +2742,9 @@ function hasOneAsterisk(patternKey: string): boolean {
 /**
  * Gets the self-recursive function specialized to retrieving the targeted import/export element for the given resolution configuration
  */
-function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, scope: PackageJsonInfo, isImports: boolean) {
-    return loadModuleFromTargetImportOrExport;
-    function loadModuleFromTargetImportOrExport(target: unknown, subpath: string, pattern: boolean, key: string): SearchResult<Resolved> | undefined {
+function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, scope: PackageJsonInfo, isImports: boolean) {
+    return loadModuleFromTargetExportOrImport;
+    function loadModuleFromTargetExportOrImport(target: unknown, subpath: string, pattern: boolean, key: string): SearchResult<Resolved> | undefined {
         if (typeof target === "string") {
             if (!pattern && subpath.length > 0 && !endsWith(target, "/")) {
                 if (state.traceEnabled) {
@@ -2807,7 +2807,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
                     if (condition === "default" || state.conditions.includes(condition) || isApplicableVersionedTypesKey(state.conditions, condition)) {
                         traceIfEnabled(state, Diagnostics.Matched_0_condition_1, isImports ? "imports" : "exports", condition);
                         const subTarget = (target as MapLike<unknown>)[condition];
-                        const result = loadModuleFromTargetImportOrExport(subTarget, subpath, pattern, key);
+                        const result = loadModuleFromTargetExportOrImport(subTarget, subpath, pattern, key);
                         if (result) {
                             traceIfEnabled(state, Diagnostics.Resolved_under_condition_0, condition);
                             traceIfEnabled(state, Diagnostics.Exiting_conditional_exports);
@@ -2832,7 +2832,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
                     return toSearchResult(/*value*/ undefined);
                 }
                 for (const elem of target) {
-                    const result = loadModuleFromTargetImportOrExport(elem, subpath, pattern, key);
+                    const result = loadModuleFromTargetExportOrImport(elem, subpath, pattern, key);
                     if (result) {
                         return result;
                     }
