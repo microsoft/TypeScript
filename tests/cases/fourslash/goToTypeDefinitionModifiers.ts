@@ -5,6 +5,8 @@
 //// 
 ////     /*private*/private z/*z*/: string;
 ////
+////     /*private2*/private y/*y*/: A;
+//// 
 ////     /*readonly*/readonly x/*x*/: string;
 //// 
 ////     /*async*/async a/*a*/() {  }
@@ -16,11 +18,13 @@
 ////
 //// exp/*exportFunction*/ort function foo/*foo*/() { }
 
-verify.baselineGoToDefinition(
+verify.baselineGoToType(
     "export",
     "A",
     "private",
     "z",
+    "private2",
+    "y",
     "readonly",
     "x",
     "async",

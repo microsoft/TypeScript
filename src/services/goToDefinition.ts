@@ -473,7 +473,11 @@ export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile
     if (isImportMeta(node.parent) && node.parent.name === node) {
         return definitionFromType(typeChecker.getTypeAtLocation(node.parent), typeChecker, node.parent, /*failedAliasResolution*/ false);
     }
-    const { symbol, failedAliasResolution } = getSymbol(node, typeChecker, /*stopAtAlias*/ false);
+    let { symbol, failedAliasResolution } = getSymbol(node, typeChecker, /*stopAtAlias*/ false);
+    if (isModifier(node) && (isClassElement(node.parent) || isNamedDeclaration(node.parent))) {
+        symbol = node.parent.symbol;
+        failedAliasResolution = false;
+    }
     if (!symbol) return undefined;
 
     const typeAtLocation = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
