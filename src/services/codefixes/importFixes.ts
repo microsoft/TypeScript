@@ -891,9 +891,10 @@ function getAllExportInfoForSymbol(importingFile: SourceFile | FutureSourceFile,
     const moduleSymbolExcluded = moduleSourceFile && isFileExcluded(moduleSourceFile as SourceFile);
     return getExportInfoMap(importingFile, host, program, preferences, cancellationToken)
         .search(importingFile.path, preferCapitalized, name => name === symbolName, info => {
+            const checker = getChecker(info[0].isFromPackageJson);
             if (
-                getChecker(info[0].isFromPackageJson).getMergedSymbol(skipAlias(info[0].symbol, getChecker(info[0].isFromPackageJson))) === symbol
-                && (moduleSymbolExcluded || info.some(i => i.moduleSymbol === moduleSymbol || i.symbol.parent === moduleSymbol))
+                checker.getMergedSymbol(skipAlias(info[0].symbol, checker)) === symbol
+                && (moduleSymbolExcluded || info.some(i => checker.getMergedSymbol(i.moduleSymbol) === moduleSymbol || i.symbol.parent === moduleSymbol))
             ) {
                 return info;
             }
