@@ -12,15 +12,21 @@ lib.decorators.d.ts-Text
 lib.decorators.legacy.d.ts-Text
 
 //// [/home/src/workspaces/project/a.ts]
-export const abc = 10;
+const abc = 10;
+const def = 20;
+export interface testInterface {
+    abc: number;
+    def: number;
+}
 
 //// [/home/src/workspaces/project/b.ts]
-import { abc } from "./a";
+import * as test from "./a";
 
-console.log(abc);
+function foo(abc: test.abc, def: test.def) {
+   console.log(abc);
+   console.log(def);
+}
 
-
-console.log("abc");
 
 //// [/home/src/workspaces/project/folder/c.ts]
 
@@ -82,8 +88,8 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/folder/c.ts SVC-1-0 ""
-	/home/src/workspaces/project/a.ts Text-1 "export const abc = 10;"
-	/home/src/workspaces/project/b.ts Text-1 "import { abc } from \"./a\";\n\nconsole.log(abc);\n\n\nconsole.log(\"abc\");"
+	/home/src/workspaces/project/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
+	/home/src/workspaces/project/b.ts Text-1 "import * as test from \"./a\";\n\nfunction foo(abc: test.abc, def: test.def) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 
 	../../tslibs/TS/Lib/lib.d.ts
@@ -244,7 +250,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/home/src/workspaces/project/folder/c.ts",
         "pastedText": [
-          "console.log(abc);"
+          "function foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}"
         ],
         "pasteLocations": [
           {
@@ -267,8 +273,8 @@ Info seq  [hh:mm:ss:mss] request:
                 "offset": 1
               },
               "end": {
-                "line": 5,
-                "offset": 1
+                "line": 6,
+                "offset": 2
               }
             }
           ]
@@ -283,13 +289,11 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/folder/c.ts SVC-1-1 "console.log(abc);"
-	/home/src/workspaces/project/a.ts Text-1 "export const abc = 10;"
-	/home/src/workspaces/project/b.ts Text-1 "import { abc } from \"./a\";\n\nconsole.log(abc);\n\n\nconsole.log(\"abc\");"
+	/home/src/workspaces/project/folder/c.ts SVC-1-1 "function foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}"
+	/home/src/workspaces/project/a.ts Text-1 "const abc = 10;\nconst def = 20;\nexport interface testInterface {\n    abc: number;\n    def: number;\n}"
+	/home/src/workspaces/project/b.ts Text-1 "import * as test from \"./a\";\n\nfunction foo(abc: test.abc, def: test.def) {\n   console.log(abc);\n   console.log(def);\n}\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
-Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -314,7 +318,7 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "import { abc } from \"../a\";\n\n"
+                "newText": "import * as test from \"../a\";\n\n"
               },
               {
                 "start": {
@@ -325,7 +329,7 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "console.log(abc);"
+                "newText": "function foo(abc: test.abc, def: test.def) {\nconsole.log(abc);\nconsole.log(def);\n}"
               }
             ]
           }
