@@ -25996,7 +25996,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (type.flags & TypeFlags.Union) {
             let typeVariable: Type | undefined;
             let promisedType: Type | undefined;
-            for (const t of (type as UnionType).types) {
+            const types = (type as UnionType).types;
+            if (types.length !== 2) {
+                return false;
+            }
+            for (const t of types) {
                 if (t.flags & TypeFlags.TypeVariable) {
                     if (typeVariable) {
                         return false;
@@ -42530,7 +42534,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isPromiseType(type: Type) {
-        return isReferenceToSomeType(type, [getGlobalPromiseType(/*reportErrors*/ false), getGlobalPromiseLikeType(/*reportErrors*/ false)]);
+        return isReferenceToType(type, getGlobalPromiseType(/*reportErrors*/ false)) ||
+            isReferenceToType(type, getGlobalPromiseLikeType(/*reportErrors*/ false));
     }
 
     function getAwaitedTypeOfPromise(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, ...args: DiagnosticArguments): Type | undefined {
