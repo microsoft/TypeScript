@@ -373,6 +373,7 @@ interface BigInt64ArrayConstructor {
     new (length?: number): BigInt64Array<ArrayBuffer>;
     new (array: ArrayLike<bigint> | Iterable<bigint>): BigInt64Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): BigInt64Array<TArrayBuffer>;
+    new (array: ArrayLike<bigint> | ArrayBuffer): BigInt64Array<ArrayBuffer>;
 
     /** The size in bytes of each element in the array. */
     readonly BYTES_PER_ELEMENT: number;
@@ -649,6 +650,7 @@ interface BigUint64ArrayConstructor {
     new (length?: number): BigUint64Array<ArrayBuffer>;
     new (array: ArrayLike<bigint> | Iterable<bigint>): BigUint64Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): BigUint64Array<TArrayBuffer>;
+    new (array: ArrayLike<bigint> | ArrayBuffer): BigUint64Array<ArrayBuffer>;
 
     /** The size in bytes of each element in the array. */
     readonly BYTES_PER_ELEMENT: number;
