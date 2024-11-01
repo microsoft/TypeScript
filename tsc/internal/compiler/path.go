@@ -1,7 +1,6 @@
 package compiler
 
 import (
-	"path"
 	"strings"
 )
 
@@ -11,6 +10,7 @@ type Path string
 // When we make system calls (eg: LanguageServiceHost.getDirectory()),
 // we expect the host to correctly handle paths in our specified format.
 const directorySeparator = '/'
+const urlSchemeSeparator = "://"
 
 //// Path Tests
 
@@ -87,10 +87,13 @@ func combinePaths(firstPath string, paths ...string) string {
 			// `trailingPath` is absolute.
 			result = trailingPath
 		} else {
-			// !!!
-			// Used to be
-			// path = ensureTrailingDirectorySeparator(path) + relativePath;
-			result = path.Join(result, trailingPath)
+			// Could use
+			//  result = path.Join(result, trailingPath)
+			// but that collapses `..` and prior segments,
+			// which is not necessarily compatible with how combinePaths
+			// was originally implemented.
+
+			result = ensureTrailingDirectorySeparator(result) + trailingPath
 		}
 	}
 	return result
@@ -115,11 +118,14 @@ func isVolumeCharacter(char byte) bool {
 }
 
 func getFileUrlVolumeSeparatorEnd(url string, start int) int {
+	if len(url) <= start {
+		return -1
+	}
 	ch0 := url[start]
 	if ch0 == ':' {
 		return start + 1
 	}
-	if ch0 == '%' && url[start+1] == '3' {
+	if ch0 == '%' && len(url) > start+2 && url[start+1] == '3' {
 		ch2 := url[start+2]
 		if ch2 == 'a' || ch2 == 'A' {
 			return start + 3
@@ -141,12 +147,13 @@ func getEncodedRootLength(path string) int {
 			return 1 // POSIX: "/" (or non-normalized "\")
 		}
 
-		p1 := strings.IndexByte(path[2:], ch0)
+		offset := 2
+		p1 := strings.IndexByte(path[offset:], ch0)
 		if p1 < 0 {
 			return ln // UNC: "//server" or "\\server"
 		}
 
-		return p1 + 1 // UNC: "//server/" or "\\server\"
+		return p1 + offset + 1 // UNC: "//server/" or "\\server\"
 	}
 
 	// DOS
@@ -161,27 +168,29 @@ func getEncodedRootLength(path string) int {
 	}
 
 	// URL
-	schemeEnd := strings.Index(path, "://")
+	schemeEnd := strings.Index(path, urlSchemeSeparator)
 	if schemeEnd != -1 {
-		authorityStart := schemeEnd + 3
-		authorityEnd := strings.Index(path[authorityStart:], "/")
-		if authorityEnd != -1 { // URL: "file:///", "file://server/", "file://server/path"
+		authorityStart := schemeEnd + len(urlSchemeSeparator)
+		authorityLength := strings.Index(path[authorityStart:], "/")
+		if authorityLength != -1 { // URL: "file:///", "file://server/", "file://server/path"
+			authorityEnd := authorityStart + authorityLength
+
 			// For local "file" URLs, include the leading DOS volume (if present).
 			// Per https://www.ietf.org/rfc/rfc1738.txt, a host of "" or "localhost" is a
 			// special case interpreted as "the machine from which the URL is being interpreted".
 			scheme := path[:schemeEnd]
-			authority := path[authorityStart : authorityStart+authorityEnd]
-			if scheme == "file" && (authority == "" || authority == "localhost") && isVolumeCharacter(path[authorityEnd+1]) {
+			authority := path[authorityStart:authorityEnd]
+			if scheme == "file" && (authority == "" || authority == "localhost") && (len(path) > authorityEnd+2) && isVolumeCharacter(path[authorityEnd+1]) {
 				volumeSeparatorEnd := getFileUrlVolumeSeparatorEnd(path, authorityEnd+2)
 				if volumeSeparatorEnd != -1 {
-					if path[volumeSeparatorEnd] == '/' {
-						// URL: "file:///c:/", "file://localhost/c:/", "file:///c%3a/", "file://localhost/c%3a/"
-						return ^(volumeSeparatorEnd + 1)
-					}
 					if volumeSeparatorEnd == len(path) {
 						// URL: "file:///c:", "file://localhost/c:", "file:///c$3a", "file://localhost/c%3a"
 						// but not "file:///c:d" or "file:///c%3ad"
 						return ^volumeSeparatorEnd
+					}
+					if path[volumeSeparatorEnd] == '/' {
+						// URL: "file:///c:/", "file://localhost/c:/", "file:///c%3a/", "file://localhost/c%3a/"
+						return ^(volumeSeparatorEnd + 1)
 					}
 				}
 			}
@@ -286,7 +295,7 @@ func getNormalizedAbsolutePath(fileName string, currentDirectory string) string 
 func normalizePath(path string) string {
 	path = normalizeSlashes(path)
 	// Most paths don't require normalization
-	relativePathSegmentRegExp := makeRegexp(`//(?:^|/)\.\.?(?:$|/)`)
+	relativePathSegmentRegExp := makeRegexp(`//|(?:^|/)\.\.?(?:$|/)`)
 	if !relativePathSegmentRegExp.MatchString(path) {
 		return path
 	}
