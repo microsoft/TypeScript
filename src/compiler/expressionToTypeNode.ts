@@ -814,7 +814,7 @@ export function createSyntacticTypeNodeBuilder(
     }
     function typeFromProperty(node: PropertyDeclaration | PropertySignature | JSDocPropertyTag, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) {
         const declaredType = getEffectiveTypeAnnotationNode(node);
-        const requiresAddingUndefined = resolver.requiresAddingImplicitUndefined(node, symbol, context.enclosingDeclaration);
+        const requiresAddingUndefined = strictNullChecks && resolver.requiresAddingImplicitUndefined(node, symbol, context.enclosingDeclaration);
         let resultType = failed;
         if (declaredType) {
             resultType = syntacticResult(serializeTypeAnnotationOfDeclaration(declaredType, context, node, symbol, requiresAddingUndefined));
