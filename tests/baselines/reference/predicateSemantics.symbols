@@ -79,3 +79,38 @@ function foo(this: Object | undefined) {
     return this ?? 0;
 >this : Symbol(this, Decl(predicateSemantics.ts, 40, 13))
 }
+
+// positive numbers
+while (+2) {}
+while (+0.000) {}
+
+// Not OK; always truthy.
+if (1n) { }
+
+// Not OK; always falsy.
+if (0n) { } 
+// Not OK; always falsy.
+if (-0n) { }
+
+// negative numbers
+// not OK - truthy
+if (-1.2) { }
+// not OK - falsy
+if (-0.0000){}
+if (+0){}
+// not OK - falsy
+if (-0n){}
+// not OK - truthy
+if (-13n){}
+
+// not ok - just a truthy number
+if (-1){}
+if (+1){}
+
+declare const identifier: any;
+>identifier : Symbol(identifier, Decl(predicateSemantics.ts, 72, 13))
+
+// OK
+if (-identifier) {}
+>identifier : Symbol(identifier, Decl(predicateSemantics.ts, 72, 13))
+

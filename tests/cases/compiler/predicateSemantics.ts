@@ -1,3 +1,5 @@
+// @target: esnext
+
 declare let cond: any;
 
 // OK: One or other operand is possibly nullish
@@ -42,3 +44,34 @@ function foo(this: Object | undefined) {
     // Should be OK
     return this ?? 0;
 }
+
+// positive numbers
+while (+2) {}
+while (+0.000) {}
+
+// Not OK; always truthy.
+if (1n) { }
+
+// Not OK; always falsy.
+if (0n) { } 
+// Not OK; always falsy.
+if (-0n) { }
+
+// negative numbers
+// not OK - truthy
+if (-1.2) { }
+// not OK - falsy
+if (-0.0000){}
+if (+0){}
+// not OK - falsy
+if (-0n){}
+// not OK - truthy
+if (-13n){}
+
+// not ok - just a truthy number
+if (-1){}
+if (+1){}
+
+declare const identifier: any;
+// OK
+if (-identifier) {}

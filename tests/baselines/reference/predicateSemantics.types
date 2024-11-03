@@ -234,3 +234,93 @@ function foo(this: Object | undefined) {
 >0 : 0
 >  : ^
 }
+
+// positive numbers
+while (+2) {}
+>+2 : 2
+>   : ^
+>2 : 2
+>  : ^
+
+while (+0.000) {}
+>+0.000 : 0
+>       : ^
+>0.000 : 0
+>      : ^
+
+// Not OK; always truthy.
+if (1n) { }
+>1n : 1n
+>   : ^^
+
+// Not OK; always falsy.
+if (0n) { } 
+>0n : 0n
+>   : ^^
+
+// Not OK; always falsy.
+if (-0n) { }
+>-0n : 0n
+>    : ^^
+>0n : 0n
+>   : ^^
+
+// negative numbers
+// not OK - truthy
+if (-1.2) { }
+>-1.2 : -1.2
+>     : ^^^^
+>1.2 : 1.2
+>    : ^^^
+
+// not OK - falsy
+if (-0.0000){}
+>-0.0000 : 0
+>        : ^
+>0.0000 : 0
+>       : ^
+
+if (+0){}
+>+0 : 0
+>   : ^
+>0 : 0
+>  : ^
+
+// not OK - falsy
+if (-0n){}
+>-0n : 0n
+>    : ^^
+>0n : 0n
+>   : ^^
+
+// not OK - truthy
+if (-13n){}
+>-13n : -13n
+>     : ^^^^
+>13n : 13n
+>    : ^^^
+
+// not ok - just a truthy number
+if (-1){}
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+
+if (+1){}
+>+1 : 1
+>   : ^
+>1 : 1
+>  : ^
+
+declare const identifier: any;
+>identifier : any
+>           : ^^^
+
+// OK
+if (-identifier) {}
+>-identifier : number
+>            : ^^^^^^
+>identifier : any
+>           : ^^^
+
