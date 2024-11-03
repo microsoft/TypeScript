@@ -288,5 +288,23 @@ function foo(this: Object | undefined) {
 >  : ^^^^^^
 >true : true
 >     : ^^^^
+
+  const f = (maybe, i++) ?? true; // error
+>f : number | true
+>  : ^^^^^^^^^^^^^
+>(maybe, i++) ?? true : number | true
+>                     : ^^^^^^^^^^^^^
+>(maybe, i++) : number
+>             : ^^^^^^
+>maybe, i++ : number
+>           : ^^^^^^
+>maybe : true
+>      : ^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+>true : true
+>     : ^^^^
 }
 

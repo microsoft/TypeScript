@@ -10,9 +10,11 @@ predicateSemantics.ts(34,11): error TS2872: This kind of expression is always tr
 predicateSemantics.ts(35,8): error TS2872: This kind of expression is always truthy.
 predicateSemantics.ts(36,8): error TS2872: This kind of expression is always truthy.
 predicateSemantics.ts(51,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(52,14): error TS2695: Left side of comma operator is unused and has no side effects.
+predicateSemantics.ts(52,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
 
 
-==== predicateSemantics.ts (12 errors) ====
+==== predicateSemantics.ts (14 errors) ====
     declare let cond: any;
     
     // OK: One or other operand is possibly nullish
@@ -87,6 +89,11 @@ predicateSemantics.ts(51,14): error TS2869: Right operand of ?? is unreachable b
       const d = (i++, maybe) ?? true; // ok
       const e = (i++, i++) ?? true; // error
                  ~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+      const f = (maybe, i++) ?? true; // error
+                 ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                 ~~~~~~~~~~
 !!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
     }
     
