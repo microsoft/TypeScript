@@ -20,33 +20,31 @@ class MyClass {
 >'something' : "something"
 >            : ^^^^^^^^^^^
 
-        this.property = `foo`; // Correctly inferred as `string`
+        this.property = `foo`;
 >this.property = `foo` : "foo"
 >                      : ^^^^^
->this.property : string
->              : ^^^^^^
+>this.property : any
 >this : this
 >     : ^^^^
->property : string
->         : ^^^^^^
+>property : any
+>         : ^^^
 >`foo` : "foo"
 >      : ^^^^^
 
-        this.property2 = `foo-${variable}`; // Causes an error
+        this.property2 = `foo-${variable}`;
 >this.property2 = `foo-${variable}` : "foo-something"
 >                                   : ^^^^^^^^^^^^^^^
->this.property2 : string
->               : ^^^^^^
+>this.property2 : any
 >this : this
 >     : ^^^^
->property2 : string
->          : ^^^^^^
+>property2 : any
+>          : ^^^
 >`foo-${variable}` : "foo-something"
 >                  : ^^^^^^^^^^^^^^^
 >variable : "something"
 >         : ^^^^^^^^^^^
 
-        const localProperty = `foo-${variable}`; // Correctly inferred as `string`
+        const localProperty = `foo-${variable}`;
 >localProperty : "foo-something"
 >              : ^^^^^^^^^^^^^^^
 >`foo-${variable}` : "foo-something"
@@ -75,33 +73,31 @@ class MyClass2 {
 >'something' : "something"
 >            : ^^^^^^^^^^^
 
-        this.property = `foo`; // Correctly inferred as `string`
+        this.property = `foo`;
 >this.property = `foo` : "foo"
 >                      : ^^^^^
->this.property : string
->              : ^^^^^^
+>this.property : any
 >this : this
 >     : ^^^^
->property : string
->         : ^^^^^^
+>property : any
+>         : ^^^
 >`foo` : "foo"
 >      : ^^^^^
 
-        this.property2 = `foo-${variable}`; // Causes an error
+        this.property2 = `foo-${variable}`;
 >this.property2 = `foo-${variable}` : "foo-something"
 >                                   : ^^^^^^^^^^^^^^^
->this.property2 : string
->               : ^^^^^^
+>this.property2 : any
 >this : this
 >     : ^^^^
->property2 : string
->          : ^^^^^^
+>property2 : any
+>          : ^^^
 >`foo-${variable}` : "foo-something"
 >                  : ^^^^^^^^^^^^^^^
 >variable : "something"
 >         : ^^^^^^^^^^^
 
-        const localProperty = `foo-${variable}`; // Correctly inferred as `string`
+        const localProperty = `foo-${variable}`;
 >localProperty : "foo-something"
 >              : ^^^^^^^^^^^^^^^
 >`foo-${variable}` : "foo-something"

@@ -16,12 +16,12 @@ class Example {
     this.test = test;
 >this.test = test : number
 >                 : ^^^^^^
->this.test : number
->          : ^^^^^^
+>this.test : any
+>          : ^^^
 >this : this
 >     : ^^^^
->test : number
->     : ^^^^^^
+>test : any
+>     : ^^^
 >test : number
 >     : ^^^^^^
   }
@@ -55,12 +55,12 @@ class Example2 {
     this.test = test;
 >this.test = test : number | undefined
 >                 : ^^^^^^^^^^^^^^^^^^
->this.test : number | undefined
->          : ^^^^^^^^^^^^^^^^^^
+>this.test : any
+>          : ^^^
 >this : this
 >     : ^^^^
->test : number | undefined
->     : ^^^^^^^^^^^^^^^^^^
+>test : any
+>     : ^^^
 >test : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
   }
@@ -108,12 +108,12 @@ class Example3 {
     this.value = n;
 >this.value = n : number
 >               : ^^^^^^
->this.value : number | null
->           : ^^^^^^^^^^^^^
+>this.value : any
+>           : ^^^
 >this : this
 >     : ^^^^
->value : number | null
->      : ^^^^^^^^^^^^^
+>value : any
+>      : ^^^
 >n : number
 >  : ^^^^^^
 
@@ -128,12 +128,12 @@ class Example3 {
       this.value = null;
 >this.value = null : null
 >                  : ^^^^
->this.value : number | null
->           : ^^^^^^^^^^^^^
+>this.value : any
+>           : ^^^
 >this : this
 >     : ^^^^
->value : number | null
->      : ^^^^^^^^^^^^^
+>value : any
+>      : ^^^
     }
   }
 }

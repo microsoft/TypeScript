@@ -17,8 +17,8 @@ class C {
 >     : ^^^^
 
         this?.#bar;
->this?.#bar : any
->           : ^^^
+>this?.#bar : undefined
+>           : ^^^^^^^^^
 >this : this
 >     : ^^^^
     }

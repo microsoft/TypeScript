@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/classAttributeInferenceUncheckedJs1.ts] ////
+
+=== classAttributeInferenceUncheckedJs1.js ===
+class C1 {
+>C1 : C1
+>   : ^^
+
+    bar;
+>bar : any
+
+    constructor () {
+        this.foo;
+>this.foo : error
+>this : this
+>     : ^^^^
+>foo : any
+>    : ^^^
+
+        this.bar;
+>this.bar : undefined
+>         : ^^^^^^^^^
+>this : this
+>     : ^^^^
+>bar : undefined
+>    : ^^^^^^^^^
+    }
+}
+
+class C2 {
+>C2 : C2
+>   : ^^
+
+    #bar;
+>#bar : any
+
+    constructor () {
+        this.#foo;
+>this.#foo : error
+>this : this
+>     : ^^^^
+
+        this.#bar;
+>this.#bar : undefined
+>          : ^^^^^^^^^
+>this : this
+>     : ^^^^
+    }
+}
+

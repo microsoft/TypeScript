@@ -28,8 +28,7 @@ export class Cls {
         this['x'] = [seed];
 >this['x'] = [seed] : number[]
 >                   : ^^^^^^^^
->this['x'] : number[]
->          : ^^^^^^^^
+>this['x'] : any
 >this : this
 >     : ^^^^
 >'x' : "x"
@@ -42,8 +41,7 @@ export class Cls {
         this['y'] = { seed };
 >this['y'] = { seed } : { seed: number; }
 >                     : ^^^^^^^^^^^^^^^^^
->this['y'] : { seed: number; }
->          : ^^^^^^^^^^^^^^^^^
+>this['y'] : any
 >this : this
 >     : ^^^^
 >'y' : "y"
@@ -56,8 +54,7 @@ export class Cls {
         this['z'] = `${seed}`;
 >this['z'] = `${seed}` : string
 >                      : ^^^^^^
->this['z'] : string
->          : ^^^^^^
+>this['z'] : any
 >this : this
 >     : ^^^^
 >'z' : "z"
@@ -70,8 +67,7 @@ export class Cls {
         this[0] = [seed];
 >this[0] = [seed] : number[]
 >                 : ^^^^^^^^
->this[0] : number[]
->        : ^^^^^^^^
+>this[0] : any
 >this : this
 >     : ^^^^
 >0 : 0

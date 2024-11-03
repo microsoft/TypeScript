@@ -1,0 +1,43 @@
+classAttributeInferenceContextualTypingOutsideOfConstructor1.ts(16,20): error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
+classAttributeInferenceContextualTypingOutsideOfConstructor1.ts(29,20): error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
+
+
+==== classAttributeInferenceContextualTypingOutsideOfConstructor1.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/60394
+    
+    type State = { type: "running"; speed: number } | { type: "stopped" };
+    
+    declare const initialState: State;
+    
+    class Actor1 {
+      private state;
+    
+      constructor() {
+        this.state = initialState;
+      }
+    
+      run(speed: number) {
+        this.state = { type: "running", speed };
+        this.state = { type: "runnnning", speed }; // error
+                       ~~~~
+!!! error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
+!!! related TS6500 classAttributeInferenceContextualTypingOutsideOfConstructor1.ts:3:16: The expected type comes from property 'type' which is declared here on type 'State'
+      }
+    }
+    
+    class Actor2 {
+      accessor state;
+    
+      constructor() {
+        this.state = initialState;
+      }
+    
+      run(speed: number) {
+        this.state = { type: "running", speed };
+        this.state = { type: "runnnning", speed }; // error
+                       ~~~~
+!!! error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
+!!! related TS6500 classAttributeInferenceContextualTypingOutsideOfConstructor1.ts:3:16: The expected type comes from property 'type' which is declared here on type 'State'
+      }
+    }
+    

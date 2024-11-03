@@ -7,10 +7,10 @@ class MyClass {
     constructor() {
         const variable = 'something'
 
-        this.property = `foo`; // Correctly inferred as `string`
-        this.property2 = `foo-${variable}`; // Causes an error
+        this.property = `foo`;
+        this.property2 = `foo-${variable}`;
 
-        const localProperty = `foo-${variable}`; // Correctly inferred as `string`
+        const localProperty = `foo-${variable}`;
     }
 }
 
@@ -21,9 +21,9 @@ class MyClass2 {
     constructor() {
         const variable = 'something'
 
-        this.property = `foo`; // Correctly inferred as `string`
-        this.property2 = `foo-${variable}`; // Causes an error
+        this.property = `foo`;
+        this.property2 = `foo-${variable}`;
 
-        const localProperty = `foo-${variable}`; // Correctly inferred as `string`
+        const localProperty = `foo-${variable}`;
     }
 }

@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/classAttributeInferenceContextualTypingOutsideOfConstructor1.ts] ////
+
+=== classAttributeInferenceContextualTypingOutsideOfConstructor1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60394
+
+type State = { type: "running"; speed: number } | { type: "stopped" };
+>State : Symbol(State, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 0, 0))
+>type : Symbol(type, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 2, 14))
+>speed : Symbol(speed, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 2, 31))
+>type : Symbol(type, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 2, 51))
+
+declare const initialState: State;
+>initialState : Symbol(initialState, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 4, 13))
+>State : Symbol(State, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 0, 0))
+
+class Actor1 {
+>Actor1 : Symbol(Actor1, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 4, 34))
+
+  private state;
+>state : Symbol(Actor1.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 6, 14))
+
+  constructor() {
+    this.state = initialState;
+>this.state : Symbol(Actor1.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 6, 14))
+>this : Symbol(Actor1, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 4, 34))
+>state : Symbol(Actor1.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 6, 14))
+>initialState : Symbol(initialState, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 4, 13))
+  }
+
+  run(speed: number) {
+>run : Symbol(Actor1.run, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 11, 3))
+>speed : Symbol(speed, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 13, 6))
+
+    this.state = { type: "running", speed };
+>this.state : Symbol(Actor1.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 6, 14))
+>this : Symbol(Actor1, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 4, 34))
+>state : Symbol(Actor1.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 6, 14))
+>type : Symbol(type, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 14, 18))
+>speed : Symbol(speed, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 14, 35))
+
+    this.state = { type: "runnnning", speed }; // error
+>this.state : Symbol(Actor1.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 6, 14))
+>this : Symbol(Actor1, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 4, 34))
+>state : Symbol(Actor1.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 6, 14))
+>type : Symbol(type, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 15, 18))
+>speed : Symbol(speed, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 15, 37))
+  }
+}
+
+class Actor2 {
+>Actor2 : Symbol(Actor2, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 17, 1))
+
+  accessor state;
+>state : Symbol(Actor2.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 19, 14))
+
+  constructor() {
+    this.state = initialState;
+>this.state : Symbol(Actor2.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 19, 14))
+>this : Symbol(Actor2, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 17, 1))
+>state : Symbol(Actor2.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 19, 14))
+>initialState : Symbol(initialState, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 4, 13))
+  }
+
+  run(speed: number) {
+>run : Symbol(Actor2.run, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 24, 3))
+>speed : Symbol(speed, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 26, 6))
+
+    this.state = { type: "running", speed };
+>this.state : Symbol(Actor2.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 19, 14))
+>this : Symbol(Actor2, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 17, 1))
+>state : Symbol(Actor2.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 19, 14))
+>type : Symbol(type, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 27, 18))
+>speed : Symbol(speed, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 27, 35))
+
+    this.state = { type: "runnnning", speed }; // error
+>this.state : Symbol(Actor2.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 19, 14))
+>this : Symbol(Actor2, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 17, 1))
+>state : Symbol(Actor2.state, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 19, 14))
+>type : Symbol(type, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 28, 18))
+>speed : Symbol(speed, Decl(classAttributeInferenceContextualTypingOutsideOfConstructor1.ts, 28, 37))
+  }
+}
+

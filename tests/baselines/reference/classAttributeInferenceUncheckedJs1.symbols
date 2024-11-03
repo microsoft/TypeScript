@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/classAttributeInferenceUncheckedJs1.ts] ////
+
+=== classAttributeInferenceUncheckedJs1.js ===
+class C1 {
+>C1 : Symbol(C1, Decl(classAttributeInferenceUncheckedJs1.js, 0, 0))
+
+    bar;
+>bar : Symbol(C1.bar, Decl(classAttributeInferenceUncheckedJs1.js, 0, 10))
+
+    constructor () {
+        this.foo;
+>this : Symbol(C1, Decl(classAttributeInferenceUncheckedJs1.js, 0, 0))
+
+        this.bar;
+>this.bar : Symbol(C1.bar, Decl(classAttributeInferenceUncheckedJs1.js, 0, 10))
+>this : Symbol(C1, Decl(classAttributeInferenceUncheckedJs1.js, 0, 0))
+>bar : Symbol(C1.bar, Decl(classAttributeInferenceUncheckedJs1.js, 0, 10))
+    }
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(classAttributeInferenceUncheckedJs1.js, 6, 1))
+
+    #bar;
+>#bar : Symbol(C2.#bar, Decl(classAttributeInferenceUncheckedJs1.js, 8, 10))
+
+    constructor () {
+        this.#foo;
+>this : Symbol(C2, Decl(classAttributeInferenceUncheckedJs1.js, 6, 1))
+
+        this.#bar;
+>this.#bar : Symbol(C2.#bar, Decl(classAttributeInferenceUncheckedJs1.js, 8, 10))
+>this : Symbol(C2, Decl(classAttributeInferenceUncheckedJs1.js, 6, 1))
+    }
+}
+
