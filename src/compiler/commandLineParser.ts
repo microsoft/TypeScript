@@ -139,9 +139,9 @@ const jsxOptionMap = new Map(Object.entries({
     "react-jsxdev": JsxEmit.ReactJSXDev,
 }));
 
-const initOptionMap = new Map(Object.entries({ 
-    "default": InitEmit.Default,
-    "clean": InitEmit.Clean,
+const initOptionMap = new Map(Object.entries({
+    default: InitEmit.Default,
+    clean: InitEmit.Clean,
 }));
 
 /** @internal */
@@ -2051,9 +2051,9 @@ function parseOptionValue(
                     Debug.fail("listOrElement not supported here");
                     break;
                 case initOptionMap:
-                    const initArg = args[i] ? args[i] : "default"
+                    const initArg = args[i] ? args[i] : "default";
                     options[opt.name] = parseCustomTypeOption(opt, initArg, errors);
-                    i++
+                    i++;
                     break;
                 // If not a primitive, the possible types are specified in what is effectively a map of options.
                 default:
@@ -2881,12 +2881,12 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
                     optionName = `"${option.name}": ${JSON.stringify(compilerOptionsMap.get(option.name))}${(seenKnownKeys += 1) === compilerOptionsMap.size ? "" : ","}`;
                 }
                 else {
-                    if (isClean) { continue; }
+                    if (isClean) continue;
                     optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
                 }
                 entries.push({
                     value: optionName,
-                    description: isClean ? `/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */` : '',
+                    description: isClean ? `/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */` : "",
                 });
                 marginLength = Math.max(optionName.length, marginLength);
             }
