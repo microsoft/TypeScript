@@ -37,6 +37,7 @@ type Binder struct {
 	file                   *SourceFile
 	options                *CompilerOptions
 	languageVersion        ScriptTarget
+	bind                   func(*Node) bool
 	parent                 *Node
 	container              *Node
 	thisParentContainer    *Node
@@ -91,6 +92,7 @@ func bindSourceFile(file *SourceFile, options *CompilerOptions) {
 		b.file = file
 		b.options = options
 		b.languageVersion = getEmitScriptTarget(options)
+		b.bind = b.bindWorker // Allocate closure once
 		b.bind(file.AsNode())
 		file.isBound = true
 		file.symbolCount = b.symbolCount
@@ -216,34 +218,9 @@ func (b *Binder) declareSymbolEx(symbolTable SymbolTable, parent *Symbol, node *
 						}
 					}
 				}
-				var relatedInformation []*Diagnostic
-				if isTypeAliasDeclaration(node) && nodeIsMissing(node.AsTypeAliasDeclaration().typeNode) && hasSyntacticModifier(node, ModifierFlagsExport) && symbol.flags&(SymbolFlagsAlias|SymbolFlagsType|SymbolFlagsNamespace) != 0 {
-					// export type T; - may have meant export type { T }?
-					relatedInformation = append(relatedInformation, b.createDiagnosticForNode(node, diagnostics.Did_you_mean_0,
-						"export type { "+node.AsTypeAliasDeclaration().name.AsIdentifier().text+" }"))
-				}
 				var declarationName *Node = getNameOfDeclaration(node)
 				if declarationName == nil {
 					declarationName = node
-				}
-				for index, declaration := range symbol.declarations {
-					var decl *Node = getNameOfDeclaration(declaration)
-					if decl == nil {
-						decl = declaration
-					}
-					var diag *Diagnostic
-					if messageNeedsName {
-						diag = b.createDiagnosticForNode(decl, message, b.getDisplayName(declaration))
-					} else {
-						diag = b.createDiagnosticForNode(decl, message)
-					}
-					if multipleDefaultExports {
-						diag.addRelatedInfo(b.createDiagnosticForNode(declarationName, ifElse(index == 0, diagnostics.Another_export_default_is_here, diagnostics.X_and_here)))
-					}
-					b.addDiagnostic(diag)
-					if multipleDefaultExports {
-						relatedInformation = append(relatedInformation, b.createDiagnosticForNode(decl, diagnostics.The_first_export_default_is_here))
-					}
 				}
 				var diag *Diagnostic
 				if messageNeedsName {
@@ -251,7 +228,29 @@ func (b *Binder) declareSymbolEx(symbolTable SymbolTable, parent *Symbol, node *
 				} else {
 					diag = b.createDiagnosticForNode(declarationName, message)
 				}
-				diag.addRelatedInfo(relatedInformation...)
+				if isTypeAliasDeclaration(node) && nodeIsMissing(node.AsTypeAliasDeclaration().typeNode) && hasSyntacticModifier(node, ModifierFlagsExport) && symbol.flags&(SymbolFlagsAlias|SymbolFlagsType|SymbolFlagsNamespace) != 0 {
+					// export type T; - may have meant export type { T }?
+					diag.addRelatedInfo(b.createDiagnosticForNode(node, diagnostics.Did_you_mean_0, "export type { "+node.AsTypeAliasDeclaration().name.AsIdentifier().text+" }"))
+				}
+				for index, declaration := range symbol.declarations {
+					var decl *Node = getNameOfDeclaration(declaration)
+					if decl == nil {
+						decl = declaration
+					}
+					var d *Diagnostic
+					if messageNeedsName {
+						d = b.createDiagnosticForNode(decl, message, b.getDisplayName(declaration))
+					} else {
+						d = b.createDiagnosticForNode(decl, message)
+					}
+					if multipleDefaultExports {
+						d.addRelatedInfo(b.createDiagnosticForNode(declarationName, ifElse(index == 0, diagnostics.Another_export_default_is_here, diagnostics.X_and_here)))
+					}
+					b.addDiagnostic(d)
+					if multipleDefaultExports {
+						diag.addRelatedInfo(b.createDiagnosticForNode(decl, diagnostics.The_first_export_default_is_here))
+					}
+				}
 				b.addDiagnostic(diag)
 				symbol = b.newSymbol(SymbolFlagsNone, name)
 			}
@@ -548,7 +547,7 @@ func finishFlowLabel(label *FlowLabel) *FlowNode {
 	return label
 }
 
-func (b *Binder) bind(node *Node) bool {
+func (b *Binder) bindWorker(node *Node) bool {
 	if node == nil {
 		return false
 	}
@@ -574,34 +573,6 @@ func (b *Binder) bind(node *Node) bool {
 	//
 	// However, not all symbols will end up in any of these tables. 'Anonymous' symbols
 	// (like TypeLiterals for example) will not be put in any table.
-	b.bindWorker(node)
-	// Then we recurse into the children of the node to bind them as well. For certain
-	// symbols we do specialized work when we recurse. For example, we'll keep track of
-	// the current 'container' node when it changes. This helps us know which symbol table
-	// a local should go into for example. Since terminal nodes are known not to have
-	// children, as an optimization we don't process those.
-	if node.kind > SyntaxKindLastToken {
-		saveParent := b.parent
-		b.parent = node
-		containerFlags := getContainerFlags(node)
-		if containerFlags == ContainerFlagsNone {
-			b.bindChildren(node)
-		} else {
-			b.bindContainer(node, containerFlags)
-		}
-		b.parent = saveParent
-	} else {
-		saveParent := b.parent
-		if node.kind == SyntaxKindEndOfFile {
-			b.parent = node
-		}
-		b.parent = saveParent
-	}
-	b.inStrictMode = saveInStrictMode
-	return false
-}
-
-func (b *Binder) bindWorker(node *Node) {
 	switch node.kind {
 	case SyntaxKindIdentifier:
 		node.AsIdentifier().flowNode = b.currentFlow
@@ -712,6 +683,30 @@ func (b *Binder) bindWorker(node *Node) {
 	case SyntaxKindJsxAttribute:
 		b.bindJsxAttribute(node, SymbolFlagsProperty, SymbolFlagsPropertyExcludes)
 	}
+	// Then we recurse into the children of the node to bind them as well. For certain
+	// symbols we do specialized work when we recurse. For example, we'll keep track of
+	// the current 'container' node when it changes. This helps us know which symbol table
+	// a local should go into for example. Since terminal nodes are known not to have
+	// children, as an optimization we don't process those.
+	if node.kind > SyntaxKindLastToken {
+		saveParent := b.parent
+		b.parent = node
+		containerFlags := getContainerFlags(node)
+		if containerFlags == ContainerFlagsNone {
+			b.bindChildren(node)
+		} else {
+			b.bindContainer(node, containerFlags)
+		}
+		b.parent = saveParent
+	} else {
+		saveParent := b.parent
+		if node.kind == SyntaxKindEndOfFile {
+			b.parent = node
+		}
+		b.parent = saveParent
+	}
+	b.inStrictMode = saveInStrictMode
+	return false
 }
 
 func (b *Binder) bindPropertyWorker(node *Node) {

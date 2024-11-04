@@ -37,25 +37,30 @@ func (c *Checker) symbolToString(s *Symbol) string {
 }
 
 func (c *Checker) typeToString(t *Type) string {
-	p := c.newPrinter()
+	return c.typeToStringEx(t, nil, TypeFormatFlagsNone)
+}
+
+func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *Node, flags TypeFormatFlags) string {
+	p := c.newPrinter(flags)
 	p.printType(t)
 	return p.string()
 }
 
 func (c *Checker) typeAliasToString(d *TypeAliasDeclaration) string {
-	p := c.newPrinter()
+	p := c.newPrinter(TypeFormatFlagsInTypeAlias)
 	p.printTypeAlias(d)
 	return p.string()
 }
 
 type Printer struct {
 	c     *Checker
+	flags TypeFormatFlags
 	sb    strings.Builder
 	depth int
 }
 
-func (c *Checker) newPrinter() *Printer {
-	return &Printer{c: c}
+func (c *Checker) newPrinter(flags TypeFormatFlags) *Printer {
+	return &Printer{c: c, flags: flags}
 }
 
 func (p *Printer) string() string {
@@ -77,6 +82,15 @@ func (p *Printer) printTypeEx(t *Type, precedence TypePrecedence) {
 }
 
 func (p *Printer) printType(t *Type) {
+	if t.alias != nil && (p.flags&TypeFormatFlagsInTypeAlias == 0 || p.depth > 0) {
+		p.print(t.alias.symbol.name)
+		p.printTypeArguments(t.alias.typeArguments)
+	} else {
+		p.printTypeNoAlias(t)
+	}
+}
+
+func (p *Printer) printTypeNoAlias(t *Type) {
 	switch {
 	case t.flags&TypeFlagsIntrinsic != 0:
 		p.print(t.AsIntrinsicType().intrinsicName)
@@ -154,9 +168,9 @@ func (p *Printer) printObjectType(t *Type) {
 
 func (p *Printer) printParameterizedType(t *Type) {
 	switch {
-	case p.c.isArrayType(t):
+	case p.c.isArrayType(t) && p.flags&TypeFormatFlagsWriteArrayAsGenericType == 0:
 		p.printArrayType(t)
-	case p.c.isTupleType(t):
+	case isTupleType(t):
 		p.printTupleType(t)
 	default:
 		p.printTypeReference(t)
@@ -165,7 +179,10 @@ func (p *Printer) printParameterizedType(t *Type) {
 
 func (p *Printer) printTypeReference(t *Type) {
 	p.print(t.symbol.name)
-	typeArguments := p.c.getTypeArguments(t)
+	p.printTypeArguments(p.c.getTypeArguments(t)[:p.c.getTypeReferenceArity(t)])
+}
+
+func (p *Printer) printTypeArguments(typeArguments []*Type) {
 	if len(typeArguments) != 0 {
 		p.print("<")
 		tail := false
@@ -240,7 +257,6 @@ func (p *Printer) printAnonymousTypeWorker(t *Type) {
 			return
 		}
 	}
-	sortSymbols(props)
 	p.print("{")
 	var tail bool
 	for _, sig := range callSignatures {
@@ -285,7 +301,6 @@ func (p *Printer) printAnonymousTypeWorker(t *Type) {
 		p.print(" ")
 	}
 	p.print("}")
-	p.depth--
 }
 
 func (p *Printer) printSignature(sig *Signature, returnSeparator string) {
@@ -339,13 +354,18 @@ func (p *Printer) printUnionType(t *Type) {
 	case t.flags&TypeFlagsEnumLiteral != 0:
 		p.print(t.symbol.name)
 	default:
-		var tail bool
-		for _, t := range p.c.formatUnionTypes(t.AsUnionType().types) {
-			if tail {
-				p.print(" | ")
+		u := t.AsUnionType()
+		if u.origin != nil {
+			p.printType(u.origin)
+		} else {
+			var tail bool
+			for _, t := range p.c.formatUnionTypes(u.types) {
+				if tail {
+					p.print(" | ")
+				}
+				p.printTypeEx(t, TypePrecedenceUnion)
+				tail = true
 			}
-			p.printTypeEx(t, TypePrecedenceUnion)
-			tail = true
 		}
 	}
 }
@@ -392,7 +412,7 @@ func (p *Printer) printTypeAlias(d *TypeAliasDeclaration) {
 		p.print(">")
 	}
 	p.print(" = ")
-	p.printType(t)
+	p.printTypeNoAlias(t)
 }
 
 func (c *Checker) formatUnionTypes(types []*Type) []*Type {

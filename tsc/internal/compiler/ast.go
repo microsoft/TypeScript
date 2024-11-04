@@ -99,6 +99,8 @@ func (node *Node) Expression() *Node {
 		return node.AsParenthesizedExpression().expression
 	case SyntaxKindCallExpression:
 		return node.AsCallExpression().expression
+	case SyntaxKindNewExpression:
+		return node.AsNewExpression().expression
 	case SyntaxKindExpressionWithTypeArguments:
 		return node.AsExpressionWithTypeArguments().expression
 	case SyntaxKindNonNullExpression:
@@ -111,6 +113,16 @@ func (node *Node) Expression() *Node {
 		return node.AsSatisfiesExpression().expression
 	}
 	panic("Unhandled case in Node.Expression")
+}
+
+func (node *Node) Arguments() []*Node {
+	switch node.kind {
+	case SyntaxKindCallExpression:
+		return node.AsCallExpression().arguments
+	case SyntaxKindNewExpression:
+		return node.AsNewExpression().arguments
+	}
+	panic("Unhandled case in Node.Arguments")
 }
 
 // Node casts
@@ -810,6 +822,10 @@ func (f *NodeFactory) NewDecorator(expression *Node) *Node {
 
 func (node *Decorator) ForEachChild(v Visitor) bool {
 	return visit(v, node.expression)
+}
+
+func isDecorator(node *Node) bool {
+	return node.kind == SyntaxKindDecorator
 }
 
 // ModifierList
@@ -2313,6 +2329,10 @@ func (node *MethodDeclaration) ForEachChild(v Visitor) bool {
 		visit(v, node.typeParameters) || visitNodes(v, node.parameters) || visit(v, node.returnType) || visit(v, node.body)
 }
 
+func isMethodDeclaration(node *Node) bool {
+	return node.kind == SyntaxKindMethodDeclaration
+}
+
 // PropertySignatureDeclaration
 
 type PropertySignatureDeclaration struct {
@@ -2422,6 +2442,10 @@ func (f *NodeFactory) NewTypeParameterList(parameters []*Node) *Node {
 
 func (node *TypeParameterList) ForEachChild(v Visitor) bool {
 	return visitNodes(v, node.parameters)
+}
+
+func isTypeParameterList(node *Node) bool {
+	return node.kind == SyntaxKindTypeParameterList
 }
 
 // ExpressionBase
@@ -2851,6 +2875,10 @@ func (f *NodeFactory) NewNewExpression(expression *Node, typeArguments *Node, ar
 
 func (node *NewExpression) ForEachChild(v Visitor) bool {
 	return visit(v, node.expression) || visit(v, node.typeArguments) || visitNodes(v, node.arguments)
+}
+
+func isNewExpression(node *Node) bool {
+	return node.kind == SyntaxKindNewExpression
 }
 
 // MetaProperty
