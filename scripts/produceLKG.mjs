@@ -17,6 +17,7 @@ async function produceLKG() {
     await fs.promises.rm(dest, { recursive: true, force: true });
     await fs.promises.mkdir(dest, { recursive: true });
     await copyLibFiles();
+    await copyNapiFiles();
     await copyLocalizedDiagnostics();
     await copyTypesMap();
     await copyScriptOutputs();
@@ -26,6 +27,10 @@ async function produceLKG() {
 
 async function copyLibFiles() {
     await copyFilesWithGlob("lib?(.*).d.ts");
+}
+
+async function copyNapiFiles() {
+    await copyFilesWithGlob("typescript.*.node");
 }
 
 async function copyLocalizedDiagnostics() {

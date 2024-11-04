@@ -25,9 +25,12 @@ export default tseslint.config(
         ignores: [
             "**/node_modules/**",
             "built/**",
+            "target/**",
             "tests/**",
             "lib/**",
             "src/lib/*.generated.d.ts",
+            "src/rs.js",
+            "src/rs.d.ts",
             "scripts/**/*.js",
             "scripts/**/*.d.*",
             "internal/**",

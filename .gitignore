@@ -64,3 +64,9 @@ package-lock.json
 .eslintcache
 *v8.log
 /lib/
+
+# napi.rs
+src/rs.d.ts
+src/rs.js
+target/*
+typescript.*

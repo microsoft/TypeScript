@@ -189,6 +189,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             bundle: true,
             outfile,
             platform: "node",
+            external: ["*.node"],
             target: ["es2020", "node14.17"],
             format: "cjs",
             sourcemap: "linked",

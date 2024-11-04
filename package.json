@@ -25,6 +25,20 @@
         "tsc": "./bin/tsc",
         "tsserver": "./bin/tsserver"
     },
+    "napi": {
+        "name": "typescript",
+        "triples": {
+            "defaults": false,
+            "additional": [
+                "x86_64-apple-darwin",
+                "x86_64-pc-windows-msvc",
+                "x86_64-unknown-linux-gnu",
+                "aarch64-apple-darwin",
+                "aarch64-pc-windows-msvc",
+                "aarch64-unknown-linux-gnu"
+            ]
+        }
+    },
     "engines": {
         "node": ">=14.17"
     },
@@ -43,6 +57,7 @@
         "@dprint/typescript": "0.93.0",
         "@esfx/canceltoken": "^1.0.0",
         "@eslint/js": "^9.11.1",
+        "@napi-rs/cli": "^2.18.4",
         "@octokit/rest": "^21.0.2",
         "@types/chai": "^4.3.20",
         "@types/diff": "^5.2.2",
@@ -92,6 +107,8 @@
         "test:eslint-rules": "hereby run-eslint-rules-tests",
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "hereby local",
+        "build:napi": "napi build --platform --release --js src/rs.js --dts src/rs.d.ts --pipe \"dprint fmt\"",
+        "postbuild:napi": "node scripts/post-build-napi.mjs",
         "build:tests": "hereby tests",
         "build:tests:notypecheck": "hereby tests --no-typecheck",
         "clean": "hereby clean",

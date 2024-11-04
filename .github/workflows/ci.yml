@@ -33,7 +33,7 @@ jobs:
           - '20'
           - '18'
           - '16'
-          - '14'
+        # - '14' does not support Nullish Coalescing in napi.rs
         bundle:
           - 'true'
         include:
@@ -56,6 +56,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           check-latest: true
       - run: npm ci
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: npm run build:napi
 
       - name: Tests
         id: test
@@ -70,6 +72,7 @@ jobs:
           git diff --staged --exit-code
 
   coverage:
+    if: ${{ github.repository_owner == 'microsoft' }}
     runs-on:
       - 'self-hosted'
       - '1ES.Pool=TypeScript-1ES-GitHub-Large'
@@ -85,6 +88,9 @@ jobs:
         with:
           node-version: 'lts/*'
       - run: npm ci
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: npm run build:napi
 
       - name: Run tests with coverage
         run: npm test -- --no-lint --coverage
@@ -157,6 +163,9 @@ jobs:
           node-version: 'lts/*'
       - run: npm ci
 
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: npm run build:napi
+
       - name: Installing browsers
         run: npx playwright install --with-deps
 
@@ -172,6 +181,9 @@ jobs:
         with:
           node-version: 'lts/*'
       - run: npm ci
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: npm run build:napi
 
       - name: Build src
         run: npx hereby build-src
@@ -192,6 +204,9 @@ jobs:
           npm --version
 
       - run: npm ci
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: npm run build:napi
 
       - run: npx hereby lkg
       - run: |
@@ -237,12 +252,18 @@ jobs:
           npm --version
           # corepack enable npm
 
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+
       - run: |
           npm install -g $(jq -r '.packageManager' < package.json)
           npm --version
         working-directory: ./pr
 
       - run: npm ci
+        working-directory: ./pr
+
+      # TODO: same on base once it has the command
+      - run: npm run build:napi
         working-directory: ./pr
 
       - run: npm ci
@@ -284,6 +305,9 @@ jobs:
           node-version: 'lts/*'
       - run: npm ci
 
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: npm run build:napi
+
       - name: Build tsc
         run: npx hereby tsc
 
@@ -302,6 +326,9 @@ jobs:
         with:
           node-version: 'lts/*'
       - run: npm ci
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - run: npm run build:napi
 
       - name: Remove all baselines
         run: rm -rf tests/baselines/reference

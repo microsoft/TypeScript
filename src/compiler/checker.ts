@@ -1,4 +1,9 @@
 import {
+    escapeLeadingUnderscores,
+    unescapeLeadingUnderscores,
+} from "./_namespaces/rs.js";
+
+import {
     __String,
     AccessExpression,
     AccessFlags,
@@ -172,7 +177,7 @@ import {
     EnumType,
     equateValues,
     ErrorOutputContainer,
-    escapeLeadingUnderscores,
+    // escapeLeadingUnderscores,
     escapeString,
     EvaluatorResult,
     evaluatorResult,
@@ -1103,7 +1108,7 @@ import {
     TypeReferenceSerializationKind,
     TypeReferenceType,
     TypeVariable,
-    unescapeLeadingUnderscores,
+    // unescapeLeadingUnderscores,
     UnionOrIntersectionType,
     UnionOrIntersectionTypeNode,
     UnionReduction,

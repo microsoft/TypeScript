@@ -28,6 +28,7 @@
     "ignore": [
         "scripts/failed-tests.d.cts"
     ],
+    "ignoreBinaries": ["cargo"],
     "ignoreDependencies": ["c8", "eslint-formatter-autolinkable-stylish", "mocha-fivemat-progress-reporter", "monocart-coverage-reports"],
     "ignoreExportsUsedInFile": {
         "enum": true,
