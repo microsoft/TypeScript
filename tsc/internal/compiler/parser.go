@@ -94,6 +94,7 @@ func ParseJSONText(fileName string, sourceText string) *SourceFile {
 		case SyntaxKindNumericLiteral, SyntaxKindStringLiteral:
 			if p.lookAhead(func() bool { return p.nextToken() != SyntaxKindColonToken }) {
 				expression = p.parseLiteralExpression()
+				break
 			}
 			fallthrough
 		default:
