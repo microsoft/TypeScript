@@ -38,10 +38,7 @@ regularExpressionScanning.ts(14,46): error TS1533: This backreference refers to 
 regularExpressionScanning.ts(14,47): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
 regularExpressionScanning.ts(14,52): error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
 regularExpressionScanning.ts(14,53): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-regularExpressionScanning.ts(15,45): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-regularExpressionScanning.ts(15,57): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
 regularExpressionScanning.ts(16,14): error TS1532: There is no capturing group named 'absent' in this regular expression.
-regularExpressionScanning.ts(16,45): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
 regularExpressionScanning.ts(16,58): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
 regularExpressionScanning.ts(19,30): error TS1507: There is nothing available for repetition.
 regularExpressionScanning.ts(19,31): error TS1506: Numbers out of order in quantifier.
@@ -196,7 +193,7 @@ regularExpressionScanning.ts(52,4): error TS1518: Anything that would possibly m
 regularExpressionScanning.ts(52,88): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 
 
-==== regularExpressionScanning.ts (196 errors) ====
+==== regularExpressionScanning.ts (193 errors) ====
     // Flags
     /foo/visualstudiocode;
             ~
@@ -292,15 +289,9 @@ regularExpressionScanning.ts(52,88): error TS1518: Anything that would possibly 
                                                         ~~~
 !!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
     /(?<foo>)((?<bar>bar)bar)(?<baz>baz)|(foo(?<foo>foo))(?<baz>)/;
-                                                ~~~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-                                                            ~~~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
     /(\k<bar>)\k<absent>(?<foo>foo)|(?<bar>)((?<foo>)|(bar(?<bar>bar)))/;
                  ~~~~~~
 !!! error TS1532: There is no capturing group named 'absent' in this regular expression.
-                                                ~~~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
                                                              ~~~
 !!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
     

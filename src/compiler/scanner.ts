@@ -1,4 +1,5 @@
 import {
+    addRange,
     append,
     arrayIsEqualTo,
     binarySearch,
@@ -12,7 +13,6 @@ import {
     Debug,
     DiagnosticMessage,
     Diagnostics,
-    flatMap,
     forEach,
     getNameOfScriptTarget,
     getSpellingSuggestion,
@@ -32,7 +32,8 @@ import {
     positionIsSynthesized,
     PunctuationOrKeywordSyntaxKind,
     RegularExpressionAnyString,
-    RegularExpressionDisjunctionScope,
+    RegularExpressionDisjunction,
+    RegularExpressionDisjunctionsScope,
     RegularExpressionFlags,
     RegularExpressionPattern,
     RegularExpressionPatternContent,
@@ -2664,12 +2665,9 @@ export function createScanner(
         var groupNameReferences: (TextRange & { name: string; })[] | undefined;
         /** All numeric backreferences within the regex. */
         var decimalEscapes: (TextRange & { value: number; })[] | undefined;
-        /** A stack of scopes for disjunction, including capturing groups, non-capturing groups, lookaheads and lookbehinds. */
-        var disjunctionsScopeStack: (RegularExpressionDisjunctionScope | undefined)[] = [];
-        var topDisjunctionsScope: RegularExpressionDisjunctionScope | undefined;
-        /** A stack of scopes for named capturing groups. @see {scanGroupName} */
-        var namedCapturingGroupsScopeStack: (Set<string> | undefined)[] = [];
-        var topNamedCapturingGroupsScope: Set<string> | undefined;
+        /** A stack of scopes for disjunctions, including capturing groups, non-capturing groups, lookaheads and lookbehinds. */
+        var disjunctionsScopesStack: RegularExpressionDisjunctionsScope[] = [];
+        var topDisjunctionsScope!: RegularExpressionDisjunctionsScope;
         /* eslint-enable no-var */
 
         regExpCapturingGroups = [];
@@ -2691,21 +2689,17 @@ export function createScanner(
         // Disjunction ::= Alternative ('|' Alternative)*
         function scanDisjunction(isInGroup: boolean): RegularExpressionPatternUnion {
             const patternUnion = new Set() as RegularExpressionPatternUnion;
-            disjunctionsScopeStack.push(topDisjunctionsScope);
-            topDisjunctionsScope = undefined;
-            namedCapturingGroupsScopeStack.push(topNamedCapturingGroupsScope);
-            topNamedCapturingGroupsScope = undefined;
+            (topDisjunctionsScope = [] as unknown as RegularExpressionDisjunctionsScope).currentAlternativeIndex = 0;
             while (true) {
                 patternUnion.add(scanAlternative(isInGroup));
                 if (charCodeChecked(pos) !== CharacterCodes.bar) {
                     if (patternUnion.size > 1) {
                         markAllInnerPatternUnionsAsPossiblyUndefined(patternUnion);
                     }
-                    topDisjunctionsScope = disjunctionsScopeStack.pop();
-                    topNamedCapturingGroupsScope = namedCapturingGroupsScopeStack.pop();
                     return patternUnion;
                 }
                 pos++;
+                topDisjunctionsScope.currentAlternativeIndex = topDisjunctionsScope.length;
             }
         }
 
@@ -2827,24 +2821,33 @@ export function createScanner(
                             groupNumber = ++numberOfCapturingGroups;
                             isPreviousTermQuantifiable = true;
                         }
-                        const patternUnion = scanDisjunction(/*isInGroup*/ true);
+
+                        const disjunction: RegularExpressionDisjunction = { groupNumber, groupName };
+                        topDisjunctionsScope.push(disjunction);
+                        disjunctionsScopesStack.push(topDisjunctionsScope);
+                        const patternUnion = disjunction.patternUnion = scanDisjunction(/*isInGroup*/ true);
+                        if (isNegativeAssertion) {
+                            // Mark all capturing groups in the negative lookahead/lookbehind just closed as possibly undefined
+                            markAllInnerPatternUnionsAsPossiblyUndefined(patternUnion);
+                            // Also flag them such that they won't be matched by backreferences
+                            for (const disjunction of topDisjunctionsScope) {
+                                disjunction.isInNegativeAssertion = true;
+                            }
+                        }
+                        const currentTopDisjunctionsScope = topDisjunctionsScope;
+                        topDisjunctionsScope = disjunctionsScopesStack.pop()!;
+                        addRange(topDisjunctionsScope, currentTopDisjunctionsScope);
+
                         isCaseInsensitive = prevIsCaseInsensitive;
                         if (isPreviousTermQuantifiable) {
                             // not an assertion
                             pattern.push(patternUnion);
                             if (groupNumber) {
                                 regExpCapturingGroups[groupNumber] = patternUnion;
-                                ((topDisjunctionsScope ??= {}).groups ??= [])[groupNumber] = patternUnion;
                                 if (groupName) {
                                     (regExpCapturingGroupSpecifiers ??= createMultiMap()).add(groupName, patternUnion);
-                                    (topDisjunctionsScope.groupSpecifiers ??= createMultiMap()).add(groupName, patternUnion);
                                 }
                             }
-                        }
-                        else if (isNegativeAssertion) {
-                            // Invalidate all capturing groups in the negative lookahead/lookbehind just closed
-                            // such that they won't be matched by backreferences
-                            topDisjunctionsScope = undefined;
                         }
                         scanExpectedChar(CharacterCodes.closeParen);
                         break;
@@ -3029,16 +3032,24 @@ export function createScanner(
             return currFlags;
         }
 
-        function getBackreferencePatternUnion(selector: (disjunctionScope: RegularExpressionDisjunctionScope | undefined) => RegularExpressionPatternUnion | RegularExpressionPatternUnion[] | undefined): RegularExpressionPatternContent {
-            disjunctionsScopeStack.push(topDisjunctionsScope);
-            const capturingGroups = flatMap(disjunctionsScopeStack, selector);
-            disjunctionsScopeStack.pop();
-            if (!capturingGroups.length) return "";
-            const patternUnion = new Set(capturingGroups as RegularExpressionPattern) as RegularExpressionPatternUnion;
-            if (some(capturingGroups, patternUnion => patternUnion.isPossiblyUndefined!)) {
-                patternUnion.add("");
+        function getBackreferencePatternUnion(predicate: (disjunction: RegularExpressionDisjunction) => boolean): RegularExpressionPatternContent {
+            disjunctionsScopesStack.push(topDisjunctionsScope);
+            let patternUnion: RegularExpressionPatternUnion | undefined;
+            for (const disjunctionsScope of disjunctionsScopesStack) {
+                for (let i = disjunctionsScope.currentAlternativeIndex; i < disjunctionsScope.length; i++) {
+                    const disjunction = disjunctionsScope[i];
+                    if (disjunction.patternUnion && !disjunction.isInNegativeAssertion && predicate(disjunction)) {
+                        for (const pattern of disjunction.patternUnion) {
+                            (patternUnion ??= new Set() as RegularExpressionPatternUnion).add(pattern);
+                        }
+                        if (disjunction.patternUnion.isPossiblyUndefined) {
+                            (patternUnion ??= new Set() as RegularExpressionPatternUnion).add("");
+                        }
+                    }
+                }
             }
-            return patternUnion;
+            disjunctionsScopesStack.pop();
+            return patternUnion || "";
         }
 
         // AtomEscape ::=
@@ -3055,7 +3066,7 @@ export function createScanner(
                     pos++;
                     const groupName = scanGroupName(/*isReference*/ true);
                     scanExpectedChar(CharacterCodes.greaterThan);
-                    return groupName ? getBackreferencePatternUnion(disjunctionsScope => disjunctionsScope?.groupSpecifiers?.get(groupName)) : "";
+                    return groupName ? getBackreferencePatternUnion(disjunction => disjunction.groupName === groupName) : "";
                 }
                 error(Diagnostics.k_must_be_followed_by_a_capturing_group_name_enclosed_in_angle_brackets, pos - 2, 2);
                 return getCharacterEquivalents(String.fromCharCode(ch));
@@ -3077,7 +3088,7 @@ export function createScanner(
                 scanDigits();
                 const groupNumber = +tokenValue;
                 decimalEscapes = append(decimalEscapes, { pos: start, end: pos, value: groupNumber });
-                return getBackreferencePatternUnion(disjunctionsScope => disjunctionsScope?.groups?.[groupNumber]);
+                return getBackreferencePatternUnion(disjunction => disjunction.groupNumber === groupNumber);
             }
         }
 
@@ -3149,19 +3160,26 @@ export function createScanner(
             scanIdentifier(codePointChecked(pos), languageVersion);
             if (pos === tokenStart) {
                 error(Diagnostics.Expected_a_capturing_group_name);
+                return;
             }
-            else if (isReference) {
+            if (isReference) {
                 groupNameReferences = append(groupNameReferences, { pos: tokenStart, end: pos, name: tokenValue });
-                return tokenValue;
-            }
-            else if (topNamedCapturingGroupsScope?.has(tokenValue) || namedCapturingGroupsScopeStack.some(group => group?.has(tokenValue))) {
-                error(Diagnostics.Named_capturing_groups_with_the_same_name_must_be_mutually_exclusive_to_each_other, tokenStart, pos - tokenStart);
             }
             else {
-                topNamedCapturingGroupsScope ??= new Set();
-                topNamedCapturingGroupsScope.add(tokenValue);
-                return tokenValue;
+                disjunctionsScopesStack.push(topDisjunctionsScope);
+                if (
+                    some(disjunctionsScopesStack, disjunctionsScope => {
+                        for (let i = disjunctionsScope.currentAlternativeIndex; i < disjunctionsScope.length; i++) {
+                            if (disjunctionsScope[i].groupName === tokenValue) return true;
+                        }
+                        return false;
+                    })
+                ) {
+                    error(Diagnostics.Named_capturing_groups_with_the_same_name_must_be_mutually_exclusive_to_each_other, tokenStart, pos - tokenStart);
+                }
+                disjunctionsScopesStack.pop();
             }
+            return tokenValue;
         }
 
         function isClassContentExit(ch: number) {

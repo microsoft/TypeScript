@@ -22,17 +22,9 @@ regularExpressionLiteralTypes.ts(187,6): error TS1531: '\P' must be followed by 
 regularExpressionLiteralTypes.ts(187,9): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
 regularExpressionLiteralTypes.ts(188,6): error TS1535: This character cannot be escaped in a regular expression.
 regularExpressionLiteralTypes.ts(188,9): error TS1535: This character cannot be escaped in a regular expression.
-regularExpressionLiteralTypes.ts(216,20): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-regularExpressionLiteralTypes.ts(218,50): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-regularExpressionLiteralTypes.ts(220,55): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-regularExpressionLiteralTypes.ts(222,51): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-regularExpressionLiteralTypes.ts(224,56): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-regularExpressionLiteralTypes.ts(226,56): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-regularExpressionLiteralTypes.ts(226,98): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-regularExpressionLiteralTypes.ts(226,114): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
 
 
-==== regularExpressionLiteralTypes.ts (32 errors) ====
+==== regularExpressionLiteralTypes.ts (24 errors) ====
     // Basic tests
     {
         /foo(.*?)bar(.*)?baz/;
@@ -297,32 +289,16 @@ regularExpressionLiteralTypes.ts(226,114): error TS1515: Named capturing groups 
         /^(?<$1>(?<$2>foo)\k<$1>|(?<$3>bar)\k<$2>)$/;
         // This will only match `foo` or `barbar` and not `foobar`, since they aren’t in the same alternative
         /(?<$$>foo)|(?<$$>bar)\k<$$>/;
-                       ~~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
         // This will only match `foofoo` or `barbar`
         /\k<$$>(?<$$>\k<$$>foo\k<$$>)\k<$$>|\k<$$>(?<$$>\k<$$>bar\k<$$>)\k<$$>/;
-                                                     ~~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
         // Matches `foo`, `bar`, `foofoo` or `barbar`
         /\k<$$>?(?<$$>\k<$$>?foo\k<$$>?)\k<$$>?|\k<$$>?(?<$$>\k<$$>?bar\k<$$>?)\k<$$>?/;
-                                                          ~~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-        // Matches ``, `foofoo` or `barbar`
-        /\k<$$>(?<$$>\k<$$>foo\k<$$>)?\k<$$>|\k<$$>(?<$$>\k<$$>bar\k<$$>)?\k<$$>/;
-                                                      ~~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
         // Matches ``, `foo`, `bar`, `foofoo` or `barbar`
         /\k<$$>?(?<$$>\k<$$>?foo\k<$$>?)?\k<$$>?|\k<$$>?(?<$$>\k<$$>?bar\k<$$>?)?\k<$$>?/;
-                                                           ~~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+        // Matches ``, `foofoo` or `barbar`, but we don't have the ability to exclude `foo` and `bar`
+        /\k<$$>(?<$$>\k<$$>foo\k<$$>)?\k<$$>|\k<$$>(?<$$>\k<$$>bar\k<$$>)?\k<$$>/;
         // All `$$` below match the empty strings
         /(?<$$>f<\k<$$>?(?<f>fizz\k<$$>?(?<b>foo)\k<b>?|(?<b>foo)\k<f>?)\k<f>?>|<\k<b>?(?<b>\k<b>?(?<f>bar)|\k<f>?(?<f>bar)\k<$$>?buzz)\k<$$>?>b)/;
-                                                           ~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-                                                                                                     ~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
-                                                                                                                     ~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
     
         // Assertions
         // Positive lookaheads and lookbehinds
@@ -348,6 +324,7 @@ regularExpressionLiteralTypes.ts(226,114): error TS1515: Named capturing groups 
         /(?=(foo)|(bar))(?<answer>\1|\2|\3|\4)(?=(foo)|(bar))/;
         /(?=(foo)|(bar))(?<answer>\1\2\3\4)(?=(foo)|(bar))/;
         // Negative lookaheads and lookbehinds
+        // Capturing groups inside them should always be marked as possibly undefined
         /(?!(foo))\1/;
         /(?!(foo|bar))\1/;
         /(?!(foo)?)\1/;

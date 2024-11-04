@@ -2798,9 +2798,17 @@ export const enum RegularExpressionFlags {
 }
 
 /** @internal */
-export interface RegularExpressionDisjunctionScope {
-    groups?: RegularExpressionPatternUnion[];
-    groupSpecifiers?: MultiMap<string, RegularExpressionPatternUnion>;
+export interface RegularExpressionDisjunction {
+    patternUnion?: RegularExpressionPatternUnion;
+    groupNumber?: number;
+    groupName?: string;
+    isInNegativeAssertion?: boolean;
+}
+
+/** @internal */
+export interface RegularExpressionDisjunctionsScope extends Array<RegularExpressionDisjunction> {
+    /** All disjunctions after this index are the ones need to be considered */
+    currentAlternativeIndex: number;
 }
 
 /** @internal */

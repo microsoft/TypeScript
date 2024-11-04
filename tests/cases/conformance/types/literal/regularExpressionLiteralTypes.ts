@@ -221,10 +221,10 @@
     /\k<$$>(?<$$>\k<$$>foo\k<$$>)\k<$$>|\k<$$>(?<$$>\k<$$>bar\k<$$>)\k<$$>/;
     // Matches `foo`, `bar`, `foofoo` or `barbar`
     /\k<$$>?(?<$$>\k<$$>?foo\k<$$>?)\k<$$>?|\k<$$>?(?<$$>\k<$$>?bar\k<$$>?)\k<$$>?/;
-    // Matches ``, `foofoo` or `barbar`
-    /\k<$$>(?<$$>\k<$$>foo\k<$$>)?\k<$$>|\k<$$>(?<$$>\k<$$>bar\k<$$>)?\k<$$>/;
     // Matches ``, `foo`, `bar`, `foofoo` or `barbar`
     /\k<$$>?(?<$$>\k<$$>?foo\k<$$>?)?\k<$$>?|\k<$$>?(?<$$>\k<$$>?bar\k<$$>?)?\k<$$>?/;
+    // Matches ``, `foofoo` or `barbar`, but we don't have the ability to exclude `foo` and `bar`
+    /\k<$$>(?<$$>\k<$$>foo\k<$$>)?\k<$$>|\k<$$>(?<$$>\k<$$>bar\k<$$>)?\k<$$>/;
     // All `$$` below match the empty strings
     /(?<$$>f<\k<$$>?(?<f>fizz\k<$$>?(?<b>foo)\k<b>?|(?<b>foo)\k<f>?)\k<f>?>|<\k<b>?(?<b>\k<b>?(?<f>bar)|\k<f>?(?<f>bar)\k<$$>?buzz)\k<$$>?>b)/;
 
@@ -252,6 +252,7 @@
     /(?=(foo)|(bar))(?<answer>\1|\2|\3|\4)(?=(foo)|(bar))/;
     /(?=(foo)|(bar))(?<answer>\1\2\3\4)(?=(foo)|(bar))/;
     // Negative lookaheads and lookbehinds
+    // Capturing groups inside them should always be marked as possibly undefined
     /(?!(foo))\1/;
     /(?!(foo|bar))\1/;
     /(?!(foo)?)\1/;

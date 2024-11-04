@@ -1,9 +1,5 @@
 //// [tests/cases/compiler/regularExpressionWithNonBMPFlags.ts] ////
 
-=== Performance Stats ===
-Type Count: 2,500
-Instantiation count: 10,000
-
 === regularExpressionWithNonBMPFlags.ts ===
 // The characters in the following regular expression are ASCII-lookalike characters found in Unicode, including:
 // - 𝘴 (U+1D634 Mathematical Sans-Serif Italic Small S)

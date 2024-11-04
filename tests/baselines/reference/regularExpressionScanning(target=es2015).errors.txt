@@ -45,14 +45,11 @@ regularExpressionScanning.ts(15,4): error TS1503: Named capturing groups are onl
 regularExpressionScanning.ts(15,13): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
 regularExpressionScanning.ts(15,28): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
 regularExpressionScanning.ts(15,44): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
-regularExpressionScanning.ts(15,45): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
 regularExpressionScanning.ts(15,56): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
-regularExpressionScanning.ts(15,57): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
 regularExpressionScanning.ts(16,14): error TS1532: There is no capturing group named 'absent' in this regular expression.
 regularExpressionScanning.ts(16,23): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
 regularExpressionScanning.ts(16,35): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
 regularExpressionScanning.ts(16,44): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
-regularExpressionScanning.ts(16,45): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
 regularExpressionScanning.ts(16,57): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
 regularExpressionScanning.ts(16,58): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
 regularExpressionScanning.ts(19,30): error TS1507: There is nothing available for repetition.
@@ -222,7 +219,7 @@ regularExpressionScanning.ts(52,88): error TS1518: Anything that would possibly 
 regularExpressionScanning.ts(52,100): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
 
 
-==== regularExpressionScanning.ts (222 errors) ====
+==== regularExpressionScanning.ts (219 errors) ====
     // Flags
     /foo/visualstudiocode;
          ~
@@ -332,12 +329,8 @@ regularExpressionScanning.ts(52,100): error TS1501: This regular expression flag
 !!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
                                                ~~~~~
 !!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
-                                                ~~~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
                                                            ~~~~~
 !!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
-                                                            ~~~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
     /(\k<bar>)\k<absent>(?<foo>foo)|(?<bar>)((?<foo>)|(bar(?<bar>bar)))/;
                  ~~~~~~
 !!! error TS1532: There is no capturing group named 'absent' in this regular expression.
@@ -347,8 +340,6 @@ regularExpressionScanning.ts(52,100): error TS1501: This regular expression flag
 !!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
                                                ~~~~~
 !!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
-                                                ~~~
-!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
                                                             ~~~~~
 !!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
                                                              ~~~
