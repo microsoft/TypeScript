@@ -38909,7 +38909,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 expr.expression.kind === SyntaxKind.ThisKeyword
             ) {
                 // Look for if this is the constructor for the class that `symbol` is a property of.
-                const ctor = getContainingFunction(expr);
+                const ctor = getControlFlowContainer(expr);
                 if (!(ctor && (ctor.kind === SyntaxKind.Constructor || isJSConstructor(ctor)))) {
                     return true;
                 }
