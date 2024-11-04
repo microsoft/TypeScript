@@ -885,7 +885,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const unusedImportsFromOldFile = new Set<Symbol>();
     for (const statement of toMove) {
         forEachReference(statement, checker, enclosingRange, (symbol, isValidTypeOnlyUseSite) => {
-            if (!symbol.declarations || isGlobalType(checker, symbol)) {
+            if (!symbol.declarations) {
                 return;
             }
             if (existingTargetLocals.has(skipAlias(symbol, checker))) {
@@ -900,7 +900,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
                         tryCast(decl, (d): d is codefix.ImportOrRequireAliasDeclaration => isImportSpecifier(d) || isImportClause(d) || isNamespaceImport(d) || isImportEqualsDeclaration(d) || isBindingElement(d) || isVariableDeclaration(d)),
                     ]);
                 }
-                else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
+                else if (!isGlobalType(checker, symbol) && isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
                     targetFileImportsFromOldFile.set(symbol, isValidTypeOnlyUseSite);
                 }
             }
