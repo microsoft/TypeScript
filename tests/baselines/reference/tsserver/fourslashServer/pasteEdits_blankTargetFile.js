@@ -22,11 +22,11 @@ console.log(abc);
 
 console.log("abc");
 
-//// [/home/src/workspaces/project/c.ts]
+//// [/home/src/workspaces/project/folder/c.ts]
 
 
 //// [/home/src/workspaces/project/tsconfig.json]
-{ "files": ["c.ts", "a.ts", "b.ts"] }
+{ "files": ["folder/c.ts", "a.ts", "b.ts"] }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -34,16 +34,16 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/home/src/workspaces/project/c.ts"
+        "file": "/home/src/workspaces/project/folder/c.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/c.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/project/folder/c.ts ProjectRootPath: undefined:: Result: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/workspaces/project/tsconfig.json, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  "rootNames": [
-  "/home/src/workspaces/project/c.ts",
+  "/home/src/workspaces/project/folder/c.ts",
   "/home/src/workspaces/project/a.ts",
   "/home/src/workspaces/project/b.ts"
  ],
@@ -58,7 +58,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/home/src/workspaces/project/tsconfig.json",
-        "reason": "Creating possible configured project for /home/src/workspaces/project/c.ts to open"
+        "reason": "Creating possible configured project for /home/src/workspaces/project/folder/c.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a.ts 500 undefined WatchType: Closed Script info
@@ -81,7 +81,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/c.ts SVC-1-0 ""
+	/home/src/workspaces/project/folder/c.ts SVC-1-0 ""
 	/home/src/workspaces/project/a.ts Text-1 "export const abc = 10;"
 	/home/src/workspaces/project/b.ts Text-1 "import { abc } from \"./a\";\n\nconsole.log(abc);\n\n\nconsole.log(\"abc\");"
 
@@ -92,7 +92,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Library referenced via 'decorators' from file '../../tslibs/TS/Lib/lib.d.ts'
 	../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
 	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
-	c.ts
+	folder/c.ts
 	  Part of 'files' list in tsconfig.json
 	a.ts
 	  Part of 'files' list in tsconfig.json
@@ -116,7 +116,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/home/src/workspaces/project/c.ts",
+        "triggerFile": "/home/src/workspaces/project/folder/c.ts",
         "configFile": "/home/src/workspaces/project/tsconfig.json",
         "diagnostics": []
       }
@@ -126,7 +126,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/c.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspaces/project/folder/c.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -191,7 +191,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/c.ts (Open) *new*
+/home/src/workspaces/project/folder/c.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*
@@ -242,7 +242,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request",
       "arguments": {
-        "file": "/home/src/workspaces/project/c.ts",
+        "file": "/home/src/workspaces/project/folder/c.ts",
         "pastedText": [
           "console.log(abc);"
         ],
@@ -283,7 +283,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/c.ts SVC-1-1 "console.log(abc);"
+	/home/src/workspaces/project/folder/c.ts SVC-1-1 "console.log(abc);"
 	/home/src/workspaces/project/a.ts Text-1 "export const abc = 10;"
 	/home/src/workspaces/project/b.ts Text-1 "import { abc } from \"./a\";\n\nconsole.log(abc);\n\n\nconsole.log(\"abc\");"
 
@@ -303,7 +303,7 @@ Info seq  [hh:mm:ss:mss] response:
       "body": {
         "edits": [
           {
-            "fileName": "/home/src/workspaces/project/c.ts",
+            "fileName": "/home/src/workspaces/project/folder/c.ts",
             "textChanges": [
               {
                 "start": {
@@ -314,7 +314,7 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "import { abc } from \"./a\";\n\n"
+                "newText": "import { abc } from \"../a\";\n\n"
               },
               {
                 "start": {
@@ -362,7 +362,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json
-/home/src/workspaces/project/c.ts (Open) *changed*
+/home/src/workspaces/project/folder/c.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
         /home/src/workspaces/project/tsconfig.json *default*

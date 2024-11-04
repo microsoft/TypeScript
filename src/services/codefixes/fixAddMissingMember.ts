@@ -182,7 +182,7 @@ registerCodeFix({
     getAllCodeActions: context => {
         const { program, fixId } = context;
         const checker = program.getTypeChecker();
-        const seen = new Map<string, true>();
+        const seen = new Set<string>();
         const typeDeclToMembers = new Map<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, TypeLikeDeclarationInfo[]>();
 
         return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
@@ -315,13 +315,13 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         const param = signature.parameters[argIndex].valueDeclaration;
         if (!(param && isParameter(param) && isIdentifier(param.name))) return undefined;
 
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
+        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex).getNonNullableType(), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
         return { kind: InfoKind.ObjectLiteral, token: param.name, identifier: param.name.text, properties, parentDeclaration: parent };
     }
 
     if (token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent)) {
-        const targetType = checker.getContextualType(parent) || checker.getTypeAtLocation(parent);
+        const targetType = (checker.getContextualType(parent) || checker.getTypeAtLocation(parent))?.getNonNullableType();
         const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
 
@@ -334,7 +334,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     if (!isMemberName(token)) return undefined;
 
     if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
-        const targetType = checker.getContextualType(token) || checker.getTypeAtLocation(token);
+        const targetType = (checker.getContextualType(token) || checker.getTypeAtLocation(token))?.getNonNullableType();
         const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
 
@@ -681,7 +681,8 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
     }
     if (type.flags & TypeFlags.EnumLike) {
         const enumMember = type.symbol.exports ? firstOrUndefinedIterator(type.symbol.exports.values()) : type.symbol;
-        const name = checker.symbolToExpression(type.symbol.parent ? type.symbol.parent : type.symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ NodeBuilderFlags.UseFullyQualifiedType);
+        const symbol = type.symbol.parent && type.symbol.parent.flags & SymbolFlags.RegularEnum ? type.symbol.parent : type.symbol;
+        const name = checker.symbolToExpression(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ NodeBuilderFlags.UseFullyQualifiedType);
         return enumMember === undefined || name === undefined ? factory.createNumericLiteral(0) : factory.createPropertyAccessExpression(name, checker.symbolToString(enumMember));
     }
     if (type.flags & TypeFlags.NumberLiteral) {

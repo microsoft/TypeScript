@@ -156,6 +156,7 @@ import {
     indent,
     isConfigFile,
     isConfiguredProject,
+    isDynamicFileName,
     isExternalProject,
     isInferredProject,
     ITypingsInstaller,
@@ -2981,6 +2982,7 @@ export class Session<TMessage = string> implements EventSender {
     }
     private getPasteEdits(args: protocol.GetPasteEditsRequestArgs): protocol.PasteEditsAction | undefined {
         const { file, project } = this.getFileAndProject(args);
+        if (isDynamicFileName(file)) return undefined;
         const copiedFrom = args.copiedFrom
             ? { file: args.copiedFrom.file, range: args.copiedFrom.spans.map(copies => this.getRange({ file: args.copiedFrom!.file, startLine: copies.start.line, startOffset: copies.start.offset, endLine: copies.end.line, endOffset: copies.end.offset }, project.getScriptInfoForNormalizedPath(toNormalizedPath(args.copiedFrom!.file))!)) }
             : undefined;
