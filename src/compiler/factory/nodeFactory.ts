@@ -477,7 +477,7 @@ export const enum NodeFactoryFlags {
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
 
 /** @internal @knipignore */
-export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
+export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void): void {
     nodeFactoryPatchers.push(fn);
 }
 
@@ -7396,7 +7396,7 @@ const syntheticFactory: BaseNodeFactory = {
     createBaseNode: kind => makeSynthetic(baseFactory.createBaseNode(kind)),
 };
 
-export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
+export const factory: NodeFactory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
 
 let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 

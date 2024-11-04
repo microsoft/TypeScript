@@ -23,8 +23,10 @@ class C {
 }
 
 (new C)[Symbol.iterator](0) // Should error
->(new C)[Symbol.iterator](0) : error
->(new C)[Symbol.iterator] : error
+>(new C)[Symbol.iterator](0) : void
+>                            : ^^^^
+>(new C)[Symbol.iterator] : () => void
+>                         : ^^^^^^^^^^
 >(new C) : C
 >        : ^
 >new C : C

@@ -102,7 +102,7 @@ function getNoEmitOnErrorErrorsType(): [subScenario: string, mainErrorContent: s
     ];
 }
 
-export function forEachNoEmitOnErrorScenarioTsc(commandLineArgs: string[]) {
+export function forEachNoEmitOnErrorScenarioTsc(commandLineArgs: string[]): void {
     getNoEmitOnErrorErrorsType().forEach(([subScenario, mainErrorContent, fixedErrorContent]) =>
         forEachNoEmitOnErrorScenario(
             subScenario,
@@ -129,7 +129,7 @@ export function forEachNoEmitOnErrorScenarioTsc(commandLineArgs: string[]) {
     );
 }
 
-export function forEachNoEmitOnErrorScenarioTscWatch(commandLineArgs: string[]) {
+export function forEachNoEmitOnErrorScenarioTscWatch(commandLineArgs: string[]): void {
     const errorTypes = getNoEmitOnErrorErrorsType();
     forEachNoEmitOnErrorScenario(
         "noEmitOnError",

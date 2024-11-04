@@ -26,13 +26,15 @@ class Bar extends Foo {
 >    : ^^^
 
     static [symbol]() {
->[symbol] : () => any
->         : ^^^^^^^^^
+>[symbol] : () => number
+>         : ^^^^^^^^^^^^
 >symbol : any
 
         return super[symbol]();
->super[symbol]() : error
->super[symbol] : error
+>super[symbol]() : number
+>                : ^^^^^^
+>super[symbol] : () => number
+>              : ^^^^^^^^^^^^
 >super : typeof Foo
 >      : ^^^^^^^^^^
 >symbol : any
