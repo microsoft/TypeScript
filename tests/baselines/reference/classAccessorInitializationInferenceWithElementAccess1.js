@@ -17,6 +17,24 @@ export class Cls {
     }
 }
 
+export class Cls2 {
+    accessor x;
+    accessor y;
+    accessor z;
+
+    accessor 0;
+
+    constructor(seed: number) {
+        (() => {
+            this['x'] = [seed];
+            this['y'] = { seed };
+            this['z'] = `${seed}`;
+
+            this[0] = [seed];
+        })();
+    }
+}
+
 
 //// [classAccessorInitializationInferenceWithElementAccess1.js]
 export class Cls {
@@ -31,10 +49,33 @@ export class Cls {
         this[0] = [seed];
     }
 }
+export class Cls2 {
+    accessor x;
+    accessor y;
+    accessor z;
+    accessor 0;
+    constructor(seed) {
+        (() => {
+            this['x'] = [seed];
+            this['y'] = { seed };
+            this['z'] = `${seed}`;
+            this[0] = [seed];
+        })();
+    }
+}
 
 
 //// [classAccessorInitializationInferenceWithElementAccess1.d.ts]
 export declare class Cls {
+    accessor x: number[];
+    accessor y: {
+        seed: number;
+    };
+    accessor z: string;
+    accessor 0: number[];
+    constructor(seed: number);
+}
+export declare class Cls2 {
     accessor x: number[];
     accessor y: {
         seed: number;

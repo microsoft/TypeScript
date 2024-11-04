@@ -11297,13 +11297,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!isThisProperty(node) || !isAutoTypedProperty(prop)) {
                 return false;
             }
-            const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ true, /*includeClassComputedPropertyName*/ false);
+            const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
             return isClassStaticBlockDeclaration(thisContainer) && (prop.parent && getClassLikeDeclarationOfSymbol(prop.parent)) === thisContainer.parent;
         }
         if (!isConstructorDeclaredProperty(prop) && (!isThisProperty(node) || !isAutoTypedProperty(prop))) {
             return false;
         }
-        const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ true, /*includeClassComputedPropertyName*/ false);
+        const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
         return isConstructorDeclaration(thisContainer) && (prop.parent && getClassLikeDeclarationOfSymbol(prop.parent)) === thisContainer.parent || thisContainer === getDeclaringConstructor(prop);
     }
 

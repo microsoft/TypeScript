@@ -1,0 +1,243 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticPropInferenceTemplate1.ts] ////
+
+=== classStaticPropInferenceTemplate1.ts ===
+class MyClass {
+>MyClass : MyClass
+>        : ^^^^^^^
+
+  static property;
+>property : string
+>         : ^^^^^^
+
+  static property2;
+>property2 : string
+>          : ^^^^^^
+
+  static {
+    const variable = "something";
+>variable : "something"
+>         : ^^^^^^^^^^^
+>"something" : "something"
+>            : ^^^^^^^^^^^
+
+    this.property = `foo`;
+>this.property = `foo` : "foo"
+>                      : ^^^^^
+>this.property : string
+>              : ^^^^^^
+>this : typeof MyClass
+>     : ^^^^^^^^^^^^^^
+>property : string
+>         : ^^^^^^
+>`foo` : "foo"
+>      : ^^^^^
+
+    this.property2 = `foo-${variable}`;
+>this.property2 = `foo-${variable}` : "foo-something"
+>                                   : ^^^^^^^^^^^^^^^
+>this.property2 : string
+>               : ^^^^^^
+>this : typeof MyClass
+>     : ^^^^^^^^^^^^^^
+>property2 : string
+>          : ^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+
+    const localProperty = `foo-${variable}`;
+>localProperty : "foo-something"
+>              : ^^^^^^^^^^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+  }
+}
+
+class MyClass2 {
+>MyClass2 : MyClass2
+>         : ^^^^^^^^
+
+  static accessor property;
+>property : string
+>         : ^^^^^^
+
+  static accessor property2;
+>property2 : string
+>          : ^^^^^^
+
+  static {
+    const variable = "something";
+>variable : "something"
+>         : ^^^^^^^^^^^
+>"something" : "something"
+>            : ^^^^^^^^^^^
+
+    this.property = `foo`;
+>this.property = `foo` : "foo"
+>                      : ^^^^^
+>this.property : string
+>              : ^^^^^^
+>this : typeof MyClass2
+>     : ^^^^^^^^^^^^^^^
+>property : string
+>         : ^^^^^^
+>`foo` : "foo"
+>      : ^^^^^
+
+    this.property2 = `foo-${variable}`;
+>this.property2 = `foo-${variable}` : "foo-something"
+>                                   : ^^^^^^^^^^^^^^^
+>this.property2 : string
+>               : ^^^^^^
+>this : typeof MyClass2
+>     : ^^^^^^^^^^^^^^^
+>property2 : string
+>          : ^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+
+    const localProperty = `foo-${variable}`;
+>localProperty : "foo-something"
+>              : ^^^^^^^^^^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+  }
+}
+
+class MyClass3 {
+>MyClass3 : MyClass3
+>         : ^^^^^^^^
+
+  static property;
+>property : string
+>         : ^^^^^^
+
+  static property2;
+>property2 : string
+>          : ^^^^^^
+
+  static {
+    (() => {
+>(() => {      const variable = "something";      this.property = `foo`;      this.property2 = `foo-${variable}`;      const localProperty = `foo-${variable}`;    })() : void
+>                                                                                                                                                                       : ^^^^
+>(() => {      const variable = "something";      this.property = `foo`;      this.property2 = `foo-${variable}`;      const localProperty = `foo-${variable}`;    }) : () => void
+>                                                                                                                                                                     : ^^^^^^^^^^
+>() => {      const variable = "something";      this.property = `foo`;      this.property2 = `foo-${variable}`;      const localProperty = `foo-${variable}`;    } : () => void
+>                                                                                                                                                                   : ^^^^^^^^^^
+
+      const variable = "something";
+>variable : "something"
+>         : ^^^^^^^^^^^
+>"something" : "something"
+>            : ^^^^^^^^^^^
+
+      this.property = `foo`;
+>this.property = `foo` : "foo"
+>                      : ^^^^^
+>this.property : string
+>              : ^^^^^^
+>this : typeof MyClass3
+>     : ^^^^^^^^^^^^^^^
+>property : string
+>         : ^^^^^^
+>`foo` : "foo"
+>      : ^^^^^
+
+      this.property2 = `foo-${variable}`;
+>this.property2 = `foo-${variable}` : "foo-something"
+>                                   : ^^^^^^^^^^^^^^^
+>this.property2 : string
+>               : ^^^^^^
+>this : typeof MyClass3
+>     : ^^^^^^^^^^^^^^^
+>property2 : string
+>          : ^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+
+      const localProperty = `foo-${variable}`;
+>localProperty : "foo-something"
+>              : ^^^^^^^^^^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+
+    })();
+  }
+}
+
+class MyClass4 {
+>MyClass4 : MyClass4
+>         : ^^^^^^^^
+
+  static accessor property;
+>property : string
+>         : ^^^^^^
+
+  static accessor property2;
+>property2 : string
+>          : ^^^^^^
+
+  static {
+    (() => {
+>(() => {      const variable = "something";      this.property = `foo`;      this.property2 = `foo-${variable}`;      const localProperty = `foo-${variable}`;    })() : void
+>                                                                                                                                                                       : ^^^^
+>(() => {      const variable = "something";      this.property = `foo`;      this.property2 = `foo-${variable}`;      const localProperty = `foo-${variable}`;    }) : () => void
+>                                                                                                                                                                     : ^^^^^^^^^^
+>() => {      const variable = "something";      this.property = `foo`;      this.property2 = `foo-${variable}`;      const localProperty = `foo-${variable}`;    } : () => void
+>                                                                                                                                                                   : ^^^^^^^^^^
+
+      const variable = "something";
+>variable : "something"
+>         : ^^^^^^^^^^^
+>"something" : "something"
+>            : ^^^^^^^^^^^
+
+      this.property = `foo`;
+>this.property = `foo` : "foo"
+>                      : ^^^^^
+>this.property : string
+>              : ^^^^^^
+>this : typeof MyClass4
+>     : ^^^^^^^^^^^^^^^
+>property : string
+>         : ^^^^^^
+>`foo` : "foo"
+>      : ^^^^^
+
+      this.property2 = `foo-${variable}`;
+>this.property2 = `foo-${variable}` : "foo-something"
+>                                   : ^^^^^^^^^^^^^^^
+>this.property2 : string
+>               : ^^^^^^
+>this : typeof MyClass4
+>     : ^^^^^^^^^^^^^^^
+>property2 : string
+>          : ^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+
+      const localProperty = `foo-${variable}`;
+>localProperty : "foo-something"
+>              : ^^^^^^^^^^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+
+    })();
+  }
+}
+

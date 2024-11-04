@@ -61,3 +61,69 @@ class MyClass2 {
     }
 }
 
+class MyClass3 {
+>MyClass3 : Symbol(MyClass3, Decl(index.js, 26, 1))
+
+    property;
+>property : Symbol(MyClass3.property, Decl(index.js, 28, 16))
+
+    property2;
+>property2 : Symbol(MyClass3.property2, Decl(index.js, 29, 13))
+
+    constructor() {
+        (() => {
+            const variable = 'something'
+>variable : Symbol(variable, Decl(index.js, 34, 17))
+
+            this.property = `foo`;
+>this.property : Symbol(MyClass3.property, Decl(index.js, 28, 16))
+>this : Symbol(MyClass3, Decl(index.js, 26, 1))
+>property : Symbol(MyClass3.property, Decl(index.js, 28, 16))
+
+            this.property2 = `foo-${variable}`;
+>this.property2 : Symbol(MyClass3.property2, Decl(index.js, 29, 13))
+>this : Symbol(MyClass3, Decl(index.js, 26, 1))
+>property2 : Symbol(MyClass3.property2, Decl(index.js, 29, 13))
+>variable : Symbol(variable, Decl(index.js, 34, 17))
+
+            const localProperty = `foo-${variable}`;
+>localProperty : Symbol(localProperty, Decl(index.js, 39, 17))
+>variable : Symbol(variable, Decl(index.js, 34, 17))
+
+        })();
+    }
+}
+
+class MyClass4 {
+>MyClass4 : Symbol(MyClass4, Decl(index.js, 42, 1))
+
+    accessor property;
+>property : Symbol(MyClass4.property, Decl(index.js, 44, 16))
+
+    accessor property2;
+>property2 : Symbol(MyClass4.property2, Decl(index.js, 45, 22))
+
+    constructor() {
+        (() => {
+            const variable = 'something'
+>variable : Symbol(variable, Decl(index.js, 50, 17))
+
+            this.property = `foo`;
+>this.property : Symbol(MyClass4.property, Decl(index.js, 44, 16))
+>this : Symbol(MyClass4, Decl(index.js, 42, 1))
+>property : Symbol(MyClass4.property, Decl(index.js, 44, 16))
+
+            this.property2 = `foo-${variable}`;
+>this.property2 : Symbol(MyClass4.property2, Decl(index.js, 45, 22))
+>this : Symbol(MyClass4, Decl(index.js, 42, 1))
+>property2 : Symbol(MyClass4.property2, Decl(index.js, 45, 22))
+>variable : Symbol(variable, Decl(index.js, 50, 17))
+
+            const localProperty = `foo-${variable}`;
+>localProperty : Symbol(localProperty, Decl(index.js, 55, 17))
+>variable : Symbol(variable, Decl(index.js, 50, 17))
+
+        })();
+    }
+}
+
