@@ -23,22 +23,24 @@ class MyClass {
         this.property = `foo`;
 >this.property = `foo` : "foo"
 >                      : ^^^^^
->this.property : any
+>this.property : string
+>              : ^^^^^^
 >this : this
 >     : ^^^^
->property : any
->         : ^^^
+>property : string
+>         : ^^^^^^
 >`foo` : "foo"
 >      : ^^^^^
 
         this.property2 = `foo-${variable}`;
 >this.property2 = `foo-${variable}` : "foo-something"
 >                                   : ^^^^^^^^^^^^^^^
->this.property2 : any
+>this.property2 : string
+>               : ^^^^^^
 >this : this
 >     : ^^^^
->property2 : any
->          : ^^^
+>property2 : string
+>          : ^^^^^^
 >`foo-${variable}` : "foo-something"
 >                  : ^^^^^^^^^^^^^^^
 >variable : "something"
@@ -76,22 +78,24 @@ class MyClass2 {
         this.property = `foo`;
 >this.property = `foo` : "foo"
 >                      : ^^^^^
->this.property : any
+>this.property : string
+>              : ^^^^^^
 >this : this
 >     : ^^^^
->property : any
->         : ^^^
+>property : string
+>         : ^^^^^^
 >`foo` : "foo"
 >      : ^^^^^
 
         this.property2 = `foo-${variable}`;
 >this.property2 = `foo-${variable}` : "foo-something"
 >                                   : ^^^^^^^^^^^^^^^
->this.property2 : any
+>this.property2 : string
+>               : ^^^^^^
 >this : this
 >     : ^^^^
->property2 : any
->          : ^^^
+>property2 : string
+>          : ^^^^^^
 >`foo-${variable}` : "foo-something"
 >                  : ^^^^^^^^^^^^^^^
 >variable : "something"

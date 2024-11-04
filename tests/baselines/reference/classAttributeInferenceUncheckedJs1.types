@@ -17,12 +17,11 @@ class C1 {
 >    : ^^^
 
         this.bar;
->this.bar : undefined
->         : ^^^^^^^^^
+>this.bar : any
 >this : this
 >     : ^^^^
->bar : undefined
->    : ^^^^^^^^^
+>bar : any
+>    : ^^^
     }
 }
 
@@ -40,8 +39,7 @@ class C2 {
 >     : ^^^^
 
         this.#bar;
->this.#bar : undefined
->          : ^^^^^^^^^
+>this.#bar : any
 >this : this
 >     : ^^^^
     }

@@ -11291,6 +11291,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             !declaration.initializer && (noImplicitAny || isInJSFile(declaration));
     }
 
+    function isThisPropertyAccessInAutoContainer(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol) {
+        const declaration = Debug.checkDefined(prop.valueDeclaration);
+        if (hasStaticModifier(declaration)) {
+            if (!isThisProperty(node) || !isAutoTypedProperty(prop)) {
+                return false;
+            }
+            const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ true, /*includeClassComputedPropertyName*/ false);
+            if (!isClassStaticBlockDeclaration(thisContainer)) {
+                return false;
+            }
+            return (prop.parent && getClassLikeDeclarationOfSymbol(prop.parent)) === thisContainer.parent;
+        }
+        if (!isConstructorDeclaredProperty(prop) && (!isThisProperty(node) || !isAutoTypedProperty(prop))) {
+            return false;
+        }
+        const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ true, /*includeClassComputedPropertyName*/ false);
+        if (thisContainer === getDeclaringConstructor(prop)) {
+            return true;
+        }
+        const classLikeDeclaration = prop.parent && getClassLikeDeclarationOfSymbol(prop.parent);
+        if (!classLikeDeclaration) {
+            return false;
+        }
+        return thisContainer === findConstructorDeclaration(classLikeDeclaration);
+    }
+
     function getDeclaringConstructor(symbol: Symbol) {
         if (!symbol.declarations) {
             return;
@@ -18548,7 +18574,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (accessFlags & AccessFlags.CacheSymbol) {
                         getNodeLinks(accessNode!).resolvedSymbol = prop;
                     }
-                    if (isThisPropertyAccessInConstructor(accessExpression, prop)) {
+                    if (isThisPropertyAccessInDeclaringConstructor(accessExpression, prop)) {
                         return autoType;
                     }
                 }
@@ -31449,7 +31475,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const decl = lhsSymbol && lhsSymbol.valueDeclaration;
                 // Unannotated, uninitialized property declarations have a type implied by their usage in the constructor.
                 // We avoid calling back into `getTypeOfExpression` and reentering contextual typing to avoid a bogus circularity error in that case when the assignment declaration is in the constructor
-                if (decl && (isPropertyDeclaration(decl) || isPropertySignature(decl)) && (!isAccessExpression(binaryExpression.left) || isThisPropertyAccessInConstructor(binaryExpression.left, lhsSymbol))) {
+                if (decl && (isPropertyDeclaration(decl) || isPropertySignature(decl)) && (!isAccessExpression(binaryExpression.left) || isThisPropertyAccessInAutoContainer(binaryExpression.left, lhsSymbol))) {
                     const overallAnnotation = getEffectiveTypeAnnotationNode(decl);
                     return (overallAnnotation && instantiateType(getTypeFromTypeNode(overallAnnotation), getSymbolLinks(lhsSymbol).mapper)) ||
                         (isPropertyDeclaration(decl) ? decl.initializer && getTypeOfExpression(binaryExpression.left) : undefined);
@@ -34009,19 +34035,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function isThisPropertyAccessInConstructor(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol) {
-        if (!isConstructorDeclaredProperty(prop) && (!isThisProperty(node) || !isAutoTypedProperty(prop))) {
-            return false;
-        }
-        const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ true, /*includeClassComputedPropertyName*/ false);
-        if (thisContainer === getDeclaringConstructor(prop)) {
-            return true;
-        }
-        const classLikeDeclaration = prop.parent && getClassLikeDeclarationOfSymbol(prop.parent);
-        if (!classLikeDeclaration) {
-            return false;
-        }
-        return thisContainer === findConstructorDeclaration(classLikeDeclaration);
+    function isThisPropertyAccessInDeclaringConstructor(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol) {
+        return (isConstructorDeclaredProperty(prop) || isThisProperty(node) && isAutoTypedProperty(prop))
+            && getThisContainer(node, /*includeArrowFunctions*/ true, /*includeClassComputedPropertyName*/ false) === getDeclaringConstructor(prop);
     }
 
     function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, leftType: Type, right: Identifier | PrivateIdentifier, checkMode: CheckMode | undefined, writeOnly?: boolean) {
@@ -34139,7 +34155,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return errorType;
             }
 
-            propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : writeOnly || isWriteOnlyAccess(node) ? getWriteTypeOfSymbol(prop) : getTypeOfSymbol(prop);
+            propType = isThisPropertyAccessInDeclaringConstructor(node, prop) ? autoType : writeOnly || isWriteOnlyAccess(node) ? getWriteTypeOfSymbol(prop) : getTypeOfSymbol(prop);
         }
 
         return getFlowTypeOfAccessExpression(node, prop, propType, right, checkMode);

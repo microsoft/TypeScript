@@ -1,0 +1,79 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticPropInitializationInferenceWithElementAccess1.ts] ////
+
+=== classStaticPropInitializationInferenceWithElementAccess1.ts ===
+let seed = 0;
+>seed : Symbol(seed, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 0, 3))
+
+export class Cls1 {
+>Cls1 : Symbol(Cls1, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 0, 13))
+
+  static x;
+>x : Symbol(Cls1.x, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 2, 19))
+
+  static y;
+>y : Symbol(Cls1.y, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 3, 11))
+
+  static z;
+>z : Symbol(Cls1.z, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 4, 11))
+
+  static 0;
+>0 : Symbol(Cls1[0], Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 5, 11))
+
+  static {
+    this["x"] = [32];
+>this : Symbol(Cls1, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 0, 13))
+>"x" : Symbol(Cls1.x, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 2, 19))
+
+    this["y"] = { seed };
+>this : Symbol(Cls1, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 0, 13))
+>"y" : Symbol(Cls1.y, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 3, 11))
+>seed : Symbol(seed, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 11, 17))
+
+    this["z"] = `${seed}`;
+>this : Symbol(Cls1, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 0, 13))
+>"z" : Symbol(Cls1.z, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 4, 11))
+>seed : Symbol(seed, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 0, 3))
+
+    this[0] = [seed];
+>this : Symbol(Cls1, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 0, 13))
+>0 : Symbol(Cls1[0], Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 5, 11))
+>seed : Symbol(seed, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 0, 3))
+  }
+}
+
+export class Cls2 {
+>Cls2 : Symbol(Cls2, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 16, 1))
+
+  static accessor x;
+>x : Symbol(Cls2.x, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 18, 19))
+
+  static accessor y;
+>y : Symbol(Cls2.y, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 19, 20))
+
+  static accessor z;
+>z : Symbol(Cls2.z, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 20, 20))
+
+  static accessor 0;
+>0 : Symbol(Cls2[0], Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 21, 20))
+
+  static {
+    this["x"] = [32];
+>this : Symbol(Cls2, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 16, 1))
+>"x" : Symbol(Cls2.x, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 18, 19))
+
+    this["y"] = { seed };
+>this : Symbol(Cls2, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 16, 1))
+>"y" : Symbol(Cls2.y, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 19, 20))
+>seed : Symbol(seed, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 27, 17))
+
+    this["z"] = `${seed}`;
+>this : Symbol(Cls2, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 16, 1))
+>"z" : Symbol(Cls2.z, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 20, 20))
+>seed : Symbol(seed, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 0, 3))
+
+    this[0] = [seed];
+>this : Symbol(Cls2, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 16, 1))
+>0 : Symbol(Cls2[0], Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 21, 20))
+>seed : Symbol(seed, Decl(classStaticPropInitializationInferenceWithElementAccess1.ts, 0, 3))
+  }
+}

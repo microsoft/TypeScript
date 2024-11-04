@@ -16,7 +16,8 @@ class Example {
         this.#test = test;
 >this.#test = test : number
 >                  : ^^^^^^
->this.#test : any
+>this.#test : number
+>           : ^^^^^^
 >this : this
 >     : ^^^^
 >test : number
@@ -50,7 +51,8 @@ class Example2 {
         this.#test = test;
 >this.#test = test : number | undefined
 >                  : ^^^^^^^^^^^^^^^^^^
->this.#test : any
+>this.#test : number | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >test : number | undefined

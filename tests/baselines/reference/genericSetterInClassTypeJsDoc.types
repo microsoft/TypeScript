@@ -20,7 +20,8 @@
         this.#value = initialValue;
 >this.#value = initialValue : T
 >                           : ^
->this.#value : any
+>this.#value : T
+>            : ^
 >this : this
 >     : ^^^^
 >initialValue : T

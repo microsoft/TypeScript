@@ -29,12 +29,12 @@ class Actor1 {
     this.state = initialState;
 >this.state = initialState : State
 >                          : ^^^^^
->this.state : any
->           : ^^^
+>this.state : State
+>           : ^^^^^
 >this : this
 >     : ^^^^
->state : any
->      : ^^^
+>state : State
+>      : ^^^^^
 >initialState : State
 >             : ^^^^^
   }
@@ -95,12 +95,12 @@ class Actor2 {
     this.state = initialState;
 >this.state = initialState : State
 >                          : ^^^^^
->this.state : any
->           : ^^^
+>this.state : State
+>           : ^^^^^
 >this : this
 >     : ^^^^
->state : any
->      : ^^^
+>state : State
+>      : ^^^^^
 >initialState : State
 >             : ^^^^^
   }
