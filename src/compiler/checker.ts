@@ -21549,7 +21549,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else if (!((source.flags | target.flags) & (TypeFlags.UnionOrIntersection | TypeFlags.IndexedAccess | TypeFlags.Conditional | TypeFlags.Substitution))) {
             // We have excluded types that may simplify to other forms, so types must have identical flags
-            if (source.flags !== target.flags) return false;
+            if ((source.flags | TypeFlags.EnumLiteral) !== (target.flags | TypeFlags.EnumLiteral)) return false;
             if (source.flags & TypeFlags.Singleton) return true;
         }
         if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
@@ -22037,7 +22037,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (source === target) return Ternary.True;
 
             if (relation === identityRelation) {
-                if (source.flags !== target.flags) return Ternary.False;
+                if ((source.flags | TypeFlags.EnumLiteral) !== (target.flags | TypeFlags.EnumLiteral)) return Ternary.False;
                 if (source.flags & TypeFlags.Singleton) return Ternary.True;
                 traceUnionsOrIntersectionsTooLarge(source, target);
                 return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false, IntersectionState.None, recursionFlags);

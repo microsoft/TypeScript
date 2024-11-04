@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/identityRelationEnumTypes.ts] ////
+
+=== identityRelationEnumTypes.ts ===
+namespace identityRelationEnumTypes {
+>identityRelationEnumTypes : typeof identityRelationEnumTypes
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export type Equals<A, B> = (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0) ? true : false;
+>Equals : Equals<A, B>
+>       : ^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    export enum Enum {
+>Enum : Enum
+>     : ^^^^
+
+        A = 'a',
+>A : Enum.A
+>  : ^^^^^^
+>'a' : "a"
+>    : ^^^
+
+        B = 'b',
+>B : Enum.B
+>  : ^^^^^^
+>'b' : "b"
+>    : ^^^
+    }
+
+    export type EnumValues = typeof Enum[keyof typeof Enum];
+>EnumValues : EnumValues
+>           : ^^^^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+>Enum : typeof Enum
+>     : ^^^^^^^^^^^
+}
+
+type Result = identityRelationEnumTypes.Equals<
+>Result : true
+>       : ^^^^
+>identityRelationEnumTypes : any
+>                          : ^^^
+
+    identityRelationEnumTypes.Enum,
+>identityRelationEnumTypes : any
+>                          : ^^^
+
+    identityRelationEnumTypes.EnumValues
+>identityRelationEnumTypes : any
+>                          : ^^^
+
+>;  // true
+

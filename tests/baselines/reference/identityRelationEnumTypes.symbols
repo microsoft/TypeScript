@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/identityRelationEnumTypes.ts] ////
+
+=== identityRelationEnumTypes.ts ===
+namespace identityRelationEnumTypes {
+>identityRelationEnumTypes : Symbol(identityRelationEnumTypes, Decl(identityRelationEnumTypes.ts, 0, 0))
+
+    export type Equals<A, B> = (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0) ? true : false;
+>Equals : Symbol(Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
+>A : Symbol(A, Decl(identityRelationEnumTypes.ts, 1, 23))
+>B : Symbol(B, Decl(identityRelationEnumTypes.ts, 1, 25))
+>T : Symbol(T, Decl(identityRelationEnumTypes.ts, 1, 33))
+>T : Symbol(T, Decl(identityRelationEnumTypes.ts, 1, 33))
+>B : Symbol(B, Decl(identityRelationEnumTypes.ts, 1, 25))
+>T : Symbol(T, Decl(identityRelationEnumTypes.ts, 1, 72))
+>T : Symbol(T, Decl(identityRelationEnumTypes.ts, 1, 72))
+>A : Symbol(A, Decl(identityRelationEnumTypes.ts, 1, 23))
+
+    export enum Enum {
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 116))
+
+        A = 'a',
+>A : Symbol(Enum.A, Decl(identityRelationEnumTypes.ts, 3, 22))
+
+        B = 'b',
+>B : Symbol(Enum.B, Decl(identityRelationEnumTypes.ts, 4, 16))
+    }
+
+    export type EnumValues = typeof Enum[keyof typeof Enum];
+>EnumValues : Symbol(EnumValues, Decl(identityRelationEnumTypes.ts, 6, 5))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 116))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 116))
+}
+
+type Result = identityRelationEnumTypes.Equals<
+>Result : Symbol(Result, Decl(identityRelationEnumTypes.ts, 9, 1))
+>identityRelationEnumTypes : Symbol(identityRelationEnumTypes, Decl(identityRelationEnumTypes.ts, 0, 0))
+>Equals : Symbol(identityRelationEnumTypes.Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
+
+    identityRelationEnumTypes.Enum,
+>identityRelationEnumTypes : Symbol(identityRelationEnumTypes, Decl(identityRelationEnumTypes.ts, 0, 0))
+>Enum : Symbol(identityRelationEnumTypes.Enum, Decl(identityRelationEnumTypes.ts, 1, 116))
+
+    identityRelationEnumTypes.EnumValues
+>identityRelationEnumTypes : Symbol(identityRelationEnumTypes, Decl(identityRelationEnumTypes.ts, 0, 0))
+>EnumValues : Symbol(identityRelationEnumTypes.EnumValues, Decl(identityRelationEnumTypes.ts, 6, 5))
+
+>;  // true
+
