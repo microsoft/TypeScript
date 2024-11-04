@@ -59,7 +59,7 @@ Show all compiler options.
 Print the compiler's version.
 
 [94m--init[39m
-Initializes a TypeScript project and creates a tsconfig.json file.
+Initializes a TypeScript project and creates a tsconfig.json file. Use '--init clean' to skip comments.
 
 [94m--project, -p[39m
 Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'.

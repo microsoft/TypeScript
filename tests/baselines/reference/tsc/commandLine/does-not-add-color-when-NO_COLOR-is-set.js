@@ -60,7 +60,7 @@ Show all compiler options.
 Print the compiler's version.
 
 --init
-Initializes a TypeScript project and creates a tsconfig.json file.
+Initializes a TypeScript project and creates a tsconfig.json file. Use '--init clean' to skip comments.
 
 --project, -p
 Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'.

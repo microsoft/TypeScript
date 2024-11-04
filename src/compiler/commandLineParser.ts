@@ -643,7 +643,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: initOptionMap,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Command_line_Options,
-        description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
+        description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file_Use_init_clean_to_skip_comments,
         defaultValueDescription: undefined,
     },
     {
