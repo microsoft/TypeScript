@@ -107,6 +107,7 @@ declare namespace ts {
                 GetApplicableRefactors = "getApplicableRefactors",
                 GetEditsForRefactor = "getEditsForRefactor",
                 GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+                PreparePasteEdits = "preparePasteEdits",
                 GetPasteEdits = "getPasteEdits",
                 OrganizeImports = "organizeImports",
                 GetEditsForFileRename = "getEditsForFileRename",
@@ -122,6 +123,7 @@ declare namespace ts {
                 ProvideInlayHints = "provideInlayHints",
                 WatchChange = "watchChange",
                 MapCode = "mapCode",
+                CopilotRelated = "copilotRelated",
             }
             /**
              * A TypeScript Server message
@@ -513,6 +515,19 @@ declare namespace ts {
                     newFileName: string;
                     files: string[];
                 };
+            }
+            /**
+             * Request to check if `pasteEdits` should be provided for a given location post copying text from that location.
+             */
+            export interface PreparePasteEditsRequest extends FileRequest {
+                command: CommandTypes.PreparePasteEdits;
+                arguments: PreparePasteEditsRequestArgs;
+            }
+            export interface PreparePasteEditsRequestArgs extends FileRequestArgs {
+                copiedTextSpan: TextSpan[];
+            }
+            export interface PreparePasteEditsResponse extends Response {
+                body: boolean;
             }
             /**
              * Request refactorings at a given position post pasting text from some other location.
@@ -1824,6 +1839,16 @@ declare namespace ts {
             export interface MapCodeResponse extends Response {
                 body: readonly FileCodeEdits[];
             }
+            export interface CopilotRelatedRequest extends FileRequest {
+                command: CommandTypes.CopilotRelated;
+                arguments: FileRequestArgs;
+            }
+            export interface CopilotRelatedItems {
+                relatedFiles: readonly string[];
+            }
+            export interface CopilotRelatedResponse extends Response {
+                body: CopilotRelatedItems;
+            }
             /**
              * Synchronous request for semantic diagnostics of one file.
              */
@@ -2534,6 +2559,7 @@ declare namespace ts {
                 ES2021 = "es2021",
                 ES2022 = "es2022",
                 ES2023 = "es2023",
+                ES2024 = "es2024",
                 ESNext = "esnext",
                 JSON = "json",
                 Latest = "esnext",
@@ -3508,6 +3534,7 @@ declare namespace ts {
             private getDocumentHighlights;
             private provideInlayHints;
             private mapCode;
+            private getCopilotRelatedInfo;
             private setCompilerOptionsForInferredProjects;
             private getProjectInfo;
             private getProjectInfoWorker;
@@ -3564,6 +3591,7 @@ declare namespace ts {
             private getApplicableRefactors;
             private getEditsForRefactor;
             private getMoveToRefactoringFileSuggestions;
+            private preparePasteEdits;
             private getPasteEdits;
             private organizeImports;
             private getEditsForFileRename;
@@ -5128,7 +5156,7 @@ declare namespace ts {
     interface InstanceofExpression extends BinaryExpression {
         readonly operatorToken: Token<SyntaxKind.InstanceOfKeyword>;
     }
-    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement | InstanceofExpression;
+    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxCallLike | InstanceofExpression;
     interface AsExpression extends Expression {
         readonly kind: SyntaxKind.AsExpression;
         readonly expression: Expression;
@@ -5164,6 +5192,7 @@ declare namespace ts {
         readonly closingElement: JsxClosingElement;
     }
     type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
+    type JsxCallLike = JsxOpeningLikeElement | JsxOpeningFragment;
     type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
     type JsxAttributeName = Identifier | JsxNamespacedName;
     type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName;
@@ -7015,6 +7044,7 @@ declare namespace ts {
         moduleDetection?: ModuleDetectionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
+        noCheck?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
@@ -7054,6 +7084,7 @@ declare namespace ts {
         removeComments?: boolean;
         resolvePackageJsonExports?: boolean;
         resolvePackageJsonImports?: boolean;
+        rewriteRelativeImportExtensions?: boolean;
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;
@@ -7164,6 +7195,7 @@ declare namespace ts {
         ES2021 = 8,
         ES2022 = 9,
         ES2023 = 10,
+        ES2024 = 11,
         ESNext = 99,
         JSON = 100,
         Latest = 99,
@@ -8728,6 +8760,7 @@ declare namespace ts {
     function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration;
     function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportDeclaration;
     function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration;
+    function isPartOfTypeOnlyImportOrExportDeclaration(node: Node): boolean;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
     function isImportAttributeName(node: Node): node is ImportAttributeName;
     function isModifier(node: Node): node is Modifier;
@@ -8776,6 +8809,7 @@ declare namespace ts {
     function isJsxAttributeLike(node: Node): node is JsxAttributeLike;
     function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression;
     function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
+    function isJsxCallLike(node: Node): node is JsxCallLike;
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
     function isJSDocCommentContainingNode(node: Node): boolean;
@@ -10219,6 +10253,7 @@ declare namespace ts {
         uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         getSupportedCodeFixes(fileName?: string): readonly string[];
         dispose(): void;
+        preparePasteEditsForFile(fileName: string, copiedTextRanges: TextRange[]): boolean;
         getPasteEdits(args: PasteEditsArgs, formatOptions: FormatCodeSettings): PasteEdits;
     }
     interface JsxClosingTagInfo {

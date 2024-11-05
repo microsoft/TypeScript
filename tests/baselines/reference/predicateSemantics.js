@@ -46,8 +46,18 @@ function foo(this: Object | undefined) {
     return this ?? 0;
 }
 
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+  const maybe = null as true | null;
+  let i = 0;
+  const d = (i++, maybe) ?? true; // ok
+  const e = (i++, i++) ?? true; // error
+  const f = (maybe, i++) ?? true; // error
+}
+
+
 //// [predicateSemantics.js]
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 // OK: One or other operand is possibly nullish
 var test1 = (_a = (cond ? undefined : 32)) !== null && _a !== void 0 ? _a : "possibly reached";
 // Not OK: Both operands nullish
@@ -87,4 +97,12 @@ console.log((cond || undefined) && 1 / cond);
 function foo() {
     // Should be OK
     return this !== null && this !== void 0 ? this : 0;
+}
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+    var maybe = null;
+    var i = 0;
+    var d = (_g = (i++, maybe)) !== null && _g !== void 0 ? _g : true; // ok
+    var e = (_h = (i++, i++)) !== null && _h !== void 0 ? _h : true; // error
+    var f = (_j = (maybe, i++)) !== null && _j !== void 0 ? _j : true; // error
 }

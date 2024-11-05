@@ -56,9 +56,9 @@ const GetSetEnumerableObjectGet = {
 
 const GetSetEnumerableObjectSet = {
 >GetSetEnumerableObjectSet : { prop: boolean; }
->                          : ^^^^^^^^^^^^^^^^^^
+>                          : ^^^^^^^^       ^^^
 >{    set prop(value: boolean) { }} : { prop: boolean; }
->                                   : ^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^^^^^       ^^^
 
     set prop(value: boolean) { }
 >prop : boolean
@@ -70,9 +70,9 @@ const GetSetEnumerableObjectSet = {
 
 const GetSetEnumerableObjectGetSet = {
 >GetSetEnumerableObjectGetSet : { prop: boolean; }
->                             : ^^^^^^^^^^^^^^^^^^
+>                             : ^^^^^^^^       ^^^
 >{    get prop() { return true; },    set prop(value: boolean) { }} : { prop: boolean; }
->                                                                   : ^^^^^^^^^^^^^^^^^^
+>                                                                   : ^^^^^^^^       ^^^
 
     get prop() { return true; },
 >prop : boolean

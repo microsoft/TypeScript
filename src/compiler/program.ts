@@ -99,8 +99,8 @@ import {
     flatten,
     forEach,
     forEachAncestorDirectory,
-    forEachChild,
     forEachChildRecursively,
+    forEachDynamicImportOrRequireCall,
     forEachEmittedFile,
     forEachEntry,
     forEachKey,
@@ -162,7 +162,6 @@ import {
     hasExtension,
     HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
-    hasJSDocNodes,
     hasJSFileExtension,
     hasJsonModuleEmitEnabled,
     hasProperty,
@@ -200,7 +199,6 @@ import {
     isImportTypeNode,
     isInJSFile,
     isJSDocImportTag,
-    isLiteralImportTypeNode,
     isModifier,
     isModuleDeclaration,
     isObjectLiteralExpression,
@@ -2120,7 +2118,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeRef: FileReference, sourceFile: SourceFile) {
-        return getResolvedTypeReferenceDirective(sourceFile, typeRef.fileName, typeRef.resolutionMode || sourceFile.impliedNodeFormat);
+        return getResolvedTypeReferenceDirective(
+            sourceFile,
+            typeRef.fileName,
+            getModeForTypeReferenceDirectiveInFile(typeRef, sourceFile),
+        );
     }
 
     function forEachResolvedModule(
@@ -2648,11 +2650,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const moduleNames = getModuleNames(newSourceFile);
             const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
             (resolvedModulesProcessing ??= new Map()).set(newSourceFile.path, resolutions);
+            const optionsForFile = getCompilerOptionsForFile(newSourceFile);
             // ensure that module resolution results are still correct
             const resolutionsChanged = hasChangesInResolutions(
                 moduleNames,
                 resolutions,
-                name => oldProgram.getResolvedModule(newSourceFile, name.text, getModeForUsageLocation(newSourceFile, name)),
+                name => oldProgram.getResolvedModule(newSourceFile, name.text, getModeForUsageLocationWorker(newSourceFile, name, optionsForFile)),
                 moduleResolutionIsEqualTo,
             );
             if (resolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
@@ -2663,7 +2666,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const typeReferenceResolutionsChanged = hasChangesInResolutions(
                 typesReferenceDirectives,
                 typeReferenceResolutions,
-                name => oldProgram.getResolvedTypeReferenceDirective(newSourceFile, getTypeReferenceResolutionName(name), getModeForFileReference(name, newSourceFile.impliedNodeFormat)),
+                name =>
+                    oldProgram.getResolvedTypeReferenceDirective(
+                        newSourceFile,
+                        getTypeReferenceResolutionName(name),
+                        getModeForTypeReferenceDirectiveInFile(name, newSourceFile),
+                    ),
                 typeDirectiveIsEqualTo,
             );
             if (typeReferenceResolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
@@ -3511,7 +3519,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
-            collectDynamicImportOrRequireOrJsDocImportCalls(file);
+            forEachDynamicImportOrRequireCall(file, /*includeTypeSpaceImports*/ true, /*requireStringLiteralLikeArgument*/ true, (node, moduleSpecifier) => {
+                setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
+                imports = append(imports, moduleSpecifier);
+            });
         }
 
         file.imports = imports || emptyArray;
@@ -3572,50 +3583,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         }
                     }
                 }
-            }
-        }
-
-        function collectDynamicImportOrRequireOrJsDocImportCalls(file: SourceFile) {
-            const r = /import|require/g;
-            while (r.exec(file.text) !== null) { // eslint-disable-line no-restricted-syntax
-                const node = getNodeAtPosition(file, r.lastIndex);
-                if (isJavaScriptFile && isRequireCall(node, /*requireStringLiteralLikeArgument*/ true)) {
-                    setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
-                    imports = append(imports, node.arguments[0]);
-                }
-                // we have to check the argument list has length of at least 1. We will still have to process these even though we have parsing error.
-                else if (isImportCall(node) && node.arguments.length >= 1 && isStringLiteralLike(node.arguments[0])) {
-                    setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
-                    imports = append(imports, node.arguments[0]);
-                }
-                else if (isLiteralImportTypeNode(node)) {
-                    setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
-                    imports = append(imports, node.argument.literal);
-                }
-                else if (isJavaScriptFile && isJSDocImportTag(node)) {
-                    const moduleNameExpr = getExternalModuleName(node);
-                    if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text) {
-                        setParentRecursive(node, /*incremental*/ false);
-                        imports = append(imports, moduleNameExpr);
-                    }
-                }
-            }
-        }
-
-        /** Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files */
-        function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
-            let current: Node = sourceFile;
-            const getContainingChild = (child: Node) => {
-                if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
-                    return child;
-                }
-            };
-            while (true) {
-                const child = isJavaScriptFile && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
-                if (!child) {
-                    return current;
-                }
-                current = child;
             }
         }
     }
@@ -4044,8 +4011,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const resolvedTypeReferenceDirective = resolutions[index];
             // store resolved type directive on the file
             const fileName = ref.fileName;
-            resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), resolvedTypeReferenceDirective);
-            const mode = ref.resolutionMode || getDefaultResolutionModeForFile(file);
+            const mode = getModeForTypeReferenceDirectiveInFile(ref, file);
+            resolutionsInFile.set(fileName, mode, resolvedTypeReferenceDirective);
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
         }
     }
@@ -4547,7 +4514,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        if (options.allowImportingTsExtensions && !(options.noEmit || options.emitDeclarationOnly)) {
+        if (options.allowImportingTsExtensions && !(options.noEmit || options.emitDeclarationOnly || options.rewriteRelativeImportExtensions)) {
             createOptionValueDiagnostic("allowImportingTsExtensions", Diagnostics.Option_allowImportingTsExtensions_can_only_be_used_when_either_noEmit_or_emitDeclarationOnly_is_set);
         }
 
@@ -5223,6 +5190,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function shouldTransformImportCall(sourceFile: SourceFile): boolean {
         return shouldTransformImportCallWorker(sourceFile, getCompilerOptionsForFile(sourceFile));
+    }
+
+    function getModeForTypeReferenceDirectiveInFile(ref: FileReference, sourceFile: SourceFile) {
+        return ref.resolutionMode || getDefaultResolutionModeForFile(sourceFile);
     }
 }
 

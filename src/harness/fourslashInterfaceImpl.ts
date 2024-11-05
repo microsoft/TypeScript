@@ -257,6 +257,10 @@ export class VerifyNegatable {
     public baselineMapCode(ranges: FourSlash.Range[][], changes: string[] = []): void {
         this.state.baselineMapCode(ranges, changes);
     }
+
+    public getImports(fileName: string, imports: string[]): void {
+        return this.state.verifyGetImports(fileName, imports);
+    }
 }
 
 export interface CompletionsResult {
@@ -657,6 +661,9 @@ export class Verify extends VerifyNegatable {
         this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
 
+    public preparePasteEdits(options: PreparePasteEditsOptions): void {
+        this.state.verifyPreparePasteEdits(options);
+    }
     public pasteEdits(options: PasteEditsOptions): void {
         this.state.verifyPasteEdits(options);
     }
@@ -2017,6 +2024,11 @@ export interface MoveToFileOptions {
     readonly preferences?: ts.UserPreferences;
 }
 
+export interface PreparePasteEditsOptions {
+    readonly providePasteEdits: boolean;
+    readonly copiedTextRange: ts.TextRange[];
+    readonly copiedFromFile: string;
+}
 export interface PasteEditsOptions {
     readonly newFileContents: { readonly [fileName: string]: string; };
     args: ts.PasteEditsArgs;
@@ -2038,4 +2050,9 @@ export interface RenameOptions {
     readonly findInComments?: boolean;
     readonly providePrefixAndSuffixTextForRename?: boolean;
     readonly quotePreference?: "auto" | "double" | "single";
+}
+
+export interface VerifyGetImportsOptions {
+    fileName: string;
+    imports: string[];
 }
