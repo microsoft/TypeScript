@@ -3,9 +3,11 @@ stringEnumLiteralTypes3.ts(10,5): error TS2322: Type 'YesNo' is not assignable t
 stringEnumLiteralTypes3.ts(11,5): error TS2322: Type 'UnknownYesNo' is not assignable to type 'Choice.Yes'.
   Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
 stringEnumLiteralTypes3.ts(12,5): error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
+  Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
 stringEnumLiteralTypes3.ts(18,5): error TS2322: Type 'UnknownYesNo' is not assignable to type 'YesNo'.
   Type 'Choice.Unknown' is not assignable to type 'YesNo'.
 stringEnumLiteralTypes3.ts(19,5): error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
+  Type 'Choice.Unknown' is not assignable to type 'YesNo'.
 stringEnumLiteralTypes3.ts(37,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
 stringEnumLiteralTypes3.ts(39,5): error TS2322: Type 'Choice.No' is not assignable to type 'Choice.Yes'.
 stringEnumLiteralTypes3.ts(40,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'YesNo'.
@@ -38,6 +40,7 @@ stringEnumLiteralTypes3.ts(96,14): error TS2678: Type 'Choice.Unknown' is not co
         a = d;
         ~
 !!! error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
+!!! error TS2322:   Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
     }
     
     function f2(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
@@ -50,6 +53,7 @@ stringEnumLiteralTypes3.ts(96,14): error TS2678: Type 'Choice.Unknown' is not co
         b = d;
         ~
 !!! error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
+!!! error TS2322:   Type 'Choice.Unknown' is not assignable to type 'YesNo'.
     }
     
     function f3(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
