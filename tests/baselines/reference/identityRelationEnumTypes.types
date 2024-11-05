@@ -37,21 +37,21 @@ namespace identityRelationEnumTypes {
 >     : ^^^^^^^^^^^
 >Enum : typeof Enum
 >     : ^^^^^^^^^^^
-}
 
-type Result = identityRelationEnumTypes.Equals<
+    type Result = identityRelationEnumTypes.Equals<
 >Result : true
 >       : ^^^^
 >identityRelationEnumTypes : any
 >                          : ^^^
 
-    identityRelationEnumTypes.Enum,
+        identityRelationEnumTypes.Enum,
 >identityRelationEnumTypes : any
 >                          : ^^^
 
-    identityRelationEnumTypes.EnumValues
+        identityRelationEnumTypes.EnumValues
 >identityRelationEnumTypes : any
 >                          : ^^^
 
->;  // true
+    >;  // true
+}
 

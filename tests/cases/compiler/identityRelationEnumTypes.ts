@@ -10,9 +10,9 @@ namespace identityRelationEnumTypes {
     }
 
     export type EnumValues = typeof Enum[keyof typeof Enum];
-}
 
-type Result = identityRelationEnumTypes.Equals<
-    identityRelationEnumTypes.Enum,
-    identityRelationEnumTypes.EnumValues
->;  // true
+    type Result = identityRelationEnumTypes.Equals<
+        identityRelationEnumTypes.Enum,
+        identityRelationEnumTypes.EnumValues
+    >;  // true
+}

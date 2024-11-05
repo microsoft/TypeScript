@@ -29,20 +29,20 @@ namespace identityRelationEnumTypes {
 >EnumValues : Symbol(EnumValues, Decl(identityRelationEnumTypes.ts, 6, 5))
 >Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 116))
 >Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 116))
+
+    type Result = identityRelationEnumTypes.Equals<
+>Result : Symbol(Result, Decl(identityRelationEnumTypes.ts, 8, 60))
+>identityRelationEnumTypes : Symbol(identityRelationEnumTypes, Decl(identityRelationEnumTypes.ts, 0, 0))
+>Equals : Symbol(Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
+
+        identityRelationEnumTypes.Enum,
+>identityRelationEnumTypes : Symbol(identityRelationEnumTypes, Decl(identityRelationEnumTypes.ts, 0, 0))
+>Enum : Symbol(Enum, Decl(identityRelationEnumTypes.ts, 1, 116))
+
+        identityRelationEnumTypes.EnumValues
+>identityRelationEnumTypes : Symbol(identityRelationEnumTypes, Decl(identityRelationEnumTypes.ts, 0, 0))
+>EnumValues : Symbol(EnumValues, Decl(identityRelationEnumTypes.ts, 6, 5))
+
+    >;  // true
 }
-
-type Result = identityRelationEnumTypes.Equals<
->Result : Symbol(Result, Decl(identityRelationEnumTypes.ts, 9, 1))
->identityRelationEnumTypes : Symbol(identityRelationEnumTypes, Decl(identityRelationEnumTypes.ts, 0, 0))
->Equals : Symbol(identityRelationEnumTypes.Equals, Decl(identityRelationEnumTypes.ts, 0, 37))
-
-    identityRelationEnumTypes.Enum,
->identityRelationEnumTypes : Symbol(identityRelationEnumTypes, Decl(identityRelationEnumTypes.ts, 0, 0))
->Enum : Symbol(identityRelationEnumTypes.Enum, Decl(identityRelationEnumTypes.ts, 1, 116))
-
-    identityRelationEnumTypes.EnumValues
->identityRelationEnumTypes : Symbol(identityRelationEnumTypes, Decl(identityRelationEnumTypes.ts, 0, 0))
->EnumValues : Symbol(identityRelationEnumTypes.EnumValues, Decl(identityRelationEnumTypes.ts, 6, 5))
-
->;  // true
 
