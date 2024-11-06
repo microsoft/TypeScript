@@ -104,3 +104,15 @@ function foo(this: Object | undefined) {
 >i : Symbol(i, Decl(predicateSemantics.ts, 48, 5))
 }
 
+// https://github.com/microsoft/TypeScript/issues/60439
+class X {
+>X : Symbol(X, Decl(predicateSemantics.ts, 52, 1))
+
+  constructor() {
+    const p = new.target ?? 32;
+>p : Symbol(p, Decl(predicateSemantics.ts, 57, 9))
+>new.target : Symbol(X, Decl(predicateSemantics.ts, 52, 1))
+>target : Symbol(X, Decl(predicateSemantics.ts, 52, 1))
+  }
+}
+

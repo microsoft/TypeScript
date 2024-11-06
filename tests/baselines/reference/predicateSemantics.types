@@ -308,3 +308,23 @@ function foo(this: Object | undefined) {
 >     : ^^^^
 }
 
+// https://github.com/microsoft/TypeScript/issues/60439
+class X {
+>X : X
+>  : ^
+
+  constructor() {
+    const p = new.target ?? 32;
+>p : 32 | typeof X
+>  : ^^^^^^^^^^^^^
+>new.target ?? 32 : 32 | typeof X
+>                 : ^^^^^^^^^^^^^
+>new.target : typeof X
+>           : ^^^^^^^^
+>target : typeof X
+>       : ^^^^^^^^
+>32 : 32
+>   : ^^
+  }
+}
+

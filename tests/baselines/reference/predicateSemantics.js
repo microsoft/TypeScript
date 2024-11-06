@@ -55,6 +55,13 @@ function foo(this: Object | undefined) {
   const f = (maybe, i++) ?? true; // error
 }
 
+// https://github.com/microsoft/TypeScript/issues/60439
+class X {
+  constructor() {
+    const p = new.target ?? 32;
+  }
+}
+
 
 //// [predicateSemantics.js]
 var _a, _b, _c, _d, _e, _f, _g, _h, _j;
@@ -106,3 +113,12 @@ function foo() {
     var e = (_h = (i++, i++)) !== null && _h !== void 0 ? _h : true; // error
     var f = (_j = (maybe, i++)) !== null && _j !== void 0 ? _j : true; // error
 }
+// https://github.com/microsoft/TypeScript/issues/60439
+var X = /** @class */ (function () {
+    function X() {
+        var _newTarget = this.constructor;
+        var _a;
+        var p = (_a = _newTarget) !== null && _a !== void 0 ? _a : 32;
+    }
+    return X;
+}());
