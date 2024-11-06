@@ -201,6 +201,7 @@ import {
     getParseTreeNode,
     getPathComponents,
     getPathFromPathComponents,
+    getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
     getResolutionModeOverride,
     getRootLength,
@@ -498,6 +499,7 @@ import {
     ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    resolvePath,
     returnFalse,
     ReturnStatement,
     returnUndefined,
@@ -4304,7 +4306,7 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
 
 /** @internal */
 export function shouldRewriteModuleSpecifier(specifier: string, compilerOptions: CompilerOptions): boolean {
-    return !!compilerOptions.rewriteRelativeImportExtensions && pathIsRelative(specifier) && !isDeclarationFileName(specifier);
+    return !!compilerOptions.rewriteRelativeImportExtensions && pathIsRelative(specifier) && !isDeclarationFileName(specifier) && hasTSFileExtension(specifier);
 }
 
 /** @internal */
@@ -6488,6 +6490,21 @@ export function getPossibleOriginalInputExtensionForExtension(path: string): Ext
         fileExtensionIsOneOf(path, [Extension.Dcts, Extension.Cjs, Extension.Cts]) ? [Extension.Cts, Extension.Cjs] :
         fileExtensionIsOneOf(path, [`.d.json.ts`]) ? [Extension.Json] :
         [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
+}
+
+/** @internal */
+export function getPossibleOriginalInputPathWithoutChangingExt(
+    filePath: string,
+    ignoreCase: boolean,
+    outputDir: string | undefined,
+    getCommonSourceDirectory: () => string,
+): string {
+    return outputDir ?
+        resolvePath(
+            getCommonSourceDirectory(),
+            getRelativePathFromDirectory(outputDir, filePath, ignoreCase),
+        ) :
+        filePath;
 }
 
 /**

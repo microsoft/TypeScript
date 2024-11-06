@@ -80,12 +80,15 @@ import {
     ImportSpecifier,
     insertImports,
     InternalSymbolName,
+    isDefaultImport,
     isExternalModuleReference,
     isFullSourceFile,
     isIdentifier,
     isImportable,
+    isImportClause,
     isImportDeclaration,
     isImportEqualsDeclaration,
+    isImportSpecifier,
     isIntrinsicJsxName,
     isJSDocImportTag,
     isJsxClosingElement,
@@ -228,6 +231,7 @@ export interface ImportAdder {
     addImportFromDiagnostic: (diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) => void;
     addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) => void;
     addImportForNonExistentExport: (exportName: string, exportingFileName: string, exportKind: ExportKind, exportedMeanings: SymbolFlags, isImportUsageValidAsTypeOnly: boolean) => void;
+    addImportForModuleSymbol: (symbolAlias: Symbol, isValidTypeOnlyUseSite: boolean, referenceImport: ImportOrRequireAliasDeclaration) => void;
     addImportForUnresolvedIdentifier: (context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean) => void;
     addVerbatimImport: (declaration: AnyImportOrRequireStatement | ImportOrRequireAliasDeclaration) => void;
     removeExistingImport: (declaration: ImportOrRequireAliasDeclaration) => void;
@@ -257,7 +261,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
     type NewImportsKey = `${0 | 1}|${string}`;
     /** Use `getNewImportEntry` for access */
     const newImports = new Map<NewImportsKey, Mutable<ImportsCollection & { useRequire: boolean; }>>();
-    return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes, hasFixes, addImportForUnresolvedIdentifier, addImportForNonExistentExport, removeExistingImport, addVerbatimImport };
+    return { addImportFromDiagnostic, addImportFromExportedSymbol, addImportForModuleSymbol, writeFixes, hasFixes, addImportForUnresolvedIdentifier, addImportForNonExistentExport, removeExistingImport, addVerbatimImport };
 
     function addVerbatimImport(declaration: AnyImportOrRequireStatement | ImportOrRequireAliasDeclaration) {
         verbatimImports.add(declaration);
@@ -276,7 +280,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
     }
 
     function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) {
-        const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
+        const moduleSymbol = Debug.checkDefined(exportedSymbol.parent, "Expected exported symbol to have module symbol as parent");
         const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
         const checker = program.getTypeChecker();
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
@@ -315,6 +319,74 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
             };
             addImport({ fix, symbolName: localName ?? symbolName, errorIdentifierText: undefined });
         }
+    }
+
+    function addImportForModuleSymbol(symbolAlias: Symbol, isValidTypeOnlyUseSite: boolean, referenceImport: ImportOrRequireAliasDeclaration) {
+        // Adds import for module, import alias will be symbolAlias.name
+        const checker = program.getTypeChecker();
+        const moduleSymbol = checker.getAliasedSymbol(symbolAlias);
+        Debug.assert(moduleSymbol.flags & SymbolFlags.Module, "Expected symbol to be a module");
+        const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
+        const moduleSpecifierResult = moduleSpecifiers.getModuleSpecifiersWithCacheInfo(moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences, /*options*/ undefined, /*forAutoImport*/ true);
+
+        const useRequire = shouldUseRequire(sourceFile, program);
+
+        // Copy the type-only status from the reference import
+        let addAsTypeOnly = getAddAsTypeOnly(
+            isValidTypeOnlyUseSite,
+            /*isForNewImportDeclaration*/ true,
+            /*symbol*/ undefined,
+            symbolAlias.flags,
+            program.getTypeChecker(),
+            compilerOptions,
+        );
+        addAsTypeOnly = addAsTypeOnly === AddAsTypeOnly.Allowed && isTypeOnlyImportDeclaration(referenceImport) ? AddAsTypeOnly.Required : AddAsTypeOnly.Allowed;
+
+        // Copy the kind of import
+        const importKind = isImportDeclaration(referenceImport) ?
+            isDefaultImport(referenceImport) ? ImportKind.Default : ImportKind.Namespace :
+            isImportSpecifier(referenceImport) ? ImportKind.Named :
+            isImportClause(referenceImport) && !!referenceImport.name ? ImportKind.Default : ImportKind.Namespace;
+
+        const exportInfo = [{
+            symbol: symbolAlias,
+            moduleSymbol,
+            moduleFileName: moduleSymbol.declarations?.[0]?.getSourceFile()?.fileName,
+            exportKind: ExportKind.Module,
+            targetFlags: symbolAlias.flags,
+            isFromPackageJson: false,
+        }];
+
+        const existingFix = getImportFixForSymbol(
+            sourceFile,
+            exportInfo,
+            program,
+            /*position*/ undefined,
+            !!isValidTypeOnlyUseSite,
+            useRequire,
+            host,
+            preferences,
+        );
+
+        let fix: FixAddNewImport | ImportFixWithModuleSpecifier;
+        if (existingFix && importKind !== ImportKind.Namespace) {
+            fix = {
+                ...existingFix,
+                addAsTypeOnly,
+                importKind,
+            };
+        }
+        else {
+            fix = {
+                kind: ImportFixKind.AddNew,
+                moduleSpecifierKind: existingFix !== undefined ? existingFix.moduleSpecifierKind : moduleSpecifierResult.kind,
+                moduleSpecifier: existingFix !== undefined ? existingFix.moduleSpecifier : first(moduleSpecifierResult.moduleSpecifiers),
+                importKind,
+                addAsTypeOnly,
+                useRequire,
+            };
+        }
+        addImport({ fix, symbolName: symbolAlias.name, errorIdentifierText: undefined });
     }
 
     function addImportForNonExistentExport(exportName: string, exportingFileName: string, exportKind: ExportKind, exportedMeanings: SymbolFlags, isImportUsageValidAsTypeOnly: boolean) {
@@ -891,9 +963,10 @@ function getAllExportInfoForSymbol(importingFile: SourceFile | FutureSourceFile,
     const moduleSymbolExcluded = moduleSourceFile && isFileExcluded(moduleSourceFile as SourceFile);
     return getExportInfoMap(importingFile, host, program, preferences, cancellationToken)
         .search(importingFile.path, preferCapitalized, name => name === symbolName, info => {
+            const checker = getChecker(info[0].isFromPackageJson);
             if (
-                getChecker(info[0].isFromPackageJson).getMergedSymbol(skipAlias(info[0].symbol, getChecker(info[0].isFromPackageJson))) === symbol
-                && (moduleSymbolExcluded || info.some(i => i.moduleSymbol === moduleSymbol || i.symbol.parent === moduleSymbol))
+                checker.getMergedSymbol(skipAlias(info[0].symbol, checker)) === symbol
+                && (moduleSymbolExcluded || info.some(i => checker.getMergedSymbol(i.moduleSymbol) === moduleSymbol || i.symbol.parent === moduleSymbol))
             ) {
                 return info;
             }
@@ -1451,6 +1524,8 @@ export function getImportKind(importingFile: SourceFile | FutureSourceFile, expo
             return getExportEqualsImportKind(importingFile, program.getCompilerOptions(), !!forceImportKeyword);
         case ExportKind.UMD:
             return getUmdImportKind(importingFile, program, !!forceImportKeyword);
+        case ExportKind.Module:
+            return ImportKind.Namespace;
         default:
             return Debug.assertNever(exportKind);
     }

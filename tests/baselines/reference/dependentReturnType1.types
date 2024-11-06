@@ -1,0 +1,2008 @@
+//// [tests/cases/compiler/dependentReturnType1.ts] ////
+
+=== dependentReturnType1.ts ===
+interface A {
+    1: number;
+>1 : number
+>  : ^^^^^^
+
+    2: string;
+>2 : string
+>  : ^^^^^^
+}
+
+function f1<T extends 1 | 2>(x: T): A[T] {
+>f1 : <T extends 1 | 2>(x: T) => A[T]
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^^^^    
+>x : T
+>  : ^
+
+    if (x === 1) {
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+
+        return 0; // Ok
+>0 : 0
+>  : ^
+    }
+    else {
+        return 1; // Error
+>1 : 1
+>  : ^
+    }
+}
+
+interface C {
+    1: number;
+>1 : number
+>  : ^^^^^^
+
+    2: string;
+>2 : string
+>  : ^^^^^^
+
+    3: boolean;
+>3 : boolean
+>  : ^^^^^^^
+}
+
+function f2<T extends 1 | 2 | 3>(x: T): C[T] {
+>f2 : <T extends 1 | 2 | 3>(x: T) => C[T]
+>   : ^ ^^^^^^^^^         ^^ ^^ ^^^^^    
+>x : T
+>  : ^
+
+    if (x === 1) {
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+
+        return 0; // Ok
+>0 : 0
+>  : ^
+    }
+    else {
+        return ""; // Error, returned expression needs to have type string & boolean (= never)
+>"" : ""
+>   : ^^
+    }
+}
+
+function f3<T extends 1 | 2 | 3>(x: T): T extends 1 ? number : T extends 2 ? string : T extends 3 ? boolean : never {
+>f3 : <T extends 1 | 2 | 3>(x: T) => T extends 1 ? number : T extends 2 ? string : T extends 3 ? boolean : never
+>   : ^ ^^^^^^^^^         ^^ ^^ ^^^^^                                                                           
+>x : T
+>  : ^
+
+    if (x === 1) {
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+
+        return 0; // Ok
+>0 : 0
+>  : ^
+    }
+    else {
+        return ""; // Error, returned expression needs to have type string & boolean (= never)
+>"" : ""
+>   : ^^
+    }
+}
+
+interface One {
+    a: "a";
+>a : "a"
+>  : ^^^
+
+    b: "b";
+>b : "b"
+>  : ^^^
+
+    c: "c";
+>c : "c"
+>  : ^^^
+
+    d: "d";
+>d : "d"
+>  : ^^^
+}
+
+interface Two {
+    a: "a";
+>a : "a"
+>  : ^^^
+
+    b: "b";
+>b : "b"
+>  : ^^^
+
+    e: "e";
+>e : "e"
+>  : ^^^
+
+    f: "f";
+>f : "f"
+>  : ^^^
+}
+
+interface Three {
+    a: "a";
+>a : "a"
+>  : ^^^
+
+    c: "c";
+>c : "c"
+>  : ^^^
+
+    e: "e";
+>e : "e"
+>  : ^^^
+
+    g: "g";
+>g : "g"
+>  : ^^^
+}
+
+interface Four {
+    a: "a";
+>a : "a"
+>  : ^^^
+
+    d: "d";
+>d : "d"
+>  : ^^^
+
+    f: "f";
+>f : "f"
+>  : ^^^
+
+    g: "g";
+>g : "g"
+>  : ^^^
+}
+// Badly written conditional return type, will not trigger narrowing
+function f10<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four {
+>f10 : <T extends 1 | 2 | 3 | 4>(x: T) => T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four
+>    : ^ ^^^^^^^^^             ^^ ^^ ^^^^^                                                                  
+>x : T
+>  : ^
+
+    if (x === 1 || x === 2) {
+>x === 1 || x === 2 : boolean
+>                   : ^^^^^^^
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+>x === 2 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>2 : 2
+>  : ^
+
+        return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" }; // Error
+>{ a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" } : { a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : "a"
+>  : ^^^
+>"a" : "a"
+>    : ^^^
+>b : "b"
+>  : ^^^
+>"b" : "b"
+>    : ^^^
+>c : "c"
+>  : ^^^
+>"c" : "c"
+>    : ^^^
+>d : "d"
+>  : ^^^
+>"d" : "d"
+>    : ^^^
+>e : "e"
+>  : ^^^
+>"e" : "e"
+>    : ^^^
+>f : "f"
+>  : ^^^
+>"f" : "f"
+>    : ^^^
+    }
+    return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" }; // Error
+>{ a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" } : { a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : "a"
+>  : ^^^
+>"a" : "a"
+>    : ^^^
+>b : "b"
+>  : ^^^
+>"b" : "b"
+>    : ^^^
+>c : "c"
+>  : ^^^
+>"c" : "c"
+>    : ^^^
+>d : "d"
+>  : ^^^
+>"d" : "d"
+>    : ^^^
+>e : "e"
+>  : ^^^
+>"e" : "e"
+>    : ^^^
+>f : "f"
+>  : ^^^
+>"f" : "f"
+>    : ^^^
+>g : "g"
+>  : ^^^
+>"g" : "g"
+>    : ^^^
+}
+// Well written conditional
+function f101<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : T extends 4 ? Four : never {
+>f101 : <T extends 1 | 2 | 3 | 4>(x: T) => T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : T extends 4 ? Four : never
+>     : ^ ^^^^^^^^^             ^^ ^^ ^^^^^                                                                                        
+>x : T
+>  : ^
+
+    if (x === 1 || x === 2) {
+>x === 1 || x === 2 : boolean
+>                   : ^^^^^^^
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+>x === 2 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>2 : 2
+>  : ^
+
+        return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" }; // Ok
+>{ a: "a", b: "b", c: "c", d: "d", e: "e", f: "f" } : { a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : "a"
+>  : ^^^
+>"a" : "a"
+>    : ^^^
+>b : "b"
+>  : ^^^
+>"b" : "b"
+>    : ^^^
+>c : "c"
+>  : ^^^
+>"c" : "c"
+>    : ^^^
+>d : "d"
+>  : ^^^
+>"d" : "d"
+>    : ^^^
+>e : "e"
+>  : ^^^
+>"e" : "e"
+>    : ^^^
+>f : "f"
+>  : ^^^
+>"f" : "f"
+>    : ^^^
+    }
+    // Excess property becomes a problem with the change,
+    // because we now check assignability to a narrower type...
+    return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" }; // EPC Error
+>{ a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" } : { a: "a"; b: string; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : "a"
+>  : ^^^
+>"a" : "a"
+>    : ^^^
+>b : string
+>  : ^^^^^^
+>"b" : "b"
+>    : ^^^
+>c : "c"
+>  : ^^^
+>"c" : "c"
+>    : ^^^
+>d : "d"
+>  : ^^^
+>"d" : "d"
+>    : ^^^
+>e : "e"
+>  : ^^^
+>"e" : "e"
+>    : ^^^
+>f : "f"
+>  : ^^^
+>"f" : "f"
+>    : ^^^
+>g : "g"
+>  : ^^^
+>"g" : "g"
+>    : ^^^
+}
+
+// This will not work for several reasons:
+// - first because the constraint of type parameter `Arg` is generic,
+//   so attempting to narrow the type of `arg` in the `if` would result in type `Arg & LeftIn`,
+//   which when substituted in the conditional return type, would not further resolve that conditional type
+// - second because the `else` branch would never work because we don't narrow the type of `arg` to `Arg & RightIn` 
+function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(
+>conditionalProducingIf : <LeftIn, RightIn, LeftOut, RightOut, Arg extends LeftIn | RightIn>(arg: Arg, cond: (arg: LeftIn | RightIn) => arg is LeftIn, produceLeftOut: (arg: LeftIn) => LeftOut, produceRightOut: (arg: RightIn) => RightOut) => Arg extends LeftIn ? LeftOut : Arg extends RightIn ? RightOut : never
+>                       : ^      ^^       ^^       ^^        ^^   ^^^^^^^^^                ^^   ^^   ^^    ^^                                        ^^              ^^                        ^^               ^^                          ^^^^^                                                                     
+
+    arg: Arg,
+>arg : Arg
+>    : ^^^
+
+    cond: (arg: LeftIn | RightIn) => arg is LeftIn,
+>cond : (arg: LeftIn | RightIn) => arg is LeftIn
+>     : ^   ^^                ^^^^^             
+>arg : LeftIn | RightIn
+>    : ^^^^^^^^^^^^^^^^
+
+    produceLeftOut: (arg: LeftIn) => LeftOut,
+>produceLeftOut : (arg: LeftIn) => LeftOut
+>               : ^   ^^      ^^^^^       
+>arg : LeftIn
+>    : ^^^^^^
+
+    produceRightOut: (arg: RightIn) => RightOut):
+>produceRightOut : (arg: RightIn) => RightOut
+>                : ^   ^^       ^^^^^        
+>arg : RightIn
+>    : ^^^^^^^
+
+    Arg extends LeftIn ? LeftOut : Arg extends RightIn ? RightOut : never
+{
+    if (cond(arg)) {
+>cond(arg) : boolean
+>          : ^^^^^^^
+>cond : (arg: LeftIn | RightIn) => arg is LeftIn
+>     : ^   ^^                ^^^^^             
+>arg : Arg
+>    : ^^^
+
+        return produceLeftOut(arg);
+>produceLeftOut(arg) : LeftOut
+>                    : ^^^^^^^
+>produceLeftOut : (arg: LeftIn) => LeftOut
+>               : ^   ^^      ^^^^^       
+>arg : Arg & LeftIn
+>    : ^^^^^^^^^^^^
+
+    } else {
+        return produceRightOut(arg as RightIn);
+>produceRightOut(arg as RightIn) : RightOut
+>                                : ^^^^^^^^
+>produceRightOut : (arg: RightIn) => RightOut
+>                : ^   ^^       ^^^^^        
+>arg as RightIn : RightIn
+>               : ^^^^^^^
+>arg : Arg
+>    : ^^^
+    }
+}
+
+interface Animal {
+    name: string;
+>name : string
+>     : ^^^^^^
+}
+
+interface Dog extends Animal {
+    bark: () => string;
+>bark : () => string
+>     : ^^^^^^      
+}
+
+// This would be unsafe to narrow.
+declare function isDog(x: Animal): x is Dog;
+>isDog : (x: Animal) => x is Dog
+>      : ^ ^^      ^^^^^        
+>x : Animal
+>  : ^^^^^^
+
+declare function doggy(x: Dog): number;
+>doggy : (x: Dog) => number
+>      : ^ ^^   ^^^^^      
+>x : Dog
+>  : ^^^
+
+function f12<T extends Animal>(x: T): T extends Dog ? number : string {
+>f12 : <T extends Animal>(x: T) => T extends Dog ? number : string
+>    : ^ ^^^^^^^^^      ^^ ^^ ^^^^^                               
+>x : T
+>  : ^
+
+    if (isDog(x)) { // `x` has type `T & Dog` here
+>isDog(x) : boolean
+>         : ^^^^^^^
+>isDog : (x: Animal) => x is Dog
+>      : ^ ^^      ^^^^^        
+>x : T
+>  : ^
+
+        return doggy(x);
+>doggy(x) : number
+>         : ^^^^^^
+>doggy : (x: Dog) => number
+>      : ^ ^^   ^^^^^      
+>x : T & Dog
+>  : ^^^^^^^
+    }
+    return ""; // Error: Should not work because we can't express "not a Dog" in the type system
+>"" : ""
+>   : ^^
+}
+
+// Cannot narrow `keyof` too eagerly or something like the below breaks
+function f<Entry extends { [index: string]: number | boolean }, EntryId extends keyof Entry>(entry: EntryId): Entry[EntryId] {
+>f : <Entry extends { [index: string]: number | boolean; }, EntryId extends keyof Entry>(entry: EntryId) => Entry[EntryId]
+>  : ^     ^^^^^^^^^                                      ^^       ^^^^^^^^^           ^^     ^^       ^^^^^              
+>index : string
+>      : ^^^^^^
+>entry : EntryId
+>      : ^^^^^^^
+
+    const entries = {} as Entry;
+>entries : Entry
+>        : ^^^^^
+>{} as Entry : Entry
+>            : ^^^^^
+>{} : {}
+>   : ^^
+
+    return entries[entry];
+>entries[entry] : Entry[EntryId]
+>               : ^^^^^^^^^^^^^^
+>entries : Entry
+>        : ^^^^^
+>entry : EntryId
+>      : ^^^^^^^
+}
+
+// Works the same as before
+declare function takeA(val: 'A'): void;
+>takeA : (val: "A") => void
+>      : ^   ^^   ^^^^^    
+>val : "A"
+>    : ^^^
+
+export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
+>bounceAndTakeIfA : <AB extends "A" | "B">(value: AB) => AB
+>                 : ^  ^^^^^^^^^         ^^     ^^  ^^^^^  
+>value : AB
+>      : ^^
+
+    if (value === 'A') {
+>value === 'A' : boolean
+>              : ^^^^^^^
+>value : AB
+>      : ^^
+>'A' : "A"
+>    : ^^^
+
+        takeA(value);
+>takeA(value) : void
+>             : ^^^^
+>takeA : (val: "A") => void
+>      : ^   ^^   ^^^^^    
+>value : "A"
+>      : ^^^
+
+        takeAB(value);
+>takeAB(value) : void
+>              : ^^^^
+>takeAB : (val: AB) => void
+>       : ^   ^^  ^^^^^    
+>value : AB
+>      : ^^
+
+        return value;
+>value : AB
+>      : ^^
+    }
+
+    return value;
+>value : AB
+>      : ^^
+
+    function takeAB(val: AB): void {}
+>takeAB : (val: AB) => void
+>       : ^   ^^  ^^^^^    
+>val : AB
+>    : ^^
+}
+
+// Works the same as before
+export function bbb<AB extends "a" | "b">(value: AB): "a" {
+>bbb : <AB extends "a" | "b">(value: AB) => "a"
+>    : ^  ^^^^^^^^^         ^^     ^^  ^^^^^   
+>value : AB
+>      : ^^
+
+    if (value === "a") {
+>value === "a" : boolean
+>              : ^^^^^^^
+>value : AB
+>      : ^^
+>"a" : "a"
+>    : ^^^
+
+        return value;
+>value : "a"
+>      : ^^^
+    }
+    return "a";
+>"a" : "a"
+>    : ^^^
+}
+
+class Unnamed {
+>Unnamed : Unnamed
+>        : ^^^^^^^
+
+    root!: { name: string };
+>root : { name: string; }
+>     : ^^^^^^^^      ^^^
+>name : string
+>     : ^^^^^^
+
+    // Error: No narrowing because parameter is optional but `T` doesn't allow for undefined
+    name<T extends string>(name?: T): T extends string ? this : T extends undefined ? string : never {
+>name : <T extends string>(name?: T) => T extends string ? this : T extends undefined ? string : never
+>     : ^ ^^^^^^^^^      ^^    ^^^ ^^^^^                                                              
+>name : T | undefined
+>     : ^^^^^^^^^^^^^
+
+        if (typeof name === 'undefined') {
+>typeof name === 'undefined' : boolean
+>                            : ^^^^^^^
+>typeof name : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : T | undefined
+>     : ^^^^^^^^^^^^^
+>'undefined' : "undefined"
+>            : ^^^^^^^^^^^
+
+            return this.root.name;
+>this.root.name : string
+>               : ^^^^^^
+>this.root : { name: string; }
+>          : ^^^^^^^^      ^^^
+>this : this
+>     : ^^^^
+>root : { name: string; }
+>     : ^^^^^^^^      ^^^
+>name : string
+>     : ^^^^^^
+        }
+        return this;
+>this : this
+>     : ^^^^
+    }
+
+    // Good conditional
+    name2<T extends string | undefined>(name?: T): T extends string ? this : T extends undefined ? string : never {
+>name2 : <T extends string | undefined>(name?: T) => T extends string ? this : T extends undefined ? string : never
+>      : ^ ^^^^^^^^^                  ^^    ^^^ ^^^^^                                                              
+>name : T | undefined
+>     : ^^^^^^^^^^^^^
+
+        if (typeof name === 'undefined') {
+>typeof name === 'undefined' : boolean
+>                            : ^^^^^^^
+>typeof name : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : T | undefined
+>     : ^^^^^^^^^^^^^
+>'undefined' : "undefined"
+>            : ^^^^^^^^^^^
+
+            return this.root.name; // Ok
+>this.root.name : string
+>               : ^^^^^^
+>this.root : { name: string; }
+>          : ^^^^^^^^      ^^^
+>this : this
+>     : ^^^^
+>root : { name: string; }
+>     : ^^^^^^^^      ^^^
+>name : string
+>     : ^^^^^^
+        }
+        this.root.name = name;
+>this.root.name = name : string
+>                      : ^^^^^^
+>this.root.name : string
+>               : ^^^^^^
+>this.root : { name: string; }
+>          : ^^^^^^^^      ^^^
+>this : this
+>     : ^^^^
+>root : { name: string; }
+>     : ^^^^^^^^      ^^^
+>name : string
+>     : ^^^^^^
+>name : string
+>     : ^^^^^^
+
+        return this; // Ok
+>this : this
+>     : ^^^^
+    }
+
+    // Good conditional, wrong return expressions
+    name3<T extends string | undefined>(name?: T): T extends string ? this : T extends undefined ? string : never {
+>name3 : <T extends string | undefined>(name?: T) => T extends string ? this : T extends undefined ? string : never
+>      : ^ ^^^^^^^^^                  ^^    ^^^ ^^^^^                                                              
+>name : T | undefined
+>     : ^^^^^^^^^^^^^
+
+        if (typeof name === 'undefined') {
+>typeof name === 'undefined' : boolean
+>                            : ^^^^^^^
+>typeof name : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : T | undefined
+>     : ^^^^^^^^^^^^^
+>'undefined' : "undefined"
+>            : ^^^^^^^^^^^
+
+            return this; // Error
+>this : this
+>     : ^^^^
+        }
+        this.root.name = name;
+>this.root.name = name : string
+>                      : ^^^^^^
+>this.root.name : string
+>               : ^^^^^^
+>this.root : { name: string; }
+>          : ^^^^^^^^      ^^^
+>this : this
+>     : ^^^^
+>root : { name: string; }
+>     : ^^^^^^^^      ^^^
+>name : string
+>     : ^^^^^^
+>name : string
+>     : ^^^^^^
+
+        return name; // Error
+>name : T & {}
+>     : ^^^^^^
+    }
+}
+
+// Conditional expressions
+interface Aa {
+    1: number;
+>1 : number
+>  : ^^^^^^
+
+    2: string;
+>2 : string
+>  : ^^^^^^
+
+    3: boolean;
+>3 : boolean
+>  : ^^^^^^^
+}
+
+function trivialConditional<T extends 1 | 2 | 3>(x: T): Aa[T] {
+>trivialConditional : <T extends 1 | 2 | 3>(x: T) => Aa[T]
+>                   : ^ ^^^^^^^^^         ^^ ^^ ^^^^^     
+>x : T
+>  : ^
+
+    if (x !== 1) {
+>x !== 1 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+
+        return x === 2 ? "" : true;
+>x === 2 ? "" : true : true | ""
+>                    : ^^^^^^^^^
+>x === 2 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>2 : 2
+>  : ^
+>"" : ""
+>   : ^^
+>true : true
+>     : ^^^^
+    }
+    else {
+        return 0;
+>0 : 0
+>  : ^
+    }
+}
+
+function conditional<T extends boolean>(x: T):
+>conditional : <T extends boolean>(x: T) => T extends true ? 1 : T extends false ? 2 : never
+>            : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                
+>x : T
+>  : ^
+
+ T extends true ? 1 : T extends false ? 2 : never {
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    return x ? 1 : 2; // Ok
+>x ? 1 : 2 : 1 | 2
+>          : ^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function contextualConditional<T extends "a" | "b">(
+>contextualConditional : <T extends "a" | "b">(x: T) => T extends "a" ? "a" : T extends "b" ? number : never
+>                      : ^ ^^^^^^^^^         ^^ ^^ ^^^^^                                                    
+
+    x: T
+>x : T
+>  : ^
+
+): T extends "a" ? "a" : T extends "b" ? number : never {
+    return x === "a" ? x : parseInt(x); // Ok
+>x === "a" ? x : parseInt(x) : number | "a"
+>                            : ^^^^^^^^^^^^
+>x === "a" : boolean
+>          : ^^^^^^^
+>x : T
+>  : ^
+>"a" : "a"
+>    : ^^^
+>x : "a"
+>  : ^^^
+>parseInt(x) : number
+>            : ^^^^^^
+>parseInt : (string: string, radix?: number) => number
+>         : ^      ^^      ^^     ^^^      ^^^^^      
+>x : "b"
+>  : ^^^
+}
+
+function conditionalWithError<T extends "a" | "b">(
+>conditionalWithError : <T extends "a" | "b">(x: T) => T extends "a" ? number : T extends "b" ? string : never
+>                     : ^ ^^^^^^^^^         ^^ ^^ ^^^^^                                                       
+
+    x: T
+>x : T
+>  : ^
+
+): T extends "a" ? number : T extends "b" ? string : never {
+    return x === "a" ? x : parseInt(x); // Error
+>x === "a" ? x : parseInt(x) : number | "a"
+>                            : ^^^^^^^^^^^^
+>x === "a" : boolean
+>          : ^^^^^^^
+>x : T
+>  : ^
+>"a" : "a"
+>    : ^^^
+>x : "a"
+>  : ^^^
+>parseInt(x) : number
+>            : ^^^^^^
+>parseInt : (string: string, radix?: number) => number
+>         : ^      ^^      ^^     ^^^      ^^^^^      
+>x : "b"
+>  : ^^^
+}
+
+// Multiple indexed type reductions
+interface BB {
+    "a": number;
+>"a" : number
+>    : ^^^^^^
+
+    [y: number]: string;
+>y : number
+>  : ^^^^^^
+}
+
+interface AA<T extends keyof BB> {
+    "c": BB[T];
+>"c" : BB[T]
+>    : ^^^^^
+
+    "d": boolean,
+>"d" : boolean
+>    : ^^^^^^^
+}
+
+function reduction<T extends keyof BB, U extends "c" | "d">(x: T, y: U): AA<T>[U] {
+>reduction : <T extends keyof BB, U extends "c" | "d">(x: T, y: U) => AA<T>[U]
+>          : ^ ^^^^^^^^^        ^^ ^^^^^^^^^         ^^ ^^ ^^ ^^ ^^^^^        
+>x : T
+>  : ^
+>y : U
+>  : ^
+
+    if (y === "c" && x === "a") {
+>y === "c" && x === "a" : boolean
+>                       : ^^^^^^^
+>y === "c" : boolean
+>          : ^^^^^^^
+>y : U
+>  : ^
+>"c" : "c"
+>    : ^^^
+>x === "a" : boolean
+>          : ^^^^^^^
+>x : T
+>  : ^
+>"a" : "a"
+>    : ^^^
+
+        // AA<T>[U='c'] -> BB[T]
+        // BB[T='a'] -> number
+        return 0; // Ok
+>0 : 0
+>  : ^
+    }
+
+    return undefined as never;
+>undefined as never : never
+>                   : ^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+// Substitution types are not narrowed
+function subsCond<T extends 1 | 2 | 3>(
+>subsCond : <T extends 1 | 2 | 3>(x: T) => T extends 1 | 2 ? T extends 1 ? string : T extends 2 ? boolean : never : T extends 3 ? number : never
+>         : ^ ^^^^^^^^^         ^^ ^^ ^^^^^                                                                                                     
+
+    x: T,
+>x : T
+>  : ^
+
+): T extends 1 | 2
+    ? T extends 1
+        ? string
+        : T extends 2
+          ? boolean
+          : never
+    : T extends 3
+      ? number
+      : never {
+    if (x === 1) {
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+
+        return "";
+>"" : ""
+>   : ^^
+
+    } else if (x == 2) {
+>x == 2 : boolean
+>       : ^^^^^^^
+>x : T
+>  : ^
+>2 : 2
+>  : ^
+
+        return true;
+>true : true
+>     : ^^^^
+    }
+    return 3;
+>3 : 3
+>  : ^
+}
+
+
+// Unsafe: check types overlap
+declare function q(x: object): x is { b: number };
+>q : (x: object) => x is { b: number; }
+>  : ^ ^^      ^^^^^                   
+>x : object
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+
+function foo<T extends { a: string } | { b: number }>(
+>foo : <T extends { a: string; } | { b: number; }>(x: T) => T extends { a: string; } ? number : T extends { b: number; } ? string : never
+>    : ^ ^^^^^^^^^                               ^^ ^^ ^^^^^                                                                             
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+
+    x: T,
+>x : T
+>  : ^
+
+): T extends { a: string } ? number : T extends { b: number } ? string : never {
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+
+    if (q(x)) {
+>q(x) : boolean
+>     : ^^^^^^^
+>q : (x: object) => x is { b: number; }
+>  : ^ ^^      ^^^^^                   
+>x : { a: string; } | { b: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
+
+        x.b;
+>x.b : number
+>    : ^^^^^^
+>x : { b: number; }
+>  : ^^^^^      ^^^
+>b : number
+>  : ^^^^^^
+
+        return "";
+>"" : ""
+>   : ^^
+    }
+    x.a;
+>x.a : string
+>    : ^^^^^^
+>x : { a: string; }
+>  : ^^^^^      ^^^
+>a : string
+>  : ^^^^^^
+
+    return 1;
+>1 : 1
+>  : ^
+}
+
+let y = { a: "", b: 1 }
+>y : { a: string; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: "", b: 1 } : { a: string; b: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+>b : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+const r = foo<{ a: string }>(y); // type says number but actually string
+>r : number
+>  : ^^^^^^
+>foo<{ a: string }>(y) : number
+>                      : ^^^^^^
+>foo : <T extends { a: string; } | { b: number; }>(x: T) => T extends { a: string; } ? number : T extends { b: number; } ? string : never
+>    : ^ ^^^^^^^^^                               ^^ ^^ ^^^^^                                                                             
+>a : string
+>  : ^^^^^^
+>y : { a: string; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type HelperCond<T, A, R1, B, R2> = T extends A ? R1 : T extends B ? R2 : never;
+>HelperCond : HelperCond<T, A, R1, B, R2>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// We don't narrow the return type because the conditionals are not distributive
+function foo2<U extends string | number, V extends boolean>(x: U, y: V):
+>foo2 : <U extends string | number, V extends boolean>(x: U, y: V) => HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>
+>     : ^ ^^^^^^^^^               ^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^                                                                                    
+>x : U
+>  : ^
+>y : V
+>  : ^
+
+    HelperCond<{ x: U, y: V },
+>x : U
+>  : ^
+>y : V
+>  : ^
+
+        { x: string, y: true }, 1,
+>x : string
+>  : ^^^^^^
+>y : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+
+        { x: number, y: false }, 2> {
+>x : number
+>  : ^^^^^^
+>y : false
+>  : ^^^^^
+>false : false
+>      : ^^^^^
+
+    if (typeof x === "string" && y === true) {
+>typeof x === "string" && y === true : boolean
+>                                    : ^^^^^^^
+>typeof x === "string" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : U
+>  : ^
+>"string" : "string"
+>         : ^^^^^^^^
+>y === true : boolean
+>           : ^^^^^^^
+>y : V
+>  : ^
+>true : true
+>     : ^^^^
+
+        return 1; // Error
+>1 : 1
+>  : ^
+    }
+    if (typeof x === "number" && y === false) {
+>typeof x === "number" && y === false : boolean
+>                                     : ^^^^^^^
+>typeof x === "number" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : U
+>  : ^
+>"number" : "number"
+>         : ^^^^^^^^
+>y === false : boolean
+>            : ^^^^^^^
+>y : V
+>  : ^
+>false : false
+>      : ^^^^^
+
+        return 2; // Error
+>2 : 2
+>  : ^
+    }
+    return 0; // Error
+>0 : 0
+>  : ^
+}
+
+// From https://github.com/microsoft/TypeScript/issues/24929#issue-332087943
+declare function isString(s: unknown): s is string;
+>isString : (s: unknown) => s is string
+>         : ^ ^^       ^^^^^           
+>s : unknown
+>  : ^^^^^^^
+
+// capitalize a string or each element of an array of strings
+function capitalize<T extends string | string[]>(
+>capitalize : <T extends string | string[]>(input: T) => T extends string[] ? string[] : T extends string ? string : never
+>           : ^ ^^^^^^^^^                 ^^     ^^ ^^^^^                                                                 
+
+    input: T
+>input : T
+>      : ^
+
+): T extends string[] ? string[] : T extends string ? string : never {
+    if (isString(input)) {
+>isString(input) : boolean
+>                : ^^^^^^^
+>isString : (s: unknown) => s is string
+>         : ^ ^^       ^^^^^           
+>input : string | string[]
+>      : ^^^^^^^^^^^^^^^^^
+
+        return input[0].toUpperCase() + input.slice(1); // Ok
+>input[0].toUpperCase() + input.slice(1) : string
+>                                        : ^^^^^^
+>input[0].toUpperCase() : string
+>                       : ^^^^^^
+>input[0].toUpperCase : () => string
+>                     : ^^^^^^      
+>input[0] : string
+>         : ^^^^^^
+>input : string
+>      : ^^^^^^
+>0 : 0
+>  : ^
+>toUpperCase : () => string
+>            : ^^^^^^      
+>input.slice(1) : string
+>               : ^^^^^^
+>input.slice : (start?: number, end?: number) => string
+>            : ^     ^^^      ^^   ^^^      ^^^^^      
+>input : string
+>      : ^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
+>1 : 1
+>  : ^
+
+    } else {
+        return input.map(elt => capitalize(elt)); // Ok
+>input.map(elt => capitalize(elt)) : string[]
+>                                  : ^^^^^^^^
+>input.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>          : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>input : string[]
+>      : ^^^^^^^^
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>elt => capitalize(elt) : (elt: string) => string
+>                       : ^   ^^^^^^^^^^^^^^^^^^^
+>elt : string
+>    : ^^^^^^
+>capitalize(elt) : string
+>                : ^^^^^^
+>capitalize : <T extends string | string[]>(input: T) => T extends string[] ? string[] : T extends string ? string : never
+>           : ^ ^^^^^^^^^                 ^^     ^^ ^^^^^                                                                 
+>elt : string
+>    : ^^^^^^
+    }
+}
+
+function badCapitalize<T extends string | string[]>(
+>badCapitalize : <T extends string | string[]>(input: T) => T extends string[] ? string[] : T extends string ? string : never
+>              : ^ ^^^^^^^^^                 ^^     ^^ ^^^^^                                                                 
+
+    input: T
+>input : T
+>      : ^
+
+): T extends string[] ? string[] : T extends string ? string : never {
+    if (isString(input)) {
+>isString(input) : boolean
+>                : ^^^^^^^
+>isString : (s: unknown) => s is string
+>         : ^ ^^       ^^^^^           
+>input : string | string[]
+>      : ^^^^^^^^^^^^^^^^^
+
+        return input[0].toUpperCase() + input.slice(1); // Ok
+>input[0].toUpperCase() + input.slice(1) : string
+>                                        : ^^^^^^
+>input[0].toUpperCase() : string
+>                       : ^^^^^^
+>input[0].toUpperCase : () => string
+>                     : ^^^^^^      
+>input[0] : string
+>         : ^^^^^^
+>input : string
+>      : ^^^^^^
+>0 : 0
+>  : ^
+>toUpperCase : () => string
+>            : ^^^^^^      
+>input.slice(1) : string
+>               : ^^^^^^
+>input.slice : (start?: number, end?: number) => string
+>            : ^     ^^^      ^^   ^^^      ^^^^^      
+>input : string
+>      : ^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
+>1 : 1
+>  : ^
+
+    } else {
+        return input[0].toUpperCase() + input.slice(1); // Bad, error
+>input[0].toUpperCase() + input.slice(1) : string
+>                                        : ^^^^^^
+>input[0].toUpperCase() : string
+>                       : ^^^^^^
+>input[0].toUpperCase : () => string
+>                     : ^^^^^^      
+>input[0] : string
+>         : ^^^^^^
+>input : string[]
+>      : ^^^^^^^^
+>0 : 0
+>  : ^
+>toUpperCase : () => string
+>            : ^^^^^^      
+>input.slice(1) : string[]
+>               : ^^^^^^^^
+>input.slice : (start?: number, end?: number) => string[]
+>            : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
+>input : string[]
+>      : ^^^^^^^^
+>slice : (start?: number, end?: number) => string[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+    }
+}
+
+// No narrowing because conditional's extends type is different from type parameter constraint types
+function voidRet<T extends { a: string } | undefined>(
+>voidRet : <T extends { a: string; } | undefined>(x: T) => T extends {} ? void : T extends undefined ? number : never
+>        : ^ ^^^^^^^^^                          ^^ ^^ ^^^^^                                                          
+>a : string
+>  : ^^^^^^
+
+    x: T
+>x : T
+>  : ^
+
+): T extends {} ? void : T extends undefined ? number : never {
+    if (x) {
+>x : T
+>  : ^
+
+        return;
+    }
+    return 1;
+>1 : 1
+>  : ^
+}
+
+// Multiple type parameters at once
+function woo<T extends string | number, U extends string | number>(
+>woo : <T extends string | number, U extends string | number>(x: T, y: U) => T extends string ? U extends string ? 1 : U extends number ? 2 : never : T extends number ? U extends number ? 3 : U extends string ? 4 : never : never
+>    : ^ ^^^^^^^^^               ^^ ^^^^^^^^^               ^^ ^^ ^^ ^^ ^^^^^                                                                                                                                                       
+
+    x: T,
+>x : T
+>  : ^
+
+    y: U,
+>y : U
+>  : ^
+
+): T extends string
+    ? U extends string
+        ? 1
+        : U extends number
+          ? 2
+          : never
+    : T extends number
+      ? U extends number
+          ? 3
+          : U extends string
+            ? 4
+            : never
+      : never {
+    if (typeof x === "number" && typeof y === "string") {
+>typeof x === "number" && typeof y === "string" : boolean
+>                                               : ^^^^^^^
+>typeof x === "number" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>"number" : "number"
+>         : ^^^^^^^^
+>typeof y === "string" : boolean
+>                      : ^^^^^^^
+>typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : U
+>  : ^
+>"string" : "string"
+>         : ^^^^^^^^
+
+        return 1; // Good error
+>1 : 1
+>  : ^
+    }
+    return undefined as any;
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+function ttt<T extends string | number, U extends string | number>(
+>ttt : <T extends string | number, U extends string | number>(x: T, y: U) => T extends string ? U extends string ? 1 : U extends number ? 2 : never : T extends number ? U extends number ? 3 : U extends string ? 4 : never : never
+>    : ^ ^^^^^^^^^               ^^ ^^^^^^^^^               ^^ ^^ ^^ ^^ ^^^^^                                                                                                                                                       
+
+    x: T,
+>x : T
+>  : ^
+
+    y: U,
+>y : U
+>  : ^
+
+): T extends string
+    ? U extends string
+        ? 1
+        : U extends number
+          ? 2
+          : never
+    : T extends number
+      ? U extends number
+          ? 3
+          : U extends string
+            ? 4
+            : never
+      : never {
+    if (typeof x === "number" && typeof y === "string") {
+>typeof x === "number" && typeof y === "string" : boolean
+>                                               : ^^^^^^^
+>typeof x === "number" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>"number" : "number"
+>         : ^^^^^^^^
+>typeof y === "string" : boolean
+>                      : ^^^^^^^
+>typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : U
+>  : ^
+>"string" : "string"
+>         : ^^^^^^^^
+
+        return 4; // Ok
+>4 : 4
+>  : ^
+    }
+    
+    return undefined as any;
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+// Shadowing of the narrowed reference
+function shadowing<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : never {
+>shadowing : <T extends 1 | 2>(x: T) => T extends 1 ? number : T extends 2 ? string : never
+>          : ^ ^^^^^^^^^     ^^ ^^ ^^^^^                                                   
+>x : T
+>  : ^
+
+    if (true) {
+>true : true
+>     : ^^^^
+
+        let x: number = Math.random() ? 1 : 2;
+>x : number
+>  : ^^^^^^
+>Math.random() ? 1 : 2 : 1 | 2
+>                      : ^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+        if (x === 1) {
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+            return 1; // Error
+>1 : 1
+>  : ^
+        }
+        return ""; // Error
+>"" : ""
+>   : ^^
+    }
+}
+
+function noShadowing<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : never {
+>noShadowing : <T extends 1 | 2>(x: T) => T extends 1 ? number : T extends 2 ? string : never
+>            : ^ ^^^^^^^^^     ^^ ^^ ^^^^^                                                   
+>x : T
+>  : ^
+
+    if (true) {
+>true : true
+>     : ^^^^
+
+        if (x === 1) {
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+
+            return 1; // Ok
+>1 : 1
+>  : ^
+        }
+        return ""; // Ok
+>"" : ""
+>   : ^^
+    }
+}
+
+// If the narrowing reference is out of scope, we simply won't narrow its type
+declare let someX: boolean;
+>someX : boolean
+>      : ^^^^^^^
+
+function scope2<T extends boolean>(a: T): T extends true ? 1 : T extends false ? 2 : never {
+>scope2 : <T extends boolean>(a: T) => T extends true ? 1 : T extends false ? 2 : never
+>       : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                
+>a : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    if ((true)) {
+>(true) : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+
+        const someX = a;
+>someX : T
+>      : ^
+>a : T
+>  : ^
+
+        if (someX) { // We narrow `someX` and the return type here
+>someX : T
+>      : ^
+
+            return 1;
+>1 : 1
+>  : ^
+        }
+    }
+    if (!someX) { // This is a different `someX`, so we don't narrow here
+>!someX : boolean
+>       : ^^^^^^^
+>someX : boolean
+>      : ^^^^^^^
+
+        return 2;
+>2 : 2
+>  : ^
+    }
+
+    return undefined as any;
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+function moreShadowing<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : never {
+>moreShadowing : <T extends 1 | 2>(x: T) => T extends 1 ? number : T extends 2 ? string : never
+>              : ^ ^^^^^^^^^     ^^ ^^ ^^^^^                                                   
+>x : T
+>  : ^
+
+    if (x === 2) {
+>x === 2 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>2 : 2
+>  : ^
+
+        let x: number = Math.random() ? 1 : 2;
+>x : number
+>  : ^^^^^^
+>Math.random() ? 1 : 2 : 1 | 2
+>                      : ^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+        if (x === 1) {
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+            return 1; // Error
+>1 : 1
+>  : ^
+        }
+        return ""; // Ok
+>"" : ""
+>   : ^^
+    }
+    return 0; // Ok
+>0 : 0
+>  : ^
+}
+
+// This would be unsafe to narrow due to `infer` type.
+function withInfer<T extends [string] | number>(x: T): T extends [infer R] ? R : T extends number ? boolean : never {
+>withInfer : <T extends [string] | number>(x: T) => T extends [infer R] ? R : T extends number ? boolean : never
+>          : ^ ^^^^^^^^^                 ^^ ^^ ^^^^^                                                            
+>x : T
+>  : ^
+
+    if (typeof x === "number") {
+>typeof x === "number" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>"number" : "number"
+>         : ^^^^^^^^
+
+        return true;
+>true : true
+>     : ^^^^
+    }
+    return "";
+>"" : ""
+>   : ^^
+}
+
+const withInferResult = withInfer(["a"] as const); // The type says it returns `"a"`, but the function actually returns `""`.
+>withInferResult : "a"
+>                : ^^^
+>withInfer(["a"] as const) : "a"
+>                          : ^^^
+>withInfer : <T extends [string] | number>(x: T) => T extends [infer R] ? R : T extends number ? boolean : never
+>          : ^ ^^^^^^^^^                 ^^ ^^ ^^^^^                                                            
+>["a"] as const : ["a"]
+>               : ^^^^^
+>["a"] : ["a"]
+>      : ^^^^^
+>"a" : "a"
+>    : ^^^
+
+// Ok
+async function abool<T extends true | false>(x: T): Promise<T extends true ? 1 : T extends false ? 2 : never> {
+>abool : <T extends true | false>(x: T) => Promise<T extends true ? 1 : T extends false ? 2 : never>
+>      : ^ ^^^^^^^^^            ^^ ^^ ^^^^^                                                         
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+>x : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    if (x) {
+>x : T
+>  : ^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+// Ok
+function* bbool<T extends true | false>(x: T): Generator<number, T extends true ? 1 : T extends false ? 2 : never, unknown> {
+>bbool : <T extends true | false>(x: T) => Generator<number, T extends true ? 1 : T extends false ? 2 : never, unknown>
+>      : ^ ^^^^^^^^^            ^^ ^^ ^^^^^                                                                            
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+>x : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    yield 3;
+>yield 3 : unknown
+>        : ^^^^^^^
+>3 : 3
+>  : ^
+
+    if (x) {
+>x : T
+>  : ^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+// We don't do the same type of narrowing for `yield` statements
+function* cbool<T extends true | false>(x: T): Generator<T extends true ? 1 : T extends false ? 2 : never, number, unknown> {
+>cbool : <T extends true | false>(x: T) => Generator<T extends true ? 1 : T extends false ? 2 : never, number, unknown>
+>      : ^ ^^^^^^^^^            ^^ ^^ ^^^^^                                                                            
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+>x : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    if (x) {
+>x : T
+>  : ^
+
+        yield 1;
+>yield 1 : unknown
+>        : ^^^^^^^
+>1 : 1
+>  : ^
+    }
+    yield 2;
+>yield 2 : unknown
+>        : ^^^^^^^
+>2 : 2
+>  : ^
+
+    return 0;
+>0 : 0
+>  : ^
+}
+
+// From #33912
+abstract class Operation<T, R> {
+>Operation : Operation<T, R>
+>          : ^^^^^^^^^^^^^^^
+
+    abstract perform(t: T): R;
+>perform : (t: T) => R
+>        : ^ ^^ ^^^^^ 
+>t : T
+>  : ^
+}
+
+type ConditionalReturnType<T, R, EOp extends Operation<T, R> | undefined> =
+>ConditionalReturnType : ConditionalReturnType<T, R, EOp>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    EOp extends Operation<T, R> ? R : EOp extends undefined ? T | R : never;
+
+
+class ConditionalOperation<
+>ConditionalOperation : ConditionalOperation<T, R, EOp>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    T,
+    R,
+    EOp extends Operation<T, R> | undefined,
+> extends Operation<T, ConditionalReturnType<T, R, EOp>> {
+>Operation : Operation<T, ConditionalReturnType<T, R, EOp>>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    constructor(
+        private predicate: (value: T) => boolean,
+>predicate : (value: T) => boolean
+>          : ^     ^^ ^^^^^       
+>value : T
+>      : ^
+
+        private thenOp: Operation<T, R>,
+>thenOp : Operation<T, R>
+>       : ^^^^^^^^^^^^^^^
+
+        private elseOp?: EOp,
+>elseOp : EOp | undefined
+>       : ^^^^^^^^^^^^^^^
+
+    ) {
+        super();
+>super() : void
+>        : ^^^^
+>super : typeof Operation
+>      : ^^^^^^^^^^^^^^^^
+    }
+
+    // We won't try to narrow the return type because `T` is declared on the class and we don't analyze this case.
+    perform(t: T): ConditionalReturnType<T, R, EOp> {
+>perform : (t: T) => ConditionalReturnType<T, R, EOp>
+>        : ^ ^^ ^^^^^                                
+>t : T
+>  : ^
+
+        if (this.predicate(t)) {
+>this.predicate(t) : boolean
+>                  : ^^^^^^^
+>this.predicate : (value: T) => boolean
+>               : ^     ^^ ^^^^^       
+>this : this
+>     : ^^^^
+>predicate : (value: T) => boolean
+>          : ^     ^^ ^^^^^       
+>t : T
+>  : ^
+
+            return this.thenOp.perform(t); // Bad: this is assignable to all of the branches of the conditional, but we still can't return it
+>this.thenOp.perform(t) : R
+>                       : ^
+>this.thenOp.perform : (t: T) => R
+>                    : ^ ^^^^^^^^^
+>this.thenOp : Operation<T, R>
+>            : ^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>thenOp : Operation<T, R>
+>       : ^^^^^^^^^^^^^^^
+>perform : (t: T) => R
+>        : ^ ^^^^^^^^^
+>t : T
+>  : ^
+
+        } else if (typeof this.elseOp !== "undefined") {
+>typeof this.elseOp !== "undefined" : boolean
+>                                   : ^^^^^^^
+>typeof this.elseOp : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.elseOp : EOp | undefined
+>            : ^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>elseOp : EOp | undefined
+>       : ^^^^^^^^^^^^^^^
+>"undefined" : "undefined"
+>            : ^^^^^^^^^^^
+
+            return this.elseOp.perform(t); // Would be ok
+>this.elseOp.perform(t) : R
+>                       : ^
+>this.elseOp.perform : (t: T) => R
+>                    : ^ ^^^^^^^^^
+>this.elseOp : Operation<T, R>
+>            : ^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>elseOp : Operation<T, R>
+>       : ^^^^^^^^^^^^^^^
+>perform : (t: T) => R
+>        : ^ ^^^^^^^^^
+>t : T
+>  : ^
+
+        } else {
+            return t; // Would be ok
+>t : T
+>  : ^
+        }
+    }
+}
+
+// Like the version above, we will not attempt to narrow because there's more than one reference to `T`,
+// because `T` shows up in the type of `predicate`.
+function perform<T, R, EOp extends Operation<T, R> | undefined>(
+>perform : <T, R, EOp extends Operation<T, R> | undefined>(t: T, predicate: (value: T) => boolean, thenOp: Operation<T, R>, elseOp?: EOp) => ConditionalReturnType<T, R, EOp>
+>        : ^ ^^ ^^   ^^^^^^^^^                           ^^ ^^ ^^         ^^                     ^^      ^^               ^^      ^^^   ^^^^^                                
+
+    t: T,
+>t : T
+>  : ^
+
+    predicate: (value: T) => boolean,
+>predicate : (value: T) => boolean
+>          : ^     ^^ ^^^^^       
+>value : T
+>      : ^
+
+    thenOp: Operation<T, R>,
+>thenOp : Operation<T, R>
+>       : ^^^^^^^^^^^^^^^
+
+    elseOp?: EOp,
+>elseOp : EOp | undefined
+>       : ^^^^^^^^^^^^^^^
+
+    ): ConditionalReturnType<T, R, EOp> {
+    if (predicate(t)) {
+>predicate(t) : boolean
+>             : ^^^^^^^
+>predicate : (value: T) => boolean
+>          : ^     ^^ ^^^^^       
+>t : T
+>  : ^
+
+        return thenOp.perform(t); // Bad: this is assignable to all of the branches of the conditional, but we still can't return it
+>thenOp.perform(t) : R
+>                  : ^
+>thenOp.perform : (t: T) => R
+>               : ^ ^^^^^^^^^
+>thenOp : Operation<T, R>
+>       : ^^^^^^^^^^^^^^^
+>perform : (t: T) => R
+>        : ^ ^^^^^^^^^
+>t : T
+>  : ^
+
+    } else if (elseOp !== undefined) {
+>elseOp !== undefined : boolean
+>                     : ^^^^^^^
+>elseOp : EOp | undefined
+>       : ^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return elseOp.perform(t); // Would be ok
+>elseOp.perform(t) : R
+>                  : ^
+>elseOp.perform : (t: T) => R
+>               : ^ ^^^^^^^^^
+>elseOp : Operation<T, R>
+>       : ^^^^^^^^^^^^^^^
+>perform : (t: T) => R
+>        : ^ ^^^^^^^^^
+>t : T
+>  : ^
+
+    } else {
+        return t; // Would be ok
+>t : T
+>  : ^
+    }
+}
+
+// Return conditional expressions with parentheses
+function returnStuff1<T extends boolean>(x: T ): T extends true ? 1 : T extends false ? 2 : never {
+>returnStuff1 : <T extends boolean>(x: T) => T extends true ? 1 : T extends false ? 2 : never
+>             : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                
+>x : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    return (x ? (1) : 2);
+>(x ? (1) : 2) : 1 | 2
+>              : ^^^^^
+>x ? (1) : 2 : 1 | 2
+>            : ^^^^^
+>x : T
+>  : ^
+>(1) : 1
+>    : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+function returnStuff2<T extends 1 | 2 | "a">(x: T ):
+>returnStuff2 : <T extends 1 | 2 | "a">(x: T) => T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never
+>             : ^ ^^^^^^^^^           ^^ ^^ ^^^^^                                                                     
+>x : T
+>  : ^
+
+    T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : never {
+    return (typeof x === "string" ? 0 : (x === 1 ? ("one") : "two"));
+>(typeof x === "string" ? 0 : (x === 1 ? ("one") : "two")) : 0 | "one" | "two"
+>                                                          : ^^^^^^^^^^^^^^^^^
+>typeof x === "string" ? 0 : (x === 1 ? ("one") : "two") : 0 | "one" | "two"
+>                                                        : ^^^^^^^^^^^^^^^^^
+>typeof x === "string" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>"string" : "string"
+>         : ^^^^^^^^
+>0 : 0
+>  : ^
+>(x === 1 ? ("one") : "two") : "one" | "two"
+>                            : ^^^^^^^^^^^^^
+>x === 1 ? ("one") : "two" : "one" | "two"
+>                          : ^^^^^^^^^^^^^
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+>("one") : "one"
+>        : ^^^^^
+>"one" : "one"
+>      : ^^^^^
+>"two" : "two"
+>      : ^^^^^
+}
+
+// If the conditional type's input is `never`, then it resolves to `never`:
+function neverOk<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 2 : never {
+>neverOk : <T extends boolean>(x: T) => T extends true ? 1 : T extends false ? 2 : never
+>        : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                
+>x : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    if (x === true) {
+>x === true : boolean
+>           : ^^^^^^^
+>x : T
+>  : ^
+>true : true
+>     : ^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    if (x === false) {
+>x === false : boolean
+>            : ^^^^^^^
+>x : T
+>  : ^
+>false : false
+>      : ^^^^^
+
+        return 2;
+>2 : 2
+>  : ^
+    }
+    return 1;
+>1 : 1
+>  : ^
+}
