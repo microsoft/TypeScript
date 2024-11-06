@@ -637,8 +637,9 @@ export function isOuterExpression(node: Node, kinds: OuterExpressionKinds = Oute
             return (kinds & OuterExpressionKinds.Parentheses) !== 0;
         case SyntaxKind.TypeAssertionExpression:
         case SyntaxKind.AsExpression:
-        case SyntaxKind.SatisfiesExpression:
             return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
+        case SyntaxKind.SatisfiesExpression:
+            return (kinds & (OuterExpressionKinds.TypeAssertions | OuterExpressionKinds.Satisfies)) !== 0;
         case SyntaxKind.ExpressionWithTypeArguments:
             return (kinds & OuterExpressionKinds.ExpressionsWithTypeArguments) !== 0;
         case SyntaxKind.NonNullExpression:
