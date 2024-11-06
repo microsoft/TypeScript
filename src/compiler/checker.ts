@@ -32021,40 +32021,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function discriminateContextualTypeByArrayElements(node: ArrayLiteralExpression, contextualType: UnionType) {
         const key = `D${getNodeId(node)},${getTypeId(contextualType)}`;
         const cachedType = getCachedType(key);
-        if (cachedType)
-            return cachedType;
+        if (cachedType) return cachedType;
 
         const elementsLength = node.elements.length;
         const filteredType = filterType(contextualType, type => {
-            if (!isTupleLikeType(type))
-                return true;
-            if (isTupleType(type))
-                return elementsLength >= type.target.minLength && (!!(type.target.combinedFlags & ElementFlags.Variable) || elementsLength <= type.target.fixedLength);
+            if (!isTupleLikeType(type)) return true;
+            if (isTupleType(type)) return elementsLength >= type.target.minLength && (!!(type.target.combinedFlags & ElementFlags.Variable) || elementsLength <= type.target.fixedLength);
             const properties = getPropertiesOfType(type);
-            if (elementsLength > properties.length || elementsLength < properties.reduce((c, p) => p.flags & SymbolFlags.Optional ? c : ++c, 0))
-                return false;
+            if (elementsLength > properties.length || elementsLength < properties.reduce((c, p) => p.flags & SymbolFlags.Optional ? c : ++c, 0)) return false;
             for (let i = 0; i < elementsLength; i++) {
-                if (!some(properties, p => p.escapedName === ("" + i) as __String))
-                    return false;
+                if (!some(properties, p => p.escapedName === ("" + i) as __String)) return false;
             }
             return true;
         });
 
-        if (filteredType.flags & TypeFlags.Never)
-            return setCachedType(key, contextualType);
-        if (!(filteredType.flags & TypeFlags.Union))
-            return setCachedType(key, isTupleLikeType(filteredType) ? filteredType : contextualType);
+        if (filteredType.flags & TypeFlags.Never) return setCachedType(key, contextualType);
+        if (!(filteredType.flags & TypeFlags.Union)) return setCachedType(key, isTupleLikeType(filteredType) ? filteredType : contextualType);
 
-        return setCachedType(key, discriminateTypeByDiscriminableItems(
-            filteredType as UnionType,
-            node.elements.map((element, index) => {
-                const name = ("" + index) as __String
-                return isPossiblyDiscriminantValue(element) && isDiscriminantProperty(filteredType, name) ?
-                    [() => getContextFreeTypeOfExpression(element), name] as const :
-                    undefined
-            }).filter(discriminator => !!discriminator),
-            isTypeAssignableTo,
-        ));
+        return setCachedType(
+            key,
+            discriminateTypeByDiscriminableItems(
+                filteredType as UnionType,
+                node.elements.map((element, index) => {
+                    const name = ("" + index) as __String;
+                    return isPossiblyDiscriminantValue(element) && isDiscriminantProperty(filteredType, name) ?
+                        [() => getContextFreeTypeOfExpression(element), name] as const :
+                        undefined;
+                }).filter(discriminator => !!discriminator),
+                isTypeAssignableTo,
+            ),
+        );
     }
 
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
@@ -32075,12 +32071,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 /*noReductions*/ true,
             );
             if (apparentType.flags & TypeFlags.Union) {
-                if (isObjectLiteralExpression(node))
-                    return discriminateContextualTypeByObjectMembers(node, apparentType as UnionType);
-                if (isJsxAttributes(node))
-                    return discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType);
-                if (isArrayLiteralExpression(node))
-                    return discriminateContextualTypeByArrayElements(node, apparentType as UnionType);
+                if (isObjectLiteralExpression(node)) return discriminateContextualTypeByObjectMembers(node, apparentType as UnionType);
+                if (isJsxAttributes(node)) return discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType);
+                if (isArrayLiteralExpression(node)) return discriminateContextualTypeByArrayElements(node, apparentType as UnionType);
             }
             return apparentType;
         }
