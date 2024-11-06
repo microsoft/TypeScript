@@ -35846,10 +35846,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!result) {
             result = chooseOverload(candidates, assignableRelation, isSingleNonGenericCandidate, signatureHelpTrailingComma);
         }
+        const links = getNodeLinks(node);
+        if (links.resolvedSignature !== resolvingSignature && !candidatesOutArray) {
+            // There are 2 situations in which it's good to preemptively return the cached result here:
+            //
+            // 1. if the signature resolution originated on a node that itself depends on the contextual type
+            // then it's possible that the resolved signature might not be the same as the one that would be computed in source order
+            // since resolving such signature leads to resolving the potential outer signature, its arguments and thus the very same signature
+            // it's possible that this inner resolution sets the resolvedSignature first.
+            // In such a case we ignore the local result and reuse the correct one that was cached.
+            //
+            // 2. In certain circular-like situations it's possible that the compiler reentries this function for the same node.
+            // It's possible to resolve the inner call against preemptively set empty members (for example in `resolveAnonymousTypeMembers`) of some type.
+            // When that happens the compiler might report an error for that inner call but at the same time it might end up resolving the actual members of the other type.
+            // This in turn creates a situation in which the outer call fails in `getSignatureApplicabilityError` due to a cached `RelationComparisonResult.Failed`
+            // but when the compiler tries to report that error (in the code below) it also tries to elaborate it and that can succeed as types would be related against the *resolved* members of the other type.
+            // This can hit `No error for last overload signature` assert but since that error was already reported when the inner call failed we can skip this step altogether here by returning the cached signature early.
+            Debug.assert(links.resolvedSignature);
+            return links.resolvedSignature;
+        }
         if (result) {
             return result;
         }
-
         result = getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray, checkMode);
         // Preemptively cache the result; getResolvedSignature will do this after we return, but
         // we need to ensure that the result is present for the error checks below so that if
@@ -35858,7 +35876,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // don't hit this issue because they only observe this result after it's had a chance to
         // be cached, but the error reporting code below executes before getResolvedSignature sets
         // resolvedSignature.
-        getNodeLinks(node).resolvedSignature = result;
+        links.resolvedSignature = result;
 
         // No signatures were applicable. Now report errors based on the last applicable signature with
         // no arguments excluded from assignability checks.
@@ -36871,19 +36889,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             resolutionStart = resolutionTargets.length;
         }
         links.resolvedSignature = resolvingSignature;
-        let result = resolveSignature(node, candidatesOutArray, checkMode || CheckMode.Normal);
+        const result = resolveSignature(node, candidatesOutArray, checkMode || CheckMode.Normal);
         resolutionStart = saveResolutionStart;
         // When CheckMode.SkipGenericFunctions is set we use resolvingSignature to indicate that call
         // resolution should be deferred.
         if (result !== resolvingSignature) {
-            // if the signature resolution originated on a node that itself depends on the contextual type
-            // then it's possible that the resolved signature might not be the same as the one that would be computed in source order
-            // since resolving such signature leads to resolving the potential outer signature, its arguments and thus the very same signature
-            // it's possible that this inner resolution sets the resolvedSignature first.
-            // In such a case we ignore the local result and reuse the correct one that was cached.
-            if (links.resolvedSignature !== resolvingSignature) {
-                result = links.resolvedSignature;
-            }
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
             // types from the control flow analysis.
