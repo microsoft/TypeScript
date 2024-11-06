@@ -5042,6 +5042,11 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFi
     packageBundlesTypes(packageName: string): boolean;
 }
 
+/** @internal */
+export interface WriterContextOut {
+    couldUnfoldMore: boolean;
+}
+
 export interface TypeChecker {
     getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
     getTypeOfSymbol(symbol: Symbol): Type;
@@ -5128,6 +5133,7 @@ export interface TypeChecker {
     symbolToParameterDeclaration(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): ParameterDeclaration | undefined;
     /** Note that the resulting nodes cannot be checked. */
     typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeParameterDeclaration | undefined;
+    /** @internal */ typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number): TypeParameterDeclaration | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
 
     getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
     getSymbolAtLocation(node: Node): Symbol | undefined;
@@ -5160,7 +5166,7 @@ export interface TypeChecker {
     typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
 
     /** @internal */ writeSignature(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string;
-    /** @internal */ writeType(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
+    /** @internal */ writeType(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter, verbosityLevel?: number, out?: WriterContextOut): string;
     /** @internal */ writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string;
     /** @internal */ writeTypePredicate(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
 
