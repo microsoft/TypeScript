@@ -1,8 +1,9 @@
 functionImplementations.ts(85,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'Base'.
 functionImplementations.ts(90,1): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+functionImplementations.ts(90,15): error TS2870: This binary expression is never nullish. Are you missing parentheses?
 
 
-==== functionImplementations.ts (2 errors) ====
+==== functionImplementations.ts (3 errors) ====
     // FunctionExpression with no return type annotation and no return statement returns void
     var v: void = function () { } ();
     
@@ -97,6 +98,8 @@ functionImplementations.ts(90,1): error TS2839: This condition will always retur
     // FunctionExpression with non -void return type annotation with a single throw statement
     undefined === function (): number {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~~~~~~
+!!! error TS2870: This binary expression is never nullish. Are you missing parentheses?
         throw undefined;
     ~~~~~~~~~~~~~~~~~~~~
     };

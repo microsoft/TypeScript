@@ -40006,6 +40006,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
                         error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
                     }
+                    const otherUndefinedOp =
+                        (left.kind === SyntaxKind.Identifier && getSymbolAtLocation(left) === undefinedSymbol) ? right :
+                        (right.kind === SyntaxKind.Identifier && getSymbolAtLocation(right) === undefinedSymbol) ? left : undefined;
+                    if (otherUndefinedOp) {
+                        if (getSyntacticNullishnessSemantics(otherUndefinedOp) !== PredicateSemantics.Sometimes) {
+                            error(otherUndefinedOp, Diagnostics.This_binary_expression_is_never_nullish_Are_you_missing_parentheses);
+                        }
+                    }
                     checkNaNEquality(errorNode, operator, left, right);
                     reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
                 }
