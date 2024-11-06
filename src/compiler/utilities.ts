@@ -10292,14 +10292,7 @@ function skipTypeCheckingWorker(
     host: HostWithIsSourceOfProjectReferenceRedirect,
     ignoreNoCheck: boolean,
 ) {
-    // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
-    // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
-    // '/// <reference no-default-lib="true"/>' directive.
-    return (sourceFile.isDeclarationFile ||
-        options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
-        (!ignoreNoCheck && options.noCheck) ||
-        host.isSourceOfProjectReferenceRedirect(sourceFile.fileName) ||
-        !canIncludeBindAndCheckDiagnostics(sourceFile, options);
+    return false;
 }
 
 /** @internal */
