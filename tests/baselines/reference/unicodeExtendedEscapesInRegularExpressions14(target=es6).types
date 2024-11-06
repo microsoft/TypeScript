@@ -1,9 +1,5 @@
 //// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions14.ts] ////
 
-=== Performance Stats ===
-Type Count: 1,000
-Instantiation count: 5,000
-
 === unicodeExtendedEscapesInRegularExpressions14.ts ===
 // Shouldn't work, negatives are not allowed.
 var x = /\u{-DDDD}/gu;

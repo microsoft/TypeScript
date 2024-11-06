@@ -1,8 +1,5 @@
 //// [tests/cases/conformance/controlFlow/controlFlowWhileStatement.ts] ////
 
-=== Performance Stats ===
-Instantiation count: 1,000
-
 === controlFlowWhileStatement.ts ===
 let cond: boolean;
 >cond : boolean

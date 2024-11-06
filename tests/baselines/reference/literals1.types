@@ -1,8 +1,5 @@
 //// [tests/cases/compiler/literals1.ts] ////
 
-=== Performance Stats ===
-Instantiation count: 1,000
-
 === literals1.ts ===
 var a = 42;
 >a : number

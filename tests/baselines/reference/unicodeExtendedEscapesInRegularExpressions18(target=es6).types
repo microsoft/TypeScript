@@ -1,9 +1,5 @@
 //// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions18.ts] ////
 
-=== Performance Stats ===
-Type Count: 1,000
-Instantiation count: 5,000
-
 === unicodeExtendedEscapesInRegularExpressions18.ts ===
 var x = /\u{65}\u{65}/gu;
 >x : RegExp<["ee"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>

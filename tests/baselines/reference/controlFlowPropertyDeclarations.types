@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/controlFlowPropertyDeclarations.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000
 Instantiation count: 2,500
 
 === controlFlowPropertyDeclarations.ts ===

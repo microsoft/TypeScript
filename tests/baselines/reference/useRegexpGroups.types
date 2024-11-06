@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Type Count: 2,500
-Instantiation count: 10,000
+Instantiation count: 5,000
 
 === useRegexpGroups.ts ===
 let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;

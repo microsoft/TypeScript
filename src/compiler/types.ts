@@ -2831,6 +2831,19 @@ export interface RegularExpressionPatternUnion extends Set<string | RegularExpre
     isCharacterEquivalents?: boolean;
 }
 
+/** @internal */
+export type RegularExpressionReducedContent = string | RegularExpressionAnyString | RegularExpressionReducedUnion | RegularExpressionReducedPattern;
+
+/** @internal */
+export interface RegularExpressionReducedUnion extends Set<RegularExpressionReducedContent> {
+    _regularExpressionReducedUnionBrand: any;
+}
+
+/** @internal */
+export interface RegularExpressionReducedPattern extends Array<string | RegularExpressionAnyString> {
+    _regularExpressionReducedPatternBrand: any;
+}
+
 export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
     readonly kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     /** @internal */

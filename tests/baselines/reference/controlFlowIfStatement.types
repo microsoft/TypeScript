@@ -1,8 +1,5 @@
 //// [tests/cases/conformance/controlFlow/controlFlowIfStatement.ts] ////
 
-=== Performance Stats ===
-Instantiation count: 1,000
-
 === controlFlowIfStatement.ts ===
 let x: string | number | boolean | RegExp;
 >x : string | number | boolean | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>

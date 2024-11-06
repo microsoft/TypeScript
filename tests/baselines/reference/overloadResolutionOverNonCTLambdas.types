@@ -1,8 +1,5 @@
 //// [tests/cases/compiler/overloadResolutionOverNonCTLambdas.ts] ////
 
-=== Performance Stats ===
-Instantiation count: 1,000
-
 === overloadResolutionOverNonCTLambdas.ts ===
 module Bugs {
 >Bugs : typeof Bugs
