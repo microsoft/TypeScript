@@ -97,3 +97,10 @@ predicateSemantics.ts(52,14): error TS2869: Right operand of ?? is unreachable b
 !!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
     }
     
+    // https://github.com/microsoft/TypeScript/issues/60439
+    class X {
+      constructor() {
+        const p = new.target ?? 32;
+      }
+    }
+    
