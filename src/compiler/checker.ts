@@ -31877,31 +31877,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function discriminateContextualTypeByArrayElements(node: ArrayLiteralExpression, contextualType: UnionType) {
         const key = `D${getNodeId(node)},${getTypeId(contextualType)}`;
-        const cached = getCachedType(key);
-        if (cached) return cached;
+        const cachedType = getCachedType(key);
+        if (cachedType)
+            return cachedType;
 
-        if (!contextualType.types.every(type => getObjectFlags(getTargetType(type)) & ObjectFlags.Tuple))
-            return setCachedType(key, contextualType)
-        
         const elementsLength = node.elements.length;
-        const filteredTupleTypesByLength = filter(contextualType.types, type => {
-            const tupleType = ((type as TypeReference).target as TupleType);
-            return (
-                elementsLength >= tupleType.minLength &&
-                ((tupleType.combinedFlags & ElementFlags.Variable) !== 0 || elementsLength <= tupleType.fixedLength)
-            )
-        })
-        if (filteredTupleTypesByLength !== contextualType.types) {
-            if (filteredTupleTypesByLength.length < 2)
-                return setCachedType(key, filteredTupleTypesByLength.length ? filteredTupleTypesByLength[0] : contextualType);
-            contextualType = getUnionType(filteredTupleTypesByLength, UnionReduction.None) as UnionType;
-        }
-        
+        const filteredType = filterType(contextualType, type => {
+            if (!isTupleLikeType(type))
+                return true;
+            if (isTupleType(type))
+                return elementsLength >= type.target.minLength && (!!(type.target.combinedFlags & ElementFlags.Variable) || elementsLength <= type.target.fixedLength);
+            const properties = getPropertiesOfType(type);
+            if (elementsLength > properties.length || elementsLength < properties.reduce((c, p) => p.flags & SymbolFlags.Optional ? c : ++c, 0))
+                return false;
+            for (let i = 0; i < elementsLength; i++) {
+                if (!some(properties, p => p.escapedName === ("" + i) as __String))
+                    return false;
+            }
+            return true;
+        });
+
+        if (filteredType.flags & TypeFlags.Never)
+            return setCachedType(key, contextualType);
+        if (!(filteredType.flags & TypeFlags.Union))
+            return setCachedType(key, isTupleLikeType(filteredType) ? filteredType : contextualType);
+
         return setCachedType(key, discriminateTypeByDiscriminableItems(
-            contextualType,
+            filteredType as UnionType,
             node.elements.map((element, index) => {
                 const name = ("" + index) as __String
-                return isPossiblyDiscriminantValue(element) && isDiscriminantProperty(contextualType, name) ?
+                return isPossiblyDiscriminantValue(element) && isDiscriminantProperty(filteredType, name) ?
                     [() => getContextFreeTypeOfExpression(element), name] as const :
                     undefined
             }).filter(discriminator => !!discriminator),
