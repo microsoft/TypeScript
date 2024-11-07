@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
+	"github.com/microsoft/typescript-go/internal/utils"
 )
 
 type IntersectionState uint32
@@ -310,7 +311,7 @@ func (c *Checker) elaborateError(node *Node, source *Type, target *Type, relatio
 func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
-		return len(resolved.signatures) == 0 && len(resolved.indexInfos) == 0 && len(resolved.properties) > 0 && every(resolved.properties, func(p *Symbol) bool {
+		return len(resolved.signatures) == 0 && len(resolved.indexInfos) == 0 && len(resolved.properties) > 0 && utils.Every(resolved.properties, func(p *Symbol) bool {
 			return p.flags&SymbolFlagsOptional != 0
 		})
 	}
@@ -318,7 +319,7 @@ func (c *Checker) isWeakType(t *Type) bool {
 		return c.isWeakType(t.AsSubstitutionType().baseType)
 	}
 	if t.flags&TypeFlagsIntersection != 0 {
-		return every(t.Types(), c.isWeakType)
+		return utils.Every(t.Types(), c.isWeakType)
 	}
 	return false
 }
@@ -379,7 +380,7 @@ func (c *Checker) getMappedTargetWithSymbol(t *Type) *Type {
 		if t.objectFlags&ObjectFlagsInstantiatedMapped == ObjectFlagsInstantiatedMapped {
 			target := c.getModifiersTypeFromMappedType(t)
 			if target != nil && (target.symbol != nil || target.flags&TypeFlagsIntersection != 0 &&
-				some(target.Types(), func(t *Type) bool { return t.symbol != nil })) {
+				utils.Some(target.Types(), func(t *Type) bool { return t.symbol != nil })) {
 				t = target
 				continue
 			}
@@ -510,7 +511,7 @@ func (c *Checker) getUnmatchedProperties(source *Type, target *Type, requireOpti
 }
 
 func (c *Checker) getUnmatchedProperty(source *Type, target *Type, requireOptionalProperties bool, matchDiscriminantProperties bool) *Symbol {
-	return firstOrNilSeq(c.getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties))
+	return utils.FirstOrNilSeq(c.getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties))
 }
 
 func (c *Checker) isMarkerType(t *Type) bool {
@@ -732,7 +733,7 @@ func (r *Relater) unionOrIntersectionRelatedTo(source *Type, target *Type, repor
 	// parameter 'T extends 1 | 2', the intersection 'T & 1' should be reduced to '1' such that it doesn't
 	// appear to be comparable to '2'.
 	if r.relation == r.c.comparableRelation && target.flags&TypeFlagsPrimitive != 0 {
-		constraints := sameMap(source.Types(), func(t *Type) *Type {
+		constraints := utils.SameMap(source.Types(), func(t *Type) *Type {
 			if t.flags&TypeFlagsInstantiable != 0 {
 				constraint := r.c.getBaseConstraintOfType(t)
 				if constraint != nil {
@@ -742,7 +743,7 @@ func (r *Relater) unionOrIntersectionRelatedTo(source *Type, target *Type, repor
 			}
 			return t
 		})
-		if !identical(constraints, source.Types()) {
+		if !utils.Same(constraints, source.Types()) {
 			source = r.c.getIntersectionType(constraints)
 			if source.flags&TypeFlagsNever != 0 {
 				return TernaryFalse

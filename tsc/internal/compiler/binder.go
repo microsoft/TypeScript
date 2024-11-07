@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
+	"github.com/microsoft/typescript-go/internal/utils"
 )
 
 type ContainerFlags int32
@@ -990,7 +991,7 @@ func (b *Binder) hasExportDeclarations(node *Node) bool {
 			statements = body.AsModuleBlock().statements
 		}
 	}
-	return some(statements, func(s *Node) bool {
+	return utils.Some(statements, func(s *Node) bool {
 		return isExportDeclaration(s) || isExportAssignment(s)
 	})
 }
@@ -1719,7 +1720,7 @@ func (b *Binder) checkUnreachable(node *Node) bool {
 				//   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
 				isError := unreachableCodeIsError(b.options) && node.flags&NodeFlagsAmbient == 0 && (!isVariableStatement(node) ||
 					getCombinedNodeFlags(node.AsVariableStatement().declarationList)&NodeFlagsBlockScoped != 0 ||
-					some(node.AsVariableStatement().declarationList.AsVariableDeclarationList().declarations, func(d *Node) bool {
+					utils.Some(node.AsVariableStatement().declarationList.AsVariableDeclarationList().declarations, func(d *Node) bool {
 						return d.AsVariableDeclaration().initializer != nil
 					}))
 				b.errorOnEachUnreachableRange(node, isError)
@@ -1762,7 +1763,7 @@ func (b *Binder) errorOnEachUnreachableRange(node *Node, isError bool) {
 func (b *Binder) isExecutableStatement(s *Node) bool {
 	// Don't remove statements that can validly be used before they appear.
 	return !isFunctionDeclaration(s) && !b.isPurelyTypeDeclaration(s) && !(isVariableStatement(s) && getCombinedNodeFlags(s)&NodeFlagsBlockScoped == 0 &&
-		some(s.AsVariableStatement().declarationList.AsVariableDeclarationList().declarations, func(d *Node) bool {
+		utils.Some(s.AsVariableStatement().declarationList.AsVariableDeclarationList().declarations, func(d *Node) bool {
 			return d.AsVariableDeclaration().initializer == nil
 		}))
 }
@@ -2082,7 +2083,7 @@ func (b *Binder) bindSwitchStatement(node *Node) {
 	b.preSwitchCaseFlow = b.currentFlow
 	b.bind(stmt.caseBlock)
 	b.addAntecedent(postSwitchLabel, b.currentFlow)
-	hasDefault := some(stmt.caseBlock.AsCaseBlock().clauses, func(c *Node) bool {
+	hasDefault := utils.Some(stmt.caseBlock.AsCaseBlock().clauses, func(c *Node) bool {
 		return c.kind == SyntaxKindDefaultClause
 	})
 	if !hasDefault {
@@ -2524,7 +2525,7 @@ func (b *Binder) addDeclarationToSymbol(symbol *Symbol, node *Node, symbolFlags 
 	if symbol.declarations == nil {
 		symbol.declarations = b.newSingleDeclaration(node)
 	} else {
-		symbol.declarations = appendIfUnique(symbol.declarations, node)
+		symbol.declarations = utils.AppendIfUnique(symbol.declarations, node)
 	}
 	// On merge of const enum module with class or function, reset const enum only flag (namespaces will already recalculate)
 	if symbol.constEnumOnlyModule && symbol.flags&(SymbolFlagsFunction|SymbolFlagsClass|SymbolFlagsRegularEnum) != 0 {

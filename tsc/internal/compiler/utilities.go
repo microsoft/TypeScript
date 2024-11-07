@@ -2,18 +2,16 @@ package compiler
 
 import (
 	"fmt"
-	"iter"
 	"maps"
 	"math"
 	"path/filepath"
-	"regexp"
 	"slices"
 	"strconv"
 	"strings"
-	"sync"
 	"sync/atomic"
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
+	"github.com/microsoft/typescript-go/internal/utils"
 )
 
 // TextPos
@@ -493,22 +491,8 @@ func getBinaryOperatorPrecedence(kind SyntaxKind) OperatorPrecedence {
 	return OperatorPrecedenceInvalid
 }
 
-var regexps = make(map[string]*regexp.Regexp)
-var regexpMutex sync.Mutex
-
-func makeRegexp(s string) *regexp.Regexp {
-	regexpMutex.Lock()
-	rx, ok := regexps[s]
-	if !ok {
-		rx = regexp.MustCompile(s)
-		regexps[s] = rx
-	}
-	regexpMutex.Unlock()
-	return rx
-}
-
 func formatStringFromArgs(text string, args []any) string {
-	return makeRegexp(`{(\d+)}`).ReplaceAllStringFunc(text, func(match string) string {
+	return utils.MakeRegexp(`{(\d+)}`).ReplaceAllStringFunc(text, func(match string) string {
 		index, err := strconv.ParseInt(match[1:len(match)-1], 10, 0)
 		if err != nil || int(index) >= len(args) {
 			panic("Invalid formatting placeholder")
@@ -525,158 +509,6 @@ func formatMessage(message *diagnostics.Message, args ...any) string {
 	return text
 }
 
-func filter[T any](slice []T, predicate func(T) bool) []T {
-	result, _ := sameFilter(slice, predicate)
-	return result
-}
-
-func sameFilter[T any](slice []T, predicate func(T) bool) ([]T, bool) {
-	for i, value := range slice {
-		if !predicate(value) {
-			result := slice[0:i]
-			i++
-			for i < len(slice) {
-				value = slice[i]
-				if predicate(value) {
-					result = append(result, value)
-				}
-				i++
-			}
-			return result, false
-		}
-	}
-	return slice, true
-}
-
-func mapf[T, U any](slice []T, f func(T) U) []U {
-	if len(slice) == 0 {
-		return nil
-	}
-	result := make([]U, len(slice))
-	for i := range slice {
-		result[i] = f(slice[i])
-	}
-	return result
-}
-
-func mapIndex[T, U any](slice []T, f func(T, int) U) []U {
-	if len(slice) == 0 {
-		return nil
-	}
-	result := make([]U, len(slice))
-	for i := range slice {
-		result[i] = f(slice[i], i)
-	}
-	return result
-}
-
-func sameMap[T comparable](slice []T, f func(T) T) []T {
-	for i, value := range slice {
-		mapped := f(value)
-		if mapped != value {
-			result := make([]T, len(slice))
-			copy(result, slice[:i])
-			result[i] = mapped
-			for j := i + 1; j < len(slice); j++ {
-				result[j] = f(slice[j])
-			}
-			return result
-		}
-	}
-	return slice
-}
-
-func sameMapIndex[T comparable](slice []T, f func(T, int) T) ([]T, bool) {
-	for i, value := range slice {
-		mapped := f(value, i)
-		if mapped != value {
-			result := make([]T, len(slice))
-			copy(result, slice[:i])
-			result[i] = mapped
-			for i, value := range slice[i+1:] {
-				result[i] = f(value, i)
-			}
-			return result, false
-		}
-	}
-	return slice, true
-}
-
-func some[T any](array []T, predicate func(T) bool) bool {
-	for _, value := range array {
-		if predicate(value) {
-			return true
-		}
-	}
-	return false
-}
-
-func every[T any](array []T, predicate func(T) bool) bool {
-	for _, value := range array {
-		if !predicate(value) {
-			return false
-		}
-	}
-	return true
-}
-
-func insertSorted[T any](slice []T, element T, cmp func(T, T) int) []T {
-	i, _ := slices.BinarySearchFunc(slice, element, cmp)
-	return slices.Insert(slice, i, element)
-}
-
-func firstOrNil[T any](slice []T) T {
-	if len(slice) != 0 {
-		return slice[0]
-	}
-	return *new(T)
-}
-
-func firstOrNilSeq[T any](seq iter.Seq[T]) T {
-	if seq != nil {
-		for value := range seq {
-			return value
-		}
-	}
-	return *new(T)
-}
-
-func lastOrNil[T any](slice []T) T {
-	if len(slice) != 0 {
-		return slice[len(slice)-1]
-	}
-	return *new(T)
-}
-
-func find[T any](slice []T, predicate func(T) bool) T {
-	for _, value := range slice {
-		if predicate(value) {
-			return value
-		}
-	}
-	return *new(T)
-}
-
-func findLast[T any](slice []T, predicate func(T) bool) T {
-	for i := len(slice) - 1; i >= 0; i-- {
-		value := slice[i]
-		if predicate(value) {
-			return value
-		}
-	}
-	return *new(T)
-}
-
-func findLastIndex[T any](slice []T, predicate func(T) bool) int {
-	for i := len(slice) - 1; i >= 0; i-- {
-		value := slice[i]
-		if predicate(value) {
-			return i
-		}
-	}
-	return -1
-}
-
 func findInMap[K comparable, V any](m map[K]V, predicate func(V) bool) V {
 	for _, value := range m {
 		if predicate(value) {
@@ -684,39 +516,6 @@ func findInMap[K comparable, V any](m map[K]V, predicate func(V) bool) V {
 		}
 	}
 	return *new(V)
-}
-
-func concatenate[T any](s1 []T, s2 []T) []T {
-	if len(s2) == 0 {
-		return s1
-	}
-	if len(s1) == 0 {
-		return s2
-	}
-	return slices.Concat(s1, s2)
-}
-
-func countWhere[T any](slice []T, predicate func(T) bool) int {
-	count := 0
-	for _, value := range slice {
-		if predicate(value) {
-			count++
-		}
-	}
-	return count
-}
-
-func replaceElement[T any](slice []T, i int, t T) []T {
-	result := slices.Clone(slice)
-	result[i] = t
-	return result
-}
-
-func identical[T any](s1 []T, s2 []T) bool {
-	if len(s1) == len(s2) {
-		return len(s1) == 0 || &s1[0] == &s2[0]
-	}
-	return false
 }
 
 func boolToTristate(b bool) Tristate {
@@ -897,13 +696,6 @@ func getTextOfNodeFromSourceText(sourceText string, node *Node) string {
 	//     text = text.split(/\r\n|\n|\r/).map(line => line.replace(/^\s*\*/, "").trimStart()).join("\n");
 	// }
 	return text
-}
-
-func appendIfUnique[T comparable](array []T, element T) []T {
-	if slices.Contains(array, element) {
-		return array
-	}
-	return append(array, element)
 }
 
 func isAssignmentDeclaration(decl *Node) bool {
@@ -1977,7 +1769,7 @@ func nodeHasName(statement *Node, id *Node) bool {
 	}
 	if isVariableStatement(statement) {
 		declarations := statement.AsVariableStatement().declarationList.AsVariableDeclarationList().declarations
-		return some(declarations, func(d *Node) bool { return nodeHasName(d, id) })
+		return utils.Some(declarations, func(d *Node) bool { return nodeHasName(d, id) })
 	}
 	return false
 }
@@ -2126,9 +1918,9 @@ func (c *DiagnosticsCollection) add(diagnostic *Diagnostic) {
 		if c.fileDiagnostics == nil {
 			c.fileDiagnostics = make(map[string][]*Diagnostic)
 		}
-		c.fileDiagnostics[fileName] = insertSorted(c.fileDiagnostics[fileName], diagnostic, compareDiagnostics)
+		c.fileDiagnostics[fileName] = utils.InsertSorted(c.fileDiagnostics[fileName], diagnostic, compareDiagnostics)
 	} else {
-		c.nonFileDiagnostics = insertSorted(c.nonFileDiagnostics, diagnostic, compareDiagnostics)
+		c.nonFileDiagnostics = utils.InsertSorted(c.nonFileDiagnostics, diagnostic, compareDiagnostics)
 	}
 }
 
@@ -2721,7 +2513,7 @@ func (r *NameResolver) useOuterVariableScopeInParameter(result *Symbol, location
 				functionLocation := location
 				declarationRequiresScopeChange := r.getRequiresScopeChangeCache(functionLocation)
 				if declarationRequiresScopeChange == TSUnknown {
-					declarationRequiresScopeChange = boolToTristate(some(functionLocation.Parameters(), r.requiresScopeChange))
+					declarationRequiresScopeChange = boolToTristate(utils.Some(functionLocation.Parameters(), r.requiresScopeChange))
 					r.setRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange)
 				}
 				return declarationRequiresScopeChange == TSTrue
@@ -3218,7 +3010,7 @@ func isExternalModuleNameRelative(moduleName string) bool {
 }
 
 func pathIsRelative(path string) bool {
-	return makeRegexp(`^\.\.?(?:$|[\\/])`).MatchString(path)
+	return utils.MakeRegexp(`^\.\.?(?:$|[\\/])`).MatchString(path)
 }
 
 func extensionIsTs(ext string) bool {
@@ -3364,7 +3156,7 @@ func getSourceFileOfModule(module *Symbol) *SourceFile {
 }
 
 func getNonAugmentationDeclaration(symbol *Symbol) *Node {
-	return find(symbol.declarations, func(d *Node) bool {
+	return utils.Find(symbol.declarations, func(d *Node) bool {
 		return !isExternalModuleAugmentation(d) && !(isModuleDeclaration(d) && isGlobalScopeAugmentation(d))
 	})
 }
@@ -3656,7 +3448,7 @@ func compareSymbols(s1, s2 *Symbol) int {
 }
 
 func getClassLikeDeclarationOfSymbol(symbol *Symbol) *Node {
-	return find(symbol.declarations, isClassLike)
+	return utils.Find(symbol.declarations, isClassLike)
 }
 
 func isThisInTypeQuery(node *Node) bool {
@@ -3685,10 +3477,10 @@ func getDeclarationModifierFlagsFromSymbolEx(s *Symbol, isWrite bool) ModifierFl
 	if s.valueDeclaration != nil {
 		var declaration *Node
 		if isWrite {
-			declaration = find(s.declarations, isSetAccessorDeclaration)
+			declaration = utils.Find(s.declarations, isSetAccessorDeclaration)
 		}
 		if declaration == nil && s.flags&SymbolFlagsGetAccessor != 0 {
-			declaration = find(s.declarations, isGetAccessorDeclaration)
+			declaration = utils.Find(s.declarations, isGetAccessorDeclaration)
 		}
 		if declaration == nil {
 			declaration = s.valueDeclaration
