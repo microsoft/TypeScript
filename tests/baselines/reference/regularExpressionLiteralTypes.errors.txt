@@ -10,18 +10,18 @@ regularExpressionLiteralTypes.ts(104,9): error TS1516: A character class range m
 regularExpressionLiteralTypes.ts(105,9): error TS1516: A character class range must not be bounded by another character class.
 regularExpressionLiteralTypes.ts(106,7): error TS1516: A character class range must not be bounded by another character class.
 regularExpressionLiteralTypes.ts(106,10): error TS1516: A character class range must not be bounded by another character class.
-regularExpressionLiteralTypes.ts(183,6): error TS1512: '\c' must be followed by an ASCII letter.
-regularExpressionLiteralTypes.ts(183,9): error TS1512: '\c' must be followed by an ASCII letter.
-regularExpressionLiteralTypes.ts(184,6): error TS1535: This character cannot be escaped in a regular expression.
-regularExpressionLiteralTypes.ts(184,9): error TS1535: This character cannot be escaped in a regular expression.
-regularExpressionLiteralTypes.ts(185,6): error TS1510: '\k' must be followed by a capturing group name enclosed in angle brackets.
-regularExpressionLiteralTypes.ts(185,9): error TS1545: '\k' is only available outside character class.
-regularExpressionLiteralTypes.ts(186,6): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
-regularExpressionLiteralTypes.ts(186,9): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
-regularExpressionLiteralTypes.ts(187,6): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
-regularExpressionLiteralTypes.ts(187,9): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
-regularExpressionLiteralTypes.ts(188,6): error TS1535: This character cannot be escaped in a regular expression.
-regularExpressionLiteralTypes.ts(188,9): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionLiteralTypes.ts(189,6): error TS1512: '\c' must be followed by an ASCII letter.
+regularExpressionLiteralTypes.ts(189,9): error TS1512: '\c' must be followed by an ASCII letter.
+regularExpressionLiteralTypes.ts(190,6): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionLiteralTypes.ts(190,9): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionLiteralTypes.ts(191,6): error TS1510: '\k' must be followed by a capturing group name enclosed in angle brackets.
+regularExpressionLiteralTypes.ts(191,9): error TS1545: '\k' is only available outside character class.
+regularExpressionLiteralTypes.ts(192,6): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionLiteralTypes.ts(192,9): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionLiteralTypes.ts(193,6): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionLiteralTypes.ts(193,9): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionLiteralTypes.ts(194,6): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionLiteralTypes.ts(194,9): error TS1535: This character cannot be escaped in a regular expression.
 
 
 ==== regularExpressionLiteralTypes.ts (24 errors) ====
@@ -218,6 +218,12 @@ regularExpressionLiteralTypes.ts(188,9): error TS1535: This character cannot be 
         /[ai][aı][aK]/i;
         /[ai][aı][aK]/iu;
         /[ai][aı][aK]/iv;
+    }
+    
+    // Case sensitivity and pattern modifiers
+    {
+        /a|(?i:b|(?-i:c)|d|(?i:e)|f)|g|(?-i:h)|k/;
+        /a|(?-i:b|(?i:c)|d|(?-i:e)|f)|g|(?i:h)|k/i;
     }
     
     // Edge cases

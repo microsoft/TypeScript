@@ -172,6 +172,12 @@
     /[ai][aı][aK]/iv;
 }
 
+// Case sensitivity and pattern modifiers
+{
+    /a|(?i:b|(?-i:c)|d|(?i:e)|f)|g|(?-i:h)|k/;
+    /a|(?-i:b|(?i:c)|d|(?-i:e)|f)|g|(?i:h)|k/i;
+}
+
 // Edge cases
 {
     // The following should be treated as identity escapes and upper case should be included
@@ -433,6 +439,11 @@
     /[ai][aı][aK]/i;
     /[ai][aı][aK]/iu;
     /[ai][aı][aK]/iv;
+}
+// Case sensitivity and pattern modifiers
+{
+    /a|(?i:b|(?-i:c)|d|(?i:e)|f)|g|(?-i:h)|k/;
+    /a|(?-i:b|(?i:c)|d|(?-i:e)|f)|g|(?i:h)|k/i;
 }
 // Edge cases
 {

@@ -2804,10 +2804,10 @@ export function createScanner(
                                     break;
                                 default:
                                     const start = pos;
-                                    const setFlags = scanPatternModifiers(RegularExpressionFlags.None);
+                                    const setFlags = scanPatternModifiers(RegularExpressionFlags.None, /*isAddition*/ true);
                                     if (charCodeChecked(pos) === CharacterCodes.minus) {
                                         pos++;
-                                        scanPatternModifiers(setFlags);
+                                        scanPatternModifiers(setFlags, /*isAddition*/ false);
                                         if (pos === start + 1) {
                                             error(Diagnostics.Subpattern_flags_must_be_present_when_there_is_a_minus_sign, start, pos - start);
                                         }
@@ -3005,9 +3005,8 @@ export function createScanner(
             }
         }
 
-        function scanPatternModifiers(currFlags: RegularExpressionFlags): RegularExpressionFlags {
-            const isAddModifiers = currFlags === RegularExpressionFlags.None;
-            while (true) {
+        function scanPatternModifiers(currFlags: RegularExpressionFlags, isAddition: boolean): RegularExpressionFlags {
+                        while (true) {
                 const ch = codePointChecked(pos);
                 if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
                     break;
@@ -3026,7 +3025,7 @@ export function createScanner(
                 else {
                     currFlags |= flag;
                     if (flag & RegularExpressionFlags.IgnoreCase) {
-                        isCaseInsensitive = isAddModifiers;
+                        isCaseInsensitive = isAddition;
                     }
                     checkRegularExpressionFlagAvailability(flag, size);
                 }
