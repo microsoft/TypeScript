@@ -1426,6 +1426,9 @@ func tryParsePattern(pattern string) Pattern {
 	return Pattern{}
 }
 
+func positionIsSynthesized(pos int) bool {
+	return pos < 0
+}
 func isDeclarationStatementKind(kind SyntaxKind) bool {
 	switch kind {
 	case SyntaxKindFunctionDeclaration, SyntaxKindMissingDeclaration, SyntaxKindClassDeclaration, SyntaxKindInterfaceDeclaration,
