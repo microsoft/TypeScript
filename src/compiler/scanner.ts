@@ -2872,7 +2872,8 @@ export function createScanner(
                                 }
                                 else {
                                     error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
-                                    pattern.push(text.substring(start, pos));
+                                    pattern.push(String.fromCharCode(ch));
+                                    pos = digitsStart;
                                     isPreviousTermQuantifiable = true;
                                     break;
                                 }
@@ -2890,7 +2891,8 @@ export function createScanner(
                             if (anyUnicodeModeOrNonAnnexB) {
                                 error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
                             }
-                            pattern.push(text.substring(start, pos));
+                            pattern.push(String.fromCharCode(ch));
+                            pos = digitsStart;
                             isPreviousTermQuantifiable = true;
                             break;
                         }
@@ -2900,7 +2902,8 @@ export function createScanner(
                                 pos--;
                             }
                             else {
-                                pattern.push(text.substring(start, pos));
+                                pattern.push(String.fromCharCode(ch));
+                                pos = digitsStart;
                                 isPreviousTermQuantifiable = true;
                                 break;
                             }
