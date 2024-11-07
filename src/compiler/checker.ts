@@ -963,7 +963,6 @@ import {
     ReadonlyKeyword,
     reduceLeft,
     RegExpAnyString,
-    RegularExpressionAnyString,
     RegularExpressionFlags,
     RegularExpressionLiteral,
     RegularExpressionPatternUnion,
@@ -32512,6 +32511,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return emptyGenericType;
     }
 
+    // An optimized version of `getUnionType` tailored for RegExps
     function reduceRegularExpressionUnion(contents: RegularExpressionReducedContent[]): RegularExpressionReducedContent {
         if (contents.length === 0) {
             return new Set() as RegularExpressionReducedUnion;
@@ -32520,21 +32520,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return contents[0];
         }
         const flattenedContents: RegularExpressionReducedContent[] = [];
-        addContents(contents);
-        return new Set(flattenedContents) as RegularExpressionReducedUnion;
+        return addContents(contents) ? new Set(flattenedContents) as RegularExpressionReducedUnion : RegExpAnyString;
 
         function addContents(contents: RegularExpressionReducedContent[] | RegularExpressionReducedUnion) {
             for (const content of contents) {
-                if (content instanceof Set) {
-                    addContents(content);
+                if (content === RegExpAnyString) {
+                    // Fast path: if there are any string types, all other subtypes are redundant.
+                    // Works like `removeRedundantLiteralTypes`
+                    return false;
+                }
+                else if (content instanceof Set) {
+                    if (!addContents(content)) return false;
                 }
                 else {
                     flattenedContents.push(content);
                 }
             }
+            return true;
         }
     }
 
+    // An optimized version of `getTemplateLiteralType` tailored for RegExps
     function reduceRegularExpressionPattern(contents: RegularExpressionReducedContent[]): RegularExpressionReducedContent {
         const unionIndex = findIndex(contents, content => content instanceof Set);
         if (unionIndex >= 0) {
@@ -32543,16 +32549,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 RegExpAnyString;
         }
         const flattenedContents = [] as unknown as RegularExpressionReducedPattern;
+        // Reduce `${string}${string}` to the string type in advance such that the fast path in `reduceRegularExpressionUnion` above works
+        let prevIsAnyString = false;
         addSpans(contents);
-        return flattenedContents;
+        return flattenedContents.length === 1 ? flattenedContents[0] : flattenedContents;
 
         function addSpans(contents: RegularExpressionReducedContent[]) {
             for (const content of contents) {
                 if (isArray(content)) {
                     addSpans(content);
                 }
+                else if (typeof content === "string") {
+                    if (content) {
+                        flattenedContents.push(content);
+                        prevIsAnyString = false;
+                    }
+                }
+                else if (content === RegExpAnyString) {
+                    if (!prevIsAnyString) {
+                        flattenedContents.push(content);
+                        prevIsAnyString = true;
+                    }
+                }
                 else {
-                    flattenedContents.push(content as string | RegularExpressionAnyString);
+                    Debug.fail("Unhandled union");
                 }
             }
         }
@@ -32578,10 +32598,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     prevIsAnyString = false;
                 }
             }
-            else if (!prevIsAnyString) {
-                textPattern.push(text);
-                text = "";
-                prevIsAnyString = true;
+            else if (content === RegExpAnyString) {
+                if (!prevIsAnyString) {
+                    textPattern.push(text);
+                    text = "";
+                    prevIsAnyString = true;
+                }
+            }
+            else {
+                Debug.fail("Unhandled union or pattern");
             }
         }
         if (textPattern.length === 0) {

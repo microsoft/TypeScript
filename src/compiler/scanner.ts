@@ -2955,7 +2955,9 @@ export function createScanner(
                                         markAllInnerPatternUnionsAsPossiblyUndefined(lastTerm);
                                     }
                                     if (ch === CharacterCodes.question) {
-                                        setLast(pattern, new Set(["", [lastTerm]]) as RegularExpressionPatternUnion);
+                                        if (lastTerm && lastTerm !== RegExpAnyString) {
+                                            setLast(pattern, new Set(["", [lastTerm]]) as RegularExpressionPatternUnion);
+                                        }
                                         break;
                                     }
                                 // falls through
@@ -3006,7 +3008,7 @@ export function createScanner(
         }
 
         function scanPatternModifiers(currFlags: RegularExpressionFlags, isAddition: boolean): RegularExpressionFlags {
-                        while (true) {
+            while (true) {
                 const ch = codePointChecked(pos);
                 if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
                     break;
