@@ -8,15 +8,20 @@
 ////    /** @deprecated  */
 ////    x: number;
 ////}
-////const foo: I = { x: 1, y: 1 };
+////const foo: I = { [|x|]: 1, y: 1 };
 ////foo.[|x|];
 
-const [range] = test.ranges();
 verify.getSuggestionDiagnostics([
     {
         "code": 6385,
         "message": "'x' is deprecated.",
         "reportsDeprecated": true,
-        "range": range
+        "range": test.ranges()[0]
+    },
+    {
+        "code": 6385,
+        "message": "'x' is deprecated.",
+        "reportsDeprecated": true,
+        "range": test.ranges()[1]
     },
 ]);
