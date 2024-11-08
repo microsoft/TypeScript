@@ -33,7 +33,16 @@ func (c *Checker) getTypePrecedence(t *Type) TypePrecedence {
 }
 
 func (c *Checker) symbolToString(s *Symbol) string {
-	return s.name // !!!
+	if s.valueDeclaration != nil {
+		name := getNameOfDeclaration(s.valueDeclaration)
+		if name != nil {
+			if isIdentifier(name) {
+				return getTextOfNode(name)
+			}
+			return "[" + getTextOfNode(name) + "]"
+		}
+	}
+	return s.name
 }
 
 func (c *Checker) typeToString(t *Type) string {

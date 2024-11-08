@@ -111,6 +111,8 @@ func (node *Node) Expression() *Node {
 		return node.AsAsExpression().expression
 	case SyntaxKindSatisfiesExpression:
 		return node.AsSatisfiesExpression().expression
+	case SyntaxKindSpreadAssignment:
+		return node.AsSpreadAssignment().expression
 	}
 	panic("Unhandled case in Node.Expression")
 }
@@ -2939,6 +2941,10 @@ func (node *SpreadElement) ForEachChild(v Visitor) bool {
 	return visit(v, node.expression)
 }
 
+func isSpreadElement(node *Node) bool {
+	return node.kind == SyntaxKindSpreadElement
+}
+
 // TemplateExpression
 
 type TemplateExpression struct {
@@ -2975,6 +2981,10 @@ func (f *NodeFactory) NewTemplateSpan(expression *Node, literal *Node) *Node {
 
 func (node *TemplateSpan) ForEachChild(v Visitor) bool {
 	return visit(v, node.expression) || visit(v, node.literal)
+}
+
+func isTemplateSpan(node *Node) bool {
+	return node.kind == SyntaxKindTemplateSpan
 }
 
 // TaggedTemplateExpression
@@ -3042,6 +3052,10 @@ func (node *ArrayLiteralExpression) ForEachChild(v Visitor) bool {
 	return visitNodes(v, node.elements)
 }
 
+func isArrayLiteralExpression(node *Node) bool {
+	return node.kind == SyntaxKindArrayLiteralExpression
+}
+
 // ObjectLiteralExpression
 
 type ObjectLiteralExpression struct {
@@ -3075,6 +3089,7 @@ type ObjectLiteralElementBase struct{}
 
 type SpreadAssignment struct {
 	NodeBase
+	DeclarationBase
 	ObjectLiteralElementBase
 	expression *Node
 }
@@ -3625,6 +3640,10 @@ func (node *MappedTypeNode) ForEachChild(v Visitor) bool {
 		visit(v, node.questionToken) || visit(v, node.typeNode) || visitNodes(v, node.members)
 }
 
+func isMappedTypeNode(node *Node) bool {
+	return node.kind == SyntaxKindMappedType
+}
+
 // TypeLiteralNode
 
 type TypeLiteralNode struct {
@@ -3927,6 +3946,10 @@ func (node *JsxAttributes) ForEachChild(v Visitor) bool {
 	return visitNodes(v, node.properties)
 }
 
+func isJsxAttributes(node *Node) bool {
+	return node.kind == SyntaxKindJsxAttributes
+}
+
 // JsxNamespacedName
 
 type JsxNamespacedName struct {
@@ -3994,6 +4017,10 @@ func (f *NodeFactory) NewJsxSelfClosingElement(tagName *Node, typeArguments *Nod
 
 func (node *JsxSelfClosingElement) ForEachChild(v Visitor) bool {
 	return visit(v, node.tagName) || visit(v, node.typeArguments) || visit(v, node.attributes)
+}
+
+func isJsxSelfClosingElement(node *Node) bool {
+	return node.kind == SyntaxKindJsxSelfClosingElement
 }
 
 /// A JSX expression of the form <>...</>

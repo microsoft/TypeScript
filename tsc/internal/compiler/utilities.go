@@ -1785,13 +1785,6 @@ func isImportMeta(node *Node) bool {
 	return false
 }
 
-func lastElement[T any](slice []T) T {
-	if len(slice) != 0 {
-		return slice[len(slice)-1]
-	}
-	return *new(T)
-}
-
 func ensureScriptKind(fileName string, scriptKind ScriptKind) ScriptKind {
 	// Using scriptKind as a condition handles both:
 	// - 'scriptKind' is unspecified and thus it is `undefined`
@@ -3403,6 +3396,10 @@ func isAssertionExpression(node *Node) bool {
 	return kind == SyntaxKindTypeAssertionExpression || kind == SyntaxKindAsExpression
 }
 
+func isTypeAssertion(node *Node) bool {
+	return isAssertionExpression(skipParentheses(node))
+}
+
 func createSymbolTable(symbols []*Symbol) SymbolTable {
 	if len(symbols) == 0 {
 		return nil
@@ -4015,4 +4012,17 @@ func reverseAccessKind(a AccessKind) AccessKind {
 		return AccessKindReadWrite
 	}
 	panic("Unhandled case in reverseAccessKind")
+}
+
+func isJsxOpeningLikeElement(node *Node) bool {
+	return isJsxOpeningElement(node) || isJsxSelfClosingElement(node)
+}
+
+func isObjectLiteralElementLike(node *Node) bool {
+	switch node.kind {
+	case SyntaxKindPropertyAssignment, SyntaxKindShorthandPropertyAssignment, SyntaxKindSpreadAssignment,
+		SyntaxKindMethodDeclaration, SyntaxKindGetAccessor, SyntaxKindSetAccessor:
+		return true
+	}
+	return false
 }

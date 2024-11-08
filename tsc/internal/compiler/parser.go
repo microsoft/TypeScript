@@ -4253,7 +4253,7 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 	case SyntaxKindJsxOpeningElement:
 		children := p.parseJsxChildren(opening)
 		var closingElement *Node
-		lastChild := lastElement(children)
+		lastChild := utils.LastOrNil(children)
 		if lastChild != nil && lastChild.kind == SyntaxKindJsxElement &&
 			!tagNamesAreEquivalent(lastChild.AsJsxElement().openingElement.AsJsxOpeningElement().tagName, lastChild.AsJsxElement().closingElement.AsJsxClosingElement().tagName) &&
 			tagNamesAreEquivalent(opening.AsJsxOpeningElement().tagName, lastChild.AsJsxElement().closingElement.AsJsxClosingElement().tagName) {
