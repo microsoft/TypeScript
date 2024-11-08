@@ -554,9 +554,9 @@ Instantiation count: 1,000
 // Edge cases
 {
     // The following should be treated as identity escapes and upper case should be included
-    /\c[\c]/i; // This is special: In Annex B, the first backslash is included, so this is equivalent to /\\[Cc][Cc]/
->/\c[\c]/i : RegExp<["\\c]" | "\\C]"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    /\c[\c]/i; // This is special: In Annex B, the first backslashes are included, so this is equivalent to /\\[Cc][\\Cc]/
+>/\c[\c]/i : RegExp<["\\c\\" | "\\cc" | "\\cC" | "\\C\\" | "\\Cc" | "\\CC"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /\e[\e]/i;
 >/\e[\e]/i : RegExp<["ee" | "eE" | "Ee" | "EE"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
@@ -580,8 +580,8 @@ Instantiation count: 1,000
 
     // The following cases produce errors, but should still be treated as identity escapes and upper case should be included
     /\c[\c]/iu;
->/\c[\c]/iu : RegExp<["[]"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/\c[\c]/iu : RegExp<["cc" | "cC" | "Cc" | "CC"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /\e[\e]/iu;
 >/\e[\e]/iu : RegExp<["ee" | "eE" | "Ee" | "EE"], undefined, { hasIndices: false; global: false; ignoreCase: true; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>

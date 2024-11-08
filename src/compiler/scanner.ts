@@ -3119,17 +3119,18 @@ export function createScanner(
                     }
                     if (anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.c_must_be_followed_by_an_ASCII_letter, pos - 2, 2);
+                        return getCharacterEquivalents("c");
                     }
-                    else if (atomEscape) {
+                    else {
                         // Annex B treats
                         //
                         //  ExtendedAtom : `\` [lookahead = `c`]
+                        //  ClassAtomNoDash : `\` [lookahead = `c`]
                         //
                         // as the single character `\` when `c` isn't followed by a valid control character
                         pos--;
                         return "\\";
                     }
-                    return getCharacterEquivalents(String.fromCharCode(ch));
                 case CharacterCodes.caret:
                 case CharacterCodes.$:
                 case CharacterCodes.slash:

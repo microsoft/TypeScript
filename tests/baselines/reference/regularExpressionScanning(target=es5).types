@@ -99,12 +99,12 @@ Type Count: 10,000
 
 // Character escapes
 /\c[\c0\ca\cQ\c\C]\c1\C/;
->/\c[\c0\ca\cQ\c\C]\c1\C/ : RegExp<["\\c0\\c1C" | "\\c\u0001\\c1C" | "\\c\u0011\\c1C" | "\\c\\\\c1C" | "\\cC\\c1C"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/\c[\c0\ca\cQ\c\C]\c1\C/ : RegExp<["\\c\\\\c1C" | "\\cc\\c1C" | "\\c0\\c1C" | "\\c\u0001\\c1C" | "\\c\u0011\\c1C" | "\\cC\\c1C"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 /\c[\c0\ca\cQ\c\C]\c1\C/u;
->/\c[\c0\ca\cQ\c\C]\c1\C/u : RegExp<["[011C" | "[\u000111C" | "[\u001111C" | "[\\11C" | "[C11C"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/\c[\c0\ca\cQ\c\C]\c1\C/u : RegExp<["ccc1C" | "c0c1C" | "c\u0001c1C" | "c\u0011c1C" | "cCc1C"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: true; unicodeSets: false; sticky: false; }>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 /\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/;
 >/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/ : RegExp<["q\\`qq{]q{" | "q\\`\\q{]q{" | "q\\``q{]q{" | "q\\`[q{]q{" | "q\\`Qq{]q{" | "q\\`{q{]q{" | "q\\`fq{]q{" | "q\\`oq{]q{" | "q\\`|q{]q{" | "q\\`bq{]q{" | "q\\`aq{]q{" | "q\\`rq{]q{" | "q\\`zq{]q{"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>

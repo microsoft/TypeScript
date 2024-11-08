@@ -181,7 +181,7 @@
 // Edge cases
 {
     // The following should be treated as identity escapes and upper case should be included
-    /\c[\c]/i; // This is special: In Annex B, the first backslash is included, so this is equivalent to /\\[Cc][Cc]/
+    /\c[\c]/i; // This is special: In Annex B, the first backslashes are included, so this is equivalent to /\\[Cc][\\Cc]/
     /\e[\e]/i;
     /\k[\k]/i;
     /\p[\p]/i;
@@ -448,7 +448,7 @@
 // Edge cases
 {
     // The following should be treated as identity escapes and upper case should be included
-    /\c[\c]/i; // This is special: In Annex B, the first backslash is included, so this is equivalent to /\\[Cc][Cc]/
+    /\c[\c]/i; // This is special: In Annex B, the first backslashes are included, so this is equivalent to /\\[Cc][\\Cc]/
     /\e[\e]/i;
     /\k[\k]/i;
     /\p[\p]/i;
