@@ -1,5 +1,9 @@
 package compiler
 
+import (
+	"github.com/microsoft/typescript-go/internal/tspath"
+)
+
 type PackageJsonPathFields struct {
 	typings              string
 	types                string
@@ -26,7 +30,7 @@ type PackageJsonInfoCacheEntry struct {
 }
 
 type PackageJsonInfoCache struct {
-	cache                map[Path]PackageJsonInfoCacheEntry
+	cache                map[tspath.Path]PackageJsonInfoCacheEntry
 	currentDirectory     string
 	getCanonicalFileName func(string) string
 	isReadonly           bool
@@ -40,9 +44,9 @@ func NewPackageJsonInfoCache(currentDirectory string, getCanonicalFileName func(
 }
 
 func (p *PackageJsonInfoCache) getPackageJsonInfo(packageJsonPath string) *PackageJsonInfoCacheEntry {
-	key := toPath(packageJsonPath, p.currentDirectory, p.getCanonicalFileName)
+	key := tspath.ToPath(packageJsonPath, p.currentDirectory, p.getCanonicalFileName)
 	if p.cache == nil {
-		p.cache = make(map[Path]PackageJsonInfoCacheEntry)
+		p.cache = make(map[tspath.Path]PackageJsonInfoCacheEntry)
 		return nil
 	}
 	entry, ok := p.cache[key]
@@ -53,9 +57,9 @@ func (p *PackageJsonInfoCache) getPackageJsonInfo(packageJsonPath string) *Packa
 }
 
 func (p *PackageJsonInfoCache) setPackageJsonInfo(packageJsonPath string, info *PackageJsonInfoCacheEntry) {
-	key := toPath(packageJsonPath, p.currentDirectory, p.getCanonicalFileName)
+	key := tspath.ToPath(packageJsonPath, p.currentDirectory, p.getCanonicalFileName)
 	if p.cache == nil {
-		p.cache = make(map[Path]PackageJsonInfoCacheEntry)
+		p.cache = make(map[tspath.Path]PackageJsonInfoCacheEntry)
 	}
 	p.cache[key] = *info
 }

@@ -1,4 +1,4 @@
-package compiler
+package tspath
 
 import (
 	"strings"
@@ -28,7 +28,7 @@ func isUrl(path string) bool {
 
 // Determines whether a path is an absolute disk path (e.g. starts with `/`, or a dos path
 // like `c:`, `c:\` or `c:/`).
-func isRootedDiskPath(path string) bool {
+func IsRootedDiskPath(path string) bool {
 	return getEncodedRootLength(path) > 0
 }
 
@@ -42,16 +42,16 @@ func isDiskPathRoot(path string) bool {
 //
 //	```
 //	// POSIX
-//	pathIsAbsolute("/path/to/file.ext") === true
+//	PathIsAbsolute("/path/to/file.ext") === true
 //	// DOS
-//	pathIsAbsolute("c:/path/to/file.ext") === true
+//	PathIsAbsolute("c:/path/to/file.ext") === true
 //	// URL
-//	pathIsAbsolute("file:///path/to/file.ext") === true
+//	PathIsAbsolute("file:///path/to/file.ext") === true
 //	// Non-absolute
-//	pathIsAbsolute("path/to/file.ext") === false
-//	pathIsAbsolute("./path/to/file.ext") === false
+//	PathIsAbsolute("path/to/file.ext") === false
+//	PathIsAbsolute("./path/to/file.ext") === false
 //	```
-func pathIsAbsolute(path string) bool {
+func PathIsAbsolute(path string) bool {
 	return getEncodedRootLength(path) != 0
 }
 
@@ -213,7 +213,7 @@ func getRootLength(path string) int {
 	return rootLength
 }
 
-func getDirectoryPath(path string) string {
+func GetDirectoryPath(path string) string {
 	path = normalizeSlashes(path)
 
 	// If the path provided is itself a root, then return it.
@@ -228,7 +228,7 @@ func getDirectoryPath(path string) string {
 	return path[:max(rootLength, strings.LastIndex(path, "/"))]
 }
 func (p Path) getDirectoryPath() Path {
-	return Path(getDirectoryPath(string(p)))
+	return Path(GetDirectoryPath(string(p)))
 }
 
 func getPathFromPathComponents(pathComponents []string) string {
@@ -316,9 +316,9 @@ func normalizePath(path string) string {
 	return normalized
 }
 
-func toPath(fileName string, basePath string, getCanonicalFileName func(string) string) Path {
+func ToPath(fileName string, basePath string, getCanonicalFileName func(string) string) Path {
 	var nonCanonicalizedPath string
-	if isRootedDiskPath(fileName) {
+	if IsRootedDiskPath(fileName) {
 		nonCanonicalizedPath = normalizePath(fileName)
 	} else {
 		nonCanonicalizedPath = getNormalizedAbsolutePath(basePath, fileName)
@@ -359,7 +359,7 @@ func getPathComponentsRelativeTo(from string, to string, stringEqualer func(a, b
 		fromComponent := fromComponents[start]
 		toComponent := toComponents[start]
 		if start == 0 {
-			if !EquateStringsCaseInsensitive(fromComponent, toComponent) {
+			if !utils.EquateStringCaseInsensitive(fromComponent, toComponent) {
 				break
 			}
 		} else {
@@ -393,7 +393,7 @@ func getPathComponentsRelativeTo(from string, to string, stringEqualer func(a, b
 }
 
 func ConvertToRelativePath(absoluteOrRelativePath, basePath string, getCanonicalFileName func(fileName string) string) string {
-	if !isRootedDiskPath(absoluteOrRelativePath) {
+	if !IsRootedDiskPath(absoluteOrRelativePath) {
 		return absoluteOrRelativePath
 	}
 
@@ -404,12 +404,12 @@ func getRelativePathToDirectoryOrUrl(directoryPathOrUrl string, relativeOrAbsolu
 	pathComponents := getPathComponentsRelativeTo(
 		resolvePath(currentDirectory, directoryPathOrUrl),
 		resolvePath(currentDirectory, relativeOrAbsolutePath),
-		EquateStringsCaseSensitive,
+		utils.EquateStringCaseSensitive,
 		getCanonicalFileName,
 	)
 
 	firstComponent := pathComponents[0]
-	if isAbsolutePathAnUrl && isRootedDiskPath(firstComponent) {
+	if isAbsolutePathAnUrl && IsRootedDiskPath(firstComponent) {
 		var prefix string
 		if firstComponent[0] == directorySeparator {
 			prefix = "file://"

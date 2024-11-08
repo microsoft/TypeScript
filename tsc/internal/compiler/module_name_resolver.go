@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
+	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/utils"
 )
 
@@ -250,7 +251,7 @@ func (r *ModuleResolver) resolveModuleName(moduleName string, containingFile str
 			r.host.Trace(formatMessage(diagnostics.Using_compiler_options_of_project_reference_redirect_0, redirectedReference.sourceFile.fileName))
 		}
 	}
-	containingDirectory := getDirectoryPath(containingFile)
+	containingDirectory := tspath.GetDirectoryPath(containingFile)
 	var result *ResolvedModuleWithFailedLookupLocations
 	if r.cache != nil {
 		result = r.cache.getFromDirectoryCache(ModeAwareCacheKey{moduleName, resolutionMode}, containingDirectory, redirectedReference)

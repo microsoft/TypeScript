@@ -5,6 +5,7 @@ import (
 	"iter"
 	"regexp"
 	"slices"
+	"strings"
 	"sync"
 )
 
@@ -214,4 +215,14 @@ func MakeRegexp(s string) *regexp.Regexp {
 	}
 	regexpMutex.Unlock()
 	return rx
+}
+
+func EquateStringCaseInsensitive(a, b string) bool {
+	// !!!
+	// return a == b || strings.ToUpper(a) == strings.ToUpper(b)
+	return strings.EqualFold(a, b)
+}
+
+func EquateStringCaseSensitive(a, b string) bool {
+	return a == b
 }

@@ -9,6 +9,7 @@ import (
 	"unicode"
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 type DiagnosticsFormattingOptions struct {
@@ -197,7 +198,7 @@ func WriteLocation(output *strings.Builder, file *SourceFile, pos int, formatOpt
 	firstLine, firstChar := GetLineAndCharacterOfPosition(file, pos)
 	var relativeFileName string
 	if formatOpts != nil {
-		relativeFileName = ConvertToRelativePath(file.path, formatOpts.CurrentDirectory, formatOpts.GetCanonicalFileName)
+		relativeFileName = tspath.ConvertToRelativePath(file.path, formatOpts.CurrentDirectory, formatOpts.GetCanonicalFileName)
 	} else {
 		relativeFileName = file.path
 	}
@@ -330,8 +331,8 @@ func writeTabularErrorsDisplay(output *strings.Builder, errorSummary *ErrorSumma
 func prettyPathForFileError(file *SourceFile, fileErrors []*Diagnostic, formatOpts *DiagnosticsFormattingOptions) string {
 	line, _ := GetLineAndCharacterOfPosition(file, fileErrors[0].loc.Pos())
 	fileName := file.fileName
-	if pathIsAbsolute(fileName) && pathIsAbsolute(formatOpts.CurrentDirectory) {
-		fileName = ConvertToRelativePath(file.path, formatOpts.CurrentDirectory, formatOpts.GetCanonicalFileName)
+	if tspath.PathIsAbsolute(fileName) && tspath.PathIsAbsolute(formatOpts.CurrentDirectory) {
+		fileName = tspath.ConvertToRelativePath(file.path, formatOpts.CurrentDirectory, formatOpts.GetCanonicalFileName)
 	}
 	return fmt.Sprintf("%s%s:%d%s",
 		fileName,
