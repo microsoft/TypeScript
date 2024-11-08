@@ -653,3 +653,161 @@ strOrNum = unionWithRestParameter4("hello", "world");
 >"world" : "world"
 >        : ^^^^^^^
 
+var unionWithAnyParameter1: { (a: string): void; } | { (a: any): void; };
+>unionWithAnyParameter1 : ((a: string) => void) | ((a: any) => void)
+>                       : ^^ ^^      ^^^^^    ^^^^^^ ^^   ^^^^^    ^
+>a : string
+>  : ^^^^^^
+>a : any
+>  : ^^^
+
+unionWithAnyParameter1('hello');
+>unionWithAnyParameter1('hello') : void
+>                                : ^^^^
+>unionWithAnyParameter1 : ((a: string) => void) | ((a: any) => void)
+>                       : ^^ ^^      ^^^^^    ^^^^^^ ^^   ^^^^^    ^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+unionWithAnyParameter1({}); // wrong argument type
+>unionWithAnyParameter1({}) : void
+>                           : ^^^^
+>unionWithAnyParameter1 : ((a: string) => void) | ((a: any) => void)
+>                       : ^^ ^^      ^^^^^    ^^^^^^ ^^   ^^^^^    ^
+>{} : {}
+>   : ^^
+
+var unionWithAnyParameter2: { (a: string, b: any): void; } | { (a: any, b: number): void; };
+>unionWithAnyParameter2 : ((a: string, b: any) => void) | ((a: any, b: number) => void)
+>                       : ^^ ^^      ^^ ^^   ^^^^^    ^^^^^^ ^^   ^^ ^^      ^^^^^    ^
+>a : string
+>  : ^^^^^^
+>b : any
+>  : ^^^
+>a : any
+>  : ^^^
+>b : number
+>  : ^^^^^^
+
+unionWithAnyParameter2('hello', 10);
+>unionWithAnyParameter2('hello', 10) : void
+>                                    : ^^^^
+>unionWithAnyParameter2 : ((a: string, b: any) => void) | ((a: any, b: number) => void)
+>                       : ^^ ^^      ^^ ^^   ^^^^^    ^^^^^^ ^^   ^^ ^^      ^^^^^    ^
+>'hello' : "hello"
+>        : ^^^^^^^
+>10 : 10
+>   : ^^
+
+unionWithAnyParameter2(10, 'hello'); // error wrong arguments types
+>unionWithAnyParameter2(10, 'hello') : void
+>                                    : ^^^^
+>unionWithAnyParameter2 : ((a: string, b: any) => void) | ((a: any, b: number) => void)
+>                       : ^^ ^^      ^^ ^^   ^^^^^    ^^^^^^ ^^   ^^ ^^      ^^^^^    ^
+>10 : 10
+>   : ^^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+unionWithAnyParameter2('hello', 'hello'); // error wrong argument type
+>unionWithAnyParameter2('hello', 'hello') : void
+>                                         : ^^^^
+>unionWithAnyParameter2 : ((a: string, b: any) => void) | ((a: any, b: number) => void)
+>                       : ^^ ^^      ^^ ^^   ^^^^^    ^^^^^^ ^^   ^^ ^^      ^^^^^    ^
+>'hello' : "hello"
+>        : ^^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+unionWithAnyParameter2(10, 10); // error wrong argument type
+>unionWithAnyParameter2(10, 10) : void
+>                               : ^^^^
+>unionWithAnyParameter2 : ((a: string, b: any) => void) | ((a: any, b: number) => void)
+>                       : ^^ ^^      ^^ ^^   ^^^^^    ^^^^^^ ^^   ^^ ^^      ^^^^^    ^
+>10 : 10
+>   : ^^
+>10 : 10
+>   : ^^
+
+var unionWithAnyParameter3: { (a: string | number, b: any): void; } | { (...a: string[]): void; };
+>unionWithAnyParameter3 : ((a: string | number, b: any) => void) | ((...a: string[]) => void)
+>                       : ^^ ^^               ^^ ^^   ^^^^^    ^^^^^^^^^ ^^        ^^^^^    ^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+>b : any
+>  : ^^^
+>a : string[]
+>  : ^^^^^^^^
+
+unionWithAnyParameter3('hello', 'hello');
+>unionWithAnyParameter3('hello', 'hello') : void
+>                                         : ^^^^
+>unionWithAnyParameter3 : ((a: string | number, b: any) => void) | ((...a: string[]) => void)
+>                       : ^^ ^^               ^^ ^^   ^^^^^    ^^^^^^^^^ ^^        ^^^^^    ^
+>'hello' : "hello"
+>        : ^^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+unionWithAnyParameter3('hello', 'hello', 'hello');
+>unionWithAnyParameter3('hello', 'hello', 'hello') : void
+>                                                  : ^^^^
+>unionWithAnyParameter3 : ((a: string | number, b: any) => void) | ((...a: string[]) => void)
+>                       : ^^ ^^               ^^ ^^   ^^^^^    ^^^^^^^^^ ^^        ^^^^^    ^
+>'hello' : "hello"
+>        : ^^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+unionWithAnyParameter3(10, 'hello'); // error wrong argument type
+>unionWithAnyParameter3(10, 'hello') : void
+>                                    : ^^^^
+>unionWithAnyParameter3 : ((a: string | number, b: any) => void) | ((...a: string[]) => void)
+>                       : ^^ ^^               ^^ ^^   ^^^^^    ^^^^^^^^^ ^^        ^^^^^    ^
+>10 : 10
+>   : ^^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+unionWithAnyParameter3('hello', 10); // error wrong argument type
+>unionWithAnyParameter3('hello', 10) : void
+>                                    : ^^^^
+>unionWithAnyParameter3 : ((a: string | number, b: any) => void) | ((...a: string[]) => void)
+>                       : ^^ ^^               ^^ ^^   ^^^^^    ^^^^^^^^^ ^^        ^^^^^    ^
+>'hello' : "hello"
+>        : ^^^^^^^
+>10 : 10
+>   : ^^
+
+var unionWithAnyParameter4: { (a: string, b: any): void; } | { (a: any): void; };
+>unionWithAnyParameter4 : ((a: string, b: any) => void) | ((a: any) => void)
+>                       : ^^ ^^      ^^ ^^   ^^^^^    ^^^^^^ ^^   ^^^^^    ^
+>a : string
+>  : ^^^^^^
+>b : any
+>  : ^^^
+>a : any
+>  : ^^^
+
+unionWithAnyParameter4('hello', {}); 
+>unionWithAnyParameter4('hello', {}) : void
+>                                    : ^^^^
+>unionWithAnyParameter4 : ((a: string, b: any) => void) | ((a: any) => void)
+>                       : ^^ ^^      ^^ ^^   ^^^^^    ^^^^^^ ^^   ^^^^^    ^
+>'hello' : "hello"
+>        : ^^^^^^^
+>{} : {}
+>   : ^^
+
+unionWithAnyParameter4({}, {}); // error wrong argument type 
+>unionWithAnyParameter4({}, {}) : void
+>                               : ^^^^
+>unionWithAnyParameter4 : ((a: string, b: any) => void) | ((a: any) => void)
+>                       : ^^ ^^      ^^ ^^   ^^^^^    ^^^^^^ ^^   ^^^^^    ^
+>{} : {}
+>   : ^^
+>{} : {}
+>   : ^^
+
