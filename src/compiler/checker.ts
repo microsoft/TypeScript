@@ -32512,28 +32512,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     // An optimized version of `getUnionType` tailored for RegExps
-    function reduceRegularExpressionUnion(contents: RegularExpressionReducedContent[]): RegularExpressionReducedContent {
-        if (contents.length === 0) {
+    function reduceRegularExpressionUnion(constituents: RegularExpressionReducedContent[]): RegularExpressionReducedContent {
+        if (constituents.length === 0) {
             return new Set() as RegularExpressionReducedUnion;
         }
-        if (contents.length === 1) {
-            return contents[0];
+        if (constituents.length === 1) {
+            return constituents[0];
         }
-        const flattenedContents: RegularExpressionReducedContent[] = [];
-        return addContents(contents) ? new Set(flattenedContents) as RegularExpressionReducedUnion : RegExpAnyString;
+        const flattenedConstituents = new Set() as RegularExpressionReducedUnion;
+        return addConstituents(constituents) ? flattenedConstituents : RegExpAnyString;
 
-        function addContents(contents: RegularExpressionReducedContent[] | RegularExpressionReducedUnion) {
-            for (const content of contents) {
-                if (content === RegExpAnyString) {
+        function addConstituents(constituents: RegularExpressionReducedContent[] | RegularExpressionReducedUnion) {
+            for (const constituent of constituents) {
+                if (constituent === RegExpAnyString) {
                     // Fast path: if there are any string types, all other subtypes are redundant.
                     // Works like `removeRedundantLiteralTypes`
                     return false;
                 }
-                else if (content instanceof Set) {
-                    if (!addContents(content)) return false;
+                else if (constituent instanceof Set) {
+                    if (!addConstituents(constituent)) return false;
                 }
                 else {
-                    flattenedContents.push(content);
+                    flattenedConstituents.add(constituent as string | RegularExpressionReducedPattern);
                 }
             }
             return true;
@@ -32545,7 +32545,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const unionIndex = findIndex(contents, content => content instanceof Set);
         if (unionIndex >= 0) {
             return reduceLeft(contents, (n, content) => content instanceof Set ? n * content.size : n, 1) < 10000 ?
-                reduceRegularExpressionUnion(arrayFrom(contents[unionIndex] as RegularExpressionReducedUnion, content => reduceRegularExpressionPattern(replaceElement(contents, unionIndex, content)))) :
+                reduceRegularExpressionUnion(arrayFrom(contents[unionIndex] as RegularExpressionReducedUnion, constituent => reduceRegularExpressionPattern(replaceElement(contents, unionIndex, constituent)))) :
                 RegExpAnyString;
         }
         const flattenedContents = [] as unknown as RegularExpressionReducedPattern;

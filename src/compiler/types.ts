@@ -2835,7 +2835,7 @@ export interface RegularExpressionPatternUnion extends Set<string | RegularExpre
 export type RegularExpressionReducedContent = string | RegularExpressionAnyString | RegularExpressionReducedUnion | RegularExpressionReducedPattern;
 
 /** @internal */
-export interface RegularExpressionReducedUnion extends Set<RegularExpressionReducedContent> {
+export interface RegularExpressionReducedUnion extends Set<string | RegularExpressionReducedPattern> {
     _regularExpressionReducedUnionBrand: any;
 }
 
