@@ -10,18 +10,18 @@ regularExpressionLiteralTypes.ts(104,9): error TS1516: A character class range m
 regularExpressionLiteralTypes.ts(105,9): error TS1516: A character class range must not be bounded by another character class.
 regularExpressionLiteralTypes.ts(106,7): error TS1516: A character class range must not be bounded by another character class.
 regularExpressionLiteralTypes.ts(106,10): error TS1516: A character class range must not be bounded by another character class.
-regularExpressionLiteralTypes.ts(189,6): error TS1512: '\c' must be followed by an ASCII letter.
-regularExpressionLiteralTypes.ts(189,9): error TS1512: '\c' must be followed by an ASCII letter.
-regularExpressionLiteralTypes.ts(190,6): error TS1535: This character cannot be escaped in a regular expression.
-regularExpressionLiteralTypes.ts(190,9): error TS1535: This character cannot be escaped in a regular expression.
-regularExpressionLiteralTypes.ts(191,6): error TS1510: '\k' must be followed by a capturing group name enclosed in angle brackets.
-regularExpressionLiteralTypes.ts(191,9): error TS1545: '\k' is only available outside character class.
-regularExpressionLiteralTypes.ts(192,6): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
-regularExpressionLiteralTypes.ts(192,9): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
-regularExpressionLiteralTypes.ts(193,6): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
-regularExpressionLiteralTypes.ts(193,9): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
-regularExpressionLiteralTypes.ts(194,6): error TS1535: This character cannot be escaped in a regular expression.
-regularExpressionLiteralTypes.ts(194,9): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionLiteralTypes.ts(197,6): error TS1512: '\c' must be followed by an ASCII letter.
+regularExpressionLiteralTypes.ts(197,9): error TS1512: '\c' must be followed by an ASCII letter.
+regularExpressionLiteralTypes.ts(198,6): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionLiteralTypes.ts(198,9): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionLiteralTypes.ts(199,6): error TS1510: '\k' must be followed by a capturing group name enclosed in angle brackets.
+regularExpressionLiteralTypes.ts(199,9): error TS1545: '\k' is only available outside character class.
+regularExpressionLiteralTypes.ts(200,6): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionLiteralTypes.ts(200,9): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionLiteralTypes.ts(201,6): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionLiteralTypes.ts(201,9): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionLiteralTypes.ts(202,6): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionLiteralTypes.ts(202,9): error TS1535: This character cannot be escaped in a regular expression.
 
 
 ==== regularExpressionLiteralTypes.ts (24 errors) ====
@@ -202,22 +202,30 @@ regularExpressionLiteralTypes.ts(194,9): error TS1535: This character cannot be 
     }
     
     // Case sensitivity in Unicode mode and non-Unicode mode
-    // The following regular expressions include these two non-ASCII characters:
+    // The following regular expressions include these three non-ASCII characters:
     // - ı (U+0131 LATIN SMALL LETTER DOTLESS I)
-    // - K (U+212A KELVIN SIGN)
+    // - ſ (U+017F LATIN SMALL LETTER LONG S)
+    // - K (U+212A KELVIN SIGN)
+    // They are prefixed by `_` for clearness.
     // When the `ignoreCase` (i) flag is set, the character canonicalization behavior differs depending on whether HasEitherUnicodeFlag(rer) is true.
     // In any Unicode mode, a character is canonicalized by the `toCasefold` method of the Unicode Default Case Folding algorithm,
-    // which includes mappings of both `ı` and `K` to ASCII `i` and `k`.
+    // which includes mappings of both `ſ` to `s` and `K` to `k` but not `ı` to `i` (which is a mapping specific to Turkish).
     // In non-Unicode mode, the `toUppercase` method of the Unicode Default Case Conversion algorithm is used instead,
-    // which does not include mapping of `K`. Although `toUppercase(ı)` is `I`, the Canonicalize AO in the spec
-    // (https://tc39.es/ecma262/#sec-runtime-semantics-canonicalize-ch) bailed out all non-ASCII-to-ASCII mapping.
+    // which does not include an uppercase mapping of `K`. Although `toUppercase(ı)` is `I` and `toUppercase(ſ)` is `S`,
+    // the Canonicalize AO in the spec (https://tc39.es/ecma262/#sec-runtime-semantics-canonicalize-ch) bailed out these two non-ASCII-to-ASCII mapping.
     {
-        /iıK/i;
-        /iıK/iu;
-        /iıK/iv;
-        /[ai][aı][aK]/i;
-        /[ai][aı][aK]/iu;
-        /[ai][aı][aK]/iv;
+        /i|_ı|s|_ſ|K|_K/i;
+        /i|_ı|s|_ſ|K|_K/iu;
+        /i|_ı|s|_ſ|K|_K/iv;
+        /\x69|_\u0131|\x73|_\u017F|\x4B|_\u212A/i;
+        /\x69|_\u0131|\x73|_\u017F|\x4B|_\u212A/iu;
+        /\x69|_\u0131|\x73|_\u017F|\x4B|_\u212A/iv;
+        /[ai]|_[bı]|[cs]|_[dſ]|[eK]|_[fK]/i;
+        /[ai]|_[bı]|[cs]|_[dſ]|[eK]|_[fK]/iu;
+        /[ai]|_[bı]|[cs]|_[dſ]|[eK]|_[fK]/iv;
+        /[\x61\x69]|_[\x62\u0131]|[\x63\x73]|_[\x64\u017F]|[\x65\x4B]|_[\x66\u212A]/i;
+        /[\x61\x69]|_[\x62\u0131]|[\x63\x73]|_[\x64\u017F]|[\x65\x4B]|_[\x66\u212A]/iu;
+        /[\x61\x69]|_[\x62\u0131]|[\x63\x73]|_[\x64\u017F]|[\x65\x4B]|_[\x66\u212A]/iv;
     }
     
     // Case sensitivity and pattern modifiers
@@ -247,7 +255,7 @@ regularExpressionLiteralTypes.ts(194,9): error TS1535: This character cannot be 
 !!! error TS1535: This character cannot be escaped in a regular expression.
             ~~
 !!! error TS1535: This character cannot be escaped in a regular expression.
-        /\k[\k]/iu;
+        /\k[\k]/iu; // Includes K (U+212A KELVIN SIGN) as described above
          ~~
 !!! error TS1510: '\k' must be followed by a capturing group name enclosed in angle brackets.
             ~~
@@ -282,7 +290,7 @@ regularExpressionLiteralTypes.ts(194,9): error TS1535: This character cannot be 
         /(foo)\2|(bar)/;
         // Even though `foo` has appeared before `\1`, they aren’t in the same alternative, so `\1` will always be the empty string
         /(foo)|(bar)\1/;
-        // Combination of the above two cases – both backreferences match the empty strings
+        // Combination of the above two cases – both backreferences match empty strings
         /^((foo)\1|(bar)\2)$/;
     
         // Named backreferences
@@ -303,7 +311,7 @@ regularExpressionLiteralTypes.ts(194,9): error TS1535: This character cannot be 
         /\k<$$>?(?<$$>\k<$$>?foo\k<$$>?)?\k<$$>?|\k<$$>?(?<$$>\k<$$>?bar\k<$$>?)?\k<$$>?/;
         // Matches ``, `foofoo` or `barbar`, but we don't have the ability to exclude `foo` and `bar`
         /\k<$$>(?<$$>\k<$$>foo\k<$$>)?\k<$$>|\k<$$>(?<$$>\k<$$>bar\k<$$>)?\k<$$>/;
-        // All `$$` below match the empty strings
+        // All `\k<$$>` below match empty strings
         /(?<$$>f<\k<$$>?(?<f>fizz\k<$$>?(?<b>foo)\k<b>?|(?<b>foo)\k<f>?)\k<f>?>|<\k<b>?(?<b>\k<b>?(?<f>bar)|\k<f>?(?<f>bar)\k<$$>?buzz)\k<$$>?>b)/;
     
         // Assertions
@@ -337,8 +345,9 @@ regularExpressionLiteralTypes.ts(194,9): error TS1535: This character cannot be 
         /(?!(foo)|bar)\1/;
         /(?!(foo)|(bar))(?<answer>\1|\2)/;
         /(?!(foo)|(bar)?)(?<answer>\1|\2)/;
-        // Excerpt of a regex that actually matches a part of a syllable of a natural language
-        /([aeiouy])(?:((?=(ng?|[mptkbd])(?!(([aeiou])|(y)(?!([aeio]))))|(g)(?!(w?[aeiou])|(y)(?!([aeio])|(u)(?!([nt])(?!([aeiou])))))))\2)/
+        /(?<!((foo)\2))\1\2(?!((bar)\4))\3\4/;
+        // Excerpt of a regex (with capturing groups added) that actually matches a part of a syllable of a natural language
+        /([aeiouy])(?:(?=((ng?|[mptkbd])(?!(([aeiou])|(y)(?!([aeio]))))|(g)(?!(w?[aeiou])|(y)(?!([aeio])|(u)(?!([nt])(?!([aeiou])))))))\2)/
     }
     
     // Finally, a very loosey Temporal (Zoned)DateTime format regex, which tests, in non-Unicode, Unicode, and Unicode Sets modes, if:
