@@ -132,9 +132,9 @@
 const dateTimeString = "2048-10-24 12:34:56";
 >dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeChecking.ts, 41, 5))
 
-// a very loosey Temporal (Zoned)DateTime format regex, see `regularExpressionTypeChecking.ts` for an explanation
+// a very loose Temporal (Zoned)DateTime format regex, identical to the one in `tests/cases/conformance/types/literal/regularExpressionLiteralTypes.ts`
 {
-    const dateTimeRegex = /^(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?:Z|[+-](?<timeZone>(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?$/i;
+    const dateTimeRegex = /^(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?<timeZone>Z|(?<timeZoneSign>[+-])(?:(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?$/i;
 >dateTimeRegex : Symbol(dateTimeRegex, Decl(regularExpressionTypeChecking.ts, 45, 9))
 
     let match = dateTimeString.match(dateTimeRegex)!; // RegExpExecArray
@@ -196,14 +196,14 @@ const dateTimeString = "2048-10-24 12:34:56";
 >6 : Symbol(6)
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
-    match[15]?.length; // number | undefined
->match[15]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    match[16]?.length; // number | undefined
+>match[16]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
->15 : Symbol(15)
+>16 : Symbol(16)
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
-    match[16].length; // error
->match[16].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    match[17].length; // error
+>match[17].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 47, 7))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
@@ -276,7 +276,7 @@ const dateTimeString = "2048-10-24 12:34:56";
 }
 
 {
-    const globalDateTimeRegex = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?:Z|[+-](?<timeZone>(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/ig;
+    const globalDateTimeRegex = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?<timeZone>Z|(?<timeZoneSign>[+-])(?:(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/ig;
 >globalDateTimeRegex : Symbol(globalDateTimeRegex, Decl(regularExpressionTypeChecking.ts, 83, 9))
 
     const match = dateTimeString.match(globalDateTimeRegex)!; // RegExpMatchArray
@@ -332,7 +332,7 @@ const dateTimeString = "2048-10-24 12:34:56";
 }
 
 {
-    const dateTimeRegexWithIndices = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?:Z|[+-](?<timeZone>(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/id;
+    const dateTimeRegexWithIndices = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?<timeZone>Z|(?<timeZoneSign>[+-])(?:(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/id;
 >dateTimeRegexWithIndices : Symbol(dateTimeRegexWithIndices, Decl(regularExpressionTypeChecking.ts, 101, 9))
 
     let match = dateTimeString.match(dateTimeRegexWithIndices)!; // RegExpExecArray
@@ -364,14 +364,14 @@ const dateTimeString = "2048-10-24 12:34:56";
 >1 : Symbol(1)
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
-    match[15]?.length; // number | undefined
->match[15]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    match[16]?.length; // number | undefined
+>match[16]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
->15 : Symbol(15)
+>16 : Symbol(16)
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
-    match[16].length; // error
->match[16].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    match[17].length; // error
+>match[17].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
@@ -406,10 +406,10 @@ const dateTimeString = "2048-10-24 12:34:56";
     match.indices[6]?.length; // 2 | undefined
 >match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
 
-    match.indices[15]?.length; // 2 | undefined
+    match.indices[16]?.length; // 2 | undefined
 >match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
 
-    match.indices[16].length; // error
+    match.indices[17].length; // error
 >match : Symbol(match, Decl(regularExpressionTypeChecking.ts, 103, 7))
 
     match.indices.groups.date.length; // 2

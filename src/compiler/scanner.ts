@@ -3256,12 +3256,13 @@ export function createScanner(
                     pos++;
                     const ch = charCodeChecked(pos);
                     if (isClassContentExit(ch)) {
+                        patternUnion?.add("-"); // Treat it as a normal character
                         return patternUnion || RegExpAnyString;
                     }
                     const minCharacter = getCharacterFromClassAtomOrOprand(minAtom);
                     if (!minCharacter && anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, minStart, pos - 1 - minStart);
-                        patternUnion?.add("-"); // Treat it as a normal character
+                        patternUnion?.add("-");
                     }
                     const maxStart = pos;
                     const maxAtom = scanClassAtom();
