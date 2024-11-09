@@ -32500,7 +32500,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return pattern;
                         }
                         return reduceRegularExpressionPattern(
-                            map(pattern, content => content instanceof Set ? reducePatternUnion(content) : content),
+                            sameMap(pattern, content =>
+                                content instanceof Set
+                                    ? content.isCharacterClass
+                                        // Fast path: there are no patterns in a character class
+                                        ? content as Set<string> as RegularExpressionReducedUnion
+                                        : reducePatternUnion(content)
+                                    : content),
                         );
                     }));
                     patternUnionReductionCache.set(patternUnion, reducedContent);

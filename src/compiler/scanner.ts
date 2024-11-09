@@ -13,6 +13,7 @@ import {
     Debug,
     DiagnosticMessage,
     Diagnostics,
+    firstIterator,
     forEach,
     getNameOfScriptTarget,
     getSpellingSuggestion,
@@ -3197,6 +3198,11 @@ export function createScanner(
             }
             else if (patternUnion && content instanceof Set) {
                 content.forEach(char => {
+                    if (typeof char !== "string") {
+                        // If there is a pattern (from `scanClassStringDisjunctionContents`),
+                        // Disable the fast path in the checker and treat it like normal disjunctions
+                        patternUnion!.isCharacterClass = false;
+                    }
                     patternUnion!.add(char);
                 });
             }
@@ -3237,6 +3243,7 @@ export function createScanner(
             }
             else {
                 patternUnion = new Set() as RegularExpressionPatternUnion;
+                patternUnion.isCharacterClass = true;
             }
             while (true) {
                 const ch = charCodeChecked(pos);
@@ -3301,6 +3308,7 @@ export function createScanner(
             }
             else {
                 patternUnion = new Set() as RegularExpressionPatternUnion;
+                patternUnion.isCharacterClass = true;
             }
             let expressionMayContainStrings = false;
             let ch = charCodeChecked(pos);
@@ -3846,11 +3854,7 @@ export function createScanner(
 
         function getCharacterFromClassAtomOrOprand(content: RegularExpressionPatternContent) {
             if (typeof content === "string") return content;
-            if (content instanceof Set && content.isCharacterEquivalents) {
-                for (const ch of content) {
-                    return ch as string;
-                }
-            }
+            if (content instanceof Set && content.isCharacterEquivalents) return firstIterator(content) as string;
         }
 
         function scanExpectedChar(ch: CharacterCodes) {

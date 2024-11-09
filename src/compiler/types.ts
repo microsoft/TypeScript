@@ -2828,6 +2828,7 @@ export interface RegularExpressionPattern extends Array<RegularExpressionPattern
 export interface RegularExpressionPatternUnion extends Set<string | RegularExpressionPattern> {
     _regularExpressionPatternUnionBrand: any;
     isPossiblyUndefined?: boolean;
+    isCharacterClass?: boolean; // For fast path in the checker
     isCharacterEquivalents?: boolean;
 }
 
