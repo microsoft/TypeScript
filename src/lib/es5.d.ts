@@ -275,7 +275,7 @@ interface Function {
      * @param thisArg An object to which the this keyword can refer inside the new function.
      * @param argArray A list of arguments to be passed to the new function.
      */
-    bind<A extends any[], R>(this: (...args: A) => R, thisArg: any, ...argArray: A): R;
+    bind<A extends any[], R>(this: (...args: A) => R, thisArg: any, ...argArray: A): (...args: A) => R;
 
     /** Returns a string representation of a function. */
     toString(): string;
