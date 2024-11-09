@@ -32550,9 +32550,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function reduceRegularExpressionPattern(contents: RegularExpressionReducedContent[]): RegularExpressionReducedContent {
         const unionIndex = findIndex(contents, content => content instanceof Set);
         if (unionIndex >= 0) {
-            return reduceLeft(contents, (n, content) => content instanceof Set ? n * content.size : n, 1) < 10000 ?
-                reduceRegularExpressionUnion(arrayFrom(contents[unionIndex] as RegularExpressionReducedUnion, constituent => reduceRegularExpressionPattern(replaceElement(contents, unionIndex, constituent)))) :
-                RegExpAnyString;
+            if (reduceLeft(contents, (n, content) => content instanceof Set ? n * content.size : n, 1) < 10000) {
+                return reduceRegularExpressionUnion(arrayFrom(contents[unionIndex] as RegularExpressionReducedUnion, constituent => reduceRegularExpressionPattern(replaceElement(contents, unionIndex, constituent))));
+            }
+            // The cross product size is too large, set all string unions to just the string type
+            for (let i = 0; i < contents.length; i++) {
+                if (contents[i] instanceof Set) contents[i] = RegExpAnyString;
+            }
         }
         const flattenedContents = [] as unknown as RegularExpressionReducedPattern;
         // Reduce `${string}${string}` to the string type in advance such that the fast path in `reduceRegularExpressionUnion` above works
