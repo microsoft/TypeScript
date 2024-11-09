@@ -13,6 +13,7 @@ import {
     PackageJsonInfo,
     PackageJsonInfoCache,
     Pattern,
+    RegExpAnyString,
     SymlinkCache,
     ThisContainer,
 } from "./_namespaces/ts.js";
@@ -2811,10 +2812,7 @@ export interface RegularExpressionDisjunctionsScope extends Array<RegularExpress
     currentAlternativeIndex: number;
 }
 
-/** @internal */
-export interface RegularExpressionAnyString {
-    _regularExpressionAnyStringBrand: any;
-}
+type RegularExpressionAnyString = typeof RegExpAnyString;
 
 /** @internal */
 export type RegularExpressionPatternContent = string | RegularExpressionAnyString | RegularExpressionPatternUnion;

@@ -32,7 +32,6 @@ import {
     parsePseudoBigInt,
     positionIsSynthesized,
     PunctuationOrKeywordSyntaxKind,
-    RegularExpressionAnyString,
     RegularExpressionDisjunction,
     RegularExpressionDisjunctionsScope,
     RegularExpressionFlags,
@@ -326,7 +325,7 @@ const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags
 const RegExpDigits = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) as RegularExpressionPatternUnion;
 
 /** @internal */
-export const RegExpAnyString = {} as RegularExpressionAnyString;
+export const RegExpAnyString: unique symbol = {} as never;
 
 /*
     As per ECMAScript Language Specification 5th Edition, Section 7.6: ISyntaxToken Names and Identifiers
@@ -2929,7 +2928,7 @@ export function createScanner(
                                     const maxValue = Number.parseInt(max);
                                     let currPattern = pattern;
                                     for (let i = minValue; i < maxValue; i++) {
-                                        const innerPattern = [lastTerm] as unknown as RegularExpressionPattern;
+                                        const innerPattern = [lastTerm] as RegularExpressionPattern;
                                         const patternUnion = new Set(["", innerPattern]) as RegularExpressionPatternUnion;
                                         currPattern.push(patternUnion);
                                         currPattern = innerPattern;
@@ -3530,6 +3529,7 @@ export function createScanner(
                         }
                     }
                     else if (operand === RegExpAnyString) {
+                        // We cannot determinate the set of characters any more, stop storing
                         patternUnion = undefined;
                     }
                 }

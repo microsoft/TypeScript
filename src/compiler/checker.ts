@@ -32539,7 +32539,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!addConstituents(constituent)) return false;
                 }
                 else {
-                    flattenedConstituents.add(constituent as string | RegularExpressionReducedPattern);
+                    flattenedConstituents.add(constituent);
                 }
             }
             return true;
@@ -32601,7 +32601,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const textPattern: string[] = [];
         let text = "";
         let prevIsAnyString = false;
-        for (const content of contents as RegularExpressionReducedPattern) {
+        for (const content of contents) {
             if (typeof content === "string") {
                 if (content) {
                     text += content;
