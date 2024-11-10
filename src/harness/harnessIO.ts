@@ -1288,9 +1288,9 @@ export namespace TestCaseParser {
     export function extractCompilerSettings(content: string): CompilerSettings {
         const opts: CompilerSettings = {};
 
-        let match: RegExpExecArray<[string, string, string]> | null; // eslint-disable-line no-restricted-syntax
+        let match: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
         while ((match = optionRegex.exec(content)) !== null) { // eslint-disable-line no-restricted-syntax
-            opts[match[1]] = match[2].trim();
+            opts[match[1]!] = match[2]!.trim();
         }
 
         return opts;
@@ -1319,7 +1319,7 @@ export namespace TestCaseParser {
         let symlinks: vfs.FileSet | undefined;
 
         for (const line of lines) {
-            let testMetaData: RegExpExecArray<[string, string, string]> | null; // eslint-disable-line no-restricted-syntax
+            let testMetaData: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
             const possiblySymlinks = parseSymlinkFromTest(line, symlinks, vfs.srcFolder);
             if (possiblySymlinks) {
                 symlinks = possiblySymlinks;
@@ -1327,8 +1327,8 @@ export namespace TestCaseParser {
             else if (testMetaData = optionRegex.exec(line)) {
                 // Comment line, check for global/file @options and record them
                 optionRegex.lastIndex = 0;
-                const metaDataName = testMetaData[1].toLowerCase();
-                currentFileOptions[testMetaData[1]] = testMetaData[2].trim();
+                const metaDataName = testMetaData[1]!.toLowerCase();
+                currentFileOptions[testMetaData[1]!] = testMetaData[2]!.trim();
                 if (metaDataName !== "filename") {
                     continue;
                 }
@@ -1348,12 +1348,12 @@ export namespace TestCaseParser {
                     // Reset local data
                     currentFileContent = undefined;
                     currentFileOptions = {};
-                    currentFileName = testMetaData[2].trim();
+                    currentFileName = testMetaData[2]!.trim();
                     refs = [];
                 }
                 else {
                     // First metadata marker in the file
-                    currentFileName = testMetaData[2].trim();
+                    currentFileName = testMetaData[2]!.trim();
                     if (currentFileContent && ts.skipTrivia(currentFileContent, 0, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false) !== currentFileContent.length) {
                         throw new Error("Non-comment test content appears before the first '// @Filename' directive");
                     }

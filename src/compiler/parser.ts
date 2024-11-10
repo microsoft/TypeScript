@@ -10718,16 +10718,16 @@ function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, te
 
     if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
         const multiLinePragmaRegEx = /@(\S+)(\s+(?:\S.*)?)?$/gm; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
-        let multiLineMatch: RegExpExecArray<[string, string, string | undefined]> | null; // eslint-disable-line no-restricted-syntax
+        let multiLineMatch: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
         while (multiLineMatch = multiLinePragmaRegEx.exec(text)) {
-            addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch);
+            addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch!);
         }
     }
 }
 
-function addPragmaForMatch(pragmas: PragmaPseudoMapEntry[], range: CommentRange, kind: PragmaKindFlags, match: RegExpExecArray<[string, string, string | undefined]>) {
+function addPragmaForMatch(pragmas: PragmaPseudoMapEntry[], range: CommentRange, kind: PragmaKindFlags, match: RegExpExecArray) {
     if (!match) return;
-    const name = match[1].toLowerCase() as keyof PragmaPseudoMap; // Technically unsafe cast, but we do it so they below check to make it safe typechecks
+    const name = match[1]!.toLowerCase() as keyof PragmaPseudoMap; // Technically unsafe cast, but we do it so they below check to make it safe typechecks
     const pragma = commentPragmas[name] as PragmaDefinition;
     if (!pragma || !(pragma.kind! & kind)) {
         return;
