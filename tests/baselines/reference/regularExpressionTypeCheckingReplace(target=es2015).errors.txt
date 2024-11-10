@@ -1,0 +1,108 @@
+regularExpressionTypeCheckingReplace.ts(18,33): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+regularExpressionTypeCheckingReplace.ts(18,45): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(match: `foo${string}`, id: string, index: number, input: `${string}foo${string}${string}`, capturingGroups: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...[StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []][4]) => `foo${string}`' is not assignable to parameter of type 'string | StringReplaceCallbackSignature<[`foo${string}`, string], { id: string; }>'.
+      Type '(match: `foo${string}`, id: string, index: number, input: `${string}foo${string}${string}`, capturingGroups: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...[StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []][4]) => `foo${string}`' is not assignable to type 'StringReplaceCallbackSignature<[`foo${string}`, string], { id: string; }>'.
+        Target signature provides too few arguments. Expected 5 or more, but got 4.
+regularExpressionTypeCheckingReplace.ts(24,5): error TS18048: 'capturingGroups' is possibly 'undefined'.
+regularExpressionTypeCheckingReplace.ts(24,21): error TS2339: Property 'id' does not exist on type 'string | number | { [name: string]: string | undefined; }'.
+  Property 'id' does not exist on type 'string'.
+regularExpressionTypeCheckingReplace.ts(25,5): error TS18048: 'capturingGroups' is possibly 'undefined'.
+regularExpressionTypeCheckingReplace.ts(25,21): error TS2339: Property 'foo' does not exist on type 'string | number | { [name: string]: string | undefined; }'.
+  Property 'foo' does not exist on type 'string'.
+regularExpressionTypeCheckingReplace.ts(30,29): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+regularExpressionTypeCheckingReplace.ts(30,44): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(match: "foo", empty: "" | undefined, index: number, input: `${string}foo${string}`, capturingGroups: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...[StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []][4]) => "foo"' is not assignable to parameter of type 'string | StringReplaceCallbackSignature<["foo", "" | undefined], { empty: "" | undefined; }>'.
+      Type '(match: "foo", empty: "" | undefined, index: number, input: `${string}foo${string}`, capturingGroups: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...[StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []][4]) => "foo"' is not assignable to type 'StringReplaceCallbackSignature<["foo", "" | undefined], { empty: "" | undefined; }>'.
+        Target signature provides too few arguments. Expected 5 or more, but got 4.
+regularExpressionTypeCheckingReplace.ts(36,5): error TS18048: 'capturingGroups' is possibly 'undefined'.
+regularExpressionTypeCheckingReplace.ts(36,21): error TS2339: Property 'empty' does not exist on type 'string | number | { [name: string]: string | undefined; }'.
+  Property 'empty' does not exist on type 'string'.
+regularExpressionTypeCheckingReplace.ts(37,5): error TS18048: 'capturingGroups' is possibly 'undefined'.
+regularExpressionTypeCheckingReplace.ts(37,21): error TS2339: Property 'foo' does not exist on type 'string | number | { [name: string]: string | undefined; }'.
+  Property 'foo' does not exist on type 'string'.
+
+
+==== regularExpressionTypeCheckingReplace.ts (12 errors) ====
+    "foo_foo_bar".replace(/foo/g, (match, index, input, ...args) => {
+        match; // "foo"
+        index; // number
+        input; // `${string}foo${string}`
+        args; // []
+        return match;
+    });
+    
+    "foo42_foo24_bar".replace(/foo(\d+)/g, (match, id, index, input, ...args) => {
+        match; // `foo${string}`
+        id; // string
+        index; // number
+        input; // `${string}foo${string}`
+        args; // []
+        return match;
+    });
+    
+    "foo42_foo24_bar".replace(/foo(?<id>\d+)/g, (match, id, index, input, capturingGroups, ...args) => {
+                                    ~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '(match: `foo${string}`, id: string, index: number, input: `${string}foo${string}${string}`, capturingGroups: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...[StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []][4]) => `foo${string}`' is not assignable to parameter of type 'string | StringReplaceCallbackSignature<[`foo${string}`, string], { id: string; }>'.
+!!! error TS2769:       Type '(match: `foo${string}`, id: string, index: number, input: `${string}foo${string}${string}`, capturingGroups: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...[StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []][4]) => `foo${string}`' is not assignable to type 'StringReplaceCallbackSignature<[`foo${string}`, string], { id: string; }>'.
+!!! error TS2769:         Target signature provides too few arguments. Expected 5 or more, but got 4.
+!!! related TS6212 regularExpressionTypeCheckingReplace.ts:18:45: Did you mean to call this expression?
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
+        match; // `foo${string}`
+        id; // string
+        index; // number
+        input; // `${string}foo${string}`
+        // for target ≥ ES2018
+        capturingGroups.id; // string
+        ~~~~~~~~~~~~~~~
+!!! error TS18048: 'capturingGroups' is possibly 'undefined'.
+                        ~~
+!!! error TS2339: Property 'id' does not exist on type 'string | number | { [name: string]: string | undefined; }'.
+!!! error TS2339:   Property 'id' does not exist on type 'string'.
+        capturingGroups.foo; // error
+        ~~~~~~~~~~~~~~~
+!!! error TS18048: 'capturingGroups' is possibly 'undefined'.
+                        ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'string | number | { [name: string]: string | undefined; }'.
+!!! error TS2339:   Property 'foo' does not exist on type 'string'.
+        args; // []
+        return match;
+    });
+    
+    "foo_foo_bar".replace(/foo(?<empty>){0}/g, (match, empty, index, input, capturingGroups, ...args) => {
+                                ~~~~~~~
+!!! error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   The last overload gave the following error.
+!!! error TS2769:     Argument of type '(match: "foo", empty: "" | undefined, index: number, input: `${string}foo${string}`, capturingGroups: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...[StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []][4]) => "foo"' is not assignable to parameter of type 'string | StringReplaceCallbackSignature<["foo", "" | undefined], { empty: "" | undefined; }>'.
+!!! error TS2769:       Type '(match: "foo", empty: "" | undefined, index: number, input: `${string}foo${string}`, capturingGroups: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...[StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []][4]) => "foo"' is not assignable to type 'StringReplaceCallbackSignature<["foo", "" | undefined], { empty: "" | undefined; }>'.
+!!! error TS2769:         Target signature provides too few arguments. Expected 5 or more, but got 4.
+!!! related TS6212 regularExpressionTypeCheckingReplace.ts:30:44: Did you mean to call this expression?
+!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
+        match; // "foo"
+        empty; // "" | undefined
+        index; // number
+        input; // `${string}foo${string}`
+        // for target ≥ ES2018
+        capturingGroups.empty; // "" | undefined
+        ~~~~~~~~~~~~~~~
+!!! error TS18048: 'capturingGroups' is possibly 'undefined'.
+                        ~~~~~
+!!! error TS2339: Property 'empty' does not exist on type 'string | number | { [name: string]: string | undefined; }'.
+!!! error TS2339:   Property 'empty' does not exist on type 'string'.
+        capturingGroups.foo; // error
+        ~~~~~~~~~~~~~~~
+!!! error TS18048: 'capturingGroups' is possibly 'undefined'.
+                        ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'string | number | { [name: string]: string | undefined; }'.
+!!! error TS2339:   Property 'foo' does not exist on type 'string'.
+        args; // []
+        return match;
+    });
+    

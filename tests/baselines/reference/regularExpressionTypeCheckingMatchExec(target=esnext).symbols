@@ -1,0 +1,538 @@
+//// [tests/cases/compiler/regularExpressionTypeCheckingMatchExec.ts] ////
+
+=== regularExpressionTypeCheckingMatchExec.ts ===
+const dateTimeString = "2048-10-24 12:34:56";
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeCheckingMatchExec.ts, 0, 5))
+
+// a very loose Temporal (Zoned)DateTime format regex, identical to the one in `tests/cases/conformance/types/literal/regularExpressionLiteralTypes.ts`
+{
+    const dateTimeRegex = /^(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?<timeZone>Z|(?<timeZoneSign>[+-])(?:(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?$/i;
+>dateTimeRegex : Symbol(dateTimeRegex, Decl(regularExpressionTypeCheckingMatchExec.ts, 4, 9))
+
+    let match = dateTimeString.match(dateTimeRegex)!; // RegExpExecArray
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>dateTimeString.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeCheckingMatchExec.ts, 0, 5))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>dateTimeRegex : Symbol(dateTimeRegex, Decl(regularExpressionTypeCheckingMatchExec.ts, 4, 9))
+
+    match.index; // number
+>match.index : Symbol(_RegExpExecArray.index, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>index : Symbol(_RegExpExecArray.index, Decl(lib.es5.d.ts, --, --))
+
+    match.input; // string
+>match.input : Symbol(_RegExpExecArray.input, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>input : Symbol(_RegExpExecArray.input, Decl(lib.es5.d.ts, --, --))
+
+    match.length; // 17
+>match.length : Symbol(length)
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>length : Symbol(length)
+
+    match[0].length; // number
+>match[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>0 : Symbol(0)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[1].length; // number
+>match[1].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>1 : Symbol(1)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[2].length; // number
+>match[2].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>2 : Symbol(2)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[3]?.length; // number | undefined
+>match[3]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>3 : Symbol(3)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[4].length; // number
+>match[4].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>4 : Symbol(4)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[5].length; // number
+>match[5].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>5 : Symbol(5)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[6]?.length; // number | undefined
+>match[6]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>6 : Symbol(6)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[16]?.length; // number | undefined
+>match[16]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>16 : Symbol(16)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[17]; // should error, but see #45560#issuecomment-1111121849
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+
+    match.groups.date.length; // number
+>match.groups.date.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.date : Symbol(date)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>date : Symbol(date)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.year.length; // number
+>match.groups.year.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.year : Symbol(year)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>year : Symbol(year)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.month.length; // number
+>match.groups.month.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.month : Symbol(month)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>month : Symbol(month)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.day.length; // number
+>match.groups.day.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.day : Symbol(day)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>day : Symbol(day)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.time?.length; // number | undefined
+>match.groups.time?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.time : Symbol(time)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>time : Symbol(time)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.hour?.length; // number | undefined
+>match.groups.hour?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.hour : Symbol(hour)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>hour : Symbol(hour)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.minute?.length; // number | undefined
+>match.groups.minute?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.minute : Symbol(minute)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>minute : Symbol(minute)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.second?.length; // number | undefined
+>match.groups.second?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.second : Symbol(second)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>second : Symbol(second)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.timeZone?.length; // number | undefined
+>match.groups.timeZone?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.timeZone : Symbol(timeZone)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>timeZone : Symbol(timeZone)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.timeZoneSecond?.length; // number | undefined
+>match.groups.timeZoneSecond?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.timeZoneSecond : Symbol(timeZoneSecond)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>timeZoneSecond : Symbol(timeZoneSecond)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.foo; // error
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+
+    match.indices; // error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+
+    let execResult = dateTimeRegex.exec(dateTimeString)!;
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExec.ts, 32, 7))
+>dateTimeRegex.exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>dateTimeRegex : Symbol(dateTimeRegex, Decl(regularExpressionTypeCheckingMatchExec.ts, 4, 9))
+>exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeCheckingMatchExec.ts, 0, 5))
+
+    match = execResult; // should not error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExec.ts, 32, 7))
+
+    execResult = match; // should not error
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExec.ts, 32, 7))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 6, 7))
+}
+
+{
+    const globalDateTimeRegex = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?<timeZone>Z|(?<timeZoneSign>[+-])(?:(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/ig;
+>globalDateTimeRegex : Symbol(globalDateTimeRegex, Decl(regularExpressionTypeCheckingMatchExec.ts, 38, 9))
+
+    let match = dateTimeString.match(globalDateTimeRegex)!; // RegExpMatchArray
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 40, 7))
+>dateTimeString.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeCheckingMatchExec.ts, 0, 5))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>globalDateTimeRegex : Symbol(globalDateTimeRegex, Decl(regularExpressionTypeCheckingMatchExec.ts, 38, 9))
+
+    match.index; // error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 40, 7))
+
+    match.input; // error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 40, 7))
+
+    match.length; // number
+>match.length : Symbol(length)
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 40, 7))
+>length : Symbol(length)
+
+    match[0].length; // number
+>match[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 40, 7))
+>0 : Symbol(0)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[1]?.length; // number | undefined
+>match[1]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 40, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[99]?.length; // number | undefined
+>match[99]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 40, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups; // error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 40, 7))
+
+    match.indices; // error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 40, 7))
+
+    let execResult = globalDateTimeRegex.exec(dateTimeString)!;
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExec.ts, 50, 7))
+>globalDateTimeRegex.exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>globalDateTimeRegex : Symbol(globalDateTimeRegex, Decl(regularExpressionTypeCheckingMatchExec.ts, 38, 9))
+>exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeCheckingMatchExec.ts, 0, 5))
+
+    match = execResult; // should error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 40, 7))
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExec.ts, 50, 7))
+
+    execResult = match; // should error
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExec.ts, 50, 7))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 40, 7))
+}
+
+{
+    const dateTimeRegexWithIndices = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?<timeZone>Z|(?<timeZoneSign>[+-])(?:(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/id;
+>dateTimeRegexWithIndices : Symbol(dateTimeRegexWithIndices, Decl(regularExpressionTypeCheckingMatchExec.ts, 56, 9))
+
+    let match = dateTimeString.match(dateTimeRegexWithIndices)!; // RegExpExecArray
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>dateTimeString.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeCheckingMatchExec.ts, 0, 5))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>dateTimeRegexWithIndices : Symbol(dateTimeRegexWithIndices, Decl(regularExpressionTypeCheckingMatchExec.ts, 56, 9))
+
+    match.index; // number
+>match.index : Symbol(_RegExpExecArray.index, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>index : Symbol(_RegExpExecArray.index, Decl(lib.es5.d.ts, --, --))
+
+    match.input; // string
+>match.input : Symbol(_RegExpExecArray.input, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>input : Symbol(_RegExpExecArray.input, Decl(lib.es5.d.ts, --, --))
+
+    match.length; // 17
+>match.length : Symbol(length)
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>length : Symbol(length)
+
+    match[0].length; // number
+>match[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>0 : Symbol(0)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[1].length; // number
+>match[1].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>1 : Symbol(1)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[16]?.length; // number | undefined
+>match[16]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>16 : Symbol(16)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match[17]; // should error, but see #45560#issuecomment-1111121849
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+
+    match.groups.date.length; // number
+>match.groups.date.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.date : Symbol(date)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>date : Symbol(date)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.timeZoneSecond?.length; // number | undefined
+>match.groups.timeZoneSecond?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match.groups.timeZoneSecond : Symbol(timeZoneSecond)
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>timeZoneSecond : Symbol(timeZoneSecond)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    match.groups.foo; // error
+>match.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+
+    // Each element is of type [startIndex: number, endIndex: number]
+    match.indices.length; // 17
+>match.indices.length : Symbol(length)
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>length : Symbol(length)
+
+    match.indices[0].length; // 2
+>match.indices[0].length : Symbol(length)
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>0 : Symbol(0)
+>length : Symbol(length)
+
+    match.indices[1].length; // 2
+>match.indices[1].length : Symbol(length)
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>1 : Symbol(1)
+>length : Symbol(length)
+
+    match.indices[2].length; // 2
+>match.indices[2].length : Symbol(length)
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>2 : Symbol(2)
+>length : Symbol(length)
+
+    match.indices[3]?.length; // 2 | undefined
+>match.indices[3]?.length : Symbol(length)
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>3 : Symbol(3)
+>length : Symbol(length)
+
+    match.indices[4].length; // 2
+>match.indices[4].length : Symbol(length)
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>4 : Symbol(4)
+>length : Symbol(length)
+
+    match.indices[5].length; // 2
+>match.indices[5].length : Symbol(length)
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>5 : Symbol(5)
+>length : Symbol(length)
+
+    match.indices[6]?.length; // 2 | undefined
+>match.indices[6]?.length : Symbol(length)
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>6 : Symbol(6)
+>length : Symbol(length)
+
+    match.indices[16]?.length; // 2 | undefined
+>match.indices[16]?.length : Symbol(length)
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>16 : Symbol(16)
+>length : Symbol(length)
+
+    match.indices[17]; // should error, but see #45560#issuecomment-1111121849
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+
+    match.indices.groups.date.length; // 2
+>match.indices.groups.date.length : Symbol(length)
+>match.indices.groups.date : Symbol(date)
+>match.indices.groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>date : Symbol(date)
+>length : Symbol(length)
+
+    match.indices.groups.year.length; // 2
+>match.indices.groups.year.length : Symbol(length)
+>match.indices.groups.year : Symbol(year)
+>match.indices.groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>year : Symbol(year)
+>length : Symbol(length)
+
+    match.indices.groups.month.length; // 2
+>match.indices.groups.month.length : Symbol(length)
+>match.indices.groups.month : Symbol(month)
+>match.indices.groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>month : Symbol(month)
+>length : Symbol(length)
+
+    match.indices.groups.day.length; // 2
+>match.indices.groups.day.length : Symbol(length)
+>match.indices.groups.day : Symbol(day)
+>match.indices.groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>day : Symbol(day)
+>length : Symbol(length)
+
+    match.indices.groups.time?.length; // 2 | undefined
+>match.indices.groups.time?.length : Symbol(length)
+>match.indices.groups.time : Symbol(time)
+>match.indices.groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>time : Symbol(time)
+>length : Symbol(length)
+
+    match.indices.groups.hour?.length; // 2 | undefined
+>match.indices.groups.hour?.length : Symbol(length)
+>match.indices.groups.hour : Symbol(hour)
+>match.indices.groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>hour : Symbol(hour)
+>length : Symbol(length)
+
+    match.indices.groups.minute?.length; // 2 | undefined
+>match.indices.groups.minute?.length : Symbol(length)
+>match.indices.groups.minute : Symbol(minute)
+>match.indices.groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>minute : Symbol(minute)
+>length : Symbol(length)
+
+    match.indices.groups.second?.length; // 2 | undefined
+>match.indices.groups.second?.length : Symbol(length)
+>match.indices.groups.second : Symbol(second)
+>match.indices.groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>second : Symbol(second)
+>length : Symbol(length)
+
+    match.indices.groups.timeZone?.length; // 2 | undefined
+>match.indices.groups.timeZone?.length : Symbol(length)
+>match.indices.groups.timeZone : Symbol(timeZone)
+>match.indices.groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>timeZone : Symbol(timeZone)
+>length : Symbol(length)
+
+    match.indices.groups.timeZoneSecond?.length; // 2 | undefined
+>match.indices.groups.timeZoneSecond?.length : Symbol(length)
+>match.indices.groups.timeZoneSecond : Symbol(timeZoneSecond)
+>match.indices.groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>timeZoneSecond : Symbol(timeZoneSecond)
+>length : Symbol(length)
+
+    match.indices.groups.foo; // error
+>match.indices.groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+>match.indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>indices : Symbol(RegExpIndices.indices, Decl(lib.es2022.regexp.d.ts, --, --))
+>groups : Symbol(groups, Decl(lib.es2022.regexp.d.ts, --, --))
+
+    let execResult = dateTimeRegexWithIndices.exec(dateTimeString)!;
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExec.ts, 93, 7))
+>dateTimeRegexWithIndices.exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>dateTimeRegexWithIndices : Symbol(dateTimeRegexWithIndices, Decl(regularExpressionTypeCheckingMatchExec.ts, 56, 9))
+>exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeCheckingMatchExec.ts, 0, 5))
+
+    match = execResult; // should not error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExec.ts, 93, 7))
+
+    execResult = match; // should not error
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExec.ts, 93, 7))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExec.ts, 58, 7))
+}
+
