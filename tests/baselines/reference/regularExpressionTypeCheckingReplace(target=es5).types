@@ -60,16 +60,16 @@ Instantiation count: 2,500
 >        : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
 >/foo(\d+)/g : RegExp<[`foo${string}`, string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(match, id, index, input, ...args) => {    match; // `foo${string}`    id; // string    index; // number    input; // `${string}foo${string}`    args; // []    return match;} : (match: `foo${string}`, id: string, index: number, input: `${string}foo${string}${string}`) => `foo${string}`
->                                                                                                                                                                               : ^     ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(match, id, index, input, ...args) => {    match; // `foo${string}`    id; // string    index; // number    input; // `${string}foo${string}`    args; // []    return match;} : (match: `foo${string}`, id: string, index: number, input: `${string}foo${string}`) => `foo${string}`
+>                                                                                                                                                                               : ^     ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >match : `foo${string}`
 >      : ^^^^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
 >index : number
 >      : ^^^^^^
->input : `${string}foo${string}${string}`
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >args : []
 >     : ^^
 
@@ -86,8 +86,8 @@ Instantiation count: 2,500
 >      : ^^^^^^
 
     input; // `${string}foo${string}`
->input : `${string}foo${string}${string}`
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 
     args; // []
 >args : []
@@ -110,16 +110,16 @@ Instantiation count: 2,500
 >        : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
 >/foo(?<id>\d+)/g : RegExp<[`foo${string}`, string], { id: string; }, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(match, id, index, input, capturingGroups, ...args) => {    match; // `foo${string}`    id; // string    index; // number    input; // `${string}foo${string}`    // for target ≥ ES2018    capturingGroups.id; // string    capturingGroups.foo; // error    args; // []    return match;} : (match: `foo${string}`, id: string, index: number, input: `${string}foo${string}${string}`, capturingGroups: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...[StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []][4]) => `foo${string}`
->                                                                                                                                                                                                                                                                                            : ^     ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(match, id, index, input, capturingGroups, ...args) => {    match; // `foo${string}`    id; // string    index; // number    input; // `${string}foo${string}`    // for target ≥ ES2018    capturingGroups.id; // string    capturingGroups.foo; // error    args; // []    return match;} : (match: `foo${string}`, id: string, index: number, input: `${string}foo${string}`, capturingGroups: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...[StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []][4]) => `foo${string}`
+>                                                                                                                                                                                                                                                                                            : ^     ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >match : `foo${string}`
 >      : ^^^^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
 >index : number
 >      : ^^^^^^
->input : `${string}foo${string}${string}`
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >capturingGroups : [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...[StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []][4]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >args : []
@@ -138,8 +138,8 @@ Instantiation count: 2,500
 >      : ^^^^^^
 
     input; // `${string}foo${string}`
->input : `${string}foo${string}${string}`
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 
     // for target ≥ ES2018
     capturingGroups.id; // string

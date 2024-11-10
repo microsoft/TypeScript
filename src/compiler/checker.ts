@@ -18366,6 +18366,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const newTypes: Type[] = [];
         const newTexts: string[] = [];
+        let prevIsStringType = false;
         let text = texts[0];
         if (!addSpans(texts, types)) {
             return stringType;
@@ -18398,8 +18399,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     text += texts[i + 1];
                 }
                 else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t)) {
-                    newTypes.push(t);
-                    newTexts.push(text);
+                    if (!text && prevIsStringType && t === stringType) {
+                        // Collapse consecutive `${string}${string}`
+                    }
+                    else {
+                        newTypes.push(t);
+                        newTexts.push(text);
+                        prevIsStringType = t === stringType;
+                    }
                     text = texts[i + 1];
                 }
                 else {
