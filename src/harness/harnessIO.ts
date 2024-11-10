@@ -1288,7 +1288,7 @@ export namespace TestCaseParser {
     export function extractCompilerSettings(content: string): CompilerSettings {
         const opts: CompilerSettings = {};
 
-        let match: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
+        let match: RegExpExecArray<[string, string, string]> | null; // eslint-disable-line no-restricted-syntax
         while ((match = optionRegex.exec(content)) !== null) { // eslint-disable-line no-restricted-syntax
             opts[match[1]] = match[2].trim();
         }
@@ -1319,7 +1319,7 @@ export namespace TestCaseParser {
         let symlinks: vfs.FileSet | undefined;
 
         for (const line of lines) {
-            let testMetaData: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
+            let testMetaData: RegExpExecArray<[string, string, string]> | null; // eslint-disable-line no-restricted-syntax
             const possiblySymlinks = parseSymlinkFromTest(line, symlinks, vfs.srcFolder);
             if (possiblySymlinks) {
                 symlinks = possiblySymlinks;

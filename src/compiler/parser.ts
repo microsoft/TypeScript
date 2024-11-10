@@ -10689,9 +10689,9 @@ function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, te
                     return; // Missing required argument, don't parse
                 }
                 else if (matchResult) {
-                    const value = matchResult[2] || matchResult[3];
+                    const value = (matchResult[2] || matchResult[3])!;
                     if (arg.captureSpan) {
-                        const startPos = range.pos + matchResult.index + matchResult[1].length + 1;
+                        const startPos = range.pos + matchResult.index + matchResult[1]!.length + 1;
                         argument[arg.name] = {
                             value,
                             pos: startPos,
@@ -10718,14 +10718,14 @@ function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, te
 
     if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
         const multiLinePragmaRegEx = /@(\S+)(\s+(?:\S.*)?)?$/gm; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
-        let multiLineMatch: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
+        let multiLineMatch: RegExpExecArray<[string, string, string | undefined]> | null; // eslint-disable-line no-restricted-syntax
         while (multiLineMatch = multiLinePragmaRegEx.exec(text)) {
             addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch);
         }
     }
 }
 
-function addPragmaForMatch(pragmas: PragmaPseudoMapEntry[], range: CommentRange, kind: PragmaKindFlags, match: RegExpExecArray) {
+function addPragmaForMatch(pragmas: PragmaPseudoMapEntry[], range: CommentRange, kind: PragmaKindFlags, match: RegExpExecArray<[string, string, string | undefined]>) {
     if (!match) return;
     const name = match[1].toLowerCase() as keyof PragmaPseudoMap; // Technically unsafe cast, but we do it so they below check to make it safe typechecks
     const pragma = commentPragmas[name] as PragmaDefinition;

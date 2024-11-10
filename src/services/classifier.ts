@@ -957,7 +957,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
         pushClassification(pos, match[3].length, ClassificationType.jsxSelfClosingTagName); // element name
         pos += match[3].length;
 
-        const attrText = match[4];
+        const attrText = match[4] || "";
         let attrPos = pos;
         while (true) {
             const attrMatch = attributeRegex.exec(attrText);
@@ -991,7 +991,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
             attrPos += attrMatch[6].length;
         }
 
-        pos += match[4].length;
+        pos += attrText.length;
 
         if (pos > attrPos) {
             pushCommentRange(attrPos, pos - attrPos);

@@ -88,5 +88,5 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, ar
 
 function getSuggestion(messageText: string | DiagnosticMessageChain) {
     const [, suggestion] = flattenDiagnosticMessageText(messageText, "\n", 0).match(/'(.*)'/) || [];
-    return suggestion;
+    return suggestion || "";
 }

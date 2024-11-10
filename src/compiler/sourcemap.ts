@@ -360,12 +360,12 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
 
 // Sometimes tools can see the following line as a source mapping url comment, so we mangle it a bit (the [M])
 /** @internal */
-export const sourceMapCommentRegExpDontCareLineStart: RegExp = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
+export const sourceMapCommentRegExpDontCareLineStart: RegExp<[string, string]> = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
 /** @internal */
-export const sourceMapCommentRegExp: RegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
+export const sourceMapCommentRegExp: RegExp<[string, string]> = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/; // eslint-disable-line regexp/no-useless-character-class
 
 /** @internal */
-export const whitespaceOrMapCommentRegExp: RegExp = /^\s*(\/\/[@#] .*)?$/;
+export const whitespaceOrMapCommentRegExp: RegExp<[string, string | undefined]> = /^\s*(\/\/[@#] .*)?$/;
 
 /** @internal */
 export interface LineInfo {

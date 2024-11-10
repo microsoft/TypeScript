@@ -3153,7 +3153,7 @@ export function createLanguageService(
                 const firstDescriptorCaptureIndex = 3;
                 Debug.assert(matchArray.length === descriptors.length + firstDescriptorCaptureIndex);
 
-                const preamble = matchArray[1];
+                const preamble = matchArray[1]!;
                 const matchPosition = matchArray.index + preamble.length;
 
                 // OK, we have found a match in the file.  This is only an acceptable match if
@@ -3176,7 +3176,7 @@ export function createLanguageService(
                     continue;
                 }
 
-                const message = matchArray[2];
+                const message = matchArray[2]!;
                 result.push({ descriptor, message, position: matchPosition });
             }
         }
