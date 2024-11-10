@@ -32475,7 +32475,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     namedCapturingGroupsTypeMembers.set(escapedGroupName, createProperty(escapedGroupName, groupType));
                 }
-                namedCapturingGroupsType = createAnonymousType(/*symbol*/ undefined, namedCapturingGroupsTypeMembers, emptyArray, emptyArray, emptyArray);
+                // TS2329 would have been reported without creating an object literal or type literal symbol.
+                // See #15300, `typeRelatedToIndexInfo` and `isObjectTypeWithInferableIndex`
+                const namedCapturingGroupsSymbol = createSymbol(SymbolFlags.ObjectLiteral, "regularExpressionNamedCapturingGroups" as __String);
+                namedCapturingGroupsType = createAnonymousType(namedCapturingGroupsSymbol, namedCapturingGroupsTypeMembers, emptyArray, emptyArray, emptyArray);
             }
             else {
                 namedCapturingGroupsType = undefinedType;
@@ -32486,7 +32489,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             for (const [flag, propertyName] of regExpFlagToPropertyName) {
                 flagsTypeMembers.set(propertyName, createProperty(propertyName, regExpFlags & flag ? trueType : falseType));
             }
-            const flagsType = createAnonymousType(/*symbol*/ undefined, flagsTypeMembers, emptyArray, emptyArray, emptyArray);
+            const flagsSymbol = createSymbol(SymbolFlags.ObjectLiteral, "regularExpressionFlags" as __String);
+            const flagsType = createAnonymousType(flagsSymbol, flagsTypeMembers, emptyArray, emptyArray, emptyArray);
 
             nodeType = getTypeAliasInstantiation(regExpTypeAlias, [capturingGroupsType, namedCapturingGroupsType, flagsType]);
             regularExpressionLiteralToType.set(node, nodeType);

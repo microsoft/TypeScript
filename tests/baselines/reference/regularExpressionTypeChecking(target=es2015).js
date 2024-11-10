@@ -4,7 +4,7 @@
 "foo_foo_bar".replace(/foo/g, (match, index, input, ...args) => {
     match; // "foo"
     index; // number
-    input; // string
+    input; // `${string}foo${string}`
     args; // []
     return match;
 });
@@ -13,7 +13,7 @@
     match; // `foo${string}`
     id; // string
     index; // number
-    input; // string
+    input; // `${string}foo${string}`
     args; // []
     return match;
 });
@@ -22,7 +22,7 @@
     match; // `foo${string}`
     id; // string
     index; // number
-    input; // string
+    input; // `${string}foo${string}`
     // for target ≥ ES2018
     capturingGroups.id; // string
     capturingGroups.foo; // error
@@ -32,11 +32,11 @@
 
 "foo_foo_bar".replace(/foo(?<empty>){0}/g, (match, empty, index, input, capturingGroups, ...args) => {
     match; // "foo"
-    empty; // undefined
+    empty; // "" | undefined
     index; // number
-    input; // string
+    input; // `${string}foo${string}`
     // for target ≥ ES2018
-    capturingGroups.empty; // undefined
+    capturingGroups.empty; // "" | undefined
     capturingGroups.foo; // error
     args; // []
     return match;
@@ -51,6 +51,7 @@ const dateTimeString = "2048-10-24 12:34:56";
     let match = dateTimeString.match(dateTimeRegex)!; // RegExpExecArray
     match.index; // number
     match.input; // string
+    match.length; // 17
     match[0].length; // number
     match[1].length; // number
     match[2].length; // number
@@ -59,7 +60,7 @@ const dateTimeString = "2048-10-24 12:34:56";
     match[5].length; // number
     match[6]?.length; // number | undefined
     match[16]?.length; // number | undefined
-    match[17].length; // error
+    match[17]; // should error, but see #45560#issuecomment-1111121849
     match.groups.date.length; // number
     match.groups.year.length; // number
     match.groups.month.length; // number
@@ -70,35 +71,30 @@ const dateTimeString = "2048-10-24 12:34:56";
     match.groups.second?.length; // number | undefined
     match.groups.timeZone?.length; // number | undefined
     match.groups.timeZoneSecond?.length; // number | undefined
-    match.groups.foo.length; // error
+    match.groups.foo; // error
     match.indices; // error
 
     let execMatch = dateTimeRegex.exec(dateTimeString)!;
-    match = execMatch;
-    execMatch = match;
-
-    dateTimeString.replace(dateTimeRegex, (...args) => {
-        args;
-        return args[0];
-    });
+    match = execMatch; // should not error
+    execMatch = match; // should not error
 }
 
 {
     const globalDateTimeRegex = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?<timeZone>Z|(?<timeZoneSign>[+-])(?:(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/ig;
 
-    const match = dateTimeString.match(globalDateTimeRegex)!; // RegExpMatchArray
+    let match = dateTimeString.match(globalDateTimeRegex)!; // RegExpMatchArray
     match.index; // error
     match.input; // error
+    match.length; // number
     match[0].length; // number
     match[1]?.length; // number | undefined
     match[99]?.length; // number | undefined
     match.groups; // error
     match.indices; // error
 
-    dateTimeString.replace(globalDateTimeRegex, (...args) => {
-        args;
-        return args[0];
-    });
+    let execMatch = globalDateTimeRegex.exec(dateTimeString)!;
+    match = execMatch; // should error
+    execMatch = match; // should error
 }
 
 {
@@ -107,15 +103,17 @@ const dateTimeString = "2048-10-24 12:34:56";
     let match = dateTimeString.match(dateTimeRegexWithIndices)!; // RegExpExecArray
     match.index; // number
     match.input; // string
+    match.length; // 17
     match[0].length; // number
     match[1].length; // number
     match[16]?.length; // number | undefined
-    match[17].length; // error
+    match[17]; // should error, but see #45560#issuecomment-1111121849
     match.groups.date.length; // number
     match.groups.timeZoneSecond?.length; // number | undefined
-    match.groups.foo.length; // error
+    match.groups.foo; // error
 
     // Each element is of type [startIndex: number, endIndex: number]
+    match.indices.length; // 17
     match.indices[0].length; // 2
     match.indices[1].length; // 2
     match.indices[2].length; // 2
@@ -124,7 +122,7 @@ const dateTimeString = "2048-10-24 12:34:56";
     match.indices[5].length; // 2
     match.indices[6]?.length; // 2 | undefined
     match.indices[16]?.length; // 2 | undefined
-    match.indices[17].length; // error
+    match.indices[17]; // should error, but see #45560#issuecomment-1111121849
     match.indices.groups.date.length; // 2
     match.indices.groups.year.length; // 2
     match.indices.groups.month.length; // 2
@@ -135,16 +133,11 @@ const dateTimeString = "2048-10-24 12:34:56";
     match.indices.groups.second?.length; // 2 | undefined
     match.indices.groups.timeZone?.length; // 2 | undefined
     match.indices.groups.timeZoneSecond?.length; // 2 | undefined
-    match.indices.groups.foo.length; // error
+    match.indices.groups.foo; // error
 
     let execMatch = dateTimeRegexWithIndices.exec(dateTimeString)!;
-    match = execMatch;
-    execMatch = match;
-
-    dateTimeString.replace(dateTimeRegexWithIndices, (...args) => {
-        args;
-        return args[0];
-    });
+    match = execMatch; // should not error
+    execMatch = match; // should not error
 }
 
 
@@ -154,7 +147,7 @@ var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, 
 "foo_foo_bar".replace(/foo/g, (match, index, input, ...args) => {
     match; // "foo"
     index; // number
-    input; // string
+    input; // `${string}foo${string}`
     args; // []
     return match;
 });
@@ -162,7 +155,7 @@ var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, 
     match; // `foo${string}`
     id; // string
     index; // number
-    input; // string
+    input; // `${string}foo${string}`
     args; // []
     return match;
 });
@@ -170,7 +163,7 @@ var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, 
     match; // `foo${string}`
     id; // string
     index; // number
-    input; // string
+    input; // `${string}foo${string}`
     // for target ≥ ES2018
     capturingGroups.id; // string
     capturingGroups.foo; // error
@@ -179,11 +172,11 @@ var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, 
 });
 "foo_foo_bar".replace(/foo(?<empty>){0}/g, (match, empty, index, input, capturingGroups, ...args) => {
     match; // "foo"
-    empty; // undefined
+    empty; // "" | undefined
     index; // number
-    input; // string
+    input; // `${string}foo${string}`
     // for target ≥ ES2018
-    capturingGroups.empty; // undefined
+    capturingGroups.empty; // "" | undefined
     capturingGroups.foo; // error
     args; // []
     return match;
@@ -195,6 +188,7 @@ const dateTimeString = "2048-10-24 12:34:56";
     let match = dateTimeString.match(dateTimeRegex); // RegExpExecArray
     match.index; // number
     match.input; // string
+    match.length; // 17
     match[0].length; // number
     match[1].length; // number
     match[2].length; // number
@@ -203,7 +197,7 @@ const dateTimeString = "2048-10-24 12:34:56";
     match[5].length; // number
     (_b = match[6]) === null || _b === void 0 ? void 0 : _b.length; // number | undefined
     (_c = match[16]) === null || _c === void 0 ? void 0 : _c.length; // number | undefined
-    match[17].length; // error
+    match[17]; // should error, but see #45560#issuecomment-1111121849
     match.groups.date.length; // number
     match.groups.year.length; // number
     match.groups.month.length; // number
@@ -214,44 +208,42 @@ const dateTimeString = "2048-10-24 12:34:56";
     (_g = match.groups.second) === null || _g === void 0 ? void 0 : _g.length; // number | undefined
     (_h = match.groups.timeZone) === null || _h === void 0 ? void 0 : _h.length; // number | undefined
     (_j = match.groups.timeZoneSecond) === null || _j === void 0 ? void 0 : _j.length; // number | undefined
-    match.groups.foo.length; // error
+    match.groups.foo; // error
     match.indices; // error
     let execMatch = dateTimeRegex.exec(dateTimeString);
-    match = execMatch;
-    execMatch = match;
-    dateTimeString.replace(dateTimeRegex, (...args) => {
-        args;
-        return args[0];
-    });
+    match = execMatch; // should not error
+    execMatch = match; // should not error
 }
 {
     const globalDateTimeRegex = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?<timeZone>Z|(?<timeZoneSign>[+-])(?:(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/ig;
-    const match = dateTimeString.match(globalDateTimeRegex); // RegExpMatchArray
+    let match = dateTimeString.match(globalDateTimeRegex); // RegExpMatchArray
     match.index; // error
     match.input; // error
+    match.length; // number
     match[0].length; // number
     (_k = match[1]) === null || _k === void 0 ? void 0 : _k.length; // number | undefined
     (_l = match[99]) === null || _l === void 0 ? void 0 : _l.length; // number | undefined
     match.groups; // error
     match.indices; // error
-    dateTimeString.replace(globalDateTimeRegex, (...args) => {
-        args;
-        return args[0];
-    });
+    let execMatch = globalDateTimeRegex.exec(dateTimeString);
+    match = execMatch; // should error
+    execMatch = match; // should error
 }
 {
     const dateTimeRegexWithIndices = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?<timeZone>Z|(?<timeZoneSign>[+-])(?:(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/id;
     let match = dateTimeString.match(dateTimeRegexWithIndices); // RegExpExecArray
     match.index; // number
     match.input; // string
+    match.length; // 17
     match[0].length; // number
     match[1].length; // number
     (_m = match[16]) === null || _m === void 0 ? void 0 : _m.length; // number | undefined
-    match[17].length; // error
+    match[17]; // should error, but see #45560#issuecomment-1111121849
     match.groups.date.length; // number
     (_o = match.groups.timeZoneSecond) === null || _o === void 0 ? void 0 : _o.length; // number | undefined
-    match.groups.foo.length; // error
+    match.groups.foo; // error
     // Each element is of type [startIndex: number, endIndex: number]
+    match.indices.length; // 17
     match.indices[0].length; // 2
     match.indices[1].length; // 2
     match.indices[2].length; // 2
@@ -260,7 +252,7 @@ const dateTimeString = "2048-10-24 12:34:56";
     match.indices[5].length; // 2
     (_q = match.indices[6]) === null || _q === void 0 ? void 0 : _q.length; // 2 | undefined
     (_r = match.indices[16]) === null || _r === void 0 ? void 0 : _r.length; // 2 | undefined
-    match.indices[17].length; // error
+    match.indices[17]; // should error, but see #45560#issuecomment-1111121849
     match.indices.groups.date.length; // 2
     match.indices.groups.year.length; // 2
     match.indices.groups.month.length; // 2
@@ -271,12 +263,8 @@ const dateTimeString = "2048-10-24 12:34:56";
     (_v = match.indices.groups.second) === null || _v === void 0 ? void 0 : _v.length; // 2 | undefined
     (_w = match.indices.groups.timeZone) === null || _w === void 0 ? void 0 : _w.length; // 2 | undefined
     (_x = match.indices.groups.timeZoneSecond) === null || _x === void 0 ? void 0 : _x.length; // 2 | undefined
-    match.indices.groups.foo.length; // error
+    match.indices.groups.foo; // error
     let execMatch = dateTimeRegexWithIndices.exec(dateTimeString);
-    match = execMatch;
-    execMatch = match;
-    dateTimeString.replace(dateTimeRegexWithIndices, (...args) => {
-        args;
-        return args[0];
-    });
+    match = execMatch; // should not error
+    execMatch = match; // should not error
 }

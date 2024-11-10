@@ -403,7 +403,7 @@ type StringReplaceCallbackSignature<
     ...args: [
         ...capturingGroups: CapturingGroups,
         index: number,
-        input: string,
+        input: `${string}${CapturingGroups[0]}${string}`,
         ...([StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : []),
     ]
 ) => string;
@@ -1034,8 +1034,7 @@ interface DateConstructor {
 
 declare var Date: DateConstructor;
 
-// `RegExpExecArray` can't extend `[string, ...(string | undefined)[]]` correctly, see issue #51751
-type CapturingGroupsArray = { 0: string; } & (string | undefined)[];
+type CapturingGroupsArray = [string, ...(string | undefined)[]];
 type NamedCapturingGroupsObject = { [name: string]: string | undefined; } | undefined;
 
 // `CapturingGroups` can't be extended directly, see issue #2225
@@ -1047,7 +1046,7 @@ type RegExpExecArray<
 > =
     & CapturingGroups
     & _RegExpExecArray<CapturingGroups, NamedCapturingGroups>
-    & (Flags extends { readonly hasIndices: true; } ? RegExpIndices : unknown);
+    & (Flags extends { readonly hasIndices: true; } ? RegExpIndices<CapturingGroups, NamedCapturingGroups> : unknown);
 
 interface _RegExpExecArray<
     CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
@@ -1060,7 +1059,7 @@ interface _RegExpExecArray<
     /**
      * A copy of the search string.
      */
-    input: string;
+    input: `${string}${CapturingGroups[0]}${string}`;
 }
 
 // Used from ES2022

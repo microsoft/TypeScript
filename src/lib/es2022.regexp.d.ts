@@ -1,10 +1,12 @@
-type RegExpGroupsValueToIndices<T> = { [K in keyof T]: T[K] extends string ? [startIndex: number, endIndex: number] : T[K]; };
+// Needs to be in two lines such as to properly distribute `string | undefined`
+type RegExpGroupValuesToIndices<T> = { [K in keyof T]: RegExpGroupValueToIndices<T[K]>; };
+type RegExpGroupValueToIndices<T> = T extends string ? [startIndex: number, endIndex: number] : T;
 
 interface RegExpIndices<
     CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray,
     NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject,
 > {
-    indices: RegExpGroupsValueToIndices<CapturingGroups> & { groups: RegExpGroupsValueToIndices<NamedCapturingGroups>; };
+    indices: RegExpGroupValuesToIndices<CapturingGroups> & { groups: RegExpGroupValuesToIndices<NamedCapturingGroups>; };
 }
 
 interface RegExpFlags {
