@@ -3153,6 +3153,7 @@ export function createLanguageService(
                 const firstDescriptorCaptureIndex = 3;
                 Debug.assert(matchArray.length === descriptors.length + firstDescriptorCaptureIndex);
 
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249
                 const preamble = matchArray[1]!;
                 const matchPosition = matchArray.index + preamble.length;
 
@@ -3176,6 +3177,7 @@ export function createLanguageService(
                     continue;
                 }
 
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249
                 const message = matchArray[2]!;
                 result.push({ descriptor, message, position: matchPosition });
             }

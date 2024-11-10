@@ -391,6 +391,7 @@ export function tryGetSourceMappingURL(lineInfo: LineInfo): string | undefined {
         const line = lineInfo.getLineText(index);
         const comment = sourceMapCommentRegExp.exec(line);
         if (comment) {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249
             return comment[1]!.trimEnd();
         }
         // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
