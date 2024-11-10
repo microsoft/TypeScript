@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/dependentReturnType4.ts] ////
+
+=== dependentReturnType4.ts ===
+declare const rand: { a?: never };
+>rand : { a?: never; }
+>     : ^^^^^^     ^^^
+>a : undefined
+>  : ^^^^^^^^^
+
+type Missing = typeof rand.a;
+>Missing : undefined
+>        : ^^^^^^^^^
+>rand.a : undefined
+>       : ^^^^^^^^^
+>rand : { a?: never; }
+>     : ^^^^^^     ^^^
+>a : undefined
+>  : ^^^^^^^^^
+
+// Detection of valid optional parameter references
+
+// Ok, will narrow return type
+function bar1<T extends string | Missing>(x?: T):
+>bar1 : <T extends string | Missing>(x?: T) => T extends Missing ? 0 : T extends string ? 1 : never
+>     : ^ ^^^^^^^^^                ^^ ^^^ ^^^^^                                                    
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
+
+    T extends Missing ? 0 : T extends string ? 1 : never {
+    if (x === undefined) {
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 0;
+>0 : 0
+>  : ^
+    }
+    return 1;
+>1 : 1
+>  : ^
+}
+
+// Ok, will narrow return type
+function bar2<T extends string | undefined>(x?: T):
+>bar2 : <T extends string | undefined>(x?: T) => T extends undefined ? 0 : T extends string ? 1 : never
+>     : ^ ^^^^^^^^^                  ^^ ^^^ ^^^^^                                                      
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
+
+    T extends undefined ? 0 : T extends string ? 1 : never {
+    if (x === undefined) {
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 0;
+>0 : 0
+>  : ^
+    }
+    return 1;
+>1 : 1
+>  : ^
+}
+
+// Not ok, will not narrow return type
+function bar3<T extends string>(x?: T):
+>bar3 : <T extends string>(x?: T) => T extends undefined ? 0 : T extends string ? 1 : never
+>     : ^ ^^^^^^^^^      ^^ ^^^ ^^^^^                                                      
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
+
+    T extends undefined ? 0 : T extends string ? 1 : never {
+    if (x === undefined) {
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return 0;
+>0 : 0
+>  : ^
+    }
+    return 1;
+>1 : 1
+>  : ^
+}

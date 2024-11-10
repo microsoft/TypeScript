@@ -234,3 +234,97 @@ function foo(this: Object | undefined) {
 >0 : 0
 >  : ^
 }
+
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+  const maybe = null as true | null;
+>maybe : true
+>      : ^^^^
+>null as true | null : true
+>                    : ^^^^
+>true : true
+>     : ^^^^
+
+  let i = 0;
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+  const d = (i++, maybe) ?? true; // ok
+>d : true
+>  : ^^^^
+>(i++, maybe) ?? true : true
+>                     : ^^^^
+>(i++, maybe) : true
+>             : ^^^^
+>i++, maybe : true
+>           : ^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+>maybe : true
+>      : ^^^^
+>true : true
+>     : ^^^^
+
+  const e = (i++, i++) ?? true; // error
+>e : number | true
+>  : ^^^^^^^^^^^^^
+>(i++, i++) ?? true : number | true
+>                   : ^^^^^^^^^^^^^
+>(i++, i++) : number
+>           : ^^^^^^
+>i++, i++ : number
+>         : ^^^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+>true : true
+>     : ^^^^
+
+  const f = (maybe, i++) ?? true; // error
+>f : number | true
+>  : ^^^^^^^^^^^^^
+>(maybe, i++) ?? true : number | true
+>                     : ^^^^^^^^^^^^^
+>(maybe, i++) : number
+>             : ^^^^^^
+>maybe, i++ : number
+>           : ^^^^^^
+>maybe : true
+>      : ^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+>true : true
+>     : ^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/60439
+class X {
+>X : X
+>  : ^
+
+  constructor() {
+    const p = new.target ?? 32;
+>p : 32 | typeof X
+>  : ^^^^^^^^^^^^^
+>new.target ?? 32 : 32 | typeof X
+>                 : ^^^^^^^^^^^^^
+>new.target : typeof X
+>           : ^^^^^^^^
+>target : typeof X
+>       : ^^^^^^^^
+>32 : 32
+>   : ^^
+  }
+}
+

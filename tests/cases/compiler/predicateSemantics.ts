@@ -42,3 +42,19 @@ function foo(this: Object | undefined) {
     // Should be OK
     return this ?? 0;
 }
+
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+  const maybe = null as true | null;
+  let i = 0;
+  const d = (i++, maybe) ?? true; // ok
+  const e = (i++, i++) ?? true; // error
+  const f = (maybe, i++) ?? true; // error
+}
+
+// https://github.com/microsoft/TypeScript/issues/60439
+class X {
+  constructor() {
+    const p = new.target ?? 32;
+  }
+}

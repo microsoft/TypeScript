@@ -201,6 +201,7 @@ import {
     getParseTreeNode,
     getPathComponents,
     getPathFromPathComponents,
+    getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
     getResolutionModeOverride,
     getRootLength,
@@ -498,6 +499,7 @@ import {
     ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    resolvePath,
     returnFalse,
     ReturnStatement,
     returnUndefined,
@@ -4304,7 +4306,7 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
 
 /** @internal */
 export function shouldRewriteModuleSpecifier(specifier: string, compilerOptions: CompilerOptions): boolean {
-    return !!compilerOptions.rewriteRelativeImportExtensions && pathIsRelative(specifier) && !isDeclarationFileName(specifier);
+    return !!compilerOptions.rewriteRelativeImportExtensions && pathIsRelative(specifier) && !isDeclarationFileName(specifier) && hasTSFileExtension(specifier);
 }
 
 /** @internal */
@@ -6064,7 +6066,7 @@ export function hasInvalidEscape(template: TemplateLiteral): boolean {
 const doubleQuoteEscapedCharsRegExp = /[\\"\u0000-\u001f\u2028\u2029\u0085]/g;
 const singleQuoteEscapedCharsRegExp = /[\\'\u0000-\u001f\u2028\u2029\u0085]/g;
 // Template strings preserve simple LF newlines, still encode CRLF (or CR)
-const backtickQuoteEscapedCharsRegExp = /\r\n|[\\`\u0000-\u001f\u2028\u2029\u0085]/g;
+const backtickQuoteEscapedCharsRegExp = /\r\n|[\\`\u0000-\u0009\u000b-\u001f\u2028\u2029\u0085]/g;
 const escapedCharsMap = new Map(Object.entries({
     "\t": "\\t",
     "\v": "\\v",
@@ -6488,6 +6490,21 @@ export function getPossibleOriginalInputExtensionForExtension(path: string): Ext
         fileExtensionIsOneOf(path, [Extension.Dcts, Extension.Cjs, Extension.Cts]) ? [Extension.Cts, Extension.Cjs] :
         fileExtensionIsOneOf(path, [`.d.json.ts`]) ? [Extension.Json] :
         [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
+}
+
+/** @internal */
+export function getPossibleOriginalInputPathWithoutChangingExt(
+    filePath: string,
+    ignoreCase: boolean,
+    outputDir: string | undefined,
+    getCommonSourceDirectory: () => string,
+): string {
+    return outputDir ?
+        resolvePath(
+            getCommonSourceDirectory(),
+            getRelativePathFromDirectory(outputDir, filePath, ignoreCase),
+        ) :
+        filePath;
 }
 
 /**
@@ -8193,15 +8210,11 @@ export function getLastChild(node: Node): Node | undefined {
  *
  * @internal
  */
-export function addToSeen<K>(seen: Map<K, true>, key: K): boolean;
-/** @internal */
-export function addToSeen<K, T>(seen: Map<K, T>, key: K, value: T): boolean;
-/** @internal */
-export function addToSeen<K, T>(seen: Map<K, T>, key: K, value: T = true as any): boolean {
+export function addToSeen<K>(seen: Set<K>, key: K): boolean {
     if (seen.has(key)) {
         return false;
     }
-    seen.set(key, value);
+    seen.add(key);
     return true;
 }
 

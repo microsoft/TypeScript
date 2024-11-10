@@ -79,3 +79,40 @@ function foo(this: Object | undefined) {
     return this ?? 0;
 >this : Symbol(this, Decl(predicateSemantics.ts, 40, 13))
 }
+
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+  const maybe = null as true | null;
+>maybe : Symbol(maybe, Decl(predicateSemantics.ts, 47, 7))
+
+  let i = 0;
+>i : Symbol(i, Decl(predicateSemantics.ts, 48, 5))
+
+  const d = (i++, maybe) ?? true; // ok
+>d : Symbol(d, Decl(predicateSemantics.ts, 49, 7))
+>i : Symbol(i, Decl(predicateSemantics.ts, 48, 5))
+>maybe : Symbol(maybe, Decl(predicateSemantics.ts, 47, 7))
+
+  const e = (i++, i++) ?? true; // error
+>e : Symbol(e, Decl(predicateSemantics.ts, 50, 7))
+>i : Symbol(i, Decl(predicateSemantics.ts, 48, 5))
+>i : Symbol(i, Decl(predicateSemantics.ts, 48, 5))
+
+  const f = (maybe, i++) ?? true; // error
+>f : Symbol(f, Decl(predicateSemantics.ts, 51, 7))
+>maybe : Symbol(maybe, Decl(predicateSemantics.ts, 47, 7))
+>i : Symbol(i, Decl(predicateSemantics.ts, 48, 5))
+}
+
+// https://github.com/microsoft/TypeScript/issues/60439
+class X {
+>X : Symbol(X, Decl(predicateSemantics.ts, 52, 1))
+
+  constructor() {
+    const p = new.target ?? 32;
+>p : Symbol(p, Decl(predicateSemantics.ts, 57, 9))
+>new.target : Symbol(X, Decl(predicateSemantics.ts, 52, 1))
+>target : Symbol(X, Decl(predicateSemantics.ts, 52, 1))
+  }
+}
+
