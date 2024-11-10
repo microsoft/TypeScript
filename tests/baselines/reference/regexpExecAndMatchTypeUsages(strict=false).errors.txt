@@ -3,13 +3,12 @@ regexpExecAndMatchTypeUsages.ts(4,17): error TS2551: Property 'index' does not e
 regexpExecAndMatchTypeUsages.ts(5,17): error TS2339: Property 'input' does not exist on type 'RegExpMatchArray<CapturingGroupsArray>'.
 regexpExecAndMatchTypeUsages.ts(6,17): error TS2339: Property 'groups' does not exist on type 'RegExpMatchArray<CapturingGroupsArray>'.
 regexpExecAndMatchTypeUsages.ts(7,17): error TS2339: Property 'groups' does not exist on type 'RegExpMatchArray<CapturingGroupsArray>'.
-regexpExecAndMatchTypeUsages.ts(17,9): error TS2322: Type 'RegExpExecArray<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>' is not assignable to type 'RegExpMatchArray<CapturingGroupsArray>'.
 regexpExecAndMatchTypeUsages.ts(20,9): error TS2322: Type 'RegExpMatchArray<CapturingGroupsArray>' is not assignable to type 'RegExpExecArray<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
   Type '[string, ...string[]]' is not assignable to type '_RegExpExecArray<CapturingGroupsArray, { [name: string]: string; }>'.
 
 
 !!! error TS5052: Option 'exactOptionalPropertyTypes' cannot be specified without specifying option 'strictNullChecks'.
-==== regexpExecAndMatchTypeUsages.ts (6 errors) ====
+==== regexpExecAndMatchTypeUsages.ts (5 errors) ====
     export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
         matchResult[0].length;
         matchResult[999].length;
@@ -36,8 +35,6 @@ regexpExecAndMatchTypeUsages.ts(20,9): error TS2322: Type 'RegExpMatchArray<Capt
     
         if (Math.random()) {
             matchResult = execResult;
-            ~~~~~~~~~~~
-!!! error TS2322: Type 'RegExpExecArray<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>' is not assignable to type 'RegExpMatchArray<CapturingGroupsArray>'.
         }
         else {
             execResult = matchResult

@@ -35,7 +35,7 @@ export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) 
     execResult[0].length;
 >execResult[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
->0 : Symbol(0, Decl(lib.es5.d.ts, --, --))
+>0 : Symbol(0)
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     execResult[999].length;

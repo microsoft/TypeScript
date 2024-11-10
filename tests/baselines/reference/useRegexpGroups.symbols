@@ -56,6 +56,8 @@ let day2 = result[3];
 
 let foo = "foo".match(/(?<bar>foo)/)!.groups.foo;
 >foo : Symbol(foo, Decl(useRegexpGroups.ts, 14, 3))
+>"foo".match(/(?<bar>foo)/)!.groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
 >"foo".match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>groups : Symbol(_RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
 

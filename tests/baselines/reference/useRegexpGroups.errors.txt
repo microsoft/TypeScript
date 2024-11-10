@@ -1,5 +1,4 @@
-useRegexpGroups.ts(15,39): error TS2339: Property 'groups' does not exist on type 'RegExpExecArray<["foo", "foo"], { bar: "foo"; }, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | RegExpMatchArray<["foo", "foo"]>'.
-  Property 'groups' does not exist on type 'RegExpMatchArray<["foo", "foo"]>'.
+useRegexpGroups.ts(15,46): error TS2339: Property 'foo' does not exist on type '{ bar: "foo"; }'.
 
 
 ==== useRegexpGroups.ts (1 errors) ====
@@ -18,6 +17,5 @@ useRegexpGroups.ts(15,39): error TS2339: Property 'groups' does not exist on typ
     let day2 = result[3];
     
     let foo = "foo".match(/(?<bar>foo)/)!.groups.foo;
-                                          ~~~~~~
-!!! error TS2339: Property 'groups' does not exist on type 'RegExpExecArray<["foo", "foo"], { bar: "foo"; }, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | RegExpMatchArray<["foo", "foo"]>'.
-!!! error TS2339:   Property 'groups' does not exist on type 'RegExpMatchArray<["foo", "foo"]>'.
+                                                 ~~~
+!!! error TS2339: Property 'foo' does not exist on type '{ bar: "foo"; }'.

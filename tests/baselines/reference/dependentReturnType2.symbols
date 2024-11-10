@@ -260,9 +260,9 @@ class NewSettingsBase {
 >key : Symbol(key, Decl(file.js, 133, 61))
 
                     if (!_id.test(key)) {
->_id.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>_id.test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >_id : Symbol(_id, Decl(file.js, 121, 11))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(file.js, 133, 61))
 
                         return;
@@ -344,9 +344,9 @@ class NewSettingsBase {
 >key : Symbol(key, Decl(file.js, 158, 103))
 
                 if (_id.test(key)) {
->_id.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>_id.test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >_id : Symbol(_id, Decl(file.js, 121, 11))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(file.js, 158, 103))
 
                     items.push({ key, value });

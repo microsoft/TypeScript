@@ -9,11 +9,11 @@ const m = ''.match('');
 m! && m[0];
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
->0 : Symbol(0, Decl(lib.es5.d.ts, --, --))
+>0 : Symbol(0)
 
 m?.[0]! && m[0];
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
->0 : Symbol(0, Decl(lib.es5.d.ts, --, --))
+>0 : Symbol(0)
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
->0 : Symbol(0, Decl(lib.es5.d.ts, --, --))
+>0 : Symbol(0)
 

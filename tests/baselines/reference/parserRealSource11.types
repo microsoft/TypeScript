@@ -1,7 +1,8 @@
 //// [tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000 -> 2,500
+Type Count: 2,500
+Instantiation count: 1,000
 
 === parserRealSource11.ts ===
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 

@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/underscoreTest1.ts] ////
 
 === Performance Stats ===
-Type Count: 2,500
-Instantiation count: 2,500
+Type Count: 1,000 -> 2,500
+Instantiation count: 1,000
 
 === underscoreTest1_underscoreTests.ts ===
 /// <reference path="underscoreTest1_underscore.ts" />

@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Type Count: 2,500
-Instantiation count: 5,000
+Instantiation count: 10,000
 
 === regexMatchAll.ts ===
 const matches = /\w/g[Symbol.matchAll]("matchAll");

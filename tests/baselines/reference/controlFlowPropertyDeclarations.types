@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/controlFlowPropertyDeclarations.ts] ////
 
 === Performance Stats ===
-Instantiation count: 2,500
+Instantiation count: 1,000
 
 === controlFlowPropertyDeclarations.ts ===
 // Repro from ##8913

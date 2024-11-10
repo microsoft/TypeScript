@@ -1,4 +1,4 @@
-file.js(155,13): error TS2322: Type 'undefined' is not assignable to type 'HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>'.
+file.js(155,13): error TS2322: Type 'undefined' is not assignable to type 'HelperCond<I, string, T | undefined, RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>, SettingComposedValue<T>[]>'.
 file.js(168,16): error TS2536: Type 'I' cannot be used to index type '{ [s: string]: any; }'.
 file.js(185,9): error TS2322: Type 'Record<string, MyObj[]>' is not assignable to type 'HelperCond<T, string, MyObj[], undefined, Record<string, MyObj[]>>'.
 
@@ -160,7 +160,7 @@ file.js(185,9): error TS2322: Type 'Record<string, MyObj[]>' is not assignable t
             if (!Meteor.settings) {
                 return undefined; // Error
                 ~~~~~~
-!!! error TS2322: Type 'undefined' is not assignable to type 'HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>'.
+!!! error TS2322: Type 'undefined' is not assignable to type 'HelperCond<I, string, T | undefined, RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>, SettingComposedValue<T>[]>'.
             }
     
             if (_.isRegExp(_id)) {

@@ -255,8 +255,8 @@ const _ = /** @type {any} */ (undefined);
 function takesRegExp(x) {
 >takesRegExp : (x: RegExp) => void
 >            : ^ ^^      ^^^^^    
->x : RegExp
->  : ^^^^^^
+>x : RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return /** @type {any} */ undefined;
 >undefined : undefined
@@ -391,8 +391,8 @@ class NewSettingsBase {
 >  : ^^^^^^^^^^^ ^^       ^^^           ^^^
 >isRegExp : (x: unknown) => x is RegExp
 >         : ^ ^^       ^^^^^           
->_id : string | RegExp
->    : ^^^^^^^^^^^^^^^
+>_id : string | RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Meteor.settings : { [s: string]: any; }
 >                : ^^^^^^^^^^^^^^^^^^^^^
 >Meteor : { settings: { [s: string]: any; }; }
@@ -433,8 +433,8 @@ class NewSettingsBase {
 >              : ^^^^^^^
 >_id.test : (string: string) => boolean
 >         : ^      ^^      ^^^^^       
->_id : RegExp
->    : ^^^^^^
+>_id : RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : (string: string) => boolean
 >     : ^      ^^      ^^^^^       
 >key : string
@@ -547,8 +547,8 @@ class NewSettingsBase {
 >  : ^^^^^^^^^^^ ^^       ^^^           ^^^
 >isRegExp : (x: unknown) => x is RegExp
 >         : ^ ^^       ^^^^^           
->_id : string | RegExp
->    : ^^^^^^^^^^^^^^^
+>_id : string | RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             return Object.keys(Meteor.settings).reduce((/** @type {SettingComposedValue<T>[]} */ items, key) => {
 >Object.keys(Meteor.settings).reduce((/** @type {SettingComposedValue<T>[]} */ items, key) => {                const value = Meteor.settings[key];                if (_id.test(key)) {                    items.push({ key, value });                }                return items;            }, []) : SettingComposedValue<T>[]
@@ -597,8 +597,8 @@ class NewSettingsBase {
 >              : ^^^^^^^
 >_id.test : (string: string) => boolean
 >         : ^      ^^      ^^^^^       
->_id : RegExp
->    : ^^^^^^
+>_id : RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : (string: string) => boolean
 >     : ^      ^^      ^^^^^       
 >key : string

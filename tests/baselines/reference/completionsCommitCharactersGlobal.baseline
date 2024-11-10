@@ -2673,9 +2673,7 @@
 // | interface BooleanConstructor
 // | interface CallableFunction
 // | type Capitalize<S extends string> = intrinsic
-// | type CapturingGroupsArray = {
-// |     0: string;
-// | } & string[]
+// | type CapturingGroupsArray = [string, ...string[]]
 // | interface ClassAccessorDecoratorContext<This = unknown, Value = unknown>
 // | interface ClassAccessorDecoratorResult<This, Value>
 // | interface ClassAccessorDecoratorTarget<This, Value>
@@ -2799,7 +2797,7 @@
 // | interface StringConstructor
 // | interface StringReplaceCallbackIncludeNamedCapturingGroups
 // | interface StringReplaceCallbackOptions
-// | type StringReplaceCallbackSignature<CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = { [name: string]: string; }> = (...args: [...capturingGroups: CapturingGroups, index: number, input: string, ...([StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : [])]) => string
+// | type StringReplaceCallbackSignature<CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = { [name: string]: string; }> = (...args: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...([StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : [])]) => string
 // | symbol
 // | interface Symbol
 // | interface SyntaxError
@@ -2872,9 +2870,7 @@
 // | interface BooleanConstructor
 // | interface CallableFunction
 // | type Capitalize<S extends string> = intrinsic
-// | type CapturingGroupsArray = {
-// |     0: string;
-// | } & string[]
+// | type CapturingGroupsArray = [string, ...string[]]
 // | interface ClassAccessorDecoratorContext<This = unknown, Value = unknown>
 // | interface ClassAccessorDecoratorResult<This, Value>
 // | interface ClassAccessorDecoratorTarget<This, Value>
@@ -2998,7 +2994,7 @@
 // | interface StringConstructor
 // | interface StringReplaceCallbackIncludeNamedCapturingGroups
 // | interface StringReplaceCallbackOptions
-// | type StringReplaceCallbackSignature<CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = { [name: string]: string; }> = (...args: [...capturingGroups: CapturingGroups, index: number, input: string, ...([StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : [])]) => string
+// | type StringReplaceCallbackSignature<CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = { [name: string]: string; }> = (...args: [...capturingGroups: CapturingGroups, index: number, input: `${string}${CapturingGroups[0]}${string}`, ...([StringReplaceCallbackOptions, NamedCapturingGroups] extends [StringReplaceCallbackIncludeNamedCapturingGroups, {}] ? [groups: NamedCapturingGroups] : [])]) => string
 // | symbol
 // | interface Symbol
 // | interface SyntaxError
@@ -82019,43 +82015,15 @@
               "kind": "space"
             },
             {
-              "text": "{",
+              "text": "[",
               "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "    ",
-              "kind": "space"
-            },
-            {
-              "text": "0",
-              "kind": "stringLiteral"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
             },
             {
               "text": "string",
               "kind": "keyword"
             },
             {
-              "text": ";",
-              "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "}",
+              "text": ",",
               "kind": "punctuation"
             },
             {
@@ -82063,12 +82031,8 @@
               "kind": "space"
             },
             {
-              "text": "&",
+              "text": "...",
               "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
             },
             {
               "text": "string",
@@ -82076,6 +82040,10 @@
             },
             {
               "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
               "kind": "punctuation"
             },
             {
@@ -90630,8 +90598,44 @@
               "kind": "space"
             },
             {
+              "text": "`${",
+              "kind": "stringLiteral"
+            },
+            {
               "text": "string",
               "kind": "keyword"
+            },
+            {
+              "text": "}${",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": "CapturingGroups",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "0",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": "}${",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": "}`",
+              "kind": "stringLiteral"
             },
             {
               "text": ",",
@@ -93608,43 +93612,15 @@
               "kind": "space"
             },
             {
-              "text": "{",
+              "text": "[",
               "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "    ",
-              "kind": "space"
-            },
-            {
-              "text": "0",
-              "kind": "stringLiteral"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
             },
             {
               "text": "string",
               "kind": "keyword"
             },
             {
-              "text": ";",
-              "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "}",
+              "text": ",",
               "kind": "punctuation"
             },
             {
@@ -93652,12 +93628,8 @@
               "kind": "space"
             },
             {
-              "text": "&",
+              "text": "...",
               "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
             },
             {
               "text": "string",
@@ -93665,6 +93637,10 @@
             },
             {
               "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
               "kind": "punctuation"
             },
             {
@@ -102219,8 +102195,44 @@
               "kind": "space"
             },
             {
+              "text": "`${",
+              "kind": "stringLiteral"
+            },
+            {
               "text": "string",
               "kind": "keyword"
+            },
+            {
+              "text": "}${",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": "CapturingGroups",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "0",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": "}${",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": "}`",
+              "kind": "stringLiteral"
             },
             {
               "text": ",",
