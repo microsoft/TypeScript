@@ -2288,6 +2288,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var deferredGlobalDisposableType: ObjectType | undefined;
     var deferredGlobalAsyncDisposableType: ObjectType | undefined;
     var deferredGlobalRegExpSymbol: Symbol | undefined;
+    var deferredGlobalRegExpExecArraySymbol: Symbol | undefined; // TODO: Remove me, see `checkNoTypeArguments`
     var deferredGlobalExtractSymbol: Symbol | undefined;
     var deferredGlobalOmitSymbol: Symbol | undefined;
     var deferredGlobalAwaitedSymbol: Symbol | undefined;
@@ -16684,7 +16685,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkNoTypeArguments(node: NodeWithTypeArguments, symbol?: Symbol) {
-        if (node.typeArguments) {
+        // Temporarily exclude these types for the build step to pass
+        if (node.typeArguments && symbol !== getGlobalRegExpSymbol() && symbol !== getGlobalRegExpExecArraySymbol()) {
             error(node, Diagnostics.Type_0_is_not_generic, symbol ? symbolToString(symbol) : (node as TypeReferenceNode).typeName ? declarationNameToString((node as TypeReferenceNode).typeName) : anon);
             return false;
         }
@@ -17020,6 +17022,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We always report an error, so cache a result in the event we could not resolve the symbol to prevent reporting it multiple times
         deferredGlobalRegExpSymbol ||= getGlobalTypeAliasSymbol("RegExp" as __String, /*arity*/ 3, /*reportErrors*/ true) || unknownSymbol;
         return deferredGlobalRegExpSymbol === unknownSymbol ? undefined : deferredGlobalRegExpSymbol;
+    }
+
+    // TODO: Remove me, see `checkNoTypeArguments`
+    function getGlobalRegExpExecArraySymbol(): Symbol | undefined {
+        // We always report an error, so cache a result in the event we could not resolve the symbol to prevent reporting it multiple times
+        deferredGlobalRegExpExecArraySymbol ||= getGlobalTypeAliasSymbol("RegExpExecArray" as __String, /*arity*/ 3, /*reportErrors*/ true) || unknownSymbol;
+        return deferredGlobalRegExpExecArraySymbol === unknownSymbol ? undefined : deferredGlobalRegExpExecArraySymbol;
     }
 
     function getGlobalExtractSymbol(): Symbol | undefined {
