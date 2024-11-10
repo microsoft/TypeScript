@@ -9,9 +9,12 @@ predicateSemantics.ts(33,8): error TS2872: This kind of expression is always tru
 predicateSemantics.ts(34,11): error TS2872: This kind of expression is always truthy.
 predicateSemantics.ts(35,8): error TS2872: This kind of expression is always truthy.
 predicateSemantics.ts(36,8): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(51,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(52,14): error TS2695: Left side of comma operator is unused and has no side effects.
+predicateSemantics.ts(52,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
 
 
-==== predicateSemantics.ts (11 errors) ====
+==== predicateSemantics.ts (14 errors) ====
     declare let cond: any;
     
     // OK: One or other operand is possibly nullish
@@ -78,3 +81,26 @@ predicateSemantics.ts(36,8): error TS2872: This kind of expression is always tru
         // Should be OK
         return this ?? 0;
     }
+    
+    // https://github.com/microsoft/TypeScript/issues/60401
+    {
+      const maybe = null as true | null;
+      let i = 0;
+      const d = (i++, maybe) ?? true; // ok
+      const e = (i++, i++) ?? true; // error
+                 ~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+      const f = (maybe, i++) ?? true; // error
+                 ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                 ~~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    }
+    
+    // https://github.com/microsoft/TypeScript/issues/60439
+    class X {
+      constructor() {
+        const p = new.target ?? 32;
+      }
+    }
+    

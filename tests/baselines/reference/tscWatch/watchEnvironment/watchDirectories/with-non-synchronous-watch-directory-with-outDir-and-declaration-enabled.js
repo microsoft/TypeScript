@@ -39,12 +39,12 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/file1.js] Inode:: 113
+//// [/user/username/projects/myproject/dist/file1.js] Inode:: 114
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/user/username/projects/myproject/dist/file1.d.ts] Inode:: 114
+//// [/user/username/projects/myproject/dist/file1.d.ts] Inode:: 115
 export {};
 
 
@@ -69,7 +69,7 @@ FsWatches::
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/dist: *new*
-  {"inode":112}
+  {"inode":113}
 /user/username/projects/myproject/node_modules: *new*
   {"inode":7}
 /user/username/projects/myproject/node_modules/file2: *new*
@@ -120,7 +120,7 @@ exitCode:: ExitStatus.undefined
 Change:: Add new file, should schedule and run timeout to update directory watcher
 
 Input::
-//// [/user/username/projects/myproject/src/file3.ts] Inode:: 115
+//// [/user/username/projects/myproject/src/file3.ts] Inode:: 116
 export const y = 10;
 
 
@@ -158,14 +158,14 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/file3.js] Inode:: 116
+//// [/user/username/projects/myproject/dist/file3.js] Inode:: 117
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 
 
-//// [/user/username/projects/myproject/dist/file3.d.ts] Inode:: 117
+//// [/user/username/projects/myproject/dist/file3.d.ts] Inode:: 118
 export declare const y = 10;
 
 
@@ -190,7 +190,7 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-  {"inode":112}
+  {"inode":113}
 /user/username/projects/myproject/node_modules:
   {"inode":7}
 /user/username/projects/myproject/node_modules/file2:
@@ -202,7 +202,7 @@ FsWatches::
 /user/username/projects/myproject/src/file1.ts:
   {"inode":6}
 /user/username/projects/myproject/src/file3.ts: *new*
-  {"inode":115}
+  {"inode":116}
 /user/username/projects/myproject/tsconfig.json:
   {"inode":10}
 

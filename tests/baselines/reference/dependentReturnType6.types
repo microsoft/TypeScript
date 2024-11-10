@@ -1,0 +1,512 @@
+//// [tests/cases/compiler/dependentReturnType6.ts] ////
+
+=== Performance Stats ===
+Instantiation count: 5,000
+
+=== file.ts ===
+// Type parameter in outer scope
+function outer<T extends boolean>(x: T): number {
+>outer : <T extends boolean>(x: T) => number
+>      : ^ ^^^^^^^^^       ^^ ^^ ^^^^^      
+>x : T
+>  : ^
+
+    return inner();
+>inner() : T extends true ? 1 : T extends false ? 2 : never
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : () => T extends true ? 1 : T extends false ? 2 : never
+>      : ^^^^^^                                                
+
+    function inner(): T extends true ? 1 : T extends false ? 2 : never {
+>inner : () => T extends true ? 1 : T extends false ? 2 : never
+>      : ^^^^^^                                                
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+        return x ? 1 : 2;
+>x ? 1 : 2 : 1 | 2
+>          : ^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+    }
+}
+
+// Overloads
+function fun6<T extends boolean>(x: T, y: string): T extends true ? string : T extends false ? 2 : never;
+>fun6 : { <T extends boolean>(x: T, y: string): T extends true ? string : T extends false ? 2 : never; <T_1 extends boolean>(x: T_1, y: undefined): T_1 extends true ? 1 : T_1 extends false ? 2 : never; (x: boolean): 1 | 2 | string; }
+>     : ^^^ ^^^^^^^^^       ^^ ^^ ^^ ^^      ^^^                                                     ^^^^^^^^^^^^^^^       ^^ ^^   ^^ ^^         ^^^                                                    ^^^ ^^       ^^^              ^^^
+>x : T
+>  : ^
+>y : string
+>  : ^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+function fun6<T extends boolean>(x: T, y: undefined): T extends true ? 1 : T extends false ? 2 : never;
+>fun6 : { <T_1 extends boolean>(x: T_1, y: string): T_1 extends true ? string : T_1 extends false ? 2 : never; <T extends boolean>(x: T, y: undefined): T extends true ? 1 : T extends false ? 2 : never; (x: boolean): 1 | 2 | string; }
+>     : ^^^^^^^^^^^^^^^       ^^ ^^   ^^ ^^      ^^^                                                         ^^^ ^^^^^^^^^       ^^ ^^ ^^ ^^         ^^^                                                ^^^ ^^       ^^^              ^^^
+>x : T
+>  : ^
+>y : undefined
+>  : ^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+function fun6(x: boolean): 1 | 2 | string;
+>fun6 : { <T extends boolean>(x: T, y: string): T extends true ? string : T extends false ? 2 : never; <T extends boolean>(x: T, y: undefined): T extends true ? 1 : T extends false ? 2 : never; (x: boolean): 1 | 2 | string; }
+>     : ^^^ ^^^^^^^^^       ^^ ^^ ^^ ^^      ^^^                                                     ^^^ ^^^^^^^^^       ^^ ^^ ^^ ^^         ^^^                                                ^^^ ^^       ^^^              ^^^
+>x : boolean
+>  : ^^^^^^^
+
+function fun6<T extends boolean>(x: T, y?: string): T extends true ? 1 | string : T extends false ? 2 : never {
+>fun6 : { <T_1 extends boolean>(x: T_1, y: string): T_1 extends true ? string : T_1 extends false ? 2 : never; <T_1 extends boolean>(x: T_1, y: undefined): T_1 extends true ? 1 : T_1 extends false ? 2 : never; (x: boolean): 1 | 2 | string; }
+>     : ^^^^^^^^^^^^^^^       ^^ ^^   ^^ ^^      ^^^                                                         ^^^^^^^^^^^^^^^       ^^ ^^   ^^ ^^         ^^^                                                    ^^^ ^^       ^^^              ^^^
+>x : T
+>  : ^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    return x ? y !== undefined ? y : 1 : 2;
+>x ? y !== undefined ? y : 1 : 2 : string | 1 | 2
+>                                : ^^^^^^^^^^^^^^
+>x : T
+>  : ^
+>y !== undefined ? y : 1 : string | 1
+>                        : ^^^^^^^^^^
+>y !== undefined : boolean
+>                : ^^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>y : string
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+// Indexed access with conditional inside
+
+// DOESN'T NARROW the nested conditional type of wrong shape
+interface SomeInterfaceBad<T> {
+    prop1: T extends 1 ? true : T extends 2 ? false : never;
+>prop1 : T extends 1 ? true : T extends 2 ? false : never
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    prop2: T extends true ? 1 : T extends false ? 2 : never;
+>prop2 : T extends true ? 1 : T extends false ? 2 : never
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+}
+
+function fun4bad<T, U extends keyof SomeInterfaceBad<unknown>>(x: T, y: U): SomeInterfaceBad<T>[U] {
+>fun4bad : <T, U extends keyof SomeInterfaceBad<unknown>>(x: T, y: U) => SomeInterfaceBad<T>[U]
+>        : ^ ^^ ^^^^^^^^^                               ^^ ^^ ^^ ^^ ^^^^^                      
+>x : T
+>  : ^
+>y : U
+>  : ^
+
+    if (y === "prop1") {
+>y === "prop1" : boolean
+>              : ^^^^^^^
+>y : U
+>  : ^
+>"prop1" : "prop1"
+>        : ^^^^^^^
+
+        return x === 1 ? true : false;
+>x === 1 ? true : false : boolean
+>                       : ^^^^^^^
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+    }
+    return x ? 1 : 2;
+>x ? 1 : 2 : 1 | 2
+>          : ^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+// Narrows nested conditional type of right shape
+interface SomeInterfaceGood<T> {
+    prop1: T extends true ? 2 : T extends false ? 1 : never;
+>prop1 : T extends true ? 2 : T extends false ? 1 : never
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    prop2: T extends true ? 1 : T extends false ? 2 : never;
+>prop2 : T extends true ? 1 : T extends false ? 2 : never
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+}
+
+function fun4good<T extends boolean, U extends keyof SomeInterfaceGood<unknown>>(x: T, y: U): SomeInterfaceGood<T>[U] {
+>fun4good : <T extends boolean, U extends keyof SomeInterfaceGood<unknown>>(x: T, y: U) => SomeInterfaceGood<T>[U]
+>         : ^ ^^^^^^^^^       ^^ ^^^^^^^^^                                ^^ ^^ ^^ ^^ ^^^^^                       
+>x : T
+>  : ^
+>y : U
+>  : ^
+
+    if (y === "prop1") {
+>y === "prop1" : boolean
+>              : ^^^^^^^
+>y : U
+>  : ^
+>"prop1" : "prop1"
+>        : ^^^^^^^
+
+        return x ? 2 : 1;
+>x ? 2 : 1 : 1 | 2
+>          : ^^^^^
+>x : T
+>  : ^
+>2 : 2
+>  : ^
+>1 : 1
+>  : ^
+    }
+    return x ? 1 : 2;
+>x ? 1 : 2 : 1 | 2
+>          : ^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+// Indexed access with indexed access inside - OK, narrows
+interface BB {
+    "a": number;
+>"a" : number
+>    : ^^^^^^
+
+    "b": string;
+>"b" : string
+>    : ^^^^^^
+}
+
+interface AA<T extends keyof BB> {
+    "c": BB[T];
+>"c" : BB[T]
+>    : ^^^^^
+
+    "d": boolean,
+>"d" : boolean
+>    : ^^^^^^^
+}
+
+function reduction<T extends keyof BB, U extends keyof AA<any>>(x: T, y: U): AA<T>[U] {
+>reduction : <T extends keyof BB, U extends keyof AA<any>>(x: T, y: U) => AA<T>[U]
+>          : ^ ^^^^^^^^^        ^^ ^^^^^^^^^             ^^ ^^ ^^ ^^ ^^^^^        
+>x : T
+>  : ^
+>y : U
+>  : ^
+
+    if (x === "a" && y === "c") {
+>x === "a" && y === "c" : boolean
+>                       : ^^^^^^^
+>x === "a" : boolean
+>          : ^^^^^^^
+>x : T
+>  : ^
+>"a" : "a"
+>    : ^^^
+>y === "c" : boolean
+>          : ^^^^^^^
+>y : U
+>  : ^
+>"c" : "c"
+>    : ^^^
+
+        return 0; // Ok
+>0 : 0
+>  : ^
+    }
+
+    return undefined as never;
+>undefined as never : never
+>                   : ^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+// Conditional with indexed access inside - OK, narrows
+function fun5<T extends 1 | 2, U extends keyof BB>(x: T, y: U): T extends 1 ? BB[U] : T extends 2 ? boolean : never {
+>fun5 : <T extends 1 | 2, U extends keyof BB>(x: T, y: U) => T extends 1 ? BB[U] : T extends 2 ? boolean : never
+>     : ^ ^^^^^^^^^     ^^ ^^^^^^^^^        ^^ ^^ ^^ ^^ ^^^^^                                                   
+>x : T
+>  : ^
+>y : U
+>  : ^
+
+    if (x === 1) {
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+
+        if (y === "a") {
+>y === "a" : boolean
+>          : ^^^^^^^
+>y : U
+>  : ^
+>"a" : "a"
+>    : ^^^
+
+            return 0;
+>0 : 0
+>  : ^
+        }
+        return "";
+>"" : ""
+>   : ^^
+    }
+    return true;
+>true : true
+>     : ^^^^
+}
+
+// `this` type parameter - Doesn't narrow
+abstract class SomeClass {
+>SomeClass : SomeClass
+>          : ^^^^^^^^^
+
+    fun3(this: Sub1 | Sub2): this extends Sub1 ? 1 : this extends Sub2 ? 2 : never {
+>fun3 : (this: Sub1 | Sub2) => this extends Sub1 ? 1 : this extends Sub2 ? 2 : never
+>     : ^    ^^           ^^^^^                                                     
+>this : Sub1 | Sub2
+>     : ^^^^^^^^^^^
+
+        if (this instanceof Sub1) {
+>this instanceof Sub1 : boolean
+>                     : ^^^^^^^
+>this : Sub1 | Sub2
+>     : ^^^^^^^^^^^
+>Sub1 : typeof Sub1
+>     : ^^^^^^^^^^^
+
+            return 1;
+>1 : 1
+>  : ^
+        }
+        return 2;
+>2 : 2
+>  : ^
+    }
+}
+class Sub1 extends SomeClass {
+>Sub1 : Sub1
+>     : ^^^^
+>SomeClass : SomeClass
+>          : ^^^^^^^^^
+
+    #sub1!: symbol;
+>#sub1 : symbol
+>      : ^^^^^^
+
+};
+class Sub2 extends SomeClass {
+>Sub2 : Sub2
+>     : ^^^^
+>SomeClass : SomeClass
+>          : ^^^^^^^^^
+
+    #sub2!: symbol;
+>#sub2 : symbol
+>      : ^^^^^^
+
+};
+
+// Detection of type parameter reference in presence of typeof
+function fun2<T extends boolean>(x: T, y: typeof x): T extends true ? 1 : T extends false ? 2 : never {
+>fun2 : <T extends boolean>(x: T, y: typeof x) => T extends true ? 1 : T extends false ? 2 : never
+>     : ^ ^^^^^^^^^       ^^ ^^ ^^ ^^        ^^^^^                                                
+>x : T
+>  : ^
+>y : T
+>  : ^
+>x : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    return x ? 1 : 2;
+>x ? 1 : 2 : 1 | 2
+>          : ^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+}
+
+// Contextually-typed lambdas
+const fun1: <T extends boolean>(x: T) => T extends true ? 1 : T extends false ? 2 : never = (x) => x ? 1 : 2;
+>fun1 : <T extends boolean>(x: T) => T extends true ? 1 : T extends false ? 2 : never
+>     : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                
+>x : T
+>  : ^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+>(x) => x ? 1 : 2 : <T extends boolean>(x: T) => 1 | 2
+>                 : ^ ^^^^^^^^^       ^^ ^^^^^^^^^^^^^
+>x : T
+>  : ^
+>x ? 1 : 2 : 1 | 2
+>          : ^^^^^
+>x : T
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+
+// Circular conditionals
+type SomeCond<T> = T extends true ? 1 : T extends false ? SomeCond<T> : never;
+>SomeCond : SomeCond<T>
+>         : ^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+function f7<T extends boolean>(x: T): SomeCond<T> {
+>f7 : <T extends boolean>(x: T) => SomeCond<T>
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^^^^           
+>x : T
+>  : ^
+
+    if (x) {
+>x : T
+>  : ^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+    return 2;
+>2 : 2
+>  : ^
+}
+
+// Composite instantiation of conditional type
+type OtherCond<T> = T extends 1 ? "one" : T extends 2 ? "two" : T extends 3 ? "three" : T extends 4 ? "four" : never;
+>OtherCond : OtherCond<T>
+>          : ^^^^^^^^^^^^
+
+function f8<U extends 1 | 2, V extends 3 | 4>(x: U, y: V): OtherCond<U | V> {
+>f8 : <U extends 1 | 2, V extends 3 | 4>(x: U, y: V) => OtherCond<U | V>
+>   : ^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^ ^^ ^^ ^^^^^                
+>x : U
+>  : ^
+>y : V
+>  : ^
+
+    if (x === 1 && y === 3)  {
+>x === 1 && y === 3 : boolean
+>                   : ^^^^^^^
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : U
+>  : ^
+>1 : 1
+>  : ^
+>y === 3 : boolean
+>        : ^^^^^^^
+>y : V
+>  : ^
+>3 : 3
+>  : ^
+
+        return "one";
+>"one" : "one"
+>      : ^^^^^
+    }
+}
+
+// Conditionals with `infer` - will not narrow, it is not safe to infer from the narrowed type into an `infer` type parameter
+function f9<T extends "a"[] | "b"[] | number>(x: T): T extends Array<infer P> ? P : T extends number ? undefined : never {
+>f9 : <T extends "a"[] | "b"[] | number>(x: T) => T extends Array<infer P> ? P : T extends number ? undefined : never
+>   : ^ ^^^^^^^^^                      ^^ ^^ ^^^^^                                                                   
+>x : T
+>  : ^
+
+    if (Array.isArray(x)) {
+>Array.isArray(x) : boolean
+>                 : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>x : number | "a"[] | "b"[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+        // If we allowed narrowing of the conditional return type, when resolving the conditional `T & ("a"[] | "b"[]) extends Array<infer P> ? P : ...`,
+        // we could infer `"a" | "b"` for `P`, and allow "a" to be returned. However, when calling `f10`, `T` could be instantiated with `"b"[]`, and the return type would be `"b"`,
+        // so allowing an `"a"` return would be unsound.
+        return "a";
+>"a" : "a"
+>    : ^^^
+    }
+    return undefined;
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+
