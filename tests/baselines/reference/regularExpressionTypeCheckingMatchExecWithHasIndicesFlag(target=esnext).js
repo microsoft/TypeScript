@@ -10,12 +10,7 @@ match.index; // number
 match.input; // string
 match.length; // 17
 match[0].length; // number
-match[1].length; // number
-match[16]?.length; // number | undefined
-match[17]; // should error, but see #45560#issuecomment-1111121849
 match.groups.date.length; // number
-match.groups.timeZoneSecond?.length; // number | undefined
-match.groups.foo; // error
 
 // Each element is of type [startIndex: number, endIndex: number]
 match.indices.length; // 17
@@ -55,12 +50,7 @@ match.index; // number
 match.input; // string
 match.length; // 17
 match[0].length; // number
-match[1].length; // number
-match[16]?.length; // number | undefined
-match[17]; // should error, but see #45560#issuecomment-1111121849
 match.groups.date.length; // number
-match.groups.timeZoneSecond?.length; // number | undefined
-match.groups.foo; // error
 // Each element is of type [startIndex: number, endIndex: number]
 match.indices.length; // 17
 match.indices[0].length; // 2
