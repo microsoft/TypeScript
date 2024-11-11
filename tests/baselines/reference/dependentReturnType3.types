@@ -1,0 +1,1000 @@
+//// [tests/cases/compiler/dependentReturnType3.ts] ////
+
+=== dependentReturnType3.ts ===
+// Adapted from ts-error-deltas repos
+
+type HelperCond<T, A, R1, B, R2> =
+>HelperCond : HelperCond<T, A, R1, B, R2>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    T extends A
+        ? R1
+        : T extends B
+            ? R2
+            : never;
+
+
+// File: Rocket.Chat/apps/meteor/app/katex/client/index.ts
+interface IMessage {
+    html?: string;
+>html : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+    tokens?: {}[];
+>tokens : {}[] | undefined
+>       : ^^^^^^^^^^^^^^^^
+}
+
+class NewKatex {
+>NewKatex : NewKatex
+>         : ^^^^^^^^
+
+    render(s: string): string {
+>render : (s: string) => string
+>       : ^ ^^      ^^^^^      
+>s : string
+>  : ^^^^^^
+
+        return "";
+>"" : ""
+>   : ^^
+    }
+
+    renderMessage<T extends string | IMessage>(message: T):
+>renderMessage : <T extends string | IMessage>(message: T) => T extends string ? string : T extends IMessage ? IMessage : never
+>              : ^ ^^^^^^^^^                 ^^       ^^ ^^^^^                                                                 
+>message : T
+>        : ^
+
+        T extends string
+        ? string
+        : T extends IMessage
+          ? IMessage
+          : never {
+        if (typeof message === 'string') {
+>typeof message === 'string' : boolean
+>                            : ^^^^^^^
+>typeof message : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>message : T
+>        : ^
+>'string' : "string"
+>         : ^^^^^^^^
+
+            return this.render(message); // Ok
+>this.render(message) : string
+>                     : ^^^^^^
+>this.render : (s: string) => string
+>            : ^ ^^      ^^^^^      
+>this : this
+>     : ^^^^
+>render : (s: string) => string
+>       : ^ ^^      ^^^^^      
+>message : string
+>        : ^^^^^^
+        }
+
+        if (!message.html?.trim()) {
+>!message.html?.trim() : boolean
+>                      : ^^^^^^^
+>message.html?.trim() : string | undefined
+>                     : ^^^^^^^^^^^^^^^^^^
+>message.html?.trim : (() => string) | undefined
+>                   : ^^^^^^^      ^^^^^^^^^^^^^
+>message.html : string | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+>message : IMessage
+>        : ^^^^^^^^
+>html : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>trim : (() => string) | undefined
+>     : ^^^^^^^      ^^^^^^^^^^^^^
+
+            return message; // Ok
+>message : IMessage
+>        : ^^^^^^^^
+        }
+
+        if (!message.tokens) {
+>!message.tokens : boolean
+>                : ^^^^^^^
+>message.tokens : {}[] | undefined
+>               : ^^^^^^^^^^^^^^^^
+>message : IMessage
+>        : ^^^^^^^^
+>tokens : {}[] | undefined
+>       : ^^^^^^^^^^^^^^^^
+
+            message.tokens = [];
+>message.tokens = [] : never[]
+>                    : ^^^^^^^
+>message.tokens : {}[] | undefined
+>               : ^^^^^^^^^^^^^^^^
+>message : IMessage
+>        : ^^^^^^^^
+>tokens : {}[] | undefined
+>       : ^^^^^^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+        }
+
+        message.html = this.render(message.html);
+>message.html = this.render(message.html) : string
+>                                         : ^^^^^^
+>message.html : string | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+>message : IMessage
+>        : ^^^^^^^^
+>html : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>this.render(message.html) : string
+>                          : ^^^^^^
+>this.render : (s: string) => string
+>            : ^ ^^      ^^^^^      
+>this : this
+>     : ^^^^
+>render : (s: string) => string
+>       : ^ ^^      ^^^^^      
+>message.html : string
+>             : ^^^^^^
+>message : IMessage
+>        : ^^^^^^^^
+>html : string
+>     : ^^^^^^
+
+        return message; // Ok
+>message : IMessage
+>        : ^^^^^^^^
+    }
+}
+
+export function createKatexMessageRendering<T extends true | false>(
+>createKatexMessageRendering : <T extends true | false>(options: { dollarSyntax: boolean; parenthesisSyntax: boolean; }, _isMessage: T) => T extends true ? (message: IMessage) => IMessage : T extends false ? (message: string) => string : never
+>                            : ^ ^^^^^^^^^            ^^       ^^                                                      ^^          ^^ ^^^^^                                                                                                        
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    options: {
+>options : { dollarSyntax: boolean; parenthesisSyntax: boolean; }
+>        : ^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^       ^^^
+
+        dollarSyntax: boolean;
+>dollarSyntax : boolean
+>             : ^^^^^^^
+
+        parenthesisSyntax: boolean;
+>parenthesisSyntax : boolean
+>                  : ^^^^^^^
+
+    },
+    _isMessage: T,
+>_isMessage : T
+>           : ^
+
+): T extends true
+>true : true
+>     : ^^^^
+
+    ? (message: IMessage) => IMessage
+>message : IMessage
+>        : ^^^^^^^^
+
+    : T extends false
+>false : false
+>      : ^^^^^
+
+      ? (message: string) => string
+>message : string
+>        : ^^^^^^
+
+      : never {
+    const instance = new NewKatex();
+>instance : NewKatex
+>         : ^^^^^^^^
+>new NewKatex() : NewKatex
+>               : ^^^^^^^^
+>NewKatex : typeof NewKatex
+>         : ^^^^^^^^^^^^^^^
+
+    if (_isMessage) {
+>_isMessage : T
+>           : ^
+
+        return (message: IMessage): IMessage => instance.renderMessage(message); // Ok
+>(message: IMessage): IMessage => instance.renderMessage(message) : (message: IMessage) => IMessage
+>                                                                 : ^       ^^        ^^^^^        
+>message : IMessage
+>        : ^^^^^^^^
+>instance.renderMessage(message) : IMessage
+>                                : ^^^^^^^^
+>instance.renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : never
+>                       : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                     
+>instance : NewKatex
+>         : ^^^^^^^^
+>renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : never
+>              : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                     
+>message : IMessage
+>        : ^^^^^^^^
+    }
+    return (message: string): string => instance.renderMessage(message); // Ok
+>(message: string): string => instance.renderMessage(message) : (message: string) => string
+>                                                             : ^       ^^      ^^^^^      
+>message : string
+>        : ^^^^^^
+>instance.renderMessage(message) : string
+>                                : ^^^^^^
+>instance.renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : never
+>                       : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                     
+>instance : NewKatex
+>         : ^^^^^^^^
+>renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : never
+>              : ^^^^^^^^^^^^^                 ^^       ^^   ^^^^^                                                                     
+>message : string
+>        : ^^^^^^
+}
+
+// File: Rocket.Chat/apps/meteor/app/settings/lib/settings.ts
+type SettingComposedValue<T extends SettingValue = SettingValue> = { key: string; value: T };
+>SettingComposedValue : SettingComposedValue<T>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>value : T
+>      : ^
+
+type SettingCallback = (key: string, value: SettingValue, initialLoad?: boolean) => void;
+>SettingCallback : SettingCallback
+>                : ^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>value : object
+>      : ^^^^^^
+>initialLoad : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
+
+type SettingValue = object;
+>SettingValue : object
+>             : ^^^^^^
+
+declare const Meteor: { settings: { [s: string]: any } };
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+
+declare const _: { isRegExp(x: unknown): x is RegExp; };
+>_ : { isRegExp(x: unknown): x is RegExp; }
+>  : ^^^^^^^^^^^ ^^       ^^^           ^^^
+>isRegExp : (x: unknown) => x is RegExp
+>         : ^ ^^       ^^^^^           
+>x : unknown
+>  : ^^^^^^^
+
+declare function takesRegExp(x: RegExp): void;
+>takesRegExp : (x: RegExp) => void
+>            : ^ ^^      ^^^^^    
+>x : RegExp
+>  : ^^^^^^
+
+declare function takesString(x: string): void;
+>takesString : (x: string) => void
+>            : ^ ^^      ^^^^^    
+>x : string
+>  : ^^^^^^
+
+class NewSettingsBase {
+>NewSettingsBase : NewSettingsBase
+>                : ^^^^^^^^^^^^^^^
+
+    public newGet<C extends SettingCallback | undefined, I extends string | RegExp, T extends SettingValue = SettingValue>(
+>newGet : <C extends SettingCallback | undefined, I extends string | RegExp, T extends SettingValue = object>(_id: I, callback?: C) => HelperCond<C, SettingCallback, void, undefined, HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>>
+>       : ^ ^^^^^^^^^                           ^^ ^^^^^^^^^               ^^ ^^^^^^^^^            ^^^^^^^^^^^   ^^ ^^        ^^^ ^^^^^                                                                                                                        
+
+        _id: I,
+>_id : I
+>    : ^
+
+        callback?: C,
+>callback : C | undefined
+>         : ^^^^^^^^^^^^^
+
+    ): HelperCond<C,
+        SettingCallback, void,
+        undefined, HelperCond<I,
+            string, T | undefined,
+            RegExp, SettingComposedValue<T>[]>> {
+        if (callback !== undefined) {
+>callback !== undefined : boolean
+>                       : ^^^^^^^
+>callback : C | undefined
+>         : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+            if (!Meteor.settings) {
+>!Meteor.settings : false
+>                 : ^^^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+
+                return; // Ok
+            }
+            if (_id === '*') {
+>_id === '*' : boolean
+>            : ^^^^^^^
+>_id : I
+>    : ^
+>'*' : "*"
+>    : ^^^
+
+                return Object.keys(Meteor.settings).forEach((key) => { // Ok
+>Object.keys(Meteor.settings).forEach((key) => { // Ok                    const value = Meteor.settings[key];                    callback(key, value);                }) : void
+>                                                                                                                                                                        : ^^^^
+>Object.keys(Meteor.settings).forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>                                     : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>Object.keys(Meteor.settings) : string[]
+>                             : ^^^^^^^^
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>(key) => { // Ok                    const value = Meteor.settings[key];                    callback(key, value);                } : (key: string) => void
+>                                                                                                                                  : ^   ^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+
+                    const value = Meteor.settings[key];
+>value : any
+>      : ^^^
+>Meteor.settings[key] : any
+>                     : ^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+
+                    callback(key, value);
+>callback(key, value) : void
+>                     : ^^^^
+>callback : SettingCallback
+>         : ^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>value : any
+>      : ^^^
+
+                });
+            }
+            if (_.isRegExp(_id) && Meteor.settings) {
+>_.isRegExp(_id) && Meteor.settings : false | { [s: string]: any; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_.isRegExp(_id) : boolean
+>                : ^^^^^^^
+>_.isRegExp : (x: unknown) => x is RegExp
+>           : ^ ^^       ^^^^^           
+>_ : { isRegExp(x: unknown): x is RegExp; }
+>  : ^^^^^^^^^^^ ^^       ^^^           ^^^
+>isRegExp : (x: unknown) => x is RegExp
+>         : ^ ^^       ^^^^^           
+>_id : string | RegExp
+>    : ^^^^^^^^^^^^^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+
+                return Object.keys(Meteor.settings).forEach((key) => { // Ok
+>Object.keys(Meteor.settings).forEach((key) => { // Ok                    if (!_id.test(key)) {                        return;                    }                    const value = Meteor.settings[key];                    callback(key, value);                }) : void
+>                                                                                                                                                                                                                                                                     : ^^^^
+>Object.keys(Meteor.settings).forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>                                     : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>Object.keys(Meteor.settings) : string[]
+>                             : ^^^^^^^^
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>(key) => { // Ok                    if (!_id.test(key)) {                        return;                    }                    const value = Meteor.settings[key];                    callback(key, value);                } : (key: string) => void
+>                                                                                                                                                                                                                               : ^   ^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+
+                    if (!_id.test(key)) {
+>!_id.test(key) : boolean
+>               : ^^^^^^^
+>_id.test(key) : boolean
+>              : ^^^^^^^
+>_id.test : (string: string) => boolean
+>         : ^      ^^      ^^^^^       
+>_id : RegExp
+>    : ^^^^^^
+>test : (string: string) => boolean
+>     : ^      ^^      ^^^^^       
+>key : string
+>    : ^^^^^^
+
+                        return;
+                    }
+                    const value = Meteor.settings[key];
+>value : any
+>      : ^^^
+>Meteor.settings[key] : any
+>                     : ^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+
+                    callback(key, value);
+>callback(key, value) : void
+>                     : ^^^^
+>callback : SettingCallback
+>         : ^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>value : any
+>      : ^^^
+
+                });
+            }
+
+            if (typeof _id === 'string') {
+>typeof _id === 'string' : boolean
+>                        : ^^^^^^^
+>typeof _id : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_id : I
+>    : ^
+>'string' : "string"
+>         : ^^^^^^^^
+
+                const value = Meteor.settings[_id];
+>value : any
+>      : ^^^
+>Meteor.settings[_id] : any
+>                     : ^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>_id : I & string
+>    : ^^^^^^^^^^
+
+                if (value != null) {
+>value != null : boolean
+>              : ^^^^^^^
+>value : any
+>      : ^^^
+
+                    callback(_id, Meteor.settings[_id]);
+>callback(_id, Meteor.settings[_id]) : void
+>                                    : ^^^^
+>callback : SettingCallback
+>         : ^^^^^^^^^^^^^^^
+>_id : string
+>    : ^^^^^^
+>Meteor.settings[_id] : any
+>                     : ^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>_id : I & string
+>    : ^^^^^^^^^^
+                }
+                return; // Ok
+            }
+
+            return; // Ok, needed for exhaustiveness check
+        }
+
+        if (!Meteor.settings) { // Wrong: we don't know that _id is string here, cannot return undefined
+>!Meteor.settings : false
+>                 : ^^^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+
+            return undefined; // Error
+>undefined : undefined
+>          : ^^^^^^^^^
+        }
+
+        if (_.isRegExp(_id)) {
+>_.isRegExp(_id) : boolean
+>                : ^^^^^^^
+>_.isRegExp : (x: unknown) => x is RegExp
+>           : ^ ^^       ^^^^^           
+>_ : { isRegExp(x: unknown): x is RegExp; }
+>  : ^^^^^^^^^^^ ^^       ^^^           ^^^
+>isRegExp : (x: unknown) => x is RegExp
+>         : ^ ^^       ^^^^^           
+>_id : string | RegExp
+>    : ^^^^^^^^^^^^^^^
+
+            return Object.keys(Meteor.settings).reduce((items: SettingComposedValue<T>[], key) => {
+>Object.keys(Meteor.settings).reduce((items: SettingComposedValue<T>[], key) => {				const value = Meteor.settings[key];				if (_id.test(key)) {					items.push({						key,						value,					});				}				return items;			}, []) : SettingComposedValue<T>[]
+>                                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.keys(Meteor.settings).reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
+>                                    : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
+>Object.keys(Meteor.settings) : string[]
+>                             : ^^^^^^^^
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
+>       : ^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^             ^^^^^            ^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^
+>(items: SettingComposedValue<T>[], key) => {				const value = Meteor.settings[key];				if (_id.test(key)) {					items.push({						key,						value,					});				}				return items;			} : (items: SettingComposedValue<T>[], key: string) => SettingComposedValue<T>[]
+>                                                                                                                                                                                     : ^     ^^                         ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>items : SettingComposedValue<T>[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+
+				const value = Meteor.settings[key];
+>value : any
+>      : ^^^
+>Meteor.settings[key] : any
+>                     : ^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+
+				if (_id.test(key)) {
+>_id.test(key) : boolean
+>              : ^^^^^^^
+>_id.test : (string: string) => boolean
+>         : ^      ^^      ^^^^^       
+>_id : RegExp
+>    : ^^^^^^
+>test : (string: string) => boolean
+>     : ^      ^^      ^^^^^       
+>key : string
+>    : ^^^^^^
+
+					items.push({
+>items.push({						key,						value,					}) : number
+>                                          : ^^^^^^
+>items.push : (...items: SettingComposedValue<T>[]) => number
+>           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>items : SettingComposedValue<T>[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>push : (...items: SettingComposedValue<T>[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>{						key,						value,					} : { key: string; value: any; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+						key,
+>key : string
+>    : ^^^^^^
+
+						value,
+>value : any
+>      : ^^^
+
+					});
+				}
+				return items;
+>items : SettingComposedValue<T>[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+			}, []); // Ok
+>[] : never[]
+>   : ^^^^^^^
+        }
+
+        return Meteor.settings?.[_id]; // Error
+>Meteor.settings?.[_id] : any
+>                       : ^^^
+>Meteor.settings : { [s: string]: any; }
+>                : ^^^^^^^^^^^^^^^^^^^^^
+>Meteor : { settings: { [s: string]: any; }; }
+>       : ^^^^^^^^^^^^                     ^^^
+>settings : { [s: string]: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>_id : I
+>    : ^
+
+        // The indexing currently doesn't work because it doesn't use the narrowed type of `_id`.
+    }
+}
+
+// File: Rocket.Chat/apps/meteor/app/ui-utils/client/lib/messageBox.ts
+type MessageBoxAction = object;
+>MessageBoxAction : object
+>                 : ^^^^^^
+
+function getWithBug<T extends string | undefined>(group: T):
+>getWithBug : <T extends string | undefined>(group: T) => HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>>
+>           : ^ ^^^^^^^^^                  ^^     ^^ ^^^^^                                                                                        
+>group : T
+>      : ^
+
+HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>> {
+    if (!group) {
+>!group : boolean
+>       : ^^^^^^^
+>group : T
+>      : ^
+
+        return {} as Record<string, MessageBoxAction[]>; // Error, could fall into this branch when group is empty string
+>{} as Record<string, MessageBoxAction[]> : Record<string, object[]>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+    }
+
+    return [] as MessageBoxAction[]; // Ok
+>[] as MessageBoxAction[] : object[]
+>                         : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+}
+
+function getWithoutBug<T extends string | undefined>(group: T):
+>getWithoutBug : <T extends string | undefined>(group: T) => HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>>
+>              : ^ ^^^^^^^^^                  ^^     ^^ ^^^^^                                                                                        
+>group : T
+>      : ^
+
+HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>> {
+    if (group === undefined) {
+>group === undefined : boolean
+>                    : ^^^^^^^
+>group : T
+>      : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return {} as Record<string, MessageBoxAction[]>; // Ok
+>{} as Record<string, MessageBoxAction[]> : Record<string, object[]>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+    }
+
+    return [] as MessageBoxAction[]; // Ok
+>[] as MessageBoxAction[] : object[]
+>                         : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+}
+
+// File: Rocket.Chat/apps/meteor/ee/server/lib/engagementDashboard/date.ts
+declare function mapDateForAPI(x: string): Date;
+>mapDateForAPI : (x: string) => Date
+>              : ^ ^^      ^^^^^    
+>x : string
+>  : ^^^^^^
+
+export function transformDatesForAPI<T extends string | undefined>(
+>transformDatesForAPI : <T extends string | undefined>(start: string, end?: T) => HelperCond<T, string, { start: Date; end: Date; }, undefined, { start: Date; end: undefined; }>
+>                     : ^ ^^^^^^^^^                  ^^     ^^      ^^   ^^^ ^^^^^                                                                                               
+
+    start: string,
+>start : string
+>      : ^^^^^^
+
+    end?: T
+>end : T | undefined
+>    : ^^^^^^^^^^^^^
+
+): HelperCond<T, string, { start: Date, end: Date }, undefined, { start: Date, end: undefined }> {
+>start : Date
+>      : ^^^^
+>end : Date
+>    : ^^^^
+>start : Date
+>      : ^^^^
+>end : undefined
+>    : ^^^^^^^^^
+
+    return end !== undefined ? // Ok
+>end !== undefined ? // Ok        {            start: mapDateForAPI(start),            end: mapDateForAPI(end),        } :        {            start: mapDateForAPI(start),            end: undefined        } : { start: Date; end: Date; } | { start: Date; end: undefined; }
+>                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>end !== undefined : boolean
+>                  : ^^^^^^^
+>end : T | undefined
+>    : ^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+        {
+>{            start: mapDateForAPI(start),            end: mapDateForAPI(end),        } : { start: Date; end: Date; }
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            start: mapDateForAPI(start),
+>start : Date
+>      : ^^^^
+>mapDateForAPI(start) : Date
+>                     : ^^^^
+>mapDateForAPI : (x: string) => Date
+>              : ^ ^^      ^^^^^    
+>start : string
+>      : ^^^^^^
+
+            end: mapDateForAPI(end),
+>end : Date
+>    : ^^^^
+>mapDateForAPI(end) : Date
+>                   : ^^^^
+>mapDateForAPI : (x: string) => Date
+>              : ^ ^^      ^^^^^    
+>end : string
+>    : ^^^^^^
+
+        } :
+        {
+>{            start: mapDateForAPI(start),            end: undefined        } : { start: Date; end: undefined; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            start: mapDateForAPI(start),
+>start : Date
+>      : ^^^^
+>mapDateForAPI(start) : Date
+>                     : ^^^^
+>mapDateForAPI : (x: string) => Date
+>              : ^ ^^      ^^^^^    
+>start : string
+>      : ^^^^^^
+
+            end: undefined
+>end : undefined
+>    : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        };
+}
+
+// File: Rocket.Chat/packages/agenda/src/Agenda.ts
+type RepeatOptions = object;
+>RepeatOptions : object
+>              : ^^^^^^
+
+type Job = object;
+>Job : object
+>    : ^^^^^^
+
+type IJob = { data: object };
+>IJob : IJob
+>     : ^^^^
+>data : object
+>     : ^^^^^^
+
+class NewAgenda {
+>NewAgenda : NewAgenda
+>          : ^^^^^^^^^
+
+    public async _createIntervalJob(interval: string | number, name: string, data: IJob['data'], options: RepeatOptions): Promise<Job> { return undefined as any; }
+>_createIntervalJob : (interval: string | number, name: string, data: IJob["data"], options: RepeatOptions) => Promise<Job>
+>                   : ^        ^^               ^^    ^^      ^^    ^^            ^^       ^^             ^^^^^            
+>interval : string | number
+>         : ^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>data : object
+>     : ^^^^^^
+>options : object
+>        : ^^^^^^
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    private _createIntervalJobs(
+>_createIntervalJobs : (interval: string | number, names: string[], data: IJob["data"], options: RepeatOptions) => Promise<Job[]> | undefined
+>                    : ^        ^^               ^^     ^^        ^^    ^^            ^^       ^^             ^^^^^                          
+
+        interval: string | number,
+>interval : string | number
+>         : ^^^^^^^^^^^^^^^
+
+        names: string[],
+>names : string[]
+>      : ^^^^^^^^
+
+        data: IJob['data'],
+>data : object
+>     : ^^^^^^
+
+        options: RepeatOptions,
+>options : object
+>        : ^^^^^^
+
+    ): Promise<Job[]> | undefined { return undefined as any; }
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    public async newEvery<T extends string | string[]>(
+>newEvery : <T extends string | string[]>(interval: string | number, name: T, data: IJob["data"], options: RepeatOptions) => Promise<HelperCond<T, string, Job, string[], Job[] | undefined>>
+>         : ^ ^^^^^^^^^                 ^^        ^^               ^^    ^^ ^^    ^^            ^^       ^^             ^^^^^                                                                
+
+        interval: string | number,
+>interval : string | number
+>         : ^^^^^^^^^^^^^^^
+
+        name: T,
+>name : T
+>     : ^
+
+        data: IJob['data'],
+>data : object
+>     : ^^^^^^
+
+        options: RepeatOptions): Promise<HelperCond<T, string, Job, string[], Job[] | undefined>> {
+>options : object
+>        : ^^^^^^
+
+        if (typeof name === 'string') {
+>typeof name === 'string' : boolean
+>                         : ^^^^^^^
+>typeof name : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : T
+>     : ^
+>'string' : "string"
+>         : ^^^^^^^^
+
+            return this._createIntervalJob(interval, name, data, options); // Ok
+>this._createIntervalJob(interval, name, data, options) : Promise<object>
+>                                                       : ^^^^^^^^^^^^^^^
+>this._createIntervalJob : (interval: string | number, name: string, data: IJob["data"], options: RepeatOptions) => Promise<Job>
+>                        : ^        ^^               ^^    ^^      ^^    ^^            ^^       ^^             ^^^^^            
+>this : this
+>     : ^^^^
+>_createIntervalJob : (interval: string | number, name: string, data: IJob["data"], options: RepeatOptions) => Promise<Job>
+>                   : ^        ^^               ^^    ^^      ^^    ^^            ^^       ^^             ^^^^^            
+>interval : string | number
+>         : ^^^^^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>data : object
+>     : ^^^^^^
+>options : object
+>        : ^^^^^^
+        }
+
+        if (Array.isArray(name)) {
+>Array.isArray(name) : boolean
+>                    : ^^^^^^^
+>Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
+>name : string[]
+>     : ^^^^^^^^
+
+            return this._createIntervalJobs(interval, name, data, options); // Ok
+>this._createIntervalJobs(interval, name, data, options) : Promise<object[]> | undefined
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this._createIntervalJobs : (interval: string | number, names: string[], data: IJob["data"], options: RepeatOptions) => Promise<Job[]> | undefined
+>                         : ^        ^^               ^^     ^^        ^^    ^^            ^^       ^^             ^^^^^                          
+>this : this
+>     : ^^^^
+>_createIntervalJobs : (interval: string | number, names: string[], data: IJob["data"], options: RepeatOptions) => Promise<Job[]> | undefined
+>                    : ^        ^^               ^^     ^^        ^^    ^^            ^^       ^^             ^^^^^                          
+>interval : string | number
+>         : ^^^^^^^^^^^^^^^
+>name : string[]
+>     : ^^^^^^^^
+>data : object
+>     : ^^^^^^
+>options : object
+>        : ^^^^^^
+
+            // Possible bug in original: createIntervalJobs can return undefined, but the original overload did not acount for that.
+        }
+
+        throw new Error('Unexpected error: Invalid job name(s)');
+>new Error('Unexpected error: Invalid job name(s)') : Error
+>                                                   : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>'Unexpected error: Invalid job name(s)' : "Unexpected error: Invalid job name(s)"
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+}
+
+// File: angular/packages/common/src/pipes/case_conversion_pipes.ts
+
+function transform1<T extends string | null | undefined>(value: T): HelperCond<T, string, string, null | undefined, null> {
+>transform1 : <T extends string | null | undefined>(value: T) => HelperCond<T, string, string, null | undefined, null>
+>           : ^ ^^^^^^^^^                         ^^     ^^ ^^^^^                                                     
+>value : T
+>      : ^
+
+    if (value == null) return null; // Ok
+>value == null : boolean
+>              : ^^^^^^^
+>value : T
+>      : ^
+
+    if (typeof value !== 'string') {
+>typeof value !== 'string' : boolean
+>                          : ^^^^^^^
+>typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : NonNullable<T>
+>      : ^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+        throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+    }
+    return value.toLowerCase(); // Ok
+>value.toLowerCase() : string
+>                    : ^^^^^^
+>value.toLowerCase : () => string
+>                  : ^^^^^^      
+>value : string
+>      : ^^^^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
+}
