@@ -15166,7 +15166,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const reduced = getUnionType(reducedTypes);
             if (reduced.flags & TypeFlags.Union) {
                 unionType = reduced as UnionType;
-            } else {
+            }
+            else {
                 return reduced;
             }
         }
