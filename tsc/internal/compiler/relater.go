@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
-	"github.com/microsoft/typescript-go/internal/utils"
+	"github.com/microsoft/typescript-go/internal/core"
 )
 
 type SignatureCheckMode uint32
@@ -346,7 +346,7 @@ func (c *Checker) elaborateError(node *Node, source *Type, target *Type, relatio
 func (c *Checker) isWeakType(t *Type) bool {
 	if t.flags&TypeFlagsObject != 0 {
 		resolved := c.resolveStructuredTypeMembers(t)
-		return len(resolved.signatures) == 0 && len(resolved.indexInfos) == 0 && len(resolved.properties) > 0 && utils.Every(resolved.properties, func(p *Symbol) bool {
+		return len(resolved.signatures) == 0 && len(resolved.indexInfos) == 0 && len(resolved.properties) > 0 && core.Every(resolved.properties, func(p *Symbol) bool {
 			return p.flags&SymbolFlagsOptional != 0
 		})
 	}
@@ -354,7 +354,7 @@ func (c *Checker) isWeakType(t *Type) bool {
 		return c.isWeakType(t.AsSubstitutionType().baseType)
 	}
 	if t.flags&TypeFlagsIntersection != 0 {
-		return utils.Every(t.Types(), c.isWeakType)
+		return core.Every(t.Types(), c.isWeakType)
 	}
 	return false
 }
@@ -415,8 +415,8 @@ func isExcessPropertyCheckTarget(t *Type) bool {
 	return t.flags&TypeFlagsObject != 0 && t.objectFlags&ObjectFlagsObjectLiteralPatternWithComputedProperties == 0 ||
 		t.flags&TypeFlagsNonPrimitive != 0 ||
 		t.flags&TypeFlagsSubstitution != 0 && isExcessPropertyCheckTarget(t.AsSubstitutionType().baseType) ||
-		t.flags&TypeFlagsUnion != 0 && utils.Some(t.Types(), isExcessPropertyCheckTarget) ||
-		t.flags&TypeFlagsIntersection != 0 && utils.Every(t.Types(), isExcessPropertyCheckTarget)
+		t.flags&TypeFlagsUnion != 0 && core.Some(t.Types(), isExcessPropertyCheckTarget) ||
+		t.flags&TypeFlagsIntersection != 0 && core.Every(t.Types(), isExcessPropertyCheckTarget)
 }
 
 // Return true if the given type is deeply nested. We consider this to be the case when the given stack contains
@@ -471,7 +471,7 @@ func (c *Checker) getMappedTargetWithSymbol(t *Type) *Type {
 		if t.objectFlags&ObjectFlagsInstantiatedMapped == ObjectFlagsInstantiatedMapped {
 			target := c.getModifiersTypeFromMappedType(t)
 			if target != nil && (target.symbol != nil || target.flags&TypeFlagsIntersection != 0 &&
-				utils.Some(target.Types(), func(t *Type) bool { return t.symbol != nil })) {
+				core.Some(target.Types(), func(t *Type) bool { return t.symbol != nil })) {
 				t = target
 				continue
 			}
@@ -577,7 +577,7 @@ func (c *Checker) findMatchingTypeReferenceOrTypeAliasReference(source *Type, un
 
 func (c *Checker) findBestTypeForInvokable(source *Type, unionTarget *Type, kind SignatureKind) *Type {
 	if len(c.getSignaturesOfType(source, kind)) != 0 {
-		return utils.Find(unionTarget.Types(), func(t *Type) bool { return len(c.getSignaturesOfType(t, kind)) != 0 })
+		return core.Find(unionTarget.Types(), func(t *Type) bool { return len(c.getSignaturesOfType(t, kind)) != 0 })
 	}
 	return nil
 }
@@ -598,7 +598,7 @@ func (c *Checker) findMostOverlappyType(source *Type, unionTarget *Type) *Type {
 					// needed to elaborate between two generic mapped types anyway.
 					var len = 1
 					if overlap.flags&TypeFlagsUnion != 0 {
-						len = utils.CountWhere(overlap.Types(), isUnitType)
+						len = core.CountWhere(overlap.Types(), isUnitType)
 					}
 					if len >= matchingCount {
 						bestMatch = target
@@ -613,7 +613,7 @@ func (c *Checker) findMostOverlappyType(source *Type, unionTarget *Type) *Type {
 
 func (c *Checker) findBestTypeForObjectLiteral(source *Type, unionTarget *Type) *Type {
 	if source.objectFlags&ObjectFlagsObjectLiteral != 0 && someType(unionTarget, c.isArrayLikeType) {
-		return utils.Find(unionTarget.Types(), func(t *Type) bool { return !c.isArrayLikeType(t) })
+		return core.Find(unionTarget.Types(), func(t *Type) bool { return !c.isArrayLikeType(t) })
 	}
 	return nil
 }
@@ -664,7 +664,7 @@ func (c *Checker) getUnmatchedProperties(source *Type, target *Type, requireOpti
 }
 
 func (c *Checker) getUnmatchedProperty(source *Type, target *Type, requireOptionalProperties bool, matchDiscriminantProperties bool) *Symbol {
-	return utils.FirstOrNilSeq(c.getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties))
+	return core.FirstOrNilSeq(c.getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties))
 }
 
 func excludeProperties(properties []*Symbol, excludedProperties set[string]) []*Symbol {
@@ -792,7 +792,7 @@ func (c *Checker) getConstituentTypeForKeyType(t *Type, keyType *Type) *Type {
 
 func (c *Checker) computeKeyPropertyNameAndMap(t *Type) (string, map[*Type]*Type) {
 	types := t.Types()
-	if len(types) < 10 || t.objectFlags&ObjectFlagsPrimitiveUnion != 0 || utils.CountWhere(types, isObjectOrInstantiableNonPrimitive) < 10 {
+	if len(types) < 10 || t.objectFlags&ObjectFlagsPrimitiveUnion != 0 || core.CountWhere(types, isObjectOrInstantiableNonPrimitive) < 10 {
 		return InternalSymbolNameMissing, nil
 	}
 	keyPropertyName := c.getKeyPropertyCandidateName(types)
@@ -964,7 +964,7 @@ func (c *Checker) typeCouldHaveTopLevelSingletonTypes(t *Type) bool {
 		return false
 	}
 	if t.flags&TypeFlagsUnionOrIntersection != 0 {
-		return utils.Some(t.Types(), c.typeCouldHaveTopLevelSingletonTypes)
+		return core.Some(t.Types(), c.typeCouldHaveTopLevelSingletonTypes)
 	}
 	if t.flags&TypeFlagsInstantiable != 0 {
 		constraint := c.getConstraintOfType(t)
@@ -1127,7 +1127,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 		}
 		return TernaryFalse
 	}
-	if source.typeParameters != nil && !utils.Same(source.typeParameters, target.typeParameters) {
+	if source.typeParameters != nil && !core.Same(source.typeParameters, target.typeParameters) {
 		target = c.getCanonicalSignature(target)
 		source = c.instantiateSignatureInContextOf(source, target /*inferenceContext*/, nil, compareTypes)
 	}
@@ -1358,7 +1358,7 @@ func (c *Checker) getMinArgumentCountEx(signature *Signature, flags MinArgumentC
 		if signatureHasRestParameter(signature) {
 			restType := c.getTypeOfSymbol(signature.parameters[len(signature.parameters)-1])
 			if isTupleType(restType) {
-				firstOptionalIndex := utils.FindIndex(restType.TargetTupleType().elementInfos, func(info TupleElementInfo) bool {
+				firstOptionalIndex := core.FindIndex(restType.TargetTupleType().elementInfos, func(info TupleElementInfo) bool {
 					return info.flags&ElementFlagsRequired == 0
 				})
 				requiredCount := firstOptionalIndex
@@ -1669,7 +1669,7 @@ func (c *Checker) createTypePredicateFromTypePredicateNode(node *Node, signature
 	}
 	kind := ifElse(predicateNode.assertsModifier != nil, TypePredicateKindAssertsIdentifier, TypePredicateKindIdentifier)
 	name := predicateNode.parameterName.Text()
-	index := utils.FindIndex(signature.parameters, func(p *Symbol) bool { return p.name == name })
+	index := core.FindIndex(signature.parameters, func(p *Symbol) bool { return p.name == name })
 	return c.newTypePredicate(kind, name, int32(index), t)
 }
 
@@ -1686,7 +1686,7 @@ func (c *Checker) newTypePredicate(kind TypePredicateKind, parameterName string,
 }
 
 func (c *Checker) isResolvingReturnTypeOfSignature(signature *Signature) bool {
-	if signature.composite != nil && utils.Some(signature.composite.signatures, c.isResolvingReturnTypeOfSignature) {
+	if signature.composite != nil && core.Some(signature.composite.signatures, c.isResolvingReturnTypeOfSignature) {
 		return true
 	}
 	return signature.resolvedReturnType == nil && c.findResolutionCycleStartIndex(signature, TypeSystemPropertyNameResolvedReturnType) >= 0
@@ -1914,7 +1914,7 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 						// use the property's value declaration if the property is assigned inside the literal itself
 						var objectLiteralDeclaration *Node
 						if source.symbol != nil {
-							objectLiteralDeclaration = utils.FirstOrNil(source.symbol.declarations)
+							objectLiteralDeclaration = core.FirstOrNil(source.symbol.declarations)
 						}
 						var suggestion string
 						if prop.valueDeclaration != nil && isObjectLiteralElementLike(prop.valueDeclaration) &&
@@ -2037,7 +2037,7 @@ func (r *Relater) unionOrIntersectionRelatedTo(source *Type, target *Type, repor
 	// parameter 'T extends 1 | 2', the intersection 'T & 1' should be reduced to '1' such that it doesn't
 	// appear to be comparable to '2'.
 	if r.relation == r.c.comparableRelation && target.flags&TypeFlagsPrimitive != 0 {
-		constraints := utils.SameMap(source.Types(), func(t *Type) *Type {
+		constraints := core.SameMap(source.Types(), func(t *Type) *Type {
 			if t.flags&TypeFlagsInstantiable != 0 {
 				constraint := r.c.getBaseConstraintOfType(t)
 				if constraint != nil {
@@ -2047,7 +2047,7 @@ func (r *Relater) unionOrIntersectionRelatedTo(source *Type, target *Type, repor
 			}
 			return t
 		})
-		if !utils.Same(constraints, source.Types()) {
+		if !core.Same(constraints, source.Types()) {
 			source = r.c.getIntersectionType(constraints)
 			if source.flags&TypeFlagsNever != 0 {
 				return TernaryFalse
@@ -2375,7 +2375,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 		if result := r.typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors, intersectionState); result != TernaryFalse {
 			return result, true
 		}
-		if utils.Some(variances, func(v VarianceFlags) bool { return v&VarianceFlagsAllowsStructuralFallback != 0 }) {
+		if core.Some(variances, func(v VarianceFlags) bool { return v&VarianceFlagsAllowsStructuralFallback != 0 }) {
 			// If some type parameter was `Unmeasurable` or `Unreliable`, and we couldn't pass by assuming it was identical, then we
 			// have to allow a structural fallback check
 			// We elide the variance-based error elaborations, since those might not be too helpful, since we'll potentially
@@ -2402,7 +2402,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			// reveal the reason).
 			// We can switch on `reportErrors` here, since varianceCheckFailed guarantees we return `False`,
 			// we can return `False` early here to skip calculating the structural error message we don't need.
-			if varianceCheckFailed && !(reportErrors && utils.Some(variances, func(v VarianceFlags) bool { return (v & VarianceFlagsVarianceMask) == VarianceFlagsInvariant })) {
+			if varianceCheckFailed && !(reportErrors && core.Some(variances, func(v VarianceFlags) bool { return (v & VarianceFlagsVarianceMask) == VarianceFlagsInvariant })) {
 				return TernaryFalse, true
 			}
 			// We remember the original error information so we can restore it in case the structural
@@ -2835,7 +2835,7 @@ func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ter
 					continue outer
 				}
 			}
-			matchingTypes = utils.AppendIfUnique(matchingTypes, t)
+			matchingTypes = core.AppendIfUnique(matchingTypes, t)
 			hasMatch = true
 		}
 		if !hasMatch {
@@ -3132,10 +3132,10 @@ func (r *Relater) reportUnmatchedProperty(source *Type, target *Type, unmatchedP
 		}
 	} else if r.tryElaborateArrayLikeErrors(source, target, false /*reportErrors*/) {
 		if len(props) > 5 {
-			propNames := strings.Join(utils.Map(props[:4], r.c.symbolToString), ", ")
+			propNames := strings.Join(core.Map(props[:4], r.c.symbolToString), ", ")
 			r.reportError(diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, r.c.typeToString(source), r.c.typeToString(target), propNames, len(props)-4)
 		} else {
-			propNames := strings.Join(utils.Map(props, r.c.symbolToString), ", ")
+			propNames := strings.Join(core.Map(props, r.c.symbolToString), ", ")
 			r.reportError(diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, r.c.typeToString(source), r.c.typeToString(target), propNames)
 		}
 	}
@@ -3369,10 +3369,10 @@ func (r *Relater) reportErrorResults(originalSource *Type, originalTarget *Type,
 		// }
 	case originalTarget.flags&TypeFlagsIntersection != 0 && originalTarget.objectFlags&ObjectFlagsIsNeverIntersection != 0:
 		message := diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituents
-		prop := utils.Find(r.c.getPropertiesOfUnionOrIntersectionType(originalTarget), r.c.isDiscriminantWithNeverType)
+		prop := core.Find(r.c.getPropertiesOfUnionOrIntersectionType(originalTarget), r.c.isDiscriminantWithNeverType)
 		if prop == nil {
 			message = diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_exists_in_multiple_constituents_and_is_private_in_some
-			prop = utils.Find(r.c.getPropertiesOfUnionOrIntersectionType(originalTarget), isConflictingPrivateProperty)
+			prop = core.Find(r.c.getPropertiesOfUnionOrIntersectionType(originalTarget), isConflictingPrivateProperty)
 		}
 		if prop != nil {
 			r.reportError(message, r.c.typeToStringEx(originalTarget, nil /*enclosingDeclaration*/, TypeFormatFlagsNoTypeReduction), r.c.symbolToString(prop))

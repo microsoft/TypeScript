@@ -1,5 +1,4 @@
-// Package funcs contains useful functions.
-package utils
+package core
 
 import (
 	"iter"

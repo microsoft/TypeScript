@@ -12,8 +12,8 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/compiler/textpos"
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tspath"
-	"github.com/microsoft/typescript-go/internal/utils"
 )
 
 // TextRange
@@ -490,7 +490,7 @@ func getBinaryOperatorPrecedence(kind SyntaxKind) OperatorPrecedence {
 }
 
 func formatStringFromArgs(text string, args []any) string {
-	return utils.MakeRegexp(`{(\d+)}`).ReplaceAllStringFunc(text, func(match string) string {
+	return core.MakeRegexp(`{(\d+)}`).ReplaceAllStringFunc(text, func(match string) string {
 		index, err := strconv.ParseInt(match[1:len(match)-1], 10, 0)
 		if err != nil || int(index) >= len(args) {
 			panic("Invalid formatting placeholder")
@@ -1770,7 +1770,7 @@ func nodeHasName(statement *Node, id *Node) bool {
 	}
 	if isVariableStatement(statement) {
 		declarations := statement.AsVariableStatement().declarationList.AsVariableDeclarationList().declarations
-		return utils.Some(declarations, func(d *Node) bool { return nodeHasName(d, id) })
+		return core.Some(declarations, func(d *Node) bool { return nodeHasName(d, id) })
 	}
 	return false
 }
@@ -1912,9 +1912,9 @@ func (c *DiagnosticsCollection) add(diagnostic *Diagnostic) {
 		if c.fileDiagnostics == nil {
 			c.fileDiagnostics = make(map[string][]*Diagnostic)
 		}
-		c.fileDiagnostics[fileName] = utils.InsertSorted(c.fileDiagnostics[fileName], diagnostic, compareDiagnostics)
+		c.fileDiagnostics[fileName] = core.InsertSorted(c.fileDiagnostics[fileName], diagnostic, compareDiagnostics)
 	} else {
-		c.nonFileDiagnostics = utils.InsertSorted(c.nonFileDiagnostics, diagnostic, compareDiagnostics)
+		c.nonFileDiagnostics = core.InsertSorted(c.nonFileDiagnostics, diagnostic, compareDiagnostics)
 	}
 }
 
@@ -2507,7 +2507,7 @@ func (r *NameResolver) useOuterVariableScopeInParameter(result *Symbol, location
 				functionLocation := location
 				declarationRequiresScopeChange := r.getRequiresScopeChangeCache(functionLocation)
 				if declarationRequiresScopeChange == TSUnknown {
-					declarationRequiresScopeChange = boolToTristate(utils.Some(functionLocation.Parameters(), r.requiresScopeChange))
+					declarationRequiresScopeChange = boolToTristate(core.Some(functionLocation.Parameters(), r.requiresScopeChange))
 					r.setRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange)
 				}
 				return declarationRequiresScopeChange == TSTrue
@@ -3004,7 +3004,7 @@ func isExternalModuleNameRelative(moduleName string) bool {
 }
 
 func pathIsRelative(path string) bool {
-	return utils.MakeRegexp(`^\.\.?(?:$|[\\/])`).MatchString(path)
+	return core.MakeRegexp(`^\.\.?(?:$|[\\/])`).MatchString(path)
 }
 
 func extensionIsTs(ext string) bool {
@@ -3150,7 +3150,7 @@ func getSourceFileOfModule(module *Symbol) *SourceFile {
 }
 
 func getNonAugmentationDeclaration(symbol *Symbol) *Node {
-	return utils.Find(symbol.declarations, func(d *Node) bool {
+	return core.Find(symbol.declarations, func(d *Node) bool {
 		return !isExternalModuleAugmentation(d) && !(isModuleDeclaration(d) && isGlobalScopeAugmentation(d))
 	})
 }
@@ -3446,7 +3446,7 @@ func compareSymbols(s1, s2 *Symbol) int {
 }
 
 func getClassLikeDeclarationOfSymbol(symbol *Symbol) *Node {
-	return utils.Find(symbol.declarations, isClassLike)
+	return core.Find(symbol.declarations, isClassLike)
 }
 
 func isThisInTypeQuery(node *Node) bool {
@@ -3475,10 +3475,10 @@ func getDeclarationModifierFlagsFromSymbolEx(s *Symbol, isWrite bool) ModifierFl
 	if s.valueDeclaration != nil {
 		var declaration *Node
 		if isWrite {
-			declaration = utils.Find(s.declarations, isSetAccessorDeclaration)
+			declaration = core.Find(s.declarations, isSetAccessorDeclaration)
 		}
 		if declaration == nil && s.flags&SymbolFlagsGetAccessor != 0 {
-			declaration = utils.Find(s.declarations, isGetAccessorDeclaration)
+			declaration = core.Find(s.declarations, isGetAccessorDeclaration)
 		}
 		if declaration == nil {
 			declaration = s.valueDeclaration

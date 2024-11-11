@@ -3,7 +3,7 @@ package tspath
 import (
 	"strings"
 
-	"github.com/microsoft/typescript-go/internal/utils"
+	"github.com/microsoft/typescript-go/internal/core"
 )
 
 type Path string
@@ -297,7 +297,7 @@ func getNormalizedAbsolutePath(fileName string, currentDirectory string) string 
 func normalizePath(path string) string {
 	path = normalizeSlashes(path)
 	// Most paths don't require normalization
-	relativePathSegmentRegExp := utils.MakeRegexp(`//|(?:^|/)\.\.?(?:$|/)`)
+	relativePathSegmentRegExp := core.MakeRegexp(`//|(?:^|/)\.\.?(?:$|/)`)
 	if !relativePathSegmentRegExp.MatchString(path) {
 		return path
 	}
@@ -359,7 +359,7 @@ func getPathComponentsRelativeTo(from string, to string, stringEqualer func(a, b
 		fromComponent := fromComponents[start]
 		toComponent := toComponents[start]
 		if start == 0 {
-			if !utils.EquateStringCaseInsensitive(fromComponent, toComponent) {
+			if !core.EquateStringCaseInsensitive(fromComponent, toComponent) {
 				break
 			}
 		} else {
@@ -404,7 +404,7 @@ func getRelativePathToDirectoryOrUrl(directoryPathOrUrl string, relativeOrAbsolu
 	pathComponents := getPathComponentsRelativeTo(
 		resolvePath(currentDirectory, directoryPathOrUrl),
 		resolvePath(currentDirectory, relativeOrAbsolutePath),
-		utils.EquateStringCaseSensitive,
+		core.EquateStringCaseSensitive,
 		getCanonicalFileName,
 	)
 

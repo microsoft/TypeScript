@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
-	"github.com/microsoft/typescript-go/internal/utils"
+	"github.com/microsoft/typescript-go/internal/core"
 )
 
 type ParsingContext int
@@ -664,7 +664,7 @@ func (p *Parser) parseDeclaration() *Statement {
 	pos := p.nodePos()
 	hasJSDoc := p.hasPrecedingJSDocComment()
 	modifierList := p.parseModifiersWithOptions( /*allowDecorators*/ true, false /*permitConstAsModifier*/, false /*stopOnStartOfClassStaticBlock*/)
-	isAmbient := modifierList != nil && utils.Some(modifierList.AsModifierList().modifiers, isDeclareModifier)
+	isAmbient := modifierList != nil && core.Some(modifierList.AsModifierList().modifiers, isDeclareModifier)
 	if isAmbient {
 		// !!! incremental parsing
 		// node := p.tryReuseAmbientDeclaration(pos)
@@ -1309,7 +1309,7 @@ func (p *Parser) parseClassDeclarationOrExpression(pos int, hasJSDoc bool, modif
 	// We don't parse the name here in await context, instead we will report a grammar error in the checker.
 	name := p.parseNameOfClassDeclarationOrExpression()
 	typeParameters := p.parseTypeParameters()
-	if modifiers != nil && utils.Some(modifiers.AsModifierList().modifiers, isExportModifier) {
+	if modifiers != nil && core.Some(modifiers.AsModifierList().modifiers, isExportModifier) {
 		p.setContextFlags(NodeFlagsAwaitContext, true /*value*/)
 	}
 	heritageClauses := p.parseHeritageClauses()
@@ -1418,7 +1418,7 @@ func (p *Parser) parseClassElement() *Node {
 	// It is very important that we check this *after* checking indexers because
 	// the [ token can start an index signature or a computed property name
 	if tokenIsIdentifierOrKeyword(p.token) || p.token == SyntaxKindStringLiteral || p.token == SyntaxKindNumericLiteral || p.token == SyntaxKindBigIntLiteral || p.token == SyntaxKindAsteriskToken || p.token == SyntaxKindOpenBracketToken {
-		isAmbient := modifierList != nil && utils.Some(modifierList.AsModifierList().modifiers, isDeclareModifier)
+		isAmbient := modifierList != nil && core.Some(modifierList.AsModifierList().modifiers, isDeclareModifier)
 		if isAmbient {
 			for _, m := range modifierList.AsModifierList().modifiers {
 				m.flags |= NodeFlagsAmbient
@@ -1506,7 +1506,7 @@ func (p *Parser) parseMethodDeclaration(pos int, hasJSDoc bool, modifiers *Node,
 }
 
 func hasAsyncModifier(modifiers *Node) bool {
-	return modifiers != nil && utils.Some(modifiers.AsModifierList().modifiers, isAsyncModifier)
+	return modifiers != nil && core.Some(modifiers.AsModifierList().modifiers, isAsyncModifier)
 }
 
 func (p *Parser) parsePropertyDeclaration(pos int, hasJSDoc bool, modifiers *Node, name *Node, questionToken *Node) *Node {
@@ -4253,7 +4253,7 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 	case SyntaxKindJsxOpeningElement:
 		children := p.parseJsxChildren(opening)
 		var closingElement *Node
-		lastChild := utils.LastOrNil(children)
+		lastChild := core.LastOrNil(children)
 		if lastChild != nil && lastChild.kind == SyntaxKindJsxElement &&
 			!tagNamesAreEquivalent(lastChild.AsJsxElement().openingElement.AsJsxOpeningElement().tagName, lastChild.AsJsxElement().closingElement.AsJsxClosingElement().tagName) &&
 			tagNamesAreEquivalent(opening.AsJsxOpeningElement().tagName, lastChild.AsJsxElement().closingElement.AsJsxClosingElement().tagName) {
