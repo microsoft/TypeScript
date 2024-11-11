@@ -80,7 +80,7 @@ const (
 	CachedTypeKindApparentType
 )
 
-// TypeCacheKey
+// CachedTypeKey
 
 type CachedTypeKey struct {
 	kind   CachedTypeKind
@@ -94,6 +94,13 @@ type UnionOfUnionKey struct {
 	id2 TypeId
 	r   UnionReduction
 	a   string
+}
+
+// CachedSignatureKey
+
+type CachedSignatureKey struct {
+	sig *Signature
+	key string
 }
 
 // InferenceContext
@@ -164,15 +171,16 @@ type Checker struct {
 	instantiationCount                 uint32
 	instantiationDepth                 uint32
 	currentNode                        *Node
-	emptySymbols                       SymbolTable
 	languageVersion                    ScriptTarget
 	moduleKind                         ModuleKind
 	allowSyntheticDefaultImports       bool
 	strictNullChecks                   bool
+	strictFunctionTypes                bool
 	strictBindCallApply                bool
 	noImplicitAny                      bool
 	useUnknownInCatchVariables         bool
 	exactOptionalPropertyTypes         bool
+	arrayVariances                     []VarianceFlags
 	globals                            SymbolTable
 	stringLiteralTypes                 map[string]*Type
 	numberLiteralTypes                 map[float64]*Type
@@ -181,6 +189,7 @@ type Checker struct {
 	indexedAccessTypes                 map[string]*Type
 	uniqueESSymbolTypes                map[*Symbol]*Type
 	cachedTypes                        map[CachedTypeKey]*Type
+	cachedSignatures                   map[CachedSignatureKey]*Signature
 	markerTypes                        set[*Type]
 	identifierSymbols                  map[*Node]*Symbol
 	undefinedSymbol                    *Symbol
@@ -213,6 +222,7 @@ type Checker struct {
 	interfaceTypeLinks                 LinkStore[*Symbol, InterfaceTypeLinks]
 	typeAliasLinks                     LinkStore[*Symbol, TypeAliasLinks]
 	spreadLinks                        LinkStore[*Symbol, SpreadLinks]
+	varianceLinks                      LinkStore[*Symbol, VarianceLinks]
 	patternForType                     map[*Type]*Node
 	anyType                            *Type
 	autoType                           *Type
@@ -247,6 +257,9 @@ type Checker struct {
 	numericStringType                  *Type
 	uniqueLiteralType                  *Type
 	uniqueLiteralMapper                *TypeMapper
+	outofbandVarianceMarkerHandler     func(onlyUnreliable bool)
+	reportUnreliableMapper             *TypeMapper
+	reportUnmeasurableMapper           *TypeMapper
 	emptyObjectType                    *Type
 	emptyTypeLiteralType               *Type
 	emptyGenericType                   *Type
@@ -258,6 +271,7 @@ type Checker struct {
 	markerOtherType                    *Type
 	markerSuperTypeForCheck            *Type
 	markerSubTypeForCheck              *Type
+	noTypePredicate                    *TypePredicate
 	enumNumberIndexInfo                *IndexInfo
 	patternAmbientModules              []PatternAmbientModule
 	patternAmbientModuleAugmentations  SymbolTable
@@ -280,6 +294,7 @@ type Checker struct {
 	contextualBindingPatterns          []*Node
 	typeResolutions                    []TypeResolution
 	resolutionStart                    int
+	inVarianceComputation              bool
 	lastGetCombinedNodeFlagsNode       *Node
 	lastGetCombinedNodeFlagsResult     NodeFlags
 	lastGetCombinedModifierFlagsNode   *Node
@@ -302,15 +317,16 @@ func NewChecker(program *Program) *Checker {
 	c.host = program.host
 	c.compilerOptions = program.options
 	c.files = program.files
-	c.emptySymbols = make(SymbolTable)
 	c.languageVersion = getEmitScriptTarget(c.compilerOptions)
 	c.moduleKind = getEmitModuleKind(c.compilerOptions)
 	c.allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(c.compilerOptions)
 	c.strictNullChecks = c.getStrictOptionValue(c.compilerOptions.StrictNullChecks)
+	c.strictFunctionTypes = c.getStrictOptionValue(c.compilerOptions.StrictFunctionTypes)
 	c.strictBindCallApply = c.getStrictOptionValue(c.compilerOptions.StrictBindCallApply)
 	c.noImplicitAny = c.getStrictOptionValue(c.compilerOptions.NoImplicitAny)
 	c.useUnknownInCatchVariables = c.getStrictOptionValue(c.compilerOptions.UseUnknownInCatchVariables)
 	c.exactOptionalPropertyTypes = c.compilerOptions.ExactOptionalPropertyTypes == TSTrue
+	c.arrayVariances = []VarianceFlags{VarianceFlagsCovariant}
 	c.globals = make(SymbolTable)
 	c.stringLiteralTypes = make(map[string]*Type)
 	c.numberLiteralTypes = make(map[float64]*Type)
@@ -319,6 +335,7 @@ func NewChecker(program *Program) *Checker {
 	c.indexedAccessTypes = make(map[string]*Type)
 	c.uniqueESSymbolTypes = make(map[*Symbol]*Type)
 	c.cachedTypes = make(map[CachedTypeKey]*Type)
+	c.cachedSignatures = make(map[CachedSignatureKey]*Signature)
 	c.identifierSymbols = make(map[*Node]*Symbol)
 	c.undefinedSymbol = c.newSymbol(SymbolFlagsProperty, "undefined")
 	c.argumentsSymbol = c.newSymbol(SymbolFlagsProperty, "arguments")
@@ -375,6 +392,8 @@ func NewChecker(program *Program) *Checker {
 	c.numericStringType = c.numberType                                // !!!
 	c.uniqueLiteralType = c.newIntrinsicType(TypeFlagsNever, "never") // Special `never` flagged by union reduction to behave as a literal
 	c.uniqueLiteralMapper = newFunctionTypeMapper(c.getUniqueLiteralTypeForTypeParameter)
+	c.reportUnreliableMapper = newFunctionTypeMapper(c.reportUnreliableWorker)
+	c.reportUnmeasurableMapper = newFunctionTypeMapper(c.reportUnmeasurableWorker)
 	c.emptyObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.emptyTypeLiteralType = c.newAnonymousType(c.newSymbol(SymbolFlagsTypeLiteral, InternalSymbolNameType), nil, nil, nil, nil)
 	c.emptyGenericType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
@@ -390,6 +409,7 @@ func NewChecker(program *Program) *Checker {
 	c.markerSuperTypeForCheck = c.newTypeParameter(nil)
 	c.markerSubTypeForCheck = c.newTypeParameter(nil)
 	c.markerSubTypeForCheck.AsTypeParameter().constraint = c.markerSuperTypeForCheck
+	c.noTypePredicate = &TypePredicate{kind: TypePredicateKindIdentifier, parameterIndex: 0, parameterName: "<<unresolved>>", t: c.anyType}
 	c.enumNumberIndexInfo = &IndexInfo{keyType: c.numberType, valueType: c.stringType, isReadonly: true}
 	c.subtypeRelation = &Relation{}
 	c.strictSubtypeRelation = &Relation{}
@@ -400,6 +420,20 @@ func NewChecker(program *Program) *Checker {
 	c.initializeClosures()
 	c.initializeChecker()
 	return c
+}
+
+func (c *Checker) reportUnreliableWorker(t *Type) *Type {
+	if c.outofbandVarianceMarkerHandler != nil && (t == c.markerSuperType || t == c.markerSubType || t == c.markerOtherType) {
+		c.outofbandVarianceMarkerHandler(true /*onlyUnreliable*/)
+	}
+	return t
+}
+
+func (c *Checker) reportUnmeasurableWorker(t *Type) *Type {
+	if c.outofbandVarianceMarkerHandler != nil && (t == c.markerSuperType || t == c.markerSubType || t == c.markerOtherType) {
+		c.outofbandVarianceMarkerHandler(false /*onlyUnreliable*/)
+	}
+	return t
 }
 
 func (c *Checker) getStrictOptionValue(value Tristate) bool {
@@ -993,6 +1027,8 @@ func (c *Checker) checkExpressionWorker(node *Node, checkMode CheckMode) *Type {
 		return c.checkPropertyAccessExpression(node, checkMode, false /*writeOnly*/)
 	case SyntaxKindBinaryExpression:
 		return c.checkBinaryExpression(node, checkMode)
+	case SyntaxKindTypeAssertionExpression, SyntaxKindAsExpression:
+		return c.checkAssertion(node, checkMode)
 	}
 	return c.anyType // !!!
 }
@@ -1815,6 +1851,22 @@ func (c *Checker) tryGetThisTypeAt(node *Node, includeGlobalThis bool, container
 
 func (c *Checker) checkThisBeforeSuper(node *Node, container *Node, diagnosticMessage *diagnostics.Message) {
 	// !!!
+}
+
+func (c *Checker) checkAssertion(node *Node, checkMode CheckMode) *Type {
+	typeNode := getEffectiveTypeAnnotationNode(node)
+	exprType := c.checkExpression(node.Expression())
+	if isConstTypeReference(typeNode) {
+		if !c.isValidConstAssertionArgument(node.Expression()) {
+			c.error(node.Expression(), diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals)
+		}
+		return c.getRegularTypeOfLiteralType(exprType)
+	}
+	links := c.typeNodeLinks.get(node)
+	links.resolvedType = exprType
+	c.checkSourceElement(typeNode)
+	c.checkNodeDeferred(node)
+	return c.getTypeFromTypeNode(typeNode)
 }
 
 func (c *Checker) checkBinaryExpression(node *Node, checkMode CheckMode) *Type {
@@ -5083,8 +5135,11 @@ func isUnconstrainedTypeParameter(tp *Type) bool {
 	if target == nil {
 		target = tp
 	}
+	if target.symbol == nil {
+		return false
+	}
 	for _, d := range target.symbol.declarations {
-		if isTypeParameterDeclaration(d) && !(d.AsTypeParameter().constraint == nil || isTypeParameterList(d.parent)) {
+		if isTypeParameterDeclaration(d) && (!isTypeParameterList(d.parent) || d.AsTypeParameter().constraint != nil) {
 			return false
 		}
 	}
@@ -5256,6 +5311,16 @@ func (c *Checker) getOptionalType(t *Type, isProperty bool) *Type {
 		return t
 	}
 	return c.getUnionType([]*Type{t, missingOrUndefined})
+}
+
+func (c *Checker) getNonNullableType(t *Type) *Type {
+	// !!!
+	// if c.strictNullChecks {
+	// 	return c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
+	// } else {
+	// 	return t
+	// }
+	return t
 }
 
 func (c *Checker) getDeclarationNodeFlagsFromSymbol(s *Symbol) NodeFlags {
@@ -5841,21 +5906,16 @@ func (c *Checker) cloneSignature(sig *Signature) *Signature {
 	result := c.newSignature(sig.flags&SignatureFlagsPropagatingFlags, sig.declaration, sig.typeParameters, sig.thisParameter, sig.parameters, nil, nil, int(sig.minArgumentCount))
 	result.target = sig.target
 	result.mapper = sig.mapper
-	// !!!
-	// result.compositeSignatures = sig.compositeSignatures
-	// result.compositeKind = sig.compositeKind
+	result.composite = sig.composite
 	return result
 }
 
 func (c *Checker) getSignatureInstantiationWithoutFillingInTypeArguments(sig *Signature, typeArguments []*Type) *Signature {
-	if sig.instantiations == nil {
-		sig.instantiations = make(map[string]*Signature)
-	}
-	key := getTypeListKey(typeArguments)
-	instantiation := sig.instantiations[key]
+	key := CachedSignatureKey{sig: sig, key: getTypeListKey(typeArguments)}
+	instantiation := c.cachedSignatures[key]
 	if instantiation == nil {
 		instantiation = c.createSignatureInstantiation(sig, typeArguments)
-		sig.instantiations[key] = instantiation
+		c.cachedSignatures[key] = instantiation
 	}
 	return instantiation
 }
@@ -5931,6 +5991,52 @@ func (c *Checker) getOrCreateTypeFromSignature(sig *Signature, outerTypeParamete
 		sig.isolatedSignatureType = t
 	}
 	return sig.isolatedSignatureType
+}
+
+func (c *Checker) getErasedSignature(signature *Signature) *Signature {
+	if len(signature.typeParameters) == 0 {
+		return signature
+	}
+	key := CachedSignatureKey{sig: signature, key: "-"}
+	erased := c.cachedSignatures[key]
+	if erased == nil {
+		erased = c.instantiateSignatureEx(signature, newArrayToSingleTypeMapper(signature.typeParameters, c.anyType), true /*eraseTypeParameters*/)
+		c.cachedSignatures[key] = erased
+	}
+	return erased
+}
+
+func (c *Checker) getCanonicalSignature(signature *Signature) *Signature {
+	if len(signature.typeParameters) == 0 {
+		return signature
+	}
+	key := CachedSignatureKey{sig: signature, key: "*"}
+	canonical := c.cachedSignatures[key]
+	if canonical == nil {
+		canonical = c.createCanonicalSignature(signature)
+		c.cachedSignatures[key] = canonical
+	}
+	return canonical
+}
+
+func (c *Checker) createCanonicalSignature(signature *Signature) *Signature {
+	// Create an instantiation of the signature where each unconstrained type parameter is replaced with
+	// its original. When a generic class or interface is instantiated, each generic method in the class or
+	// interface is instantiated with a fresh set of cloned type parameters (which we need to handle scenarios
+	// where different generations of the same type parameter are in scope). This leads to a lot of new type
+	// identities, and potentially a lot of work comparing those identities, so here we create an instantiation
+	// that uses the original type identities for all unconstrained type parameters.
+	return c.getSignatureInstantiation(signature, utils.Map(signature.typeParameters, func(tp *Type) *Type {
+		if tp.Target() != nil && c.getConstraintOfTypeParameter(tp.Target()) == nil {
+			return tp.Target()
+		}
+		return tp
+	}), nil)
+}
+
+// Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
+func (c *Checker) instantiateSignatureInContextOf(signature *Signature, contextualSignature *Signature, inferenceContext *InferenceContext, compareTypes TypeComparer) *Signature {
+	return signature // !!!
 }
 
 func (c *Checker) resolveBaseTypesOfInterface(t *Type) {
@@ -6311,6 +6417,9 @@ func (c *Checker) getSignatureFromDeclaration(declaration *Node) *Signature {
 	if hasRestParameter(declaration) {
 		flags |= SignatureFlagsHasRestParameter
 	}
+	if isConstructorTypeNode(declaration) || isConstructorDeclaration(declaration) || isConstructSignatureDeclaration(declaration) {
+		flags |= SignatureFlagsConstruct
+	}
 	if isConstructorTypeNode(declaration) && hasSyntacticModifier(declaration, ModifierFlagsAbstract) || isConstructorDeclaration(declaration) && hasSyntacticModifier(declaration.parent, ModifierFlagsAbstract) {
 		flags |= SignatureFlagsAbstract
 	}
@@ -6455,6 +6564,13 @@ func (c *Checker) getReturnTypeOfSignature(sig *Signature) *Type {
 	return sig.resolvedReturnType
 }
 
+func (c *Checker) getNonCircularReturnTypeOfSignature(sig *Signature) *Type {
+	if c.isResolvingReturnTypeOfSignature(sig) {
+		return c.anyType
+	}
+	return c.getReturnTypeOfSignature(sig)
+}
+
 func (c *Checker) getReturnTypeFromAnnotation(declaration *Node) *Type {
 	if isConstructorDeclaration(declaration) {
 		return c.getDeclaredTypeOfClassOrInterface(c.getMergedSymbol(declaration.parent.Symbol()))
@@ -6508,6 +6624,10 @@ func getSetAccessorValueParameter(accessor *Node) *Node {
 
 func (c *Checker) getReturnTypeFromBody(sig *Node) *Type {
 	return c.anyType // !!!
+}
+
+func (c *Checker) getTypePredicateFromBody(fn *Node) *TypePredicate {
+	return nil // !!!
 }
 
 func (c *Checker) addOptionalTypeMarker(t *Type) *Type {
@@ -6717,7 +6837,7 @@ func (c *Checker) getDefaultConstructSignatures(classType *Type) []*Signature {
 	declaration := getClassLikeDeclarationOfSymbol(classType.symbol)
 	isAbstract := declaration != nil && hasSyntacticModifier(declaration, ModifierFlagsAbstract)
 	if len(baseSignatures) == 0 {
-		flags := ifElse(isAbstract, SignatureFlagsAbstract, SignatureFlagsNone)
+		flags := ifElse(isAbstract, SignatureFlagsConstruct|SignatureFlagsAbstract, SignatureFlagsConstruct)
 		return []*Signature{c.newSignature(flags, nil, classType.AsInterfaceType().LocalTypeParameters(), nil, nil, classType, nil, 0)}
 	}
 	baseTypeNode := getBaseTypeNodeOfClass(classType)
@@ -9247,7 +9367,7 @@ func (c *Checker) newIndexType(target *Type, indexFlags IndexFlags) *Type {
 	return c.newType(TypeFlagsIndex, ObjectFlagsNone, data)
 }
 
-func (c *Checker) newSignature(flags SignatureFlags, declaration *Node, typeParameters []*Type, thisParameter *Symbol, parameters []*Symbol, resolvedReturnType *Type, resolvedTypePredicate *Type, minArgumentCount int) *Signature {
+func (c *Checker) newSignature(flags SignatureFlags, declaration *Node, typeParameters []*Type, thisParameter *Symbol, parameters []*Symbol, resolvedReturnType *Type, resolvedTypePredicate *TypePredicate, minArgumentCount int) *Signature {
 	sig := c.signaturePool.New()
 	sig.flags = flags
 	sig.declaration = declaration
@@ -9257,6 +9377,7 @@ func (c *Checker) newSignature(flags SignatureFlags, declaration *Node, typePara
 	sig.resolvedReturnType = resolvedReturnType
 	sig.resolvedTypePredicate = resolvedTypePredicate
 	sig.minArgumentCount = int32(minArgumentCount)
+	sig.resolvedMinArgumentCount = -1
 	return sig
 }
 
@@ -9511,6 +9632,13 @@ const (
 	UnionReductionLiteral
 	UnionReductionSubtype
 )
+
+func (c *Checker) getUnionOrIntersectionType(types []*Type, flags TypeFlags, unionReduction UnionReduction) *Type {
+	if flags&TypeFlagsIntersection == 0 {
+		return c.getUnionTypeEx(types, unionReduction, nil, nil)
+	}
+	return c.getIntersectionType(types)
+}
 
 func (c *Checker) getUnionType(types []*Type) *Type {
 	return c.getUnionTypeEx(types, UnionReductionLiteral, nil /*alias*/, nil /*origin*/)
@@ -11504,4 +11632,16 @@ func (c *Checker) getInferenceContext(node *Node) *InferenceContext {
 	// 	}
 	// }
 	return nil
+}
+
+type TypeFacts uint32
+
+const (
+	TypeFactsNEUndefinedOrNull TypeFacts = 0
+	TypeFactsIsUndefinedOrNull TypeFacts = 0
+)
+
+func (c *Checker) getTypeFacts(t *Type, mask TypeFacts) TypeFacts {
+	// !!!
+	return 0
 }

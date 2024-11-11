@@ -2182,6 +2182,10 @@ func (node *ConstructSignatureDeclaration) ForEachChild(v Visitor) bool {
 	return visit(v, node.typeParameters) || visitNodes(v, node.parameters) || visit(v, node.returnType)
 }
 
+func isConstructSignatureDeclaration(node *Node) bool {
+	return node.kind == SyntaxKindConstructSignature
+}
+
 // ConstructorDeclaration
 
 type ConstructorDeclaration struct {
@@ -3523,6 +3527,10 @@ func (f *NodeFactory) NewThisTypeNode() *Node {
 	return f.NewNode(SyntaxKindThisType, &ThisTypeNode{})
 }
 
+func isThisTypeNode(node *Node) bool {
+	return node.kind == SyntaxKindThisType
+}
+
 // TypePredicateNode
 
 type TypePredicateNode struct {
@@ -3542,6 +3550,10 @@ func (f *NodeFactory) NewTypePredicateNode(assertsModifier *TokenNode, parameter
 
 func (node *TypePredicateNode) ForEachChild(v Visitor) bool {
 	return visit(v, node.assertsModifier) || visit(v, node.parameterName) || visit(v, node.typeNode)
+}
+
+func isTypePredicateNode(node *Node) bool {
+	return node.kind == SyntaxKindTypePredicate
 }
 
 // ImportTypeNode

@@ -61,11 +61,27 @@ func (c *Checker) typeAliasToString(d *TypeAliasDeclaration) string {
 	return p.string()
 }
 
+func (c *Checker) signatureToString(s *Signature) string {
+	p := c.newPrinter(TypeFormatFlagsNone)
+	if s.flags&SignatureFlagsConstruct != 0 {
+		p.print("new")
+	}
+	p.printSignature(s, ": ")
+	return p.string()
+}
+
+func (c *Checker) typePredicateToString(t *TypePredicate) string {
+	p := c.newPrinter(TypeFormatFlagsNone)
+	p.printTypePredicate(t)
+	return p.string()
+}
+
 type Printer struct {
-	c     *Checker
-	flags TypeFormatFlags
-	sb    strings.Builder
-	depth int
+	c       *Checker
+	flags   TypeFormatFlags
+	sb      strings.Builder
+	visited set[*Type]
+	depth   int
 }
 
 func (c *Checker) newPrinter(flags TypeFormatFlags) *Printer {
@@ -105,18 +121,29 @@ func (p *Printer) printTypeNoAlias(t *Type) {
 		p.print(t.AsIntrinsicType().intrinsicName)
 	case t.flags&TypeFlagsLiteral != 0:
 		p.printLiteralType(t)
-	case t.flags&TypeFlagsObject != 0:
-		p.printObjectType(t)
-	case t.flags&TypeFlagsTypeParameter != 0:
-		p.printTypeParameter(t)
 	case t.flags&TypeFlagsUnion != 0:
 		p.printUnionType(t)
 	case t.flags&TypeFlagsIntersection != 0:
 		p.printIntersectionType(t)
+	case t.flags&TypeFlagsTypeParameter != 0:
+		p.printTypeParameter(t)
+	case t.flags&TypeFlagsObject != 0:
+		p.printRecursive(t, (*Printer).printObjectType)
 	case t.flags&TypeFlagsIndex != 0:
-		p.printIndexType(t)
+		p.printRecursive(t, (*Printer).printIndexType)
 	case t.flags&TypeFlagsIndexedAccess != 0:
-		p.printIndexedAccessType(t)
+		p.printRecursive(t, (*Printer).printIndexedAccessType)
+	}
+}
+
+func (p *Printer) printRecursive(t *Type, f func(*Printer, *Type)) {
+	if !p.visited.has(t) && p.depth < 10 {
+		p.visited.add(t)
+		p.depth++
+		f(p, t)
+		p.depth--
+	} else {
+		p.print("???")
 	}
 }
 
@@ -242,16 +269,6 @@ func (p *Printer) printTupleType(t *Type) {
 }
 
 func (p *Printer) printAnonymousType(t *Type) {
-	if p.depth >= 2 {
-		p.print("???")
-		return
-	}
-	p.depth++
-	p.printAnonymousTypeWorker(t)
-	p.depth--
-}
-
-func (p *Printer) printAnonymousTypeWorker(t *Type) {
 	props := p.c.getPropertiesOfObjectType(t)
 	callSignatures := p.c.getSignaturesOfType(t, SignatureKindCall)
 	constructSignatures := p.c.getSignaturesOfType(t, SignatureKindConstruct)
@@ -342,10 +359,30 @@ func (p *Printer) printSignature(sig *Signature, returnSeparator string) {
 		}
 		p.print(": ")
 		p.printType(p.c.getTypeOfSymbol(param))
+		tail = true
 	}
 	p.print(")")
 	p.print(returnSeparator)
-	p.printType(p.c.getReturnTypeOfSignature(sig))
+	if pred := p.c.getTypePredicateOfSignature(sig); pred != nil {
+		p.printTypePredicate(pred)
+	} else {
+		p.printType(p.c.getReturnTypeOfSignature(sig))
+	}
+}
+
+func (p *Printer) printTypePredicate(pred *TypePredicate) {
+	if pred.kind == TypePredicateKindAssertsThis || pred.kind == TypePredicateKindAssertsIdentifier {
+		p.print("asserts ")
+	}
+	if pred.kind == TypePredicateKindThis || pred.kind == TypePredicateKindAssertsThis {
+		p.print("this")
+	} else {
+		p.print(pred.parameterName)
+	}
+	if pred.kind == TypePredicateKindThis || pred.kind == TypePredicateKindIdentifier {
+		p.print(" is ")
+		p.printType(pred.t)
+	}
 }
 
 func (p *Printer) printTypeParameter(t *Type) {

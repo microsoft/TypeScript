@@ -881,6 +881,12 @@ type SpreadLinks struct {
 	rightSpread *Symbol // Right source for synthetic spread property
 }
 
+// Links for variances of type aliases and interface types
+
+type VarianceLinks struct {
+	variances []VarianceFlags
+}
+
 // FlowFlags
 
 type FlowFlags uint32
@@ -1051,6 +1057,7 @@ type CompilerOptions struct {
 	Strict                             Tristate
 	StrictBindCallApply                Tristate
 	StrictNullChecks                   Tristate
+	StrictFunctionTypes                Tristate
 	Target                             ScriptTarget
 	TraceResolution                    Tristate
 	Types                              []string
@@ -1584,7 +1591,6 @@ type InterfaceType struct {
 	allTypeParameters           []*Type // Type parameters (outer + local + thisType)
 	outerTypeParameterCount     int     // Count of outer type parameters
 	thisType                    *Type   // The "this" type (nil if none)
-	variances                   []VarianceFlags
 	baseTypesResolved           bool
 	declaredMembersResolved     bool
 	resolvedBaseConstructorType *Type
@@ -1807,35 +1813,58 @@ const (
 	// Propagating flags
 	SignatureFlagsHasRestParameter SignatureFlags = 1 << 0 // Indicates last parameter is rest parameter
 	SignatureFlagsHasLiteralTypes  SignatureFlags = 1 << 1 // Indicates signature is specialized
-	SignatureFlagsAbstract         SignatureFlags = 1 << 2 // Indicates signature comes from an abstract class, abstract construct signature, or abstract constructor type
+	SignatureFlagsConstruct        SignatureFlags = 1 << 2 // Indicates signature is a construct signature
+	SignatureFlagsAbstract         SignatureFlags = 1 << 3 // Indicates signature comes from an abstract class, abstract construct signature, or abstract constructor type
 	// Non-propagating flags
-	SignatureFlagsIsInnerCallChain                       SignatureFlags = 1 << 3 // Indicates signature comes from a CallChain nested in an outer OptionalChain
-	SignatureFlagsIsOuterCallChain                       SignatureFlags = 1 << 4 // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
-	SignatureFlagsIsUntypedSignatureInJSFile             SignatureFlags = 1 << 5 // Indicates signature is from a js file and has no types
-	SignatureFlagsIsNonInferrable                        SignatureFlags = 1 << 6 // Indicates signature comes from a non-inferrable type
-	SignatureFlagsIsSignatureCandidateForOverloadFailure SignatureFlags = 1 << 7
+	SignatureFlagsIsInnerCallChain                       SignatureFlags = 1 << 4 // Indicates signature comes from a CallChain nested in an outer OptionalChain
+	SignatureFlagsIsOuterCallChain                       SignatureFlags = 1 << 5 // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
+	SignatureFlagsIsUntypedSignatureInJSFile             SignatureFlags = 1 << 6 // Indicates signature is from a js file and has no types
+	SignatureFlagsIsNonInferrable                        SignatureFlags = 1 << 7 // Indicates signature comes from a non-inferrable type
+	SignatureFlagsIsSignatureCandidateForOverloadFailure SignatureFlags = 1 << 8
 	// We do not propagate `IsInnerCallChain` or `IsOuterCallChain` to instantiated signatures, as that would result in us
 	// attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
 	// instantiating the return type.
-	SignatureFlagsPropagatingFlags = SignatureFlagsHasRestParameter | SignatureFlagsHasLiteralTypes | SignatureFlagsAbstract | SignatureFlagsIsUntypedSignatureInJSFile | SignatureFlagsIsSignatureCandidateForOverloadFailure
+	SignatureFlagsPropagatingFlags = SignatureFlagsHasRestParameter | SignatureFlagsHasLiteralTypes | SignatureFlagsConstruct | SignatureFlagsAbstract | SignatureFlagsIsUntypedSignatureInJSFile | SignatureFlagsIsSignatureCandidateForOverloadFailure
 	SignatureFlagsCallChainFlags   = SignatureFlagsIsInnerCallChain | SignatureFlagsIsOuterCallChain
 )
 
 // Signature
 
 type Signature struct {
-	flags                 SignatureFlags
-	minArgumentCount      int32
-	declaration           *Node
-	typeParameters        []*Type
-	parameters            []*Symbol
-	thisParameter         *Symbol
-	resolvedReturnType    *Type
-	resolvedTypePredicate *Type
-	target                *Signature
-	mapper                *TypeMapper
-	instantiations        map[string]*Signature
-	isolatedSignatureType *Type
+	flags                    SignatureFlags
+	minArgumentCount         int32
+	resolvedMinArgumentCount int32
+	declaration              *Node
+	typeParameters           []*Type
+	parameters               []*Symbol
+	thisParameter            *Symbol
+	resolvedReturnType       *Type
+	resolvedTypePredicate    *TypePredicate
+	target                   *Signature
+	mapper                   *TypeMapper
+	isolatedSignatureType    *Type
+	composite                *CompositeSignature
+}
+
+type CompositeSignature struct {
+	flags      TypeFlags // TypeFlagsUnion | TypeFlagsIntersection
+	signatures []*Signature
+}
+
+type TypePredicateKind int32
+
+const (
+	TypePredicateKindThis TypePredicateKind = iota
+	TypePredicateKindIdentifier
+	TypePredicateKindAssertsThis
+	TypePredicateKindAssertsIdentifier
+)
+
+type TypePredicate struct {
+	kind           TypePredicateKind
+	parameterIndex int32
+	parameterName  string
+	t              *Type
 }
 
 // IndexInfo
@@ -1863,6 +1892,8 @@ const (
 	TernaryMaybe   Ternary = 3
 	TernaryTrue    Ternary = -1
 )
+
+type TypeComparer func(s *Type, t *Type, reportErrors bool) Ternary
 
 type LanguageFeatureMinimumTargetMap struct {
 	Classes                           ScriptTarget
