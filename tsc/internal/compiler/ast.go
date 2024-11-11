@@ -1,5 +1,9 @@
 package compiler
 
+import (
+	"github.com/microsoft/typescript-go/internal/compiler/textpos"
+)
+
 // Visitor
 
 type Visitor func(*Node) bool
@@ -4219,7 +4223,7 @@ type SourceFile struct {
 	diagnostics                 []*Diagnostic
 	bindDiagnostics             []*Diagnostic
 	bindSuggestionDiagnostics   []*Diagnostic
-	lineMap                     []TextPos
+	lineMap                     []textpos.TextPos
 	languageVersion             ScriptTarget
 	languageVariant             LanguageVariant
 	scriptKind                  ScriptKind

@@ -9,6 +9,7 @@ import (
 	"unicode"
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
+	"github.com/microsoft/typescript-go/internal/compiler/textpos"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -102,7 +103,7 @@ func writeCodeSnippet(writer *strings.Builder, sourceFile *SourceFile, start int
 		}
 
 		lineStart := GetPositionOfLineAndCharacter(sourceFile, i, 0)
-		var lineEnd TextPos
+		var lineEnd textpos.TextPos
 		if i < lastLineOfFile {
 			lineEnd = GetPositionOfLineAndCharacter(sourceFile, i+1, 0)
 		} else {

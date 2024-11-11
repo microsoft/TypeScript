@@ -11,23 +11,20 @@ import (
 	"sync/atomic"
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
+	"github.com/microsoft/typescript-go/internal/compiler/textpos"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/utils"
 )
 
-// TextPos
-
-type TextPos int32
-
 // TextRange
 
 type TextRange struct {
-	pos TextPos
-	end TextPos
+	pos textpos.TextPos
+	end textpos.TextPos
 }
 
 func NewTextRange(pos int, end int) TextRange {
-	return TextRange{pos: TextPos(pos), end: TextPos(end)}
+	return TextRange{pos: textpos.TextPos(pos), end: textpos.TextPos(end)}
 }
 
 func (t TextRange) Pos() int {

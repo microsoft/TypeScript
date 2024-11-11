@@ -7,6 +7,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
+	"github.com/microsoft/typescript-go/internal/compiler/stringutil"
+	"github.com/microsoft/typescript-go/internal/compiler/textpos"
 )
 
 type TokenFlags int32
@@ -463,7 +465,7 @@ func (s *Scanner) Scan() SyntaxKind {
 				s.token = SyntaxKindMinusToken
 			}
 		case '.':
-			if isDigit(s.charAt(1)) {
+			if stringutil.IsDigit(s.charAt(1)) {
 				s.token = s.scanNumber()
 			} else if s.charAt(1) == '.' && s.charAt(2) == '.' {
 				s.pos += 3
@@ -484,7 +486,7 @@ func (s *Scanner) Scan() SyntaxKind {
 						s.pos++
 					} else {
 						ch, size := s.charAndSize()
-						if isLineBreak(ch) {
+						if stringutil.IsLineBreak(ch) {
 							break
 						}
 						s.pos += size
@@ -513,7 +515,7 @@ func (s *Scanner) Scan() SyntaxKind {
 						s.pos++
 					} else {
 						ch, size := s.charAndSize()
-						if isLineBreak(ch) {
+						if stringutil.IsLineBreak(ch) {
 							break
 						}
 						s.pos += size
@@ -644,7 +646,7 @@ func (s *Scanner) Scan() SyntaxKind {
 			s.pos++
 			s.token = SyntaxKindGreaterThanToken
 		case '?':
-			if s.charAt(1) == '.' && !isDigit(s.charAt(2)) {
+			if s.charAt(1) == '.' && !stringutil.IsDigit(s.charAt(2)) {
 				s.pos += 2
 				s.token = SyntaxKindQuestionDotToken
 			} else if s.charAt(1) == '?' {
@@ -764,11 +766,11 @@ func (s *Scanner) Scan() SyntaxKind {
 				s.token = SyntaxKindNonTextFileMarkerTrivia
 				break
 			}
-			if isWhiteSpaceSingleLine(ch) {
+			if stringutil.IsWhiteSpaceSingleLine(ch) {
 				s.pos += size
 				continue
 			}
-			if isLineBreak(ch) {
+			if stringutil.IsLineBreak(ch) {
 				s.tokenFlags |= TokenFlagsPrecedingLineBreak
 				s.pos += size
 				continue
@@ -832,7 +834,7 @@ func (s *Scanner) ReScanSlashToken() SyntaxKind {
 			// If we reach the end of a file, or hit a newline, then this is an unterminated
 			// regex.  Report error and return what we have so far.
 			switch {
-			case size == 0 || isLineBreak(ch):
+			case size == 0 || stringutil.IsLineBreak(ch):
 				s.tokenFlags |= TokenFlagsUnterminated
 				s.error(diagnostics.Unterminated_regular_expression_literal)
 				break loop
@@ -925,13 +927,13 @@ func (s *Scanner) scanJsxTokenEx(allowMultilineJsxText bool) SyntaxKind {
 			//      </div> becomes <div></div>
 			//
 			//      <div>----</div> becomes <div>----</div>
-			if isLineBreak(ch) && firstNonWhitespace == 0 {
+			if stringutil.IsLineBreak(ch) && firstNonWhitespace == 0 {
 				firstNonWhitespace = -1
-			} else if !allowMultilineJsxText && isLineBreak(ch) && firstNonWhitespace > 0 {
+			} else if !allowMultilineJsxText && stringutil.IsLineBreak(ch) && firstNonWhitespace > 0 {
 				// Stop JsxText on each line during formatting. This allows the formatter to
 				// indent each line correctly.
 				break
-			} else if !isWhiteSpaceLike(ch) {
+			} else if !stringutil.IsWhiteSpaceLike(ch) {
 				firstNonWhitespace = s.pos
 			}
 			s.pos += size
@@ -997,7 +999,7 @@ func (s *Scanner) scanIdentifier(prefixLength int) bool {
 	s.pos += prefixLength
 	ch := s.char()
 	// Fast path for simple ASCII identifiers
-	if isASCIILetter(ch) || ch == '_' || ch == '$' {
+	if stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$' {
 		for {
 			s.pos++
 			ch = s.char()
@@ -1150,21 +1152,21 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 	case '0':
 		// Although '0' preceding any digit is treated as LegacyOctalEscapeSequence,
 		// '\08' should separately be interpreted as '\0' + '8'.
-		if !isDigit(s.char()) {
+		if !stringutil.IsDigit(s.char()) {
 			return "\x00"
 		}
 		// '\01', '\011'
 		fallthrough
 	case '1', '2', '3':
 		// '\1', '\17', '\177'
-		if isOctalDigit(s.char()) {
+		if stringutil.IsOctalDigit(s.char()) {
 			s.pos++
 		}
 		// '\17', '\177'
 		fallthrough
 	case '4', '5', '6', '7':
 		// '\4', '\47' but not '\477'
-		if isOctalDigit(s.char()) {
+		if stringutil.IsOctalDigit(s.char()) {
 			s.pos++
 		}
 		// '\47'
@@ -1225,7 +1227,7 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 	case 'x':
 		// '\xDD'
 		for ; s.pos < start+4; s.pos++ {
-			if !isHexDigit(s.char()) {
+			if !stringutil.IsHexDigit(s.char()) {
 				s.tokenFlags |= TokenFlagsContainsInvalidEscape
 				if flags&EscapeSequenceScanningFlagsReportInvalidEscapeErrors != 0 {
 					s.error(diagnostics.Hexadecimal_digit_expected)
@@ -1423,7 +1425,7 @@ func (s *Scanner) scanNumberFragment() string {
 			start = s.pos
 			continue
 		}
-		if isDigit(ch) {
+		if stringutil.IsDigit(ch) {
 			allowSeparator = true
 			isPreviousTokenSeparator = false
 			s.pos++
@@ -1441,8 +1443,8 @@ func (s *Scanner) scanNumberFragment() string {
 func (s *Scanner) scanDigits() (string, bool) {
 	start := s.pos
 	isOctal := true
-	for isDigit(s.char()) {
-		if !isOctalDigit(s.char()) {
+	for stringutil.IsDigit(s.char()) {
+		if !stringutil.IsOctalDigit(s.char()) {
 			isOctal = false
 		}
 		s.pos++
@@ -1456,7 +1458,7 @@ func (s *Scanner) scanHexDigits(minCount int, scanAsManyAsPossible bool, canHave
 	isPreviousTokenSeparator := false
 	for sb.Len() < minCount || scanAsManyAsPossible {
 		ch := s.char()
-		if isHexDigit(ch) {
+		if stringutil.IsHexDigit(ch) {
 			if ch >= 'A' && ch <= 'F' {
 				ch += 'a' - 'A' // standardize hex literals to lowercase
 			}
@@ -1493,7 +1495,7 @@ func (s *Scanner) scanBinaryOrOctalDigits(base int32) string {
 	isPreviousTokenSeparator := false
 	for {
 		ch := s.char()
-		if isDigit(ch) && ch-'0' < base {
+		if stringutil.IsDigit(ch) && ch-'0' < base {
 			sb.WriteByte(byte(ch))
 			allowSeparator = true
 			isPreviousTokenSeparator = false
@@ -1554,88 +1556,13 @@ func getIdentifierToken(str string) SyntaxKind {
 	return SyntaxKindIdentifier
 }
 
-func isWhiteSpaceLike(ch rune) bool {
-	return isWhiteSpaceSingleLine(ch) || isLineBreak(ch)
-}
-
-func isWhiteSpaceSingleLine(ch rune) bool {
-	// Note: nextLine is in the Zs space, and should be considered to be a whitespace.
-	// It is explicitly not a line-break as it isn't in the exact set specified by EcmaScript.
-	switch ch {
-	case
-		' ',    // space
-		'\t',   // tab
-		'\v',   // verticalTab
-		'\f',   // formFeed
-		0x0085, // nextLine
-		0x00A0, // nonBreakingSpace
-		0x1680, // ogham
-		0x2000, // enQuad
-		0x2001, // emQuad
-		0x2002, // enSpace
-		0x2003, // emSpace
-		0x2004, // threePerEmSpace
-		0x2005, // fourPerEmSpace
-		0x2006, // sixPerEmSpace
-		0x2007, // figureSpace
-		0x2008, // punctuationEmSpace
-		0x2009, // thinSpace
-		0x200A, // hairSpace
-		0x200B, // zeroWidthSpace
-		0x202F, // narrowNoBreakSpace
-		0x205F, // mathematicalSpace
-		0x3000, // ideographicSpace
-		0xFEFF: // byteOrderMark
-		return true
-	}
-	return false
-}
-
-func isLineBreak(ch rune) bool {
-	// ES5 7.3:
-	// The ECMAScript line terminator characters are listed in Table 3.
-	//     Table 3: Line Terminator Characters
-	//     Code Unit Value     Name                    Formal Name
-	//     \u000A              Line Feed               <LF>
-	//     \u000D              Carriage Return         <CR>
-	//     \u2028              Line separator          <LS>
-	//     \u2029              Paragraph separator     <PS>
-	// Only the characters in Table 3 are treated as line terminators. Other new line or line
-	// breaking characters are treated as white space but not as line terminators.
-	switch ch {
-	case
-		'\n',   // lineFeed
-		'\r',   // carriageReturn
-		0x2028, // lineSeparator
-		0x2029: // paragraphSeparator
-		return true
-	}
-	return false
-}
-
-func isDigit(ch rune) bool {
-	return ch >= '0' && ch <= '9'
-}
-
-func isOctalDigit(ch rune) bool {
-	return ch >= '0' && ch <= '7'
-}
-
-func isHexDigit(ch rune) bool {
-	return ch >= '0' && ch <= '9' || ch >= 'A' && ch <= 'F' || ch >= 'a' && ch <= 'f'
-}
-
-func isASCIILetter(ch rune) bool {
-	return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z'
-}
-
 // Section 6.1.4
 func isWordCharacter(ch rune) bool {
-	return isASCIILetter(ch) || isDigit(ch) || ch == '_'
+	return stringutil.IsASCIILetter(ch) || stringutil.IsDigit(ch) || ch == '_'
 }
 
 func isIdentifierStart(ch rune, languageVersion ScriptTarget) bool {
-	return isASCIILetter(ch) || ch == '_' || ch == '$' || ch > 0x7F && isUnicodeIdentifierStart(ch, languageVersion)
+	return stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$' || ch > 0x7F && isUnicodeIdentifierStart(ch, languageVersion)
 }
 
 func isIdentifierPart(ch rune, languageVersion ScriptTarget) bool {
@@ -1751,7 +1678,7 @@ func skipTriviaEx(text string, pos int, options *skipTriviaOptions) int {
 				pos += 2
 				for pos < len(text) {
 					ch, size := utf8.DecodeRuneInString(text[pos:])
-					if isLineBreak(ch) {
+					if stringutil.IsLineBreak(ch) {
 						break
 					}
 					pos += size
@@ -1791,7 +1718,7 @@ func skipTriviaEx(text string, pos int, options *skipTriviaOptions) int {
 				continue
 			}
 		default:
-			if ch > rune(maxAsciiCharacter) && isWhiteSpaceLike(ch) {
+			if ch > rune(maxAsciiCharacter) && stringutil.IsWhiteSpaceLike(ch) {
 				pos += size
 				continue
 			}
@@ -1815,7 +1742,7 @@ func isConflictMarkerTrivia(text string, pos int) bool {
 	if pos >= 2 {
 		prev, _ = utf8.DecodeLastRuneInString(text[:pos-2])
 	}
-	if pos == 0 || isLineBreak(prev) || pos >= 1 && isLineBreak(rune(text[pos-1])) {
+	if pos == 0 || stringutil.IsLineBreak(prev) || pos >= 1 && stringutil.IsLineBreak(rune(text[pos-1])) {
 		ch := text[pos]
 
 		if (pos + mergeConflictMarkerLength) < len(text) {
@@ -1840,7 +1767,7 @@ func scanConflictMarkerTrivia(text string, pos int, error func(diag *diagnostics
 	length := len(text)
 
 	if ch == '<' || ch == '>' {
-		for pos < length && !isLineBreak(ch) {
+		for pos < length && !stringutil.IsLineBreak(ch) {
 			pos += size
 			ch, size = utf8.DecodeRuneInString(text[pos:])
 		}
@@ -1874,7 +1801,7 @@ func scanShebangTrivia(text string, pos int) int {
 	pos += 2
 	for pos < len(text) {
 		ch, size := utf8.DecodeRuneInString(text[pos:])
-		if isLineBreak(ch) {
+		if stringutil.IsLineBreak(ch) {
 			break
 		}
 		pos += size
@@ -1897,38 +1824,7 @@ func getRangeOfTokenAtPosition(sourceFile *SourceFile, pos int) TextRange {
 	return NewTextRange(s.tokenStart, s.pos)
 }
 
-func computeLineStarts(text string) []TextPos {
-	var result []TextPos
-	pos := 0
-	lineStart := 0
-	for pos < len(text) {
-		b := text[pos]
-		if b < 0x7F {
-			pos++
-			switch b {
-			case '\r':
-				if pos < len(text) && text[pos] == '\n' {
-					pos++
-				}
-				fallthrough
-			case '\n':
-				result = append(result, TextPos(lineStart))
-				lineStart = pos
-			}
-		} else {
-			ch, size := utf8.DecodeRuneInString(text[pos:])
-			pos += size
-			if isLineBreak(ch) {
-				result = append(result, TextPos(lineStart))
-				lineStart = pos
-			}
-		}
-	}
-	result = append(result, TextPos(lineStart))
-	return result
-}
-
-func computeLineOfPosition(lineStarts []TextPos, pos TextPos) int {
+func computeLineOfPosition(lineStarts []textpos.TextPos, pos textpos.TextPos) int {
 	low := 0
 	high := len(lineStarts) - 1
 	for low <= high {
@@ -1945,15 +1841,15 @@ func computeLineOfPosition(lineStarts []TextPos, pos TextPos) int {
 	return low - 1
 }
 
-func getLineStarts(sourceFile *SourceFile) []TextPos {
+func getLineStarts(sourceFile *SourceFile) []textpos.TextPos {
 	if sourceFile.lineMap == nil {
-		sourceFile.lineMap = computeLineStarts(sourceFile.text)
+		sourceFile.lineMap = stringutil.ComputeLineStarts(sourceFile.text)
 	}
 	return sourceFile.lineMap
 }
 
 func GetLineAndCharacterOfPosition(sourceFile *SourceFile, pos int) (line int, character int) {
-	line = computeLineOfPosition(getLineStarts(sourceFile), TextPos(pos))
+	line = computeLineOfPosition(getLineStarts(sourceFile), textpos.TextPos(pos))
 	character = utf8.RuneCountInString(sourceFile.text[sourceFile.lineMap[line]:pos])
 	return
 }
@@ -1962,18 +1858,18 @@ func getEndLinePosition(sourceFile *SourceFile, line int) int {
 	pos := int(getLineStarts(sourceFile)[line])
 	for {
 		ch, size := utf8.DecodeRuneInString(sourceFile.text[pos:])
-		if size == 0 || isLineBreak(ch) {
+		if size == 0 || stringutil.IsLineBreak(ch) {
 			return pos
 		}
 		pos += size
 	}
 }
 
-func GetPositionOfLineAndCharacter(sourceFile *SourceFile, line int, character int) TextPos {
+func GetPositionOfLineAndCharacter(sourceFile *SourceFile, line int, character int) textpos.TextPos {
 	return ComputePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character)
 }
 
-func ComputePositionOfLineAndCharacter(lineStarts []TextPos, line int, character int) TextPos {
+func ComputePositionOfLineAndCharacter(lineStarts []textpos.TextPos, line int, character int) textpos.TextPos {
 	/// !!! debugText, allowEdits
 	if line < 0 || line >= len(lineStarts) {
 		// if (allowEdits) {
@@ -1983,7 +1879,7 @@ func ComputePositionOfLineAndCharacter(lineStarts []TextPos, line int, character
 		panic(fmt.Sprintf("Bad line number. Line: %d, lineStarts.length: %d.", line, len(lineStarts)))
 	}
 
-	res := (lineStarts[line]) + TextPos(character)
+	res := (lineStarts[line]) + textpos.TextPos(character)
 
 	// !!!
 	// if (allowEdits) {
