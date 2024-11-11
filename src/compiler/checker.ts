@@ -6193,8 +6193,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             enterNewScope(context, node) {
                 if (isFunctionLike(node) || isJSDocSignature(node)) {
                     const signature = getSignatureFromDeclaration(node);
-                    const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
-                    return enterNewScope(context as NodeBuilderContext, node, expandedParams, signature.typeParameters);
+                    return enterNewScope(context as NodeBuilderContext, node, signature.parameters, signature.typeParameters);
                 }
                 else {
                     const typeParameters = isConditionalTypeNode(node) ? getInferTypeParameters(node) :
