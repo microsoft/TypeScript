@@ -2816,10 +2816,8 @@ export interface RegularExpressionDisjunctionsScope extends Array<RegularExpress
     currentAlternativeIndex: number;
 }
 
-type RegularExpressionAnyString = typeof RegExpAnyString;
-
 /** @internal */
-export type RegularExpressionPatternContent = string | RegularExpressionAnyString | RegularExpressionPatternUnion;
+export type RegularExpressionPatternContent = string | typeof RegExpAnyString | RegularExpressionPatternUnion;
 
 /** @internal */
 export interface RegularExpressionPattern extends Array<RegularExpressionPatternContent> {
@@ -2835,7 +2833,7 @@ export interface RegularExpressionPatternUnion extends Set<string | RegularExpre
 }
 
 /** @internal */
-export type RegularExpressionReducedContent = string | RegularExpressionAnyString | RegularExpressionReducedUnion | RegularExpressionReducedPattern;
+export type RegularExpressionReducedContent = string | typeof RegExpAnyString | RegularExpressionReducedUnion | RegularExpressionReducedPattern;
 
 /** @internal */
 export interface RegularExpressionReducedUnion extends Set<string | RegularExpressionReducedPattern> {
@@ -2843,7 +2841,7 @@ export interface RegularExpressionReducedUnion extends Set<string | RegularExpre
 }
 
 /** @internal */
-export interface RegularExpressionReducedPattern extends Array<string | RegularExpressionAnyString> {
+export interface RegularExpressionReducedPattern extends Array<string | typeof RegExpAnyString> {
     _regularExpressionReducedPatternBrand: any;
 }
 
