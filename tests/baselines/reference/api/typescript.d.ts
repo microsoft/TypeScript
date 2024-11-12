@@ -123,6 +123,7 @@ declare namespace ts {
                 ProvideInlayHints = "provideInlayHints",
                 WatchChange = "watchChange",
                 MapCode = "mapCode",
+                /** @deprecated */
                 CopilotRelated = "copilotRelated",
             }
             /**
@@ -1839,10 +1840,12 @@ declare namespace ts {
             export interface MapCodeResponse extends Response {
                 body: readonly FileCodeEdits[];
             }
+            /** @deprecated */
             export interface CopilotRelatedRequest extends FileRequest {
                 command: CommandTypes.CopilotRelated;
                 arguments: FileRequestArgs;
             }
+            /** @deprecated */
             export interface CopilotRelatedItems {
                 relatedFiles: readonly string[];
             }
