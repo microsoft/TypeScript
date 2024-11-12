@@ -202,7 +202,6 @@ export const enum CommandTypes {
     ProvideInlayHints = "provideInlayHints",
     WatchChange = "watchChange",
     MapCode = "mapCode",
-    CopilotRelated = "copilotRelated",
 }
 
 /**
@@ -2417,18 +2416,6 @@ export interface MapCodeResponse extends Response {
     body: readonly FileCodeEdits[];
 }
 
-export interface CopilotRelatedRequest extends FileRequest {
-    command: CommandTypes.CopilotRelated;
-    arguments: FileRequestArgs;
-}
-
-export interface CopilotRelatedItems {
-    relatedFiles: readonly string[];
-}
-
-export interface CopilotRelatedResponse extends Response {
-    body: CopilotRelatedItems;
-}
 /**
  * Synchronous request for semantic diagnostics of one file.
  */

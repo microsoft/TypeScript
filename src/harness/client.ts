@@ -801,7 +801,6 @@ export class SessionClient implements LanguageService {
     }
 
     mapCode: typeof notImplemented = notImplemented;
-    getImports: typeof notImplemented = notImplemented;
 
     private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
         return typeof positionOrRange === "number"
