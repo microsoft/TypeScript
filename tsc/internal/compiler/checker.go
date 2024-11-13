@@ -2828,7 +2828,7 @@ func (c *Checker) addDuplicateDeclarationError(node *Node, message *diagnostics.
 		leadingMessage := createDiagnosticForNode(adjustedNode, diagnostics.X_0_was_also_declared_here, symbolName)
 		followOnMessage := createDiagnosticForNode(adjustedNode, diagnostics.X_and_here)
 		if len(err.relatedInformation) >= 5 || core.Some(err.relatedInformation, func(d *Diagnostic) bool {
-			return compareDiagnostics(d, followOnMessage) == 0 || compareDiagnostics(d, leadingMessage) == 0
+			return CompareDiagnostics(d, followOnMessage) == 0 || CompareDiagnostics(d, leadingMessage) == 0
 		}) {
 			continue
 		}

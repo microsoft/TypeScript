@@ -213,7 +213,7 @@ func (p *Parser) hasPrecedingJSDocComment() bool {
 }
 
 func (p *Parser) parseSourceFileWorker() *SourceFile {
-	isDeclarationFile := isDeclarationFileName(p.fileName)
+	isDeclarationFile := IsDeclarationFileName(p.fileName)
 	if isDeclarationFile {
 		p.contextFlags |= NodeFlagsAmbient
 	}
@@ -5955,7 +5955,7 @@ func attachFileToDiagnostics(diagnostics []*Diagnostic, file *SourceFile) []*Dia
 	return diagnostics
 }
 
-func isDeclarationFileName(fileName string) bool {
+func IsDeclarationFileName(fileName string) bool {
 	return getDeclarationFileExtension(fileName) != ""
 }
 

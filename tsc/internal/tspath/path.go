@@ -1,6 +1,7 @@
 package tspath
 
 import (
+	"cmp"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/core"
@@ -13,6 +14,11 @@ type Path string
 // we expect the host to correctly handle paths in our specified format.
 const directorySeparator = '/'
 const urlSchemeSeparator = "://"
+
+// check path for these segments:
+//
+//	'', '.'. '..'
+var relativePathSegmentRegExp = core.MakeRegexp(`//|(?:^|/)\.\.?(?:$|/)`)
 
 //// Path Tests
 
@@ -78,13 +84,13 @@ func hasTrailingDirectorySeparator(path string) bool {
 func combinePaths(firstPath string, paths ...string) string {
 	// TODO (drosen): There is potential for a fast path here.
 	// In the case where we find the last absolute path and just path.Join from there.
-	result := normalizeSlashes(firstPath)
+	result := NormalizeSlashes(firstPath)
 
 	for _, trailingPath := range paths {
 		if trailingPath == "" {
 			continue
 		}
-		trailingPath = normalizeSlashes(trailingPath)
+		trailingPath = NormalizeSlashes(trailingPath)
 		if result == "" || getRootLength(trailingPath) != 0 {
 			// `trailingPath` is absolute.
 			result = trailingPath
@@ -95,7 +101,7 @@ func combinePaths(firstPath string, paths ...string) string {
 			// which is not necessarily compatible with how combinePaths
 			// was originally implemented.
 
-			result = ensureTrailingDirectorySeparator(result) + trailingPath
+			result = EnsureTrailingDirectorySeparator(result) + trailingPath
 		}
 	}
 	return result
@@ -214,7 +220,7 @@ func getRootLength(path string) int {
 }
 
 func GetDirectoryPath(path string) string {
-	path = normalizeSlashes(path)
+	path = NormalizeSlashes(path)
 
 	// If the path provided is itself a root, then return it.
 	rootLength := getRootLength(path)
@@ -238,13 +244,13 @@ func getPathFromPathComponents(pathComponents []string) string {
 
 	root := pathComponents[0]
 	if root != "" {
-		root = ensureTrailingDirectorySeparator(root)
+		root = EnsureTrailingDirectorySeparator(root)
 	}
 
 	return root + strings.Join(pathComponents[1:], "/")
 }
 
-func normalizeSlashes(path string) string {
+func NormalizeSlashes(path string) string {
 	return strings.ReplaceAll(path, "\\", "/")
 }
 
@@ -281,7 +287,7 @@ func resolvePath(path string, paths ...string) string {
 	if len(paths) > 0 {
 		combinedPath = combinePaths(path, paths...)
 	} else {
-		combinedPath = normalizeSlashes(path)
+		combinedPath = NormalizeSlashes(path)
 	}
 	return normalizePath(combinedPath)
 }
@@ -295,9 +301,8 @@ func getNormalizedAbsolutePath(fileName string, currentDirectory string) string 
 }
 
 func normalizePath(path string) string {
-	path = normalizeSlashes(path)
+	path = NormalizeSlashes(path)
 	// Most paths don't require normalization
-	relativePathSegmentRegExp := core.MakeRegexp(`//|(?:^|/)\.\.?(?:$|/)`)
 	if !relativePathSegmentRegExp.MatchString(path) {
 		return path
 	}
@@ -311,7 +316,7 @@ func normalizePath(path string) string {
 	// Other paths require full normalization
 	normalized := getPathFromPathComponents(reducePathComponents(getPathComponents(path, "")))
 	if normalized != "" && hasTrailingDirectorySeparator(path) {
-		normalized = ensureTrailingDirectorySeparator(normalized)
+		normalized = EnsureTrailingDirectorySeparator(normalized)
 	}
 	return normalized
 }
@@ -336,7 +341,7 @@ func (p Path) removeTrailingDirectorySeparator() Path {
 	return Path(removeTrailingDirectorySeparator(string(p)))
 }
 
-func ensureTrailingDirectorySeparator(path string) string {
+func EnsureTrailingDirectorySeparator(path string) string {
 	if !hasTrailingDirectorySeparator(path) {
 		return path + "/"
 	}
@@ -344,7 +349,7 @@ func ensureTrailingDirectorySeparator(path string) string {
 	return path
 }
 func (p Path) ensureTrailingDirectorySeparator() Path {
-	return Path(ensureTrailingDirectorySeparator(string(p)))
+	return Path(EnsureTrailingDirectorySeparator(string(p)))
 }
 
 //// Relative Paths
@@ -420,4 +425,137 @@ func getRelativePathToDirectoryOrUrl(directoryPathOrUrl string, relativeOrAbsolu
 	}
 
 	return getPathFromPathComponents(pathComponents)
+}
+
+func ComparePaths(a string, b string, currentDirectory string, ignoreCase bool) core.Comparison {
+	a = combinePaths(currentDirectory, a)
+	b = combinePaths(currentDirectory, b)
+	return comparePathsWorker(a, b, core.GetStringComparer(ignoreCase))
+}
+
+func comparePathsWorker(a string, b string, stringComparer func(a, b string) core.Comparison) core.Comparison {
+	if a == b {
+		return core.ComparisonEqual
+	}
+
+	// NOTE: Performance optimization - shortcut if the root segments differ as there would be no
+	//       need to perform path reduction.
+	aRoot := a[:getRootLength(a)]
+	bRoot := b[:getRootLength(b)]
+	result := core.CompareStringsCaseInsensitive(aRoot, bRoot)
+	if result != core.ComparisonEqual {
+		return result
+	}
+
+	// NOTE: Performance optimization - shortcut if there are no relative path segments in
+	//       the non-root portion of the path
+	aRest := a[len(aRoot):]
+	bRest := b[len(bRoot):]
+	if !relativePathSegmentRegExp.MatchString(aRest) && !relativePathSegmentRegExp.MatchString(bRest) {
+		return stringComparer(aRest, bRest)
+	}
+
+	// The path contains a relative path segment. Normalize the paths and perform a slower component
+	// by component comparison.
+	aComponents := reducePathComponents(getPathComponents(a, ""))
+	bComponents := reducePathComponents(getPathComponents(b, ""))
+	sharedLength := min(len(aComponents), len(bComponents))
+	for i := 1; i < sharedLength; i++ {
+		result := stringComparer(aComponents[i], bComponents[i])
+		if result != core.ComparisonEqual {
+			return result
+		}
+	}
+
+	return cmp.Compare(len(aComponents), len(bComponents))
+}
+
+// Gets the portion of a path following the last (non-terminal) separator (`/`).
+// Semantics align with NodeJS's `path.basename` except that we support URL's as well.
+// If the base name has any one of the provided extensions, it is removed.
+//
+//	// POSIX
+//	GetBaseFileName("/path/to/file.ext") == "file.ext"
+//	GetBaseFileName("/path/to/") == "to"
+//	GetBaseFileName("/") == ""
+//	// DOS
+//	GetBaseFileName("c:/path/to/file.ext") == "file.ext"
+//	GetBaseFileName("c:/path/to/") == "to"
+//	GetBaseFileName("c:/") == ""
+//	GetBaseFileName("c:") == ""
+//	// URL
+//	GetBaseFileName("http://typescriptlang.org/path/to/file.ext") == "file.ext"
+//	GetBaseFileName("http://typescriptlang.org/path/to/") == "to"
+//	GetBaseFileName("http://typescriptlang.org/") == ""
+//	GetBaseFileName("http://typescriptlang.org") == ""
+//	GetBaseFileName("file://server/path/to/file.ext") == "file.ext"
+//	GetBaseFileName("file://server/path/to/") == "to"
+//	GetBaseFileName("file://server/") == ""
+//	GetBaseFileName("file://server") == ""
+//	GetBaseFileName("file:///path/to/file.ext") == "file.ext"
+//	GetBaseFileName("file:///path/to/") == "to"
+//	GetBaseFileName("file:///") == ""
+//	GetBaseFileName("file://") == ""
+func GetBaseFileName(path string) string {
+	path = NormalizeSlashes(path)
+
+	// if the path provided is itself the root, then it has no file name.
+	rootLength := getRootLength(path)
+	if rootLength == len(path) {
+		return ""
+	}
+
+	// return the trailing portion of the path starting after the last (non-terminal) directory
+	// separator but not including any trailing directory separator.
+	path = removeTrailingDirectorySeparator(path)
+	return path[max(getRootLength(path), strings.LastIndex(path, string(directorySeparator))+1):]
+}
+
+// Gets the file extension for a path.
+// If extensions are provided, gets the file extension for a path, provided it is one of the provided extensions.
+//
+//	GetAnyExtensionFromPath("/path/to/file.ext", nil, false) == ".ext"
+//	GetAnyExtensionFromPath("/path/to/file.ext/", nil, false) == ".ext"
+//	GetAnyExtensionFromPath("/path/to/file", nil, false) == ""
+//	GetAnyExtensionFromPath("/path/to.ext/file", nil, false) == ""
+//	GetAnyExtensionFromPath("/path/to/file.ext", ".ext", true) === ".ext"
+//	GetAnyExtensionFromPath("/path/to/file.js", ".ext", true) === ""
+//	GetAnyExtensionFromPath("/path/to/file.js", [".ext", ".js"], true) === ".js"
+//	GetAnyExtensionFromPath("/path/to/file.ext", ".EXT", false) === ""
+func GetAnyExtensionFromPath(path string, extensions []string, ignoreCase bool) string {
+	// Retrieves any string from the final "." onwards from a base file name.
+	// Unlike extensionFromPath, which throws an exception on unrecognized extensions.
+	if len(extensions) > 0 {
+		return getAnyExtensionFromPathWorker(removeTrailingDirectorySeparator(path), extensions, core.GetStringEqualityComparer(ignoreCase))
+	}
+
+	baseFileName := GetBaseFileName(path)
+	extensionIndex := strings.LastIndex(baseFileName, ".")
+	if extensionIndex >= 0 {
+		return baseFileName[extensionIndex:]
+	}
+	return ""
+}
+
+func getAnyExtensionFromPathWorker(path string, extensions []string, stringEqualityComparer func(a, b string) bool) string {
+	for _, extension := range extensions {
+		result := tryGetExtensionFromPath(path, extension, stringEqualityComparer)
+		if result != "" {
+			return result
+		}
+	}
+	return ""
+}
+
+func tryGetExtensionFromPath(path string, extension string, stringEqualityComparer func(a, b string) bool) string {
+	if !strings.HasPrefix(extension, ".") {
+		extension = "." + extension
+	}
+	if len(path) >= len(extension) && path[len(path)-len(extension)] == '.' {
+		pathExtension := path[len(path)-len(extension):]
+		if stringEqualityComparer(pathExtension, extension) {
+			return pathExtension
+		}
+	}
+	return ""
 }
