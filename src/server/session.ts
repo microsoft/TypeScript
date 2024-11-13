@@ -2052,7 +2052,7 @@ export class Session<TMessage = string> implements EventSender {
         return this.mapTextChangesToCodeEdits(changes);
     }
 
-    private getCopilotRelatedInfo(): { relatedFiles: never[] } {
+    private getCopilotRelatedInfo(): { relatedFiles: never[]; } {
         return {
             relatedFiles: [],
         };
