@@ -2052,11 +2052,9 @@ export class Session<TMessage = string> implements EventSender {
         return this.mapTextChangesToCodeEdits(changes);
     }
 
-    private getCopilotRelatedInfo(args: protocol.FileRequestArgs): protocol.CopilotRelatedItems {
-        const { file, project } = this.getFileAndProject(args);
-
+    private getCopilotRelatedInfo(): { relatedFiles: never[]; } {
         return {
-            relatedFiles: project.getLanguageService().getImports(file),
+            relatedFiles: [],
         };
     }
 
@@ -3802,8 +3800,8 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.MapCode]: (request: protocol.MapCodeRequest) => {
             return this.requiredResponse(this.mapCode(request.arguments));
         },
-        [protocol.CommandTypes.CopilotRelated]: (request: protocol.CopilotRelatedRequest) => {
-            return this.requiredResponse(this.getCopilotRelatedInfo(request.arguments));
+        [protocol.CommandTypes.CopilotRelated]: () => {
+            return this.requiredResponse(this.getCopilotRelatedInfo());
         },
     }));
 
