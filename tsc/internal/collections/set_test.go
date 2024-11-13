@@ -39,7 +39,7 @@ func TestSet(t *testing.T) {
 	assert.Equal(t, s2.Size(), 0)
 }
 
-func TestSetWithSizeHint(t *testing.T) {
+func TestSetWithSizeHint(t *testing.T) { //nolint:paralleltest
 	const N = 1024
 
 	allocs := testing.AllocsPerRun(10, func() {

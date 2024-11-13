@@ -149,8 +149,8 @@ func (p *Parser) initializeState(fileName string, sourceText string, languageVer
 	p.scanner.SetLanguageVariant(p.languageVariant)
 }
 
-func (p *Parser) scanError(message *diagnostics.Message, pos int, len int, args ...any) {
-	p.parseErrorAtRange(NewTextRange(pos, pos+len), message, args...)
+func (p *Parser) scanError(message *diagnostics.Message, pos int, length int, args ...any) {
+	p.parseErrorAtRange(NewTextRange(pos, pos+length), message, args...)
 }
 
 func (p *Parser) parseErrorAt(pos int, end int, message *diagnostics.Message, args ...any) *Diagnostic {
@@ -308,10 +308,10 @@ func (p *Parser) parseDelimitedList(kind ParsingContext, parseElement func(p *Pa
 
 // Return a non-nil (but possibly empty) slice if parsing was successful, or nil if opening token wasn't found
 // or parseElement returned nil
-func (p *Parser) parseBracketedList(kind ParsingContext, parseElement func(p *Parser) *Node, open SyntaxKind, close SyntaxKind) []*Node {
-	if p.parseExpected(open) {
+func (p *Parser) parseBracketedList(kind ParsingContext, parseElement func(p *Parser) *Node, opening SyntaxKind, closing SyntaxKind) []*Node {
+	if p.parseExpected(opening) {
 		result := p.parseDelimitedList(kind, parseElement)
-		p.parseExpected(close)
+		p.parseExpected(closing)
 		return result
 	}
 	return nil
@@ -1979,7 +1979,7 @@ func (p *Parser) parseImportOrExportSpecifier(kind SyntaxKind) (isTypeOnly bool,
 		p.parseExpected(SyntaxKindAsKeyword)
 		name = p.parseModuleExportName(kind == SyntaxKindImportSpecifier /*disallowKeywords*/)
 	}
-	return
+	return isTypeOnly, propertyName, name
 }
 
 func (p *Parser) canParseModuleExportName() bool {
@@ -2801,7 +2801,6 @@ func (p *Parser) parseParametersWorker(flags ParseFlags, allowAmbiguity bool) []
 	})
 	p.contextFlags = saveContextFlags
 	return parameters
-
 }
 
 func (p *Parser) parseParameter() *Node {
@@ -3212,7 +3211,6 @@ func (p *Parser) getTemplateLiteralRawText(endLength int) string {
 		endLength = 0
 	}
 	return tokenText[1 : len(tokenText)-endLength]
-
 }
 
 func (p *Parser) parseTemplateTypeSpans() []*Node {

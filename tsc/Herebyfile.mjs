@@ -18,6 +18,7 @@ const { values: options } = parseArgs({
     args: process.argv.slice(2),
     options: {
         race: { type: "boolean" },
+        fix: { type: "boolean" },
     },
     strict: false,
     allowPositionals: true,
@@ -65,7 +66,20 @@ export const test = task({
 export const lint = task({
     name: "lint",
     run: async () => {
-        await $`go vet ./...`;
+        await $`golangci-lint run ${options.fix ? ["--fix"] : []}`;
+    },
+});
+
+const tools = new Map([
+    ["github.com/golangci/golangci-lint/cmd/golangci-lint", "v1.62.0"],
+]);
+
+export const installTools = task({
+    name: "install-tools",
+    run: async () => {
+        for (const [tool, version] of tools) {
+            await $`go install ${tool}@${version}`;
+        }
     },
 });
 

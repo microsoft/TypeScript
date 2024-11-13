@@ -146,7 +146,7 @@ func padInt(n int) string {
 	return fmt.Sprintf("%10d", n)
 }
 
-func TestMapWithSizeHint(t *testing.T) {
+func TestMapWithSizeHint(t *testing.T) { //nolint:paralleltest
 	const N = 1024
 
 	allocs := testing.AllocsPerRun(10, func() {

@@ -206,7 +206,7 @@ func resolvedTypeScriptOnly(resolved *Resolved) *PathAndPackageId {
 		return nil
 	}
 	if !extensionIsTs(resolved.extension) {
-		panic(fmt.Sprintf("Expected resolved extension to be a TypeScript extension, but got %s", resolved.extension))
+		panic("Expected resolved extension to be a TypeScript extension, but got " + resolved.extension)
 	}
 	return &PathAndPackageId{
 		fileName:  resolved.path,

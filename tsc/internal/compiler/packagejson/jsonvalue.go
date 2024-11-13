@@ -4,10 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/microsoft/typescript-go/internal/collections"
-
 	json2 "github.com/go-json-experiment/json"
 	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/collections"
 )
 
 type JSONValueType int8

@@ -3,6 +3,7 @@ package collections
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"iter"
 	"maps"
@@ -52,8 +53,7 @@ func (m *Map[K, V]) Get(key K) (V, bool) {
 
 // GetOrZero retrieves a value from the map, or returns the zero value of the value type if the key is not present.
 func (m *Map[K, V]) GetOrZero(key K) V {
-	v, _ := m.mp[key]
-	return v
+	return m.mp[key]
 }
 
 // Has returns true if the map contains the key.
@@ -162,7 +162,7 @@ func (m *Map[K, V]) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if token != json.Delim('{') {
-		return fmt.Errorf("cannot unmarshal non-object JSON value into Map")
+		return errors.New("cannot unmarshal non-object JSON value into Map")
 	}
 	for dec.More() {
 		nameToken, err := dec.Token()
@@ -201,7 +201,7 @@ func (m *Map[K, V]) UnmarshalJSONV2(dec *jsontext.Decoder, opts json2.Options) e
 		return nil
 	}
 	if token.Kind() != '{' { // jsontext.ObjectStart.Kind()
-		return fmt.Errorf("cannot unmarshal non-object JSON value into Map")
+		return errors.New("cannot unmarshal non-object JSON value into Map")
 	}
 	for dec.PeekKind() != '}' { // jsontext.ObjectEnd.Kind()
 		var key K

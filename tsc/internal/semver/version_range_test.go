@@ -9,6 +9,7 @@ import (
 )
 
 func TestWildcardsHaveSameString(t *testing.T) {
+	t.Parallel()
 	majorWildcardStrings := []string{
 		"",
 		"*",
@@ -46,6 +47,7 @@ func TestWildcardsHaveSameString(t *testing.T) {
 
 func assertAllVersionRangesHaveIdenticalStrings(t *testing.T, name string, strs []string) {
 	t.Run(name, func(t *testing.T) {
+		t.Parallel()
 		for _, s1 := range strs {
 			for _, s2 := range strs {
 				t.Run(s1+" == "+s2, func(t *testing.T) {
@@ -66,6 +68,7 @@ type testGoodBad struct {
 }
 
 func TestVersionRanges(t *testing.T) {
+	t.Parallel()
 	assertRangesGoodBad(t, "1", testGoodBad{
 		good: []string{"1.0.0", "1.9.9", "1.0.0-pre", "1.0.0+build"},
 		bad:  []string{"0.0.0", "2.0.0", "0.0.0-pre", "0.0.0+build"},
@@ -122,6 +125,7 @@ func TestVersionRanges(t *testing.T) {
 }
 
 func TestComparatorsOfVersionRanges(t *testing.T) {
+	t.Parallel()
 	comparatorsTests := []testForRangeOnVersion{
 		// empty (matches everything)
 		{"", "2.0.0", true},
@@ -791,6 +795,7 @@ func TestComparatorsOfVersionRanges(t *testing.T) {
 }
 
 func TestConjunctionsOfVersionRanges(t *testing.T) {
+	t.Parallel()
 	conjunctionTests := []testForRangeOnVersion{
 		{">1.0.0 <2.0.0", "1.0.1", true},
 		{">1.0.0 <2.0.0", "2.0.0", false},
@@ -803,6 +808,7 @@ func TestConjunctionsOfVersionRanges(t *testing.T) {
 }
 
 func TestDisjunctionsOfVersionRanges(t *testing.T) {
+	t.Parallel()
 	disjunctionTests := []testForRangeOnVersion{
 		{">1.0.0 || <1.0.0", "1.0.1", true},
 		{">1.0.0 || <1.0.0", "0.0.1", true},
@@ -818,6 +824,7 @@ func TestDisjunctionsOfVersionRanges(t *testing.T) {
 }
 
 func TestHyphensOfVersionRanges(t *testing.T) {
+	t.Parallel()
 	hyphenTests := []testForRangeOnVersion{
 		{"1.0.0 - 2.0.0", "1.0.0", true},
 		{"1.0.0 - 2.0.0", "1.0.1", true},
@@ -832,6 +839,7 @@ func TestHyphensOfVersionRanges(t *testing.T) {
 }
 
 func TestTildesOfVersionRanges(t *testing.T) {
+	t.Parallel()
 	tildeTests := []testForRangeOnVersion{
 		{"~0", "0.0.0", true},
 		{"~0", "0.1.0", true},
@@ -869,6 +877,7 @@ func TestTildesOfVersionRanges(t *testing.T) {
 }
 
 func TestCaretsOfVersionRanges(t *testing.T) {
+	t.Parallel()
 	caretTests := []testForRangeOnVersion{
 		{"^0", "0.0.0", true},
 		{"^0", "0.1.0", true},
@@ -913,6 +922,7 @@ type testForRangeOnVersion struct {
 
 func assertRangesGoodBad(t *testing.T, versionRangeString string, tests testGoodBad) {
 	t.Run(versionRangeString, func(t *testing.T) {
+		t.Parallel()
 		versionRange, ok := TryParseVersionRange(versionRangeString)
 		assert.Assert(t, ok)
 		for _, good := range tests.good {
@@ -932,6 +942,7 @@ func assertRangesGoodBad(t *testing.T, versionRangeString string, tests testGood
 func assertRangeTest(t *testing.T, name string, rangeText string, versionText string, inRange bool) {
 	testName := fmt.Sprintf("%s (version %s in range %s) == %t", name, versionText, rangeText, inRange)
 	t.Run(testName, func(t *testing.T) {
+		t.Parallel()
 		versionRange, ok := TryParseVersionRange(rangeText)
 		assert.Assert(t, ok)
 		version, err := TryParseVersion(versionText)

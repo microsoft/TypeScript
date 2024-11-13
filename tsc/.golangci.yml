@@ -1,0 +1,76 @@
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/golangci.jsonschema.json
+
+linters:
+  disable-all: true
+  enable:
+    # Enabled
+    - asasalint
+    - inamedparam
+    - nakedret
+    - govet
+    - bidichk
+    - bodyclose
+    - canonicalheader
+    - copyloopvar
+    - durationcheck
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - fatcontext
+    - gci
+    - gocheckcompilerdirectives
+    - goprintffuncname
+    - gosimple
+    - grouper
+    - ineffassign
+    - intrange
+    - makezero
+    - mirror
+    - musttag
+    - nolintlint
+    - paralleltest
+    - perfsprint
+    - predeclared
+    - reassign
+    - tenv
+    - testableexamples
+    - tparallel
+    - unconvert
+    - usestdlibvars
+    - whitespace
+    - wrapcheck
+
+    # Need to add headers
+    # - goheader
+
+    # Check
+    # - exhaustive
+    # - gocritic
+    # - gosec
+    # - revive
+    # - staticcheck
+    # - stylecheck
+    # - testifylint
+    # - unparam
+    # - unused
+
+linters-settings:
+  wrapcheck:
+    ignorePackageGlobs:
+      - encoding/*
+      - github.com/go-json-experiment/*
+#   revive:
+#     enable-all-rules: true
+#     rules:
+#       - name: unused-parameter
+#         disabled: true
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+  exclude:
+    - '^could not import'
+    - '^: #'
+    - 'imported and not used$'

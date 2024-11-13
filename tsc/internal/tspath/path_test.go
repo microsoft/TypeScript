@@ -7,6 +7,7 @@ import (
 )
 
 func TestNormalizeSlashes(t *testing.T) {
+	t.Parallel()
 	assert.Equal(t, NormalizeSlashes("a"), "a")
 	assert.Equal(t, NormalizeSlashes("a/b"), "a/b")
 	assert.Equal(t, NormalizeSlashes("a\\b"), "a/b")
@@ -14,6 +15,7 @@ func TestNormalizeSlashes(t *testing.T) {
 }
 
 func TestGetRootLength(t *testing.T) {
+	t.Parallel()
 	assert.Equal(t, getRootLength("a"), 0)
 	assert.Equal(t, getRootLength("/"), 1)
 	assert.Equal(t, getRootLength("/path"), 1)
@@ -65,6 +67,7 @@ func TestGetRootLength(t *testing.T) {
 }
 
 func TestPathIsAbsolute(t *testing.T) {
+	t.Parallel()
 	// POSIX
 	assert.Equal(t, PathIsAbsolute("/path/to/file.ext"), true)
 	// DOS
@@ -77,6 +80,7 @@ func TestPathIsAbsolute(t *testing.T) {
 }
 
 func TestIsUrl(t *testing.T) {
+	t.Parallel()
 	assert.Equal(t, isUrl("a"), false)
 	assert.Equal(t, isUrl("/"), false)
 	assert.Equal(t, isUrl("c:"), false)
@@ -99,6 +103,7 @@ func TestIsUrl(t *testing.T) {
 }
 
 func TestIsRootedDiskPath(t *testing.T) {
+	t.Parallel()
 	assert.Equal(t, IsRootedDiskPath("a"), false)
 	assert.Equal(t, IsRootedDiskPath("/"), true)
 	assert.Equal(t, IsRootedDiskPath("c:"), true)
@@ -120,6 +125,7 @@ func TestIsRootedDiskPath(t *testing.T) {
 }
 
 func TestGetDirectoryPath(t *testing.T) {
+	t.Parallel()
 	assert.Equal(t, GetDirectoryPath(""), "")
 	assert.Equal(t, GetDirectoryPath("a"), "")
 	assert.Equal(t, GetDirectoryPath("a/b"), "a")
@@ -164,6 +170,7 @@ func TestGetDirectoryPath(t *testing.T) {
 // getAnyExtensionFromPath
 
 func TestGetPathComponents(t *testing.T) {
+	t.Parallel()
 	assert.DeepEqual(t, getPathComponents("", ""), []string{""})
 	assert.DeepEqual(t, getPathComponents("a", ""), []string{"", "a"})
 	assert.DeepEqual(t, getPathComponents("./a", ""), []string{"", ".", "a"})
@@ -192,6 +199,7 @@ func TestGetPathComponents(t *testing.T) {
 }
 
 func TestReducePathComponents(t *testing.T) {
+	t.Parallel()
 	assert.DeepEqual(t, reducePathComponents([]string{""}), []string{""})
 	assert.DeepEqual(t, reducePathComponents([]string{"", "."}), []string{""})
 	assert.DeepEqual(t, reducePathComponents([]string{"", ".", "a"}), []string{"", "a"})
@@ -208,6 +216,7 @@ func TestReducePathComponents(t *testing.T) {
 }
 
 func TestCombinePaths(t *testing.T) {
+	t.Parallel()
 	// Non-rooted
 	assert.Equal(t, combinePaths("path", "to", "file.ext"), "path/to/file.ext")
 	assert.Equal(t, combinePaths("path", "dir", "..", "to", "file.ext"), "path/dir/../to/file.ext")
@@ -230,6 +239,7 @@ func TestCombinePaths(t *testing.T) {
 }
 
 func TestResolvePath(t *testing.T) {
+	t.Parallel()
 	assert.Equal(t, resolvePath(""), "")
 	assert.Equal(t, resolvePath("."), "")
 	assert.Equal(t, resolvePath("./"), "")
@@ -261,6 +271,7 @@ func TestResolvePath(t *testing.T) {
 }
 
 func TestGetRelativePathToDirectoryOrUrl(t *testing.T) {
+	t.Parallel()
 	// !!!
 	// Based on tests for `getRelativePathFromDirectory`.
 	getCanonicalFileName := func(s string) string {

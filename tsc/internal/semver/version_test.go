@@ -7,6 +7,7 @@ import (
 )
 
 func TestTryParseSemver(t *testing.T) {
+	t.Parallel()
 	var tests = []struct {
 		in  string
 		out Version
@@ -19,6 +20,7 @@ func TestTryParseSemver(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.in, func(t *testing.T) {
+			t.Parallel()
 			v, err := TryParseVersion(test.in)
 			assert.NilError(t, err)
 			assertVersion(t, v, test.out)
@@ -27,6 +29,7 @@ func TestTryParseSemver(t *testing.T) {
 }
 
 func TestVersionString(t *testing.T) {
+	t.Parallel()
 	var tests = []struct {
 		in  Version
 		out string
@@ -41,12 +44,14 @@ func TestVersionString(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.out, func(t *testing.T) {
+			t.Parallel()
 			assert.Equal(t, test.in.String(), test.out)
 		})
 	}
 }
 
 func TestVersionCompare(t *testing.T) {
+	t.Parallel()
 	var tests = []struct {
 		v1, v2 string
 		want   int
@@ -118,6 +123,7 @@ func TestVersionCompare(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.v1+" <=> "+test.v2, func(t *testing.T) {
+			t.Parallel()
 			v1, err1 := TryParseVersion(test.v1)
 			assert.NilError(t, err1, test.v1)
 			v2, err2 := TryParseVersion(test.v2)

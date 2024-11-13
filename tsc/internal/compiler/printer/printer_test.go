@@ -9,6 +9,7 @@ import (
 )
 
 func TestSanityCheckParsePrintRoundtrip(t *testing.T) {
+	t.Parallel()
 	samples := []string{
 		// "6",
 		// 		"interface A {}",

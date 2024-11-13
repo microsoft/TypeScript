@@ -24,11 +24,12 @@ $ git submodule update --init --recursive
 With the submodule in place and `npm ci`, you can run tasks via `hereby`, similar to the TypeScript repo:
 
 ```console
-$ hereby build    # Verify that the project builds
-$ hereby test     # Run all tests
-$ hereby lint     # Run all linters
-$ hereby format   # Format all code
-$ hereby generate # Generate all Go code (e.g. diagnostics, committed to repo)
+$ hereby build          # Verify that the project builds
+$ hereby test           # Run all tests
+$ hereby install-tools  # Install additional tools such as linters
+$ hereby lint           # Run all linters
+$ hereby format         # Format all code
+$ hereby generate       # Generate all Go code (e.g. diagnostics, committed to repo)
 ```
 
 Additional tasks are a work in progress.

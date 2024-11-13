@@ -240,7 +240,6 @@ func (p *Printer) printArrayType(t *Type) {
 	}
 	p.printTypeEx(p.c.getTypeArguments(t)[0], TypePrecedencePostfix)
 	p.print("[]")
-
 }
 func (p *Printer) printTupleType(t *Type) {
 	tail := false

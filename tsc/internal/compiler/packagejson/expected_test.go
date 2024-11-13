@@ -9,6 +9,8 @@ import (
 )
 
 func TestExpected(t *testing.T) {
+	t.Parallel()
+
 	type packageJson struct {
 		Name    packagejson.Expected[string] `json:"name"`
 		Version packagejson.Expected[string] `json:"version"`

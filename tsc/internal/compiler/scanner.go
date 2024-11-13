@@ -333,9 +333,9 @@ func (s *Scanner) error(diagnostic *diagnostics.Message) {
 	s.errorAt(diagnostic, s.pos, 0)
 }
 
-func (s *Scanner) errorAt(diagnostic *diagnostics.Message, pos int, len int, args ...any) {
+func (s *Scanner) errorAt(diagnostic *diagnostics.Message, pos int, length int, args ...any) {
 	if s.onError != nil {
-		s.onError(diagnostic, pos, len, args...)
+		s.onError(diagnostic, pos, length, args...)
 	}
 }
 
@@ -1044,7 +1044,7 @@ func (s *Scanner) scanIdentifierParts() string {
 			escaped := s.peekUnicodeEscape()
 			if escaped >= 0 && isIdentifierPart(escaped, s.languageVersion) {
 				sb.WriteString(s.text[start:s.pos])
-				sb.WriteString(string(s.scanUnicodeEscape(true)))
+				sb.WriteRune(s.scanUnicodeEscape(true))
 				start = s.pos
 				continue
 			}
@@ -1190,7 +1190,7 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 			} else {
 				s.errorAt(diagnostics.Escape_sequence_0_is_not_allowed, start, s.pos-start, s.text[start:s.pos])
 			}
-			return string(rune(ch))
+			return string(ch)
 		}
 		return s.text[start:s.pos]
 	case 'b':
@@ -1253,7 +1253,7 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 		if flags&EscapeSequenceScanningFlagsAnyUnicodeMode != 0 || flags&EscapeSequenceScanningFlagsRegularExpression != 0 && flags&EscapeSequenceScanningFlagsAnnexB == 0 && isIdentifierPart(ch, s.languageVersion) {
 			s.errorAt(diagnostics.This_character_cannot_be_escaped_in_a_regular_expression, s.pos-2, 2)
 		}
-		return string(rune(ch))
+		return string(ch)
 	}
 }
 
@@ -1746,7 +1746,7 @@ func isConflictMarkerTrivia(text string, pos int) bool {
 		ch := text[pos]
 
 		if (pos + mergeConflictMarkerLength) < len(text) {
-			for i := 0; i < mergeConflictMarkerLength; i++ {
+			for i := range mergeConflictMarkerLength {
 				if text[pos+i] != ch {
 					return false
 				}
@@ -1759,9 +1759,9 @@ func isConflictMarkerTrivia(text string, pos int) bool {
 	return false
 }
 
-func scanConflictMarkerTrivia(text string, pos int, error func(diag *diagnostics.Message, pos int, length int, args ...any)) int {
-	if error != nil {
-		error(diagnostics.Merge_conflict_marker_encountered, pos, mergeConflictMarkerLength)
+func scanConflictMarkerTrivia(text string, pos int, reportError func(diag *diagnostics.Message, pos int, length int, args ...any)) int {
+	if reportError != nil {
+		reportError(diagnostics.Merge_conflict_marker_encountered, pos, mergeConflictMarkerLength)
 	}
 	ch, size := utf8.DecodeRuneInString(text[pos:])
 	length := len(text)

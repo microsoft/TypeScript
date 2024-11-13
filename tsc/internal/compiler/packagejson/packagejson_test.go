@@ -23,7 +23,6 @@ func BenchmarkPackageJSON(b *testing.B) {
 		content := []byte(f.ReadFile(b))
 		b.Run("UnmarshalJSON", func(b *testing.B) {
 			b.Run(f.Name(), func(b *testing.B) {
-
 				for i := 0; i < b.N; i++ {
 					var p packagejson.Fields
 					if err := json.Unmarshal(content, &p); err != nil {

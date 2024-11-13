@@ -34,20 +34,20 @@ func FromFile(name string, path string) Fixture {
 func (f *fromFile) Name() string { return f.name }
 func (f *fromFile) Path() string { return f.path }
 
-func (f *fromFile) SkipIfNotExist(t testing.TB) {
-	t.Helper()
+func (f *fromFile) SkipIfNotExist(tb testing.TB) {
+	tb.Helper()
 
 	if _, err := os.Stat(f.path); err != nil {
-		t.Skipf("Test fixture %q does not exist", f.path)
+		tb.Skipf("Test fixture %q does not exist", f.path)
 	}
 }
 
-func (f *fromFile) ReadFile(t testing.TB) string {
-	t.Helper()
+func (f *fromFile) ReadFile(tb testing.TB) string {
+	tb.Helper()
 
 	contents, err := f.contents()
 	if err != nil {
-		t.Fatalf("Failed to read test fixture %q: %v", f.path, err)
+		tb.Fatalf("Failed to read test fixture %q: %v", f.path, err)
 	}
 	return contents
 }
@@ -69,6 +69,6 @@ func FromString(name string, path string, contents string) Fixture {
 func (f *fromString) Name() string { return f.name }
 func (f *fromString) Path() string { return f.path }
 
-func (f *fromString) SkipIfNotExist(t testing.TB) {}
+func (f *fromString) SkipIfNotExist(tb testing.TB) {}
 
-func (f *fromString) ReadFile(t testing.TB) string { return f.contents }
+func (f *fromString) ReadFile(tb testing.TB) string { return f.contents }

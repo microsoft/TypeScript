@@ -17,7 +17,7 @@ type CompilerHost interface {
 	ReadFile(fileName string) (text string, ok bool)
 	ReadDirectory(rootPath string, extensions []string) []FileInfo
 	AbsFileName(fileName string) string
-	RunTask(func())
+	RunTask(fn func())
 	WaitForTasks()
 }
 
@@ -74,7 +74,7 @@ func decodeUtf16(b []byte, order binary.ByteOrder) string {
 
 func (h *compilerHost) ReadDirectory(rootDir string, extensions []string) []FileInfo {
 	var fileInfos []FileInfo
-	filepath.Walk(rootDir, func(path string, info fs.FileInfo, err error) error {
+	_ = filepath.Walk(rootDir, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

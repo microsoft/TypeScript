@@ -22,5 +22,10 @@
         "ui.diagnostic.analyses": {
             "unusedparams": false
         }
-    }
+    },
+    "go.lintTool": "golangci-lint",
+    // "go.lintOnSave": "workspace",
+    // "go.lintOnSave": "package",
+    // "go.lintOnSave": "file",
+    "go.lintOnSave": "off"
 }
