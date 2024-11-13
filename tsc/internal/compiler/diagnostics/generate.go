@@ -7,7 +7,9 @@ import (
 	"cmp"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"go/format"
+	"go/token"
 	"log"
 	"os"
 	"path/filepath"
@@ -16,7 +18,6 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
-	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/repo"
 )
@@ -78,25 +79,10 @@ func main() {
 	buf.WriteString("package diagnostics\n")
 
 	for _, m := range diagnosticMessages {
-		propName, key := convertPropertyName(m.key, m.Code)
+		varName, key := convertPropertyName(m.key, m.Code)
 
-		buf.WriteString(`var `)
-		buf.WriteString(propName)
-		buf.WriteString(` = &Message{code: `)
-		buf.WriteString(strconv.Itoa(m.Code))
-		buf.WriteString(`, category: Category`)
-		buf.WriteString(m.Category)
-		buf.WriteString(`, key: "`)
-		buf.WriteString(key)
-		buf.WriteString(`", text: `)
-		buf.WriteString(toJSONString(m.key))
-		// buf.WriteString(`, reportsUnnecessary: `)
-		// buf.WriteString(strconv.FormatBool(m.ReportsUnnecessary))
-		// buf.WriteString(`, elidedInCompatabilityPyramid: `)
-		// buf.WriteString(strconv.FormatBool(m.ElidedInCompatabilityPyramid))
-		// buf.WriteString(`, reportsDeprecated: `)
-		// buf.WriteString(strconv.FormatBool(m.ReportsDeprecated))
-		buf.WriteString(``)
+		fmt.Fprintf(&buf, "var %s = &Message{code: %d, category: Category%s, key: %q, text: %q", varName, m.Code, m.Category, key, m.key)
+
 		if m.ReportsUnnecessary {
 			buf.WriteString(`, reportsUnnecessary: true`)
 		}
@@ -106,8 +92,8 @@ func main() {
 		if m.ReportsDeprecated {
 			buf.WriteString(`, reportsDeprecated: true`)
 		}
-		buf.WriteString(`}`)
-		buf.WriteString("\n")
+
+		buf.WriteString("}\n")
 	}
 
 	formatted, err := format.Source(buf.Bytes())
@@ -128,7 +114,7 @@ var (
 	trailingUnderscoreRegexp           = regexp.MustCompile(`_$`)
 )
 
-func convertPropertyName(origName string, code int) (propName string, key string) {
+func convertPropertyName(origName string, code int) (varName string, key string) {
 	var b strings.Builder
 	b.Grow(len(origName))
 
@@ -149,43 +135,35 @@ func convertPropertyName(origName string, code int) (propName string, key string
 		}
 	}
 
-	propName = b.String()
+	varName = b.String()
 	// get rid of all multi-underscores
-	propName = multipleUnderscoreRegexp.ReplaceAllString(propName, "_")
+	varName = multipleUnderscoreRegexp.ReplaceAllString(varName, "_")
 	// remove any leading underscore, unless it is followed by a number.
-	propName = leadingUnderscoreUnlessDigitRegexp.ReplaceAllString(propName, "$1")
+	varName = leadingUnderscoreUnlessDigitRegexp.ReplaceAllString(varName, "$1")
 	// get rid of all trailing underscores.
-	propName = trailingUnderscoreRegexp.ReplaceAllString(propName, "")
+	varName = trailingUnderscoreRegexp.ReplaceAllString(varName, "")
 
-	key = propName
+	key = varName
 	if len(key) > 100 {
 		key = key[:100]
 	}
 	key = key + "_" + strconv.Itoa(code)
 
-	// Ensure the first character is uppercase so the variable is exported.
-	first, _ := utf8.DecodeRuneInString(propName)
-	if !unicode.IsUpper(first) {
+	if !token.IsExported(varName) {
 		var b strings.Builder
-		b.Grow(len(propName) + 2)
-		if first == '_' {
+		b.Grow(len(varName) + 2)
+		if varName[0] == '_' {
 			b.WriteString("X")
 		} else {
 			b.WriteString("X_")
 		}
-		b.WriteString(propName)
-		propName = b.String()
+		b.WriteString(varName)
+		varName = b.String()
 	}
 
-	return propName, key
-}
-
-func toJSONString(s string) string {
-	var buf bytes.Buffer
-	var enc = json.NewEncoder(&buf)
-	enc.SetEscapeHTML(false)
-	if err := enc.Encode(s); err != nil {
-		log.Fatalf("failed to encode text: %v", err)
+	if !token.IsIdentifier(varName) || !token.IsExported(varName) {
+		log.Fatalf("failed to convert property name to exported identifier: %q", origName)
 	}
-	return strings.TrimSpace(buf.String())
+
+	return varName, key
 }
