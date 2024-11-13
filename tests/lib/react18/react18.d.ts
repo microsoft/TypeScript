@@ -886,14 +886,14 @@ declare namespace React {
      * context value, as given by the nearest context provider for the given context.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#usecontext
+     * @see https://react.dev/reference/react/useContext
      */
     function useContext<T>(context: Context<T>/*, (not public API) observedBits?: number|boolean */): T;
     /**
      * Returns a stateful value, and a function to update it.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#usestate
+     * @see https://react.dev/reference/react/useState
      */
     function useState<S>(initialState: S | (() => S)): [S, Dispatch<SetStateAction<S>>];
     // convenience overload when first argument is omitted
@@ -901,7 +901,7 @@ declare namespace React {
      * Returns a stateful value, and a function to update it.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#usestate
+     * @see https://react.dev/reference/react/useState
      */
     function useState<S = undefined>(): [S | undefined, Dispatch<SetStateAction<S | undefined>>];
     /**
@@ -912,7 +912,7 @@ declare namespace React {
      * updates because you can pass `dispatch` down instead of callbacks.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#usereducer
+     * @see https://react.dev/reference/react/useReducer
      */
     // overload where dispatch could accept 0 arguments.
     function useReducer<R extends ReducerWithoutAction<any>, I>(
@@ -928,7 +928,7 @@ declare namespace React {
      * updates because you can pass `dispatch` down instead of callbacks.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#usereducer
+     * @see https://react.dev/reference/react/useReducer
      */
     // overload where dispatch could accept 0 arguments.
     function useReducer<R extends ReducerWithoutAction<any>>(
@@ -944,7 +944,7 @@ declare namespace React {
      * updates because you can pass `dispatch` down instead of callbacks.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#usereducer
+     * @see https://react.dev/reference/react/useReducer
      */
     // overload where "I" may be a subset of ReducerState<R>; used to provide autocompletion.
     // If "I" matches ReducerState<R> exactly then the last overload will allow initializer to be omitted.
@@ -962,7 +962,7 @@ declare namespace React {
      * updates because you can pass `dispatch` down instead of callbacks.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#usereducer
+     * @see https://react.dev/reference/react/useReducer
      */
     // overload for free "I"; all goes as long as initializer converts it into "ReducerState<R>".
     function useReducer<R extends Reducer<any, any>, I>(
@@ -978,7 +978,7 @@ declare namespace React {
      * updates because you can pass `dispatch` down instead of callbacks.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#usereducer
+     * @see https://react.dev/reference/react/useReducer
      */
 
     // I'm not sure if I keep this 2-ary or if I make it (2,3)-ary; it's currently (2,3)-ary.
@@ -1003,7 +1003,7 @@ declare namespace React {
      * value around similar to how you’d use instance fields in classes.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#useref
+     * @see https://react.dev/reference/react/useRef
      */
     function useRef<T>(initialValue: T): MutableRefObject<T>;
     // convenience overload for refs given as a ref prop as they typically start with a null value
@@ -1018,7 +1018,7 @@ declare namespace React {
      * of the generic argument.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#useref
+     * @see https://react.dev/reference/react/useRef
      */
     function useRef<T>(initialValue: T|null): RefObject<T>;
     // convenience overload for potentially undefined initialValue / call with 0 arguments
@@ -1031,7 +1031,7 @@ declare namespace React {
      * value around similar to how you’d use instance fields in classes.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#useref
+     * @see https://react.dev/reference/react/useRef
      */
     function useRef<T = undefined>(): MutableRefObject<T | undefined>;
     /**
@@ -1045,7 +1045,7 @@ declare namespace React {
      * `componentDidMount` and `componentDidUpdate`.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#uselayouteffect
+     * @see https://react.dev/reference/react/useLayoutEffect
      */
     function useLayoutEffect(effect: EffectCallback, deps?: DependencyList): void;
     /**
@@ -1055,7 +1055,7 @@ declare namespace React {
      * @param deps If present, effect will only activate if the values in the list change.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#useeffect
+     * @see https://react.dev/reference/react/useEffect
      */
     function useEffect(effect: EffectCallback, deps?: DependencyList): void;
     // NOTE: this does not accept strings, but this will have to be fixed by removing strings from type Ref<T>
@@ -1066,7 +1066,7 @@ declare namespace React {
      * `useImperativeHandle` should be used with `React.forwardRef`.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#useimperativehandle
+     * @see https://react.dev/reference/react/useImperativeHandle
      */
     function useImperativeHandle<T, R extends T>(ref: Ref<T>|undefined, init: () => R, deps?: DependencyList): void;
     // I made 'inputs' required here and in useMemo as there's no point to memoizing without the memoization key
@@ -1076,7 +1076,7 @@ declare namespace React {
      * has changed.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#usecallback
+     * @see https://react.dev/reference/react/useCallback
      */
     // A specific function type would not trigger implicit any.
     // See https://github.com/DefinitelyTyped/DefinitelyTyped/issues/52873#issuecomment-845806435 for a comparison between `Function` and more specific types.
@@ -1086,7 +1086,7 @@ declare namespace React {
      * `useMemo` will only recompute the memoized value when one of the `deps` has changed.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#usememo
+     * @see https://react.dev/reference/react/useMemo
      */
     // allow undefined, but don't make it optional as that is very likely a mistake
     function useMemo<T>(factory: () => T, deps: DependencyList | undefined): T;
@@ -1097,7 +1097,7 @@ declare namespace React {
      * It’s most valuable for custom hooks that are part of shared libraries.
      *
      * @version 16.8.0
-     * @see https://reactjs.org/docs/hooks-reference.html#usedebugvalue
+     * @see https://react.dev/reference/react/useDebugValue
      */
     // the name of the custom hook is itself derived from the function name at runtime:
     // it's just the function name without the "use" prefix.
@@ -1127,7 +1127,7 @@ declare namespace React {
      *
      * @param value The value that is going to be deferred
      *
-     * @see https://reactjs.org/docs/concurrent-mode-reference.html#usedeferredvalue
+     * @see https://react.dev/reference/react/useDeferredValue
      */
     export function useDeferredValue<T>(value: T): T;
 
@@ -1144,7 +1144,7 @@ declare namespace React {
      *
      * **If some state update causes a component to suspend, that state update should be wrapped in a transition.**`
      *
-     * @see https://reactjs.org/docs/concurrent-mode-reference.html#usetransition
+     * @see https://react.dev/reference/react/useTransition
      */
     export function useTransition(): [boolean, TransitionStartFunction];
 
