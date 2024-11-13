@@ -953,6 +953,18 @@ const (
 	TSTrue
 )
 
+func (t *Tristate) UnmarshalJSON(data []byte) error {
+	switch string(data) {
+	case "true":
+		*t = TSTrue
+	case "false":
+		*t = TSFalse
+	default:
+		*t = TSUnknown
+	}
+	return nil
+}
+
 type VarianceFlags uint32
 
 const (
@@ -1038,6 +1050,7 @@ const (
 // CompilerOptions
 
 type CompilerOptions struct {
+	AllowJs                            Tristate
 	AllowSyntheticDefaultImports       Tristate
 	AllowUmdGlobalAccess               Tristate
 	AllowUnreachableCode               Tristate
@@ -1049,21 +1062,32 @@ type CompilerOptions struct {
 	IsolatedModules                    Tristate
 	ModuleKind                         ModuleKind
 	ModuleResolution                   ModuleResolutionKind
+	ModuleSuffixes                     []string
 	NoFallthroughCasesInSwitch         Tristate
 	NoImplicitAny                      Tristate
 	NoPropertyAccessFromIndexSignature Tristate
 	NoUncheckedIndexedAccess           Tristate
+	Paths                              map[string][]string
 	PreserveConstEnums                 Tristate
+	PreserveSymlinks                   Tristate
+	ResolveJsonModule                  Tristate
+	ResolvePackageJsonExports          Tristate
+	ResolvePackageJsonImports          Tristate
 	Strict                             Tristate
 	StrictBindCallApply                Tristate
 	StrictNullChecks                   Tristate
 	StrictFunctionTypes                Tristate
 	Target                             ScriptTarget
 	TraceResolution                    Tristate
+	TypeRoots                          []string
 	Types                              []string
 	UseDefineForClassFields            Tristate
 	UseUnknownInCatchVariables         Tristate
 	VerbatimModuleSyntax               Tristate
+
+	configFilePath  string
+	noDtsResolution Tristate
+	pathsBasePath   string
 }
 
 type ModuleKind int32

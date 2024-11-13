@@ -12,9 +12,6 @@ var testPathPrefix = regexp.MustCompile(`(?:(file:\/{3})|\/)\.(?:ts|lib|src)\/`)
 var testPathCharacters = regexp.MustCompile(`[\^<>:"|?*%]`)
 var testPathDotDot = regexp.MustCompile(`\.\.\/`)
 
-// This is done so tests work on windows _and_ linux
-var canonicalizeForHarness = strings.ToLower
-
 var libFolder = "built/local/"
 var builtFolder = "/.ts"
 
@@ -48,6 +45,6 @@ func sanitizeTestFilePath(name string) string {
 	path := testPathCharacters.ReplaceAllString(name, "_")
 	path = tspath.NormalizeSlashes(path)
 	path = testPathDotDot.ReplaceAllString(path, "__dotdot/")
-	path = string(tspath.ToPath(path, "", canonicalizeForHarness))
+	path = string(tspath.ToPath(path, "", false /*useCaseSensitiveFileNames*/))
 	return strings.TrimPrefix(path, "/")
 }

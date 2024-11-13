@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"testing"
 
 	"github.com/microsoft/typescript-go/internal/repo"
 )
@@ -14,50 +15,51 @@ type Options struct {
 
 const NoContent = "<no content>"
 
-func Run(fileName string, actual string, opts Options) error {
+func Run(t testing.TB, fileName string, actual string, opts Options) {
+	writeComparison(t, actual, fileName, opts)
+}
+
+func writeComparison(t testing.TB, actual string, relativeFileName string, opts Options) {
 	if actual == "" {
 		panic("The generated content was \"\". Return 'baseline.NoContent' if no baselining is required.")
 	}
+	var (
+		localFileName     string
+		referenceFileName string
+	)
 
-	return writeComparison(actual, fileName, opts)
-}
-
-func writeComparison(actual string, relativeFileName string, opts Options) error {
-	localFileName := localPath(relativeFileName, opts.Subfolder)
-	referenceFileName := referencePath(relativeFileName, opts.Subfolder)
+	localFileName = localPath(relativeFileName, opts.Subfolder)
+	referenceFileName = referencePath(relativeFileName, opts.Subfolder)
 	expected := getExpectedContent(relativeFileName, opts)
 	if _, err := os.Stat(localFileName); err == nil {
 		if err := os.Remove(localFileName); err != nil {
-			return fmt.Errorf("Failed to remove the local baseline file %s: %w", localFileName, err)
+			t.Fatal(fmt.Errorf("failed to remove the local baseline file %s: %w", localFileName, err))
 		}
 	}
 	if actual != expected {
 		if err := os.MkdirAll(filepath.Dir(localFileName), 0755); err != nil {
-			return fmt.Errorf("Failed to create directories for the local baseline file %s: %w", localFileName, err)
+			t.Fatal(fmt.Errorf("failed to create directories for the local baseline file %s: %w", localFileName, err))
 		}
 		if actual == NoContent {
 			if err := os.WriteFile(localFileName+".delete", []byte{}, 0644); err != nil {
-				return fmt.Errorf("Failed to write the local baseline file %s: %w", localFileName+".delete", err)
+				t.Fatal(fmt.Errorf("failed to write the local baseline file %s: %w", localFileName+".delete", err))
 			}
-		} else {
-			if err := os.WriteFile(localFileName, []byte(actual), 0644); err != nil {
-				return fmt.Errorf("Failed to write the local baseline file %s: %w", localFileName, err)
-			}
+		} else if err := os.WriteFile(localFileName, []byte(actual), 0644); err != nil {
+			t.Fatal(fmt.Errorf("failed to write the local baseline file %s: %w", localFileName, err))
 		}
 
 		if _, err := os.Stat(referenceFileName); err != nil {
-			return fmt.Errorf("The baseline file %s has changed. (Run `hereby baseline-accept` if the new baseline is correct.)", relativeFileName)
+			t.Errorf("New baseline created at %s.", localFileName)
+		} else {
+			t.Errorf("The baseline file %s has changed. (Run `hereby baseline-accept` if the new baseline is correct.)", relativeFileName)
 		}
-		return fmt.Errorf("New baseline created at %s.", localFileName)
 	}
-	return nil
 }
 
 func getExpectedContent(relativeFileName string, opts Options) string {
 	refFileName := referencePath(relativeFileName, opts.Subfolder)
 	expected := NoContent
-	content, err := os.ReadFile(refFileName)
-	if err == nil {
+	if content, err := os.ReadFile(refFileName); err == nil {
 		expected = string(content)
 	}
 	return expected

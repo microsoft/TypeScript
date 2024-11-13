@@ -25,9 +25,7 @@ var (
 )
 
 var formatOpts = &compiler.DiagnosticsFormattingOptions{
-	GetCanonicalFileName: getCanonicalFileName,
-	CurrentDirectory:     "",
-	NewLine:              harnessNewLine,
+	NewLine: harnessNewLine,
 }
 
 type TestFile struct {
@@ -39,7 +37,7 @@ type TestFile struct {
 var diagnosticsLocationPrefix = regexp.MustCompile(`(?im)^(lib.*\.d\.ts)\(\d+,\d+\)`)
 var diagnosticsLocationPattern = regexp.MustCompile(`(?i)(lib.*\.d\.ts):\d+:\d+`)
 
-func DoErrorBaseline(t testing.TB, baselinePath string, inputFiles []*TestFile, errors []*compiler.Diagnostic, pretty bool) error {
+func DoErrorBaseline(t testing.TB, baselinePath string, inputFiles []*TestFile, errors []*compiler.Diagnostic, pretty bool) {
 	baselinePath = tsExtension.ReplaceAllString(baselinePath, ".errors.txt")
 	var errorBaseline string
 	if len(errors) > 0 {
@@ -47,11 +45,7 @@ func DoErrorBaseline(t testing.TB, baselinePath string, inputFiles []*TestFile, 
 	} else {
 		errorBaseline = NoContent
 	}
-	return Run(baselinePath, errorBaseline, Options{})
-}
-
-func getCanonicalFileName(fileName string) string {
-	return fileName
+	Run(t, baselinePath, errorBaseline, Options{})
 }
 
 func minimalDiagnosticsToString(diagnostics []*compiler.Diagnostic, pretty bool) string {
@@ -169,7 +163,7 @@ func iterateErrorBaseline(t testing.TB, inputFiles []*TestFile, inputDiagnostics
 		// Filter down to the errors in the file
 		fileErrors := core.Filter(diagnostics, func(e *compiler.Diagnostic) bool {
 			return e.File() != nil &&
-				tspath.ComparePaths(removeTestPathPrefixes(e.File().FileName(), false), removeTestPathPrefixes(inputFile.unitName, false), "", true) == core.ComparisonEqual
+				tspath.ComparePaths(removeTestPathPrefixes(e.File().FileName(), false), removeTestPathPrefixes(inputFile.unitName, false), tspath.ComparePathsOptions{}) == core.ComparisonEqual
 		})
 
 		// Header

@@ -24,12 +24,13 @@ func TestJSONValue(t *testing.T) {
 
 func testJSONValue(t *testing.T, unmarshal func([]byte, any) error) {
 	type packageJson struct {
-		Private packagejson.JSONValue `json:"private"`
-		False   packagejson.JSONValue `json:"false"`
-		Name    packagejson.JSONValue `json:"name"`
-		Version packagejson.JSONValue `json:"version"`
-		Exports packagejson.JSONValue `json:"exports"`
-		Imports packagejson.JSONValue `json:"imports"`
+		Private    packagejson.JSONValue `json:"private"`
+		False      packagejson.JSONValue `json:"false"`
+		Name       packagejson.JSONValue `json:"name"`
+		Version    packagejson.JSONValue `json:"version"`
+		Exports    packagejson.JSONValue `json:"exports"`
+		Imports    packagejson.JSONValue `json:"imports"`
+		NotPresent packagejson.JSONValue `json:"notPresent"`
 	}
 
 	var p packageJson
@@ -76,4 +77,7 @@ func testJSONValue(t *testing.T, unmarshal func([]byte, any) error) {
 
 	assert.Equal(t, p.Imports.Type, packagejson.JSONValueTypeNull)
 	assert.Equal(t, p.Imports.Value, nil)
+
+	assert.Equal(t, p.NotPresent.Type, packagejson.JSONValueTypeNotPresent)
+	assert.Equal(t, p.NotPresent.Value, nil)
 }

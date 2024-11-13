@@ -12,7 +12,8 @@ import (
 type JSONValueType int8
 
 const (
-	JSONValueTypeNull JSONValueType = iota
+	JSONValueTypeNotPresent JSONValueType = iota
+	JSONValueTypeNull
 	JSONValueTypeString
 	JSONValueTypeNumber
 	JSONValueTypeBoolean
@@ -42,6 +43,21 @@ func (t JSONValueType) String() string {
 type JSONValue struct {
 	Type  JSONValueType
 	Value any
+}
+
+func (v *JSONValue) IsFalsy() bool {
+	switch v.Type {
+	case JSONValueTypeNotPresent, JSONValueTypeNull:
+		return true
+	case JSONValueTypeString:
+		return v.Value == ""
+	case JSONValueTypeNumber:
+		return v.Value == 0
+	case JSONValueTypeBoolean:
+		return !v.Value.(bool)
+	default:
+		return false
+	}
 }
 
 func (v *JSONValue) AsObject() *collections.Map[string, *JSONValue] {

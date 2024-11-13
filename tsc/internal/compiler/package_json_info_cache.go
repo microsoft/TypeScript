@@ -30,21 +30,21 @@ type PackageJsonInfoCacheEntry struct {
 }
 
 type PackageJsonInfoCache struct {
-	cache                map[tspath.Path]PackageJsonInfoCacheEntry
-	currentDirectory     string
-	getCanonicalFileName func(string) string
-	isReadonly           bool
+	cache                     map[tspath.Path]PackageJsonInfoCacheEntry
+	currentDirectory          string
+	useCaseSensitiveFileNames bool
+	isReadonly                bool
 }
 
-func NewPackageJsonInfoCache(currentDirectory string, getCanonicalFileName func(string) string) *PackageJsonInfoCache {
+func NewPackageJsonInfoCache(currentDirectory string, useCaseSensitiveFileNames bool) *PackageJsonInfoCache {
 	return &PackageJsonInfoCache{
-		currentDirectory:     currentDirectory,
-		getCanonicalFileName: getCanonicalFileName,
+		currentDirectory:          currentDirectory,
+		useCaseSensitiveFileNames: useCaseSensitiveFileNames,
 	}
 }
 
 func (p *PackageJsonInfoCache) getPackageJsonInfo(packageJsonPath string) *PackageJsonInfoCacheEntry {
-	key := tspath.ToPath(packageJsonPath, p.currentDirectory, p.getCanonicalFileName)
+	key := tspath.ToPath(packageJsonPath, p.currentDirectory, p.useCaseSensitiveFileNames)
 	if p.cache == nil {
 		p.cache = make(map[tspath.Path]PackageJsonInfoCacheEntry)
 		return nil
@@ -57,7 +57,7 @@ func (p *PackageJsonInfoCache) getPackageJsonInfo(packageJsonPath string) *Packa
 }
 
 func (p *PackageJsonInfoCache) setPackageJsonInfo(packageJsonPath string, info *PackageJsonInfoCacheEntry) {
-	key := tspath.ToPath(packageJsonPath, p.currentDirectory, p.getCanonicalFileName)
+	key := tspath.ToPath(packageJsonPath, p.currentDirectory, p.useCaseSensitiveFileNames)
 	if p.cache == nil {
 		p.cache = make(map[tspath.Path]PackageJsonInfoCacheEntry)
 	}
