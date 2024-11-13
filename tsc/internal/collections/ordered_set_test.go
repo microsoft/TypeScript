@@ -8,10 +8,10 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func TestSet(t *testing.T) {
+func TestOrderedSet(t *testing.T) {
 	t.Parallel()
 
-	s := &collections.Set[int]{}
+	s := &collections.OrderedSet[int]{}
 
 	s.Add(1)
 	s.Add(2)
@@ -39,11 +39,11 @@ func TestSet(t *testing.T) {
 	assert.Equal(t, s2.Size(), 0)
 }
 
-func TestSetWithSizeHint(t *testing.T) { //nolint:paralleltest
+func TestOrderedSetWithSizeHint(t *testing.T) { //nolint:paralleltest
 	const N = 1024
 
 	allocs := testing.AllocsPerRun(10, func() {
-		m := collections.NewSetWithSizeHint[int](N)
+		m := collections.NewOrderedSetWithSizeHint[int](N)
 		for i := range N {
 			m.Add(i)
 		}

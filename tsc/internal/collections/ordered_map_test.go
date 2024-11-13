@@ -11,10 +11,10 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func TestMap(t *testing.T) {
+func TestOrderedMap(t *testing.T) {
 	t.Parallel()
 
-	var m collections.Map[int, string]
+	var m collections.OrderedMap[int, string]
 
 	assert.Assert(t, !m.Has(1))
 
@@ -104,10 +104,10 @@ func TestMap(t *testing.T) {
 	assert.Equal(t, m.Size(), 0)
 }
 
-func TestMapClone(t *testing.T) {
+func TestOrderedMapClone(t *testing.T) {
 	t.Parallel()
 
-	m := &collections.Map[int, string]{}
+	m := &collections.OrderedMap[int, string]{}
 	m.Set(1, "one")
 	m.Set(2, "two")
 
@@ -130,10 +130,10 @@ func TestMapClone(t *testing.T) {
 	assert.DeepEqual(t, slices.Collect(clone.Values()), []string{"one", "two"})
 }
 
-func TestMapClear(t *testing.T) {
+func TestOrderedMapClear(t *testing.T) {
 	t.Parallel()
 
-	var m collections.Map[int, string]
+	var m collections.OrderedMap[int, string]
 	m.Set(1, "one")
 	m.Set(2, "two")
 
@@ -146,11 +146,11 @@ func padInt(n int) string {
 	return fmt.Sprintf("%10d", n)
 }
 
-func TestMapWithSizeHint(t *testing.T) { //nolint:paralleltest
+func TestOrderedMapWithSizeHint(t *testing.T) { //nolint:paralleltest
 	const N = 1024
 
 	allocs := testing.AllocsPerRun(10, func() {
-		m := collections.NewMapWithSizeHint[int, int](N)
+		m := collections.NewOrderedMapWithSizeHint[int, int](N)
 		for i := range N {
 			m.Set(i, i)
 		}
@@ -159,21 +159,21 @@ func TestMapWithSizeHint(t *testing.T) { //nolint:paralleltest
 	assert.Assert(t, allocs < 10, "allocs = %v", allocs)
 }
 
-func TestMapUnmarshalJSON(t *testing.T) {
+func TestOrderedMapUnmarshalJSON(t *testing.T) {
 	t.Parallel()
 
 	t.Run("UnmarshalJSON", func(t *testing.T) {
 		t.Parallel()
-		testMapUnmarshalJSON(t, json.Unmarshal)
+		testOrderedMapUnmarshalJSON(t, json.Unmarshal)
 	})
 	t.Run("UnmarshalJSONV2", func(t *testing.T) {
 		t.Parallel()
-		testMapUnmarshalJSON(t, func(in []byte, out any) error { return json2.Unmarshal(in, out) })
+		testOrderedMapUnmarshalJSON(t, func(in []byte, out any) error { return json2.Unmarshal(in, out) })
 	})
 }
 
-func testMapUnmarshalJSON(t *testing.T, unmarshal func([]byte, any) error) {
-	var m collections.Map[string, any]
+func testOrderedMapUnmarshalJSON(t *testing.T, unmarshal func([]byte, any) error) {
+	var m collections.OrderedMap[string, any]
 	err := unmarshal([]byte(`{"a": 1, "b": "two", "c": { "d": 4 } }`), &m)
 	assert.NilError(t, err)
 
@@ -186,7 +186,7 @@ func testMapUnmarshalJSON(t *testing.T, unmarshal func([]byte, any) error) {
 	err = unmarshal([]byte(`"foo"`), &m)
 	assert.ErrorContains(t, err, "cannot unmarshal non-object JSON value into Map")
 
-	var invalidMap collections.Map[int, any]
+	var invalidMap collections.OrderedMap[int, any]
 	err = unmarshal([]byte(`{"a": 1, "b": "two"}`), &invalidMap)
 	assert.ErrorContains(t, err, "unmarshal")
 }

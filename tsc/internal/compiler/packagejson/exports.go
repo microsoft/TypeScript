@@ -28,11 +28,11 @@ func (e *Exports) UnmarshalJSONV2(dec *jsontext.Decoder, opts json2.Options) err
 	return unmarshalJSONValueV2[Exports](&e.JSONValue, dec, opts)
 }
 
-func (e *Exports) AsObject() *collections.Map[string, *Exports] {
+func (e *Exports) AsObject() *collections.OrderedMap[string, *Exports] {
 	if e.Type != JSONValueTypeObject {
 		panic("expected object")
 	}
-	return e.Value.(*collections.Map[string, *Exports])
+	return e.Value.(*collections.OrderedMap[string, *Exports])
 }
 
 func (e *Exports) AsArray() []*Exports {
