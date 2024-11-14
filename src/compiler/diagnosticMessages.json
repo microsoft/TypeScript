@@ -8246,6 +8246,11 @@
         "code": 95197
     },
 
+    "Detected_empty_files_with_references_use_tsc_b": {
+        "category": "Message",
+        "code": 95200
+    },
+
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004

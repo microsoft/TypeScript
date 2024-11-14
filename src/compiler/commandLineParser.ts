@@ -3048,6 +3048,11 @@ function parseJsonConfigFileContentWorker(
     function getConfigFileSpecs(): ConfigFileSpecs {
         const referencesOfRaw = getPropFromRaw<ProjectReference>("references", element => typeof element === "object", "object");
         const filesSpecs = toPropValue(getSpecsFromRaw("files"));
+        if (options.noEmit && filesSpecs && filesSpecs.length === 0 && isArray(referencesOfRaw) && referencesOfRaw.length > 0) {
+            errors.push(
+                createCompilerDiagnostic(Diagnostics.Detected_empty_files_with_references_use_tsc_b)
+            );
+        }
         if (filesSpecs) {
             const hasZeroOrNoReferences = referencesOfRaw === "no-prop" || isArray(referencesOfRaw) && referencesOfRaw.length === 0;
             const hasExtends = hasProperty(raw, "extends");
