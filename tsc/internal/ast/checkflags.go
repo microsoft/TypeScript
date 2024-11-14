@@ -2,7 +2,7 @@ package ast
 
 // CheckFlags
 
-type CheckFlags = uint32
+type CheckFlags uint32
 
 const (
 	CheckFlagsNone                   CheckFlags = 0
