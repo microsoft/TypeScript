@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/stringutil"
 )
 
@@ -132,7 +132,7 @@ func (w *singleLineStringWriter) writeStringLiteral(text string) {
 	w.builder.WriteString(text)
 }
 
-func (w *singleLineStringWriter) writeSymbol(text string, symbol compiler.Symbol) {
+func (w *singleLineStringWriter) writeSymbol(text string, symbol ast.Symbol) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }

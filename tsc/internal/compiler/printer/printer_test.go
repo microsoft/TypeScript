@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/core"
 	"gotest.tools/v3/assert"
 )
 
@@ -36,7 +37,7 @@ func TestSanityCheckParsePrintRoundtrip(t *testing.T) {
 	for i, sample := range samples {
 		t.Run(fmt.Sprintf("printer sanity check %d", i), func(t *testing.T) {
 			t.Parallel()
-			file := compiler.ParseSourceFile("file.ts", sample, compiler.ScriptTargetLatest)
+			file := compiler.ParseSourceFile("file.ts", sample, core.ScriptTargetLatest)
 			emitted := PrintNode(&file.Node)
 			assert.Equal(t, emitted, sample)
 		})

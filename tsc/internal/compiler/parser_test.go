@@ -2,6 +2,8 @@ package compiler
 
 import (
 	"testing"
+
+	"github.com/microsoft/typescript-go/internal/core"
 )
 
 func BenchmarkParse(b *testing.B) {
@@ -13,7 +15,7 @@ func BenchmarkParse(b *testing.B) {
 			sourceText := f.ReadFile(b)
 
 			for i := 0; i < b.N; i++ {
-				ParseSourceFile(fileName, sourceText, ScriptTargetESNext)
+				ParseSourceFile(fileName, sourceText, core.ScriptTargetESNext)
 			}
 		})
 	}

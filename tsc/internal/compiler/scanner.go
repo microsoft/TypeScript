@@ -6,37 +6,10 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/compiler/stringutil"
-	"github.com/microsoft/typescript-go/internal/compiler/textpos"
-)
-
-type TokenFlags int32
-
-const (
-	TokenFlagsNone                           TokenFlags = 0
-	TokenFlagsPrecedingLineBreak             TokenFlags = 1 << 0
-	TokenFlagsPrecedingJSDocComment          TokenFlags = 1 << 1
-	TokenFlagsUnterminated                   TokenFlags = 1 << 2
-	TokenFlagsExtendedUnicodeEscape          TokenFlags = 1 << 3  // e.g. `\u{10ffff}`
-	TokenFlagsScientific                     TokenFlags = 1 << 4  // e.g. `10e2`
-	TokenFlagsOctal                          TokenFlags = 1 << 5  // e.g. `0777`
-	TokenFlagsHexSpecifier                   TokenFlags = 1 << 6  // e.g. `0x00000000`
-	TokenFlagsBinarySpecifier                TokenFlags = 1 << 7  // e.g. `0b0110010000000000`
-	TokenFlagsOctalSpecifier                 TokenFlags = 1 << 8  // e.g. `0o777`
-	TokenFlagsContainsSeparator              TokenFlags = 1 << 9  // e.g. `0b1100_0101`
-	TokenFlagsUnicodeEscape                  TokenFlags = 1 << 10 // e.g. `\u00a0`
-	TokenFlagsContainsInvalidEscape          TokenFlags = 1 << 11 // e.g. `\uhello`
-	TokenFlagsHexEscape                      TokenFlags = 1 << 12 // e.g. `\xa0`
-	TokenFlagsContainsLeadingZero            TokenFlags = 1 << 13 // e.g. `0888`
-	TokenFlagsContainsInvalidSeparator       TokenFlags = 1 << 14 // e.g. `0_1`
-	TokenFlagsPrecedingJSDocLeadingAsterisks TokenFlags = 1 << 15
-	TokenFlagsBinaryOrOctalSpecifier         TokenFlags = TokenFlagsBinarySpecifier | TokenFlagsOctalSpecifier
-	TokenFlagsWithSpecifier                  TokenFlags = TokenFlagsHexSpecifier | TokenFlagsBinaryOrOctalSpecifier
-	TokenFlagsStringLiteralFlags             TokenFlags = TokenFlagsHexEscape | TokenFlagsUnicodeEscape | TokenFlagsExtendedUnicodeEscape | TokenFlagsContainsInvalidEscape
-	TokenFlagsNumericLiteralFlags            TokenFlags = TokenFlagsScientific | TokenFlagsOctal | TokenFlagsContainsLeadingZero | TokenFlagsWithSpecifier | TokenFlagsContainsSeparator | TokenFlagsContainsInvalidSeparator
-	TokenFlagsTemplateLiteralLikeFlags       TokenFlags = TokenFlagsHexEscape | TokenFlagsUnicodeEscape | TokenFlagsExtendedUnicodeEscape | TokenFlagsContainsInvalidEscape
-	TokenFlagsIsInvalid                      TokenFlags = TokenFlagsOctal | TokenFlagsContainsLeadingZero | TokenFlagsContainsInvalidSeparator | TokenFlagsContainsInvalidEscape
+	"github.com/microsoft/typescript-go/internal/core"
 )
 
 type EscapeSequenceScanningFlags int32
@@ -54,155 +27,155 @@ const (
 
 type ErrorCallback func(diagnostic *diagnostics.Message, start, length int, args ...any)
 
-var textToKeyword = map[string]SyntaxKind{
-	"abstract":    SyntaxKindAbstractKeyword,
-	"accessor":    SyntaxKindAccessorKeyword,
-	"any":         SyntaxKindAnyKeyword,
-	"as":          SyntaxKindAsKeyword,
-	"asserts":     SyntaxKindAssertsKeyword,
-	"assert":      SyntaxKindAssertKeyword,
-	"bigint":      SyntaxKindBigIntKeyword,
-	"boolean":     SyntaxKindBooleanKeyword,
-	"break":       SyntaxKindBreakKeyword,
-	"case":        SyntaxKindCaseKeyword,
-	"catch":       SyntaxKindCatchKeyword,
-	"class":       SyntaxKindClassKeyword,
-	"continue":    SyntaxKindContinueKeyword,
-	"const":       SyntaxKindConstKeyword,
-	"constructor": SyntaxKindConstructorKeyword,
-	"debugger":    SyntaxKindDebuggerKeyword,
-	"declare":     SyntaxKindDeclareKeyword,
-	"default":     SyntaxKindDefaultKeyword,
-	"delete":      SyntaxKindDeleteKeyword,
-	"do":          SyntaxKindDoKeyword,
-	"else":        SyntaxKindElseKeyword,
-	"enum":        SyntaxKindEnumKeyword,
-	"export":      SyntaxKindExportKeyword,
-	"extends":     SyntaxKindExtendsKeyword,
-	"false":       SyntaxKindFalseKeyword,
-	"finally":     SyntaxKindFinallyKeyword,
-	"for":         SyntaxKindForKeyword,
-	"from":        SyntaxKindFromKeyword,
-	"function":    SyntaxKindFunctionKeyword,
-	"get":         SyntaxKindGetKeyword,
-	"if":          SyntaxKindIfKeyword,
-	"immediate":   SyntaxKindImmediateKeyword,
-	"implements":  SyntaxKindImplementsKeyword,
-	"import":      SyntaxKindImportKeyword,
-	"in":          SyntaxKindInKeyword,
-	"infer":       SyntaxKindInferKeyword,
-	"instanceof":  SyntaxKindInstanceOfKeyword,
-	"interface":   SyntaxKindInterfaceKeyword,
-	"intrinsic":   SyntaxKindIntrinsicKeyword,
-	"is":          SyntaxKindIsKeyword,
-	"keyof":       SyntaxKindKeyOfKeyword,
-	"let":         SyntaxKindLetKeyword,
-	"module":      SyntaxKindModuleKeyword,
-	"namespace":   SyntaxKindNamespaceKeyword,
-	"never":       SyntaxKindNeverKeyword,
-	"new":         SyntaxKindNewKeyword,
-	"null":        SyntaxKindNullKeyword,
-	"number":      SyntaxKindNumberKeyword,
-	"object":      SyntaxKindObjectKeyword,
-	"package":     SyntaxKindPackageKeyword,
-	"private":     SyntaxKindPrivateKeyword,
-	"protected":   SyntaxKindProtectedKeyword,
-	"public":      SyntaxKindPublicKeyword,
-	"override":    SyntaxKindOverrideKeyword,
-	"out":         SyntaxKindOutKeyword,
-	"readonly":    SyntaxKindReadonlyKeyword,
-	"require":     SyntaxKindRequireKeyword,
-	"global":      SyntaxKindGlobalKeyword,
-	"return":      SyntaxKindReturnKeyword,
-	"satisfies":   SyntaxKindSatisfiesKeyword,
-	"set":         SyntaxKindSetKeyword,
-	"static":      SyntaxKindStaticKeyword,
-	"string":      SyntaxKindStringKeyword,
-	"super":       SyntaxKindSuperKeyword,
-	"switch":      SyntaxKindSwitchKeyword,
-	"symbol":      SyntaxKindSymbolKeyword,
-	"this":        SyntaxKindThisKeyword,
-	"throw":       SyntaxKindThrowKeyword,
-	"true":        SyntaxKindTrueKeyword,
-	"try":         SyntaxKindTryKeyword,
-	"type":        SyntaxKindTypeKeyword,
-	"typeof":      SyntaxKindTypeOfKeyword,
-	"undefined":   SyntaxKindUndefinedKeyword,
-	"unique":      SyntaxKindUniqueKeyword,
-	"unknown":     SyntaxKindUnknownKeyword,
-	"using":       SyntaxKindUsingKeyword,
-	"var":         SyntaxKindVarKeyword,
-	"void":        SyntaxKindVoidKeyword,
-	"while":       SyntaxKindWhileKeyword,
-	"with":        SyntaxKindWithKeyword,
-	"yield":       SyntaxKindYieldKeyword,
-	"async":       SyntaxKindAsyncKeyword,
-	"await":       SyntaxKindAwaitKeyword,
-	"of":          SyntaxKindOfKeyword,
+var textToKeyword = map[string]ast.Kind{
+	"abstract":    ast.KindAbstractKeyword,
+	"accessor":    ast.KindAccessorKeyword,
+	"any":         ast.KindAnyKeyword,
+	"as":          ast.KindAsKeyword,
+	"asserts":     ast.KindAssertsKeyword,
+	"assert":      ast.KindAssertKeyword,
+	"bigint":      ast.KindBigIntKeyword,
+	"boolean":     ast.KindBooleanKeyword,
+	"break":       ast.KindBreakKeyword,
+	"case":        ast.KindCaseKeyword,
+	"catch":       ast.KindCatchKeyword,
+	"class":       ast.KindClassKeyword,
+	"continue":    ast.KindContinueKeyword,
+	"const":       ast.KindConstKeyword,
+	"constructor": ast.KindConstructorKeyword,
+	"debugger":    ast.KindDebuggerKeyword,
+	"declare":     ast.KindDeclareKeyword,
+	"default":     ast.KindDefaultKeyword,
+	"delete":      ast.KindDeleteKeyword,
+	"do":          ast.KindDoKeyword,
+	"else":        ast.KindElseKeyword,
+	"enum":        ast.KindEnumKeyword,
+	"export":      ast.KindExportKeyword,
+	"extends":     ast.KindExtendsKeyword,
+	"false":       ast.KindFalseKeyword,
+	"finally":     ast.KindFinallyKeyword,
+	"for":         ast.KindForKeyword,
+	"from":        ast.KindFromKeyword,
+	"function":    ast.KindFunctionKeyword,
+	"get":         ast.KindGetKeyword,
+	"if":          ast.KindIfKeyword,
+	"immediate":   ast.KindImmediateKeyword,
+	"implements":  ast.KindImplementsKeyword,
+	"import":      ast.KindImportKeyword,
+	"in":          ast.KindInKeyword,
+	"infer":       ast.KindInferKeyword,
+	"instanceof":  ast.KindInstanceOfKeyword,
+	"interface":   ast.KindInterfaceKeyword,
+	"intrinsic":   ast.KindIntrinsicKeyword,
+	"is":          ast.KindIsKeyword,
+	"keyof":       ast.KindKeyOfKeyword,
+	"let":         ast.KindLetKeyword,
+	"module":      ast.KindModuleKeyword,
+	"namespace":   ast.KindNamespaceKeyword,
+	"never":       ast.KindNeverKeyword,
+	"new":         ast.KindNewKeyword,
+	"null":        ast.KindNullKeyword,
+	"number":      ast.KindNumberKeyword,
+	"object":      ast.KindObjectKeyword,
+	"package":     ast.KindPackageKeyword,
+	"private":     ast.KindPrivateKeyword,
+	"protected":   ast.KindProtectedKeyword,
+	"public":      ast.KindPublicKeyword,
+	"override":    ast.KindOverrideKeyword,
+	"out":         ast.KindOutKeyword,
+	"readonly":    ast.KindReadonlyKeyword,
+	"require":     ast.KindRequireKeyword,
+	"global":      ast.KindGlobalKeyword,
+	"return":      ast.KindReturnKeyword,
+	"satisfies":   ast.KindSatisfiesKeyword,
+	"set":         ast.KindSetKeyword,
+	"static":      ast.KindStaticKeyword,
+	"string":      ast.KindStringKeyword,
+	"super":       ast.KindSuperKeyword,
+	"switch":      ast.KindSwitchKeyword,
+	"symbol":      ast.KindSymbolKeyword,
+	"this":        ast.KindThisKeyword,
+	"throw":       ast.KindThrowKeyword,
+	"true":        ast.KindTrueKeyword,
+	"try":         ast.KindTryKeyword,
+	"type":        ast.KindTypeKeyword,
+	"typeof":      ast.KindTypeOfKeyword,
+	"undefined":   ast.KindUndefinedKeyword,
+	"unique":      ast.KindUniqueKeyword,
+	"unknown":     ast.KindUnknownKeyword,
+	"using":       ast.KindUsingKeyword,
+	"var":         ast.KindVarKeyword,
+	"void":        ast.KindVoidKeyword,
+	"while":       ast.KindWhileKeyword,
+	"with":        ast.KindWithKeyword,
+	"yield":       ast.KindYieldKeyword,
+	"async":       ast.KindAsyncKeyword,
+	"await":       ast.KindAwaitKeyword,
+	"of":          ast.KindOfKeyword,
 }
 
-var textToToken = map[string]SyntaxKind{
-	"{":    SyntaxKindOpenBraceToken,
-	"}":    SyntaxKindCloseBraceToken,
-	"(":    SyntaxKindOpenParenToken,
-	")":    SyntaxKindCloseParenToken,
-	"[":    SyntaxKindOpenBracketToken,
-	"]":    SyntaxKindCloseBracketToken,
-	".":    SyntaxKindDotToken,
-	"...":  SyntaxKindDotDotDotToken,
-	";":    SyntaxKindSemicolonToken,
-	",":    SyntaxKindCommaToken,
-	"<":    SyntaxKindLessThanToken,
-	">":    SyntaxKindGreaterThanToken,
-	"<=":   SyntaxKindLessThanEqualsToken,
-	">=":   SyntaxKindGreaterThanEqualsToken,
-	"==":   SyntaxKindEqualsEqualsToken,
-	"!=":   SyntaxKindExclamationEqualsToken,
-	"===":  SyntaxKindEqualsEqualsEqualsToken,
-	"!==":  SyntaxKindExclamationEqualsEqualsToken,
-	"=>":   SyntaxKindEqualsGreaterThanToken,
-	"+":    SyntaxKindPlusToken,
-	"-":    SyntaxKindMinusToken,
-	"**":   SyntaxKindAsteriskAsteriskToken,
-	"*":    SyntaxKindAsteriskToken,
-	"/":    SyntaxKindSlashToken,
-	"%":    SyntaxKindPercentToken,
-	"++":   SyntaxKindPlusPlusToken,
-	"--":   SyntaxKindMinusMinusToken,
-	"<<":   SyntaxKindLessThanLessThanToken,
-	"</":   SyntaxKindLessThanSlashToken,
-	">>":   SyntaxKindGreaterThanGreaterThanToken,
-	">>>":  SyntaxKindGreaterThanGreaterThanGreaterThanToken,
-	"&":    SyntaxKindAmpersandToken,
-	"|":    SyntaxKindBarToken,
-	"^":    SyntaxKindCaretToken,
-	"!":    SyntaxKindExclamationToken,
-	"~":    SyntaxKindTildeToken,
-	"&&":   SyntaxKindAmpersandAmpersandToken,
-	"||":   SyntaxKindBarBarToken,
-	"?":    SyntaxKindQuestionToken,
-	"??":   SyntaxKindQuestionQuestionToken,
-	"?.":   SyntaxKindQuestionDotToken,
-	":":    SyntaxKindColonToken,
-	"=":    SyntaxKindEqualsToken,
-	"+=":   SyntaxKindPlusEqualsToken,
-	"-=":   SyntaxKindMinusEqualsToken,
-	"*=":   SyntaxKindAsteriskEqualsToken,
-	"**=":  SyntaxKindAsteriskAsteriskEqualsToken,
-	"/=":   SyntaxKindSlashEqualsToken,
-	"%=":   SyntaxKindPercentEqualsToken,
-	"<<=":  SyntaxKindLessThanLessThanEqualsToken,
-	">>=":  SyntaxKindGreaterThanGreaterThanEqualsToken,
-	">>>=": SyntaxKindGreaterThanGreaterThanGreaterThanEqualsToken,
-	"&=":   SyntaxKindAmpersandEqualsToken,
-	"|=":   SyntaxKindBarEqualsToken,
-	"^=":   SyntaxKindCaretEqualsToken,
-	"||=":  SyntaxKindBarBarEqualsToken,
-	"&&=":  SyntaxKindAmpersandAmpersandEqualsToken,
-	"??=":  SyntaxKindQuestionQuestionEqualsToken,
-	"@":    SyntaxKindAtToken,
-	"#":    SyntaxKindHashToken,
-	"`":    SyntaxKindBacktickToken,
+var textToToken = map[string]ast.Kind{
+	"{":    ast.KindOpenBraceToken,
+	"}":    ast.KindCloseBraceToken,
+	"(":    ast.KindOpenParenToken,
+	")":    ast.KindCloseParenToken,
+	"[":    ast.KindOpenBracketToken,
+	"]":    ast.KindCloseBracketToken,
+	".":    ast.KindDotToken,
+	"...":  ast.KindDotDotDotToken,
+	";":    ast.KindSemicolonToken,
+	",":    ast.KindCommaToken,
+	"<":    ast.KindLessThanToken,
+	">":    ast.KindGreaterThanToken,
+	"<=":   ast.KindLessThanEqualsToken,
+	">=":   ast.KindGreaterThanEqualsToken,
+	"==":   ast.KindEqualsEqualsToken,
+	"!=":   ast.KindExclamationEqualsToken,
+	"===":  ast.KindEqualsEqualsEqualsToken,
+	"!==":  ast.KindExclamationEqualsEqualsToken,
+	"=>":   ast.KindEqualsGreaterThanToken,
+	"+":    ast.KindPlusToken,
+	"-":    ast.KindMinusToken,
+	"**":   ast.KindAsteriskAsteriskToken,
+	"*":    ast.KindAsteriskToken,
+	"/":    ast.KindSlashToken,
+	"%":    ast.KindPercentToken,
+	"++":   ast.KindPlusPlusToken,
+	"--":   ast.KindMinusMinusToken,
+	"<<":   ast.KindLessThanLessThanToken,
+	"</":   ast.KindLessThanSlashToken,
+	">>":   ast.KindGreaterThanGreaterThanToken,
+	">>>":  ast.KindGreaterThanGreaterThanGreaterThanToken,
+	"&":    ast.KindAmpersandToken,
+	"|":    ast.KindBarToken,
+	"^":    ast.KindCaretToken,
+	"!":    ast.KindExclamationToken,
+	"~":    ast.KindTildeToken,
+	"&&":   ast.KindAmpersandAmpersandToken,
+	"||":   ast.KindBarBarToken,
+	"?":    ast.KindQuestionToken,
+	"??":   ast.KindQuestionQuestionToken,
+	"?.":   ast.KindQuestionDotToken,
+	":":    ast.KindColonToken,
+	"=":    ast.KindEqualsToken,
+	"+=":   ast.KindPlusEqualsToken,
+	"-=":   ast.KindMinusEqualsToken,
+	"*=":   ast.KindAsteriskEqualsToken,
+	"**=":  ast.KindAsteriskAsteriskEqualsToken,
+	"/=":   ast.KindSlashEqualsToken,
+	"%=":   ast.KindPercentEqualsToken,
+	"<<=":  ast.KindLessThanLessThanEqualsToken,
+	">>=":  ast.KindGreaterThanGreaterThanEqualsToken,
+	">>>=": ast.KindGreaterThanGreaterThanGreaterThanEqualsToken,
+	"&=":   ast.KindAmpersandEqualsToken,
+	"|=":   ast.KindBarEqualsToken,
+	"^=":   ast.KindCaretEqualsToken,
+	"||=":  ast.KindBarBarEqualsToken,
+	"&&=":  ast.KindAmpersandAmpersandEqualsToken,
+	"??=":  ast.KindQuestionQuestionEqualsToken,
+	"@":    ast.KindAtToken,
+	"#":    ast.KindHashToken,
+	"`":    ast.KindBacktickToken,
 }
 
 // As per ECMAScript Language Specification 5th Edition, Section 7.6: ISyntaxToken Names and Identifiers
@@ -239,32 +212,32 @@ var unicodeESNextIdentifierStart = []rune{65, 90, 97, 122, 170, 170, 181, 181, 1
 var unicodeESNextIdentifierPart = []rune{48, 57, 65, 90, 95, 95, 97, 122, 170, 170, 181, 181, 183, 183, 186, 186, 192, 214, 216, 246, 248, 705, 710, 721, 736, 740, 748, 748, 750, 750, 768, 884, 886, 887, 890, 893, 895, 895, 902, 906, 908, 908, 910, 929, 931, 1013, 1015, 1153, 1155, 1159, 1162, 1327, 1329, 1366, 1369, 1369, 1376, 1416, 1425, 1469, 1471, 1471, 1473, 1474, 1476, 1477, 1479, 1479, 1488, 1514, 1519, 1522, 1552, 1562, 1568, 1641, 1646, 1747, 1749, 1756, 1759, 1768, 1770, 1788, 1791, 1791, 1808, 1866, 1869, 1969, 1984, 2037, 2042, 2042, 2045, 2045, 2048, 2093, 2112, 2139, 2144, 2154, 2160, 2183, 2185, 2190, 2200, 2273, 2275, 2403, 2406, 2415, 2417, 2435, 2437, 2444, 2447, 2448, 2451, 2472, 2474, 2480, 2482, 2482, 2486, 2489, 2492, 2500, 2503, 2504, 2507, 2510, 2519, 2519, 2524, 2525, 2527, 2531, 2534, 2545, 2556, 2556, 2558, 2558, 2561, 2563, 2565, 2570, 2575, 2576, 2579, 2600, 2602, 2608, 2610, 2611, 2613, 2614, 2616, 2617, 2620, 2620, 2622, 2626, 2631, 2632, 2635, 2637, 2641, 2641, 2649, 2652, 2654, 2654, 2662, 2677, 2689, 2691, 2693, 2701, 2703, 2705, 2707, 2728, 2730, 2736, 2738, 2739, 2741, 2745, 2748, 2757, 2759, 2761, 2763, 2765, 2768, 2768, 2784, 2787, 2790, 2799, 2809, 2815, 2817, 2819, 2821, 2828, 2831, 2832, 2835, 2856, 2858, 2864, 2866, 2867, 2869, 2873, 2876, 2884, 2887, 2888, 2891, 2893, 2901, 2903, 2908, 2909, 2911, 2915, 2918, 2927, 2929, 2929, 2946, 2947, 2949, 2954, 2958, 2960, 2962, 2965, 2969, 2970, 2972, 2972, 2974, 2975, 2979, 2980, 2984, 2986, 2990, 3001, 3006, 3010, 3014, 3016, 3018, 3021, 3024, 3024, 3031, 3031, 3046, 3055, 3072, 3084, 3086, 3088, 3090, 3112, 3114, 3129, 3132, 3140, 3142, 3144, 3146, 3149, 3157, 3158, 3160, 3162, 3165, 3165, 3168, 3171, 3174, 3183, 3200, 3203, 3205, 3212, 3214, 3216, 3218, 3240, 3242, 3251, 3253, 3257, 3260, 3268, 3270, 3272, 3274, 3277, 3285, 3286, 3293, 3294, 3296, 3299, 3302, 3311, 3313, 3315, 3328, 3340, 3342, 3344, 3346, 3396, 3398, 3400, 3402, 3406, 3412, 3415, 3423, 3427, 3430, 3439, 3450, 3455, 3457, 3459, 3461, 3478, 3482, 3505, 3507, 3515, 3517, 3517, 3520, 3526, 3530, 3530, 3535, 3540, 3542, 3542, 3544, 3551, 3558, 3567, 3570, 3571, 3585, 3642, 3648, 3662, 3664, 3673, 3713, 3714, 3716, 3716, 3718, 3722, 3724, 3747, 3749, 3749, 3751, 3773, 3776, 3780, 3782, 3782, 3784, 3790, 3792, 3801, 3804, 3807, 3840, 3840, 3864, 3865, 3872, 3881, 3893, 3893, 3895, 3895, 3897, 3897, 3902, 3911, 3913, 3948, 3953, 3972, 3974, 3991, 3993, 4028, 4038, 4038, 4096, 4169, 4176, 4253, 4256, 4293, 4295, 4295, 4301, 4301, 4304, 4346, 4348, 4680, 4682, 4685, 4688, 4694, 4696, 4696, 4698, 4701, 4704, 4744, 4746, 4749, 4752, 4784, 4786, 4789, 4792, 4798, 4800, 4800, 4802, 4805, 4808, 4822, 4824, 4880, 4882, 4885, 4888, 4954, 4957, 4959, 4969, 4977, 4992, 5007, 5024, 5109, 5112, 5117, 5121, 5740, 5743, 5759, 5761, 5786, 5792, 5866, 5870, 5880, 5888, 5909, 5919, 5940, 5952, 5971, 5984, 5996, 5998, 6000, 6002, 6003, 6016, 6099, 6103, 6103, 6108, 6109, 6112, 6121, 6155, 6157, 6159, 6169, 6176, 6264, 6272, 6314, 6320, 6389, 6400, 6430, 6432, 6443, 6448, 6459, 6470, 6509, 6512, 6516, 6528, 6571, 6576, 6601, 6608, 6618, 6656, 6683, 6688, 6750, 6752, 6780, 6783, 6793, 6800, 6809, 6823, 6823, 6832, 6845, 6847, 6862, 6912, 6988, 6992, 7001, 7019, 7027, 7040, 7155, 7168, 7223, 7232, 7241, 7245, 7293, 7296, 7304, 7312, 7354, 7357, 7359, 7376, 7378, 7380, 7418, 7424, 7957, 7960, 7965, 7968, 8005, 8008, 8013, 8016, 8023, 8025, 8025, 8027, 8027, 8029, 8029, 8031, 8061, 8064, 8116, 8118, 8124, 8126, 8126, 8130, 8132, 8134, 8140, 8144, 8147, 8150, 8155, 8160, 8172, 8178, 8180, 8182, 8188, 8204, 8205, 8255, 8256, 8276, 8276, 8305, 8305, 8319, 8319, 8336, 8348, 8400, 8412, 8417, 8417, 8421, 8432, 8450, 8450, 8455, 8455, 8458, 8467, 8469, 8469, 8472, 8477, 8484, 8484, 8486, 8486, 8488, 8488, 8490, 8505, 8508, 8511, 8517, 8521, 8526, 8526, 8544, 8584, 11264, 11492, 11499, 11507, 11520, 11557, 11559, 11559, 11565, 11565, 11568, 11623, 11631, 11631, 11647, 11670, 11680, 11686, 11688, 11694, 11696, 11702, 11704, 11710, 11712, 11718, 11720, 11726, 11728, 11734, 11736, 11742, 11744, 11775, 12293, 12295, 12321, 12335, 12337, 12341, 12344, 12348, 12353, 12438, 12441, 12447, 12449, 12543, 12549, 12591, 12593, 12686, 12704, 12735, 12784, 12799, 13312, 19903, 19968, 42124, 42192, 42237, 42240, 42508, 42512, 42539, 42560, 42607, 42612, 42621, 42623, 42737, 42775, 42783, 42786, 42888, 42891, 42954, 42960, 42961, 42963, 42963, 42965, 42969, 42994, 43047, 43052, 43052, 43072, 43123, 43136, 43205, 43216, 43225, 43232, 43255, 43259, 43259, 43261, 43309, 43312, 43347, 43360, 43388, 43392, 43456, 43471, 43481, 43488, 43518, 43520, 43574, 43584, 43597, 43600, 43609, 43616, 43638, 43642, 43714, 43739, 43741, 43744, 43759, 43762, 43766, 43777, 43782, 43785, 43790, 43793, 43798, 43808, 43814, 43816, 43822, 43824, 43866, 43868, 43881, 43888, 44010, 44012, 44013, 44016, 44025, 44032, 55203, 55216, 55238, 55243, 55291, 63744, 64109, 64112, 64217, 64256, 64262, 64275, 64279, 64285, 64296, 64298, 64310, 64312, 64316, 64318, 64318, 64320, 64321, 64323, 64324, 64326, 64433, 64467, 64829, 64848, 64911, 64914, 64967, 65008, 65019, 65024, 65039, 65056, 65071, 65075, 65076, 65101, 65103, 65136, 65140, 65142, 65276, 65296, 65305, 65313, 65338, 65343, 65343, 65345, 65370, 65381, 65470, 65474, 65479, 65482, 65487, 65490, 65495, 65498, 65500, 65536, 65547, 65549, 65574, 65576, 65594, 65596, 65597, 65599, 65613, 65616, 65629, 65664, 65786, 65856, 65908, 66045, 66045, 66176, 66204, 66208, 66256, 66272, 66272, 66304, 66335, 66349, 66378, 66384, 66426, 66432, 66461, 66464, 66499, 66504, 66511, 66513, 66517, 66560, 66717, 66720, 66729, 66736, 66771, 66776, 66811, 66816, 66855, 66864, 66915, 66928, 66938, 66940, 66954, 66956, 66962, 66964, 66965, 66967, 66977, 66979, 66993, 66995, 67001, 67003, 67004, 67072, 67382, 67392, 67413, 67424, 67431, 67456, 67461, 67463, 67504, 67506, 67514, 67584, 67589, 67592, 67592, 67594, 67637, 67639, 67640, 67644, 67644, 67647, 67669, 67680, 67702, 67712, 67742, 67808, 67826, 67828, 67829, 67840, 67861, 67872, 67897, 67968, 68023, 68030, 68031, 68096, 68099, 68101, 68102, 68108, 68115, 68117, 68119, 68121, 68149, 68152, 68154, 68159, 68159, 68192, 68220, 68224, 68252, 68288, 68295, 68297, 68326, 68352, 68405, 68416, 68437, 68448, 68466, 68480, 68497, 68608, 68680, 68736, 68786, 68800, 68850, 68864, 68903, 68912, 68921, 69248, 69289, 69291, 69292, 69296, 69297, 69373, 69404, 69415, 69415, 69424, 69456, 69488, 69509, 69552, 69572, 69600, 69622, 69632, 69702, 69734, 69749, 69759, 69818, 69826, 69826, 69840, 69864, 69872, 69881, 69888, 69940, 69942, 69951, 69956, 69959, 69968, 70003, 70006, 70006, 70016, 70084, 70089, 70092, 70094, 70106, 70108, 70108, 70144, 70161, 70163, 70199, 70206, 70209, 70272, 70278, 70280, 70280, 70282, 70285, 70287, 70301, 70303, 70312, 70320, 70378, 70384, 70393, 70400, 70403, 70405, 70412, 70415, 70416, 70419, 70440, 70442, 70448, 70450, 70451, 70453, 70457, 70459, 70468, 70471, 70472, 70475, 70477, 70480, 70480, 70487, 70487, 70493, 70499, 70502, 70508, 70512, 70516, 70656, 70730, 70736, 70745, 70750, 70753, 70784, 70853, 70855, 70855, 70864, 70873, 71040, 71093, 71096, 71104, 71128, 71133, 71168, 71232, 71236, 71236, 71248, 71257, 71296, 71352, 71360, 71369, 71424, 71450, 71453, 71467, 71472, 71481, 71488, 71494, 71680, 71738, 71840, 71913, 71935, 71942, 71945, 71945, 71948, 71955, 71957, 71958, 71960, 71989, 71991, 71992, 71995, 72003, 72016, 72025, 72096, 72103, 72106, 72151, 72154, 72161, 72163, 72164, 72192, 72254, 72263, 72263, 72272, 72345, 72349, 72349, 72368, 72440, 72704, 72712, 72714, 72758, 72760, 72768, 72784, 72793, 72818, 72847, 72850, 72871, 72873, 72886, 72960, 72966, 72968, 72969, 72971, 73014, 73018, 73018, 73020, 73021, 73023, 73031, 73040, 73049, 73056, 73061, 73063, 73064, 73066, 73102, 73104, 73105, 73107, 73112, 73120, 73129, 73440, 73462, 73472, 73488, 73490, 73530, 73534, 73538, 73552, 73561, 73648, 73648, 73728, 74649, 74752, 74862, 74880, 75075, 77712, 77808, 77824, 78895, 78912, 78933, 82944, 83526, 92160, 92728, 92736, 92766, 92768, 92777, 92784, 92862, 92864, 92873, 92880, 92909, 92912, 92916, 92928, 92982, 92992, 92995, 93008, 93017, 93027, 93047, 93053, 93071, 93760, 93823, 93952, 94026, 94031, 94087, 94095, 94111, 94176, 94177, 94179, 94180, 94192, 94193, 94208, 100343, 100352, 101589, 101632, 101640, 110576, 110579, 110581, 110587, 110589, 110590, 110592, 110882, 110898, 110898, 110928, 110930, 110933, 110933, 110948, 110951, 110960, 111355, 113664, 113770, 113776, 113788, 113792, 113800, 113808, 113817, 113821, 113822, 118528, 118573, 118576, 118598, 119141, 119145, 119149, 119154, 119163, 119170, 119173, 119179, 119210, 119213, 119362, 119364, 119808, 119892, 119894, 119964, 119966, 119967, 119970, 119970, 119973, 119974, 119977, 119980, 119982, 119993, 119995, 119995, 119997, 120003, 120005, 120069, 120071, 120074, 120077, 120084, 120086, 120092, 120094, 120121, 120123, 120126, 120128, 120132, 120134, 120134, 120138, 120144, 120146, 120485, 120488, 120512, 120514, 120538, 120540, 120570, 120572, 120596, 120598, 120628, 120630, 120654, 120656, 120686, 120688, 120712, 120714, 120744, 120746, 120770, 120772, 120779, 120782, 120831, 121344, 121398, 121403, 121452, 121461, 121461, 121476, 121476, 121499, 121503, 121505, 121519, 122624, 122654, 122661, 122666, 122880, 122886, 122888, 122904, 122907, 122913, 122915, 122916, 122918, 122922, 122928, 122989, 123023, 123023, 123136, 123180, 123184, 123197, 123200, 123209, 123214, 123214, 123536, 123566, 123584, 123641, 124112, 124153, 124896, 124902, 124904, 124907, 124909, 124910, 124912, 124926, 124928, 125124, 125136, 125142, 125184, 125259, 125264, 125273, 126464, 126467, 126469, 126495, 126497, 126498, 126500, 126500, 126503, 126503, 126505, 126514, 126516, 126519, 126521, 126521, 126523, 126523, 126530, 126530, 126535, 126535, 126537, 126537, 126539, 126539, 126541, 126543, 126545, 126546, 126548, 126548, 126551, 126551, 126553, 126553, 126555, 126555, 126557, 126557, 126559, 126559, 126561, 126562, 126564, 126564, 126567, 126570, 126572, 126578, 126580, 126583, 126585, 126588, 126590, 126590, 126592, 126601, 126603, 126619, 126625, 126627, 126629, 126633, 126635, 126651, 130032, 130041, 131072, 173791, 173824, 177977, 177984, 178205, 178208, 183969, 183984, 191456, 191472, 192093, 194560, 195101, 196608, 201546, 201552, 205743, 917760, 917999}
 
 type ScannerState struct {
-	pos          int        // Current position in text (and ending position of current token)
-	fullStartPos int        // Starting position of current token including preceding whitespace
-	tokenStart   int        // Starting position of non-whitespace part of current token
-	token        SyntaxKind // SyntaxKind of current token
-	tokenValue   string     // Parsed value of current token
-	tokenFlags   TokenFlags // Flags for current token
+	pos          int            // Current position in text (and ending position of current token)
+	fullStartPos int            // Starting position of current token including preceding whitespace
+	tokenStart   int            // Starting position of non-whitespace part of current token
+	token        ast.Kind       // Kind of current token
+	tokenValue   string         // Parsed value of current token
+	tokenFlags   ast.TokenFlags // Flags for current token
 }
 
 type Scanner struct {
 	text            string
-	languageVersion ScriptTarget
-	languageVariant LanguageVariant
+	languageVersion core.ScriptTarget
+	languageVariant core.LanguageVariant
 	onError         ErrorCallback
 	skipTrivia      bool
 	ScannerState
 }
 
 func NewScanner() *Scanner {
-	return &Scanner{languageVersion: ScriptTargetLatest, skipTrivia: true}
+	return &Scanner{languageVersion: core.ScriptTargetLatest, skipTrivia: true}
 }
 
 func (s *Scanner) Text() string {
 	return s.text
 }
 
-func (s *Scanner) Token() SyntaxKind {
+func (s *Scanner) Token() ast.Kind {
 	return s.token
 }
 
@@ -288,8 +261,8 @@ func (s *Scanner) TokenValue() string {
 	return s.tokenValue
 }
 
-func (s *Scanner) TokenRange() TextRange {
-	return NewTextRange(s.tokenStart, s.pos)
+func (s *Scanner) TokenRange() core.TextRange {
+	return core.NewTextRange(s.tokenStart, s.pos)
 }
 
 func (s *Scanner) Mark() ScannerState {
@@ -301,15 +274,15 @@ func (s *Scanner) Rewind(state ScannerState) {
 }
 
 func (s *Scanner) HasUnicodeEscape() bool {
-	return s.tokenFlags&TokenFlagsUnicodeEscape != 0
+	return s.tokenFlags&ast.TokenFlagsUnicodeEscape != 0
 }
 
 func (s *Scanner) HasExtendedUnicodeEscape() bool {
-	return s.tokenFlags&TokenFlagsExtendedUnicodeEscape != 0
+	return s.tokenFlags&ast.TokenFlagsExtendedUnicodeEscape != 0
 }
 
 func (s *Scanner) HasPrecedingLineBreak() bool {
-	return s.tokenFlags&TokenFlagsPrecedingLineBreak != 0
+	return s.tokenFlags&ast.TokenFlagsPrecedingLineBreak != 0
 }
 
 func (s *Scanner) SetText(text string) {
@@ -321,11 +294,11 @@ func (s *Scanner) SetOnError(errorCallback ErrorCallback) {
 	s.onError = errorCallback
 }
 
-func (s *Scanner) SetScriptTarget(scriptTarget ScriptTarget) {
+func (s *Scanner) SetScriptTarget(scriptTarget core.ScriptTarget) {
 	s.languageVersion = scriptTarget
 }
 
-func (s *Scanner) SetLanguageVariant(languageVariant LanguageVariant) {
+func (s *Scanner) SetLanguageVariant(languageVariant core.LanguageVariant) {
 	s.languageVariant = languageVariant
 }
 
@@ -361,9 +334,9 @@ func (s *Scanner) shouldParseJSDoc() bool {
 	return false
 }
 
-func (s *Scanner) Scan() SyntaxKind {
+func (s *Scanner) Scan() ast.Kind {
 	s.fullStartPos = s.pos
-	s.tokenFlags = TokenFlagsNone
+	s.tokenFlags = ast.TokenFlagsNone
 	for {
 		s.tokenStart = s.pos
 		ch := s.char()
@@ -372,107 +345,107 @@ func (s *Scanner) Scan() SyntaxKind {
 			s.pos++
 			continue
 		case '\n', '\r':
-			s.tokenFlags |= TokenFlagsPrecedingLineBreak
+			s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
 			s.pos++
 			continue
 		case '!':
 			if s.charAt(1) == '=' {
 				if s.charAt(2) == '=' {
 					s.pos += 3
-					s.token = SyntaxKindExclamationEqualsEqualsToken
+					s.token = ast.KindExclamationEqualsEqualsToken
 				} else {
 					s.pos += 2
-					s.token = SyntaxKindExclamationEqualsToken
+					s.token = ast.KindExclamationEqualsToken
 				}
 			} else {
 				s.pos++
-				s.token = SyntaxKindExclamationToken
+				s.token = ast.KindExclamationToken
 			}
 		case '"', '\'':
 			s.tokenValue = s.scanString(false /*jsxAttributeString*/)
-			s.token = SyntaxKindStringLiteral
+			s.token = ast.KindStringLiteral
 		case '`':
 			s.token = s.scanTemplateAndSetTokenValue(false /*shouldEmitInvalidEscapeError*/)
 		case '%':
 			if s.charAt(1) == '=' {
 				s.pos += 2
-				s.token = SyntaxKindPercentEqualsToken
+				s.token = ast.KindPercentEqualsToken
 			} else {
 				s.pos++
-				s.token = SyntaxKindPercentToken
+				s.token = ast.KindPercentToken
 			}
 		case '&':
 			if s.charAt(1) == '&' {
 				if s.charAt(2) == '=' {
 					s.pos += 3
-					s.token = SyntaxKindAmpersandAmpersandEqualsToken
+					s.token = ast.KindAmpersandAmpersandEqualsToken
 				} else {
 					s.pos += 2
-					s.token = SyntaxKindAmpersandAmpersandToken
+					s.token = ast.KindAmpersandAmpersandToken
 				}
 			} else if s.charAt(1) == '=' {
 				s.pos += 2
-				s.token = SyntaxKindAmpersandEqualsToken
+				s.token = ast.KindAmpersandEqualsToken
 			} else {
 				s.pos++
-				s.token = SyntaxKindAmpersandToken
+				s.token = ast.KindAmpersandToken
 			}
 		case '(':
 			s.pos++
-			s.token = SyntaxKindOpenParenToken
+			s.token = ast.KindOpenParenToken
 		case ')':
 			s.pos++
-			s.token = SyntaxKindCloseParenToken
+			s.token = ast.KindCloseParenToken
 		case '*':
 			if s.charAt(1) == '=' {
 				s.pos += 2
-				s.token = SyntaxKindAsteriskEqualsToken
+				s.token = ast.KindAsteriskEqualsToken
 			} else if s.charAt(1) == '*' {
 				if s.charAt(2) == '=' {
 					s.pos += 3
-					s.token = SyntaxKindAsteriskAsteriskEqualsToken
+					s.token = ast.KindAsteriskAsteriskEqualsToken
 				} else {
 					s.pos += 2
-					s.token = SyntaxKindAsteriskAsteriskToken
+					s.token = ast.KindAsteriskAsteriskToken
 				}
 			} else {
 				s.pos++
-				s.token = SyntaxKindAsteriskToken
+				s.token = ast.KindAsteriskToken
 			}
 		case '+':
 			if s.charAt(1) == '=' {
 				s.pos += 2
-				s.token = SyntaxKindPlusEqualsToken
+				s.token = ast.KindPlusEqualsToken
 			} else if s.charAt(1) == '+' {
 				s.pos += 2
-				s.token = SyntaxKindPlusPlusToken
+				s.token = ast.KindPlusPlusToken
 			} else {
 				s.pos++
-				s.token = SyntaxKindPlusToken
+				s.token = ast.KindPlusToken
 			}
 		case ',':
 			s.pos++
-			s.token = SyntaxKindCommaToken
+			s.token = ast.KindCommaToken
 		case '-':
 			if s.charAt(1) == '=' {
 				s.pos += 2
-				s.token = SyntaxKindMinusEqualsToken
+				s.token = ast.KindMinusEqualsToken
 			} else if s.charAt(1) == '-' {
 				s.pos += 2
-				s.token = SyntaxKindMinusMinusToken
+				s.token = ast.KindMinusMinusToken
 			} else {
 				s.pos++
-				s.token = SyntaxKindMinusToken
+				s.token = ast.KindMinusToken
 			}
 		case '.':
 			if stringutil.IsDigit(s.charAt(1)) {
 				s.token = s.scanNumber()
 			} else if s.charAt(1) == '.' && s.charAt(2) == '.' {
 				s.pos += 3
-				s.token = SyntaxKindDotDotDotToken
+				s.token = ast.KindDotDotDotToken
 			} else {
 				s.pos++
-				s.token = SyntaxKindDotToken
+				s.token = ast.KindDotToken
 			}
 		case '/':
 			if s.charAt(1) == '/' {
@@ -510,7 +483,7 @@ func (s *Scanner) Scan() SyntaxKind {
 							break
 						}
 						if ch == '\r' || ch == '\n' {
-							s.tokenFlags |= TokenFlagsPrecedingLineBreak
+							s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
 						}
 						s.pos++
 					} else {
@@ -522,17 +495,17 @@ func (s *Scanner) Scan() SyntaxKind {
 					}
 				}
 				if isJSDoc && s.shouldParseJSDoc() {
-					s.tokenFlags |= TokenFlagsPrecedingJSDocComment
+					s.tokenFlags |= ast.TokenFlagsPrecedingJSDocComment
 				}
 				// commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
 				continue
 			}
 			if s.charAt(1) == '=' {
 				s.pos += 2
-				s.token = SyntaxKindSlashEqualsToken
+				s.token = ast.KindSlashEqualsToken
 			} else {
 				s.pos++
-				s.token = SyntaxKindSlashToken
+				s.token = ast.KindSlashToken
 			}
 		case '0':
 			if s.charAt(1) == 'X' || s.charAt(1) == 'x' {
@@ -543,7 +516,7 @@ func (s *Scanner) Scan() SyntaxKind {
 					digits = "0"
 				}
 				s.tokenValue = "0x" + digits
-				s.tokenFlags |= TokenFlagsHexSpecifier
+				s.tokenFlags |= ast.TokenFlagsHexSpecifier
 				s.token = s.scanBigIntSuffix()
 				break
 			}
@@ -555,7 +528,7 @@ func (s *Scanner) Scan() SyntaxKind {
 					digits = "0"
 				}
 				s.tokenValue = "0b" + digits
-				s.tokenFlags |= TokenFlagsBinarySpecifier
+				s.tokenFlags |= ast.TokenFlagsBinarySpecifier
 				s.token = s.scanBigIntSuffix()
 				break
 			}
@@ -567,7 +540,7 @@ func (s *Scanner) Scan() SyntaxKind {
 					digits = "0"
 				}
 				s.tokenValue = "0o" + digits
-				s.tokenFlags |= TokenFlagsOctalSpecifier
+				s.tokenFlags |= ast.TokenFlagsOctalSpecifier
 				s.token = s.scanBigIntSuffix()
 				break
 			}
@@ -576,37 +549,37 @@ func (s *Scanner) Scan() SyntaxKind {
 			s.token = s.scanNumber()
 		case ':':
 			s.pos++
-			s.token = SyntaxKindColonToken
+			s.token = ast.KindColonToken
 		case ';':
 			s.pos++
-			s.token = SyntaxKindSemicolonToken
+			s.token = ast.KindSemicolonToken
 		case '<':
 			if isConflictMarkerTrivia(s.text, s.pos) {
 				s.pos = scanConflictMarkerTrivia(s.text, s.pos, s.errorAt)
 				if s.skipTrivia {
 					continue
 				} else {
-					s.token = SyntaxKindConflictMarkerTrivia
+					s.token = ast.KindConflictMarkerTrivia
 					return s.token
 				}
 			}
 			if s.charAt(1) == '<' {
 				if s.charAt(2) == '=' {
 					s.pos += 3
-					s.token = SyntaxKindLessThanLessThanEqualsToken
+					s.token = ast.KindLessThanLessThanEqualsToken
 				} else {
 					s.pos += 2
-					s.token = SyntaxKindLessThanLessThanToken
+					s.token = ast.KindLessThanLessThanToken
 				}
 			} else if s.charAt(1) == '=' {
 				s.pos += 2
-				s.token = SyntaxKindLessThanEqualsToken
-			} else if s.languageVariant == LanguageVariantJSX && s.charAt(1) == '/' && s.charAt(2) != '*' {
+				s.token = ast.KindLessThanEqualsToken
+			} else if s.languageVariant == core.LanguageVariantJSX && s.charAt(1) == '/' && s.charAt(2) != '*' {
 				s.pos += 2
-				s.token = SyntaxKindLessThanSlashToken
+				s.token = ast.KindLessThanSlashToken
 			} else {
 				s.pos++
-				s.token = SyntaxKindLessThanToken
+				s.token = ast.KindLessThanToken
 			}
 		case '=':
 			if isConflictMarkerTrivia(s.text, s.pos) {
@@ -614,24 +587,24 @@ func (s *Scanner) Scan() SyntaxKind {
 				if s.skipTrivia {
 					continue
 				} else {
-					s.token = SyntaxKindConflictMarkerTrivia
+					s.token = ast.KindConflictMarkerTrivia
 					return s.token
 				}
 			}
 			if s.charAt(1) == '=' {
 				if s.charAt(2) == '=' {
 					s.pos += 3
-					s.token = SyntaxKindEqualsEqualsEqualsToken
+					s.token = ast.KindEqualsEqualsEqualsToken
 				} else {
 					s.pos += 2
-					s.token = SyntaxKindEqualsEqualsToken
+					s.token = ast.KindEqualsEqualsToken
 				}
 			} else if s.charAt(1) == '>' {
 				s.pos += 2
-				s.token = SyntaxKindEqualsGreaterThanToken
+				s.token = ast.KindEqualsGreaterThanToken
 			} else {
 				s.pos++
-				s.token = SyntaxKindEqualsToken
+				s.token = ast.KindEqualsToken
 			}
 		case '>':
 			if isConflictMarkerTrivia(s.text, s.pos) {
@@ -639,79 +612,79 @@ func (s *Scanner) Scan() SyntaxKind {
 				if s.skipTrivia {
 					continue
 				} else {
-					s.token = SyntaxKindConflictMarkerTrivia
+					s.token = ast.KindConflictMarkerTrivia
 					return s.token
 				}
 			}
 			s.pos++
-			s.token = SyntaxKindGreaterThanToken
+			s.token = ast.KindGreaterThanToken
 		case '?':
 			if s.charAt(1) == '.' && !stringutil.IsDigit(s.charAt(2)) {
 				s.pos += 2
-				s.token = SyntaxKindQuestionDotToken
+				s.token = ast.KindQuestionDotToken
 			} else if s.charAt(1) == '?' {
 				if s.charAt(2) == '=' {
 					s.pos += 3
-					s.token = SyntaxKindQuestionQuestionEqualsToken
+					s.token = ast.KindQuestionQuestionEqualsToken
 				} else {
 					s.pos += 2
-					s.token = SyntaxKindQuestionQuestionToken
+					s.token = ast.KindQuestionQuestionToken
 				}
 			} else {
 				s.pos++
-				s.token = SyntaxKindQuestionToken
+				s.token = ast.KindQuestionToken
 			}
 		case '[':
 			s.pos++
-			s.token = SyntaxKindOpenBracketToken
+			s.token = ast.KindOpenBracketToken
 		case ']':
 			s.pos++
-			s.token = SyntaxKindCloseBracketToken
+			s.token = ast.KindCloseBracketToken
 		case '^':
 			if s.charAt(1) == '=' {
 				s.pos += 2
-				s.token = SyntaxKindCaretEqualsToken
+				s.token = ast.KindCaretEqualsToken
 			} else {
 				s.pos++
-				s.token = SyntaxKindCaretToken
+				s.token = ast.KindCaretToken
 			}
 		case '{':
 			s.pos++
-			s.token = SyntaxKindOpenBraceToken
+			s.token = ast.KindOpenBraceToken
 		case '|':
 			if isConflictMarkerTrivia(s.text, s.pos) {
 				s.pos = scanConflictMarkerTrivia(s.text, s.pos, s.errorAt)
 				if s.skipTrivia {
 					continue
 				} else {
-					s.token = SyntaxKindConflictMarkerTrivia
+					s.token = ast.KindConflictMarkerTrivia
 					return s.token
 				}
 			}
 			if s.charAt(1) == '|' {
 				if s.charAt(2) == '=' {
 					s.pos += 3
-					s.token = SyntaxKindBarBarEqualsToken
+					s.token = ast.KindBarBarEqualsToken
 				} else {
 					s.pos += 2
-					s.token = SyntaxKindBarBarToken
+					s.token = ast.KindBarBarToken
 				}
 			} else if s.charAt(1) == '=' {
 				s.pos += 2
-				s.token = SyntaxKindBarEqualsToken
+				s.token = ast.KindBarEqualsToken
 			} else {
 				s.pos++
-				s.token = SyntaxKindBarToken
+				s.token = ast.KindBarToken
 			}
 		case '}':
 			s.pos++
-			s.token = SyntaxKindCloseBraceToken
+			s.token = ast.KindCloseBraceToken
 		case '~':
 			s.pos++
-			s.token = SyntaxKindTildeToken
+			s.token = ast.KindTildeToken
 		case '@':
 			s.pos++
-			s.token = SyntaxKindAtToken
+			s.token = ast.KindAtToken
 		case '\\':
 			cp := s.peekUnicodeEscape()
 			if cp >= 0 && isIdentifierStart(cp, s.languageVersion) {
@@ -731,7 +704,7 @@ func (s *Scanner) Scan() SyntaxKind {
 				}
 				s.errorAt(diagnostics.X_can_only_be_used_at_the_start_of_a_file, s.pos, 2)
 				s.pos += 2
-				s.token = SyntaxKindUnknown
+				s.token = ast.KindUnknown
 				break
 			}
 			if s.charAt(1) == '\\' {
@@ -739,20 +712,20 @@ func (s *Scanner) Scan() SyntaxKind {
 				cp := s.peekUnicodeEscape()
 				if cp >= 0 && isIdentifierStart(cp, s.languageVersion) {
 					s.tokenValue = "#" + string(s.scanUnicodeEscape(true)) + s.scanIdentifierParts()
-					s.token = SyntaxKindPrivateIdentifier
+					s.token = ast.KindPrivateIdentifier
 					break
 				}
 				s.pos--
 			}
 			if s.scanIdentifier(1) {
-				s.token = SyntaxKindPrivateIdentifier
+				s.token = ast.KindPrivateIdentifier
 			} else {
 				s.errorAt(diagnostics.Invalid_character, s.pos-1, 1)
-				s.token = SyntaxKindUnknown
+				s.token = ast.KindUnknown
 			}
 		default:
 			if ch < 0 {
-				s.token = SyntaxKindEndOfFile
+				s.token = ast.KindEndOfFile
 				break
 			}
 			if s.scanIdentifier(0) {
@@ -763,7 +736,7 @@ func (s *Scanner) Scan() SyntaxKind {
 			if ch == utf8.RuneError && size == 1 {
 				s.errorAt(diagnostics.File_appears_to_be_binary, 0, 0)
 				s.pos = len(s.text)
-				s.token = SyntaxKindNonTextFileMarkerTrivia
+				s.token = ast.KindNonTextFileMarkerTrivia
 				break
 			}
 			if stringutil.IsWhiteSpaceSingleLine(ch) {
@@ -771,7 +744,7 @@ func (s *Scanner) Scan() SyntaxKind {
 				continue
 			}
 			if stringutil.IsLineBreak(ch) {
-				s.tokenFlags |= TokenFlagsPrecedingLineBreak
+				s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
 				s.pos += size
 				continue
 			}
@@ -781,50 +754,50 @@ func (s *Scanner) Scan() SyntaxKind {
 	}
 }
 
-func (s *Scanner) ReScanLessThanToken() SyntaxKind {
-	if s.token == SyntaxKindLessThanLessThanToken {
+func (s *Scanner) ReScanLessThanToken() ast.Kind {
+	if s.token == ast.KindLessThanLessThanToken {
 		s.pos = s.tokenStart + 1
-		s.token = SyntaxKindLessThanToken
+		s.token = ast.KindLessThanToken
 	}
 	return s.token
 }
 
-func (s *Scanner) ReScanGreaterThanToken() SyntaxKind {
-	if s.token == SyntaxKindGreaterThanToken {
+func (s *Scanner) ReScanGreaterThanToken() ast.Kind {
+	if s.token == ast.KindGreaterThanToken {
 		s.pos = s.tokenStart + 1
 		if s.char() == '>' {
 			if s.charAt(1) == '>' {
 				if s.charAt(2) == '=' {
 					s.pos += 3
-					s.token = SyntaxKindGreaterThanGreaterThanGreaterThanEqualsToken
+					s.token = ast.KindGreaterThanGreaterThanGreaterThanEqualsToken
 				} else {
 					s.pos += 2
-					s.token = SyntaxKindGreaterThanGreaterThanGreaterThanToken
+					s.token = ast.KindGreaterThanGreaterThanGreaterThanToken
 				}
 			} else if s.charAt(1) == '=' {
 				s.pos += 2
-				s.token = SyntaxKindGreaterThanGreaterThanEqualsToken
+				s.token = ast.KindGreaterThanGreaterThanEqualsToken
 			} else {
 				s.pos++
-				s.token = SyntaxKindGreaterThanGreaterThanToken
+				s.token = ast.KindGreaterThanGreaterThanToken
 			}
 		} else if s.char() == '=' {
 			s.pos++
-			s.token = SyntaxKindGreaterThanEqualsToken
+			s.token = ast.KindGreaterThanEqualsToken
 		}
 	}
 	return s.token
 }
 
-func (s *Scanner) ReScanTemplateToken(isTaggedTemplate bool) SyntaxKind {
+func (s *Scanner) ReScanTemplateToken(isTaggedTemplate bool) ast.Kind {
 	s.pos = s.tokenStart
 	s.token = s.scanTemplateAndSetTokenValue(!isTaggedTemplate)
 	return s.token
 }
 
 // !!! https://github.com/microsoft/TypeScript/pull/55600
-func (s *Scanner) ReScanSlashToken() SyntaxKind {
-	if s.token == SyntaxKindSlashToken || s.token == SyntaxKindSlashEqualsToken {
+func (s *Scanner) ReScanSlashToken() ast.Kind {
+	if s.token == ast.KindSlashToken || s.token == ast.KindSlashEqualsToken {
 		s.pos = s.tokenStart + 1
 		inEscape := false
 		inCharacterClass := false
@@ -835,7 +808,7 @@ func (s *Scanner) ReScanSlashToken() SyntaxKind {
 			// regex.  Report error and return what we have so far.
 			switch {
 			case size == 0 || stringutil.IsLineBreak(ch):
-				s.tokenFlags |= TokenFlagsUnterminated
+				s.tokenFlags |= ast.TokenFlagsUnterminated
 				s.error(diagnostics.Unterminated_regular_expression_literal)
 				break loop
 			case inEscape:
@@ -864,40 +837,40 @@ func (s *Scanner) ReScanSlashToken() SyntaxKind {
 			s.pos += size
 		}
 		s.tokenValue = s.text[s.tokenStart:s.pos]
-		s.token = SyntaxKindRegularExpressionLiteral
+		s.token = ast.KindRegularExpressionLiteral
 	}
 	return s.token
 }
 
-func (s *Scanner) reScanJsxToken(allowMultilineJsxText bool) SyntaxKind {
+func (s *Scanner) reScanJsxToken(allowMultilineJsxText bool) ast.Kind {
 	s.pos = s.fullStartPos
 	s.tokenStart = s.fullStartPos
 	s.token = s.scanJsxTokenEx(allowMultilineJsxText)
 	return s.token
 }
 
-func (s *Scanner) scanJsxToken() SyntaxKind {
+func (s *Scanner) scanJsxToken() ast.Kind {
 	return s.scanJsxTokenEx(true /*allowMultilineJsxText*/)
 }
 
-func (s *Scanner) scanJsxTokenEx(allowMultilineJsxText bool) SyntaxKind {
+func (s *Scanner) scanJsxTokenEx(allowMultilineJsxText bool) ast.Kind {
 	s.fullStartPos = s.pos
 	s.tokenStart = s.pos
 	ch := s.char()
 	switch {
 	case ch < 0:
-		s.token = SyntaxKindEndOfFile
+		s.token = ast.KindEndOfFile
 	case ch == '<':
 		if s.charAt(1) == '/' {
 			s.pos += 2
-			s.token = SyntaxKindLessThanSlashToken
+			s.token = ast.KindLessThanSlashToken
 		} else {
 			s.pos++
-			s.token = SyntaxKindLessThanToken
+			s.token = ast.KindLessThanToken
 		}
 	case ch == '{':
 		s.pos++
-		s.token = SyntaxKindOpenBraceToken
+		s.token = ast.KindOpenBraceToken
 	default:
 		// First non-whitespace character on this line.
 		firstNonWhitespace := 0
@@ -911,7 +884,7 @@ func (s *Scanner) scanJsxTokenEx(allowMultilineJsxText bool) SyntaxKind {
 			if ch == '<' {
 				if isConflictMarkerTrivia(s.text, s.pos) {
 					s.pos = scanConflictMarkerTrivia(s.text, s.pos, s.errorAt)
-					s.token = SyntaxKindConflictMarkerTrivia
+					s.token = ast.KindConflictMarkerTrivia
 					return s.token
 				}
 				break
@@ -939,16 +912,16 @@ func (s *Scanner) scanJsxTokenEx(allowMultilineJsxText bool) SyntaxKind {
 			s.pos += size
 		}
 		s.tokenValue = s.text[s.fullStartPos:s.pos]
-		s.token = SyntaxKindJsxText
+		s.token = ast.KindJsxText
 		if firstNonWhitespace == -1 {
-			s.token = SyntaxKindJsxTextAllWhiteSpaces
+			s.token = ast.KindJsxTextAllWhiteSpaces
 		}
 	}
 	return s.token
 }
 
 // Scans a JSX identifier; these differ from normal identifiers in that they allow dashes
-func (s *Scanner) scanJsxIdentifier() SyntaxKind {
+func (s *Scanner) scanJsxIdentifier() ast.Kind {
 	if tokenIsIdentifierOrKeyword(s.token) {
 		// An identifier or keyword has already been parsed - check for a `-` or a single instance of `:` and then append it and
 		// everything after it to the token
@@ -975,12 +948,12 @@ func (s *Scanner) scanJsxIdentifier() SyntaxKind {
 	return s.token
 }
 
-func (s *Scanner) scanJsxAttributeValue() SyntaxKind {
+func (s *Scanner) scanJsxAttributeValue() ast.Kind {
 	s.fullStartPos = s.pos
 	switch s.char() {
 	case '"', '\'':
 		s.tokenValue = s.scanString(true /*jsxAttributeString*/)
-		s.token = SyntaxKindStringLiteral
+		s.token = ast.KindStringLiteral
 		return s.token
 	default:
 		// If this scans anything other than `{`, it's a parse error.
@@ -988,7 +961,7 @@ func (s *Scanner) scanJsxAttributeValue() SyntaxKind {
 	}
 }
 
-func (s *Scanner) reScanJsxAttributeValue() SyntaxKind {
+func (s *Scanner) reScanJsxAttributeValue() ast.Kind {
 	s.pos = s.fullStartPos
 	s.tokenStart = s.fullStartPos
 	return s.scanJsxAttributeValue()
@@ -1064,7 +1037,7 @@ func (s *Scanner) scanString(jsxAttributeString bool) string {
 		ch := s.char()
 		if ch < 0 {
 			sb.WriteString(s.text[start:s.pos])
-			s.tokenFlags |= TokenFlagsUnterminated
+			s.tokenFlags |= ast.TokenFlagsUnterminated
 			s.error(diagnostics.Unterminated_string_literal)
 			break
 		}
@@ -1081,7 +1054,7 @@ func (s *Scanner) scanString(jsxAttributeString bool) string {
 		}
 		if ch == '\n' || ch == '\r' && !jsxAttributeString {
 			sb.WriteString(s.text[start:s.pos])
-			s.tokenFlags |= TokenFlagsUnterminated
+			s.tokenFlags |= ast.TokenFlagsUnterminated
 			s.error(diagnostics.Unterminated_string_literal)
 			break
 		}
@@ -1090,12 +1063,12 @@ func (s *Scanner) scanString(jsxAttributeString bool) string {
 	return sb.String()
 }
 
-func (s *Scanner) scanTemplateAndSetTokenValue(shouldEmitInvalidEscapeError bool) SyntaxKind {
+func (s *Scanner) scanTemplateAndSetTokenValue(shouldEmitInvalidEscapeError bool) ast.Kind {
 	startedWithBacktick := s.char() == '`'
 	start := s.pos
 	s.pos++
 	contents := ""
-	var token SyntaxKind
+	var token ast.Kind
 	for {
 		ch := s.char()
 		if ch < 0 || ch == '`' {
@@ -1103,16 +1076,16 @@ func (s *Scanner) scanTemplateAndSetTokenValue(shouldEmitInvalidEscapeError bool
 			if ch == '`' {
 				s.pos++
 			} else {
-				s.tokenFlags |= TokenFlagsUnterminated
+				s.tokenFlags |= ast.TokenFlagsUnterminated
 				s.error(diagnostics.Unterminated_template_literal)
 			}
-			token = ifElse(startedWithBacktick, SyntaxKindNoSubstitutionTemplateLiteral, SyntaxKindTemplateTail)
+			token = ifElse(startedWithBacktick, ast.KindNoSubstitutionTemplateLiteral, ast.KindTemplateTail)
 			break
 		}
 		if ch == '$' && s.charAt(1) == '{' {
 			contents += s.text[start:s.pos]
 			s.pos += 2
-			token = ifElse(startedWithBacktick, SyntaxKindTemplateHead, SyntaxKindTemplateMiddle)
+			token = ifElse(startedWithBacktick, ast.KindTemplateHead, ast.KindTemplateMiddle)
 			break
 		}
 		if ch == '\\' {
@@ -1170,7 +1143,7 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 			s.pos++
 		}
 		// '\47'
-		s.tokenFlags |= TokenFlagsContainsInvalidEscape
+		s.tokenFlags |= ast.TokenFlagsContainsInvalidEscape
 		if flags&EscapeSequenceScanningFlagsReportInvalidEscapeErrors != 0 {
 			code, _ := strconv.ParseInt(s.text[start+1:s.pos], 8, 32)
 			if flags&EscapeSequenceScanningFlagsRegularExpression != 0 && flags&EscapeSequenceScanningFlagsAtomEscape == 0 && ch != '0' {
@@ -1183,7 +1156,7 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 		return s.text[start:s.pos]
 	case '8', '9':
 		// the invalid '\8' and '\9'
-		s.tokenFlags |= TokenFlagsContainsInvalidEscape
+		s.tokenFlags |= ast.TokenFlagsContainsInvalidEscape
 		if flags&EscapeSequenceScanningFlagsReportInvalidEscapeErrors != 0 {
 			if flags&EscapeSequenceScanningFlagsRegularExpression != 0 && flags&EscapeSequenceScanningFlagsAtomEscape == 0 {
 				s.errorAt(diagnostics.Decimal_escape_sequences_and_backreferences_are_not_allowed_in_a_character_class, start, s.pos-start)
@@ -1215,27 +1188,27 @@ func (s *Scanner) scanEscapeSequence(flags EscapeSequenceScanningFlags) string {
 		s.pos -= 2
 		codePoint := s.scanUnicodeEscape(flags&EscapeSequenceScanningFlagsReportInvalidEscapeErrors != 0)
 		if codePoint < 0 {
-			s.tokenFlags |= TokenFlagsContainsInvalidEscape
+			s.tokenFlags |= ast.TokenFlagsContainsInvalidEscape
 			return s.text[start:s.pos]
 		}
 		if extended {
-			s.tokenFlags |= TokenFlagsExtendedUnicodeEscape
+			s.tokenFlags |= ast.TokenFlagsExtendedUnicodeEscape
 		} else {
-			s.tokenFlags |= TokenFlagsUnicodeEscape
+			s.tokenFlags |= ast.TokenFlagsUnicodeEscape
 		}
 		return string(codePoint)
 	case 'x':
 		// '\xDD'
 		for ; s.pos < start+4; s.pos++ {
 			if !stringutil.IsHexDigit(s.char()) {
-				s.tokenFlags |= TokenFlagsContainsInvalidEscape
+				s.tokenFlags |= ast.TokenFlagsContainsInvalidEscape
 				if flags&EscapeSequenceScanningFlagsReportInvalidEscapeErrors != 0 {
 					s.error(diagnostics.Hexadecimal_digit_expected)
 				}
 				return s.text[start:s.pos]
 			}
 		}
-		s.tokenFlags |= TokenFlagsHexEscape
+		s.tokenFlags |= ast.TokenFlagsHexEscape
 		escapedValue, _ := strconv.ParseInt(s.text[start+2:s.pos], 16, 32)
 		return string(rune(escapedValue))
 	case '\r':
@@ -1306,13 +1279,13 @@ func (s *Scanner) peekUnicodeEscape() rune {
 	return -1
 }
 
-func (s *Scanner) scanNumber() SyntaxKind {
+func (s *Scanner) scanNumber() ast.Kind {
 	start := s.pos
 	var fixedPart string
 	if s.char() == '0' {
 		s.pos++
 		if s.char() == '_' {
-			s.tokenFlags |= TokenFlagsContainsSeparator | TokenFlagsContainsInvalidSeparator
+			s.tokenFlags |= ast.TokenFlagsContainsSeparator | ast.TokenFlagsContainsInvalidSeparator
 			s.errorAt(diagnostics.Numeric_separators_are_not_allowed_here, s.pos, 1)
 			s.pos = start
 			fixedPart = s.scanNumberFragment()
@@ -1321,13 +1294,13 @@ func (s *Scanner) scanNumber() SyntaxKind {
 			if digits == "" {
 				fixedPart = "0"
 			} else if !isOctal {
-				s.tokenFlags |= TokenFlagsContainsLeadingZero
+				s.tokenFlags |= ast.TokenFlagsContainsLeadingZero
 				fixedPart = digits
 			} else {
-				s.tokenFlags |= TokenFlagsOctal
+				s.tokenFlags |= ast.TokenFlagsOctal
 				s.tokenValue = "0o" + digits
 				s.errorAt(diagnostics.Octal_literals_are_not_allowed_Use_the_syntax_0, start, s.pos-start, digits)
-				return SyntaxKindNumericLiteral
+				return ast.KindNumericLiteral
 			}
 		}
 	} else {
@@ -1344,7 +1317,7 @@ func (s *Scanner) scanNumber() SyntaxKind {
 	end := s.pos
 	if s.char() == 'E' || s.char() == 'e' {
 		s.pos++
-		s.tokenFlags |= TokenFlagsScientific
+		s.tokenFlags |= ast.TokenFlagsScientific
 		if s.char() == '+' || s.char() == '-' {
 			s.pos++
 		}
@@ -1357,7 +1330,7 @@ func (s *Scanner) scanNumber() SyntaxKind {
 			end = s.pos
 		}
 	}
-	if s.tokenFlags&TokenFlagsContainsSeparator != 0 {
+	if s.tokenFlags&ast.TokenFlagsContainsSeparator != 0 {
 		s.tokenValue = fixedPart
 		if fractionalPart != "" {
 			s.tokenValue += "." + fractionalPart
@@ -1368,24 +1341,24 @@ func (s *Scanner) scanNumber() SyntaxKind {
 	} else {
 		s.tokenValue = s.text[start:end]
 	}
-	if s.tokenFlags&TokenFlagsContainsLeadingZero != 0 {
+	if s.tokenFlags&ast.TokenFlagsContainsLeadingZero != 0 {
 		s.errorAt(diagnostics.Decimals_with_leading_zeros_are_not_allowed, start, s.pos-start)
 		s.tokenValue = numberToString(stringToNumber(s.tokenValue))
-		return SyntaxKindNumericLiteral
+		return ast.KindNumericLiteral
 	}
-	var result SyntaxKind
+	var result ast.Kind
 	if fixedPartEnd == s.pos {
 		result = s.scanBigIntSuffix()
 	} else {
 		s.tokenValue = numberToString(stringToNumber(s.tokenValue))
-		result = SyntaxKindNumericLiteral
+		result = ast.KindNumericLiteral
 	}
 	ch, _ := s.charAndSize()
 	if isIdentifierStart(ch, s.languageVersion) {
 		idStart := s.pos
 		id := s.scanIdentifierParts()
-		if result != SyntaxKindBigIntLiteral && len(id) == 1 && s.text[idStart] == 'n' {
-			if s.tokenFlags&TokenFlagsScientific != 0 {
+		if result != ast.KindBigIntLiteral && len(id) == 1 && s.text[idStart] == 'n' {
+			if s.tokenFlags&ast.TokenFlagsScientific != 0 {
 				s.errorAt(diagnostics.A_bigint_literal_cannot_use_exponential_notation, start, s.pos-start)
 				return result
 			}
@@ -1408,13 +1381,13 @@ func (s *Scanner) scanNumberFragment() string {
 	for {
 		ch := s.char()
 		if ch == '_' {
-			s.tokenFlags |= TokenFlagsContainsSeparator
+			s.tokenFlags |= ast.TokenFlagsContainsSeparator
 			if allowSeparator {
 				allowSeparator = false
 				isPreviousTokenSeparator = true
 				result += s.text[start:s.pos]
 			} else {
-				s.tokenFlags |= TokenFlagsContainsInvalidSeparator
+				s.tokenFlags |= ast.TokenFlagsContainsInvalidSeparator
 				if isPreviousTokenSeparator {
 					s.errorAt(diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, s.pos, 1)
 				} else {
@@ -1434,7 +1407,7 @@ func (s *Scanner) scanNumberFragment() string {
 		break
 	}
 	if isPreviousTokenSeparator {
-		s.tokenFlags |= TokenFlagsContainsInvalidSeparator
+		s.tokenFlags |= ast.TokenFlagsContainsInvalidSeparator
 		s.errorAt(diagnostics.Numeric_separators_are_not_allowed_here, s.pos-1, 1)
 	}
 	return result + s.text[start:s.pos]
@@ -1466,7 +1439,7 @@ func (s *Scanner) scanHexDigits(minCount int, scanAsManyAsPossible bool, canHave
 			allowSeparator = canHaveSeparators
 			isPreviousTokenSeparator = false
 		} else if canHaveSeparators && ch == '_' {
-			s.tokenFlags |= TokenFlagsContainsSeparator
+			s.tokenFlags |= ast.TokenFlagsContainsSeparator
 			if allowSeparator {
 				allowSeparator = false
 				isPreviousTokenSeparator = true
@@ -1500,7 +1473,7 @@ func (s *Scanner) scanBinaryOrOctalDigits(base int32) string {
 			allowSeparator = true
 			isPreviousTokenSeparator = false
 		} else if ch == '_' {
-			s.tokenFlags |= TokenFlagsContainsSeparator
+			s.tokenFlags |= ast.TokenFlagsContainsSeparator
 			if allowSeparator {
 				allowSeparator = false
 				isPreviousTokenSeparator = true
@@ -1520,40 +1493,40 @@ func (s *Scanner) scanBinaryOrOctalDigits(base int32) string {
 	return sb.String()
 }
 
-func (s *Scanner) scanBigIntSuffix() SyntaxKind {
+func (s *Scanner) scanBigIntSuffix() ast.Kind {
 	if s.char() == 'n' {
 		s.pos++
 		s.tokenValue += "n"
 		// !!! Convert all bigint tokens to their normalized decimal representation
-		return SyntaxKindBigIntLiteral
+		return ast.KindBigIntLiteral
 	}
 	// !!! Once stringToNumber supports parsing of non-decimal values we should also convert non-decimal
 	// tokens to their normalized decimal representation
 	if len(s.tokenValue) >= 2 {
 		firstTwo := s.tokenValue[:2]
 		if firstTwo == "0x" || firstTwo == "0o" || firstTwo == "0b" {
-			return SyntaxKindNumericLiteral
+			return ast.KindNumericLiteral
 		}
 	}
 	s.tokenValue = numberToString(stringToNumber(s.tokenValue))
-	return SyntaxKindNumericLiteral
+	return ast.KindNumericLiteral
 }
 
 func (s *Scanner) scanInvalidCharacter() {
 	_, size := s.charAndSize()
 	s.errorAt(diagnostics.Invalid_character, s.pos, size)
 	s.pos += size
-	s.token = SyntaxKindUnknown
+	s.token = ast.KindUnknown
 }
 
-func getIdentifierToken(str string) SyntaxKind {
+func getIdentifierToken(str string) ast.Kind {
 	if len(str) >= 2 && len(str) <= 12 && str[0] >= 'a' && str[0] <= 'z' {
 		keyword := textToKeyword[str]
-		if keyword != SyntaxKindUnknown {
+		if keyword != ast.KindUnknown {
 			return keyword
 		}
 	}
-	return SyntaxKindIdentifier
+	return ast.KindIdentifier
 }
 
 // Section 6.1.4
@@ -1561,20 +1534,20 @@ func isWordCharacter(ch rune) bool {
 	return stringutil.IsASCIILetter(ch) || stringutil.IsDigit(ch) || ch == '_'
 }
 
-func isIdentifierStart(ch rune, languageVersion ScriptTarget) bool {
+func isIdentifierStart(ch rune, languageVersion core.ScriptTarget) bool {
 	return stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$' || ch > 0x7F && isUnicodeIdentifierStart(ch, languageVersion)
 }
 
-func isIdentifierPart(ch rune, languageVersion ScriptTarget) bool {
+func isIdentifierPart(ch rune, languageVersion core.ScriptTarget) bool {
 	return isWordCharacter(ch) || ch == '$' || ch > 0x7F && isUnicodeIdentifierPart(ch, languageVersion)
 }
 
-func isUnicodeIdentifierStart(ch rune, languageVersion ScriptTarget) bool {
-	return isInUnicodeRanges(ch, ifElse(languageVersion >= ScriptTargetES2015, unicodeESNextIdentifierStart, unicodeES5IdentifierStart))
+func isUnicodeIdentifierStart(ch rune, languageVersion core.ScriptTarget) bool {
+	return isInUnicodeRanges(ch, ifElse(languageVersion >= core.ScriptTargetES2015, unicodeESNextIdentifierStart, unicodeES5IdentifierStart))
 }
 
-func isUnicodeIdentifierPart(ch rune, languageVersion ScriptTarget) bool {
-	return isInUnicodeRanges(ch, ifElse(languageVersion >= ScriptTargetES2015, unicodeESNextIdentifierPart, unicodeES5IdentifierPart))
+func isUnicodeIdentifierPart(ch rune, languageVersion core.ScriptTarget) bool {
+	return isInUnicodeRanges(ch, ifElse(languageVersion >= core.ScriptTargetES2015, unicodeESNextIdentifierPart, unicodeES5IdentifierPart))
 }
 
 func isInUnicodeRanges(cp rune, ranges []rune) bool {
@@ -1601,10 +1574,10 @@ func isInUnicodeRanges(cp rune, ranges []rune) bool {
 	return false
 }
 
-var tokenToText map[SyntaxKind]string
+var tokenToText map[ast.Kind]string
 
 func init() {
-	tokenToText = make(map[SyntaxKind]string, len(textToKeyword)+len(textToToken))
+	tokenToText = make(map[ast.Kind]string, len(textToKeyword)+len(textToToken))
 	for text, key := range textToKeyword {
 		tokenToText[key] = text
 	}
@@ -1613,7 +1586,7 @@ func init() {
 	}
 }
 
-func TokenToString(token SyntaxKind) string {
+func TokenToString(token ast.Kind) string {
 	return tokenToText[token]
 }
 
@@ -1809,22 +1782,22 @@ func scanShebangTrivia(text string, pos int) int {
 	return pos
 }
 
-func getScannerForSourceFile(sourceFile *SourceFile, pos int) *Scanner {
+func getScannerForSourceFile(sourceFile *ast.SourceFile, pos int) *Scanner {
 	s := NewScanner()
-	s.text = sourceFile.text
+	s.text = sourceFile.Text
 	s.pos = pos
-	s.languageVersion = sourceFile.languageVersion
-	s.languageVariant = sourceFile.languageVariant
+	s.languageVersion = sourceFile.LanguageVersion
+	s.languageVariant = sourceFile.LanguageVariant
 	s.Scan()
 	return s
 }
 
-func getRangeOfTokenAtPosition(sourceFile *SourceFile, pos int) TextRange {
+func getRangeOfTokenAtPosition(sourceFile *ast.SourceFile, pos int) core.TextRange {
 	s := getScannerForSourceFile(sourceFile, pos)
-	return NewTextRange(s.tokenStart, s.pos)
+	return core.NewTextRange(s.tokenStart, s.pos)
 }
 
-func computeLineOfPosition(lineStarts []textpos.TextPos, pos textpos.TextPos) int {
+func computeLineOfPosition(lineStarts []core.TextPos, pos core.TextPos) int {
 	low := 0
 	high := len(lineStarts) - 1
 	for low <= high {
@@ -1841,23 +1814,23 @@ func computeLineOfPosition(lineStarts []textpos.TextPos, pos textpos.TextPos) in
 	return low - 1
 }
 
-func getLineStarts(sourceFile *SourceFile) []textpos.TextPos {
-	if sourceFile.lineMap == nil {
-		sourceFile.lineMap = stringutil.ComputeLineStarts(sourceFile.text)
+func getLineStarts(sourceFile *ast.SourceFile) []core.TextPos {
+	if sourceFile.LineMap == nil {
+		sourceFile.LineMap = stringutil.ComputeLineStarts(sourceFile.Text)
 	}
-	return sourceFile.lineMap
+	return sourceFile.LineMap
 }
 
-func GetLineAndCharacterOfPosition(sourceFile *SourceFile, pos int) (line int, character int) {
-	line = computeLineOfPosition(getLineStarts(sourceFile), textpos.TextPos(pos))
-	character = utf8.RuneCountInString(sourceFile.text[sourceFile.lineMap[line]:pos])
+func GetLineAndCharacterOfPosition(sourceFile *ast.SourceFile, pos int) (line int, character int) {
+	line = computeLineOfPosition(getLineStarts(sourceFile), core.TextPos(pos))
+	character = utf8.RuneCountInString(sourceFile.Text[sourceFile.LineMap[line]:pos])
 	return
 }
 
-func getEndLinePosition(sourceFile *SourceFile, line int) int {
+func getEndLinePosition(sourceFile *ast.SourceFile, line int) int {
 	pos := int(getLineStarts(sourceFile)[line])
 	for {
-		ch, size := utf8.DecodeRuneInString(sourceFile.text[pos:])
+		ch, size := utf8.DecodeRuneInString(sourceFile.Text[pos:])
 		if size == 0 || stringutil.IsLineBreak(ch) {
 			return pos
 		}
@@ -1865,11 +1838,11 @@ func getEndLinePosition(sourceFile *SourceFile, line int) int {
 	}
 }
 
-func GetPositionOfLineAndCharacter(sourceFile *SourceFile, line int, character int) textpos.TextPos {
+func GetPositionOfLineAndCharacter(sourceFile *ast.SourceFile, line int, character int) core.TextPos {
 	return ComputePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character)
 }
 
-func ComputePositionOfLineAndCharacter(lineStarts []textpos.TextPos, line int, character int) textpos.TextPos {
+func ComputePositionOfLineAndCharacter(lineStarts []core.TextPos, line int, character int) core.TextPos {
 	/// !!! debugText, allowEdits
 	if line < 0 || line >= len(lineStarts) {
 		// if (allowEdits) {
@@ -1879,7 +1852,7 @@ func ComputePositionOfLineAndCharacter(lineStarts []textpos.TextPos, line int, c
 		panic(fmt.Sprintf("Bad line number. Line: %d, lineStarts.length: %d.", line, len(lineStarts)))
 	}
 
-	res := (lineStarts[line]) + textpos.TextPos(character)
+	res := (lineStarts[line]) + core.TextPos(character)
 
 	// !!!
 	// if (allowEdits) {

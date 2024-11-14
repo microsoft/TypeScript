@@ -8,8 +8,9 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
-	"github.com/microsoft/typescript-go/internal/compiler/textpos"
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -33,7 +34,7 @@ const (
 	ellipsis            = "..."
 )
 
-func FormatDiagnosticsWithColorAndContext(output *strings.Builder, diags []*Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+func FormatDiagnosticsWithColorAndContext(output *strings.Builder, diags []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
 	if len(diags) == 0 {
 		return
 	}
@@ -43,10 +44,10 @@ func FormatDiagnosticsWithColorAndContext(output *strings.Builder, diags []*Diag
 			output.WriteString(formatOpts.NewLine)
 		}
 
-		if diagnostic.file != nil {
-			file := diagnostic.file
-			pos := diagnostic.loc.Pos()
-			WriteLocation(output, file, pos, formatOpts, writeWithStyleAndReset)
+		if diagnostic.File() != nil {
+			file := diagnostic.File()
+			pos := diagnostic.Loc().Pos()
+			WriteLocation(output, file, int(pos), formatOpts, writeWithStyleAndReset)
 			output.WriteString(" - ")
 		}
 
@@ -78,11 +79,11 @@ func FormatDiagnosticsWithColorAndContext(output *strings.Builder, diags []*Diag
 	}
 }
 
-func writeCodeSnippet(writer *strings.Builder, sourceFile *SourceFile, start int, length int, squiggleColor string, formatOpts *DiagnosticsFormattingOptions) {
+func writeCodeSnippet(writer *strings.Builder, sourceFile *ast.SourceFile, start int, length int, squiggleColor string, formatOpts *DiagnosticsFormattingOptions) {
 	firstLine, firstLineChar := GetLineAndCharacterOfPosition(sourceFile, start)
 	lastLine, lastLineChar := GetLineAndCharacterOfPosition(sourceFile, start+length)
 
-	lastLineOfFile, _ := GetLineAndCharacterOfPosition(sourceFile, len(sourceFile.text))
+	lastLineOfFile, _ := GetLineAndCharacterOfPosition(sourceFile, len(sourceFile.Text))
 
 	hasMoreThanFiveLines := lastLine-firstLine >= 4
 	gutterWidth := len(strconv.Itoa(lastLineOfFile + 1))
@@ -102,14 +103,14 @@ func writeCodeSnippet(writer *strings.Builder, sourceFile *SourceFile, start int
 		}
 
 		lineStart := GetPositionOfLineAndCharacter(sourceFile, i, 0)
-		var lineEnd textpos.TextPos
+		var lineEnd core.TextPos
 		if i < lastLineOfFile {
 			lineEnd = GetPositionOfLineAndCharacter(sourceFile, i+1, 0)
 		} else {
-			lineEnd = sourceFile.loc.end
+			lineEnd = sourceFile.Loc.End()
 		}
 
-		lineContent := strings.TrimRightFunc(sourceFile.text[lineStart:lineEnd], unicode.IsSpace) // trim from end
+		lineContent := strings.TrimRightFunc(sourceFile.Text[lineStart:lineEnd], unicode.IsSpace) // trim from end
 		lineContent = strings.ReplaceAll(lineContent, "\t", " ")                                  // convert tabs to single spaces
 
 		// Output the gutter and the actual contents of the line.
@@ -152,22 +153,22 @@ func writeCodeSnippet(writer *strings.Builder, sourceFile *SourceFile, start int
 	}
 }
 
-func WriteFlattenedDiagnosticMessage(writer *strings.Builder, diagnostic *Diagnostic, newline string) {
+func WriteFlattenedDiagnosticMessage(writer *strings.Builder, diagnostic *ast.Diagnostic, newline string) {
 	writer.WriteString(diagnostic.Message())
 
-	for _, chain := range diagnostic.messageChain {
+	for _, chain := range diagnostic.MessageChain() {
 		flattenDiagnosticMessageChain(writer, chain, newline, 1 /*level*/)
 	}
 }
 
-func flattenDiagnosticMessageChain(writer *strings.Builder, chain *MessageChain, newLine string, level int) {
+func flattenDiagnosticMessageChain(writer *strings.Builder, chain *ast.MessageChain, newLine string, level int) {
 	writer.WriteString(newLine)
 	for range level {
 		writer.WriteString("  ")
 	}
 
-	writer.WriteString(chain.message)
-	for _, child := range chain.messageChain {
+	writer.WriteString(chain.Message())
+	for _, child := range chain.MessageChain() {
 		flattenDiagnosticMessageChain(writer, child, newLine, level+1)
 	}
 }
@@ -194,13 +195,13 @@ func writeWithStyleAndReset(output *strings.Builder, text string, formatStyle st
 	output.WriteString(resetEscapeSequence)
 }
 
-func WriteLocation(output *strings.Builder, file *SourceFile, pos int, formatOpts *DiagnosticsFormattingOptions, writeWithStyleAndReset FormattedWriter) {
+func WriteLocation(output *strings.Builder, file *ast.SourceFile, pos int, formatOpts *DiagnosticsFormattingOptions, writeWithStyleAndReset FormattedWriter) {
 	firstLine, firstChar := GetLineAndCharacterOfPosition(file, pos)
 	var relativeFileName string
 	if formatOpts != nil {
-		relativeFileName = tspath.ConvertToRelativePath(file.path, formatOpts.ComparePathsOptions)
+		relativeFileName = tspath.ConvertToRelativePath(file.Path(), formatOpts.ComparePathsOptions)
 	} else {
-		relativeFileName = file.path
+		relativeFileName = file.Path()
 	}
 
 	writeWithStyleAndReset(output, relativeFileName, foregroundColorEscapeCyan)
@@ -214,12 +215,12 @@ func WriteLocation(output *strings.Builder, file *SourceFile, pos int, formatOpt
 
 type ErrorSummary struct {
 	TotalErrorCount int
-	GlobalErrors    []*Diagnostic
-	ErrorsByFiles   map[*SourceFile][]*Diagnostic
-	SortedFileList  []*SourceFile
+	GlobalErrors    []*ast.Diagnostic
+	ErrorsByFiles   map[*ast.SourceFile][]*ast.Diagnostic
+	SortedFileList  []*ast.SourceFile
 }
 
-func WriteErrorSummaryText(output *strings.Builder, allDiagnostics []*Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+func WriteErrorSummaryText(output *strings.Builder, allDiagnostics []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
 	// Roughly corresponds to 'getErrorSummaryText' from watch.ts
 
 	errorSummary := getErrorSummary(allDiagnostics)
@@ -262,10 +263,10 @@ func WriteErrorSummaryText(output *strings.Builder, allDiagnostics []*Diagnostic
 	}
 }
 
-func getErrorSummary(diags []*Diagnostic) *ErrorSummary {
+func getErrorSummary(diags []*ast.Diagnostic) *ErrorSummary {
 	var totalErrorCount int
-	var globalErrors []*Diagnostic
-	var errorsByFiles map[*SourceFile][]*Diagnostic
+	var globalErrors []*ast.Diagnostic
+	var errorsByFiles map[*ast.SourceFile][]*ast.Diagnostic
 
 	for _, diagnostic := range diags {
 		if diagnostic.Category() != diagnostics.CategoryError {
@@ -273,20 +274,20 @@ func getErrorSummary(diags []*Diagnostic) *ErrorSummary {
 		}
 
 		totalErrorCount++
-		if diagnostic.file == nil {
+		if diagnostic.File() == nil {
 			globalErrors = append(globalErrors, diagnostic)
 		} else {
 			if errorsByFiles == nil {
-				errorsByFiles = make(map[*SourceFile][]*Diagnostic)
+				errorsByFiles = make(map[*ast.SourceFile][]*ast.Diagnostic)
 			}
-			errorsByFiles[diagnostic.file] = append(errorsByFiles[diagnostic.file], diagnostic)
+			errorsByFiles[diagnostic.File()] = append(errorsByFiles[diagnostic.File()], diagnostic)
 		}
 	}
 
 	// !!!
 	// Need an ordered map here, but sorting for consistency.
-	sortedFileList := slices.SortedFunc(maps.Keys(errorsByFiles), func(a, b *SourceFile) int {
-		return strings.Compare(a.fileName, b.fileName)
+	sortedFileList := slices.SortedFunc(maps.Keys(errorsByFiles), func(a, b *ast.SourceFile) int {
+		return strings.Compare(a.FileName(), b.FileName())
 	})
 
 	return &ErrorSummary{
@@ -328,11 +329,11 @@ func writeTabularErrorsDisplay(output *strings.Builder, errorSummary *ErrorSumma
 	}
 }
 
-func prettyPathForFileError(file *SourceFile, fileErrors []*Diagnostic, formatOpts *DiagnosticsFormattingOptions) string {
-	line, _ := GetLineAndCharacterOfPosition(file, fileErrors[0].loc.Pos())
-	fileName := file.fileName
+func prettyPathForFileError(file *ast.SourceFile, fileErrors []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) string {
+	line, _ := GetLineAndCharacterOfPosition(file, int(fileErrors[0].Loc().Pos()))
+	fileName := file.FileName()
 	if tspath.PathIsAbsolute(fileName) && tspath.PathIsAbsolute(formatOpts.CurrentDirectory) {
-		fileName = tspath.ConvertToRelativePath(file.path, formatOpts.ComparePathsOptions)
+		fileName = tspath.ConvertToRelativePath(file.Path(), formatOpts.ComparePathsOptions)
 	}
 	return fmt.Sprintf("%s%s:%d%s",
 		fileName,
@@ -342,16 +343,16 @@ func prettyPathForFileError(file *SourceFile, fileErrors []*Diagnostic, formatOp
 	)
 }
 
-func WriteFormatDiagnostics(output *strings.Builder, diagnostics []*Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+func WriteFormatDiagnostics(output *strings.Builder, diagnostics []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
 	for _, diagnostic := range diagnostics {
 		WriteFormatDiagnostic(output, diagnostic, formatOpts)
 	}
 }
 
-func WriteFormatDiagnostic(output *strings.Builder, diagnostic *Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
-	if diagnostic.file != nil {
-		line, character := GetLineAndCharacterOfPosition(diagnostic.file, diagnostic.loc.Pos())
-		fileName := diagnostic.file.fileName
+func WriteFormatDiagnostic(output *strings.Builder, diagnostic *ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+	if diagnostic.File() != nil {
+		line, character := GetLineAndCharacterOfPosition(diagnostic.File(), int(diagnostic.Loc().Pos()))
+		fileName := diagnostic.File().FileName()
 		relativeFileName := tspath.ConvertToRelativePath(fileName, formatOpts.ComparePathsOptions)
 		fmt.Fprintf(output, "%s(%d,%d): ", relativeFileName, line+1, character+1)
 	}

@@ -4,7 +4,7 @@ package stringutil
 import (
 	"unicode/utf8"
 
-	"github.com/microsoft/typescript-go/internal/compiler/textpos"
+	"github.com/microsoft/typescript-go/internal/core"
 )
 
 func IsWhiteSpaceLike(ch rune) bool {
@@ -82,8 +82,8 @@ func IsASCIILetter(ch rune) bool {
 	return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z'
 }
 
-func ComputeLineStarts(text string) []textpos.TextPos {
-	var result []textpos.TextPos
+func ComputeLineStarts(text string) []core.TextPos {
+	var result []core.TextPos
 	pos := 0
 	lineStart := 0
 	for pos < len(text) {
@@ -97,18 +97,18 @@ func ComputeLineStarts(text string) []textpos.TextPos {
 				}
 				fallthrough
 			case '\n':
-				result = append(result, textpos.TextPos(lineStart))
+				result = append(result, core.TextPos(lineStart))
 				lineStart = pos
 			}
 		} else {
 			ch, size := utf8.DecodeRuneInString(text[pos:])
 			pos += size
 			if IsLineBreak(ch) {
-				result = append(result, textpos.TextPos(lineStart))
+				result = append(result, core.TextPos(lineStart))
 				lineStart = pos
 			}
 		}
 	}
-	result = append(result, textpos.TextPos(lineStart))
+	result = append(result, core.TextPos(lineStart))
 	return result
 }

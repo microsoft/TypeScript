@@ -1,9 +1,11 @@
 package core
 
 import (
+	"fmt"
 	"iter"
 	"regexp"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 )
@@ -268,4 +270,14 @@ func GetStringComparer(ignoreCase bool) func(a, b string) Comparison {
 		return CompareStringsCaseInsensitive
 	}
 	return CompareStringsCaseSensitive
+}
+
+func FormatStringFromArgs(text string, args []any) string {
+	return MakeRegexp(`{(\d+)}`).ReplaceAllStringFunc(text, func(match string) string {
+		index, err := strconv.ParseInt(match[1:len(match)-1], 10, 0)
+		if err != nil || int(index) >= len(args) {
+			panic("Invalid formatting placeholder")
+		}
+		return fmt.Sprintf("%v", args[int(index)])
+	})
 }

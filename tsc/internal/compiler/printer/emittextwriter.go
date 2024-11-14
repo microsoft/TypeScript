@@ -1,6 +1,6 @@
 package printer
 
-import "github.com/microsoft/typescript-go/internal/compiler"
+import "github.com/microsoft/typescript-go/internal/ast"
 
 // Externally opaque interface for printing text
 type EmitTextWriter interface {
@@ -14,7 +14,7 @@ type EmitTextWriter interface {
 	writeStringLiteral(text string)
 	writeParameter(text string)
 	writeProperty(text string)
-	writeSymbol(text string, symbol compiler.Symbol)
+	writeSymbol(text string, symbol ast.Symbol)
 	writeLine()
 	writeLineForce(force bool)
 	increaseIndent()

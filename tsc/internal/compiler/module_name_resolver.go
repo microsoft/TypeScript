@@ -5,6 +5,7 @@ import (
 	"math/bits"
 	"strings"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -40,7 +41,7 @@ type ParsedCommandLine struct {
 
 type ResolvedProjectReference struct {
 	commandLine ParsedCommandLine
-	sourceFile  *SourceFile
+	sourceFile  *ast.SourceFile
 	references  []*ResolvedProjectReference
 }
 
@@ -113,7 +114,7 @@ type ResolvedModuleFull struct {
 type WithFailedLookupLocations struct {
 	failedLookupLocations []string
 	affectingLocations    []string
-	resolutionDiagnostics []Diagnostic
+	resolutionDiagnostics []ast.Diagnostic
 }
 
 type ResolvedModuleWithFailedLookupLocations struct {
@@ -176,7 +177,7 @@ func (e Extensions) String() string {
 		result = append(result, "JavaScript")
 	}
 	if e&ExtensionsDeclaration != 0 {
-		result = append(result, "Declaration")
+		result = append(result, "ast.Declaration")
 	}
 	if e&ExtensionsJson != 0 {
 		result = append(result, "JSON")
@@ -241,14 +242,14 @@ func NewModuleResolver(host ModuleResolutionHost, cache ModuleResolutionCache, o
 }
 
 func (r *ModuleResolver) resolveModuleName(moduleName string, containingFile string, resolutionMode ResolutionMode, redirectedReference *ResolvedProjectReference) *ResolvedModuleWithFailedLookupLocations {
-	traceEnabled := r.compilerOptions.TraceResolution == TSTrue
+	traceEnabled := r.compilerOptions.TraceResolution == core.TSTrue
 	if redirectedReference != nil {
 		r.compilerOptions = redirectedReference.commandLine.options
 	}
 	if traceEnabled {
 		r.host.Trace(formatMessage(diagnostics.Resolving_module_0_from_1, moduleName, containingFile))
 		if redirectedReference != nil {
-			r.host.Trace(formatMessage(diagnostics.Using_compiler_options_of_project_reference_redirect_0, redirectedReference.sourceFile.fileName))
+			r.host.Trace(formatMessage(diagnostics.Using_compiler_options_of_project_reference_redirect_0, redirectedReference.sourceFile.FileName()))
 		}
 	}
 	containingDirectory := tspath.GetDirectoryPath(containingFile)

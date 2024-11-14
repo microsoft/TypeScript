@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/stringutil"
 )
 
@@ -187,7 +187,7 @@ func (w *textWriter) writeStringLiteral(text string) {
 	w.write(text)
 }
 
-func (w *textWriter) writeSymbol(text string, symbol compiler.Symbol) {
+func (w *textWriter) writeSymbol(text string, symbol ast.Symbol) {
 	w.write(text)
 }
 

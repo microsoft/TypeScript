@@ -2,555 +2,12 @@ package compiler
 
 import (
 	"slices"
+
+	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/core"
 )
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=LanguageVariant,ModuleResolutionKind,ScriptKind,ScriptTarget,SignatureKind,SyntaxKind,Tristate -output=stringer_generated.go
-
-type SyntaxKind int16
-
-const (
-	SyntaxKindUnknown SyntaxKind = iota
-	SyntaxKindEndOfFile
-	SyntaxKindConflictMarkerTrivia
-	SyntaxKindNonTextFileMarkerTrivia
-	SyntaxKindNumericLiteral
-	SyntaxKindBigIntLiteral
-	SyntaxKindStringLiteral
-	SyntaxKindJsxText
-	SyntaxKindJsxTextAllWhiteSpaces
-	SyntaxKindRegularExpressionLiteral
-	SyntaxKindNoSubstitutionTemplateLiteral
-	// Pseudo-literals
-	SyntaxKindTemplateHead
-	SyntaxKindTemplateMiddle
-	SyntaxKindTemplateTail
-	// Punctuation
-	SyntaxKindOpenBraceToken
-	SyntaxKindCloseBraceToken
-	SyntaxKindOpenParenToken
-	SyntaxKindCloseParenToken
-	SyntaxKindOpenBracketToken
-	SyntaxKindCloseBracketToken
-	SyntaxKindDotToken
-	SyntaxKindDotDotDotToken
-	SyntaxKindSemicolonToken
-	SyntaxKindCommaToken
-	SyntaxKindQuestionDotToken
-	SyntaxKindLessThanToken
-	SyntaxKindLessThanSlashToken
-	SyntaxKindGreaterThanToken
-	SyntaxKindLessThanEqualsToken
-	SyntaxKindGreaterThanEqualsToken
-	SyntaxKindEqualsEqualsToken
-	SyntaxKindExclamationEqualsToken
-	SyntaxKindEqualsEqualsEqualsToken
-	SyntaxKindExclamationEqualsEqualsToken
-	SyntaxKindEqualsGreaterThanToken
-	SyntaxKindPlusToken
-	SyntaxKindMinusToken
-	SyntaxKindAsteriskToken
-	SyntaxKindAsteriskAsteriskToken
-	SyntaxKindSlashToken
-	SyntaxKindPercentToken
-	SyntaxKindPlusPlusToken
-	SyntaxKindMinusMinusToken
-	SyntaxKindLessThanLessThanToken
-	SyntaxKindGreaterThanGreaterThanToken
-	SyntaxKindGreaterThanGreaterThanGreaterThanToken
-	SyntaxKindAmpersandToken
-	SyntaxKindBarToken
-	SyntaxKindCaretToken
-	SyntaxKindExclamationToken
-	SyntaxKindTildeToken
-	SyntaxKindAmpersandAmpersandToken
-	SyntaxKindBarBarToken
-	SyntaxKindQuestionToken
-	SyntaxKindColonToken
-	SyntaxKindAtToken
-	SyntaxKindQuestionQuestionToken
-	/** Only the JSDoc scanner produces BacktickToken. The normal scanner produces NoSubstitutionTemplateLiteral and related kinds. */
-	SyntaxKindBacktickToken
-	/** Only the JSDoc scanner produces HashToken. The normal scanner produces PrivateIdentifier. */
-	SyntaxKindHashToken
-	// Assignments
-	SyntaxKindEqualsToken
-	SyntaxKindPlusEqualsToken
-	SyntaxKindMinusEqualsToken
-	SyntaxKindAsteriskEqualsToken
-	SyntaxKindAsteriskAsteriskEqualsToken
-	SyntaxKindSlashEqualsToken
-	SyntaxKindPercentEqualsToken
-	SyntaxKindLessThanLessThanEqualsToken
-	SyntaxKindGreaterThanGreaterThanEqualsToken
-	SyntaxKindGreaterThanGreaterThanGreaterThanEqualsToken
-	SyntaxKindAmpersandEqualsToken
-	SyntaxKindBarEqualsToken
-	SyntaxKindBarBarEqualsToken
-	SyntaxKindAmpersandAmpersandEqualsToken
-	SyntaxKindQuestionQuestionEqualsToken
-	SyntaxKindCaretEqualsToken
-	// Identifiers and PrivateIdentifier
-	SyntaxKindIdentifier
-	SyntaxKindPrivateIdentifier
-	SyntaxKindJSDocCommentTextToken
-	// Reserved words
-	SyntaxKindBreakKeyword
-	SyntaxKindCaseKeyword
-	SyntaxKindCatchKeyword
-	SyntaxKindClassKeyword
-	SyntaxKindConstKeyword
-	SyntaxKindContinueKeyword
-	SyntaxKindDebuggerKeyword
-	SyntaxKindDefaultKeyword
-	SyntaxKindDeleteKeyword
-	SyntaxKindDoKeyword
-	SyntaxKindElseKeyword
-	SyntaxKindEnumKeyword
-	SyntaxKindExportKeyword
-	SyntaxKindExtendsKeyword
-	SyntaxKindFalseKeyword
-	SyntaxKindFinallyKeyword
-	SyntaxKindForKeyword
-	SyntaxKindFunctionKeyword
-	SyntaxKindIfKeyword
-	SyntaxKindImportKeyword
-	SyntaxKindInKeyword
-	SyntaxKindInstanceOfKeyword
-	SyntaxKindNewKeyword
-	SyntaxKindNullKeyword
-	SyntaxKindReturnKeyword
-	SyntaxKindSuperKeyword
-	SyntaxKindSwitchKeyword
-	SyntaxKindThisKeyword
-	SyntaxKindThrowKeyword
-	SyntaxKindTrueKeyword
-	SyntaxKindTryKeyword
-	SyntaxKindTypeOfKeyword
-	SyntaxKindVarKeyword
-	SyntaxKindVoidKeyword
-	SyntaxKindWhileKeyword
-	SyntaxKindWithKeyword
-	// Strict mode reserved words
-	SyntaxKindImplementsKeyword
-	SyntaxKindInterfaceKeyword
-	SyntaxKindLetKeyword
-	SyntaxKindPackageKeyword
-	SyntaxKindPrivateKeyword
-	SyntaxKindProtectedKeyword
-	SyntaxKindPublicKeyword
-	SyntaxKindStaticKeyword
-	SyntaxKindYieldKeyword
-	// Contextual keywords
-	SyntaxKindAbstractKeyword
-	SyntaxKindAccessorKeyword
-	SyntaxKindAsKeyword
-	SyntaxKindAssertsKeyword
-	SyntaxKindAssertKeyword
-	SyntaxKindAnyKeyword
-	SyntaxKindAsyncKeyword
-	SyntaxKindAwaitKeyword
-	SyntaxKindBooleanKeyword
-	SyntaxKindConstructorKeyword
-	SyntaxKindDeclareKeyword
-	SyntaxKindGetKeyword
-	SyntaxKindImmediateKeyword
-	SyntaxKindInferKeyword
-	SyntaxKindIntrinsicKeyword
-	SyntaxKindIsKeyword
-	SyntaxKindKeyOfKeyword
-	SyntaxKindModuleKeyword
-	SyntaxKindNamespaceKeyword
-	SyntaxKindNeverKeyword
-	SyntaxKindOutKeyword
-	SyntaxKindReadonlyKeyword
-	SyntaxKindRequireKeyword
-	SyntaxKindNumberKeyword
-	SyntaxKindObjectKeyword
-	SyntaxKindSatisfiesKeyword
-	SyntaxKindSetKeyword
-	SyntaxKindStringKeyword
-	SyntaxKindSymbolKeyword
-	SyntaxKindTypeKeyword
-	SyntaxKindUndefinedKeyword
-	SyntaxKindUniqueKeyword
-	SyntaxKindUnknownKeyword
-	SyntaxKindUsingKeyword
-	SyntaxKindFromKeyword
-	SyntaxKindGlobalKeyword
-	SyntaxKindBigIntKeyword
-	SyntaxKindOverrideKeyword
-	SyntaxKindOfKeyword // LastKeyword and LastToken and LastContextualKeyword
-	// Parse tree nodes
-	// Names
-	SyntaxKindQualifiedName
-	SyntaxKindComputedPropertyName
-	// Lists
-	SyntaxKindModifierList
-	SyntaxKindTypeParameterList
-	SyntaxKindTypeArgumentList
-	// Signature elements
-	SyntaxKindTypeParameter
-	SyntaxKindParameter
-	SyntaxKindDecorator
-	// TypeMember
-	SyntaxKindPropertySignature
-	SyntaxKindPropertyDeclaration
-	SyntaxKindMethodSignature
-	SyntaxKindMethodDeclaration
-	SyntaxKindClassStaticBlockDeclaration
-	SyntaxKindConstructor
-	SyntaxKindGetAccessor
-	SyntaxKindSetAccessor
-	SyntaxKindCallSignature
-	SyntaxKindConstructSignature
-	SyntaxKindIndexSignature
-	// Type
-	SyntaxKindTypePredicate
-	SyntaxKindTypeReference
-	SyntaxKindFunctionType
-	SyntaxKindConstructorType
-	SyntaxKindTypeQuery
-	SyntaxKindTypeLiteral
-	SyntaxKindArrayType
-	SyntaxKindTupleType
-	SyntaxKindOptionalType
-	SyntaxKindRestType
-	SyntaxKindUnionType
-	SyntaxKindIntersectionType
-	SyntaxKindConditionalType
-	SyntaxKindInferType
-	SyntaxKindParenthesizedType
-	SyntaxKindThisType
-	SyntaxKindTypeOperator
-	SyntaxKindIndexedAccessType
-	SyntaxKindMappedType
-	SyntaxKindLiteralType
-	SyntaxKindNamedTupleMember
-	SyntaxKindTemplateLiteralType
-	SyntaxKindTemplateLiteralTypeSpan
-	SyntaxKindImportType
-	// Binding patterns
-	SyntaxKindObjectBindingPattern
-	SyntaxKindArrayBindingPattern
-	SyntaxKindBindingElement
-	// Expression
-	SyntaxKindArrayLiteralExpression
-	SyntaxKindObjectLiteralExpression
-	SyntaxKindPropertyAccessExpression
-	SyntaxKindElementAccessExpression
-	SyntaxKindCallExpression
-	SyntaxKindNewExpression
-	SyntaxKindTaggedTemplateExpression
-	SyntaxKindTypeAssertionExpression
-	SyntaxKindParenthesizedExpression
-	SyntaxKindFunctionExpression
-	SyntaxKindArrowFunction
-	SyntaxKindDeleteExpression
-	SyntaxKindTypeOfExpression
-	SyntaxKindVoidExpression
-	SyntaxKindAwaitExpression
-	SyntaxKindPrefixUnaryExpression
-	SyntaxKindPostfixUnaryExpression
-	SyntaxKindBinaryExpression
-	SyntaxKindConditionalExpression
-	SyntaxKindTemplateExpression
-	SyntaxKindYieldExpression
-	SyntaxKindSpreadElement
-	SyntaxKindClassExpression
-	SyntaxKindOmittedExpression
-	SyntaxKindExpressionWithTypeArguments
-	SyntaxKindAsExpression
-	SyntaxKindNonNullExpression
-	SyntaxKindMetaProperty
-	SyntaxKindSyntheticExpression
-	SyntaxKindSatisfiesExpression
-	// Misc
-	SyntaxKindTemplateSpan
-	SyntaxKindSemicolonClassElement
-	// Element
-	SyntaxKindBlock
-	SyntaxKindEmptyStatement
-	SyntaxKindVariableStatement
-	SyntaxKindExpressionStatement
-	SyntaxKindIfStatement
-	SyntaxKindDoStatement
-	SyntaxKindWhileStatement
-	SyntaxKindForStatement
-	SyntaxKindForInStatement
-	SyntaxKindForOfStatement
-	SyntaxKindContinueStatement
-	SyntaxKindBreakStatement
-	SyntaxKindReturnStatement
-	SyntaxKindWithStatement
-	SyntaxKindSwitchStatement
-	SyntaxKindLabeledStatement
-	SyntaxKindThrowStatement
-	SyntaxKindTryStatement
-	SyntaxKindDebuggerStatement
-	SyntaxKindVariableDeclaration
-	SyntaxKindVariableDeclarationList
-	SyntaxKindFunctionDeclaration
-	SyntaxKindClassDeclaration
-	SyntaxKindInterfaceDeclaration
-	SyntaxKindTypeAliasDeclaration
-	SyntaxKindEnumDeclaration
-	SyntaxKindModuleDeclaration
-	SyntaxKindModuleBlock
-	SyntaxKindCaseBlock
-	SyntaxKindNamespaceExportDeclaration
-	SyntaxKindImportEqualsDeclaration
-	SyntaxKindImportDeclaration
-	SyntaxKindImportClause
-	SyntaxKindNamespaceImport
-	SyntaxKindNamedImports
-	SyntaxKindImportSpecifier
-	SyntaxKindExportAssignment
-	SyntaxKindExportDeclaration
-	SyntaxKindNamedExports
-	SyntaxKindNamespaceExport
-	SyntaxKindExportSpecifier
-	SyntaxKindMissingDeclaration
-	// Module references
-	SyntaxKindExternalModuleReference
-	// JSX
-	SyntaxKindJsxElement
-	SyntaxKindJsxSelfClosingElement
-	SyntaxKindJsxOpeningElement
-	SyntaxKindJsxClosingElement
-	SyntaxKindJsxFragment
-	SyntaxKindJsxOpeningFragment
-	SyntaxKindJsxClosingFragment
-	SyntaxKindJsxAttribute
-	SyntaxKindJsxAttributes
-	SyntaxKindJsxSpreadAttribute
-	SyntaxKindJsxExpression
-	SyntaxKindJsxNamespacedName
-	// Clauses
-	SyntaxKindCaseClause
-	SyntaxKindDefaultClause
-	SyntaxKindHeritageClause
-	SyntaxKindCatchClause
-	// Import attributes
-	SyntaxKindImportAttributes
-	SyntaxKindImportAttribute
-	// Property assignments
-	SyntaxKindPropertyAssignment
-	SyntaxKindShorthandPropertyAssignment
-	SyntaxKindSpreadAssignment
-	// Enum
-	SyntaxKindEnumMember
-	// Top-level nodes
-	SyntaxKindSourceFile
-	SyntaxKindBundle
-	// JSDoc nodes
-	SyntaxKindJSDocTypeExpression
-	SyntaxKindJSDocNameReference
-	SyntaxKindJSDocMemberName  // C#p
-	SyntaxKindJSDocAllType     // The * type
-	SyntaxKindJSDocUnknownType // The ? type
-	SyntaxKindJSDocNullableType
-	SyntaxKindJSDocNonNullableType
-	SyntaxKindJSDocOptionalType
-	SyntaxKindJSDocFunctionType
-	SyntaxKindJSDocVariadicType
-	SyntaxKindJSDocNamepathType // https://jsdoc.app/about-namepaths.html
-	SyntaxKindJSDoc
-	SyntaxKindJSDocText
-	SyntaxKindJSDocTypeLiteral
-	SyntaxKindJSDocSignature
-	SyntaxKindJSDocLink
-	SyntaxKindJSDocLinkCode
-	SyntaxKindJSDocLinkPlain
-	SyntaxKindJSDocTag
-	SyntaxKindJSDocAugmentsTag
-	SyntaxKindJSDocImplementsTag
-	SyntaxKindJSDocAuthorTag
-	SyntaxKindJSDocDeprecatedTag
-	SyntaxKindJSDocImmediateTag
-	SyntaxKindJSDocClassTag
-	SyntaxKindJSDocPublicTag
-	SyntaxKindJSDocPrivateTag
-	SyntaxKindJSDocProtectedTag
-	SyntaxKindJSDocReadonlyTag
-	SyntaxKindJSDocOverrideTag
-	SyntaxKindJSDocCallbackTag
-	SyntaxKindJSDocOverloadTag
-	SyntaxKindJSDocEnumTag
-	SyntaxKindJSDocParameterTag
-	SyntaxKindJSDocReturnTag
-	SyntaxKindJSDocThisTag
-	SyntaxKindJSDocTypeTag
-	SyntaxKindJSDocTemplateTag
-	SyntaxKindJSDocTypedefTag
-	SyntaxKindJSDocSeeTag
-	SyntaxKindJSDocPropertyTag
-	SyntaxKindJSDocThrowsTag
-	SyntaxKindJSDocSatisfiesTag
-	SyntaxKindJSDocImportTag
-	// Synthesized list
-	SyntaxKindSyntaxList
-	// Transformation nodes
-	SyntaxKindNotEmittedStatement
-	SyntaxKindPartiallyEmittedExpression
-	SyntaxKindCommaListExpression
-	SyntaxKindSyntheticReferenceExpression
-	// Enum value count
-	SyntaxKindCount
-	// Markers
-	SyntaxKindFirstAssignment         = SyntaxKindEqualsToken
-	SyntaxKindLastAssignment          = SyntaxKindCaretEqualsToken
-	SyntaxKindFirstCompoundAssignment = SyntaxKindPlusEqualsToken
-	SyntaxKindLastCompoundAssignment  = SyntaxKindCaretEqualsToken
-	SyntaxKindFirstReservedWord       = SyntaxKindBreakKeyword
-	SyntaxKindLastReservedWord        = SyntaxKindWithKeyword
-	SyntaxKindFirstKeyword            = SyntaxKindBreakKeyword
-	SyntaxKindLastKeyword             = SyntaxKindOfKeyword
-	SyntaxKindFirstFutureReservedWord = SyntaxKindImplementsKeyword
-	SyntaxKindLastFutureReservedWord  = SyntaxKindYieldKeyword
-	SyntaxKindFirstTypeNode           = SyntaxKindTypePredicate
-	SyntaxKindLastTypeNode            = SyntaxKindImportType
-	SyntaxKindFirstPunctuation        = SyntaxKindOpenBraceToken
-	SyntaxKindLastPunctuation         = SyntaxKindCaretEqualsToken
-	SyntaxKindFirstToken              = SyntaxKindUnknown
-	SyntaxKindLastToken               = SyntaxKindLastKeyword
-	SyntaxKindFirstLiteralToken       = SyntaxKindNumericLiteral
-	SyntaxKindLastLiteralToken        = SyntaxKindNoSubstitutionTemplateLiteral
-	SyntaxKindFirstTemplateToken      = SyntaxKindNoSubstitutionTemplateLiteral
-	SyntaxKindLastTemplateToken       = SyntaxKindTemplateTail
-	SyntaxKindFirstBinaryOperator     = SyntaxKindLessThanToken
-	SyntaxKindLastBinaryOperator      = SyntaxKindCaretEqualsToken
-	SyntaxKindFirstStatement          = SyntaxKindVariableStatement
-	SyntaxKindLastStatement           = SyntaxKindDebuggerStatement
-	SyntaxKindFirstNode               = SyntaxKindQualifiedName
-	SyntaxKindFirstJSDocNode          = SyntaxKindJSDocTypeExpression
-	SyntaxKindLastJSDocNode           = SyntaxKindJSDocImportTag
-	SyntaxKindFirstJSDocTagNode       = SyntaxKindJSDocTag
-	SyntaxKindLastJSDocTagNode        = SyntaxKindJSDocImportTag
-	SyntaxKindFirstContextualKeyword  = SyntaxKindAbstractKeyword
-	SyntaxKindLastContextualKeyword   = SyntaxKindOfKeyword
-)
-
-type NodeFlags uint32
-
-const (
-	NodeFlagsNone                            NodeFlags = 0
-	NodeFlagsLet                             NodeFlags = 1 << 0  // Variable declaration
-	NodeFlagsConst                           NodeFlags = 1 << 1  // Variable declaration
-	NodeFlagsUsing                           NodeFlags = 1 << 2  // Variable declaration
-	NodeFlagsNestedNamespace                 NodeFlags = 1 << 3  // Namespace declaration
-	NodeFlagsSynthesized                     NodeFlags = 1 << 4  // Node was synthesized during transformation
-	NodeFlagsNamespace                       NodeFlags = 1 << 5  // Namespace declaration
-	NodeFlagsOptionalChain                   NodeFlags = 1 << 6  // Chained MemberExpression rooted to a pseudo-OptionalExpression
-	NodeFlagsExportContext                   NodeFlags = 1 << 7  // Export context (initialized by binding)
-	NodeFlagsContainsThis                    NodeFlags = 1 << 8  // Interface contains references to "this"
-	NodeFlagsHasImplicitReturn               NodeFlags = 1 << 9  // If function implicitly returns on one of codepaths (initialized by binding)
-	NodeFlagsHasExplicitReturn               NodeFlags = 1 << 10 // If function has explicit reachable return on one of codepaths (initialized by binding)
-	NodeFlagsGlobalAugmentation              NodeFlags = 1 << 11 // Set if module declaration is an augmentation for the global scope
-	NodeFlagsHasAsyncFunctions               NodeFlags = 1 << 12 // If the file has async functions (initialized by binding)
-	NodeFlagsDisallowInContext               NodeFlags = 1 << 13 // If node was parsed in a context where 'in-expressions' are not allowed
-	NodeFlagsYieldContext                    NodeFlags = 1 << 14 // If node was parsed in the 'yield' context created when parsing a generator
-	NodeFlagsDecoratorContext                NodeFlags = 1 << 15 // If node was parsed as part of a decorator
-	NodeFlagsAwaitContext                    NodeFlags = 1 << 16 // If node was parsed in the 'await' context created when parsing an async function
-	NodeFlagsDisallowConditionalTypesContext NodeFlags = 1 << 17 // If node was parsed in a context where conditional types are not allowed
-	NodeFlagsThisNodeHasError                NodeFlags = 1 << 18 // If the parser encountered an error when parsing the code that created this node
-	NodeFlagsJavaScriptFile                  NodeFlags = 1 << 19 // If node was parsed in a JavaScript
-	NodeFlagsThisNodeOrAnySubNodesHasError   NodeFlags = 1 << 20 // If this node or any of its children had an error
-	NodeFlagsHasAggregatedChildData          NodeFlags = 1 << 21 // If we've computed data from children and cached it in this node
-
-	// These flags will be set when the parser encounters a dynamic import expression or 'import.meta' to avoid
-	// walking the tree if the flags are not set. However, these flags are just a approximation
-	// (hence why it's named "PossiblyContainsDynamicImport") because once set, the flags never get cleared.
-	// During editing, if a dynamic import is removed, incremental parsing will *NOT* clear this flag.
-	// This means that the tree will always be traversed during module resolution, or when looking for external module indicators.
-	// However, the removal operation should not occur often and in the case of the
-	// removal, it is likely that users will add the import anyway.
-	// The advantage of this approach is its simplicity. For the case of batch compilation,
-	// we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
-	NodeFlagsPossiblyContainsDynamicImport NodeFlags = 1 << 22
-	NodeFlagsPossiblyContainsImportMeta    NodeFlags = 1 << 23
-
-	NodeFlagsJSDoc           NodeFlags = 1 << 24 // If node was parsed inside jsdoc
-	NodeFlagsAmbient         NodeFlags = 1 << 25 // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-	NodeFlagsInWithStatement NodeFlags = 1 << 26 // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-	NodeFlagsJsonFile        NodeFlags = 1 << 27 // If node was parsed in a Json
-	NodeFlagsTypeCached      NodeFlags = 1 << 28 // If a type was cached for node at any point
-	NodeFlagsDeprecated      NodeFlags = 1 << 29 // If has '@deprecated' JSDoc tag
-
-	NodeFlagsBlockScoped = NodeFlagsLet | NodeFlagsConst | NodeFlagsUsing
-	NodeFlagsConstant    = NodeFlagsConst | NodeFlagsUsing
-	NodeFlagsAwaitUsing  = NodeFlagsConst | NodeFlagsUsing // Variable declaration (NOTE: on a single node these flags would otherwise be mutually exclusive)
-
-	NodeFlagsReachabilityCheckFlags   = NodeFlagsHasImplicitReturn | NodeFlagsHasExplicitReturn
-	NodeFlagsReachabilityAndEmitFlags = NodeFlagsReachabilityCheckFlags | NodeFlagsHasAsyncFunctions
-
-	// Parsing context flags
-	NodeFlagsContextFlags NodeFlags = NodeFlagsDisallowInContext | NodeFlagsDisallowConditionalTypesContext | NodeFlagsYieldContext | NodeFlagsDecoratorContext | NodeFlagsAwaitContext | NodeFlagsJavaScriptFile | NodeFlagsInWithStatement | NodeFlagsAmbient
-
-	// Exclude these flags when parsing a Type
-	NodeFlagsTypeExcludesFlags NodeFlags = NodeFlagsYieldContext | NodeFlagsAwaitContext
-
-	// Represents all flags that are potentially set once and
-	// never cleared on SourceFiles which get re-used in between incremental parses.
-	// See the comment above on `PossiblyContainsDynamicImport` and `PossiblyContainsImportMeta`.
-	NodeFlagsPermanentlySetIncrementalFlags NodeFlags = NodeFlagsPossiblyContainsDynamicImport | NodeFlagsPossiblyContainsImportMeta
-
-	// The following flags repurpose other NodeFlags as different meanings for Identifier nodes
-	NodeFlagsIdentifierHasExtendedUnicodeEscape NodeFlags = NodeFlagsContainsThis      // Indicates whether the identifier contains an extended unicode escape sequence
-	NodeFlagsIdentifierIsInJSDocNamespace       NodeFlags = NodeFlagsHasAsyncFunctions // Indicates whether the identifier is part of a JSDoc namespace
-)
-
-type ModifierFlags uint32
-
-const (
-	ModifierFlagsNone ModifierFlags = 0
-	// Syntactic/JSDoc modifiers
-	ModifierFlagsPublic    ModifierFlags = 1 << 0 // Property/Method
-	ModifierFlagsPrivate   ModifierFlags = 1 << 1 // Property/Method
-	ModifierFlagsProtected ModifierFlags = 1 << 2 // Property/Method
-	ModifierFlagsReadonly  ModifierFlags = 1 << 3 // Property/Method
-	ModifierFlagsOverride  ModifierFlags = 1 << 4 // Override method
-	// Syntactic-only modifiers
-	ModifierFlagsExport    ModifierFlags = 1 << 5  // Declarations
-	ModifierFlagsAbstract  ModifierFlags = 1 << 6  // Class/Method/ConstructSignature
-	ModifierFlagsAmbient   ModifierFlags = 1 << 7  // Declarations
-	ModifierFlagsStatic    ModifierFlags = 1 << 8  // Property/Method
-	ModifierFlagsAccessor  ModifierFlags = 1 << 9  // Property
-	ModifierFlagsAsync     ModifierFlags = 1 << 10 // Property/Method/Function
-	ModifierFlagsDefault   ModifierFlags = 1 << 11 // Function/Class (export default declaration)
-	ModifierFlagsConst     ModifierFlags = 1 << 12 // Const enum
-	ModifierFlagsIn        ModifierFlags = 1 << 13 // Contravariance modifier
-	ModifierFlagsOut       ModifierFlags = 1 << 14 // Covariance modifier
-	ModifierFlagsDecorator ModifierFlags = 1 << 15 // Contains a decorator.
-	ModifierFlagsImmediate ModifierFlags = 1 << 16 // Parameter
-	// JSDoc-only modifiers
-	ModifierFlagsDeprecated     ModifierFlags = 1 << 17 // Deprecated tag.
-	ModifierFlagsJSDocImmediate ModifierFlags = 1 << 18 // Parameter
-	// Cache-only JSDoc-modifiers. Should match order of Syntactic/JSDoc modifiers, above.
-	ModifierFlagsJSDocPublic               ModifierFlags = 1 << 23 // if this value changes, `selectEffectiveModifierFlags` must change accordingly
-	ModifierFlagsJSDocPrivate              ModifierFlags = 1 << 24
-	ModifierFlagsJSDocProtected            ModifierFlags = 1 << 25
-	ModifierFlagsJSDocReadonly             ModifierFlags = 1 << 26
-	ModifierFlagsJSDocOverride             ModifierFlags = 1 << 27
-	ModifierFlagsHasComputedJSDocModifiers ModifierFlags = 1 << 28 // Indicates the computed modifier flags include modifiers from JSDoc.
-	ModifierFlagsHasComputedFlags          ModifierFlags = 1 << 29 // Modifier flags have been computed
-
-	ModifierFlagsSyntacticOrJSDocModifiers = ModifierFlagsPublic | ModifierFlagsPrivate | ModifierFlagsProtected | ModifierFlagsReadonly | ModifierFlagsOverride
-	ModifierFlagsSyntacticOnlyModifiers    = ModifierFlagsExport | ModifierFlagsAmbient | ModifierFlagsAbstract | ModifierFlagsStatic | ModifierFlagsAccessor | ModifierFlagsAsync | ModifierFlagsDefault | ModifierFlagsConst | ModifierFlagsIn | ModifierFlagsOut | ModifierFlagsDecorator | ModifierFlagsImmediate
-	ModifierFlagsSyntacticModifiers        = ModifierFlagsSyntacticOrJSDocModifiers | ModifierFlagsSyntacticOnlyModifiers
-	ModifierFlagsJSDocCacheOnlyModifiers   = ModifierFlagsJSDocPublic | ModifierFlagsJSDocPrivate | ModifierFlagsJSDocProtected | ModifierFlagsJSDocReadonly | ModifierFlagsJSDocOverride
-	ModifierFlagsJSDocOnlyModifiers        = ModifierFlagsDeprecated | ModifierFlagsJSDocImmediate
-	ModifierFlagsNonCacheOnlyModifiers     = ModifierFlagsSyntacticOrJSDocModifiers | ModifierFlagsSyntacticOnlyModifiers | ModifierFlagsJSDocOnlyModifiers
-
-	ModifierFlagsAccessibilityModifier = ModifierFlagsPublic | ModifierFlagsPrivate | ModifierFlagsProtected
-	// Accessibility modifiers and 'readonly' can be attached to a parameter in a constructor to make it a property.
-	ModifierFlagsParameterPropertyModifier      = ModifierFlagsAccessibilityModifier | ModifierFlagsReadonly | ModifierFlagsOverride
-	ModifierFlagsNonPublicAccessibilityModifier = ModifierFlagsPrivate | ModifierFlagsProtected
-
-	ModifierFlagsTypeScriptModifier = ModifierFlagsAmbient | ModifierFlagsPublic | ModifierFlagsPrivate | ModifierFlagsProtected | ModifierFlagsReadonly | ModifierFlagsAbstract | ModifierFlagsConst | ModifierFlagsOverride | ModifierFlagsIn | ModifierFlagsOut | ModifierFlagsImmediate
-	ModifierFlagsExportDefault      = ModifierFlagsExport | ModifierFlagsDefault
-	ModifierFlagsAll                = ModifierFlagsExport | ModifierFlagsAmbient | ModifierFlagsPublic | ModifierFlagsPrivate | ModifierFlagsProtected | ModifierFlagsStatic | ModifierFlagsReadonly | ModifierFlagsAbstract | ModifierFlagsAccessor | ModifierFlagsAsync | ModifierFlagsDefault | ModifierFlagsConst | ModifierFlagsDeprecated | ModifierFlagsOverride | ModifierFlagsIn | ModifierFlagsOut | ModifierFlagsImmediate | ModifierFlagsDecorator
-	ModifierFlagsModifier           = ModifierFlagsAll & ^ModifierFlagsDecorator
-)
+//go:generate go run golang.org/x/tools/cmd/stringer -type=ModuleResolutionKind,SignatureKind -output=stringer_generated.go
 
 // ParseFlags
 
@@ -565,171 +22,11 @@ const (
 	ParseFlagsJSDoc                  ParseFlags = 1 << 5
 )
 
-// SymbolFlags
-
-type SymbolFlags uint32
-
-const (
-	SymbolFlagsNone                   SymbolFlags = 0
-	SymbolFlagsFunctionScopedVariable SymbolFlags = 1 << 0  // Variable (var) or parameter
-	SymbolFlagsBlockScopedVariable    SymbolFlags = 1 << 1  // A block-scoped variable (let or const)
-	SymbolFlagsProperty               SymbolFlags = 1 << 2  // Property or enum member
-	SymbolFlagsEnumMember             SymbolFlags = 1 << 3  // Enum member
-	SymbolFlagsFunction               SymbolFlags = 1 << 4  // Function
-	SymbolFlagsClass                  SymbolFlags = 1 << 5  // Class
-	SymbolFlagsInterface              SymbolFlags = 1 << 6  // Interface
-	SymbolFlagsConstEnum              SymbolFlags = 1 << 7  // Const enum
-	SymbolFlagsRegularEnum            SymbolFlags = 1 << 8  // Enum
-	SymbolFlagsValueModule            SymbolFlags = 1 << 9  // Instantiated module
-	SymbolFlagsNamespaceModule        SymbolFlags = 1 << 10 // Uninstantiated module
-	SymbolFlagsTypeLiteral            SymbolFlags = 1 << 11 // Type Literal or mapped type
-	SymbolFlagsObjectLiteral          SymbolFlags = 1 << 12 // Object Literal
-	SymbolFlagsMethod                 SymbolFlags = 1 << 13 // Method
-	SymbolFlagsConstructor            SymbolFlags = 1 << 14 // Constructor
-	SymbolFlagsGetAccessor            SymbolFlags = 1 << 15 // Get accessor
-	SymbolFlagsSetAccessor            SymbolFlags = 1 << 16 // Set accessor
-	SymbolFlagsSignature              SymbolFlags = 1 << 17 // Call, construct, or index signature
-	SymbolFlagsTypeParameter          SymbolFlags = 1 << 18 // Type parameter
-	SymbolFlagsTypeAlias              SymbolFlags = 1 << 19 // Type alias
-	SymbolFlagsExportValue            SymbolFlags = 1 << 20 // Exported value marker (see comment in declareModuleMember in binder)
-	SymbolFlagsAlias                  SymbolFlags = 1 << 21 // An alias for another symbol (see comment in isAliasSymbolDeclaration in checker)
-	SymbolFlagsPrototype              SymbolFlags = 1 << 22 // Prototype property (no source representation)
-	SymbolFlagsExportStar             SymbolFlags = 1 << 23 // Export * declaration
-	SymbolFlagsOptional               SymbolFlags = 1 << 24 // Optional property
-	SymbolFlagsTransient              SymbolFlags = 1 << 25 // Transient symbol (created during type check)
-	SymbolFlagsAssignment             SymbolFlags = 1 << 26 // Assignment treated as declaration (eg `this.prop = 1`)
-	SymbolFlagsModuleExports          SymbolFlags = 1 << 27 // Symbol for CommonJS `module` of `module.exports`
-	SymbolFlagsAll                    SymbolFlags = 0xFFFFFFFF
-
-	SymbolFlagsEnum      = SymbolFlagsRegularEnum | SymbolFlagsConstEnum
-	SymbolFlagsVariable  = SymbolFlagsFunctionScopedVariable | SymbolFlagsBlockScopedVariable
-	SymbolFlagsValue     = SymbolFlagsVariable | SymbolFlagsProperty | SymbolFlagsEnumMember | SymbolFlagsObjectLiteral | SymbolFlagsFunction | SymbolFlagsClass | SymbolFlagsEnum | SymbolFlagsValueModule | SymbolFlagsMethod | SymbolFlagsGetAccessor | SymbolFlagsSetAccessor
-	SymbolFlagsType      = SymbolFlagsClass | SymbolFlagsInterface | SymbolFlagsEnum | SymbolFlagsEnumMember | SymbolFlagsTypeLiteral | SymbolFlagsTypeParameter | SymbolFlagsTypeAlias
-	SymbolFlagsNamespace = SymbolFlagsValueModule | SymbolFlagsNamespaceModule | SymbolFlagsEnum
-	SymbolFlagsModule    = SymbolFlagsValueModule | SymbolFlagsNamespaceModule
-	SymbolFlagsAccessor  = SymbolFlagsGetAccessor | SymbolFlagsSetAccessor
-
-	// Variables can be redeclared, but can not redeclare a block-scoped declaration with the
-	// same name, or any other value that is not a variable, e.g. ValueModule or Class
-	SymbolFlagsFunctionScopedVariableExcludes = SymbolFlagsValue & ^SymbolFlagsFunctionScopedVariable
-
-	// Block-scoped declarations are not allowed to be re-declared
-	// they can not merge with anything in the value space
-	SymbolFlagsBlockScopedVariableExcludes = SymbolFlagsValue
-
-	SymbolFlagsParameterExcludes                   = SymbolFlagsValue
-	SymbolFlagsPropertyExcludes                    = SymbolFlagsNone
-	SymbolFlagsEnumMemberExcludes                  = SymbolFlagsValue | SymbolFlagsType
-	SymbolFlagsFunctionExcludes                    = SymbolFlagsValue & ^(SymbolFlagsFunction | SymbolFlagsValueModule | SymbolFlagsClass)
-	SymbolFlagsClassExcludes                       = (SymbolFlagsValue | SymbolFlagsType) & ^(SymbolFlagsValueModule | SymbolFlagsInterface | SymbolFlagsFunction) // class-interface mergability done in checker.ts
-	SymbolFlagsInterfaceExcludes                   = SymbolFlagsType & ^(SymbolFlagsInterface | SymbolFlagsClass)
-	SymbolFlagsRegularEnumExcludes                 = (SymbolFlagsValue | SymbolFlagsType) & ^(SymbolFlagsRegularEnum | SymbolFlagsValueModule) // regular enums merge only with regular enums and modules
-	SymbolFlagsConstEnumExcludes                   = (SymbolFlagsValue | SymbolFlagsType) & ^SymbolFlagsConstEnum                              // const enums merge only with const enums
-	SymbolFlagsValueModuleExcludes                 = SymbolFlagsValue & ^(SymbolFlagsFunction | SymbolFlagsClass | SymbolFlagsRegularEnum | SymbolFlagsValueModule)
-	SymbolFlagsNamespaceModuleExcludes             = SymbolFlagsNone
-	SymbolFlagsMethodExcludes                      = SymbolFlagsValue & ^SymbolFlagsMethod
-	SymbolFlagsGetAccessorExcludes                 = SymbolFlagsValue & ^SymbolFlagsSetAccessor
-	SymbolFlagsSetAccessorExcludes                 = SymbolFlagsValue & ^SymbolFlagsGetAccessor
-	SymbolFlagsAccessorExcludes                    = SymbolFlagsValue & ^SymbolFlagsAccessor
-	SymbolFlagsTypeParameterExcludes               = SymbolFlagsType & ^SymbolFlagsTypeParameter
-	SymbolFlagsTypeAliasExcludes                   = SymbolFlagsType
-	SymbolFlagsAliasExcludes                       = SymbolFlagsAlias
-	SymbolFlagsModuleMember                        = SymbolFlagsVariable | SymbolFlagsFunction | SymbolFlagsClass | SymbolFlagsInterface | SymbolFlagsEnum | SymbolFlagsModule | SymbolFlagsTypeAlias | SymbolFlagsAlias
-	SymbolFlagsExportHasLocal                      = SymbolFlagsFunction | SymbolFlagsClass | SymbolFlagsEnum | SymbolFlagsValueModule
-	SymbolFlagsBlockScoped                         = SymbolFlagsBlockScopedVariable | SymbolFlagsClass | SymbolFlagsEnum
-	SymbolFlagsPropertyOrAccessor                  = SymbolFlagsProperty | SymbolFlagsAccessor
-	SymbolFlagsClassMember                         = SymbolFlagsMethod | SymbolFlagsAccessor | SymbolFlagsProperty
-	SymbolFlagsExportSupportsDefaultModifier       = SymbolFlagsClass | SymbolFlagsFunction | SymbolFlagsInterface
-	SymbolFlagsExportDoesNotSupportDefaultModifier = ^SymbolFlagsExportSupportsDefaultModifier
-	// The set of things we consider semantically classifiable.  Used to speed up the LS during
-	// classification.
-	SymbolFlagsClassifiable         = SymbolFlagsClass | SymbolFlagsEnum | SymbolFlagsTypeAlias | SymbolFlagsInterface | SymbolFlagsTypeParameter | SymbolFlagsModule | SymbolFlagsAlias
-	SymbolFlagsLateBindingContainer = SymbolFlagsClass | SymbolFlagsInterface | SymbolFlagsTypeLiteral | SymbolFlagsObjectLiteral | SymbolFlagsFunction
-)
-
-// CheckFlags
-
-type CheckFlags = uint32
-
-const (
-	CheckFlagsNone                   CheckFlags = 0
-	CheckFlagsInstantiated           CheckFlags = 1 << 0  // Instantiated symbol
-	CheckFlagsSyntheticProperty      CheckFlags = 1 << 1  // Property in union or intersection type
-	CheckFlagsSyntheticMethod        CheckFlags = 1 << 2  // Method in union or intersection type
-	CheckFlagsReadonly               CheckFlags = 1 << 3  // Readonly transient symbol
-	CheckFlagsReadPartial            CheckFlags = 1 << 4  // Synthetic property present in some but not all constituents
-	CheckFlagsWritePartial           CheckFlags = 1 << 5  // Synthetic property present in some but only satisfied by an index signature in others
-	CheckFlagsHasNonUniformType      CheckFlags = 1 << 6  // Synthetic property with non-uniform type in constituents
-	CheckFlagsHasLiteralType         CheckFlags = 1 << 7  // Synthetic property with at least one literal type in constituents
-	CheckFlagsContainsPublic         CheckFlags = 1 << 8  // Synthetic property with public constituent(s)
-	CheckFlagsContainsProtected      CheckFlags = 1 << 9  // Synthetic property with protected constituent(s)
-	CheckFlagsContainsPrivate        CheckFlags = 1 << 10 // Synthetic property with private constituent(s)
-	CheckFlagsContainsStatic         CheckFlags = 1 << 11 // Synthetic property with static constituent(s)
-	CheckFlagsLate                   CheckFlags = 1 << 12 // Late-bound symbol for a computed property with a dynamic name
-	CheckFlagsReverseMapped          CheckFlags = 1 << 13 // Property of reverse-inferred homomorphic mapped type
-	CheckFlagsOptionalParameter      CheckFlags = 1 << 14 // Optional parameter
-	CheckFlagsRestParameter          CheckFlags = 1 << 15 // Rest parameter
-	CheckFlagsDeferredType           CheckFlags = 1 << 16 // Calculation of the type of this symbol is deferred due to processing costs, should be fetched with `getTypeOfSymbolWithDeferredType`
-	CheckFlagsHasNeverType           CheckFlags = 1 << 17 // Synthetic property with at least one never type in constituents
-	CheckFlagsMapped                 CheckFlags = 1 << 18 // Property of mapped type
-	CheckFlagsStripOptional          CheckFlags = 1 << 19 // Strip optionality in mapped property
-	CheckFlagsUnresolved             CheckFlags = 1 << 20 // Unresolved type alias symbol
-	CheckFlagsIsDiscriminantComputed CheckFlags = 1 << 21 // IsDiscriminant flags has been computed
-	CheckFlagsIsDiscriminant         CheckFlags = 1 << 22 // Discriminant property
-	CheckFlagsSynthetic                         = CheckFlagsSyntheticProperty | CheckFlagsSyntheticMethod
-	CheckFlagsNonUniformAndLiteral              = CheckFlagsHasNonUniformType | CheckFlagsHasLiteralType
-	CheckFlagsPartial                           = CheckFlagsReadPartial | CheckFlagsWritePartial
-)
-
 type SignatureKind int32
 
 const (
 	SignatureKindCall SignatureKind = iota
 	SignatureKindConstruct
-)
-
-type ScriptKind int32
-
-const (
-	ScriptKindUnknown ScriptKind = iota
-	ScriptKindJS
-	ScriptKindJSX
-	ScriptKindTS
-	ScriptKindTSX
-	ScriptKindExternal
-	ScriptKindJSON
-	/**
-	 * Used on extensions that doesn't define the ScriptKind but the content defines it.
-	 * Deferred extensions are going to be included in all project contexts.
-	 */
-	ScriptKindDeferred
-)
-
-type ScriptTarget int32
-
-const (
-	ScriptTargetNone   ScriptTarget = 0
-	ScriptTargetES3    ScriptTarget = 0 // Deprecated
-	ScriptTargetES5    ScriptTarget = 1
-	ScriptTargetES2015 ScriptTarget = 2
-	ScriptTargetES2016 ScriptTarget = 3
-	ScriptTargetES2017 ScriptTarget = 4
-	ScriptTargetES2018 ScriptTarget = 5
-	ScriptTargetES2019 ScriptTarget = 6
-	ScriptTargetES2020 ScriptTarget = 7
-	ScriptTargetES2021 ScriptTarget = 8
-	ScriptTargetES2022 ScriptTarget = 9
-	ScriptTargetES2023 ScriptTarget = 10
-	ScriptTargetESNext ScriptTarget = 99
-	ScriptTargetJSON   ScriptTarget = 100
-	ScriptTargetLatest ScriptTarget = ScriptTargetESNext
-)
-
-type LanguageVariant int32
-
-const (
-	LanguageVariantStandard LanguageVariant = iota
-	LanguageVariantJSX
 )
 
 type ContextFlags uint32
@@ -778,41 +75,14 @@ const (
 
 // Ids
 
-type NodeId uint32
-type SymbolId uint32
-type MergeId uint32
 type TypeId uint32
-
-// Symbol
-
-type Symbol struct {
-	flags                        SymbolFlags
-	checkFlags                   CheckFlags // Non-zero only in transient symbols created by Checker
-	constEnumOnlyModule          bool       // True if module contains only const enums or other modules with only const enums
-	isReplaceableByMethod        bool
-	name                         string
-	declarations                 []*Node
-	valueDeclaration             *Node
-	members                      SymbolTable
-	exports                      SymbolTable
-	id                           SymbolId
-	mergeId                      MergeId // Assigned once symbol is merged somewhere
-	parent                       *Symbol
-	exportSymbol                 *Symbol
-	assignmentDeclarationMembers map[NodeId]*Node // Set of detected assignment declarations
-	globalExports                SymbolTable      // Conditional global UMD exports
-}
-
-// SymbolTable
-
-type SymbolTable map[string]*Symbol
 
 // Links for value symbols
 
 type ValueSymbolLinks struct {
 	resolvedType   *Type // Type of value symbol
 	writeType      *Type
-	target         *Symbol
+	target         *ast.Symbol
 	mapper         *TypeMapper
 	nameType       *Type
 	containingType *Type // Containing union or intersection type for synthetic property
@@ -821,26 +91,26 @@ type ValueSymbolLinks struct {
 // Links for alias symbols
 
 type AliasSymbolLinks struct {
-	immediateTarget             *Symbol // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
-	aliasTarget                 *Symbol // Resolved (non-alias) target of an alias
-	typeOnlyDeclarationResolved bool    // True when typeOnlyDeclaration resolution in process
-	typeOnlyDeclaration         *Node   // First resolved alias declaration that makes the symbol only usable in type constructs
-	typeOnlyExportStarName      string  // Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name
+	immediateTarget             *ast.Symbol // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
+	aliasTarget                 *ast.Symbol // Resolved (non-alias) target of an alias
+	typeOnlyDeclarationResolved bool        // True when typeOnlyDeclaration resolution in process
+	typeOnlyDeclaration         *ast.Node   // First resolved alias declaration that makes the symbol only usable in type constructs
+	typeOnlyExportStarName      string      // Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name
 }
 
 // Links for module symbols
 
 type ModuleSymbolLinks struct {
-	resolvedExports       SymbolTable      // Resolved exports of module or combined early- and late-bound static members of a class.
-	cjsExportMerged       *Symbol          // Version of the symbol with all non export= exports merged with the export= target
-	typeOnlyExportStarMap map[string]*Node // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
+	resolvedExports       ast.SymbolTable      // Resolved exports of module or combined early- and late-bound static members of a class.
+	cjsExportMerged       *ast.Symbol          // Version of the symbol with all non export= exports merged with the export= target
+	typeOnlyExportStarMap map[string]*ast.Node // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
 }
 
 // Links for export type symbols
 
 type ExportTypeLinks struct {
-	target            *Symbol // Target symbol
-	originatingImport *Node   // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
+	target            *ast.Symbol // Target symbol
+	originatingImport *ast.Node   // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
 }
 
 // Links for type aliases
@@ -866,97 +136,19 @@ const (
 	MembersOrExportsResolutionKindresolvedMembers MembersOrExportsResolutionKind = 1
 )
 
-type MembersAndExportsLinks [2]SymbolTable // Indexed by MembersOrExportsResolutionKind
+type MembersAndExportsLinks [2]ast.SymbolTable // Indexed by MembersOrExportsResolutionKind
 
 // Links for syntheric spread properties
 
 type SpreadLinks struct {
-	leftSpread  *Symbol // Left source for synthetic spread property
-	rightSpread *Symbol // Right source for synthetic spread property
+	leftSpread  *ast.Symbol // Left source for synthetic spread property
+	rightSpread *ast.Symbol // Right source for synthetic spread property
 }
 
 // Links for variances of type aliases and interface types
 
 type VarianceLinks struct {
 	variances []VarianceFlags
-}
-
-// FlowFlags
-
-type FlowFlags uint32
-
-const (
-	FlowFlagsUnreachable    FlowFlags = 1 << 0  // Unreachable code
-	FlowFlagsStart          FlowFlags = 1 << 1  // Start of flow graph
-	FlowFlagsBranchLabel    FlowFlags = 1 << 2  // Non-looping junction
-	FlowFlagsLoopLabel      FlowFlags = 1 << 3  // Looping junction
-	FlowFlagsAssignment     FlowFlags = 1 << 4  // Assignment
-	FlowFlagsTrueCondition  FlowFlags = 1 << 5  // Condition known to be true
-	FlowFlagsFalseCondition FlowFlags = 1 << 6  // Condition known to be false
-	FlowFlagsSwitchClause   FlowFlags = 1 << 7  // Switch statement clause
-	FlowFlagsArrayMutation  FlowFlags = 1 << 8  // Potential array mutation
-	FlowFlagsCall           FlowFlags = 1 << 9  // Potential assertion call
-	FlowFlagsReduceLabel    FlowFlags = 1 << 10 // Temporarily reduce antecedents of label
-	FlowFlagsReferenced     FlowFlags = 1 << 11 // Referenced as antecedent once
-	FlowFlagsShared         FlowFlags = 1 << 12 // Referenced as antecedent more than once
-	FlowFlagsLabel                    = FlowFlagsBranchLabel | FlowFlagsLoopLabel
-	FlowFlagsCondition                = FlowFlagsTrueCondition | FlowFlagsFalseCondition
-)
-
-// FlowNode
-
-type FlowNode struct {
-	flags       FlowFlags
-	node        any
-	antecedent  *FlowNode // Antecedent for all but FlowLabel
-	antecedents *FlowList // Linked list of antecedents for FlowLabel
-}
-
-type FlowList struct {
-	node *FlowNode
-	next *FlowList
-}
-
-type FlowLabel = FlowNode
-
-var unreachableFlow = &FlowNode{flags: FlowFlagsUnreachable}
-var reportedUnreachableFlow = &FlowNode{flags: FlowFlagsUnreachable}
-
-// FlowSwitchClauseData
-
-type FlowSwitchClauseData struct {
-	switchStatement *SwitchStatement
-	clauseStart     int32 // Start index of case/default clause range
-	clauseEnd       int32 // End index of case/default clause range
-}
-
-// FlowReduceLabelData
-
-type FlowReduceLabelData struct {
-	target      *FlowLabel // Target label
-	antecedents *FlowList  // Temporary antecedent list
-}
-
-// Tristate
-
-type Tristate byte
-
-const (
-	TSUnknown Tristate = iota
-	TSFalse
-	TSTrue
-)
-
-func (t *Tristate) UnmarshalJSON(data []byte) error {
-	switch string(data) {
-	case "true":
-		*t = TSTrue
-	case "false":
-		*t = TSFalse
-	default:
-		*t = TSUnknown
-	}
-	return nil
 }
 
 type VarianceFlags uint32
@@ -1044,43 +236,43 @@ const (
 // CompilerOptions
 
 type CompilerOptions struct {
-	AllowJs                            Tristate
-	AllowSyntheticDefaultImports       Tristate
-	AllowUmdGlobalAccess               Tristate
-	AllowUnreachableCode               Tristate
-	AllowUnusedLabels                  Tristate
-	CheckJs                            Tristate
+	AllowJs                            core.Tristate
+	AllowSyntheticDefaultImports       core.Tristate
+	AllowUmdGlobalAccess               core.Tristate
+	AllowUnreachableCode               core.Tristate
+	AllowUnusedLabels                  core.Tristate
+	CheckJs                            core.Tristate
 	CustomConditions                   []string
-	ESModuleInterop                    Tristate
-	ExactOptionalPropertyTypes         Tristate
-	IsolatedModules                    Tristate
+	ESModuleInterop                    core.Tristate
+	ExactOptionalPropertyTypes         core.Tristate
+	IsolatedModules                    core.Tristate
 	ModuleKind                         ModuleKind
 	ModuleResolution                   ModuleResolutionKind
 	ModuleSuffixes                     []string
-	NoFallthroughCasesInSwitch         Tristate
-	NoImplicitAny                      Tristate
-	NoPropertyAccessFromIndexSignature Tristate
-	NoUncheckedIndexedAccess           Tristate
+	NoFallthroughCasesInSwitch         core.Tristate
+	NoImplicitAny                      core.Tristate
+	NoPropertyAccessFromIndexSignature core.Tristate
+	NoUncheckedIndexedAccess           core.Tristate
 	Paths                              map[string][]string
-	PreserveConstEnums                 Tristate
-	PreserveSymlinks                   Tristate
-	ResolveJsonModule                  Tristate
-	ResolvePackageJsonExports          Tristate
-	ResolvePackageJsonImports          Tristate
-	Strict                             Tristate
-	StrictBindCallApply                Tristate
-	StrictNullChecks                   Tristate
-	StrictFunctionTypes                Tristate
-	Target                             ScriptTarget
-	TraceResolution                    Tristate
+	PreserveConstEnums                 core.Tristate
+	PreserveSymlinks                   core.Tristate
+	ResolveJsonModule                  core.Tristate
+	ResolvePackageJsonExports          core.Tristate
+	ResolvePackageJsonImports          core.Tristate
+	Strict                             core.Tristate
+	StrictBindCallApply                core.Tristate
+	StrictNullChecks                   core.Tristate
+	StrictFunctionTypes                core.Tristate
+	Target                             core.ScriptTarget
+	TraceResolution                    core.Tristate
 	TypeRoots                          []string
 	Types                              []string
-	UseDefineForClassFields            Tristate
-	UseUnknownInCatchVariables         Tristate
-	VerbatimModuleSyntax               Tristate
+	UseDefineForClassFields            core.Tristate
+	UseUnknownInCatchVariables         core.Tristate
+	VerbatimModuleSyntax               core.Tristate
 
 	configFilePath  string
-	noDtsResolution Tristate
+	noDtsResolution core.Tristate
 	pathsBasePath   string
 }
 
@@ -1156,12 +348,12 @@ const (
 
 type NodeLinks struct {
 	flags                          NodeCheckFlags // Set of flags specific to Node
-	declarationRequiresScopeChange Tristate
+	declarationRequiresScopeChange core.Tristate
 }
 
 type TypeNodeLinks struct {
-	resolvedType        *Type   // Cached type of type node
-	resolvedSymbol      *Symbol // Cached name resolution result
+	resolvedType        *Type       // Cached type of type node
+	resolvedSymbol      *ast.Symbol // Cached name resolution result
 	outerTypeParameters []*Type
 }
 
@@ -1376,11 +568,11 @@ const (
 // TypeAlias
 
 type TypeAlias struct {
-	symbol        *Symbol
+	symbol        *ast.Symbol
 	typeArguments []*Type
 }
 
-func (a *TypeAlias) Symbol() *Symbol {
+func (a *TypeAlias) Symbol() *ast.Symbol {
 	if a == nil {
 		return nil
 	}
@@ -1400,7 +592,7 @@ type Type struct {
 	flags       TypeFlags
 	objectFlags ObjectFlags
 	id          TypeId
-	symbol      *Symbol
+	symbol      *ast.Symbol
 	alias       *TypeAlias
 	data        TypeData // Type specific data
 }
@@ -1561,8 +753,8 @@ func (t *ConstrainedType) AsConstrainedType() *ConstrainedType { return t }
 
 type StructuredType struct {
 	ConstrainedType
-	members            SymbolTable
-	properties         []*Symbol
+	members            ast.SymbolTable
+	properties         []*ast.Symbol
 	signatures         []*Signature // Signatures (call + construct)
 	callSignatureCount int          // Count of call signatures
 	indexInfos         []*IndexInfo
@@ -1602,7 +794,7 @@ func (t *ObjectType) AsObjectType() *ObjectType { return t }
 
 type TypeReference struct {
 	ObjectType
-	node                  *Node // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
+	node                  *ast.Node // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
 	resolvedTypeArguments []*Type
 }
 
@@ -1619,10 +811,10 @@ type InterfaceType struct {
 	declaredMembersResolved     bool
 	resolvedBaseConstructorType *Type
 	resolvedBaseTypes           []*Type
-	declaredMembers             SymbolTable  // Declared members
-	declaredCallSignatures      []*Signature // Declared call signatures
-	declaredConstructSignatures []*Signature // Declared construct signatures
-	declaredIndexInfos          []*IndexInfo // Declared index signatures
+	declaredMembers             ast.SymbolTable // Declared members
+	declaredCallSignatures      []*Signature    // Declared call signatures
+	declaredConstructSignatures []*Signature    // Declared construct signatures
+	declaredIndexInfos          []*IndexInfo    // Declared index signatures
 }
 
 func (t *InterfaceType) AsInterfaceType() *InterfaceType { return t }
@@ -1666,7 +858,7 @@ const (
 
 type TupleElementInfo struct {
 	flags              ElementFlags
-	labeledDeclaration *Node // NamedTupleMember | ParameterDeclaration | nil
+	labeledDeclaration *ast.Node // NamedTupleMember | ParameterDeclaration | nil
 }
 
 type TupleType struct {
@@ -1689,14 +881,14 @@ type SingleSignatureType struct {
 
 type InstantiationExpressionType struct {
 	ObjectType
-	node *Node
+	node *ast.Node
 }
 
 // MappedType
 
 type MappedType struct {
 	ObjectType
-	declaration          MappedTypeNode
+	declaration          ast.MappedTypeNode
 	typeParameter        *Type
 	constraintType       *Type
 	nameType             *Type
@@ -1720,9 +912,9 @@ type ReverseMappedType struct {
 type UnionOrIntersectionType struct {
 	StructuredType
 	types                                       []*Type
-	propertyCache                               SymbolTable
-	propertyCacheWithoutFunctionPropertyAugment SymbolTable
-	resolvedProperties                          []*Symbol
+	propertyCache                               ast.SymbolTable
+	propertyCacheWithoutFunctionPropertyAugment ast.SymbolTable
+	resolvedProperties                          []*ast.Symbol
 	resolvedBaseConstraint                      *Type
 }
 
@@ -1804,7 +996,7 @@ type SubstitutionType struct {
 }
 
 type ConditionalRoot struct {
-	node                *Node // ConditionalTypeNode
+	node                *ast.Node // ConditionalTypeNode
 	checkType           *Type
 	extendsType         *Type
 	isDistributive      bool
@@ -1858,10 +1050,10 @@ type Signature struct {
 	flags                    SignatureFlags
 	minArgumentCount         int32
 	resolvedMinArgumentCount int32
-	declaration              *Node
+	declaration              *ast.Node
 	typeParameters           []*Type
-	parameters               []*Symbol
-	thisParameter            *Symbol
+	parameters               []*ast.Symbol
+	thisParameter            *ast.Symbol
 	resolvedReturnType       *Type
 	resolvedTypePredicate    *TypePredicate
 	target                   *Signature
@@ -1897,7 +1089,7 @@ type IndexInfo struct {
 	keyType     *Type
 	valueType   *Type
 	isReadonly  bool
-	declaration *Node // IndexSignatureDeclaration
+	declaration *ast.Node // IndexSignatureDeclaration
 }
 
 /**
@@ -1920,75 +1112,75 @@ const (
 type TypeComparer func(s *Type, t *Type, reportErrors bool) Ternary
 
 type LanguageFeatureMinimumTargetMap struct {
-	Classes                           ScriptTarget
-	ForOf                             ScriptTarget
-	Generators                        ScriptTarget
-	Iteration                         ScriptTarget
-	SpreadElements                    ScriptTarget
-	RestElements                      ScriptTarget
-	TaggedTemplates                   ScriptTarget
-	DestructuringAssignment           ScriptTarget
-	BindingPatterns                   ScriptTarget
-	ArrowFunctions                    ScriptTarget
-	BlockScopedVariables              ScriptTarget
-	ObjectAssign                      ScriptTarget
-	RegularExpressionFlagsUnicode     ScriptTarget
-	RegularExpressionFlagsSticky      ScriptTarget
-	Exponentiation                    ScriptTarget
-	AsyncFunctions                    ScriptTarget
-	ForAwaitOf                        ScriptTarget
-	AsyncGenerators                   ScriptTarget
-	AsyncIteration                    ScriptTarget
-	ObjectSpreadRest                  ScriptTarget
-	RegularExpressionFlagsDotAll      ScriptTarget
-	BindinglessCatch                  ScriptTarget
-	BigInt                            ScriptTarget
-	NullishCoalesce                   ScriptTarget
-	OptionalChaining                  ScriptTarget
-	LogicalAssignment                 ScriptTarget
-	TopLevelAwait                     ScriptTarget
-	ClassFields                       ScriptTarget
-	PrivateNamesAndClassStaticBlocks  ScriptTarget
-	RegularExpressionFlagsHasIndices  ScriptTarget
-	ShebangComments                   ScriptTarget
-	UsingAndAwaitUsing                ScriptTarget
-	ClassAndClassElementDecorators    ScriptTarget
-	RegularExpressionFlagsUnicodeSets ScriptTarget
+	Classes                           core.ScriptTarget
+	ForOf                             core.ScriptTarget
+	Generators                        core.ScriptTarget
+	Iteration                         core.ScriptTarget
+	SpreadElements                    core.ScriptTarget
+	RestElements                      core.ScriptTarget
+	TaggedTemplates                   core.ScriptTarget
+	DestructuringAssignment           core.ScriptTarget
+	BindingPatterns                   core.ScriptTarget
+	ArrowFunctions                    core.ScriptTarget
+	BlockScopedVariables              core.ScriptTarget
+	ObjectAssign                      core.ScriptTarget
+	RegularExpressionFlagsUnicode     core.ScriptTarget
+	RegularExpressionFlagsSticky      core.ScriptTarget
+	Exponentiation                    core.ScriptTarget
+	AsyncFunctions                    core.ScriptTarget
+	ForAwaitOf                        core.ScriptTarget
+	AsyncGenerators                   core.ScriptTarget
+	AsyncIteration                    core.ScriptTarget
+	ObjectSpreadRest                  core.ScriptTarget
+	RegularExpressionFlagsDotAll      core.ScriptTarget
+	BindinglessCatch                  core.ScriptTarget
+	BigInt                            core.ScriptTarget
+	NullishCoalesce                   core.ScriptTarget
+	OptionalChaining                  core.ScriptTarget
+	LogicalAssignment                 core.ScriptTarget
+	TopLevelAwait                     core.ScriptTarget
+	ClassFields                       core.ScriptTarget
+	PrivateNamesAndClassStaticBlocks  core.ScriptTarget
+	RegularExpressionFlagsHasIndices  core.ScriptTarget
+	ShebangComments                   core.ScriptTarget
+	UsingAndAwaitUsing                core.ScriptTarget
+	ClassAndClassElementDecorators    core.ScriptTarget
+	RegularExpressionFlagsUnicodeSets core.ScriptTarget
 }
 
 var LanguageFeatureMinimumTarget = LanguageFeatureMinimumTargetMap{
-	Classes:                           ScriptTargetES2015,
-	ForOf:                             ScriptTargetES2015,
-	Generators:                        ScriptTargetES2015,
-	Iteration:                         ScriptTargetES2015,
-	SpreadElements:                    ScriptTargetES2015,
-	RestElements:                      ScriptTargetES2015,
-	TaggedTemplates:                   ScriptTargetES2015,
-	DestructuringAssignment:           ScriptTargetES2015,
-	BindingPatterns:                   ScriptTargetES2015,
-	ArrowFunctions:                    ScriptTargetES2015,
-	BlockScopedVariables:              ScriptTargetES2015,
-	ObjectAssign:                      ScriptTargetES2015,
-	RegularExpressionFlagsUnicode:     ScriptTargetES2015,
-	RegularExpressionFlagsSticky:      ScriptTargetES2015,
-	Exponentiation:                    ScriptTargetES2016,
-	AsyncFunctions:                    ScriptTargetES2017,
-	ForAwaitOf:                        ScriptTargetES2018,
-	AsyncGenerators:                   ScriptTargetES2018,
-	AsyncIteration:                    ScriptTargetES2018,
-	ObjectSpreadRest:                  ScriptTargetES2018,
-	RegularExpressionFlagsDotAll:      ScriptTargetES2018,
-	BindinglessCatch:                  ScriptTargetES2019,
-	BigInt:                            ScriptTargetES2020,
-	NullishCoalesce:                   ScriptTargetES2020,
-	OptionalChaining:                  ScriptTargetES2020,
-	LogicalAssignment:                 ScriptTargetES2021,
-	TopLevelAwait:                     ScriptTargetES2022,
-	ClassFields:                       ScriptTargetES2022,
-	PrivateNamesAndClassStaticBlocks:  ScriptTargetES2022,
-	RegularExpressionFlagsHasIndices:  ScriptTargetES2022,
-	ShebangComments:                   ScriptTargetESNext,
-	UsingAndAwaitUsing:                ScriptTargetESNext,
-	ClassAndClassElementDecorators:    ScriptTargetESNext,
-	RegularExpressionFlagsUnicodeSets: ScriptTargetESNext,
+	Classes:                           core.ScriptTargetES2015,
+	ForOf:                             core.ScriptTargetES2015,
+	Generators:                        core.ScriptTargetES2015,
+	Iteration:                         core.ScriptTargetES2015,
+	SpreadElements:                    core.ScriptTargetES2015,
+	RestElements:                      core.ScriptTargetES2015,
+	TaggedTemplates:                   core.ScriptTargetES2015,
+	DestructuringAssignment:           core.ScriptTargetES2015,
+	BindingPatterns:                   core.ScriptTargetES2015,
+	ArrowFunctions:                    core.ScriptTargetES2015,
+	BlockScopedVariables:              core.ScriptTargetES2015,
+	ObjectAssign:                      core.ScriptTargetES2015,
+	RegularExpressionFlagsUnicode:     core.ScriptTargetES2015,
+	RegularExpressionFlagsSticky:      core.ScriptTargetES2015,
+	Exponentiation:                    core.ScriptTargetES2016,
+	AsyncFunctions:                    core.ScriptTargetES2017,
+	ForAwaitOf:                        core.ScriptTargetES2018,
+	AsyncGenerators:                   core.ScriptTargetES2018,
+	AsyncIteration:                    core.ScriptTargetES2018,
+	ObjectSpreadRest:                  core.ScriptTargetES2018,
+	RegularExpressionFlagsDotAll:      core.ScriptTargetES2018,
+	BindinglessCatch:                  core.ScriptTargetES2019,
+	BigInt:                            core.ScriptTargetES2020,
+	NullishCoalesce:                   core.ScriptTargetES2020,
+	OptionalChaining:                  core.ScriptTargetES2020,
+	LogicalAssignment:                 core.ScriptTargetES2021,
+	TopLevelAwait:                     core.ScriptTargetES2022,
+	ClassFields:                       core.ScriptTargetES2022,
+	PrivateNamesAndClassStaticBlocks:  core.ScriptTargetES2022,
+	RegularExpressionFlagsHasIndices:  core.ScriptTargetES2022,
+	ShebangComments:                   core.ScriptTargetESNext,
+	UsingAndAwaitUsing:                core.ScriptTargetESNext,
+	ClassAndClassElementDecorators:    core.ScriptTargetESNext,
+	RegularExpressionFlagsUnicodeSets: core.ScriptTargetESNext,
 }
