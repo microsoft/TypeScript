@@ -454,10 +454,10 @@ func ConvertToRelativePath(absoluteOrRelativePath string, options ComparePathsOp
 		return absoluteOrRelativePath
 	}
 
-	return getRelativePathToDirectoryOrUrl(options.CurrentDirectory, absoluteOrRelativePath, false /*isAbsolutePathAnUrl*/, options)
+	return GetRelativePathToDirectoryOrUrl(options.CurrentDirectory, absoluteOrRelativePath, false /*isAbsolutePathAnUrl*/, options)
 }
 
-func getRelativePathToDirectoryOrUrl(directoryPathOrUrl string, relativeOrAbsolutePath string, isAbsolutePathAnUrl bool, options ComparePathsOptions) string {
+func GetRelativePathToDirectoryOrUrl(directoryPathOrUrl string, relativeOrAbsolutePath string, isAbsolutePathAnUrl bool, options ComparePathsOptions) string {
 	pathComponents := GetPathComponentsRelativeTo(
 		directoryPathOrUrl,
 		relativeOrAbsolutePath,
