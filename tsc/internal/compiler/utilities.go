@@ -3842,6 +3842,21 @@ func isThisProperty(node *Node) bool {
 	return (isPropertyAccessExpression(node) || isElementAccessExpression(node)) && node.Expression().kind == SyntaxKindThisKeyword
 }
 
+func anyToString(v any) string {
+	// !!! This function should behave identically to the expression `"" + v` in JS
+	switch v := v.(type) {
+	case string:
+		return v
+	case float64:
+		return numberToString(v)
+	case bool:
+		return ifElse(v, "true", "false")
+	case PseudoBigInt:
+		return "(BigInt)" // !!!
+	}
+	panic("Unhandled case in anyToString")
+}
+
 func numberToString(f float64) string {
 	// !!! This function should behave identically to the expression `"" + f` in JS
 	return strconv.FormatFloat(f, 'g', -1, 64)
@@ -4100,4 +4115,146 @@ func isObjectLiteralElementLike(node *Node) bool {
 		return true
 	}
 	return false
+}
+
+type EvaluatorResult struct {
+	value                 any
+	isSyntacticallyString bool
+	resolvedOtherFiles    bool
+	hasExternalReferences bool
+}
+
+func evaluatorResult(value any, isSyntacticallyString bool, resolvedOtherFiles bool, hasExternalReferences bool) EvaluatorResult {
+	return EvaluatorResult{value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences}
+}
+
+type Evaluator func(expr *Node, location *Node) EvaluatorResult
+
+func createEvaluator(evaluateEntity Evaluator) Evaluator {
+	var evaluate Evaluator
+	evaluateTemplateExpression := func(expr *Node, location *Node) EvaluatorResult {
+		var sb strings.Builder
+		sb.WriteString(expr.AsTemplateExpression().head.Text())
+		resolvedOtherFiles := false
+		hasExternalReferences := false
+		for _, span := range expr.AsTemplateExpression().templateSpans {
+			spanResult := evaluate(span.Expression(), location)
+			if spanResult.value == nil {
+				return evaluatorResult(nil, true /*isSyntacticallyString*/, false, false)
+			}
+			sb.WriteString(anyToString(spanResult.value))
+			sb.WriteString(span.AsTemplateSpan().literal.Text())
+			resolvedOtherFiles = resolvedOtherFiles || spanResult.resolvedOtherFiles
+			hasExternalReferences = hasExternalReferences || spanResult.hasExternalReferences
+		}
+		return evaluatorResult(sb.String(), true, resolvedOtherFiles, hasExternalReferences)
+	}
+	evaluate = func(expr *Node, location *Node) EvaluatorResult {
+		isSyntacticallyString := false
+		resolvedOtherFiles := false
+		hasExternalReferences := false
+		// It's unclear when/whether we should consider skipping other kinds of outer expressions.
+		// Type assertions intentionally break evaluation when evaluating literal types, such as:
+		//     type T = `one ${"two" as any} three`; // string
+		// But it's less clear whether such an assertion should break enum member evaluation:
+		//     enum E {
+		//       A = "one" as any
+		//     }
+		// SatisfiesExpressions and non-null assertions seem to have even less reason to break
+		// emitting enum members as literals. However, these expressions also break Babel's
+		// evaluation (but not esbuild's), and the isolatedModules errors we give depend on
+		// our evaluation results, so we're currently being conservative so as to issue errors
+		// on code that might break Babel.
+		expr = skipParentheses(expr)
+		switch expr.kind {
+		case SyntaxKindPrefixUnaryExpression:
+			result := evaluate(expr.AsPrefixUnaryExpression().operand, location)
+			resolvedOtherFiles = result.resolvedOtherFiles
+			hasExternalReferences = result.hasExternalReferences
+			if value, ok := result.value.(float64); ok {
+				switch expr.AsPrefixUnaryExpression().operator {
+				case SyntaxKindPlusToken:
+					return evaluatorResult(value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindMinusToken:
+					return evaluatorResult(-value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindTildeToken:
+					return evaluatorResult(float64(^int32(value)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				}
+			}
+		case SyntaxKindBinaryExpression:
+			left := evaluate(expr.AsBinaryExpression().left, location)
+			right := evaluate(expr.AsBinaryExpression().right, location)
+			operator := expr.AsBinaryExpression().operatorToken.kind
+			isSyntacticallyString = (left.isSyntacticallyString || right.isSyntacticallyString) && expr.AsBinaryExpression().operatorToken.kind == SyntaxKindPlusToken
+			resolvedOtherFiles = left.resolvedOtherFiles || right.resolvedOtherFiles
+			hasExternalReferences = left.hasExternalReferences || right.hasExternalReferences
+			leftNum, leftIsNum := left.value.(float64)
+			rightNum, rightIsNum := right.value.(float64)
+			if leftIsNum && rightIsNum {
+				switch operator {
+				case SyntaxKindBarToken:
+					return evaluatorResult(float64(int32(leftNum)|int32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindAmpersandToken:
+					return evaluatorResult(float64(int32(leftNum)&int32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindGreaterThanGreaterThanToken:
+					return evaluatorResult(float64(int32(leftNum)>>int32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindGreaterThanGreaterThanGreaterThanToken:
+					return evaluatorResult(float64(uint32(leftNum)>>uint32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindLessThanLessThanToken:
+					return evaluatorResult(float64(int32(leftNum)<<int32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindCaretToken:
+					return evaluatorResult(float64(int32(leftNum)^int32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindAsteriskToken:
+					return evaluatorResult(leftNum*rightNum, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindSlashToken:
+					return evaluatorResult(leftNum/rightNum, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindPlusToken:
+					return evaluatorResult(leftNum+rightNum, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindMinusToken:
+					return evaluatorResult(leftNum-rightNum, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindPercentToken:
+					return evaluatorResult(leftNum-rightNum*math.Floor(leftNum/rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				case SyntaxKindAsteriskAsteriskToken:
+					return evaluatorResult(math.Pow(leftNum, rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+				}
+			}
+			leftStr, leftIsStr := left.value.(string)
+			rightStr, rightIsStr := right.value.(string)
+			if (leftIsStr || leftIsNum) && (rightIsStr || rightIsNum) && operator == SyntaxKindPlusToken {
+				if leftIsNum {
+					leftStr = numberToString(leftNum)
+				}
+				if rightIsNum {
+					rightStr = numberToString(rightNum)
+				}
+				return evaluatorResult(leftStr+rightStr, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+			}
+		case SyntaxKindStringLiteral, SyntaxKindNoSubstitutionTemplateLiteral:
+			return evaluatorResult(expr.Text(), true /*isSyntacticallyString*/, false, false)
+		case SyntaxKindTemplateExpression:
+			return evaluateTemplateExpression(expr, location)
+		case SyntaxKindNumericLiteral:
+			return evaluatorResult(stringToNumber(expr.Text()), false, false, false)
+		case SyntaxKindIdentifier, SyntaxKindElementAccessExpression:
+			return evaluateEntity(expr, location)
+		case SyntaxKindPropertyAccessExpression:
+			if isEntityNameExpression(expr) {
+				return evaluateEntity(expr, location)
+			}
+		}
+		return evaluatorResult(nil, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+	}
+	return evaluate
+}
+
+func isComputedNonLiteralName(name *Node) bool {
+	return isComputedPropertyName(name) && !isStringOrNumericLiteralLike(name.Expression())
+}
+
+func isInfinityOrNaNString(name string) bool {
+	return name == "Infinity" || name == "-Infinity" || name == "NaN"
+}
+
+func (c *Checker) isConstantVariable(symbol *Symbol) bool {
+	return symbol.flags&SymbolFlagsVariable != 0 && (c.getDeclarationNodeFlagsFromSymbol(symbol)&NodeFlagsConstant) != 0
 }

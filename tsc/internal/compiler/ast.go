@@ -87,6 +87,12 @@ func (n *Node) Text() string {
 		return n.AsBigIntLiteral().text
 	case SyntaxKindNoSubstitutionTemplateLiteral:
 		return n.AsNoSubstitutionTemplateLiteral().text
+	case SyntaxKindTemplateHead:
+		return n.AsTemplateHead().text
+	case SyntaxKindTemplateMiddle:
+		return n.AsTemplateMiddle().text
+	case SyntaxKindTemplateTail:
+		return n.AsTemplateTail().text
 	case SyntaxKindJsxNamespacedName:
 		return n.AsJsxNamespacedName().namespace.Text() + ":" + n.AsJsxNamespacedName().name.Text()
 	}
@@ -117,6 +123,8 @@ func (node *Node) Expression() *Node {
 		return node.AsSatisfiesExpression().expression
 	case SyntaxKindSpreadAssignment:
 		return node.AsSpreadAssignment().expression
+	case SyntaxKindTemplateSpan:
+		return node.AsTemplateSpan().expression
 	}
 	panic("Unhandled case in Node.Expression")
 }
@@ -486,6 +494,21 @@ func (n *Node) AsGetAccessorDeclaration() *GetAccessorDeclaration {
 }
 func (n *Node) AsSetAccessorDeclaration() *SetAccessorDeclaration {
 	return n.data.(*SetAccessorDeclaration)
+}
+func (n *Node) AsTemplateExpression() *TemplateExpression {
+	return n.data.(*TemplateExpression)
+}
+func (n *Node) AsTemplateHead() *TemplateHead {
+	return n.data.(*TemplateHead)
+}
+func (n *Node) AsTemplateMiddle() *TemplateMiddle {
+	return n.data.(*TemplateMiddle)
+}
+func (n *Node) AsTemplateTail() *TemplateTail {
+	return n.data.(*TemplateTail)
+}
+func (n *Node) AsEnumDeclaration() *EnumDeclaration {
+	return n.data.(*EnumDeclaration)
 }
 
 // NodeData
@@ -2992,6 +3015,10 @@ func (f *NodeFactory) NewTemplateExpression(head *TemplateHeadNode, templateSpan
 
 func (node *TemplateExpression) ForEachChild(v Visitor) bool {
 	return visit(v, node.head) || visitNodes(v, node.templateSpans)
+}
+
+func isTemplateExpression(node *Node) bool {
+	return node.kind == SyntaxKindTemplateExpression
 }
 
 // TemplateLiteralTypeSpan

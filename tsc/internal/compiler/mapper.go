@@ -44,6 +44,13 @@ func mergeTypeMappers(m1 *TypeMapper, m2 *TypeMapper) *TypeMapper {
 	return m2
 }
 
+func appendTypeMapping(mapper *TypeMapper, source *Type, target *Type) *TypeMapper {
+	if mapper == nil {
+		return newSimpleTypeMapper(source, target)
+	}
+	return newMergedTypeMapper(mapper, newSimpleTypeMapper(source, target))
+}
+
 // SimpleTypeMapper
 
 type SimpleTypeMapper struct {

@@ -3,6 +3,7 @@ package compiler
 import (
 	"fmt"
 	"maps"
+	"math"
 	"slices"
 	"strconv"
 	"strings"
@@ -158,6 +159,91 @@ const (
 	ReferenceHintDecorator
 )
 
+type TypeFacts uint32
+
+const (
+	TypeFactsNone               TypeFacts = 0
+	TypeFactsTypeofEQString     TypeFacts = 1 << 0
+	TypeFactsTypeofEQNumber     TypeFacts = 1 << 1
+	TypeFactsTypeofEQBigInt     TypeFacts = 1 << 2
+	TypeFactsTypeofEQBoolean    TypeFacts = 1 << 3
+	TypeFactsTypeofEQSymbol     TypeFacts = 1 << 4
+	TypeFactsTypeofEQObject     TypeFacts = 1 << 5
+	TypeFactsTypeofEQFunction   TypeFacts = 1 << 6
+	TypeFactsTypeofEQHostObject TypeFacts = 1 << 7
+	TypeFactsTypeofNEString     TypeFacts = 1 << 8
+	TypeFactsTypeofNENumber     TypeFacts = 1 << 9
+	TypeFactsTypeofNEBigInt     TypeFacts = 1 << 10
+	TypeFactsTypeofNEBoolean    TypeFacts = 1 << 11
+	TypeFactsTypeofNESymbol     TypeFacts = 1 << 12
+	TypeFactsTypeofNEObject     TypeFacts = 1 << 13
+	TypeFactsTypeofNEFunction   TypeFacts = 1 << 14
+	TypeFactsTypeofNEHostObject TypeFacts = 1 << 15
+	TypeFactsEQUndefined        TypeFacts = 1 << 16
+	TypeFactsEQNull             TypeFacts = 1 << 17
+	TypeFactsEQUndefinedOrNull  TypeFacts = 1 << 18
+	TypeFactsNEUndefined        TypeFacts = 1 << 19
+	TypeFactsNENull             TypeFacts = 1 << 20
+	TypeFactsNEUndefinedOrNull  TypeFacts = 1 << 21
+	TypeFactsTruthy             TypeFacts = 1 << 22
+	TypeFactsFalsy              TypeFacts = 1 << 23
+	TypeFactsIsUndefined        TypeFacts = 1 << 24
+	TypeFactsIsNull             TypeFacts = 1 << 25
+	TypeFactsIsUndefinedOrNull  TypeFacts = TypeFactsIsUndefined | TypeFactsIsNull
+	TypeFactsAll                TypeFacts = (1 << 27) - 1
+	// The following members encode facts about particular kinds of types for use in the getTypeFacts function.
+	// The presence of a particular fact means that the given test is true for some (and possibly all) values
+	// of that kind of type.
+	TypeFactsBaseStringStrictFacts     TypeFacts = TypeFactsTypeofEQString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull
+	TypeFactsBaseStringFacts           TypeFacts = TypeFactsBaseStringStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
+	TypeFactsStringStrictFacts         TypeFacts = TypeFactsBaseStringStrictFacts | TypeFactsTruthy | TypeFactsFalsy
+	TypeFactsStringFacts               TypeFacts = TypeFactsBaseStringFacts | TypeFactsTruthy
+	TypeFactsEmptyStringStrictFacts    TypeFacts = TypeFactsBaseStringStrictFacts | TypeFactsFalsy
+	TypeFactsEmptyStringFacts          TypeFacts = TypeFactsBaseStringFacts
+	TypeFactsNonEmptyStringStrictFacts TypeFacts = TypeFactsBaseStringStrictFacts | TypeFactsTruthy
+	TypeFactsNonEmptyStringFacts       TypeFacts = TypeFactsBaseStringFacts | TypeFactsTruthy
+	TypeFactsBaseNumberStrictFacts     TypeFacts = TypeFactsTypeofEQNumber | TypeFactsTypeofNEString | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull
+	TypeFactsBaseNumberFacts           TypeFacts = TypeFactsBaseNumberStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
+	TypeFactsNumberStrictFacts         TypeFacts = TypeFactsBaseNumberStrictFacts | TypeFactsTruthy | TypeFactsFalsy
+	TypeFactsNumberFacts               TypeFacts = TypeFactsBaseNumberFacts | TypeFactsTruthy
+	TypeFactsZeroNumberStrictFacts     TypeFacts = TypeFactsBaseNumberStrictFacts | TypeFactsFalsy
+	TypeFactsZeroNumberFacts           TypeFacts = TypeFactsBaseNumberFacts
+	TypeFactsNonZeroNumberStrictFacts  TypeFacts = TypeFactsBaseNumberStrictFacts | TypeFactsTruthy
+	TypeFactsNonZeroNumberFacts        TypeFacts = TypeFactsBaseNumberFacts | TypeFactsTruthy
+	TypeFactsBaseBigIntStrictFacts     TypeFacts = TypeFactsTypeofEQBigInt | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull
+	TypeFactsBaseBigIntFacts           TypeFacts = TypeFactsBaseBigIntStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
+	TypeFactsBigIntStrictFacts         TypeFacts = TypeFactsBaseBigIntStrictFacts | TypeFactsTruthy | TypeFactsFalsy
+	TypeFactsBigIntFacts               TypeFacts = TypeFactsBaseBigIntFacts | TypeFactsTruthy
+	TypeFactsZeroBigIntStrictFacts     TypeFacts = TypeFactsBaseBigIntStrictFacts | TypeFactsFalsy
+	TypeFactsZeroBigIntFacts           TypeFacts = TypeFactsBaseBigIntFacts
+	TypeFactsNonZeroBigIntStrictFacts  TypeFacts = TypeFactsBaseBigIntStrictFacts | TypeFactsTruthy
+	TypeFactsNonZeroBigIntFacts        TypeFacts = TypeFactsBaseBigIntFacts | TypeFactsTruthy
+	TypeFactsBaseBooleanStrictFacts    TypeFacts = TypeFactsTypeofEQBoolean | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull
+	TypeFactsBaseBooleanFacts          TypeFacts = TypeFactsBaseBooleanStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
+	TypeFactsBooleanStrictFacts        TypeFacts = TypeFactsBaseBooleanStrictFacts | TypeFactsTruthy | TypeFactsFalsy
+	TypeFactsBooleanFacts              TypeFacts = TypeFactsBaseBooleanFacts | TypeFactsTruthy
+	TypeFactsFalseStrictFacts          TypeFacts = TypeFactsBaseBooleanStrictFacts | TypeFactsFalsy
+	TypeFactsFalseFacts                TypeFacts = TypeFactsBaseBooleanFacts
+	TypeFactsTrueStrictFacts           TypeFacts = TypeFactsBaseBooleanStrictFacts | TypeFactsTruthy
+	TypeFactsTrueFacts                 TypeFacts = TypeFactsBaseBooleanFacts | TypeFactsTruthy
+	TypeFactsSymbolStrictFacts         TypeFacts = TypeFactsTypeofEQSymbol | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull | TypeFactsTruthy
+	TypeFactsSymbolFacts               TypeFacts = TypeFactsSymbolStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
+	TypeFactsObjectStrictFacts         TypeFacts = TypeFactsTypeofEQObject | TypeFactsTypeofEQHostObject | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEFunction | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull | TypeFactsTruthy
+	TypeFactsObjectFacts               TypeFacts = TypeFactsObjectStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
+	TypeFactsFunctionStrictFacts       TypeFacts = TypeFactsTypeofEQFunction | TypeFactsTypeofEQHostObject | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsNEUndefined | TypeFactsNENull | TypeFactsNEUndefinedOrNull | TypeFactsTruthy
+	TypeFactsFunctionFacts             TypeFacts = TypeFactsFunctionStrictFacts | TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsFalsy
+	TypeFactsVoidFacts                 TypeFacts = TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsEQUndefined | TypeFactsEQUndefinedOrNull | TypeFactsNENull | TypeFactsFalsy
+	TypeFactsUndefinedFacts            TypeFacts = TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsEQUndefined | TypeFactsEQUndefinedOrNull | TypeFactsNENull | TypeFactsFalsy | TypeFactsIsUndefined
+	TypeFactsNullFacts                 TypeFacts = TypeFactsTypeofEQObject | TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEFunction | TypeFactsTypeofNEHostObject | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsNEUndefined | TypeFactsFalsy | TypeFactsIsNull
+	TypeFactsEmptyObjectStrictFacts    TypeFacts = TypeFactsAll & ^(TypeFactsEQUndefined | TypeFactsEQNull | TypeFactsEQUndefinedOrNull | TypeFactsIsUndefinedOrNull)
+	TypeFactsEmptyObjectFacts          TypeFacts = TypeFactsAll & ^TypeFactsIsUndefinedOrNull
+	TypeFactsUnknownFacts              TypeFacts = TypeFactsAll & ^TypeFactsIsUndefinedOrNull
+	TypeFactsAllTypeofNE               TypeFacts = TypeFactsTypeofNEString | TypeFactsTypeofNENumber | TypeFactsTypeofNEBigInt | TypeFactsTypeofNEBoolean | TypeFactsTypeofNESymbol | TypeFactsTypeofNEObject | TypeFactsTypeofNEFunction | TypeFactsNEUndefined
+	// Masks
+	TypeFactsOrFactsMask  TypeFacts = TypeFactsTypeofEQFunction | TypeFactsTypeofNEObject
+	TypeFactsAndFactsMask TypeFacts = TypeFactsAll & ^TypeFactsOrFactsMask
+)
+
 // Checker
 
 type Checker struct {
@@ -182,6 +268,7 @@ type Checker struct {
 	exactOptionalPropertyTypes         bool
 	arrayVariances                     []VarianceFlags
 	globals                            SymbolTable
+	evaluate                           Evaluator
 	stringLiteralTypes                 map[string]*Type
 	numberLiteralTypes                 map[float64]*Type
 	bigintLiteralTypes                 map[PseudoBigInt]*Type
@@ -213,14 +300,14 @@ type Checker struct {
 	nodeLinks                          LinkStore[*Node, NodeLinks]
 	signatureLinks                     LinkStore[*Node, SignatureLinks]
 	typeNodeLinks                      LinkStore[*Node, TypeNodeLinks]
+	enumMemberLinks                    LinkStore[*Node, EnumMemberLinks]
 	valueSymbolLinks                   LinkStore[*Symbol, ValueSymbolLinks]
 	aliasSymbolLinks                   LinkStore[*Symbol, AliasSymbolLinks]
 	moduleSymbolLinks                  LinkStore[*Symbol, ModuleSymbolLinks]
 	exportTypeLinks                    LinkStore[*Symbol, ExportTypeLinks]
 	membersAndExportsLinks             LinkStore[*Symbol, MembersAndExportsLinks]
-	typeParameterLinks                 LinkStore[*Symbol, TypeParameterLinks]
-	interfaceTypeLinks                 LinkStore[*Symbol, InterfaceTypeLinks]
 	typeAliasLinks                     LinkStore[*Symbol, TypeAliasLinks]
+	declaredTypeLinks                  LinkStore[*Symbol, DeclaredTypeLinks]
 	spreadLinks                        LinkStore[*Symbol, SpreadLinks]
 	varianceLinks                      LinkStore[*Symbol, VarianceLinks]
 	patternForType                     map[*Type]*Node
@@ -262,6 +349,8 @@ type Checker struct {
 	reportUnmeasurableMapper           *TypeMapper
 	emptyObjectType                    *Type
 	emptyTypeLiteralType               *Type
+	unknownEmptyObjectType             *Type
+	unknownUnionType                   *Type
 	emptyGenericType                   *Type
 	anyFunctionType                    *Type
 	noConstraintType                   *Type
@@ -305,6 +394,7 @@ type Checker struct {
 	comparableRelation                 *Relation
 	identityRelation                   *Relation
 	enumRelation                       *Relation
+	getGlobalNonNullableTypeAlias      func() *Symbol
 	isPrimitiveOrObjectOrEmptyType     func(*Type) bool
 	containsMissingType                func(*Type) bool
 	couldContainTypeVariables          func(*Type) bool
@@ -328,6 +418,7 @@ func NewChecker(program *Program) *Checker {
 	c.exactOptionalPropertyTypes = c.compilerOptions.ExactOptionalPropertyTypes == TSTrue
 	c.arrayVariances = []VarianceFlags{VarianceFlagsCovariant}
 	c.globals = make(SymbolTable)
+	c.evaluate = createEvaluator(c.evaluateEntity)
 	c.stringLiteralTypes = make(map[string]*Type)
 	c.numberLiteralTypes = make(map[float64]*Type)
 	c.bigintLiteralTypes = make(map[PseudoBigInt]*Type)
@@ -396,6 +487,8 @@ func NewChecker(program *Program) *Checker {
 	c.reportUnmeasurableMapper = newFunctionTypeMapper(c.reportUnmeasurableWorker)
 	c.emptyObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.emptyTypeLiteralType = c.newAnonymousType(c.newSymbol(SymbolFlagsTypeLiteral, InternalSymbolNameType), nil, nil, nil, nil)
+	c.unknownEmptyObjectType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
+	c.unknownUnionType = c.createUnknownUnionType()
 	c.emptyGenericType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
 	c.emptyGenericType.AsObjectType().instantiations = make(map[string]*Type)
 	c.anyFunctionType = c.newAnonymousType(nil /*symbol*/, nil, nil, nil, nil)
@@ -417,6 +510,7 @@ func NewChecker(program *Program) *Checker {
 	c.comparableRelation = &Relation{}
 	c.identityRelation = &Relation{}
 	c.enumRelation = &Relation{}
+	c.getGlobalNonNullableTypeAlias = core.Memoize(func() *Symbol { return c.getGlobalSymbol("NonNullable", SymbolFlagsTypeAlias, nil /*diagnostic*/) })
 	c.initializeClosures()
 	c.initializeChecker()
 	return c
@@ -4327,9 +4421,9 @@ func (c *Checker) getTypeOfSymbol(symbol *Symbol) *Type {
 	if symbol.flags&(SymbolFlagsFunction|SymbolFlagsMethod|SymbolFlagsClass|SymbolFlagsEnum|SymbolFlagsValueModule) != 0 {
 		return c.getTypeOfFuncClassEnumModule(symbol)
 	}
-	// if symbol.flags&SymbolFlagsEnumMember != 0 {
-	// 	return c.getTypeOfEnumMember(symbol)
-	// }
+	if symbol.flags&SymbolFlagsEnumMember != 0 {
+		return c.getTypeOfEnumMember(symbol)
+	}
 	// if symbol.flags&SymbolFlagsAccessor != 0 {
 	// 	return c.getTypeOfAccessors(symbol)
 	// }
@@ -4823,6 +4917,11 @@ func (c *Checker) getConstraintFromTypeParameter(t *Type) *Type {
 	return nil
 }
 
+func (c *Checker) getConstraintOrUnknownFromTypeParameter(t *Type) *Type {
+	result := c.getConstraintFromTypeParameter(t)
+	return ifElse(result != nil, result, c.unknownType)
+}
+
 func (c *Checker) getInferredTypeParameterConstraint(t *Type, omitTypeReferences bool) *Type {
 	return nil // !!!
 }
@@ -4850,7 +4949,7 @@ func (c *Checker) getConstraintFromConditionalType(t *Type) *Type {
 }
 
 func (c *Checker) getDeclaredTypeOfClassOrInterface(symbol *Symbol) *Type {
-	links := c.interfaceTypeLinks.get(symbol)
+	links := c.declaredTypeLinks.get(symbol)
 	if links.declaredType == nil {
 		kind := ifElse(symbol.flags&SymbolFlagsClass != 0, ObjectFlagsClass, ObjectFlagsInterface)
 		t := c.newObjectType(kind, symbol)
@@ -5293,7 +5392,11 @@ func (c *Checker) getWidenedType(t *Type) *Type {
 }
 
 func (c *Checker) getTypeOfEnumMember(symbol *Symbol) *Type {
-	return c.anyType // !!!
+	links := c.valueSymbolLinks.get(symbol)
+	if links.resolvedType == nil {
+		links.resolvedType = c.getDeclaredTypeOfEnumMember(symbol)
+	}
+	return links.resolvedType
 }
 
 func (c *Checker) addOptionalityEx(t *Type, isProperty bool, isOptional bool) *Type {
@@ -5313,12 +5416,9 @@ func (c *Checker) getOptionalType(t *Type, isProperty bool) *Type {
 }
 
 func (c *Checker) getNonNullableType(t *Type) *Type {
-	// !!!
-	// if c.strictNullChecks {
-	// 	return c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
-	// } else {
-	// 	return t
-	// }
+	if c.strictNullChecks {
+		return c.getAdjustedTypeWithFacts(t, TypeFactsNEUndefinedOrNull)
+	}
 	return t
 }
 
@@ -7435,6 +7535,11 @@ func (c *Checker) getDefaultFromTypeParameter(t *Type) *Type {
 	return c.unknownType // !!!
 }
 
+func (c *Checker) getDefaultOrUnknownFromTypeParameter(t *Type) *Type {
+	result := c.getDefaultFromTypeParameter(t)
+	return ifElse(result != nil, result, c.unknownType)
+}
+
 func (c *Checker) getNamedMembers(members SymbolTable) []*Symbol {
 	var result []*Symbol
 	for id, symbol := range members {
@@ -7811,8 +7916,49 @@ func (c *Checker) getTypeParameterFromMappedType(t *Type) *Type {
 	return c.anyType // !!!
 }
 
+func (c *Checker) getConstraintTypeFromMappedType(t *Type) *Type {
+	return c.anyType // !!!
+}
+
 func (c *Checker) getNameTypeFromMappedType(t *Type) *Type {
 	return c.anyType // !!!
+}
+
+func (c *Checker) getTemplateTypeFromMappedType(t *Type) *Type {
+	return c.anyType // !!!
+}
+
+func (c *Checker) isMappedTypeWithKeyofConstraintDeclaration(t *Type) bool {
+	constraintDeclaration := c.getConstraintDeclarationForMappedType(t)
+	return isTypeOperatorNode(constraintDeclaration) && constraintDeclaration.AsTypeOperatorNode().operator == SyntaxKindKeyOfKeyword
+}
+
+func (c *Checker) getConstraintDeclarationForMappedType(t *Type) *Node {
+	return t.AsMappedType().declaration.AsMappedTypeNode().typeParameter.AsTypeParameter().constraint
+}
+
+func (c *Checker) getApparentMappedTypeKeys(nameType *Type, targetType *Type) *Type {
+	modifiersType := c.getApparentType(c.getModifiersTypeFromMappedType(targetType))
+	var mappedKeys []*Type
+	c.forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, TypeFlagsStringOrNumberLiteralOrUnique, false, func(t *Type) {
+		mappedKeys = append(mappedKeys, c.instantiateType(nameType, appendTypeMapping(targetType.Mapper(), c.getTypeParameterFromMappedType(targetType), t)))
+	})
+	return c.getUnionType(mappedKeys)
+}
+
+func (c *Checker) forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(t *Type, include TypeFlags, stringsOnly bool, cb func(keyType *Type)) {
+	for _, prop := range c.getPropertiesOfType(t) {
+		cb(c.getLiteralTypeFromProperty(prop, include, false))
+	}
+	if t.flags&TypeFlagsAny != 0 {
+		cb(c.stringType)
+	} else {
+		for _, info := range c.getIndexInfosOfType(t) {
+			if !stringsOnly || info.keyType.flags&(TypeFlagsString|TypeFlagsTemplateLiteral) != 0 {
+				cb(info.keyType)
+			}
+		}
+	}
 }
 
 func (c *Checker) instantiateReverseMappedType(t *Type, m *TypeMapper) *Type {
@@ -8517,11 +8663,11 @@ func (c *Checker) tryGetDeclaredTypeOfSymbol(symbol *Symbol) *Type {
 		return c.getDeclaredTypeOfTypeParameter(symbol)
 	case symbol.flags&SymbolFlagsTypeAlias != 0:
 		return c.getDeclaredTypeOfTypeAlias(symbol)
+	case symbol.flags&SymbolFlagsEnum != 0:
+		return c.getDeclaredTypeOfEnum(symbol)
+	case symbol.flags&SymbolFlagsEnumMember != 0:
+		return c.getDeclaredTypeOfEnumMember(symbol)
 		// !!!
-		// case symbol.flags&SymbolFlagsEnum != 0:
-		// 	return c.getDeclaredTypeOfEnum(symbol)
-		// case symbol.flags&SymbolFlagsEnumMember != 0:
-		// 	return c.getDeclaredTypeOfEnumMember(symbol)
 		// case symbol.flags&SymbolFlagsAlias != 0:
 		// 	return c.getDeclaredTypeOfAlias(symbol)
 	}
@@ -8662,7 +8808,7 @@ func (c *Checker) appendTypeParameters(typeParameters []*Type, declarations []*N
 }
 
 func (c *Checker) getDeclaredTypeOfTypeParameter(symbol *Symbol) *Type {
-	links := c.typeParameterLinks.get(symbol)
+	links := c.declaredTypeLinks.get(symbol)
 	if links.declaredType == nil {
 		links.declaredType = c.newTypeParameter(symbol)
 	}
@@ -8706,6 +8852,222 @@ func (c *Checker) getDeclaredTypeOfTypeAlias(symbol *Symbol) *Type {
 		}
 	}
 	return links.declaredType
+}
+
+func (c *Checker) getDeclaredTypeOfEnum(symbol *Symbol) *Type {
+	links := c.declaredTypeLinks.get(symbol)
+	if !(links.declaredType != nil) {
+		var memberTypeList []*Type
+		for _, declaration := range symbol.declarations {
+			if declaration.kind == SyntaxKindEnumDeclaration {
+				for _, member := range declaration.AsEnumDeclaration().members {
+					if c.hasBindableName(member) {
+						memberSymbol := c.getSymbolOfDeclaration(member)
+						value := c.getEnumMemberValue(member).value
+						var memberType *Type
+						if value != nil {
+							memberType = c.getEnumLiteralType(value, symbol, memberSymbol)
+						} else {
+							memberType = c.createComputedEnumType(memberSymbol)
+						}
+						c.declaredTypeLinks.get(memberSymbol).declaredType = c.getFreshTypeOfLiteralType(memberType)
+						memberTypeList = append(memberTypeList, memberType)
+					}
+				}
+			}
+		}
+		var enumType *Type
+		if len(memberTypeList) != 0 {
+			enumType = c.getUnionTypeEx(memberTypeList, UnionReductionLiteral, &TypeAlias{symbol: symbol}, nil /*origin*/)
+		} else {
+			enumType = c.createComputedEnumType(symbol)
+		}
+		if enumType.flags&TypeFlagsUnion != 0 {
+			enumType.flags |= TypeFlagsEnumLiteral
+			enumType.symbol = symbol
+		}
+		links.declaredType = enumType
+	}
+	return links.declaredType
+}
+
+func (c *Checker) getEnumMemberValue(node *Node) EvaluatorResult {
+	c.computeEnumMemberValues(node.parent)
+	return c.enumMemberLinks.get(node).value
+}
+
+func (c *Checker) createComputedEnumType(symbol *Symbol) *Type {
+	regularType := c.newLiteralType(TypeFlagsEnum, nil, nil)
+	regularType.symbol = symbol
+	freshType := c.newLiteralType(TypeFlagsEnum, nil, regularType)
+	freshType.symbol = symbol
+	regularType.AsLiteralType().freshType = freshType
+	return regularType
+}
+
+func (c *Checker) getDeclaredTypeOfEnumMember(symbol *Symbol) *Type {
+	links := c.declaredTypeLinks.get(symbol)
+	if !(links.declaredType != nil) {
+		enumType := c.getDeclaredTypeOfEnum(c.getParentOfSymbol(symbol))
+		if links.declaredType == nil {
+			links.declaredType = enumType
+		}
+	}
+	return links.declaredType
+}
+
+func (c *Checker) computeEnumMemberValues(node *Node) {
+	nodeLinks := c.nodeLinks.get(node)
+	if !(nodeLinks.flags&NodeCheckFlagsEnumValuesComputed != 0) {
+		nodeLinks.flags |= NodeCheckFlagsEnumValuesComputed
+		var autoValue = 0.0
+		var previous *Node
+		for _, member := range node.AsEnumDeclaration().members {
+			result := c.computeEnumMemberValue(member, autoValue, previous)
+			c.enumMemberLinks.get(member).value = result
+			if value, isNumber := result.value.(float64); isNumber {
+				autoValue = value + 1
+			} else {
+				autoValue = math.NaN()
+			}
+			previous = member
+		}
+	}
+}
+
+func (c *Checker) computeEnumMemberValue(member *Node, autoValue float64, previous *Node) EvaluatorResult {
+	if isComputedNonLiteralName(member.Name()) {
+		c.error(member.Name(), diagnostics.Computed_property_names_are_not_allowed_in_enums)
+	} else {
+		text := member.Name().Text()
+		if isNumericLiteralName(text) && !isInfinityOrNaNString(text) {
+			c.error(member.Name(), diagnostics.An_enum_member_cannot_have_a_numeric_name)
+		}
+	}
+	if member.AsEnumMember().initializer != nil {
+		return c.computeConstantEnumMemberValue(member)
+	}
+	// In ambient non-const numeric enum declarations, enum members without initializers are
+	// considered computed members (as opposed to having auto-incremented values).
+	if member.parent.flags&NodeFlagsAmbient != 0 && !isEnumConst(member.parent) {
+		return evaluatorResult(nil, false, false, false)
+	}
+	// If the member declaration specifies no value, the member is considered a constant enum member.
+	// If the member is the first member in the enum declaration, it is assigned the value zero.
+	// Otherwise, it is assigned the value of the immediately preceding member plus one, and an error
+	// occurs if the immediately preceding member is not a constant enum member.
+	if math.IsNaN(autoValue) {
+		c.error(member.Name(), diagnostics.Enum_member_must_have_initializer)
+		return evaluatorResult(nil, false, false, false)
+	}
+	if getIsolatedModules(c.compilerOptions) && previous != nil && previous.AsEnumMember().initializer != nil {
+		prevValue := c.getEnumMemberValue(previous)
+		_, prevIsNum := prevValue.value.(float64)
+		if !prevIsNum || prevValue.resolvedOtherFiles {
+			c.error(member.Name(), diagnostics.Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is_enabled)
+		}
+	}
+	return evaluatorResult(autoValue, false, false, false)
+}
+
+func (c *Checker) computeConstantEnumMemberValue(member *Node) EvaluatorResult {
+	isConstEnum := isEnumConst(member.parent)
+	initializer := member.AsEnumMember().initializer
+	result := c.evaluate(initializer, member)
+	switch {
+	case result.value != nil:
+		if isConstEnum {
+			if numValue, isNumber := result.value.(float64); isNumber && (math.IsInf(numValue, 0) || !math.IsNaN(numValue)) {
+				c.error(initializer, ifElse(math.IsNaN(numValue),
+					diagnostics.X_const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN,
+					diagnostics.X_const_enum_member_initializer_was_evaluated_to_a_non_finite_value))
+			}
+		}
+		if getIsolatedModules(c.compilerOptions) {
+			if _, isString := result.value.(string); isString && !result.isSyntacticallyString {
+				memberName := member.parent.Name().Text() + "." + member.Name().Text()
+				c.error(initializer, diagnostics.X_0_has_a_string_type_but_must_have_syntactically_recognizable_string_syntax_when_isolatedModules_is_enabled, memberName)
+			}
+		}
+	case isConstEnum:
+		c.error(initializer, diagnostics.X_const_enum_member_initializers_must_be_constant_expressions)
+	case member.parent.flags&NodeFlagsAmbient != 0:
+		c.error(initializer, diagnostics.In_ambient_enum_declarations_member_initializer_must_be_constant_expression)
+	default:
+		c.checkTypeAssignableTo(c.checkExpression(initializer), c.numberType, initializer, diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values, nil, nil)
+	}
+	return result
+}
+
+func (c *Checker) evaluateEntity(expr *Node, location *Node) EvaluatorResult {
+	switch expr.kind {
+	case SyntaxKindIdentifier, SyntaxKindPropertyAccessExpression:
+		symbol := c.resolveEntityName(expr, SymbolFlagsValue, true /*ignoreErrors*/, false, nil)
+		if symbol == nil {
+			return evaluatorResult(nil, false, false, false)
+		}
+		if expr.kind == SyntaxKindIdentifier {
+			if isInfinityOrNaNString(expr.Text()) && (symbol == c.getGlobalSymbol(expr.Text(), SymbolFlagsValue, nil /*diagnostic*/)) {
+				// Technically we resolved a global lib file here, but the decision to treat this as numeric
+				// is more predicated on the fact that the single-file resolution *didn't* resolve to a
+				// different meaning of `Infinity` or `NaN`. Transpilers handle this no problem.
+				return evaluatorResult(+stringToNumber(expr.Text()), false, false, false)
+			}
+		}
+		if symbol.flags&SymbolFlagsEnumMember != 0 {
+			if location != nil {
+				return c.evaluateEnumMember(expr, symbol, location)
+			}
+			return c.getEnumMemberValue(symbol.valueDeclaration)
+		}
+		if c.isConstantVariable(symbol) {
+			declaration := symbol.valueDeclaration
+			if declaration != nil && getEffectiveTypeAnnotationNode(declaration) == nil && getInitializerFromNode(declaration) != nil &&
+				(location == nil || declaration != location && c.isBlockScopedNameDeclaredBeforeUse(declaration, location)) {
+				result := c.evaluate(getInitializerFromNode(declaration), declaration)
+				if location != nil && getSourceFileOfNode(location) != getSourceFileOfNode(declaration) {
+					return evaluatorResult(result.value, false, true, true)
+				}
+				return evaluatorResult(result.value, result.isSyntacticallyString, result.resolvedOtherFiles, true /*hasExternalReferences*/)
+			}
+		}
+		return evaluatorResult(nil, false, false, false)
+	case SyntaxKindElementAccessExpression:
+		root := expr.Expression()
+		if isEntityNameExpression(root) && isStringLiteralLike(expr.AsElementAccessExpression().argumentExpression) {
+			rootSymbol := c.resolveEntityName(root, SymbolFlagsValue, true /*ignoreErrors*/, false, nil)
+			if rootSymbol != nil && rootSymbol.flags&SymbolFlagsEnum != 0 {
+				name := expr.AsElementAccessExpression().argumentExpression.Text()
+				member := rootSymbol.exports[name]
+				if member != nil {
+					// !!! Debug.assert(getSourceFileOfNode(member.valueDeclaration) == getSourceFileOfNode(rootSymbol.valueDeclaration))
+					if location != nil {
+						return c.evaluateEnumMember(expr, member, location)
+					}
+					return c.getEnumMemberValue(member.valueDeclaration)
+				}
+			}
+		}
+		return evaluatorResult(nil, false, false, false)
+	}
+	panic("Unhandled case in evaluateEntity")
+}
+
+func (c *Checker) evaluateEnumMember(expr *Node, symbol *Symbol, location *Node) EvaluatorResult {
+	declaration := symbol.valueDeclaration
+	if declaration == nil || declaration == location {
+		c.error(expr, diagnostics.Property_0_is_used_before_being_assigned, c.symbolToString(symbol))
+		return evaluatorResult(nil, false, false, false)
+	}
+	if !c.isBlockScopedNameDeclaredBeforeUse(declaration, location) {
+		c.error(expr, diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums)
+		return evaluatorResult(0.0, false, false, false)
+	}
+	value := c.getEnumMemberValue(declaration)
+	if location.parent != declaration.parent {
+		return evaluatorResult(value.value, value.isSyntacticallyString, value.resolvedOtherFiles, true /*hasExternalReferences*/)
+	}
+	return value
 }
 
 func (c *Checker) getTypeFromArrayOrTupleTypeNode(node *Node) *Type {
@@ -9212,6 +9574,13 @@ func (c *Checker) createWideningType(nonWideningType *Type) *Type {
 	return c.newIntrinsicType(nonWideningType.flags, nonWideningType.AsIntrinsicType().intrinsicName)
 }
 
+func (c *Checker) createUnknownUnionType() *Type {
+	if c.strictNullChecks {
+		return c.getUnionType([]*Type{c.undefinedType, c.nullType, c.unknownEmptyObjectType})
+	}
+	return c.unknownType
+}
+
 func (c *Checker) newLiteralType(flags TypeFlags, value any, regularType *Type) *Type {
 	data := &LiteralType{}
 	data.value = value
@@ -9408,6 +9777,7 @@ func (c *Checker) getFreshTypeOfLiteralType(t *Type) *Type {
 		d := t.AsLiteralType()
 		if d.freshType == nil {
 			f := c.newLiteralType(t.flags, d.value, t)
+			f.symbol = t.symbol
 			f.AsLiteralType().freshType = f
 			d.freshType = f
 		}
@@ -11385,9 +11755,15 @@ func (c *Checker) getSimplifiedType(t *Type, writing bool) *Type {
 	return t // !!!
 }
 
+func (c *Checker) getSimplifiedTypeOrConstraint(t *Type) *Type {
+	if simplified := c.getSimplifiedType(t, false /*writing*/); simplified != t {
+		return simplified
+	}
+	return c.getConstraintOfType(t)
+}
+
 func (c *Checker) getNormalizedUnionOrIntersectionType(t *Type, writing bool) *Type {
-	reduced := c.getReducedType(t)
-	if reduced != t {
+	if reduced := c.getReducedType(t); reduced != t {
 		return reduced
 	}
 	if t.flags&TypeFlagsIntersection != 0 && c.shouldNormalizeIntersection(t) {
@@ -11633,14 +12009,244 @@ func (c *Checker) getInferenceContext(node *Node) *InferenceContext {
 	return nil
 }
 
-type TypeFacts uint32
-
-const (
-	TypeFactsNEUndefinedOrNull TypeFacts = 0
-	TypeFactsIsUndefinedOrNull TypeFacts = 0
-)
-
 func (c *Checker) getTypeFacts(t *Type, mask TypeFacts) TypeFacts {
-	// !!!
-	return 0
+	return c.getTypeFactsWorker(t, mask) & mask
+}
+
+func (c *Checker) hasTypeFacts(t *Type, mask TypeFacts) bool {
+	return c.getTypeFacts(t, mask) != 0
+}
+
+func (c *Checker) getTypeFactsWorker(t *Type, callerOnlyNeeds TypeFacts) TypeFacts {
+	if t.flags&(TypeFlagsIntersection|TypeFlagsInstantiable) != 0 {
+		t = c.getBaseConstraintOfType(t)
+		if t == nil {
+			t = c.unknownType
+		}
+	}
+	flags := t.flags
+	switch {
+	case flags&(TypeFlagsString|TypeFlagsStringMapping) != 0:
+		if c.strictNullChecks {
+			return TypeFactsStringStrictFacts
+		}
+		return TypeFactsStringFacts
+	case flags&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral) != 0:
+		isEmpty := flags&TypeFlagsStringLiteral != 0 && t.AsLiteralType().value.(string) == ""
+		if c.strictNullChecks {
+			if isEmpty {
+				return TypeFactsEmptyStringStrictFacts
+			}
+			return TypeFactsNonEmptyStringStrictFacts
+		}
+		if isEmpty {
+			return TypeFactsEmptyStringFacts
+		}
+		return TypeFactsNonEmptyStringFacts
+	case flags&(TypeFlagsNumber|TypeFlagsEnum) != 0:
+		if c.strictNullChecks {
+			return TypeFactsNumberStrictFacts
+		}
+		return TypeFactsNumberFacts
+	case flags&TypeFlagsNumberLiteral != 0:
+		isZero := t.AsLiteralType().value.(float64) == 0
+		if c.strictNullChecks {
+			if isZero {
+				return TypeFactsZeroNumberStrictFacts
+			}
+			return TypeFactsNonZeroNumberStrictFacts
+		}
+		if isZero {
+			return TypeFactsZeroNumberFacts
+		}
+		return TypeFactsNonZeroNumberFacts
+	case flags&TypeFlagsBigInt != 0:
+		if c.strictNullChecks {
+			return TypeFactsBigIntStrictFacts
+		}
+		return TypeFactsBigIntFacts
+	case flags&TypeFlagsBigIntLiteral != 0:
+		isZero := isZeroBigInt(t)
+		if c.strictNullChecks {
+			if isZero {
+				return TypeFactsZeroBigIntStrictFacts
+			}
+			return TypeFactsNonZeroBigIntStrictFacts
+		}
+		if isZero {
+			return TypeFactsZeroBigIntFacts
+		}
+		return TypeFactsNonZeroBigIntFacts
+	case flags&TypeFlagsBoolean != 0:
+		if c.strictNullChecks {
+			return TypeFactsBooleanStrictFacts
+		}
+		return TypeFactsBooleanFacts
+	case flags&TypeFlagsBooleanLike != 0:
+		isFalse := t == c.falseType || t == c.regularFalseType
+		if c.strictNullChecks {
+			if isFalse {
+				return TypeFactsFalseStrictFacts
+			}
+			return TypeFactsTrueStrictFacts
+		}
+		if isFalse {
+			return TypeFactsFalseFacts
+		}
+		return TypeFactsTrueFacts
+	case flags&TypeFlagsObject != 0:
+		var possibleFacts TypeFacts
+		if c.strictNullChecks {
+			possibleFacts = TypeFactsEmptyObjectStrictFacts | TypeFactsFunctionStrictFacts | TypeFactsObjectStrictFacts
+		} else {
+			possibleFacts = TypeFactsEmptyObjectFacts | TypeFactsFunctionFacts | TypeFactsObjectFacts
+		}
+		if (callerOnlyNeeds & possibleFacts) == 0 {
+			// If the caller doesn't care about any of the facts that we could possibly produce,
+			// return zero so we can skip resolving members.
+			return TypeFactsNone
+		}
+		switch {
+		case t.objectFlags&ObjectFlagsAnonymous != 0 && c.isEmptyObjectType(t):
+			if c.strictNullChecks {
+				return TypeFactsEmptyObjectStrictFacts
+			}
+			return TypeFactsEmptyObjectFacts
+		case c.isFunctionObjectType(t):
+			if c.strictNullChecks {
+				return TypeFactsFunctionStrictFacts
+			}
+			return TypeFactsFunctionFacts
+		case c.strictNullChecks:
+			return TypeFactsObjectStrictFacts
+		}
+		return TypeFactsObjectFacts
+	case flags&TypeFlagsVoid != 0:
+		return TypeFactsVoidFacts
+	case flags&TypeFlagsUndefined != 0:
+		return TypeFactsUndefinedFacts
+	case flags&TypeFlagsNull != 0:
+		return TypeFactsNullFacts
+	case flags&TypeFlagsESSymbolLike != 0:
+		if c.strictNullChecks {
+			return TypeFactsSymbolStrictFacts
+		} else {
+			return TypeFactsSymbolFacts
+		}
+	case flags&TypeFlagsNonPrimitive != 0:
+		if c.strictNullChecks {
+			return TypeFactsObjectStrictFacts
+		} else {
+			return TypeFactsObjectFacts
+		}
+	case flags&TypeFlagsNever != 0:
+		return TypeFactsNone
+	case flags&TypeFlagsUnion != 0:
+		var facts TypeFacts
+		for _, t := range t.Types() {
+			facts |= c.getTypeFactsWorker(t, callerOnlyNeeds)
+		}
+		return facts
+	case flags&TypeFlagsIntersection != 0:
+		return c.getIntersectionTypeFacts(t, callerOnlyNeeds)
+	}
+	return TypeFactsUnknownFacts
+}
+
+func (c *Checker) getIntersectionTypeFacts(t *Type, callerOnlyNeeds TypeFacts) TypeFacts {
+	// When an intersection contains a primitive type we ignore object type constituents as they are
+	// presumably type tags. For example, in string & { __kind__: "name" } we ignore the object type.
+	ignoreObjects := c.maybeTypeOfKind(t, TypeFlagsPrimitive)
+	// When computing the type facts of an intersection type, certain type facts are computed as `and`
+	// and others are computed as `or`.
+	oredFacts := TypeFactsNone
+	andedFacts := TypeFactsAll
+	for _, t := range t.Types() {
+		if !(ignoreObjects && t.flags&TypeFlagsObject != 0) {
+			f := c.getTypeFactsWorker(t, callerOnlyNeeds)
+			oredFacts |= f
+			andedFacts &= f
+		}
+	}
+	return oredFacts&TypeFactsOrFactsMask | andedFacts&TypeFactsAndFactsMask
+}
+
+func isZeroBigInt(t *Type) bool {
+	return t.AsLiteralType().value.(PseudoBigInt).base10Value == "0"
+}
+
+func (c *Checker) isFunctionObjectType(t *Type) bool {
+	if t.objectFlags&ObjectFlagsEvolvingArray != 0 {
+		return false
+	}
+	// We do a quick check for a "bind" property before performing the more expensive subtype
+	// check. This gives us a quicker out in the common case where an object type is not a function.
+	resolved := c.resolveStructuredTypeMembers(t)
+	return len(resolved.signatures) != 0 || resolved.members["bind"] != nil && c.isTypeSubtypeOf(t, c.globalFunctionType)
+}
+
+func (c *Checker) getTypeWithFacts(t *Type, include TypeFacts) *Type {
+	return c.filterType(t, func(t *Type) bool {
+		return c.hasTypeFacts(t, include)
+	})
+}
+
+// This function is similar to getTypeWithFacts, except that in strictNullChecks mode it replaces type
+// unknown with the union {} | null | undefined (and reduces that accordingly), and it intersects remaining
+// instantiable types with {}, {} | null, or {} | undefined in order to remove null and/or undefined.
+func (c *Checker) getAdjustedTypeWithFacts(t *Type, facts TypeFacts) *Type {
+	reduced := c.recombineUnknownType(c.getTypeWithFacts(ifElse(c.strictNullChecks && t.flags&TypeFlagsUnknown != 0, c.unknownUnionType, t), facts))
+	if c.strictNullChecks {
+		switch facts {
+		case TypeFactsNEUndefined:
+			return c.removeNullableByIntersection(reduced, TypeFactsEQUndefined, TypeFactsEQNull, TypeFactsIsNull, c.nullType)
+		case TypeFactsNENull:
+			return c.removeNullableByIntersection(reduced, TypeFactsEQNull, TypeFactsEQUndefined, TypeFactsIsUndefined, c.undefinedType)
+		case TypeFactsNEUndefinedOrNull, TypeFactsTruthy:
+			return c.mapType(reduced, func(t *Type) *Type {
+				if c.hasTypeFacts(t, TypeFactsEQUndefinedOrNull) {
+					return c.getGlobalNonNullableTypeInstantiation(t)
+				}
+				return t
+			})
+		}
+	}
+	return reduced
+}
+
+func (c *Checker) removeNullableByIntersection(t *Type, targetFacts TypeFacts, otherFacts TypeFacts, otherIncludesFacts TypeFacts, otherType *Type) *Type {
+	facts := c.getTypeFacts(t, TypeFactsEQUndefined|TypeFactsEQNull|TypeFactsIsUndefined|TypeFactsIsNull)
+	// Simply return the type if it never compares equal to the target nullable.
+	if facts&targetFacts == 0 {
+		return t
+	}
+	// By default we intersect with a union of {} and the opposite nullable.
+	emptyAndOtherUnion := c.getUnionType([]*Type{c.emptyObjectType, otherType})
+	// For each constituent type that can compare equal to the target nullable, intersect with the above union
+	// if the type doesn't already include the opppsite nullable and the constituent can compare equal to the
+	// opposite nullable; otherwise, just intersect with {}.
+	return c.mapType(t, func(t *Type) *Type {
+		if c.hasTypeFacts(t, targetFacts) {
+			if facts&otherIncludesFacts == 0 && c.hasTypeFacts(t, otherFacts) {
+				return c.getIntersectionType([]*Type{t, emptyAndOtherUnion})
+			}
+			return c.getIntersectionType([]*Type{t, c.emptyObjectType})
+		}
+		return t
+	})
+}
+
+func (c *Checker) recombineUnknownType(t *Type) *Type {
+	if t == c.unknownUnionType {
+		return c.unknownType
+	}
+	return t
+}
+
+func (c *Checker) getGlobalNonNullableTypeInstantiation(t *Type) *Type {
+	alias := c.getGlobalNonNullableTypeAlias()
+	if alias != nil {
+		return c.getTypeAliasInstantiation(alias, []*Type{t}, nil)
+	}
+	return c.getIntersectionType([]*Type{t, c.emptyObjectType})
 }
