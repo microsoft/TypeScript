@@ -52,7 +52,7 @@ func main() {
 	flag.Parse()
 
 	rootPath := flag.Arg(0)
-	compilerOptions := &ts.CompilerOptions{Strict: core.TSTrue, Target: core.ScriptTargetESNext, ModuleKind: ts.ModuleKindNodeNext}
+	compilerOptions := &core.CompilerOptions{Strict: core.TSTrue, Target: core.ScriptTargetESNext, ModuleKind: core.ModuleKindNodeNext}
 	programOptions := ts.ProgramOptions{RootPath: rootPath, Options: compilerOptions, SingleThreaded: singleThreaded}
 	useCaseSensitiveFileNames := isFileSystemCaseSensitive()
 

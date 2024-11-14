@@ -14,13 +14,13 @@ import (
 type ProgramOptions struct {
 	RootPath       string
 	Host           CompilerHost
-	Options        *CompilerOptions
+	Options        *core.CompilerOptions
 	SingleThreaded bool
 }
 
 type Program struct {
 	host                        CompilerHost
-	options                     *CompilerOptions
+	options                     *core.CompilerOptions
 	rootPath                    string
 	files                       []*ast.SourceFile
 	filesByPath                 map[string]*ast.SourceFile
@@ -36,7 +36,7 @@ func NewProgram(options ProgramOptions) *Program {
 	p := &Program{}
 	p.options = options.Options
 	if p.options == nil {
-		p.options = &CompilerOptions{}
+		p.options = &core.CompilerOptions{}
 	}
 	p.host = options.Host
 	if p.host == nil {
@@ -57,7 +57,7 @@ func NewProgram(options ProgramOptions) *Program {
 }
 
 func (p *Program) SourceFiles() []*ast.SourceFile { return p.files }
-func (p *Program) Options() *CompilerOptions      { return p.options }
+func (p *Program) Options() *core.CompilerOptions { return p.options }
 func (p *Program) Host() CompilerHost             { return p.host }
 
 func (p *Program) parseSourceFiles(fileInfos []FileInfo) {

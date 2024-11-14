@@ -250,7 +250,7 @@ const (
 type Checker struct {
 	program                            *Program
 	host                               CompilerHost
-	compilerOptions                    *CompilerOptions
+	compilerOptions                    *core.CompilerOptions
 	files                              []*ast.SourceFile
 	typeCount                          uint32
 	symbolCount                        uint32
@@ -259,7 +259,7 @@ type Checker struct {
 	instantiationDepth                 uint32
 	currentNode                        *ast.Node
 	languageVersion                    core.ScriptTarget
-	moduleKind                         ModuleKind
+	moduleKind                         core.ModuleKind
 	allowSyntheticDefaultImports       bool
 	strictNullChecks                   bool
 	strictFunctionTypes                bool
@@ -3219,7 +3219,7 @@ func (c *Checker) getTargetOfModuleDefault(moduleSymbol *ast.Symbol, node *ast.N
 	// if !exportDefaultSymbol && !hasSyntheticDefault && !hasDefaultOnly {
 	// 	if c.hasExportAssignmentSymbol(moduleSymbol) && !c.allowSyntheticDefaultImports {
 	// 		var compilerOptionName /* TODO(TS-TO-GO) inferred type "allowSyntheticDefaultImports" | "esModuleInterop" */ any
-	// 		if c.moduleKind >= ModuleKindES2015 {
+	// 		if c.moduleKind >= core.ModuleKindES2015 {
 	// 			compilerOptionName = "allowSyntheticDefaultImports"
 	// 		} else {
 	// 			compilerOptionName = "esModuleInterop"
@@ -3357,7 +3357,7 @@ func (c *Checker) getExternalModuleMember(node *ast.Node, specifier *ast.Node, d
 			}
 			if isImportOrExportSpecifier(specifier) && c.isOnlyImportableAsDefault(moduleSpecifier, moduleSymbol) && nameText != InternalSymbolNameDefault {
 				// !!!
-				// c.error(name, Diagnostics.Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0, ModuleKind[c.moduleKind])
+				// c.error(name, Diagnostics.Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0, core.ModuleKind[c.moduleKind])
 			} else if symbol == nil {
 				c.errorNoModuleMemberSymbol(moduleSymbol, targetSymbol, node, name)
 			}
@@ -3428,9 +3428,9 @@ func (c *Checker) getExportOfModule(symbol *ast.Symbol, nameText string, specifi
 
 func (c *Checker) isOnlyImportableAsDefault(usage *ast.Node, resolvedModule *ast.Symbol) bool {
 	// In Node.js, JSON modules don't get named exports
-	if ModuleKindNode16 <= c.moduleKind && c.moduleKind <= ModuleKindNodeNext {
+	if core.ModuleKindNode16 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext {
 		usageMode := c.getEmitSyntaxForModuleSpecifierExpression(usage)
-		if usageMode == ModuleKindESNext {
+		if usageMode == core.ModuleKindESNext {
 			if resolvedModule == nil {
 				resolvedModule = c.resolveExternalModuleName(usage, usage, true /*ignoreErrors*/)
 			}
@@ -3450,13 +3450,13 @@ func (c *Checker) canHaveSyntheticDefault(file *ast.SourceFile, moduleSymbol *as
 	// if file != nil {
 	// 	usageMode = c.getEmitSyntaxForModuleSpecifierExpression(usage)
 	// }
-	// if file != nil && usageMode != ModuleKindNone {
+	// if file != nil && usageMode != core.ModuleKindNone {
 	// 	targetMode := host.getImpliedNodeFormatForEmit(file)
-	// 	if usageMode == ModuleKindESNext && targetMode == ModuleKindCommonJS && ModuleKindNode16 <= c.moduleKind && c.moduleKind <= ModuleKindNodeNext {
+	// 	if usageMode == core.ModuleKindESNext && targetMode == core.ModuleKindCommonJS && core.ModuleKindNode16 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext {
 	// 		// In Node.js, CommonJS modules always have a synthetic default when imported into ESM
 	// 		return true
 	// 	}
-	// 	if usageMode == ModuleKindESNext && targetMode == ModuleKindESNext {
+	// 	if usageMode == core.ModuleKindESNext && targetMode == core.ModuleKindESNext {
 	// 		// No matter what the `module` setting is, if we're confident that both files
 	// 		// are ESM, there cannot be a synthetic default.
 	// 		return false
@@ -3489,12 +3489,12 @@ func (c *Checker) canHaveSyntheticDefault(file *ast.SourceFile, moduleSymbol *as
 	return hasExportAssignmentSymbol(moduleSymbol)
 }
 
-func (c *Checker) getEmitSyntaxForModuleSpecifierExpression(usage *ast.Node) ResolutionMode {
+func (c *Checker) getEmitSyntaxForModuleSpecifierExpression(usage *ast.Node) core.ResolutionMode {
 	// !!!
 	// if isStringLiteralLike(usage) {
 	// 	return host.getEmitSyntaxForUsageLocation(getSourceFileOfNode(usage), usage)
 	// }
-	return ModuleKindNone
+	return core.ModuleKindNone
 }
 
 func (c *Checker) errorNoModuleMemberSymbol(moduleSymbol *ast.Symbol, targetSymbol *ast.Symbol, node *ast.Node, name *ast.Node) {
@@ -3552,7 +3552,7 @@ func (c *Checker) reportNonExportedMember(node *ast.Node, name *ast.Node, declar
 }
 
 func (c *Checker) reportInvalidImportEqualsExportMember(node *ast.Node, name *ast.Node, declarationName string, moduleName string) {
-	if c.moduleKind >= ModuleKindES2015 {
+	if c.moduleKind >= core.ModuleKindES2015 {
 		message := ifElse(getESModuleInterop(c.compilerOptions),
 			diagnostics.X_0_can_only_be_imported_by_using_a_default_import,
 			diagnostics.X_0_can_only_be_imported_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import)
@@ -3866,7 +3866,7 @@ func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, referencingLoc
 	symbol := c.resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias)
 	if !dontResolveAlias && symbol != nil {
 		if !suppressInteropError && symbol.Flags&(ast.SymbolFlagsModule|ast.SymbolFlagsVariable) == 0 && getDeclarationOfKind(symbol, ast.KindSourceFile) == nil {
-			compilerOptionName := ifElse(c.moduleKind >= ModuleKindES2015, "allowSyntheticDefaultImports", "esModuleInterop")
+			compilerOptionName := ifElse(c.moduleKind >= core.ModuleKindES2015, "allowSyntheticDefaultImports", "esModuleInterop")
 			c.error(referencingLocation, diagnostics.This_module_can_only_be_referenced_with_ECMAScript_imports_Slashexports_by_turning_on_the_0_flag_and_referencing_its_default_export, compilerOptionName)
 			return symbol
 		}

@@ -1341,7 +1341,7 @@ func isFunctionBlock(node *ast.Node) bool {
 	return node != nil && node.Kind == ast.KindBlock && isFunctionLike(node.Parent)
 }
 
-func shouldPreserveConstEnums(options *CompilerOptions) bool {
+func shouldPreserveConstEnums(options *core.CompilerOptions) bool {
 	return options.PreserveConstEnums == core.TSTrue || options.IsolatedModules == core.TSTrue
 }
 
@@ -1424,11 +1424,11 @@ func isDottedName(node *ast.Node) bool {
 	return false
 }
 
-func unusedLabelIsError(options *CompilerOptions) bool {
+func unusedLabelIsError(options *core.CompilerOptions) bool {
 	return options.AllowUnusedLabels == core.TSFalse
 }
 
-func unreachableCodeIsError(options *CompilerOptions) bool {
+func unreachableCodeIsError(options *core.CompilerOptions) bool {
 	return options.AllowUnreachableCode == core.TSFalse
 }
 
@@ -1643,7 +1643,7 @@ func ensureScriptKind(fileName string, scriptKind core.ScriptKind) core.ScriptKi
 	// - 'scriptKind' is unspecified and thus it is `undefined`
 	// - 'scriptKind' is set and it is `Unknown` (0)
 	// If the 'scriptKind' is 'undefined' or 'Unknown' then we attempt
-	// to get the core.ScriptKind from the file name. If it cannot be resolved
+	// to get the ScriptKind from the file name. If it cannot be resolved
 	// from the file name then the default 'TS' script kind is returned.
 	if scriptKind == core.ScriptKindUnknown {
 		scriptKind = getScriptKindFromFileName(fileName)
@@ -1702,71 +1702,70 @@ func getLanguageVariant(scriptKind core.ScriptKind) core.LanguageVariant {
 	return core.LanguageVariantStandard
 }
 
-func getEmitScriptTarget(options *CompilerOptions) core.ScriptTarget {
+func getEmitScriptTarget(options *core.CompilerOptions) core.ScriptTarget {
 	if options.Target != core.ScriptTargetNone {
 		return options.Target
 	}
 	return core.ScriptTargetES5
 }
 
-func getEmitModuleKind(options *CompilerOptions) ModuleKind {
-	if options.ModuleKind != ModuleKindNone {
+func getEmitModuleKind(options *core.CompilerOptions) core.ModuleKind {
+	if options.ModuleKind != core.ModuleKindNone {
 		return options.ModuleKind
 	}
 	if options.Target >= core.ScriptTargetES2015 {
-		return ModuleKindES2015
+		return core.ModuleKindES2015
 	}
-	return ModuleKindCommonJS
+	return core.ModuleKindCommonJS
 }
 
-func getEmitModuleResolutionKind(options *CompilerOptions) ModuleResolutionKind {
-	if options.ModuleResolution != ModuleResolutionKindUnknown {
+func getEmitModuleResolutionKind(options *core.CompilerOptions) core.ModuleResolutionKind {
+	if options.ModuleResolution != core.ModuleResolutionKindUnknown {
 		return options.ModuleResolution
 	}
 	switch getEmitModuleKind(options) {
-	case ModuleKindCommonJS:
-		return ModuleResolutionKindBundler
-	case ModuleKindNode16:
-		return ModuleResolutionKindNode16
-	case ModuleKindNodeNext:
-		return ModuleResolutionKindNodeNext
-	case ModuleKindPreserve:
-		return ModuleResolutionKindBundler
+	case core.ModuleKindCommonJS:
+		return core.ModuleResolutionKindBundler
+	case core.ModuleKindNode16:
+		return core.ModuleResolutionKindNode16
+	case core.ModuleKindNodeNext:
+		return core.ModuleResolutionKindNodeNext
+	case core.ModuleKindPreserve:
+		return core.ModuleResolutionKindBundler
 	default:
 		panic("Unhandled case in getEmitModuleResolutionKind")
 	}
 }
 
-func getESModuleInterop(options *CompilerOptions) bool {
+func getESModuleInterop(options *core.CompilerOptions) bool {
 	if options.ESModuleInterop != core.TSUnknown {
 		return options.ESModuleInterop == core.TSTrue
 	}
 	switch getEmitModuleKind(options) {
-	case ModuleKindNode16:
-	case ModuleKindNodeNext:
-	case ModuleKindPreserve:
+	case core.ModuleKindNode16:
+	case core.ModuleKindNodeNext:
+	case core.ModuleKindPreserve:
 		return true
 	}
 	return false
 }
-
-func getAllowSyntheticDefaultImports(options *CompilerOptions) bool {
+func getAllowSyntheticDefaultImports(options *core.CompilerOptions) bool {
 	if options.AllowSyntheticDefaultImports != core.TSUnknown {
 		return options.AllowSyntheticDefaultImports == core.TSTrue
 	}
 	return getESModuleInterop(options) ||
-		getEmitModuleKind(options) == ModuleKindSystem ||
-		getEmitModuleResolutionKind(options) == ModuleResolutionKindBundler
+		getEmitModuleKind(options) == core.ModuleKindSystem ||
+		getEmitModuleResolutionKind(options) == core.ModuleResolutionKindBundler
 }
 
-func getResolveJsonModule(options *CompilerOptions) bool {
+func getResolveJsonModule(options *core.CompilerOptions) bool {
 	if options.ResolveJsonModule != core.TSUnknown {
 		return options.ResolveJsonModule == core.TSTrue
 	}
-	return getEmitModuleResolutionKind(options) == ModuleResolutionKindBundler
+	return getEmitModuleResolutionKind(options) == core.ModuleResolutionKindBundler
 }
 
-func getAllowJs(options *CompilerOptions) bool {
+func getAllowJs(options *core.CompilerOptions) bool {
 	if options.AllowJs != core.TSUnknown {
 		return options.AllowJs == core.TSTrue
 	}
@@ -1983,7 +1982,7 @@ func isParameterLikeOrReturnTag(node *ast.Node) bool {
 	return false
 }
 
-func getEmitStandardClassFields(options *CompilerOptions) bool {
+func getEmitStandardClassFields(options *core.CompilerOptions) bool {
 	return options.UseDefineForClassFields != core.TSFalse && getEmitScriptTarget(options) >= core.ScriptTargetES2022
 }
 
@@ -2028,7 +2027,7 @@ func getDeclarationOfKind(symbol *ast.Symbol, kind ast.Kind) *ast.Node {
 	return nil
 }
 
-func getIsolatedModules(options *CompilerOptions) bool {
+func getIsolatedModules(options *core.CompilerOptions) bool {
 	return options.IsolatedModules == core.TSTrue || options.VerbatimModuleSyntax == core.TSTrue
 }
 
@@ -2042,7 +2041,7 @@ func findConstructorDeclaration(node *ast.Node) *ast.Node {
 }
 
 type NameResolver struct {
-	compilerOptions                  *CompilerOptions
+	compilerOptions                  *core.CompilerOptions
 	getSymbolOfDeclaration           func(node *ast.Node) *ast.Symbol
 	error                            func(location *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic
 	globals                          ast.SymbolTable

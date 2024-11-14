@@ -11,6 +11,8 @@ import (
 	"strings"
 	"sync"
 	"unicode/utf16"
+
+	"github.com/microsoft/typescript-go/internal/core"
 )
 
 type CompilerHost interface {
@@ -27,13 +29,13 @@ type FileInfo struct {
 }
 
 type compilerHost struct {
-	options        *CompilerOptions
+	options        *core.CompilerOptions
 	singleThreaded bool
 	wg             sync.WaitGroup
 	readSema       chan struct{}
 }
 
-func NewCompilerHost(options *CompilerOptions, singleThreaded bool) CompilerHost {
+func NewCompilerHost(options *core.CompilerOptions, singleThreaded bool) CompilerHost {
 	h := &compilerHost{}
 	h.options = options
 	h.singleThreaded = singleThreaded

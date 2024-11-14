@@ -37,7 +37,7 @@ const (
 
 type Binder struct {
 	file                   *ast.SourceFile
-	options                *CompilerOptions
+	options                *core.CompilerOptions
 	languageVersion        core.ScriptTarget
 	bind                   func(*ast.Node) bool
 	parent                 *ast.Node
@@ -88,7 +88,7 @@ type ActiveLabel struct {
 func (label *ActiveLabel) BreakTarget() *ast.FlowNode    { return label.breakTarget }
 func (label *ActiveLabel) ContinueTarget() *ast.FlowNode { return label.continueTarget }
 
-func bindSourceFile(file *ast.SourceFile, options *CompilerOptions) {
+func bindSourceFile(file *ast.SourceFile, options *core.CompilerOptions) {
 	if !file.IsBound {
 		b := &Binder{}
 		b.file = file
@@ -2487,7 +2487,7 @@ func (b *Binder) bindInitializer(node *ast.Node) {
 	b.currentFlow = finishFlowLabel(exitFlow)
 }
 
-func isEnumDeclarationWithPreservedEmit(node *ast.Node, options *CompilerOptions) bool {
+func isEnumDeclarationWithPreservedEmit(node *ast.Node, options *core.CompilerOptions) bool {
 	return node.Kind == ast.KindEnumDeclaration && (!isEnumConst(node) || shouldPreserveConstEnums(options))
 }
 

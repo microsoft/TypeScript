@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 )
 
-//go:generate go run golang.org/x/tools/cmd/stringer -type=ModuleResolutionKind,SignatureKind -output=stringer_generated.go
+//go:generate go run golang.org/x/tools/cmd/stringer -type=SignatureKind -output=stringer_generated.go
 
 // ParseFlags
 
@@ -231,87 +231,6 @@ const (
 	InternalSymbolNameImportAttributes        = InternalSymbolNamePrefix + "importAttributes"
 	InternalSymbolNameDefault                 = "default" // Default export symbol (technically not wholly internal, but included here for usability)
 	InternalSymbolNameThis                    = "this"
-)
-
-// CompilerOptions
-
-type CompilerOptions struct {
-	AllowJs                            core.Tristate
-	AllowSyntheticDefaultImports       core.Tristate
-	AllowUmdGlobalAccess               core.Tristate
-	AllowUnreachableCode               core.Tristate
-	AllowUnusedLabels                  core.Tristate
-	CheckJs                            core.Tristate
-	CustomConditions                   []string
-	ESModuleInterop                    core.Tristate
-	ExactOptionalPropertyTypes         core.Tristate
-	IsolatedModules                    core.Tristate
-	ModuleKind                         ModuleKind
-	ModuleResolution                   ModuleResolutionKind
-	ModuleSuffixes                     []string
-	NoFallthroughCasesInSwitch         core.Tristate
-	NoImplicitAny                      core.Tristate
-	NoPropertyAccessFromIndexSignature core.Tristate
-	NoUncheckedIndexedAccess           core.Tristate
-	Paths                              map[string][]string
-	PreserveConstEnums                 core.Tristate
-	PreserveSymlinks                   core.Tristate
-	ResolveJsonModule                  core.Tristate
-	ResolvePackageJsonExports          core.Tristate
-	ResolvePackageJsonImports          core.Tristate
-	Strict                             core.Tristate
-	StrictBindCallApply                core.Tristate
-	StrictNullChecks                   core.Tristate
-	StrictFunctionTypes                core.Tristate
-	Target                             core.ScriptTarget
-	TraceResolution                    core.Tristate
-	TypeRoots                          []string
-	Types                              []string
-	UseDefineForClassFields            core.Tristate
-	UseUnknownInCatchVariables         core.Tristate
-	VerbatimModuleSyntax               core.Tristate
-
-	configFilePath  string
-	noDtsResolution core.Tristate
-	pathsBasePath   string
-}
-
-type ModuleKind int32
-
-const (
-	ModuleKindNone     ModuleKind = 0
-	ModuleKindCommonJS ModuleKind = 1
-	ModuleKindAMD      ModuleKind = 2
-	ModuleKindUMD      ModuleKind = 3
-	ModuleKindSystem   ModuleKind = 4
-	// NOTE: ES module kinds should be contiguous to more easily check whether a module kind is *any* ES module kind.
-	//       Non-ES module kinds should not come between ES2015 (the earliest ES module kind) and ESNext (the last ES
-	//       module kind).
-	ModuleKindES2015 ModuleKind = 5
-	ModuleKindES2020 ModuleKind = 6
-	ModuleKindES2022 ModuleKind = 7
-	ModuleKindESNext ModuleKind = 99
-	// Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
-	ModuleKindNode16   ModuleKind = 100
-	ModuleKindNodeNext ModuleKind = 199
-	// Emit as written
-	ModuleKindPreserve ModuleKind = 200
-)
-
-type ResolutionMode = ModuleKind // ModuleKindNone | ModuleKindCommonJS | ModuleKindESNext
-
-type ModuleResolutionKind int32
-
-const (
-	ModuleResolutionKindUnknown ModuleResolutionKind = 0
-	// Starting with node16, node's module resolver has significant departures from traditional cjs resolution
-	// to better support ECMAScript modules and their use within node - however more features are still being added.
-	// TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable
-	// version that supports both pattern trailers - *but*, Node 16 is the first version that also supports ECMAScript 2022.
-	// In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
-	ModuleResolutionKindNode16   ModuleResolutionKind = 3
-	ModuleResolutionKindNodeNext ModuleResolutionKind = 99 // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
-	ModuleResolutionKindBundler  ModuleResolutionKind = 100
 )
 
 type NodeCheckFlags uint32
