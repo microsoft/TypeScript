@@ -7,6 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
 import { parseArgs } from "node:util";
+import which from "which";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
@@ -39,6 +40,24 @@ function assertTypeScriptCloned() {
     throw new Error("_submodules/TypeScript does not exist; try running `git submodule update --init --recursive`");
 }
 
+const tools = new Map([
+    ["github.com/golangci/golangci-lint/cmd/golangci-lint", "v1.62.0"],
+    ["gotest.tools/gotestsum", "latest"],
+]);
+
+/**
+ * @param {string} tool
+ */
+function isInstalled(tool) {
+    try {
+        which.sync(tool);
+        return true;
+    }
+    catch {
+        return false;
+    }
+}
+
 export const build = task({
     name: "build",
     run: async () => {
@@ -54,32 +73,49 @@ export const generate = task({
     },
 });
 
+async function runTests() {
+    const goTest = isInstalled("gotestsum") ? ["gotestsum", "--format-hide-empty-pkg", "--"] : ["go", "test"];
+    await $`${goTest} ${options.race ? ["-race"] : []} ./...`;
+}
+
 export const test = task({
     name: "test",
+    run: runTests,
+});
+
+async function runTestBenchmarks() {
+    // Run the benchmarks once to ensure they compile and run without errors.
+    await $`go test ${options.race ? ["-race"] : []} -run=- -bench=. -benchtime=1x ./...`;
+}
+
+export const testBenchmarks = task({
+    name: "test:benchmarks",
+    run: runTestBenchmarks,
+});
+
+export const testAll = task({
+    name: "test:all",
     run: async () => {
-        await $`go test ${options.race ? ["-race"] : []} ./...`;
-        // Run the benchmarks once to ensure they compile and run without errors.
-        await $`go test ${options.race ? ["-race"] : []} -run=- -bench=. -benchtime=1x ./...`;
+        // Prevent interleaving by running these directly instead of in parallel.
+        await runTests();
+        await runTestBenchmarks();
     },
 });
 
 export const lint = task({
     name: "lint",
     run: async () => {
+        if (!isInstalled("golangci-lint")) {
+            throw new Error("golangci-lint is not installed; run `hereby install-tools`");
+        }
         await $`golangci-lint run ${options.fix ? ["--fix"] : []}`;
     },
 });
 
-const tools = new Map([
-    ["github.com/golangci/golangci-lint/cmd/golangci-lint", "v1.62.0"],
-]);
-
 export const installTools = task({
     name: "install-tools",
     run: async () => {
-        for (const [tool, version] of tools) {
-            await $`go install ${tool}@${version}`;
-        }
+        await Promise.all([...tools].map(([tool, version]) => $`go install ${tool}@${version}`));
     },
 });
 

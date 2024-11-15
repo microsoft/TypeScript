@@ -63,7 +63,8 @@ jobs:
 
       - run: npm ci
 
-      - run: npx hereby test --race
+      - run: go install gotest.tools/gotestsum@latest
+      - run: npx hereby test:all --race
 
       - run: git add .
       - run: git diff --staged --exit-code --stat
@@ -80,7 +81,6 @@ jobs:
       - run: npm ci
 
       - run: npx hereby install-tools
-
       - run: npx hereby lint
 
   format:
