@@ -1065,8 +1065,8 @@ func (s *Scanner) scanString(jsxAttributeString bool) string {
 
 func (s *Scanner) scanTemplateAndSetTokenValue(shouldEmitInvalidEscapeError bool) ast.Kind {
 	startedWithBacktick := s.char() == '`'
-	start := s.pos
 	s.pos++
+	start := s.pos
 	contents := ""
 	var token ast.Kind
 	for {
@@ -1797,12 +1797,12 @@ func getRangeOfTokenAtPosition(sourceFile *ast.SourceFile, pos int) core.TextRan
 	return core.NewTextRange(s.tokenStart, s.pos)
 }
 
-func computeLineOfPosition(lineStarts []core.TextPos, pos core.TextPos) int {
+func computeLineOfPosition(lineStarts []core.TextPos, pos int) int {
 	low := 0
 	high := len(lineStarts) - 1
 	for low <= high {
 		middle := low + ((high - low) >> 1)
-		value := lineStarts[middle]
+		value := int(lineStarts[middle])
 		if value < pos {
 			low = middle + 1
 		} else if value > pos {
@@ -1822,7 +1822,7 @@ func getLineStarts(sourceFile *ast.SourceFile) []core.TextPos {
 }
 
 func GetLineAndCharacterOfPosition(sourceFile *ast.SourceFile, pos int) (line int, character int) {
-	line = computeLineOfPosition(getLineStarts(sourceFile), core.TextPos(pos))
+	line = computeLineOfPosition(getLineStarts(sourceFile), pos)
 	character = utf8.RuneCountInString(sourceFile.Text[sourceFile.LineMap[line]:pos])
 	return
 }
@@ -1838,11 +1838,11 @@ func getEndLinePosition(sourceFile *ast.SourceFile, line int) int {
 	}
 }
 
-func GetPositionOfLineAndCharacter(sourceFile *ast.SourceFile, line int, character int) core.TextPos {
+func GetPositionOfLineAndCharacter(sourceFile *ast.SourceFile, line int, character int) int {
 	return ComputePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character)
 }
 
-func ComputePositionOfLineAndCharacter(lineStarts []core.TextPos, line int, character int) core.TextPos {
+func ComputePositionOfLineAndCharacter(lineStarts []core.TextPos, line int, character int) int {
 	/// !!! debugText, allowEdits
 	if line < 0 || line >= len(lineStarts) {
 		// if (allowEdits) {
@@ -1852,7 +1852,7 @@ func ComputePositionOfLineAndCharacter(lineStarts []core.TextPos, line int, char
 		panic(fmt.Sprintf("Bad line number. Line: %d, lineStarts.length: %d.", line, len(lineStarts)))
 	}
 
-	res := (lineStarts[line]) + core.TextPos(character)
+	res := int(lineStarts[line]) + character
 
 	// !!!
 	// if (allowEdits) {
@@ -1861,7 +1861,7 @@ func ComputePositionOfLineAndCharacter(lineStarts []core.TextPos, line int, char
 	//     // apply them to the computed position to improve accuracy
 	//     return res > lineStarts[line + 1] ? lineStarts[line + 1] : typeof debugText === "string" && res > debugText.length ? debugText.length : res;
 	// }
-	if line < len(lineStarts)-1 && res >= lineStarts[line+1] {
+	if line < len(lineStarts)-1 && res >= int(lineStarts[line+1]) {
 		panic("Computed position is beyond that of the following line.")
 	}
 	// !!!

@@ -15,12 +15,12 @@ func NewTextRange(pos int, end int) TextRange {
 	return TextRange{pos: TextPos(pos), end: TextPos(end)}
 }
 
-func (t TextRange) Pos() TextPos {
-	return t.pos
+func (t TextRange) Pos() int {
+	return int(t.pos)
 }
 
-func (t TextRange) End() TextPos {
-	return t.end
+func (t TextRange) End() int {
+	return int(t.end)
 }
 
 func (t TextRange) Len() int {

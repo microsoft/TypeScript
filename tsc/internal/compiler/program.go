@@ -196,19 +196,12 @@ func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, getDiagnostic
 	return sortAndDeduplicateDiagnostics(result)
 }
 
-func (p *Program) PrintTypeAliases() {
+func (p *Program) PrintSourceFileWithTypes() {
 	for _, file := range p.files {
 		if filepath.Base(file.FileName()) == "main.ts" {
-			file.AsNode().ForEachChild(p.printTypeAlias)
+			fmt.Print(p.getTypeChecker().sourceFileWithTypes(file))
 		}
 	}
-}
-
-func (p *Program) printTypeAlias(node *ast.Node) bool {
-	if ast.IsTypeAliasDeclaration(node) {
-		fmt.Println(p.getTypeChecker().typeAliasToString(node.AsTypeAliasDeclaration()))
-	}
-	return node.ForEachChild(p.printTypeAlias)
 }
 
 func (p *Program) collectExternalModuleReferences(file *ast.SourceFile) {

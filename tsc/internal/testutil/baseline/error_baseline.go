@@ -113,7 +113,7 @@ func iterateErrorBaseline(t testing.TB, inputFiles []*TestFile, inputDiagnostics
 		for _, info := range diag.RelatedInformation() {
 			var location string
 			if info.File() != nil {
-				location = " " + formatLocation(info.File(), int(info.Loc().Pos()), formatOpts, func(output *strings.Builder, text string, formatStyle string) { output.WriteString(text) })
+				location = " " + formatLocation(info.File(), info.Loc().Pos(), formatOpts, func(output *strings.Builder, text string, formatStyle string) { output.WriteString(text) })
 			}
 			location = removeTestPathPrefixes(location, false)
 			if len(location) > 0 && isDefaultLibraryFile(info.File().FileName()) {
@@ -197,12 +197,12 @@ func iterateErrorBaseline(t testing.TB, inputFiles []*TestFile, inputDiagnostics
 			outputLines.WriteString(line)
 			for _, errDiagnostic := range fileErrors {
 				// Does any error start or continue on to this line? Emit squiggles
-				end := int(errDiagnostic.Loc().End())
-				if end >= thisLineStart && (int(errDiagnostic.Loc().Pos()) < nextLineStart || lineIndex == len(lines)-1) {
+				end := errDiagnostic.Loc().End()
+				if end >= thisLineStart && (errDiagnostic.Loc().Pos() < nextLineStart || lineIndex == len(lines)-1) {
 					// How many characters from the start of this line the error starts at (could be positive or negative)
-					relativeOffset := int(errDiagnostic.Loc().Pos()) - thisLineStart
+					relativeOffset := errDiagnostic.Loc().Pos() - thisLineStart
 					// How many characters of the error are on this line (might be longer than this line in reality)
-					length := (end - int(errDiagnostic.Loc().Pos())) - max(0, -relativeOffset)
+					length := (end - errDiagnostic.Loc().Pos()) - max(0, -relativeOffset)
 					// Calculate the start of the squiggle
 					squiggleStart := max(0, relativeOffset)
 					// TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another

@@ -1529,11 +1529,11 @@ func CompareDiagnostics(d1, d2 *ast.Diagnostic) int {
 	if c != 0 {
 		return c
 	}
-	c = int(d1.Loc().Pos()) - int(d2.Loc().Pos())
+	c = d1.Loc().Pos() - d2.Loc().Pos()
 	if c != 0 {
 		return c
 	}
-	c = int(d1.Loc().End()) - int(d2.Loc().End())
+	c = d1.Loc().End() - d2.Loc().End()
 	if c != 0 {
 		return c
 	}

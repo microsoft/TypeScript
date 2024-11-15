@@ -54,8 +54,8 @@ type Node struct {
 // type switches. Either approach is fine. Interface methods are likely more performant, but have higher
 // code size costs because we have hundreds of implementations of the NodeData interface.
 
-func (n *Node) Pos() int                                  { return int(n.Loc.Pos()) }
-func (n *Node) End() int                                  { return int(n.Loc.End()) }
+func (n *Node) Pos() int                                  { return n.Loc.Pos() }
+func (n *Node) End() int                                  { return n.Loc.End() }
 func (n *Node) ForEachChild(v Visitor) bool               { return n.Data.ForEachChild(v) }
 func (n *Node) Name() *DeclarationName                    { return n.Data.Name() }
 func (n *Node) Modifiers() *ModifierListNode              { return n.Data.Modifiers() }

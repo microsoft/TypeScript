@@ -18,8 +18,8 @@ type Diagnostic struct {
 }
 
 func (d *Diagnostic) File() *SourceFile                 { return d.file }
-func (d *Diagnostic) Pos() int                          { return int(d.loc.Pos()) }
-func (d *Diagnostic) End() int                          { return int(d.loc.End()) }
+func (d *Diagnostic) Pos() int                          { return d.loc.Pos() }
+func (d *Diagnostic) End() int                          { return d.loc.End() }
 func (d *Diagnostic) Len() int                          { return d.loc.Len() }
 func (d *Diagnostic) Loc() core.TextRange               { return d.loc }
 func (d *Diagnostic) Code() int32                       { return d.code }

@@ -2731,7 +2731,7 @@ func (b *Binder) errorOrSuggestionOnNode(isError bool, node *ast.Node, message *
 }
 
 func (b *Binder) errorOrSuggestionOnRange(isError bool, startNode *ast.Node, endNode *ast.Node, message *diagnostics.Message) {
-	textRange := core.NewTextRange(int(getRangeOfTokenAtPosition(b.file, startNode.Pos()).Pos()), endNode.End())
+	textRange := core.NewTextRange(getRangeOfTokenAtPosition(b.file, startNode.Pos()).Pos(), endNode.End())
 	diagnostic := ast.NewDiagnostic(b.file, textRange, message)
 	if isError {
 		b.addDiagnostic(diagnostic)

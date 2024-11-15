@@ -5862,7 +5862,7 @@ func (p *Parser) inAwaitContext() bool {
 }
 
 func (p *Parser) skipRangeTrivia(textRange core.TextRange) core.TextRange {
-	return core.NewTextRange(skipTrivia(p.sourceText, int(textRange.Pos())), int(textRange.End()))
+	return core.NewTextRange(skipTrivia(p.sourceText, textRange.Pos()), textRange.End())
 }
 
 func isModifierKind(token ast.Kind) bool {
