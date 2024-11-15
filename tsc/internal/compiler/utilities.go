@@ -460,7 +460,7 @@ func getTextOfNodeFromSourceText(sourceText string, node *ast.Node) string {
 	if ast.NodeIsMissing(node) {
 		return ""
 	}
-	text := sourceText[skipTrivia(sourceText, node.Pos()):node.End()]
+	text := sourceText[SkipTrivia(sourceText, node.Pos()):node.End()]
 	// if (isJSDocTypeExpressionOrChild(node)) {
 	//     // strip space + asterisk at line start
 	//     text = text.split(/\r\n|\n|\r/).map(line => line.replace(/^\s*\*/, "").trimStart()).join("\n");
@@ -510,7 +510,7 @@ func getErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 	errorNode := node
 	switch node.Kind {
 	case ast.KindSourceFile:
-		pos := skipTrivia(sourceFile.Text, 0)
+		pos := SkipTrivia(sourceFile.Text, 0)
 		if pos == len(sourceFile.Text) {
 			return core.NewTextRange(0, 0)
 		}
@@ -525,7 +525,7 @@ func getErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		return getErrorRangeForArrowFunction(sourceFile, node)
 	case ast.KindCaseClause:
 	case ast.KindDefaultClause:
-		start := skipTrivia(sourceFile.Text, node.Pos())
+		start := SkipTrivia(sourceFile.Text, node.Pos())
 		end := node.End()
 		statements := node.Data.(*ast.CaseOrDefaultClause).Statements
 		if len(statements) != 0 {
@@ -533,10 +533,10 @@ func getErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		}
 		return core.NewTextRange(start, end)
 	case ast.KindReturnStatement, ast.KindYieldExpression:
-		pos := skipTrivia(sourceFile.Text, node.Pos())
+		pos := SkipTrivia(sourceFile.Text, node.Pos())
 		return getRangeOfTokenAtPosition(sourceFile, pos)
 	case ast.KindSatisfiesExpression:
-		pos := skipTrivia(sourceFile.Text, node.AsSatisfiesExpression().Expression.End())
+		pos := SkipTrivia(sourceFile.Text, node.AsSatisfiesExpression().Expression.End())
 		return getRangeOfTokenAtPosition(sourceFile, pos)
 	case ast.KindConstructor:
 		scanner := getScannerForSourceFile(sourceFile, node.Pos())
@@ -547,7 +547,7 @@ func getErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		return core.NewTextRange(start, scanner.pos)
 		// !!!
 		// case KindJSDocSatisfiesTag:
-		// 	pos := skipTrivia(sourceFile.text, node.tagName.pos)
+		// 	pos := SkipTrivia(sourceFile.text, node.tagName.pos)
 		// 	return getRangeOfTokenAtPosition(sourceFile, pos)
 	}
 	if errorNode == nil {
@@ -557,13 +557,13 @@ func getErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 	}
 	pos := errorNode.Pos()
 	if !ast.NodeIsMissing(errorNode) {
-		pos = skipTrivia(sourceFile.Text, pos)
+		pos = SkipTrivia(sourceFile.Text, pos)
 	}
 	return core.NewTextRange(pos, errorNode.End())
 }
 
 func getErrorRangeForArrowFunction(sourceFile *ast.SourceFile, node *ast.Node) core.TextRange {
-	pos := skipTrivia(sourceFile.Text, node.Pos())
+	pos := SkipTrivia(sourceFile.Text, node.Pos())
 	body := node.AsArrowFunction().Body
 	if body != nil && body.Kind == ast.KindBlock {
 		startLine, _ := GetLineAndCharacterOfPosition(sourceFile, body.Pos())

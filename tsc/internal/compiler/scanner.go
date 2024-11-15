@@ -1612,7 +1612,7 @@ type skipTriviaOptions struct {
 	inJSDoc            bool
 }
 
-func skipTrivia(text string, pos int) int {
+func SkipTrivia(text string, pos int) int {
 	return skipTriviaEx(text, pos, nil)
 }
 func skipTriviaEx(text string, pos int, options *skipTriviaOptions) int {

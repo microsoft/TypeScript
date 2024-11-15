@@ -1570,7 +1570,7 @@ func (p *Parser) parseErrorForMissingSemicolonAfter(node *ast.Node) {
 		p.parseErrorAtCurrentToken(diagnostics.X_0_expected, TokenToString(ast.KindSemicolonToken))
 		return
 	}
-	pos := skipTrivia(p.sourceText, node.Pos())
+	pos := SkipTrivia(p.sourceText, node.Pos())
 	// Some known keywords are likely signs of syntax being used improperly.
 	switch expressionText {
 	case "const", "let", "var":
@@ -4199,7 +4199,7 @@ func (p *Parser) parseUnaryExpressionOrHigher() *ast.Expression {
 	unaryOperator := p.token
 	simpleUnaryExpression := p.parseSimpleUnaryExpression()
 	if p.token == ast.KindAsteriskAsteriskToken {
-		pos := skipTrivia(p.sourceText, simpleUnaryExpression.Pos())
+		pos := SkipTrivia(p.sourceText, simpleUnaryExpression.Pos())
 		end := simpleUnaryExpression.End()
 		if simpleUnaryExpression.Kind == ast.KindTypeAssertionExpression {
 			p.parseErrorAt(pos, end, diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses)
@@ -4305,7 +4305,7 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 		invalidElement := p.parseJsxElementOrSelfClosingElementOrFragment( /*inExpressionContext*/ true, topBadPos, nil, false)
 		operatorToken := p.factory.NewToken(ast.KindCommaToken)
 		operatorToken.Loc = core.NewTextRange(invalidElement.Pos(), invalidElement.Pos())
-		p.parseErrorAt(skipTrivia(p.sourceText, topBadPos), invalidElement.End(), diagnostics.JSX_expressions_must_have_one_parent_element)
+		p.parseErrorAt(SkipTrivia(p.sourceText, topBadPos), invalidElement.End(), diagnostics.JSX_expressions_must_have_one_parent_element)
 		result = p.factory.NewBinaryExpression(result, operatorToken, invalidElement)
 		p.finishNode(result, pos)
 	}
@@ -4345,7 +4345,7 @@ func (p *Parser) parseJsxChild(openingTag *ast.Node, token ast.Kind) *ast.Expres
 			// We want the error span to cover only 'Foo.Bar' in < Foo.Bar >
 			// or to cover only 'Foo' in < Foo >
 			tag := openingTag.AsJsxOpeningElement().TagName
-			start := min(skipTrivia(p.sourceText, tag.Pos()), tag.End())
+			start := min(SkipTrivia(p.sourceText, tag.Pos()), tag.End())
 			p.parseErrorAt(start, tag.End(), diagnostics.JSX_element_0_has_no_corresponding_closing_tag,
 				getTextOfNodeFromSourceText(p.sourceText, openingTag.AsJsxOpeningElement().TagName))
 		}
@@ -5862,7 +5862,7 @@ func (p *Parser) inAwaitContext() bool {
 }
 
 func (p *Parser) skipRangeTrivia(textRange core.TextRange) core.TextRange {
-	return core.NewTextRange(skipTrivia(p.sourceText, textRange.Pos()), textRange.End())
+	return core.NewTextRange(SkipTrivia(p.sourceText, textRange.Pos()), textRange.End())
 }
 
 func isModifierKind(token ast.Kind) bool {

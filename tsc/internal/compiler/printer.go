@@ -452,7 +452,7 @@ func (p *Printer) printSourceFileWithTypes(sourceFile *ast.SourceFile) {
 	var typesPrinted bool
 	lineStarts := getLineStarts(sourceFile)
 	printLinesBefore := func(node *ast.Node) {
-		line := computeLineOfPosition(lineStarts, skipTrivia(sourceFile.Text, node.Pos()))
+		line := computeLineOfPosition(lineStarts, SkipTrivia(sourceFile.Text, node.Pos()))
 		var nextLineStart int
 		if line+1 < len(lineStarts) {
 			nextLineStart = int(lineStarts[line+1])
