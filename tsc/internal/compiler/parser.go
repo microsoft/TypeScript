@@ -1379,7 +1379,7 @@ func (p *Parser) parseHeritageClause() *ast.Node {
 func (p *Parser) parseExpressionWithTypeArguments() *ast.Node {
 	pos := p.nodePos()
 	expression := p.parseLeftHandSideExpressionOrHigher()
-	if isExpressionWithTypeArguments(expression) {
+	if ast.IsExpressionWithTypeArguments(expression) {
 		return expression
 	}
 	typeArguments := p.parseTypeArguments()
@@ -3648,7 +3648,7 @@ func (p *Parser) parseAssignmentExpressionOrHigherWorker(allowReturnTypeInArrowF
 	//
 	// Note: we call reScanGreaterToken so that we get an appropriately merged token
 	// for cases like `> > =` becoming `>>=`
-	if isLeftHandSideExpressionKind(expr.Kind) && isAssignmentOperator(p.reScanGreaterThanToken()) {
+	if ast.IsLeftHandSideExpression(expr) && isAssignmentOperator(p.reScanGreaterThanToken()) {
 		return p.makeBinaryExpression(expr, p.parseTokenNode(), p.parseAssignmentExpressionOrHigherWorker(allowReturnTypeInArrowFunction), pos)
 	}
 	// It wasn't an assignment or a lambda.  This is a conditional expression:
@@ -3961,7 +3961,7 @@ func (p *Parser) parseModifiersForArrowFunction() *ast.Node {
 func typeHasArrowFunctionBlockingParseError(node *ast.TypeNode) bool {
 	switch node.Kind {
 	case ast.KindTypeReference:
-		return nodeIsMissing(node.AsTypeReference().TypeName)
+		return ast.NodeIsMissing(node.AsTypeReference().TypeName)
 	case ast.KindFunctionType, ast.KindConstructorType:
 		return len(node.Parameters()) == 0 || typeHasArrowFunctionBlockingParseError(node.ReturnType())
 	case ast.KindParenthesizedType:
@@ -4888,7 +4888,7 @@ func (p *Parser) parseMemberExpressionRest(pos int, expression *ast.Expression, 
 		}
 		if p.isTemplateStartOfTaggedTemplate() {
 			// Absorb type arguments into TemplateExpression when preceding expression is ExpressionWithTypeArguments
-			if questionDotToken == nil && isExpressionWithTypeArguments(expression) {
+			if questionDotToken == nil && ast.IsExpressionWithTypeArguments(expression) {
 				expression = p.parseTaggedTemplateRest(pos, expression.AsExpressionWithTypeArguments().Expression, questionDotToken, expression.AsExpressionWithTypeArguments().TypeArguments)
 			} else {
 				expression = p.parseTaggedTemplateRest(pos, expression, questionDotToken, nil /*typeArguments*/)
@@ -4929,7 +4929,7 @@ func (p *Parser) parsePropertyAccessExpressionRest(pos int, expression *ast.Expr
 	if isOptionalChain && ast.IsPrivateIdentifier(name) {
 		p.parseErrorAtRange(p.skipRangeTrivia(name.Loc), diagnostics.An_optional_chain_cannot_contain_private_identifiers)
 	}
-	if isExpressionWithTypeArguments(expression) && expression.AsExpressionWithTypeArguments().TypeArguments != nil {
+	if ast.IsExpressionWithTypeArguments(expression) && expression.AsExpressionWithTypeArguments().TypeArguments != nil {
 		loc := p.skipRangeTrivia(expression.AsExpressionWithTypeArguments().TypeArguments.Loc)
 		p.parseErrorAtRange(loc, diagnostics.An_instantiation_expression_cannot_be_followed_by_a_property_access)
 	}
@@ -4942,14 +4942,14 @@ func (p *Parser) tryReparseOptionalChain(node *ast.Expression) bool {
 		return true
 	}
 	// check for an optional chain in a non-null expression
-	if isNonNullExpression(node) {
+	if ast.IsNonNullExpression(node) {
 		expr := node.AsNonNullExpression().Expression
-		for isNonNullExpression(expr) && expr.Flags&ast.NodeFlagsOptionalChain == 0 {
+		for ast.IsNonNullExpression(expr) && expr.Flags&ast.NodeFlagsOptionalChain == 0 {
 			expr = expr.AsNonNullExpression().Expression
 		}
 		if expr.Flags&ast.NodeFlagsOptionalChain != 0 {
 			// this is part of an optional chain. Walk down from `node` to `expression` and set the flag.
-			for isNonNullExpression(node) {
+			for ast.IsNonNullExpression(node) {
 				node.Flags |= ast.NodeFlagsOptionalChain
 				node = node.AsNonNullExpression().Expression
 			}

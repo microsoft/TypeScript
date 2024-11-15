@@ -1399,6 +1399,10 @@ func IsArrayBindingPattern(node *Node) bool {
 	return node.Kind == KindArrayBindingPattern
 }
 
+func IsBindingPattern(node *Node) bool {
+	return node.Kind == KindArrayBindingPattern || node.Kind == KindObjectBindingPattern
+}
+
 // ParameterDeclaration
 
 type ParameterDeclaration struct {
@@ -2574,6 +2578,10 @@ func (f *NodeFactory) NewNumericLiteral(text string) *Node {
 	return f.NewNode(KindNumericLiteral, data)
 }
 
+func IsNumericLiteral(node *Node) bool {
+	return node.Kind == KindNumericLiteral
+}
+
 // BigIntLiteral
 
 type BigIntLiteral struct {
@@ -2585,6 +2593,10 @@ func (f *NodeFactory) NewBigIntLiteral(text string) *Node {
 	data := &BigIntLiteral{}
 	data.Text = text
 	return f.NewNode(KindBigIntLiteral, data)
+}
+
+func IsBigIntLiteral(node *Node) bool {
+	return node.Kind == KindBigIntLiteral
 }
 
 // RegularExpressionLiteral
@@ -2633,6 +2645,10 @@ func (f *NodeFactory) NewBinaryExpression(left *Expression, operatorToken *Token
 
 func (node *BinaryExpression) ForEachChild(v Visitor) bool {
 	return visit(v, node.Left) || visit(v, node.OperatorToken) || visit(v, node.Right)
+}
+
+func IsBinaryExpression(node *Node) bool {
+	return node.Kind == KindBinaryExpression
 }
 
 // PrefixUnaryExpression
@@ -2983,6 +2999,10 @@ func (f *NodeFactory) NewNonNullExpression(expression *Expression) *Node {
 
 func (node *NonNullExpression) ForEachChild(v Visitor) bool {
 	return visit(v, node.Expression)
+}
+
+func IsNonNullExpression(node *Node) bool {
+	return node.Kind == KindNonNullExpression
 }
 
 // SpreadElement
@@ -3527,6 +3547,10 @@ func (f *NodeFactory) NewExpressionWithTypeArguments(expression *Expression, typ
 
 func (node *ExpressionWithTypeArguments) ForEachChild(v Visitor) bool {
 	return visit(v, node.Expression) || visit(v, node.TypeArguments)
+}
+
+func IsExpressionWithTypeArguments(node *Node) bool {
+	return node.Kind == KindExpressionWithTypeArguments
 }
 
 // LiteralTypeNode

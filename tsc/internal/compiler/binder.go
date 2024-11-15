@@ -230,7 +230,7 @@ func (b *Binder) declareSymbolEx(symbolTable ast.SymbolTable, parent *ast.Symbol
 				} else {
 					diag = b.createDiagnosticForNode(declarationName, message)
 				}
-				if ast.IsTypeAliasDeclaration(node) && nodeIsMissing(node.AsTypeAliasDeclaration().TypeNode) && hasSyntacticModifier(node, ast.ModifierFlagsExport) && symbol.Flags&(ast.SymbolFlagsAlias|ast.SymbolFlagsType|ast.SymbolFlagsNamespace) != 0 {
+				if ast.IsTypeAliasDeclaration(node) && ast.NodeIsMissing(node.AsTypeAliasDeclaration().TypeNode) && hasSyntacticModifier(node, ast.ModifierFlagsExport) && symbol.Flags&(ast.SymbolFlagsAlias|ast.SymbolFlagsType|ast.SymbolFlagsNamespace) != 0 {
 					// export type T; - may have meant export type { T }?
 					diag.AddRelatedInfo(b.createDiagnosticForNode(node, diagnostics.Did_you_mean_0, "export type { "+node.AsTypeAliasDeclaration().Name().AsIdentifier().Text+" }"))
 				}
@@ -291,7 +291,7 @@ func (b *Binder) getDeclarationName(node *ast.Node) string {
 			}
 			return getSymbolNameForPrivateIdentifier(containingClass.Symbol(), name.Text())
 		}
-		if isPropertyNameLiteral(name) {
+		if ast.IsPropertyNameLiteral(name) {
 			return name.Text()
 		}
 		if ast.IsComputedPropertyName(name) {
@@ -458,7 +458,7 @@ func (b *Binder) createFlowCondition(flags ast.FlowFlags, antecedent *ast.FlowNo
 		}
 		return ast.UnreachableFlow
 	}
-	if (expression.Kind == ast.KindTrueKeyword && flags&ast.FlowFlagsFalseCondition != 0 || expression.Kind == ast.KindFalseKeyword && flags&ast.FlowFlagsTrueCondition != 0) && !isExpressionOfOptionalChainRoot(expression) && !isNullishCoalesce(expression.Parent) {
+	if (expression.Kind == ast.KindTrueKeyword && flags&ast.FlowFlagsFalseCondition != 0 || expression.Kind == ast.KindFalseKeyword && flags&ast.FlowFlagsTrueCondition != 0) && !ast.IsExpressionOfOptionalChainRoot(expression) && !isNullishCoalesce(expression.Parent) {
 		return ast.UnreachableFlow
 	}
 	if !isNarrowingExpression(expression) {
@@ -1111,7 +1111,7 @@ func (b *Binder) bindVariableDeclarationOrBindingElement(node *ast.Node) {
 	if b.inStrictMode {
 		b.checkStrictModeEvalOrArguments(node, node.Name())
 	}
-	if !isBindingPattern(node.Name()) {
+	if name := node.Name(); name != nil && !ast.IsBindingPattern(name) {
 		switch {
 		case isBlockOrCatchScoped(node):
 			b.bindBlockScopedDeclaration(node, ast.SymbolFlagsBlockScopedVariable, ast.SymbolFlagsBlockScopedVariableExcludes)
@@ -1143,7 +1143,7 @@ func (b *Binder) bindParameter(node *ast.Node) {
 		// strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
 		b.checkStrictModeEvalOrArguments(node, decl.Name())
 	}
-	if isBindingPattern(decl.Name()) {
+	if ast.IsBindingPattern(decl.Name()) {
 		index := slices.Index(node.Parent.Parameters(), node)
 		b.bindAnonymousDeclaration(node, ast.SymbolFlagsFunctionScopedVariable, "__"+strconv.Itoa(index))
 	} else {
@@ -1172,7 +1172,7 @@ func (b *Binder) bindFunctionDeclaration(node *ast.Node) {
 }
 
 func (b *Binder) getInferTypeContainer(node *ast.Node) *ast.Node {
-	extendsType := findAncestor(node, func(n *ast.Node) bool {
+	extendsType := ast.FindAncestor(node, func(n *ast.Node) bool {
 		parent := n.Parent
 		return parent != nil && ast.IsConditionalTypeNode(parent) && parent.AsConditionalTypeNode().ExtendsType == n
 	})
@@ -1352,7 +1352,7 @@ func (b *Binder) getStrictModeBlockScopeFunctionDeclarationMessage(node *ast.Nod
 
 func (b *Binder) checkStrictModeBinaryExpression(node *ast.Node) {
 	expr := node.AsBinaryExpression()
-	if b.inStrictMode && isLeftHandSideExpression(expr.Left) && isAssignmentOperator(expr.OperatorToken.Kind) {
+	if b.inStrictMode && ast.IsLeftHandSideExpression(expr.Left) && isAssignmentOperator(expr.OperatorToken.Kind) {
 		// ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
 		// Assignment operator(11.13) or of a PostfixExpression(11.3)
 		b.checkStrictModeEvalOrArguments(node, expr.Left)
@@ -1409,7 +1409,7 @@ func (b *Binder) checkStrictModeLabeledStatement(node *ast.Node) {
 	// Grammar checking for labeledStatement
 	if b.inStrictMode && b.options.Target >= core.ScriptTargetES2015 {
 		data := node.AsLabeledStatement()
-		if isDeclarationStatement(data.Statement) || ast.IsVariableStatement(data.Statement) {
+		if ast.IsDeclarationStatement(data.Statement) || ast.IsVariableStatement(data.Statement) {
 			b.errorOnFirstToken(data.Label, diagnostics.A_label_is_not_allowed_here)
 		}
 	}
@@ -1522,7 +1522,7 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 		node.Flags &= ^ast.NodeFlagsReachabilityAndEmitFlags
 		if b.currentFlow.Flags&ast.FlowFlagsUnreachable == 0 && containerFlags&ContainerFlagsIsFunctionLike != 0 {
 			bodyData := node.BodyData()
-			if bodyData != nil && nodeIsPresent(bodyData.Body) {
+			if bodyData != nil && ast.NodeIsPresent(bodyData.Body) {
 				node.Flags |= ast.NodeFlagsHasImplicitReturn
 				if b.hasExplicitReturn {
 					node.Flags |= ast.NodeFlagsHasExplicitReturn
@@ -1703,7 +1703,7 @@ func (b *Binder) checkUnreachable(node *ast.Node) bool {
 		// report errors on class declarations
 		// report errors on enums with preserved emit
 		// report errors on instantiated modules
-		reportError := isStatementButNotDeclaration(node) && !ast.IsEmptyStatement(node) ||
+		reportError := ast.IsStatementButNotDeclaration(node) && !ast.IsEmptyStatement(node) ||
 			ast.IsClassDeclaration(node) ||
 			isEnumDeclarationWithPreservedEmit(node, b.options) ||
 			ast.IsModuleDeclaration(node) && b.shouldReportErrorOnModuleDeclaration(node)
@@ -1804,7 +1804,7 @@ func (b *Binder) doWithConditionalBranches(action func(value *ast.Node) bool, va
 
 func (b *Binder) bindCondition(node *ast.Node, trueTarget *ast.FlowLabel, falseTarget *ast.FlowLabel) {
 	b.doWithConditionalBranches(b.bind, node, trueTarget, falseTarget)
-	if node == nil || !isLogicalAssignmentExpression(node) && !isLogicalExpression(node) && !(isOptionalChain(node) && isOutermostOptionalChain(node)) {
+	if node == nil || !isLogicalAssignmentExpression(node) && !isLogicalExpression(node) && !(ast.IsOptionalChain(node) && ast.IsOutermostOptionalChain(node)) {
 		b.addAntecedent(trueTarget, b.createFlowCondition(ast.FlowFlagsTrueCondition, b.currentFlow, node))
 		b.addAntecedent(falseTarget, b.createFlowCondition(ast.FlowFlagsFalseCondition, b.currentFlow, node))
 	}
@@ -1821,7 +1821,7 @@ func (b *Binder) bindIterativeStatement(node *ast.Node, breakTarget *ast.FlowLab
 }
 
 func isLogicalAssignmentExpression(node *ast.Node) bool {
-	return isLogicalOrCoalescingAssignmentExpression(skipParentheses(node))
+	return isLogicalOrCoalescingAssignmentExpression(ast.SkipParentheses(node))
 }
 
 func (b *Binder) bindAssignmentTargetFlow(node *ast.Node) {
@@ -1853,7 +1853,7 @@ func (b *Binder) bindAssignmentTargetFlow(node *ast.Node) {
 }
 
 func (b *Binder) bindDestructuringTargetFlow(node *ast.Node) {
-	if isBinaryExpression(node) && node.AsBinaryExpression().OperatorToken.Kind == ast.KindEqualsToken {
+	if ast.IsBinaryExpression(node) && node.AsBinaryExpression().OperatorToken.Kind == ast.KindEqualsToken {
 		b.bindAssignmentTargetFlow(node.AsBinaryExpression().Left)
 	} else {
 		b.bindAssignmentTargetFlow(node)
@@ -2327,7 +2327,7 @@ func (b *Binder) bindInitializedVariableFlow(node *ast.Node) {
 	case ast.KindBindingElement:
 		name = node.AsBindingElement().Name()
 	}
-	if isBindingPattern(name) {
+	if name != nil && ast.IsBindingPattern(name) {
 		for _, child := range name.AsBindingPattern().Elements {
 			b.bindInitializedVariableFlow(child)
 		}
@@ -2337,7 +2337,7 @@ func (b *Binder) bindInitializedVariableFlow(node *ast.Node) {
 }
 
 func (b *Binder) bindAccessExpressionFlow(node *ast.Node) {
-	if isOptionalChain(node) {
+	if ast.IsOptionalChain(node) {
 		b.bindOptionalChainFlow(node)
 	} else {
 		b.bindEachChild(node)
@@ -2374,7 +2374,7 @@ func (b *Binder) bindOptionalChain(node *ast.Node, trueTarget *ast.FlowLabel, fa
 	// of the node as part of the "true" branch, and continue to do so as we ascend back up to the outermost
 	// chain node. We then treat the entire node as the right side of the expression.
 	var preChainLabel *ast.FlowLabel
-	if isOptionalChainRoot(node) {
+	if ast.IsOptionalChainRoot(node) {
 		preChainLabel = b.createBranchLabel()
 	}
 	b.bindOptionalExpression(node.Expression(), ifElse(preChainLabel != nil, preChainLabel, trueTarget), falseTarget)
@@ -2382,7 +2382,7 @@ func (b *Binder) bindOptionalChain(node *ast.Node, trueTarget *ast.FlowLabel, fa
 		b.currentFlow = finishFlowLabel(preChainLabel)
 	}
 	b.doWithConditionalBranches(b.bindOptionalChainRest, node, trueTarget, falseTarget)
-	if isOutermostOptionalChain(node) {
+	if ast.IsOutermostOptionalChain(node) {
 		b.addAntecedent(trueTarget, b.createFlowCondition(ast.FlowFlagsTrueCondition, b.currentFlow, node))
 		b.addAntecedent(falseTarget, b.createFlowCondition(ast.FlowFlagsFalseCondition, b.currentFlow, node))
 	}
@@ -2390,7 +2390,7 @@ func (b *Binder) bindOptionalChain(node *ast.Node, trueTarget *ast.FlowLabel, fa
 
 func (b *Binder) bindOptionalExpression(node *ast.Node, trueTarget *ast.FlowLabel, falseTarget *ast.FlowLabel) {
 	b.doWithConditionalBranches(b.bind, node, trueTarget, falseTarget)
-	if !isOptionalChain(node) || isOutermostOptionalChain(node) {
+	if !ast.IsOptionalChain(node) || ast.IsOutermostOptionalChain(node) {
 		b.addAntecedent(trueTarget, b.createFlowCondition(ast.FlowFlagsTrueCondition, b.currentFlow, node))
 		b.addAntecedent(falseTarget, b.createFlowCondition(ast.FlowFlagsFalseCondition, b.currentFlow, node))
 	}
@@ -2414,13 +2414,13 @@ func (b *Binder) bindOptionalChainRest(node *ast.Node) bool {
 
 func (b *Binder) bindCallExpressionFlow(node *ast.Node) {
 	call := node.AsCallExpression()
-	if isOptionalChain(node) {
+	if ast.IsOptionalChain(node) {
 		b.bindOptionalChainFlow(node)
 	} else {
 		// If the target of the call expression is a function expression or arrow function we have
 		// an immediately invoked function expression (IIFE). Initialize the flowNode property to
 		// the current control flow (which includes evaluation of the IIFE arguments).
-		expr := skipParentheses(call.Expression)
+		expr := ast.SkipParentheses(call.Expression)
 		if expr.Kind == ast.KindFunctionExpression || expr.Kind == ast.KindArrowFunction {
 			b.bind(call.TypeArguments)
 			b.bindEachExpression(call.Arguments)
@@ -2441,7 +2441,7 @@ func (b *Binder) bindCallExpressionFlow(node *ast.Node) {
 }
 
 func (b *Binder) bindNonNullExpressionFlow(node *ast.Node) {
-	if isOptionalChain(node) {
+	if ast.IsOptionalChain(node) {
 		b.bindOptionalChainFlow(node)
 	} else {
 		b.bindEachChild(node)
@@ -2589,7 +2589,7 @@ func getContainerFlags(node *ast.Node) ContainerFlags {
 	case ast.KindCatchClause, ast.KindForStatement, ast.KindForInStatement, ast.KindForOfStatement, ast.KindCaseBlock:
 		return ContainerFlagsIsBlockScopedContainer | ContainerFlagsHasLocals
 	case ast.KindBlock:
-		if isFunctionLike(node.Parent) || ast.IsClassStaticBlockDeclaration(node.Parent) {
+		if ast.IsFunctionLike(node.Parent) || ast.IsClassStaticBlockDeclaration(node.Parent) {
 			return ContainerFlagsNone
 		} else {
 			return ContainerFlagsIsBlockScopedContainer | ContainerFlagsHasLocals
@@ -2659,7 +2659,7 @@ func isNarrowableReference(node *ast.Node) bool {
 	case ast.KindBinaryExpression:
 		expr := node.AsBinaryExpression()
 		return expr.OperatorToken.Kind == ast.KindCommaToken && isNarrowableReference(expr.Right) ||
-			isAssignmentOperator(expr.OperatorToken.Kind) && isLeftHandSideExpression(expr.Left)
+			isAssignmentOperator(expr.OperatorToken.Kind) && ast.IsLeftHandSideExpression(expr.Left)
 	}
 	return false
 }
@@ -2686,7 +2686,7 @@ func isNarrowingBinaryExpression(expr *ast.BinaryExpression) bool {
 	case ast.KindEqualsEqualsToken, ast.KindExclamationEqualsToken, ast.KindEqualsEqualsEqualsToken, ast.KindExclamationEqualsEqualsToken:
 		return isNarrowableOperand(expr.Left) || isNarrowableOperand(expr.Right) ||
 			isNarrowingTypeOfOperands(expr.Right, expr.Left) || isNarrowingTypeOfOperands(expr.Left, expr.Right) ||
-			(isBooleanLiteral(expr.Right) && isNarrowingExpression(expr.Left) || isBooleanLiteral(expr.Left) && isNarrowingExpression(expr.Right))
+			(ast.IsBooleanLiteral(expr.Right) && isNarrowingExpression(expr.Left) || ast.IsBooleanLiteral(expr.Left) && isNarrowingExpression(expr.Right))
 	case ast.KindInstanceOfKeyword:
 		return isNarrowableOperand(expr.Left)
 	case ast.KindInKeyword:

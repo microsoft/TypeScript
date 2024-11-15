@@ -962,7 +962,7 @@ func (c *Checker) getTypeNameForErrorDisplay(t *Type) string {
 }
 
 func (c *Checker) symbolValueDeclarationIsContextSensitive(symbol *ast.Symbol) bool {
-	return symbol != nil && symbol.ValueDeclaration != nil && isExpression(symbol.ValueDeclaration) && !c.isContextSensitive(symbol.ValueDeclaration)
+	return symbol != nil && symbol.ValueDeclaration != nil && ast.IsExpression(symbol.ValueDeclaration) && !c.isContextSensitive(symbol.ValueDeclaration)
 }
 
 func (c *Checker) typeCouldHaveTopLevelSingletonTypes(t *Type) bool {
@@ -1625,7 +1625,7 @@ func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
 				switch {
 				case typeNode != nil && ast.IsTypePredicateNode(typeNode):
 					sig.resolvedTypePredicate = c.createTypePredicateFromTypePredicateNode(typeNode, sig)
-				case isFunctionLikeDeclaration(sig.declaration) && (sig.resolvedReturnType == nil || sig.resolvedReturnType.flags&TypeFlagsBoolean != 0) && c.getParameterCount(sig) > 0:
+				case ast.IsFunctionLikeDeclaration(sig.declaration) && (sig.resolvedReturnType == nil || sig.resolvedReturnType.flags&TypeFlagsBoolean != 0) && c.getParameterCount(sig) > 0:
 					sig.resolvedTypePredicate = c.noTypePredicate // avoid infinite loop
 					sig.resolvedTypePredicate = c.getTypePredicateFromBody(sig.declaration)
 				}
@@ -2038,7 +2038,7 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 						// !!!
 						// // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
 						// // However, using an object-literal error message will be very confusing to the users so we give different a message.
-						// if prop.valueDeclaration && isJsxAttribute(prop.valueDeclaration) && getSourceFileOfNode(errorNode) == getSourceFileOfNode(prop.valueDeclaration.name) {
+						// if prop.valueDeclaration && isJsxAttribute(prop.valueDeclaration) && ast.GetSourceFileOfNode(errorNode) == ast.GetSourceFileOfNode(prop.valueDeclaration.name) {
 						// 	// Note that extraneous children (as in `<NoChild>extra</NoChild>`) don't pass this check,
 						// 	// since `children` is a Kind.PropertySignature instead of a Kind.JsxAttribute.
 						// 	errorNode = prop.valueDeclaration.name
@@ -2063,9 +2063,9 @@ func (r *Relater) hasExcessProperties(source *Type, target *Type, reportErrors b
 							objectLiteralDeclaration = core.FirstOrNil(source.symbol.Declarations)
 						}
 						var suggestion string
-						if prop.ValueDeclaration != nil && isObjectLiteralElementLike(prop.ValueDeclaration) &&
-							findAncestor(prop.ValueDeclaration, func(d *ast.Node) bool { return d == objectLiteralDeclaration }) != nil &&
-							getSourceFileOfNode(objectLiteralDeclaration) == getSourceFileOfNode(r.errorNode) {
+						if prop.ValueDeclaration != nil && ast.IsObjectLiteralElement(prop.ValueDeclaration) &&
+							ast.FindAncestor(prop.ValueDeclaration, func(d *ast.Node) bool { return d == objectLiteralDeclaration }) != nil &&
+							ast.GetSourceFileOfNode(objectLiteralDeclaration) == ast.GetSourceFileOfNode(r.errorNode) {
 							name := prop.ValueDeclaration.Name()
 							r.errorNode = name
 							if ast.IsIdentifier(name) {
