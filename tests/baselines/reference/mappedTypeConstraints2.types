@@ -120,18 +120,18 @@ function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
 >   : ^ ^^^^^^^^^      ^^   ^^          ^^   ^^                ^^^^^^^^^
 >obj : Mapped5<K>
 >    : ^^^^^^^^^^
->key : K extends `_${string}` ? K : never
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : keyof Mapped5<K>
+>    : ^^^^^^^^^^^^^^^^
 
   let s: `_${string}` = obj[key];
 >s : `_${string}`
 >  : ^^^^^^^^^^^^
->obj[key] : Mapped5<K>[K extends `_${string}` ? K : never]
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[key] : string | number | symbol
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Mapped5<K>
 >    : ^^^^^^^^^^
->key : K extends `_${string}` ? K : never
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : keyof Mapped5<K>
+>    : ^^^^^^^^^^^^^^^^
 }
 
 // repro from #53066#issuecomment-1913384757
