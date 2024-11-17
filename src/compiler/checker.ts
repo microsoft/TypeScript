@@ -18877,6 +18877,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getSimplifiedType(type: Type, writing: boolean): Type {
         return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(type as IndexedAccessType, writing) :
             type.flags & TypeFlags.Conditional ? getSimplifiedConditionalType(type as ConditionalType, writing) :
+            type.flags & TypeFlags.Index ? getSimplifiedIndexType(type as IndexType) :
             type;
     }
 
@@ -18972,6 +18973,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (checkType.flags & TypeFlags.Any || isIntersectionEmpty(checkType, extendsType)) { // Always false
                 return getSimplifiedType(falseType, writing);
             }
+        }
+        return type;
+    }
+
+    function getSimplifiedIndexType(type: IndexType) {
+        if (isGenericMappedType(type.type) && getNameTypeFromMappedType(type.type) && !isMappedTypeWithKeyofConstraintDeclaration(type.type)) {
+            return getIndexTypeForMappedType(type.type, IndexFlags.None);
         }
         return type;
     }
@@ -42092,11 +42100,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Check if the index type is assignable to 'keyof T' for the object type.
         const objectType = (type as IndexedAccessType).objectType;
         const indexType = (type as IndexedAccessType).indexType;
-        const objectIndexType = isGenericMappedType(objectType)
-            ? getIndexTypeForMappedType(objectType, IndexFlags.None)
-            : getIndexType(objectType, IndexFlags.None);
         const hasNumberIndexInfo = !!getIndexInfoOfType(objectType, numberType);
-        if (everyType(indexType, t => isTypeAssignableTo(t, objectIndexType) || hasNumberIndexInfo && isApplicableIndexType(t, numberType))) {
+        if (everyType(indexType, t => isTypeAssignableTo(t, getIndexType(objectType, IndexFlags.None)) || hasNumberIndexInfo && isApplicableIndexType(t, numberType))) {
             if (
                 accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
                 getObjectFlags(objectType) & ObjectFlags.Mapped && getMappedTypeModifiers(objectType as MappedType) & MappedTypeModifiers.IncludeReadonly
