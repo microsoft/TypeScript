@@ -18256,7 +18256,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // a circular definition. For this reason, we only eagerly manifest the keys if the constraint is non-generic.
         if (isGenericIndexType(constraintType)) {
             if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
-                // We have a generic index and a homomorphic mapping (but a distributive key remapping) - we need to defer
+                // We have a generic index and a homomorphic mapping and a key remapping - we need to defer
                 // the whole `keyof whatever` for later since it's not safe to resolve the shape of modifier type.
                 return getIndexTypeForGenericType(type, indexFlags);
             }
@@ -18283,25 +18283,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // `keyof` currently always returns `string | number` for concrete `string` index signatures - the below ternary keeps that behavior for mapped types
             // See `getLiteralTypeFromProperties` where there's a similar ternary to cause the same behavior.
             keyTypes.push(propNameType === stringType ? stringOrNumberType : propNameType);
-        }
-    }
-
-    // Ordinarily we reduce a keyof M, where M is a mapped type { [P in K as N<P>]: X }, to simply N<K>. This however presumes
-    // that N distributes over union types, i.e. that N<A | B | C> is equivalent to N<A> | N<B> | N<C>. Specifically, we only
-    // want to perform the reduction when the name type of a mapped type is distributive with respect to the type variable
-    // introduced by the 'in' clause of the mapped type. Note that non-generic types are considered to be distributive because
-    // they're the same type regardless of what's being distributed over.
-    function hasDistributiveNameType(mappedType: MappedType) {
-        const typeVariable = getTypeParameterFromMappedType(mappedType);
-        return isDistributive(getNameTypeFromMappedType(mappedType) || typeVariable);
-        function isDistributive(type: Type): boolean {
-            return type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Primitive | TypeFlags.Never | TypeFlags.TypeParameter | TypeFlags.Object | TypeFlags.NonPrimitive) ? true :
-                type.flags & TypeFlags.Conditional ? (type as ConditionalType).root.isDistributive && (type as ConditionalType).checkType === typeVariable :
-                type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) ? every((type as UnionOrIntersectionType | TemplateLiteralType).types, isDistributive) :
-                type.flags & TypeFlags.IndexedAccess ? isDistributive((type as IndexedAccessType).objectType) && isDistributive((type as IndexedAccessType).indexType) :
-                type.flags & TypeFlags.Substitution ? isDistributive((type as SubstitutionType).baseType) && isDistributive((type as SubstitutionType).constraint) :
-                type.flags & TypeFlags.StringMapping ? isDistributive((type as StringMappingType).type) :
-                false;
         }
     }
 
