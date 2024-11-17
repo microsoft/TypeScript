@@ -14749,6 +14749,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     undefined;
             }
             if (t.flags & TypeFlags.Index) {
+                if (isGenericMappedType((t as IndexType).type)) {
+                    const mappedType = (t as IndexType).type as MappedType;
+                    if (getNameTypeFromMappedType(mappedType) && !isMappedTypeWithKeyofConstraintDeclaration(mappedType)) {
+                        return getBaseConstraint(getIndexTypeForMappedType(mappedType, IndexFlags.None));
+                    }
+                }
                 return stringNumberSymbolType;
             }
             if (t.flags & TypeFlags.TemplateLiteral) {
@@ -42086,8 +42092,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Check if the index type is assignable to 'keyof T' for the object type.
         const objectType = (type as IndexedAccessType).objectType;
         const indexType = (type as IndexedAccessType).indexType;
-        // skip index type deferral on remapping mapped types
-        const objectIndexType = isGenericMappedType(objectType) && getMappedTypeNameTypeKind(objectType) === MappedTypeNameTypeKind.Remapping
+        const objectIndexType = isGenericMappedType(objectType)
             ? getIndexTypeForMappedType(objectType, IndexFlags.None)
             : getIndexType(objectType, IndexFlags.None);
         const hasNumberIndexInfo = !!getIndexInfoOfType(objectType, numberType);

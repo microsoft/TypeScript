@@ -126,8 +126,8 @@ function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
   let s: `_${string}` = obj[key];
 >s : `_${string}`
 >  : ^^^^^^^^^^^^
->obj[key] : string | number | symbol
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[key] : Mapped5<K>[keyof Mapped5<K>]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Mapped5<K>
 >    : ^^^^^^^^^^
 >key : keyof Mapped5<K>
