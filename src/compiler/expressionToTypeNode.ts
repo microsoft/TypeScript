@@ -834,6 +834,7 @@ export function createSyntacticTypeNodeBuilder(
         symbol: Symbol | undefined,
         context: SyntacticTypeNodeBuilderContext,
         reportFallback = true,
+        widen = false,
     ) {
         if (reportFallback) {
             context.tracker.reportInferenceFallback(node);
@@ -841,7 +842,7 @@ export function createSyntacticTypeNodeBuilder(
         if (context.noInferenceFallback === true) {
             return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
         }
-        return resolver.serializeTypeOfDeclaration(context, node, symbol);
+        return resolver.serializeTypeOfDeclaration(context, node, symbol, widen);
     }
 
     function inferExpressionType(node: Expression, context: SyntacticTypeNodeBuilderContext, reportFallback = true, requiresAddingUndefined?: boolean) {
@@ -1058,9 +1059,6 @@ export function createSyntacticTypeNodeBuilder(
             }
             return syntacticResult(inferExpressionType(objectLiteral, context, /*reportFallback*/ false, requiresAddingUndefined));
         }
-        // Disable any inference fallback since we won't actually use the resulting type and we don't want to generate errors
-        const oldNoInferenceFallback = context.noInferenceFallback;
-        context.noInferenceFallback = true;
         const properties: TypeElement[] = [];
         const oldFlags = context.flags;
         context.flags |= NodeBuilderFlags.InObjectTypeLiteral;
@@ -1092,8 +1090,7 @@ export function createSyntacticTypeNodeBuilder(
         if (!(context.flags & NodeBuilderFlags.MultilineObjectLiterals)) {
             setEmitFlags(typeNode, EmitFlags.SingleLine);
         }
-        context.noInferenceFallback = oldNoInferenceFallback;
-        return notImplemented;
+        return syntacticResult(addUndefinedIfNeeded(typeNode, requiresAddingUndefined, objectLiteral, context));
     }
 
     function typeFromObjectLiteralPropertyAssignment(prop: PropertyAssignment, name: PropertyName, context: SyntacticTypeNodeBuilderContext, isConstContext: boolean) {
@@ -1101,7 +1098,7 @@ export function createSyntacticTypeNodeBuilder(
             [factory.createModifier(SyntaxKind.ReadonlyKeyword)] :
             [];
         const expressionResult = typeFromExpression(prop.initializer, context, isConstContext);
-        const typeNode = expressionResult.type !== undefined ? expressionResult.type : inferTypeOfDeclaration(prop, /*symbol*/ undefined, context, expressionResult.reportFallback);
+        const typeNode = expressionResult.type !== undefined ? expressionResult.type : inferTypeOfDeclaration(prop, /*symbol*/ undefined, context, expressionResult.reportFallback, !isConstContext);
 
         return factory.createPropertySignature(
             modifiers,

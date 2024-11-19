@@ -21,7 +21,7 @@ export function noParamAnnotationDefault(p = 1): void {}
 
 export function noParamAnnotationBadDefault(p = 1 + 1, p2 = { a: 1 + 1 }, p3 = [1 + 1] as const): void {}
 >noParamAnnotationBadDefault : (p?: number, p2?: { a: number; }, p3?: readonly [number]) => void
->                            : ^ ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                            : ^ ^^^^^^^^^^^  ^^^^^ ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >p : number
 >  : ^^^^^^
 >1 + 1 : number
@@ -57,7 +57,7 @@ export function noParamAnnotationBadDefault(p = 1 + 1, p2 = { a: 1 + 1 }, p3 = [
 
 export function noParamAnnotationBadDefault2(p = { a: 1 + 1 }): void {}
 >noParamAnnotationBadDefault2 : (p?: { a: number; }) => void
->                             : ^ ^^^^^^^^^^^^^^^^^^^^^^    
+>                             : ^ ^^^^^ ^^^^^^^^^^^^^^^^    
 >p : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >{ a: 1 + 1 } : { a: number; }

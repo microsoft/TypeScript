@@ -7,7 +7,7 @@ class a {
 
     method1() {
 >method1 : () => { doStuff: (callback: any) => () => any; }
->        : ^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^       ^^^          ^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            doStuff: (callback) => () => {                var _this = 2;                return callback(this);            }        } : { doStuff: (callback: any) => () => any; }
@@ -38,7 +38,7 @@ class a {
     }
     method2() {
 >method2 : () => { doStuff: (callback: any) => () => any; }
->        : ^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^       ^^^          ^^^^^^^^^^^^^^^^^^^^
 
         var _this = 2;
 >_this : number

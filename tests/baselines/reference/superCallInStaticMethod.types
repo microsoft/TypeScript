@@ -57,7 +57,7 @@ class Other extends Doing {
     // in an object literal inside a static method
     public static objectLiteralInsideAStaticMethod() {
 >objectLiteralInsideAStaticMethod : () => { a: () => void; b: void; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^
 
         return {
 >{            a: () => {                super.staticMethod();            },            b: super.staticMethod()        } : { a: () => void; b: void; }

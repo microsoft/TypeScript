@@ -13,7 +13,7 @@ class SymbolIterator {
 
     next() {
 >next : () => { value: symbol; done: boolean; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^     ^^^^^^^^^^    ^^^^^^^^^^^^
 
         return {
 >{            value: Symbol(),            done: false        } : { value: symbol; done: boolean; }
@@ -58,7 +58,7 @@ class _StringIterator {
 
     next() {
 >next : () => { value: string; done: boolean; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^     ^^^^^^^^^^    ^^^^^^^^^^^^
 
         return {
 >{            value: "",            done: false        } : { value: string; done: boolean; }

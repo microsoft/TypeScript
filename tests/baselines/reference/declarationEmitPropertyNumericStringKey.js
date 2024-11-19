@@ -28,7 +28,7 @@ var obj2 = (_c = {}, _c[hundredNum] = "bar", _c);
 
 //// [declarationEmitPropertyNumericStringKey.d.ts]
 declare const STATUS: {
-    readonly "404": "not found";
+    readonly ["404"]: "not found";
 };
 declare const hundredStr = "100";
 declare const obj: {

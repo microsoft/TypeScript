@@ -372,7 +372,7 @@ function opt1(n = 4) {
 // Function signature with optional parameter, no type annotation and initializer has initializer's widened type
 function opt2(n = { x: null, y: undefined }) {
 >opt2 : (n?: { x: any; y: any; }) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
 >n : { x: any; y: any; }
 >  : ^^^^^^^^^^^^^^^^^^^
 >{ x: null, y: undefined } : { x: null; y: undefined; }

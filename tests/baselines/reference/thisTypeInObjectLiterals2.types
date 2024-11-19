@@ -1108,13 +1108,13 @@ let vue = new Vue({
 >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
 >    : ^^^^^ ^^ ^^ ^^       ^^                   ^^^^^         
 >{    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }} : { data: () => { x: number; y: number; }; methods: { f(x: string): number; }; computed: { test(): number; hello: { get(): string; set(value: string): void; }; }; }
->                                                                                                                                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^
 
     data: () => ({ x: 1, y: 2 }),
 >data : () => { x: number; y: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^
 >() => ({ x: 1, y: 2 }) : () => { x: number; y: number; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^
 >({ x: 1, y: 2 }) : { x: number; y: number; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: 2 } : { x: number; y: number; }

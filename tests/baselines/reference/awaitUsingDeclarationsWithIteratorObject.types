@@ -21,7 +21,7 @@ class MyIterator extends Iterator<string> {
 
     next() { return { done: true, value: undefined }; }
 >next : () => { done: boolean; value: any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^    ^^^^^^^^^^^     ^^^^^^^^
 >{ done: true, value: undefined } : { done: boolean; value: undefined; }
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >done : boolean

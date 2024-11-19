@@ -5,7 +5,7 @@
 
 function makePoint(x: number, y: number) {
 >makePoint : (x: number, y: number) => { readonly x: number; readonly y: number; dist: () => number; }
->          : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
