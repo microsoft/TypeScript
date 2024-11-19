@@ -114,7 +114,7 @@ type Obj = {
 
 const mapped: { [K in keyof Partial<Obj>]: Obj[K] } = {};
 >mapped : { a?: 1 | undefined; b?: 2 | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -124,7 +124,7 @@ const resolveMapped = <K extends keyof typeof mapped>(key: K) => mapped[key].toS
 ><K extends keyof typeof mapped>(key: K) => mapped[key].toString() : <K extends keyof typeof mapped>(key: K) => string
 >                                                                  : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^^^^^^^
 >mapped : { a?: 1 | undefined; b?: 2 | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >key : K
 >    : ^
 >mapped[key].toString() : string
@@ -134,7 +134,7 @@ const resolveMapped = <K extends keyof typeof mapped>(key: K) => mapped[key].toS
 >mapped[key] : 1 | 2 | undefined
 >            : ^^^^^^^^^^^^^^^^^
 >mapped : { a?: 1 | undefined; b?: 2 | undefined; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >key : K
 >    : ^
 >toString : (radix?: number) => string
