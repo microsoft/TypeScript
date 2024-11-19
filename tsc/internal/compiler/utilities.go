@@ -477,7 +477,7 @@ func getErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 	case ast.KindDefaultClause:
 		start := SkipTrivia(sourceFile.Text, node.Pos())
 		end := node.End()
-		statements := node.Data.(*ast.CaseOrDefaultClause).Statements.Nodes
+		statements := node.AsCaseOrDefaultClause().Statements.Nodes
 		if len(statements) != 0 {
 			end = statements[0].Pos()
 		}

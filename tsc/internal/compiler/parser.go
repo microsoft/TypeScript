@@ -3156,7 +3156,7 @@ func (p *Parser) parseTupleElementType() *ast.TypeNode {
 	}
 	typeNode := p.parseType()
 	if typeNode.Kind == ast.KindJSDocNullableType {
-		nullableType := typeNode.Data.(*ast.JSDocNullableType)
+		nullableType := typeNode.AsJSDocNullableType()
 		if typeNode.Loc.Pos() == nullableType.TypeNode.Loc.Pos() {
 			result := p.factory.NewOptionalTypeNode(nullableType.TypeNode)
 			result.Loc = typeNode.Loc
