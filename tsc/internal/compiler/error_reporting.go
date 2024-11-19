@@ -236,20 +236,20 @@ func WriteErrorSummaryText(output *strings.Builder, allDiagnostics []*ast.Diagno
 	if totalErrorCount == 1 {
 		// Special-case a single error.
 		if len(errorSummary.GlobalErrors) > 0 {
-			message = formatMessage(diagnostics.Found_1_error)
+			message = diagnostics.Found_1_error.Format()
 		} else {
-			message = formatMessage(diagnostics.Found_1_error_in_0, firstFileName)
+			message = diagnostics.Found_1_error_in_0.Format(firstFileName)
 		}
 	} else {
 		if numErroringFiles == 0 {
 			// No file-specific errors.
-			message = formatMessage(diagnostics.Found_0_errors, totalErrorCount)
+			message = diagnostics.Found_0_errors.Format(totalErrorCount)
 		} else if numErroringFiles == 1 {
 			// One file with errors.
-			message = formatMessage(diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, totalErrorCount, firstFileName)
+			message = diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1.Format(totalErrorCount, firstFileName)
 		} else {
 			// Multiple files with errors.
-			message = formatMessage(diagnostics.Found_0_errors_in_1_files, totalErrorCount, numErroringFiles)
+			message = diagnostics.Found_0_errors_in_1_files.Format(totalErrorCount, numErroringFiles)
 		}
 	}
 	output.WriteString(formatOpts.NewLine)

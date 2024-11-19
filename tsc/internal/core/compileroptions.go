@@ -44,6 +44,76 @@ type CompilerOptions struct {
 	PathsBasePath   string   `json:"pathsBasePath"`
 }
 
+func (options *CompilerOptions) GetEmitScriptTarget() ScriptTarget {
+	if options.Target != ScriptTargetNone {
+		return options.Target
+	}
+	return ScriptTargetES5
+}
+
+func (options *CompilerOptions) GetEmitModuleKind() ModuleKind {
+	if options.ModuleKind != ModuleKindNone {
+		return options.ModuleKind
+	}
+	if options.Target >= ScriptTargetES2015 {
+		return ModuleKindES2015
+	}
+	return ModuleKindCommonJS
+}
+
+func (options *CompilerOptions) GetModuleResolutionKind() ModuleResolutionKind {
+	if options.ModuleResolution != ModuleResolutionKindUnknown {
+		return options.ModuleResolution
+	}
+	switch options.GetEmitModuleKind() {
+	case ModuleKindCommonJS:
+		return ModuleResolutionKindBundler
+	case ModuleKindNode16:
+		return ModuleResolutionKindNode16
+	case ModuleKindNodeNext:
+		return ModuleResolutionKindNodeNext
+	case ModuleKindPreserve:
+		return ModuleResolutionKindBundler
+	default:
+		panic("Unhandled case in getEmitModuleResolutionKind")
+	}
+}
+
+func (options *CompilerOptions) GetESModuleInterop() bool {
+	if options.ESModuleInterop != TSUnknown {
+		return options.ESModuleInterop == TSTrue
+	}
+	switch options.GetEmitModuleKind() {
+	case ModuleKindNode16:
+	case ModuleKindNodeNext:
+	case ModuleKindPreserve:
+		return true
+	}
+	return false
+}
+func (options *CompilerOptions) GetAllowSyntheticDefaultImports() bool {
+	if options.AllowSyntheticDefaultImports != TSUnknown {
+		return options.AllowSyntheticDefaultImports == TSTrue
+	}
+	return options.GetESModuleInterop() ||
+		options.GetEmitModuleKind() == ModuleKindSystem ||
+		options.GetModuleResolutionKind() == ModuleResolutionKindBundler
+}
+
+func (options *CompilerOptions) GetResolveJsonModule() bool {
+	if options.ResolveJsonModule != TSUnknown {
+		return options.ResolveJsonModule == TSTrue
+	}
+	return options.GetModuleResolutionKind() == ModuleResolutionKindBundler
+}
+
+func (options *CompilerOptions) GetAllowJs() bool {
+	if options.AllowJs != TSUnknown {
+		return options.AllowJs == TSTrue
+	}
+	return options.CheckJs == TSTrue
+}
+
 type ModuleKind int32
 
 const (

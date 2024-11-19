@@ -93,7 +93,7 @@ func bindSourceFile(file *ast.SourceFile, options *core.CompilerOptions) {
 		b := &Binder{}
 		b.file = file
 		b.options = options
-		b.languageVersion = getEmitScriptTarget(options)
+		b.languageVersion = options.GetEmitScriptTarget()
 		b.bind = b.bindWorker // Allocate closure once
 		b.bind(file.AsNode())
 		file.IsBound = true
@@ -747,11 +747,11 @@ func (b *Binder) bindModuleDeclaration(node *ast.Node) {
 		if isModuleAugmentationExternal(node) {
 			b.declareModuleSymbol(node)
 		} else {
-			var pattern ast.Pattern
+			var pattern core.Pattern
 			name := node.AsModuleDeclaration().Name()
 			if ast.IsStringLiteral(name) {
-				pattern = tryParsePattern(name.AsStringLiteral().Text)
-				if !isValidPattern(pattern) {
+				pattern = core.TryParsePattern(name.AsStringLiteral().Text)
+				if !pattern.IsValid() {
 					b.errorOnFirstToken(name, diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, name.AsStringLiteral().Text)
 				}
 			}

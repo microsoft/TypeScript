@@ -254,6 +254,14 @@ func TryParseVersion(text string) (Version, error) {
 	return result, nil
 }
 
+func MustParse(text string) Version {
+	v, err := TryParseVersion(text)
+	if err != nil {
+		panic(err)
+	}
+	return v
+}
+
 func getUintComponent(text string) (uint32, error) {
 	r, err := strconv.ParseUint(text, 10, 32)
 	return uint32(r), err

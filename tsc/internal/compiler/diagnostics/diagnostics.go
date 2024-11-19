@@ -1,6 +1,8 @@
 // Package diagnostics contains generated localizable diagnostic messages.
 package diagnostics
 
+import "github.com/microsoft/typescript-go/internal/core"
+
 //go:generate go run generate.go -output ./diagnostics_generated.go
 //go:generate go run golang.org/x/tools/cmd/stringer -type=Category -output=stringer_generated.go
 
@@ -44,3 +46,11 @@ func (m *Message) Message() string                    { return m.text }
 func (m *Message) ReportsUnnecessary() bool           { return m.reportsUnnecessary }
 func (m *Message) ElidedInCompatabilityPyramid() bool { return m.elidedInCompatabilityPyramid }
 func (m *Message) ReportsDeprecated() bool            { return m.reportsDeprecated }
+
+func (m *Message) Format(args ...any) string {
+	text := m.Message()
+	if len(args) != 0 {
+		text = core.FormatStringFromArgs(text, args)
+	}
+	return text
+}

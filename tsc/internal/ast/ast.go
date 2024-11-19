@@ -4273,13 +4273,8 @@ func (node *JSDocNullableType) ForEachChild(v Visitor) bool {
 
 // PatternAmbientModule
 
-type Pattern struct {
-	Text      string
-	StarIndex int // -1 for exact match
-}
-
 type PatternAmbientModule struct {
-	Pattern Pattern
+	Pattern core.Pattern
 	Symbol  *Symbol
 }
 

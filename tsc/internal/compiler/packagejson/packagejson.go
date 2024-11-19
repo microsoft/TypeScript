@@ -32,10 +32,10 @@ type Fields struct {
 	DependencyFields
 }
 
-func Parse(data []byte) (*Fields, error) {
+func Parse(data []byte) (Fields, error) {
 	var f Fields
 	if err := json2.Unmarshal(data, &f); err != nil {
-		return nil, err
+		return f, err
 	}
-	return &f, nil
+	return f, nil
 }

@@ -572,6 +572,13 @@ func PathIsRelative(path string) bool {
 	return core.MakeRegexp(`^\.\.?(?:$|[\\/])`).MatchString(path)
 }
 
+func IsExternalModuleNameRelative(moduleName string) bool {
+	// TypeScript 1.0 spec (April 2014): 11.2.1
+	// An external module name is "relative" if the first term is "." or "..".
+	// Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
+	return PathIsRelative(moduleName) || IsRootedDiskPath(moduleName)
+}
+
 type ComparePathsOptions struct {
 	UseCaseSensitiveFileNames bool
 	CurrentDirectory          string

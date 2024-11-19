@@ -2,11 +2,11 @@ package compiler
 
 import (
 	"path"
-	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 type ParsingContext int
@@ -214,7 +214,7 @@ func (p *Parser) hasPrecedingJSDocComment() bool {
 }
 
 func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
-	isDeclarationFile := IsDeclarationFileName(p.fileName)
+	isDeclarationFile := tspath.IsDeclarationFileName(p.fileName)
 	if isDeclarationFile {
 		p.contextFlags |= ast.NodeFlagsAmbient
 	}
@@ -5964,24 +5964,4 @@ func attachFileToDiagnostics(diagnostics []*ast.Diagnostic, file *ast.SourceFile
 		d.SetFile(file)
 	}
 	return diagnostics
-}
-
-func IsDeclarationFileName(fileName string) bool {
-	return getDeclarationFileExtension(fileName) != ""
-}
-
-func getDeclarationFileExtension(fileName string) string {
-	_, base := path.Split(fileName)
-	for _, ext := range supportedDeclarationExtensions {
-		if strings.HasSuffix(base, ext) {
-			return ext
-		}
-	}
-	if strings.HasSuffix(base, ExtensionTs) {
-		index := strings.Index(base, ".d.")
-		if index >= 0 {
-			return base[index:]
-		}
-	}
-	return ""
 }

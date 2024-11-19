@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 // CheckMode
@@ -408,9 +409,9 @@ func NewChecker(program *Program) *Checker {
 	c.host = program.host
 	c.compilerOptions = program.options
 	c.files = program.files
-	c.languageVersion = getEmitScriptTarget(c.compilerOptions)
-	c.moduleKind = getEmitModuleKind(c.compilerOptions)
-	c.allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(c.compilerOptions)
+	c.languageVersion = c.compilerOptions.GetEmitScriptTarget()
+	c.moduleKind = c.compilerOptions.GetEmitModuleKind()
+	c.allowSyntheticDefaultImports = c.compilerOptions.GetAllowSyntheticDefaultImports()
 	c.strictNullChecks = c.getStrictOptionValue(c.compilerOptions.StrictNullChecks)
 	c.strictFunctionTypes = c.getStrictOptionValue(c.compilerOptions.StrictFunctionTypes)
 	c.strictBindCallApply = c.getStrictOptionValue(c.compilerOptions.StrictBindCallApply)
@@ -3438,7 +3439,7 @@ func (c *Checker) isOnlyImportableAsDefault(usage *ast.Node, resolvedModule *ast
 			if resolvedModule != nil {
 				targetFile = getSourceFileOfModule(resolvedModule)
 			}
-			return targetFile != nil && (isJsonSourceFile(targetFile) || getDeclarationFileExtension(targetFile.FileName()) == ".d.json.ts")
+			return targetFile != nil && (isJsonSourceFile(targetFile) || tspath.GetDeclarationFileExtension(targetFile.FileName()) == ".d.json.ts")
 		}
 	}
 	return false
@@ -3553,12 +3554,12 @@ func (c *Checker) reportNonExportedMember(node *ast.Node, name *ast.Node, declar
 
 func (c *Checker) reportInvalidImportEqualsExportMember(node *ast.Node, name *ast.Node, declarationName string, moduleName string) {
 	if c.moduleKind >= core.ModuleKindES2015 {
-		message := ifElse(getESModuleInterop(c.compilerOptions),
+		message := ifElse(c.compilerOptions.GetESModuleInterop(),
 			diagnostics.X_0_can_only_be_imported_by_using_a_default_import,
 			diagnostics.X_0_can_only_be_imported_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import)
 		c.error(name, message, declarationName)
 	} else {
-		message := ifElse(getESModuleInterop(c.compilerOptions),
+		message := ifElse(c.compilerOptions.GetESModuleInterop(),
 			diagnostics.X_0_can_only_be_imported_by_using_import_1_require_2_or_a_default_import,
 			diagnostics.X_0_can_only_be_imported_by_using_import_1_require_2_or_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import)
 		c.error(name, message, declarationName, declarationName, moduleName)
@@ -3802,7 +3803,7 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 }
 
 func (c *Checker) tryFindAmbientModule(moduleName string, withAugmentations bool) *ast.Symbol {
-	if isExternalModuleNameRelative(moduleName) {
+	if tspath.IsExternalModuleNameRelative(moduleName) {
 		return nil
 	}
 	symbol := c.getSymbol(c.globals, "\""+moduleName+"\"", ast.SymbolFlagsValueModule)
@@ -3886,7 +3887,7 @@ func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, referencingLoc
 			// !!!
 			// targetFile := moduleSymbol. /* ? */ declarations. /* ? */ find(isSourceFile)
 			// isEsmCjsRef := targetFile && c.isESMFormatImportImportingCommonjsFormatFile(c.getEmitSyntaxForModuleSpecifierExpression(reference), host.getImpliedNodeFormatForEmit(targetFile))
-			// if getESModuleInterop(c.compilerOptions) || isEsmCjsRef {
+			// if c.compilerOptions.GetESModuleInterop() || isEsmCjsRef {
 			// 	sigs := c.getSignaturesOfStructuredType(type_, SignatureKindCall)
 			// 	if !sigs || !sigs.length {
 			// 		sigs = c.getSignaturesOfStructuredType(type_, SignatureKindConstruct)

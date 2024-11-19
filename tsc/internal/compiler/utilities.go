@@ -339,14 +339,6 @@ func getBinaryOperatorPrecedence(kind ast.Kind) OperatorPrecedence {
 	return OperatorPrecedenceInvalid
 }
 
-func formatMessage(message *diagnostics.Message, args ...any) string {
-	text := message.Message()
-	if len(args) != 0 {
-		text = core.FormatStringFromArgs(text, args)
-	}
-	return text
-}
-
 func findInMap[K comparable, V any](m map[K]V, predicate func(V) bool) V {
 	for _, value := range m {
 		if predicate(value) {
@@ -947,49 +939,6 @@ func isModuleAugmentationExternal(node *ast.Node) bool {
 	return false
 }
 
-func isValidPattern(pattern ast.Pattern) bool {
-	return pattern.StarIndex == -1 || pattern.StarIndex < len(pattern.Text)
-}
-
-func tryParsePattern(pattern string) ast.Pattern {
-	starIndex := strings.Index(pattern, "*")
-	if starIndex == -1 || !strings.Contains(pattern[starIndex+1:], "*") {
-		return ast.Pattern{Text: pattern, StarIndex: starIndex}
-	}
-	return ast.Pattern{}
-}
-
-func findBestPatternMatch(patterns []ast.Pattern, candidate string) ast.Pattern {
-	var bestPattern ast.Pattern
-	longestMatchPrefixLength := -1
-	for _, pattern := range patterns {
-		if (pattern.StarIndex == -1 || pattern.StarIndex > longestMatchPrefixLength) && isPatternMatch(pattern, candidate) {
-			bestPattern = pattern
-			longestMatchPrefixLength = pattern.StarIndex
-		}
-	}
-	return bestPattern
-}
-
-func isPatternMatch(pattern ast.Pattern, candidate string) bool {
-	if pattern.StarIndex == -1 {
-		return pattern.Text == candidate
-	}
-	return len(candidate) >= pattern.StarIndex &&
-		strings.HasPrefix(candidate, pattern.Text[:pattern.StarIndex]) &&
-		strings.HasSuffix(candidate, pattern.Text[pattern.StarIndex+1:])
-}
-
-func matchedText(pattern ast.Pattern, candidate string) string {
-	if !isPatternMatch(pattern, candidate) {
-		panic("candidate does not match pattern")
-	}
-	if pattern.StarIndex == -1 {
-		return ""
-	}
-	return candidate[pattern.StarIndex : len(candidate)-len(pattern.Text)+pattern.StarIndex+1]
-}
-
 func positionIsSynthesized(pos int) bool {
 	return pos < 0
 }
@@ -1279,39 +1228,19 @@ func ensureScriptKind(fileName string, scriptKind core.ScriptKind) core.ScriptKi
 	return scriptKind
 }
 
-const (
-	ExtensionTs          = ".ts"
-	ExtensionTsx         = ".tsx"
-	ExtensionDts         = ".d.ts"
-	ExtensionJs          = ".js"
-	ExtensionJsx         = ".jsx"
-	ExtensionJson        = ".json"
-	ExtensionTsBuildInfo = ".tsbuildinfo"
-	ExtensionMjs         = ".mjs"
-	ExtensionMts         = ".mts"
-	ExtensionDmts        = ".d.mts"
-	ExtensionCjs         = ".cjs"
-	ExtensionCts         = ".cts"
-	ExtensionDcts        = ".d.cts"
-)
-
-var supportedDeclarationExtensions = []string{ExtensionDts, ExtensionDcts, ExtensionDmts}
-var supportedTSImplementationExtensions = []string{ExtensionTs, ExtensionTsx, ExtensionMts, ExtensionCts}
-var supportedTSExtensionsForExtractExtension = []string{ExtensionDts, ExtensionDcts, ExtensionDmts, ExtensionTs, ExtensionTsx, ExtensionMts, ExtensionCts}
-
 func getScriptKindFromFileName(fileName string) core.ScriptKind {
 	dotPos := strings.LastIndex(fileName, ".")
 	if dotPos >= 0 {
 		switch strings.ToLower(fileName[dotPos:]) {
-		case ExtensionJs, ExtensionCjs, ExtensionMjs:
+		case tspath.ExtensionJs, tspath.ExtensionCjs, tspath.ExtensionMjs:
 			return core.ScriptKindJS
-		case ExtensionJsx:
+		case tspath.ExtensionJsx:
 			return core.ScriptKindJSX
-		case ExtensionTs, ExtensionCts, ExtensionMts:
+		case tspath.ExtensionTs, tspath.ExtensionCts, tspath.ExtensionMts:
 			return core.ScriptKindTS
-		case ExtensionTsx:
+		case tspath.ExtensionTsx:
 			return core.ScriptKindTSX
-		case ExtensionJson:
+		case tspath.ExtensionJson:
 			return core.ScriptKindJSON
 		}
 	}
@@ -1325,76 +1254,6 @@ func getLanguageVariant(scriptKind core.ScriptKind) core.LanguageVariant {
 		return core.LanguageVariantJSX
 	}
 	return core.LanguageVariantStandard
-}
-
-func getEmitScriptTarget(options *core.CompilerOptions) core.ScriptTarget {
-	if options.Target != core.ScriptTargetNone {
-		return options.Target
-	}
-	return core.ScriptTargetES5
-}
-
-func getEmitModuleKind(options *core.CompilerOptions) core.ModuleKind {
-	if options.ModuleKind != core.ModuleKindNone {
-		return options.ModuleKind
-	}
-	if options.Target >= core.ScriptTargetES2015 {
-		return core.ModuleKindES2015
-	}
-	return core.ModuleKindCommonJS
-}
-
-func getEmitModuleResolutionKind(options *core.CompilerOptions) core.ModuleResolutionKind {
-	if options.ModuleResolution != core.ModuleResolutionKindUnknown {
-		return options.ModuleResolution
-	}
-	switch getEmitModuleKind(options) {
-	case core.ModuleKindCommonJS:
-		return core.ModuleResolutionKindBundler
-	case core.ModuleKindNode16:
-		return core.ModuleResolutionKindNode16
-	case core.ModuleKindNodeNext:
-		return core.ModuleResolutionKindNodeNext
-	case core.ModuleKindPreserve:
-		return core.ModuleResolutionKindBundler
-	default:
-		panic("Unhandled case in getEmitModuleResolutionKind")
-	}
-}
-
-func getESModuleInterop(options *core.CompilerOptions) bool {
-	if options.ESModuleInterop != core.TSUnknown {
-		return options.ESModuleInterop == core.TSTrue
-	}
-	switch getEmitModuleKind(options) {
-	case core.ModuleKindNode16:
-	case core.ModuleKindNodeNext:
-	case core.ModuleKindPreserve:
-		return true
-	}
-	return false
-}
-func getAllowSyntheticDefaultImports(options *core.CompilerOptions) bool {
-	if options.AllowSyntheticDefaultImports != core.TSUnknown {
-		return options.AllowSyntheticDefaultImports == core.TSTrue
-	}
-	return getESModuleInterop(options) ||
-		getEmitModuleKind(options) == core.ModuleKindSystem ||
-		getEmitModuleResolutionKind(options) == core.ModuleResolutionKindBundler
-}
-
-func getResolveJsonModule(options *core.CompilerOptions) bool {
-	if options.ResolveJsonModule != core.TSUnknown {
-		return options.ResolveJsonModule == core.TSTrue
-	}
-	return getEmitModuleResolutionKind(options) == core.ModuleResolutionKindBundler
-}
-
-func getAllowJs(options *core.CompilerOptions) bool {
-	if options.AllowJs != core.TSUnknown {
-		return options.AllowJs == core.TSTrue
-	}
-	return options.CheckJs == core.TSTrue
 }
 
 type DiagnosticsCollection struct {
@@ -1608,7 +1467,7 @@ func isParameterLikeOrReturnTag(node *ast.Node) bool {
 }
 
 func getEmitStandardClassFields(options *core.CompilerOptions) bool {
-	return options.UseDefineForClassFields != core.TSFalse && getEmitScriptTarget(options) >= core.ScriptTargetES2022
+	return options.UseDefineForClassFields != core.TSFalse && options.GetEmitScriptTarget() >= core.ScriptTargetES2022
 }
 
 func getLocalSymbolForExportDefault(symbol *ast.Symbol) *ast.Symbol {
@@ -1854,7 +1713,7 @@ loop:
 		case ast.KindArrowFunction:
 			// when targeting ES6 or higher there is no 'arguments' in an arrow function
 			// for lower compile targets the resolved symbol is used to emit an error
-			if getEmitScriptTarget(r.compilerOptions) >= core.ScriptTargetES2015 {
+			if r.compilerOptions.GetEmitScriptTarget() >= core.ScriptTargetES2015 {
 				break
 			}
 			fallthrough
@@ -1983,7 +1842,7 @@ func (r *NameResolver) useOuterVariableScopeInParameter(result *ast.Symbol, loca
 			// - optional chaining pre-es2020
 			// - nullish coalesce pre-es2020
 			// - spread assignment in binding pattern pre-es2017
-			target := getEmitScriptTarget(r.compilerOptions)
+			target := r.compilerOptions.GetEmitScriptTarget()
 			if target >= core.ScriptTargetES2015 {
 				functionLocation := location
 				declarationRequiresScopeChange := r.getRequiresScopeChangeCache(functionLocation)
@@ -2016,10 +1875,10 @@ func (r *NameResolver) requiresScopeChangeWorker(node *ast.Node) bool {
 		return r.requiresScopeChangeWorker(node.AsPropertyDeclaration().Name())
 	default:
 		if isNullishCoalesce(node) || ast.IsOptionalChain(node) {
-			return getEmitScriptTarget(r.compilerOptions) < core.ScriptTargetES2020
+			return r.compilerOptions.GetEmitScriptTarget() < core.ScriptTargetES2020
 		}
 		if ast.IsBindingElement(node) && node.AsBindingElement().DotDotDotToken != nil && ast.IsObjectBindingPattern(node.Parent) {
-			return getEmitScriptTarget(r.compilerOptions) < core.ScriptTargetES2017
+			return r.compilerOptions.GetEmitScriptTarget() < core.ScriptTargetES2017
 		}
 		if ast.IsTypeNode(node) {
 			return false
@@ -2462,17 +2321,6 @@ func getImportTypeNodeLiteral(node *ast.Node) *ast.Node {
 	return nil
 }
 
-func isExternalModuleNameRelative(moduleName string) bool {
-	// TypeScript 1.0 spec (April 2014): 11.2.1
-	// An external module name is "relative" if the first term is "." or "..".
-	// Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
-	return tspath.PathIsRelative(moduleName) || tspath.IsRootedDiskPath(moduleName)
-}
-
-func extensionIsTs(ext string) bool {
-	return ext == ExtensionTs || ext == ExtensionTsx || ext == ExtensionDts || ext == ExtensionMts || ext == ExtensionDmts || ext == ExtensionCts || ext == ExtensionDcts || len(ext) >= 7 && ext[:3] == ".d." && ext[len(ext)-3:] == ".ts"
-}
-
 func isShorthandAmbientModuleSymbol(moduleSymbol *ast.Symbol) bool {
 	return isShorthandAmbientModule(moduleSymbol.ValueDeclaration)
 }
@@ -2526,54 +2374,6 @@ func getContainingQualifiedNameNode(node *ast.Node) *ast.Node {
 		node = node.Parent
 	}
 	return node
-}
-
-var extensionsToRemove = []string{ExtensionDts, ExtensionDmts, ExtensionDcts, ExtensionMjs, ExtensionMts, ExtensionCjs, ExtensionCts, ExtensionTs, ExtensionJs, ExtensionTsx, ExtensionJsx, ExtensionJson}
-
-func removeFileExtension(path string) string {
-	// Remove any known extension even if it has more than one dot
-	for _, ext := range extensionsToRemove {
-		if strings.HasSuffix(path, ext) {
-			return path[:len(path)-len(ext)]
-		}
-	}
-	// Otherwise just remove single dot extension, if any
-	return path[:len(path)-len(filepath.Ext(path))]
-}
-
-func tryGetExtensionFromPath(p string) string {
-	for _, ext := range extensionsToRemove {
-		if tspath.FileExtensionIs(p, ext) {
-			return ext
-		}
-	}
-	return ""
-}
-
-func removeExtension(path string, extension string) string {
-	return path[:len(path)-len(extension)]
-}
-
-func fileExtensionIsOneOf(path string, extensions []string) bool {
-	for _, ext := range extensions {
-		if tspath.FileExtensionIs(path, ext) {
-			return true
-		}
-	}
-	return false
-}
-
-func tryExtractTSExtension(fileName string) string {
-	for _, ext := range supportedTSExtensionsForExtractExtension {
-		if tspath.FileExtensionIs(fileName, ext) {
-			return ext
-		}
-	}
-	return ""
-}
-
-func hasImplementationTSFileExtension(path string) bool {
-	return fileExtensionIsOneOf(path, supportedTSImplementationExtensions) && !IsDeclarationFileName(path)
 }
 
 func isSideEffectImport(node *ast.Node) bool {
