@@ -2977,6 +2977,9 @@ func (node *MetaProperty) ForEachChild(v Visitor) bool {
 	return visit(v, node.name)
 }
 
+func (node *MetaProperty) Name() *DeclarationName {
+	return node.name
+}
 func IsMetaProperty(node *Node) bool {
 	return node.Kind == KindMetaProperty
 }
@@ -3786,6 +3789,9 @@ func (node *NamedTupleMember) ForEachChild(v Visitor) bool {
 	return visit(v, node.DotDotDotToken) || visit(v, node.name) || visit(v, node.QuestionToken) || visit(v, node.TypeNode)
 }
 
+func (node *NamedTupleMember) Name() *DeclarationName {
+	return node.name
+}
 func IsNamedTupleMember(node *Node) bool {
 	return node.Kind == KindNamedTupleMember
 }
@@ -4045,6 +4051,10 @@ func (f *NodeFactory) NewJsxNamespacedName(name *IdentifierNode, namespace *Iden
 
 func (node *JsxNamespacedName) ForEachChild(v Visitor) bool {
 	return visit(v, node.name) || visit(v, node.Namespace)
+}
+
+func (node *JsxNamespacedName) Name() *DeclarationName {
+	return node.name
 }
 
 func IsJsxNamespacedName(node *Node) bool {
