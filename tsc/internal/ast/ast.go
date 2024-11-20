@@ -174,6 +174,8 @@ func (node *Node) Expression() *Node {
 		return node.AsSpreadAssignment().Expression
 	case KindTemplateSpan:
 		return node.AsTemplateSpan().Expression
+	case KindForInStatement, KindForOfStatement:
+		return node.AsForInOrOfStatement().Expression
 	}
 	panic("Unhandled case in Node.Expression")
 }
@@ -560,6 +562,9 @@ func (n *Node) AsEnumDeclaration() *EnumDeclaration {
 }
 func (n *Node) AsJSDocNullableType() *JSDocNullableType {
 	return n.data.(*JSDocNullableType)
+}
+func (n *Node) AsTemplateLiteralTypeNode() *TemplateLiteralTypeNode {
+	return n.data.(*TemplateLiteralTypeNode)
 }
 
 // NodeData

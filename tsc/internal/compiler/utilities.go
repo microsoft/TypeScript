@@ -3018,6 +3018,18 @@ func stringToNumber(s string) float64 {
 	return value
 }
 
+func isValidNumberString(s string, roundTripOnly bool) bool {
+	if s == "" {
+		return false
+	}
+	n := stringToNumber(s)
+	return !math.IsNaN(n) && !math.IsInf(n, 0) && (!roundTripOnly || numberToString(n) == s)
+}
+
+func isValidBigIntString(s string, roundTripOnly bool) bool {
+	return false // !!!
+}
+
 func isValidESSymbolDeclaration(node *ast.Node) bool {
 	if ast.IsVariableDeclaration(node) {
 		return isVarConst(node) && ast.IsIdentifier(node.AsVariableDeclaration().Name()) && isVariableDeclarationInVariableStatement(node)

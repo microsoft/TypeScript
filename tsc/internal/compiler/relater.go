@@ -1844,6 +1844,194 @@ func (c *Checker) getEffectiveConstraintOfIntersection(types []*Type, targetIsUn
 	return nil
 }
 
+func (c *Checker) templateLiteralTypesDefinitelyUnrelated(source *TemplateLiteralType, target *TemplateLiteralType) bool {
+	// Two template literal types with diffences in their starting or ending text spans are definitely unrelated.
+	sourceStart := source.texts[0]
+	targetStart := target.texts[0]
+	sourceEnd := source.texts[len(source.texts)-1]
+	targetEnd := target.texts[len(target.texts)-1]
+	startLen := min(len(sourceStart), len(targetStart))
+	endLen := min(len(sourceEnd), len(targetEnd))
+	return sourceStart[:startLen] != targetStart[:startLen] || sourceEnd[len(sourceEnd)-endLen:] != targetEnd[len(targetEnd)-endLen:]
+}
+
+func (c *Checker) isTypeMatchedByTemplateLiteralType(source *Type, target *TemplateLiteralType) bool {
+	inferences := c.inferTypesFromTemplateLiteralType(source, target)
+	if inferences != nil {
+		for i, inference := range inferences {
+			if !c.isValidTypeForTemplateLiteralPlaceholder(inference, target.types[i]) {
+				return false
+			}
+		}
+		return true
+	}
+	return false
+}
+
+func (c *Checker) inferTypesFromTemplateLiteralType(source *Type, target *TemplateLiteralType) []*Type {
+	switch {
+	case source.flags&TypeFlagsStringLiteral != 0:
+		return c.inferFromLiteralPartsToTemplateLiteral([]string{getStringLiteralValue(source)}, nil, target)
+	case source.flags&TypeFlagsTemplateLiteral != 0:
+		if slices.Equal(source.AsTemplateLiteralType().texts, target.texts) {
+			return core.MapIndex(source.AsTemplateLiteralType().types, func(s *Type, i int) *Type {
+				if c.isTypeAssignableTo(c.getBaseConstraintOrType(s), c.getBaseConstraintOrType(target.types[i])) {
+					return s
+				}
+				return c.getStringLikeTypeForType(s)
+			})
+		}
+		return c.inferFromLiteralPartsToTemplateLiteral(source.AsTemplateLiteralType().texts, source.AsTemplateLiteralType().types, target)
+	default:
+		return nil
+	}
+}
+
+// This function infers from the text parts and type parts of a source literal to a target template literal. The number
+// of text parts is always one more than the number of type parts, and a source string literal is treated as a source
+// with one text part and zero type parts. The function returns an array of inferred string or template literal types
+// corresponding to the placeholders in the target template literal, or undefined if the source doesn't match the target.
+//
+// We first check that the starting source text part matches the starting target text part, and that the ending source
+// text part ends matches the ending target text part. We then iterate through the remaining target text parts, finding
+// a match for each in the source and inferring string or template literal types created from the segments of the source
+// that occur between the matches. During this iteration, seg holds the index of the current text part in the sourceTexts
+// array and pos holds the current character position in the current text part.
+//
+// Consider inference from type `<<${string}>.<${number}-${number}>>` to type `<${string}.${string}>`, i.e.
+//
+//	sourceTexts = ['<<', '>.<', '-', '>>']
+//	sourceTypes = [string, number, number]
+//	target.texts = ['<', '.', '>']
+//
+// We first match '<' in the target to the start of '<<' in the source and '>' in the target to the end of '>>' in
+// the source. The first match for the '.' in target occurs at character 1 in the source text part at index 1, and thus
+// the first inference is the template literal type `<${string}>`. The remainder of the source makes up the second
+// inference, the template literal type `<${number}-${number}>`.
+func (c *Checker) inferFromLiteralPartsToTemplateLiteral(sourceTexts []string, sourceTypes []*Type, target *TemplateLiteralType) []*Type {
+	lastSourceIndex := len(sourceTexts) - 1
+	sourceStartText := sourceTexts[0]
+	sourceEndText := sourceTexts[lastSourceIndex]
+	targetTexts := target.texts
+	lastTargetIndex := len(targetTexts) - 1
+	targetStartText := targetTexts[0]
+	targetEndText := targetTexts[lastTargetIndex]
+	if lastSourceIndex == 0 && len(sourceStartText) < len(targetStartText)+len(targetEndText) || !strings.HasPrefix(sourceStartText, targetStartText) || !strings.HasSuffix(sourceEndText, targetEndText) {
+		return nil
+	}
+	remainingEndText := sourceEndText[:len(sourceEndText)-len(targetEndText)]
+	seg := 0
+	pos := len(targetStartText)
+	var matches []*Type
+	getSourceText := func(index int) string {
+		if index < lastSourceIndex {
+			return sourceTexts[index]
+		}
+		return remainingEndText
+	}
+	addMatch := func(s int, p int) {
+		var matchType *Type
+		if s == seg {
+			matchType = c.getStringLiteralType(getSourceText(s)[pos:p])
+		} else {
+			matchTexts := make([]string, s-seg+1)
+			matchTexts[0] = sourceTexts[seg][pos:]
+			copy(matchTexts[1:], sourceTexts[seg+1:s])
+			matchTexts[s-seg] = getSourceText(s)[:p]
+			matchType = c.getTemplateLiteralType(matchTexts, sourceTypes[seg:s])
+		}
+		matches = append(matches, matchType)
+		seg = s
+		pos = p
+	}
+	for i := 1; i < lastTargetIndex; i++ {
+		delim := targetTexts[i]
+		if len(delim) > 0 {
+			s := seg
+			p := pos
+			for {
+				d := strings.Index(getSourceText(s)[p:], delim)
+				if d >= 0 {
+					p += d
+					break
+				}
+				s++
+				if s == len(sourceTexts) {
+					return nil
+				}
+				p = 0
+			}
+			addMatch(s, p)
+			pos += len(delim)
+		} else if pos < len(getSourceText(seg)) {
+			addMatch(seg, pos+1)
+		} else if seg < lastSourceIndex {
+			addMatch(seg+1, 0)
+		} else {
+			return nil
+		}
+	}
+	addMatch(lastSourceIndex, len(getSourceText(lastSourceIndex)))
+	return matches
+}
+
+func (c *Checker) getStringLikeTypeForType(t *Type) *Type {
+	if t.flags&(TypeFlagsAny|TypeFlagsStringLike) != 0 {
+		return t
+	}
+	return c.getTemplateLiteralType([]string{"", ""}, []*Type{t})
+}
+
+func (c *Checker) isValidTypeForTemplateLiteralPlaceholder(source *Type, target *Type) bool {
+	switch {
+	case target.flags&TypeFlagsIntersection != 0:
+		return core.Every(target.Types(), func(t *Type) bool {
+			return t == c.emptyTypeLiteralType || c.isValidTypeForTemplateLiteralPlaceholder(source, t)
+		})
+	case target.flags&TypeFlagsString != 0 || c.isTypeAssignableTo(source, target):
+		return true
+	case source.flags&TypeFlagsStringLiteral != 0:
+		value := getStringLiteralValue(source)
+		return target.flags&TypeFlagsNumber != 0 && isValidNumberString(value, false /*roundTripOnly*/) ||
+			target.flags&TypeFlagsBigInt != 0 && isValidBigIntString(value, false /*roundTripOnly*/) ||
+			target.flags&(TypeFlagsBooleanLiteral|TypeFlagsNullable) != 0 && value == target.AsIntrinsicType().intrinsicName ||
+			target.flags&TypeFlagsStringMapping != 0 && c.isMemberOfStringMapping(c.getStringLiteralType(value), target) ||
+			target.flags&TypeFlagsTemplateLiteral != 0 && c.isTypeMatchedByTemplateLiteralType(source, target.AsTemplateLiteralType())
+	case source.flags&TypeFlagsTemplateLiteral != 0:
+		texts := source.AsTemplateLiteralType().texts
+		return len(texts) == 2 && texts[0] == "" && texts[1] == "" && c.isTypeAssignableTo(source.AsTemplateLiteralType().types[0], target)
+	}
+	return false
+}
+
+func (c *Checker) isMemberOfStringMapping(source *Type, target *Type) bool {
+	switch {
+	case target.flags&TypeFlagsAny != 0:
+		return true
+	case target.flags&(TypeFlagsString|TypeFlagsTemplateLiteral) != 0:
+		return c.isTypeAssignableTo(source, target)
+	case target.flags&TypeFlagsStringMapping != 0:
+		// We need to see whether applying the same mappings of the target
+		// onto the source would produce an identical type *and* that
+		// it's compatible with the inner-most non-string-mapped type.
+		//
+		// The intuition here is that if same mappings don't affect the source at all,
+		// and the source is compatible with the unmapped target, then they must
+		// still reside in the same domain.
+		mapped, inner := c.applyTargetStringMappingToSource(source, target)
+		return mapped == source && c.isMemberOfStringMapping(source, inner)
+	}
+	return false
+}
+
+func (c *Checker) applyTargetStringMappingToSource(source *Type, target *Type) (*Type, *Type) {
+	inner := target.AsStringMappingType().target
+	if inner.flags&TypeFlagsStringMapping != 0 {
+		source, inner = c.applyTargetStringMappingToSource(source, inner)
+	}
+	return c.getStringMappingType(target.symbol, source), inner
+}
+
 func visibilityToString(flags ast.ModifierFlags) string {
 	if flags == ast.ModifierFlagsPrivate {
 		return "private"
@@ -2843,9 +3031,26 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 	case target.flags&TypeFlagsConditional != 0:
 		// !!!
 	case target.flags&TypeFlagsTemplateLiteral != 0:
-		// !!!
+		if source.flags&TypeFlagsTemplateLiteral != 0 {
+			if r.relation == r.c.comparableRelation {
+				if r.c.templateLiteralTypesDefinitelyUnrelated(source.AsTemplateLiteralType(), target.AsTemplateLiteralType()) {
+					return TernaryFalse
+				}
+				return TernaryTrue
+			}
+			// Report unreliable variance for type variables referenced in template literal type placeholders.
+			// For example, `foo-${number}` is related to `foo-${string}` even though number isn't related to string.
+			r.c.instantiateType(source, r.c.reportUnreliableMapper)
+		}
+		if r.c.isTypeMatchedByTemplateLiteralType(source, target.AsTemplateLiteralType()) {
+			return TernaryTrue
+		}
 	case target.flags&TypeFlagsStringMapping != 0:
-		// !!!
+		if source.flags&TypeFlagsStringMapping == 0 {
+			if r.c.isMemberOfStringMapping(source, target) {
+				return TernaryTrue
+			}
+		}
 	case r.c.isGenericMappedType(target) && r.relation != r.c.identityRelation:
 		// !!!
 	}
@@ -2919,7 +3124,23 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		}
 	case source.flags&TypeFlagsStringMapping != 0:
-		// !!!
+		if target.flags&TypeFlagsStringMapping != 0 {
+			if source.AsStringMappingType().symbol != target.AsStringMappingType().symbol {
+				return TernaryFalse
+			}
+			result = r.isRelatedTo(source.AsStringMappingType().target, target.AsStringMappingType().target, RecursionFlagsBoth, reportErrors)
+			if result != TernaryFalse {
+				return result
+			}
+		} else {
+			constraint := r.c.getBaseConstraintOfType(source)
+			if constraint != nil {
+				result = r.isRelatedTo(constraint, target, RecursionFlagsSource, reportErrors)
+				if result != TernaryFalse {
+					return result
+				}
+			}
+		}
 	default:
 		// An empty object type is related to any mapped type that includes a '?' modifier.
 		if r.relation != r.c.subtypeRelation && r.relation != r.c.strictSubtypeRelation && isPartialMappedType(target) && r.c.isEmptyObjectType(source) {

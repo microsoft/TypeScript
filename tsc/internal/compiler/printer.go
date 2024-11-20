@@ -19,20 +19,21 @@ const (
 )
 
 func (c *Checker) getTypePrecedence(t *Type) TypePrecedence {
-	switch {
-	case t.flags&TypeFlagsConditional != 0:
-		return TypePrecedenceConditional
-	case t.flags&TypeFlagsIntersection != 0:
-		return TypePrecedenceIntersection
-	case t.flags&TypeFlagsUnion != 0:
-		return TypePrecedenceUnion
-	case t.flags&TypeFlagsIndex != 0:
-		return TypePrecedenceTypeOperator
-	case c.isArrayType(t):
-		return TypePrecedencePostfix
-	default:
-		return TypePrecedenceNonArray
+	if t.alias == nil {
+		switch {
+		case t.flags&TypeFlagsConditional != 0:
+			return TypePrecedenceConditional
+		case t.flags&TypeFlagsIntersection != 0:
+			return TypePrecedenceIntersection
+		case t.flags&TypeFlagsUnion != 0 && t.flags&TypeFlagsBoolean == 0:
+			return TypePrecedenceUnion
+		case t.flags&TypeFlagsIndex != 0:
+			return TypePrecedenceTypeOperator
+		case c.isArrayType(t):
+			return TypePrecedencePostfix
+		}
 	}
+	return TypePrecedenceNonArray
 }
 
 func (c *Checker) symbolToString(s *ast.Symbol) string {
@@ -136,6 +137,10 @@ func (p *Printer) printTypeNoAlias(t *Type) {
 		p.printRecursive(t, (*Printer).printIndexType)
 	case t.flags&TypeFlagsIndexedAccess != 0:
 		p.printRecursive(t, (*Printer).printIndexedAccessType)
+	case t.flags&TypeFlagsTemplateLiteral != 0:
+		p.printTemplateLiteralType(t)
+	case t.flags&TypeFlagsStringMapping != 0:
+		p.printStringMappingType(t)
 	}
 }
 
@@ -191,6 +196,27 @@ func (p *Printer) printBigIntLiteral(b PseudoBigInt) {
 		p.print("-")
 	}
 	p.print(b.base10Value)
+}
+
+func (p *Printer) printTemplateLiteralType(t *Type) {
+	texts := t.AsTemplateLiteralType().texts
+	types := t.AsTemplateLiteralType().types
+	p.print("`")
+	p.print(texts[0])
+	for i, t := range types {
+		p.print("${")
+		p.printType(t)
+		p.print("}")
+		p.print(texts[i+1])
+	}
+	p.print("`")
+}
+
+func (p *Printer) printStringMappingType(t *Type) {
+	p.print(t.symbol.Name)
+	p.print("<")
+	p.printType(t.AsStringMappingType().target)
+	p.print(">")
 }
 
 func (p *Printer) printEnumLiteral(t *Type) {
@@ -249,6 +275,7 @@ func (p *Printer) printArrayType(t *Type) {
 	p.printTypeEx(p.c.getTypeArguments(t)[0], TypePrecedencePostfix)
 	p.print("[]")
 }
+
 func (p *Printer) printTupleType(t *Type) {
 	tail := false
 	p.print("[")
@@ -492,12 +519,12 @@ func (p *Printer) printSourceFileWithTypes(sourceFile *ast.SourceFile) {
 func (c *Checker) getTextAndTypeOfNode(node *ast.Node) (string, *Type, bool) {
 	if ast.IsDeclarationNode(node) {
 		symbol := node.Symbol()
-		if symbol != nil {
+		if symbol != nil && !isReservedMemberName(symbol.Name) {
 			if symbol.Flags&ast.SymbolFlagsValue != 0 {
-				return declarationNameToString(getNameOfDeclaration(node)), c.getTypeOfSymbol(symbol), true
+				return symbol.Name, c.getTypeOfSymbol(symbol), true
 			}
 			if symbol.Flags&ast.SymbolFlagsTypeAlias != 0 {
-				return declarationNameToString(getNameOfDeclaration(node)), c.getDeclaredTypeOfTypeAlias(symbol), true
+				return symbol.Name, c.getDeclaredTypeOfTypeAlias(symbol), true
 			}
 		}
 	}
