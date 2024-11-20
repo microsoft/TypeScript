@@ -6115,7 +6115,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (!containsNonMissingUndefinedType(type)) {
                             return false;
                         }
-                        const declaredType = getEffectiveTypeAnnotationNode(declaration)
+                        const declaredType = getEffectiveTypeAnnotationNode(declaration);
                         return !!(declaredType && !containsUndefinedType(getTypeFromTypeNodeWithoutContext(declaredType)));
                     case SyntaxKind.Parameter:
                     case SyntaxKind.JSDocParameterTag:
