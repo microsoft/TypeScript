@@ -560,8 +560,119 @@ func (n *Node) AsTemplateTail() *TemplateTail {
 func (n *Node) AsEnumDeclaration() *EnumDeclaration {
 	return n.data.(*EnumDeclaration)
 }
+func (n *Node) AsJSDoc() *JSDoc {
+	return n.data.(*JSDoc)
+}
+func (n *Node) AsJSDocTagBase() *JSDocTagBase {
+	return n.data.(*JSDocTagBase)
+}
+func (n *Node) AsJSDocCommentBase() *JSDocCommentBase {
+	return n.data.(*JSDocCommentBase)
+}
+func (n *Node) AsJSDocText() *JSDocText {
+	return n.data.(*JSDocText)
+}
+func (n *Node) AsJSDocLink() *JSDocLink {
+	return n.data.(*JSDocLink)
+}
+func (n *Node) AsJSDocLinkPlain() *JSDocLinkPlain {
+	return n.data.(*JSDocLinkPlain)
+}
+func (n *Node) AsJSDocLinkCode() *JSDocLinkCode {
+	return n.data.(*JSDocLinkCode)
+}
+func (n *Node) AsJSDocTypeExpression() *JSDocTypeExpression {
+	return n.data.(*JSDocTypeExpression)
+}
+func (n *Node) AsJSDocNonNullableType() *JSDocNonNullableType {
+	return n.data.(*JSDocNonNullableType)
+}
 func (n *Node) AsJSDocNullableType() *JSDocNullableType {
 	return n.data.(*JSDocNullableType)
+}
+func (n *Node) AsJSDocAllType() *JSDocAllType {
+	return n.data.(*JSDocAllType)
+}
+func (n *Node) AsJSDocFunctionType() *JSDocFunctionType {
+	return n.data.(*JSDocFunctionType)
+}
+func (n *Node) AsJSDocVariadicType() *JSDocVariadicType {
+	return n.data.(*JSDocVariadicType)
+}
+func (n *Node) AsJSDocOptionalType() *JSDocOptionalType {
+	return n.data.(*JSDocOptionalType)
+}
+func (n *Node) AsJSDocTypeTag() *JSDocTypeTag {
+	return n.data.(*JSDocTypeTag)
+}
+func (n *Node) AsJSDocUnknownTag() *JSDocUnknownTag {
+	return n.data.(*JSDocUnknownTag)
+}
+func (n *Node) AsJSDocTemplateTag() *JSDocTemplateTag {
+	return n.data.(*JSDocTemplateTag)
+}
+func (n *Node) AsJSDocPropertyTag() *JSDocPropertyTag {
+	return n.data.(*JSDocPropertyTag)
+}
+func (n *Node) AsJSDocParameterTag() *JSDocParameterTag {
+	return n.data.(*JSDocParameterTag)
+}
+func (n *Node) AsJSDocReturnTag() *JSDocReturnTag {
+	return n.data.(*JSDocReturnTag)
+}
+func (n *Node) AsJSDocPublicTag() *JSDocPublicTag {
+	return n.data.(*JSDocPublicTag)
+}
+func (n *Node) AsJSDocPrivateTag() *JSDocPrivateTag {
+	return n.data.(*JSDocPrivateTag)
+}
+func (n *Node) AsJSDocProtectedTag() *JSDocProtectedTag {
+	return n.data.(*JSDocProtectedTag)
+}
+func (n *Node) AsJSDocReadonlyTag() *JSDocReadonlyTag {
+	return n.data.(*JSDocReadonlyTag)
+}
+func (n *Node) AsJSDocOverrideTag() *JSDocOverrideTag {
+	return n.data.(*JSDocOverrideTag)
+}
+func (n *Node) AsJSDocDeprecatedTag() *JSDocDeprecatedTag {
+	return n.data.(*JSDocDeprecatedTag)
+}
+func (n *Node) AsJSDocSeeTag() *JSDocSeeTag {
+	return n.data.(*JSDocSeeTag)
+}
+func (n *Node) AsJSDocImplementsTag() *JSDocImplementsTag {
+	return n.data.(*JSDocImplementsTag)
+}
+func (n *Node) AsJSDocAugmentsTag() *JSDocAugmentsTag {
+	return n.data.(*JSDocAugmentsTag)
+}
+func (n *Node) AsJSDocSatisfiesTag() *JSDocSatisfiesTag {
+	return n.data.(*JSDocSatisfiesTag)
+}
+func (n *Node) AsJSDocThisTag() *JSDocThisTag {
+	return n.data.(*JSDocThisTag)
+}
+func (n *Node) AsJSDocImportTag() *JSDocImportTag {
+	return n.data.(*JSDocImportTag)
+}
+func (n *Node) AsJSDocCallbackTag() *JSDocCallbackTag {
+	return n.data.(*JSDocCallbackTag)
+}
+func (n *Node) AsJSDocOverloadTag() *JSDocOverloadTag {
+	return n.data.(*JSDocOverloadTag)
+}
+func (n *Node) AsJSDocTypedefTag() *JSDocTypedefTag {
+	return n.data.(*JSDocTypedefTag)
+}
+func (n *Node) AsJSDocTypeLiteral() *JSDocTypeLiteral {
+	return n.data.(*JSDocTypeLiteral)
+}
+func (n *Node) AsJSDocSignature() *JSDocSignature {
+	return n.data.(*JSDocSignature)
+}
+func (n *Node) AsJSDocNameReference() *JSDocNameReference {
+	return n.data.(*JSDocNameReference)
 }
 func (n *Node) AsTemplateLiteralTypeNode() *TemplateLiteralTypeNode {
 	return n.data.(*TemplateLiteralTypeNode)
@@ -648,6 +759,8 @@ type TemplateLiteral = Node             // TemplateExpression | NoSubstitutionTe
 type TypePredicateParameterName = Node  // Identifier | ThisTypeNode
 type ImportAttributeName = Node         // Identifier | StringLiteral
 type LeftHandSideExpression = Node      // subset of Expression
+type JSDocComment = Node                // JSDocText | JSDocLink | JSDocLinkCode | JSDocLinkPlain;
+type JSDocTag = Node                    // Node with JSDocTagBase
 
 // Aliases for node singletons
 
@@ -772,6 +885,29 @@ type FlowNodeBase struct {
 
 func (node *FlowNodeBase) FlowNodeData() *FlowNodeBase { return node }
 
+// if you provide nil for file, this code will walk to the root of the tree to find the file
+func (node *Node) JSDoc(file *SourceFile) []*Node {
+	if node.Flags&NodeFlagsHasJSDoc == 0 {
+		return nil
+	}
+	if file == nil {
+		file = GetSourceFileOfNode(node)
+		if file == nil {
+			return nil
+		}
+	}
+	if jsdocs, ok := file.jsdocCache[node]; ok {
+		return jsdocs
+	}
+	return nil
+}
+func (node *Node) SetJSDoc(file *SourceFile, jsDocs []*Node) {
+	if node.Flags&NodeFlagsHasJSDoc == 0 {
+		node.Flags &= NodeFlagsHasJSDoc
+	}
+	file.jsdocCache[node] = jsDocs
+}
+
 // Token
 
 type Token struct {
@@ -860,10 +996,6 @@ func (f *NodeFactory) NewTypeParameterDeclaration(modifiers *ModifierList, name 
 	data.Constraint = constraint
 	data.DefaultType = defaultType
 	return f.newNode(KindTypeParameter, data)
-}
-
-func (node *TypeParameterDeclaration) Kind() Kind {
-	return KindTypeParameter
 }
 
 func (node *TypeParameterDeclaration) ForEachChild(v Visitor) bool {
@@ -1217,10 +1349,6 @@ func (f *NodeFactory) NewTryStatement(tryBlock *BlockNode, catchClause *CatchCla
 	data.CatchClause = catchClause
 	data.FinallyBlock = finallyBlock
 	return f.newNode(KindTryStatement, data)
-}
-
-func (node *TryStatement) Kind() Kind {
-	return KindTryStatement
 }
 
 func (node *TryStatement) ForEachChild(v Visitor) bool {
@@ -1614,8 +1742,6 @@ func (f *NodeFactory) NewClassExpression(modifiers *ModifierList, name *Identifi
 	data.Members = members
 	return f.newNode(KindClassExpression, data)
 }
-
-func (node *ClassExpression) Kind() Kind { return KindClassExpression }
 
 func IsClassExpression(node *Node) bool {
 	return node.Kind == KindClassExpression
@@ -3757,10 +3883,6 @@ func (f *NodeFactory) NewTupleTypeNode(elements *NodeList) *Node {
 	return f.newNode(KindTupleType, data)
 }
 
-func (node *TupleTypeNode) Kind() Kind {
-	return KindTupleType
-}
-
 func (node *TupleTypeNode) ForEachChild(v Visitor) bool {
 	return visitNodeList(v, node.Elements)
 }
@@ -4248,18 +4370,134 @@ func (f *NodeFactory) NewJsxText(text string, containsOnlyTriviaWhiteSpace bool)
 	return f.newNode(KindJsxText, data)
 }
 
+/// JSDoc ///
+
+type JSDoc struct {
+	NodeBase
+	Comment *NodeList // NodeList[*JSDocCommentBase]
+	Tags    *NodeList // NodeList[*JSDocTagBase]
+}
+
+func (f *NodeFactory) NewJSDoc(comment *NodeList, tags *NodeList) *Node {
+	data := &JSDoc{}
+	data.Comment = comment
+	data.Tags = tags
+	return f.newNode(KindJSDoc, data)
+}
+
+func (node *JSDoc) ForEachChild(v Visitor) bool {
+	return visitNodeList(v, node.Comment) || visitNodeList(v, node.Tags)
+}
+
+type JSDocTagBase struct {
+	NodeBase
+	TagName *IdentifierNode
+	Comment *NodeList
+}
+
+type JSDocCommentBase struct {
+	NodeBase
+	Text string
+}
+
+// JSDoc comments
+type JSDocText struct {
+	JSDocCommentBase
+}
+
+func (f *NodeFactory) NewJSDocText(text string) *Node {
+	data := &JSDocText{}
+	data.Text = text
+	return f.newNode(KindJSDocText, data)
+}
+
+type JSDocLink struct {
+	JSDocCommentBase
+	name *Node // optional (should only be EntityName | JSDocMemberName)
+}
+
+func (f *NodeFactory) NewJSDocLink(name *Node, text string) *Node {
+	data := &JSDocLink{}
+	data.name = name
+	data.Text = text
+	return f.newNode(KindJSDocLink, data)
+}
+
+func (node *JSDocLink) ForEachChild(v Visitor) bool {
+	return visit(v, node.name)
+}
+
+func (node *JSDocLink) Name() *DeclarationName {
+	return node.name
+}
+
+type JSDocLinkPlain struct {
+	JSDocCommentBase
+	name *Node // optional (should only be EntityName | JSDocMemberName)
+}
+
+func (f *NodeFactory) NewJSDocLinkPlain(name *Node, text string) *Node {
+	data := &JSDocLinkPlain{}
+	data.name = name
+	data.Text = text
+	return f.newNode(KindJSDocLinkPlain, data)
+}
+
+func (node *JSDocLinkPlain) ForEachChild(v Visitor) bool {
+	return visit(v, node.name)
+}
+
+func (node *JSDocLinkPlain) Name() *DeclarationName {
+	return node.name
+}
+
+type JSDocLinkCode struct {
+	JSDocCommentBase
+	name *Node // optional (should only be EntityName | JSDocMemberName)
+}
+
+func (f *NodeFactory) NewJSDocLinkCode(name *Node, text string) *Node {
+	data := &JSDocLinkCode{}
+	data.name = name
+	data.Text = text
+	return f.newNode(KindJSDocLinkCode, data)
+}
+
+func (node *JSDocLinkCode) ForEachChild(v Visitor) bool {
+	return visit(v, node.name)
+}
+
+func (node *JSDocLinkCode) Name() *DeclarationName {
+	return node.name
+}
+
+// JSDocTypeExpression
+
+type JSDocTypeExpression struct {
+	TypeNodeBase
+	TypeNode *TypeNode
+}
+
+func (node *JSDocTypeExpression) ForEachChild(v Visitor) bool {
+	return visit(v, node.TypeNode)
+}
+
+func (f *NodeFactory) NewJSDocTypeExpression(typeNode *TypeNode) *Node {
+	data := &JSDocTypeExpression{}
+	data.TypeNode = typeNode
+	return f.newNode(KindJSDocTypeExpression, data)
+}
+
 // JSDocNonNullableType
 
 type JSDocNonNullableType struct {
 	TypeNodeBase
 	TypeNode *TypeNode // TypeNode
-	Postfix  bool
 }
 
-func (f *NodeFactory) NewJSDocNonNullableType(typeNode *TypeNode, postfix bool) *Node {
+func (f *NodeFactory) NewJSDocNonNullableType(typeNode *TypeNode) *Node {
 	data := &JSDocNonNullableType{}
 	data.TypeNode = typeNode
-	data.Postfix = postfix
 	return f.newNode(KindJSDocNonNullableType, data)
 }
 
@@ -4272,19 +4510,523 @@ func (node *JSDocNonNullableType) ForEachChild(v Visitor) bool {
 type JSDocNullableType struct {
 	TypeNodeBase
 	TypeNode *TypeNode // TypeNode
-	Postfix  bool
 }
 
-func (f *NodeFactory) NewJSDocNullableType(typeNode *TypeNode, postfix bool) *Node {
+func (f *NodeFactory) NewJSDocNullableType(typeNode *TypeNode) *Node {
 	data := &JSDocNullableType{}
 	data.TypeNode = typeNode
-	data.Postfix = postfix
 	return f.newNode(KindJSDocNullableType, data)
 }
 
 func (node *JSDocNullableType) ForEachChild(v Visitor) bool {
 	return visit(v, node.TypeNode)
 }
+
+// JSDocAllType
+
+type JSDocAllType struct {
+	TypeNodeBase
+}
+
+func (f *NodeFactory) NewJSDocAllType() *Node {
+	data := &JSDocAllType{}
+	return f.newNode(KindJSDocAllType, data)
+}
+
+// JSDocFunctionType
+
+type JSDocFunctionType struct {
+	TypeNodeBase
+	Parameters *NodeList // NodeList[*ParameterDeclarationNode]
+	TypeNode   *TypeNode
+}
+
+func (node *JSDocFunctionType) ForEachChild(v Visitor) bool {
+	return visitNodeList(v, node.Parameters) || visit(v, node.TypeNode)
+}
+
+func (f *NodeFactory) NewJSDocFunctionType(parameters *NodeList, typeNode *TypeNode) *Node {
+	data := &JSDocFunctionType{}
+	data.Parameters = parameters
+	data.TypeNode = typeNode
+	return f.newNode(KindJSDocFunctionType, data)
+}
+
+// JSDocVariadicType
+
+type JSDocVariadicType struct {
+	TypeNodeBase
+	TypeNode *TypeNode
+}
+
+func (f *NodeFactory) NewJSDocVariadicType(typeNode *TypeNode) *Node {
+	data := &JSDocVariadicType{}
+	data.TypeNode = typeNode
+	return f.newNode(KindJSDocVariadicType, data)
+}
+
+func (node *JSDocVariadicType) ForEachChild(v Visitor) bool {
+	return visit(v, node.TypeNode)
+}
+
+// JSDocOptionalType
+
+type JSDocOptionalType struct {
+	TypeNodeBase
+	TypeNode *TypeNode
+}
+
+func (node *JSDocOptionalType) ForEachChild(v Visitor) bool {
+	return visit(v, node.TypeNode)
+}
+
+func (f *NodeFactory) NewJSDocOptionalType(typeNode *TypeNode) *Node {
+	data := &JSDocOptionalType{}
+	data.TypeNode = typeNode
+	return f.newNode(KindJSDocOptionalType, data)
+}
+
+type JSDocTypeTag struct {
+	JSDocTagBase
+	TypeExpression *TypeNode
+}
+
+func (f *NodeFactory) NewJSDocTypeTag(tagName *IdentifierNode, typeExpression *Node, comment *NodeList) *Node {
+	data := &JSDocTypeTag{}
+	data.TagName = tagName
+	data.TypeExpression = typeExpression
+	data.Comment = comment
+	return f.newNode(KindJSDocTypeTag, data)
+}
+
+func (node *JSDocTypeTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+}
+
+// JSDocUnknownTag
+type JSDocUnknownTag struct {
+	JSDocTagBase
+}
+
+func (f *NodeFactory) NewJSDocUnknownTag(tagName *IdentifierNode, comment *NodeList) *Node {
+	data := &JSDocUnknownTag{}
+	data.TagName = tagName
+	data.Comment = comment
+	return f.newNode(KindJSDocTag, data)
+}
+
+// JSDocTemplateTag
+type JSDocTemplateTag struct {
+	JSDocTagBase
+	Constraint     *Node
+	typeParameters *TypeParameterListNode
+}
+
+func (f *NodeFactory) NewJSDocTemplateTag(tagName *IdentifierNode, constraint *Node, typeParameters *TypeParameterListNode, comment *NodeList) *Node {
+	data := &JSDocTemplateTag{}
+	data.TagName = tagName
+	data.Constraint = constraint
+	data.typeParameters = typeParameters
+	data.Comment = comment
+	return f.newNode(KindJSDocTemplateTag, data)
+}
+
+func (node *JSDocTemplateTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.Constraint) || visit(v, node.typeParameters) || visitNodeList(v, node.Comment)
+}
+
+func (node *JSDocTemplateTag) TypeParameters() *TypeParameterListNode { return node.typeParameters }
+
+// JSDocParameterTag
+
+type JSDocPropertyTag struct {
+	JSDocTagBase
+	name           *EntityName
+	IsBracketed    bool
+	TypeExpression *TypeNode
+	IsNameFirst    bool
+}
+
+func NewJSDocPropertyTag(tagName *IdentifierNode, name *EntityName, isBracketed bool, typeExpression *TypeNode, isNameFirst bool, comment *NodeList) *JSDocPropertyTag {
+	data := &JSDocPropertyTag{}
+	data.TagName = tagName
+	data.name = name
+	data.IsBracketed = isBracketed
+	data.TypeExpression = typeExpression
+	data.IsNameFirst = isNameFirst
+	data.Comment = comment
+	return data
+}
+func (node *JSDocPropertyTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.name) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+}
+
+func (node *JSDocPropertyTag) Name() *EntityName { return node.name }
+
+type JSDocParameterTag struct {
+	JSDocTagBase
+	name           *EntityName
+	IsBracketed    bool
+	TypeExpression *TypeNode
+	IsNameFirst    bool
+}
+
+func NewJSDocParameterTag(tagName *IdentifierNode, name *EntityName, isBracketed bool, typeExpression *TypeNode, isNameFirst bool, comment *NodeList) *JSDocParameterTag {
+	data := &JSDocParameterTag{}
+	data.TagName = tagName
+	data.name = name
+	data.IsBracketed = isBracketed
+	data.TypeExpression = typeExpression
+	data.IsNameFirst = isNameFirst
+	data.Comment = comment
+	return data
+}
+func (node *JSDocParameterTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.name) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+}
+
+func (node *JSDocParameterTag) Name() *EntityName { return node.name }
+
+// JSDocReturnTag
+type JSDocReturnTag struct {
+	JSDocTagBase
+	TypeExpression *TypeNode
+}
+
+func NewJSDocReturnTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *JSDocReturnTag {
+	data := &JSDocReturnTag{}
+	data.TagName = tagName
+	data.TypeExpression = typeExpression
+	data.Comment = comment
+	return data
+}
+func (node *JSDocReturnTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+}
+
+// JSDocPublicTag
+type JSDocPublicTag struct {
+	JSDocTagBase
+}
+
+func NewJSDocPublicTag(tagName *IdentifierNode, comment *NodeList) *JSDocPublicTag {
+	data := &JSDocPublicTag{}
+	data.TagName = tagName
+	data.Comment = comment
+	return data
+}
+func (node *JSDocPublicTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+}
+
+// JSDocPrivateTag
+type JSDocPrivateTag struct {
+	JSDocTagBase
+}
+
+func NewJSDocPrivateTag(tagName *IdentifierNode, comment *NodeList) *JSDocPrivateTag {
+	data := &JSDocPrivateTag{}
+	data.TagName = tagName
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocPrivateTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+}
+
+// JSDocProtectedTag
+type JSDocProtectedTag struct {
+	JSDocTagBase
+}
+
+func NewJSDocProtectedTag(tagName *IdentifierNode, comment *NodeList) *JSDocProtectedTag {
+	data := &JSDocProtectedTag{}
+	data.TagName = tagName
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocProtectedTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+}
+
+// JSDocReadonlyTag
+type JSDocReadonlyTag struct {
+	JSDocTagBase
+}
+
+func NewJSDocReadonlyTag(tagName *IdentifierNode, comment *NodeList) *JSDocReadonlyTag {
+	data := &JSDocReadonlyTag{}
+	data.TagName = tagName
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocReadonlyTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+}
+
+// JSDocOverrideTag
+type JSDocOverrideTag struct {
+	JSDocTagBase
+}
+
+func NewJSDocOverrideTag(tagName *IdentifierNode, comment *NodeList) *JSDocOverrideTag {
+	data := &JSDocOverrideTag{}
+	data.TagName = tagName
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocOverrideTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+}
+
+// JSDocDeprecatedTag
+type JSDocDeprecatedTag struct {
+	JSDocTagBase
+}
+
+func NewJSDocDeprecatedTag(tagName *IdentifierNode, comment *NodeList) *JSDocDeprecatedTag {
+	data := &JSDocDeprecatedTag{}
+	data.TagName = tagName
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocDeprecatedTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visitNodeList(v, node.Comment)
+}
+
+// JSDocSeeTag
+type JSDocSeeTag struct {
+	JSDocTagBase
+	NameExpression *TypeNode
+}
+
+func NewJSDocSeeTag(tagName *IdentifierNode, nameExpression *TypeNode, comment *NodeList) *JSDocSeeTag {
+	data := &JSDocSeeTag{}
+	data.TagName = tagName
+	data.NameExpression = nameExpression
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocSeeTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.NameExpression) || visitNodeList(v, node.Comment)
+}
+
+// JSDocImplementsTag
+type JSDocImplementsTag struct {
+	JSDocTagBase
+	ClassName *Expression
+}
+
+func NewJSDocImplementsTag(tagName *IdentifierNode, className *Expression, comment *NodeList) *JSDocImplementsTag {
+	data := &JSDocImplementsTag{}
+	data.TagName = tagName
+	data.ClassName = className
+	data.Comment = comment
+	return data
+}
+func (node *JSDocImplementsTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.ClassName) || visitNodeList(v, node.Comment)
+}
+
+// JSDocAugmentsTag
+type JSDocAugmentsTag struct {
+	JSDocTagBase
+	ClassName *Expression
+}
+
+func NewJSDocAugmentsTag(tagName *IdentifierNode, className *Expression, comment *NodeList) *JSDocAugmentsTag {
+	data := &JSDocAugmentsTag{}
+	data.TagName = tagName
+	data.ClassName = className
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocAugmentsTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.ClassName) || visitNodeList(v, node.Comment)
+}
+
+// JSDocSatisfiesTag
+type JSDocSatisfiesTag struct {
+	JSDocTagBase
+	TypeExpression *TypeNode
+}
+
+func NewJSDocSatisfiesTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *JSDocSatisfiesTag {
+	data := &JSDocSatisfiesTag{}
+	data.TagName = tagName
+	data.TypeExpression = typeExpression
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocSatisfiesTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+}
+
+// JSDocThisTag
+type JSDocThisTag struct {
+	JSDocTagBase
+	TypeExpression *TypeNode
+}
+
+func NewJSDocThisTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *JSDocThisTag {
+	data := &JSDocThisTag{}
+	data.TagName = tagName
+	data.TypeExpression = typeExpression
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocThisTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+}
+
+// JSDocImportTag
+type JSDocImportTag struct {
+	JSDocTagBase
+	ImportClause    *Declaration
+	ModuleSpecifier *Node
+	Attributes      *Node
+}
+
+func NewJSDocImportTag(tagName *IdentifierNode, importClause *Declaration, moduleSpecifier *Node, attributes *Node, comment *NodeList) *JSDocImportTag {
+	data := &JSDocImportTag{}
+	data.TagName = tagName
+	data.ImportClause = importClause
+	data.ModuleSpecifier = moduleSpecifier
+	data.Attributes = attributes
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocImportTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.ImportClause) || visit(v, node.ModuleSpecifier) || visit(v, node.Attributes) || visitNodeList(v, node.Comment)
+}
+
+// JSDocCallbackTag
+type JSDocCallbackTag struct {
+	JSDocTagBase
+	FullName       *Node
+	TypeExpression *TypeNode
+}
+
+func NewJSDocCallbackTag(tagName *IdentifierNode, typeExpression *TypeNode, fullName *Node, comment *NodeList) *JSDocCallbackTag {
+	data := &JSDocCallbackTag{}
+	data.TagName = tagName
+	data.FullName = fullName
+	data.TypeExpression = typeExpression
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocCallbackTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.FullName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+}
+
+// JSDocOverloadTag
+type JSDocOverloadTag struct {
+	JSDocTagBase
+	TypeExpression *TypeNode
+}
+
+func NewJSDocOverloadTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *JSDocOverloadTag {
+	data := &JSDocOverloadTag{}
+	data.TagName = tagName
+	data.TypeExpression = typeExpression
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocOverloadTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+}
+
+// JSDocTypedefTag
+type JSDocTypedefTag struct {
+	JSDocTagBase
+	TypeExpression *Node
+	FullName       *Node
+}
+
+func NewJSDocTypedefTag(tagName *IdentifierNode, typeExpression *Node, fullName *Node, comment *NodeList) *JSDocTypedefTag {
+	data := &JSDocTypedefTag{}
+	data.TagName = tagName
+	data.TypeExpression = typeExpression
+	data.FullName = fullName
+	data.Comment = comment
+	return data
+}
+
+func (node *JSDocTypedefTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visit(v, node.FullName) || visitNodeList(v, node.Comment)
+}
+
+// JSDocTypeLiteral
+type JSDocTypeLiteral struct {
+	TypeNodeBase
+	DeclarationBase
+	JsDocPropertyTags []*Node
+	IsArrayType       bool
+}
+
+func NewJSDocTypeLiteral(jsDocPropertyTags []*Node, isArrayType bool) *JSDocTypeLiteral {
+	data := &JSDocTypeLiteral{}
+	data.JsDocPropertyTags = jsDocPropertyTags
+	data.IsArrayType = isArrayType
+	return data
+}
+
+func (node *JSDocTypeLiteral) ForEachChild(v Visitor) bool {
+	return visitNodes(v, node.JsDocPropertyTags)
+}
+
+// JSDocSignature
+type JSDocSignature struct {
+	TypeNodeBase
+	typeParameters *TypeParameterListNode
+	Parameters     []*JSDocTag
+	TypeNode       *JSDocTag
+}
+
+func NewJSDocSignature(typeParameters *TypeParameterListNode, parameters []*JSDocTag, typeNode *JSDocTag) *JSDocSignature {
+	data := &JSDocSignature{}
+	data.typeParameters = typeParameters
+	data.Parameters = parameters
+	data.TypeNode = typeNode
+	return data
+}
+
+func (node *JSDocSignature) ForEachChild(v Visitor) bool {
+	return visit(v, node.typeParameters) || visitNodes(v, node.Parameters) || visit(v, node.TypeNode)
+}
+
+func (node *JSDocSignature) TypeParameters() *TypeParameterListNode { return node.typeParameters }
+
+// JSDocNameReference
+type JSDocNameReference struct {
+	TypeNodeBase
+	name *EntityName
+}
+
+// JSDocMemberName
+func NewJSDocNameReference(name *EntityName) *JSDocNameReference {
+	data := &JSDocNameReference{}
+	data.name = name
+	return data
+}
+
+func (node *JSDocNameReference) ForEachChild(v Visitor) bool {
+	return visit(v, node.name)
+}
+
+func (node *JSDocNameReference) Name() *EntityName { return node.name }
 
 // PatternAmbientModule
 
@@ -4328,6 +5070,7 @@ type SourceFile struct {
 	TypeReferenceDirectives     []FileReference
 	LibReferenceDirectives      []FileReference
 	HasNoDefaultLib             bool
+	jsdocCache                  map[*Node][]*Node
 }
 
 func (f *NodeFactory) NewSourceFile(text string, fileName string, statements *NodeList) *Node {
