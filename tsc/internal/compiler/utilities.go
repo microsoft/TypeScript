@@ -5,7 +5,6 @@ import (
 	"math"
 	"path/filepath"
 	"slices"
-	"strconv"
 	"strings"
 	"sync/atomic"
 
@@ -2900,7 +2899,7 @@ func getPropertyNameFromType(t *Type) string {
 	case t.flags&TypeFlagsStringLiteral != 0:
 		return t.AsLiteralType().value.(string)
 	case t.flags&TypeFlagsNumberLiteral != 0:
-		return numberToString(t.AsLiteralType().value.(float64))
+		return core.NumberToString(t.AsLiteralType().value.(float64))
 	case t.flags&TypeFlagsUniqueESSymbol != 0:
 		return t.AsUniqueESSymbolType().name
 	}
@@ -2929,7 +2928,7 @@ func isNumericLiteralName(name string) bool {
 	// Note that this accepts the values 'Infinity', '-Infinity', and 'NaN', and that this is intentional.
 	// This is desired behavior, because when indexing with them as numeric entities, you are indexing
 	// with the strings '"Infinity"', '"-Infinity"', and '"NaN"' respectively.
-	return numberToString(stringToNumber(name)) == name
+	return core.NumberToString(core.StringToNumber(name)) == name
 }
 
 func getPropertyNameForPropertyNameNode(name *ast.Node) string {
@@ -2964,7 +2963,7 @@ func anyToString(v any) string {
 	case string:
 		return v
 	case float64:
-		return numberToString(v)
+		return core.NumberToString(v)
 	case bool:
 		return core.IfElse(v, "true", "false")
 	case PseudoBigInt:
@@ -2973,27 +2972,12 @@ func anyToString(v any) string {
 	panic("Unhandled case in anyToString")
 }
 
-func numberToString(f float64) string {
-	// !!! This function should behave identically to the expression `"" + f` in JS
-	return strconv.FormatFloat(f, 'g', -1, 64)
-}
-
-func stringToNumber(s string) float64 {
-	// !!! This function should behave identically to the expression `+s` in JS
-	// This includes parsing binary, octal, and hex numeric strings
-	value, err := strconv.ParseFloat(s, 64)
-	if err != nil {
-		return math.NaN()
-	}
-	return value
-}
-
 func isValidNumberString(s string, roundTripOnly bool) bool {
 	if s == "" {
 		return false
 	}
-	n := stringToNumber(s)
-	return !math.IsNaN(n) && !math.IsInf(n, 0) && (!roundTripOnly || numberToString(n) == s)
+	n := core.StringToNumber(s)
+	return !math.IsNaN(n) && !math.IsInf(n, 0) && (!roundTripOnly || core.NumberToString(n) == s)
 }
 
 func isValidBigIntString(s string, roundTripOnly bool) bool {
@@ -3352,10 +3336,10 @@ func createEvaluator(evaluateEntity Evaluator) Evaluator {
 			rightStr, rightIsStr := right.value.(string)
 			if (leftIsStr || leftIsNum) && (rightIsStr || rightIsNum) && operator == ast.KindPlusToken {
 				if leftIsNum {
-					leftStr = numberToString(leftNum)
+					leftStr = core.NumberToString(leftNum)
 				}
 				if rightIsNum {
-					rightStr = numberToString(rightNum)
+					rightStr = core.NumberToString(rightNum)
 				}
 				return evaluatorResult(leftStr+rightStr, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 			}
@@ -3364,7 +3348,7 @@ func createEvaluator(evaluateEntity Evaluator) Evaluator {
 		case ast.KindTemplateExpression:
 			return evaluateTemplateExpression(expr, location)
 		case ast.KindNumericLiteral:
-			return evaluatorResult(stringToNumber(expr.Text()), false, false, false)
+			return evaluatorResult(core.StringToNumber(expr.Text()), false, false, false)
 		case ast.KindIdentifier, ast.KindElementAccessExpression:
 			return evaluateEntity(expr, location)
 		case ast.KindPropertyAccessExpression:

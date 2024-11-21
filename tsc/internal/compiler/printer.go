@@ -185,7 +185,7 @@ func (p *Printer) printStringLiteral(s string) {
 }
 
 func (p *Printer) printNumberLiteral(f float64) {
-	p.print(numberToString(f))
+	p.print(core.NumberToString(f))
 }
 
 func (p *Printer) printBooleanLiteral(b bool) {
