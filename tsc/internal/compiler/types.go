@@ -1103,28 +1103,3 @@ var LanguageFeatureMinimumTarget = LanguageFeatureMinimumTargetMap{
 	ClassAndClassElementDecorators:    core.ScriptTargetESNext,
 	RegularExpressionFlagsUnicodeSets: core.ScriptTargetESNext,
 }
-
-type ProjectReference struct {
-	path         string
-	originalPath string
-	circular     bool
-}
-
-type FileIncludeKind int
-
-const (
-	RootFile = iota
-	SourceFromProjectReference
-	OutputFromProjectReference
-	Import
-	ReferenceFile
-	TypeReferenceDirective
-	LibFile
-	LibReferenceDirective
-	AutomaticTypeDirectiveFile
-)
-
-type FileIncludeReason struct {
-	Kind  FileIncludeKind
-	Index int
-}

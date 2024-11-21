@@ -54,7 +54,7 @@ func main() {
 
 	rootPath := flag.Arg(0)
 	compilerOptions := &core.CompilerOptions{Strict: core.TSTrue, Target: core.ScriptTargetESNext, ModuleKind: core.ModuleKindNodeNext}
-	programOptions := ts.ProgramOptions{RootNames: []string{rootPath}, Options: compilerOptions, SingleThreaded: singleThreaded}
+	programOptions := ts.ProgramOptions{RootPath: rootPath, Options: compilerOptions, SingleThreaded: singleThreaded}
 	useCaseSensitiveFileNames := isFileSystemCaseSensitive()
 
 	startTime := time.Now()

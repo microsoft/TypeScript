@@ -390,12 +390,12 @@ func (v *vfsModuleResolutionHost) GetDirectories(path string) []string {
 }
 
 // ReadFile implements ModuleResolutionHost.
-func (v *vfsModuleResolutionHost) ReadFile(fileName string) (string, bool) {
+func (v *vfsModuleResolutionHost) ReadFile(fileName string) string {
 	bytes, err := v.fs.ReadFile(fixRoot(fileName))
 	if err != nil {
 		panic(err)
 	}
-	return string(bytes), true
+	return string(bytes)
 }
 
 // Realpath implements ModuleResolutionHost.
