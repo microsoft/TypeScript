@@ -164,7 +164,7 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 
 		switch moduleResolution {
 		case core.ModuleResolutionKindNode16, core.ModuleResolutionKindNodeNext, core.ModuleResolutionKindBundler:
-			state := newResolutionState(moduleName, containingFile, resolutionMode, compilerOptions, r)
+			state := newResolutionState(moduleName, containingDirectory, resolutionMode, compilerOptions, r)
 			result = state.resolveNodeLike()
 		default:
 			panic(fmt.Sprintf("Unexpected moduleResolution: %d", moduleResolution))
@@ -1049,7 +1049,8 @@ func (r *resolutionState) getPackageJsonInfo(packageDirectory string, onlyRecord
 	directoryExists := r.resolver.host.DirectoryExists(packageDirectory)
 	if directoryExists && r.resolver.host.FileExists(packageJsonPath) {
 		// Ignore error
-		packageJsonContent, _ := packagejson.Parse([]byte(r.resolver.host.ReadFile(packageJsonPath)))
+		file, _ := r.resolver.host.ReadFile(packageJsonPath)
+		packageJsonContent, _ := packagejson.Parse([]byte(file))
 		if r.resolver.traceEnabled() {
 			r.resolver.host.Trace(diagnostics.Found_package_json_at_0.Format(packageJsonPath))
 		}

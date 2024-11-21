@@ -13,7 +13,7 @@ import (
 
 type ResolutionHost interface {
 	FileExists(fileName string) bool
-	ReadFile(fileName string) string
+	ReadFile(fileName string) (text string, ok bool)
 	Trace(msg string)
 	DirectoryExists(directoryName string) bool
 	Realpath(path string) string

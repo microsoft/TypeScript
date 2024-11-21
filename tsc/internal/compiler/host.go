@@ -12,15 +12,65 @@ import (
 	"sync"
 	"unicode/utf16"
 
+	"github.com/microsoft/typescript-go/internal/compiler/module"
 	"github.com/microsoft/typescript-go/internal/core"
 )
 
 type CompilerHost interface {
-	ReadFile(fileName string) (text string, ok bool)
+	module.ResolutionHost
 	ReadDirectory(rootPath string, extensions []string) []FileInfo
 	AbsFileName(fileName string) string
 	RunTask(fn func())
 	WaitForTasks()
+}
+
+// implement ModuleResolutionHost for compilerHost
+
+func (d *compilerHost) FileExists(fileName string) bool {
+	_, err := os.Stat(fileName)
+	return !os.IsNotExist(err)
+}
+
+func (d *compilerHost) Trace(msg string) {
+	fmt.Println(msg)
+}
+
+func (d *compilerHost) DirectoryExists(directoryName string) bool {
+	stat, err := os.Stat(directoryName)
+	if err != nil {
+		return false
+	}
+	return stat.IsDir()
+}
+
+func (d *compilerHost) Realpath(path string) string {
+	panic("TODO: realpath")
+}
+
+func (d *compilerHost) GetCurrentDirectory() string {
+	cwd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	return cwd
+}
+
+func (d *compilerHost) GetDirectories(path string) []string {
+	files, err := os.ReadDir(path)
+	if err != nil {
+		return nil
+	}
+	result := make([]string, 0, len(files))
+	for _, file := range files {
+		if file.IsDir() {
+			result = append(result, file.Name())
+		}
+	}
+	return result
+}
+
+func (d *compilerHost) UseCaseSensitiveFileNames() bool {
+	return false
 }
 
 type FileInfo struct {
@@ -29,6 +79,7 @@ type FileInfo struct {
 }
 
 type compilerHost struct {
+	CompilerHost
 	options        *core.CompilerOptions
 	singleThreaded bool
 	wg             sync.WaitGroup
