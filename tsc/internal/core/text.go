@@ -27,6 +27,10 @@ func (t TextRange) Len() int {
 	return int(t.end - t.pos)
 }
 
+func (t TextRange) Contains(pos int) bool {
+	return pos >= int(t.pos) && pos < int(t.end)
+}
+
 func (t TextRange) ContainsInclusive(pos int) bool {
 	return pos >= int(t.pos) && pos <= int(t.end)
 }

@@ -581,6 +581,10 @@ func getEffectiveModifierFlags(node *ast.Node) ast.ModifierFlags {
 	return node.ModifierFlags() // !!! Handle JSDoc
 }
 
+func getSelectedEffectiveModifierFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags {
+	return getEffectiveModifierFlags(node) & flags
+}
+
 func hasEffectiveModifier(node *ast.Node, flags ast.ModifierFlags) bool {
 	return getEffectiveModifierFlags(node)&flags != 0
 }
@@ -797,6 +801,10 @@ func getNodeFlags(node *ast.Node) ast.NodeFlags {
 
 func isParameterPropertyDeclaration(node *ast.Node, parent *ast.Node) bool {
 	return ast.IsParameter(node) && hasSyntacticModifier(node, ast.ModifierFlagsParameterPropertyModifier) && parent.Kind == ast.KindConstructor
+}
+
+func isBindingElementOfBareOrAccessedRequire(node *ast.Node) bool {
+	return ast.IsBindingElement(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node.Parent.Parent)
 }
 
 /**
@@ -3371,4 +3379,38 @@ func isInfinityOrNaNString(name string) bool {
 
 func (c *Checker) isConstantVariable(symbol *ast.Symbol) bool {
 	return symbol.Flags&ast.SymbolFlagsVariable != 0 && (c.getDeclarationNodeFlagsFromSymbol(symbol)&ast.NodeFlagsConstant) != 0
+}
+
+func isInAmbientOrTypeNode(node *ast.Node) bool {
+	return node.Flags&ast.NodeFlagsAmbient != 0 || ast.FindAncestor(node, func(n *ast.Node) bool {
+		return ast.IsInterfaceDeclaration(n) || ast.IsTypeAliasDeclaration(n) || ast.IsTypeLiteralNode(n)
+	}) != nil
+}
+
+func isVariableLike(node *ast.Node) bool {
+	switch node.Kind {
+	case ast.KindBindingElement, ast.KindEnumMember, ast.KindParameter, ast.KindPropertyAssignment, ast.KindPropertyDeclaration,
+		ast.KindPropertySignature, ast.KindShorthandPropertyAssignment, ast.KindVariableDeclaration:
+		return true
+	}
+	return false
+}
+
+func getAncestor(node *ast.Node, kind ast.Kind) *ast.Node {
+	for node != nil {
+		if node.Kind == kind {
+			return node
+		}
+		node = node.Parent
+	}
+	return nil
+}
+
+func isLiteralExpressionOfObject(node *ast.Node) bool {
+	switch node.Kind {
+	case ast.KindObjectLiteralExpression, ast.KindArrayLiteralExpression, ast.KindRegularExpressionLiteral,
+		ast.KindFunctionExpression, ast.KindClassExpression:
+		return true
+	}
+	return false
 }
