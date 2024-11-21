@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	ts "github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -25,7 +26,7 @@ var pretty = true
 func printDiagnostic(d *ast.Diagnostic, level int) {
 	file := d.File()
 	if file != nil {
-		line, character := ts.GetLineAndCharacterOfPosition(file, d.Loc().Pos())
+		line, character := scanner.GetLineAndCharacterOfPosition(file, d.Loc().Pos())
 		fmt.Printf("%v%v(%v,%v): error TS%v: %v\n", strings.Repeat(" ", level*2), file.FileName(), line+1, character+1, d.Code(), d.Message())
 	} else {
 		fmt.Printf("%verror TS%v: %v\n", strings.Repeat(" ", level*2), d.Code(), d.Message())

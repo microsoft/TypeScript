@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
 type TypePrecedence int32
@@ -188,7 +189,7 @@ func (p *Printer) printNumberLiteral(f float64) {
 }
 
 func (p *Printer) printBooleanLiteral(b bool) {
-	p.print(ifElse(b, "true", "false"))
+	p.print(core.IfElse(b, "true", "false"))
 }
 
 func (p *Printer) printBigIntLiteral(b PseudoBigInt) {
@@ -477,9 +478,9 @@ func (p *Printer) printSourceFileWithTypes(sourceFile *ast.SourceFile) {
 	var pos int
 	var visit func(*ast.Node) bool
 	var typesPrinted bool
-	lineStarts := getLineStarts(sourceFile)
+	lineStarts := scanner.GetLineStarts(sourceFile)
 	printLinesBefore := func(node *ast.Node) {
-		line := computeLineOfPosition(lineStarts, SkipTrivia(sourceFile.Text, node.Pos()))
+		line := scanner.ComputeLineOfPosition(lineStarts, scanner.SkipTrivia(sourceFile.Text, node.Pos()))
 		var nextLineStart int
 		if line+1 < len(lineStarts) {
 			nextLineStart = int(lineStarts[line+1])

@@ -3,6 +3,7 @@ package core
 import (
 	"fmt"
 	"iter"
+	"math"
 	"regexp"
 	"slices"
 	"strconv"
@@ -280,4 +281,28 @@ func FormatStringFromArgs(text string, args []any) string {
 		}
 		return fmt.Sprintf("%v", args[int(index)])
 	})
+}
+
+// Returns whenTrue if b is true; otherwise, returns whenFalse. IfElse should only be used when branches are either
+// constant or precomputed as both branches will be evaluated regardless as to the value of b.
+func IfElse[T any](b bool, whenTrue T, whenFalse T) T {
+	if b {
+		return whenTrue
+	}
+	return whenFalse
+}
+
+// This function should behave identically to the expression `"" + f` in JS
+func NumberToString(f float64) string {
+	return strconv.FormatFloat(f, 'g', -1, 64)
+}
+
+// This function should behave identically to the expression `+s` in JS, including parsing binary, octal, and hex
+// numeric strings
+func StringToNumber(s string) float64 {
+	value, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		return math.NaN()
+	}
+	return value
 }

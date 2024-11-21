@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
 type ContainerFlags int32
@@ -246,7 +247,7 @@ func (b *Binder) declareSymbolEx(symbolTable ast.SymbolTable, parent *ast.Symbol
 						d = b.createDiagnosticForNode(decl, message)
 					}
 					if multipleDefaultExports {
-						d.AddRelatedInfo(b.createDiagnosticForNode(declarationName, ifElse(index == 0, diagnostics.Another_export_default_is_here, diagnostics.X_and_here)))
+						d.AddRelatedInfo(b.createDiagnosticForNode(declarationName, core.IfElse(index == 0, diagnostics.Another_export_default_is_here, diagnostics.X_and_here)))
 					}
 					b.addDiagnostic(d)
 					if multipleDefaultExports {
@@ -271,7 +272,7 @@ func (b *Binder) declareSymbolEx(symbolTable ast.SymbolTable, parent *ast.Symbol
 // unless it is a well known Symbol.
 func (b *Binder) getDeclarationName(node *ast.Node) string {
 	if ast.IsExportAssignment(node) {
-		return ifElse(node.AsExportAssignment().IsExportEquals, InternalSymbolNameExportEquals, InternalSymbolNameDefault)
+		return core.IfElse(node.AsExportAssignment().IsExportEquals, InternalSymbolNameExportEquals, InternalSymbolNameDefault)
 	}
 	name := getNameOfDeclaration(node)
 	if name != nil {
@@ -302,7 +303,7 @@ func (b *Binder) getDeclarationName(node *ast.Node) string {
 			}
 			if isSignedNumericLiteral(nameExpression) {
 				unaryExpression := nameExpression.AsPrefixUnaryExpression()
-				return TokenToString(unaryExpression.Operator) + unaryExpression.Operand.Text()
+				return scanner.TokenToString(unaryExpression.Operator) + unaryExpression.Operand.Text()
 			}
 			panic("Only computed properties with literal names have declaration names")
 		}
@@ -630,7 +631,7 @@ func (b *Binder) bindWorker(node *ast.Node) bool {
 	case ast.KindCallSignature, ast.KindConstructSignature, ast.KindIndexSignature:
 		b.declareSymbolAndAddToSymbolTable(node, ast.SymbolFlagsSignature, ast.SymbolFlagsNone)
 	case ast.KindMethodDeclaration, ast.KindMethodSignature:
-		b.bindPropertyOrMethodOrAccessor(node, ast.SymbolFlagsMethod|ifElse(getPostfixTokenFromNode(node) != nil, ast.SymbolFlagsOptional, ast.SymbolFlagsNone), ifElse(isObjectLiteralMethod(node), ast.SymbolFlagsPropertyExcludes, ast.SymbolFlagsMethodExcludes))
+		b.bindPropertyOrMethodOrAccessor(node, ast.SymbolFlagsMethod|core.IfElse(getPostfixTokenFromNode(node) != nil, ast.SymbolFlagsOptional, ast.SymbolFlagsNone), core.IfElse(isObjectLiteralMethod(node), ast.SymbolFlagsPropertyExcludes, ast.SymbolFlagsMethodExcludes))
 	case ast.KindFunctionDeclaration:
 		b.bindFunctionDeclaration(node)
 	case ast.KindConstructor:
@@ -713,9 +714,9 @@ func (b *Binder) bindWorker(node *ast.Node) bool {
 
 func (b *Binder) bindPropertyWorker(node *ast.Node) {
 	isAutoAccessor := isAutoAccessorPropertyDeclaration(node)
-	includes := ifElse(isAutoAccessor, ast.SymbolFlagsAccessor, ast.SymbolFlagsProperty)
-	excludes := ifElse(isAutoAccessor, ast.SymbolFlagsAccessorExcludes, ast.SymbolFlagsPropertyExcludes)
-	b.bindPropertyOrMethodOrAccessor(node, includes|ifElse(getPostfixTokenFromNode(node) != nil, ast.SymbolFlagsOptional, ast.SymbolFlagsNone), excludes)
+	includes := core.IfElse(isAutoAccessor, ast.SymbolFlagsAccessor, ast.SymbolFlagsProperty)
+	excludes := core.IfElse(isAutoAccessor, ast.SymbolFlagsAccessorExcludes, ast.SymbolFlagsPropertyExcludes)
+	b.bindPropertyOrMethodOrAccessor(node, includes|core.IfElse(getPostfixTokenFromNode(node) != nil, ast.SymbolFlagsOptional, ast.SymbolFlagsNone), excludes)
 }
 
 func (b *Binder) bindSourceFileIfExternalModule() {
@@ -771,7 +772,7 @@ func (b *Binder) bindModuleDeclaration(node *ast.Node) {
 func (b *Binder) declareModuleSymbol(node *ast.Node) ModuleInstanceState {
 	state := getModuleInstanceState(node, nil /*visited*/)
 	instantiated := state != ModuleInstanceStateNonInstantiated
-	b.declareSymbolAndAddToSymbolTable(node, ifElse(instantiated, ast.SymbolFlagsValueModule, ast.SymbolFlagsNamespaceModule), ifElse(instantiated, ast.SymbolFlagsValueModuleExcludes, ast.SymbolFlagsNamespaceModuleExcludes))
+	b.declareSymbolAndAddToSymbolTable(node, core.IfElse(instantiated, ast.SymbolFlagsValueModule, ast.SymbolFlagsNamespaceModule), core.IfElse(instantiated, ast.SymbolFlagsValueModuleExcludes, ast.SymbolFlagsNamespaceModuleExcludes))
 	return state
 }
 
@@ -1153,7 +1154,7 @@ func (b *Binder) bindParameter(node *ast.Node) {
 	// containing class.
 	if isParameterPropertyDeclaration(node, node.Parent) {
 		classDeclaration := node.Parent.Parent
-		flags := ast.SymbolFlagsProperty | ifElse(decl.QuestionToken != nil, ast.SymbolFlagsOptional, ast.SymbolFlagsNone)
+		flags := ast.SymbolFlagsProperty | core.IfElse(decl.QuestionToken != nil, ast.SymbolFlagsOptional, ast.SymbolFlagsNone)
 		b.declareSymbol(getMembers(classDeclaration.Symbol()), classDeclaration.Symbol(), node, flags, ast.SymbolFlagsPropertyExcludes)
 	}
 }
@@ -1260,7 +1261,7 @@ func (b *Binder) checkContextualIdentifier(node *ast.Node) {
 	// Report error only if there are no parse errors in file
 	if len(b.file.Diagnostics()) == 0 && node.Flags&ast.NodeFlagsAmbient == 0 && node.Flags&ast.NodeFlagsJSDoc == 0 && !isIdentifierName(node) {
 		// strict mode identifiers
-		originalKeywordKind := getIdentifierToken(node.AsIdentifier().Text)
+		originalKeywordKind := scanner.GetIdentifierToken(node.AsIdentifier().Text)
 		if originalKeywordKind == ast.KindIdentifier {
 			return
 		}
@@ -1315,7 +1316,7 @@ func (b *Binder) updateStrictModeStatementList(statements *ast.NodeList) {
 
 // Should be called only on prologue directives (isPrologueDirective(node) should be true)
 func (b *Binder) isUseStrictPrologueDirective(node *ast.Node) bool {
-	nodeText := getSourceTextOfNodeFromSourceFile(b.file, node.AsExpressionStatement().Expression)
+	nodeText := scanner.GetSourceTextOfNodeFromSourceFile(b.file, node.AsExpressionStatement().Expression, false /*includeTrivia*/)
 	// Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
 	// string to contain unicode escapes (as per ES5).
 	return nodeText == "\"use strict\"" || nodeText == "'use strict'"
@@ -2383,7 +2384,7 @@ func (b *Binder) bindOptionalChain(node *ast.Node, trueTarget *ast.FlowLabel, fa
 	if ast.IsOptionalChainRoot(node) {
 		preChainLabel = b.createBranchLabel()
 	}
-	b.bindOptionalExpression(node.Expression(), ifElse(preChainLabel != nil, preChainLabel, trueTarget), falseTarget)
+	b.bindOptionalExpression(node.Expression(), core.IfElse(preChainLabel != nil, preChainLabel, trueTarget), falseTarget)
 	if preChainLabel != nil {
 		b.currentFlow = finishFlowLabel(preChainLabel)
 	}
@@ -2728,7 +2729,7 @@ func (b *Binder) errorOnNode(node *ast.Node, message *diagnostics.Message, args 
 }
 
 func (b *Binder) errorOnFirstToken(node *ast.Node, message *diagnostics.Message, args ...any) {
-	span := getRangeOfTokenAtPosition(b.file, node.Pos())
+	span := scanner.GetRangeOfTokenAtPosition(b.file, node.Pos())
 	b.addDiagnostic(ast.NewDiagnostic(b.file, span, message, args...))
 }
 
@@ -2737,7 +2738,7 @@ func (b *Binder) errorOrSuggestionOnNode(isError bool, node *ast.Node, message *
 }
 
 func (b *Binder) errorOrSuggestionOnRange(isError bool, startNode *ast.Node, endNode *ast.Node, message *diagnostics.Message) {
-	textRange := core.NewTextRange(getRangeOfTokenAtPosition(b.file, startNode.Pos()).Pos(), endNode.End())
+	textRange := core.NewTextRange(scanner.GetRangeOfTokenAtPosition(b.file, startNode.Pos()).Pos(), endNode.End())
 	diagnostic := ast.NewDiagnostic(b.file, textRange, message)
 	if isError {
 		b.addDiagnostic(diagnostic)

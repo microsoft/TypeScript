@@ -14,7 +14,12 @@ func NodeIsPresent(node *Node) bool {
 
 // Determines if a node contains synthetic positions
 func NodeIsSynthesized(node *Node) bool {
-	return node.Loc.Pos() < 0 || node.Loc.End() < 0
+	return PositionIsSynthesized(node.Loc.Pos()) || PositionIsSynthesized(node.Loc.End())
+}
+
+// Determines whether a position is synthetic
+func PositionIsSynthesized(pos int) bool {
+	return pos < 0
 }
 
 func NodeKindIs(node *Node, kinds ...Kind) bool {

@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -82,7 +82,7 @@ func makeUnitsFromTest(code string, fileName string, settings compilerSettings) 
 			} else {
 				// First metadata marker in the file
 				currentFileName = strings.TrimSpace(testMetaData[2])
-				if currentFileContent.Len() != 0 && compiler.SkipTrivia(currentFileContent.String(), 0) != currentFileContent.Len() {
+				if currentFileContent.Len() != 0 && scanner.SkipTrivia(currentFileContent.String(), 0) != currentFileContent.Len() {
 					panic("Non-comment test content appears before the first '// @Filename' directive")
 				}
 			}

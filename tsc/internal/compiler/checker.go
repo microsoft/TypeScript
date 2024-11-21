@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -472,7 +473,7 @@ func NewChecker(program *Program) *Checker {
 	c.undefinedType = c.newIntrinsicType(TypeFlagsUndefined, "undefined")
 	c.undefinedWideningType = c.createWideningType(c.undefinedType)
 	c.missingType = c.newIntrinsicType(TypeFlagsUndefined, "undefined")
-	c.undefinedOrMissingType = ifElse(c.exactOptionalPropertyTypes, c.missingType, c.undefinedType)
+	c.undefinedOrMissingType = core.IfElse(c.exactOptionalPropertyTypes, c.missingType, c.undefinedType)
 	c.optionalType = c.newIntrinsicType(TypeFlagsUndefined, "undefined")
 	c.nullType = c.newIntrinsicType(TypeFlagsNull, "null")
 	c.nullWideningType = c.createWideningType(c.nullType)
@@ -747,7 +748,7 @@ func (c *Checker) checkAndReportErrorForInvalidInitializer(errorLocation *ast.No
 		// to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
 		// with emitStandardClassFields because the scope semantics are different.
 		prop := propertyWithInvalidInitializer.AsPropertyDeclaration()
-		message := ifElse(errorLocation != nil && prop.TypeNode != nil && prop.TypeNode.Loc.ContainsInclusive(errorLocation.Pos()),
+		message := core.IfElse(errorLocation != nil && prop.TypeNode != nil && prop.TypeNode.Loc.ContainsInclusive(errorLocation.Pos()),
 			diagnostics.Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
 			diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor)
 		c.error(errorLocation, message, declarationNameToString(prop.Name()), name)
@@ -804,7 +805,7 @@ func (c *Checker) onSuccessfullyResolvedSymbol(errorLocation *ast.Node, result *
 	if errorLocation != nil && meaning&ast.SymbolFlagsValue != 0 && result.Flags&ast.SymbolFlagsAlias != 0 && result.Flags&ast.SymbolFlagsValue == 0 && !isValidTypeOnlyAliasUseSite(errorLocation) {
 		typeOnlyDeclaration := c.getTypeOnlyAliasDeclarationEx(result, ast.SymbolFlagsValue)
 		if typeOnlyDeclaration != nil {
-			message := ifElse(ast.NodeKindIs(typeOnlyDeclaration, ast.KindExportSpecifier, ast.KindExportDeclaration, ast.KindNamespaceExport),
+			message := core.IfElse(ast.NodeKindIs(typeOnlyDeclaration, ast.KindExportSpecifier, ast.KindExportDeclaration, ast.KindNamespaceExport),
 				diagnostics.X_0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type,
 				diagnostics.X_0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type)
 			c.addTypeOnlyDeclarationRelatedInfo(c.error(errorLocation, message, name), typeOnlyDeclaration, name)
@@ -1112,14 +1113,14 @@ func (c *Checker) reportObjectPossiblyNullOrUndefinedError(node *ast.Node, facts
 			c.error(node, diagnostics.The_value_0_cannot_be_used_here, "undefined")
 			return
 		}
-		c.error(node, ifElse(facts&TypeFactsIsUndefined != 0,
-			ifElse(facts&TypeFactsIsNull != 0,
+		c.error(node, core.IfElse(facts&TypeFactsIsUndefined != 0,
+			core.IfElse(facts&TypeFactsIsNull != 0,
 				diagnostics.X_0_is_possibly_null_or_undefined,
 				diagnostics.X_0_is_possibly_undefined),
 			diagnostics.X_0_is_possibly_null), nodeText)
 	} else {
-		c.error(node, ifElse(facts&TypeFactsIsUndefined != 0,
-			ifElse(facts&TypeFactsIsNull != 0,
+		c.error(node, core.IfElse(facts&TypeFactsIsUndefined != 0,
+			core.IfElse(facts&TypeFactsIsNull != 0,
 				diagnostics.Object_is_possibly_null_or_undefined,
 				diagnostics.Object_is_possibly_undefined),
 			diagnostics.Object_is_possibly_null))
@@ -1388,7 +1389,7 @@ func (c *Checker) checkPropertyAccessExpressionOrQualifiedName(node *ast.Node, l
 				return c.anyType
 			}
 			if right.Text() != "" && !c.checkAndReportErrorForExtendingInterface(node) {
-				c.reportNonexistentProperty(right, ifElse(isThisTypeParameter(leftType), apparentType, leftType))
+				c.reportNonexistentProperty(right, core.IfElse(isThisTypeParameter(leftType), apparentType, leftType))
 			}
 			return c.errorType
 		}
@@ -2498,7 +2499,7 @@ func (c *Checker) tryMergeUnionOfObjectTypeAndEmptyObject(t *Type, readonly bool
 		} else if c.isSpreadableProperty(prop) {
 			isSetonlyAccessor := prop.Flags&ast.SymbolFlagsSetAccessor != 0 && prop.Flags&ast.SymbolFlagsGetAccessor == 0
 			flags := ast.SymbolFlagsProperty | ast.SymbolFlagsOptional
-			result := c.newSymbolEx(flags, prop.Name, prop.CheckFlags&ast.CheckFlagsLate|(ifElse(readonly, ast.CheckFlagsReadonly, 0)))
+			result := c.newSymbolEx(flags, prop.Name, prop.CheckFlags&ast.CheckFlagsLate|(core.IfElse(readonly, ast.CheckFlagsReadonly, 0)))
 			links := c.valueSymbolLinks.get(result)
 			if isSetonlyAccessor {
 				links.resolvedType = c.undefinedType
@@ -2529,7 +2530,7 @@ func (c *Checker) getSpreadSymbol(prop *ast.Symbol, readonly bool) *ast.Symbol {
 		return prop
 	}
 	flags := ast.SymbolFlagsProperty | (prop.Flags & ast.SymbolFlagsOptional)
-	result := c.newSymbolEx(flags, prop.Name, prop.CheckFlags&ast.CheckFlagsLate|(ifElse(readonly, ast.CheckFlagsReadonly, 0)))
+	result := c.newSymbolEx(flags, prop.Name, prop.CheckFlags&ast.CheckFlagsLate|(core.IfElse(readonly, ast.CheckFlagsReadonly, 0)))
 	links := c.valueSymbolLinks.get(result)
 	if isSetonlyAccessor {
 		links.resolvedType = c.undefinedType
@@ -2706,19 +2707,19 @@ func (c *Checker) getCannotFindNameDiagnosticForName(node *ast.Node) *diagnostic
 	case "document", "console":
 		return diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_include_dom
 	case "$":
-		return ifElse(c.compilerOptions.Types != nil,
+		return core.IfElse(c.compilerOptions.Types != nil,
 			diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig,
 			diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery)
 	case "describe", "suite", "it", "test":
-		return ifElse(c.compilerOptions.Types != nil,
+		return core.IfElse(c.compilerOptions.Types != nil,
 			diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha_and_then_add_jest_or_mocha_to_the_types_field_in_your_tsconfig,
 			diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha)
 	case "process", "require", "Buffer", "module":
-		return ifElse(c.compilerOptions.Types != nil,
+		return core.IfElse(c.compilerOptions.Types != nil,
 			diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig,
 			diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode)
 	case "Bun":
-		return ifElse(c.compilerOptions.Types != nil,
+		return core.IfElse(c.compilerOptions.Types != nil,
 			diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun_and_then_add_bun_to_the_types_field_in_your_tsconfig,
 			diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun)
 	case "Map", "Set", "Promise", "ast.Symbol", "WeakMap", "WeakSet", "Iterator", "AsyncIterator", "SharedArrayBuffer", "Atomics", "AsyncIterable",
@@ -3254,10 +3255,10 @@ func (c *Checker) checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(nod
 	if c.markSymbolOfAliasDeclarationIfTypeOnly(node, nil /*immediateTarget*/, resolved, false /*overwriteEmpty*/, nil, "") && !decl.IsTypeOnly {
 		typeOnlyDeclaration := c.getTypeOnlyAliasDeclaration(c.getSymbolOfDeclaration(node))
 		isExport := ast.NodeKindIs(typeOnlyDeclaration, ast.KindExportSpecifier, ast.KindExportDeclaration)
-		message := ifElse(isExport,
+		message := core.IfElse(isExport,
 			diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_exported_using_export_type,
 			diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_imported_using_import_type)
-		relatedMessage := ifElse(isExport,
+		relatedMessage := core.IfElse(isExport,
 			diagnostics.X_0_was_exported_here,
 			diagnostics.X_0_was_imported_here)
 		// TODO: how to get name for export *?
@@ -3619,7 +3620,7 @@ func (c *Checker) reportNonExportedMember(node *ast.Node, name *ast.Node, declar
 				diagnostic = c.error(name, diagnostics.Module_0_declares_1_locally_but_it_is_not_exported, moduleName, declarationName)
 			}
 			for i, decl := range localSymbol.Declarations {
-				diagnostic.AddRelatedInfo(createDiagnosticForNode(decl, ifElse(i == 0, diagnostics.X_0_is_declared_here, diagnostics.X_and_here), declarationName))
+				diagnostic.AddRelatedInfo(createDiagnosticForNode(decl, core.IfElse(i == 0, diagnostics.X_0_is_declared_here, diagnostics.X_and_here), declarationName))
 			}
 		}
 	} else {
@@ -3629,12 +3630,12 @@ func (c *Checker) reportNonExportedMember(node *ast.Node, name *ast.Node, declar
 
 func (c *Checker) reportInvalidImportEqualsExportMember(node *ast.Node, name *ast.Node, declarationName string, moduleName string) {
 	if c.moduleKind >= core.ModuleKindES2015 {
-		message := ifElse(c.compilerOptions.GetESModuleInterop(),
+		message := core.IfElse(c.compilerOptions.GetESModuleInterop(),
 			diagnostics.X_0_can_only_be_imported_by_using_a_default_import,
 			diagnostics.X_0_can_only_be_imported_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import)
 		c.error(name, message, declarationName)
 	} else {
-		message := ifElse(c.compilerOptions.GetESModuleInterop(),
+		message := core.IfElse(c.compilerOptions.GetESModuleInterop(),
 			diagnostics.X_0_can_only_be_imported_by_using_import_1_require_2_or_a_default_import,
 			diagnostics.X_0_can_only_be_imported_by_using_import_1_require_2_or_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import)
 		c.error(name, message, declarationName, declarationName, moduleName)
@@ -3841,12 +3842,12 @@ func (c *Checker) markSymbolOfAliasDeclarationIfTypeOnlyWorker(aliasDeclarationL
 
 func (c *Checker) resolveExternalModuleName(location *ast.Node, moduleReferenceExpression *ast.Node, ignoreErrors bool) *ast.Symbol {
 	errorMessage := diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations
-	return c.resolveExternalModuleNameWorker(location, moduleReferenceExpression, ifElse(ignoreErrors, nil, errorMessage), ignoreErrors, false /*isForAugmentation*/)
+	return c.resolveExternalModuleNameWorker(location, moduleReferenceExpression, core.IfElse(ignoreErrors, nil, errorMessage), ignoreErrors, false /*isForAugmentation*/)
 }
 
 func (c *Checker) resolveExternalModuleNameWorker(location *ast.Node, moduleReferenceExpression *ast.Node, moduleNotFoundError *diagnostics.Message, ignoreErrors bool, isForAugmentation bool) *ast.Symbol {
 	if isStringLiteralLike(moduleReferenceExpression) {
-		return c.resolveExternalModule(location, moduleReferenceExpression.Text(), moduleNotFoundError, ifElse(!ignoreErrors, moduleReferenceExpression, nil), isForAugmentation)
+		return c.resolveExternalModule(location, moduleReferenceExpression.Text(), moduleNotFoundError, core.IfElse(!ignoreErrors, moduleReferenceExpression, nil), isForAugmentation)
 	}
 	return nil
 }
@@ -3942,7 +3943,7 @@ func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, referencingLoc
 	symbol := c.resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias)
 	if !dontResolveAlias && symbol != nil {
 		if !suppressInteropError && symbol.Flags&(ast.SymbolFlagsModule|ast.SymbolFlagsVariable) == 0 && getDeclarationOfKind(symbol, ast.KindSourceFile) == nil {
-			compilerOptionName := ifElse(c.moduleKind >= core.ModuleKindES2015, "allowSyntheticDefaultImports", "esModuleInterop")
+			compilerOptionName := core.IfElse(c.moduleKind >= core.ModuleKindES2015, "allowSyntheticDefaultImports", "esModuleInterop")
 			c.error(referencingLocation, diagnostics.This_module_can_only_be_referenced_with_ECMAScript_imports_Slashexports_by_turning_on_the_0_flag_and_referencing_its_default_export, compilerOptionName)
 			return symbol
 		}
@@ -4993,7 +4994,7 @@ func (c *Checker) getConstraintFromTypeParameter(t *Type) *Type {
 
 func (c *Checker) getConstraintOrUnknownFromTypeParameter(t *Type) *Type {
 	result := c.getConstraintFromTypeParameter(t)
-	return ifElse(result != nil, result, c.unknownType)
+	return core.IfElse(result != nil, result, c.unknownType)
 }
 
 func (c *Checker) getInferredTypeParameterConstraint(t *Type, omitTypeReferences bool) *Type {
@@ -5025,7 +5026,7 @@ func (c *Checker) getConstraintFromConditionalType(t *Type) *Type {
 func (c *Checker) getDeclaredTypeOfClassOrInterface(symbol *ast.Symbol) *Type {
 	links := c.declaredTypeLinks.get(symbol)
 	if links.declaredType == nil {
-		kind := ifElse(symbol.Flags&ast.SymbolFlagsClass != 0, ObjectFlagsClass, ObjectFlagsInterface)
+		kind := core.IfElse(symbol.Flags&ast.SymbolFlagsClass != 0, ObjectFlagsClass, ObjectFlagsInterface)
 		t := c.newObjectType(kind, symbol)
 		links.declaredType = t
 		outerTypeParameters := c.getOuterTypeParametersOfClassOrInterface(symbol)
@@ -5410,19 +5411,19 @@ func (c *Checker) reportImplicitAny(declaration *ast.Node, t *Type, wideningKind
 	var diagnostic *diagnostics.Message
 	switch declaration.Kind {
 	case ast.KindBinaryExpression, ast.KindPropertyDeclaration, ast.KindPropertySignature:
-		diagnostic = ifElse(c.noImplicitAny,
+		diagnostic = core.IfElse(c.noImplicitAny,
 			diagnostics.Member_0_implicitly_has_an_1_type,
 			diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage)
 	case ast.KindParameter:
 		param := declaration.AsParameterDeclaration()
 		if ast.IsIdentifier(param.Name()) {
 			name := param.Name().AsIdentifier()
-			originalKeywordKind := identifierToKeywordKind(name)
+			originalKeywordKind := scanner.IdentifierToKeywordKind(name)
 			if (ast.IsCallSignatureDeclaration(declaration.Parent) || ast.IsMethodSignatureDeclaration(declaration.Parent) || ast.IsFunctionTypeNode(declaration.Parent)) &&
 				slices.Contains(declaration.Parent.Parameters(), declaration) &&
 				(ast.IsTypeNodeKind(originalKeywordKind) || c.resolveName(declaration, name.Text, ast.SymbolFlagsType, nil /*nameNotFoundMessage*/, true /*isUse*/, false /*excludeGlobals*/) != nil) {
 				newName := fmt.Sprintf("arg%v", slices.Index(declaration.Parent.Parameters(), declaration))
-				typeName := declarationNameToString(param.Name()) + ifElse(param.DotDotDotToken != nil, "[]", "")
+				typeName := declarationNameToString(param.Name()) + core.IfElse(param.DotDotDotToken != nil, "[]", "")
 				c.errorOrSuggestion(c.noImplicitAny, declaration, diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1, newName, typeName)
 				return
 			}
@@ -5499,7 +5500,7 @@ func (c *Checker) addOptionalityEx(t *Type, isProperty bool, isOptional bool) *T
 
 func (c *Checker) getOptionalType(t *Type, isProperty bool) *Type {
 	// !!! Debug.assert(c.strictNullChecks)
-	missingOrUndefined := ifElse(isProperty, c.undefinedOrMissingType, c.undefinedType)
+	missingOrUndefined := core.IfElse(isProperty, c.undefinedOrMissingType, c.undefinedType)
 	if t == missingOrUndefined || t.flags&TypeFlagsUnion != 0 && t.Types()[0] == missingOrUndefined {
 		return t
 	}
@@ -6599,7 +6600,7 @@ func (c *Checker) getSignatureFromDeclaration(declaration *ast.Node) *Signature 
 	}
 	// If only one accessor includes a this-type annotation, the other behaves as if it had the same type annotation
 	if (ast.IsGetAccessorDeclaration(declaration) || ast.IsSetAccessorDeclaration(declaration)) && c.hasBindableName(declaration) && (!hasThisParameter || thisParameter == nil) {
-		otherKind := ifElse(ast.IsGetAccessorDeclaration(declaration), ast.KindSetAccessor, ast.KindGetAccessor)
+		otherKind := core.IfElse(ast.IsGetAccessorDeclaration(declaration), ast.KindSetAccessor, ast.KindGetAccessor)
 		other := getDeclarationOfKind(c.getSymbolOfDeclaration(declaration), otherKind)
 		if other != nil {
 			thisParameter = c.getAnnotatedAccessorThisParameter(other)
@@ -6645,7 +6646,7 @@ func (c *Checker) getAnnotatedAccessorThisParameter(accessor *ast.Node) *ast.Sym
 }
 
 func (c *Checker) getAccessorThisParameter(accessor *ast.Node) *ast.Node {
-	if len(accessor.Parameters()) == ifElse(ast.IsGetAccessorDeclaration(accessor), 1, 2) {
+	if len(accessor.Parameters()) == core.IfElse(ast.IsGetAccessorDeclaration(accessor), 1, 2) {
 		return getThisParameter(accessor)
 	}
 	return nil
@@ -6818,7 +6819,7 @@ func getSetAccessorValueParameter(accessor *ast.Node) *ast.Node {
 	parameters := accessor.Parameters()
 	if len(parameters) > 0 {
 		hasThis := len(parameters) == 2 && parameterIsThisKeyword(parameters[0])
-		return parameters[ifElse(hasThis, 1, 0)]
+		return parameters[core.IfElse(hasThis, 1, 0)]
 	}
 	return nil
 }
@@ -7038,7 +7039,7 @@ func (c *Checker) getDefaultConstructSignatures(classType *Type) []*Signature {
 	declaration := getClassLikeDeclarationOfSymbol(classType.symbol)
 	isAbstract := declaration != nil && hasSyntacticModifier(declaration, ast.ModifierFlagsAbstract)
 	if len(baseSignatures) == 0 {
-		flags := ifElse(isAbstract, SignatureFlagsConstruct|SignatureFlagsAbstract, SignatureFlagsConstruct)
+		flags := core.IfElse(isAbstract, SignatureFlagsConstruct|SignatureFlagsAbstract, SignatureFlagsConstruct)
 		return []*Signature{c.newSignature(flags, nil, classType.AsInterfaceType().LocalTypeParameters(), nil, nil, classType, nil, 0)}
 	}
 	baseTypeNode := getBaseTypeNodeOfClass(classType)
@@ -7214,7 +7215,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 					indexInfo = c.getApplicableIndexInfoForName(t, name)
 				}
 				if indexInfo != nil {
-					checkFlags |= ast.CheckFlagsWritePartial | (ifElse(indexInfo.isReadonly, ast.CheckFlagsReadonly, 0))
+					checkFlags |= ast.CheckFlagsWritePartial | (core.IfElse(indexInfo.isReadonly, ast.CheckFlagsReadonly, 0))
 					if isTupleType(t) {
 						indexType := c.getRestTypeOfTupleType(t)
 						if indexType == nil {
@@ -7572,7 +7573,7 @@ func (c *Checker) getTypeArguments(t *Type) []*Type {
 			if d.resolvedTypeArguments == nil {
 				d.resolvedTypeArguments = slices.Repeat([]*Type{c.errorType}, len(n.TypeParameters()))
 			}
-			errorNode := ifElse(node != nil, node, c.currentNode)
+			errorNode := core.IfElse(node != nil, node, c.currentNode)
 			if d.target.symbol != nil {
 				c.error(errorNode, diagnostics.Type_arguments_for_0_circularly_reference_themselves, c.symbolToString(d.target.symbol))
 			} else {
@@ -7639,7 +7640,7 @@ func (c *Checker) getDefaultFromTypeParameter(t *Type) *Type {
 
 func (c *Checker) getDefaultOrUnknownFromTypeParameter(t *Type) *Type {
 	result := c.getDefaultFromTypeParameter(t)
-	return ifElse(result != nil, result, c.unknownType)
+	return core.IfElse(result != nil, result, c.unknownType)
 }
 
 func (c *Checker) getNamedMembers(members ast.SymbolTable) []*ast.Symbol {
@@ -7713,7 +7714,7 @@ func (c *Checker) couldContainTypeVariablesWorker(t *Type) bool {
 			objectFlags&ObjectFlagsAnonymous != 0 && t.symbol != nil && t.symbol.Flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod|ast.SymbolFlagsClass|ast.SymbolFlagsTypeLiteral|ast.SymbolFlagsObjectLiteral) != 0 && t.symbol.Declarations != nil ||
 			objectFlags&(ObjectFlagsMapped|ObjectFlagsReverseMapped|ObjectFlagsObjectRestType|ObjectFlagsInstantiationExpressionType) != 0) ||
 		t.flags&TypeFlagsUnionOrIntersection != 0 && t.flags&TypeFlagsEnumLiteral == 0 && !c.isNonGenericTopLevelType(t) && core.Some(t.Types(), c.couldContainTypeVariables)
-	t.objectFlags |= ObjectFlagsCouldContainTypeVariablesComputed | ifElse(result, ObjectFlagsCouldContainTypeVariables, 0)
+	t.objectFlags |= ObjectFlagsCouldContainTypeVariablesComputed | core.IfElse(result, ObjectFlagsCouldContainTypeVariables, 0)
 	return result
 }
 
@@ -8552,7 +8553,7 @@ func (n *TupleNormalizer) normalize(c *Checker, elementTypes []*Type, elementInf
 			} else if isTupleType(t) {
 				spreadTypes := c.getElementTypes(t)
 				if len(spreadTypes)+len(n.types) >= 10_000 {
-					message := ifElse(isPartOfTypeNode(c.currentNode),
+					message := core.IfElse(isPartOfTypeNode(c.currentNode),
 						diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent,
 						diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent)
 					c.error(c.currentNode, message)
@@ -8740,7 +8741,7 @@ func (c *Checker) getTypeFromTypeAliasReference(node *ast.Node, symbol *ast.Symb
 		numTypeArguments := len(typeArguments)
 		minTypeArgumentCount := c.getMinTypeArgumentCount(typeParameters)
 		if numTypeArguments < minTypeArgumentCount || numTypeArguments > len(typeParameters) {
-			message := ifElse(minTypeArgumentCount == len(typeParameters),
+			message := core.IfElse(minTypeArgumentCount == len(typeParameters),
 				diagnostics.Generic_type_0_requires_1_type_argument_s,
 				diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments)
 			c.error(node, message, c.symbolToString(symbol), minTypeArgumentCount, len(typeParameters))
@@ -9142,7 +9143,7 @@ func (c *Checker) computeConstantEnumMemberValue(member *ast.Node) EvaluatorResu
 	case result.value != nil:
 		if isConstEnum {
 			if numValue, isNumber := result.value.(float64); isNumber && (math.IsInf(numValue, 0) || !math.IsNaN(numValue)) {
-				c.error(initializer, ifElse(math.IsNaN(numValue),
+				c.error(initializer, core.IfElse(math.IsNaN(numValue),
 					diagnostics.X_const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN,
 					diagnostics.X_const_enum_member_initializer_was_evaluated_to_a_non_finite_value))
 			}
@@ -9337,7 +9338,7 @@ func (c *Checker) getTypeFromIntersectionTypeNode(node *ast.Node) *Type {
 				noSupertypeReduction = t.flags&(TypeFlagsString|TypeFlagsNumber|TypeFlagsBigInt) != 0 || t.flags&TypeFlagsTemplateLiteral != 0 && c.isPatternLiteralType(t)
 			}
 		}
-		links.resolvedType = c.getIntersectionTypeEx(types, ifElse(noSupertypeReduction, IntersectionFlagsNoSupertypeReduction, 0), alias)
+		links.resolvedType = c.getIntersectionTypeEx(types, core.IfElse(noSupertypeReduction, IntersectionFlagsNoSupertypeReduction, 0), alias)
 	}
 	return links.resolvedType
 }
@@ -9390,15 +9391,15 @@ func getGlobalTypeDeclaration(symbol *ast.Symbol) *ast.Declaration {
 }
 
 func (c *Checker) getGlobalValueSymbol(name string, reportErrors bool) *ast.Symbol {
-	return c.getGlobalSymbol(name, ast.SymbolFlagsValue, ifElse(reportErrors, diagnostics.Cannot_find_global_value_0, nil))
+	return c.getGlobalSymbol(name, ast.SymbolFlagsValue, core.IfElse(reportErrors, diagnostics.Cannot_find_global_value_0, nil))
 }
 
 func (c *Checker) getGlobalTypeSymbol(name string, reportErrors bool) *ast.Symbol {
-	return c.getGlobalSymbol(name, ast.SymbolFlagsType, ifElse(reportErrors, diagnostics.Cannot_find_global_type_0, nil))
+	return c.getGlobalSymbol(name, ast.SymbolFlagsType, core.IfElse(reportErrors, diagnostics.Cannot_find_global_type_0, nil))
 }
 
 func (c *Checker) getGlobalTypeAliasSymbol(name string, arity int, reportErrors bool) *ast.Symbol {
-	symbol := c.getGlobalSymbol(name, ast.SymbolFlagsType, ifElse(reportErrors, diagnostics.Cannot_find_global_type_0, nil))
+	symbol := c.getGlobalSymbol(name, ast.SymbolFlagsType, core.IfElse(reportErrors, diagnostics.Cannot_find_global_type_0, nil))
 	if symbol != nil {
 		// Resolve the declared type of the symbol. This resolves type parameters for the type
 		// alias so that we can check arity.
@@ -9472,7 +9473,7 @@ func (c *Checker) createArrayType(elementType *Type) *Type {
 }
 
 func (c *Checker) createArrayTypeEx(elementType *Type, readonly bool) *Type {
-	return c.createTypeFromGenericGlobalType(ifElse(readonly, c.globalReadonlyArrayType, c.globalArrayType), []*Type{elementType})
+	return c.createTypeFromGenericGlobalType(core.IfElse(readonly, c.globalReadonlyArrayType, c.globalArrayType), []*Type{elementType})
 }
 
 func (c *Checker) getTupleElementFlags(node *ast.Node) ElementFlags {
@@ -9480,14 +9481,14 @@ func (c *Checker) getTupleElementFlags(node *ast.Node) ElementFlags {
 	case ast.KindOptionalType:
 		return ElementFlagsOptional
 	case ast.KindRestType:
-		return ifElse(c.getArrayElementTypeNode(node.AsRestTypeNode().TypeNode) != nil, ElementFlagsRest, ElementFlagsVariadic)
+		return core.IfElse(c.getArrayElementTypeNode(node.AsRestTypeNode().TypeNode) != nil, ElementFlagsRest, ElementFlagsVariadic)
 	case ast.KindNamedTupleMember:
 		named := node.AsNamedTupleMember()
 		switch {
 		case named.QuestionToken != nil:
 			return ElementFlagsOptional
 		case named.DotDotDotToken != nil:
-			return ifElse(c.getArrayElementTypeNode(named.TypeNode) != nil, ElementFlagsRest, ElementFlagsVariadic)
+			return core.IfElse(c.getArrayElementTypeNode(named.TypeNode) != nil, ElementFlagsRest, ElementFlagsVariadic)
 		}
 		return ElementFlagsRequired
 	}
@@ -9497,7 +9498,7 @@ func (c *Checker) getTupleElementFlags(node *ast.Node) ElementFlags {
 func (c *Checker) getTupleElementInfo(node *ast.Node) TupleElementInfo {
 	return TupleElementInfo{
 		flags:              c.getTupleElementFlags(node),
-		labeledDeclaration: ifElse(ast.IsNamedTupleMember(node) || ast.IsParameter(node), node, nil),
+		labeledDeclaration: core.IfElse(ast.IsNamedTupleMember(node) || ast.IsParameter(node), node, nil),
 	}
 }
 
@@ -9557,7 +9558,7 @@ func (c *Checker) createTupleTargetType(elementInfos []TupleElementInfo, readonl
 			flags := elementInfos[i].flags
 			combinedFlags |= flags
 			if combinedFlags&ElementFlagsVariable == 0 {
-				property := c.newSymbolEx(ast.SymbolFlagsProperty|(ifElse(flags&ElementFlagsOptional != 0, ast.SymbolFlagsOptional, 0)), strconv.Itoa(i), ifElse(readonly, ast.CheckFlagsReadonly, 0))
+				property := c.newSymbolEx(ast.SymbolFlagsProperty|(core.IfElse(flags&ElementFlagsOptional != 0, ast.SymbolFlagsOptional, 0)), strconv.Itoa(i), core.IfElse(readonly, ast.CheckFlagsReadonly, 0))
 				c.valueSymbolLinks.get(property).resolvedType = typeParameter
 				//c.valueSymbolLinks.get(property).tupleLabelDeclaration = elementInfos[i].labeledDeclaration
 				members[property.Name] = property
@@ -9565,7 +9566,7 @@ func (c *Checker) createTupleTargetType(elementInfos []TupleElementInfo, readonl
 		}
 	}
 	fixedLength := len(members)
-	lengthSymbol := c.newSymbolEx(ast.SymbolFlagsProperty, "length", ifElse(readonly, ast.CheckFlagsReadonly, 0))
+	lengthSymbol := c.newSymbolEx(ast.SymbolFlagsProperty, "length", core.IfElse(readonly, ast.CheckFlagsReadonly, 0))
 	if combinedFlags&ElementFlagsVariable != 0 {
 		c.valueSymbolLinks.get(lengthSymbol).resolvedType = c.numberType
 	} else {
@@ -9612,7 +9613,7 @@ func (c *Checker) getElementTypeOfSliceOfTupleType(t *Type, index int, endSkipCo
 		if writing {
 			return c.getIntersectionType(elementTypes)
 		}
-		return c.getUnionTypeEx(elementTypes, ifElse(noReductions, UnionReductionNone, UnionReductionLiteral), nil, nil)
+		return c.getUnionTypeEx(elementTypes, core.IfElse(noReductions, UnionReductionNone, UnionReductionLiteral), nil, nil)
 	}
 	return nil
 }
@@ -10329,8 +10330,8 @@ func (c *Checker) getUnionTypeWorker(types []*Type, unionReduction UnionReductio
 			origin = c.newUnionType(ObjectFlagsNone, reducedTypes)
 		}
 	}
-	objectFlags := ifElse(includes&TypeFlagsNotPrimitiveUnion != 0, ObjectFlagsNone, ObjectFlagsPrimitiveUnion) |
-		ifElse(includes&TypeFlagsIntersection != 0, ObjectFlagsContainsIntersections, ObjectFlagsNone)
+	objectFlags := core.IfElse(includes&TypeFlagsNotPrimitiveUnion != 0, ObjectFlagsNone, ObjectFlagsPrimitiveUnion) |
+		core.IfElse(includes&TypeFlagsIntersection != 0, ObjectFlagsContainsIntersections, ObjectFlagsNone)
 	return c.getUnionTypeFromSortedList(typeSet, objectFlags, alias, origin)
 }
 
@@ -11066,8 +11067,8 @@ func (c *Checker) getIndexTypeEx(t *Type, indexFlags IndexFlags) *Type {
 	case t.flags&(TypeFlagsAny|TypeFlagsNever) != 0:
 		return c.stringNumberSymbolType
 	}
-	include := ifElse(indexFlags&IndexFlagsNoIndexSignatures != 0, TypeFlagsStringLiteral, TypeFlagsStringLike) |
-		ifElse(indexFlags&IndexFlagsStringsOnly != 0, TypeFlagsNone, TypeFlagsNumberLike|TypeFlagsESSymbolLike)
+	include := core.IfElse(indexFlags&IndexFlagsNoIndexSignatures != 0, TypeFlagsStringLiteral, TypeFlagsStringLike) |
+		core.IfElse(indexFlags&IndexFlagsStringsOnly != 0, TypeFlagsNone, TypeFlagsNumberLike|TypeFlagsESSymbolLike)
 	return c.getLiteralTypeFromProperties(t, include, indexFlags == IndexFlagsNone)
 }
 
@@ -11222,7 +11223,7 @@ func (c *Checker) getMappedTypeNameTypeKind(t *Type) MappedTypeNameTypeKind {
 
 func (c *Checker) getIndexTypeForGenericType(t *Type, indexFlags IndexFlags) *Type {
 	key := CachedTypeKey{
-		kind:   ifElse(indexFlags&IndexFlagsStringsOnly != 0, CachedTypeKindStringIndexType, CachedTypeKindIndexType),
+		kind:   core.IfElse(indexFlags&IndexFlagsStringsOnly != 0, CachedTypeKindStringIndexType, CachedTypeKindIndexType),
 		typeId: t.id,
 	}
 	if indexType := c.cachedTypes[key]; indexType != nil {
@@ -11244,7 +11245,7 @@ func (c *Checker) getIndexedAccessType(objectType *Type, indexType *Type) *Type 
 func (c *Checker) getIndexedAccessTypeEx(objectType *Type, indexType *Type, accessFlags AccessFlags, accessNode *ast.Node, alias *TypeAlias) *Type {
 	result := c.getIndexedAccessTypeOrUndefined(objectType, indexType, accessFlags, accessNode, alias)
 	if result == nil {
-		result = ifElse(accessNode != nil, c.errorType, c.unknownType)
+		result = core.IfElse(accessNode != nil, c.errorType, c.unknownType)
 	}
 	return result
 }
@@ -11293,7 +11294,7 @@ func (c *Checker) getIndexedAccessTypeOrUndefined(objectType *Type, indexType *T
 		var propTypes []*Type
 		wasMissingProp := false
 		for _, t := range indexType.Types() {
-			propType := c.getPropertyTypeForIndexType(objectType, apparentObjectType, t, indexType, accessNode, accessFlags|ifElse(wasMissingProp, AccessFlagsSuppressNoImplicitAnyError, 0))
+			propType := c.getPropertyTypeForIndexType(objectType, apparentObjectType, t, indexType, accessNode, accessFlags|core.IfElse(wasMissingProp, AccessFlagsSuppressNoImplicitAnyError, 0))
 			if propType != nil {
 				propTypes = append(propTypes, propType)
 			} else if accessNode == nil {
@@ -11387,7 +11388,7 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 			}
 			if index >= 0 {
 				c.errorIfWritingToReadonlyIndex(c.getIndexInfoOfType(objectType, c.numberType), objectType, accessExpression)
-				return c.getTupleElementTypeOutOfStartCount(objectType, index, ifElse(accessFlags&AccessFlagsIncludeUndefined != 0, c.missingType, nil))
+				return c.getTupleElementTypeOutOfStartCount(objectType, index, core.IfElse(accessFlags&AccessFlagsIncludeUndefined != 0, c.missingType, nil))
 			}
 		}
 	}
@@ -12098,8 +12099,8 @@ func (c *Checker) getPromisedTypeOfPromise(t *Type) *Type {
 
 func getMappedTypeModifiers(t *Type) MappedTypeModifiers {
 	declaration := t.AsMappedType().declaration
-	return ifElse(declaration.ReadonlyToken != nil, ifElse(declaration.ReadonlyToken.Kind == ast.KindMinusToken, MappedTypeModifiersExcludeReadonly, MappedTypeModifiersIncludeReadonly), 0) |
-		ifElse(declaration.QuestionToken != nil, ifElse(declaration.QuestionToken.Kind == ast.KindMinusToken, MappedTypeModifiersExcludeOptional, MappedTypeModifiersIncludeOptional), 0)
+	return core.IfElse(declaration.ReadonlyToken != nil, core.IfElse(declaration.ReadonlyToken.Kind == ast.KindMinusToken, MappedTypeModifiersExcludeReadonly, MappedTypeModifiersIncludeReadonly), 0) |
+		core.IfElse(declaration.QuestionToken != nil, core.IfElse(declaration.QuestionToken.Kind == ast.KindMinusToken, MappedTypeModifiersExcludeOptional, MappedTypeModifiersIncludeOptional), 0)
 }
 
 func isPartialMappedType(t *Type) bool {
@@ -12571,7 +12572,7 @@ func (c *Checker) getTypeWithFacts(t *Type, include TypeFacts) *Type {
 // unknown with the union {} | null | undefined (and reduces that accordingly), and it intersects remaining
 // instantiable types with {}, {} | null, or {} | undefined in order to remove null and/or undefined.
 func (c *Checker) getAdjustedTypeWithFacts(t *Type, facts TypeFacts) *Type {
-	reduced := c.recombineUnknownType(c.getTypeWithFacts(ifElse(c.strictNullChecks && t.flags&TypeFlagsUnknown != 0, c.unknownUnionType, t), facts))
+	reduced := c.recombineUnknownType(c.getTypeWithFacts(core.IfElse(c.strictNullChecks && t.flags&TypeFlagsUnknown != 0, c.unknownUnionType, t), facts))
 	if c.strictNullChecks {
 		switch facts {
 		case TypeFactsNEUndefined:
