@@ -1,0 +1,256 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsArrays.ts] ////
+
+=== ok.ts ===
+export let a1 = [1, "2"] as const
+>a1 : readonly [1, "2"]
+>   : ^^^^^^^^^^^^^^^^^
+>[1, "2"] as const : readonly [1, "2"]
+>                  : ^^^^^^^^^^^^^^^^^
+>[1, "2"] : readonly [1, "2"]
+>         : ^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"2" : "2"
+>    : ^^^
+
+const x = 0;
+>x : 0
+>  : ^
+>0 : 0
+>  : ^
+
+export let a2 = [x as 0, "2"] as const
+>a2 : readonly [0, "2"]
+>   : ^^^^^^^^^^^^^^^^^
+>[x as 0, "2"] as const : readonly [0, "2"]
+>                       : ^^^^^^^^^^^^^^^^^
+>[x as 0, "2"] : readonly [0, "2"]
+>              : ^^^^^^^^^^^^^^^^^
+>x as 0 : 0
+>       : ^
+>x : 0
+>  : ^
+>"2" : "2"
+>    : ^^^
+
+type N = 1;
+>N : 1
+>  : ^
+
+export let a3 = [x as N, "2" as string] as const
+>a3 : readonly [1, string]
+>   : ^^^^^^^^^^^^^^^^^^^^
+>[x as N, "2" as string] as const : readonly [1, string]
+>                                 : ^^^^^^^^^^^^^^^^^^^^
+>[x as N, "2" as string] : readonly [1, string]
+>                        : ^^^^^^^^^^^^^^^^^^^^
+>x as N : 1
+>       : ^
+>x : 0
+>  : ^
+>"2" as string : string
+>              : ^^^^^^
+>"2" : "2"
+>    : ^^^
+
+export let a4 = [Math.random() as N, "2" as string] as const
+>a4 : readonly [1, string]
+>   : ^^^^^^^^^^^^^^^^^^^^
+>[Math.random() as N, "2" as string] as const : readonly [1, string]
+>                                             : ^^^^^^^^^^^^^^^^^^^^
+>[Math.random() as N, "2" as string] : readonly [1, string]
+>                                    : ^^^^^^^^^^^^^^^^^^^^
+>Math.random() as N : 1
+>                   : ^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>"2" as string : string
+>              : ^^^^^^
+>"2" : "2"
+>    : ^^^
+
+export const a5 = [(s: N):void => {}, "2"] as const
+>a5 : readonly [(s: N) => void, "2"]
+>   : ^^^^^^^^^^^ ^^ ^^^^^    ^^^^^^
+>[(s: N):void => {}, "2"] as const : readonly [(s: N) => void, "2"]
+>                                  : ^^^^^^^^^^^ ^^ ^^^^^    ^^^^^^
+>[(s: N):void => {}, "2"] : readonly [(s: N) => void, "2"]
+>                         : ^^^^^^^^^^^ ^^ ^^^^^    ^^^^^^
+>(s: N):void => {} : (s: N) => void
+>                  : ^ ^^ ^^^^^    
+>s : 1
+>  : ^
+>"2" : "2"
+>    : ^^^
+
+export const o = {
+>o : { readonly arr: readonly [1, 2, 3]; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    arr: [x as N,2,3]} as const : { readonly arr: readonly [1, 2, 3]; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    arr: [x as N,2,3]} : { readonly arr: readonly [1, 2, 3]; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    arr: [x as N,2,3]
+>arr : readonly [1, 2, 3]
+>    : ^^^^^^^^^^^^^^^^^^
+>[x as N,2,3] : readonly [1, 2, 3]
+>             : ^^^^^^^^^^^^^^^^^^
+>x as N : 1
+>       : ^
+>x : 0
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+} as const
+
+export const o2 = {
+>o2 : { arr: () => readonly [N, 2, 3]; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^
+>{    arr: () => [x as N,2,3] as const} : { arr: () => readonly [N, 2, 3]; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^
+
+    arr: () => [x as N,2,3] as const
+>arr : () => readonly [N, 2, 3]
+>    : ^^^^^^^^^^^^^^^^ ^^ ^^ ^
+>() => [x as N,2,3] as const : () => readonly [N, 2, 3]
+>                            : ^^^^^^^^^^^^^^^^ ^^ ^^ ^
+>[x as N,2,3] as const : readonly [1, 2, 3]
+>                      : ^^^^^^^^^^^^^^^^^^
+>[x as N,2,3] : readonly [1, 2, 3]
+>             : ^^^^^^^^^^^^^^^^^^
+>x as N : 1
+>       : ^
+>x : 0
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+};
+
+
+=== bad.ts ===
+export let aBad1 = [1, "2"];
+>aBad1 : (string | number)[]
+>      : ^^^^^^^^^^^^^^^^^^^
+>[1, "2"] : (string | number)[]
+>         : ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"2" : "2"
+>    : ^^^
+
+export const aBad2 = [1, "2"];
+>aBad2 : (string | number)[]
+>      : ^^^^^^^^^^^^^^^^^^^
+>[1, "2"] : (string | number)[]
+>         : ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"2" : "2"
+>    : ^^^
+
+const y = 0;
+>y : 0
+>  : ^
+>0 : 0
+>  : ^
+
+type S = "2";
+>S : "2"
+>  : ^^^
+
+export let aBad3 = [y, "2"] as const
+>aBad3 : readonly [0, "2"]
+>      : ^^^^^^^^^^^^^^^^^
+>[y, "2"] as const : readonly [0, "2"]
+>                  : ^^^^^^^^^^^^^^^^^
+>[y, "2"] : readonly [0, "2"]
+>         : ^^^^^^^^^^^^^^^^^
+>y : 0
+>  : ^
+>"2" : "2"
+>    : ^^^
+
+export let a = [1,2,3] as const;
+>a : readonly [1, 2, 3]
+>  : ^^^^^^^^^^^^^^^^^^
+>[1,2,3] as const : readonly [1, 2, 3]
+>                 : ^^^^^^^^^^^^^^^^^^
+>[1,2,3] : readonly [1, 2, 3]
+>        : ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+export let aBad4 = [...a] as const
+>aBad4 : readonly [1, 2, 3]
+>      : ^^^^^^^^^^^^^^^^^^
+>[...a] as const : readonly [1, 2, 3]
+>                : ^^^^^^^^^^^^^^^^^^
+>[...a] : readonly [1, 2, 3]
+>       : ^^^^^^^^^^^^^^^^^^
+>...a : 1 | 2 | 3
+>     : ^^^^^^^^^
+>a : readonly [1, 2, 3]
+>  : ^^^^^^^^^^^^^^^^^^
+
+export const oBad1 = {
+>oBad1 : { readonly arr: readonly [0, 2, 3]; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    arr: [y,2,3]} as const : { readonly arr: readonly [0, 2, 3]; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    arr: [y,2,3]} : { readonly arr: readonly [0, 2, 3]; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    arr: [y,2,3]
+>arr : readonly [0, 2, 3]
+>    : ^^^^^^^^^^^^^^^^^^
+>[y,2,3] : readonly [0, 2, 3]
+>        : ^^^^^^^^^^^^^^^^^^
+>y : 0
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+} as const
+
+export const oBad2 = {
+>oBad2 : { readonly arr: () => number[]; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    arr: () => [y,2,3]} as const : { readonly arr: () => number[]; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    arr: () => [y,2,3]} : { readonly arr: () => number[]; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    arr: () => [y,2,3]
+>arr : () => number[]
+>    : ^^^^^^^^^^^^^^
+>() => [y,2,3] : () => number[]
+>              : ^^^^^^^^^^^^^^
+>[y,2,3] : number[]
+>        : ^^^^^^^^
+>y : 0
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+} as const

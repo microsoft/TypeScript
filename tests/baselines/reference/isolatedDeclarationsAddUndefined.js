@@ -62,7 +62,7 @@ exports.Bar2 = Bar2;
 //// [file1.d.ts]
 type N = 1;
 export declare class Bar {
-    c?: readonly [1] | undefined;
+    c?: readonly [N];
     c3?: N;
     readonly r = 1;
     f: number;

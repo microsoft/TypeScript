@@ -166,7 +166,6 @@ function syntacticResult(type: undefined, reportFallback: boolean): SyntacticRes
 function syntacticResult(type: TypeNode | undefined, reportFallback: boolean = true) {
     return { type, reportFallback } as SyntacticResult;
 }
-const notImplemented: SyntacticResult = syntacticResult(/*type*/ undefined, /*reportFallback*/ false);
 const alreadyReported: SyntacticResult = syntacticResult(/*type*/ undefined, /*reportFallback*/ false);
 const failed: SyntacticResult = syntacticResult(/*type*/ undefined, /*reportFallback*/ true);
 
@@ -1001,9 +1000,6 @@ export function createSyntacticTypeNodeBuilder(
             }
             return syntacticResult(inferExpressionType(arrayLiteral, context, /*reportFallback*/ false, requiresAddingUndefined));
         }
-        // Disable any inference fallback since we won't actually use the resulting type and we don't want to generate errors
-        const oldNoInferenceFallback = context.noInferenceFallback;
-        context.noInferenceFallback = true;
         const elementTypesInfo: TypeNode[] = [];
         for (const element of arrayLiteral.elements) {
             Debug.assert(element.kind !== SyntaxKind.SpreadElement);
@@ -1020,8 +1016,7 @@ export function createSyntacticTypeNodeBuilder(
         }
         const tupleType = factory.createTupleTypeNode(elementTypesInfo);
         tupleType.emitNode = { flags: 1, autoGenerate: undefined, internalFlags: 0 };
-        context.noInferenceFallback = oldNoInferenceFallback;
-        return notImplemented;
+        return syntacticResult(addUndefinedIfNeeded(factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleType), requiresAddingUndefined, arrayLiteral, context));
     }
     function canGetTypeFromObjectLiteral(objectLiteral: ObjectLiteralExpression, context: SyntacticTypeNodeBuilderContext) {
         let result = true;

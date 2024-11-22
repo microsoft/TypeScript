@@ -1,0 +1,64 @@
+bad.ts(1,20): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+bad.ts(2,22): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+bad.ts(6,21): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+bad.ts(8,21): error TS9018: Arrays with spread elements can't inferred with --isolatedDeclarations.
+bad.ts(11,11): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+bad.ts(15,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+
+
+==== ok.ts (0 errors) ====
+    export let a1 = [1, "2"] as const
+    const x = 0;
+    export let a2 = [x as 0, "2"] as const
+    type N = 1;
+    export let a3 = [x as N, "2" as string] as const
+    export let a4 = [Math.random() as N, "2" as string] as const
+    export const a5 = [(s: N):void => {}, "2"] as const
+    
+    export const o = {
+        arr: [x as N,2,3]
+    } as const
+    
+    export const o2 = {
+        arr: () => [x as N,2,3] as const
+    };
+    
+    
+==== bad.ts (6 errors) ====
+    export let aBad1 = [1, "2"];
+                       ~~~~~~~~
+!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+!!! related TS9027 bad.ts:1:12: Add a type annotation to the variable aBad1.
+    export const aBad2 = [1, "2"];
+                         ~~~~~~~~
+!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+!!! related TS9027 bad.ts:2:14: Add a type annotation to the variable aBad2.
+    const y = 0;
+    type S = "2";
+    
+    export let aBad3 = [y, "2"] as const
+                        ~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 bad.ts:6:12: Add a type annotation to the variable aBad3.
+!!! related TS9035 bad.ts:6:21: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    export let a = [1,2,3] as const;
+    export let aBad4 = [...a] as const
+                        ~~~~
+!!! error TS9018: Arrays with spread elements can't inferred with --isolatedDeclarations.
+!!! related TS9027 bad.ts:8:12: Add a type annotation to the variable aBad4.
+    
+    export const oBad1 = {
+        arr: [y,2,3]
+              ~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 bad.ts:10:14: Add a type annotation to the variable oBad1.
+!!! related TS9035 bad.ts:11:11: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    } as const
+    
+    export const oBad2 = {
+        arr: () => [y,2,3]
+             ~~~~~~~~~~~~~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 bad.ts:14:14: Add a type annotation to the variable oBad2.
+!!! related TS9030 bad.ts:15:10: Add a return type to the function expression.
+    } as const
