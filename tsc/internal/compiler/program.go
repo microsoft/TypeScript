@@ -3,13 +3,13 @@ package compiler
 import (
 	"encoding/json"
 	"fmt"
-	"path/filepath"
 	"slices"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
 type ProgramOptions struct {
@@ -24,7 +24,7 @@ type Program struct {
 	options                     *core.CompilerOptions
 	rootPath                    string
 	files                       []*ast.SourceFile
-	filesByPath                 map[string]*ast.SourceFile
+	filesByPath                 map[tspath.Path]*ast.SourceFile
 	nodeModules                 map[string]*ast.SourceFile
 	checker                     *Checker
 	usesUriStyleNodeCoreModules core.Tristate
@@ -41,20 +41,42 @@ func NewProgram(options ProgramOptions) *Program {
 	}
 	p.host = options.Host
 	if p.host == nil {
-		p.host = NewCompilerHost(p.options, options.SingleThreaded)
+		panic("host required")
 	}
-	rootPath := options.RootPath
-	if rootPath == "" {
-		rootPath = "."
+	p.rootPath = options.RootPath
+	if p.rootPath == "" {
+		panic("root path required")
 	}
-	p.rootPath = p.host.AbsFileName(rootPath)
-	fileInfos := p.host.ReadDirectory(rootPath, extensions)
+	fileInfos := readFileInfos(p.host.FS(), p.rootPath, extensions)
 	// Sort files by descending file size
 	slices.SortFunc(fileInfos, func(a FileInfo, b FileInfo) int {
 		return int(b.Size) - int(a.Size)
 	})
 	p.parseSourceFiles(fileInfos)
 	return p
+}
+
+func readFileInfos(fs vfs.FS, rootPath string, extensions []string) []FileInfo {
+	var fileInfos []FileInfo
+
+	err := fs.WalkDir(rootPath, func(path string, d vfs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if !d.IsDir() && slices.ContainsFunc(extensions, func(ext string) bool { return tspath.FileExtensionIs(path, ext) }) {
+			info, err := d.Info()
+			if err != nil {
+				return err //nolint:wrapcheck
+			}
+			fileInfos = append(fileInfos, FileInfo{Name: path, Size: info.Size()})
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return fileInfos
 }
 
 func (p *Program) SourceFiles() []*ast.SourceFile { return p.files }
@@ -66,16 +88,16 @@ func (p *Program) parseSourceFiles(fileInfos []FileInfo) {
 	for i := range fileInfos {
 		p.host.RunTask(func() {
 			fileName := fileInfos[i].Name
-			text, _ := p.host.ReadFile(fileName)
+			text, _ := p.host.FS().ReadFile(fileName)
 			sourceFile := ParseSourceFile(fileName, text, p.options.GetEmitScriptTarget())
-			path, _ := filepath.Abs(fileName)
+			path := tspath.ToPath(fileName, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
 			sourceFile.SetPath(path)
 			p.collectExternalModuleReferences(sourceFile)
 			p.files[i] = sourceFile
 		})
 	}
 	p.host.WaitForTasks()
-	p.filesByPath = make(map[string]*ast.SourceFile)
+	p.filesByPath = make(map[tspath.Path]*ast.SourceFile)
 	for _, file := range p.files {
 		p.filesByPath[file.Path()] = file
 	}
@@ -93,9 +115,9 @@ func (p *Program) bindSourceFiles() {
 }
 
 func (p *Program) getResolvedModule(currentSourceFile *ast.SourceFile, moduleReference string) *ast.SourceFile {
-	directory := filepath.Dir(currentSourceFile.Path())
+	directory := tspath.GetDirectoryPath(currentSourceFile.FileName())
 	if tspath.IsExternalModuleNameRelative(moduleReference) {
-		return p.findSourceFile(filepath.Join(directory, moduleReference))
+		return p.findSourceFile(tspath.CombinePaths(directory, moduleReference))
 	}
 	return p.findNodeModule(moduleReference)
 }
@@ -103,7 +125,7 @@ func (p *Program) getResolvedModule(currentSourceFile *ast.SourceFile, moduleRef
 func (p *Program) findSourceFile(candidate string) *ast.SourceFile {
 	extensionless := tspath.RemoveFileExtension(candidate)
 	for _, ext := range []string{tspath.ExtensionTs, tspath.ExtensionTsx, tspath.ExtensionDts} {
-		path := extensionless + ext
+		path := tspath.ToPath(extensionless+ext, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
 		if result, ok := p.filesByPath[path]; ok {
 			return result
 		}
@@ -118,16 +140,16 @@ func (p *Program) findNodeModule(moduleReference string) *ast.SourceFile {
 	if sourceFile, ok := p.nodeModules[moduleReference]; ok {
 		return sourceFile
 	}
-	sourceFile := p.tryLoadNodeModule(filepath.Join(p.rootPath, "node_modules", moduleReference))
+	sourceFile := p.tryLoadNodeModule(tspath.CombinePaths(p.rootPath, "node_modules", moduleReference))
 	if sourceFile == nil {
-		sourceFile = p.tryLoadNodeModule(filepath.Join(p.rootPath, "node_modules/@types", moduleReference))
+		sourceFile = p.tryLoadNodeModule(tspath.CombinePaths(p.rootPath, "node_modules/@types", moduleReference))
 	}
 	p.nodeModules[moduleReference] = sourceFile
 	return sourceFile
 }
 
 func (p *Program) tryLoadNodeModule(modulePath string) *ast.SourceFile {
-	if packageJson, ok := p.host.ReadFile(filepath.Join(modulePath, "package.json")); ok {
+	if packageJson, ok := p.host.FS().ReadFile(tspath.CombinePaths(modulePath, "package.json")); ok {
 		var jsonMap map[string]any
 		if json.Unmarshal([]byte(packageJson), &jsonMap) == nil {
 			typesValue := jsonMap["types"]
@@ -135,8 +157,8 @@ func (p *Program) tryLoadNodeModule(modulePath string) *ast.SourceFile {
 				typesValue = jsonMap["typings"]
 			}
 			if fileName, ok := typesValue.(string); ok {
-				path := filepath.Join(modulePath, fileName)
-				return p.filesByPath[path]
+				path := tspath.CombinePaths(modulePath, fileName)
+				return p.filesByPath[tspath.ToPath(path, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())]
 			}
 		}
 	}
@@ -204,7 +226,7 @@ type NodeCount struct {
 
 func (p *Program) PrintSourceFileWithTypes() {
 	for _, file := range p.files {
-		if filepath.Base(file.FileName()) == "main.ts" {
+		if tspath.GetBaseFileName(file.FileName()) == "main.ts" {
 			fmt.Print(p.getTypeChecker().sourceFileWithTypes(file))
 		}
 	}

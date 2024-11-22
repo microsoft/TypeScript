@@ -2,6 +2,7 @@ package ast
 
 import (
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 // Visitor
@@ -5093,7 +5094,7 @@ type SourceFile struct {
 	LocalsContainerBase
 	Text                        string
 	fileName                    string
-	path                        string
+	path                        tspath.Path
 	Statements                  *NodeList // NodeList[*Statement]
 	diagnostics                 []*Diagnostic
 	bindDiagnostics             []*Diagnostic
@@ -5132,11 +5133,11 @@ func (node *SourceFile) FileName() string {
 	return node.fileName
 }
 
-func (node *SourceFile) Path() string {
+func (node *SourceFile) Path() tspath.Path {
 	return node.path
 }
 
-func (node *SourceFile) SetPath(p string) {
+func (node *SourceFile) SetPath(p tspath.Path) {
 	node.path = p
 }
 
