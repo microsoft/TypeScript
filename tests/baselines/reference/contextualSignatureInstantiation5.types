@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/contextualSignatureInstantiation5.ts] ////
+
+=== contextualSignatureInstantiation5.ts ===
+// https://github.com/microsoft/TypeScript/issues/60552
+
+declare function fooooooo<
+>fooooooo : <T, Result extends ArrayLike<unknown>, Extra extends readonly unknown[]>(input: T, callback: (input: T, prev: Result, ...extra: Extra) => Result, extra: Extra) => Result
+>         : ^ ^^      ^^^^^^^^^                  ^^     ^^^^^^^^^                  ^^     ^^ ^^        ^^                                                   ^^     ^^     ^^^^^      
+
+  T,
+  Result extends ArrayLike<unknown>,
+  Extra extends readonly unknown[],
+>(
+  input: T,
+>input : T
+>      : ^
+
+  callback: (input: T, prev: Result, ...extra: Extra) => Result,
+>callback : (input: T, prev: Result, ...extra: Extra) => Result
+>         : ^     ^^ ^^    ^^      ^^^^^     ^^     ^^^^^      
+>input : T
+>      : ^
+>prev : Result
+>     : ^^^^^^
+>extra : Extra
+>      : ^^^^^
+
+  extra: Extra,
+>extra : Extra
+>      : ^^^^^
+
+): Result;
+
+declare function baaaaaar<T, Result extends ArrayLike<unknown>>(
+>baaaaaar : <T, Result extends ArrayLike<unknown>>(input: T, callback: (input: T, prev: Result) => Result) => Result
+>         : ^ ^^      ^^^^^^^^^                  ^^     ^^ ^^        ^^                                  ^^^^^      
+
+  input: T,
+>input : T
+>      : ^
+
+  callback: (input: T, prev: Result) => Result,
+>callback : (input: T, prev: Result) => Result
+>         : ^     ^^ ^^    ^^      ^^^^^      
+>input : T
+>      : ^
+>prev : Result
+>     : ^^^^^^
+
+): Result;
+
+declare function callback<T>(input: T, prev: string[]): string[];
+>callback : <T>(input: T, prev: string[]) => string[]
+>         : ^ ^^     ^^ ^^    ^^        ^^^^^        
+>input : T
+>      : ^
+>prev : string[]
+>     : ^^^^^^^^
+
+export function example<T>(input: T) {
+>example : <T>(input: T) => void
+>        : ^ ^^     ^^ ^^^^^^^^^
+>input : T
+>      : ^
+
+  const result1 = fooooooo(input, callback, []); // ok
+>result1 : string[]
+>        : ^^^^^^^^
+>fooooooo(input, callback, []) : string[]
+>                              : ^^^^^^^^
+>fooooooo : <T_1, Result extends ArrayLike<unknown>, Extra extends readonly unknown[]>(input: T_1, callback: (input: T_1, prev: Result, ...extra: Extra) => Result, extra: Extra) => Result
+>         : ^^^^^^      ^^^^^^^^^                  ^^     ^^^^^^^^^                  ^^     ^^   ^^        ^^                                                     ^^     ^^     ^^^^^      
+>input : T
+>      : ^
+>callback : <T_1>(input: T_1, prev: string[]) => string[]
+>         : ^^^^^^     ^^   ^^    ^^        ^^^^^        
+>[] : []
+>   : ^^
+
+  const result2 = baaaaaar(input, callback); // ok
+>result2 : string[]
+>        : ^^^^^^^^
+>baaaaaar(input, callback) : string[]
+>                          : ^^^^^^^^
+>baaaaaar : <T_1, Result extends ArrayLike<unknown>>(input: T_1, callback: (input: T_1, prev: Result) => Result) => Result
+>         : ^^^^^^      ^^^^^^^^^                  ^^     ^^   ^^        ^^                                    ^^^^^      
+>input : T
+>      : ^
+>callback : <T_1>(input: T_1, prev: string[]) => string[]
+>         : ^^^^^^     ^^   ^^    ^^        ^^^^^        
+}
+
