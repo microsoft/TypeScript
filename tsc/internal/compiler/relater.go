@@ -261,7 +261,11 @@ func (c *Checker) isEnumTypeRelatedTo(source *ast.Symbol, target *ast.Symbol, er
 	return source == target // !!!
 }
 
-func (c *Checker) checkTypeAssignableTo(source *Type, target *Type, errorNode *ast.Node, headMessage *diagnostics.Message, containingMessageChain func() *ast.MessageChain, errorOutputObject *ErrorOutputContainer) bool {
+func (c *Checker) checkTypeAssignableTo(source *Type, target *Type, errorNode *ast.Node, headMessage *diagnostics.Message) bool {
+	return c.checkTypeRelatedToEx(source, target, c.assignableRelation, errorNode, headMessage, nil, nil)
+}
+
+func (c *Checker) checkTypeAssignableToEx(source *Type, target *Type, errorNode *ast.Node, headMessage *diagnostics.Message, containingMessageChain func() *ast.MessageChain, errorOutputObject *ErrorOutputContainer) bool {
 	return c.checkTypeRelatedToEx(source, target, c.assignableRelation, errorNode, headMessage, containingMessageChain, errorOutputObject)
 }
 

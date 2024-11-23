@@ -12,12 +12,14 @@ type CompilerOptions struct {
 	CustomConditions                   []string             `json:"customConditions"`
 	ESModuleInterop                    Tristate             `json:"esModuleInterop"`
 	ExactOptionalPropertyTypes         Tristate             `json:"exactOptionalPropertyTypes"`
+	ExperimentalDecorators             Tristate             `json:"experimentalDecorators"`
 	IsolatedModules                    Tristate             `json:"isolatedModules"`
 	ModuleKind                         ModuleKind           `json:"module"`
 	ModuleResolution                   ModuleResolutionKind `json:"moduleResolution"`
 	ModuleSuffixes                     []string             `json:"moduleSuffixes"`
 	NoFallthroughCasesInSwitch         Tristate             `json:"noFallthroughCasesInSwitch"`
 	NoImplicitAny                      Tristate             `json:"noImplicitAny"`
+	NoImplicitThis                     Tristate             `json:"noImplicitThis"`
 	NoPropertyAccessFromIndexSignature Tristate             `json:"noPropertyAccessFromIndexSignature"`
 	NoUncheckedIndexedAccess           Tristate             `json:"noUncheckedIndexedAccess"`
 	Paths                              map[string][]string  `json:"paths"`

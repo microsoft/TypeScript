@@ -83,6 +83,7 @@ const (
 	CachedTypeKindStringIndexType
 	CachedTypeKindEquivalentBaseType
 	CachedTypeKindApparentType
+	CachedTypeKindAwaitedType
 )
 
 // CachedTypeKey
@@ -294,11 +295,13 @@ type Checker struct {
 	currentNode                        *ast.Node
 	languageVersion                    core.ScriptTarget
 	moduleKind                         core.ModuleKind
+	legacyDecorators                   bool
 	allowSyntheticDefaultImports       bool
 	strictNullChecks                   bool
 	strictFunctionTypes                bool
 	strictBindCallApply                bool
 	noImplicitAny                      bool
+	noImplicitThis                     bool
 	useUnknownInCatchVariables         bool
 	exactOptionalPropertyTypes         bool
 	arrayVariances                     []VarianceFlags
@@ -400,6 +403,10 @@ type Checker struct {
 	markerSuperTypeForCheck            *Type
 	markerSubTypeForCheck              *Type
 	noTypePredicate                    *TypePredicate
+	anySignature                       *Signature
+	unknownSignature                   *Signature
+	resolvingSignature                 *Signature
+	silentNeverSignature               *Signature
 	enumNumberIndexInfo                *IndexInfo
 	patternAmbientModules              []ast.PatternAmbientModule
 	patternAmbientModuleAugmentations  ast.SymbolTable
@@ -430,17 +437,20 @@ type Checker struct {
 	lastGetCombinedNodeFlagsResult     ast.NodeFlags
 	lastGetCombinedModifierFlagsNode   *ast.Node
 	lastGetCombinedModifierFlagsResult ast.ModifierFlags
+	flowNodePostSuper                  map[*ast.FlowNode]bool
+	awaitedTypeStack                   []*Type
 	subtypeRelation                    *Relation
 	strictSubtypeRelation              *Relation
 	assignableRelation                 *Relation
 	comparableRelation                 *Relation
 	identityRelation                   *Relation
 	enumRelation                       *Relation
-	getGlobalNonNullableTypeAlias      func() *ast.Symbol
+	getGlobalNonNullableTypeAliasOrNil func() *ast.Symbol
 	getGlobalExtractSymbol             func() *ast.Symbol
 	getGlobalDisposableType            func() *Type
 	getGlobalAsyncDisposableType       func() *Type
 	getGlobalAwaitedSymbol             func() *ast.Symbol
+	getGlobalAwaitedSymbolOrNil        func() *ast.Symbol
 	getGlobalNaNSymbol                 func() *ast.Symbol
 	isPrimitiveOrObjectOrEmptyType     func(*Type) bool
 	containsMissingType                func(*Type) bool
@@ -456,11 +466,13 @@ func NewChecker(program *Program) *Checker {
 	c.files = program.files
 	c.languageVersion = c.compilerOptions.GetEmitScriptTarget()
 	c.moduleKind = c.compilerOptions.GetEmitModuleKind()
+	c.legacyDecorators = c.compilerOptions.ExperimentalDecorators == core.TSTrue
 	c.allowSyntheticDefaultImports = c.compilerOptions.GetAllowSyntheticDefaultImports()
 	c.strictNullChecks = c.getStrictOptionValue(c.compilerOptions.StrictNullChecks)
 	c.strictFunctionTypes = c.getStrictOptionValue(c.compilerOptions.StrictFunctionTypes)
 	c.strictBindCallApply = c.getStrictOptionValue(c.compilerOptions.StrictBindCallApply)
 	c.noImplicitAny = c.getStrictOptionValue(c.compilerOptions.NoImplicitAny)
+	c.noImplicitThis = c.getStrictOptionValue(c.compilerOptions.NoImplicitThis)
 	c.useUnknownInCatchVariables = c.getStrictOptionValue(c.compilerOptions.UseUnknownInCatchVariables)
 	c.exactOptionalPropertyTypes = c.compilerOptions.ExactOptionalPropertyTypes == core.TSTrue
 	c.arrayVariances = []VarianceFlags{VarianceFlagsCovariant}
@@ -553,16 +565,28 @@ func NewChecker(program *Program) *Checker {
 	c.markerSubTypeForCheck = c.newTypeParameter(nil)
 	c.markerSubTypeForCheck.AsTypeParameter().constraint = c.markerSuperTypeForCheck
 	c.noTypePredicate = &TypePredicate{kind: TypePredicateKindIdentifier, parameterIndex: 0, parameterName: "<<unresolved>>", t: c.anyType}
+	c.anySignature = c.newSignature(SignatureFlagsNone, nil, nil, nil, nil, c.anyType, nil, 0)
+	c.unknownSignature = c.newSignature(SignatureFlagsNone, nil, nil, nil, nil, c.errorType, nil, 0)
+	c.resolvingSignature = c.newSignature(SignatureFlagsNone, nil, nil, nil, nil, c.anyType, nil, 0)
+	c.silentNeverSignature = c.newSignature(SignatureFlagsNone, nil, nil, nil, nil, c.silentNeverType, nil, 0)
 	c.enumNumberIndexInfo = &IndexInfo{keyType: c.numberType, valueType: c.stringType, isReadonly: true}
 	c.emptyStringType = c.getStringLiteralType("")
 	c.zeroType = c.getNumberLiteralType(0)
 	c.zeroBigIntType = c.getBigIntLiteralType(PseudoBigInt{negative: false, base10Value: "0"})
+	c.flowNodePostSuper = make(map[*ast.FlowNode]bool)
 	c.subtypeRelation = &Relation{}
 	c.strictSubtypeRelation = &Relation{}
 	c.assignableRelation = &Relation{}
 	c.comparableRelation = &Relation{}
 	c.identityRelation = &Relation{}
 	c.enumRelation = &Relation{}
+	c.getGlobalNonNullableTypeAliasOrNil = c.getGlobalTypeAliasResolver("NonNullable", 1 /*arity*/, false /*reportErrors*/)
+	c.getGlobalExtractSymbol = c.getGlobalTypeAliasResolver("Extract", 2 /*arity*/, true /*reportErrors*/)
+	c.getGlobalDisposableType = c.getGlobalTypeResolver("Disposable", 0 /*arity*/, true /*reportErrors*/)
+	c.getGlobalAsyncDisposableType = c.getGlobalTypeResolver("AsyncDisposable", 0 /*arity*/, true /*reportErrors*/)
+	c.getGlobalAwaitedSymbol = c.getGlobalTypeAliasResolver("Awaited", 1 /*arity*/, true /*reportErrors*/)
+	c.getGlobalAwaitedSymbolOrNil = c.getGlobalTypeAliasResolver("Awaited", 1 /*arity*/, false /*reportErrors*/)
+	c.getGlobalNaNSymbol = c.getGlobalValueSymbolResolver("NaN", false /*reportErrors*/)
 	c.initializeClosures()
 	c.initializeChecker()
 	return c
@@ -589,25 +613,78 @@ func (c *Checker) getStrictOptionValue(value core.Tristate) bool {
 	return c.compilerOptions.Strict == core.TSTrue
 }
 
+func (c *Checker) getGlobalTypeResolver(name string, arity int, reportErrors bool) func() *Type {
+	return core.Memoize(func() *Type {
+		return c.getGlobalType(name, arity, reportErrors)
+	})
+}
+
+func (c *Checker) getGlobalTypeAliasResolver(name string, arity int, reportErrors bool) func() *ast.Symbol {
+	return core.Memoize(func() *ast.Symbol {
+		return c.getGlobalTypeAliasSymbol(name, arity, reportErrors)
+	})
+}
+
+func (c *Checker) getGlobalValueSymbolResolver(name string, reportErrors bool) func() *ast.Symbol {
+	return core.Memoize(func() *ast.Symbol {
+		return c.getGlobalSymbol(name, ast.SymbolFlagsValue, core.IfElse(reportErrors, diagnostics.Cannot_find_global_value_0, nil))
+	})
+}
+
+func (c *Checker) getGlobalTypeAliasSymbol(name string, arity int, reportErrors bool) *ast.Symbol {
+	symbol := c.getGlobalSymbol(name, ast.SymbolFlagsTypeAlias, core.IfElse(reportErrors, diagnostics.Cannot_find_global_type_0, nil))
+	if symbol == nil {
+		return nil
+	}
+	// Resolve the declared type of the symbol. This resolves type parameters for the type alias so that we can check arity.
+	c.getDeclaredTypeOfSymbol(symbol)
+	if len(c.typeAliasLinks.get(symbol).typeParameters) != arity {
+		if reportErrors {
+			decl := core.Find(symbol.Declarations, ast.IsTypeAliasDeclaration)
+			c.error(decl, diagnostics.Global_type_0_must_have_1_type_parameter_s, symbolName(symbol), arity)
+		}
+		return nil
+	}
+	return symbol
+}
+
+func (c *Checker) getGlobalType(name string, arity int, reportErrors bool) *Type {
+	symbol := c.getGlobalSymbol(name, ast.SymbolFlagsType, core.IfElse(reportErrors, diagnostics.Cannot_find_global_type_0, nil))
+	if symbol != nil {
+		if symbol.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0 {
+			t := c.getDeclaredTypeOfSymbol(symbol)
+			if len(t.AsInterfaceType().TypeParameters()) == arity {
+				return t
+			}
+			if reportErrors {
+				c.error(getGlobalTypeDeclaration(symbol), diagnostics.Global_type_0_must_have_1_type_parameter_s, symbolName(symbol), arity)
+			}
+		} else if reportErrors {
+			c.error(getGlobalTypeDeclaration(symbol), diagnostics.Global_type_0_must_be_a_class_or_interface_type, symbolName(symbol))
+		}
+	}
+	if arity != 0 {
+		return c.emptyGenericType
+	}
+	return c.emptyObjectType
+}
+
+func getGlobalTypeDeclaration(symbol *ast.Symbol) *ast.Declaration {
+	for _, declaration := range symbol.Declarations {
+		switch declaration.Kind {
+		case ast.KindClassDeclaration, ast.KindInterfaceDeclaration, ast.KindEnumDeclaration, ast.KindTypeAliasDeclaration:
+			return declaration
+		}
+	}
+	return nil
+}
+
+func (c *Checker) getGlobalSymbol(name string, meaning ast.SymbolFlags, diagnostic *diagnostics.Message) *ast.Symbol {
+	// Don't track references for global symbols anyway, so value if `isReference` is arbitrary
+	return c.resolveName(nil, name, meaning, diagnostic, false /*isUse*/, false /*excludeGlobals*/)
+}
+
 func (c *Checker) initializeClosures() {
-	c.getGlobalNonNullableTypeAlias = core.Memoize(func() *ast.Symbol {
-		return c.getGlobalSymbol("NonNullable", ast.SymbolFlagsTypeAlias, nil /*diagnostic*/)
-	})
-	c.getGlobalExtractSymbol = core.Memoize(func() *ast.Symbol {
-		return c.getGlobalTypeAliasSymbol("Extract", 2 /*arity*/, true /*reportErrors*/)
-	})
-	c.getGlobalDisposableType = core.Memoize(func() *Type {
-		return c.getGlobalType("Disposable", 0 /*arity*/, true /*reportErrors*/)
-	})
-	c.getGlobalAsyncDisposableType = core.Memoize(func() *Type {
-		return c.getGlobalType("AsyncDisposable", 0 /*arity*/, true /*reportErrors*/)
-	})
-	c.getGlobalAwaitedSymbol = core.Memoize(func() *ast.Symbol {
-		return c.getGlobalTypeAliasSymbol("Awaited", 1 /*arity*/, true /*reportErrors*/)
-	})
-	c.getGlobalNaNSymbol = core.Memoize(func() *ast.Symbol {
-		return c.getGlobalValueSymbol("NaN", false /*reportErrors*/)
-	})
 	c.isPrimitiveOrObjectOrEmptyType = func(t *Type) bool {
 		return t.flags&(TypeFlagsPrimitive|TypeFlagsNonPrimitive) != 0 || c.isEmptyAnonymousObjectType(t)
 	}
@@ -673,12 +750,12 @@ func (c *Checker) initializeChecker() {
 		// autoArrayType is used as a marker, so even if global Array type is not defined, it needs to be a unique type
 		c.autoArrayType = c.newAnonymousType(nil, nil, nil, nil, nil)
 	}
-	c.globalReadonlyArrayType = c.getGlobalTypeOrNil("ReadonlyArray", 1 /*arity*/)
+	c.globalReadonlyArrayType = c.getGlobalType("ReadonlyArray", 1 /*arity*/, false /*reportErrors*/)
 	if c.globalReadonlyArrayType == nil {
 		c.globalReadonlyArrayType = c.globalArrayType
 	}
 	c.anyReadonlyArrayType = c.createTypeFromGenericGlobalType(c.globalReadonlyArrayType, []*Type{c.anyType})
-	c.globalThisType = c.getGlobalTypeOrNil("ThisType", 1 /*arity*/)
+	c.globalThisType = c.getGlobalType("ThisType", 1 /*arity*/, false /*reportErrors*/)
 	// merge _nonglobal_ module augmentations.
 	// this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed
 	for _, list := range augmentations {
@@ -1627,16 +1704,14 @@ func (c *Checker) checkVariableLikeDeclaration(node *ast.Node) {
 				if globalAsyncDisposableType != c.emptyObjectType && globalDisposableType != c.emptyObjectType {
 					optionalDisposableType := c.getUnionType([]*Type{globalAsyncDisposableType, globalDisposableType, c.nullType, c.undefinedType})
 					c.checkTypeAssignableTo(c.widenTypeForVariableLikeDeclaration(initializerType, node, false), optionalDisposableType, initializer,
-						diagnostics.The_initializer_of_an_await_using_declaration_must_be_either_an_object_with_a_Symbol_asyncDispose_or_Symbol_dispose_method_or_be_null_or_undefined,
-						nil, nil)
+						diagnostics.The_initializer_of_an_await_using_declaration_must_be_either_an_object_with_a_Symbol_asyncDispose_or_Symbol_dispose_method_or_be_null_or_undefined)
 				}
 			} else if blockScopeKind == ast.NodeFlagsUsing {
 				globalDisposableType := c.getGlobalDisposableType()
 				if globalDisposableType != c.emptyObjectType {
 					optionalDisposableType := c.getUnionType([]*Type{globalDisposableType, c.nullType, c.undefinedType})
 					c.checkTypeAssignableTo(c.widenTypeForVariableLikeDeclaration(initializerType, node, false), optionalDisposableType, initializer,
-						diagnostics.The_initializer_of_a_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined,
-						nil, nil)
+						diagnostics.The_initializer_of_a_using_declaration_must_be_either_an_object_with_a_Symbol_dispose_method_or_be_null_or_undefined)
 				}
 			}
 		}
@@ -2087,8 +2162,21 @@ func (c *Checker) checkExpressionWorker(node *ast.Node, checkMode CheckMode) *Ty
 }
 
 func (c *Checker) checkPrivateIdentifierExpression(node *ast.Node) *Type {
-	// !!!
-	return c.errorType
+	// !!! c.checkGrammarPrivateIdentifierExpression(node)
+	symbol := c.getSymbolForPrivateIdentifierExpression(node)
+	if symbol != nil {
+		c.markPropertyAsReferenced(symbol, nil /*nodeForCheckWriteOnly*/, false /*isSelfTypeAccess*/)
+	}
+	return c.anyType
+}
+
+func (c *Checker) getSymbolForPrivateIdentifierExpression(node *ast.Node) *ast.Symbol {
+	if symbol := c.identifierSymbols[node]; symbol != nil {
+		return symbol
+	}
+	symbol := c.lookupSymbolForPrivateIdentifierDeclaration(node.Text(), node)
+	c.identifierSymbols[node] = symbol
+	return symbol
 }
 
 func (c *Checker) checkSuperExpression(node *ast.Node) *Type {
@@ -2984,8 +3072,6 @@ func (c *Checker) getContextuallyTypedParameterType(parameter *ast.Node) *Type {
 }
 
 func (c *Checker) checkThisExpression(node *ast.Node) *Type {
-	// !!!
-	// isNodeInTypeQuery := isInTypeQuery(node)
 	// Stop at the first arrow function so that we can
 	// tell whether 'this' needs to be captured.
 	container := getThisContainer(node, true /*includeArrowFunctions*/, true /*includeClassComputedPropertyName*/)
@@ -3007,71 +3093,57 @@ func (c *Checker) checkThisExpression(node *ast.Node) *Type {
 		}
 		break
 	}
-	// !!!
-	// c.checkThisInStaticClassFieldInitializerInDecoratedClass(node, container)
-	// if thisInComputedPropertyName {
-	// 	c.error(node, Diagnostics.this_cannot_be_referenced_in_a_computed_property_name)
-	// } else {
-	// 	switch container.kind {
-	// 	case KindModuleDeclaration:
-	// 		c.error(node, Diagnostics.this_cannot_be_referenced_in_a_module_or_namespace_body)
-	// 		// do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
-	// 	case KindEnumDeclaration:
-	// 		c.error(node, Diagnostics.this_cannot_be_referenced_in_current_location)
-	// 		// do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
-	// 	}
-	// }
-	// // When targeting es6, mark that we'll need to capture `this` in its lexically bound scope.
-	// if !isNodeInTypeQuery && capturedByArrowFunction && c.languageVersion < core.ScriptTargetES2015 {
-	// 	c.captureLexicalThis(node, container)
-	// }
-	t := c.tryGetThisTypeAt(node /*includeGlobalThis*/, true, container)
-	// !!!
-	// if c.noImplicitThis {
-	// 	globalThisType := c.getTypeOfSymbol(c.globalThisSymbol)
-	// 	if t == globalThisType && capturedByArrowFunction {
-	// 		c.error(node, Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this)
-	// 	} else if !t {
-	// 		// With noImplicitThis, functions may not reference 'this' if it has type 'any'
-	// 		diag := c.error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation)
-	// 		if !isSourceFile(container) {
-	// 			outsideThis := c.tryGetThisTypeAt(container)
-	// 			if outsideThis && outsideThis != globalThisType {
-	// 				addRelatedInfo(diag, createDiagnosticForNode(container, Diagnostics.An_outer_value_of_this_is_shadowed_by_this_container))
-	// 			}
-	// 		}
-	// 	}
-	// }
+	c.checkThisInStaticClassFieldInitializerInDecoratedClass(node, container)
+	if thisInComputedPropertyName {
+		c.error(node, diagnostics.X_this_cannot_be_referenced_in_a_computed_property_name)
+	} else {
+		switch container.Kind {
+		case ast.KindModuleDeclaration:
+			c.error(node, diagnostics.X_this_cannot_be_referenced_in_a_module_or_namespace_body)
+			// do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
+		case ast.KindEnumDeclaration:
+			c.error(node, diagnostics.X_this_cannot_be_referenced_in_current_location)
+			// do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
+		}
+	}
+	t := c.tryGetThisTypeAtEx(node, true /*includeGlobalThis*/, container)
+	if c.noImplicitThis {
+		globalThisType := c.getTypeOfSymbol(c.globalThisSymbol)
+		if t == globalThisType && capturedByArrowFunction {
+			c.error(node, diagnostics.The_containing_arrow_function_captures_the_global_value_of_this)
+		} else if t == nil {
+			// With noImplicitThis, functions may not reference 'this' if it has type 'any'
+			diag := c.error(node, diagnostics.X_this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation)
+			if !ast.IsSourceFile(container) {
+				outsideThis := c.tryGetThisTypeAt(container)
+				if outsideThis != nil && outsideThis != globalThisType {
+					diag.AddRelatedInfo(createDiagnosticForNode(container, diagnostics.An_outer_value_of_this_is_shadowed_by_this_container))
+				}
+			}
+		}
+	}
 	if t == nil {
 		return c.anyType
 	}
 	return t
 }
 
-func (c *Checker) tryGetThisTypeAt(node *ast.Node, includeGlobalThis bool, container *ast.Node) *Type {
-	// !!!
-	// isInJS := isInJSFile(node)
-	// if ast.IsFunctionLike(container) && (!c.isInParameterInitializerBeforeContainingFunction(node) || getThisParameter(container)) {
-	// 	thisType := c.getThisTypeOfDeclaration(container) || isInJS && c.getTypeForThisExpressionFromJSDoc(container)
-	// 	// Note: a parameter initializer should refer to class-this unless function-this is explicitly annotated.
-	// 	// If this is a function in a JS file, it might be a class method.
-	// 	if !thisType {
-	// 		className := c.getClassNameFromPrototypeMethod(container)
-	// 		if isInJS && className {
-	// 			classSymbol := c.checkExpression(className).symbol
-	// 			if classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlagsFunction) {
-	// 				thisType = (c.getDeclaredTypeOfSymbol(classSymbol).(InterfaceType)).thisType
-	// 			}
-	// 		} else if c.isJSConstructor(container) {
-	// 			thisType = (c.getDeclaredTypeOfSymbol(c.getMergedSymbol(container.symbol)).(InterfaceType)).thisType
-	// 		}
-	// 		thisType = thisType || c.getContextualThisParameterType(container)
-	// 	}
+func (c *Checker) tryGetThisTypeAt(node *ast.Node) *Type {
+	return c.tryGetThisTypeAtEx(node, true /*includeGlobalThis*/, c.getThisContainer(node, false /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/))
+}
 
-	// 	if thisType {
-	// 		return c.getFlowTypeOfReference(node, thisType)
-	// 	}
-	// }
+func (c *Checker) tryGetThisTypeAtEx(node *ast.Node, includeGlobalThis bool, container *ast.Node) *Type {
+	if ast.IsFunctionLike(container) && (!c.isInParameterInitializerBeforeContainingFunction(node) || getThisParameter(container) != nil) {
+		thisType := c.getThisTypeOfDeclaration(container)
+		// Note: a parameter initializer should refer to class-this unless function-this is explicitly annotated.
+		// If this is a function in a JS file, it might be a class method.
+		if thisType == nil {
+			thisType = c.getContextualThisParameterType(container)
+		}
+		if thisType != nil {
+			return c.getFlowTypeOfReference(node, thisType)
+		}
+	}
 	if container.Parent != nil && ast.IsClassLike(container.Parent) {
 		symbol := c.getSymbolOfDeclaration(container.Parent)
 		var t *Type
@@ -3082,24 +3154,115 @@ func (c *Checker) tryGetThisTypeAt(node *ast.Node, includeGlobalThis bool, conta
 		}
 		return c.getFlowTypeOfReference(node, t)
 	}
-	// !!!
-	// if isSourceFile(container) {
-	// 	// look up in the source file's locals or exports
-	// 	if container.commonJsModuleIndicator {
-	// 		fileSymbol := c.getSymbolOfDeclaration(container)
-	// 		return fileSymbol && c.getTypeOfSymbol(fileSymbol)
-	// 	} else if container.externalModuleIndicator {
-	// 		// TODO: Maybe issue a better error than 'object is possibly undefined'
-	// 		return c.undefinedType
-	// 	} else if includeGlobalThis {
-	// 		return c.getTypeOfSymbol(c.globalThisSymbol)
-	// 	}
-	// }
+	if ast.IsSourceFile(container) {
+		// look up in the source file's locals or exports
+		if container.AsSourceFile().ExternalModuleIndicator != nil {
+			// TODO: Maybe issue a better error than 'object is possibly undefined'
+			return c.undefinedType
+		}
+		if includeGlobalThis {
+			return c.getTypeOfSymbol(c.globalThisSymbol)
+		}
+	}
 	return nil
 }
 
+func (c *Checker) getThisContainer(node *ast.Node, includeArrowFunctions bool, includeClassComputedPropertyName bool) *ast.Node {
+	for {
+		node = node.Parent
+		if node == nil {
+			// If we never pass in a SourceFile, this should be unreachable, since we'll stop when we reach that.
+			panic("No parent in getThisContainer")
+		}
+		switch node.Kind {
+		case ast.KindComputedPropertyName:
+			// If the grandparent node is an object literal (as opposed to a class),
+			// then the computed property is not a 'this' container.
+			// A computed property name in a class needs to be a this container
+			// so that we can error on it.
+			if includeClassComputedPropertyName && ast.IsClassLike(node.Parent.Parent) {
+				return node
+			}
+			// If this is a computed property, then the parent should not
+			// make it a this container. The parent might be a property
+			// in an object literal, like a method or accessor. But in order for
+			// such a parent to be a this container, the reference must be in
+			// the *body* of the container.
+			node = node.Parent.Parent
+		case ast.KindDecorator:
+			// Decorators are always applied outside of the body of a class or method.
+			if node.Parent.Kind == ast.KindParameter && ast.IsClassElement(node.Parent.Parent) {
+				// If the decorator's parent is a Parameter, we resolve the this container from
+				// the grandparent class declaration.
+				node = node.Parent.Parent
+			} else if ast.IsClassElement(node.Parent) {
+				// If the decorator's parent is a class element, we resolve the 'this' container
+				// from the parent class declaration.
+				node = node.Parent
+			}
+		case ast.KindArrowFunction:
+			if !includeArrowFunctions {
+				continue
+			}
+			fallthrough
+		case ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindModuleDeclaration, ast.KindClassStaticBlockDeclaration,
+			ast.KindPropertyDeclaration, ast.KindPropertySignature, ast.KindMethodDeclaration, ast.KindMethodSignature, ast.KindConstructor,
+			ast.KindGetAccessor, ast.KindSetAccessor, ast.KindCallSignature, ast.KindConstructSignature, ast.KindIndexSignature,
+			ast.KindEnumDeclaration, ast.KindSourceFile:
+			return node
+		}
+	}
+}
+
+func (c *Checker) isInParameterInitializerBeforeContainingFunction(node *ast.Node) bool {
+	inBindingInitializer := false
+	for node.Parent != nil && !ast.IsFunctionLike(node.Parent) {
+		if ast.IsParameter(node.Parent) && (inBindingInitializer || getInitializerFromNode(node.Parent) == node) {
+			return true
+		}
+		if ast.IsBindingElement(node.Parent) && getInitializerFromNode(node.Parent) == node {
+			inBindingInitializer = true
+		}
+		node = node.Parent
+	}
+	return false
+}
+
+func (c *Checker) getThisTypeOfDeclaration(declaration *ast.Node) *Type {
+	return c.getThisTypeOfSignature(c.getSignatureFromDeclaration(declaration))
+}
+
+func (c *Checker) checkThisInStaticClassFieldInitializerInDecoratedClass(thisExpression *ast.Node, container *ast.Node) {
+	if ast.IsPropertyDeclaration(container) && hasStaticModifier(container) && c.legacyDecorators {
+		initializer := getInitializerFromNode(container)
+		if initializer != nil && initializer.Loc.ContainsInclusive(thisExpression.Pos()) && hasDecorators(container.Parent) {
+			c.error(thisExpression, diagnostics.Cannot_use_this_in_a_static_property_initializer_of_a_decorated_class)
+		}
+	}
+}
+
 func (c *Checker) checkThisBeforeSuper(node *ast.Node, container *ast.Node, diagnosticMessage *diagnostics.Message) {
-	// !!!
+	containingClassDecl := container.Parent
+	baseTypeNode := getClassExtendsHeritageElement(containingClassDecl)
+	// If a containing class does not have extends clause or the class extends null
+	// skip checking whether super statement is called before "this" accessing.
+	if baseTypeNode != nil && !c.classDeclarationExtendsNull(containingClassDecl) {
+		if node.FlowNodeData() != nil && !c.isPostSuperFlowNode(node.FlowNodeData().FlowNode, false /*noCacheCheck*/) {
+			c.error(node, diagnosticMessage)
+		}
+	}
+}
+
+/**
+ * Check if the given class-declaration extends null then return true.
+ * Otherwise, return false
+ * @param classDecl a class declaration to check if it extends null
+ */
+func (c *Checker) classDeclarationExtendsNull(classDecl *ast.Node) bool {
+	classSymbol := c.getSymbolOfDeclaration(classDecl)
+	classInstanceType := c.getDeclaredTypeOfSymbol(classSymbol)
+	baseConstructorType := c.getBaseConstructorTypeOfClass(classInstanceType)
+	return baseConstructorType == c.nullWideningType
 }
 
 func (c *Checker) checkAssertion(node *ast.Node, checkMode CheckMode) *Type {
@@ -3176,7 +3339,7 @@ func (c *Checker) checkBinaryLikeExpression(left *ast.Node, operatorToken *ast.N
 			resultType = c.errorType
 		}
 		if leftOk && rightOk {
-			c.checkAssignmentOperator(left, right, leftType, resultType)
+			c.checkAssignmentOperator(left, operator, right, leftType, resultType)
 			switch operator {
 			case ast.KindLessThanLessThanToken, ast.KindLessThanLessThanEqualsToken, ast.KindGreaterThanGreaterThanToken,
 				ast.KindGreaterThanGreaterThanEqualsToken, ast.KindGreaterThanGreaterThanGreaterThanToken,
@@ -3232,7 +3395,7 @@ func (c *Checker) checkBinaryLikeExpression(left *ast.Node, operatorToken *ast.N
 			return c.anyType
 		}
 		if operator == ast.KindPlusEqualsToken {
-			c.checkAssignmentOperator(left, right, leftType, resultType)
+			c.checkAssignmentOperator(left, operator, right, leftType, resultType)
 		}
 		return resultType
 	case ast.KindLessThanToken, ast.KindGreaterThanToken, ast.KindLessThanEqualsToken, ast.KindGreaterThanEqualsToken:
@@ -3278,7 +3441,7 @@ func (c *Checker) checkBinaryLikeExpression(left *ast.Node, operatorToken *ast.N
 			resultType = c.getUnionType([]*Type{c.extractDefinitelyFalsyTypes(t), rightType})
 		}
 		if operator == ast.KindAmpersandAmpersandEqualsToken {
-			c.checkAssignmentOperator(left, right, leftType, rightType)
+			c.checkAssignmentOperator(left, operator, right, leftType, rightType)
 		}
 		return resultType
 	case ast.KindBarBarToken,
@@ -3288,7 +3451,7 @@ func (c *Checker) checkBinaryLikeExpression(left *ast.Node, operatorToken *ast.N
 			resultType = c.getUnionTypeEx([]*Type{c.getNonNullableType(c.removeDefinitelyFalsyTypes(leftType)), rightType}, UnionReductionSubtype, nil, nil)
 		}
 		if operator == ast.KindBarBarEqualsToken {
-			c.checkAssignmentOperator(left, right, leftType, rightType)
+			c.checkAssignmentOperator(left, operator, right, leftType, rightType)
 		}
 		return resultType
 	case ast.KindQuestionQuestionToken, ast.KindQuestionQuestionEqualsToken:
@@ -3297,11 +3460,11 @@ func (c *Checker) checkBinaryLikeExpression(left *ast.Node, operatorToken *ast.N
 			resultType = c.getUnionTypeEx([]*Type{c.getNonNullableType(leftType), rightType}, UnionReductionSubtype, nil, nil)
 		}
 		if operator == ast.KindQuestionQuestionEqualsToken {
-			c.checkAssignmentOperator(left, right, leftType, rightType)
+			c.checkAssignmentOperator(left, operator, right, leftType, rightType)
 		}
 		return resultType
 	case ast.KindEqualsToken:
-		c.checkAssignmentOperator(left, right, leftType, rightType)
+		c.checkAssignmentOperator(left, operator, right, leftType, rightType)
 		return rightType
 	case ast.KindCommaToken:
 		if c.compilerOptions.AllowUnreachableCode == core.TSFalse && c.isSideEffectFree(left) && !c.isIndirectCall(left.Parent) {
@@ -3361,23 +3524,23 @@ func (c *Checker) getBaseTypesIfUnrelated(leftType *Type, rightType *Type, isRel
 	return effectiveLeft, effectiveRight
 }
 
-func (c *Checker) checkAssignmentOperator(left *ast.Node, right *ast.Node, leftType *Type, rightType *Type) {
-	// !!!
-	// assigneeType := leftType
-	// // getters can be a subtype of setters, so to check for assignability we use the setter's type instead
-	// if isCompoundAssignment(operatorToken.kind) && left.kind == KindPropertyAccessExpression {
-	// 	assigneeType = c.checkPropertyAccessExpression(left.(PropertyAccessExpression) /*checkMode*/, nil /*writeOnly*/, true)
-	// }
-	if c.checkReferenceExpression(left, diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access, diagnostics.The_left_hand_side_of_an_assignment_expression_may_not_be_an_optional_property_access) {
-		var headMessage *diagnostics.Message
-		if c.exactOptionalPropertyTypes && ast.IsPropertyAccessExpression(left) && c.maybeTypeOfKind(rightType, TypeFlagsUndefined) {
-			target := c.getTypeOfPropertyOfType(c.getTypeOfExpression(left.Expression()), left.Name().Text())
-			if c.isExactOptionalPropertyMismatch(rightType, target) {
-				headMessage = diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target
-			}
+func (c *Checker) checkAssignmentOperator(left *ast.Node, operator ast.Kind, right *ast.Node, leftType *Type, rightType *Type) {
+	if isAssignmentOperator(operator) {
+		// getters can be a subtype of setters, so to check for assignability we use the setter's type instead
+		if isCompoundAssignment(operator) && ast.IsPropertyAccessExpression(left) {
+			leftType = c.checkPropertyAccessExpression(left, CheckModeNormal, true /*writeOnly*/)
 		}
-		// to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-		c.checkTypeAssignableToAndOptionallyElaborate(rightType, leftType, left, right, headMessage, nil)
+		if c.checkReferenceExpression(left, diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access, diagnostics.The_left_hand_side_of_an_assignment_expression_may_not_be_an_optional_property_access) {
+			var headMessage *diagnostics.Message
+			if c.exactOptionalPropertyTypes && ast.IsPropertyAccessExpression(left) && c.maybeTypeOfKind(rightType, TypeFlagsUndefined) {
+				target := c.getTypeOfPropertyOfType(c.getTypeOfExpression(left.Expression()), left.Name().Text())
+				if c.isExactOptionalPropertyMismatch(rightType, target) {
+					headMessage = diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target
+				}
+			}
+			// to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
+			c.checkTypeAssignableToAndOptionallyElaborate(rightType, leftType, left, right, headMessage, nil)
+		}
 	}
 }
 
@@ -3558,11 +3721,75 @@ func (c *Checker) isIndirectCall(node *ast.Node) bool {
 }
 
 func (c *Checker) checkInstanceOfExpression(left *ast.Expression, right *ast.Expression, leftType *Type, rightType *Type, checkMode CheckMode) *Type {
-	return c.errorType // !!!
+	if leftType == c.silentNeverType || rightType == c.silentNeverType {
+		return c.silentNeverType
+	}
+	// TypeScript 1.0 spec (April 2014): 4.15.4
+	// The instanceof operator requires the left operand to be of type Any, an object type, or a type parameter type,
+	// and the right operand to be of type Any, a subtype of the 'Function' interface type, or have a call or construct signature.
+	// The result is always of the Boolean primitive type.
+	// NOTE: do not raise error if leftType is unknown as related error was already reported
+	if !isTypeAny(leftType) && c.allTypesAssignableToKind(leftType, TypeFlagsPrimitive) {
+		c.error(left, diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter)
+	}
+	signature := c.getResolvedSignature(left.Parent, nil /*candidatesOutArray*/, checkMode)
+	if signature == c.resolvingSignature {
+		// CheckMode.SkipGenericFunctions is enabled and this is a call to a generic function that
+		// returns a function type. We defer checking and return silentNeverType.
+		return c.silentNeverType
+	}
+	// If rightType has a `[Symbol.hasInstance]` method that is not `(value: unknown) => boolean`, we
+	// must check the expression as if it were a call to `right[Symbol.hasInstance](left)`. The call to
+	// `getResolvedSignature`, below, will check that leftType is assignable to the type of the first
+	// parameter.
+	returnType := c.getReturnTypeOfSignature(signature)
+	// We also verify that the return type of the `[Symbol.hasInstance]` method is assignable to
+	// `boolean`. According to the spec, the runtime will actually perform `ToBoolean` on the result,
+	// but this is more type-safe.
+	c.checkTypeAssignableTo(returnType, c.booleanType, right, diagnostics.An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_hand_side_of_an_instanceof_expression)
+	return c.booleanType
 }
 
 func (c *Checker) checkInExpression(left *ast.Expression, right *ast.Expression, leftType *Type, rightType *Type) *Type {
-	return c.errorType // !!!
+	if leftType == c.silentNeverType || rightType == c.silentNeverType {
+		return c.silentNeverType
+	}
+	if ast.IsPrivateIdentifier(left) {
+		// !!!
+		// if c.languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks || c.languageVersion < LanguageFeatureMinimumTarget.ClassAndClassElementDecorators || !c.useDefineForClassFields {
+		// 	c.checkExternalEmitHelpers(left, ExternalEmitHelpersClassPrivateFieldIn)
+		// }
+		// Unlike in 'checkPrivateIdentifierExpression' we now have access to the RHS type
+		// which provides us with the opportunity to emit more detailed errors
+		if c.identifierSymbols[left] == nil && getContainingClass(left) != nil {
+			c.reportNonexistentProperty(left, rightType)
+		}
+	} else {
+		// The type of the lef operand must be assignable to string, number, or symbol.
+		c.checkTypeAssignableTo(c.checkNonNullType(leftType, left), c.stringNumberSymbolType, left, nil)
+	}
+	// The type of the right operand must be assignable to 'object'.
+	if c.checkTypeAssignableTo(c.checkNonNullType(rightType, right), c.nonPrimitiveType, right, nil) {
+		// The {} type is assignable to the object type, yet {} might represent a primitive type. Here we
+		// detect and error on {} that results from narrowing the unknown type, as well as intersections
+		// that include {} (we know that the other types in such intersections are assignable to object
+		// since we already checked for that).
+		if c.hasEmptyObjectIntersection(rightType) {
+			c.error(right, diagnostics.Type_0_may_represent_a_primitive_value_which_is_not_permitted_as_the_right_operand_of_the_in_operator, c.typeToString(rightType))
+		}
+	}
+	// The result is always of the Boolean primitive type.
+	return c.booleanType
+}
+
+func (c *Checker) hasEmptyObjectIntersection(t *Type) bool {
+	return someType(t, func(t *Type) bool {
+		return t == c.unknownEmptyObjectType || t.flags&TypeFlagsIntersection != 0 && c.isEmptyAnonymousObjectType(c.getBaseConstraintOrType(t))
+	})
+}
+
+func (c *Checker) getResolvedSignature(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
+	return c.unknownSignature // !!!
 }
 
 func (c *Checker) isExactOptionalPropertyMismatch(source *Type, target *Type) bool {
@@ -10651,7 +10878,7 @@ func (c *Checker) computeConstantEnumMemberValue(member *ast.Node) EvaluatorResu
 	case member.Parent.Flags&ast.NodeFlagsAmbient != 0:
 		c.error(initializer, diagnostics.In_ambient_enum_declarations_member_initializer_must_be_constant_expression)
 	default:
-		c.checkTypeAssignableTo(c.checkExpression(initializer), c.numberType, initializer, diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values, nil, nil)
+		c.checkTypeAssignableTo(c.checkExpression(initializer), c.numberType, initializer, diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values)
 	}
 	return result
 }
@@ -10849,81 +11076,6 @@ func (c *Checker) getTypeFromTemplateTypeNode(node *ast.Node) *Type {
 		links.resolvedType = c.getTemplateLiteralType(texts, types)
 	}
 	return links.resolvedType
-}
-
-func (c *Checker) getTypeOfGlobalSymbol(symbol *ast.Symbol, arity int) *Type {
-	if symbol != nil {
-		t := c.getDeclaredTypeOfSymbol(symbol)
-		if t.flags&TypeFlagsObject != 0 {
-			if len(t.AsInterfaceType().TypeParameters()) == arity {
-				return t
-			} else {
-				c.error(getGlobalTypeDeclaration(symbol), diagnostics.Global_type_0_must_have_1_type_parameter_s, symbolName(symbol), arity)
-			}
-		} else {
-			c.error(getGlobalTypeDeclaration(symbol), diagnostics.Global_type_0_must_be_a_class_or_interface_type, symbolName(symbol))
-		}
-	}
-	if arity != 0 {
-		return c.emptyGenericType
-	}
-	return c.emptyObjectType
-}
-
-func getGlobalTypeDeclaration(symbol *ast.Symbol) *ast.Declaration {
-	if symbol.Declarations != nil {
-		for _, declaration := range symbol.Declarations {
-			switch declaration.Kind {
-			case ast.KindClassDeclaration, ast.KindInterfaceDeclaration, ast.KindEnumDeclaration:
-				return declaration
-			}
-		}
-	}
-	return nil
-}
-
-func (c *Checker) getGlobalValueSymbol(name string, reportErrors bool) *ast.Symbol {
-	return c.getGlobalSymbol(name, ast.SymbolFlagsValue, core.IfElse(reportErrors, diagnostics.Cannot_find_global_value_0, nil))
-}
-
-func (c *Checker) getGlobalTypeSymbol(name string, reportErrors bool) *ast.Symbol {
-	return c.getGlobalSymbol(name, ast.SymbolFlagsType, core.IfElse(reportErrors, diagnostics.Cannot_find_global_type_0, nil))
-}
-
-func (c *Checker) getGlobalTypeAliasSymbol(name string, arity int, reportErrors bool) *ast.Symbol {
-	symbol := c.getGlobalSymbol(name, ast.SymbolFlagsType, core.IfElse(reportErrors, diagnostics.Cannot_find_global_type_0, nil))
-	if symbol != nil {
-		// Resolve the declared type of the symbol. This resolves type parameters for the type
-		// alias so that we can check arity.
-		c.getDeclaredTypeOfSymbol(symbol)
-		if len(c.typeAliasLinks.get(symbol).typeParameters) != arity {
-			decl := core.Find(symbol.Declarations, ast.IsTypeAliasDeclaration)
-			c.error(decl, diagnostics.Global_type_0_must_have_1_type_parameter_s, symbolName(symbol), arity)
-			return nil
-		}
-	}
-	return symbol
-}
-
-func (c *Checker) getGlobalSymbol(name string, meaning ast.SymbolFlags, diagnostic *diagnostics.Message) *ast.Symbol {
-	// Don't track references for global symbols anyway, so value if `isReference` is arbitrary
-	return c.resolveName(nil, name, meaning, diagnostic, false /*isUse*/, false /*excludeGlobals*/)
-}
-
-func (c *Checker) getGlobalType(name string, arity int, reportErrors bool) *Type {
-	symbol := c.getGlobalTypeSymbol(name, reportErrors)
-	if symbol != nil || reportErrors {
-		return c.getTypeOfGlobalSymbol(symbol, arity)
-	}
-	return nil
-}
-
-func (c *Checker) getGlobalTypeOrNil(name string, arity int) *Type {
-	symbol := c.getGlobalSymbol(name, ast.SymbolFlagsType, nil /*diagnostic*/)
-	if symbol != nil {
-		return c.getTypeOfGlobalSymbol(symbol, arity)
-	}
-	return nil
 }
 
 func (c *Checker) createTypeFromGenericGlobalType(genericGlobalType *Type, typeArguments []*Type) *Type {
@@ -13329,6 +13481,19 @@ func (c *Checker) maybeTypeOfKindConsideringBaseConstraint(t *Type, kind TypeFla
 	return baseConstraint != nil && c.maybeTypeOfKind(baseConstraint, kind)
 }
 
+func (c *Checker) allTypesAssignableToKind(source *Type, kind TypeFlags) bool {
+	return c.allTypesAssignableToKindEx(source, kind, false)
+}
+
+func (c *Checker) allTypesAssignableToKindEx(source *Type, kind TypeFlags, strict bool) bool {
+	if source.flags&TypeFlagsUnion != 0 {
+		return core.Every(source.Types(), func(subType *Type) bool {
+			return c.allTypesAssignableToKindEx(subType, kind, strict)
+		})
+	}
+	return c.isTypeAssignableToKindEx(source, kind, strict)
+}
+
 func (c *Checker) isTypeAssignableToKind(source *Type, kind TypeFlags) bool {
 	return c.isTypeAssignableToKindEx(source, kind, false)
 }
@@ -13612,6 +13777,10 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 }
 
 func (c *Checker) getPromisedTypeOfPromise(t *Type) *Type {
+	return c.getPromisedTypeOfPromiseEx(t, nil, nil)
+}
+
+func (c *Checker) getPromisedTypeOfPromiseEx(t *Type, errorNode *ast.Node, thisTypeForErrorOut **Type) *Type {
 	return nil // !!!
 }
 
@@ -14155,7 +14324,7 @@ func (c *Checker) recombineUnknownType(t *Type) *Type {
 }
 
 func (c *Checker) getGlobalNonNullableTypeInstantiation(t *Type) *Type {
-	alias := c.getGlobalNonNullableTypeAlias()
+	alias := c.getGlobalNonNullableTypeAliasOrNil()
 	if alias != nil {
 		return c.getTypeAliasInstantiation(alias, []*Type{t}, nil)
 	}
@@ -14172,10 +14341,236 @@ func (c *Checker) convertAutoToAny(t *Type) *Type {
 	return t
 }
 
+/**
+ * Gets the "awaited type" of a type.
+ *
+ * The "awaited type" of an expression is its "promised type" if the expression is a
+ * Promise-like type; otherwise, it is the type of the expression. If the "promised
+ * type" is itself a Promise-like, the "promised type" is recursively unwrapped until a
+ * non-promise type is found.
+ *
+ * This is used to reflect the runtime behavior of the `await` keyword.
+ */
+func (c *Checker) getAwaitedType(t *Type) *Type {
+	return c.getAwaitedTypeEx(t, nil, nil)
+}
+
+func (c *Checker) getAwaitedTypeEx(t *Type, errorNode *ast.Node, diagnosticMessage *diagnostics.Message, args ...any) *Type {
+	awaitedType := c.getAwaitedTypeNoAliasEx(t, errorNode, diagnosticMessage, args...)
+	if awaitedType != nil {
+		return c.createAwaitedTypeIfNeeded(awaitedType)
+	}
+	return nil
+}
+
+/**
+ * Gets the "awaited type" of a type without introducing an `Awaited<T>` wrapper.
+ *
+ * @see {@link getAwaitedType}
+ */
 func (c *Checker) getAwaitedTypeNoAlias(t *Type) *Type {
-	return t // !!!
+	return c.getAwaitedTypeNoAliasEx(t, nil, nil)
+}
+
+func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnosticMessage *diagnostics.Message, args ...any) *Type {
+	if isTypeAny(t) {
+		return t
+	}
+	// If this is already an `Awaited<T>`, just return it. This avoids `Awaited<Awaited<T>>` in higher-order
+	if c.isAwaitedTypeInstantiation(t) {
+		return t
+	}
+	// If we've already cached an awaited type, return a possible `Awaited<T>` for it.
+	key := CachedTypeKey{kind: CachedTypeKindAwaitedType, typeId: t.id}
+	if awaitedType := c.cachedTypes[key]; awaitedType != nil {
+		return awaitedType
+	}
+	// For a union, get a union of the awaited types of each constituent.
+	if t.flags&TypeFlagsUnion != 0 {
+		if slices.Contains(c.awaitedTypeStack, t) {
+			if errorNode != nil {
+				c.error(errorNode, diagnostics.Type_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method)
+			}
+			return nil
+		}
+		c.awaitedTypeStack = append(c.awaitedTypeStack, t)
+		mapped := c.mapType(t, func(t *Type) *Type { return c.getAwaitedTypeNoAliasEx(t, errorNode, diagnosticMessage, args...) })
+		c.awaitedTypeStack = c.awaitedTypeStack[:len(c.awaitedTypeStack)-1]
+		c.cachedTypes[key] = mapped
+		return mapped
+	}
+	// If `type` is generic and should be wrapped in `Awaited<T>`, return it.
+	if c.isAwaitedTypeNeeded(t) {
+		c.cachedTypes[key] = t
+		return t
+	}
+	var thisTypeForError *Type
+	promisedType := c.getPromisedTypeOfPromiseEx(t, nil /*errorNode*/, &thisTypeForError)
+	if promisedType != nil {
+		if t == promisedType || slices.Contains(c.awaitedTypeStack, promisedType) {
+			// Verify that we don't have a bad actor in the form of a promise whose
+			// promised type is the same as the promise type, or a mutually recursive
+			// promise. If so, we return undefined as we cannot guess the shape. If this
+			// were the actual case in the JavaScript, this Promise would never resolve.
+			//
+			// An example of a bad actor with a singly-recursive promise type might
+			// be:
+			//
+			//  interface BadPromise {
+			//      then(
+			//          onfulfilled: (value: BadPromise) => any,
+			//          onrejected: (error: any) => any): BadPromise;
+			//  }
+			//
+			// The above interface will pass the PromiseLike check, and return a
+			// promised type of `BadPromise`. Since this is a self reference, we
+			// don't want to keep recursing ad infinitum.
+			//
+			// An example of a bad actor in the form of a mutually-recursive
+			// promise type might be:
+			//
+			//  interface BadPromiseA {
+			//      then(
+			//          onfulfilled: (value: BadPromiseB) => any,
+			//          onrejected: (error: any) => any): BadPromiseB;
+			//  }
+			//
+			//  interface BadPromiseB {
+			//      then(
+			//          onfulfilled: (value: BadPromiseA) => any,
+			//          onrejected: (error: any) => any): BadPromiseA;
+			//  }
+			//
+			if errorNode != nil {
+				c.error(errorNode, diagnostics.Type_is_referenced_directly_or_indirectly_in_the_fulfillment_callback_of_its_own_then_method)
+			}
+			return nil
+		}
+		// Keep track of the type we're about to unwrap to avoid bad recursive promise types.
+		// See the comments above for more information.
+		c.awaitedTypeStack = append(c.awaitedTypeStack, t)
+		awaitedType := c.getAwaitedTypeNoAliasEx(promisedType, errorNode, diagnosticMessage, args...)
+		c.awaitedTypeStack = c.awaitedTypeStack[:len(c.awaitedTypeStack)-1]
+		if awaitedType == nil {
+			return nil
+		}
+		c.cachedTypes[key] = awaitedType
+		return awaitedType
+	}
+	// The type was not a promise, so it could not be unwrapped any further.
+	// As long as the type does not have a callable "then" property, it is
+	// safe to return the type; otherwise, an error is reported and we return
+	// undefined.
+	//
+	// An example of a non-promise "thenable" might be:
+	//
+	//  await { then(): void {} }
+	//
+	// The "thenable" does not match the minimal definition for a promise. When
+	// a Promise/A+-compatible or ES6 promise tries to adopt this value, the promise
+	// will never settle. We treat this as an error to help flag an early indicator
+	// of a runtime problem. If the user wants to return this value from an async
+	// function, they would need to wrap it in some other value. If they want it to
+	// be treated as a promise, they can cast to <any>.
+	if c.isThenableType(t) {
+		if errorNode != nil {
+			var chain *ast.MessageChain
+			if thisTypeForError != nil {
+				chain = chainDiagnosticMessages(chain, diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1, c.typeToString(t), c.typeToString(thisTypeForError))
+			}
+			chain = chainDiagnosticMessages(chain, diagnosticMessage, args...)
+			c.diagnostics.add(NewDiagnosticForNodeFromMessageChain(errorNode, chain))
+		}
+		return nil
+	}
+	c.cachedTypes[key] = t
+	return t
+}
+
+func (c *Checker) isAwaitedTypeInstantiation(t *Type) bool {
+	if t.flags&TypeFlagsConditional != 0 {
+		awaitedSymbol := c.getGlobalAwaitedSymbolOrNil()
+		return awaitedSymbol != nil && t.alias != nil && t.alias.symbol == awaitedSymbol && len(t.alias.typeArguments) == 1
+	}
+	return false
+}
+
+func (c *Checker) isAwaitedTypeNeeded(t *Type) bool {
+	// If this is already an `Awaited<T>`, we shouldn't wrap it. This helps to avoid `Awaited<Awaited<T>>` in higher-order.
+	if isTypeAny(t) || c.isAwaitedTypeInstantiation(t) {
+		return false
+	}
+	// We only need `Awaited<T>` if `T` contains possibly non-primitive types.
+	if c.isGenericObjectType(t) {
+		baseConstraint := c.getBaseConstraintOfType(t)
+		// We only need `Awaited<T>` if `T` is a type variable that has no base constraint, or the base constraint of `T` is `any`, `unknown`, `{}`, `object`,
+		// or is promise-like.
+		if baseConstraint != nil {
+			return baseConstraint.flags&TypeFlagsAnyOrUnknown != 0 || c.isEmptyObjectType(baseConstraint) || someType(baseConstraint, c.isThenableType)
+		}
+		return c.maybeTypeOfKind(t, TypeFlagsTypeVariable)
+	}
+	return false
+}
+
+func (c *Checker) createAwaitedTypeIfNeeded(t *Type) *Type {
+	// We wrap type `T` in `Awaited<T>` based on the following conditions:
+	// - `T` is not already an `Awaited<U>`, and
+	// - `T` is generic, and
+	// - One of the following applies:
+	//   - `T` has no base constraint, or
+	//   - The base constraint of `T` is `any`, `unknown`, `object`, or `{}`, or
+	//   - The base constraint of `T` is an object type with a callable `then` method.
+	if c.isAwaitedTypeNeeded(t) {
+		awaitedType := c.tryCreateAwaitedType(t)
+		if awaitedType != nil {
+			return awaitedType
+		}
+	}
+	return t
+}
+
+func (c *Checker) tryCreateAwaitedType(t *Type) *Type {
+	// Nothing to do if `Awaited<T>` doesn't exist
+	awaitedSymbol := c.getGlobalAwaitedSymbol()
+	if awaitedSymbol != nil {
+		// Unwrap unions that may contain `Awaited<T>`, otherwise its possible to manufacture an `Awaited<Awaited<T> | U>` where
+		// an `Awaited<T | U>` would suffice.
+		return c.getTypeAliasInstantiation(awaitedSymbol, []*Type{c.unwrapAwaitedType(t)}, nil)
+	}
+	return nil
+}
+
+/**
+ * For a generic `Awaited<T>`, gets `T`.
+ */
+func (c *Checker) unwrapAwaitedType(t *Type) *Type {
+	switch {
+	case t.flags&TypeFlagsUnion != 0:
+		return c.mapType(t, c.unwrapAwaitedType)
+	case c.isAwaitedTypeInstantiation(t):
+		return t.alias.typeArguments[0]
+	}
+	return t
+}
+
+func (c *Checker) isThenableType(t *Type) bool {
+	if c.allTypesAssignableToKind(c.getBaseConstraintOrType(t), TypeFlagsPrimitive|TypeFlagsNever) {
+		// primitive types cannot be considered "thenable" since they are not objects.
+		return false
+	}
+	thenFunction := c.getTypeOfPropertyOfType(t, "then")
+	return thenFunction != nil && len(c.getSignaturesOfType(c.getTypeWithFacts(thenFunction, TypeFactsNEUndefinedOrNull), SignatureKindCall)) != 0
 }
 
 func (c *Checker) getAwaitedTypeOfPromise(t *Type) *Type {
-	return nil // !!!
+	return c.getAwaitedTypeOfPromiseEx(t, nil, nil)
+}
+
+func (c *Checker) getAwaitedTypeOfPromiseEx(t *Type, errorNode *ast.Node, diagnosticMessage *diagnostics.Message, args ...any) *Type {
+	promisedType := c.getPromisedTypeOfPromiseEx(t, errorNode, nil)
+	if promisedType != nil {
+		return c.getAwaitedTypeEx(promisedType, errorNode, diagnosticMessage, args...)
+	}
+	return nil
 }

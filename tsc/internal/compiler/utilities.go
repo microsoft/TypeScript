@@ -358,6 +358,10 @@ func isAssignmentOperator(token ast.Kind) bool {
 	return token >= ast.KindFirstAssignment && token <= ast.KindLastAssignment
 }
 
+func isCompoundAssignment(token ast.Kind) bool {
+	return token >= ast.KindFirstCompoundAssignment && token <= ast.KindLastCompoundAssignment
+}
+
 func isStringLiteralLike(node *ast.Node) bool {
 	return node.Kind == ast.KindStringLiteral || node.Kind == ast.KindNoSubstitutionTemplateLiteral
 }
@@ -574,6 +578,10 @@ func hasAccessorModifier(node *ast.Node) bool {
 
 func hasStaticModifier(node *ast.Node) bool {
 	return hasSyntacticModifier(node, ast.ModifierFlagsStatic)
+}
+
+func hasDecorators(node *ast.Node) bool {
+	return hasSyntacticModifier(node, ast.ModifierFlagsDecorator)
 }
 
 func getEffectiveModifierFlags(node *ast.Node) ast.ModifierFlags {
@@ -3415,4 +3423,8 @@ func isLiteralExpressionOfObject(node *ast.Node) bool {
 		return true
 	}
 	return false
+}
+
+func canHaveFlowNode(node *ast.Node) bool {
+	return node.FlowNodeData() != nil
 }
