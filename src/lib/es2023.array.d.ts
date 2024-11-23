@@ -194,7 +194,7 @@ interface Int8Array<TArrayBuffer extends ArrayBufferLike> {
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Int8Array.from([11, 2, 22, 1]);
-     * myNums.toSorted((a, b) => a - b) // Int8Array<Buffer>(4) [1, 2, 11, 22]
+     * myNums.toSorted((a, b) => a - b) // Int8Array(4) [1, 2, 11, 22]
      * ```
      */
     toSorted(compareFn?: (a: number, b: number) => number): Int8Array<ArrayBuffer>;
@@ -258,7 +258,7 @@ interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Uint8Array.from([11, 2, 22, 1]);
-     * myNums.toSorted((a, b) => a - b) // Uint8Array<Buffer>(4) [1, 2, 11, 22]
+     * myNums.toSorted((a, b) => a - b) // Uint8Array(4) [1, 2, 11, 22]
      * ```
      */
     toSorted(compareFn?: (a: number, b: number) => number): Uint8Array<ArrayBuffer>;
@@ -330,7 +330,7 @@ interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike> {
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Uint8ClampedArray.from([11, 2, 22, 1]);
-     * myNums.toSorted((a, b) => a - b) // Uint8ClampedArray<Buffer>(4) [1, 2, 11, 22]
+     * myNums.toSorted((a, b) => a - b) // Uint8ClampedArray(4) [1, 2, 11, 22]
      * ```
      */
     toSorted(compareFn?: (a: number, b: number) => number): Uint8ClampedArray<ArrayBuffer>;
@@ -394,7 +394,7 @@ interface Int16Array<TArrayBuffer extends ArrayBufferLike> {
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Int16Array.from([11, 2, -22, 1]);
-     * myNums.toSorted((a, b) => a - b) // Int16Array<Buffer>(4) [-22, 1, 2, 11]
+     * myNums.toSorted((a, b) => a - b) // Int16Array(4) [-22, 1, 2, 11]
      * ```
      */
     toSorted(compareFn?: (a: number, b: number) => number): Int16Array<ArrayBuffer>;
@@ -466,7 +466,7 @@ interface Uint16Array<TArrayBuffer extends ArrayBufferLike> {
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Uint16Array.from([11, 2, 22, 1]);
-     * myNums.toSorted((a, b) => a - b) // Uint16Array<Buffer>(4) [1, 2, 11, 22]
+     * myNums.toSorted((a, b) => a - b) // Uint16Array(4) [1, 2, 11, 22]
      * ```
      */
     toSorted(compareFn?: (a: number, b: number) => number): Uint16Array<ArrayBuffer>;
@@ -530,7 +530,7 @@ interface Int32Array<TArrayBuffer extends ArrayBufferLike> {
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Int32Array.from([11, 2, -22, 1]);
-     * myNums.toSorted((a, b) => a - b) // Int32Array<Buffer>(4) [-22, 1, 2, 11]
+     * myNums.toSorted((a, b) => a - b) // Int32Array(4) [-22, 1, 2, 11]
      * ```
      */
     toSorted(compareFn?: (a: number, b: number) => number): Int32Array<ArrayBuffer>;
@@ -602,7 +602,7 @@ interface Uint32Array<TArrayBuffer extends ArrayBufferLike> {
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Uint32Array.from([11, 2, 22, 1]);
-     * myNums.toSorted((a, b) => a - b) // Uint32Array<Buffer>(4) [1, 2, 11, 22]
+     * myNums.toSorted((a, b) => a - b) // Uint32Array(4) [1, 2, 11, 22]
      * ```
      */
     toSorted(compareFn?: (a: number, b: number) => number): Uint32Array<ArrayBuffer>;
@@ -674,7 +674,7 @@ interface Float32Array<TArrayBuffer extends ArrayBufferLike> {
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Float32Array.from([11.25, 2, -22.5, 1]);
-     * myNums.toSorted((a, b) => a - b) // Float32Array<Buffer>(4) [-22.5, 1, 2, 11.5]
+     * myNums.toSorted((a, b) => a - b) // Float32Array(4) [-22.5, 1, 2, 11.5]
      * ```
      */
     toSorted(compareFn?: (a: number, b: number) => number): Float32Array<ArrayBuffer>;
@@ -746,7 +746,7 @@ interface Float64Array<TArrayBuffer extends ArrayBufferLike> {
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Float64Array.from([11.25, 2, -22.5, 1]);
-     * myNums.toSorted((a, b) => a - b) // Float64Array<Buffer>(4) [-22.5, 1, 2, 11.5]
+     * myNums.toSorted((a, b) => a - b) // Float64Array(4) [-22.5, 1, 2, 11.5]
      * ```
      */
     toSorted(compareFn?: (a: number, b: number) => number): Float64Array<ArrayBuffer>;
@@ -818,7 +818,7 @@ interface BigInt64Array<TArrayBuffer extends ArrayBufferLike> {
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = BigInt64Array.from([11n, 2n, -22n, 1n]);
-     * myNums.toSorted((a, b) => Number(a - b)) // BigInt64Array<Buffer>(4) [-22n, 1n, 2n, 11n]
+     * myNums.toSorted((a, b) => Number(a - b)) // BigInt64Array(4) [-22n, 1n, 2n, 11n]
      * ```
      */
     toSorted(compareFn?: (a: bigint, b: bigint) => number): BigInt64Array<ArrayBuffer>;
@@ -890,7 +890,7 @@ interface BigUint64Array<TArrayBuffer extends ArrayBufferLike> {
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = BigUint64Array.from([11n, 2n, 22n, 1n]);
-     * myNums.toSorted((a, b) => Number(a - b)) // BigUint64Array<Buffer>(4) [1n, 2n, 11n, 22n]
+     * myNums.toSorted((a, b) => Number(a - b)) // BigUint64Array(4) [1n, 2n, 11n, 22n]
      * ```
      */
     toSorted(compareFn?: (a: bigint, b: bigint) => number): BigUint64Array<ArrayBuffer>;
