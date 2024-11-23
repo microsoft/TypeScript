@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/validCompositeProject.ts] ////
+
+=== validCompositeProject.ts ===
+export const tsconfig = {
+>tsconfig : { files: any[]; composite: boolean; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    "files": [],    "composite": true} : { files: undefined[]; composite: boolean; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    "files": [],
+>"files" : undefined[]
+>        : ^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+    "composite": true
+>"composite" : boolean
+>            : ^^^^^^^
+>true : true
+>     : ^^^^
+
+};

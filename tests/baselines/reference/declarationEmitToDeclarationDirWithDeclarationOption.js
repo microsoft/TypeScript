@@ -17,3 +17,20 @@ interface Foo {
     x: number;
 }
 export default Foo;
+
+
+//// [DtsFileErrors]
+
+
+message TS6042: No actionable task. Add 'composite': true, valid 'references', or use 'tsc -b'.
+
+
+!!! message TS6042: No actionable task. Add 'composite': true, valid 'references', or use 'tsc -b'.
+==== /foo/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+          "declaration": true,
+          "declarationDir": "out"
+        }
+      }
+    

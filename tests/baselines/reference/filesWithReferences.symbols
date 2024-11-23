@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/filesWithReferences.ts] ////
+
+=== filesWithReferences.ts ===
+export const tsconfig = {
+>tsconfig : Symbol(tsconfig, Decl(filesWithReferences.ts, 0, 12))
+
+    "files": [],
+>"files" : Symbol("files", Decl(filesWithReferences.ts, 0, 25))
+
+    "references": [{ "path": "./lib" }]
+>"references" : Symbol("references", Decl(filesWithReferences.ts, 1, 16))
+>"path" : Symbol("path", Decl(filesWithReferences.ts, 2, 20))
+}
+

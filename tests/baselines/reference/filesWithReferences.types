@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/filesWithReferences.ts] ////
+
+=== filesWithReferences.ts ===
+export const tsconfig = {
+>tsconfig : { files: any[]; references: { path: string; }[]; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    "files": [],    "references": [{ "path": "./lib" }]} : { files: undefined[]; references: { path: string; }[]; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    "files": [],
+>"files" : undefined[]
+>        : ^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+    "references": [{ "path": "./lib" }]
+>"references" : { path: string; }[]
+>             : ^^^^^^^^^^^^^^^^^^^
+>[{ "path": "./lib" }] : { path: string; }[]
+>                      : ^^^^^^^^^^^^^^^^^^^
+>{ "path": "./lib" } : { path: string; }
+>                    : ^^^^^^^^^^^^^^^^^
+>"path" : string
+>       : ^^^^^^
+>"./lib" : "./lib"
+>        : ^^^^^^^
+}
+

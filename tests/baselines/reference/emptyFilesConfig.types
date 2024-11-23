@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/emptyFilesConfig.ts] ////
+
+=== emptyFilesConfig.ts ===
+export const tsconfig = {
+>tsconfig : { files: any[]; }
+>         : ^^^^^^^^^^^^^^^^^
+>{    "files": []} : { files: undefined[]; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    "files": []
+>"files" : undefined[]
+>        : ^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+}

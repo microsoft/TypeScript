@@ -4828,6 +4828,10 @@
         "category": "Message",
         "code": 6041
     },
+    "No actionable task. Add 'composite': true, valid 'references', or use 'tsc -b'.": {
+        "category": "Message",
+        "code": 6042
+    },
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043

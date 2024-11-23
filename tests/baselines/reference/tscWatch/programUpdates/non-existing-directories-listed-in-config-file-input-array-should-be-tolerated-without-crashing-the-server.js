@@ -30,6 +30,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
+[94mmessage[0m[90m TS6042: [0mNo actionable task. Add 'composite': true, valid 'references', or use 'tsc -b'.
+
 [91merror[0m[90m TS18003: [0mNo inputs were found in config file '/user/username/workspace/solution/projects/project/tsconfig.json'. Specified 'include' paths were '["app/*","test/**/*","something"]' and 'exclude' paths were '[]'.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.

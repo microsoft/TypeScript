@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/emptyFilesConfig.ts] ////
+
+=== emptyFilesConfig.ts ===
+export const tsconfig = {
+>tsconfig : Symbol(tsconfig, Decl(emptyFilesConfig.ts, 0, 12))
+
+    "files": []
+>"files" : Symbol("files", Decl(emptyFilesConfig.ts, 0, 25))
+}
