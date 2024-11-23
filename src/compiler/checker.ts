@@ -3458,10 +3458,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (containerKind === SyntaxKind.InterfaceDeclaration && heritageKind === SyntaxKind.ExtendsKeyword) {
                         error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_It_can_only_extend_other_named_object_types, unescapeLeadingUnderscores(name));
                     }
-                    else if (containerKind === SyntaxKind.ClassDeclaration && heritageKind === SyntaxKind.ExtendsKeyword) {
+                    else if (isClassLike(grandparent.parent) && heritageKind === SyntaxKind.ExtendsKeyword) {
                         error(errorLocation, Diagnostics.A_class_cannot_extend_a_primitive_type_like_0_Classes_can_only_extend_constructable_values, unescapeLeadingUnderscores(name));
                     }
-                    else if (containerKind === SyntaxKind.ClassDeclaration && heritageKind === SyntaxKind.ImplementsKeyword) {
+                    else if (isClassLike(grandparent.parent) && heritageKind === SyntaxKind.ImplementsKeyword) {
                         error(errorLocation, Diagnostics.A_class_cannot_implement_a_primitive_type_like_0_It_can_only_implement_other_named_object_types, unescapeLeadingUnderscores(name));
                     }
                 }
@@ -6193,8 +6193,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             enterNewScope(context, node) {
                 if (isFunctionLike(node) || isJSDocSignature(node)) {
                     const signature = getSignatureFromDeclaration(node);
-                    const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
-                    return enterNewScope(context as NodeBuilderContext, node, expandedParams, signature.typeParameters);
+                    return enterNewScope(context as NodeBuilderContext, node, signature.parameters, signature.typeParameters);
                 }
                 else {
                     const typeParameters = isConditionalTypeNode(node) ? getInferTypeParameters(node) :
