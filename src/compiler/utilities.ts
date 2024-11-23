@@ -10483,6 +10483,7 @@ function isIdentifierInNonEmittingHeritageClause(node: Node): boolean {
     if (node.kind !== SyntaxKind.Identifier) return false;
     const heritageClause = findAncestor(node.parent, parent => {
         switch (parent.kind) {
+            case SyntaxKind.JSDocImplementsTag:
             case SyntaxKind.HeritageClause:
                 return true;
             case SyntaxKind.PropertyAccessExpression:
@@ -10492,7 +10493,8 @@ function isIdentifierInNonEmittingHeritageClause(node: Node): boolean {
                 return "quit";
         }
     }) as HeritageClause | undefined;
-    return heritageClause?.token === SyntaxKind.ImplementsKeyword || heritageClause?.parent.kind === SyntaxKind.InterfaceDeclaration;
+    if (heritageClause === undefined) return false;
+    return isJSDocImplementsTag(heritageClause) || heritageClause.token === SyntaxKind.ImplementsKeyword || heritageClause.parent.kind === SyntaxKind.InterfaceDeclaration;
 }
 
 /** @internal */
