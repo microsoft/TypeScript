@@ -1,0 +1,23 @@
+message TS6042: No actionable task. Add 'composite': true, valid 'references', or use 'tsc -b'.
+
+
+!!! message TS6042: No actionable task. Add 'composite': true, valid 'references', or use 'tsc -b'.
+==== /parent/tsconfig.json (0 errors) ====
+    {
+        "files": [],
+        "references": [{ "path": "../child" }]
+      }
+      
+      // @filename: /child/tsconfig.json
+      {
+        "compilerOptions": {
+          "declaration": true,
+          "declarationDir": "out",
+          "composite": true
+        },
+        "include": ["index.ts"]
+      }
+      
+      // @filename: /child/index.ts
+      export const childConst = "I am child!";
+      
