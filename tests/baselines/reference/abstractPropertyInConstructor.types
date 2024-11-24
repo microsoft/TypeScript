@@ -15,15 +15,15 @@ abstract class AbstractClass {
 >this.method(parseInt(str)) : void
 >                           : ^^^^
 >this.method : (num: number) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >this : this
 >     : ^^^^
 >method : (num: number) => void
->       : ^   ^^      ^^^^^^^^^
+>       : ^   ^^      ^^^^^    
 >parseInt(str) : number
 >              : ^^^^^^
 >parseInt : (string: string, radix?: number) => number
->         : ^      ^^      ^^     ^^^      ^^^^^^^^^^^
+>         : ^      ^^      ^^     ^^^      ^^^^^      
 >str : string
 >    : ^^^^^^
 
@@ -33,7 +33,7 @@ abstract class AbstractClass {
 >this.prop.toLowerCase() : string
 >                        : ^^^^^^
 >this.prop.toLowerCase : () => string
->                      : ^^^^^^^^^^^^
+>                      : ^^^^^^      
 >this.prop : string
 >          : ^^^^^^
 >this : this
@@ -41,7 +41,7 @@ abstract class AbstractClass {
 >prop : string
 >     : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
         if (!str) {
 >!str : boolean
@@ -65,11 +65,11 @@ abstract class AbstractClass {
 >this.cb(str) : void
 >             : ^^^^
 >this.cb : (s: string) => void
->        : ^ ^^      ^^^^^^^^^
+>        : ^ ^^      ^^^^^    
 >this : this
 >     : ^^^^
 >cb : (s: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >str : string
 >    : ^^^^^^
 
@@ -94,11 +94,11 @@ abstract class AbstractClass {
 >other.cb(other.prop) : void
 >                     : ^^^^
 >other.cb : (s: string) => void
->         : ^ ^^      ^^^^^^^^^
+>         : ^ ^^      ^^^^^    
 >other : AbstractClass
 >      : ^^^^^^^^^^^^^
 >cb : (s: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >other.prop : string
 >           : ^^^^^^
 >other : AbstractClass
@@ -216,7 +216,7 @@ abstract class DerivedAbstractClass extends AbstractClass {
 >this.prop.toLowerCase() : string
 >                        : ^^^^^^
 >this.prop.toLowerCase : () => string
->                      : ^^^^^^^^^^^^
+>                      : ^^^^^^      
 >this.prop : string
 >          : ^^^^^^
 >this : this
@@ -224,17 +224,17 @@ abstract class DerivedAbstractClass extends AbstractClass {
 >prop : string
 >     : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
         this.method(1);
 >this.method(1) : void
 >               : ^^^^
 >this.method : (num: number) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >this : this
 >     : ^^^^
 >method : (num: number) => void
->       : ^   ^^      ^^^^^^^^^
+>       : ^   ^^      ^^^^^    
 >1 : 1
 >  : ^
 
@@ -243,11 +243,11 @@ abstract class DerivedAbstractClass extends AbstractClass {
 >other.cb(other.prop) : void
 >                     : ^^^^
 >other.cb : (s: string) => void
->         : ^ ^^      ^^^^^^^^^
+>         : ^ ^^      ^^^^^    
 >other : AbstractClass
 >      : ^^^^^^^^^^^^^
 >cb : (s: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >other.prop : string
 >           : ^^^^^^
 >other : AbstractClass
@@ -378,11 +378,11 @@ class User {
 >a.cb("hi") : void
 >           : ^^^^
 >a.cb : (s: string) => void
->     : ^ ^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^    
 >a : AbstractClass
 >  : ^^^^^^^^^^^^^
 >cb : (s: string) => void
->   : ^ ^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^    
 >"hi" : "hi"
 >     : ^^^^
 
@@ -390,11 +390,11 @@ class User {
 >a.method(12) : void
 >             : ^^^^
 >a.method : (num: number) => void
->         : ^   ^^      ^^^^^^^^^
+>         : ^   ^^      ^^^^^    
 >a : AbstractClass
 >  : ^^^^^^^^^^^^^
 >method : (num: number) => void
->       : ^   ^^      ^^^^^^^^^
+>       : ^   ^^      ^^^^^    
 >12 : 12
 >   : ^^
 

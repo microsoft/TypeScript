@@ -64,11 +64,11 @@
 // === /tests/cases/fourslash/goToDefinitionAmbiants.ts ===
 // declare var ambientVar;
 // declare function ambientFunction();
-// declare class ambientClass {
-//     [|constructor();|]
+// <|declare class [|{| defId: 0 |}ambientClass|] {
+//     [|{| defId: 1 |}constructor();|]
 //     static method();
 //     public method();
-// }
+// }|>
 // 
 // ambientVar = 1;
 // ambientFunction();
@@ -79,6 +79,17 @@
   // === Details ===
   [
    {
+    "defId": 0,
+    "kind": "class",
+    "name": "ambientClass",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
     "kind": "constructor",
     "name": "__constructor",
     "containerName": "ambientClass",

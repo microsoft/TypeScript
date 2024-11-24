@@ -101,7 +101,7 @@ testFuncLiteral(funcL);
 >testFuncLiteral : (funcLit: (y2: any) => number) => void
 >                : ^       ^^     ^^^           ^^^^^^^^^
 >funcL : (y2: any) => number
->      : ^  ^^^^^^^^^^^^^^^^
+>      : ^  ^^^^^^^^^^      
 
 var k = temp1(null);
 >k : void

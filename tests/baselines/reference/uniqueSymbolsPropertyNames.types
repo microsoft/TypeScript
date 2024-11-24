@@ -22,11 +22,11 @@ const uniqueSymbol0 = Symbol.for("");
 >Symbol.for("") : unique symbol
 >               : ^^^^^^^^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^   ^^      ^^^^^^^^^^^
+>           : ^   ^^      ^^^^^      
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^   ^^      ^^^^^^^^^^^
+>    : ^   ^^      ^^^^^      
 >"" : ""
 >   : ^^
 
@@ -36,11 +36,11 @@ const uniqueSymbol1 = Symbol.for("");
 >Symbol.for("") : unique symbol
 >               : ^^^^^^^^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^   ^^      ^^^^^^^^^^^
+>           : ^   ^^      ^^^^^      
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^   ^^      ^^^^^^^^^^^
+>    : ^   ^^      ^^^^^      
 >"" : ""
 >   : ^^
 
@@ -81,11 +81,11 @@ const Op: OpTypes = {
 >Symbol.for("equal") : symbol
 >                    : ^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^   ^^      ^^^^^^^^^^^
+>           : ^   ^^      ^^^^^      
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^   ^^      ^^^^^^^^^^^
+>    : ^   ^^      ^^^^^      
 >"equal" : "equal"
 >        : ^^^^^^^
 
@@ -194,8 +194,8 @@ const t3 = {
 >                     : ^^^^^^
 >getUniqueSymbol0() : unique symbol
 >                   : ^^^^^^^^^^^^^
->getUniqueSymbol0 : () => unique symbol
->                 : ^^^^^^^^^^^^^^^^^^^
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
+>                 : ^^^^^^                    
 >"first" : "first"
 >        : ^^^^^^^
 
@@ -204,8 +204,8 @@ const t3 = {
 >                     : ^^^^^^
 >getUniqueSymbol0() : unique symbol
 >                   : ^^^^^^^^^^^^^
->getUniqueSymbol0 : () => unique symbol
->                 : ^^^^^^^^^^^^^^^^^^^
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
+>                 : ^^^^^^                    
 >"last" : "last"
 >       : ^^^^^^
 
@@ -214,8 +214,8 @@ const t3 = {
 >                     : ^^^^^^
 >getUniqueSymbol1() : unique symbol
 >                   : ^^^^^^^^^^^^^
->getUniqueSymbol1 : () => unique symbol
->                 : ^^^^^^^^^^^^^^^^^^^
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
+>                 : ^^^^^^                    
 >"first" : "first"
 >        : ^^^^^^^
 
@@ -224,8 +224,8 @@ const t3 = {
 >                     : ^^^^^^
 >getUniqueSymbol1() : unique symbol
 >                   : ^^^^^^^^^^^^^
->getUniqueSymbol1 : () => unique symbol
->                 : ^^^^^^^^^^^^^^^^^^^
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
+>                 : ^^^^^^                    
 >"last" : "last"
 >       : ^^^^^^
 
@@ -306,8 +306,8 @@ class Cls3 {
 >                     : ^^^^^^
 >getUniqueSymbol0() : unique symbol
 >                   : ^^^^^^^^^^^^^
->getUniqueSymbol0 : () => unique symbol
->                 : ^^^^^^^^^^^^^^^^^^^
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
+>                 : ^^^^^^                    
 >"first" : "first"
 >        : ^^^^^^^
 
@@ -316,8 +316,8 @@ class Cls3 {
 >                     : ^^^^^^
 >getUniqueSymbol0() : unique symbol
 >                   : ^^^^^^^^^^^^^
->getUniqueSymbol0 : () => unique symbol
->                 : ^^^^^^^^^^^^^^^^^^^
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
+>                 : ^^^^^^                    
 >"last" : "last"
 >       : ^^^^^^
 
@@ -326,8 +326,8 @@ class Cls3 {
 >                     : ^^^^^^
 >getUniqueSymbol1() : unique symbol
 >                   : ^^^^^^^^^^^^^
->getUniqueSymbol1 : () => unique symbol
->                 : ^^^^^^^^^^^^^^^^^^^
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
+>                 : ^^^^^^                    
 >"first" : "first"
 >        : ^^^^^^^
 
@@ -336,8 +336,8 @@ class Cls3 {
 >                     : ^^^^^^
 >getUniqueSymbol1() : unique symbol
 >                   : ^^^^^^^^^^^^^
->getUniqueSymbol1 : () => unique symbol
->                 : ^^^^^^^^^^^^^^^^^^^
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
+>                 : ^^^^^^                    
 >"last" : "last"
 >       : ^^^^^^
 }

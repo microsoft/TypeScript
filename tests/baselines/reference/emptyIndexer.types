@@ -24,7 +24,7 @@ var n = x[''].m(); // should not crash compiler
 >x[''].m() : number
 >          : ^^^^^^
 >x[''].m : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >x[''] : I1
 >      : ^^
 >x : I2
@@ -32,5 +32,5 @@ var n = x[''].m(); // should not crash compiler
 >'' : ""
 >   : ^^
 >m : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 

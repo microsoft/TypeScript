@@ -31,9 +31,9 @@ foo(a);
 >foo(a) : void
 >       : ^^^^
 >foo : (x: () => Container<Ref<number>>) => void
->    : ^ ^^                            ^^^^^^^^^
+>    : ^ ^^                            ^^^^^    
 >a : () => Container<Ref<string>>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^                      
 
 // Repro for #25498
 
@@ -70,7 +70,7 @@ const x = ({ [foo.bar]: c }) => undefined;
 >foo.bar : any
 >        : ^^^
 >foo : (x: () => Container<Ref<number>>) => void
->    : ^ ^^                            ^^^^^^^^^
+>    : ^ ^^                            ^^^^^    
 >bar : any
 >    : ^^^
 >c : any

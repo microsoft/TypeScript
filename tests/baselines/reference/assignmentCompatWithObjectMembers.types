@@ -134,11 +134,11 @@ module SimpleTypes {
 
     s2 = b;
 >s2 = b : { foo: string; }
->       : ^^^^^^^^^^^^^^^^
+>       : ^^^^^^^      ^^^
 >s2 : S2
 >   : ^^
 >b : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     s2 = a2;
 >s2 = a2 : { foo: string; }
@@ -150,25 +150,25 @@ module SimpleTypes {
 
     a = b;
 >a = b : { foo: string; }
->      : ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^      ^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >b : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     b = a;
 >b = a : { foo: string; }
->      : ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^      ^^^
 >b : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     a = s;
 >a = s : S
 >      : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >s : S
 >  : ^
 
@@ -176,7 +176,7 @@ module SimpleTypes {
 >a = s2 : S2
 >       : ^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >s2 : S2
 >   : ^^
 
@@ -184,7 +184,7 @@ module SimpleTypes {
 >a = a2 : { foo: string; }
 >       : ^^^^^^^^^^^^^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >a2 : { foo: string; }
 >   : ^^^^^^^^^^^^^^^^
 
@@ -206,11 +206,11 @@ module SimpleTypes {
 
     a2 = b;
 >a2 = b : { foo: string; }
->       : ^^^^^^^^^^^^^^^^
+>       : ^^^^^^^      ^^^
 >a2 : { foo: string; }
 >   : ^^^^^^^^^^^^^^^^
 >b : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     a2 = t2;
 >a2 = t2 : T2
@@ -274,16 +274,16 @@ module ObjectTypes {
 >  : ^^^^^^^        ^^^
 >foo : { foo: typeof a; }
 >    : ^^^^^^^        ^^^
->a : { foo: any; }
->  : ^^^^^^^^^^^^^
+>a : { foo: typeof a; }
+>  : ^^^^^^^        ^^^
 
     var b: { foo: typeof b; }
 >b : { foo: typeof b; }
 >  : ^^^^^^^        ^^^
 >foo : { foo: typeof b; }
 >    : ^^^^^^^        ^^^
->b : { foo: any; }
->  : ^^^^^^^^^^^^^
+>b : { foo: typeof b; }
+>  : ^^^^^^^        ^^^
 
     var a2 = { foo: a2 };
 >a2 : any
@@ -354,12 +354,12 @@ module ObjectTypes {
 >  : ^
 
     s2 = b;
->s2 = b : { foo: any; }
->       : ^^^^^^^^^^^^^
+>s2 = b : { foo: typeof b; }
+>       : ^^^^^^^        ^^^
 >s2 : S2
 >   : ^^
->b : { foo: any; }
->  : ^^^^^^^^^^^^^
+>b : { foo: typeof b; }
+>  : ^^^^^^^        ^^^
 
     s2 = a2;
 >s2 = a2 : any
@@ -368,41 +368,41 @@ module ObjectTypes {
 >a2 : any
 
     a = b;
->a = b : { foo: any; }
->      : ^^^^^^^^^^^^^
->a : { foo: any; }
->  : ^^^^^^^^^^^^^
->b : { foo: any; }
->  : ^^^^^^^^^^^^^
+>a = b : { foo: typeof b; }
+>      : ^^^^^^^        ^^^
+>a : { foo: typeof a; }
+>  : ^^^^^^^        ^^^
+>b : { foo: typeof b; }
+>  : ^^^^^^^        ^^^
 
     b = a;
->b = a : { foo: any; }
->      : ^^^^^^^^^^^^^
->b : { foo: any; }
->  : ^^^^^^^^^^^^^
->a : { foo: any; }
->  : ^^^^^^^^^^^^^
+>b = a : { foo: typeof a; }
+>      : ^^^^^^^        ^^^
+>b : { foo: typeof b; }
+>  : ^^^^^^^        ^^^
+>a : { foo: typeof a; }
+>  : ^^^^^^^        ^^^
 
     a = s;
 >a = s : S
 >      : ^
->a : { foo: any; }
->  : ^^^^^^^^^^^^^
+>a : { foo: typeof a; }
+>  : ^^^^^^^        ^^^
 >s : S
 >  : ^
 
     a = s2;
 >a = s2 : S2
 >       : ^^
->a : { foo: any; }
->  : ^^^^^^^^^^^^^
+>a : { foo: typeof a; }
+>  : ^^^^^^^        ^^^
 >s2 : S2
 >   : ^^
 
     a = a2;
 >a = a2 : any
->a : { foo: any; }
->  : ^^^^^^^^^^^^^
+>a : { foo: typeof a; }
+>  : ^^^^^^^        ^^^
 >a2 : any
 
     a2 = b2;
@@ -416,11 +416,11 @@ module ObjectTypes {
 >a2 : any
 
     a2 = b;
->a2 = b : { foo: any; }
->       : ^^^^^^^^^^^^^
+>a2 = b : { foo: typeof b; }
+>       : ^^^^^^^        ^^^
 >a2 : any
->b : { foo: any; }
->  : ^^^^^^^^^^^^^
+>b : { foo: typeof b; }
+>  : ^^^^^^^        ^^^
 
     a2 = t2;
 >a2 = t2 : T2

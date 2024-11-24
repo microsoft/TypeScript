@@ -50,11 +50,11 @@ var f = (x: number) => { return x.toFixed() };
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 var r5 = _.forEach<number>(c2, f); 
 >r5 : void
@@ -62,11 +62,11 @@ var r5 = _.forEach<number>(c2, f);
 >_.forEach<number>(c2, f) : void
 >                         : ^^^^
 >_.forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
->          : ^ ^^ ^^             ^^ ^^              ^^^^^^^^^
+>          : ^ ^^ ^^             ^^ ^^              ^^^^^    
 >_ : Combinators
 >  : ^^^^^^^^^^^
 >forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
->        : ^ ^^ ^^             ^^ ^^              ^^^^^^^^^
+>        : ^ ^^ ^^             ^^ ^^              ^^^^^    
 >c2 : Collection<number>
 >   : ^^^^^^^^^^^^^^^^^^
 >f : (x: number) => string
@@ -78,11 +78,11 @@ var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() });
 >_.forEach<number>(c2, (x) => { return x.toFixed() }) : void
 >                                                     : ^^^^
 >_.forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
->          : ^ ^^ ^^             ^^ ^^              ^^^^^^^^^
+>          : ^ ^^ ^^             ^^ ^^              ^^^^^    
 >_ : Combinators
 >  : ^^^^^^^^^^^
 >forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
->        : ^ ^^ ^^             ^^ ^^              ^^^^^^^^^
+>        : ^ ^^ ^^             ^^ ^^              ^^^^^    
 >c2 : Collection<number>
 >   : ^^^^^^^^^^^^^^^^^^
 >(x) => { return x.toFixed() } : (x: number) => string
@@ -92,9 +92,9 @@ var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() });
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 

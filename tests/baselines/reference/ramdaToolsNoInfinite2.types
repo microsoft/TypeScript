@@ -43,7 +43,7 @@ declare module "Object/Pick" {
 
     type __Pick<O extends object, K extends keyof O> = {
 >__Pick : { [P in K]: O[P]; }
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^^^
 
         [P in K]: O[P];
     } & {};
@@ -478,7 +478,7 @@ declare module "Object/NonNullable" {
 
     export type NonNullableFlat<O> = {
 >NonNullableFlat : { [K in keyof O]: UNonNullable<O[K]>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         [K in keyof O]: UNonNullable<O[K]>;
     } & {};
@@ -496,7 +496,7 @@ declare module "Object/NonNullable" {
 
         'flat': NonNullableFlat<O>;
 >'flat' : { [K in keyof O]: import("Union/Exclude").Exclude<O[K], null | undefined>; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         'deep': NonNullableDeep<O>;
 >'deep' : NonNullableDeep<O>
@@ -524,7 +524,7 @@ declare module "Object/Overwrite" {
 
     export type Overwrite<O extends object, O1 extends object> = {
 >Overwrite : { [K in keyof O]: K extends keyof O1 ? O1[K] : O[K]; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         [K in keyof O]: K extends keyof O1 ? O1[K] : O[K];
     } & {};
@@ -657,7 +657,7 @@ declare module "List/_Internal" {
 
     export type Naked<L extends List> = Overwrite<Required<L>, L>;
 >Naked : { [K in keyof Required<L>]: K extends keyof L ? L[K] : Required<L>[K]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 declare module "List/Tail" {
 >"List/Tail" : typeof import("List/Tail")

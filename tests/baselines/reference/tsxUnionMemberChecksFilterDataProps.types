@@ -43,8 +43,8 @@ const RootNotHappy = () => (<NotHappy data-testid="my-test-id" />);
 >                                        : ^^^^^^^^^^^
 ><NotHappy data-testid="my-test-id" /> : JSX.Element
 >                                      : ^^^^^^^^^^^
->NotHappy : (props: ({ fixed?: boolean; } | { value?: number; })) => React.ReactElement<any>
->         : ^     ^^                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>NotHappy : (props: ({ fixed?: boolean; } | { value?: number; })) => ReactElement<any>
+>         : ^     ^^                                            ^^^^^                 
 >data-testid : string
 >            : ^^^^^^
 
@@ -57,8 +57,8 @@ const RootHappy = () => (<Happy data-testid="my-test-id" />);
 >                                     : ^^^^^^^^^^^
 ><Happy data-testid="my-test-id" /> : JSX.Element
 >                                   : ^^^^^^^^^^^
->Happy : (props: { fixed?: boolean; value?: number; }) => React.ReactElement<any>
->      : ^     ^^                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Happy : (props: { fixed?: boolean; value?: number; }) => ReactElement<any>
+>      : ^     ^^                                    ^^^^^                 
 >data-testid : string
 >            : ^^^^^^
 

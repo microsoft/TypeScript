@@ -16,7 +16,7 @@ export function foo(): import("./file1").Foo {
 === file3.ts ===
 import {foo} from "./file2";
 >foo : () => import("file1").Foo
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                   
 
 export function bar() {
 >bar : () => import("file1").Foo
@@ -26,6 +26,6 @@ export function bar() {
 >foo() : import("file1").Foo
 >      : ^^^^^^^^^^^^^^^^^^^
 >foo : () => import("file1").Foo
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                   
 }
 

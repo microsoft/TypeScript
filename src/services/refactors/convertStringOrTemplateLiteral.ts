@@ -36,8 +36,8 @@ import {
     TemplateTail,
     textChanges,
     Token,
-} from "../_namespaces/ts";
-import { registerRefactor } from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.js";
+import { registerRefactor } from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Convert to template string";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);

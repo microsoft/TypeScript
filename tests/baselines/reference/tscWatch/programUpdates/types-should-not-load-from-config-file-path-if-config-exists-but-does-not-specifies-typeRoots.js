@@ -1,9 +1,9 @@
-currentDirectory:: /a/c useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/projectc useCaseSensitiveFileNames:: false
 Input::
-//// [/a/b/app.ts]
+//// [/user/username/workspace/solution/projects/project/app.ts]
 let x = 1
 
-//// [/a/b/tsconfig.json]
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
 {
   "compilerOptions": {
     "types": [
@@ -13,10 +13,10 @@ let x = 1
   }
 }
 
-//// [/a/b/node_modules/@types/node/index.d.ts]
+//// [/user/username/workspace/solution/projects/project/node_modules/@types/node/index.d.ts]
 declare var process: any
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -28,9 +28,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w -p /user/username/workspace/solution/projects/project/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -39,7 +41,7 @@ Output::
   The file is in the program because:
     Entry point of type library 'node' specified in compilerOptions
 
-  [96m../b/tsconfig.json[0m:[93m4[0m:[93m7[0m
+  [96m../project/tsconfig.json[0m:[93m4[0m:[93m7[0m
     [7m4[0m       "node"
     [7m [0m [96m      ~~~~~~[0m
     File is entry point of type library specified here.
@@ -48,25 +50,25 @@ Output::
 
 
 
-//// [/a/b/app.js]
+//// [/user/username/workspace/solution/projects/project/app.js]
 var x = 1;
 
 
 
 FsWatches::
-/a/b/app.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/a/b/tsconfig.json: *new*
+/user/username/workspace/solution/projects/project/app.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a/b: *new*
+/user/username/workspace/solution/projects/project: *new*
   {}
 
 Program root files: [
-  "/a/b/app.ts"
+  "/user/username/workspace/solution/projects/project/app.ts"
 ]
 Program options: {
   "types": [
@@ -74,18 +76,18 @@ Program options: {
   ],
   "typeRoots": [],
   "watch": true,
-  "project": "/a/b/tsconfig.json",
-  "configFilePath": "/a/b/tsconfig.json"
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/a/b/app.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/user/username/workspace/solution/projects/project/app.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/app.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/workspace/solution/projects/project/app.ts (used version)
 
 exitCode:: ExitStatus.undefined

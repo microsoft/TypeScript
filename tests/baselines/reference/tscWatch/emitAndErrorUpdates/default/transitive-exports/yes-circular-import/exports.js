@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/lib1/tools/toolsinterface.ts]
 export interface ITest {
@@ -49,7 +49,7 @@ export class Data2 {
   }
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -61,9 +61,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -183,23 +185,13 @@ exports.App = App;
 
 
 PolledWatches::
-/user/username/projects/myproject/lib1/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/lib1/tools/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/lib2/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/app.ts: *new*
   {}
@@ -228,7 +220,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
@@ -238,7 +230,7 @@ Program files::
 /user/username/projects/myproject/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
@@ -248,7 +240,7 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/app.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts (used version)
 /user/username/projects/myproject/lib1/tools/public.ts (used version)
 /user/username/projects/myproject/lib1/public.ts (used version)
@@ -274,6 +266,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -307,7 +300,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
@@ -351,6 +344,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -374,7 +368,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
@@ -418,6 +412,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -446,7 +441,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts

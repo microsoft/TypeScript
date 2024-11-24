@@ -56,11 +56,11 @@ class C {
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >x : number
 >  : ^^^^^^
         }
@@ -478,11 +478,11 @@ const o = {
 >console.log('oh no') : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'oh no' : "oh no"
 >        : ^^^^^^^
 >2 : 2
@@ -611,11 +611,11 @@ for (async of l) {
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >x : number
 >  : ^^^^^^
 }
@@ -637,11 +637,11 @@ for (const cantHaveInit = 1 of [1,2,3]) {
 >console.log(cantHaveInit) : void
 >                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >cantHaveInit : number
 >             : ^^^^^^
 }
@@ -663,11 +663,11 @@ for (const cantHaveInit = 1 in [1,2,3]) {
 >console.log(cantHaveInit) : void
 >                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >cantHaveInit : string
 >             : ^^^^^^
 }
@@ -689,11 +689,11 @@ for (let y, x of [1,2,3]) {
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >x : number
 >  : ^^^^^^
 }
@@ -715,11 +715,11 @@ for (let y, x in [1,2,3]) {
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >x : string
 >  : ^^^^^^
 }
@@ -741,11 +741,11 @@ switch (b) {
 >console.log('no') : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'no' : "no"
 >     : ^^^^
 
@@ -754,11 +754,11 @@ switch (b) {
 >console.log('yes') : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'yes' : "yes"
 >      : ^^^^^
 
@@ -767,11 +767,11 @@ switch (b) {
 >console.log('wat') : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'wat' : "wat"
 >      : ^^^^^
 }
@@ -794,11 +794,11 @@ catch (e) {
 >console.log(e) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >e : 1
 >  : ^
 }

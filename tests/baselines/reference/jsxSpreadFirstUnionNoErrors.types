@@ -55,7 +55,7 @@ props.status === "hidden"
 >props.content : string
 >              : ^^^^^^
 >props : { status: "visible"; content: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^         ^^^^^^^^^^^      ^^^
 >content : string
 >        : ^^^^^^
 >div : any

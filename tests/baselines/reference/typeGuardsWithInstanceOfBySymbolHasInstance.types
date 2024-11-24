@@ -373,7 +373,7 @@ if (obj7 instanceof D) { // narrowed to D.
 >obj7 : string | D
 >     : ^^^^^^^^^^
 >D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^          ^^^
 
     obj7.foo;
 >obj7.foo : string
@@ -402,7 +402,7 @@ if (obj8 instanceof D) {
 >obj8 : any
 >     : ^^^
 >D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^          ^^^
 
     obj8.foo;
 >obj8.foo : string

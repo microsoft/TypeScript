@@ -13,11 +13,11 @@ var a = x.toString();
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : true
 >  : ^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 var b = x['toString']();
 >b : string
@@ -25,7 +25,7 @@ var b = x['toString']();
 >x['toString']() : string
 >                : ^^^^^^
 >x['toString'] : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >x : true
 >  : ^^^^
 >'toString' : "toString"

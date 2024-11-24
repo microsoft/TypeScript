@@ -12,7 +12,7 @@ export class TemplateRef { }
 === index.ts ===
 import { Input, TemplateRef } from './deps';
 >Input : () => any
->      : ^^^^^^^^^
+>      : ^^^^^^   
 >TemplateRef : typeof TemplateRef
 >            : ^^^^^^^^^^^^^^^^^^
 
@@ -27,7 +27,7 @@ export class MyComponent {
     @Input()
 >Input() : any
 >Input : () => any
->      : ^^^^^^^^^
+>      : ^^^^^^   
 
     get ref() { return this._ref; }
 >ref : TemplateRef

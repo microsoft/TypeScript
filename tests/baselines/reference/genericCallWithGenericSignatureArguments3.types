@@ -26,7 +26,7 @@ function foo<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
 
     return r;
 >r : (x: T) => T
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
 }
 
 var r1 = foo('', (x: string) => '', (x: Object) => null); // any => any
@@ -35,7 +35,7 @@ var r1 = foo('', (x: string) => '', (x: Object) => null); // any => any
 >foo('', (x: string) => '', (x: Object) => null) : (x: any) => any
 >                                                : ^ ^^^^^^^^^^^^^
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >'' : ""
 >   : ^^
 >(x: string) => '' : (x: string) => string
@@ -55,7 +55,7 @@ var r1ii = foo('', (x) => '', (x) => null); // string => string
 >foo('', (x) => '', (x) => null) : (x: string) => string
 >                                : ^ ^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >'' : ""
 >   : ^^
 >(x) => '' : (x: string) => string
@@ -75,7 +75,7 @@ var r2 = foo('', (x: string) => '', (x: Object) => ''); // string => string
 >foo('', (x: string) => '', (x: Object) => '') : (x: Object) => Object
 >                                              : ^ ^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >'' : ""
 >   : ^^
 >(x: string) => '' : (x: string) => string
@@ -97,7 +97,7 @@ var r3 = foo(null, (x: Object) => '', (x: string) => ''); // Object => Object
 >foo(null, (x: Object) => '', (x: string) => '') : (x: Object) => Object
 >                                                : ^ ^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x: Object) => '' : (x: Object) => string
 >                  : ^ ^^      ^^^^^^^^^^^
 >x : Object
@@ -117,7 +117,7 @@ var r4 = foo(null, (x) => '', (x) => ''); // any => any
 >foo(null, (x) => '', (x) => '') : (x: any) => any
 >                                : ^ ^^^^^^^^^^^^^
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x) => '' : (x: any) => string
 >          : ^ ^^^^^^^^^^^^^^^^
 >x : any
@@ -137,7 +137,7 @@ var r5 = foo(new Object(), (x) => '', (x) => ''); // Object => Object
 >foo(new Object(), (x) => '', (x) => '') : (x: Object) => Object
 >                                        : ^ ^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >new Object() : Object
 >             : ^^^^^^
 >Object : ObjectConstructor
@@ -173,7 +173,7 @@ var r6 = foo(E.A, (x: number) => E.A, (x: F) => F.A); // number => number
 >foo(E.A, (x: number) => E.A, (x: F) => F.A) : (x: number) => number
 >                                            : ^ ^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>    : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >E.A : E
 >    : ^
 >E : typeof E
@@ -224,7 +224,7 @@ function foo2<T, U>(x: T, a: (x: T) => U, b: (x: T) => U) {
 
     return r;
 >r : (x: T) => U
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
 }
 
 var r8 = foo2('', (x) => '', (x) => null); // string => string
@@ -233,7 +233,7 @@ var r8 = foo2('', (x) => '', (x) => null); // string => string
 >foo2('', (x) => '', (x) => null) : (x: string) => any
 >                                 : ^ ^^^^^^^^^^^^^^^^
 >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
->     : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >'' : ""
 >   : ^^
 >(x) => '' : (x: string) => string
@@ -253,7 +253,7 @@ var r9 = foo2(null, (x) => '', (x) => ''); // any => any
 >foo2(null, (x) => '', (x) => '') : (x: any) => string
 >                                 : ^ ^^^^^^^^^^^^^^^^
 >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
->     : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x) => '' : (x: any) => string
 >          : ^ ^^^^^^^^^^^^^^^^
 >x : any
@@ -273,7 +273,7 @@ var r10 = foo2(null, (x: Object) => '', (x: string) => ''); // Object => Object
 >foo2(null, (x: Object) => '', (x: string) => '') : (x: Object) => string
 >                                                 : ^ ^^^^^^^^^^^^^^^^^^^
 >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
->     : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x: Object) => '' : (x: Object) => string
 >                  : ^ ^^      ^^^^^^^^^^^
 >x : Object
@@ -295,13 +295,13 @@ var x: (a: string) => boolean;
 
 var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2); // error
 >r11 : (x: (a: string) => boolean) => (n: Object) => 1
->    : ^ ^^^ ^^      ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^
+>    : ^ ^^^ ^^      ^^^^^       ^^^^^^ ^^      ^^^^^^
 >foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2) : (x: (a: string) => boolean) => (n: Object) => 1
->                                                                                           : ^ ^^^ ^^      ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^
+>                                                                                           : ^ ^^^ ^^      ^^^^^       ^^^^^^ ^^      ^^^^^^
 >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
->     : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >x : (a: string) => boolean
->  : ^ ^^      ^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^       
 >(a1: (y: string) => string) => (n: Object) => 1 : (a1: (y: string) => string) => (n: Object) => 1
 >                                                : ^  ^^                     ^^^^^^ ^^      ^^^^^^
 >a1 : (y: string) => string
@@ -329,9 +329,9 @@ var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: str
 >foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2) : (x: (z: string) => boolean) => (n: Object) => 1
 >                                                                                             : ^ ^^^ ^^      ^^^^^       ^^^^^^ ^^      ^^^^^^
 >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
->     : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >x : (a: string) => boolean
->  : ^ ^^      ^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^       
 >(a1: (y: string) => boolean) => (n: Object) => 1 : (a1: (y: string) => boolean) => (n: Object) => 1
 >                                                 : ^  ^^                      ^^^^^^ ^^      ^^^^^^
 >a1 : (y: string) => boolean

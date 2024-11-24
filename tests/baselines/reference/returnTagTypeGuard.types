@@ -76,11 +76,11 @@ function f(chunk) {
 >chunk.isInit(chunk) : boolean
 >                    : ^^^^^^^
 >chunk.isInit : ((x: any) => this is Entry) | ((x: any) => false)
->             : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^
+>             : ^^ ^^   ^^^^^             ^^^^^^ ^^   ^^^^^     ^
 >chunk : Entry | Group
 >      : ^^^^^^^^^^^^^
 >isInit : ((x: any) => this is Entry) | ((x: any) => false)
->       : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^
+>       : ^^ ^^   ^^^^^             ^^^^^^ ^^   ^^^^^     ^
 >chunk : Entry | Group
 >      : ^^^^^^^^^^^^^
 >chunk.c : number
@@ -131,7 +131,7 @@ function foo(val) {
 >isBoolean(val) : boolean
 >               : ^^^^^^^
 >isBoolean : (value: any) => value is boolean
->          : ^     ^^   ^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^   ^^^^^                
 >val : number | boolean
 >    : ^^^^^^^^^^^^^^^^
 
@@ -173,7 +173,7 @@ function g(x) {
 >isNumber(x) : boolean
 >            : ^^^^^^^
 >isNumber : (x: unknown) => x is number
->         : ^ ^^       ^^^^^^^^^^^^^^^^
+>         : ^ ^^       ^^^^^           
 >x : unknown
 >  : ^^^^^^^
 

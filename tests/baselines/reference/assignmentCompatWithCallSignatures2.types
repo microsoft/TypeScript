@@ -24,17 +24,17 @@ var a: { f(x: number): void };
 
 t = a;
 >t = a : { f(x: number): void; }
->      : ^^^^ ^^      ^^^^^^^^^^
+>      : ^^^^ ^^      ^^^    ^^^
 >t : T
 >  : ^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 
 a = t;
 >a = t : T
 >      : ^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >t : T
 >  : ^
 
@@ -67,27 +67,27 @@ t = s;
 
 t = a2;
 >t = a2 : { f(x: number): string; }
->       : ^^^^ ^^      ^^^^^^^^^^^^
+>       : ^^^^ ^^      ^^^      ^^^
 >t : T
 >  : ^
 >a2 : { f(x: number): string; }
->   : ^^^^ ^^      ^^^^^^^^^^^^
+>   : ^^^^ ^^      ^^^      ^^^
 
 a = s;
 >a = s : S
 >      : ^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >s : S
 >  : ^
 
 a = a2;
 >a = a2 : { f(x: number): string; }
->       : ^^^^ ^^      ^^^^^^^^^^^^
+>       : ^^^^ ^^      ^^^      ^^^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >a2 : { f(x: number): string; }
->   : ^^^^ ^^      ^^^^^^^^^^^^
+>   : ^^^^ ^^      ^^^      ^^^
 
 t = { f: () => 1 };
 >t = { f: () => 1 } : { f: () => number; }
@@ -153,7 +153,7 @@ a = { f: () => 1 }
 >a = { f: () => 1 } : { f: () => number; }
 >                   : ^^^^^^^^^^^^^^^^^^^^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >{ f: () => 1 } : { f: () => number; }
 >               : ^^^^^^^^^^^^^^^^^^^^
 >f : () => number
@@ -167,7 +167,7 @@ a = { f: <T>(x: T) => 1 };
 >a = { f: <T>(x: T) => 1 } : { f: <T>(x: T) => number; }
 >                          : ^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >{ f: <T>(x: T) => 1 } : { f: <T>(x: T) => number; }
 >                      : ^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >f : <T>(x: T) => number
@@ -183,7 +183,7 @@ a = { f: function (x: number) { return ''; } }
 >a = { f: function (x: number) { return ''; } } : { f: (x: number) => string; }
 >                                               : ^^^^^^ ^^      ^^^^^^^^^^^^^^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >{ f: function (x: number) { return ''; } } : { f: (x: number) => string; }
 >                                           : ^^^^^^ ^^      ^^^^^^^^^^^^^^
 >f : (x: number) => string
@@ -222,7 +222,7 @@ a = () => 1;
 >a = () => 1 : () => number
 >            : ^^^^^^^^^^^^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >() => 1 : () => number
 >        : ^^^^^^^^^^^^
 >1 : 1
@@ -232,7 +232,7 @@ a = function (x: number) { return ''; }
 >a = function (x: number) { return ''; } : (x: number) => string
 >                                        : ^ ^^      ^^^^^^^^^^^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >function (x: number) { return ''; } : (x: number) => string
 >                                    : ^ ^^      ^^^^^^^^^^^
 >x : number
@@ -270,11 +270,11 @@ t = s2;
 
 t = a3;
 >t = a3 : { f(x: string): void; }
->       : ^^^^ ^^      ^^^^^^^^^^
+>       : ^^^^ ^^      ^^^    ^^^
 >t : T
 >  : ^
 >a3 : { f(x: string): void; }
->   : ^^^^ ^^      ^^^^^^^^^^
+>   : ^^^^ ^^      ^^^    ^^^
 
 t = (x: string) => 1;
 >t = (x: string) => 1 : (x: string) => number
@@ -304,23 +304,23 @@ a = s2;
 >a = s2 : S2
 >       : ^^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >s2 : S2
 >   : ^^
 
 a = a3;
 >a = a3 : { f(x: string): void; }
->       : ^^^^ ^^      ^^^^^^^^^^
+>       : ^^^^ ^^      ^^^    ^^^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >a3 : { f(x: string): void; }
->   : ^^^^ ^^      ^^^^^^^^^^
+>   : ^^^^ ^^      ^^^    ^^^
 
 a = (x: string) => 1;
 >a = (x: string) => 1 : (x: string) => number
 >                     : ^ ^^      ^^^^^^^^^^^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >(x: string) => 1 : (x: string) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : string
@@ -332,7 +332,7 @@ a = function (x: string) { return ''; }
 >a = function (x: string) { return ''; } : (x: string) => string
 >                                        : ^ ^^      ^^^^^^^^^^^
 >a : { f(x: number): void; }
->  : ^^^^ ^^      ^^^^^^^^^^
+>  : ^^^^ ^^      ^^^    ^^^
 >function (x: string) { return ''; } : (x: string) => string
 >                                    : ^ ^^      ^^^^^^^^^^^
 >x : string

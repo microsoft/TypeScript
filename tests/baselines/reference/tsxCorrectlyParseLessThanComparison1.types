@@ -51,11 +51,11 @@ export class ShortDetails extends React.Component<{ id: number }, {}> {
 >this.props.id : number
 >              : ^^^^^^
 >this.props : { id: number; }
->           : ^^^^^^^^^^^^^^^
+>           : ^^^^^^      ^^^
 >this : this
 >     : ^^^^
 >props : { id: number; }
->      : ^^^^^^^^^^^^^^^
+>      : ^^^^^^      ^^^
 >id : number
 >   : ^^^^^^
 >1 : 1

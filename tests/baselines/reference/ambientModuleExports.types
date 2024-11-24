@@ -22,11 +22,11 @@ Foo.a();
 >Foo.a() : void
 >        : ^^^^
 >Foo.a : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >a : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
 Foo.b;
 >Foo.b : number
@@ -69,11 +69,11 @@ Foo2.a();
 >Foo2.a() : void
 >         : ^^^^
 >Foo2.a : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 >Foo2 : typeof Foo2
 >     : ^^^^^^^^^^^
 >a : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
 Foo2.b;
 >Foo2.b : number

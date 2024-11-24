@@ -91,11 +91,11 @@ for (const key of enumerationKeys) {
 >Intl.supportedValuesOf(key) : string[]
 >                            : ^^^^^^^^
 >Intl.supportedValuesOf : (key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit") => string[]
->                       : ^   ^^                                                                               ^^^^^^^^^^^^^
+>                       : ^   ^^                                                                               ^^^^^        
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >supportedValuesOf : (key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit") => string[]
->                  : ^   ^^                                                                               ^^^^^^^^^^^^^
+>                  : ^   ^^                                                                               ^^^^^        
 >key : "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

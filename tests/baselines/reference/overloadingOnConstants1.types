@@ -34,25 +34,25 @@ class Derived3 extends Base { biz() { } }
 interface Document2 {
     createElement(tagName: 'canvas'): Derived1;
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^        ^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : "canvas"
 >        : ^^^^^^^^
 
     createElement(tagName: 'div'): Derived2;
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^        ^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : "div"
 >        : ^^^^^
 
     createElement(tagName: 'span'): Derived3;
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^        ^^^       ^^      ^^^^^^^^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : "span"
 >        : ^^^^^^
 
     createElement(tagName: string): Base;
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^    ^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : string
 >        : ^^^^^^
 }
@@ -68,11 +68,11 @@ var htmlElement: Base = d2.createElement("yo")
 >d2.createElement("yo") : Base
 >                       : ^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->                 : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
 >   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"yo" : "yo"
 >     : ^^^^
 
@@ -82,11 +82,11 @@ var htmlCanvasElement: Derived1 = d2.createElement("canvas");
 >d2.createElement("canvas") : Derived1
 >                           : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->                 : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
 >   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"canvas" : "canvas"
 >         : ^^^^^^^^
 
@@ -96,11 +96,11 @@ var htmlDivElement: Derived2 = d2.createElement("div");
 >d2.createElement("div") : Derived2
 >                        : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->                 : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
 >   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"div" : "div"
 >      : ^^^^^
 
@@ -110,11 +110,11 @@ var htmlSpanElement: Derived3 = d2.createElement("span");
 >d2.createElement("span") : Derived3
 >                         : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->                 : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
 >   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"span" : "span"
 >       : ^^^^^^
 
@@ -125,11 +125,11 @@ var htmlElement2: Derived1 = d2.createElement("yo")
 >d2.createElement("yo") : Base
 >                       : ^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->                 : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
 >   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"yo" : "yo"
 >     : ^^^^
 
@@ -139,11 +139,11 @@ var htmlCanvasElement2: Derived3 = d2.createElement("canvas");
 >d2.createElement("canvas") : Derived1
 >                           : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->                 : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
 >   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"canvas" : "canvas"
 >         : ^^^^^^^^
 
@@ -153,11 +153,11 @@ var htmlDivElement2: Derived1 = d2.createElement("div");
 >d2.createElement("div") : Derived2
 >                        : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->                 : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
 >   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"div" : "div"
 >      : ^^^^^
 
@@ -167,11 +167,11 @@ var htmlSpanElement2: Derived1 = d2.createElement("span");
 >d2.createElement("span") : Derived3
 >                         : ^^^^^^^^
 >d2.createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->                 : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>                 : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >d2 : Document2
 >   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
->              : ^^^       ^^        ^^^^^^^^^^^^^^       ^^     ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^
+>              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >"span" : "span"
 >       : ^^^^^^
 

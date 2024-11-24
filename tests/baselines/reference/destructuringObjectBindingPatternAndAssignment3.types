@@ -37,8 +37,8 @@ var { f2: {f21} = { f212: "string" } }: any = undefined;
 >   : ^^^
 >f21 : any
 >    : ^^^
->{ f212: "string" } : { f212: string; f21: any; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ f212: "string" } : { f212: string; }
+>                   : ^^^^^^^^^^^^^^^^^
 >f212 : string
 >     : ^^^^^^
 >"string" : "string"

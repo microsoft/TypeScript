@@ -27,9 +27,9 @@ export function createElement(): void;
 
 export { dom as default };
 >dom : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 >default : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 
 === otherreacty.tsx ===
 /** @jsx React.createElement */
@@ -48,23 +48,23 @@ import * as React from "./renderer";
 /** @jsx h */
 import { dom as h } from "./renderer"
 >dom : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 >h : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
 export const prerendered = <h></h>;
 >prerendered : error
 ><h></h> : error
 >h : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >h : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 
 === othernoalias.tsx ===
 /** @jsx otherdom */
 import { otherdom } from "./renderer"
 >otherdom : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
 export const prerendered2 = <h></h>;
 >prerendered2 : error
@@ -77,7 +77,7 @@ export const prerendered2 = <h></h>;
 === reacty.tsx ===
 import React from "./renderer"
 >React : () => void
->      : ^^^^^^^^^^
+>      : ^^^^^^    
 
 export const prerendered3 = <h></h>;
 >prerendered3 : error
@@ -91,7 +91,7 @@ export const prerendered3 = <h></h>;
 /** @jsx dom */
 import { dom } from "./renderer"
 >dom : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 <h></h>
 ><h></h> : error

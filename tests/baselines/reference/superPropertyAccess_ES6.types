@@ -37,11 +37,11 @@ class MyDerived extends MyBase {
 >super.getValue() : number
 >                 : ^^^^^^
 >super.getValue : () => number
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >super : MyBase
 >      : ^^^^^^
 >getValue : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
     const f2 = super.value;
 >f2 : number

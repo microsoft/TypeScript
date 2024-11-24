@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/declarationEmitMergedAliasWithConst.ts] ////
+
+=== declarationEmitMergedAliasWithConst.ts ===
+export const Color = {
+>Color : Symbol(Color, Decl(declarationEmitMergedAliasWithConst.ts, 0, 12), Decl(declarationEmitMergedAliasWithConst.ts, 4, 10))
+
+    Red: "Red",
+>Red : Symbol(Red, Decl(declarationEmitMergedAliasWithConst.ts, 0, 22))
+
+    Green: "Green",
+>Green : Symbol(Green, Decl(declarationEmitMergedAliasWithConst.ts, 1, 15))
+
+    Blue: "Blue"
+>Blue : Symbol(Blue, Decl(declarationEmitMergedAliasWithConst.ts, 2, 19))
+
+} as const
+>const : Symbol(const)
+
+export type Color = typeof Color
+>Color : Symbol(Color, Decl(declarationEmitMergedAliasWithConst.ts, 0, 12), Decl(declarationEmitMergedAliasWithConst.ts, 4, 10))
+>Color : Symbol(Color, Decl(declarationEmitMergedAliasWithConst.ts, 0, 12), Decl(declarationEmitMergedAliasWithConst.ts, 4, 10))
+
+export type Colors = Color[keyof Color]
+>Colors : Symbol(Colors, Decl(declarationEmitMergedAliasWithConst.ts, 6, 32))
+>Color : Symbol(Color, Decl(declarationEmitMergedAliasWithConst.ts, 0, 12), Decl(declarationEmitMergedAliasWithConst.ts, 4, 10))
+>Color : Symbol(Color, Decl(declarationEmitMergedAliasWithConst.ts, 0, 12), Decl(declarationEmitMergedAliasWithConst.ts, 4, 10))
+

@@ -67,7 +67,7 @@ var p1: { x: number; y: number; }
 
 var p1: M.Point;
 >p1 : { x: number; y: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >M : any
 >  : ^^^
 
@@ -175,13 +175,13 @@ var p2: { x: number; y: number }
 
 var p2: M2.Point;
 >p2 : { x: number; y: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >M2 : any
 >   : ^^^
 
 var p2 = new m2.Point();
 >p2 : { x: number; y: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >new m2.Point() : M2.Point
 >               : ^^^^^^^^
 >m2.Point : typeof M2.Point
@@ -193,7 +193,7 @@ var p2 = new m2.Point();
 
 var p2 = new M2.Point();
 >p2 : { x: number; y: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^^^      ^^^
 >new M2.Point() : M2.Point
 >               : ^^^^^^^^
 >M2.Point : typeof M2.Point

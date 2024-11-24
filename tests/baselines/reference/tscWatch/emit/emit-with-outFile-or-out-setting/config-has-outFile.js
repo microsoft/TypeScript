@@ -1,19 +1,19 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/a useCaseSensitiveFileNames:: false
 Input::
-//// [/a/a.ts]
+//// [/home/src/projects/a/a.ts]
 let x = 1
 
-//// [/a/b.ts]
+//// [/home/src/projects/a/b.ts]
 let y = 1
 
-//// [/a/tsconfig.json]
+//// [/home/src/projects/a/tsconfig.json]
 {
   "compilerOptions": {
-    "outFile": "/a/out.js"
+    "outFile": "/home/src/projects/a/out.js"
   }
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -25,9 +25,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w -p /a/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --w -p /home/src/projects/a/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -36,44 +38,52 @@ Output::
 
 
 
-//// [/a/out.js]
+//// [/home/src/projects/a/out.js]
 var x = 1;
 var y = 1;
 
 
 
+PolledWatches::
+/home/src/projects/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/a/a.ts: *new*
+/home/src/projects/a/a.ts: *new*
   {}
-/a/b.ts: *new*
+/home/src/projects/a/b.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/home/src/projects/a/tsconfig.json: *new*
   {}
-/a/tsconfig.json: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a: *new*
+/home/src/projects/a: *new*
   {}
 
 Program root files: [
-  "/a/a.ts",
-  "/a/b.ts",
-  "/a/lib/lib.d.ts"
+  "/home/src/projects/a/a.ts",
+  "/home/src/projects/a/b.ts"
 ]
 Program options: {
-  "outFile": "/a/out.js",
+  "outFile": "/home/src/projects/a/out.js",
   "watch": true,
-  "project": "/a/tsconfig.json",
-  "configFilePath": "/a/tsconfig.json"
+  "project": "/home/src/projects/a/tsconfig.json",
+  "configFilePath": "/home/src/projects/a/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/a.ts
-/a/b.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/a.ts
+/home/src/projects/a/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/a.ts
+/home/src/projects/a/b.ts
 
 No shapes updated in the builder::
 
@@ -82,7 +92,7 @@ exitCode:: ExitStatus.undefined
 Change:: Make change in the file
 
 Input::
-//// [/a/a.ts]
+//// [/home/src/projects/a/a.ts]
 let x = 11
 
 
@@ -92,6 +102,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -101,7 +112,7 @@ Output::
 
 
 
-//// [/a/out.js]
+//// [/home/src/projects/a/out.js]
 var x = 11;
 var y = 1;
 
@@ -109,23 +120,25 @@ var y = 1;
 
 
 Program root files: [
-  "/a/a.ts",
-  "/a/b.ts",
-  "/a/lib/lib.d.ts"
+  "/home/src/projects/a/a.ts",
+  "/home/src/projects/a/b.ts"
 ]
 Program options: {
-  "outFile": "/a/out.js",
+  "outFile": "/home/src/projects/a/out.js",
   "watch": true,
-  "project": "/a/tsconfig.json",
-  "configFilePath": "/a/tsconfig.json"
+  "project": "/home/src/projects/a/tsconfig.json",
+  "configFilePath": "/home/src/projects/a/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/a.ts
-/a/b.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/a.ts
+/home/src/projects/a/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/a.ts
+/home/src/projects/a/b.ts
 
 No shapes updated in the builder::
 
@@ -134,7 +147,7 @@ exitCode:: ExitStatus.undefined
 Change:: Make change in the file again
 
 Input::
-//// [/a/a.ts]
+//// [/home/src/projects/a/a.ts]
 let xy = 11
 
 
@@ -144,6 +157,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -153,7 +167,7 @@ Output::
 
 
 
-//// [/a/out.js]
+//// [/home/src/projects/a/out.js]
 var xy = 11;
 var y = 1;
 
@@ -161,23 +175,25 @@ var y = 1;
 
 
 Program root files: [
-  "/a/a.ts",
-  "/a/b.ts",
-  "/a/lib/lib.d.ts"
+  "/home/src/projects/a/a.ts",
+  "/home/src/projects/a/b.ts"
 ]
 Program options: {
-  "outFile": "/a/out.js",
+  "outFile": "/home/src/projects/a/out.js",
   "watch": true,
-  "project": "/a/tsconfig.json",
-  "configFilePath": "/a/tsconfig.json"
+  "project": "/home/src/projects/a/tsconfig.json",
+  "configFilePath": "/home/src/projects/a/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/a.ts
-/a/b.ts
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/a.ts
+/home/src/projects/a/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/projects/a/a.ts
+/home/src/projects/a/b.ts
 
 No shapes updated in the builder::
 

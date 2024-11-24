@@ -56,7 +56,7 @@ interface PostMessageObject<T> {
 interface WindowLike<T> extends PostMessageObject<T> {
     addEventListener(type: "message", handler: Action1<MessageEventLike<T>>): void;
 >addEventListener : { (type: "message", handler: Action1<MessageEventLike<T>>): void; (type: string, handler: Action1<any>): void; }
->                 : ^^^    ^^         ^^       ^^                            ^^^    ^^^    ^^      ^^       ^^            ^^^^^^^^^^
+>                 : ^^^    ^^         ^^       ^^                            ^^^    ^^^    ^^      ^^       ^^            ^^^    ^^^
 >type : "message"
 >     : ^^^^^^^^^
 >handler : Action1<MessageEventLike<T>>
@@ -64,7 +64,7 @@ interface WindowLike<T> extends PostMessageObject<T> {
 
     addEventListener(type: string, handler: Action1<any>): void;
 >addEventListener : { (type: "message", handler: Action1<MessageEventLike<T>>): void; (type: string, handler: Action1<any>): void; }
->                 : ^^^    ^^         ^^       ^^                            ^^^^^^^^^^    ^^      ^^       ^^            ^^^    ^^^
+>                 : ^^^    ^^         ^^       ^^                            ^^^    ^^^    ^^      ^^       ^^            ^^^    ^^^
 >type : string
 >     : ^^^^^^
 >handler : Action1<any>
@@ -72,7 +72,7 @@ interface WindowLike<T> extends PostMessageObject<T> {
 
     removeEventListener(type: "message", handler: Action1<MessageEventLike<T>>): void;
 >removeEventListener : { (type: "message", handler: Action1<MessageEventLike<T>>): void; (type: string, handler: Action1<any>): void; }
->                    : ^^^    ^^         ^^       ^^                            ^^^    ^^^    ^^      ^^       ^^            ^^^^^^^^^^
+>                    : ^^^    ^^         ^^       ^^                            ^^^    ^^^    ^^      ^^       ^^            ^^^    ^^^
 >type : "message"
 >     : ^^^^^^^^^
 >handler : Action1<MessageEventLike<T>>
@@ -80,7 +80,7 @@ interface WindowLike<T> extends PostMessageObject<T> {
 
     removeEventListener(type: string, handler: Action1<any>): void;
 >removeEventListener : { (type: "message", handler: Action1<MessageEventLike<T>>): void; (type: string, handler: Action1<any>): void; }
->                    : ^^^    ^^         ^^       ^^                            ^^^^^^^^^^    ^^      ^^       ^^            ^^^    ^^^
+>                    : ^^^    ^^         ^^       ^^                            ^^^    ^^^    ^^      ^^       ^^            ^^^    ^^^
 >type : string
 >     : ^^^^^^
 >handler : Action1<any>

@@ -6,7 +6,7 @@
  */
 function thing(list) {
 >thing : (list: Array<any>) => any[]
->      : ^    ^^      ^^^ ^^^^^^^^^^
+>      : ^    ^^          ^^^^^^^^^^
 >list : any[]
 >     : ^^^^^
 

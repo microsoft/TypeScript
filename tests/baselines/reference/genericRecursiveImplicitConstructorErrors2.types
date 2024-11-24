@@ -35,7 +35,7 @@ module TypeScript2 {
     // link methods
     public addOutgoingLink<A,B,C>(linkTo: PullSymbol, kind: SymbolLinkKind) {
 >addOutgoingLink : <A, B, C>(linkTo: PullSymbol, kind: SymbolLinkKind) => void
->                : ^^^^^^^^^^      ^^          ^^    ^^              ^^^^^^^^^
+>                : ^ ^^ ^^ ^^      ^^          ^^    ^^              ^^^^^^^^^
 >linkTo : PullSymbol
 >       : ^^^^^^^^^^
 >kind : SymbolLinkKind

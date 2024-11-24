@@ -1,4 +1,13 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createImportAdder,
+    ImportAdder,
+    importSymbols,
+    registerCodeFix,
+    tryGetAutoImportableReferenceFromTypeNode,
+} from "../_namespaces/ts.codefix.js";
+import {
     append,
     ArrowFunction,
     CodeFixAction,
@@ -17,6 +26,7 @@ import {
     getNameOfDeclaration,
     getSourceFileOfNode,
     getTokenAtPosition,
+    InternalNodeBuilderFlags,
     isAccessExpression,
     isCallExpression,
     isIdentifier,
@@ -44,16 +54,7 @@ import {
     TypeChecker,
     TypeNode,
     UserPreferences,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    createImportAdder,
-    ImportAdder,
-    importSymbols,
-    registerCodeFix,
-    tryGetAutoImportableReferenceFromTypeNode,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const addMissingParamFixId = "addMissingParam";
 const addOptionalParamFixId = "addOptionalParam";
@@ -221,7 +222,7 @@ function tryGetName(node: FunctionLikeDeclaration) {
 }
 
 function typeToTypeNode(checker: TypeChecker, type: Type, enclosingDeclaration: Node) {
-    return checker.typeToTypeNode(checker.getWidenedType(type), enclosingDeclaration, NodeBuilderFlags.NoTruncation)
+    return checker.typeToTypeNode(checker.getWidenedType(type), enclosingDeclaration, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames)
         ?? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
 }
 

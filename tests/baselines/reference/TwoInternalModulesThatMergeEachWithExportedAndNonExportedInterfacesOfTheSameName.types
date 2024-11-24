@@ -40,7 +40,7 @@ var p: { x: number; y: number; toCarth(): A.Point; };
 
 var p: A.Point;
 >p : { x: number; y: number; toCarth(): A.Point; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^^^^       ^^^
 >A : any
 >  : ^^^
 

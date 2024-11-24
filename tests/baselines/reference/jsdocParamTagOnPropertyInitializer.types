@@ -16,10 +16,10 @@ class Foo {
 >x.toLowerCase() : string
 >                : ^^^^^^
 >x.toLowerCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >x : string
 >  : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 }
 

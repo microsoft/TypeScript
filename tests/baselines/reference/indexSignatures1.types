@@ -31,19 +31,19 @@ function gg3(x: { [key: string]: string }, y: { [key: symbol]: string }, z: { [s
 
     x = z;
 >x = z : { [sym]: number; }
->      : ^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^      ^^^
 >x : { [key: string]: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { [sym]: number; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 
     y = z;  // Error
 >y = z : { [sym]: number; }
->      : ^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^      ^^^
 >y : { [key: symbol]: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { [sym]: number; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 }
 
 // Overlapping index signatures
@@ -1247,7 +1247,7 @@ plugins[system][SomeSytePlugin] = () => console.log('awsome');
 >plugins[system][SomeSytePlugin] = () => console.log('awsome') : () => void
 >                                                              : ^^^^^^^^^^
 >plugins[system][SomeSytePlugin] : (...args: any) => unknown
->                                : ^^^^    ^^   ^^^^^^^^^^^^
+>                                : ^^^^    ^^   ^^^^^       
 >plugins[system] : Plugs
 >                : ^^^^^
 >plugins : { user: Plugs; [system]: Plugs; }
@@ -1261,11 +1261,11 @@ plugins[system][SomeSytePlugin] = () => console.log('awsome');
 >console.log('awsome') : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >'awsome' : "awsome"
 >         : ^^^^^^^^
 
@@ -1273,7 +1273,7 @@ plugins[system][SomeSytePlugin]();
 >plugins[system][SomeSytePlugin]() : unknown
 >                                  : ^^^^^^^
 >plugins[system][SomeSytePlugin] : (...args: any) => unknown
->                                : ^^^^    ^^   ^^^^^^^^^^^^
+>                                : ^^^^    ^^   ^^^^^       
 >plugins[system] : Plugs
 >                : ^^^^^
 >plugins : { user: Plugs; [system]: Plugs; }
@@ -1343,7 +1343,7 @@ let case1 = foo({
 >foo({    [directive]: (x: string) => 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,}) : void
 >                                                                                                                : ^^^^
 >foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
->    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^^^^^
+>    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
 >{    [directive]: (x: string) => 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: (x: string) => "str"; addOne: (x: number) => number; double: (x: number) => number; }
 >                                                                                                           : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 
@@ -1395,7 +1395,7 @@ let case2 = foo({
 >foo({    addOne: (x: number) => x + 1,    double: (x: number) => x + x,    [directive]: (x: string) => 'str',}) : void
 >                                                                                                                : ^^^^
 >foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
->    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^^^^^
+>    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
 >{    addOne: (x: number) => x + 1,    double: (x: number) => x + x,    [directive]: (x: string) => 'str',} : { addOne: (x: number) => number; double: (x: number) => number; [directive]: (x: string) => "str"; }
 >                                                                                                           : ^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 
@@ -1447,7 +1447,7 @@ let case3 = foo({
 >foo({    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,}) : void
 >                                                                                                 : ^^^^
 >foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
->    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^^^^^
+>    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
 >{    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: string; addOne: (x: number) => number; double: (x: number) => number; }
 >                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 

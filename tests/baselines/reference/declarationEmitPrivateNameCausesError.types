@@ -11,8 +11,8 @@ const IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
 
 //This is exported
 export function ignoreExtraVariables<CtorT extends {new(...args:any[]):{}}> (ctor : CtorT) {
->ignoreExtraVariables : <CtorT extends new (...args: any[]) => {}>(ctor: CtorT) => { new (...args: any[]): (Anonymous class); prototype: ignoreExtraVariables<any>.(Anonymous class); } & CtorT
->                     : ^     ^^^^^^^^^^^^^^^^^    ^^     ^^^^^  ^^    ^^     ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ignoreExtraVariables : <CtorT extends { new (...args: any[]): {}; }>(ctor: CtorT) => { new (...args: any[]): (Anonymous class); prototype: ignoreExtraVariables<any>.(Anonymous class); } & CtorT
+>                     : ^     ^^^^^^^^^                             ^^    ^^     ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 >ctor : CtorT

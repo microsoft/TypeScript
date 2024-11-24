@@ -269,7 +269,7 @@ getter.a = 12;
 >getter.a : number
 >         : ^^^^^^
 >getter : { a: number; c: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >12 : 12
@@ -310,13 +310,13 @@ function from16326(this: { header: Header }, header: Header, authToken: string):
 
     return {
 >{        ...this.header,        ...header,        ...authToken && { authToken }    } : { authToken: string; head: string; body: string; }
->                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                     : ^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^      ^^^
 
         ...this.header,
 >this.header : Header
 >            : ^^^^^^
 >this : { header: Header; }
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^      ^^^
 >header : Header
 >       : ^^^^^^
 
@@ -606,11 +606,11 @@ cplus.plus();
 >cplus.plus() : void
 >             : ^^^^
 >cplus.plus : () => void
->           : ^^^^^^^^^^
+>           : ^^^^^^    
 >cplus : { p: number; plus(): void; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^^^^^^    ^^^
 >plus : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 
 // new field's type conflicting with existing field is OK
 let changeTypeAfter: { a: string, b: string } =
@@ -684,11 +684,11 @@ function container(
 >{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
 >                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >definiteBoolean : { sn: boolean; }
->                : ^^^^^^^^^^^^^^^^
+>                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
->               : ^^^^^^^^^^^^^^^
->optionalNumber : { sn?: number | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^      ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 
     let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
 >optionalUnionDuplicates : { sn: string | number; }
@@ -698,13 +698,13 @@ function container(
 >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
 >                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >definiteBoolean : { sn: boolean; }
->                : ^^^^^^^^^^^^^^^^
+>                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
->               : ^^^^^^^^^^^^^^^
->optionalString : { sn?: string | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->optionalNumber : { sn?: number | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^      ^^^
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 
     let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
 >allOptional : { sn?: string | number; }
@@ -713,10 +713,10 @@ function container(
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->optionalString : { sn?: string | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->optionalNumber : { sn?: number | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 
     // computed property
     let computedFirst: { a: number, b: string, "before everything": number } =
@@ -1052,9 +1052,9 @@ function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { 
 
     let x07 = { a: 5, b: 'hi', ...t, c: true, ...obj };
 >x07 : { a: number; b: string; } & T & { x: number; c: boolean; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{ a: 5, b: 'hi', ...t, c: true, ...obj } : { a: number; b: string; } & T & { x: number; c: boolean; }
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >5 : 5
@@ -1070,13 +1070,13 @@ function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { 
 >true : true
 >     : ^^^^
 >obj : { x: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
     let x09 = { a: 5, ...t, b: 'hi', c: true, ...obj };
 >x09 : { a: number; } & T & { x: number; b: string; c: boolean; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 5, ...t, b: 'hi', c: true, ...obj } : { a: number; } & T & { x: number; b: string; c: boolean; }
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >5 : 5
@@ -1092,13 +1092,13 @@ function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { 
 >true : true
 >     : ^^^^
 >obj : { x: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
     let x10 = { a: 5, ...t, b: 'hi', ...u, ...obj };
 >x10 : { a: number; } & T & { b: string; } & U & { x: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >{ a: 5, ...t, b: 'hi', ...u, ...obj } : { a: number; } & T & { b: string; } & U & { x: number; }
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >5 : 5
@@ -1112,7 +1112,7 @@ function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { 
 >u : U
 >  : ^
 >obj : { x: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
     let x11 = { ...v };
 >x11 : T | U
@@ -1124,31 +1124,31 @@ function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { 
 
     let x12 = { ...v, ...obj };
 >x12 : (T & { x: number; }) | (U & { x: number; })
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^
 >{ ...v, ...obj } : (T & { x: number; }) | (U & { x: number; })
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^
 >v : T | U
 >  : ^^^^^
 >obj : { x: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
     let x13 = { ...w };
 >x13 : T | { s: string; }
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^      ^^^
 >{ ...w } : T | { s: string; }
->         : ^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^      ^^^
 >w : T | { s: string; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 
     let x14 = { ...w, ...obj };
 >x14 : (T & { x: number; }) | { x: number; s: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^      ^^^
 >{ ...w, ...obj } : (T & { x: number; }) | { x: number; s: string; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^      ^^^
 >w : T | { s: string; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 >obj : { x: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
     let x15 = { ...t, ...v };
 >x15 : T | (T & U)
@@ -1162,36 +1162,36 @@ function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { 
 
     let x16 = { ...t, ...w };
 >x16 : T | (T & { s: string; })
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^      ^^^^
 >{ ...t, ...w } : T | (T & { s: string; })
->               : ^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^      ^^^^
 >t : T
 >  : ^
 >w : T | { s: string; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 
     let x17 = { ...t, ...w, ...obj };
 >x17 : (T & { x: number; }) | (T & { x: number; s: string; })
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^
 >{ ...t, ...w, ...obj } : (T & { x: number; }) | (T & { x: number; s: string; })
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^
 >t : T
 >  : ^
 >w : T | { s: string; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 >obj : { x: number; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
     let x18 = { ...t, ...v, ...w };
 >x18 : T | (T & U) | (T & { s: string; }) | (T & U & { s: string; })
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >{ ...t, ...v, ...w } : T | (T & U) | (T & { s: string; }) | (T & U & { s: string; })
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >t : T
 >  : ^
 >v : T | U
 >  : ^^^^^
 >w : T | { s: string; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 }
 

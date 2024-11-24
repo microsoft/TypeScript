@@ -14,7 +14,7 @@ function f() {
 /** @type {{ prop: string }} */
 var g = function (prop) {
 >g : { prop: string; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^
 >function (prop) {} : (prop: any) => void
 >                   : ^    ^^^^^^^^^^^^^^
 >prop : any
@@ -80,18 +80,18 @@ function funcWithMoreParameters(more) {} // error
 /** @type {() => void} */
 const variableWithMoreParameters = function (more) {}; // error
 >variableWithMoreParameters : () => void
->                           : ^^^^^^^^^^
+>                           : ^^^^^^    
 >function (more) {} : (more: any) => void
->                   : ^    ^^^^^^^^^^^^^^
+>                   : ^    ^^^^^^^^^^    
 >more : any
 >     : ^^^
 
 /** @type {() => void} */
 const arrowWithMoreParameters = (more) => {}; // error
 >arrowWithMoreParameters : () => void
->                        : ^^^^^^^^^^
+>                        : ^^^^^^    
 >(more) => {} : (more: any) => void
->             : ^    ^^^^^^^^^^^^^^
+>             : ^    ^^^^^^^^^^    
 >more : any
 >     : ^^^
 

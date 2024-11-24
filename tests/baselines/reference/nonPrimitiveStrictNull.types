@@ -23,11 +23,11 @@ var e: object | null
 
 a.toString; // error
 >a.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >a : object
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 a = undefined; // error
 >a = undefined : undefined
@@ -145,11 +145,11 @@ if (typeof d === 'object') {
 >d.toString() : string
 >             : ^^^^^^
 >d.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >d : object | null
 >  : ^^^^^^^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 } else {
     d.toString(); // error, undefined
@@ -184,11 +184,11 @@ if (d == null) {
 >d.toString() : string
 >             : ^^^^^^
 >d.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >d : object
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 
 if (d === null) {
@@ -212,11 +212,11 @@ if (d === null) {
 >d.toString() : string
 >             : ^^^^^^
 >d.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >d : object | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 
 if (typeof d === 'undefined') {
@@ -244,11 +244,11 @@ if (typeof d === 'undefined') {
 >d.toString() : string
 >             : ^^^^^^
 >d.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >d : object | null
 >  : ^^^^^^^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 
 interface Proxy<T extends object> {}

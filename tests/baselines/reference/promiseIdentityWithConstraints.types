@@ -4,7 +4,7 @@
 export interface IPromise<T, V> {
     then<U extends T, W extends V>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
 >then : <U extends T, W extends V>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
->     : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^        ^^                        ^^^^^              
+>     : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^        ^^                        ^^^^^              
 >callback : (x: T) => IPromise<U, W>
 >         : ^ ^^ ^^^^^              
 >x : T
@@ -13,7 +13,7 @@ export interface IPromise<T, V> {
 export interface Promise<T, V> {
     then<U extends T, W extends V>(callback: (x: T) => Promise<U, W>): Promise<U, W>;
 >then : <U extends T, W extends V>(callback: (x: T) => Promise<U, W>) => Promise<U, W>
->     : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^        ^^                       ^^^^^             
+>     : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^        ^^                       ^^^^^             
 >callback : (x: T) => Promise<U, W>
 >         : ^ ^^ ^^^^^             
 >x : T

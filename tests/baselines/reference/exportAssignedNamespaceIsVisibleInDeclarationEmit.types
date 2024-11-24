@@ -17,7 +17,7 @@ export = Foo;
 === index.ts ===
 import { f } from "./thing";
 >f : () => import("thing").Bar
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^       ^^^^^^^  ^^^
 
 export const thing = f();
 >thing : import("thing").Bar
@@ -25,5 +25,5 @@ export const thing = f();
 >f() : import("thing").Bar
 >    : ^^^^^^^^^^^^^^^^^^^
 >f : () => import("thing").Bar
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^       ^^^^^^^  ^^^
 

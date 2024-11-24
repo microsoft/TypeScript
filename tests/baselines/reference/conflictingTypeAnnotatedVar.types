@@ -11,5 +11,5 @@ function foo(): number { }
 
 function foo(): number { }
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 

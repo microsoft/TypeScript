@@ -100,5 +100,5 @@ var s = new fnNumber(); // Error
 >new fnNumber() : any
 >               : ^^^
 >fnNumber : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 

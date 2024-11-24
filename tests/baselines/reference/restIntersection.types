@@ -27,7 +27,7 @@ var {x, ...rest1 } = intersection;
 >x : number
 >  : ^^^^^^
 >rest1 : { y: number; w: string; z: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^^^      ^^^
 >intersection : { x: number; y: number; } & { w: string; z: string; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 

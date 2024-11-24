@@ -1,19 +1,8 @@
-currentDirectory:: / useCaseSensitiveFileNames: true
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: true
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-
 //// [/user/username/projects/myproject/tsbase.json]
 {
   "compileOnSave": true,
@@ -66,6 +55,21 @@ module Hmi {
     }
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 //// [/user/username/projects/myproject/buttonClass/Source.js]
 var Hmi;
 (function (Hmi) {
@@ -89,49 +93,33 @@ declare namespace Hmi {
 
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./Source.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}","impliedFormat":1}],"root":[2],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/TS/Lib/lib.d.ts","./Source.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"],"root":[2],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/buttonClass/Source.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "./Source.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
-      },
-      "./Source.ts": {
-        "original": {
-          "version": "-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}",
-          "impliedFormat": 1
-        },
-        "version": "-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./Source.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 0,
-      "outFile": "./Source.js"
-    },
-    "outSignature": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
-    "latestChangedDtsFile": "./Source.d.ts"
+  "fileNames": [
+    "../../../../../home/src/tslibs/TS/Lib/lib.d.ts",
+    "./Source.ts"
+  ],
+  "fileInfos": {
+    "../../../../../home/src/tslibs/TS/Lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./Source.ts": "-1678937917-module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"
   },
+  "root": [
+    [
+      2,
+      "./Source.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 0,
+    "outFile": "./Source.js"
+  },
+  "outSignature": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
+  "latestChangedDtsFile": "./Source.d.ts",
   "version": "FakeTSVersion",
-  "size": 893
+  "size": 918
 }
 
 //// [/user/username/projects/myproject/SiblingClass/Source.js]
@@ -157,58 +145,35 @@ declare namespace Hmi {
 
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../buttonClass/Source.d.ts","./Source.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","impliedFormat":1},{"version":"-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}","impliedFormat":1}],"root":[3],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/TS/Lib/lib.d.ts","../buttonClass/Source.d.ts","./Source.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n","-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"],"root":[3],"options":{"composite":true,"module":0,"outFile":"./Source.js"},"outSignature":"-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n","latestChangedDtsFile":"./Source.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/SiblingClass/Source.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "../buttonClass/Source.d.ts",
-      "./Source.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
-      },
-      "../buttonClass/Source.d.ts": {
-        "original": {
-          "version": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
-          "impliedFormat": 1
-        },
-        "version": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
-        "impliedFormat": "commonjs"
-      },
-      "./Source.ts": {
-        "original": {
-          "version": "-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}",
-          "impliedFormat": 1
-        },
-        "version": "-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        3,
-        "./Source.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 0,
-      "outFile": "./Source.js"
-    },
-    "outSignature": "-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n",
-    "latestChangedDtsFile": "./Source.d.ts"
+  "fileNames": [
+    "../../../../../home/src/tslibs/TS/Lib/lib.d.ts",
+    "../buttonClass/Source.d.ts",
+    "./Source.ts"
+  ],
+  "fileInfos": {
+    "../../../../../home/src/tslibs/TS/Lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../buttonClass/Source.d.ts": "6176297704-declare namespace Hmi {\n    class Button {\n        static myStaticFunction(): void;\n    }\n}\n",
+    "./Source.ts": "-3370344921-module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"
   },
+  "root": [
+    [
+      3,
+      "./Source.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 0,
+    "outFile": "./Source.js"
+  },
+  "outSignature": "-2810380820-declare namespace Hmi {\n    class Sibling {\n        mySiblingFunction(): void;\n    }\n}\n",
+  "latestChangedDtsFile": "./Source.d.ts",
   "version": "FakeTSVersion",
-  "size": 1054
+  "size": 1049
 }
 
 
@@ -222,18 +187,8 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/SiblingClass/Source.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/SiblingClass/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/SiblingClass/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/myproject/SiblingClass/tsconfig.json, currentDirectory: /user/username/projects/myproject/SiblingClass
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/SiblingClass/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/SiblingClass/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/myproject/SiblingClass/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/myproject/SiblingClass/Source.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/SiblingClass/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/SiblingClass/Source.ts"
@@ -252,6 +207,16 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/SiblingClass/
  ]
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsbase.json 2000 undefined Config: /user/username/projects/myproject/SiblingClass/tsconfig.json WatchType: Extended config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/SiblingClass/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/SiblingClass/Source.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/SiblingClass/tsconfig.json
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/buttonClass/tsconfig.json : {
  "rootNames": [
@@ -266,7 +231,7 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/buttonClass/t
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/buttonClass/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/SiblingClass/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/buttonClass/Source.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/SiblingClass/node_modules/@types 1 undefined Project: /user/username/projects/myproject/SiblingClass/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/SiblingClass/node_modules/@types 1 undefined Project: /user/username/projects/myproject/SiblingClass/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/SiblingClass/tsconfig.json WatchType: Type roots
@@ -276,12 +241,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/SiblingClass/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/SiblingClass/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/buttonClass/Source.ts Text-1 "module Hmi {\n    export class Button {\n        public static myStaticFunction() {\n        }\n    }\n}"
 	/user/username/projects/myproject/SiblingClass/Source.ts SVC-1-0 "module Hmi {\n    export class Sibling {\n        public mySiblingFunction() {\n        }\n    }\n}"
 
 
-	../../../../../a/lib/lib.d.ts
+	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	../buttonClass/Source.ts
 	  Source from referenced project '../buttonClass/tsconfig.json' included because '--outFile' specified
@@ -317,7 +282,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -364,7 +329,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/SiblingCla
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/SiblingClass/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -377,7 +349,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/SiblingClass/tsconfig.json: *new*
   {}
@@ -392,9 +364,10 @@ Projects::
 /user/username/projects/myproject/SiblingClass/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/SiblingClass/tsconfig.json

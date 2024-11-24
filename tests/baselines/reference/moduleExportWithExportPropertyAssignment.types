@@ -8,7 +8,7 @@ var mod1 = require('./mod1')
 >require('./mod1') : { (): void; f: (a: number) => void; }
 >                  : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >require : (name: string) => any
->        : ^    ^^      ^^^^^^^^
+>        : ^    ^^      ^^^^^   
 >'./mod1' : "./mod1"
 >         : ^^^^^^^^
 

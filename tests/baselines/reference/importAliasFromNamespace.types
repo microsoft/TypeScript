@@ -31,11 +31,11 @@ namespace SomeOther.Thing {
 >Internal.getThing() : void
 >                    : ^^^^
 >Internal.getThing : () => void
->                  : ^^^^^^^^^^
+>                  : ^^^^^^    
 >Internal : typeof Internal
 >         : ^^^^^^^^^^^^^^^
 >getThing : () => void
->         : ^^^^^^^^^^
+>         : ^^^^^^    
 
             Internal.WhichThing.A ? "foo" : "bar";
 >Internal.WhichThing.A ? "foo" : "bar" : "foo" | "bar"

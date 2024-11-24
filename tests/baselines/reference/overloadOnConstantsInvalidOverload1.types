@@ -39,7 +39,7 @@ function foo(name: "SPAN"): Derived1;
 
 function foo(name: "DIV"): Derived2 {
 >foo : (name: "SPAN") => Derived1
->    : ^    ^^      ^^^^^^^^^^^^^
+>    : ^    ^^      ^^^^^        
 >name : "DIV"
 >     : ^^^^^
 
@@ -50,7 +50,7 @@ foo("HI");
 >foo("HI") : Derived1
 >          : ^^^^^^^^
 >foo : (name: "SPAN") => Derived1
->    : ^    ^^      ^^^^^^^^^^^^^
+>    : ^    ^^      ^^^^^        
 >"HI" : "HI"
 >     : ^^^^
 

@@ -32,15 +32,15 @@ var noreturn = obj => void obj.title
 >noreturn : NoReturn
 >         : ^^^^^^^^
 >obj => void obj.title : (obj: { e: number; m: number; title: string; }) => any
->                      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^   ^^^^^^^      ^^^^^      ^^^^^^^^^      ^^^^^^^^^^^
 >obj : { e: number; m: number; title: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^      ^^^^^^^^^      ^^^
 >void obj.title : undefined
 >               : ^^^^^^^^^
 >obj.title : string
 >          : ^^^^^^
 >obj : { e: number; m: number; title: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^      ^^^^^^^^^      ^^^
 >title : string
 >      : ^^^^^^
 

@@ -128,7 +128,7 @@ foo(o1); // Not error since x has contextual type of tuple namely [string, numbe
 >foo : ({ x: [a, b], y: { c, d, e } }: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
 >    : ^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o1 : { x: [string, number]; y: { c: boolean; d: string; e: number; }; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^                ^^^^^                                     ^^^
 
 foo({ x: ["string", 1], y: { c: true, d: "world", e: 3 } }); // Not error
 >foo({ x: ["string", 1], y: { c: true, d: "world", e: 3 } }) : void

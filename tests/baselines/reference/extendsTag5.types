@@ -38,7 +38,7 @@ class B extends A {}
 >B : B
 >  : ^
 >A : A<{ a: string; b: string[]; }>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^^^        ^^^^
 
 /**
  * @extends {A<{
@@ -50,7 +50,7 @@ class C extends A {}
 >C : C
 >  : ^
 >A : A<{ a: string; b: string; }>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^^^      ^^^^
 
 /**
  * @extends {A<{a: string, b: string[]}>}
@@ -59,7 +59,7 @@ class D extends A {}
 >D : D
 >  : ^
 >A : A<{ a: string; b: string[]; }>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^^^        ^^^^
 
 /**
  * @extends {A<{a: string, b: string}>}
@@ -68,5 +68,5 @@ class E extends A {}
 >E : E
 >  : ^
 >A : A<{ a: string; b: string; }>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^^^      ^^^^
 

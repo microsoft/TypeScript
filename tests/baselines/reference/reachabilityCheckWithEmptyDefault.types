@@ -3,7 +3,7 @@
 === reachabilityCheckWithEmptyDefault.ts ===
 declare function print(s: string): void;
 >print : { (): void; (s: string): void; }
->      : ^^^^^^^^^^^^^ ^^      ^^^    ^^^
+>      : ^^^^^^    ^^^ ^^      ^^^    ^^^
 >s : string
 >  : ^^^^^^
 
@@ -25,7 +25,7 @@ function foo(x: any) {
 >print('1') : void
 >           : ^^^^
 >print : { (): void; (s: string): void; }
->      : ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>      : ^^^^^^    ^^^ ^^      ^^^    ^^^
 >'1' : "1"
 >    : ^^^
 }

@@ -74,11 +74,11 @@ complicatedArrayVar.push({ x: 30, y : 'hello world' });
 >complicatedArrayVar.push({ x: 30, y : 'hello world' }) : number
 >                                                       : ^^^^^^
 >complicatedArrayVar.push : (...items: { x: number; y: string; }[]) => number
->                         : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^     ^^^^^^^      ^^^^^      ^^^^^^^^^^      
 >complicatedArrayVar : { x: number; y: string; }[]
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^      ^^^^^      ^^^^^
 >push : (...items: { x: number; y: string; }[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^      ^^^^^      ^^^^^^^^^^      
 >{ x: 30, y : 'hello world' } : { x: number; y: string; }
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number

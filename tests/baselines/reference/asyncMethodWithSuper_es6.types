@@ -856,11 +856,11 @@ class Derived extends Base {
 >                             : ^^^^^^^^^^^^^^^^^^
 >super.method('') : any
 >super.method : (x: string) => any
->             : ^ ^^      ^^^^^^^^
+>             : ^ ^^      ^^^^^   
 >super : Base
 >      : ^^^^
 >method : (x: string) => any
->       : ^ ^^      ^^^^^^^^
+>       : ^ ^^      ^^^^^   
 >'' : ""
 >   : ^^
 
@@ -897,7 +897,7 @@ class Derived extends Base {
 >                                : ^^^^^^^^^^^^^^^^^^
 >super["method"]('') : any
 >super["method"] : (x: string) => any
->                : ^ ^^      ^^^^^^^^
+>                : ^ ^^      ^^^^^   
 >super : Base
 >      : ^^^^
 >"method" : "method"
@@ -938,11 +938,11 @@ class Derived extends Base {
 >                             : ^^^^^^^^^^^^^^^^^^
 >super.method('') : any
 >super.method : (x: string) => any
->             : ^ ^^      ^^^^^^^^
+>             : ^ ^^      ^^^^^   
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >method : (x: string) => any
->       : ^ ^^      ^^^^^^^^
+>       : ^ ^^      ^^^^^   
 >'' : ""
 >   : ^^
 
@@ -979,7 +979,7 @@ class Derived extends Base {
 >                                : ^^^^^^^^^^^^^^^^^^
 >super["method"]('') : any
 >super["method"] : (x: string) => any
->                : ^ ^^      ^^^^^^^^
+>                : ^ ^^      ^^^^^   
 >super : typeof Base
 >      : ^^^^^^^^^^^
 >"method" : "method"

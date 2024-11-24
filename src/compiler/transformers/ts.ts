@@ -60,7 +60,6 @@ import {
     getStrictOptionValue,
     getTextOfNode,
     hasDecorators,
-    hasStaticModifier,
     hasSyntacticModifier,
     HeritageClause,
     Identifier,
@@ -191,6 +190,7 @@ import {
     takeWhile,
     TextRange,
     TransformationContext,
+    Transformer,
     TransformFlags,
     VariableDeclaration,
     VariableStatement,
@@ -201,7 +201,7 @@ import {
     visitNodes,
     visitParameterList,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /**
  * Indicates whether to emit type metadata in the new format.
@@ -209,6 +209,7 @@ import {
 const USE_NEW_TYPE_METADATA_FORMAT = false;
 
 const enum TypeScriptSubstitutionFlags {
+    None = 0,
     /** Enables substitutions for namespace exports. */
     NamespaceExports = 1 << 1,
     /* Enables substitutions for unqualified enum members */
@@ -231,7 +232,7 @@ const enum ClassFacts {
 }
 
 /** @internal */
-export function transformTypeScript(context: TransformationContext) {
+export function transformTypeScript(context: TransformationContext): Transformer<SourceFile | Bundle> {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -266,13 +267,12 @@ export function transformTypeScript(context: TransformationContext) {
     let currentNamespaceContainerName: Identifier;
     let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
     let currentScopeFirstDeclarationsOfName: Map<__String, Node> | undefined;
-    let currentClassHasParameterProperties: boolean | undefined;
 
     /**
      * Keeps track of whether expression substitution has been enabled for specific edge cases.
      * They are persisted between each SourceFile transformation and should not be reset.
      */
-    let enabledSubstitutions: TypeScriptSubstitutionFlags;
+    let enabledSubstitutions = TypeScriptSubstitutionFlags.None;
 
     /**
      * Keeps track of whether we are within any containing namespaces when performing
@@ -323,7 +323,6 @@ export function transformTypeScript(context: TransformationContext) {
         // Save state
         const savedCurrentScope = currentLexicalScope;
         const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
-        const savedCurrentClassHasParameterProperties = currentClassHasParameterProperties;
 
         // Handle state changes before visiting a node.
         onBeforeVisitNode(node);
@@ -336,7 +335,6 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         currentLexicalScope = savedCurrentScope;
-        currentClassHasParameterProperties = savedCurrentClassHasParameterProperties;
         return visited;
     }
 
@@ -1239,10 +1237,8 @@ export function transformTypeScript(context: TransformationContext) {
     function visitPropertyNameOfClassElement(member: ClassElement): PropertyName {
         const name = member.name!;
         // Computed property names need to be transformed into a hoisted variable when they are used more than once.
-        // The names are used more than once when:
-        //   - the property is non-static and its initializer is moved to the constructor (when there are parameter property assignments).
-        //   - the property has a decorator.
-        if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member) && legacyDecorators)) {
+        // The names are used more than once when the property has a decorator.
+        if (legacyDecorators && isComputedPropertyName(name) && hasDecorators(member)) {
             const expression = visitNode(name.expression, visitor, isExpression);
             Debug.assert(expression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
@@ -1689,7 +1685,7 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function visitParenthesizedExpression(node: ParenthesizedExpression): Expression {
-        const innerExpression = skipOuterExpressions(node.expression, ~OuterExpressionKinds.Assertions);
+        const innerExpression = skipOuterExpressions(node.expression, ~(OuterExpressionKinds.Assertions | OuterExpressionKinds.ExpressionsWithTypeArguments));
         if (isAssertionExpression(innerExpression) || isSatisfiesExpression(innerExpression)) {
             // Make sure we consider all nested cast expressions, e.g.:
             // (<any><number><any>-A).x;
@@ -2347,7 +2343,14 @@ export function transformTypeScript(context: TransformationContext) {
             // never elide `export <whatever> from <whereever>` declarations -
             // they should be kept for sideffects/untyped exports, even when the
             // type checker doesn't know about any exports
-            return node;
+            return factory.updateExportDeclaration(
+                node,
+                node.modifiers,
+                node.isTypeOnly,
+                node.exportClause,
+                node.moduleSpecifier,
+                node.attributes,
+            );
         }
 
         // Elide the export declaration if all of its named exports are elided.
@@ -2426,8 +2429,10 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         if (isExternalModuleImportEqualsDeclaration(node)) {
-            const isReferenced = shouldEmitAliasDeclaration(node);
-            return isReferenced ? visitEachChild(node, visitor, context) : undefined;
+            if (!shouldEmitAliasDeclaration(node)) {
+                return undefined;
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         if (!shouldEmitImportEqualsDeclaration(node)) {

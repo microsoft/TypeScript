@@ -3,19 +3,19 @@
 === functionOverloads30.ts ===
 function foo(bar:string):string;
 >foo : { (bar: string): string; (bar: number): number; }
->    : ^^^   ^^      ^^^      ^^^   ^^      ^^^^^^^^^^^^
+>    : ^^^   ^^      ^^^      ^^^   ^^      ^^^      ^^^
 >bar : string
 >    : ^^^^^^
 
 function foo(bar:number):number;
 >foo : { (bar: string): string; (bar: number): number; }
->    : ^^^   ^^      ^^^^^^^^^^^^   ^^      ^^^      ^^^
+>    : ^^^   ^^      ^^^      ^^^   ^^      ^^^      ^^^
 >bar : number
 >    : ^^^^^^
 
 function foo(bar:any):any{ return bar }
 >foo : { (bar: string): string; (bar: number): number; }
->    : ^^^   ^^      ^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^
+>    : ^^^   ^^      ^^^      ^^^   ^^      ^^^      ^^^
 >bar : any
 >bar : any
 
@@ -25,7 +25,7 @@ var x = foo('bar');
 >foo('bar') : string
 >           : ^^^^^^
 >foo : { (bar: string): string; (bar: number): number; }
->    : ^^^   ^^      ^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^
+>    : ^^^   ^^      ^^^      ^^^   ^^      ^^^      ^^^
 >'bar' : "bar"
 >      : ^^^^^
 

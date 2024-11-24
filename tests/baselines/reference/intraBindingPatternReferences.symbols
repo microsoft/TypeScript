@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/intraBindingPatternReferences.ts] ////
+
+=== intraBindingPatternReferences.ts ===
+// https://github.com/microsoft/TypeScript/issues/59177
+
+function foo() { return a }
+>foo : Symbol(foo, Decl(intraBindingPatternReferences.ts, 0, 0))
+>a : Symbol(a, Decl(intraBindingPatternReferences.ts, 4, 7))
+
+const [a, b = a + 1] = [42];
+>a : Symbol(a, Decl(intraBindingPatternReferences.ts, 4, 7))
+>b : Symbol(b, Decl(intraBindingPatternReferences.ts, 4, 9))
+>a : Symbol(a, Decl(intraBindingPatternReferences.ts, 4, 7))
+
+const [c1, c2 = c1] = [123];
+>c1 : Symbol(c1, Decl(intraBindingPatternReferences.ts, 6, 7))
+>c2 : Symbol(c2, Decl(intraBindingPatternReferences.ts, 6, 10))
+>c1 : Symbol(c1, Decl(intraBindingPatternReferences.ts, 6, 7))
+
+const [d1, d2 = d1, d3 = d2] = [123];
+>d1 : Symbol(d1, Decl(intraBindingPatternReferences.ts, 7, 7))
+>d2 : Symbol(d2, Decl(intraBindingPatternReferences.ts, 7, 10))
+>d1 : Symbol(d1, Decl(intraBindingPatternReferences.ts, 7, 7))
+>d3 : Symbol(d3, Decl(intraBindingPatternReferences.ts, 7, 19))
+>d2 : Symbol(d2, Decl(intraBindingPatternReferences.ts, 7, 10))
+
+const { e1, e2 = e1 } = { e1: 1 };
+>e1 : Symbol(e1, Decl(intraBindingPatternReferences.ts, 9, 7))
+>e2 : Symbol(e2, Decl(intraBindingPatternReferences.ts, 9, 11))
+>e1 : Symbol(e1, Decl(intraBindingPatternReferences.ts, 9, 7))
+>e1 : Symbol(e1, Decl(intraBindingPatternReferences.ts, 9, 25))
+
+const { f1, f2 = f1, f3 = f2 } = { f1: 1 };
+>f1 : Symbol(f1, Decl(intraBindingPatternReferences.ts, 10, 7))
+>f2 : Symbol(f2, Decl(intraBindingPatternReferences.ts, 10, 11))
+>f1 : Symbol(f1, Decl(intraBindingPatternReferences.ts, 10, 7))
+>f3 : Symbol(f3, Decl(intraBindingPatternReferences.ts, 10, 20))
+>f2 : Symbol(f2, Decl(intraBindingPatternReferences.ts, 10, 11))
+>f1 : Symbol(f1, Decl(intraBindingPatternReferences.ts, 10, 34))
+
+// Example that requires padding of object literal types at depth
+const mockCallback = ({ event: { params = {} } = {} }) => {};
+>mockCallback : Symbol(mockCallback, Decl(intraBindingPatternReferences.ts, 13, 5))
+>event : Symbol(event)
+>params : Symbol(params, Decl(intraBindingPatternReferences.ts, 13, 32))
+
+// The contextual type for the second lambda in the object literal is 'any' because of the
+// intra-binding-pattern reference in the initializer for fn2
+const { fn1 = (x: number) => 0, fn2 = fn1 } = { fn1: x => x + 1, fn2: x => x + 2 };
+>fn1 : Symbol(fn1, Decl(intraBindingPatternReferences.ts, 17, 7))
+>x : Symbol(x, Decl(intraBindingPatternReferences.ts, 17, 15))
+>fn2 : Symbol(fn2, Decl(intraBindingPatternReferences.ts, 17, 31))
+>fn1 : Symbol(fn1, Decl(intraBindingPatternReferences.ts, 17, 7))
+>fn1 : Symbol(fn1, Decl(intraBindingPatternReferences.ts, 17, 47))
+>x : Symbol(x, Decl(intraBindingPatternReferences.ts, 17, 52))
+>x : Symbol(x, Decl(intraBindingPatternReferences.ts, 17, 52))
+>fn2 : Symbol(fn2, Decl(intraBindingPatternReferences.ts, 17, 64))
+>x : Symbol(x, Decl(intraBindingPatternReferences.ts, 17, 69))
+>x : Symbol(x, Decl(intraBindingPatternReferences.ts, 17, 69))
+

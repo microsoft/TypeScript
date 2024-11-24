@@ -32,7 +32,7 @@ foo({
 >foo({    x: Bar,    y: Date}, getNum()) : void
 >                                        : ^^^^
 >foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
->    : ^   ^^                    ^^    ^^      ^^     ^^^                        ^^^^^^^^^
+>    : ^   ^^                    ^^    ^^      ^^     ^^^                        ^^^^^    
 >{    x: Bar,    y: Date} : { x: typeof Bar; y: DateConstructor; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -52,13 +52,13 @@ foo({
 >getNum() : number
 >         : ^^^^^^
 >getNum : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
 foo({
 >foo({    x: new Bar(),    y: new Date()}, getNum) : void
 >                                                  : ^^^^
 >foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
->    : ^   ^^                    ^^    ^^      ^^     ^^^                        ^^^^^^^^^
+>    : ^   ^^                    ^^    ^^      ^^     ^^^                        ^^^^^    
 >{    x: new Bar(),    y: new Date()} : { x: Bar; y: Date; }
 >                                     : ^^^^^^^^^^^^^^^^^^^^
 
@@ -80,14 +80,14 @@ foo({
 
 }, getNum);
 >getNum : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
 
 foo({
 >foo({    x: new Bar(),    y: new Date()}, getNum(), [    1,    2,    getNum]) : void
 >                                                                              : ^^^^
 >foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
->    : ^   ^^                    ^^    ^^      ^^     ^^^                        ^^^^^^^^^
+>    : ^   ^^                    ^^    ^^      ^^     ^^^                        ^^^^^    
 >{    x: new Bar(),    y: new Date()} : { x: Bar; y: Date; }
 >                                     : ^^^^^^^^^^^^^^^^^^^^
 
@@ -111,9 +111,9 @@ foo({
 >getNum() : number
 >         : ^^^^^^
 >getNum : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >[    1,    2,    getNum] : [number, number, () => number]
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^      ^
 
     1,
 >1 : 1
@@ -125,7 +125,7 @@ foo({
 
     getNum
 >getNum : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 
 ]);
 

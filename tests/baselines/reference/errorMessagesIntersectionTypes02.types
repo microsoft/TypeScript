@@ -28,7 +28,7 @@ let fooBar: FooBar = mixBar({
 >mixBar({    fooProp: "frizzlebizzle"}) : { fooProp: "frizzlebizzle"; } & Bar
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mixBar : <T>(obj: T) => T & Bar
->       : ^ ^^   ^^ ^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^       
 >{    fooProp: "frizzlebizzle"} : { fooProp: "frizzlebizzle"; }
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

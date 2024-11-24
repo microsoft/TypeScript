@@ -144,7 +144,7 @@ enum E2 {
 >someValue() : number
 >            : ^^^^^^
 >someValue : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 }
 
 someString > E2.S1;

@@ -52,7 +52,7 @@ class X {
 >  : ^^^^^^^^^^
 >this.m.bind(this) : any
 >this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->            : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>            : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >this.m : () => void
 >       : ^^^^^^^^^^
 >this : this
@@ -60,7 +60,7 @@ class X {
 >m : () => void
 >  : ^^^^^^^^^^
 >bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >this : this
 >     : ^^^^
 
@@ -150,7 +150,7 @@ class Y {
 >  : ^^^^^^^^^^
 >this.m.bind(this) : any
 >this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->            : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>            : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >this.m : () => void
 >       : ^^^^^^^^^^
 >this : this
@@ -158,7 +158,7 @@ class Y {
 >m : () => void
 >  : ^^^^^^^^^^
 >bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >this : this
 >     : ^^^^
 

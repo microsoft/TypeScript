@@ -89,19 +89,19 @@ class C4 implements IFoo4 { // incompatible on the property type
 
 function if1(i: IFoo1): void;
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
->    : ^^^ ^^     ^^^    ^^^ ^^     ^^^^^^^^^^
+>    : ^^^ ^^     ^^^    ^^^ ^^     ^^^    ^^^
 >i : IFoo1
 >  : ^^^^^
 
 function if1(i: IFoo2): void;
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
->    : ^^^ ^^     ^^^^^^^^^^ ^^     ^^^    ^^^
+>    : ^^^ ^^     ^^^    ^^^ ^^     ^^^    ^^^
 >i : IFoo2
 >  : ^^^^^
 
 function if1(a: any) { }
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
->    : ^^^ ^^     ^^^^^^^^^^ ^^     ^^^^^^^^^^
+>    : ^^^ ^^     ^^^    ^^^ ^^     ^^^    ^^^
 >a : any
 >  : ^^^
 
@@ -117,14 +117,14 @@ if1(c1);
 >if1(c1) : void
 >        : ^^^^
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
->    : ^^^ ^^     ^^^^^^^^^^ ^^     ^^^^^^^^^^
+>    : ^^^ ^^     ^^^    ^^^ ^^     ^^^    ^^^
 >c1 : C1
 >   : ^^
 
 
 function of1(n: { a: { a: string; }; b: string; }): number;
 >of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
->    : ^^^ ^^                                 ^^^      ^^^ ^^                                 ^^^^^^^^^^^^
+>    : ^^^ ^^                                 ^^^      ^^^ ^^                                 ^^^      ^^^
 >n : { a: { a: string; }; b: string; }
 >  : ^^^^^              ^^^^^      ^^^
 >a : { a: string; }
@@ -136,7 +136,7 @@ function of1(n: { a: { a: string; }; b: string; }): number;
 
 function of1(s: { c: { b: string; }; d: string; }): string;
 >of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
->    : ^^^ ^^                                 ^^^^^^^^^^^^ ^^                                 ^^^      ^^^
+>    : ^^^ ^^                                 ^^^      ^^^ ^^                                 ^^^      ^^^
 >s : { c: { b: string; }; d: string; }
 >  : ^^^^^              ^^^^^      ^^^
 >c : { b: string; }
@@ -148,7 +148,7 @@ function of1(s: { c: { b: string; }; d: string; }): string;
 
 function of1(a: any) { return null; }
 >of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
->    : ^^^ ^^                                 ^^^^^^^^^^^^ ^^                                 ^^^^^^^^^^^^
+>    : ^^^ ^^                                 ^^^      ^^^ ^^                                 ^^^      ^^^
 >a : any
 >  : ^^^
 
@@ -156,7 +156,7 @@ of1({ e: 0, f: 0 });
 >of1({ e: 0, f: 0 }) : never
 >                    : ^^^^^
 >of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
->    : ^^^ ^^                                 ^^^^^^^^^^^^ ^^                                 ^^^^^^^^^^^^
+>    : ^^^ ^^                                 ^^^      ^^^ ^^                                 ^^^      ^^^
 >{ e: 0, f: 0 } : { e: number; f: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : number

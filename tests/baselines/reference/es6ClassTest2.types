@@ -80,11 +80,11 @@ console.log((<any>m5.isAlive).toString());
 >console.log((<any>m5.isAlive).toString()) : void
 >                                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >(<any>m5.isAlive).toString() : any
 >(<any>m5.isAlive).toString : any
 >(<any>m5.isAlive) : any

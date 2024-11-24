@@ -52,11 +52,11 @@ import {
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     refactorKindBeginsWith,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Convert arrow function or function expression";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);

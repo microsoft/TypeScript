@@ -114,7 +114,7 @@ var ResultIsNumber4 = --obj;
 >--obj : number
 >      : ^^^^^^
 >obj : () => {}
->    : ^^^^^^^^
+>    : ^^^^^^  
 
 var ResultIsNumber5 = --obj1;
 >ResultIsNumber5 : number
@@ -154,7 +154,7 @@ var ResultIsNumber9 = obj--;
 >obj-- : number
 >      : ^^^^^^
 >obj : () => {}
->    : ^^^^^^^^
+>    : ^^^^^^  
 
 var ResultIsNumber10 = obj1--;
 >ResultIsNumber10 : number
@@ -218,7 +218,7 @@ var ResultIsNumber17 = --foo();
 >foo() : any
 >      : ^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 var ResultIsNumber18 = --A.foo();
 >ResultIsNumber18 : number
@@ -228,11 +228,11 @@ var ResultIsNumber18 = --A.foo();
 >A.foo() : any
 >        : ^^^
 >A.foo : () => any
->      : ^^^^^^^^^
+>      : ^^^^^^   
 >A : typeof A
 >  : ^^^^^^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 var ResultIsNumber19 = --(null + undefined);
 >ResultIsNumber19 : number
@@ -302,7 +302,7 @@ var ResultIsNumber24 = foo()--;
 >foo() : any
 >      : ^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 var ResultIsNumber25 = A.foo()--;
 >ResultIsNumber25 : number
@@ -312,11 +312,11 @@ var ResultIsNumber25 = A.foo()--;
 >A.foo() : any
 >        : ^^^
 >A.foo : () => any
->      : ^^^^^^^^^
+>      : ^^^^^^   
 >A : typeof A
 >  : ^^^^^^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 var ResultIsNumber26 = (null + undefined)--;
 >ResultIsNumber26 : number

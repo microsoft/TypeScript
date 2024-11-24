@@ -4,7 +4,7 @@
 interface Array<T> {
     slice(): this;
 >slice : { (start?: number, end?: number): T[]; (): this; }
->      : ^^^     ^^^      ^^   ^^^      ^^^^^^^^^^^^    ^^^
+>      : ^^^     ^^^      ^^   ^^^      ^^^   ^^^^^^    ^^^
 }
 
 let t: [number, string] = [42, "hello"];

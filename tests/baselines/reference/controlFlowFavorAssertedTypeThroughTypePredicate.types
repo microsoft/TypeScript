@@ -17,7 +17,7 @@ if (isObject1(obj1)) {
 >isObject1(obj1) : boolean
 >                : ^^^^^^^
 >isObject1 : (value: unknown) => value is Record<string, unknown>
->          : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^       ^^^^^                                
 >obj1 : {}
 >     : ^^
 
@@ -46,7 +46,7 @@ if (isObject1(obj2)) {
 >isObject1(obj2) : boolean
 >                : ^^^^^^^
 >isObject1 : (value: unknown) => value is Record<string, unknown>
->          : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^       ^^^^^                                
 >obj2 : {} | undefined
 >     : ^^^^^^^^^^^^^^
 
@@ -81,7 +81,7 @@ if (isObject2(obj3)) {
 >isObject2(obj3) : boolean
 >                : ^^^^^^^
 >isObject2 : (value: unknown) => value is {}
->          : ^     ^^       ^^^^^^^^^^^^^^^^
+>          : ^     ^^       ^^^^^           
 >obj3 : Record<string, unknown>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -110,7 +110,7 @@ if (isObject2(obj4)) {
 >isObject2(obj4) : boolean
 >                : ^^^^^^^
 >isObject2 : (value: unknown) => value is {}
->          : ^     ^^       ^^^^^^^^^^^^^^^^
+>          : ^     ^^       ^^^^^           
 >obj4 : Record<string, unknown> | undefined
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

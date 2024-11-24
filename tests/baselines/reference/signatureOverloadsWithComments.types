@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/signatureOverloadsWithComments.ts] ////
+
+=== signatureOverloadsWithComments.ts ===
+/**
+ * Docs
+ */
+function Foo() {
+>Foo : () => typeof Bar
+>    : ^^^^^^^^^^^^^^^^
+
+    return class Bar {
+>class Bar {        /**         * comment 1         */        foo(bar: string): void;        /**         * @deprecated This signature is deprecated         *         * comment 2         */        foo(): string;        foo(bar?: string): string | void {            return 'hi'        }    } : typeof Bar
+>                                                                                                                                                                                                                                                                                                 : ^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+
+        /**
+         * comment 1
+         */
+        foo(bar: string): void;
+>foo : { (bar: string): void; (): string; }
+>    : ^^^   ^^      ^^^    ^^^^^^      ^^^
+>bar : string
+>    : ^^^^^^
+
+        /**
+         * @deprecated This signature is deprecated
+         *
+         * comment 2
+         */
+        foo(): string;
+>foo : { (bar: string): void; (): string; }
+>    : ^^^   ^^      ^^^    ^^^^^^      ^^^
+
+        foo(bar?: string): string | void {
+>foo : { (bar: string): void; (): string; }
+>    : ^^^   ^^      ^^^    ^^^^^^      ^^^
+>bar : string
+>    : ^^^^^^
+
+            return 'hi'
+>'hi' : "hi"
+>     : ^^^^
+        }
+    }
+}
+

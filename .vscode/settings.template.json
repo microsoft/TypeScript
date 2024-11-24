@@ -18,6 +18,9 @@
         ".git-blame-ignore-revs"
     ],
 
+    "javascript.preferences.importModuleSpecifierEnding": "js",
+    "typescript.preferences.importModuleSpecifierEnding": "js",
+
     // Match dprint in organize/auto-imports.
     "typescript.unstable": {
         "organizeImportsCollation": "unicode",

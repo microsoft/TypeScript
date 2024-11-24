@@ -1,4 +1,15 @@
 import {
+    anyContext,
+    ContextPredicate,
+    FormattingContext,
+    FormattingRequestKind,
+    Rule,
+    RuleAction,
+    RuleFlags,
+    TextRangeWithKind,
+    TokenRange,
+} from "../_namespaces/ts.formatting.js";
+import {
     BinaryExpression,
     contains,
     findAncestor,
@@ -20,18 +31,7 @@ import {
     SyntaxKind,
     typeKeywords,
     YieldExpression,
-} from "../_namespaces/ts";
-import {
-    anyContext,
-    ContextPredicate,
-    FormattingContext,
-    FormattingRequestKind,
-    Rule,
-    RuleAction,
-    RuleFlags,
-    TextRangeWithKind,
-    TokenRange,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export interface RuleSpec {
@@ -931,6 +931,13 @@ function isSemicolonDeletionContext(context: FormattingContext): boolean {
     if (startLine === endLine) {
         return nextTokenKind === SyntaxKind.CloseBraceToken
             || nextTokenKind === SyntaxKind.EndOfFileToken;
+    }
+
+    if (
+        nextTokenKind === SyntaxKind.SemicolonToken &&
+        context.currentTokenSpan.kind === SyntaxKind.SemicolonToken
+    ) {
+        return true;
     }
 
     if (

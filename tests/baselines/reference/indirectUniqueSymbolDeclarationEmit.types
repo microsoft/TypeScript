@@ -31,7 +31,7 @@ export function f() {
 >rand() : boolean
 >       : ^^^^^^^
 >rand : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 >x : unique symbol
 >  : ^^^^^^^^^^^^^
 >y : unique symbol

@@ -45,11 +45,11 @@ test.get(function (param) {
 >test.get(function (param) {    var x = barbaz.get(function () { });}) : void
 >                                                                      : ^^^^
 >test.get : (handler: (bar: number) => void) => void
->         : ^       ^^                     ^^^^^^^^^
+>         : ^       ^^                     ^^^^^    
 >test : foo
 >     : ^^^
 >get : (handler: (bar: number) => void) => void
->    : ^       ^^                     ^^^^^^^^^
+>    : ^       ^^                     ^^^^^    
 >function (param) {    var x = barbaz.get(function () { });} : (param: number) => void
 >                                                            : ^     ^^^^^^^^^^^^^^^^^
 >param : number
@@ -61,11 +61,11 @@ test.get(function (param) {
 >barbaz.get(function () { }) : number
 >                            : ^^^^^^
 >barbaz.get : (callback: Function) => number
->           : ^        ^^        ^^^^^^^^^^^
+>           : ^        ^^        ^^^^^      
 >barbaz : baz
 >       : ^^^
 >get : (callback: Function) => number
->    : ^        ^^        ^^^^^^^^^^^
+>    : ^        ^^        ^^^^^      
 >function () { } : () => void
 >                : ^^^^^^^^^^
 

@@ -50,10 +50,10 @@ class C {
 >b.toString() : string
 >             : ^^^^^^
 >b.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >b : string
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
     }
 }
