@@ -29,6 +29,7 @@ import {
     getFunctionFlags,
     getJSDocType,
     getJSDocTypeAssertionType,
+    getOriginalNode,
     getSourceFileOfNode,
     getStrictOptionValue,
     hasDynamicName,
@@ -711,7 +712,10 @@ export function createSyntacticTypeNodeBuilder(
                 undefined;
 
             if (type && !isConstTypeReference(type)) {
-                result = serializeExistingTypeNode(type, context);
+                const assertionNode = serializeExistingTypeNode(type, context);
+                if (resolver.canReuseTypeNodeAnnotation(context, node, getOriginalNode(assertionNode, isTypeNode), symbol)) {
+                    result = assertionNode;
+                }
             }
         }
         return result ?? inferTypeOfDeclaration(node, symbol, context, /*reportFallback*/ false);
