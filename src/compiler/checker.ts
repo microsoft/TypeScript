@@ -22895,16 +22895,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
-        function getApparentMappedTypeKeys(nameType: Type, targetType: MappedType) {
-            const modifiersType = getApparentType(getModifiersTypeFromMappedType(targetType));
+        function getApparentMappedTypeKeys(nameType: Type, mappedType: MappedType) {
+            const modifiersType = getApparentType(getModifiersTypeFromMappedType(mappedType));
             const mappedKeys: Type[] = [];
             forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(
                 modifiersType,
                 TypeFlags.StringOrNumberLiteralOrUnique,
                 /*stringsOnly*/ false,
-                t => void mappedKeys.push(instantiateType(nameType, appendTypeMapping(targetType.mapper, getTypeParameterFromMappedType(targetType), t))),
+                t => void mappedKeys.push(instantiateType(nameType, appendTypeMapping(mappedType.mapper, getTypeParameterFromMappedType(mappedType), t))),
             );
-            return mappedKeys.length ? getUnionType(mappedKeys) : stringNumberSymbolType;
+            return getUnionType(mappedKeys);
         }
 
         function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, saveErrorInfo: ReturnType<typeof captureErrorCalculationState>): Ternary {
@@ -23277,7 +23277,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // allow assignments of index types of identical (or similar enough) mapped types.
                     // eg, `keyof {[X in keyof A]: Obj[X]}` should be assignable to `keyof {[Y in keyof A]: Tup[Y]}` because both map over the same set of keys (`keyof A`).
                     // Without this source-side breakdown, a `keyof {[X in keyof A]: Obj[X]}` style type won't be assignable to anything except itself, which is much too strict.
-                    const sourceMappedKeys = nameType && isMappedTypeWithKeyofConstraintDeclaration(mappedType) ? getApparentMappedTypeKeys(nameType, mappedType) : (nameType || getConstraintTypeFromMappedType(mappedType));
+                    let sourceMappedKeys: Type;
+                    if (nameType && isMappedTypeWithKeyofConstraintDeclaration(mappedType)) {
+                        sourceMappedKeys = getApparentMappedTypeKeys(nameType, mappedType);
+                        if (sourceMappedKeys.flags & TypeFlags.Never) {
+                            // modifiers type of mapped type is often `unknown`, `keyof unknown` is `never` and that's assignable to everything
+                            // letting this through is too permissive so we use the apparent type of an index type here instead
+                            sourceMappedKeys = stringNumberSymbolType;
+                        }
+                    }
+                    else {
+                        sourceMappedKeys = nameType || getConstraintTypeFromMappedType(mappedType);
+                    }
                     if (result = isRelatedTo(sourceMappedKeys, target, RecursionFlags.Source, reportErrors)) {
                         return result;
                     }
