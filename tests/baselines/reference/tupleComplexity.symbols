@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/tupleComplexity.ts] ////
+
+=== tupleComplexity.ts ===
+// Tuple union with simple cases - should not produce TS2590
+type TupleUnion = [string, number] | [boolean, string];
+>TupleUnion : Symbol(TupleUnion, Decl(tupleComplexity.ts, 0, 0))
+
+const example1: TupleUnion = ["hello", 42]; // Valid
+>example1 : Symbol(example1, Decl(tupleComplexity.ts, 2, 5))
+>TupleUnion : Symbol(TupleUnion, Decl(tupleComplexity.ts, 0, 0))
+
+const example2: TupleUnion = [true, "world"]; // Valid
+>example2 : Symbol(example2, Decl(tupleComplexity.ts, 3, 5))
+>TupleUnion : Symbol(TupleUnion, Decl(tupleComplexity.ts, 0, 0))
+
+// Complex tuple concatenation - TS2590 currently triggered
+type ConcatTuple<T extends any[], U extends any[]> = [...T, ...U];
+>ConcatTuple : Symbol(ConcatTuple, Decl(tupleComplexity.ts, 3, 45))
+>T : Symbol(T, Decl(tupleComplexity.ts, 6, 17))
+>U : Symbol(U, Decl(tupleComplexity.ts, 6, 33))
+>T : Symbol(T, Decl(tupleComplexity.ts, 6, 17))
+>U : Symbol(U, Decl(tupleComplexity.ts, 6, 33))
+
+type Result = ConcatTuple<[number, string], [boolean]>;
+>Result : Symbol(Result, Decl(tupleComplexity.ts, 6, 66))
+>ConcatTuple : Symbol(ConcatTuple, Decl(tupleComplexity.ts, 3, 45))
+
+// Result should be inferred as [number, string, boolean]
+const concatenated: Result = [1, "foo", true]; // Valid
+>concatenated : Symbol(concatenated, Decl(tupleComplexity.ts, 9, 5))
+>Result : Symbol(Result, Decl(tupleComplexity.ts, 6, 66))
+
+// Map types on tuples
+type Stringify<T extends any[]> = { [K in keyof T]: string };
+>Stringify : Symbol(Stringify, Decl(tupleComplexity.ts, 9, 46))
+>T : Symbol(T, Decl(tupleComplexity.ts, 12, 15))
+>K : Symbol(K, Decl(tupleComplexity.ts, 12, 37))
+>T : Symbol(T, Decl(tupleComplexity.ts, 12, 15))
+
+type Mapped = Stringify<[number, boolean]>;
+>Mapped : Symbol(Mapped, Decl(tupleComplexity.ts, 12, 61))
+>Stringify : Symbol(Stringify, Decl(tupleComplexity.ts, 9, 46))
+
+// Should infer as [string, string]
+const mapped: Mapped = ["123", "true"]; // Valid
+>mapped : Symbol(mapped, Decl(tupleComplexity.ts, 15, 5))
+>Mapped : Symbol(Mapped, Decl(tupleComplexity.ts, 12, 61))
+
+// Complex unions within tuples
+type NestedUnion = [string, [boolean | number]];
+>NestedUnion : Symbol(NestedUnion, Decl(tupleComplexity.ts, 15, 39))
+
+const nested: NestedUnion = ["test", [true]]; // Valid
+>nested : Symbol(nested, Decl(tupleComplexity.ts, 19, 5))
+>NestedUnion : Symbol(NestedUnion, Decl(tupleComplexity.ts, 15, 39))
+
+const nested2: NestedUnion = ["test", [42]]; // Valid
+>nested2 : Symbol(nested2, Decl(tupleComplexity.ts, 20, 5))
+>NestedUnion : Symbol(NestedUnion, Decl(tupleComplexity.ts, 15, 39))
+

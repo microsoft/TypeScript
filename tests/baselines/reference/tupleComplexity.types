@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/tupleComplexity.ts] ////
+
+=== tupleComplexity.ts ===
+// Tuple union with simple cases - should not produce TS2590
+type TupleUnion = [string, number] | [boolean, string];
+>TupleUnion : TupleUnion
+>           : ^^^^^^^^^^
+
+const example1: TupleUnion = ["hello", 42]; // Valid
+>example1 : TupleUnion
+>         : ^^^^^^^^^^
+>["hello", 42] : [string, number]
+>              : ^^^^^^^^^^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+const example2: TupleUnion = [true, "world"]; // Valid
+>example2 : TupleUnion
+>         : ^^^^^^^^^^
+>[true, "world"] : [true, string]
+>                : ^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>"world" : "world"
+>        : ^^^^^^^
+
+// Complex tuple concatenation - TS2590 currently triggered
+type ConcatTuple<T extends any[], U extends any[]> = [...T, ...U];
+>ConcatTuple : [...T, ...U]
+>            : ^^^^^^^^^^^^
+
+type Result = ConcatTuple<[number, string], [boolean]>;
+>Result : [number, string, boolean]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Result should be inferred as [number, string, boolean]
+const concatenated: Result = [1, "foo", true]; // Valid
+>concatenated : [number, string, boolean]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, "foo", true] : [number, string, true]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"foo" : "foo"
+>      : ^^^^^
+>true : true
+>     : ^^^^
+
+// Map types on tuples
+type Stringify<T extends any[]> = { [K in keyof T]: string };
+>Stringify : Stringify<T>
+>          : ^^^^^^^^^^^^
+
+type Mapped = Stringify<[number, boolean]>;
+>Mapped : [string, string]
+>       : ^^^^^^^^^^^^^^^^
+
+// Should infer as [string, string]
+const mapped: Mapped = ["123", "true"]; // Valid
+>mapped : [string, string]
+>       : ^^^^^^^^^^^^^^^^
+>["123", "true"] : [string, string]
+>                : ^^^^^^^^^^^^^^^^
+>"123" : "123"
+>      : ^^^^^
+>"true" : "true"
+>       : ^^^^^^
+
+// Complex unions within tuples
+type NestedUnion = [string, [boolean | number]];
+>NestedUnion : NestedUnion
+>            : ^^^^^^^^^^^
+
+const nested: NestedUnion = ["test", [true]]; // Valid
+>nested : NestedUnion
+>       : ^^^^^^^^^^^
+>["test", [true]] : [string, [true]]
+>                 : ^^^^^^^^^^^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+>[true] : [true]
+>       : ^^^^^^
+>true : true
+>     : ^^^^
+
+const nested2: NestedUnion = ["test", [42]]; // Valid
+>nested2 : NestedUnion
+>        : ^^^^^^^^^^^
+>["test", [42]] : [string, [number]]
+>               : ^^^^^^^^^^^^^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+>[42] : [number]
+>     : ^^^^^^^^
+>42 : 42
+>   : ^^
+
