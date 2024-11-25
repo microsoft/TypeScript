@@ -3458,10 +3458,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (containerKind === SyntaxKind.InterfaceDeclaration && heritageKind === SyntaxKind.ExtendsKeyword) {
                         error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_It_can_only_extend_other_named_object_types, unescapeLeadingUnderscores(name));
                     }
-                    else if (containerKind === SyntaxKind.ClassDeclaration && heritageKind === SyntaxKind.ExtendsKeyword) {
+                    else if (isClassLike(grandparent.parent) && heritageKind === SyntaxKind.ExtendsKeyword) {
                         error(errorLocation, Diagnostics.A_class_cannot_extend_a_primitive_type_like_0_Classes_can_only_extend_constructable_values, unescapeLeadingUnderscores(name));
                     }
-                    else if (containerKind === SyntaxKind.ClassDeclaration && heritageKind === SyntaxKind.ImplementsKeyword) {
+                    else if (isClassLike(grandparent.parent) && heritageKind === SyntaxKind.ImplementsKeyword) {
                         error(errorLocation, Diagnostics.A_class_cannot_implement_a_primitive_type_like_0_It_can_only_implement_other_named_object_types, unescapeLeadingUnderscores(name));
                     }
                 }
@@ -14369,6 +14369,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return MappedTypeNameTypeKind.None;
         }
         return isTypeAssignableTo(nameType, getTypeParameterFromMappedType(type)) ? MappedTypeNameTypeKind.Filtering : MappedTypeNameTypeKind.Remapping;
+    }
+
+    // generic mapped types that don't simplify or have a constraint still have a very simple set of keys - their nameType or constraintType.
+    // In many ways, this is a deferred version of what `getIndexTypeForMappedType` does to actually resolve the keys for _non_-generic types
+    function getGenericMappedTypeKeys(type: MappedType) {
+        const nameType = getNameTypeFromMappedType(type);
+        if (nameType && isMappedTypeWithKeyofConstraintDeclaration(type)) {
+            // we need to get the apparent mappings and union them with the generic mappings, since some properties may be
+            // missing from the `constraintType` which will otherwise be mapped in the object
+            const modifiersType = getApparentType(getModifiersTypeFromMappedType(type));
+            const mappedKeys: Type[] = [];
+            forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(
+                modifiersType,
+                TypeFlags.StringOrNumberLiteralOrUnique,
+                /*stringsOnly*/ false,
+                t => void mappedKeys.push(instantiateType(nameType, appendTypeMapping(type.mapper, getTypeParameterFromMappedType(type), t))),
+            );
+            // We still need to include the non-apparent (and thus still generic) keys since when this gets used in comparisons the other side might include them
+            return getUnionType([...mappedKeys, nameType]);
+        }
+        return nameType || getConstraintTypeFromMappedType(type);
     }
 
     function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
