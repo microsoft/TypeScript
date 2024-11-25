@@ -14,7 +14,7 @@ import (
 func Filter[T any](slice []T, f func(T) bool) []T {
 	for i, value := range slice {
 		if !f(value) {
-			result := slice[:i]
+			result := slices.Clone(slice[:i])
 			for i++; i < len(slice); i++ {
 				value = slice[i]
 				if f(value) {

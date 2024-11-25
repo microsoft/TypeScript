@@ -231,7 +231,7 @@ func (b *Binder) declareSymbolEx(symbolTable ast.SymbolTable, parent *ast.Symbol
 				} else {
 					diag = b.createDiagnosticForNode(declarationName, message)
 				}
-				if ast.IsTypeAliasDeclaration(node) && ast.NodeIsMissing(node.AsTypeAliasDeclaration().TypeNode) && hasSyntacticModifier(node, ast.ModifierFlagsExport) && symbol.Flags&(ast.SymbolFlagsAlias|ast.SymbolFlagsType|ast.SymbolFlagsNamespace) != 0 {
+				if ast.IsTypeAliasDeclaration(node) && ast.NodeIsMissing(node.AsTypeAliasDeclaration().Type) && hasSyntacticModifier(node, ast.ModifierFlagsExport) && symbol.Flags&(ast.SymbolFlagsAlias|ast.SymbolFlagsType|ast.SymbolFlagsNamespace) != 0 {
 					// export type T; - may have meant export type { T }?
 					diag.AddRelatedInfo(b.createDiagnosticForNode(node, diagnostics.Did_you_mean_0, "export type { "+node.AsTypeAliasDeclaration().Name().AsIdentifier().Text+" }"))
 				}
@@ -430,7 +430,7 @@ func (b *Binder) newFlowNode(flags ast.FlowFlags) *ast.FlowNode {
 	return result
 }
 
-func (b *Binder) newFlowNodeEx(flags ast.FlowFlags, node any, antecedent *ast.FlowNode) *ast.FlowNode {
+func (b *Binder) newFlowNodeEx(flags ast.FlowFlags, node *ast.Node, antecedent *ast.FlowNode) *ast.FlowNode {
 	result := b.newFlowNode(flags)
 	result.Node = node
 	result.Antecedent = antecedent
@@ -446,7 +446,7 @@ func (b *Binder) createBranchLabel() *ast.FlowLabel {
 }
 
 func (b *Binder) createReduceLabel(target *ast.FlowLabel, antecedents *ast.FlowList, antecedent *ast.FlowNode) *ast.FlowNode {
-	return b.newFlowNodeEx(ast.FlowFlagsReduceLabel, &ast.FlowReduceLabelData{Target: target, Antecedents: antecedents}, antecedent)
+	return b.newFlowNodeEx(ast.FlowFlagsReduceLabel, ast.NewFlowReduceLabelData(target, antecedents), antecedent)
 }
 
 func (b *Binder) createFlowCondition(flags ast.FlowFlags, antecedent *ast.FlowNode, expression *ast.Node) *ast.FlowNode {
@@ -479,12 +479,12 @@ func (b *Binder) createFlowMutation(flags ast.FlowFlags, antecedent *ast.FlowNod
 	return result
 }
 
-func (b *Binder) createFlowSwitchClause(antecedent *ast.FlowNode, switchStatement *ast.SwitchStatement, clauseStart int32, clauseEnd int32) *ast.FlowNode {
+func (b *Binder) createFlowSwitchClause(antecedent *ast.FlowNode, switchStatement *ast.SwitchStatement, clauseStart int, clauseEnd int) *ast.FlowNode {
 	setFlowNodeReferenced(antecedent)
-	return b.newFlowNodeEx(ast.FlowFlagsSwitchClause, &ast.FlowSwitchClauseData{SwitchStatement: switchStatement, ClauseStart: clauseStart, ClauseEnd: clauseEnd}, antecedent)
+	return b.newFlowNodeEx(ast.FlowFlagsSwitchClause, ast.NewFlowSwitchClauseData(switchStatement, clauseStart, clauseEnd), antecedent)
 }
 
-func (b *Binder) createFlowCall(antecedent *ast.FlowNode, node *ast.CallExpression) *ast.FlowNode {
+func (b *Binder) createFlowCall(antecedent *ast.FlowNode, node *ast.Node) *ast.FlowNode {
 	setFlowNodeReferenced(antecedent)
 	b.hasFlowEffects = true
 	return b.newFlowNodeEx(ast.FlowFlagsCall, node, antecedent)
@@ -492,7 +492,7 @@ func (b *Binder) createFlowCall(antecedent *ast.FlowNode, node *ast.CallExpressi
 
 func (b *Binder) newFlowList(head *ast.FlowNode, tail *ast.FlowList) *ast.FlowList {
 	result := b.flowListPool.New()
-	result.Node = head
+	result.Flow = head
 	result.Next = tail
 	return result
 }
@@ -501,7 +501,7 @@ func (b *Binder) combineFlowLists(head *ast.FlowList, tail *ast.FlowList) *ast.F
 	if head == nil {
 		return tail
 	}
-	return b.newFlowList(head.Node, b.combineFlowLists(head.Next, tail))
+	return b.newFlowList(head.Flow, b.combineFlowLists(head.Next, tail))
 }
 
 func (b *Binder) newSingleDeclaration(declaration *ast.Node) []*ast.Node {
@@ -525,7 +525,7 @@ func setFlowNodeReferenced(flow *ast.FlowNode) {
 
 func hasAntecedent(list *ast.FlowList, antecedent *ast.FlowNode) bool {
 	for list != nil {
-		if list.Node == antecedent {
+		if list.Flow == antecedent {
 			return true
 		}
 		list = list.Next
@@ -545,7 +545,7 @@ func finishFlowLabel(label *ast.FlowLabel) *ast.FlowNode {
 		return ast.UnreachableFlow
 	}
 	if label.Antecedents.Next == nil {
-		return label.Antecedents.Node
+		return label.Antecedents.Flow
 	}
 	return label
 }
@@ -777,7 +777,7 @@ func (b *Binder) declareModuleSymbol(node *ast.Node) ModuleInstanceState {
 }
 
 func (b *Binder) bindNamespaceExportDeclaration(node *ast.Node) {
-	if node.AsNamespaceExportDeclaration().Modifiers() != nil {
+	if node.Modifiers() != nil {
 		b.errorOnNode(node, diagnostics.Modifiers_cannot_appear_here)
 	}
 	switch {
@@ -941,7 +941,7 @@ func getModuleInstanceStateForAliasTarget(node *ast.Node, visited map[ast.NodeId
 		if ast.IsBlock(p) || ast.IsModuleBlock(p) || ast.IsSourceFile(p) {
 			statements := getStatementsOfBlock(p)
 			found := ModuleInstanceStateUnknown
-			for _, statement := range statements {
+			for _, statement := range statements.Nodes {
 				if nodeHasName(statement, name) {
 					if statement.Parent == nil {
 						setParent(statement, p)
@@ -1872,12 +1872,13 @@ func (b *Binder) bindWhileStatement(node *ast.Node) {
 	preWhileLabel := b.setContinueTarget(node, b.createLoopLabel())
 	preBodyLabel := b.createBranchLabel()
 	postWhileLabel := b.createBranchLabel()
-	b.addAntecedent(preWhileLabel, b.currentFlow)
+	topFlow := b.currentFlow
 	b.currentFlow = preWhileLabel
 	b.bindCondition(stmt.Expression, preBodyLabel, postWhileLabel)
 	b.currentFlow = finishFlowLabel(preBodyLabel)
 	b.bindIterativeStatement(stmt.Statement, postWhileLabel, preWhileLabel)
 	b.addAntecedent(preWhileLabel, b.currentFlow)
+	b.addAntecedent(preWhileLabel, topFlow)
 	b.currentFlow = finishFlowLabel(postWhileLabel)
 }
 
@@ -1886,12 +1887,13 @@ func (b *Binder) bindDoStatement(node *ast.Node) {
 	preDoLabel := b.createLoopLabel()
 	preConditionLabel := b.setContinueTarget(node, b.createBranchLabel())
 	postDoLabel := b.createBranchLabel()
-	b.addAntecedent(preDoLabel, b.currentFlow)
+	topFlow := b.currentFlow
 	b.currentFlow = preDoLabel
 	b.bindIterativeStatement(stmt.Statement, postDoLabel, preConditionLabel)
 	b.addAntecedent(preConditionLabel, b.currentFlow)
 	b.currentFlow = finishFlowLabel(preConditionLabel)
 	b.bindCondition(stmt.Expression, preDoLabel, postDoLabel)
+	b.addAntecedent(preDoLabel, topFlow)
 	b.currentFlow = finishFlowLabel(postDoLabel)
 }
 
@@ -1901,13 +1903,14 @@ func (b *Binder) bindForStatement(node *ast.Node) {
 	preBodyLabel := b.createBranchLabel()
 	postLoopLabel := b.createBranchLabel()
 	b.bind(stmt.Initializer)
-	b.addAntecedent(preLoopLabel, b.currentFlow)
+	topFlow := b.currentFlow
 	b.currentFlow = preLoopLabel
 	b.bindCondition(stmt.Condition, preBodyLabel, postLoopLabel)
 	b.currentFlow = finishFlowLabel(preBodyLabel)
 	b.bindIterativeStatement(stmt.Statement, postLoopLabel, preLoopLabel)
 	b.bind(stmt.Incrementor)
 	b.addAntecedent(preLoopLabel, b.currentFlow)
+	b.addAntecedent(preLoopLabel, topFlow)
 	b.currentFlow = finishFlowLabel(postLoopLabel)
 }
 
@@ -1916,7 +1919,7 @@ func (b *Binder) bindForInOrForOfStatement(node *ast.Node) {
 	preLoopLabel := b.setContinueTarget(node, b.createLoopLabel())
 	postLoopLabel := b.createBranchLabel()
 	b.bind(stmt.Expression)
-	b.addAntecedent(preLoopLabel, b.currentFlow)
+	topFlow := b.currentFlow
 	b.currentFlow = preLoopLabel
 	if node.Kind == ast.KindForOfStatement {
 		b.bind(stmt.AwaitModifier)
@@ -1928,6 +1931,7 @@ func (b *Binder) bindForInOrForOfStatement(node *ast.Node) {
 	}
 	b.bindIterativeStatement(stmt.Statement, postLoopLabel, preLoopLabel)
 	b.addAntecedent(preLoopLabel, b.currentFlow)
+	b.addAntecedent(preLoopLabel, topFlow)
 	b.currentFlow = finishFlowLabel(postLoopLabel)
 }
 
@@ -2059,18 +2063,18 @@ func (b *Binder) bindTryStatement(node *ast.Node) {
 		} else {
 			// If we have an IIFE return target and return statements in the try or catch blocks, add a control
 			// flow that goes back through the finally block and back through only the return statements.
-			if b.currentReturnTarget != nil && returnLabel.Antecedent != nil {
+			if b.currentReturnTarget != nil && returnLabel.Antecedents != nil {
 				b.addAntecedent(b.currentReturnTarget, b.createReduceLabel(finallyLabel, returnLabel.Antecedents, b.currentFlow))
 			}
 			// If we have an outer exception target (i.e. a containing try-finally or try-catch-finally), add a
 			// control flow that goes back through the finally blok and back through each possible exception source.
-			if b.currentExceptionTarget != nil && exceptionLabel.Antecedent != nil {
+			if b.currentExceptionTarget != nil && exceptionLabel.Antecedents != nil {
 				b.addAntecedent(b.currentExceptionTarget, b.createReduceLabel(finallyLabel, exceptionLabel.Antecedents, b.currentFlow))
 			}
 			// If the end of the finally block is reachable, but the end of the try and catch blocks are not,
 			// convert the current flow to unreachable. For example, 'try { return 1; } finally { ... }' should
 			// result in an unreachable current control flow.
-			if normalExitLabel.Antecedent != nil {
+			if normalExitLabel.Antecedents != nil {
 				b.currentFlow = b.createReduceLabel(finallyLabel, normalExitLabel.Antecedents, b.currentFlow)
 			} else {
 				b.currentFlow = ast.UnreachableFlow
@@ -2119,7 +2123,7 @@ func (b *Binder) bindCaseBlock(node *ast.Node) {
 		preCaseLabel := b.createBranchLabel()
 		preCaseFlow := b.preSwitchCaseFlow
 		if isNarrowingSwitch {
-			preCaseFlow = b.createFlowSwitchClause(b.preSwitchCaseFlow, switchStatement, int32(clauseStart), int32(i+1))
+			preCaseFlow = b.createFlowSwitchClause(b.preSwitchCaseFlow, switchStatement, clauseStart, i+1)
 		}
 		b.addAntecedent(preCaseLabel, preCaseFlow)
 		b.addAntecedent(preCaseLabel, fallthroughFlow)
@@ -2154,9 +2158,8 @@ func (b *Binder) maybeBindExpressionFlowIfCall(node *ast.Node) {
 	// A top level or comma expression call expression with a dotted function name and at least one argument
 	// is potentially an assertion and is therefore included in the control flow.
 	if ast.IsCallExpression(node) {
-		expr := node.AsCallExpression()
-		if expr.Expression.Kind != ast.KindSuperKeyword && isDottedName(expr.Expression) {
-			b.currentFlow = b.createFlowCall(b.currentFlow, expr)
+		if node.Expression().Kind != ast.KindSuperKeyword && isDottedName(node.Expression()) {
+			b.currentFlow = b.createFlowCall(b.currentFlow, node)
 		}
 	}
 }
@@ -2435,7 +2438,7 @@ func (b *Binder) bindCallExpressionFlow(node *ast.Node) {
 		} else {
 			b.bindEachChild(node)
 			if call.Expression.Kind == ast.KindSuperKeyword {
-				b.currentFlow = b.createFlowCall(b.currentFlow, call)
+				b.currentFlow = b.createFlowCall(b.currentFlow, node)
 			}
 		}
 	}
@@ -2473,7 +2476,7 @@ func (b *Binder) bindParameterFlow(node *ast.Node) {
 	b.bindModifiers(param.Modifiers())
 	b.bind(param.DotDotDotToken)
 	b.bind(param.QuestionToken)
-	b.bind(param.TypeNode)
+	b.bind(param.Type)
 	b.bindInitializer(param.Initializer)
 	b.bind(param.Name())
 }

@@ -536,6 +536,7 @@ func (t *Type) AsInstantiationExpressionType() *InstantiationExpressionType {
 }
 func (t *Type) AsMappedType() *MappedType                   { return t.data.(*MappedType) }
 func (t *Type) AsReverseMappedType() *ReverseMappedType     { return t.data.(*ReverseMappedType) }
+func (t *Type) AsEvolvingArrayType() *EvolvingArrayType     { return t.data.(*EvolvingArrayType) }
 func (t *Type) AsTypeParameter() *TypeParameter             { return t.data.(*TypeParameter) }
 func (t *Type) AsUnionType() *UnionType                     { return t.data.(*UnionType) }
 func (t *Type) AsIntersectionType() *IntersectionType       { return t.data.(*IntersectionType) }
@@ -707,6 +708,7 @@ func (t *StructuredType) ConstructSignatures() []*Signature {
 //   InstantiationExpressionType (ObjectFlagsAnonymous|ObjectFlagsInstantiationExpressionType)
 //   MappedType (ObjectFlagsAnonymous|ObjectFlagsMapped)
 //   ReverseMapped (ObjectFlagsReverseMapped)
+//   EvolvingArray (ObjectFlagsEvolvingArray)
 
 type ObjectType struct {
 	StructuredType
@@ -832,6 +834,14 @@ type ReverseMappedType struct {
 	source         *Type
 	mappedType     *Type
 	constraintType *Type
+}
+
+// EvolvingArrayType
+
+type EvolvingArrayType struct {
+	ObjectType
+	elementType    *Type
+	finalArrayType *Type
 }
 
 // UnionOrIntersectionTypeData

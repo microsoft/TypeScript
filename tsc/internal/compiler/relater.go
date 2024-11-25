@@ -1637,7 +1637,7 @@ func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
 		default:
 			var typeNode *ast.TypeNode
 			if sig.declaration != nil {
-				typeNode = getEffectiveTypeAnnotationNode(sig.declaration)
+				typeNode = sig.declaration.Type()
 				switch {
 				case typeNode != nil && ast.IsTypePredicateNode(typeNode):
 					sig.resolvedTypePredicate = c.createTypePredicateFromTypePredicateNode(typeNode, sig)
@@ -1694,8 +1694,8 @@ func (c *Checker) typePredicateKindsMatch(a *TypePredicate, b *TypePredicate) bo
 func (c *Checker) createTypePredicateFromTypePredicateNode(node *ast.Node, signature *Signature) *TypePredicate {
 	predicateNode := node.AsTypePredicateNode()
 	var t *Type
-	if predicateNode.TypeNode != nil {
-		t = c.getTypeFromTypeNode(predicateNode.TypeNode)
+	if predicateNode.Type != nil {
+		t = c.getTypeFromTypeNode(predicateNode.Type)
 	}
 	if ast.IsThisTypeNode(predicateNode.ParameterName) {
 		kind := core.IfElse(predicateNode.AssertsModifier != nil, TypePredicateKindAssertsThis, TypePredicateKindThis)
@@ -4256,4 +4256,45 @@ func chainDepth(chain *ErrorChain) int {
 		chain = chain.next
 	}
 	return depth
+}
+
+// An object type S is considered to be derived from an object type T if
+// S is a union type and every constituent of S is derived from T,
+// T is a union type and S is derived from at least one constituent of T, or
+// S is an intersection type and some constituent of S is derived from T, or
+// S is a type variable with a base constraint that is derived from T, or
+// T is {} and S is an object-like type (ensuring {} is less derived than Object), or
+// T is one of the global types Object and Function and S is a subtype of T, or
+// T occurs directly or indirectly in an 'extends' clause of S.
+// Note that this check ignores type parameters and only considers the
+// inheritance hierarchy.
+func (c *Checker) isTypeDerivedFrom(source *Type, target *Type) bool {
+	switch {
+	case source.flags&TypeFlagsUnion != 0:
+		return core.Every(source.AsUnionType().types, func(t *Type) bool {
+			return c.isTypeDerivedFrom(t, target)
+		})
+	case target.flags&TypeFlagsUnion != 0:
+		return core.Some(target.AsUnionType().types, func(t *Type) bool {
+			return c.isTypeDerivedFrom(source, t)
+		})
+	case source.flags&TypeFlagsIntersection != 0:
+		return core.Some(source.AsIntersectionType().types, func(t *Type) bool {
+			return c.isTypeDerivedFrom(t, target)
+		})
+	case source.flags&TypeFlagsInstantiableNonPrimitive != 0:
+		constraint := c.getBaseConstraintOfType(source)
+		if constraint == nil {
+			constraint = c.unknownType
+		}
+		return c.isTypeDerivedFrom(constraint, target)
+	case c.isEmptyAnonymousObjectType(target):
+		return source.flags&(TypeFlagsObject|TypeFlagsNonPrimitive) != 0
+	case target == c.globalObjectType:
+		return source.flags&(TypeFlagsObject|TypeFlagsNonPrimitive) != 0 && !c.isEmptyAnonymousObjectType(source)
+	case target == c.globalFunctionType:
+		return source.flags&TypeFlagsObject != 0 && c.isFunctionObjectType(source)
+	default:
+		return c.hasBaseType(source, c.getTargetType(target)) || (c.isArrayType(target) && !c.isReadonlyArrayType(target) && c.isTypeDerivedFrom(source, c.globalReadonlyArrayType))
+	}
 }

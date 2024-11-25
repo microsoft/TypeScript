@@ -1,6 +1,8 @@
 package ast
 
-import "slices"
+import (
+	"slices"
+)
 
 // Determines if a node is missing (either `nil` or empty)
 func NodeIsMissing(node *Node) bool {
@@ -527,4 +529,12 @@ func ModifiersToFlags(modifiers []*Node) ModifierFlags {
 		flags |= ModifierToFlag(modifier.Kind)
 	}
 	return flags
+}
+
+func IsFunctionOrModuleBlock(node *Node) bool {
+	return IsSourceFile(node) || IsModuleBlock(node) || IsBlock(node) && IsFunctionLike(node.Parent)
+}
+
+func IsFunctionExpressionOrArrowFunction(node *Node) bool {
+	return IsFunctionExpression(node) || IsArrowFunction(node)
 }

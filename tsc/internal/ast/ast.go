@@ -119,7 +119,6 @@ func (n *Node) FunctionLikeData() *FunctionLikeBase       { return n.data.Functi
 func (n *Node) Parameters() []*ParameterDeclarationNode {
 	return n.data.FunctionLikeData().Parameters.Nodes
 }
-func (n *Node) ReturnType() *TypeNode         { return n.data.FunctionLikeData().ReturnType }
 func (n *Node) ClassLikeData() *ClassLikeBase { return n.data.ClassLikeData() }
 func (n *Node) BodyData() *BodyBase           { return n.data.BodyData() }
 
@@ -149,72 +148,203 @@ func (n *Node) Text() string {
 	panic("Unhandled case in Node.Text")
 }
 
-func (node *Node) Expression() *Node {
-	switch node.Kind {
+func (n *Node) Expression() *Node {
+	switch n.Kind {
 	case KindPropertyAccessExpression:
-		return node.AsPropertyAccessExpression().Expression
+		return n.AsPropertyAccessExpression().Expression
 	case KindElementAccessExpression:
-		return node.AsElementAccessExpression().Expression
+		return n.AsElementAccessExpression().Expression
 	case KindParenthesizedExpression:
-		return node.AsParenthesizedExpression().Expression
+		return n.AsParenthesizedExpression().Expression
 	case KindCallExpression:
-		return node.AsCallExpression().Expression
+		return n.AsCallExpression().Expression
 	case KindNewExpression:
-		return node.AsNewExpression().Expression
+		return n.AsNewExpression().Expression
 	case KindExpressionWithTypeArguments:
-		return node.AsExpressionWithTypeArguments().Expression
+		return n.AsExpressionWithTypeArguments().Expression
 	case KindNonNullExpression:
-		return node.AsNonNullExpression().Expression
+		return n.AsNonNullExpression().Expression
 	case KindTypeAssertionExpression:
-		return node.AsTypeAssertion().Expression
+		return n.AsTypeAssertion().Expression
 	case KindAsExpression:
-		return node.AsAsExpression().Expression
+		return n.AsAsExpression().Expression
 	case KindSatisfiesExpression:
-		return node.AsSatisfiesExpression().Expression
+		return n.AsSatisfiesExpression().Expression
 	case KindTypeOfExpression:
-		return node.AsTypeOfExpression().Expression
+		return n.AsTypeOfExpression().Expression
 	case KindSpreadAssignment:
-		return node.AsSpreadAssignment().Expression
+		return n.AsSpreadAssignment().Expression
 	case KindSpreadElement:
-		return node.AsSpreadElement().Expression
+		return n.AsSpreadElement().Expression
 	case KindTemplateSpan:
-		return node.AsTemplateSpan().Expression
+		return n.AsTemplateSpan().Expression
 	case KindDeleteExpression:
-		return node.AsDeleteExpression().Expression
+		return n.AsDeleteExpression().Expression
 	case KindVoidExpression:
-		return node.AsVoidExpression().Expression
+		return n.AsVoidExpression().Expression
 	case KindAwaitExpression:
-		return node.AsAwaitExpression().Expression
+		return n.AsAwaitExpression().Expression
 	case KindYieldExpression:
-		return node.AsYieldExpression().Expression
+		return n.AsYieldExpression().Expression
 	case KindForInStatement, KindForOfStatement:
-		return node.AsForInOrOfStatement().Expression
+		return n.AsForInOrOfStatement().Expression
 	}
 	panic("Unhandled case in Node.Expression")
 }
 
-func (node *Node) Arguments() []*Node {
-	var arguments *NodeList
-	switch node.Kind {
+func (n *Node) Arguments() []*Node {
+	var list *NodeList
+	switch n.Kind {
 	case KindCallExpression:
-		arguments = node.AsCallExpression().Arguments
+		list = n.AsCallExpression().Arguments
 	case KindNewExpression:
-		arguments = node.AsNewExpression().Arguments
+		list = n.AsNewExpression().Arguments
 	default:
 		panic("Unhandled case in Node.Arguments")
 	}
-	if arguments != nil {
-		return arguments.Nodes
+	if list != nil {
+		return list.Nodes
 	}
 	return nil
 }
 
-func (node *Node) ModifierFlags() ModifierFlags {
-	modifiers := node.Modifiers()
+func (n *Node) TypeArguments() []*Node {
+	var list *NodeList
+	switch n.Kind {
+	case KindCallExpression:
+		list = n.AsCallExpression().TypeArguments
+	case KindNewExpression:
+		list = n.AsNewExpression().TypeArguments
+	case KindTaggedTemplateExpression:
+		list = n.AsTaggedTemplateExpression().TypeArguments
+	case KindTypeReference:
+		list = n.AsTypeReference().TypeArguments
+	case KindExpressionWithTypeArguments:
+		list = n.AsExpressionWithTypeArguments().TypeArguments
+	case KindImportType:
+		list = n.AsImportTypeNode().TypeArguments
+	case KindTypeQuery:
+		list = n.AsTypeQueryNode().TypeArguments
+	default:
+		panic("Unhandled case in Node.TypeArguments")
+	}
+	if list != nil {
+		return list.Nodes
+	}
+	return nil
+}
+
+func (n *Node) TypeParameters() []*Node {
+	var list *NodeList
+	switch n.Kind {
+	case KindClassDeclaration:
+		list = n.AsClassDeclaration().TypeParameters
+	case KindClassExpression:
+		list = n.AsClassExpression().TypeParameters
+	case KindInterfaceDeclaration:
+		list = n.AsInterfaceDeclaration().TypeParameters
+	case KindTypeAliasDeclaration:
+		list = n.AsTypeAliasDeclaration().TypeParameters
+	default:
+		funcLike := n.FunctionLikeData()
+		if funcLike == nil {
+			panic("Unhandled case in Node.TypeParameters")
+		}
+		list = funcLike.TypeParameters
+	}
+	if list != nil {
+		return list.Nodes
+	}
+	return nil
+}
+
+func (n *Node) ModifierFlags() ModifierFlags {
+	modifiers := n.Modifiers()
 	if modifiers != nil {
 		return modifiers.ModifierFlags
 	}
 	return ModifierFlagsNone
+}
+
+func (n *Node) Type() *Node {
+	switch n.Kind {
+	case KindVariableDeclaration:
+		return n.AsVariableDeclaration().Type
+	case KindParameter:
+		return n.AsParameterDeclaration().Type
+	case KindPropertySignature:
+		return n.AsPropertySignatureDeclaration().Type
+	case KindPropertyDeclaration:
+		return n.AsPropertyDeclaration().Type
+	case KindTypePredicate:
+		return n.AsTypePredicateNode().Type
+	case KindParenthesizedType:
+		return n.AsParenthesizedTypeNode().Type
+	case KindTypeOperator:
+		return n.AsTypeOperatorNode().Type
+	case KindMappedType:
+		return n.AsMappedTypeNode().Type
+	case KindTypeAssertionExpression:
+		return n.AsTypeAssertion().Type
+	case KindAsExpression:
+		return n.AsAsExpression().Type
+	case KindSatisfiesExpression:
+		return n.AsSatisfiesExpression().Type
+	case KindTypeAliasDeclaration:
+		return n.AsTypeAliasDeclaration().Type
+	case KindNamedTupleMember:
+		return n.AsNamedTupleMember().Type
+	case KindOptionalType:
+		return n.AsOptionalTypeNode().Type
+	case KindRestType:
+		return n.AsRestTypeNode().Type
+	case KindTemplateLiteralTypeSpan:
+		return n.AsTemplateLiteralTypeSpan().Type
+	case KindJSDocTypeExpression:
+		return n.AsJSDocTypeExpression().Type
+	case KindJSDocNullableType:
+		return n.AsJSDocNullableType().Type
+	case KindJSDocNonNullableType:
+		return n.AsJSDocNonNullableType().Type
+	case KindJSDocFunctionType:
+		return n.AsJSDocFunctionType().Type
+	case KindJSDocOptionalType:
+		return n.AsJSDocOptionalType().Type
+	case KindEnumMember, KindBindingElement:
+		return nil
+	default:
+		funcLike := n.FunctionLikeData()
+		if funcLike != nil {
+			return funcLike.Type
+		}
+	}
+	panic("Unhandled case in Node.Type")
+}
+
+func (n *Node) Initializer() *Node {
+	switch n.Kind {
+	case KindVariableDeclaration:
+		return n.AsVariableDeclaration().Initializer
+	case KindParameter:
+		return n.AsParameterDeclaration().Initializer
+	case KindBindingElement:
+		return n.AsBindingElement().Initializer
+	case KindPropertyDeclaration:
+		return n.AsPropertyDeclaration().Initializer
+	case KindPropertySignature:
+		return n.AsPropertyDeclaration().Initializer
+	case KindPropertyAssignment:
+		return n.AsPropertyAssignment().Initializer
+	case KindEnumMember:
+		return n.AsEnumMember().Initializer
+	case KindForStatement:
+		return n.AsForStatement().Initializer
+	case KindForInStatement, KindForOfStatement:
+		return n.AsForInOrOfStatement().Initializer
+	case KindJsxAttribute:
+		return n.AsJsxAttribute().Initializer
+	}
+	panic("Unhandled case in Node.Initializer")
 }
 
 // Node casts
@@ -705,6 +835,15 @@ func (n *Node) AsAwaitExpression() *AwaitExpression {
 func (n *Node) AsYieldExpression() *YieldExpression {
 	return n.data.(*YieldExpression)
 }
+func (n *Node) AsFlowSwitchClauseData() *FlowSwitchClauseData {
+	return n.data.(*FlowSwitchClauseData)
+}
+func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
+	return n.data.(*FlowReduceLabelData)
+}
+func (n *Node) AsJsxExpression() *JsxExpression {
+	return n.data.(*JsxExpression)
+}
 
 // NodeData
 
@@ -871,7 +1010,7 @@ type FunctionLikeBase struct {
 	LocalsContainerBase
 	TypeParameters *NodeList // NodeList[*TypeParameterDeclarationNode]. Optional
 	Parameters     *NodeList // NodeList[*ParameterDeclarationNode]
-	ReturnType     *TypeNode // Optional
+	Type           *TypeNode // Optional
 }
 
 func (node *FunctionLikeBase) LocalsContainerData() *LocalsContainerBase {
@@ -1410,6 +1549,10 @@ func (node *CatchClause) ForEachChild(v Visitor) bool {
 	return visit(v, node.VariableDeclaration) || visit(v, node.Block)
 }
 
+func IsCatchClause(node *Node) bool {
+	return node.Kind == KindCatchClause
+}
+
 // DebuggerStatement
 
 type DebuggerStatement struct {
@@ -1515,7 +1658,7 @@ type VariableDeclaration struct {
 	ExportableBase
 	name             *BindingName // BindingName
 	ExclamationToken *TokenNode   // TokenNode. Optional
-	TypeNode         *TypeNode    // TypeNode. Optional
+	Type             *TypeNode    // TypeNode. Optional
 	Initializer      *Expression  // Expression. Optional
 }
 
@@ -1523,13 +1666,13 @@ func (f *NodeFactory) NewVariableDeclaration(name *BindingName, exclamationToken
 	data := &VariableDeclaration{}
 	data.name = name
 	data.ExclamationToken = exclamationToken
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	data.Initializer = initializer
 	return f.newNode(KindVariableDeclaration, data)
 }
 
 func (node *VariableDeclaration) ForEachChild(v Visitor) bool {
-	return visit(v, node.name) || visit(v, node.ExclamationToken) || visit(v, node.TypeNode) || visit(v, node.Initializer)
+	return visit(v, node.name) || visit(v, node.ExclamationToken) || visit(v, node.Type) || visit(v, node.Initializer)
 }
 
 func (node *VariableDeclaration) Name() *DeclarationName {
@@ -1601,7 +1744,7 @@ type ParameterDeclaration struct {
 	DotDotDotToken *TokenNode   // TokenNode. Present on rest parameter
 	name           *BindingName // BindingName. Declared parameter name
 	QuestionToken  *TokenNode   // TokenNode. Present on optional parameter
-	TypeNode       *TypeNode    // TypeNode. Optional
+	Type           *TypeNode    // TypeNode. Optional
 	Initializer    *Expression  // Expression. Optional
 }
 
@@ -1611,14 +1754,14 @@ func (f *NodeFactory) NewParameterDeclaration(modifiers *ModifierList, dotDotDot
 	data.DotDotDotToken = dotDotDotToken
 	data.name = name
 	data.QuestionToken = questionToken
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	data.Initializer = initializer
 	return f.newNode(KindParameter, data)
 }
 
 func (node *ParameterDeclaration) ForEachChild(v Visitor) bool {
 	return visitModifiers(v, node.modifiers) || visit(v, node.DotDotDotToken) || visit(v, node.name) ||
-		visit(v, node.QuestionToken) || visit(v, node.TypeNode) || visit(v, node.Initializer)
+		visit(v, node.QuestionToken) || visit(v, node.Type) || visit(v, node.Initializer)
 }
 
 func (node *ParameterDeclaration) Name() *DeclarationName {
@@ -1700,14 +1843,14 @@ func (f *NodeFactory) NewFunctionDeclaration(modifiers *ModifierList, asteriskTo
 	data.name = name
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	data.Body = body
 	return f.newNode(KindFunctionDeclaration, data)
 }
 
 func (node *FunctionDeclaration) ForEachChild(v Visitor) bool {
 	return visitModifiers(v, node.modifiers) || visit(v, node.AsteriskToken) || visit(v, node.name) || visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) || visit(v, node.ReturnType) || visit(v, node.Body)
+		visitNodeList(v, node.Parameters) || visit(v, node.Type) || visit(v, node.Body)
 }
 
 func (node *FunctionDeclaration) Name() *DeclarationName {
@@ -1849,7 +1992,7 @@ type TypeAliasDeclaration struct {
 	LocalsContainerBase
 	name           *IdentifierNode // IdentifierNode
 	TypeParameters *NodeList       // NodeList[*TypeParameterDeclarationNode]. Optional
-	TypeNode       *TypeNode       // TypeNode
+	Type           *TypeNode       // TypeNode
 }
 
 func (f *NodeFactory) NewTypeAliasDeclaration(modifiers *ModifierList, name *IdentifierNode, typeParameters *NodeList, typeNode *TypeNode) *Node {
@@ -1857,12 +2000,12 @@ func (f *NodeFactory) NewTypeAliasDeclaration(modifiers *ModifierList, name *Ide
 	data.modifiers = modifiers
 	data.name = name
 	data.TypeParameters = typeParameters
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindTypeAliasDeclaration, data)
 }
 
 func (node *TypeAliasDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visitNodeList(v, node.TypeParameters) || visit(v, node.TypeNode)
+	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visitNodeList(v, node.TypeParameters) || visit(v, node.Type)
 }
 
 func (node *TypeAliasDeclaration) Name() *DeclarationName { return node.name }
@@ -2367,12 +2510,12 @@ func (f *NodeFactory) NewCallSignatureDeclaration(typeParameters *NodeList, para
 	data := &CallSignatureDeclaration{}
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	return f.newNode(KindCallSignature, data)
 }
 
 func (node *CallSignatureDeclaration) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.ReturnType)
+	return visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
 }
 
 func IsCallSignatureDeclaration(node *Node) bool {
@@ -2392,12 +2535,12 @@ func (f *NodeFactory) NewConstructSignatureDeclaration(typeParameters *NodeList,
 	data := &ConstructSignatureDeclaration{}
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	return f.newNode(KindConstructSignature, data)
 }
 
 func (node *ConstructSignatureDeclaration) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.ReturnType)
+	return visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
 }
 
 func IsConstructSignatureDeclaration(node *Node) bool {
@@ -2420,13 +2563,13 @@ func (f *NodeFactory) NewConstructorDeclaration(modifiers *ModifierList, typePar
 	data.modifiers = modifiers
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	data.Body = body
 	return f.newNode(KindConstructor, data)
 }
 
 func (node *ConstructorDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.ReturnType) || visit(v, node.Body)
+	return visitModifiers(v, node.modifiers) || visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type) || visit(v, node.Body)
 }
 
 func IsConstructorDeclaration(node *Node) bool {
@@ -2447,7 +2590,7 @@ type AccessorDeclarationBase struct {
 
 func (node *AccessorDeclarationBase) ForEachChild(v Visitor) bool {
 	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) ||
-		visit(v, node.ReturnType) || visit(v, node.Body)
+		visit(v, node.Type) || visit(v, node.Body)
 }
 
 func (node *AccessorDeclarationBase) IsAccessorDeclaration() {}
@@ -2464,7 +2607,7 @@ func (f *NodeFactory) NewGetAccessorDeclaration(modifiers *ModifierList, name *P
 	data.name = name
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	data.Body = body
 	return f.newNode(KindGetAccessor, data)
 }
@@ -2485,7 +2628,7 @@ func (f *NodeFactory) NewSetAccessorDeclaration(modifiers *ModifierList, name *P
 	data.name = name
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	data.Body = body
 	return f.newNode(KindSetAccessor, data)
 }
@@ -2509,12 +2652,12 @@ func (f *NodeFactory) NewIndexSignatureDeclaration(modifiers *ModifierList, para
 	data := &IndexSignatureDeclaration{}
 	data.modifiers = modifiers
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	return f.newNode(KindIndexSignature, data)
 }
 
 func (node *IndexSignatureDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visitNodeList(v, node.Parameters) || visit(v, node.ReturnType)
+	return visitModifiers(v, node.modifiers) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
 }
 
 func IsIndexSignatureDeclaration(node *Node) bool {
@@ -2537,13 +2680,13 @@ func (f *NodeFactory) NewMethodSignatureDeclaration(modifiers *ModifierList, nam
 	data.PostfixToken = postfixToken
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	return f.newNode(KindMethodSignature, data)
 }
 
 func (node *MethodSignatureDeclaration) ForEachChild(v Visitor) bool {
 	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.PostfixToken) || visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) || visit(v, node.ReturnType)
+		visitNodeList(v, node.Parameters) || visit(v, node.Type)
 }
 
 func IsMethodSignatureDeclaration(node *Node) bool {
@@ -2569,14 +2712,14 @@ func (f *NodeFactory) NewMethodDeclaration(modifiers *ModifierList, asteriskToke
 	data.PostfixToken = postfixToken
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	data.Body = body
 	return f.newNode(KindMethodDeclaration, data)
 }
 
 func (node *MethodDeclaration) ForEachChild(v Visitor) bool {
 	return visitModifiers(v, node.modifiers) || visit(v, node.AsteriskToken) || visit(v, node.name) || visit(v, node.PostfixToken) ||
-		visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.ReturnType) || visit(v, node.Body)
+		visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type) || visit(v, node.Body)
 }
 
 func IsMethodDeclaration(node *Node) bool {
@@ -2589,7 +2732,7 @@ type PropertySignatureDeclaration struct {
 	NodeBase
 	NamedMemberBase
 	TypeElementBase
-	TypeNode    *TypeNode   // TypeNode
+	Type        *TypeNode   // TypeNode
 	Initializer *Expression // Expression. For error reporting purposes
 }
 
@@ -2598,13 +2741,13 @@ func (f *NodeFactory) NewPropertySignatureDeclaration(modifiers *ModifierList, n
 	data.modifiers = modifiers
 	data.name = name
 	data.PostfixToken = postfixToken
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	data.Initializer = initializer
 	return f.newNode(KindPropertySignature, data)
 }
 
 func (node *PropertySignatureDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.PostfixToken) || visit(v, node.TypeNode) || visit(v, node.Initializer)
+	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.PostfixToken) || visit(v, node.Type) || visit(v, node.Initializer)
 }
 
 func IsPropertySignatureDeclaration(node *Node) bool {
@@ -2617,7 +2760,7 @@ type PropertyDeclaration struct {
 	NodeBase
 	NamedMemberBase
 	ClassElementBase
-	TypeNode    *TypeNode   // TypeNode. Optional
+	Type        *TypeNode   // TypeNode. Optional
 	Initializer *Expression // Expression. Optional
 }
 
@@ -2626,13 +2769,13 @@ func (f *NodeFactory) NewPropertyDeclaration(modifiers *ModifierList, name *Prop
 	data.modifiers = modifiers
 	data.name = name
 	data.PostfixToken = postfixToken
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	data.Initializer = initializer
 	return f.newNode(KindPropertyDeclaration, data)
 }
 
 func (node *PropertyDeclaration) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.PostfixToken) || visit(v, node.TypeNode) || visit(v, node.Initializer)
+	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.PostfixToken) || visit(v, node.Type) || visit(v, node.Initializer)
 }
 
 func IsPropertyDeclaration(node *Node) bool {
@@ -2894,7 +3037,7 @@ func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *
 	data.modifiers = modifiers
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	data.EqualsGreaterThanToken = equalsGreaterThanToken
 	data.Body = body
 	return f.newNode(KindArrowFunction, data)
@@ -2902,7 +3045,7 @@ func (f *NodeFactory) NewArrowFunction(modifiers *ModifierList, typeParameters *
 
 func (node *ArrowFunction) ForEachChild(v Visitor) bool {
 	return visitModifiers(v, node.modifiers) || visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) ||
-		visit(v, node.ReturnType) || visit(v, node.EqualsGreaterThanToken) || visit(v, node.Body)
+		visit(v, node.Type) || visit(v, node.EqualsGreaterThanToken) || visit(v, node.Body)
 }
 
 func (node *ArrowFunction) Name() *DeclarationName {
@@ -2932,14 +3075,14 @@ func (f *NodeFactory) NewFunctionExpression(modifiers *ModifierList, asteriskTok
 	data.name = name
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	data.Body = body
 	return f.newNode(KindFunctionExpression, data)
 }
 
 func (node *FunctionExpression) ForEachChild(v Visitor) bool {
 	return visitModifiers(v, node.modifiers) || visit(v, node.AsteriskToken) || visit(v, node.name) || visitNodeList(v, node.TypeParameters) ||
-		visitNodeList(v, node.Parameters) || visit(v, node.ReturnType) || visit(v, node.Body)
+		visitNodeList(v, node.Parameters) || visit(v, node.Type) || visit(v, node.Body)
 }
 
 func (node *FunctionExpression) Name() *DeclarationName {
@@ -2955,18 +3098,18 @@ func IsFunctionExpression(node *Node) bool {
 type AsExpression struct {
 	ExpressionBase
 	Expression *Expression // Expression
-	TypeNode   *TypeNode   // TypeNode
+	Type       *TypeNode   // TypeNode
 }
 
 func (f *NodeFactory) NewAsExpression(expression *Expression, typeNode *TypeNode) *Node {
 	data := &AsExpression{}
 	data.Expression = expression
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindAsExpression, data)
 }
 
 func (node *AsExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.TypeNode)
+	return visit(v, node.Expression) || visit(v, node.Type)
 }
 
 // SatisfiesExpression
@@ -2974,18 +3117,18 @@ func (node *AsExpression) ForEachChild(v Visitor) bool {
 type SatisfiesExpression struct {
 	ExpressionBase
 	Expression *Expression // Expression
-	TypeNode   *TypeNode   // TypeNode
+	Type       *TypeNode   // TypeNode
 }
 
 func (f *NodeFactory) NewSatisfiesExpression(expression *Expression, typeNode *TypeNode) *Node {
 	data := &SatisfiesExpression{}
 	data.Expression = expression
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindSatisfiesExpression, data)
 }
 
 func (node *SatisfiesExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Expression) || visit(v, node.TypeNode)
+	return visit(v, node.Expression) || visit(v, node.Type)
 }
 
 // ConditionalExpression
@@ -3489,19 +3632,19 @@ func (node *AwaitExpression) ForEachChild(v Visitor) bool {
 
 type TypeAssertion struct {
 	ExpressionBase
-	TypeNode   *TypeNode   // TypeNode
+	Type       *TypeNode   // TypeNode
 	Expression *Expression // Expression
 }
 
 func (f *NodeFactory) NewTypeAssertion(typeNode *TypeNode, expression *Expression) *Node {
 	data := &TypeAssertion{}
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	data.Expression = expression
 	return f.newNode(KindTypeAssertionExpression, data)
 }
 
 func (node *TypeAssertion) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeNode) || visit(v, node.Expression)
+	return visit(v, node.Type) || visit(v, node.Expression)
 }
 
 // TypeNodeBase
@@ -3588,18 +3731,18 @@ func IsConditionalTypeNode(node *Node) bool {
 type TypeOperatorNode struct {
 	TypeNodeBase
 	Operator Kind      // KindKeyOfKeyword | KindUniqueKeyword | KindReadonlyKeyword
-	TypeNode *TypeNode // TypeNode
+	Type     *TypeNode // TypeNode
 }
 
 func (f *NodeFactory) NewTypeOperatorNode(operator Kind, typeNode *TypeNode) *Node {
 	data := &TypeOperatorNode{}
 	data.Operator = operator
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindTypeOperator, data)
 }
 
 func (node *TypeOperatorNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeNode)
+	return visit(v, node.Type)
 }
 
 func IsTypeOperatorNode(node *Node) bool {
@@ -3754,19 +3897,19 @@ type TypePredicateNode struct {
 	TypeNodeBase
 	AssertsModifier *TokenNode                  // TokenNode. Optional
 	ParameterName   *TypePredicateParameterName // TypePredicateParameterName (Identifier | ThisTypeNode)
-	TypeNode        *TypeNode                   // TypeNode. Optional
+	Type            *TypeNode                   // TypeNode. Optional
 }
 
 func (f *NodeFactory) NewTypePredicateNode(assertsModifier *TokenNode, parameterName *TypePredicateParameterName, typeNode *TypeNode) *Node {
 	data := &TypePredicateNode{}
 	data.AssertsModifier = assertsModifier
 	data.ParameterName = parameterName
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindTypePredicate, data)
 }
 
 func (node *TypePredicateNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.AssertsModifier) || visit(v, node.ParameterName) || visit(v, node.TypeNode)
+	return visit(v, node.AssertsModifier) || visit(v, node.ParameterName) || visit(v, node.Type)
 }
 
 func IsTypePredicateNode(node *Node) bool {
@@ -3875,7 +4018,7 @@ type MappedTypeNode struct {
 	TypeParameter *TypeParameterDeclarationNode // TypeParameterDeclarationNode
 	NameType      *TypeNode                     // TypeNode. Optional
 	QuestionToken *TokenNode                    // TokenNode. Optional
-	TypeNode      *TypeNode                     // TypeNode. Optional (error if missing)
+	Type          *TypeNode                     // TypeNode. Optional (error if missing)
 	Members       *NodeList                     // NodeList[*TypeElement]. Used only to produce grammar errors
 }
 
@@ -3885,14 +4028,14 @@ func (f *NodeFactory) NewMappedTypeNode(readonlyToken *TokenNode, typeParameter 
 	data.TypeParameter = typeParameter
 	data.NameType = nameType
 	data.QuestionToken = questionToken
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	data.Members = members
 	return f.newNode(KindMappedType, data)
 }
 
 func (node *MappedTypeNode) ForEachChild(v Visitor) bool {
 	return visit(v, node.ReadonlyToken) || visit(v, node.TypeParameter) || visit(v, node.NameType) ||
-		visit(v, node.QuestionToken) || visit(v, node.TypeNode) || visitNodeList(v, node.Members)
+		visit(v, node.QuestionToken) || visit(v, node.Type) || visitNodeList(v, node.Members)
 }
 
 func IsMappedTypeNode(node *Node) bool {
@@ -3946,7 +4089,7 @@ type NamedTupleMember struct {
 	DotDotDotToken *TokenNode      // TokenNode
 	name           *IdentifierNode // IdentifierNode
 	QuestionToken  *TokenNode      // TokenNode
-	TypeNode       *TypeNode       // TypeNode
+	Type           *TypeNode       // TypeNode
 }
 
 func (f *NodeFactory) NewNamedTupleTypeMember(dotDotDotToken *TokenNode, name *IdentifierNode, questionToken *TokenNode, typeNode *TypeNode) *Node {
@@ -3954,12 +4097,12 @@ func (f *NodeFactory) NewNamedTupleTypeMember(dotDotDotToken *TokenNode, name *I
 	data.DotDotDotToken = dotDotDotToken
 	data.name = name
 	data.QuestionToken = questionToken
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindNamedTupleMember, data)
 }
 
 func (node *NamedTupleMember) ForEachChild(v Visitor) bool {
-	return visit(v, node.DotDotDotToken) || visit(v, node.name) || visit(v, node.QuestionToken) || visit(v, node.TypeNode)
+	return visit(v, node.DotDotDotToken) || visit(v, node.name) || visit(v, node.QuestionToken) || visit(v, node.Type)
 }
 
 func (node *NamedTupleMember) Name() *DeclarationName {
@@ -3973,51 +4116,51 @@ func IsNamedTupleMember(node *Node) bool {
 
 type OptionalTypeNode struct {
 	TypeNodeBase
-	TypeNode *TypeNode // TypeNode
+	Type *TypeNode // TypeNode
 }
 
 func (f *NodeFactory) NewOptionalTypeNode(typeNode *TypeNode) *Node {
 	data := &OptionalTypeNode{}
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindOptionalType, data)
 }
 
 func (node *OptionalTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeNode)
+	return visit(v, node.Type)
 }
 
 // RestTypeNode
 
 type RestTypeNode struct {
 	TypeNodeBase
-	TypeNode *TypeNode // TypeNode
+	Type *TypeNode // TypeNode
 }
 
 func (f *NodeFactory) NewRestTypeNode(typeNode *TypeNode) *Node {
 	data := &RestTypeNode{}
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindRestType, data)
 }
 
 func (node *RestTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeNode)
+	return visit(v, node.Type)
 }
 
 // ParenthesizedTypeNode
 
 type ParenthesizedTypeNode struct {
 	TypeNodeBase
-	TypeNode *TypeNode // TypeNode
+	Type *TypeNode // TypeNode
 }
 
 func (f *NodeFactory) NewParenthesizedTypeNode(typeNode *TypeNode) *Node {
 	data := &ParenthesizedTypeNode{}
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindParenthesizedType, data)
 }
 
 func (node *ParenthesizedTypeNode) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeNode)
+	return visit(v, node.Type)
 }
 
 func IsParenthesizedTypeNode(node *Node) bool {
@@ -4034,7 +4177,7 @@ type FunctionOrConstructorTypeNodeBase struct {
 }
 
 func (node *FunctionOrConstructorTypeNodeBase) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.ReturnType)
+	return visitModifiers(v, node.modifiers) || visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
 }
 
 // FunctionTypeNode
@@ -4047,7 +4190,7 @@ func (f *NodeFactory) NewFunctionTypeNode(typeParameters *NodeList, parameters *
 	data := &FunctionTypeNode{}
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	return f.newNode(KindFunctionType, data)
 }
 
@@ -4066,7 +4209,7 @@ func (f *NodeFactory) NewConstructorTypeNode(modifiers *ModifierList, typeParame
 	data.modifiers = modifiers
 	data.TypeParameters = typeParameters
 	data.Parameters = parameters
-	data.ReturnType = returnType
+	data.Type = returnType
 	return f.newNode(KindConstructorType, data)
 }
 
@@ -4150,19 +4293,19 @@ func (node *TemplateLiteralTypeNode) ForEachChild(v Visitor) bool {
 
 type TemplateLiteralTypeSpan struct {
 	NodeBase
-	TypeNode *TypeNode             // TypeNode
-	Literal  *TemplateMiddleOrTail // TemplateMiddleOrTail
+	Type    *TypeNode             // TypeNode
+	Literal *TemplateMiddleOrTail // TemplateMiddleOrTail
 }
 
 func (f *NodeFactory) NewTemplateLiteralTypeSpan(typeNode *TypeNode, literal *TemplateMiddleOrTail) *Node {
 	data := &TemplateLiteralTypeSpan{}
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	data.Literal = literal
 	return f.newNode(KindTemplateLiteralTypeSpan, data)
 }
 
 func (node *TemplateLiteralTypeSpan) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeNode) || visit(v, node.Literal)
+	return visit(v, node.Type) || visit(v, node.Literal)
 }
 
 /// A JSX expression of the form <TagName attrs>...</TagName>
@@ -4526,16 +4669,16 @@ func (node *JSDocLinkCode) Name() *DeclarationName {
 
 type JSDocTypeExpression struct {
 	TypeNodeBase
-	TypeNode *TypeNode
+	Type *TypeNode
 }
 
 func (node *JSDocTypeExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeNode)
+	return visit(v, node.Type)
 }
 
 func (f *NodeFactory) NewJSDocTypeExpression(typeNode *TypeNode) *Node {
 	data := &JSDocTypeExpression{}
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindJSDocTypeExpression, data)
 }
 
@@ -4543,34 +4686,34 @@ func (f *NodeFactory) NewJSDocTypeExpression(typeNode *TypeNode) *Node {
 
 type JSDocNonNullableType struct {
 	TypeNodeBase
-	TypeNode *TypeNode // TypeNode
+	Type *TypeNode // TypeNode
 }
 
 func (f *NodeFactory) NewJSDocNonNullableType(typeNode *TypeNode) *Node {
 	data := &JSDocNonNullableType{}
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindJSDocNonNullableType, data)
 }
 
 func (node *JSDocNonNullableType) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeNode)
+	return visit(v, node.Type)
 }
 
 // JSDocNullableType
 
 type JSDocNullableType struct {
 	TypeNodeBase
-	TypeNode *TypeNode // TypeNode
+	Type *TypeNode // TypeNode
 }
 
 func (f *NodeFactory) NewJSDocNullableType(typeNode *TypeNode) *Node {
 	data := &JSDocNullableType{}
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindJSDocNullableType, data)
 }
 
 func (node *JSDocNullableType) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeNode)
+	return visit(v, node.Type)
 }
 
 // JSDocAllType
@@ -4589,17 +4732,17 @@ func (f *NodeFactory) NewJSDocAllType() *Node {
 type JSDocFunctionType struct {
 	TypeNodeBase
 	Parameters *NodeList // NodeList[*ParameterDeclarationNode]
-	TypeNode   *TypeNode
+	Type       *TypeNode
 }
 
 func (node *JSDocFunctionType) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.Parameters) || visit(v, node.TypeNode)
+	return visitNodeList(v, node.Parameters) || visit(v, node.Type)
 }
 
 func (f *NodeFactory) NewJSDocFunctionType(parameters *NodeList, typeNode *TypeNode) *Node {
 	data := &JSDocFunctionType{}
 	data.Parameters = parameters
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindJSDocFunctionType, data)
 }
 
@@ -4607,33 +4750,33 @@ func (f *NodeFactory) NewJSDocFunctionType(parameters *NodeList, typeNode *TypeN
 
 type JSDocVariadicType struct {
 	TypeNodeBase
-	TypeNode *TypeNode
+	Type *TypeNode
 }
 
 func (f *NodeFactory) NewJSDocVariadicType(typeNode *TypeNode) *Node {
 	data := &JSDocVariadicType{}
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindJSDocVariadicType, data)
 }
 
 func (node *JSDocVariadicType) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeNode)
+	return visit(v, node.Type)
 }
 
 // JSDocOptionalType
 
 type JSDocOptionalType struct {
 	TypeNodeBase
-	TypeNode *TypeNode
+	Type *TypeNode
 }
 
 func (node *JSDocOptionalType) ForEachChild(v Visitor) bool {
-	return visit(v, node.TypeNode)
+	return visit(v, node.Type)
 }
 
 func (f *NodeFactory) NewJSDocOptionalType(typeNode *TypeNode) *Node {
 	data := &JSDocOptionalType{}
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return f.newNode(KindJSDocOptionalType, data)
 }
 
@@ -5043,19 +5186,19 @@ type JSDocSignature struct {
 	TypeNodeBase
 	typeParameters *TypeParameterListNode
 	Parameters     []*JSDocTag
-	TypeNode       *JSDocTag
+	Type           *JSDocTag
 }
 
 func NewJSDocSignature(typeParameters *TypeParameterListNode, parameters []*JSDocTag, typeNode *JSDocTag) *JSDocSignature {
 	data := &JSDocSignature{}
 	data.typeParameters = typeParameters
 	data.Parameters = parameters
-	data.TypeNode = typeNode
+	data.Type = typeNode
 	return data
 }
 
 func (node *JSDocSignature) ForEachChild(v Visitor) bool {
-	return visit(v, node.typeParameters) || visitNodes(v, node.Parameters) || visit(v, node.TypeNode)
+	return visit(v, node.typeParameters) || visitNodes(v, node.Parameters) || visit(v, node.Type)
 }
 
 func (node *JSDocSignature) TypeParameters() *TypeParameterListNode { return node.typeParameters }
