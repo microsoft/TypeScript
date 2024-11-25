@@ -8,7 +8,6 @@ import (
 	"slices"
 	"strconv"
 	"strings"
-	"sync"
 )
 
 func Filter[T any](slice []T, f func(T) bool) []T {
@@ -205,20 +204,6 @@ func AppendIfUnique[T comparable](slice []T, element T) []T {
 	return append(slice, element)
 }
 
-var regexps = make(map[string]*regexp.Regexp)
-var regexpMutex sync.Mutex
-
-func MakeRegexp(s string) *regexp.Regexp {
-	regexpMutex.Lock()
-	rx, ok := regexps[s]
-	if !ok {
-		rx = regexp.MustCompile(s)
-		regexps[s] = rx
-	}
-	regexpMutex.Unlock()
-	return rx
-}
-
 func EquateStringCaseInsensitive(a, b string) bool {
 	// !!!
 	// return a == b || strings.ToUpper(a) == strings.ToUpper(b)
@@ -273,8 +258,10 @@ func GetStringComparer(ignoreCase bool) func(a, b string) Comparison {
 	return CompareStringsCaseSensitive
 }
 
+var curlyNumberRegExp = regexp.MustCompile(`{(\d+)}`)
+
 func FormatStringFromArgs(text string, args []any) string {
-	return MakeRegexp(`{(\d+)}`).ReplaceAllStringFunc(text, func(match string) string {
+	return curlyNumberRegExp.ReplaceAllStringFunc(text, func(match string) string {
 		index, err := strconv.ParseInt(match[1:len(match)-1], 10, 0)
 		if err != nil || int(index) >= len(args) {
 			panic("Invalid formatting placeholder")

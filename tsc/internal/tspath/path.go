@@ -2,6 +2,7 @@ package tspath
 
 import (
 	"cmp"
+	"regexp"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/core"
@@ -18,7 +19,7 @@ const urlSchemeSeparator = "://"
 // check path for these segments:
 //
 //	'', '.'. '..'
-var relativePathSegmentRegExp = core.MakeRegexp(`//|(?:^|/)\.\.?(?:$|/)`)
+var relativePathSegmentRegExp = regexp.MustCompile(`//|(?:^|/)\.\.?(?:$|/)`)
 
 // We convert the file names to lower case as key for file name on case insensitive file system
 // While doing so we need to handle special characters (eg \u0130) to ensure that we dont convert
@@ -42,7 +43,7 @@ var relativePathSegmentRegExp = core.MakeRegexp(`//|(?:^|/)\.\.?(?:$|/)`)
 //
 // But to avoid having to do string building for most common cases, also ignore
 // a-z, 0-9, \u0131, \u00DF, \, /, ., : and space
-var fileNameLowerCaseRegExp = core.MakeRegexp(`[^\x{0130}\x{0131}\x{00DF}a-z0-9\\/:\-_. ]+`)
+var fileNameLowerCaseRegExp = regexp.MustCompile(`[^\x{0130}\x{0131}\x{00DF}a-z0-9\\/:\-_. ]+`)
 
 //// Path Tests
 
@@ -568,8 +569,10 @@ func tryGetExtensionFromPath(path string, extension string, stringEqualityCompar
 	return ""
 }
 
+var pathIsRelativeRegexp = regexp.MustCompile(`^\.\.?(?:$|[\\/])`)
+
 func PathIsRelative(path string) bool {
-	return core.MakeRegexp(`^\.\.?(?:$|[\\/])`).MatchString(path)
+	return pathIsRelativeRegexp.MatchString(path)
 }
 
 func IsExternalModuleNameRelative(moduleName string) bool {
