@@ -12,6 +12,8 @@ var _ = module.exports = foo
 >module.exports = foo : any
 >module.exports : any
 >module : any
+>       : ^^^
 >exports : any
+>        : ^^^
 >foo : any
 

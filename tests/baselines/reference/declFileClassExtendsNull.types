@@ -3,4 +3,5 @@
 === declFileClassExtendsNull.ts ===
 class ExtendsNull extends null {
 >ExtendsNull : ExtendsNull
+>            : ^^^^^^^^^^^
 }

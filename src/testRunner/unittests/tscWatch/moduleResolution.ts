@@ -1,28 +1,24 @@
-import * as Utils from "../../_namespaces/Utils";
 import {
-    jsonToReadableText,
-} from "../helpers";
+    ModuleDetectionKind,
+    ModuleKind,
+    ModuleResolutionKind,
+} from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { verifyAlternateResultScenario } from "../helpers/alternateResult.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
-    getFsConentsForNode10ResultAtTypesPackageJson,
-    getFsContentsForNode10Result,
-    getFsContentsForNode10ResultDts,
-    getFsContentsForNode10ResultPackageJson,
-} from "../helpers/node10Result";
-import {
-    verifyTscWatch,
-} from "../helpers/tscWatch";
-import {
-    createWatchedSystem,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: moduleResolution", () => {
+describe("unittests:: tscWatch:: moduleResolution::", () => {
     verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: `watches for changes to package-json main fields`,
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/package.json`,
                     content: jsonToReadableText({
@@ -33,7 +29,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
             import type { TheNum } from 'pkg2'
             export const theNum: TheNum = 42;`,
                 },
@@ -69,7 +65,6 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg2`,
                     symLink: `/user/username/projects/myproject/packages/pkg2`,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["--project", "./packages/pkg1/tsconfig.json", "-w", "--traceResolution"],
         edits: [
@@ -96,7 +91,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         scenario: "moduleResolution",
         subScenario: "diagnostics from cache",
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
@@ -123,7 +118,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         import * as me from "@this/package";
                         me.thing()
                         export function thing(): void {}
@@ -131,11 +126,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/index2.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         export function thing(): void {}
                     `,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [{
@@ -163,20 +157,20 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             };
             const fileA: File = {
                 path: `/user/username/projects/myproject/src/fileA.ts`,
-                content: Utils.dedent`
+                content: dedent`
                         import { foo } from "./fileB.mjs";
                         foo();
                     `,
             };
             const fileB: File = {
                 path: `/user/username/projects/myproject/project/src/fileB.mts`,
-                content: Utils.dedent`
+                content: dedent`
                         export function foo() {
                         }
                     `,
             };
-            return createWatchedSystem(
-                [configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }],
+            return TestServerHost.createWatchedSystem(
+                [configFile, fileA, fileB, packageFile],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
         }
@@ -312,7 +306,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         scenario: "moduleResolution",
         subScenario: "module resolutions from file are partially used",
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
@@ -321,7 +315,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
                         import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
                         import {x} from "./a";
@@ -329,7 +323,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/a.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         export const x = 10;
                     `,
                 },
@@ -367,7 +361,6 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg1/import.d.ts`,
                     content: `export interface ImportInterface {}`,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [
@@ -383,7 +376,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         scenario: "moduleResolution",
         subScenario: "module resolutions from files with partially used import attributes",
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
@@ -392,7 +385,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
                         import type { RequireInterface } from "pkg1" with { "resolution-mode": "require" };
                         import {x} from "./a";
@@ -400,7 +393,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/a.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         export const x = 10;
                     `,
                 },
@@ -438,7 +431,6 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg1/import.d.ts`,
                     content: `export interface ImportInterface {}`,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [
@@ -454,7 +446,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         scenario: "moduleResolution",
         subScenario: "type reference resolutions reuse",
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
@@ -463,7 +455,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     /// <reference types="pkg" resolution-mode="import"/>
                     /// <reference types="pkg1" resolution-mode="require"/>
                     export interface LocalInterface extends RequireInterface {}
@@ -471,7 +463,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/a.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     export const x = 10;
                 `,
                 },
@@ -488,7 +480,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/node_modules/pkg/import.d.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     export {};
                     declare global {
                         interface ImportInterface {}
@@ -497,7 +489,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/node_modules/pkg/require.d.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     export {};
                     declare global {
                         interface RequireInterface {}
@@ -517,7 +509,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/node_modules/pkg1/import.d.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     export {};
                     declare global {
                         interface ImportInterface {}
@@ -528,7 +520,6 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts`,
                     content: `export const x = 10;`,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [
@@ -540,107 +531,206 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         ],
     });
 
+    verifyAlternateResultScenario(
+        /*forTsserver*/ false,
+        (subScenario, sys, edits) =>
+            verifyTscWatch({
+                scenario: "moduleResolution",
+                subScenario,
+                sys,
+                commandLineArgs: ["-w", "--extendedDiagnostics"],
+                edits: edits(),
+            }),
+    );
+
     verifyTscWatch({
         scenario: "moduleResolution",
-        subScenario: "node10Result",
-        sys: () => createWatchedSystem(getFsContentsForNode10Result(), { currentDirectory: "/home/src/projects/project" }),
-        commandLineArgs: ["-w", "--extendedDiagnostics"],
+        subScenario: "ambient module names are resolved correctly",
+        commandLineArgs: ["-w", "--extendedDiagnostics", "--explainFiles"],
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        noEmit: true,
+                        traceResolution: true,
+                    },
+                    include: ["**/*.ts"],
+                }),
+                "/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts": dedent`
+                    declare module 'mymodule' {
+                        export function readFile(): void;
+                    }
+                    declare module 'mymoduleutils' {
+                        export function promisify(): void;
+                    }
+                `,
+                "/home/src/workspaces/project/witha/a.ts": dedent`
+                    import { readFile } from 'mymodule';
+                    import { promisify, promisify2 } from 'mymoduleutils';
+                    readFile();
+                    promisify();
+                    promisify2();
+                `,
+                "/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts": dedent`
+                    declare module 'mymodule' {
+                        export function readFile(): void;
+                    }
+                    declare module 'mymoduleutils' {
+                        export function promisify2(): void;
+                    }
+                `,
+                "/home/src/workspaces/project/withb/b.ts": dedent`
+                    import { readFile } from 'mymodule';
+                    import { promisify, promisify2 } from 'mymoduleutils';
+                    readFile();
+                    promisify();
+                    promisify2();
+                `,
+            }),
         edits: [
             {
-                caption: "delete the node10Result in @types",
-                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts"),
+                caption: "remove a file that will remove module augmentation",
+                edit: sys => {
+                    sys.replaceFileText("/home/src/workspaces/project/withb/b.ts", `import { readFile } from 'mymodule';`, "");
+                    sys.deleteFile("/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts");
+                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "write a file that will add augmentation",
+                edit: sys => {
+                    sys.ensureFileOrFolder({
+                        path: "/home/src/workspaces/project/withb/node_modules/mymoduleutils/index.d.ts",
+                        content: dedent`
+                            declare module 'mymoduleutils' {
+                                export function promisify2(): void;
+                            }
+                        `,
+                    });
+                    sys.replaceFileText("/home/src/workspaces/project/withb/b.ts", `readFile();`, "");
+                },
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario: "moduleResolution",
+        subScenario: "type reference resolutions with impliedMode",
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/user/username/projects/myproject/package.json": jsonToReadableText({
+                    name: "myproject",
+                    version: "1.0.0",
+                    type: "module",
+                }),
+                "/user/username/projects/myproject/tsconfig.json": jsonToReadableText({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        moduleResolution: ModuleResolutionKind.Node16,
+                        module: ModuleKind.Node16,
+                        moduleDetection: ModuleDetectionKind.Legacy,
+                        types: [],
+                    }),
+                }),
+                "/user/username/projects/myproject/index.ts": dedent`
+                    /// <reference types="pkg"/>
+                    interface LocalInterface extends RequireInterface {}
+                `,
+                "/user/username/projects/myproject/node_modules/@types/pkg/package.json": jsonToReadableText({
+                    name: "pkg",
+                    version: "0.0.1",
+                    exports: {
+                        import: "./import.js",
+                        require: "./require.js",
+                    },
+                }),
+                "/user/username/projects/myproject/node_modules/@types/pkg/import.d.ts": dedent`
+                    export {};
+                    declare global {
+                        interface ImportInterface {}
+                    }
+                `,
+                "/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts": dedent`
+                    export {};
+                    declare global {
+                        interface RequireInterface {}
+                    }
+                `,
+            }, { currentDirectory: "/user/username/projects/myproject" }),
+        commandLineArgs: ["-w", "--traceResolution", "--explainFiles"],
+        edits: [
+            {
+                caption: "Modify package json",
+                edit: sys =>
+                    sys.prependFile(
+                        "/user/username/projects/myproject/package.json",
+                        jsonToReadableText({
+                            name: "myproject",
+                            version: "1.0.0",
+                        }),
+                    ),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
                 },
             },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario: "moduleResolution",
+        subScenario: "late discovered dependency symlink",
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspace/packageA/index.d.ts": dedent`
+                    export declare class Foo {
+                        private f: any;
+                    }
+                `,
+                "/home/src/workspace/packageB/package.json": jsonToReadableText({
+                    private: true,
+                    dependencies: {
+                        "package-a": "file:../packageA",
+                    },
+                }),
+                "/home/src/workspace/packageB/index.d.ts": dedent`
+                    import { Foo } from "package-a";
+                    export declare function invoke(): Foo;
+                `,
+                "/home/src/workspace/packageC/package.json": jsonToReadableText({
+                    private: true,
+                    dependencies: {
+                        "package-b": "file:../packageB",
+                        "package-a": "file:../packageA",
+                    },
+                }),
+                "/home/src/workspace/packageC/index.ts": dedent`
+                    import * as pkg from "package-b";
+
+                    export const a = pkg.invoke();
+                `,
+                "/home/src/workspace/packageC/node_modules/package-a": { symLink: "/home/src/workspace/packageA" },
+                "/home/src/workspace/packageB/node_modules/package-a": { symLink: "/home/src/workspace/packageA" },
+                "/home/src/workspace/packageC/node_modules/package-b": { symLink: "/home/src/workspace/packageB" },
+                "/home/src/workspace/packageC/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        declaration: true,
+                    },
+                }),
+            }, { currentDirectory: "/home/src/workspace/packageC" }),
+        commandLineArgs: ["--traceResolution", "--explainFiles", "--watch"],
+        edits: [
             {
-                caption: "delete the ndoe10Result in package/types",
-                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/foo/index.d.ts"),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "add the node10Result in @types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForNode10ResultDts("bar")),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "add the ndoe10Result in package/types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForNode10ResultDts("foo")),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "update package.json from @types so error is fixed",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForNode10ResultAtTypesPackageJson("bar", /*addTypesCondition*/ true)),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "update package.json so error is fixed",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForNode10ResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true)),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "update package.json from @types so error is introduced",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForNode10ResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false)),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "update package.json so error is introduced",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForNode10ResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false)),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "delete the node10Result in @types",
-                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts"),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "delete the ndoe10Result in package/types",
-                edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/foo2/index.d.ts"),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "add the node10Result in @types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForNode10ResultDts("bar2")),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
-            },
-            {
-                caption: "add the ndoe10Result in package/types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForNode10ResultDts("foo2")),
-                timeouts: sys => {
-                    sys.runQueuedTimeoutCallbacks();
-                    sys.runQueuedTimeoutCallbacks();
-                },
+                caption: "change index.ts",
+                edit: fs =>
+                    fs.writeFile(
+                        "/home/src/workspace/packageC/index.ts",
+                        dedent`
+                            import * as pkg from "package-b";
+                
+                            export const aa = pkg.invoke();`,
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
     });

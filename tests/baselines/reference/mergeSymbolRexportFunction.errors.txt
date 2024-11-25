@@ -1,0 +1,25 @@
+a.d.ts(3,9): error TS2451: Cannot redeclare block-scoped variable 'Row'.
+index.d.ts(1,14): error TS2451: Cannot redeclare block-scoped variable 'Row'.
+
+
+==== main.ts (0 errors) ====
+    import {Row} from '.'
+    Row();
+    
+==== ./a.d.ts (1 errors) ====
+    import '.'
+    declare module '.' {
+      const Row: () => void;
+            ~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'Row'.
+!!! related TS6203 index.d.ts:1:14: 'Row' was also declared here.
+    }
+    
+==== ./index.d.ts (1 errors) ====
+    export type {Row} from './common';
+                 ~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'Row'.
+!!! related TS6203 a.d.ts:3:9: 'Row' was also declared here.
+    
+==== ./common.d.ts (0 errors) ====
+    export declare function Row(): void; 

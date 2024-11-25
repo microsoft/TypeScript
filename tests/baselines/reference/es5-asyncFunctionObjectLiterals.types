@@ -11,11 +11,14 @@ declare var x, y, z, a, b, c;
 
 async function objectLiteral0() {
 >objectLiteral0 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     x = {
 >x = {        a: await y,        b: z    } : { a: any; b: any; }
+>                                          : ^^^^^^^^^^^^^^^^^^^
 >x : any
 >{        a: await y,        b: z    } : { a: any; b: any; }
+>                                      : ^^^^^^^^^^^^^^^^^^^
 
         a: await y,
 >a : any
@@ -31,11 +34,14 @@ async function objectLiteral0() {
 
 async function objectLiteral1() {
 >objectLiteral1 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     x = {
 >x = {        a: y,        b: await z    } : { a: any; b: any; }
+>                                          : ^^^^^^^^^^^^^^^^^^^
 >x : any
 >{        a: y,        b: await z    } : { a: any; b: any; }
+>                                      : ^^^^^^^^^^^^^^^^^^^
 
         a: y,
 >a : any
@@ -51,11 +57,14 @@ async function objectLiteral1() {
 
 async function objectLiteral2() {
 >objectLiteral2 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     x = {
 >x = {        [await a]: y,        b: z    } : { [x: number]: any; b: any; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >{        [await a]: y,        b: z    } : { [x: number]: any; b: any; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         [await a]: y,
 >[await a] : any
@@ -72,11 +81,14 @@ async function objectLiteral2() {
 
 async function objectLiteral3() {
 >objectLiteral3 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     x = {
 >x = {        [a]: await y,        b: z    } : { [x: number]: any; b: any; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >{        [a]: await y,        b: z    } : { [x: number]: any; b: any; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         [a]: await y,
 >[a] : any
@@ -93,11 +105,14 @@ async function objectLiteral3() {
 
 async function objectLiteral4() {
 >objectLiteral4 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     x = {
 >x = {        a: await y,        [b]: z    } : { [x: number]: any; a: any; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >{        a: await y,        [b]: z    } : { [x: number]: any; a: any; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         a: await y,
 >a : any
@@ -114,11 +129,14 @@ async function objectLiteral4() {
 
 async function objectLiteral5() {
 >objectLiteral5 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     x = {
 >x = {        a: y,        [await b]: z    } : { [x: number]: any; a: any; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >{        a: y,        [await b]: z    } : { [x: number]: any; a: any; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         a: y,
 >a : any
@@ -135,11 +153,14 @@ async function objectLiteral5() {
 
 async function objectLiteral6() {
 >objectLiteral6 : () => Promise<void>
+>               : ^^^^^^^^^^^^^^^^^^^
 
     x = {
 >x = {        a: y,        [b]: await z    } : { [x: number]: any; a: any; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >{        a: y,        [b]: await z    } : { [x: number]: any; a: any; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         a: y,
 >a : any

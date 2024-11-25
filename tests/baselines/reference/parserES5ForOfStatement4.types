@@ -3,6 +3,9 @@
 === parserES5ForOfStatement4.ts ===
 for (var a = 1 of X) {
 >a : any
+>  : ^^^
 >1 : 1
+>  : ^
 >X : any
+>  : ^^^
 }

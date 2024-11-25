@@ -3,7 +3,11 @@
 === contextualTyping39.ts ===
 var foo = <{ (): number; }> function() { return "err"; };
 >foo : () => number
+>    : ^^^^^^      
 ><{ (): number; }> function() { return "err"; } : () => number
+>                                               : ^^^^^^      
 >function() { return "err"; } : () => string
+>                             : ^^^^^^^^^^^^
 >"err" : "err"
+>      : ^^^^^
 

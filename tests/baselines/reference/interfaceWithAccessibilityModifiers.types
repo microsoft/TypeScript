@@ -5,10 +5,13 @@
 interface Foo {
     public a: any;
 >a : any
+>  : ^^^
 
     private b: any;
 >b : any
+>  : ^^^
 
     protected c: any;
 >c : any
+>  : ^^^
 }

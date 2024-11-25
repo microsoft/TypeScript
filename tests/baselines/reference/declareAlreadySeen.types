@@ -3,15 +3,19 @@
 === declareAlreadySeen.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     declare declare var x;
 >x : any
+>  : ^^^
 
     declare declare function f();
 >f : () => any
+>  : ^^^^^^^^^
 
     declare declare module N { }  
 
     declare declare class C { }
 >C : C
+>  : ^
 }

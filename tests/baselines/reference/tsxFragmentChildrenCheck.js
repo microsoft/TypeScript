@@ -31,11 +31,10 @@ export default RenderString
 //// [my-component.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MyComponent = void 0;
+exports.MyComponent = MyComponent;
 function MyComponent(props) {
     return React.createElement("span", null, "my component");
 }
-exports.MyComponent = MyComponent;
 //// [file1.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {

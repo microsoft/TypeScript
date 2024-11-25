@@ -1,10 +1,10 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: config:: showConfig", () => {
     function showTSConfigCorrectly(name: string, commandLinesArgs: string[], configJson?: object) {
         describe(name, () => {
-            const outputFileName = `config/showConfig/${name.replace(/[^a-z0-9\-./ ]/ig, "")}/tsconfig.json`;
+            const outputFileName = `config/showConfig/${name.replace(/[^a-z0-9\-./ ]/gi, "")}/tsconfig.json`;
 
             it(`Correct output for ${outputFileName}`, () => {
                 const cwd = `/${name}`;
@@ -33,7 +33,7 @@ describe("unittests:: config:: showConfig", () => {
                 }
                 const initResult = ts.convertToTSConfig(commandLine, configPath, configParseHost);
 
-                // eslint-disable-next-line no-null/no-null
+                // eslint-disable-next-line no-restricted-syntax
                 Harness.Baseline.runBaseline(outputFileName, JSON.stringify(initResult, null, 4) + "\n");
             });
         });
@@ -56,6 +56,8 @@ describe("unittests:: config:: showConfig", () => {
     showTSConfigCorrectly("Show TSConfig with incorrect compiler option value", ["--showConfig", "--lib", "nonExistLib,es5,es2015.promise"]);
 
     showTSConfigCorrectly("Show TSConfig with advanced options", ["--showConfig", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"]);
+
+    showTSConfigCorrectly("Show TSConfig with transitively implied options", ["--showConfig", "--module", "nodenext"]);
 
     showTSConfigCorrectly("Show TSConfig with compileOnSave and more", ["-p", "tsconfig.json"], {
         compilerOptions: {
@@ -113,6 +115,21 @@ describe("unittests:: config:: showConfig", () => {
         include: [
             "./src/**/*",
         ],
+    });
+
+    showTSConfigCorrectly("Show TSConfig with configDir template template", ["-p", "tsconfig.json"], {
+        compilerOptions: {
+            outDir: "${configDir}/outDir", // eslint-disable-line no-template-curly-in-string
+            typeRoots: ["root1", "${configDir}/root2", "root3"], // eslint-disable-line no-template-curly-in-string
+            paths: {
+                "@myscope/*": ["${configDir}/types/*"], // eslint-disable-line no-template-curly-in-string
+                "other/*": ["other/*"],
+            },
+        },
+        include: [
+            "${configDir}/src/**/*", // eslint-disable-line no-template-curly-in-string
+        ],
+        files: ["${configDir}/main.ts"], // eslint-disable-line no-template-curly-in-string
     });
 
     // Bulk validation of all option declarations

@@ -6,6 +6,7 @@ declare module JSX {
 	interface IntrinsicElements {
 		[s: string]: any;
 >s : string
+>  : ^^^^^^
 	}
 }
 
@@ -16,6 +17,7 @@ export var React;
 === react-consumer.tsx ===
 import {React} from "./test";
 >React : any
+>      : ^^^
 
 // Should emit test_1.React.createElement
 //  and React.__spread
@@ -24,9 +26,14 @@ var foo: any;
 
 var spread1 = <div x='' {...foo} y='' />;
 >spread1 : JSX.Element
+>        : ^^^^^^^^^^^
 ><div x='' {...foo} y='' /> : JSX.Element
+>                           : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >x : string
+>  : ^^^^^^
 >foo : any
 >y : string
+>  : ^^^^^^
 

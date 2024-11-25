@@ -1,7 +1,7 @@
-import * as fakes from "../_namespaces/fakes";
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
-import * as vfs from "../_namespaces/vfs";
+import * as fakes from "../_namespaces/fakes.js";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
+import * as vfs from "../_namespaces/vfs.js";
 
 describe("unittests:: PrinterAPI", () => {
     function makePrintsCorrectly(prefix: string) {
@@ -100,6 +100,17 @@ describe("unittests:: PrinterAPI", () => {
                 ts.ScriptKind.TSX,
             ));
         });
+
+        // https://github.com/microsoft/TypeScript/issues/59587
+        printsCorrectly("lambda type parameter lists in tsx", {}, printer => {
+            return printer.printFile(ts.createSourceFile(
+                "source.tsx",
+                String.raw`export const id = <T,>(id: T): T => id`,
+                ts.ScriptTarget.ESNext,
+                /*setParentNodes*/ undefined,
+                ts.ScriptKind.TSX,
+            ));
+        });
     });
 
     describe("No duplicate ref directives when emiting .d.ts->.d.ts", () => {
@@ -115,7 +126,7 @@ describe("unittests:: PrinterAPI", () => {
             const file = program.getSourceFile("/test.d.ts")!;
             const printer = ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed });
             const output = printer.printFile(file);
-            assert.equal(output.split(/\r?\n/g).length, 3);
+            assert.equal(output.split(/\r?\n/).length, 3);
         });
         it("with statements", () => {
             const host = new fakes.CompilerHost(
@@ -129,7 +140,7 @@ describe("unittests:: PrinterAPI", () => {
             const file = program.getSourceFile("/test.d.ts")!;
             const printer = ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed });
             const output = printer.printFile(file);
-            assert.equal(output.split(/\r?\n/g).length, 4);
+            assert.equal(output.split(/\r?\n/).length, 4);
         });
     });
 
@@ -346,6 +357,14 @@ describe("unittests:: PrinterAPI", () => {
                     ts.EmitFlags.SingleLine,
                 ),
                 ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015),
+            ));
+
+        // https://github.com/microsoft/TypeScript/issues/59150
+        printsCorrectly("template string", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createNoSubstitutionTemplateLiteral("\n"),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
             ));
     });
 });

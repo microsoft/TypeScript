@@ -7,8 +7,11 @@ declare module JSX {
 
 declare module A.B.C {
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
   var D: any;
 >D : any
@@ -16,18 +19,31 @@ declare module A.B.C {
 
 <A.B.C.D>foo</A . B . C.D>
 ><A.B.C.D>foo</A . B . C.D> : JSX.Element
+>                           : ^^^^^^^^^^^
 >A.B.C.D : any
 >A.B.C : typeof A.B.C
+>      : ^^^^^^^^^^^^
 >A.B : typeof A.B
+>    : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 >C : typeof A.B.C
+>  : ^^^^^^^^^^^^
 >D : any
+>  : ^^^
 >A . B . C.D : any
 >A . B . C : typeof A.B.C
+>          : ^^^^^^^^^^^^
 >A . B : typeof A.B
+>      : ^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 >C : typeof A.B.C
+>  : ^^^^^^^^^^^^
 >D : any
+>  : ^^^
 

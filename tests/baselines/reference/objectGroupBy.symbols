@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/objectGroupBy.ts] ////
+
+=== objectGroupBy.ts ===
+const basic = Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
+>basic : Symbol(basic, Decl(objectGroupBy.ts, 0, 5))
+>Object.groupBy : Symbol(ObjectConstructor.groupBy, Decl(lib.es2024.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>groupBy : Symbol(ObjectConstructor.groupBy, Decl(lib.es2024.object.d.ts, --, --))
+>x : Symbol(x, Decl(objectGroupBy.ts, 0, 39))
+>x : Symbol(x, Decl(objectGroupBy.ts, 0, 39))
+
+const chars = Object.groupBy('a string', c => c);
+>chars : Symbol(chars, Decl(objectGroupBy.ts, 2, 5))
+>Object.groupBy : Symbol(ObjectConstructor.groupBy, Decl(lib.es2024.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>groupBy : Symbol(ObjectConstructor.groupBy, Decl(lib.es2024.object.d.ts, --, --))
+>c : Symbol(c, Decl(objectGroupBy.ts, 2, 40))
+>c : Symbol(c, Decl(objectGroupBy.ts, 2, 40))
+
+type Employee = { name: string, role: 'ic' | 'manager' }
+>Employee : Symbol(Employee, Decl(objectGroupBy.ts, 2, 49))
+>name : Symbol(name, Decl(objectGroupBy.ts, 4, 17))
+>role : Symbol(role, Decl(objectGroupBy.ts, 4, 31))
+
+const employees: Set<Employee> = new Set();
+>employees : Symbol(employees, Decl(objectGroupBy.ts, 5, 5))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>Employee : Symbol(Employee, Decl(objectGroupBy.ts, 2, 49))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+const byRole = Object.groupBy(employees, x => x.role);
+>byRole : Symbol(byRole, Decl(objectGroupBy.ts, 6, 5))
+>Object.groupBy : Symbol(ObjectConstructor.groupBy, Decl(lib.es2024.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>groupBy : Symbol(ObjectConstructor.groupBy, Decl(lib.es2024.object.d.ts, --, --))
+>employees : Symbol(employees, Decl(objectGroupBy.ts, 5, 5))
+>x : Symbol(x, Decl(objectGroupBy.ts, 6, 40))
+>x.role : Symbol(role, Decl(objectGroupBy.ts, 4, 31))
+>x : Symbol(x, Decl(objectGroupBy.ts, 6, 40))
+>role : Symbol(role, Decl(objectGroupBy.ts, 4, 31))
+
+const byNonKey = Object.groupBy(employees, x => x);
+>byNonKey : Symbol(byNonKey, Decl(objectGroupBy.ts, 8, 5))
+>Object.groupBy : Symbol(ObjectConstructor.groupBy, Decl(lib.es2024.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>groupBy : Symbol(ObjectConstructor.groupBy, Decl(lib.es2024.object.d.ts, --, --))
+>employees : Symbol(employees, Decl(objectGroupBy.ts, 5, 5))
+>x : Symbol(x, Decl(objectGroupBy.ts, 8, 42))
+>x : Symbol(x, Decl(objectGroupBy.ts, 8, 42))
+

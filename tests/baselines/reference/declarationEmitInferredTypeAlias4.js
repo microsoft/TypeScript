@@ -16,5 +16,5 @@ function f() {
 
 //// [declarationEmitInferredTypeAlias4.d.ts]
 declare function f<A>(): A[] | {
-    x: A[] | any;
+    x: A[] | /*elided*/ any;
 };

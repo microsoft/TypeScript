@@ -1,52 +1,73 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
 Before request
-//// [/a/b/lodash.js]
+//// [/user/username/projects/project/lodash.js]
 
 
-//// [/a/b/commander.js]
+//// [/user/username/projects/project/commander.js]
 
 
-//// [/a/b/file3.d.ts]
+//// [/user/username/projects/project/file3.d.ts]
 
 
-//// [/typesMap.json]
+//// [/home/src/tslibs/TS/Lib/typesMap.json]
 {
-            "typesMap": {
-                "jquery": {
-                    "match": "jquery(-(\\.?\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
-                    "types": ["jquery"]
-                },
-                "quack": {
-                    "match": "/duckquack-(\\d+)\\.min\\.js",
-                    "types": ["duck-types"]
-                }
-            },
-            "simpleMap": {
-                "Bacon": "baconjs",
-                "bliss": "blissfuljs",
-                "commander": "commander",
-                "cordova": "cordova",
-                "react": "react",
-                "lodash": "lodash"
-            }
-        }
+  "typesMap": {
+    "jquery": {
+      "match": "jquery(-(\\.?\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
+      "types": [
+        "jquery"
+      ]
+    },
+    "quack": {
+      "match": "/duckquack-(\\d+)\\.min\\.js",
+      "types": [
+        "duck-types"
+      ]
+    }
+  },
+  "simpleMap": {
+    "Bacon": "baconjs",
+    "bliss": "blissfuljs",
+    "commander": "commander",
+    "cordova": "cordova",
+    "react": "react",
+    "lodash": "lodash"
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
-        "projectFileName": "/a/app/test1.csproj",
+        "projectFileName": "/user/username/projects/app/test1.csproj",
         "options": {
           "allowJS": true,
           "moduleResolution": 2
         },
         "rootFiles": [
           {
-            "fileName": "/a/b/commander.js"
+            "fileName": "/user/username/projects/project/commander.js"
           },
           {
-            "fileName": "/a/b/file3.d.ts"
+            "fileName": "/user/username/projects/project/file3.d.ts"
           }
         ],
         "typeAcquisition": {
@@ -58,26 +79,35 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Excluded '/a/b/commander.js' because it matched commander from the legacy safelist
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file3.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test1.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test1.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test1.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/app/test1.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/file3.d.ts Text-1 ""
+Info seq  [hh:mm:ss:mss] Excluded '/user/username/projects/project/commander.js' because it matched commander from the legacy safelist
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: /user/username/projects/app/test1.csproj, currentDirectory: /user/username/projects/app
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/file3.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/test1.csproj
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test1.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/file3.d.ts Text-1 ""
 
 
-	../b/file3.d.ts
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	../project/file3.d.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
     {
-      "projectName": "/a/app/test1.csproj",
+      "projectName": "/user/username/projects/app/test1.csproj",
       "fileNames": [
-        "/a/b/file3.d.ts",
-        "/a/b/commander.js"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/file3.d.ts",
+        "/user/username/projects/project/commander.js"
       ],
       "compilerOptions": {
         "allowJS": true,
@@ -94,10 +124,10 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "enable": true
       },
       "unresolvedImports": [],
-      "projectRootPath": "/a/app",
+      "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
-Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling request for: /a/app/test1.csproj
+Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling request for: /user/username/projects/app/test1.csproj
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -106,7 +136,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "d57df0c2e801fc85740246bb38cad99e380b98923a5bdf2b146062324576d721",
+          "projectId": "3f50cfc566480103236ba7d91dffb32ba81fc1c9286c2b9c1029bf95ac31b17d",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -116,8 +146,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 0,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 0,
+            "dts": 2,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -138,23 +168,50 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/user/username/projects/app/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/file3.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/user/username/projects/project/file3.d.ts: *new*
   {}
 
 Timeout callback:: count: 1
-1: /a/app/test1.csproj::discover *new*
+1: /user/username/projects/app/test1.csproj::discover *new*
+
+Projects::
+/user/username/projects/app/test1.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/app/test1.csproj
+/user/username/projects/project/file3.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/app/test1.csproj
 
 Before request
 
@@ -162,14 +219,14 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
-        "projectFileName": "/a/app/test2.csproj",
+        "projectFileName": "/user/username/projects/app/test2.csproj",
         "options": {
           "allowJS": true,
           "moduleResolution": 2
         },
         "rootFiles": [
           {
-            "fileName": "/a/b/file3.d.ts"
+            "fileName": "/user/username/projects/project/file3.d.ts"
           }
         ],
         "typeAcquisition": {
@@ -182,23 +239,31 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test2.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test2.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test2.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/app/test2.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/file3.d.ts Text-1 ""
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: /user/username/projects/app/test2.csproj, currentDirectory: /user/username/projects/app
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/test2.csproj
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test2.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test2.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/file3.d.ts Text-1 ""
 
 
-	../b/file3.d.ts
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	../project/file3.d.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
     {
-      "projectName": "/a/app/test2.csproj",
+      "projectName": "/user/username/projects/app/test2.csproj",
       "fileNames": [
-        "/a/b/file3.d.ts"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/file3.d.ts"
       ],
       "compilerOptions": {
         "allowJS": true,
@@ -215,10 +280,10 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "enable": true
       },
       "unresolvedImports": [],
-      "projectRootPath": "/a/app",
+      "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
-Info seq  [hh:mm:ss:mss] TIAdapter:: Deferring request for: /a/app/test2.csproj
+Info seq  [hh:mm:ss:mss] TIAdapter:: Deferring request for: /user/username/projects/app/test2.csproj
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -227,7 +292,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "708ab763923f965e4d2f19cfd2dca6beb9d49c11ba2c52d06b3375b1867b290b",
+          "projectId": "68f2b379a6be46e74599f95f10b113c31ac22098eb2a19c14c6eac19da804340",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -237,8 +302,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 0,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 0,
+            "dts": 2,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -259,12 +324,44 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test2.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
+
+Projects::
+/user/username/projects/app/test1.csproj (External)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/app/test2.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/app/test1.csproj
+        /user/username/projects/app/test2.csproj *new*
+/user/username/projects/project/file3.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/app/test1.csproj
+        /user/username/projects/app/test2.csproj *new*
 
 Before request
 
@@ -272,17 +369,17 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
-        "projectFileName": "/a/app/test3.csproj",
+        "projectFileName": "/user/username/projects/app/test3.csproj",
         "options": {
           "allowJS": true,
           "moduleResolution": 2
         },
         "rootFiles": [
           {
-            "fileName": "/a/b/lodash.js"
+            "fileName": "/user/username/projects/project/lodash.js"
           },
           {
-            "fileName": "/a/b/file3.d.ts"
+            "fileName": "/user/username/projects/project/file3.d.ts"
           }
         ],
         "typeAcquisition": {
@@ -294,25 +391,33 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Excluded '/a/b/lodash.js' because it matched lodash from the legacy safelist
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test3.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test3.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test3.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/app/test3.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/file3.d.ts Text-1 ""
+Info seq  [hh:mm:ss:mss] Excluded '/user/username/projects/project/lodash.js' because it matched lodash from the legacy safelist
+Info seq  [hh:mm:ss:mss] Creating ExternalProject: /user/username/projects/app/test3.csproj, currentDirectory: /user/username/projects/app
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/test3.csproj
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test3.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test3.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/project/file3.d.ts Text-1 ""
 
 
-	../b/file3.d.ts
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
+	  Default library for target 'es5'
+	../project/file3.d.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
     {
-      "projectName": "/a/app/test3.csproj",
+      "projectName": "/user/username/projects/app/test3.csproj",
       "fileNames": [
-        "/a/b/file3.d.ts",
-        "/a/b/lodash.js"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/file3.d.ts",
+        "/user/username/projects/project/lodash.js"
       ],
       "compilerOptions": {
         "allowJS": true,
@@ -329,10 +434,10 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "enable": true
       },
       "unresolvedImports": [],
-      "projectRootPath": "/a/app",
+      "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
-Info seq  [hh:mm:ss:mss] TIAdapter:: Deferring request for: /a/app/test3.csproj
+Info seq  [hh:mm:ss:mss] TIAdapter:: Deferring request for: /user/username/projects/app/test3.csproj
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -341,7 +446,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "5d322fe3ca31af82cbdcc0d00ec687f0e61a044e99fcdbe8f28f538027445147",
+          "projectId": "bb13783ca6d44fc162647a54a8b4db0415fb3bfaaf37366a572c699bfdc6d17e",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -351,8 +456,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 0,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 0,
+            "dts": 2,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -373,22 +478,64 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test2.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test3.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
+Projects::
+/user/username/projects/app/test1.csproj (External)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/app/test2.csproj (External)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/app/test3.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /user/username/projects/app/test1.csproj
+        /user/username/projects/app/test2.csproj
+        /user/username/projects/app/test3.csproj *new*
+/user/username/projects/project/file3.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /user/username/projects/app/test1.csproj
+        /user/username/projects/app/test2.csproj
+        /user/username/projects/app/test3.csproj *new*
+
 Before running Timeout callback:: count: 1
-1: /a/app/test1.csproj::discover
+1: /user/username/projects/app/test1.csproj::discover
 
 Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
     {
-      "projectName": "/a/app/test1.csproj",
+      "projectName": "/user/username/projects/app/test1.csproj",
       "fileNames": [
-        "/a/b/file3.d.ts",
-        "/a/b/commander.js"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/file3.d.ts",
+        "/user/username/projects/project/commander.js"
       ],
       "compilerOptions": {
         "allowJS": true,
@@ -405,25 +552,25 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
         "enable": true
       },
       "unresolvedImports": [],
-      "projectRootPath": "/a/app",
+      "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
 TI:: Creating typing installer
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/a/data/package.json]
+//// [/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [/a/data/node_modules/types-registry/index.json]
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {
     "commander": {
@@ -498,10 +645,11 @@ TI:: typing installer creation complete
 
 TI:: [hh:mm:ss:mss] Got install request
     {
-      "projectName": "/a/app/test1.csproj",
+      "projectName": "/user/username/projects/app/test1.csproj",
       "fileNames": [
-        "/a/b/file3.d.ts",
-        "/a/b/commander.js"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/file3.d.ts",
+        "/user/username/projects/project/commander.js"
       ],
       "compilerOptions": {
         "allowJS": true,
@@ -518,10 +666,10 @@ TI:: [hh:mm:ss:mss] Got install request
         "enable": true
       },
       "unresolvedImports": [],
-      "projectRootPath": "/a/app",
+      "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -533,57 +681,57 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "commander"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules",
-        "/a/app/bower_components",
-        "/a/app/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/user/username/projects/app/bower_components",
+        "/user/username/projects/app/node_modules"
       ]
     }
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "action::watchTypingLocations",
-      "projectName": "/a/app/test1.csproj",
+      "projectName": "/user/username/projects/app/test1.csproj",
       "files": [
-        "/a/b/bower_components",
-        "/a/b/node_modules",
-        "/a/app/bower_components",
-        "/a/app/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/user/username/projects/app/bower_components",
+        "/user/username/projects/app/node_modules"
       ]
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
       "kind": "action::watchTypingLocations",
-      "projectName": "/a/app/test1.csproj",
+      "projectName": "/user/username/projects/app/test1.csproj",
       "files": [
-        "/a/b/bower_components",
-        "/a/b/node_modules",
-        "/a/app/bower_components",
-        "/a/app/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/user/username/projects/app/bower_components",
+        "/user/username/projects/app/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test1.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test1.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/app/test1.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/app/test1.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test1.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test1.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test1.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test1.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["jquery","commander"]
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::beginInstallTypes",
       "eventId": 1,
       "typingsInstallerVersion": "FakeVersion",
-      "projectName": "/a/app/test1.csproj"
+      "projectName": "/user/username/projects/app/test1.csproj"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
       "kind": "event::beginInstallTypes",
       "eventId": 1,
       "typingsInstallerVersion": "FakeVersion",
-      "projectName": "/a/app/test1.csproj"
+      "projectName": "/user/username/projects/app/test1.csproj"
     }
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -594,32 +742,36 @@ Info seq  [hh:mm:ss:mss] event:
         "eventId": 1
       }
     }
-TI:: [hh:mm:ss:mss] #1 with cwd: /a/data arguments: [
+TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/Library/Caches/typescript arguments: [
   "@types/jquery@tsFakeMajor.Minor",
   "@types/commander@tsFakeMajor.Minor"
 ]
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/app/bower_components: *new*
+/user/username/projects/app/bower_components: *new*
   {"pollingInterval":500}
-/a/app/node_modules: *new*
+/user/username/projects/app/node_modules: *new*
   {"pollingInterval":500}
-/a/b/bower_components: *new*
+/user/username/projects/app/node_modules/@types:
   {"pollingInterval":500}
-/a/b/node_modules: *new*
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/a/lib/lib.d.ts:
+/user/username/projects/project/bower_components: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/file3.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+/user/username/projects/project/file3.d.ts:
   {}
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/jquery@ts5.4",
-  "@types/commander@ts5.4"
+  "@types/jquery@tsFakeMajor.Minor",
+  "@types/commander@tsFakeMajor.Minor"
 ] *new*
 
 Before running PendingInstalls callback:: count: 1
@@ -632,18 +784,18 @@ TI:: Installation #1 with arguments:: [
   "@types/jquery@tsFakeMajor.Minor",
   "@types/commander@tsFakeMajor.Minor"
 ] complete with success::true
-//// [/a/data/node_modules/@types/commander/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts]
 declare const commander: { x: number }
 
-//// [/a/data/node_modules/@types/jquery/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts]
 declare const jquery: { x: number }
 
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor","@types/commander@tsFakeMajor.Minor"]
-TI:: [hh:mm:ss:mss] Installed typing files ["/a/data/node_modules/@types/jquery/index.d.ts","/a/data/node_modules/@types/commander/index.d.ts"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
     {
-      "projectName": "/a/app/test1.csproj",
+      "projectName": "/user/username/projects/app/test1.csproj",
       "typeAcquisition": {
         "include": [
           "jquery",
@@ -659,15 +811,15 @@ TI:: [hh:mm:ss:mss] Sending response:
         "noEmitForJsFiles": true
       },
       "typings": [
-        "/a/data/node_modules/@types/jquery/index.d.ts",
-        "/a/data/node_modules/@types/commander/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
-      "projectName": "/a/app/test1.csproj",
+      "projectName": "/user/username/projects/app/test1.csproj",
       "typeAcquisition": {
         "include": [
           "jquery",
@@ -683,21 +835,21 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "noEmitForJsFiles": true
       },
       "typings": [
-        "/a/data/node_modules/@types/jquery/index.d.ts",
-        "/a/data/node_modules/@types/commander/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
     }
-Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling request for: /a/app/test2.csproj
-Info seq  [hh:mm:ss:mss] Scheduled: /a/app/test1.csproj
+Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling request for: /user/username/projects/app/test2.csproj
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/app/test1.csproj
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "setTypings",
       "body": {
-        "projectName": "/a/app/test1.csproj",
+        "projectName": "/user/username/projects/app/test1.csproj",
         "typeAcquisition": {
           "include": [
             "jquery",
@@ -713,8 +865,8 @@ Info seq  [hh:mm:ss:mss] event:
           "noEmitForJsFiles": true
         },
         "typings": [
-          "/a/data/node_modules/@types/jquery/index.d.ts",
-          "/a/data/node_modules/@types/commander/index.d.ts"
+          "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts",
+          "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
         ],
         "unresolvedImports": [],
         "kind": "action::set"
@@ -724,7 +876,7 @@ TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::endInstallTypes",
       "eventId": 1,
-      "projectName": "/a/app/test1.csproj",
+      "projectName": "/user/username/projects/app/test1.csproj",
       "packagesToInstall": [
         "@types/jquery@tsFakeMajor.Minor",
         "@types/commander@tsFakeMajor.Minor"
@@ -736,7 +888,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
       "kind": "event::endInstallTypes",
       "eventId": 1,
-      "projectName": "/a/app/test1.csproj",
+      "projectName": "/user/username/projects/app/test1.csproj",
       "packagesToInstall": [
         "@types/jquery@tsFakeMajor.Minor",
         "@types/commander@tsFakeMajor.Minor"
@@ -761,19 +913,32 @@ Info seq  [hh:mm:ss:mss] event:
 After running PendingInstalls callback:: count: 0
 
 Timeout callback:: count: 2
-2: /a/app/test2.csproj::discover *new*
-3: /a/app/test1.csproj *new*
+2: /user/username/projects/app/test2.csproj::discover *new*
+3: /user/username/projects/app/test1.csproj *new*
+
+Projects::
+/user/username/projects/app/test1.csproj (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+/user/username/projects/app/test2.csproj (External)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/app/test3.csproj (External)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 Before running Timeout callback:: count: 2
-2: /a/app/test2.csproj::discover
-3: /a/app/test1.csproj
+2: /user/username/projects/app/test2.csproj::discover
+3: /user/username/projects/app/test1.csproj
 
-Invoking Timeout callback:: timeoutId:: 2:: /a/app/test2.csproj::discover
+Invoking Timeout callback:: timeoutId:: 2:: /user/username/projects/app/test2.csproj::discover
 Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
     {
-      "projectName": "/a/app/test2.csproj",
+      "projectName": "/user/username/projects/app/test2.csproj",
       "fileNames": [
-        "/a/b/file3.d.ts"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/file3.d.ts"
       ],
       "compilerOptions": {
         "allowJS": true,
@@ -790,14 +955,15 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
         "enable": true
       },
       "unresolvedImports": [],
-      "projectRootPath": "/a/app",
+      "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Got install request
     {
-      "projectName": "/a/app/test2.csproj",
+      "projectName": "/user/username/projects/app/test2.csproj",
       "fileNames": [
-        "/a/b/file3.d.ts"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/file3.d.ts"
       ],
       "compilerOptions": {
         "allowJS": true,
@@ -814,7 +980,7 @@ TI:: [hh:mm:ss:mss] Got install request
         "enable": true
       },
       "unresolvedImports": [],
-      "projectRootPath": "/a/app",
+      "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: ["grunt","gulp"]
@@ -827,47 +993,47 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "gulp"
       ],
       "filesToWatch": [
-        "/a/app/bower_components",
-        "/a/app/node_modules"
+        "/user/username/projects/app/bower_components",
+        "/user/username/projects/app/node_modules"
       ]
     }
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "action::watchTypingLocations",
-      "projectName": "/a/app/test2.csproj",
+      "projectName": "/user/username/projects/app/test2.csproj",
       "files": [
-        "/a/app/bower_components",
-        "/a/app/node_modules"
+        "/user/username/projects/app/bower_components",
+        "/user/username/projects/app/node_modules"
       ]
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
       "kind": "action::watchTypingLocations",
-      "projectName": "/a/app/test2.csproj",
+      "projectName": "/user/username/projects/app/test2.csproj",
       "files": [
-        "/a/app/bower_components",
-        "/a/app/node_modules"
+        "/user/username/projects/app/bower_components",
+        "/user/username/projects/app/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test2.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test2.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test2.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test2.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["grunt","gulp"]
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::beginInstallTypes",
       "eventId": 2,
       "typingsInstallerVersion": "FakeVersion",
-      "projectName": "/a/app/test2.csproj"
+      "projectName": "/user/username/projects/app/test2.csproj"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
       "kind": "event::beginInstallTypes",
       "eventId": 2,
       "typingsInstallerVersion": "FakeVersion",
-      "projectName": "/a/app/test2.csproj"
+      "projectName": "/user/username/projects/app/test2.csproj"
     }
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -878,7 +1044,7 @@ Info seq  [hh:mm:ss:mss] event:
         "eventId": 2
       }
     }
-TI:: [hh:mm:ss:mss] #2 with cwd: /a/data arguments: [
+TI:: [hh:mm:ss:mss] #2 with cwd: /home/src/Library/Caches/typescript arguments: [
   "@types/grunt@tsFakeMajor.Minor",
   "@types/gulp@tsFakeMajor.Minor"
 ]
@@ -886,8 +1052,8 @@ After running Timeout callback:: count: 1
 
 PendingInstalls callback:: count: 1
 2: #2 with arguments:: [
-  "@types/grunt@ts5.4",
-  "@types/gulp@ts5.4"
+  "@types/grunt@tsFakeMajor.Minor",
+  "@types/gulp@tsFakeMajor.Minor"
 ] *new*
 
 Before running PendingInstalls callback:: count: 1
@@ -900,18 +1066,18 @@ TI:: Installation #2 with arguments:: [
   "@types/grunt@tsFakeMajor.Minor",
   "@types/gulp@tsFakeMajor.Minor"
 ] complete with success::true
-//// [/a/data/node_modules/@types/grunt/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts]
 declare const grunt: { x: number }
 
-//// [/a/data/node_modules/@types/gulp/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts]
 declare const gulp: { x: number }
 
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/grunt@tsFakeMajor.Minor","@types/gulp@tsFakeMajor.Minor"]
-TI:: [hh:mm:ss:mss] Installed typing files ["/a/data/node_modules/@types/grunt/index.d.ts","/a/data/node_modules/@types/gulp/index.d.ts"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
     {
-      "projectName": "/a/app/test2.csproj",
+      "projectName": "/user/username/projects/app/test2.csproj",
       "typeAcquisition": {
         "include": [
           "grunt",
@@ -927,15 +1093,15 @@ TI:: [hh:mm:ss:mss] Sending response:
         "noEmitForJsFiles": true
       },
       "typings": [
-        "/a/data/node_modules/@types/grunt/index.d.ts",
-        "/a/data/node_modules/@types/gulp/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
-      "projectName": "/a/app/test2.csproj",
+      "projectName": "/user/username/projects/app/test2.csproj",
       "typeAcquisition": {
         "include": [
           "grunt",
@@ -951,21 +1117,21 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "noEmitForJsFiles": true
       },
       "typings": [
-        "/a/data/node_modules/@types/grunt/index.d.ts",
-        "/a/data/node_modules/@types/gulp/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
     }
-Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling request for: /a/app/test3.csproj
-Info seq  [hh:mm:ss:mss] Scheduled: /a/app/test2.csproj
+Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling request for: /user/username/projects/app/test3.csproj
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/app/test2.csproj
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "setTypings",
       "body": {
-        "projectName": "/a/app/test2.csproj",
+        "projectName": "/user/username/projects/app/test2.csproj",
         "typeAcquisition": {
           "include": [
             "grunt",
@@ -981,8 +1147,8 @@ Info seq  [hh:mm:ss:mss] event:
           "noEmitForJsFiles": true
         },
         "typings": [
-          "/a/data/node_modules/@types/grunt/index.d.ts",
-          "/a/data/node_modules/@types/gulp/index.d.ts"
+          "/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts",
+          "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts"
         ],
         "unresolvedImports": [],
         "kind": "action::set"
@@ -992,7 +1158,7 @@ TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::endInstallTypes",
       "eventId": 2,
-      "projectName": "/a/app/test2.csproj",
+      "projectName": "/user/username/projects/app/test2.csproj",
       "packagesToInstall": [
         "@types/grunt@tsFakeMajor.Minor",
         "@types/gulp@tsFakeMajor.Minor"
@@ -1004,7 +1170,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
       "kind": "event::endInstallTypes",
       "eventId": 2,
-      "projectName": "/a/app/test2.csproj",
+      "projectName": "/user/username/projects/app/test2.csproj",
       "packagesToInstall": [
         "@types/grunt@tsFakeMajor.Minor",
         "@types/gulp@tsFakeMajor.Minor"
@@ -1029,22 +1195,36 @@ Info seq  [hh:mm:ss:mss] event:
 After running PendingInstalls callback:: count: 0
 
 Timeout callback:: count: 3
-3: /a/app/test1.csproj
-4: /a/app/test3.csproj::discover *new*
-5: /a/app/test2.csproj *new*
+3: /user/username/projects/app/test1.csproj
+4: /user/username/projects/app/test3.csproj::discover *new*
+5: /user/username/projects/app/test2.csproj *new*
+
+Projects::
+/user/username/projects/app/test1.csproj (External)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+/user/username/projects/app/test2.csproj (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+/user/username/projects/app/test3.csproj (External)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 Before running Timeout callback:: count: 3
-3: /a/app/test1.csproj
-4: /a/app/test3.csproj::discover
-5: /a/app/test2.csproj
+3: /user/username/projects/app/test1.csproj
+4: /user/username/projects/app/test3.csproj::discover
+5: /user/username/projects/app/test2.csproj
 
-Invoking Timeout callback:: timeoutId:: 4:: /a/app/test3.csproj::discover
+Invoking Timeout callback:: timeoutId:: 4:: /user/username/projects/app/test3.csproj::discover
 Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
     {
-      "projectName": "/a/app/test3.csproj",
+      "projectName": "/user/username/projects/app/test3.csproj",
       "fileNames": [
-        "/a/b/file3.d.ts",
-        "/a/b/lodash.js"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/file3.d.ts",
+        "/user/username/projects/project/lodash.js"
       ],
       "compilerOptions": {
         "allowJS": true,
@@ -1061,15 +1241,16 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
         "enable": true
       },
       "unresolvedImports": [],
-      "projectRootPath": "/a/app",
+      "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Got install request
     {
-      "projectName": "/a/app/test3.csproj",
+      "projectName": "/user/username/projects/app/test3.csproj",
       "fileNames": [
-        "/a/b/file3.d.ts",
-        "/a/b/lodash.js"
+        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/user/username/projects/project/file3.d.ts",
+        "/user/username/projects/project/lodash.js"
       ],
       "compilerOptions": {
         "allowJS": true,
@@ -1086,7 +1267,7 @@ TI:: [hh:mm:ss:mss] Got install request
         "enable": true
       },
       "unresolvedImports": [],
-      "projectRootPath": "/a/app",
+      "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: ["cordova","lodash"]
@@ -1100,57 +1281,57 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "lodash"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules",
-        "/a/app/bower_components",
-        "/a/app/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/user/username/projects/app/bower_components",
+        "/user/username/projects/app/node_modules"
       ]
     }
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "action::watchTypingLocations",
-      "projectName": "/a/app/test3.csproj",
+      "projectName": "/user/username/projects/app/test3.csproj",
       "files": [
-        "/a/b/bower_components",
-        "/a/b/node_modules",
-        "/a/app/bower_components",
-        "/a/app/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/user/username/projects/app/bower_components",
+        "/user/username/projects/app/node_modules"
       ]
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
       "kind": "action::watchTypingLocations",
-      "projectName": "/a/app/test3.csproj",
+      "projectName": "/user/username/projects/app/test3.csproj",
       "files": [
-        "/a/b/bower_components",
-        "/a/b/node_modules",
-        "/a/app/bower_components",
-        "/a/app/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/user/username/projects/app/bower_components",
+        "/user/username/projects/app/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test3.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /a/app/test3.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/app/test3.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /a/app/test3.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test3.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/bower_components 1 undefined Project: /a/app/test3.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test3.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/app/node_modules 1 undefined Project: /a/app/test3.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/bower_components 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["cordova","lodash"]
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/Library/Caches/typescript/package.json
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::beginInstallTypes",
       "eventId": 3,
       "typingsInstallerVersion": "FakeVersion",
-      "projectName": "/a/app/test3.csproj"
+      "projectName": "/user/username/projects/app/test3.csproj"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
       "kind": "event::beginInstallTypes",
       "eventId": 3,
       "typingsInstallerVersion": "FakeVersion",
-      "projectName": "/a/app/test3.csproj"
+      "projectName": "/user/username/projects/app/test3.csproj"
     }
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1161,7 +1342,7 @@ Info seq  [hh:mm:ss:mss] event:
         "eventId": 3
       }
     }
-TI:: [hh:mm:ss:mss] #3 with cwd: /a/data arguments: [
+TI:: [hh:mm:ss:mss] #3 with cwd: /home/src/Library/Caches/typescript arguments: [
   "@types/cordova@tsFakeMajor.Minor",
   "@types/lodash@tsFakeMajor.Minor"
 ]
@@ -1169,8 +1350,8 @@ After running Timeout callback:: count: 2
 
 PendingInstalls callback:: count: 1
 3: #3 with arguments:: [
-  "@types/cordova@ts5.4",
-  "@types/lodash@ts5.4"
+  "@types/cordova@tsFakeMajor.Minor",
+  "@types/lodash@tsFakeMajor.Minor"
 ] *new*
 
 Before running PendingInstalls callback:: count: 1
@@ -1183,18 +1364,18 @@ TI:: Installation #3 with arguments:: [
   "@types/cordova@tsFakeMajor.Minor",
   "@types/lodash@tsFakeMajor.Minor"
 ] complete with success::true
-//// [/a/data/node_modules/@types/lodash/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts]
 declare const lodash: { x: number }
 
-//// [/a/data/node_modules/@types/cordova/index.d.ts]
+//// [/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts]
 declare const cordova: { x: number }
 
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/cordova@tsFakeMajor.Minor","@types/lodash@tsFakeMajor.Minor"]
-TI:: [hh:mm:ss:mss] Installed typing files ["/a/data/node_modules/@types/cordova/index.d.ts","/a/data/node_modules/@types/lodash/index.d.ts"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts","/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
     {
-      "projectName": "/a/app/test3.csproj",
+      "projectName": "/user/username/projects/app/test3.csproj",
       "typeAcquisition": {
         "include": [
           "cordova",
@@ -1210,15 +1391,15 @@ TI:: [hh:mm:ss:mss] Sending response:
         "noEmitForJsFiles": true
       },
       "typings": [
-        "/a/data/node_modules/@types/cordova/index.d.ts",
-        "/a/data/node_modules/@types/lodash/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
-      "projectName": "/a/app/test3.csproj",
+      "projectName": "/user/username/projects/app/test3.csproj",
       "typeAcquisition": {
         "include": [
           "cordova",
@@ -1234,20 +1415,20 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "noEmitForJsFiles": true
       },
       "typings": [
-        "/a/data/node_modules/@types/cordova/index.d.ts",
-        "/a/data/node_modules/@types/lodash/index.d.ts"
+        "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
+        "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
       ],
       "unresolvedImports": [],
       "kind": "action::set"
     }
-Info seq  [hh:mm:ss:mss] Scheduled: /a/app/test3.csproj
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/app/test3.csproj
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "setTypings",
       "body": {
-        "projectName": "/a/app/test3.csproj",
+        "projectName": "/user/username/projects/app/test3.csproj",
         "typeAcquisition": {
           "include": [
             "cordova",
@@ -1263,8 +1444,8 @@ Info seq  [hh:mm:ss:mss] event:
           "noEmitForJsFiles": true
         },
         "typings": [
-          "/a/data/node_modules/@types/cordova/index.d.ts",
-          "/a/data/node_modules/@types/lodash/index.d.ts"
+          "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
+          "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
         ],
         "unresolvedImports": [],
         "kind": "action::set"
@@ -1274,7 +1455,7 @@ TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::endInstallTypes",
       "eventId": 3,
-      "projectName": "/a/app/test3.csproj",
+      "projectName": "/user/username/projects/app/test3.csproj",
       "packagesToInstall": [
         "@types/cordova@tsFakeMajor.Minor",
         "@types/lodash@tsFakeMajor.Minor"
@@ -1286,7 +1467,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
     {
       "kind": "event::endInstallTypes",
       "eventId": 3,
-      "projectName": "/a/app/test3.csproj",
+      "projectName": "/user/username/projects/app/test3.csproj",
       "packagesToInstall": [
         "@types/cordova@tsFakeMajor.Minor",
         "@types/lodash@tsFakeMajor.Minor"
@@ -1311,6 +1492,20 @@ Info seq  [hh:mm:ss:mss] event:
 After running PendingInstalls callback:: count: 0
 
 Timeout callback:: count: 3
-3: /a/app/test1.csproj
-5: /a/app/test2.csproj
-6: /a/app/test3.csproj *new*
+3: /user/username/projects/app/test1.csproj
+5: /user/username/projects/app/test2.csproj
+6: /user/username/projects/app/test3.csproj *new*
+
+Projects::
+/user/username/projects/app/test1.csproj (External)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+/user/username/projects/app/test2.csproj (External)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+/user/username/projects/app/test3.csproj (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*

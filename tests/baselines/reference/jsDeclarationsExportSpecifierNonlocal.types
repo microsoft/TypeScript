@@ -3,13 +3,18 @@
 === source.js ===
 export class Thing {}
 >Thing : Thing
+>      : ^^^^^
 
 export class OtherThing {}
 >OtherThing : OtherThing
+>           : ^^^^^^^^^^
 
 === index.js ===
 export { Thing, OtherThing as default } from "./source";
 >Thing : typeof import("source").Thing
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >OtherThing : typeof import("source").OtherThing
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >default : typeof import("source").OtherThing
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

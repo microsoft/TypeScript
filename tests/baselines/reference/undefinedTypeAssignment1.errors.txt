@@ -1,10 +1,10 @@
-undefinedTypeAssignment1.ts(1,6): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+undefinedTypeAssignment1.ts(1,6): error TS2457: Type alias name cannot be 'undefined'.
 
 
 ==== undefinedTypeAssignment1.ts (1 errors) ====
     type undefined = string;
          ~~~~~~~~~
-!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+!!! error TS2457: Type alias name cannot be 'undefined'.
     function p(undefined = "wat") {
     	return undefined;
     }

@@ -3,5 +3,7 @@
 === ambientErrors1.ts ===
 declare var x = 4;
 >x : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 

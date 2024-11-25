@@ -1,7 +1,7 @@
 ===================================================================
 --- default
 +++ ParseNone
-@@ -91,53 +91,9 @@
+@@ -88,52 +88,9 @@
                  "pos": 69,
                  "end": 69,
                  "hasTrailingComma": false,
@@ -37,7 +37,6 @@
 -                                "pos": 43,
 -                                "end": 44,
 -                                "flags": "JSDoc",
--                                "modifierFlagsCache": 0,
 -                                "transformFlags": 0,
 -                                "escapedText": "A"
 -                            },
@@ -56,7 +55,7 @@
          "length": 2,
          "pos": 0,
          "end": 70,
-@@ -220,7 +176,6 @@
+@@ -214,7 +171,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],

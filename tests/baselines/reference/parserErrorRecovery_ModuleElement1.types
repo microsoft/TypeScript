@@ -3,7 +3,9 @@
 === parserErrorRecovery_ModuleElement1.ts ===
 return foo;
 >foo : any
+>    : ^^^
 }
 return bar;
 >bar : any
+>    : ^^^
 }

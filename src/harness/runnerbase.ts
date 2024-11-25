@@ -1,11 +1,10 @@
 import {
-    FileBasedTest,
     IO,
     userSpecifiedRoot,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
 
-export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project";
+export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "transpile";
 export type CompilerTestKind = "conformance" | "compiler";
 export type FourslashTestKind = "fourslash" | "fourslash-server";
 
@@ -13,19 +12,19 @@ export let shards = 1;
 export let shardId = 1;
 
 // The following have setters as while they're read here in the harness, they're only set in the runner
-export function setShards(count: number) {
+export function setShards(count: number): void {
     shards = count;
 }
-export function setShardId(id: number) {
+export function setShardId(id: number): void {
     shardId = id;
 }
 
 export abstract class RunnerBase {
     // contains the tests to run
-    public tests: (string | FileBasedTest)[] = [];
+    public tests: string[] = [];
 
     /** Add a source file to the runner's list of tests that need to be initialized with initializeTests */
-    public addTest(fileName: string) {
+    public addTest(fileName: string): void {
         this.tests.push(fileName);
     }
 
@@ -35,7 +34,7 @@ export abstract class RunnerBase {
 
     abstract kind(): TestRunnerKind;
 
-    abstract enumerateTestFiles(): (string | FileBasedTest)[];
+    abstract enumerateTestFiles(): string[];
 
     getTestFiles(): ReturnType<this["enumerateTestFiles"]> {
         const all = this.enumerateTestFiles();
@@ -54,9 +53,9 @@ export abstract class RunnerBase {
     public abstract initializeTests(): void;
 
     /** Replaces instances of full paths with fileNames only */
-    static removeFullPaths(path: string) {
+    static removeFullPaths(path: string): string {
         // If its a full path (starts with "C:" or "/") replace with just the filename
-        let fixedPath = /^(\w:|\/)/.test(path) ? ts.getBaseFileName(path) : path;
+        let fixedPath = /^(?:\w:|\/)/.test(path) ? ts.getBaseFileName(path) : path;
 
         // when running in the browser the 'full path' is the host name, shows up in error baselines
         const localHost = /http:\/localhost:\d+/g;

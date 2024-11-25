@@ -3,9 +3,11 @@
 === constructorArgsErrors3.ts ===
 class foo {
 >foo : foo
+>    : ^^^
 
     constructor (public public a: number) {
 >a : number
+>  : ^^^^^^
     }
 }
 

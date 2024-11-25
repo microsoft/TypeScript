@@ -18,7 +18,7 @@ import {
     Version,
     version,
     versionMajorMinor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ActionPackageInstalled,
     ActionSet,
@@ -39,7 +39,7 @@ import {
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
     WatchTypingLocations,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 interface NpmConfig {
     devDependencies: MapLike<any>;
@@ -73,7 +73,7 @@ function typingToFileName(cachePath: string, packageName: string, installTypingH
 }
 
 /** @internal */
-export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean) {
+export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean): boolean {
     let hasError = false;
     for (let remaining = packageNames.length; remaining > 0;) {
         const result = getNpmCommandForInstallation(npmPath, tsVersion, packageNames, remaining);
@@ -84,7 +84,10 @@ export function installNpmPackages(npmPath: string, tsVersion: string, packageNa
 }
 
 /** @internal */
-export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number) {
+export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number): {
+    command: string;
+    remaining: number;
+} {
     const sliceStart = packageNames.length - remaining;
     let command: string, toSlice = remaining;
     while (true) {
@@ -113,7 +116,6 @@ export abstract class TypingsInstaller {
     private readonly knownCachesSet = new Set<string>();
     private readonly projectWatchers = new Map<string, Set<string>>();
     private safeList: JsTyping.SafeList | undefined;
-    /** @internal */
     private pendingRunRequests: PendingRequest[] = [];
 
     private installRunCount = 1;
@@ -127,7 +129,7 @@ export abstract class TypingsInstaller {
         private readonly safeListPath: Path,
         private readonly typesMapLocation: Path,
         private readonly throttleLimit: number,
-        protected readonly log = nullLog,
+        protected readonly log: Log = nullLog,
     ) {
         const isLoggingEnabled = this.log.isEnabled();
         if (isLoggingEnabled) {
@@ -137,7 +139,7 @@ export abstract class TypingsInstaller {
     }
 
     /** @internal */
-    handleRequest(req: TypingInstallerRequestUnion) {
+    handleRequest(req: TypingInstallerRequestUnion): void {
         switch (req.kind) {
             case "discover":
                 this.install(req);
@@ -163,7 +165,7 @@ export abstract class TypingsInstaller {
         }
     }
 
-    closeProject(req: CloseProject) {
+    closeProject(req: CloseProject): void {
         this.closeWatchers(req.projectName);
     }
 
@@ -187,7 +189,7 @@ export abstract class TypingsInstaller {
         }
     }
 
-    install(req: DiscoverTypings) {
+    install(req: DiscoverTypings): void {
         if (this.log.isEnabled()) {
             this.log.writeLine(`Got install request${stringifyIndented(req)}`);
         }
@@ -232,7 +234,7 @@ export abstract class TypingsInstaller {
     }
 
     /** @internal */
-    installPackage(req: InstallPackageRequest) {
+    installPackage(req: InstallPackageRequest): void {
         const { fileName, packageName, projectName, projectRootPath, id } = req;
         const cwd = forEachAncestorDirectory(getDirectoryPath(fileName), directory => {
             if (this.installTypingHost.fileExists(combinePaths(directory, "package.json"))) {
@@ -374,7 +376,7 @@ export abstract class TypingsInstaller {
         });
     }
 
-    protected ensurePackageDirectoryExists(directory: string) {
+    protected ensurePackageDirectoryExists(directory: string): void {
         const npmConfigPath = combinePaths(directory, "package.json");
         if (this.log.isEnabled()) {
             this.log.writeLine(`Npm config file: ${npmConfigPath}`);
@@ -526,7 +528,7 @@ export abstract class TypingsInstaller {
     protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
     protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
     /** @internal */
-    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations | PackageInstalledResponse | TypesRegistryResponse): void;
+    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations | PackageInstalledResponse | TypesRegistryResponse): void; // eslint-disable-line @typescript-eslint/unified-signatures
     protected readonly latestDistTag = "latest";
 }
 

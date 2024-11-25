@@ -4,17 +4,25 @@
 // Unary operator +
 var b;
 >b : any
+>  : ^^^
 
 // operand before +
 var result1 = b+;   //expect error
 >result1 : any
+>        : ^^^
 >b+ : any
+>   : ^^^
 >b : any
+>  : ^^^
 > : any
+> : ^^^
 
 // miss  an operand
 var result2 =+;
 >result2 : number
+>        : ^^^^^^
 >+ : number
+>  : ^^^^^^
 > : any
+> : ^^^
 

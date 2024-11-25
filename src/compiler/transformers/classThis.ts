@@ -21,7 +21,7 @@ import {
     Statement,
     SyntaxKind,
     ThisExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /**
  * Creates a class `static {}` block used to assign the static `this` to a `_classThis` (or similar) variable.
@@ -29,9 +29,8 @@ import {
  * @param classThis The identifier to use for the captured static `this` reference, usually with the name `_classThis`.
  * @param thisExpression Overrides the expression to use for the actual `this` reference. This can be used to provide an
  * expression that has already had its `EmitFlags` set or may have been tracked to prevent substitution.
- * @internal
  */
-export function createClassThisAssignmentBlock(factory: NodeFactory, classThis: Identifier, thisExpression = factory.createThis()): ClassThisAssignmentBlock {
+function createClassThisAssignmentBlock(factory: NodeFactory, classThis: Identifier, thisExpression = factory.createThis()): ClassThisAssignmentBlock {
     // produces:
     //
     //  static { _classThis = this; }
@@ -88,7 +87,7 @@ export function isClassThisAssignmentBlock(node: Node): node is ClassThisAssignm
  * `_classThis` (or similar) variable.
  * @internal
  */
-export function classHasClassThisAssignment(node: ClassLikeDeclaration) {
+export function classHasClassThisAssignment(node: ClassLikeDeclaration): boolean {
     return !!node.emitNode?.classThis && some(node.members, isClassThisAssignmentBlock);
 }
 

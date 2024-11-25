@@ -6,24 +6,20 @@
         "pretty": true,
         "lib": ["es2020"],
         "target": "es2020",
-        "module": "CommonJS",
-        "moduleResolution": "node",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
 
         "declaration": true,
         "declarationMap": true,
         "sourceMap": true,
         "composite": true,
-        "noEmitOnError": true,
         "emitDeclarationOnly": true,
+        "isolatedDeclarations": true,
 
         "strict": true,
         "strictBindCallApply": false,
         "useUnknownInCatchVariables": false,
         "noImplicitOverride": true,
-
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "allowUnusedLabels": false,
 
         "skipLibCheck": true,
 

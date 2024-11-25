@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/project/tsconfig.json]
 {
@@ -45,7 +45,7 @@ export const one = 1;
 //// [/user/username/projects/project/lib/index.d.ts]
 export const one = 1;
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -61,27 +61,29 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w -p . --extendedDiagnostics
+/home/src/tslibs/TS/Lib/tsc.js --w -p . --extendedDiagnostics
 Output::
-[[90m12:00:31 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-Current directory: / CaseSensitiveFileNames: false
+Current directory: /user/username/projects/project CaseSensitiveFileNames: false
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/project/app.ts"]
   options: {"types":[],"extendedDiagnostics":true,"configFilePath":"/user/username/projects/project/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/project/lib","originalPath":"./lib"}]
 Loading config file: /user/username/projects/project/lib/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /user/username/projects/project/lib/tsconfig.json 2000 undefined Config file of referened project
 FileWatcher:: Added:: WatchInfo: /user/username/projects/project/app.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/lib 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/lib 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/project/lib/index.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /user/username/projects/project/app.js :: WatchInfo: /user/username/projects 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/project/app.js :: WatchInfo: /user/username/projects 1 undefined Failed Lookup Locations
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+DirectoryWatcher:: Triggered with /user/username/projects/project/app.js :: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/project/app.js :: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
+FileWatcher:: Added:: WatchInfo: /user/username/projects/project/lib/tsconfig.json 2000 undefined Config file of referened project
 
 
 //// [/user/username/projects/project/app.js]
@@ -93,7 +95,9 @@ console.log(lib_1.one);
 
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+  {}
+/user/username/projects/project: *new*
   {}
 /user/username/projects/project/app.ts: *new*
   {}
@@ -103,7 +107,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects: *new*
+/user/username/projects/project/lib: *new*
   {}
 
 Program root files: [
@@ -116,17 +120,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/project/lib/index.d.ts
 /user/username/projects/project/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/project/lib/index.d.ts
 /user/username/projects/project/app.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/project/lib/index.d.ts (used version)
 /user/username/projects/project/app.ts (used version)
 
@@ -158,17 +162,18 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
 Loading config file: /user/username/projects/project/lib/tsconfig.json
-[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/project/app.ts"]
   options: {"types":[],"extendedDiagnostics":true,"configFilePath":"/user/username/projects/project/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/project/lib","originalPath":"./lib"}]
-[[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -184,7 +189,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.d.ts
 /user/username/projects/project/lib/index.d.ts
 /user/username/projects/project/app.ts
 

@@ -1,0 +1,65 @@
+name: Publish Insiders
+
+on:
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: [publish-insiders]
+
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: 'lts/*'
+      - run: |
+          npm --version
+          # corepack enable npm
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
+      - name: Test insiders
+        run: |
+          npm ci
+          npx hereby configure-insiders
+          npm test
+
+  publish:
+    needs: test
+
+    runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: 'lts/*'
+          # Use NODE_AUTH_TOKEN environment variable to authenticate to this registry.
+          registry-url: https://registry.npmjs.org/
+      - run: |
+          npm --version
+          # corepack enable npm
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
+      - name: Setup and publish insiders
+        run: |
+          npm whoami
+          npm ci
+          npx hereby configure-insiders
+          npx hereby LKG
+          node ./scripts/addPackageJsonGitHead.mjs package.json
+          npm publish --tag insiders
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}

@@ -1,10 +1,12 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/a/b/projects/project/src/index.ts]
 let y = 10
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -16,6 +18,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -28,28 +32,28 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/project/src
-Info seq  [hh:mm:ss:mss] For info: /a/b/projects/project/src/index.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /a/b/projects/project/src
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
-	../../../../lib/lib.d.ts
+	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	index.ts
 	  Root file specified for compilation
@@ -64,7 +68,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/index.ts ProjectRo
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -85,25 +96,35 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+
+ScriptInfos::
+/a/b/projects/project/src/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/home/src/tslibs/TS/Lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/project/src
-Info seq  [hh:mm:ss:mss] For info: /a/b/projects/project/src/index.ts :: Config file name: /a/b/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: /a/b/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj:: Result: /a/b/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/project/src
-Info seq  [hh:mm:ss:mss] For info: /a/b/projects/project/src/index.ts :: Config file name: /a/b/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: /a/b/projects/project/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj:: Result: /a/b/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Before running Timeout callback:: count: 2
-3: /a/b/projects/project/tsconfig.json
-4: *ensureProjectForOpenFiles*
+Before running Timeout callback:: count: 1
+2: *ensureProjectForOpenFiles*
 //// [/a/b/projects/project/tsconfig.json]
 {}
 
@@ -129,25 +150,23 @@ PolledWatches *deleted*::
 FsWatches::
 /a/b/projects/project/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
-Timeout callback:: count: 2
-3: /a/b/projects/project/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 1
+2: *ensureProjectForOpenFiles* *new*
 
-Info seq  [hh:mm:ss:mss] Running: /a/b/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /a/b/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/a/b/projects/project/tsconfig.json",
-        "reason": "Change in config file detected"
-      }
-    }
+Host is moving to new time
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /a/b/projects/project/tsconfig.json, currentDirectory: /a/b/projects/project
 Info seq  [hh:mm:ss:mss] Config: /a/b/projects/project/tsconfig.json : {
  "rootNames": [
   "/a/b/projects/project/src/index.ts"
@@ -156,6 +175,16 @@ Info seq  [hh:mm:ss:mss] Config: /a/b/projects/project/tsconfig.json : {
   "configFilePath": "/a/b/projects/project/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/a/b/projects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /a/b/projects/project/src/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project 1 undefined Config: /a/b/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project 1 undefined Config: /a/b/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -166,14 +195,14 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/pro
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/projects/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
-	../../../lib/lib.d.ts
+	../../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	src/index.ts
 	  Matched by default include pattern '**/*'
@@ -207,7 +236,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -235,26 +264,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/a/b/projects/project/tsconfig.json",
+        "triggerFile": "/a/b/projects/project/src/index.ts",
         "configFile": "/a/b/projects/project/tsconfig.json",
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
@@ -306,101 +322,104 @@ PolledWatches *deleted*::
 FsWatches::
 /a/b/projects/project/tsconfig.json:
   {}
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
 /a/b/projects/project: *new*
   {}
 
+Projects::
+/a/b/projects/project/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: false
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 2 *changed*
+    isOrphan: true *changed*
+    autoImportProviderHost: undefined *changed*
+
+ScriptInfos::
+/a/b/projects/project/src/index.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 1 *changed*
+        /a/b/projects/project/tsconfig.json *default* *new*
+        /dev/null/inferredProject1* *deleted*
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /a/b/projects/project/tsconfig.json *new*
+        /dev/null/inferredProject1* *deleted*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 2:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts
-	/a/b/projects/project/src/index.ts
-
-
-	../../../lib/lib.d.ts
-	  Default library for target 'es5'
-	src/index.ts
-	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project 1 undefined Config: /a/b/projects/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project 1 undefined Config: /a/b/projects/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/project/node_modules/@types 1 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/project/src
-Info seq  [hh:mm:ss:mss] For info: /a/b/projects/project/src/index.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj:: Result: undefined
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 2:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/project/tsconfig.json :: WatchInfo: /a/b/projects/project 1 undefined Config: /a/b/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Project: /a/b/projects/project/tsconfig.json Detected file add/remove of non supported extension: /a/b/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/project/tsconfig.json :: WatchInfo: /a/b/projects/project 1 undefined Config: /a/b/projects/project/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 1
-5: *ensureProjectForOpenFiles*
+3: *ensureProjectForOpenFiles*
 //// [/a/b/projects/project/tsconfig.json] deleted
 
-PolledWatches::
-/a/b/projects/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/projects/project/src/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-
-FsWatches *deleted*::
-/a/b/projects/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive *deleted*::
-/a/b/projects/project:
-  {}
-
 Timeout callback:: count: 1
-5: *ensureProjectForOpenFiles* *new*
+3: *ensureProjectForOpenFiles* *new*
 
-Host is moving to new time
+Projects::
+/a/b/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isOrphan: true *changed*
+    deferredClose: true *changed*
+    autoImportProviderHost: undefined *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 2
+    isOrphan: true
+
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
-Info seq  [hh:mm:ss:mss] 		Projects: 
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/a/b/projects/project/src/index.ts SVC-1-0 "let y = 10"
 
 
-	../../../../lib/lib.d.ts
+	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	index.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*,/a/b/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/projects/project/src/index.ts
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -428,9 +447,36 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/projects/project/src/tsconfig.json: *new*
   {"pollingInterval":2000}
-/a/b/projects/project/tsconfig.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/a/b/projects/project/tsconfig.json:
   {}
+/home/src/tslibs/TS/Lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/project:
+  {}
+
+Projects::
+/a/b/projects/project/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isOrphan: true
+    deferredClose: true
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 3 *changed*
+    isOrphan: false *changed*
+
+ScriptInfos::
+/a/b/projects/project/src/index.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1* *default* *new*
+        /a/b/projects/project/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /a/b/projects/project/tsconfig.json
+        /dev/null/inferredProject1* *new*

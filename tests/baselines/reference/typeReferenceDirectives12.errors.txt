@@ -1,10 +1,6 @@
-error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'outFile' instead.
-/main.ts(1,14): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+/main.ts(1,14): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
 
 
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
 ==== /mod2.ts (0 errors) ====
     import { Cls } from "./main";
     import "./mod1";
@@ -12,13 +8,14 @@ error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript
     export const cls = Cls;
     export const foo = new Cls().foo();
     export const bar = Cls.bar();
+    
 ==== /types/lib/index.d.ts (0 errors) ====
     interface Lib { x }
     
 ==== /main.ts (1 errors) ====
     export class Cls {
                  ~~~
-!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+!!! error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
         x
     }
     

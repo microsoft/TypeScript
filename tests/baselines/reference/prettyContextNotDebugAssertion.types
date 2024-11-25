@@ -3,4 +3,5 @@
 === index.ts ===
 if (true) {
 >true : true
+>     : ^^^^
 

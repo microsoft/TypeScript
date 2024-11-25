@@ -1,3 +1,11 @@
+import { fork } from "child_process";
+import { statSync } from "fs";
+import Mocha from "mocha";
+import ms from "ms";
+import os from "os";
+import path from "path";
+import readline from "readline";
+import tty from "tty";
 import {
     configOption,
     globalTimeout,
@@ -12,7 +20,7 @@ import {
     TestConfig,
     TestRunnerKind,
     workerCount,
-} from "../_namespaces/Harness";
+} from "../_namespaces/Harness.js";
 import {
     ErrorInfo,
     ParallelClientMessage,
@@ -21,25 +29,17 @@ import {
     Task,
     TaskTimeout,
     TestInfo,
-} from "../_namespaces/Harness.Parallel";
-import * as ts from "../_namespaces/ts";
-import * as Utils from "../_namespaces/Utils";
+} from "../_namespaces/Harness.Parallel.js";
+import * as ts from "../_namespaces/ts.js";
+import * as Utils from "../_namespaces/Utils.js";
 
-export function start() {
-    const Mocha = require("mocha") as typeof import("mocha");
+export function start(importTests: () => Promise<unknown>): void {
     const Base = Mocha.reporters.Base;
     const color = Base.color;
     const cursor = Base.cursor;
-    const ms = require("ms") as typeof import("ms");
-    const readline = require("readline") as typeof import("readline");
-    const os = require("os") as typeof import("os");
-    const tty = require("tty") as typeof import("tty");
     const isatty = tty.isatty(1) && tty.isatty(2);
-    const path = require("path") as typeof import("path");
-    const { fork } = require("child_process") as typeof import("child_process");
-    const { statSync } = require("fs") as typeof import("fs");
 
-    // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
+    // NOTE: paths for module and types for FailedTestReporter _do not_ line up when bundled
     const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.cjs")) as typeof import("../../../scripts/failed-tests.cjs");
 
     const perfdataFileNameFragment = ".parallelperf";
@@ -217,8 +217,7 @@ export function start() {
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
         for (const runner of runners) {
-            for (const test of runner.getTestFiles()) {
-                const file = typeof test === "string" ? test : test.file;
+            for (const file of runner.getTestFiles()) {
                 let size: number;
                 if (!perfData) {
                     try {
@@ -597,7 +596,7 @@ export function start() {
             consoleReporter.epilogue();
             if (noColors) Base.useColors = savedUseColors;
 
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4));
 
             if (xunitReporter) {
@@ -657,5 +656,5 @@ export function start() {
         shimNoopTestInterface(global);
     }
 
-    setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
+    importTests().then(() => startDelayed(perfData, totalCost));
 }

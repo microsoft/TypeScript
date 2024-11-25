@@ -1,0 +1,118 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/b.js ===
+// /**
+//  * @import {
+//  *     Foo
+//  * } from './a'
+//  */
+// 
+// /**
+//  * @param {Foo} a
+//  */
+// function foo(a) {}
+// foo()
+//     ^
+// | ----------------------------------------------------------------------
+// | foo(**a: Foo**): void
+// | @param a
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/b.js",
+      "position": 98,
+      "name": ""
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "foo",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Foo",
+                  "kind": "aliasName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "a",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 98,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  }
+]

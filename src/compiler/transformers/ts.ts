@@ -25,7 +25,6 @@ import {
     createRange,
     createRuntimeTypeSerializer,
     createTokenRange,
-    createUnparsedSourceFile,
     Debug,
     Declaration,
     Decorator,
@@ -61,7 +60,6 @@ import {
     getStrictOptionValue,
     getTextOfNode,
     hasDecorators,
-    hasStaticModifier,
     hasSyntacticModifier,
     HeritageClause,
     Identifier,
@@ -69,7 +67,6 @@ import {
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
-    ImportsNotUsedAsValues,
     ImportSpecifier,
     InitializedVariableDeclaration,
     insertStatementsAfterStandardPrologue,
@@ -86,7 +83,10 @@ import {
     isComputedPropertyName,
     isDecorator,
     isElementAccessExpression,
+    isEntityName,
     isEnumConst,
+    isExportAssignment,
+    isExportDeclaration,
     isExportOrDefaultModifier,
     isExportSpecifier,
     isExpression,
@@ -96,6 +96,8 @@ import {
     isHeritageClause,
     isIdentifier,
     isImportClause,
+    isImportDeclaration,
+    isImportEqualsDeclaration,
     isImportSpecifier,
     isInJSFile,
     isInstantiatedModule,
@@ -115,6 +117,7 @@ import {
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyName,
+    isSatisfiesExpression,
     isShorthandPropertyAssignment,
     isSimpleInlineableExpression,
     isSourceFile,
@@ -187,6 +190,7 @@ import {
     takeWhile,
     TextRange,
     TransformationContext,
+    Transformer,
     TransformFlags,
     VariableDeclaration,
     VariableStatement,
@@ -197,7 +201,7 @@ import {
     visitNodes,
     visitParameterList,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /**
  * Indicates whether to emit type metadata in the new format.
@@ -205,6 +209,7 @@ import {
 const USE_NEW_TYPE_METADATA_FORMAT = false;
 
 const enum TypeScriptSubstitutionFlags {
+    None = 0,
     /** Enables substitutions for namespace exports. */
     NamespaceExports = 1 << 1,
     /* Enables substitutions for unqualified enum members */
@@ -227,7 +232,7 @@ const enum ClassFacts {
 }
 
 /** @internal */
-export function transformTypeScript(context: TransformationContext) {
+export function transformTypeScript(context: TransformationContext): Transformer<SourceFile | Bundle> {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -262,13 +267,12 @@ export function transformTypeScript(context: TransformationContext) {
     let currentNamespaceContainerName: Identifier;
     let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
     let currentScopeFirstDeclarationsOfName: Map<__String, Node> | undefined;
-    let currentClassHasParameterProperties: boolean | undefined;
 
     /**
      * Keeps track of whether expression substitution has been enabled for specific edge cases.
      * They are persisted between each SourceFile transformation and should not be reset.
      */
-    let enabledSubstitutions: TypeScriptSubstitutionFlags;
+    let enabledSubstitutions = TypeScriptSubstitutionFlags.None;
 
     /**
      * Keeps track of whether we are within any containing namespaces when performing
@@ -288,12 +292,6 @@ export function transformTypeScript(context: TransformationContext) {
     function transformBundle(node: Bundle) {
         return factory.createBundle(
             node.sourceFiles.map(transformSourceFile),
-            mapDefined(node.prepends, prepend => {
-                if (prepend.kind === SyntaxKind.InputFiles) {
-                    return createUnparsedSourceFile(prepend, "js");
-                }
-                return prepend;
-            }),
         );
     }
 
@@ -325,7 +323,6 @@ export function transformTypeScript(context: TransformationContext) {
         // Save state
         const savedCurrentScope = currentLexicalScope;
         const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
-        const savedCurrentClassHasParameterProperties = currentClassHasParameterProperties;
 
         // Handle state changes before visiting a node.
         onBeforeVisitNode(node);
@@ -338,7 +335,6 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         currentLexicalScope = savedCurrentScope;
-        currentClassHasParameterProperties = savedCurrentClassHasParameterProperties;
         return visited;
     }
 
@@ -425,13 +421,65 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node | undefined> {
+    /**
+     * Determines whether import/export elision is blocked for this statement.
+     *
+     * @description
+     * We generally block import/export elision if the statement was modified by a `before` custom
+     * transform, although we will continue to allow it if the statement hasn't replaced a node of a different kind and
+     * as long as the local bindings for the declarations are unchanged.
+     */
+    function isElisionBlocked(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration) {
         const parsed = getParseTreeNode(node);
-        if (parsed !== node) {
-            // If the node has been transformed by a `before` transformer, perform no ellision on it
-            // As the type information we would attempt to lookup to perform ellision is potentially unavailable for the synthesized nodes
-            // We do not reuse `visitorWorker`, as the ellidable statement syntax kinds are technically unrecognized by the switch-case in `visitTypeScript`,
-            // and will trigger debug failures when debug verbosity is turned up
+        if (parsed === node || isExportAssignment(node)) {
+            return false;
+        }
+
+        if (!parsed || parsed.kind !== node.kind) {
+            // no longer safe to elide as the declaration was replaced with a node of a different kind
+            return true;
+        }
+
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+                Debug.assertNode(parsed, isImportDeclaration);
+                if (node.importClause !== parsed.importClause) {
+                    return true; // no longer safe to elide as the import clause has changed
+                }
+                if (node.attributes !== parsed.attributes) {
+                    return true; // no longer safe to elide as the import attributes have changed
+                }
+                break;
+            case SyntaxKind.ImportEqualsDeclaration:
+                Debug.assertNode(parsed, isImportEqualsDeclaration);
+                if (node.name !== parsed.name) {
+                    return true; // no longer safe to elide as local binding has changed
+                }
+                if (node.isTypeOnly !== parsed.isTypeOnly) {
+                    return true; // no longer safe to elide as `type` modifier has changed
+                }
+                if (node.moduleReference !== parsed.moduleReference && (isEntityName(node.moduleReference) || isEntityName(parsed.moduleReference))) {
+                    return true; // no longer safe to elide as EntityName reference has changed.
+                }
+                break;
+            case SyntaxKind.ExportDeclaration:
+                Debug.assertNode(parsed, isExportDeclaration);
+                if (node.exportClause !== parsed.exportClause) {
+                    return true; // no longer safe to elide as the export clause has changed
+                }
+                if (node.attributes !== parsed.attributes) {
+                    return true; // no longer safe to elide as the export attributes have changed
+                }
+                break;
+        }
+
+        return false;
+    }
+
+    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node | undefined> {
+        if (isElisionBlocked(node)) {
+            // We do not reuse `visitorWorker`, as the ellidable statement syntax kinds are technically unrecognized by
+            // the switch-case in `visitTypeScript`, and will trigger debug failures when debug verbosity is turned up.
             if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 // This node contains TypeScript, so we should visit its children.
                 return visitEachChild(node, visitor, context);
@@ -1072,7 +1120,7 @@ export function transformTypeScript(context: TransformationContext) {
         if (typeSerializer) {
             let decorators: Decorator[] | undefined;
             if (shouldAddTypeMetadata(node)) {
-                const typeMetadata = emitHelpers().createMetadataHelper("design:type", typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node));
+                const typeMetadata = emitHelpers().createMetadataHelper("design:type", typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node, container));
                 decorators = append(decorators, factory.createDecorator(typeMetadata));
             }
             if (shouldAddParamTypesMetadata(node)) {
@@ -1091,7 +1139,7 @@ export function transformTypeScript(context: TransformationContext) {
         if (typeSerializer) {
             let properties: ObjectLiteralElementLike[] | undefined;
             if (shouldAddTypeMetadata(node)) {
-                const typeProperty = factory.createPropertyAssignment("type", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node)));
+                const typeProperty = factory.createPropertyAssignment("type", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node, container)));
                 properties = append(properties, typeProperty);
             }
             if (shouldAddParamTypesMetadata(node)) {
@@ -1189,10 +1237,8 @@ export function transformTypeScript(context: TransformationContext) {
     function visitPropertyNameOfClassElement(member: ClassElement): PropertyName {
         const name = member.name!;
         // Computed property names need to be transformed into a hoisted variable when they are used more than once.
-        // The names are used more than once when:
-        //   - the property is non-static and its initializer is moved to the constructor (when there are parameter property assignments).
-        //   - the property has a decorator.
-        if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member) && legacyDecorators)) {
+        // The names are used more than once when the property has a decorator.
+        if (legacyDecorators && isComputedPropertyName(name) && hasDecorators(member)) {
             const expression = visitNode(name.expression, visitor, isExpression);
             Debug.assert(expression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
@@ -1639,8 +1685,8 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function visitParenthesizedExpression(node: ParenthesizedExpression): Expression {
-        const innerExpression = skipOuterExpressions(node.expression, ~OuterExpressionKinds.Assertions);
-        if (isAssertionExpression(innerExpression)) {
+        const innerExpression = skipOuterExpressions(node.expression, ~(OuterExpressionKinds.Assertions | OuterExpressionKinds.ExpressionsWithTypeArguments));
+        if (isAssertionExpression(innerExpression) || isSatisfiesExpression(innerExpression)) {
             // Make sure we consider all nested cast expressions, e.g.:
             // (<any><number><any>-A).x;
             const expression = visitNode(node.expression, visitor, isExpression);
@@ -1865,7 +1911,8 @@ export function transformTypeScript(context: TransformationContext) {
         // we pass false as 'generateNameForComputedPropertyName' for a backward compatibility purposes
         // old emitter always generate 'expression' part of the name as-is.
         const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
-        const valueExpression = transformEnumMemberDeclarationValue(member);
+        const evaluated = resolver.getEnumMemberValue(member);
+        const valueExpression = transformEnumMemberDeclarationValue(member, evaluated?.value);
         const innerAssignment = factory.createAssignment(
             factory.createElementAccessExpression(
                 currentNamespaceContainerName,
@@ -1873,7 +1920,7 @@ export function transformTypeScript(context: TransformationContext) {
             ),
             valueExpression,
         );
-        const outerAssignment = valueExpression.kind === SyntaxKind.StringLiteral ?
+        const outerAssignment = typeof evaluated?.value === "string" || evaluated?.isSyntacticallyString ?
             innerAssignment :
             factory.createAssignment(
                 factory.createElementAccessExpression(
@@ -1898,12 +1945,11 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param member The enum member node.
      */
-    function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
-        const value = resolver.getConstantValue(member);
-        if (value !== undefined) {
-            return typeof value === "string" ? factory.createStringLiteral(value) :
-                value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) :
-                factory.createNumericLiteral(value);
+    function transformEnumMemberDeclarationValue(member: EnumMember, constantValue: string | number | undefined): Expression {
+        if (constantValue !== undefined) {
+            return typeof constantValue === "string" ? factory.createStringLiteral(constantValue) :
+                constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constantValue)) :
+                factory.createNumericLiteral(constantValue);
         }
         else {
             enableSubstitutionForNonQualifiedEnumMembers();
@@ -2219,9 +2265,7 @@ export function transformTypeScript(context: TransformationContext) {
 
         // Elide the declaration if the import clause was elided.
         const importClause = visitNode(node.importClause, visitImportClause, isImportClause);
-        return importClause ||
-                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
+        return importClause
             ? factory.updateImportDeclaration(
                 node,
                 /*modifiers*/ undefined,
@@ -2257,10 +2301,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
         else {
             // Elide named imports if all of its import specifiers are elided and settings allow.
-            const allowEmpty = compilerOptions.verbatimModuleSyntax || compilerOptions.preserveValueImports && (
-                        compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                        compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
-                    );
+            const allowEmpty = compilerOptions.verbatimModuleSyntax;
             const elements = visitNodes(node.elements, visitImportSpecifier, isImportSpecifier);
             return allowEmpty || some(elements) ? factory.updateNamedImports(node, elements) : undefined;
         }
@@ -2302,14 +2343,18 @@ export function transformTypeScript(context: TransformationContext) {
             // never elide `export <whatever> from <whereever>` declarations -
             // they should be kept for sideffects/untyped exports, even when the
             // type checker doesn't know about any exports
-            return node;
+            return factory.updateExportDeclaration(
+                node,
+                node.modifiers,
+                node.isTypeOnly,
+                node.exportClause,
+                node.moduleSpecifier,
+                node.attributes,
+            );
         }
 
         // Elide the export declaration if all of its named exports are elided.
-        const allowEmpty = compilerOptions.verbatimModuleSyntax || !!node.moduleSpecifier && (
-                    compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                    compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
-                );
+        const allowEmpty = !!compilerOptions.verbatimModuleSyntax;
         const exportClause = visitNode(
             node.exportClause,
             (bindings: NamedExportBindings) => visitNamedExportBindings(bindings, allowEmpty),
@@ -2384,24 +2429,10 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         if (isExternalModuleImportEqualsDeclaration(node)) {
-            const isReferenced = shouldEmitAliasDeclaration(node);
-            // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.
-            if (!isReferenced && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve) {
-                return setOriginalNode(
-                    setTextRange(
-                        factory.createImportDeclaration(
-                            /*modifiers*/ undefined,
-                            /*importClause*/ undefined,
-                            node.moduleReference.expression,
-                            /*attributes*/ undefined,
-                        ),
-                        node,
-                    ),
-                    node,
-                );
+            if (!shouldEmitAliasDeclaration(node)) {
+                return undefined;
             }
-
-            return isReferenced ? visitEachChild(node, visitor, context) : undefined;
+            return visitEachChild(node, visitor, context);
         }
 
         if (!shouldEmitImportEqualsDeclaration(node)) {
@@ -2710,9 +2741,6 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function shouldEmitAliasDeclaration(node: Node): boolean {
-        return compilerOptions.verbatimModuleSyntax || isInJSFile(node) ||
-            (compilerOptions.preserveValueImports
-                ? resolver.isValueAliasDeclaration(node)
-                : resolver.isReferencedAliasDeclaration(node));
+        return compilerOptions.verbatimModuleSyntax || isInJSFile(node) || resolver.isReferencedAliasDeclaration(node);
     }
 }
