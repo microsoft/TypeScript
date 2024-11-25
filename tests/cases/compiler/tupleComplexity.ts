@@ -1,21 +1,44 @@
-// Tuple union with simple cases - should not produce TS2590
-type TupleUnion = [string, number] | [boolean, string];
-const example1: TupleUnion = ["hello", 42]; // Valid
-const example2: TupleUnion = [true, "world"]; // Valid
+// Tests for TS2590: "Expression produces a union type that is too complex to represent"
 
-// Complex tuple concatenation - TS2590 currently triggered
+// --- Tuple Unions ---
+
+// Simple union - Should work
+type TupleUnion1 = [string, number] | [boolean, string];
+const valid1: TupleUnion1 = ["hello", 42]; // ✅ Should pass
+const valid2: TupleUnion1 = [true, "world"]; // ✅ Should pass
+
+// Extended union - Should trigger TS2590
+type TupleUnion2 = [string, number] | [boolean, string];
+type ComplexTuple = [...TupleUnion2, string]; // ❌ Should trigger TS2590
+const invalid: ComplexTuple = ["hello", 42, "world"]; // Should fail with TS2590
+
+// --- Tuple Concatenations ---
+
+// Manageable concatenation - Should work
 type ConcatTuple<T extends any[], U extends any[]> = [...T, ...U];
-type Result = ConcatTuple<[number, string], [boolean]>;
-// Result should be inferred as [number, string, boolean]
-const concatenated: Result = [1, "foo", true]; // Valid
+type Result1 = ConcatTuple<[string, number], [boolean]>; // ✅ Should infer [string, number, boolean]
+const concat1: Result1 = ["hello", 42, true]; // ✅ Should pass
 
-// Map types on tuples
+// Excessively large concatenation - Should trigger TS2590
+type LargeConcat = ConcatTuple<[...Array<100>], [...Array<100>]>;
+// ❌ Should trigger TS2590 for excessive complexity
+
+// --- Mapped Types on Tuples ---
+
+// Simple mapping - Should work
 type Stringify<T extends any[]> = { [K in keyof T]: string };
-type Mapped = Stringify<[number, boolean]>;
-// Should infer as [string, string]
-const mapped: Mapped = ["123", "true"]; // Valid
+type MappedTuple1 = Stringify<[number, boolean]>; // ✅ Should infer [string, string]
+const map1: MappedTuple1 = ["42", "true"]; // ✅ Should pass
 
-// Complex unions within tuples
-type NestedUnion = [string, [boolean | number]];
-const nested: NestedUnion = ["test", [true]]; // Valid
-const nested2: NestedUnion = ["test", [42]]; // Valid
+// --- Nested Tuples ---
+
+// Deeply nested tuple - Should trigger TS2590
+type DeepTuple = [string, [boolean | number, [boolean | number, [boolean | number]]]];
+type Nested = [...DeepTuple, string]; // ❌ Should trigger TS2590
+const deep: Nested = ["root", [true, [42, [false]]], "leaf"]; // Should fail with TS2590
+
+// --- Invalid Cases ---
+
+// Expected type mismatches (non-TS2590 failures)
+const invalidConcat1: Result1 = ["hello", 42]; // ❌ Error: Missing boolean
+const invalidMap1: MappedTuple1 = [42, true]; // ❌ Error: Expected strings

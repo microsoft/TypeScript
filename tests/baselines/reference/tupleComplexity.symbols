@@ -1,60 +1,100 @@
 //// [tests/cases/compiler/tupleComplexity.ts] ////
 
 === tupleComplexity.ts ===
-// Tuple union with simple cases - should not produce TS2590
-type TupleUnion = [string, number] | [boolean, string];
->TupleUnion : Symbol(TupleUnion, Decl(tupleComplexity.ts, 0, 0))
+// Tests for TS2590: "Expression produces a union type that is too complex to represent"
 
-const example1: TupleUnion = ["hello", 42]; // Valid
->example1 : Symbol(example1, Decl(tupleComplexity.ts, 2, 5))
->TupleUnion : Symbol(TupleUnion, Decl(tupleComplexity.ts, 0, 0))
+// --- Tuple Unions ---
 
-const example2: TupleUnion = [true, "world"]; // Valid
->example2 : Symbol(example2, Decl(tupleComplexity.ts, 3, 5))
->TupleUnion : Symbol(TupleUnion, Decl(tupleComplexity.ts, 0, 0))
+// Simple union - Should work
+type TupleUnion1 = [string, number] | [boolean, string];
+>TupleUnion1 : Symbol(TupleUnion1, Decl(tupleComplexity.ts, 0, 0))
 
-// Complex tuple concatenation - TS2590 currently triggered
+const valid1: TupleUnion1 = ["hello", 42]; // ✅ Should pass
+>valid1 : Symbol(valid1, Decl(tupleComplexity.ts, 6, 5))
+>TupleUnion1 : Symbol(TupleUnion1, Decl(tupleComplexity.ts, 0, 0))
+
+const valid2: TupleUnion1 = [true, "world"]; // ✅ Should pass
+>valid2 : Symbol(valid2, Decl(tupleComplexity.ts, 7, 5))
+>TupleUnion1 : Symbol(TupleUnion1, Decl(tupleComplexity.ts, 0, 0))
+
+// Extended union - Should trigger TS2590
+type TupleUnion2 = [string, number] | [boolean, string];
+>TupleUnion2 : Symbol(TupleUnion2, Decl(tupleComplexity.ts, 7, 44))
+
+type ComplexTuple = [...TupleUnion2, string]; // ❌ Should trigger TS2590
+>ComplexTuple : Symbol(ComplexTuple, Decl(tupleComplexity.ts, 10, 56))
+>TupleUnion2 : Symbol(TupleUnion2, Decl(tupleComplexity.ts, 7, 44))
+
+const invalid: ComplexTuple = ["hello", 42, "world"]; // Should fail with TS2590
+>invalid : Symbol(invalid, Decl(tupleComplexity.ts, 12, 5))
+>ComplexTuple : Symbol(ComplexTuple, Decl(tupleComplexity.ts, 10, 56))
+
+// --- Tuple Concatenations ---
+
+// Manageable concatenation - Should work
 type ConcatTuple<T extends any[], U extends any[]> = [...T, ...U];
->ConcatTuple : Symbol(ConcatTuple, Decl(tupleComplexity.ts, 3, 45))
->T : Symbol(T, Decl(tupleComplexity.ts, 6, 17))
->U : Symbol(U, Decl(tupleComplexity.ts, 6, 33))
->T : Symbol(T, Decl(tupleComplexity.ts, 6, 17))
->U : Symbol(U, Decl(tupleComplexity.ts, 6, 33))
+>ConcatTuple : Symbol(ConcatTuple, Decl(tupleComplexity.ts, 12, 53))
+>T : Symbol(T, Decl(tupleComplexity.ts, 17, 17))
+>U : Symbol(U, Decl(tupleComplexity.ts, 17, 33))
+>T : Symbol(T, Decl(tupleComplexity.ts, 17, 17))
+>U : Symbol(U, Decl(tupleComplexity.ts, 17, 33))
 
-type Result = ConcatTuple<[number, string], [boolean]>;
->Result : Symbol(Result, Decl(tupleComplexity.ts, 6, 66))
->ConcatTuple : Symbol(ConcatTuple, Decl(tupleComplexity.ts, 3, 45))
+type Result1 = ConcatTuple<[string, number], [boolean]>; // ✅ Should infer [string, number, boolean]
+>Result1 : Symbol(Result1, Decl(tupleComplexity.ts, 17, 66))
+>ConcatTuple : Symbol(ConcatTuple, Decl(tupleComplexity.ts, 12, 53))
 
-// Result should be inferred as [number, string, boolean]
-const concatenated: Result = [1, "foo", true]; // Valid
->concatenated : Symbol(concatenated, Decl(tupleComplexity.ts, 9, 5))
->Result : Symbol(Result, Decl(tupleComplexity.ts, 6, 66))
+const concat1: Result1 = ["hello", 42, true]; // ✅ Should pass
+>concat1 : Symbol(concat1, Decl(tupleComplexity.ts, 19, 5))
+>Result1 : Symbol(Result1, Decl(tupleComplexity.ts, 17, 66))
 
-// Map types on tuples
+// Excessively large concatenation - Should trigger TS2590
+type LargeConcat = ConcatTuple<[...Array<100>], [...Array<100>]>;
+>LargeConcat : Symbol(LargeConcat, Decl(tupleComplexity.ts, 19, 45))
+>ConcatTuple : Symbol(ConcatTuple, Decl(tupleComplexity.ts, 12, 53))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// ❌ Should trigger TS2590 for excessive complexity
+
+// --- Mapped Types on Tuples ---
+
+// Simple mapping - Should work
 type Stringify<T extends any[]> = { [K in keyof T]: string };
->Stringify : Symbol(Stringify, Decl(tupleComplexity.ts, 9, 46))
->T : Symbol(T, Decl(tupleComplexity.ts, 12, 15))
->K : Symbol(K, Decl(tupleComplexity.ts, 12, 37))
->T : Symbol(T, Decl(tupleComplexity.ts, 12, 15))
+>Stringify : Symbol(Stringify, Decl(tupleComplexity.ts, 22, 65))
+>T : Symbol(T, Decl(tupleComplexity.ts, 28, 15))
+>K : Symbol(K, Decl(tupleComplexity.ts, 28, 37))
+>T : Symbol(T, Decl(tupleComplexity.ts, 28, 15))
 
-type Mapped = Stringify<[number, boolean]>;
->Mapped : Symbol(Mapped, Decl(tupleComplexity.ts, 12, 61))
->Stringify : Symbol(Stringify, Decl(tupleComplexity.ts, 9, 46))
+type MappedTuple1 = Stringify<[number, boolean]>; // ✅ Should infer [string, string]
+>MappedTuple1 : Symbol(MappedTuple1, Decl(tupleComplexity.ts, 28, 61))
+>Stringify : Symbol(Stringify, Decl(tupleComplexity.ts, 22, 65))
 
-// Should infer as [string, string]
-const mapped: Mapped = ["123", "true"]; // Valid
->mapped : Symbol(mapped, Decl(tupleComplexity.ts, 15, 5))
->Mapped : Symbol(Mapped, Decl(tupleComplexity.ts, 12, 61))
+const map1: MappedTuple1 = ["42", "true"]; // ✅ Should pass
+>map1 : Symbol(map1, Decl(tupleComplexity.ts, 30, 5))
+>MappedTuple1 : Symbol(MappedTuple1, Decl(tupleComplexity.ts, 28, 61))
 
-// Complex unions within tuples
-type NestedUnion = [string, [boolean | number]];
->NestedUnion : Symbol(NestedUnion, Decl(tupleComplexity.ts, 15, 39))
+// --- Nested Tuples ---
 
-const nested: NestedUnion = ["test", [true]]; // Valid
->nested : Symbol(nested, Decl(tupleComplexity.ts, 19, 5))
->NestedUnion : Symbol(NestedUnion, Decl(tupleComplexity.ts, 15, 39))
+// Deeply nested tuple - Should trigger TS2590
+type DeepTuple = [string, [boolean | number, [boolean | number, [boolean | number]]]];
+>DeepTuple : Symbol(DeepTuple, Decl(tupleComplexity.ts, 30, 42))
 
-const nested2: NestedUnion = ["test", [42]]; // Valid
->nested2 : Symbol(nested2, Decl(tupleComplexity.ts, 20, 5))
->NestedUnion : Symbol(NestedUnion, Decl(tupleComplexity.ts, 15, 39))
+type Nested = [...DeepTuple, string]; // ❌ Should trigger TS2590
+>Nested : Symbol(Nested, Decl(tupleComplexity.ts, 35, 86))
+>DeepTuple : Symbol(DeepTuple, Decl(tupleComplexity.ts, 30, 42))
+
+const deep: Nested = ["root", [true, [42, [false]]], "leaf"]; // Should fail with TS2590
+>deep : Symbol(deep, Decl(tupleComplexity.ts, 37, 5))
+>Nested : Symbol(Nested, Decl(tupleComplexity.ts, 35, 86))
+
+// --- Invalid Cases ---
+
+// Expected type mismatches (non-TS2590 failures)
+const invalidConcat1: Result1 = ["hello", 42]; // ❌ Error: Missing boolean
+>invalidConcat1 : Symbol(invalidConcat1, Decl(tupleComplexity.ts, 42, 5))
+>Result1 : Symbol(Result1, Decl(tupleComplexity.ts, 17, 66))
+
+const invalidMap1: MappedTuple1 = [42, true]; // ❌ Error: Expected strings
+>invalidMap1 : Symbol(invalidMap1, Decl(tupleComplexity.ts, 43, 5))
+>MappedTuple1 : Symbol(MappedTuple1, Decl(tupleComplexity.ts, 28, 61))
 
