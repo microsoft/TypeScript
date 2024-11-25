@@ -369,7 +369,7 @@ func ToPath(fileName string, basePath string, useCaseSensitiveFileNames bool) Pa
 	if IsRootedDiskPath(fileName) {
 		nonCanonicalizedPath = NormalizePath(fileName)
 	} else {
-		nonCanonicalizedPath = GetNormalizedAbsolutePath(basePath, fileName)
+		nonCanonicalizedPath = GetNormalizedAbsolutePath(fileName, basePath)
 	}
 	return Path(getCanonicalFileName(nonCanonicalizedPath, useCaseSensitiveFileNames))
 }
