@@ -1509,7 +1509,7 @@ func (p *Parser) parsePropertyOrMethodDeclaration(pos int, hasJSDoc bool, modifi
 }
 
 func (p *Parser) parseMethodDeclaration(pos int, hasJSDoc bool, modifiers *ast.ModifierList, asteriskToken *ast.Node, name *ast.Node, questionToken *ast.Node, diagnosticMessage *diagnostics.Message) *ast.Node {
-	signatureFlags := core.IfElse(asteriskToken != nil, ParseFlagsYield, ParseFlagsNone) | core.IfElse(hasAsyncModifier(modifiers), ParseFlagsAwait, ParseFlagsNone)
+	signatureFlags := core.IfElse(asteriskToken != nil, ParseFlagsYield, ParseFlagsNone) | core.IfElse(modifierListHasAsync(modifiers), ParseFlagsAwait, ParseFlagsNone)
 	typeParameters := p.parseTypeParameters()
 	parameters := p.parseParameters(signatureFlags)
 	typeNode := p.parseReturnType(ast.KindColonToken, false /*isType*/)
@@ -1520,7 +1520,7 @@ func (p *Parser) parseMethodDeclaration(pos int, hasJSDoc bool, modifiers *ast.M
 	return result
 }
 
-func hasAsyncModifier(modifiers *ast.ModifierList) bool {
+func modifierListHasAsync(modifiers *ast.ModifierList) bool {
 	return modifiers != nil && core.Some(modifiers.Nodes, isAsyncModifier)
 }
 
@@ -3851,7 +3851,7 @@ func (p *Parser) parseParenthesizedArrowFunctionExpression(allowAmbiguity bool, 
 	pos := p.nodePos()
 	// hasJSDoc := p.hasPrecedingJSDocComment()
 	modifiers := p.parseModifiersForArrowFunction()
-	isAsync := hasAsyncModifier(modifiers)
+	isAsync := modifierListHasAsync(modifiers)
 	signatureFlags := core.IfElse(isAsync, ParseFlagsAwait, ParseFlagsNone)
 	// Arrow functions are never generators.
 	//
@@ -5230,7 +5230,7 @@ func (p *Parser) parseFunctionExpression() *ast.Expression {
 	p.parseExpected(ast.KindFunctionKeyword)
 	asteriskToken := p.parseOptionalToken(ast.KindAsteriskToken)
 	isGenerator := asteriskToken != nil
-	isAsync := hasAsyncModifier(modifiers)
+	isAsync := modifierListHasAsync(modifiers)
 	signatureFlags := core.IfElse(isGenerator, ParseFlagsYield, ParseFlagsNone) | core.IfElse(isAsync, ParseFlagsAwait, ParseFlagsNone)
 	var name *ast.Node
 	switch {

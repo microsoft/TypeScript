@@ -267,20 +267,21 @@ const (
 // Common links
 
 type NodeLinks struct {
-	flags                          NodeCheckFlags // Set of flags specific to Node
-	declarationRequiresScopeChange core.Tristate
+	flags                                NodeCheckFlags // Set of flags specific to Node
+	declarationRequiresScopeChange       core.Tristate  // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
+	hasReportedStatementInAmbientContext bool           // Cache boolean if we report statements in ambient context
 }
 
 type TypeNodeLinks struct {
 	resolvedType        *Type       // Cached type of type node
 	resolvedSymbol      *ast.Symbol // Cached name resolution result
-	outerTypeParameters []*Type
+	outerTypeParameters []*Type     // Outer type parameters of anonymous object type
 }
 
 // Links for enum members
 
 type EnumMemberLinks struct {
-	value EvaluatorResult
+	value EvaluatorResult // Constant value of enum member
 }
 
 // SourceFile links
@@ -293,8 +294,8 @@ type SourceFileLinks struct {
 // Signature specific links
 
 type SignatureLinks struct {
-	resolvedSignature *Signature
-	effectsSignature  *Signature
+	resolvedSignature *Signature // Cached signature of signature node or call expression
+	effectsSignature  *Signature // Signature with possible control flow effects
 }
 
 // jsxFlag: JsxOpeningElement | JsxClosingElement

@@ -162,6 +162,8 @@ func (n *Node) Expression() *Node {
 		return n.AsNewExpression().Expression
 	case KindExpressionWithTypeArguments:
 		return n.AsExpressionWithTypeArguments().Expression
+	case KindComputedPropertyName:
+		return n.AsComputedPropertyName().Expression
 	case KindNonNullExpression:
 		return n.AsNonNullExpression().Expression
 	case KindTypeAssertionExpression:
@@ -332,7 +334,7 @@ func (n *Node) Initializer() *Node {
 	case KindPropertyDeclaration:
 		return n.AsPropertyDeclaration().Initializer
 	case KindPropertySignature:
-		return n.AsPropertyDeclaration().Initializer
+		return n.AsPropertySignatureDeclaration().Initializer
 	case KindPropertyAssignment:
 		return n.AsPropertyAssignment().Initializer
 	case KindEnumMember:
@@ -439,6 +441,9 @@ func (n *Node) AsIfStatement() *IfStatement {
 func (n *Node) AsWhileStatement() *WhileStatement {
 	return n.data.(*WhileStatement)
 }
+func (n *Node) AsDecorator() *Decorator {
+	return n.data.(*Decorator)
+}
 func (n *Node) AsDoStatement() *DoStatement {
 	return n.data.(*DoStatement)
 }
@@ -480,6 +485,9 @@ func (n *Node) AsTypeReference() *TypeReferenceNode {
 }
 func (n *Node) AsConstructorDeclaration() *ConstructorDeclaration {
 	return n.data.(*ConstructorDeclaration)
+}
+func (n *Node) AsIndexSignatureDeclaration() *IndexSignatureDeclaration {
+	return n.data.(*IndexSignatureDeclaration)
 }
 func (n *Node) AsConditionalTypeNode() *ConditionalTypeNode {
 	return n.data.(*ConditionalTypeNode)
@@ -586,6 +594,9 @@ func (n *Node) AsTypeAliasDeclaration() *TypeAliasDeclaration {
 func (n *Node) AsJsxAttribute() *JsxAttribute {
 	return n.data.(*JsxAttribute)
 }
+func (n *Node) AsJsxAttributes() *JsxAttributes {
+	return n.data.(*JsxAttributes)
+}
 func (n *Node) AsParenthesizedTypeNode() *ParenthesizedTypeNode {
 	return n.data.(*ParenthesizedTypeNode)
 }
@@ -627,6 +638,9 @@ func (n *Node) AsLabeledStatement() *LabeledStatement {
 }
 func (n *Node) AsNamespaceExportDeclaration() *NamespaceExportDeclaration {
 	return n.data.(*NamespaceExportDeclaration)
+}
+func (n *Node) AsNamedImports() *NamedImports {
+	return n.data.(*NamedImports)
 }
 func (n *Node) AsNamedExports() *NamedExports {
 	return n.data.(*NamedExports)
@@ -1356,6 +1370,7 @@ func (node *ForInOrOfStatement) ForEachChild(v Visitor) bool {
 func IsForInStatement(node *Node) bool {
 	return node.Kind == KindForInStatement
 }
+
 func IsForOfStatement(node *Node) bool {
 	return node.Kind == KindForOfStatement
 }
@@ -3628,6 +3643,10 @@ func (node *AwaitExpression) ForEachChild(v Visitor) bool {
 	return visit(v, node.Expression)
 }
 
+func IsAwaitExpression(node *Node) bool {
+	return node.Kind == KindAwaitExpression
+}
+
 // TypeAssertion
 
 type TypeAssertion struct {
@@ -5242,10 +5261,12 @@ type SourceFile struct {
 	diagnostics                 []*Diagnostic
 	bindDiagnostics             []*Diagnostic
 	BindSuggestionDiagnostics   []*Diagnostic
+	ImpliedNodeFormat           core.ModuleKind
 	LineMap                     []core.TextPos
 	LanguageVersion             core.ScriptTarget
 	LanguageVariant             core.LanguageVariant
 	ScriptKind                  core.ScriptKind
+	CommonJsModuleIndicator     *Node
 	ExternalModuleIndicator     *Node
 	EndFlowNode                 *FlowNode
 	JsGlobalAugmentations       SymbolTable

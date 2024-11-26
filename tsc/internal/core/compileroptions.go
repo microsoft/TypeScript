@@ -20,6 +20,8 @@ type CompilerOptions struct {
 	ExactOptionalPropertyTypes         Tristate             `json:"exactOptionalPropertyTypes"`
 	ExperimentalDecorators             Tristate             `json:"experimentalDecorators"`
 	IsolatedModules                    Tristate             `json:"isolatedModules"`
+	Jsx                                JsxEmit              `json:"jsx"`
+	LegacyDecorators                   Tristate             `json:"legacyDecorators"`
 	ModuleKind                         ModuleKind           `json:"module"`
 	ModuleResolution                   ModuleResolutionKind `json:"moduleResolution"`
 	ModuleSuffixes                     []string             `json:"moduleSuffixes"`
@@ -51,6 +53,17 @@ type CompilerOptions struct {
 	NoDtsResolution Tristate `json:"noDtsResolution"`
 	PathsBasePath   string   `json:"pathsBasePath"`
 }
+
+type JsxEmit int32
+
+const (
+	JsxEmitNone        JsxEmit = 0
+	JsxEmitPreserve    JsxEmit = 1
+	JsxEmitReact       JsxEmit = 2
+	JsxEmitReactNative JsxEmit = 3
+	JsxEmitReactJSX    JsxEmit = 4
+	JsxEmitReactJSXDev JsxEmit = 5
+)
 
 func (options *CompilerOptions) GetEmitScriptTarget() ScriptTarget {
 	if options.Target != ScriptTargetNone {
@@ -116,6 +129,11 @@ func (options *CompilerOptions) GetAllowJs() bool {
 		return options.AllowJs == TSTrue
 	}
 	return options.CheckJs == TSTrue
+}
+
+func (options *CompilerOptions) GetJSXTransformEnabled() bool {
+	jsx := options.Jsx
+	return jsx == JsxEmitReact || jsx == JsxEmitReactJSX || jsx == JsxEmitReactJSXDev
 }
 
 func (options *CompilerOptions) GetEffectiveTypeRoots(currentDirectory string) (result []string, fromConfig bool) {

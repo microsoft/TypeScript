@@ -344,6 +344,15 @@ func getBinaryOperatorPrecedence(kind ast.Kind) OperatorPrecedence {
 	return OperatorPrecedenceInvalid
 }
 
+func isIntrinsicJsxName(name string) bool {
+	if len(name) == 0 {
+		return false
+	}
+
+	ch := name[0]
+	return (ch >= 'a' && ch <= 'z') || strings.ContainsRune(name, '-')
+}
+
 func findInMap[K comparable, V any](m map[K]V, predicate func(V) bool) V {
 	for _, value := range m {
 		if predicate(value) {
@@ -406,6 +415,16 @@ func isInJSFile(node *ast.Node) bool {
 
 func isEffectiveModuleDeclaration(node *ast.Node) bool {
 	return ast.IsModuleDeclaration(node) || ast.IsIdentifier(node)
+}
+
+func isCommonJSContainingModuleKind(kind core.ModuleKind) bool {
+	return kind == core.ModuleKindCommonJS || kind == core.ModuleKindNode16 || kind == core.ModuleKindNodeNext
+}
+
+/** @internal */
+
+func isEffectiveExternalModule(node *ast.SourceFile, compilerOptions *core.CompilerOptions) bool {
+	return isExternalModule(node) || (isCommonJSContainingModuleKind(compilerOptions.GetEmitModuleKind()) && node.CommonJsModuleIndicator != nil)
 }
 
 func isObjectLiteralOrClassExpressionMethodOrAccessor(node *ast.Node) bool {
@@ -505,10 +524,6 @@ func getErrorRangeForArrowFunction(sourceFile *ast.SourceFile, node *ast.Node) c
 	return core.NewTextRange(pos, node.End())
 }
 
-func getContainingClass(node *ast.Node) *ast.Node {
-	return ast.FindAncestor(node.Parent, ast.IsClassLike)
-}
-
 func declarationNameToString(name *ast.Node) string {
 	if name == nil || name.Pos() == name.End() {
 		return "(Missing)"
@@ -578,16 +593,28 @@ func hasSyntacticModifier(node *ast.Node, flags ast.ModifierFlags) bool {
 	return node.ModifierFlags()&flags != 0
 }
 
+func hasAbstractModifier(node *ast.Node) bool {
+	return hasSyntacticModifier(node, ast.ModifierFlagsAbstract)
+}
+
+func hasAmbientModifier(node *ast.Node) bool {
+	return hasSyntacticModifier(node, ast.ModifierFlagsAmbient)
+}
+
 func hasAccessorModifier(node *ast.Node) bool {
 	return hasSyntacticModifier(node, ast.ModifierFlagsAccessor)
 }
 
-func hasStaticModifier(node *ast.Node) bool {
-	return hasSyntacticModifier(node, ast.ModifierFlagsStatic)
+func hasAsyncModifier(node *ast.Node) bool {
+	return hasSyntacticModifier(node, ast.ModifierFlagsAsync)
 }
 
 func hasDecorators(node *ast.Node) bool {
 	return hasSyntacticModifier(node, ast.ModifierFlagsDecorator)
+}
+
+func hasStaticModifier(node *ast.Node) bool {
+	return hasSyntacticModifier(node, ast.ModifierFlagsStatic)
 }
 
 func getEffectiveModifierFlags(node *ast.Node) ast.ModifierFlags {
@@ -909,6 +936,10 @@ func isStaticPrivateIdentifierProperty(s *ast.Symbol) bool {
 
 func isPrivateIdentifierClassElementDeclaration(node *ast.Node) bool {
 	return (ast.IsPropertyDeclaration(node) || isMethodOrAccessor(node)) && ast.IsPrivateIdentifier(node.Name())
+}
+
+func isModifier(node *ast.Node) bool {
+	return isModifierKind(node.Kind)
 }
 
 func isMethodOrAccessor(node *ast.Node) bool {
@@ -1495,6 +1526,13 @@ func findConstructorDeclaration(node *ast.Node) *ast.Node {
 	return nil
 }
 
+func getSingleVariableOfVariableStatement(node *ast.Node) *ast.Node {
+	if !ast.IsVariableStatement(node) {
+		return nil
+	}
+	return core.FirstOrNil(node.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes)
+}
+
 type NameResolver struct {
 	compilerOptions                  *core.CompilerOptions
 	getSymbolOfDeclaration           func(node *ast.Node) *ast.Symbol
@@ -2020,6 +2058,39 @@ func isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node *ast.Node) boo
 		return true
 	}
 	return ast.NodeKindIs(node.Parent.Parent, ast.KindInterfaceDeclaration, ast.KindTypeLiteral)
+}
+
+func nodeCanBeDecorated(useLegacyDecorators bool, node *ast.Node, parent *ast.Node, grandparent *ast.Node) bool {
+	// private names cannot be used with decorators yet
+	if useLegacyDecorators && node.Name() != nil && ast.IsPrivateIdentifier(node.Name()) {
+		return false
+	}
+
+	switch node.Kind {
+	case ast.KindClassDeclaration:
+		// class declarations are valid targets
+		return true
+	case ast.KindClassExpression:
+		// class expressions are valid targets for native decorators
+		return !useLegacyDecorators
+	case ast.KindPropertyDeclaration:
+		// property declarations are valid if their parent is a class declaration.
+		return parent != nil && (ast.IsClassDeclaration(parent) || !useLegacyDecorators && ast.IsClassExpression(parent) && !hasAbstractModifier(node) && !hasAmbientModifier(node))
+	case ast.KindGetAccessor,
+		ast.KindSetAccessor,
+		ast.KindMethodDeclaration:
+		// if this method has a body and its parent is a class declaration, this is a valid target.
+		return node.BodyData() != nil && parent != nil && (ast.IsClassDeclaration(parent) || !useLegacyDecorators && ast.IsClassExpression(parent))
+	case ast.KindParameter:
+		// TODO(rbuckton): Parameter decorator support for ES decorators must wait until it is standardized
+		if !useLegacyDecorators {
+			return false
+		}
+		// if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target.
+		return parent != nil && parent.BodyData() != nil && (parent.BodyData()).Body != nil && (parent.Kind == ast.KindConstructor || parent.Kind == ast.KindMethodDeclaration || parent.Kind == ast.KindSetAccessor) && getThisParameter(parent) != node && grandparent != nil && grandparent.Kind == ast.KindClassDeclaration
+	}
+
+	return false
 }
 
 func isExpressionNode(node *ast.Node) bool {
@@ -2777,6 +2848,14 @@ func getContainingFunction(node *ast.Node) *ast.Node {
 	return ast.FindAncestor(node.Parent, ast.IsFunctionLike)
 }
 
+func getContainingClass(node *ast.Node) *ast.Node {
+	return ast.FindAncestor(node.Parent, ast.IsClassLike)
+}
+
+func getContainingFunctionOrClassStaticBlock(node *ast.Node) *ast.Node {
+	return ast.FindAncestor(node.Parent, isFunctionLikeOrClassStaticBlockDeclaration)
+}
+
 func isTypeReferenceType(node *ast.Node) bool {
 	return node.Kind == ast.KindTypeReference || node.Kind == ast.KindExpressionWithTypeArguments
 }
@@ -3327,11 +3406,6 @@ func isLiteralExpressionOfObject(node *ast.Node) bool {
 
 func canHaveFlowNode(node *ast.Node) bool {
 	return node.FlowNodeData() != nil
-}
-
-func (c *Checker) isVarConstLike(node *ast.Node) bool {
-	blockScopeKind := c.getCombinedNodeFlagsCached(node) & ast.NodeFlagsBlockScoped
-	return blockScopeKind == ast.NodeFlagsConst || blockScopeKind == ast.NodeFlagsUsing || blockScopeKind == ast.NodeFlagsAwaitUsing
 }
 
 func isNonNullAccess(node *ast.Node) bool {

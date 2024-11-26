@@ -1302,24 +1302,33 @@ func (b *Binder) getStrictModeIdentifierMessage(node *ast.Node) *diagnostics.Mes
 
 func (b *Binder) updateStrictModeStatementList(statements *ast.NodeList) {
 	if !b.inStrictMode {
-		for _, statement := range statements.Nodes {
-			if !isPrologueDirective(statement) {
-				return
-			}
-			if b.isUseStrictPrologueDirective(statement) {
-				b.inStrictMode = true
-				return
-			}
+		useStrictDirective := findUseStrictPrologue(b.file, statements.Nodes)
+		if useStrictDirective != nil {
+			b.inStrictMode = true
 		}
 	}
 }
 
 // Should be called only on prologue directives (isPrologueDirective(node) should be true)
-func (b *Binder) isUseStrictPrologueDirective(node *ast.Node) bool {
-	nodeText := scanner.GetSourceTextOfNodeFromSourceFile(b.file, node.AsExpressionStatement().Expression, false /*includeTrivia*/)
+func isUseStrictPrologueDirective(sourceFile *ast.SourceFile, node *ast.Node) bool {
+	nodeText := scanner.GetSourceTextOfNodeFromSourceFile(sourceFile, node.AsExpressionStatement().Expression, false /*includeTrivia*/)
 	// Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
 	// string to contain unicode escapes (as per ES5).
 	return nodeText == "\"use strict\"" || nodeText == "'use strict'"
+}
+
+func findUseStrictPrologue(sourceFile *ast.SourceFile, statements []*ast.Node) *ast.Node {
+	for _, statement := range statements {
+		if isPrologueDirective(statement) {
+			if isUseStrictPrologueDirective(sourceFile, statement) {
+				return statement
+			}
+		} else {
+			return nil
+		}
+	}
+
+	return nil
 }
 
 func (b *Binder) checkStrictModeFunctionName(node *ast.Node) {

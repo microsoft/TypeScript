@@ -28,6 +28,10 @@ func NodeKindIs(node *Node, kinds ...Kind) bool {
 	return slices.Contains(kinds, node.Kind)
 }
 
+func IsAccessor(node *Node) bool {
+	return node.Kind == KindGetAccessor || node.Kind == KindSetAccessor
+}
+
 func IsPropertyNameLiteral(node *Node) bool {
 	switch node.Kind {
 	case KindIdentifier,
@@ -178,6 +182,32 @@ func isExpressionKind(kind Kind) bool {
 // Determines whether a node is an expression based only on its kind.
 func IsExpression(node *Node) bool {
 	return isExpressionKind(node.Kind)
+}
+
+func IsCommaExpression(node *Node) bool {
+	return node.Kind == KindBinaryExpression && node.AsBinaryExpression().OperatorToken.Kind == KindCommaToken
+}
+
+func IsCommaSequence(node *Node) bool {
+	// !!!
+	// New compiler just has binary expressinons.
+	// Maybe this should consider KindCommaListExpression even though we don't generate them.
+	return IsCommaExpression(node)
+}
+
+func IsIterationStatement(node *Node, lookInLabeledStatements bool) bool {
+	switch node.Kind {
+	case KindForStatement,
+		KindForInStatement,
+		KindForOfStatement,
+		KindDoStatement,
+		KindWhileStatement:
+		return true
+	case KindLabeledStatement:
+		return lookInLabeledStatements && IsIterationStatement((node.AsLabeledStatement()).Statement, lookInLabeledStatements)
+	}
+
+	return false
 }
 
 // Determines if a node is a property or element access expression
@@ -376,7 +406,7 @@ func IsTypeNode(node *Node) bool {
 	return IsTypeNodeKind(node.Kind)
 }
 
-func isJSDocTypeAssertion(node *Node) bool {
+func isJSDocTypeAssertion(_ *Node) bool {
 	return false // !!!
 }
 
@@ -529,6 +559,80 @@ func ModifiersToFlags(modifiers []*Node) ModifierFlags {
 		flags |= ModifierToFlag(modifier.Kind)
 	}
 	return flags
+}
+
+func CanHaveIllegalDecorators(node *Node) bool {
+	switch node.Kind {
+	case KindPropertyAssignment, KindShorthandPropertyAssignment,
+		KindFunctionDeclaration, KindConstructor,
+		KindIndexSignature, KindClassStaticBlockDeclaration,
+		KindMissingDeclaration, KindVariableStatement,
+		KindInterfaceDeclaration, KindTypeAliasDeclaration,
+		KindEnumDeclaration, KindModuleDeclaration,
+		KindImportEqualsDeclaration, KindImportDeclaration,
+		KindNamespaceExportDeclaration, KindExportDeclaration,
+		KindExportAssignment:
+		return true
+	}
+	return false
+}
+
+func CanHaveIllegalModifiers(node *Node) bool {
+	switch node.Kind {
+	case KindClassStaticBlockDeclaration,
+		KindPropertyAssignment,
+		KindShorthandPropertyAssignment,
+		KindMissingDeclaration,
+		KindNamespaceExportDeclaration:
+		return true
+	}
+	return false
+}
+
+func CanHaveModifiers(node *Node) bool {
+	switch node.Kind {
+	case KindTypeParameter,
+		KindParameter,
+		KindPropertySignature,
+		KindPropertyDeclaration,
+		KindMethodSignature,
+		KindMethodDeclaration,
+		KindConstructor,
+		KindGetAccessor,
+		KindSetAccessor,
+		KindIndexSignature,
+		KindConstructorType,
+		KindFunctionExpression,
+		KindArrowFunction,
+		KindClassExpression,
+		KindVariableStatement,
+		KindFunctionDeclaration,
+		KindClassDeclaration,
+		KindInterfaceDeclaration,
+		KindTypeAliasDeclaration,
+		KindEnumDeclaration,
+		KindModuleDeclaration,
+		KindImportEqualsDeclaration,
+		KindImportDeclaration,
+		KindExportAssignment,
+		KindExportDeclaration:
+		return true
+	}
+	return false
+}
+
+func CanHaveDecorators(node *Node) bool {
+	switch node.Kind {
+	case KindParameter,
+		KindPropertyDeclaration,
+		KindMethodDeclaration,
+		KindGetAccessor,
+		KindSetAccessor,
+		KindClassExpression,
+		KindClassDeclaration:
+		return true
+	}
+	return false
 }
 
 func IsFunctionOrModuleBlock(node *Node) bool {

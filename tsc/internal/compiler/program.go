@@ -421,3 +421,15 @@ func (p *Program) collectModuleReferences(file *ast.SourceFile, node *ast.Statem
 		}
 	}
 }
+
+func (p *Program) getEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.ModuleKind {
+	// !!!
+	// Must reimplement the below.
+	// Also, previous version is a method on `TypeCheckerHost`/`Program`.
+
+	// mode, hadImpliedFormat := getImpliedNodeFormatForEmitWorker(sourceFile, options)
+	// if !hadImpliedFormat {
+	// 	mode = options.GetEmitModuleKind()
+	// }
+	return p.options.GetEmitModuleKind()
+}
