@@ -3,8 +3,11 @@
 === parserAccessors6.ts ===
 declare class C {
 >C : C
+>  : ^
 
   set foo(v) { }
 >foo : any
+>    : ^^^
 >v : any
+>  : ^^^
 }

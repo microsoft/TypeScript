@@ -1,8 +1,10 @@
-import * as documents from "../_namespaces/documents";
-import * as fakes from "../_namespaces/fakes";
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
-import * as vfs from "../_namespaces/vfs";
+import * as documents from "../_namespaces/documents.js";
+import * as fakes from "../_namespaces/fakes.js";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
+import * as vfs from "../_namespaces/vfs.js";
+import { jsonToReadableText } from "./helpers.js";
+import { TestServerHost } from "./helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
@@ -20,12 +22,8 @@ describe("unittests:: Public APIs", () => {
         });
     }
 
-    describe("for the language service and compiler", () => {
+    describe("for typescript.d.ts", () => {
         verifyApi("typescript.d.ts");
-    });
-
-    describe("for the language server", () => {
-        verifyApi("tsserverlibrary.d.ts");
     });
 });
 
@@ -64,7 +62,7 @@ function test() {}`;
         const funcDec = testSourceFile.statements.find(ts.isFunctionDeclaration)!;
         const tags = ts.getJSDocTags(funcDec);
         assert.isDefined(tags[0].comment);
-        assert.isDefined(tags[0].comment![0]);
+        assert.isDefined(tags[0].comment[0]);
         assert.isString(tags[0].comment);
         assert.equal(tags[0].comment as string, "Some\n text\r\n with newlines.");
     });
@@ -260,5 +258,70 @@ class C {
         assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
         assert.equal(ts.ModifierFlags.Private, ts.getEffectiveModifierFlags(propNode));
         assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+    });
+});
+
+describe("unittests:: Public APIs:: createProgram", () => {
+    function verifyAPI(useJsonParsingApi: boolean) {
+        const sys = TestServerHost.createWatchedSystem({
+            "/home/src/projects/project/packages/a/index.js": `export const a = 'a';`,
+            "/home/src/projects/project/packages/a/test/index.js": `import 'a';`,
+            "/home/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    checkJs: true,
+                    composite: true,
+                    declaration: true,
+                    emitDeclarationOnly: true,
+                    module: "nodenext",
+                    outDir: "types",
+                },
+            }),
+            "/home/src/projects/project/packages/a/package.json": jsonToReadableText({
+                name: "a",
+                version: "0.0.0",
+                type: "module",
+                exports: {
+                    ".": {
+                        types: "./types/index.d.ts",
+                        default: "./index.js",
+                    },
+                },
+            }),
+        }, { currentDirectory: "/home/src/projects/project" });
+        const commandLine = ts.getParsedCommandLineOfConfigFile(
+            "/home/src/projects/project/packages/a/tsconfig.json",
+            /*optionsToExtend*/ undefined,
+            {
+                fileExists: sys.fileExists.bind(sys),
+                getCurrentDirectory: sys.getCurrentDirectory.bind(sys),
+                onUnRecoverableConfigFileDiagnostic: () => {},
+                readDirectory: sys.readDirectory.bind(sys),
+                readFile: sys.readFile.bind(sys),
+                useCaseSensitiveFileNames: sys.useCaseSensitiveFileNames,
+                directoryExists: sys.directoryExists.bind(sys),
+                getDirectories: sys.getDirectories.bind(sys),
+                realpath: sys.realpath.bind(sys),
+            },
+        )!;
+        const config = !useJsonParsingApi ? JSON.parse(sys.readFile("/home/src/projects/project/packages/a/tsconfig.json")!) : undefined;
+        // This is really createCompilerHost but we want to use our own sys so simple usage
+        const host = ts.createCompilerHostWorker(
+            useJsonParsingApi ? commandLine.options : config.compilerOptions,
+            /*setParentNodes*/ undefined,
+            sys,
+        );
+        (useJsonParsingApi ? assert.doesNotThrow : assert.throws)(() =>
+            ts.createProgram({
+                rootNames: commandLine.fileNames,
+                options: useJsonParsingApi ? commandLine.options : config.compilerOptions,
+                host,
+            })
+        );
+    }
+    it("when using correct config file API", () => {
+        verifyAPI(/*useJsonParsingApi*/ true);
+    });
+    it("when using direct json read", () => {
+        verifyAPI(/*useJsonParsingApi*/ false);
     });
 });

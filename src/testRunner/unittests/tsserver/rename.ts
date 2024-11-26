@@ -1,31 +1,23 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    libContent,
-} from "../helpers/contents";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: rename", () => {
+describe("unittests:: tsserver:: rename::", () => {
     it("works with fileToRename", () => {
-        const aTs: File = { path: "/a.ts", content: "export const a = 0;" };
-        const bTs: File = { path: "/b.ts", content: 'import { a } from "./a";' };
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: "export const a = 0;" };
+        const bTs: File = { path: "/home/src/projects/project/b.ts", content: 'import { a } from "./a";' };
 
-        const host = createServerHost([aTs, bTs]);
+        const host = TestServerHost.createServerHost([aTs, bTs]);
         const session = new TestSession(host);
         openFilesForSession([bTs], session);
 
@@ -52,7 +44,7 @@ describe("unittests:: tsserver:: rename", () => {
         });
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { file: "/b.ts", formatOptions: {}, preferences: { allowRenameOfImportPath: true } },
+            arguments: { file: "/home/src/projects/project/b.ts", formatOptions: {}, preferences: { allowRenameOfImportPath: true } },
         });
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
@@ -62,8 +54,8 @@ describe("unittests:: tsserver:: rename", () => {
     });
 
     it("works with prefixText and suffixText when enabled", () => {
-        const aTs: File = { path: "/a.ts", content: "const x = 0; const o = { x };" };
-        const host = createServerHost([aTs]);
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: "const x = 0; const o = { x };" };
+        const host = TestServerHost.createServerHost([aTs]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -89,7 +81,7 @@ describe("unittests:: tsserver:: rename", () => {
         });
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { file: "/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } },
+            arguments: { file: "/home/src/projects/project/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } },
         });
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
@@ -99,10 +91,10 @@ describe("unittests:: tsserver:: rename", () => {
     });
 
     it("export default anonymous function works with prefixText and suffixText when disabled", () => {
-        const aTs: File = { path: "/a.ts", content: "export default function() {}" };
-        const bTs: File = { path: "/b.ts", content: `import aTest from "./a"; function test() { return aTest(); }` };
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: "export default function() {}" };
+        const bTs: File = { path: "/home/src/projects/project/b.ts", content: `import aTest from "./a"; function test() { return aTest(); }` };
 
-        const host = createServerHost([aTs, bTs]);
+        const host = TestServerHost.createServerHost([aTs, bTs]);
         const session = new TestSession(host);
         openFilesForSession([bTs], session);
 
@@ -118,16 +110,16 @@ describe("unittests:: tsserver:: rename", () => {
     });
 
     it("rename behavior is based on file of rename initiation", () => {
-        const aTs: File = { path: "/a.ts", content: "const x = 1; export { x };" };
-        const bTs: File = { path: "/b.ts", content: `import { x } from "./a"; const y = x + 1;` };
-        const host = createServerHost([aTs, bTs]);
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: "const x = 1; export { x };" };
+        const bTs: File = { path: "/home/src/projects/project/b.ts", content: `import { x } from "./a"; const y = x + 1;` };
+        const host = TestServerHost.createServerHost([aTs, bTs]);
         const session = new TestSession(host);
         openFilesForSession([aTs, bTs], session);
 
         // rename from file with prefixText and suffixText enabled
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { file: "/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } },
+            arguments: { file: "/home/src/projects/project/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } },
         });
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
@@ -150,7 +142,7 @@ describe("unittests:: tsserver:: rename", () => {
                 }
             `,
         };
-        const host = createServerHost({
+        const host = TestServerHost.createServerHost({
             [file.path]: file.content,
             "C:/temp/test/project1/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
@@ -183,7 +175,6 @@ describe("unittests:: tsserver:: rename", () => {
                 include: [],
             }),
             "C:/temp/test/node_modules/project1": { symLink: "c:/temp/test/project1" },
-            [libFile.path]: libContent,
         }, { windowsStyleRoot: "C:/" });
         const session = new TestSession(host);
         openFilesForSession([file.path.toLowerCase()], session);
@@ -195,10 +186,10 @@ describe("unittests:: tsserver:: rename", () => {
     });
 
     it("rename TS file with js extension", () => {
-        const aTs: File = { path: "/a.ts", content: "export const a = 1;" };
-        const bTs: File = { path: "/b.ts", content: `import * as foo from './a.js';` };
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: "export const a = 1;" };
+        const bTs: File = { path: "/home/src/projects/project/b.ts", content: `import * as foo from './a.js';` };
 
-        const host = createServerHost([aTs, bTs]);
+        const host = TestServerHost.createServerHost([aTs, bTs]);
         const session = new TestSession(host);
         openFilesForSession([aTs, bTs], session);
 

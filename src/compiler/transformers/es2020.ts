@@ -36,7 +36,7 @@ import {
     visitNode,
     visitNodes,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformES2020(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

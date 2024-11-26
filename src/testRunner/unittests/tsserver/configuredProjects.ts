@@ -1,56 +1,45 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    ensureErrorFreeBuild,
-} from "../helpers/solutionBuilder";
-import {
-    commonFile1,
-    commonFile2,
-} from "../helpers/tscWatch";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
+import { ensureErrorFreeBuild } from "../helpers/solutionBuilder.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    logConfiguredProjectsHasOpenRefStatus,
-    logInferredProjectsOrphanStatus,
     openFilesForSession,
+    projectInfoForSession,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
     libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: ConfiguredProjects", () => {
+describe("unittests:: tsserver:: configuredProjects::", () => {
     it("create configured project without file list", () => {
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
-            content: `
-                {
-                    "compilerOptions": {},
-                    "exclude": [
-                        "e"
-                    ]
-                }`,
+            path: "/home/src/project/project/a/b/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {},
+                exclude: ["e"],
+            }),
         };
         const file1: File = {
-            path: "/a/b/c/f1.ts",
+            path: "/home/src/project/project/a/b/c/f1.ts",
             content: "let x = 1",
         };
         const file2: File = {
-            path: "/a/b/d/f2.ts",
+            path: "/home/src/project/project/a/b/d/f2.ts",
             content: "let y = 1",
         };
         const file3: File = {
-            path: "/a/b/e/f3.ts",
+            path: "/home/src/project/project/a/b/e/f3.ts",
             content: "let z = 1",
         };
 
-        const host = createServerHost([configFile, libFile, file1, file2, file3]);
+        const host = TestServerHost.createServerHost([configFile, file1, file2, file3]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         baselineTsserverLogs("configuredProjects", "create configured project without file list", session);
@@ -58,27 +47,26 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("create configured project with the file list", () => {
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
-            content: `
-                {
-                    "compilerOptions": {},
-                    "include": ["*.ts"]
-                }`,
+            path: "/home/src/project/project/a/b/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {},
+                include: ["*.ts"],
+            }),
         };
         const file1: File = {
-            path: "/a/b/f1.ts",
+            path: "/home/src/project/project/a/b/f1.ts",
             content: "let x = 1",
         };
         const file2: File = {
-            path: "/a/b/f2.ts",
+            path: "/home/src/project/project/a/b/f2.ts",
             content: "let y = 1",
         };
         const file3: File = {
-            path: "/a/b/c/f3.ts",
+            path: "/home/src/project/project/a/b/c/f3.ts",
             content: "let z = 1",
         };
 
-        const host = createServerHost([configFile, libFile, file1, file2, file3]);
+        const host = TestServerHost.createServerHost([configFile, file1, file2, file3]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         baselineTsserverLogs("configuredProjects", "create configured project with the file list", session);
@@ -87,9 +75,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
     it("add and then remove a config file in a folder with loose files", () => {
         const configFile: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: `{
-                    "files": ["commonFile1.ts"]
-                }`,
+            content: jsonToReadableText({ files: ["commonFile1.ts"] }),
         };
         const commonFile1: File = {
             path: `/user/username/projects/myproject/commonFile1.ts`,
@@ -100,9 +86,10 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
             content: "let y = 1",
         };
 
-        const host = createServerHost([libFile, commonFile1, commonFile2]);
+        const host = TestServerHost.createServerHost([commonFile1, commonFile2]);
 
         const session = new TestSession(host);
+        // 1: when both files are open
         openFilesForSession([commonFile1, commonFile2], session);
 
         // Add a tsconfig file
@@ -113,15 +100,249 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         host.deleteFile(configFile.path);
         host.runQueuedTimeoutCallbacks(); // Refresh inferred projects
 
+        // Add a tsconfig file
+        host.writeFile(configFile.path, configFile.content);
+        host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
+
+        openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+        // Check status when all files are closed
+        closeFilesForSession([commonFile1, commonFile2, "/user/username/projects/random/random.ts"], session);
+        openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+        // 2: when file is opened while config file is deleted
+        closeFilesForSession(["/user/username/projects/random/random.ts"], session);
+        openFilesForSession([commonFile1], session);
+
+        // remove the tsconfig file
+        host.deleteFile(configFile.path);
+        openFilesForSession([commonFile2], session);
+
+        // Add a tsconfig file
+        host.writeFile(configFile.path, configFile.content);
+        host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
+
+        openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+        // Check status when all files are closed
+        closeFilesForSession([commonFile1, commonFile2, "/user/username/projects/random/random.ts"], session);
+        openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
         baselineTsserverLogs("configuredProjects", "add and then remove a config file in a folder with loose files", session);
+    });
+
+    describe("add and then remove a config file with another config", () => {
+        function setup(parentOrSiblingConfigFile: File) {
+            const configFile: File = {
+                path: `/user/username/projects/myproject/folder/tsconfig.json`,
+                content: jsonToReadableText({ files: ["commonFile1.ts"] }),
+            };
+            const commonFile1: File = {
+                path: `/user/username/projects/myproject/folder/commonFile1.ts`,
+                content: "let x = 1",
+            };
+            const commonFile2: File = {
+                path: `/user/username/projects/myproject/folder/commonFile2.ts`,
+                content: "let y = 1",
+            };
+
+            const host = TestServerHost.createServerHost([commonFile1, commonFile2, configFile, parentOrSiblingConfigFile]);
+            const session = new TestSession(host);
+            return { host, session, commonFile1, commonFile2, configFile };
+        }
+        function verify(scenario: string, parentOrSiblingConfigFile: File) {
+            it(`add and then remove a config file ${scenario}`, () => {
+                const { host, session, commonFile1, commonFile2, configFile } = setup(parentOrSiblingConfigFile);
+
+                openFilesForSession([commonFile1], session);
+                projectInfoForSession(session, commonFile1);
+
+                session.logger.log("1: When config file is deleted and then another file is opened");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                openFilesForSession([commonFile2], session);
+
+                // Add a tsconfig file
+                host.writeFile(configFile.path, configFile.content);
+                host.runQueuedTimeoutCallbacks();
+
+                // Check the state after files collected
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                // Check status when all files are closed
+                closeFilesForSession([commonFile1, commonFile2, "/user/username/projects/random/random.ts"], session);
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                closeFilesForSession(["/user/username/projects/random/random.ts"], session);
+                openFilesForSession([commonFile1, commonFile2], session);
+
+                session.logger.log("2: When both files are open and config file is deleted");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                host.runQueuedTimeoutCallbacks();
+
+                // Add a tsconfig file
+                host.writeFile(configFile.path, configFile.content);
+                host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
+
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                closeFilesForSession([commonFile1, commonFile2, "/user/username/projects/random/random.ts"], session);
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                closeFilesForSession(["/user/username/projects/random/random.ts"], session);
+                openFilesForSession([commonFile1], session);
+
+                session.logger.log("3: Check when both files are closed when config file is deleted");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                openFilesForSession([commonFile2], session);
+
+                // State after open files are closed
+                closeFilesForSession([commonFile1, commonFile2], session);
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                host.writeFile(configFile.path, configFile.content);
+                closeFilesForSession(["/user/username/projects/random/random.ts"], session);
+                openFilesForSession([commonFile1], session);
+
+                session.logger.log("4: Check when both files are closed one by one when file is deleted");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                openFilesForSession([commonFile2], session);
+
+                // State after open files are closed
+                closeFilesForSession([commonFile1], session);
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                closeFilesForSession([commonFile2, "/user/username/projects/random/random.ts"], session);
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                host.writeFile(configFile.path, configFile.content);
+                closeFilesForSession(["/user/username/projects/random/random.ts"], session);
+                openFilesForSession([commonFile1], session);
+
+                session.logger.log("5: Check when both files are closed one by one when file is deleted order changed");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                openFilesForSession([commonFile2], session);
+
+                // State after open files are closed
+                closeFilesForSession([commonFile2], session);
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                closeFilesForSession([commonFile1, "/user/username/projects/random/random.ts"], session);
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                session.logger.log("6. Check closing commonFile2 first");
+                host.writeFile(configFile.path, configFile.content);
+                closeFilesForSession(["/user/username/projects/random/random.ts"], session);
+                openFilesForSession([commonFile1, commonFile2], session);
+                closeFilesForSession([commonFile2], session);
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+                closeFilesForSession(["/user/username/projects/random/random.ts"], session);
+
+                session.logger.log("7: When config file is deleted and then another file is opened and projectInfo");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                openFilesForSession([commonFile2], session);
+
+                projectInfoForSession(session, commonFile1);
+                projectInfoForSession(session, commonFile2);
+
+                // Add a tsconfig file
+                host.writeFile(configFile.path, configFile.content);
+                host.runQueuedTimeoutCallbacks();
+
+                session.logger.log("8: When both files are open and config file is deleted and projectInfo");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                host.runQueuedTimeoutCallbacks();
+
+                projectInfoForSession(session, commonFile1);
+                projectInfoForSession(session, commonFile2);
+
+                baselineTsserverLogs("configuredProjects", `add and then remove a config file ${scenario}`, session);
+            });
+
+            it(`add and then remove a config file ${scenario} and file from first config is not open`, () => {
+                const { host, session, commonFile2, configFile } = setup(parentOrSiblingConfigFile);
+                openFilesForSession([commonFile2], session);
+                projectInfoForSession(session, commonFile2);
+
+                session.logger.log("1: When config file is deleted");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                host.runQueuedTimeoutCallbacks();
+
+                // Add a tsconfig file
+                host.writeFile(configFile.path, configFile.content);
+                host.runQueuedTimeoutCallbacks();
+
+                // Check the state after files collected
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                // Check status when all files are closed
+                closeFilesForSession([commonFile2, "/user/username/projects/random/random.ts"], session);
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                closeFilesForSession(["/user/username/projects/random/random.ts"], session);
+                openFilesForSession([commonFile2], session);
+
+                session.logger.log("2: Check when file is closed when config file is deleted");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+
+                // State after open files are closed
+                closeFilesForSession([commonFile2], session);
+                openFilesForSession([{ file: "/user/username/projects/random/random.ts", content: "export const y = 10;" }], session);
+
+                // Add a tsconfig file
+                host.writeFile(configFile.path, configFile.content);
+                host.runQueuedTimeoutCallbacks();
+                closeFilesForSession(["/user/username/projects/random/random.ts"], session);
+                openFilesForSession([commonFile2], session);
+
+                session.logger.log("3: When config file is deleted and projectInfo");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                host.runQueuedTimeoutCallbacks();
+                projectInfoForSession(session, commonFile2);
+
+                // Add a tsconfig file
+                host.writeFile(configFile.path, configFile.content);
+                host.runQueuedTimeoutCallbacks();
+
+                session.logger.log("4: Check when file is closed when config file is deleted and projectInfo");
+                // remove the tsconfig file
+                host.deleteFile(configFile.path);
+                projectInfoForSession(session, commonFile2);
+
+                baselineTsserverLogs("configuredProjects", `add and then remove a config file ${scenario} and file from first config is not open`, session);
+            });
+        }
+        verify("when parent folder has config file", {
+            path: `/user/username/projects/myproject/tsconfig.json`,
+            content: jsonToReadableText({ files: ["folder/commonFile2.ts"] }),
+        });
+        verify("with sibling jsconfig file", {
+            path: `/user/username/projects/myproject/folder/jsconfig.json`,
+            content: jsonToReadableText({ files: ["commonFile2.ts"], typeAcquisition: { enable: false } }),
+        });
     });
 
     it("add new files to a configured project without file list", () => {
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: `{}`,
         };
-        const host = createServerHost([commonFile1, libFile, configFile]);
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const commonFile2: File = {
+            path: "/user/username/projects/project/commonFile2.ts",
+            content: "let y = 1",
+        };
+        const host = TestServerHost.createServerHost([commonFile1, configFile]);
         const session = new TestSession(host);
         openFilesForSession([commonFile1], session);
 
@@ -133,16 +354,24 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("should ignore non-existing files specified in the config file", () => {
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
-            content: `{
-                    "compilerOptions": {},
-                    "files": [
-                        "commonFile1.ts",
-                        "commonFile3.ts"
-                    ]
-                }`,
+            path: "/user/username/projects/project/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {},
+                files: [
+                    "commonFile1.ts",
+                    "commonFile3.ts",
+                ],
+            }),
         };
-        const host = createServerHost([commonFile1, commonFile2, configFile]);
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const commonFile2: File = {
+            path: "/user/username/projects/project/commonFile2.ts",
+            content: "let y = 1",
+        };
+        const host = TestServerHost.createServerHost([commonFile1, commonFile2, configFile]);
         const session = new TestSession(host);
         openFilesForSession([commonFile1, commonFile2], session);
         baselineTsserverLogs("configuredProjects", "should ignore non-existing files specified in the config file", session);
@@ -150,10 +379,18 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("handle recreated files correctly", () => {
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: `{}`,
         };
-        const host = createServerHost([commonFile1, commonFile2, configFile]);
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const commonFile2: File = {
+            path: "/user/username/projects/project/commonFile2.ts",
+            content: "let y = 1",
+        };
+        const host = TestServerHost.createServerHost([commonFile1, commonFile2, configFile]);
         const session = new TestSession(host);
         openFilesForSession([commonFile1], session);
 
@@ -169,18 +406,25 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("files explicitly excluded in config file", () => {
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
-            content: `{
-                    "compilerOptions": {},
-                    "exclude": ["/a/c"]
-                }`,
+            path: "/user/username/projects/project/b/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {},
+                exclude: ["/user/username/projects/project/c"],
+            }),
         };
         const excludedFile1: File = {
-            path: "/a/c/excluedFile1.ts",
+            path: "/user/username/projects/project/c/excluedFile1.ts",
             content: `let t = 1;`,
         };
-
-        const host = createServerHost([commonFile1, commonFile2, excludedFile1, configFile]);
+        const commonFile1: File = {
+            path: "/user/username/projects/project/b/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const commonFile2: File = {
+            path: "/user/username/projects/project/b/commonFile2.ts",
+            content: "let y = 1",
+        };
+        const host = TestServerHost.createServerHost([commonFile1, commonFile2, excludedFile1, configFile]);
         const session = new TestSession(host);
         openFilesForSession([commonFile1, excludedFile1], session);
 
@@ -189,49 +433,43 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("should properly handle module resolution changes in config file", () => {
         const file1: File = {
-            path: "/a/b/file1.ts",
+            path: "/user/username/projects/project/a/b/file1.ts",
             content: `import { T } from "module1";`,
         };
         const nodeModuleFile: File = {
-            path: "/a/b/node_modules/module1.ts",
+            path: "/user/username/projects/project/a/b/node_modules/module1.ts",
             content: `export interface T {}`,
         };
         const classicModuleFile: File = {
-            path: "/a/module1.ts",
+            path: "/user/username/projects/project/a/module1.ts",
             content: `export interface T {}`,
         };
         const randomFile: File = {
-            path: "/a/file1.ts",
+            path: "/user/username/projects/project/a/file1.ts",
             content: `export interface T {}`,
         };
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
-            content: `{
-                    "compilerOptions": {
-                        "moduleResolution": "node"
-                    },
-                    "files": ["${file1.path}"]
-                }`,
+            path: "/user/username/projects/project/a/b/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: compilerOptionsToConfigJson({ moduleResolution: ts.ModuleResolutionKind.Node10 }),
+                files: [file1.path],
+            }),
         };
         const files = [file1, nodeModuleFile, classicModuleFile, configFile, randomFile];
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([file1, nodeModuleFile, classicModuleFile], session);
 
         host.writeFile(
             configFile.path,
-            `{
-                "compilerOptions": {
-                    "moduleResolution": "classic"
-                },
-                "files": ["${file1.path}"]
-            }`,
+            jsonToReadableText({
+                compilerOptions: compilerOptionsToConfigJson({ moduleResolution: ts.ModuleResolutionKind.Classic }),
+                files: [file1.path],
+            }),
         );
         host.runQueuedTimeoutCallbacks();
 
         // will not remove project 1
-        logInferredProjectsOrphanStatus(session);
-
         // Open random file and it will reuse first inferred project
         openFilesForSession([randomFile], session);
         baselineTsserverLogs("configuredProjects", "should properly handle module resolution changes in config file", session);
@@ -239,23 +477,23 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("should keep the configured project when the opened file is referenced by the project but not its root", () => {
         const file1: File = {
-            path: "/a/b/main.ts",
+            path: "/user/username/projects/project/a/b/main.ts",
             content: "import { objA } from './obj-a';",
         };
         const file2: File = {
-            path: "/a/b/obj-a.ts",
+            path: "/user/username/projects/project/a/b/obj-a.ts",
             content: `export const objA = Object.assign({foo: "bar"}, {bar: "baz"});`,
         };
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
-            content: `{
-                    "compilerOptions": {
-                        "target": "es6"
-                    },
-                    "files": [ "main.ts" ]
-                }`,
+            path: "/user/username/projects/project/a/b/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {
+                    target: "es6",
+                },
+                files: ["main.ts"],
+            }),
         };
-        const host = createServerHost([file1, file2, configFile]);
+        const host = TestServerHost.createServerHost([file1, file2, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         closeFilesForSession([file1], session);
@@ -265,16 +503,24 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("should tolerate config file errors and still try to build a project", () => {
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
-            content: `{
-                    "compilerOptions": {
-                        "target": "es6",
-                        "allowAnything": true
-                    },
-                    "someOtherProperty": {}
-                }`,
+            path: "/user/username/projects/project/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {
+                    target: "es6",
+                    allowAnything: true,
+                },
+                someOtherProperty: {},
+            }),
         };
-        const host = createServerHost([commonFile1, commonFile2, libFile, configFile]);
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const commonFile2: File = {
+            path: "/user/username/projects/project/commonFile2.ts",
+            content: "let y = 1",
+        };
+        const host = TestServerHost.createServerHost([commonFile1, commonFile2, configFile]);
         const session = new TestSession(host);
         openFilesForSession([commonFile1], session);
         baselineTsserverLogs("configuredProjects", "should tolerate config file errors and still try to build a project", session);
@@ -282,59 +528,49 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("should reuse same project if file is opened from the configured project that has no open files", () => {
         const file1 = {
-            path: "/a/b/main.ts",
+            path: "/user/username/projects/project/main.ts",
             content: "let x =1;",
         };
         const file2 = {
-            path: "/a/b/main2.ts",
+            path: "/user/username/projects/project/main2.ts",
             content: "let y =1;",
         };
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
-            content: `{
-                    "compilerOptions": {
-                        "target": "es6"
-                    },
-                    "files": [ "main.ts", "main2.ts" ]
-                }`,
+            path: "/user/username/projects/project/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {
+                    target: "es6",
+                },
+                files: ["main.ts", "main2.ts"],
+            }),
         };
-        const host = createServerHost([file1, file2, configFile, libFile]);
+        const host = TestServerHost.createServerHost([file1, file2, configFile]);
         const session = new TestSession({ host, useSingleInferredProject: true });
         openFilesForSession([file1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // file1
-
         closeFilesForSession([file1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No open files
-
         openFilesForSession([file2], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // file2
         baselineTsserverLogs("configuredProjects", "should reuse same project if file is opened from the configured project that has no open files", session);
     });
 
     it("should not close configured project after closing last open file, but should be closed on next file open if its not the file from same project", () => {
         const file1 = {
-            path: "/a/b/main.ts",
+            path: "/user/username/projects/project/main.ts",
             content: "let x =1;",
         };
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
-            content: `{
-                    "compilerOptions": {
-                        "target": "es6"
-                    },
-                    "files": [ "main.ts" ]
-                }`,
+            path: "/user/username/projects/project/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {
+                    target: "es6",
+                },
+                files: ["main.ts"],
+            }),
         };
-        const host = createServerHost([file1, configFile, libFile]);
+        const host = TestServerHost.createServerHost([file1, configFile]);
         const session = new TestSession({ host, useSingleInferredProject: true });
         openFilesForSession([file1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // file1
-
         closeFilesForSession([file1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files
-
         openFilesForSession([libFile], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files + project closed
         baselineTsserverLogs("configuredProjects", "should not close configured project after closing last open file, but should be closed on next file open if its not the file from same project", session);
     });
 
@@ -356,31 +592,30 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
             content: jsonToReadableText({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] }),
         };
 
-        const host = createServerHost([file1, file2, file3]);
+        const host = TestServerHost.createServerHost([file1, file2, file3]);
         const session = new TestSession(host);
         openFilesForSession([file1, file3], session);
 
         host.writeFile(configFile.path, configFile.content);
         host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
-        logInferredProjectsOrphanStatus(session);
         baselineTsserverLogs("configuredProjects", "open file become a part of configured project if it is referenced from root file", session);
     });
 
     it("can correctly update configured project when set of root files has changed (new file on disk)", () => {
         const file1 = {
-            path: "/a/b/f1.ts",
+            path: "/user/username/projects/project/f1.ts",
             content: "let x = 1",
         };
         const file2 = {
-            path: "/a/b/f2.ts",
+            path: "/user/username/projects/project/f2.ts",
             content: "let y = 1",
         };
         const configFile = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: jsonToReadableText({ compilerOptions: {} }),
         };
 
-        const host = createServerHost([file1, configFile]);
+        const host = TestServerHost.createServerHost([file1, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -393,19 +628,19 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("can correctly update configured project when set of root files has changed (new file in list of files)", () => {
         const file1 = {
-            path: "/a/b/f1.ts",
+            path: "/user/username/projects/project/f1.ts",
             content: "let x = 1",
         };
         const file2 = {
-            path: "/a/b/f2.ts",
+            path: "/user/username/projects/project/f2.ts",
             content: "let y = 1",
         };
         const configFile = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts"] }),
         };
 
-        const host = createServerHost([file1, file2, configFile]);
+        const host = TestServerHost.createServerHost([file1, file2, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -417,19 +652,19 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("can update configured project when set of root files was not changed", () => {
         const file1 = {
-            path: "/a/b/f1.ts",
+            path: "/user/username/projects/project/f1.ts",
             content: "let x = 1",
         };
         const file2 = {
-            path: "/a/b/f2.ts",
+            path: "/user/username/projects/project/f2.ts",
             content: "let y = 1",
         };
         const configFile = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }),
         };
 
-        const host = createServerHost([file1, file2, configFile]);
+        const host = TestServerHost.createServerHost([file1, file2, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -441,52 +676,39 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("Open ref of configured project when open file gets added to the project as part of configured file update", () => {
         const file1: File = {
-            path: "/a/b/src/file1.ts",
+            path: "/user/username/projects/project/a/b/src/file1.ts",
             content: "let x = 1;",
         };
         const file2: File = {
-            path: "/a/b/src/file2.ts",
+            path: "/user/username/projects/project/a/b/src/file2.ts",
             content: "let y = 1;",
         };
         const file3: File = {
-            path: "/a/b/file3.ts",
+            path: "/user/username/projects/project/a/b/file3.ts",
             content: "let z = 1;",
         };
         const file4: File = {
-            path: "/a/file4.ts",
+            path: "/user/username/projects/project/a/file4.ts",
             content: "let z = 1;",
         };
         const configFile = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/a/b/tsconfig.json",
             content: jsonToReadableText({ files: ["src/file1.ts", "file3.ts"] }),
         };
 
         const files = [file1, file2, file3, file4];
-        const host = createServerHost(files.concat(configFile));
+        const host = TestServerHost.createServerHost(files.concat(configFile));
         const session = new TestSession(host);
         openFilesForSession([file1, file2, file3, file4], session);
 
-        logConfiguredProjectsHasOpenRefStatus(session); // file1 and file3
-
         host.writeFile(configFile.path, "{}");
         host.runQueuedTimeoutCallbacks();
-
-        logConfiguredProjectsHasOpenRefStatus(session); // file1, file2, file3
-        logInferredProjectsOrphanStatus(session);
-
         closeFilesForSession([file1, file2, file4], session);
-
-        logConfiguredProjectsHasOpenRefStatus(session); // file3
-        logInferredProjectsOrphanStatus(session);
-
         openFilesForSession([file4], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // file3
-
         closeFilesForSession([file3], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files
 
         const file5: File = {
-            path: "/file5.ts",
+            path: "/user/username/projects/project/file5.ts",
             content: "let zz = 1;",
         };
         host.writeFile(file5.path, file5.content);
@@ -498,114 +720,90 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("Open ref of configured project when open file gets added to the project as part of configured file update buts its open file references are all closed when the update happens", () => {
         const file1: File = {
-            path: "/a/b/src/file1.ts",
+            path: "/user/username/projects/project/a/b/src/file1.ts",
             content: "let x = 1;",
         };
         const file2: File = {
-            path: "/a/b/src/file2.ts",
+            path: "/user/username/projects/project/a/b/src/file2.ts",
             content: "let y = 1;",
         };
         const file3: File = {
-            path: "/a/b/file3.ts",
+            path: "/user/username/projects/project/a/b/file3.ts",
             content: "let z = 1;",
         };
         const file4: File = {
-            path: "/a/file4.ts",
+            path: "/user/username/projects/project/a/file4.ts",
             content: "let z = 1;",
         };
         const configFile = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/a/b/tsconfig.json",
             content: jsonToReadableText({ files: ["src/file1.ts", "file3.ts"] }),
         };
 
         const files = [file1, file2, file3];
         const hostFiles = files.concat(file4, configFile);
-        const host = createServerHost(hostFiles);
+        const host = TestServerHost.createServerHost(hostFiles);
         const session = new TestSession(host);
         openFilesForSession([file1, file2, file3], session);
-
-        logConfiguredProjectsHasOpenRefStatus(session); // file1 and file3
-
         closeFilesForSession([file1, file3], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files
 
         host.writeFile(configFile.path, "{}");
         session.host.baselineHost("configFile updated");
         // Time out is not yet run so there is project update pending
-        logConfiguredProjectsHasOpenRefStatus(session); // Pending update and file2 might get into the project
 
         openFilesForSession([file4], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // Pending update and F2 might get into the project
 
         host.runQueuedTimeoutCallbacks();
-        logConfiguredProjectsHasOpenRefStatus(session); // file2
-        logInferredProjectsOrphanStatus(session);
         baselineTsserverLogs("configuredProjects", "Open ref of configured project when open file gets added to the project as part of configured file update buts its open file references are all closed when the update happens", session);
     });
 
     it("files are properly detached when language service is disabled", () => {
         const f1 = {
-            path: "/a/app.js",
+            path: "/user/username/projects/project/a/app.js",
             content: "var x = 1",
         };
         const f2 = {
-            path: "/a/largefile.js",
+            path: "/user/username/projects/project/a/largefile.js",
             content: "",
         };
         const f3 = {
-            path: "/a/lib.js",
+            path: "/user/username/projects/project/a/lib.js",
             content: "var x = 1",
         };
         const config = {
-            path: "/a/tsconfig.json",
+            path: "/user/username/projects/project/a/tsconfig.json",
             content: jsonToReadableText({ compilerOptions: { allowJs: true } }),
         };
-        const host = createServerHost([f1, f2, f3, config]);
+        const host = TestServerHost.createServerHost([f1, f2, f3, config]);
         const originalGetFileSize = host.getFileSize;
         host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
         const session = new TestSession(host);
         openFilesForSession([f1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // f1
-
         closeFilesForSession([f1], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files
-
-        for (const f of [f1, f2, f3]) {
-            // All the script infos should be present and contain the project since it is still alive.
-            const scriptInfo = session.getProjectService().getScriptInfoForNormalizedPath(ts.server.toNormalizedPath(f.path))!;
-            session.logger.log(`Containing projects for ${f.path}:: ${scriptInfo.containingProjects.map(p => p.projectName).join(",")}`);
-        }
-
         const f4 = {
-            path: "/aa.js",
+            path: "/user/username/projects/project/aa.js",
             content: "var x = 1",
         };
         host.writeFile(f4.path, f4.content);
         openFilesForSession([f4], session);
-        logConfiguredProjectsHasOpenRefStatus(session); // No files
-
-        for (const f of [f1, f2, f3]) {
-            // All the script infos should not be present since the project is closed and orphan script infos are collected
-            assert.isUndefined(session.getProjectService().getScriptInfoForNormalizedPath(ts.server.toNormalizedPath(f.path)));
-        }
         baselineTsserverLogs("configuredProjects", "files are properly detached when language service is disabled", session);
     });
 
     it("syntactic features work even if language service is disabled", () => {
         const f1 = {
-            path: "/a/app.js",
+            path: "/user/username/projects/project/a/app.js",
             content: "let x =   1;",
         };
         const f2 = {
-            path: "/a/largefile.js",
+            path: "/user/username/projects/project/a/largefile.js",
             content: "",
         };
         const config = {
-            path: "/a/jsconfig.json",
+            path: "/user/username/projects/project/a/jsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, f2, config]);
+        const host = TestServerHost.createServerHost([f1, f2, config]);
         const originalGetFileSize = host.getFileSize;
         host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
         const session = new TestSession(host);
@@ -658,10 +856,6 @@ bar();`,
             symLink: `/user/username/projects/myproject/bar`,
         };
 
-        const lib2017: File = {
-            path: `${ts.getDirectoryPath(libFile.path)}/lib.es2017.d.ts`,
-            content: libFile.content,
-        };
         const libDom: File = {
             path: `${ts.getDirectoryPath(libFile.path)}/lib.dom.d.ts`,
             content: `
@@ -669,7 +863,7 @@ declare var console: {
     log(...args: any[]): void;
 };`,
         };
-        const host = createServerHost([barConfig, barIndex, fooConfig, fooIndex, barSymLink, lib2017, libDom]);
+        const host = TestServerHost.createServerHost([barConfig, barIndex, fooConfig, fooIndex, barSymLink, libDom]);
         const session = new TestSession(host);
         openFilesForSession([fooIndex, barIndex], session);
         verifyGetErrRequest({ session, files: [barIndex, fooIndex] });
@@ -689,7 +883,7 @@ declare var console: {
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([file, app, tsconfig, libFile]);
+        const host = TestServerHost.createServerHost([file, app, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("configuredProjects", "when file name starts with caret", session);
@@ -715,10 +909,9 @@ declare var console: {
             content: "export function fooBar() { }",
         };
         function verifySessionWorker({ withExclude, openFileBeforeCreating }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
-            const host = createServerHost([
+            const host = TestServerHost.createServerHost([
                 foo,
                 bar,
-                libFile,
                 { path: `/user/username/projects/myproject/src/sub` },
                 withExclude ?
                     {
@@ -832,7 +1025,7 @@ foo();`,
             path: `/user/username/projects/myproject/foo/index.ts`,
             content: `export function foo() {}`,
         };
-        const host = createServerHost([barConfig, barIndex, fooBarConfig, fooBarIndex, fooConfig, fooIndex, libFile]);
+        const host = TestServerHost.createServerHost([barConfig, barIndex, fooBarConfig, fooBarIndex, fooConfig, fooIndex]);
         ensureErrorFreeBuild(host, [fooConfig.path]);
         const fooDts = `/user/username/projects/myproject/foo/lib/index.d.ts`;
         const session = new TestSession(host);
@@ -847,7 +1040,7 @@ foo();`,
                 endOffset: 1,
             },
         });
-        session.logger.log(`Default project for file: ${fooDts}: ${session.getProjectService().tryGetDefaultProjectForFile(ts.server.toNormalizedPath(fooDts))?.projectName}`);
+        projectInfoForSession(session, fooDts);
         baselineTsserverLogs("configuredProjects", "when default configured project does not contain the file", session);
     });
 
@@ -886,7 +1079,7 @@ foo();`,
                 content: `let b = 1;`,
             };
 
-            const host = createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles || ts.emptyArray)]);
+            const host = TestServerHost.createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles || ts.emptyArray)]);
             const session = new TestSession(host);
             return { host, session, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig };
         }
@@ -953,21 +1146,21 @@ foo();`,
     });
 });
 
-describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories listed in config file input array", () => {
+describe("unittests:: tsserver:: configuredProjects:: non-existing directories listed in config file input array", () => {
     it("should be tolerated without crashing the server", () => {
         const configFile = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/a/b/tsconfig.json",
             content: `{
                     "compilerOptions": {},
                     "include": ["app/*", "test/**/*", "something"]
                 }`,
         };
         const file1 = {
-            path: "/a/b/file1.ts",
+            path: "/user/username/projects/project/a/b/file1.ts",
             content: "let t = 10;",
         };
 
-        const host = createServerHost([file1, configFile]);
+        const host = TestServerHost.createServerHost([file1, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         host.runQueuedTimeoutCallbacks();
@@ -978,25 +1171,25 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
 
     it("should be able to handle @types if input file list is empty", () => {
         const f = {
-            path: "/a/app.ts",
+            path: "/user/username/projects/project/a/app.ts",
             content: "let x = 1",
         };
         const config = {
-            path: "/a/tsconfig.json",
+            path: "/user/username/projects/project/a/tsconfig.json",
             content: jsonToReadableText({
                 compiler: {},
                 files: [],
             }),
         };
         const t1 = {
-            path: "/a/node_modules/@types/typings/index.d.ts",
+            path: "/user/username/projects/project/a/node_modules/@types/typings/index.d.ts",
             content: `export * from "./lib"`,
         };
         const t2 = {
-            path: "/a/node_modules/@types/typings/lib.d.ts",
+            path: "/user/username/projects/project/a/node_modules/@types/typings/lib.d.ts",
             content: `export const x: number`,
         };
-        const host = createServerHost([f, config, t1, t2], { currentDirectory: ts.getDirectoryPath(f.path) });
+        const host = TestServerHost.createServerHost([f, config, t1, t2]);
         const session = new TestSession(host);
         openFilesForSession([f], session);
 
@@ -1021,7 +1214,7 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
                 ],
             }),
         };
-        const host = createServerHost([f, config, libFile], { useCaseSensitiveFileNames: true });
+        const host = TestServerHost.createServerHost([f, config], { useCaseSensitiveFileNames: true });
         const session = new TestSession(host);
         openFilesForSession([f], session);
 
@@ -1031,23 +1224,23 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
 
     it("Changed module resolution reflected when specifying files list", () => {
         const file1: File = {
-            path: "/users/username/projects/project/file1.ts",
+            path: "/users/username/solution/projects/project/file1.ts",
             content: 'import classc from "file2"',
         };
         const file2a: File = {
-            path: "/users/username/projects/file2.ts",
+            path: "/users/username/solution/projects/file2.ts",
             content: "export classc { method2a() { return 10; } }",
         };
         const file2: File = {
-            path: "/users/username/projects/project/file2.ts",
+            path: "/users/username/solution/projects/project/file2.ts",
             content: "export classc { method2() { return 10; } }",
         };
         const configFile: File = {
-            path: "/users/username/projects/project/tsconfig.json",
+            path: "/users/username/solution/projects/project/tsconfig.json",
             content: jsonToReadableText({ files: [file1.path], compilerOptions: { module: "amd" } }),
         };
-        const files = [file1, file2a, configFile, libFile];
-        const host = createServerHost(files);
+        const files = [file1, file2a, configFile];
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -1061,39 +1254,36 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
     });
 
     it("Failed lookup locations uses parent most node_modules directory", () => {
-        const root = "/user/username/rootfolder";
         const file1: File = {
-            path: "/a/b/src/file1.ts",
+            path: "/user/username/rootfolder/a/b/src/file1.ts",
             content: 'import { classc } from "module1"',
         };
         const module1: File = {
-            path: "/a/b/node_modules/module1/index.d.ts",
+            path: "/user/username/rootfolder/a/b/node_modules/module1/index.d.ts",
             content: `import { class2 } from "module2";
                           export classc { method2a(): class2; }`,
         };
         const module2: File = {
-            path: "/a/b/node_modules/module2/index.d.ts",
+            path: "/user/username/rootfolder/a/b/node_modules/module2/index.d.ts",
             content: "export class2 { method2() { return 10; } }",
         };
         const module3: File = {
-            path: "/a/b/node_modules/module/node_modules/module3/index.d.ts",
+            path: "/user/username/rootfolder/a/b/node_modules/module/node_modules/module3/index.d.ts",
             content: "export class3 { method2() { return 10; } }",
         };
         const configFile: File = {
-            path: "/a/b/src/tsconfig.json",
+            path: "/user/username/rootfolder/a/b/src/tsconfig.json",
             content: jsonToReadableText({ files: ["file1.ts"] }),
         };
-        const nonLibFiles = [file1, module1, module2, module3, configFile];
-        nonLibFiles.forEach(f => f.path = root + f.path);
-        const files = nonLibFiles.concat(libFile);
-        const host = createServerHost(files);
+        const files = [file1, module1, module2, module3, configFile];
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         baselineTsserverLogs("configuredProjects", "failed lookup locations uses parent most node_modules directory", session);
     });
 });
 
-describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file fails", () => {
+describe("unittests:: tsserver:: configuredProjects:: when reading tsconfig file fails", () => {
     it("should be tolerated without crashing the server", () => {
         const configFile = {
             path: `/user/username/projects/myproject/tsconfig.json`,
@@ -1104,7 +1294,7 @@ describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file
             content: "let t = 10;",
         };
 
-        const host = createServerHost([file1, libFile, configFile]);
+        const host = TestServerHost.createServerHost([file1, configFile]);
         const session = new TestSession(host);
         const originalReadFile = host.readFile;
         host.readFile = f => {

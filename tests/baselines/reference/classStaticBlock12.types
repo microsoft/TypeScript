@@ -3,15 +3,20 @@
 === classStaticBlock12.ts ===
 class C {
 >C : C
+>  : ^
 
   static #x = 1;
 >#x : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
   
   static {
     C.#x;
 >C.#x : number
+>     : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
   }
 }
 

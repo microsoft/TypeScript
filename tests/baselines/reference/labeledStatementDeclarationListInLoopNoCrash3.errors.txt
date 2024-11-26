@@ -1,0 +1,76 @@
+labeledStatementDeclarationListInLoopNoCrash3.ts(9,12): error TS2339: Property 'classFormat' does not exist on type 'ParseThemeData'.
+labeledStatementDeclarationListInLoopNoCrash3.ts(15,12): error TS1005: ',' expected.
+labeledStatementDeclarationListInLoopNoCrash3.ts(15,12): error TS2304: Cannot find name 'font'.
+labeledStatementDeclarationListInLoopNoCrash3.ts(15,21): error TS1005: ',' expected.
+labeledStatementDeclarationListInLoopNoCrash3.ts(15,23): error TS1135: Argument expression expected.
+labeledStatementDeclarationListInLoopNoCrash3.ts(15,26): error TS1134: Variable declaration expected.
+labeledStatementDeclarationListInLoopNoCrash3.ts(15,41): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
+labeledStatementDeclarationListInLoopNoCrash3.ts(15,42): error TS1005: ')' expected.
+labeledStatementDeclarationListInLoopNoCrash3.ts(15,53): error TS2304: Cannot find name 'fontSize'.
+labeledStatementDeclarationListInLoopNoCrash3.ts(15,61): error TS1005: ';' expected.
+labeledStatementDeclarationListInLoopNoCrash3.ts(16,12): error TS1005: ';' expected.
+labeledStatementDeclarationListInLoopNoCrash3.ts(16,23): error TS1134: Variable declaration expected.
+labeledStatementDeclarationListInLoopNoCrash3.ts(16,38): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
+labeledStatementDeclarationListInLoopNoCrash3.ts(16,39): error TS1005: ')' expected.
+labeledStatementDeclarationListInLoopNoCrash3.ts(16,50): error TS2304: Cannot find name 'height'.
+labeledStatementDeclarationListInLoopNoCrash3.ts(16,56): error TS1005: ';' expected.
+labeledStatementDeclarationListInLoopNoCrash3.ts(22,1): error TS1160: Unterminated template literal.
+
+
+==== labeledStatementDeclarationListInLoopNoCrash3.ts (17 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/59345
+    
+    export class ParseThemeData {
+      parseButton(button: any) {
+        const {type, size} = button;
+        for (let item of type) {
+          const fontType = item.type;
+          const style = (state: string) => `color: var(--button-${fontType}-${state}-font-color)`;
+          this.classFormat(`${style('active')});
+               ~~~~~~~~~~~
+!!! error TS2339: Property 'classFormat' does not exist on type 'ParseThemeData'.
+        }
+        for (let item of size) {
+          const fontType = item.type;
+          this.classFormat(
+            [
+              `font-size: var(--button-size-${fontType}-fontSize)`,
+               ~~~~
+!!! error TS1005: ',' expected.
+               ~~~~
+!!! error TS2304: Cannot find name 'font'.
+                        ~
+!!! error TS1005: ',' expected.
+                          ~~~
+!!! error TS1135: Argument expression expected.
+                             ~
+!!! error TS1134: Variable declaration expected.
+                                            ~
+!!! error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
+                                             ~
+!!! error TS1005: ')' expected.
+                                                        ~~~~~~~~
+!!! error TS2304: Cannot find name 'fontSize'.
+                                                                ~
+!!! error TS1005: ';' expected.
+              `height: var(--button-size-${fontType}-height)`,
+               ~~~~~~
+!!! error TS1005: ';' expected.
+                          ~
+!!! error TS1134: Variable declaration expected.
+                                         ~
+!!! error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
+                                          ~
+!!! error TS1005: ')' expected.
+                                                     ~~~~~~
+!!! error TS2304: Cannot find name 'height'.
+                                                           ~
+!!! error TS1005: ';' expected.
+            ].join(';')
+          );
+        }
+      }
+    }
+    
+    
+!!! error TS1160: Unterminated template literal.

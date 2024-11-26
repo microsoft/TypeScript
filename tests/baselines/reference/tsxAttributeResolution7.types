@@ -6,33 +6,51 @@ declare module JSX {
 	interface IntrinsicElements {
 		test1: { "data-foo"?: string };
 >test1 : { "data-foo"?: string; }
+>      : ^^^^^^^^^^^^^^^      ^^^
 >"data-foo" : string
+>           : ^^^^^^
 	}
 }
 
 // Error
 <test1 data-foo={32} />;
 ><test1 data-foo={32} /> : JSX.Element
+>                        : ^^^^^^^^^^^
 >test1 : any
+>      : ^^^
 >data-foo : number
+>         : ^^^^^^
 >32 : 32
+>   : ^^
 
 // OK
 <test1 data-foo={'32'} />;
 ><test1 data-foo={'32'} /> : JSX.Element
+>                          : ^^^^^^^^^^^
 >test1 : any
+>      : ^^^
 >data-foo : string
+>         : ^^^^^^
 >'32' : "32"
+>     : ^^^^
 
 <test1 data-bar={'32'} />;
 ><test1 data-bar={'32'} /> : JSX.Element
+>                          : ^^^^^^^^^^^
 >test1 : any
+>      : ^^^
 >data-bar : string
+>         : ^^^^^^
 >'32' : "32"
+>     : ^^^^
 
 <test1 data-bar={32} />;
 ><test1 data-bar={32} /> : JSX.Element
+>                        : ^^^^^^^^^^^
 >test1 : any
+>      : ^^^
 >data-bar : number
+>         : ^^^^^^
 >32 : 32
+>   : ^^
 

@@ -1,0 +1,153 @@
+//// [tests/cases/compiler/noUncheckedIndexedAccessCompoundAssignments.ts] ////
+
+=== noUncheckedIndexedAccessCompoundAssignments.ts ===
+// Each line should have one error
+// for a total of 12 errors
+stringMap.foo++;
+>stringMap.foo++ : number
+>                : ^^^^^^
+>stringMap.foo : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>stringMap : { [s: string]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+--stringMap.foo;
+>--stringMap.foo : number
+>                : ^^^^^^
+>stringMap.foo : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>stringMap : { [s: string]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+stringMap.foo += 1;
+>stringMap.foo += 1 : number
+>                   : ^^^^^^
+>stringMap.foo : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>stringMap : { [s: string]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+stringMap.foo *= 1;
+>stringMap.foo *= 1 : number
+>                   : ^^^^^^
+>stringMap.foo : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>stringMap : { [s: string]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+++stringMap['foo'];
+>++stringMap['foo'] : number
+>                   : ^^^^^^
+>stringMap['foo'] : number | undefined
+>                 : ^^^^^^^^^^^^^^^^^^
+>stringMap : { [s: string]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+stringMap['foo']--;
+>stringMap['foo']-- : number
+>                   : ^^^^^^
+>stringMap['foo'] : number | undefined
+>                 : ^^^^^^^^^^^^^^^^^^
+>stringMap : { [s: string]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+
+++stringMap[s];
+>++stringMap[s] : number
+>               : ^^^^^^
+>stringMap[s] : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+>stringMap : { [s: string]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+
+stringMap[s]--;
+>stringMap[s]-- : number
+>               : ^^^^^^
+>stringMap[s] : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+>stringMap : { [s: string]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+
+numberMap[32]++;
+>numberMap[32]++ : number
+>                : ^^^^^^
+>numberMap[32] : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>numberMap : { [n: number]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>32 : 32
+>   : ^^
+
+numberMap[32] += 1;
+>numberMap[32] += 1 : number
+>                   : ^^^^^^
+>numberMap[32] : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>numberMap : { [n: number]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>32 : 32
+>   : ^^
+>1 : 1
+>  : ^
+
+numberMap[n]++;
+>numberMap[n]++ : number
+>               : ^^^^^^
+>numberMap[n] : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+>numberMap : { [n: number]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+numberMap[n] += 1;
+>numberMap[n] += 1 : number
+>                  : ^^^^^^
+>numberMap[n] : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+>numberMap : { [n: number]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+declare const stringMap: { [s: string]: number };
+>stringMap : { [s: string]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+
+declare const s: string;
+>s : string
+>  : ^^^^^^
+
+declare const numberMap: { [n: number]: number };
+>numberMap : { [n: number]: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+declare const n: number;
+>n : number
+>  : ^^^^^^
+

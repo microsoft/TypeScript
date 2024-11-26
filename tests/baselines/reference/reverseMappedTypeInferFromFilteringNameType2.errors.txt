@@ -12,7 +12,7 @@ reverseMappedTypeInferFromFilteringNameType2.ts(75,26): error TS2353: Object lit
 reverseMappedTypeInferFromFilteringNameType2.ts(83,26): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; }'.
 reverseMappedTypeInferFromFilteringNameType2.ts(85,36): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; y: "foo"; }'.
 reverseMappedTypeInferFromFilteringNameType2.ts(96,68): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ prop: "foo"; nested: { prop: string; }; }'.
-reverseMappedTypeInferFromFilteringNameType2.ts(139,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ readonly types: { actors: { src: "str"; logic: () => Promise<string>; }; }; readonly invoke: { readonly src: "str"; }; }'.
+reverseMappedTypeInferFromFilteringNameType2.ts(139,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ readonly types: { actors: { src: "str"; logic: typeof child; }; }; readonly invoke: { readonly src: "str"; }; }'.
 reverseMappedTypeInferFromFilteringNameType2.ts(145,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ readonly invoke: { readonly src: "whatever"; }; }'.
 
 
@@ -183,7 +183,7 @@ reverseMappedTypeInferFromFilteringNameType2.ts(145,3): error TS2353: Object lit
       },
       extra: 10,
       ~~~~~
-!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ readonly types: { actors: { src: "str"; logic: () => Promise<string>; }; }; readonly invoke: { readonly src: "str"; }; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ readonly types: { actors: { src: "str"; logic: typeof child; }; }; readonly invoke: { readonly src: "str"; }; }'.
     });
     const config2 = createXMachine({
       invoke: {

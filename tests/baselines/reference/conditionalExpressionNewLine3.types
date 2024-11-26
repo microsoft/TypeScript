@@ -3,10 +3,15 @@
 === conditionalExpressionNewLine3.ts ===
 var v = a ?
 >v : any
+>  : ^^^
 >a ?  b : c : any
+>           : ^^^
 >a : any
+>  : ^^^
 
   b : c;
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 

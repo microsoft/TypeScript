@@ -1,21 +1,16 @@
-import {
-    reportDocumentRegistryStats,
-} from "../../../harness/incrementalUtils";
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { reportDocumentRegistryStats } from "../../../harness/incrementalUtils.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: documentRegistry:: document registry in project service", () => {
     const importModuleContent = `import {a} from "./module1"`;
@@ -48,7 +43,7 @@ describe("unittests:: tsserver:: documentRegistry:: document registry in project
     }
 
     function createSessionAndHost() {
-        const host = createServerHost([file, moduleFile, libFile, configFile]);
+        const host = TestServerHost.createServerHost([file, moduleFile, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         checkProject(session, /*moduleIsOrphan*/ false);
@@ -130,7 +125,7 @@ describe("unittests:: tsserver:: documentRegistry:: document registry in project
 
 describe("unittests:: tsserver:: documentRegistry:: works when reusing orphan script info with different scriptKind", () => {
     it("works when reusing orphan script info with different scriptKind", () => {
-        const host = createServerHost({});
+        const host = TestServerHost.createServerHost({});
         const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
         const newText = "exrpot const x = 10;";
         const content = `import x from 'react';\n${newText}`;

@@ -1,5 +1,5 @@
 import {
-    arraysEqual,
+    arrayIsEqualTo,
     ArrowFunction,
     AssignmentDeclarationKind,
     BinaryExpression,
@@ -92,7 +92,7 @@ import {
     TypeChecker,
     typeParameterNamePart,
     VariableStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const jsDocTagNames = [
     "abstract",
@@ -131,6 +131,7 @@ const jsDocTagNames = [
     "host",
     "ignore",
     "implements",
+    "import",
     "inheritdoc",
     "inner",
     "instance",
@@ -221,7 +222,7 @@ export function getJsDocCommentsFromDeclarations(declarations: readonly Declarat
 }
 
 function isIdenticalListOfDisplayParts(parts1: SymbolDisplayPart[], parts2: SymbolDisplayPart[]) {
-    return arraysEqual(parts1, parts2, (p1, p2) => p1.kind === p2.kind && p1.text === p2.text);
+    return arrayIsEqualTo(parts1, parts2, (p1, p2) => p1.kind === p2.kind && p1.text === p2.text);
 }
 
 function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
@@ -382,7 +383,7 @@ export function getJSDocTagNameCompletions(): CompletionEntry[] {
 }
 
 /** @internal */
-export const getJSDocTagNameCompletionDetails = getJSDocTagCompletionDetails;
+export const getJSDocTagNameCompletionDetails: typeof getJSDocTagCompletionDetails = getJSDocTagCompletionDetails;
 
 /** @internal */
 export function getJSDocTagCompletions(): CompletionEntry[] {

@@ -1,4 +1,8 @@
 import {
+    getRangeOfEnclosingComment,
+    TextRangeWithKind,
+} from "../_namespaces/ts.formatting.js";
+import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     CallExpression,
@@ -52,11 +56,7 @@ import {
     TypeLiteralNode,
     TypeReferenceNode,
     VariableDeclarationList,
-} from "../_namespaces/ts";
-import {
-    getRangeOfEnclosingComment,
-    TextRangeWithKind,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export namespace SmartIndenter {
@@ -92,7 +92,7 @@ export namespace SmartIndenter {
 
         const precedingToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined, /*excludeJsdoc*/ true);
 
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken || null);
         if (enclosingCommentRange && enclosingCommentRange.kind === SyntaxKind.MultiLineCommentTrivia) {
             return getCommentIndent(sourceFile, position, options, enclosingCommentRange);
@@ -233,7 +233,7 @@ export namespace SmartIndenter {
         return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, /*isNextChild*/ false, options);
     }
 
-    export function getBaseIndentation(options: EditorSettings) {
+    export function getBaseIndentation(options: EditorSettings): number {
         return options.baseIndentSize || 0;
     }
 
@@ -602,7 +602,10 @@ export namespace SmartIndenter {
      * value of 'character' for '$' is 3
      * value of 'column' for '$' is 6 (assuming that tab size is 4)
      */
-    export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFileLike, options: EditorSettings) {
+    export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFileLike, options: EditorSettings): {
+        column: number;
+        character: number;
+    } {
         let character = 0;
         let column = 0;
         for (let pos = startPos; pos < endPos; pos++) {
@@ -721,7 +724,8 @@ export namespace SmartIndenter {
                 return childKind !== SyntaxKind.JsxClosingFragment;
             case SyntaxKind.IntersectionType:
             case SyntaxKind.UnionType:
-                if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType) {
+            case SyntaxKind.SatisfiesExpression:
+                if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType || childKind === SyntaxKind.MappedType) {
                     return false;
                 }
                 break;

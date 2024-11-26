@@ -3,9 +3,12 @@
 === a.ts ===
 export class A { } // module
 >A : A
+>  : ^
 
 === b.ts ===
 var x = 0; // global
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 

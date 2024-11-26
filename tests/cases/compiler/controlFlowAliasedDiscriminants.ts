@@ -1,5 +1,4 @@
-// @strictNullChecks: true
-// @noImplicitAny: true
+// @strict: true
 
 type UseQueryResult<T> = {
     isSuccess: false;
@@ -103,4 +102,14 @@ type Nested = {
     if (resp.type === 'string') {
         resp.resp.data satisfies string;
     }    
+}
+
+function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) {
+  const { data: data2, isSuccess: isSuccess2 } = useQuery();
+
+  const areSuccess = isSuccess1 && isSuccess2;
+  if (areSuccess) {
+    data1.toExponential();
+    data2.toExponential();
+  }
 }

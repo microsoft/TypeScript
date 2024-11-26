@@ -1,0 +1,49 @@
+name: Update LKG
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: Release branch name to LKG
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if [[ ! "${{ inputs.branch_name }}" =~ ^release- ]]; then
+            echo "Branch name must start with 'release-'"
+            exit 1
+          fi
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ inputs.branch_name }}
+          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: 'lts/*'
+      - run: |
+          npm --version
+          # corepack enable npm
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
+      - run: |
+          npm ci
+          npx hereby LKG
+          git add --force ./lib
+          git config user.email "typescriptbot@microsoft.com"
+          git config user.name "TypeScript Bot"
+          git commit -m 'Update LKG'
+          git push

@@ -9,6 +9,7 @@
 
 function bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
 
 
 
@@ -18,12 +19,16 @@ function bar() { }
 /// <amd-dependency path="/js/libs/hgn.js!app/templates/home" name="compiler"/>
 var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 /// <reference path="file1.ts" />
 var y = "hello";
 >y : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 
 /// <reference path="file2.ts" />
@@ -33,6 +38,7 @@ var y = "hello";
 
 function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
 
 /// <reference path="file0.ts" />
@@ -40,5 +46,7 @@ function foo() { }
 
 var z = "world";
 >z : string
+>  : ^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 

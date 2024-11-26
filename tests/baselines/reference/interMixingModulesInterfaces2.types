@@ -3,20 +3,25 @@
 === interMixingModulesInterfaces2.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export interface B {
         name: string;
 >name : string
+>     : ^^^^^^
 
         value: number;
 >value : number
+>      : ^^^^^^
     }
 
     module B {
 >B : typeof B
+>  : ^^^^^^^^
 
         export function createB(): B {
 >createB : () => B
+>        : ^^^^^^ 
 
             return null;
         }
@@ -25,5 +30,7 @@ module A {
 
 var x: A.B = null;
 >x : A.B
+>  : ^^^
 >A : any
+>  : ^^^
 

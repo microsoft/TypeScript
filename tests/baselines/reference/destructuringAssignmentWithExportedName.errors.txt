@@ -1,0 +1,40 @@
+destructuringAssignmentWithExportedName.ts(8,5): error TS2873: This kind of expression is always falsy.
+destructuringAssignmentWithExportedName.ts(11,10): error TS2873: This kind of expression is always falsy.
+destructuringAssignmentWithExportedName.ts(14,10): error TS2873: This kind of expression is always falsy.
+destructuringAssignmentWithExportedName.ts(17,10): error TS2873: This kind of expression is always falsy.
+
+
+==== destructuringAssignmentWithExportedName.ts (4 errors) ====
+    export let exportedFoo: any;
+    let nonexportedFoo: any;
+    
+    // sanity checks
+    exportedFoo = null;
+    nonexportedFoo = null;
+    
+    if (null as any) {
+        ~~~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
+        ({ exportedFoo, nonexportedFoo } = null as any);
+    }
+    else if (null as any) {
+             ~~~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
+    	({ foo: exportedFoo, bar: nonexportedFoo } = null as any);
+    }
+    else if (null as any) {
+             ~~~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
+    	({ foo: { bar: exportedFoo, baz: nonexportedFoo } } = null as any);
+    }
+    else if (null as any) {
+             ~~~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
+    	([exportedFoo, nonexportedFoo] = null as any);
+    }
+    else {
+    	([[exportedFoo, nonexportedFoo]] = null as any);
+    }
+    
+    export { nonexportedFoo };
+    export { exportedFoo as foo, nonexportedFoo as nfoo };

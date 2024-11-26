@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts] ////
+
+=== mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts ===
+// https://github.com/microsoft/TypeScript/issues/55932
+
+type Replace<T extends [...any], A, B> = {
+>Replace : Symbol(Replace, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 2, 13))
+>A : Symbol(A, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 2, 32))
+>B : Symbol(B, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 2, 35))
+
+  [K in keyof T]: T[K] extends A ? B : T[K];
+>K : Symbol(K, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 3, 3))
+>T : Symbol(T, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 2, 13))
+>T : Symbol(T, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 2, 13))
+>K : Symbol(K, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 3, 3))
+>A : Symbol(A, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 2, 32))
+>B : Symbol(B, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 2, 35))
+>T : Symbol(T, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 2, 13))
+>K : Symbol(K, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 3, 3))
+
+};
+
+type ReplaceParams1<ARRAY extends [...any], A, B> = (
+>ReplaceParams1 : Symbol(ReplaceParams1, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 4, 2))
+>ARRAY : Symbol(ARRAY, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 6, 20))
+>A : Symbol(A, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 6, 43))
+>B : Symbol(B, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 6, 46))
+
+  ...args: Replace<ARRAY, A, B>
+>args : Symbol(args, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 6, 53))
+>Replace : Symbol(Replace, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 0, 0))
+>ARRAY : Symbol(ARRAY, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 6, 20))
+>A : Symbol(A, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 6, 43))
+>B : Symbol(B, Decl(mappedTypeOverArrayWithBareAnyRestCanBeUsedAsRestParam1.ts, 6, 46))
+
+) => any;
+

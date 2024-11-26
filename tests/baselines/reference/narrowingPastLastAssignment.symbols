@@ -1,0 +1,382 @@
+//// [tests/cases/compiler/narrowingPastLastAssignment.ts] ////
+
+=== narrowingPastLastAssignment.ts ===
+function action(f: Function) {}
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>f : Symbol(f, Decl(narrowingPastLastAssignment.ts, 0, 16))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+// Narrowings are preserved in closures created past last assignment
+
+function f1(x: string | number) {
+>f1 : Symbol(f1, Decl(narrowingPastLastAssignment.ts, 0, 31))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 4, 12))
+
+    x = "abc";
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 4, 12))
+
+    action(() => { x /* string | number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 4, 12))
+
+    x = 42;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 4, 12))
+
+    action(() => { x /* number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 4, 12))
+}
+
+// Narrowings are not preserved in inner function and class declarations (due to hoisting)
+
+function f2() {
+>f2 : Symbol(f2, Decl(narrowingPastLastAssignment.ts, 9, 1))
+
+    let x: string | number;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 14, 7))
+
+    x = 42;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 14, 7))
+
+    let a = () => { x /* number */ };
+>a : Symbol(a, Decl(narrowingPastLastAssignment.ts, 16, 7))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 14, 7))
+
+    let f = function() { x /* number */ };
+>f : Symbol(f, Decl(narrowingPastLastAssignment.ts, 17, 7))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 14, 7))
+
+    let C = class {
+>C : Symbol(C, Decl(narrowingPastLastAssignment.ts, 18, 7))
+
+        foo() { x /* number */ }
+>foo : Symbol(C.foo, Decl(narrowingPastLastAssignment.ts, 18, 19))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 14, 7))
+
+    };
+    let o = {
+>o : Symbol(o, Decl(narrowingPastLastAssignment.ts, 21, 7))
+
+        foo() { x /* number */ }
+>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 21, 13))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 14, 7))
+
+    };
+    function g() { x /* string | number */ }
+>g : Symbol(g, Decl(narrowingPastLastAssignment.ts, 23, 6))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 14, 7))
+
+    class A {
+>A : Symbol(A, Decl(narrowingPastLastAssignment.ts, 24, 44))
+
+        foo() { x /* string | number */ }
+>foo : Symbol(A.foo, Decl(narrowingPastLastAssignment.ts, 25, 13))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 14, 7))
+    }
+}
+
+// Narrowings are not preserved when assignments occur in inner functions
+
+function f3(x: string | number) {
+>f3 : Symbol(f3, Decl(narrowingPastLastAssignment.ts, 28, 1))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 32, 12))
+
+    action(() => { x = "abc" });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 32, 12))
+
+    x = 42;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 32, 12))
+
+    action(() => { x /* string | number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 32, 12))
+}
+
+// Assignment effects in compoud statements extend to the entire statement
+
+function f4(cond: () => boolean) {
+>f4 : Symbol(f4, Decl(narrowingPastLastAssignment.ts, 36, 1))
+>cond : Symbol(cond, Decl(narrowingPastLastAssignment.ts, 40, 12))
+
+    let x: string | number = 0;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 41, 7))
+
+    while (cond()) {
+>cond : Symbol(cond, Decl(narrowingPastLastAssignment.ts, 40, 12))
+
+        x = "abc";
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 41, 7))
+
+        action(() => { x /* string | number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 41, 7))
+
+        x = 42;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 41, 7))
+
+        action(() => { x /* string | number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 41, 7))
+    }
+    action(() => { x /* number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 41, 7))
+}
+
+function f5(x: string | number, cond: () => boolean) {
+>f5 : Symbol(f5, Decl(narrowingPastLastAssignment.ts, 49, 1))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 51, 12))
+>cond : Symbol(cond, Decl(narrowingPastLastAssignment.ts, 51, 31))
+
+    if (cond()) {
+>cond : Symbol(cond, Decl(narrowingPastLastAssignment.ts, 51, 31))
+
+        x = 1;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 51, 12))
+
+        action(() => { x /* string | number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 51, 12))
+    }
+    else {
+        x = 2;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 51, 12))
+
+        action(() => { x /* string | number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 51, 12))
+    }
+    action(() => { x /* number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 51, 12))
+}
+
+function f5a(cond: boolean) {
+>f5a : Symbol(f5a, Decl(narrowingPastLastAssignment.ts, 61, 1))
+>cond : Symbol(cond, Decl(narrowingPastLastAssignment.ts, 63, 13))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(narrowingPastLastAssignment.ts, 63, 13))
+
+        let x: number | undefined;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 65, 11))
+
+        x = 1;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 65, 11))
+
+        action(() => { x /* number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 65, 11))
+    }
+    else {
+        let x: number | undefined;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 70, 11))
+
+        x = 2;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 70, 11))
+
+        action(() => { x /* number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 70, 11))
+    }
+}
+
+function f5b() {
+>f5b : Symbol(f5b, Decl(narrowingPastLastAssignment.ts, 74, 1))
+
+    for (let x = 0; x < 10; x++) {
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 77, 12))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 77, 12))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 77, 12))
+
+        if (x === 1 || x === 2) {
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 77, 12))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 77, 12))
+
+            action(() => { x /* 1 | 2 */ })
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 77, 12))
+        }
+    }
+}
+
+// Implicit any variables have a known type following last assignment
+
+function f6() {
+>f6 : Symbol(f6, Decl(narrowingPastLastAssignment.ts, 82, 1))
+
+    let x;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 87, 7))
+
+    x = "abc";
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 87, 7))
+
+    action(() => { x });  // Error
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 87, 7))
+
+    x = 42;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 87, 7))
+
+    action(() => { x /* number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 87, 7))
+}
+
+// Narrowings on catch variables are preserved past last assignment
+
+function f7() {
+>f7 : Symbol(f7, Decl(narrowingPastLastAssignment.ts, 92, 1))
+
+    try {
+    }
+    catch (e) {
+>e : Symbol(e, Decl(narrowingPastLastAssignment.ts, 99, 11))
+
+        if (e instanceof Error) {
+>e : Symbol(e, Decl(narrowingPastLastAssignment.ts, 99, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+            let f = () => { e /* Error */ }
+>f : Symbol(f, Decl(narrowingPastLastAssignment.ts, 101, 15))
+>e : Symbol(e, Decl(narrowingPastLastAssignment.ts, 99, 11))
+        }
+    }
+}
+
+// Narrowings are not preserved for global variables
+
+let g: string | number;
+>g : Symbol(g, Decl(narrowingPastLastAssignment.ts, 108, 3))
+
+g = "abc";
+>g : Symbol(g, Decl(narrowingPastLastAssignment.ts, 108, 3))
+
+action(() => { g /* string | number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>g : Symbol(g, Decl(narrowingPastLastAssignment.ts, 108, 3))
+
+// Narrowings are not preserved for exported namespace members
+
+namespace Foo {
+>Foo : Symbol(Foo, Decl(narrowingPastLastAssignment.ts, 110, 42))
+
+    export let x: string | number;
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 115, 14))
+
+    x = "abc";
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 115, 14))
+
+    action(() => { x /* string | number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingPastLastAssignment.ts, 115, 14))
+
+    let y: string | number;
+>y : Symbol(y, Decl(narrowingPastLastAssignment.ts, 118, 7))
+
+    y = "abc";
+>y : Symbol(y, Decl(narrowingPastLastAssignment.ts, 118, 7))
+
+    action(() => { y /* string */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignment.ts, 0, 0))
+>y : Symbol(y, Decl(narrowingPastLastAssignment.ts, 118, 7))
+}
+
+// Repros from #35124
+
+function f10() {
+>f10 : Symbol(f10, Decl(narrowingPastLastAssignment.ts, 121, 1))
+
+    let i: number | undefined;
+>i : Symbol(i, Decl(narrowingPastLastAssignment.ts, 126, 7))
+
+    i = 0;
+>i : Symbol(i, Decl(narrowingPastLastAssignment.ts, 126, 7))
+
+    return (k: number) => k === i + 1;
+>k : Symbol(k, Decl(narrowingPastLastAssignment.ts, 128, 12))
+>k : Symbol(k, Decl(narrowingPastLastAssignment.ts, 128, 12))
+>i : Symbol(i, Decl(narrowingPastLastAssignment.ts, 126, 7))
+}
+
+function makeAdder(n?: number) {
+>makeAdder : Symbol(makeAdder, Decl(narrowingPastLastAssignment.ts, 129, 1))
+>n : Symbol(n, Decl(narrowingPastLastAssignment.ts, 131, 19))
+
+    n ??= 0;
+>n : Symbol(n, Decl(narrowingPastLastAssignment.ts, 131, 19))
+
+    return (m: number) => n + m;
+>m : Symbol(m, Decl(narrowingPastLastAssignment.ts, 133, 12))
+>n : Symbol(n, Decl(narrowingPastLastAssignment.ts, 131, 19))
+>m : Symbol(m, Decl(narrowingPastLastAssignment.ts, 133, 12))
+}
+
+function f11() {
+>f11 : Symbol(f11, Decl(narrowingPastLastAssignment.ts, 134, 1))
+
+    let r;
+>r : Symbol(r, Decl(narrowingPastLastAssignment.ts, 137, 7))
+
+    r = "b";
+>r : Symbol(r, Decl(narrowingPastLastAssignment.ts, 137, 7))
+
+    () => r;
+>r : Symbol(r, Decl(narrowingPastLastAssignment.ts, 137, 7))
+}
+
+// Repro from #52104
+
+function f12() {
+>f12 : Symbol(f12, Decl(narrowingPastLastAssignment.ts, 140, 1))
+
+    const fooMap: Map<string,Array<number>> = new Map()
+>fooMap : Symbol(fooMap, Decl(narrowingPastLastAssignment.ts, 145, 9))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    const values = [1, 2, 3, 4, 5];
+>values : Symbol(values, Decl(narrowingPastLastAssignment.ts, 146, 9))
+
+    let foo = fooMap.get("a");
+>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 147, 7))
+>fooMap.get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
+>fooMap : Symbol(fooMap, Decl(narrowingPastLastAssignment.ts, 145, 9))
+>get : Symbol(Map.get, Decl(lib.es2015.collection.d.ts, --, --))
+
+    if (foo == null) {
+>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 147, 7))
+
+        foo = [];
+>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 147, 7))
+    }
+    values.forEach(v => foo.push(v));
+>values.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(narrowingPastLastAssignment.ts, 146, 9))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(narrowingPastLastAssignment.ts, 151, 19))
+>foo.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 147, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(narrowingPastLastAssignment.ts, 151, 19))
+}
+
+function f13() {
+>f13 : Symbol(f13, Decl(narrowingPastLastAssignment.ts, 152, 1))
+
+    // Test for captured 'var' declaration (as opposed to parameters, let, const).
+    var foo: string | undefined;
+>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 156, 7))
+
+    foo = '';
+>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 156, 7))
+
+    return () => {
+        foo.toLocaleLowerCase();
+>foo.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+>foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 156, 7))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+    }
+}

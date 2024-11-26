@@ -2,23 +2,32 @@
 
 === 0.ts ===
 export type Data = string | boolean;
->Data : string | boolean
+>Data : Data
+>     : ^^^^
 
 let obj: Data = true;
 >obj : Data
+>    : ^^^^
 >true : true
+>     : ^^^^
 
 === 1.ts ===
 import * as Z from "./0"
 >Z : typeof Z
+>  : ^^^^^^^^
 
 //let v2: Z.Data;
 let v = "str" || true;
 >v : string | boolean
+>  : ^^^^^^^^^^^^^^^^
 >"str" || true : true | "str"
+>              : ^^^^^^^^^^^^
 >"str" : "str"
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 export { v }
 >v : string | boolean
+>  : ^^^^^^^^^^^^^^^^
 

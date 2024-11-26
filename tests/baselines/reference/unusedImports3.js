@@ -22,7 +22,9 @@ test2();
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test2 = exports.test = exports.Calculator = void 0;
+exports.Calculator = void 0;
+exports.test = test;
+exports.test2 = test2;
 var Calculator = /** @class */ (function () {
     function Calculator() {
     }
@@ -32,10 +34,8 @@ var Calculator = /** @class */ (function () {
 exports.Calculator = Calculator;
 function test() {
 }
-exports.test = test;
 function test2() {
 }
-exports.test2 = test2;
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -16,9 +16,8 @@ function main() {
 //// [voidAsNonAmbiguousReturnType_0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mkdirSync = void 0;
-function mkdirSync(path, mode) { }
 exports.mkdirSync = mkdirSync;
+function mkdirSync(path, mode) { }
 //// [voidAsNonAmbiguousReturnType_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

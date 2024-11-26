@@ -1,0 +1,61 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration10.ts] ////
+
+=== destructuringParameterDeclaration10.ts ===
+export function prepareConfig({
+>prepareConfig : Symbol(prepareConfig, Decl(destructuringParameterDeclaration10.ts, 0, 0))
+
+    additionalFiles: {
+>additionalFiles : Symbol(additionalFiles, Decl(destructuringParameterDeclaration10.ts, 4, 4))
+
+        json = []
+>json : Symbol(json, Decl(destructuringParameterDeclaration10.ts, 1, 22))
+
+    } = {}
+}: {
+  additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+>additionalFiles : Symbol(additionalFiles, Decl(destructuringParameterDeclaration10.ts, 4, 4))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+} = {}) {
+    json // string[]
+>json : Symbol(json, Decl(destructuringParameterDeclaration10.ts, 1, 22))
+}
+
+export function prepareConfigWithoutAnnotation({
+>prepareConfigWithoutAnnotation : Symbol(prepareConfigWithoutAnnotation, Decl(destructuringParameterDeclaration10.ts, 8, 1))
+
+    additionalFiles: {
+>additionalFiles : Symbol(additionalFiles)
+
+        json = []
+>json : Symbol(json, Decl(destructuringParameterDeclaration10.ts, 11, 22))
+
+    } = {}
+} = {}) {
+    json
+>json : Symbol(json, Decl(destructuringParameterDeclaration10.ts, 11, 22))
+}
+
+export const prepareConfigWithContextualSignature: (param:{
+>prepareConfigWithContextualSignature : Symbol(prepareConfigWithContextualSignature, Decl(destructuringParameterDeclaration10.ts, 18, 12))
+>param : Symbol(param, Decl(destructuringParameterDeclaration10.ts, 18, 52))
+
+  additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+>additionalFiles : Symbol(additionalFiles, Decl(destructuringParameterDeclaration10.ts, 18, 59))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+}) => void = ({
+    additionalFiles: {
+>additionalFiles : Symbol(additionalFiles, Decl(destructuringParameterDeclaration10.ts, 18, 59))
+
+        json = []
+>json : Symbol(json, Decl(destructuringParameterDeclaration10.ts, 21, 22))
+
+    } = {}
+} = {}) => {
+    json // string[]
+>json : Symbol(json, Decl(destructuringParameterDeclaration10.ts, 21, 22))
+}
+

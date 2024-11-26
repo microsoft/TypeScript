@@ -4,44 +4,64 @@
 // cjs format file
 const a = {};
 >a : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 export = a;
 >a : {}
+>  : ^^
 
 === subfolder/file.js ===
 // cjs format file
 const a = {};
 >a : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 module.exports = a;
 >module.exports = a : {}
+>                   : ^^
 >module.exports : {}
+>               : ^^
 >module : { exports: {}; }
+>       : ^^^^^^^^^^^^^^^^
 >exports : {}
+>        : ^^
 >a : {}
+>  : ^^
 
 === index.js ===
 // esm format file
 const a = {};
 >a : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 export = a;
 >a : {}
+>  : ^^
 
 === file.js ===
 // esm format file
 import "fs";
 const a = {};
 >a : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 module.exports = a;
 >module.exports = a : any
+>                   : ^^^
 >module.exports : any
+>               : ^^^
 >module : any
+>       : ^^^
 >exports : any
+>        : ^^^
 >a : {}
+>  : ^^
 
