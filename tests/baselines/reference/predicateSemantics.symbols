@@ -116,3 +116,24 @@ class X {
   }
 }
 
+// https://github.com/microsoft/TypeScript/issues/60614
+declare function tag<T>(
+>tag : Symbol(tag, Decl(predicateSemantics.ts, 59, 1))
+>T : Symbol(T, Decl(predicateSemantics.ts, 62, 21))
+
+  strings: TemplateStringsArray,
+>strings : Symbol(strings, Decl(predicateSemantics.ts, 62, 24))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+
+  ...values: number[]
+>values : Symbol(values, Decl(predicateSemantics.ts, 63, 32))
+
+): T | null;
+>T : Symbol(T, Decl(predicateSemantics.ts, 62, 21))
+
+tag`foo${1}` ?? 32; // ok
+>tag : Symbol(tag, Decl(predicateSemantics.ts, 59, 1))
+
+`foo${1}` ?? 32; // error
+`foo` ?? 32; // error
+
