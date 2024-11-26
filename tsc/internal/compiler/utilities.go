@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -2802,7 +2803,7 @@ func getPropertyNameFromType(t *Type) string {
 	case t.flags&TypeFlagsStringLiteral != 0:
 		return t.AsLiteralType().value.(string)
 	case t.flags&TypeFlagsNumberLiteral != 0:
-		return core.NumberToString(t.AsLiteralType().value.(float64))
+		return stringutil.FromNumber(t.AsLiteralType().value.(float64))
 	case t.flags&TypeFlagsUniqueESSymbol != 0:
 		return t.AsUniqueESSymbolType().name
 	}
@@ -2831,7 +2832,7 @@ func isNumericLiteralName(name string) bool {
 	// Note that this accepts the values 'Infinity', '-Infinity', and 'NaN', and that this is intentional.
 	// This is desired behavior, because when indexing with them as numeric entities, you are indexing
 	// with the strings '"Infinity"', '"-Infinity"', and '"NaN"' respectively.
-	return core.NumberToString(core.StringToNumber(name)) == name
+	return stringutil.FromNumber(stringutil.ToNumber(name)) == name
 }
 
 func getPropertyNameForPropertyNameNode(name *ast.Node) string {
@@ -2866,7 +2867,7 @@ func anyToString(v any) string {
 	case string:
 		return v
 	case float64:
-		return core.NumberToString(v)
+		return stringutil.FromNumber(v)
 	case bool:
 		return core.IfElse(v, "true", "false")
 	case PseudoBigInt:
@@ -2879,8 +2880,8 @@ func isValidNumberString(s string, roundTripOnly bool) bool {
 	if s == "" {
 		return false
 	}
-	n := core.StringToNumber(s)
-	return !math.IsNaN(n) && !math.IsInf(n, 0) && (!roundTripOnly || core.NumberToString(n) == s)
+	n := stringutil.ToNumber(s)
+	return !math.IsNaN(n) && !math.IsInf(n, 0) && (!roundTripOnly || stringutil.FromNumber(n) == s)
 }
 
 func isValidBigIntString(s string, roundTripOnly bool) bool {
@@ -3239,10 +3240,10 @@ func createEvaluator(evaluateEntity Evaluator) Evaluator {
 			rightStr, rightIsStr := right.value.(string)
 			if (leftIsStr || leftIsNum) && (rightIsStr || rightIsNum) && operator == ast.KindPlusToken {
 				if leftIsNum {
-					leftStr = core.NumberToString(leftNum)
+					leftStr = stringutil.FromNumber(leftNum)
 				}
 				if rightIsNum {
-					rightStr = core.NumberToString(rightNum)
+					rightStr = stringutil.FromNumber(rightNum)
 				}
 				return evaluatorResult(leftStr+rightStr, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 			}
@@ -3251,7 +3252,7 @@ func createEvaluator(evaluateEntity Evaluator) Evaluator {
 		case ast.KindTemplateExpression:
 			return evaluateTemplateExpression(expr, location)
 		case ast.KindNumericLiteral:
-			return evaluatorResult(core.StringToNumber(expr.Text()), false, false, false)
+			return evaluatorResult(stringutil.ToNumber(expr.Text()), false, false, false)
 		case ast.KindIdentifier, ast.KindElementAccessExpression:
 			return evaluateEntity(expr, location)
 		case ast.KindPropertyAccessExpression:

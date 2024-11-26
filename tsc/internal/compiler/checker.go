@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -2098,7 +2099,7 @@ func (c *Checker) checkExpressionWorker(node *ast.Node, checkMode CheckMode) *Ty
 		return c.getFreshTypeOfLiteralType(c.getStringLiteralType(node.Text()))
 	case ast.KindNumericLiteral:
 		// !!! checkGrammarNumericLiteral(node as NumericLiteral)
-		return c.getFreshTypeOfLiteralType(c.getNumberLiteralType(core.StringToNumber(node.Text())))
+		return c.getFreshTypeOfLiteralType(c.getNumberLiteralType(stringutil.ToNumber(node.Text())))
 	case ast.KindBigIntLiteral:
 		// !!! checkGrammarBigIntLiteral(node as BigIntLiteral);
 		return c.getFreshTypeOfLiteralType(c.getBigIntLiteralType(PseudoBigInt{
@@ -10926,7 +10927,7 @@ func (c *Checker) evaluateEntity(expr *ast.Node, location *ast.Node) EvaluatorRe
 				// Technically we resolved a global lib file here, but the decision to treat this as numeric
 				// is more predicated on the fact that the single-file resolution *didn't* resolve to a
 				// different meaning of `Infinity` or `NaN`. Transpilers handle this no problem.
-				return evaluatorResult(core.StringToNumber(expr.Text()), false, false, false)
+				return evaluatorResult(stringutil.ToNumber(expr.Text()), false, false, false)
 			}
 		}
 		if symbol.Flags&ast.SymbolFlagsEnumMember != 0 {
@@ -13076,7 +13077,7 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 			}
 		}
 		if everyType(objectType, isTupleType) && isNumericLiteralName(propName) {
-			index := core.StringToNumber(propName)
+			index := stringutil.ToNumber(propName)
 			if accessNode != nil && everyType(objectType, func(t *Type) bool {
 				return t.TargetTupleType().combinedFlags&ElementFlagsVariable == 0
 			}) && accessFlags&AccessFlagsAllowMissing == 0 {
@@ -13320,7 +13321,7 @@ func indexTypeLessThan(indexType *Type, limit int) bool {
 		if t.flags&TypeFlagsStringOrNumberLiteral != 0 {
 			propName := getPropertyNameFromType(t)
 			if isNumericLiteralName(propName) {
-				index := core.StringToNumber(propName)
+				index := stringutil.ToNumber(propName)
 				return index >= 0 && index < float64(limit)
 			}
 		}

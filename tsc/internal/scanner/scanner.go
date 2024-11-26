@@ -8,8 +8,8 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
-	"github.com/microsoft/typescript-go/internal/compiler/stringutil"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 type EscapeSequenceScanningFlags int32
@@ -1347,14 +1347,14 @@ func (s *Scanner) scanNumber() ast.Kind {
 	}
 	if s.tokenFlags&ast.TokenFlagsContainsLeadingZero != 0 {
 		s.errorAt(diagnostics.Decimals_with_leading_zeros_are_not_allowed, start, s.pos-start)
-		s.tokenValue = core.NumberToString(core.StringToNumber(s.tokenValue))
+		s.tokenValue = stringutil.FromNumber(stringutil.ToNumber(s.tokenValue))
 		return ast.KindNumericLiteral
 	}
 	var result ast.Kind
 	if fixedPartEnd == s.pos {
 		result = s.scanBigIntSuffix()
 	} else {
-		s.tokenValue = core.NumberToString(core.StringToNumber(s.tokenValue))
+		s.tokenValue = stringutil.FromNumber(stringutil.ToNumber(s.tokenValue))
 		result = ast.KindNumericLiteral
 	}
 	ch, _ := s.charAndSize()
@@ -1512,7 +1512,7 @@ func (s *Scanner) scanBigIntSuffix() ast.Kind {
 			return ast.KindNumericLiteral
 		}
 	}
-	s.tokenValue = core.NumberToString(core.StringToNumber(s.tokenValue))
+	s.tokenValue = stringutil.FromNumber(stringutil.ToNumber(s.tokenValue))
 	return ast.KindNumericLiteral
 }
 
@@ -1820,7 +1820,7 @@ func ComputeLineOfPosition(lineStarts []core.TextPos, pos int) int {
 
 func GetLineStarts(sourceFile *ast.SourceFile) []core.TextPos {
 	if sourceFile.LineMap == nil {
-		sourceFile.LineMap = stringutil.ComputeLineStarts(sourceFile.Text)
+		sourceFile.LineMap = core.ComputeLineStarts(sourceFile.Text)
 	}
 	return sourceFile.LineMap
 }

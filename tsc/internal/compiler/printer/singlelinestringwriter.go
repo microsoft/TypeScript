@@ -5,7 +5,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/compiler/stringutil"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 var SingleLineStringWriter EmitTextWriter = &singleLineStringWriter{}

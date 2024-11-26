@@ -49,9 +49,9 @@ type NonRelativeNameResolutionCache[T any] interface {
 	getOrCreateCacheForNonRelativeName(nameAndMode ModeAwareCacheKey, compilerOptions *core.CompilerOptions) map[string]T
 }
 
-type ResolutionCache interface {
-	PerDirectoryResolutionCache[*ResolvedModuleWithFailedLookupLocations]
-	NonRelativeNameResolutionCache[*ResolvedModuleWithFailedLookupLocations]
+type ResolutionCache[T any] interface {
+	PerDirectoryResolutionCache[T]
+	NonRelativeNameResolutionCache[T]
 	getPackageJsonInfoCache() *packagejson.InfoCache
 }
 
@@ -125,29 +125,33 @@ type ResolvedTypeReferenceDirectiveWithFailedLookupLocations struct {
 	ResolvedTypeReferenceDirective
 }
 
+func (r *ResolvedTypeReferenceDirectiveWithFailedLookupLocations) IsResolved() bool {
+	return r.ResolvedTypeReferenceDirective.ResolvedFileName != ""
+}
+
 type extensions int32
 
 const (
-	ExtensionsTypeScript extensions = 1 << iota
-	ExtensionsJavaScript
-	ExtensionsDeclaration
-	ExtensionsJson
+	extensionsTypeScript extensions = 1 << iota
+	extensionsJavaScript
+	extensionsDeclaration
+	extensionsJson
 
-	ExtensionsImplementationFiles = ExtensionsTypeScript | ExtensionsJavaScript
+	extensionsImplementationFiles = extensionsTypeScript | extensionsJavaScript
 )
 
 func (e extensions) String() string {
 	result := make([]string, 0, bits.OnesCount(uint(e)))
-	if e&ExtensionsTypeScript != 0 {
+	if e&extensionsTypeScript != 0 {
 		result = append(result, "TypeScript")
 	}
-	if e&ExtensionsJavaScript != 0 {
+	if e&extensionsJavaScript != 0 {
 		result = append(result, "JavaScript")
 	}
-	if e&ExtensionsDeclaration != 0 {
+	if e&extensionsDeclaration != 0 {
 		result = append(result, "Declaration")
 	}
-	if e&ExtensionsJson != 0 {
+	if e&extensionsJson != 0 {
 		result = append(result, "JSON")
 	}
 	return strings.Join(result, ", ")
@@ -155,16 +159,16 @@ func (e extensions) String() string {
 
 func (e extensions) Array() []string {
 	result := []string{}
-	if e&ExtensionsTypeScript != 0 {
+	if e&extensionsTypeScript != 0 {
 		result = append(result, tspath.ExtensionTs, tspath.ExtensionTsx)
 	}
-	if e&ExtensionsJavaScript != 0 {
+	if e&extensionsJavaScript != 0 {
 		result = append(result, tspath.ExtensionJs, tspath.ExtensionJsx)
 	}
-	if e&ExtensionsDeclaration != 0 {
+	if e&extensionsDeclaration != 0 {
 		result = append(result, tspath.ExtensionDts)
 	}
-	if e&ExtensionsJson != 0 {
+	if e&extensionsJson != 0 {
 		result = append(result, tspath.ExtensionJson)
 	}
 	return result

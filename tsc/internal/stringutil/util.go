@@ -1,12 +1,6 @@
 // Package stringutil Exports common rune utilities for parsing and emitting javascript
 package stringutil
 
-import (
-	"unicode/utf8"
-
-	"github.com/microsoft/typescript-go/internal/core"
-)
-
 func IsWhiteSpaceLike(ch rune) bool {
 	return IsWhiteSpaceSingleLine(ch) || IsLineBreak(ch)
 }
@@ -80,35 +74,4 @@ func IsHexDigit(ch rune) bool {
 
 func IsASCIILetter(ch rune) bool {
 	return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z'
-}
-
-func ComputeLineStarts(text string) []core.TextPos {
-	var result []core.TextPos
-	pos := 0
-	lineStart := 0
-	for pos < len(text) {
-		b := text[pos]
-		if b < 0x7F {
-			pos++
-			switch b {
-			case '\r':
-				if pos < len(text) && text[pos] == '\n' {
-					pos++
-				}
-				fallthrough
-			case '\n':
-				result = append(result, core.TextPos(lineStart))
-				lineStart = pos
-			}
-		} else {
-			ch, size := utf8.DecodeRuneInString(text[pos:])
-			pos += size
-			if IsLineBreak(ch) {
-				result = append(result, core.TextPos(lineStart))
-				lineStart = pos
-			}
-		}
-	}
-	result = append(result, core.TextPos(lineStart))
-	return result
 }

@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 type Path string
@@ -409,7 +409,7 @@ func GetPathComponentsRelativeTo(from string, to string, options ComparePathsOpt
 		fromComponent := fromComponents[start]
 		toComponent := toComponents[start]
 		if start == 0 {
-			if !core.EquateStringCaseInsensitive(fromComponent, toComponent) {
+			if !stringutil.EquateStringCaseInsensitive(fromComponent, toComponent) {
 				break
 			}
 		} else {
@@ -535,7 +535,7 @@ func GetAnyExtensionFromPath(path string, extensions []string, ignoreCase bool) 
 	// Retrieves any string from the final "." onwards from a base file name.
 	// Unlike extensionFromPath, which throws an exception on unrecognized extensions.
 	if len(extensions) > 0 {
-		return getAnyExtensionFromPathWorker(RemoveTrailingDirectorySeparator(path), extensions, core.GetStringEqualityComparer(ignoreCase))
+		return getAnyExtensionFromPathWorker(RemoveTrailingDirectorySeparator(path), extensions, stringutil.GetStringEqualityComparer(ignoreCase))
 	}
 
 	baseFileName := GetBaseFileName(path)
@@ -588,11 +588,11 @@ type ComparePathsOptions struct {
 }
 
 func (o ComparePathsOptions) GetComparer() func(a, b string) int {
-	return core.GetStringComparer(!o.UseCaseSensitiveFileNames)
+	return stringutil.GetStringComparer(!o.UseCaseSensitiveFileNames)
 }
 
 func (o ComparePathsOptions) getEqualityComparer() func(a, b string) bool {
-	return core.GetStringEqualityComparer(!o.UseCaseSensitiveFileNames)
+	return stringutil.GetStringEqualityComparer(!o.UseCaseSensitiveFileNames)
 }
 
 func ComparePaths(a string, b string, options ComparePathsOptions) int {
@@ -613,7 +613,7 @@ func ComparePaths(a string, b string, options ComparePathsOptions) int {
 	//       need to perform path reduction.
 	aRoot := a[:GetRootLength(a)]
 	bRoot := b[:GetRootLength(b)]
-	result := core.CompareStringsCaseInsensitive(aRoot, bRoot)
+	result := stringutil.CompareStringsCaseInsensitive(aRoot, bRoot)
 	if result != 0 {
 		return result
 	}
@@ -667,7 +667,7 @@ func ContainsPath(parent string, child string, options ComparePathsOptions) bool
 	for i, parentComponent := range parentComponents {
 		var comparer func(a, b string) bool
 		if i == 0 {
-			comparer = core.EquateStringCaseInsensitive
+			comparer = stringutil.EquateStringCaseInsensitive
 		} else {
 			comparer = componentComparer
 		}

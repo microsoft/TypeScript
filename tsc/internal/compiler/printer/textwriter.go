@@ -5,7 +5,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/compiler/stringutil"
+	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 var _ EmitTextWriter = &textWriter{}
@@ -85,7 +86,7 @@ func (w *textWriter) rawWrite(s string) {
 }
 
 func (w *textWriter) updateLineCountAndPosFor(s string) {
-	lineStartsOfS := stringutil.ComputeLineStarts(s)
+	lineStartsOfS := core.ComputeLineStarts(s)
 	if len(lineStartsOfS) > 1 {
 		w.lineCount += len(lineStartsOfS) - 1
 		curLen := w.builder.Len()

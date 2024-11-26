@@ -3,6 +3,7 @@ package ast
 import (
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 // Diagnostic
@@ -58,7 +59,7 @@ func (d *Diagnostic) AddRelatedInfo(relatedInformation *Diagnostic) *Diagnostic 
 func NewDiagnostic(file *SourceFile, loc core.TextRange, message *diagnostics.Message, args ...any) *Diagnostic {
 	text := message.Message()
 	if len(args) != 0 {
-		text = core.FormatStringFromArgs(text, args)
+		text = stringutil.Format(text, args)
 	}
 	return &Diagnostic{
 		file:     file,
@@ -106,7 +107,7 @@ func (m *MessageChain) AddMessageChain(messageChain *MessageChain) *MessageChain
 func NewMessageChain(message *diagnostics.Message, args ...any) *MessageChain {
 	text := message.Message()
 	if len(args) != 0 {
-		text = core.FormatStringFromArgs(text, args)
+		text = stringutil.Format(text, args)
 	}
 	return &MessageChain{
 		code:     message.Code(),

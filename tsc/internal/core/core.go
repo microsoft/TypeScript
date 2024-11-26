@@ -1,13 +1,11 @@
 package core
 
 import (
-	"fmt"
 	"iter"
-	"math"
-	"regexp"
 	"slices"
-	"strconv"
-	"strings"
+	"unicode/utf8"
+
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 func Filter[T any](slice []T, f func(T) bool) []T {
@@ -204,16 +202,6 @@ func AppendIfUnique[T comparable](slice []T, element T) []T {
 	return append(slice, element)
 }
 
-func EquateStringCaseInsensitive(a, b string) bool {
-	// !!!
-	// return a == b || strings.ToUpper(a) == strings.ToUpper(b)
-	return strings.EqualFold(a, b)
-}
-
-func EquateStringCaseSensitive(a, b string) bool {
-	return a == b
-}
-
 func Memoize[T any](create func() T) func() T {
 	var value T
 	return func() T {
@@ -225,51 +213,6 @@ func Memoize[T any](create func() T) func() T {
 	}
 }
 
-func GetStringEqualityComparer(ignoreCase bool) func(a, b string) bool {
-	if ignoreCase {
-		return EquateStringCaseInsensitive
-	}
-	return EquateStringCaseSensitive
-}
-
-type Comparison = int
-
-const (
-	ComparisonLessThan    Comparison = -1
-	ComparisonEqual       Comparison = 0
-	ComparisonGreaterThan Comparison = 1
-)
-
-func CompareStringsCaseInsensitive(a string, b string) Comparison {
-	if a == b {
-		return ComparisonEqual
-	}
-	return strings.Compare(strings.ToUpper(a), strings.ToUpper(b))
-}
-
-func CompareStringsCaseSensitive(a string, b string) Comparison {
-	return strings.Compare(a, b)
-}
-
-func GetStringComparer(ignoreCase bool) func(a, b string) Comparison {
-	if ignoreCase {
-		return CompareStringsCaseInsensitive
-	}
-	return CompareStringsCaseSensitive
-}
-
-var curlyNumberRegExp = regexp.MustCompile(`{(\d+)}`)
-
-func FormatStringFromArgs(text string, args []any) string {
-	return curlyNumberRegExp.ReplaceAllStringFunc(text, func(match string) string {
-		index, err := strconv.ParseInt(match[1:len(match)-1], 10, 0)
-		if err != nil || int(index) >= len(args) {
-			panic("Invalid formatting placeholder")
-		}
-		return fmt.Sprintf("%v", args[int(index)])
-	})
-}
-
 // Returns whenTrue if b is true; otherwise, returns whenFalse. IfElse should only be used when branches are either
 // constant or precomputed as both branches will be evaluated regardless as to the value of b.
 func IfElse[T any](b bool, whenTrue T, whenFalse T) T {
@@ -279,19 +222,33 @@ func IfElse[T any](b bool, whenTrue T, whenFalse T) T {
 	return whenFalse
 }
 
-// This function should behave identically to the expression `"" + f` in JS
-func NumberToString(f float64) string {
-	// !!! verify that this is actually the same as JS.
-	return strconv.FormatFloat(f, 'g', -1, 64)
-}
-
-// This function should behave identically to the expression `+s` in JS, including parsing binary, octal, and hex
-// numeric strings
-func StringToNumber(s string) float64 {
-	// !!! verify that this is actually the same as JS.
-	value, err := strconv.ParseFloat(s, 64)
-	if err != nil {
-		return math.NaN()
+func ComputeLineStarts(text string) []TextPos {
+	var result []TextPos
+	pos := 0
+	lineStart := 0
+	for pos < len(text) {
+		b := text[pos]
+		if b < 0x7F {
+			pos++
+			switch b {
+			case '\r':
+				if pos < len(text) && text[pos] == '\n' {
+					pos++
+				}
+				fallthrough
+			case '\n':
+				result = append(result, TextPos(lineStart))
+				lineStart = pos
+			}
+		} else {
+			ch, size := utf8.DecodeRuneInString(text[pos:])
+			pos += size
+			if stringutil.IsLineBreak(ch) {
+				result = append(result, TextPos(lineStart))
+				lineStart = pos
+			}
+		}
 	}
-	return value
+	result = append(result, TextPos(lineStart))
+	return result
 }
