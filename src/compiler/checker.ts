@@ -39909,6 +39909,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (node.kind) {
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.CallExpression:
+            case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ElementAccessExpression:
             case SyntaxKind.MetaProperty:
             case SyntaxKind.NewExpression:
