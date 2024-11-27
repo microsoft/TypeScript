@@ -52,11 +52,10 @@ type FlowSwitchClauseData struct {
 
 func NewFlowSwitchClauseData(switchStatement *SwitchStatement, clauseStart int, clauseEnd int) *Node {
 	node := &FlowSwitchClauseData{}
-	node.data = node
 	node.SwitchStatement = switchStatement
 	node.ClauseStart = int32(clauseStart)
 	node.ClauseEnd = int32(clauseEnd)
-	return node.AsNode()
+	return newNode(KindUnknown, node)
 }
 
 func (node *FlowSwitchClauseData) IsEmpty() bool {
@@ -73,8 +72,7 @@ type FlowReduceLabelData struct {
 
 func NewFlowReduceLabelData(target *FlowLabel, antecedents *FlowList) *Node {
 	node := &FlowReduceLabelData{}
-	node.data = node
 	node.Target = target
 	node.Antecedents = antecedents
-	return node.AsNode()
+	return newNode(KindUnknown, node)
 }
