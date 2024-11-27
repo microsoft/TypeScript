@@ -1967,7 +1967,7 @@ export function createScanner(
                         }
                         return pos += 2, token = SyntaxKind.ExclamationEqualsToken;
                     }
-                    const hasLeadingWhitespace = charCodeChecked(pos - 1) === CharacterCodes.space;
+                    const hasLeadingWhitespace = isWhiteSpaceLike(charCodeChecked(pos - 1));
                     pos++;
                     const nextIdentifierToken = lookAhead(() => {
                         tokenValue = scanIdentifierParts();
