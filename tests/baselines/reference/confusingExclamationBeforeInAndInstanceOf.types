@@ -59,6 +59,16 @@ a !instanceof b; // should error
 >b : any
 >  : ^^^
 
+a	!instanceof b; // should error
+>a	!instanceof b : boolean
+>                : ^^^^^^^
+>a	! : any
+>    : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
 a! in b; // should work
 >a! in b : boolean
 >        : ^^^^^^^
@@ -103,6 +113,16 @@ a !in b; // should error
 >a !in b : boolean
 >        : ^^^^^^^
 >a ! : any
+>    : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+a	!in b; // should error
+>a	!in b : boolean
+>        : ^^^^^^^
+>a	! : any
 >    : ^^^
 >a : any
 >  : ^^^

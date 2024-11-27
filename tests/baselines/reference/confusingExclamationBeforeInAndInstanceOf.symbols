@@ -27,6 +27,10 @@ a !instanceof b; // should error
 >a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
 >b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
 
+a	!instanceof b; // should error
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
 a! in b; // should work
 >a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
 >b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
@@ -44,6 +48,10 @@ a!/**/in b; // should work
 >b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
 
 a !in b; // should error
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a	!in b; // should error
 >a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
 >b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
 
