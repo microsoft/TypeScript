@@ -51414,10 +51414,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "abstract", "accessor");
                             }
                         }
-                        if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.PrivateIdentifier) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "abstract");
-                        }
-
                         flags |= ModifierFlags.Abstract;
                         break;
 

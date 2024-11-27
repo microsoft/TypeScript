@@ -20,12 +20,11 @@ privateNamesIncompatibleModifiers.ts(25,5): error TS1031: 'declare' modifier can
 privateNamesIncompatibleModifiers.ts(26,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
 privateNamesIncompatibleModifiers.ts(27,5): error TS1042: 'async' modifier cannot be used here.
 privateNamesIncompatibleModifiers.ts(28,5): error TS1042: 'async' modifier cannot be used here.
-privateNamesIncompatibleModifiers.ts(32,5): error TS18019: 'abstract' modifier cannot be used with a private identifier.
 privateNamesIncompatibleModifiers.ts(32,14): error TS1267: Property '#quux' cannot have an initializer because it is marked abstract.
 
 
 !!! error TS2318: Cannot find global type 'AsyncIterableIterator'.
-==== privateNamesIncompatibleModifiers.ts (23 errors) ====
+==== privateNamesIncompatibleModifiers.ts (22 errors) ====
     class A {
         public #foo = 3;         // Error
         ~~~~~~
@@ -100,8 +99,6 @@ privateNamesIncompatibleModifiers.ts(32,14): error TS1267: Property '#quux' cann
     
     abstract class B {
         abstract #quux = 3;      // Error
-        ~~~~~~~~
-!!! error TS18019: 'abstract' modifier cannot be used with a private identifier.
                  ~~~~~
 !!! error TS1267: Property '#quux' cannot have an initializer because it is marked abstract.
     }
