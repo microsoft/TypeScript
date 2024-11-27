@@ -7632,16 +7632,15 @@ func (c *Checker) isVarConstLike(node *ast.Node) bool {
 	return blockScopeKind == ast.NodeFlagsConst || blockScopeKind == ast.NodeFlagsUsing || blockScopeKind == ast.NodeFlagsAwaitUsing
 }
 
-func (c *Checker) getEffectivePropertyNameForPropertyNameNode(node *ast.PropertyName) (effectiveName string, ok bool) {
+func (c *Checker) getEffectivePropertyNameForPropertyNameNode(node *ast.PropertyName) (string, bool) {
 	name := getPropertyNameForPropertyNameNode(node)
 	switch {
-	case name != InternalSymbolNameMissing, len(name) != 0:
+	case name != InternalSymbolNameMissing:
 		return name, true
 	case ast.IsComputedPropertyName(node):
 		return c.tryGetNameFromType(c.getTypeOfExpression(node.Expression()))
-	default:
-		return effectiveName, false
 	}
+	return "", false
 }
 
 func (c *Checker) tryGetNameFromType(t *Type) (name string, ok bool) {

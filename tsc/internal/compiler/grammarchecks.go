@@ -200,19 +200,15 @@ func (c *Checker) checkGrammarModuleElementContext(node *ast.Statement, errorMes
 }
 
 func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, HasDecorators, HasIllegalModifiers, HasIllegalDecorators]*/) bool {
-	quickResult := c.reportObviousDecoratorErrors(node)
-	if quickResult == core.TSTrue {
-		quickResult = c.reportObviousModifierErrors(node)
+	if node.Modifiers() == nil {
+		return false
 	}
-
-	if quickResult != core.TSUnknown {
-		return quickResult == core.TSTrue
+	if c.reportObviousDecoratorErrors(node) || c.reportObviousModifierErrors(node) {
+		return true
 	}
-
 	if ast.IsParameter(node) && parameterIsThisKeyword(node) {
 		return c.grammarErrorOnFirstToken(node, diagnostics.Neither_decorators_nor_modifiers_may_be_applied_to_this_parameters)
 	}
-
 	blockScopeKind := ast.NodeFlagsNone
 	if ast.IsVariableStatement(node) {
 		blockScopeKind = node.AsVariableStatement().DeclarationList.Flags & ast.NodeFlagsBlockScoped
@@ -574,27 +570,12 @@ func isJSDocTypedefTag(_ *ast.Node) bool {
 	return false
 }
 
-/**
- * TSTrue | TSFalse: Early return this value from checkGrammarModifiers.
- * Unknown: Need to do full checking on the modifiers.
- */
-
-func (c *Checker) reportObviousModifierErrors(node *ast.Node) core.Tristate {
-	modifiers := node.Modifiers()
-	if modifiers == nil {
-		return core.TSFalse
-	}
-
+func (c *Checker) reportObviousModifierErrors(node *ast.Node) bool {
 	modifier := c.findFirstIllegalModifier(node)
 	if modifier == nil {
-		return core.TSUnknown
+		return false
 	}
-
-	r := c.grammarErrorOnFirstToken(modifier, diagnostics.Modifiers_cannot_appear_here)
-	if r {
-		return core.TSTrue
-	}
-	return core.TSFalse
+	return c.grammarErrorOnFirstToken(modifier, diagnostics.Modifiers_cannot_appear_here)
 }
 
 func (c *Checker) findFirstModifierExcept(node *ast.Node, allowedModifier ast.Kind) *ast.Node {
@@ -671,22 +652,17 @@ func (c *Checker) findFirstIllegalModifier(node *ast.Node) *ast.Node {
 	}
 }
 
-func (c *Checker) reportObviousDecoratorErrors(node *ast.Node) core.Tristate {
+func (c *Checker) reportObviousDecoratorErrors(node *ast.Node) bool {
 	decorator := c.findFirstIllegalDecorator(node)
 	if decorator == nil {
-		return core.TSUnknown
+		return false
 	}
-
-	r := c.grammarErrorOnFirstToken(decorator, diagnostics.Decorators_are_not_valid_here)
-	if r {
-		return core.TSTrue
-	}
-	return core.TSFalse
+	return c.grammarErrorOnFirstToken(decorator, diagnostics.Decorators_are_not_valid_here)
 }
 
 func (c *Checker) findFirstIllegalDecorator(node *ast.Node) *ast.Node {
-	if modifiers := node.Modifiers(); modifiers != nil && ast.CanHaveIllegalDecorators(node) {
-		decorator := core.Find(modifiers.Nodes, ast.IsDecorator)
+	if ast.CanHaveIllegalDecorators(node) {
+		decorator := core.Find(node.Modifiers().Nodes, ast.IsDecorator)
 		return decorator
 	} else {
 		return nil
@@ -858,7 +834,7 @@ func (c *Checker) checkGrammarIndexSignatureParameters(node *ast.IndexSignatureD
 		return c.grammarErrorOnNode(parameter.Name(), diagnostics.An_index_signature_parameter_cannot_have_an_initializer)
 	}
 	typeNode := parameter.Type
-	if typeNode != nil {
+	if typeNode == nil {
 		return c.grammarErrorOnNode(parameter.Name(), diagnostics.An_index_signature_parameter_must_have_a_type_annotation)
 	}
 	t := c.getTypeFromTypeNode(typeNode)
@@ -1154,7 +1130,7 @@ func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExp
 			}
 
 			existingKind := seen[effectiveName]
-			if existingKind != 0 {
+			if existingKind == 0 {
 				seen[effectiveName] = currentKind
 			} else {
 				if (currentKind&DeclarationMeaningMethod != 0) && (existingKind&DeclarationMeaningMethod != 0) {
