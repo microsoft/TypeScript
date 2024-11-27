@@ -1375,7 +1375,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         filePath: Path,
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
     ) {
-        Debug.checkDefined(resolution.files).delete(filePath);
+        if (!resolution.files) return;
+        resolution.files.delete(filePath);
         if (resolution.files!.size) return;
         resolution.files = undefined;
         const resolved = getResolutionWithResolvedFileName(resolution);
