@@ -9,7 +9,6 @@ import {
     CodeFixContext,
     Debug,
     Diagnostics,
-    find,
     getEffectiveBaseTypeNode,
     getSourceFileOfNode,
     getTextOfPropertyName,
@@ -18,10 +17,8 @@ import {
     isClassExpression,
     isClassLike,
     isComputedPropertyName,
-    isKnownSymbol,
     skipParentheses,
     SourceFile,
-    Symbol,
     unescapeLeadingUnderscores,
 } from "../_namespaces/ts.js";
 
