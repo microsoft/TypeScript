@@ -305,6 +305,10 @@ export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics:
 }
 
 /** @internal */
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const targetToLibMap: Map<ScriptTarget, string> = new Map([
     [ScriptTarget.ESNext, "lib.esnext.full.d.ts"],
     [ScriptTarget.ES2024, "lib.es2024.full.d.ts"],
