@@ -73,24 +73,7 @@ function doChange(file: SourceFile, start: number, length: number, code: number,
         const base = isClassExpression(expression) ? expression.symbol : checker.getSymbolAtLocation(expression);
         if (!base) return [];
         const baseType = checker.getDeclaredTypeOfSymbol(base);
-        let baseProp: Symbol | undefined;
-        if (isComputedPropertyName(node.name)) {
-            const symbol = checker.getSymbolAtLocation(node.name);
-
-            if (!symbol) {
-                return;
-            }
-
-            if (isKnownSymbol(symbol)) {
-                baseProp = find(checker.getPropertiesOfType(baseType), s => s.escapedName === symbol.escapedName);
-            }
-            else {
-                baseProp = checker.getPropertyOfType(baseType, unescapeLeadingUnderscores(symbol.escapedName));
-            }
-        }
-        else {
-            baseProp = checker.getPropertyOfType(baseType, unescapeLeadingUnderscores(getTextOfPropertyName(node.name)));
-        }
+        const baseProp = checker.getPropertyOfType(baseType, unescapeLeadingUnderscores(getTextOfPropertyName(node.name)));
         if (!baseProp || !baseProp.valueDeclaration) return [];
 
         startPosition = baseProp.valueDeclaration.pos;
