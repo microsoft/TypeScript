@@ -68,10 +68,10 @@ function doChange(file: SourceFile, start: number, length: number, code: number,
         if (!baseTypeNode) return;
         const expression = skipParentheses(baseTypeNode.expression);
         const base = isClassExpression(expression) ? expression.symbol : checker.getSymbolAtLocation(expression);
-        if (!base) return [];
+        if (!base) return;
         const baseType = checker.getDeclaredTypeOfSymbol(base);
         const baseProp = checker.getPropertyOfType(baseType, unescapeLeadingUnderscores(getTextOfPropertyName(node.name)));
-        if (!baseProp || !baseProp.valueDeclaration) return [];
+        if (!baseProp || !baseProp.valueDeclaration) return;
 
         startPosition = baseProp.valueDeclaration.pos;
         endPosition = baseProp.valueDeclaration.end;
