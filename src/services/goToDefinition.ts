@@ -51,6 +51,7 @@ import {
     isClassExpression,
     isClassLike,
     isClassStaticBlockDeclaration,
+    isComputedPropertyName,
     isConstructorDeclaration,
     isDeclarationFileName,
     isDefaultClause,
@@ -64,6 +65,7 @@ import {
     isJSDocOverrideTag,
     isJsxOpeningLikeElement,
     isJumpStatementTarget,
+    isKnownSymbol,
     isModuleSpecifierLike,
     isNameOfFunctionDeclaration,
     isNewExpressionTarget,
@@ -327,14 +329,29 @@ function getDefinitionFromOverriddenMember(typeChecker: TypeChecker, node: Node)
     const expression = skipParentheses(baseTypeNode.expression);
     const base = isClassExpression(expression) ? expression.symbol : typeChecker.getSymbolAtLocation(expression);
     if (!base) return;
+    const baseType = hasStaticModifier(classElement) ? typeChecker.getTypeOfSymbol(base) : typeChecker.getDeclaredTypeOfSymbol(base);
+    let baseSymbol: Symbol | undefined;
 
-    const name = unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name));
-    const symbol = hasStaticModifier(classElement)
-        ? typeChecker.getPropertyOfType(typeChecker.getTypeOfSymbol(base), name)
-        : typeChecker.getPropertyOfType(typeChecker.getDeclaredTypeOfSymbol(base), name);
-    if (!symbol) return;
+    if (isComputedPropertyName(classElement.name)) {
+        const symbol = typeChecker.getSymbolAtLocation(classElement.name);
 
-    return getDefinitionFromSymbol(typeChecker, symbol, node);
+        if (!symbol) {
+            return;
+        }
+
+        if (isKnownSymbol(symbol)) {
+            baseSymbol = find(typeChecker.getPropertiesOfType(baseType), s => s.escapedName === symbol.escapedName);
+        }
+        else {
+            baseSymbol = typeChecker.getPropertyOfType(baseType, unescapeLeadingUnderscores(symbol.escapedName));
+        }
+    }
+    else {
+        baseSymbol = typeChecker.getPropertyOfType(baseType, unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name)));
+    }
+    if (!baseSymbol) return;
+
+    return getDefinitionFromSymbol(typeChecker, baseSymbol, node);
 }
 
 /** @internal */

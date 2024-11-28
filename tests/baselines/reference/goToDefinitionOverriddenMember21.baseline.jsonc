@@ -1,0 +1,9 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionOverriddenMember21.ts ===
+// const prop = "foo" as const;
+// 
+// abstract class A {}
+// 
+// export class B extends A {
+//   static /*GOTO DEF*/override readonly [prop] = "B";
+// }
