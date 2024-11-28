@@ -330,28 +330,28 @@ function getDefinitionFromOverriddenMember(typeChecker: TypeChecker, node: Node)
     const base = isClassExpression(expression) ? expression.symbol : typeChecker.getSymbolAtLocation(expression);
     if (!base) return;
     const baseType = hasStaticModifier(classElement) ? typeChecker.getTypeOfSymbol(base) : typeChecker.getDeclaredTypeOfSymbol(base);
-    let baseSymbol: Symbol | undefined;
+    let baseProp: Symbol | undefined;
 
     if (isComputedPropertyName(classElement.name)) {
-        const symbol = typeChecker.getSymbolAtLocation(classElement.name);
+        const prop = typeChecker.getSymbolAtLocation(classElement.name);
 
-        if (!symbol) {
+        if (!prop) {
             return;
         }
 
-        if (isKnownSymbol(symbol)) {
-            baseSymbol = find(typeChecker.getPropertiesOfType(baseType), s => s.escapedName === symbol.escapedName);
+        if (isKnownSymbol(prop)) {
+            baseProp = find(typeChecker.getPropertiesOfType(baseType), s => s.escapedName === prop.escapedName);
         }
         else {
-            baseSymbol = typeChecker.getPropertyOfType(baseType, unescapeLeadingUnderscores(symbol.escapedName));
+            baseProp = typeChecker.getPropertyOfType(baseType, unescapeLeadingUnderscores(prop.escapedName));
         }
     }
     else {
-        baseSymbol = typeChecker.getPropertyOfType(baseType, unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name)));
+        baseProp = typeChecker.getPropertyOfType(baseType, unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name)));
     }
-    if (!baseSymbol) return;
+    if (!baseProp) return;
 
-    return getDefinitionFromSymbol(typeChecker, baseSymbol, node);
+    return getDefinitionFromSymbol(typeChecker, baseProp, node);
 }
 
 /** @internal */
