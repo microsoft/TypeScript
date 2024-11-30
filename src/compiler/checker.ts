@@ -11366,18 +11366,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!isThisProperty(node) || !isAutoTypedProperty(prop)) {
                 return false;
             }
-            const autoContainer = getAutoContainer(node);
+            const autoContainer = getAutoContainer(node)!;
             return isClassStaticBlockDeclaration(autoContainer) && (prop.parent && getClassLikeDeclarationOfSymbol(prop.parent)) === autoContainer.parent;
         }
         if (!isConstructorDeclaredProperty(prop) && (!isThisProperty(node) || !isAutoTypedProperty(prop))) {
             return false;
         }
-        const autoContainer = getAutoContainer(node);
+        const autoContainer = getAutoContainer(node)!;
         return isConstructorDeclaration(autoContainer) && (prop.parent && getClassLikeDeclarationOfSymbol(prop.parent)) === autoContainer.parent || autoContainer === getDeclaringConstructor(prop);
     }
 
     function getAutoContainer(node: Node) {
-        return findAncestor(node.parent, node => !!getContainingFunctionOrClassStaticBlock(node) && !getImmediatelyInvokedFunctionExpression(node))!;
+        let container = getContainingFunctionOrClassStaticBlock(node);
+        while (container) {
+            if (getImmediatelyInvokedFunctionExpression(container)) {
+                container = getContainingFunctionOrClassStaticBlock(container);
+                continue;
+            }
+            return container;
+        }
     }
 
     function getDeclaringConstructor(symbol: Symbol) {
