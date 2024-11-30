@@ -1,0 +1,253 @@
+//// [tests/cases/compiler/classOptionalFieldReturnTypeInference1.ts] ////
+
+=== classOptionalFieldReturnTypeInference1.ts ===
+declare abstract class BasePrompt {
+>BasePrompt : BasePrompt
+>           : ^^^^^^^^^^
+
+  choice<Choice extends string, Result extends any = Choice>(
+>choice : <Choice extends string, Result extends unknown = Choice>(title: string, choices: readonly Choice[]) => Promise<Result>
+>       : ^      ^^^^^^^^^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^       ^^                 ^^^^^               
+
+    title: string,
+>title : string
+>      : ^^^^^^
+
+    choices: readonly Choice[],
+>choices : readonly Choice[]
+>        : ^^^^^^^^^^^^^^^^^
+
+  ): Promise<Result>;
+}
+
+type MiddlewareNode = {
+>MiddlewareNode : MiddlewareNode
+>               : ^^^^^^^^^^^^^^
+
+  name?: string;
+>name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+};
+
+declare class Codemods {
+>Codemods : Codemods
+>         : ^^^^^^^^
+
+  registerMiddleware(
+>registerMiddleware : (stack: "server" | "router" | "named", middleware: MiddlewareNode[]) => Promise<void>
+>                   : ^     ^^                             ^^          ^^                ^^^^^             
+
+    stack: "server" | "router" | "named",
+>stack : "server" | "router" | "named"
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    middleware: MiddlewareNode[],
+>middleware : MiddlewareNode[]
+>           : ^^^^^^^^^^^^^^^^
+
+  ): Promise<void>;
+}
+
+declare class BaseCommand {
+>BaseCommand : BaseCommand
+>            : ^^^^^^^^^^^
+
+  prompt: BasePrompt;
+>prompt : BasePrompt
+>       : ^^^^^^^^^^
+
+  createCodemods(): Promise<Codemods>;
+>createCodemods : () => Promise<Codemods>
+>               : ^^^^^^                 
+}
+
+export default class MakeMiddleware extends BaseCommand {
+>MakeMiddleware : MakeMiddleware
+>               : ^^^^^^^^^^^^^^
+>BaseCommand : BaseCommand
+>            : ^^^^^^^^^^^
+
+  declare name: string;
+>name : string
+>     : ^^^^^^
+
+  declare stack?: "server" | "named" | "router";
+>stack : "server" | "router" | "named" | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+  async run() {
+>run : () => Promise<void>
+>    : ^^^^^^^^^^^^^^^^^^^
+
+    const stackChoices = ["server", "router", "named"];
+>stackChoices : string[]
+>             : ^^^^^^^^
+>["server", "router", "named"] : string[]
+>                              : ^^^^^^^^
+>"server" : "server"
+>         : ^^^^^^^^
+>"router" : "router"
+>         : ^^^^^^^^
+>"named" : "named"
+>        : ^^^^^^^
+
+    if (!this.stack) {
+>!this.stack : boolean
+>            : ^^^^^^^
+>this.stack : "server" | "router" | "named" | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>stack : "server" | "router" | "named" | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      this.stack = await this.prompt.choice(
+>this.stack = await this.prompt.choice(        "Under which stack you want to register the middleware?",        stackChoices,      ) : "server" | "router" | "named"
+>                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.stack : "server" | "router" | "named" | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>stack : "server" | "router" | "named" | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await this.prompt.choice(        "Under which stack you want to register the middleware?",        stackChoices,      ) : "server" | "router" | "named"
+>                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.prompt.choice(        "Under which stack you want to register the middleware?",        stackChoices,      ) : Promise<"server" | "router" | "named">
+>                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.prompt.choice : <Choice extends string, Result extends unknown = Choice>(title: string, choices: readonly Choice[]) => Promise<Result>
+>                   : ^      ^^^^^^^^^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^       ^^                 ^^^^^               
+>this.prompt : BasePrompt
+>            : ^^^^^^^^^^
+>this : this
+>     : ^^^^
+>prompt : BasePrompt
+>       : ^^^^^^^^^^
+>choice : <Choice extends string, Result extends unknown = Choice>(title: string, choices: readonly Choice[]) => Promise<Result>
+>       : ^      ^^^^^^^^^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^       ^^                 ^^^^^               
+
+        "Under which stack you want to register the middleware?",
+>"Under which stack you want to register the middleware?" : "Under which stack you want to register the middleware?"
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        stackChoices,
+>stackChoices : string[]
+>             : ^^^^^^^^
+
+      );
+    }
+
+    if (!stackChoices.includes(this.stack)) {
+>!stackChoices.includes(this.stack) : boolean
+>                                   : ^^^^^^^
+>stackChoices.includes(this.stack) : boolean
+>                                  : ^^^^^^^
+>stackChoices.includes : (searchElement: string, fromIndex?: number) => boolean
+>                      : ^             ^^^^^^^^^^         ^^^      ^^^^^       
+>stackChoices : string[]
+>             : ^^^^^^^^
+>includes : (searchElement: string, fromIndex?: number) => boolean
+>         : ^             ^^^^^^^^^^         ^^^      ^^^^^       
+>this.stack : "server" | "router" | "named"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>stack : "server" | "router" | "named"
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      return;
+    }
+
+    const codemods = await this.createCodemods();
+>codemods : Codemods
+>         : ^^^^^^^^
+>await this.createCodemods() : Codemods
+>                            : ^^^^^^^^
+>this.createCodemods() : Promise<Codemods>
+>                      : ^^^^^^^^^^^^^^^^^
+>this.createCodemods : () => Promise<Codemods>
+>                    : ^^^^^^                 
+>this : this
+>     : ^^^^
+>createCodemods : () => Promise<Codemods>
+>               : ^^^^^^                 
+
+    await codemods.registerMiddleware(this.stack, [
+>await codemods.registerMiddleware(this.stack, [      {        name: this.name,      },    ]) : void
+>                                                                                             : ^^^^
+>codemods.registerMiddleware(this.stack, [      {        name: this.name,      },    ]) : Promise<void>
+>                                                                                       : ^^^^^^^^^^^^^
+>codemods.registerMiddleware : (stack: "server" | "router" | "named", middleware: MiddlewareNode[]) => Promise<void>
+>                            : ^     ^^                             ^^          ^^                ^^^^^             
+>codemods : Codemods
+>         : ^^^^^^^^
+>registerMiddleware : (stack: "server" | "router" | "named", middleware: MiddlewareNode[]) => Promise<void>
+>                   : ^     ^^                             ^^          ^^                ^^^^^             
+>this.stack : "server" | "router" | "named"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>stack : "server" | "router" | "named"
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[      {        name: this.name,      },    ] : { name: string; }[]
+>                                              : ^^^^^^^^^^^^^^^^^^^
+      {
+>{        name: this.name,      } : { name: string; }
+>                                 : ^^^^^^^^^^^^^^^^^
+
+        name: this.name,
+>name : string
+>     : ^^^^^^
+>this.name : string
+>          : ^^^^^^
+>this : this
+>     : ^^^^
+>name : string
+>     : ^^^^^^
+
+      },
+    ]);
+  }
+}
+
+declare function dom$<T extends HTMLElement>(description: string): T;
+>dom$ : <T extends HTMLElement>(description: string) => T
+>     : ^ ^^^^^^^^^           ^^           ^^      ^^^^^ 
+>description : string
+>            : ^^^^^^
+
+export abstract class PeekViewWidget {
+>PeekViewWidget : PeekViewWidget
+>               : ^^^^^^^^^^^^^^
+
+  protected _titleElement?: HTMLDivElement;
+>_titleElement : HTMLDivElement | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  protected _fillHead(container: HTMLElement, noCloseAction?: boolean): void {
+>_fillHead : (container: HTMLElement, noCloseAction?: boolean) => void
+>          : ^         ^^           ^^             ^^^       ^^^^^    
+>container : HTMLElement
+>          : ^^^^^^^^^^^
+>noCloseAction : boolean | undefined
+>              : ^^^^^^^^^^^^^^^^^^^
+
+    this._titleElement = dom$(".peekview-title");
+>this._titleElement = dom$(".peekview-title") : HTMLDivElement
+>                                             : ^^^^^^^^^^^^^^
+>this._titleElement : HTMLDivElement | undefined
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : this
+>     : ^^^^
+>_titleElement : HTMLDivElement | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dom$(".peekview-title") : HTMLDivElement
+>                        : ^^^^^^^^^^^^^^
+>dom$ : <T extends HTMLElement>(description: string) => T
+>     : ^ ^^^^^^^^^           ^^           ^^      ^^^^^ 
+>".peekview-title" : ".peekview-title"
+>                  : ^^^^^^^^^^^^^^^^^
+  }
+}
+

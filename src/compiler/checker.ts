@@ -31620,10 +31620,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const decl = lhsSymbol && lhsSymbol.valueDeclaration;
                 // Unannotated, uninitialized property declarations have a type implied by their usage in the constructor or static blocks.
                 // We avoid calling back into `getTypeOfExpression` and reentering contextual typing to avoid a bogus circularity error in that case when the assignment declaration is in the respective auto container
-                if (decl && (isPropertyDeclaration(decl) || isPropertySignature(decl)) && (!isAccessExpression(binaryExpression.left) || isThisPropertyAccessInAutoContainer(binaryExpression.left, lhsSymbol))) {
+                if (decl && (isPropertyDeclaration(decl) || isPropertySignature(decl))) {
                     const overallAnnotation = getEffectiveTypeAnnotationNode(decl);
-                    return (overallAnnotation && instantiateType(getTypeFromTypeNode(overallAnnotation), getSymbolLinks(lhsSymbol).mapper)) ||
+                    const type = (overallAnnotation && instantiateType(getTypeFromTypeNode(overallAnnotation), getSymbolLinks(lhsSymbol).mapper)) ||
                         (isPropertyDeclaration(decl) ? decl.initializer && getTypeOfExpression(binaryExpression.left) : undefined);
+                    if (type || isAccessExpression(binaryExpression.left) && isThisPropertyAccessInAutoContainer(binaryExpression.left, lhsSymbol)) {
+                        return type;
+                    }
                 }
                 if (kind === AssignmentDeclarationKind.None) {
                     return getTypeOfExpression(binaryExpression.left);
