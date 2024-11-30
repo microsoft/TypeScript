@@ -5,7 +5,9 @@ package ast
 type Symbol struct {
 	Flags                        SymbolFlags
 	CheckFlags                   CheckFlags // Non-zero only in transient symbols created by Checker
-	ConstEnumOnlyModule          bool       // True if module contains only const enums or other modules with only const enums
+	LastAssignmentPos            int32
+	HasDefiniteAssignment        bool // Symbol is definitely assigned somewhere
+	ConstEnumOnlyModule          bool // True if module contains only const enums or other modules with only const enums
 	IsReplaceableByMethod        bool
 	Name                         string
 	Declarations                 []*Node

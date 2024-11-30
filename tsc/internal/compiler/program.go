@@ -166,16 +166,15 @@ func (p *Program) tryLoadNodeModule(modulePath string) *ast.SourceFile {
 }
 
 func (p *Program) GetSyntacticDiagnostics(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return p.getDiagnosticsHelper(sourceFile, p.getSyntaticDiagnosticsForFile)
+	return p.getDiagnosticsHelper(sourceFile, false /*ensureBound*/, p.getSyntaticDiagnosticsForFile)
 }
 
 func (p *Program) GetBindDiagnostics(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	p.bindSourceFiles()
-	return p.getDiagnosticsHelper(sourceFile, p.getBindDiagnosticsForFile)
+	return p.getDiagnosticsHelper(sourceFile, true /*ensureBound*/, p.getBindDiagnosticsForFile)
 }
 
 func (p *Program) GetSemanticDiagnostics(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return p.getDiagnosticsHelper(sourceFile, p.getSemanticDiagnosticsForFile)
+	return p.getDiagnosticsHelper(sourceFile, true /*ensureBound*/, p.getSemanticDiagnosticsForFile)
 }
 
 func (p *Program) GetGlobalDiagnostics() []*ast.Diagnostic {
@@ -205,12 +204,18 @@ func (p *Program) getBindDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.D
 }
 
 func (p *Program) getSemanticDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return p.getTypeChecker().GetDiagnostics(sourceFile)
+	return core.Concatenate(sourceFile.BindDiagnostics(), p.getTypeChecker().GetDiagnostics(sourceFile))
 }
 
-func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, getDiagnostics func(*ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
+func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound bool, getDiagnostics func(*ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
 	if sourceFile != nil {
+		if ensureBound {
+			bindSourceFile(sourceFile, p.options)
+		}
 		return sortAndDeduplicateDiagnostics(getDiagnostics(sourceFile))
+	}
+	if ensureBound {
+		p.bindSourceFiles()
 	}
 	var result []*ast.Diagnostic
 	for _, file := range p.files {

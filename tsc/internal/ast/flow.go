@@ -45,12 +45,12 @@ var ReportedUnreachableFlow = &FlowNode{Flags: FlowFlagsUnreachable}
 
 type FlowSwitchClauseData struct {
 	NodeBase
-	SwitchStatement *SwitchStatement
+	SwitchStatement *Node
 	ClauseStart     int32 // Start index of case/default clause range
 	ClauseEnd       int32 // End index of case/default clause range
 }
 
-func NewFlowSwitchClauseData(switchStatement *SwitchStatement, clauseStart int, clauseEnd int) *Node {
+func NewFlowSwitchClauseData(switchStatement *Node, clauseStart int, clauseEnd int) *Node {
 	node := &FlowSwitchClauseData{}
 	node.SwitchStatement = switchStatement
 	node.ClauseStart = int32(clauseStart)

@@ -2336,7 +2336,7 @@ func (c *Checker) isTypeSubsetOf(source *Type, target *Type) bool {
 
 func (c *Checker) isTypeSubsetOfUnion(source *Type, target *Type) bool {
 	if source.flags&TypeFlagsUnion != 0 {
-		for _, t := range source.AsUnionType().types {
+		for _, t := range source.Types() {
 			if containsType(target.Types(), t) {
 				return false
 			}

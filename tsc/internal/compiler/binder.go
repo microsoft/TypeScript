@@ -479,7 +479,7 @@ func (b *Binder) createFlowMutation(flags ast.FlowFlags, antecedent *ast.FlowNod
 	return result
 }
 
-func (b *Binder) createFlowSwitchClause(antecedent *ast.FlowNode, switchStatement *ast.SwitchStatement, clauseStart int, clauseEnd int) *ast.FlowNode {
+func (b *Binder) createFlowSwitchClause(antecedent *ast.FlowNode, switchStatement *ast.Node, clauseStart int, clauseEnd int) *ast.FlowNode {
 	setFlowNodeReferenced(antecedent)
 	return b.newFlowNodeEx(ast.FlowFlagsSwitchClause, ast.NewFlowSwitchClauseData(switchStatement, clauseStart, clauseEnd), antecedent)
 }
@@ -2108,7 +2108,7 @@ func (b *Binder) bindSwitchStatement(node *ast.Node) {
 		return c.Kind == ast.KindDefaultClause
 	})
 	if !hasDefault {
-		b.addAntecedent(postSwitchLabel, b.createFlowSwitchClause(b.preSwitchCaseFlow, stmt, 0, 0))
+		b.addAntecedent(postSwitchLabel, b.createFlowSwitchClause(b.preSwitchCaseFlow, node, 0, 0))
 	}
 	b.currentBreakTarget = saveBreakTarget
 	b.preSwitchCaseFlow = savePreSwitchCaseFlow
@@ -2116,9 +2116,9 @@ func (b *Binder) bindSwitchStatement(node *ast.Node) {
 }
 
 func (b *Binder) bindCaseBlock(node *ast.Node) {
-	switchStatement := node.Parent.AsSwitchStatement()
+	switchStatement := node.Parent
 	clauses := node.AsCaseBlock().Clauses.Nodes
-	isNarrowingSwitch := switchStatement.Expression.Kind == ast.KindTrueKeyword || isNarrowingExpression(switchStatement.Expression)
+	isNarrowingSwitch := switchStatement.Expression().Kind == ast.KindTrueKeyword || isNarrowingExpression(switchStatement.Expression())
 	var fallthroughFlow *ast.FlowNode = ast.UnreachableFlow
 	for i := 0; i < len(clauses); i++ {
 		clauseStart := i

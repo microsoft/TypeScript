@@ -1186,7 +1186,7 @@ func isCompoundLikeAssignment(assignment *ast.Node) bool {
 }
 
 func isPushOrUnshiftIdentifier(node *ast.Node) bool {
-	text := node.AsIdentifier().Text
+	text := node.Text()
 	return text == "push" || text == "unshift"
 }
 
@@ -1932,7 +1932,7 @@ func getIsDeferredContext(location *ast.Node, lastLocation *ast.Node) bool {
 func isTypeParameterSymbolDeclaredInContainer(symbol *ast.Symbol, container *ast.Node) bool {
 	for _, decl := range symbol.Declarations {
 		if decl.Kind == ast.KindTypeParameter {
-			parent := decl.Parent.Parent
+			parent := decl.Parent
 			if parent == container {
 				return true
 			}
@@ -2557,6 +2557,10 @@ func isQuestionToken(node *ast.Node) bool {
 	return node != nil && node.Kind == ast.KindQuestionToken
 }
 
+func isExclamationToken(node *ast.Node) bool {
+	return node != nil && node.Kind == ast.KindQuestionToken
+}
+
 func isOptionalDeclaration(declaration *ast.Node) bool {
 	switch declaration.Kind {
 	case ast.KindParameter:
@@ -2618,35 +2622,34 @@ func compareSymbols(s1, s2 *ast.Symbol) int {
 		return 0
 	}
 	if s1.ValueDeclaration != nil && s2.ValueDeclaration != nil {
-		if s1.Parent != nil && s2.Parent != nil {
-			// Symbols with the same unmerged parent are always in the same file
-			if s1.Parent != s2.Parent {
-				f1 := ast.GetSourceFileOfNode(s1.ValueDeclaration)
-				f2 := ast.GetSourceFileOfNode(s2.ValueDeclaration)
-				if f1 != f2 {
-					f1Path := string(f1.Path())
-					f2Path := string(f2.Path())
-
-					// In different files, first compare base filename
-					r := strings.Compare(tspath.GetDirectoryPath(f1Path), tspath.GetDirectoryPath(f2Path))
-					if r == 0 {
-						// Same base filename, compare the full paths (no two files should have the same full path)
-						r = strings.Compare(f1Path, f2Path)
-					}
-					return r
-				}
+		// Symbols with the same unmerged parent are always in the same file
+		if s1.Parent != s2.Parent {
+			f1 := ast.GetSourceFileOfNode(s1.ValueDeclaration)
+			f2 := ast.GetSourceFileOfNode(s2.ValueDeclaration)
+			if f1 != f2 {
+				// Compare the full paths (no two files should have the same full path)
+				return strings.Compare(string(f1.Path()), string(f2.Path()))
 			}
 			// In the same file, compare source positions
-			return s1.ValueDeclaration.Pos() - s2.ValueDeclaration.Pos()
 		}
+		r := s1.ValueDeclaration.Pos() - s2.ValueDeclaration.Pos()
+		if r != 0 {
+			return r
+		}
+	}
+	// Symbols with value declarations sort before symbols without
+	if s1.ValueDeclaration != nil && s2.ValueDeclaration == nil {
+		return -1
+	}
+	if s1.ValueDeclaration == nil && s2.ValueDeclaration != nil {
+		return 1
 	}
 	// Sort by name
 	r := strings.Compare(s1.Name, s2.Name)
-	if r == 0 {
-		// Same name, sort by symbol id
-		r = int(getSymbolId(s1)) - int(getSymbolId(s2))
+	if r != 0 {
+		return r
 	}
-	return r
+	panic("Symbols must have unique names to be sorted")
 }
 
 func getClassLikeDeclarationOfSymbol(symbol *ast.Symbol) *ast.Node {
@@ -3422,4 +3425,12 @@ func getTagNameOfNode(node *ast.Node) *ast.Node {
 		return node.AsJsxSelfClosingElement().TagName
 	}
 	panic("Unhandled case in getTagNameOfNode")
+}
+
+func getBindingElementPropertyName(node *ast.Node) *ast.Node {
+	name := node.AsBindingElement().PropertyName
+	if name != nil {
+		return name
+	}
+	return node.Name()
 }

@@ -38,8 +38,9 @@ type CompilerOptions struct {
 	ResolvePackageJsonImports          Tristate             `json:"resolvePackageJsonImports"`
 	Strict                             Tristate             `json:"strict"`
 	StrictBindCallApply                Tristate             `json:"strictBindCallApply"`
-	StrictNullChecks                   Tristate             `json:"strictNullChecks"`
 	StrictFunctionTypes                Tristate             `json:"strictFunctionTypes"`
+	StrictNullChecks                   Tristate             `json:"strictNullChecks"`
+	StrictPropertyInitialization       Tristate             `json:"strictPropertyInitialization"`
 	Target                             ScriptTarget         `json:"target"`
 	TraceResolution                    Tristate             `json:"traceResolution"`
 	TypeRoots                          []string             `json:"typeRoots"`

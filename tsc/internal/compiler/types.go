@@ -128,6 +128,25 @@ type DeclaredTypeLinks struct {
 	declaredType *Type
 }
 
+// Links for switch clauses
+
+type ExhaustiveState byte
+
+const (
+	ExhaustiveStateUnknown   ExhaustiveState = iota // Exhaustive state not computed
+	ExhaustiveStateComputing                        // Exhaustive state computation in progress
+	ExhaustiveStateFalse                            // Switch statement is not exhaustive
+	ExhaustiveStateTrue                             // Switch statement is exhaustive
+)
+
+type SwitchStatementLinks struct {
+	exhaustiveState     ExhaustiveState // Switch statement exhaustiveness
+	switchTypesComputed bool
+	witnessesComputed   bool
+	switchTypes         []*Type
+	witnesses           []string
+}
+
 // Links for late-binding containers
 
 type MembersOrExportsResolutionKind int
@@ -262,6 +281,8 @@ const (
 	NodeCheckFlagsContainsSuperPropertyInStaticInitializer NodeCheckFlags = 1 << 21 // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
 	NodeCheckFlagsInCheckIdentifier                        NodeCheckFlags = 1 << 22
 	NodeCheckFlagsPartiallyTypeChecked                     NodeCheckFlags = 1 << 23 // Node has been partially type checked
+	NodeCheckFlagsInitializerIsUndefined                   NodeCheckFlags = 1 << 24
+	NodeCheckFlagsInitializerIsUndefinedComputed           NodeCheckFlags = 1 << 25
 )
 
 // Common links

@@ -256,6 +256,10 @@ func IsFunctionLike(node *Node) bool {
 	return node != nil && isFunctionLikeKind(node.Kind)
 }
 
+func IsFunctionOrSourceFile(node *Node) bool {
+	return IsFunctionLike(node) || IsSourceFile(node)
+}
+
 func IsClassLike(node *Node) bool {
 	return node.Kind == KindClassDeclaration || node.Kind == KindClassExpression
 }

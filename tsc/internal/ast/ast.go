@@ -190,6 +190,10 @@ func (n *Node) Expression() *Node {
 		return n.AsYieldExpression().Expression
 	case KindForInStatement, KindForOfStatement:
 		return n.AsForInOrOfStatement().Expression
+	case KindSwitchStatement:
+		return n.AsSwitchStatement().Expression
+	case KindCaseClause:
+		return n.AsCaseOrDefaultClause().Expression
 	}
 	panic("Unhandled case in Node.Expression")
 }
@@ -3517,6 +3521,10 @@ func (f *NodeFactory) NewSpreadAssignment(expression *Expression) *Node {
 
 func (node *SpreadAssignment) ForEachChild(v Visitor) bool {
 	return visit(v, node.Expression)
+}
+
+func IsSpreadAssignment(node *Node) bool {
+	return node.Kind == KindSpreadAssignment
 }
 
 // PropertyAssignment
