@@ -13,6 +13,11 @@ class Actor1 {
 
   constructor() {
     this.state = initialState;
+
+    const localRun = (speed: number) => {
+      this.state = { type: "running", speed };
+      this.state = { type: "runnnning", speed }; // error
+    }
   }
 
   run(speed: number) {
@@ -26,6 +31,11 @@ class Actor2 {
 
   constructor() {
     this.state = initialState;
+
+    const localRun = (speed: number) => {
+      this.state = { type: "running", speed };
+      this.state = { type: "runnnning", speed }; // error
+    }
   }
 
   run(speed: number) {

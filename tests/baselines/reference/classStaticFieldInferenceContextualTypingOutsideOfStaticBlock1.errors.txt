@@ -1,8 +1,10 @@
-classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts(14,27): error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
-classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts(27,27): error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
+classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts(13,29): error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
+classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts(19,27): error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
+classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts(31,29): error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
+classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts(37,27): error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
 
 
-==== classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts (2 errors) ====
+==== classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts (4 errors) ====
     type State = { type: "running"; speed: number } | { type: "stopped" };
     
     declare const initialState: State;
@@ -12,6 +14,14 @@ classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts(27,27): error 
     
       static {
         this.initialState = initialState;
+    
+        const localSetAsInitiallyRunning = (speed: number) => {
+          this.initialState = { type: "running", speed };
+          this.initialState = { type: "runnnning", speed }; // error
+                                ~~~~
+!!! error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
+!!! related TS6500 classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts:1:16: The expected type comes from property 'type' which is declared here on type 'State'
+        }
       }
     
       static setAsInitiallyRunning(speed: number) {
@@ -28,6 +38,14 @@ classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts(27,27): error 
     
       static {
         this.initialState = initialState;
+    
+        const localSetAsInitiallyRunning = (speed: number) => {
+          this.initialState = { type: "running", speed };
+          this.initialState = { type: "runnnning", speed }; // error
+                                ~~~~
+!!! error TS2820: Type '"runnnning"' is not assignable to type '"running" | "stopped"'. Did you mean '"running"'?
+!!! related TS6500 classStaticFieldInferenceContextualTypingOutsideOfStaticBlock1.ts:1:16: The expected type comes from property 'type' which is declared here on type 'State'
+        }
       }
     
       static setAsInitiallyRunning(speed: number) {

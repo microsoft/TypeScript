@@ -11,6 +11,11 @@ class Actor1 {
 
   static {
     this.initialState = initialState;
+
+    const localSetAsInitiallyRunning = (speed: number) => {
+      this.initialState = { type: "running", speed };
+      this.initialState = { type: "runnnning", speed }; // error
+    }
   }
 
   static setAsInitiallyRunning(speed: number) {
@@ -24,6 +29,11 @@ class Actor2 {
 
   static {
     this.initialState = initialState;
+
+    const localSetAsInitiallyRunning = (speed: number) => {
+      this.initialState = { type: "running", speed };
+      this.initialState = { type: "runnnning", speed }; // error
+    }
   }
 
   static setAsInitiallyRunning(speed: number) {

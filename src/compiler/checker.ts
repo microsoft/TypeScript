@@ -11366,14 +11366,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!isThisProperty(node) || !isAutoTypedProperty(prop)) {
                 return false;
             }
-            const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
-            return isClassStaticBlockDeclaration(thisContainer) && (prop.parent && getClassLikeDeclarationOfSymbol(prop.parent)) === thisContainer.parent;
+            const autoContainer = getAutoContainer(node);
+            return isClassStaticBlockDeclaration(autoContainer) && (prop.parent && getClassLikeDeclarationOfSymbol(prop.parent)) === autoContainer.parent;
         }
         if (!isConstructorDeclaredProperty(prop) && (!isThisProperty(node) || !isAutoTypedProperty(prop))) {
             return false;
         }
-        const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
-        return isConstructorDeclaration(thisContainer) && (prop.parent && getClassLikeDeclarationOfSymbol(prop.parent)) === thisContainer.parent || thisContainer === getDeclaringConstructor(prop);
+        const autoContainer = getAutoContainer(node);
+        return isConstructorDeclaration(autoContainer) && (prop.parent && getClassLikeDeclarationOfSymbol(prop.parent)) === autoContainer.parent || autoContainer === getDeclaringConstructor(prop);
+    }
+
+    function getAutoContainer(node: Node) {
+        return findAncestor(node.parent, node => !!getContainingFunctionOrClassStaticBlock(node) && !getImmediatelyInvokedFunctionExpression(node))!;
     }
 
     function getDeclaringConstructor(symbol: Symbol) {

@@ -37,6 +37,51 @@ class Actor1 {
 >      : ^^^^^
 >initialState : State
 >             : ^^^^^
+
+    const localRun = (speed: number) => {
+>localRun : (speed: number) => void
+>         : ^     ^^      ^^^^^^^^^
+>(speed: number) => {      this.state = { type: "running", speed };      this.state = { type: "runnnning", speed }; // error    } : (speed: number) => void
+>                                                                                                                                 : ^     ^^      ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+      this.state = { type: "running", speed };
+>this.state = { type: "running", speed } : { type: "running"; speed: number; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.state : State
+>           : ^^^^^
+>this : this
+>     : ^^^^
+>state : State
+>      : ^^^^^
+>{ type: "running", speed } : { type: "running"; speed: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "running"
+>     : ^^^^^^^^^
+>"running" : "running"
+>          : ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+      this.state = { type: "runnnning", speed }; // error
+>this.state = { type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.state : State
+>           : ^^^^^
+>this : this
+>     : ^^^^
+>state : State
+>      : ^^^^^
+>{ type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "runnnning"
+>     : ^^^^^^^^^^^
+>"runnnning" : "runnnning"
+>            : ^^^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+    }
   }
 
   run(speed: number) {
@@ -103,6 +148,51 @@ class Actor2 {
 >      : ^^^^^
 >initialState : State
 >             : ^^^^^
+
+    const localRun = (speed: number) => {
+>localRun : (speed: number) => void
+>         : ^     ^^      ^^^^^^^^^
+>(speed: number) => {      this.state = { type: "running", speed };      this.state = { type: "runnnning", speed }; // error    } : (speed: number) => void
+>                                                                                                                                 : ^     ^^      ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+      this.state = { type: "running", speed };
+>this.state = { type: "running", speed } : { type: "running"; speed: number; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.state : State
+>           : ^^^^^
+>this : this
+>     : ^^^^
+>state : State
+>      : ^^^^^
+>{ type: "running", speed } : { type: "running"; speed: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "running"
+>     : ^^^^^^^^^
+>"running" : "running"
+>          : ^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+
+      this.state = { type: "runnnning", speed }; // error
+>this.state = { type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.state : State
+>           : ^^^^^
+>this : this
+>     : ^^^^
+>state : State
+>      : ^^^^^
+>{ type: "runnnning", speed } : { type: "runnnning"; speed: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "runnnning"
+>     : ^^^^^^^^^^^
+>"runnnning" : "runnnning"
+>            : ^^^^^^^^^^^
+>speed : number
+>      : ^^^^^^
+    }
   }
 
   run(speed: number) {
