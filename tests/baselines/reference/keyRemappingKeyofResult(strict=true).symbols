@@ -248,6 +248,10 @@ function h<T>(z: StringKeys2<T>) {
 
   z = "foo"; // error
 >z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 88, 14))
+
+  const f: string = z; // ok
+>f : Symbol(f, Decl(keyRemappingKeyofResult.ts, 90, 7))
+>z : Symbol(z, Decl(keyRemappingKeyofResult.ts, 88, 14))
 }
 
 export {};

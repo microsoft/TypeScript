@@ -91,6 +91,7 @@ type StringKeys2<T> = keyof {
 
 function h<T>(z: StringKeys2<T>) {
   z = "foo"; // error
+  const f: string = z; // ok
 }
 
 export {};
@@ -127,5 +128,6 @@ function test_57827(z) {
 }
 function h(z) {
     z = "foo"; // error
+    const f = z; // ok
 }
 export {};

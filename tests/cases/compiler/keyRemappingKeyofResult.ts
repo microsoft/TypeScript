@@ -90,6 +90,7 @@ type StringKeys2<T> = keyof {
 
 function h<T>(z: StringKeys2<T>) {
   z = "foo"; // error
+  const f: string = z; // ok
 }
 
 export {};

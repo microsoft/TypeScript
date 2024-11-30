@@ -298,6 +298,12 @@ function h<T>(z: StringKeys2<T>) {
 >  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
+
+  const f: string = z; // ok
+>f : string
+>  : ^^^^^^
+>z : string
+>  : ^^^^^^
 }
 
 export {};

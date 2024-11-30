@@ -99,6 +99,7 @@ keyRemappingKeyofResult.ts(90,3): error TS2322: Type 'string' is not assignable 
       ~
 !!! error TS2322: Type 'string' is not assignable to type 'keyof { [P in keyof T as T[P] extends string ? P : never]: any; }'.
 !!! error TS2322:   Type 'string' is not assignable to type 'T[P] extends string ? P : never'.
+      const f: string = z; // ok
     }
     
     export {};
