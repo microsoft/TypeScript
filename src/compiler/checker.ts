@@ -25741,12 +25741,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isTypeParameterAtTopLevel(type: Type, tp: TypeParameter, depth = 0): boolean {
+        if (type.flags & TypeFlags.Substitution) {
+            type = getActualTypeVariable(type);
+        }
         return !!(type === tp ||
             type.flags & TypeFlags.UnionOrIntersection && some((type as UnionOrIntersectionType).types, t => isTypeParameterAtTopLevel(t, tp, depth)) ||
-            depth < 3 && type.flags & TypeFlags.Conditional && (
+            depth < 3 && (type.flags & TypeFlags.Conditional && (
                     isTypeParameterAtTopLevel(getTrueTypeFromConditionalType(type as ConditionalType), tp, depth + 1) ||
                     isTypeParameterAtTopLevel(getFalseTypeFromConditionalType(type as ConditionalType), tp, depth + 1)
-                ));
+                ) || type.flags & TypeFlags.TemplateLiteral && some((type as TemplateLiteralType).types, t => isTypeParameterAtTopLevel(t, tp, depth))));
     }
 
     function isTypeParameterAtTopLevelInReturnType(signature: Signature, typeParameter: TypeParameter) {
