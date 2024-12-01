@@ -1,4 +1,4 @@
-import { execFileSync } from "child_process";
+import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -81,7 +81,7 @@ interface ExecSyncOptions {
     encoding: "utf-8";
 }
 
-export class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
+class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
     private readonly npmPath: string;
     readonly typesRegistry: Map<string, MapLike<string>>;
 
@@ -172,7 +172,7 @@ export class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInst
             this.log.writeLine(`Exec: ${command}`);
         }
         try {
-            const stdout = execFileSync(command, { ...options, encoding: "utf-8" });
+            const stdout = execSync(command, { ...options, encoding: "utf-8" });
             if (this.log.isEnabled()) {
                 this.log.writeLine(`    Succeeded. stdout:${indent(sys.newLine, stdout)}`);
             }

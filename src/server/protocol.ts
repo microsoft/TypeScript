@@ -169,6 +169,7 @@ export const enum CommandTypes {
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
     GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+    PreparePasteEdits = "preparePasteEdits",
     GetPasteEdits = "getPasteEdits",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
@@ -201,6 +202,8 @@ export const enum CommandTypes {
     ProvideInlayHints = "provideInlayHints",
     WatchChange = "watchChange",
     MapCode = "mapCode",
+    /** @internal */
+    CopilotRelated = "copilotRelated",
 }
 
 /**
@@ -669,6 +672,20 @@ export interface GetMoveToRefactoringFileSuggestions extends Response {
         newFileName: string;
         files: string[];
     };
+}
+
+/**
+ * Request to check if `pasteEdits` should be provided for a given location post copying text from that location.
+ */
+export interface PreparePasteEditsRequest extends FileRequest {
+    command: CommandTypes.PreparePasteEdits;
+    arguments: PreparePasteEditsRequestArgs;
+}
+export interface PreparePasteEditsRequestArgs extends FileRequestArgs {
+    copiedTextSpan: TextSpan[];
+}
+export interface PreparePasteEditsResponse extends Response {
+    body: boolean;
 }
 
 /**
@@ -1988,6 +2005,11 @@ export interface QuickInfoRequest extends FileLocationRequest {
     arguments: FileLocationRequestArgs;
 }
 
+export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
+    /** TODO */
+    verbosityLevel?: number;
+}
+
 /**
  * Body of QuickInfoResponse.
  */
@@ -2027,6 +2049,11 @@ export interface QuickInfoResponseBody {
      * JSDoc tags associated with symbol.
      */
     tags: JSDocTagInfo[];
+
+    /**
+     * TODO
+     */
+    canIncreaseVerbosityLevel?: boolean;
 }
 
 /**
@@ -3262,6 +3289,7 @@ export const enum ScriptTarget {
     ES2021 = "es2021",
     ES2022 = "es2022",
     ES2023 = "es2023",
+    ES2024 = "es2024",
     ESNext = "esnext",
     JSON = "json",
     Latest = ESNext,

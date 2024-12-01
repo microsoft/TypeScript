@@ -169,6 +169,7 @@ import {
     isExternalModule,
     isExternalModuleImportEqualsDeclaration,
     isExternalModuleReference,
+    isExternalModuleSymbol,
     isFileLevelUniqueName,
     isForInStatement,
     isForOfStatement,
@@ -320,6 +321,7 @@ import {
     PseudoBigInt,
     pseudoBigIntToString,
     QualifiedName,
+    rangeContainsRange,
     RefactorContext,
     removeFileExtension,
     removeSuffix,
@@ -388,6 +390,7 @@ import {
     visitEachChild,
     VoidExpression,
     walkUpParenthesizedExpressions,
+    WriterContextOut,
     YieldExpression,
 } from "./_namespaces/ts.js";
 
@@ -918,11 +921,6 @@ export function getLineStartPositionForPosition(position: number, sourceFile: So
 }
 
 /** @internal */
-export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
-    return startEndContainsRange(r1.pos, r1.end, r2);
-}
-
-/** @internal */
 export function rangeContainsRangeExclusive(r1: TextRange, r2: TextRange): boolean {
     return rangeContainsPositionExclusive(r1, r2.pos) && rangeContainsPositionExclusive(r1, r2.end);
 }
@@ -935,11 +933,6 @@ export function rangeContainsPosition(r: TextRange, pos: number): boolean {
 /** @internal */
 export function rangeContainsPositionExclusive(r: TextRange, pos: number): boolean {
     return r.pos < pos && pos < r.end;
-}
-
-/** @internal */
-export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
-    return start <= range.pos && end >= range.end;
 }
 
 /** @internal */
@@ -2468,7 +2461,7 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         fileExists: fileName => program.fileExists(fileName),
         getCurrentDirectory: () => host.getCurrentDirectory(),
         readFile: maybeBind(host, host.readFile),
-        useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
+        useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames) || program.useCaseSensitiveFileNames,
         getSymlinkCache: maybeBind(host, host.getSymlinkCache) || program.getSymlinkCache,
         getModuleSpecifierCache: maybeBind(host, host.getModuleSpecifierCache),
         getPackageJsonInfoCache: () => program.getModuleResolutionCache()?.getPackageJsonInfoCache(),
@@ -3063,9 +3056,9 @@ export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbol
 }
 
 /** @internal */
-export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
+export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None, verbosityLevel?: number, out?: WriterContextOut): SymbolDisplayPart[] {
     return mapToDisplayParts(writer => {
-        typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
+        typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer, verbosityLevel, out);
     });
 }
 
@@ -4036,7 +4029,13 @@ export function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string 
             return tryCast(d.propertyName, isIdentifier)?.text;
         }
         // GH#52694
-        return tryCast(getNameOfDeclaration(d), isIdentifier)?.text;
+        const name = tryCast(getNameOfDeclaration(d), isIdentifier)?.text;
+        if (name) {
+            return name;
+        }
+        if (symbol.parent && !isExternalModuleSymbol(symbol.parent)) {
+            return symbol.parent.getName();
+        }
     });
 }
 
@@ -4062,7 +4061,7 @@ export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: Scri
 
 /** @internal */
 export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget | undefined, forceCapitalize?: boolean): string {
-    const baseName = getBaseFileName(removeSuffix(moduleSpecifier, "/index"));
+    const baseName = getBaseFileName(removeSuffix(removeFileExtension(moduleSpecifier), "/index"));
     let res = "";
     let lastCharWasValid = true;
     const firstCharCode = baseName.charCodeAt(0);

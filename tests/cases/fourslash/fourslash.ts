@@ -361,7 +361,7 @@ declare namespace FourSlashInterface {
         baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineCompletions(preferences?: UserPreferences): void;
-        baselineQuickInfo(): void;
+        baselineQuickInfo(verbosityLevels?: VerbosityLevels): void;
         baselineSmartSelection(): void;
         baselineSignatureHelp(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
@@ -458,6 +458,11 @@ declare namespace FourSlashInterface {
         toggleMultilineComment(newFileContent: string): void;
         commentSelection(newFileContent: string): void;
         uncommentSelection(newFileContent: string): void;
+        preparePasteEdits(options: {
+            copiedFromFile: string,
+            copiedTextRange: { pos: number, end: number }[],
+            providePasteEdits: boolean
+        }): void;
         pasteEdits(options: {
             newFileContents: { readonly [fileName: string]: string };
             args: {
@@ -695,6 +700,9 @@ declare namespace FourSlashInterface {
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
         readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+    }
+    interface VerbosityLevels {
+        [markerName: string]: number | number[] | undefined;
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";

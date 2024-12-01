@@ -1,13 +1,16 @@
 index.js(2,12): error TS17014: JSX fragment has no corresponding closing tag.
+index.js(2,13): error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
 index.js(2,13): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
 index.js(3,1): error TS1005: '</' expected.
 
 
-==== index.js (3 errors) ====
+==== index.js (4 errors) ====
     const x = "oops";
     const y = + <> x;
                ~~~
 !!! error TS17014: JSX fragment has no corresponding closing tag.
+                ~~
+!!! error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
                 ~~
 !!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
     

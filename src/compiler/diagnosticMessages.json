@@ -1826,6 +1826,14 @@
         "category": "Error",
         "code": 1542
     },
+    "Importing a JSON file into an ECMAScript module requires a 'type: \"json\"' import attribute when 'module' is set to '{0}'.": {
+        "category": "Error",
+        "code": 1543
+    },
+    "Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to '{0}'.": {
+        "category": "Error",
+        "code": 1544
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3948,6 +3956,31 @@
         "category": "Error",
         "code": 2873
     },
+    "This JSX tag requires '{0}' to be in scope, but it could not be found.": {
+        "category": "Error",
+        "code": 2874
+    },
+    "This JSX tag requires the module path '{0}' to exist, but none could be found. Make sure you have types for the appropriate package installed.": {
+        "category": "Error",
+        "code": 2875
+    },
+    "This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to \"{0}\".": {
+        "category": "Error",
+        "code": 2876
+    },
+    "This import uses a '{0}' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.": {
+        "category": "Error",
+        "code": 2877
+    },
+    "This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.": {
+        "category": "Error",
+        "code": 2878
+    },
+    "Using JSX fragments requires fragment factory '{0}' to be in scope, but it could not be found.": {
+        "category": "Error",
+        "code": 2879
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -5501,7 +5534,6 @@
         "category": "Message",
         "code": 6243
     },
-
     "Modules": {
         "category": "Message",
         "code": 6244
@@ -5929,6 +5961,10 @@
     "Project '{0}' is out of date because {1}.": {
         "category": "Message",
         "code": 6420
+    },
+    "Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files.": {
+        "category": "Message",
+        "code": 6421
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -6650,7 +6686,7 @@
         "category": "Error",
         "code": 7024
     },
-    "Generator implicitly has yield type '{0}' because it does not yield any values. Consider supplying a return type annotation.": {
+    "Generator implicitly has yield type '{0}'. Consider supplying a return type annotation.": {
         "category": "Error",
         "code": 7025
     },
@@ -6962,7 +6998,7 @@
         "category": "Error",
         "code": 9008
     },
-    "At least one accessor must have an explicit return type annotation with --isolatedDeclarations.": {
+    "At least one accessor must have an explicit type annotation with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9009
     },
@@ -7022,7 +7058,7 @@
         "category": "Error",
         "code": 9023
     },
-    "Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.": {
+    "Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9025
     },

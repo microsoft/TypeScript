@@ -86,6 +86,10 @@ export interface TextSpan {
     end: number;
 }
 
+export interface VerbosityLevels {
+    [markerName: string]: number | number[] | undefined;
+}
+
 // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
 // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
 // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
@@ -2451,19 +2455,28 @@ export class TestState {
         return result;
     }
 
-    public baselineQuickInfo(): void {
-        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
-            marker: { ...marker, name },
-            item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position),
-        }));
+    public baselineQuickInfo(verbosityLevels?: VerbosityLevels): void {
+        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
+            const verbosityLevel = toArray(verbosityLevels?.[name]);
+            const items = verbosityLevel.map(verbosityLevel => {
+                const item: ts.QuickInfo & { verbosityLevel?: number; } | undefined = this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position, verbosityLevel);
+                if (item) item.verbosityLevel = verbosityLevel;
+                return {
+                    marker: { ...marker, name },
+                    item,
+                };
+            });
+            return items;
+        }).flat();
         const annotations = this.annotateContentWithTooltips(
             result,
             "quickinfo",
             item => item.textSpan,
-            ({ displayParts, documentation, tags }) => [
+            ({ displayParts, documentation, tags, verbosityLevel }) => [
                 ...(displayParts ? displayParts.map(p => p.text).join("").split("\n") : []),
                 ...(documentation?.length ? documentation.map(p => p.text).join("").split("\n") : []),
                 ...(tags?.length ? tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n") : []),
+                ...(verbosityLevel !== undefined ? [`(verbosity level: ${verbosityLevel})`] : []),
             ],
         );
         this.baseline("QuickInfo", annotations + "\n\n" + stringify(result));
@@ -3069,7 +3082,7 @@ export class TestState {
     private verifyFileContent(fileName: string, text: string) {
         const actual = this.getFileContent(fileName);
         if (actual !== text) {
-            throw new Error(`verifyFileContent failed:\n${showTextDiff(text, actual)}`);
+            throw new Error(`verifyFileContent in file '${fileName}' failed:\n${showTextDiff(text, actual)}`);
         }
     }
 
@@ -3404,10 +3417,11 @@ export class TestState {
         return ts.first(ranges);
     }
 
-    private verifyTextMatches(actualText: string, includeWhitespace: boolean, expectedText: string) {
+    private verifyTextMatches(actualText: string, includeWhitespace: boolean, expectedText: string, fileName?: string) {
         const removeWhitespace = (s: string): string => includeWhitespace ? s : this.removeWhitespace(s);
         if (removeWhitespace(actualText) !== removeWhitespace(expectedText)) {
-            this.raiseError(`Actual range text doesn't match expected text.\n${showTextDiff(expectedText, actualText)}`);
+            const addFileName = fileName ? ` in file '${fileName}'` : "";
+            this.raiseError(`Actual range text${addFileName} doesn't match expected text.\n${showTextDiff(expectedText, actualText)}`);
         }
     }
 
@@ -3485,7 +3499,7 @@ export class TestState {
             const newText = ts.textChanges.applyChanges(this.getFileContent(this.activeFile.fileName), change.textChanges);
             const newRange = updateTextRangeForTextChanges(this.getOnlyRange(this.activeFile.fileName), change.textChanges);
             const actualText = newText.slice(newRange.pos, newRange.end);
-            this.verifyTextMatches(actualText, /*includeWhitespace*/ true, newRangeContent);
+            this.verifyTextMatches(actualText, /*includeWhitespace*/ true, newRangeContent, change.fileName);
         }
         else {
             if (newFileContent === undefined) throw ts.Debug.fail();
@@ -3497,7 +3511,7 @@ export class TestState {
                 }
                 const oldText = this.tryGetFileContent(change.fileName);
                 const newContent = change.isNewFile ? ts.first(change.textChanges).newText : ts.textChanges.applyChanges(oldText!, change.textChanges);
-                this.verifyTextMatches(newContent, /*includeWhitespace*/ true, expectedNewContent);
+                this.verifyTextMatches(newContent, /*includeWhitespace*/ true, expectedNewContent, change.fileName);
             }
             for (const newFileName in newFileContent) {
                 ts.Debug.assert(changes.some(c => c.fileName === newFileName), "No change in file", () => newFileName);
@@ -3628,6 +3642,13 @@ export class TestState {
         });
 
         assert.deepEqual(actualModuleSpecifiers, moduleSpecifiers);
+    }
+
+    public verifyPreparePasteEdits(options: FourSlashInterface.PreparePasteEditsOptions): void {
+        const providePasteEdits = this.languageService.preparePasteEditsForFile(options.copiedFromFile, options.copiedTextRange);
+        if (providePasteEdits !== options.providePasteEdits) {
+            this.raiseError(`preparePasteEdits failed - Expected prepare paste edits to return ${options.providePasteEdits}, but got ${providePasteEdits}.`);
+        }
     }
 
     public verifyPasteEdits(options: FourSlashInterface.PasteEditsOptions): void {

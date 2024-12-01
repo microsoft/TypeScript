@@ -251,7 +251,6 @@ import {
     SymbolDisplayPart,
     SymbolDisplayPartKind,
     SymbolFlags,
-    SymbolId,
     symbolName,
     SyntaxKind,
     textPart,
@@ -544,7 +543,7 @@ export function getImplementationsAtPosition(program: Program, cancellationToken
     }
     else if (entries) {
         const queue = createQueue(entries);
-        const seenNodes = new Map<number, true>();
+        const seenNodes = new Set<number>();
         while (!queue.isEmpty()) {
             const entry = queue.dequeue() as NodeEntry;
             if (!addToSeen(seenNodes, getNodeId(entry.node))) {
@@ -2666,7 +2665,7 @@ export namespace Core {
      *                                The value of previousIterationSymbol is undefined when the function is first called.
      */
     function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
-        const seen = new Map<SymbolId, true>();
+        const seen = new Set<Symbol>();
         return recur(symbol);
 
         function recur(symbol: Symbol): T | undefined {
@@ -2674,7 +2673,7 @@ export namespace Core {
             //      interface C extends C {
             //          /*findRef*/propName: string;
             //      }
-            if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !addToSeen(seen, getSymbolId(symbol))) return;
+            if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !addToSeen(seen, symbol)) return;
 
             return firstDefined(symbol.declarations, declaration =>
                 firstDefined(getAllSuperTypeNodes(declaration), typeReference => {
