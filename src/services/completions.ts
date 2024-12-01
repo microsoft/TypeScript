@@ -3585,7 +3585,7 @@ function getCompletionData(
     let importSpecifierResolver: codefix.ImportSpecifierResolver | undefined;
     const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
     const symbolToSortTextMap: SymbolSortTextMap = [];
-    const seenPropertySymbols = new Map<SymbolId, true>();
+    const seenPropertySymbols = new Set<SymbolId>();
     const isTypeOnlyLocation = isTypeOnlyCompletion();
     const getModuleSpecifierResolutionHost = memoizeOne((isFromPackageJson: boolean) => {
         return createModuleSpecifierResolutionHost(isFromPackageJson ? host.getPackageJsonAutoImportProvider!()! : program, host);
@@ -6051,14 +6051,14 @@ function isArrowFunctionBody(node: Node) {
 }
 
 /** True if symbol is a type or a module containing at least one type. */
-function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecker, seenModules = new Map<SymbolId, true>()): boolean {
+function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecker, seenModules = new Set<Symbol>()): boolean {
     // Since an alias can be merged with a local declaration, we need to test both the alias and its target.
     // This code used to just test the result of `skipAlias`, but that would ignore any locally introduced meanings.
     return nonAliasCanBeReferencedAtTypeLocation(symbol) || nonAliasCanBeReferencedAtTypeLocation(skipAlias(symbol.exportSymbol || symbol, checker));
 
     function nonAliasCanBeReferencedAtTypeLocation(symbol: Symbol): boolean {
         return !!(symbol.flags & SymbolFlags.Type) || checker.isUnknownSymbol(symbol) ||
-            !!(symbol.flags & SymbolFlags.Module) && addToSeen(seenModules, getSymbolId(symbol)) &&
+            !!(symbol.flags & SymbolFlags.Module) && addToSeen(seenModules, symbol) &&
                 checker.getExportsOfModule(symbol).some(e => symbolCanBeReferencedAtTypeLocation(e, checker, seenModules));
     }
 }
