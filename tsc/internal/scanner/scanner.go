@@ -984,7 +984,7 @@ func (s *Scanner) scanIdentifier(prefixLength int) bool {
 				break
 			}
 		}
-		if ch <= 0x7F || ch != '\\' {
+		if ch <= 0x7F && ch != '\\' {
 			s.tokenValue = s.text[start:s.pos]
 			return true
 		}
