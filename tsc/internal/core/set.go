@@ -27,3 +27,11 @@ func (s *Set[T]) Len() int {
 func (s *Set[T]) Keys() map[T]struct{} {
 	return s.M
 }
+
+func NewSetFromItems[T comparable](items ...T) *Set[T] {
+	s := &Set[T]{}
+	for _, item := range items {
+		s.Add(item)
+	}
+	return s
+}

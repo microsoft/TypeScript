@@ -33,6 +33,19 @@ func newMapWithSizeHint[K comparable, V any](hint int) OrderedMap[K, V] {
 	}
 }
 
+type MapEntry[K comparable, V any] struct {
+	Key   K
+	Value V
+}
+
+func NewOrderedMapFromList[K comparable, V any](items []MapEntry[K, V]) *OrderedMap[K, V] {
+	mp := NewOrderedMapWithSizeHint[K, V](len(items))
+	for _, item := range items {
+		mp.Set(item.Key, item.Value)
+	}
+	return mp
+}
+
 // Set sets a key-value pair in the map.
 func (m *OrderedMap[K, V]) Set(key K, value V) {
 	if m.mp == nil {
