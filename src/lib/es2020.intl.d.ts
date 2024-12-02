@@ -56,7 +56,7 @@ declare namespace Intl {
      *
      * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation).
      */
-    type RelativeTimeFormatLocaleMatcher = "lookup" | "best fit";
+    type LocaleMatcher = "lookup" | "best fit";
 
     /**
      * The format of output message.
@@ -87,7 +87,7 @@ declare namespace Intl {
      */
     interface RelativeTimeFormatOptions {
         /** The locale matching algorithm to use. For information about this option, see [Intl page](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation). */
-        localeMatcher?: RelativeTimeFormatLocaleMatcher;
+        localeMatcher?: LocaleMatcher;
         /** The format of output message. */
         numeric?: RelativeTimeFormatNumeric;
         /** The length of the internationalized message. */
@@ -352,7 +352,7 @@ declare namespace Intl {
         | "standard";
 
     interface DisplayNamesOptions {
-        localeMatcher?: RelativeTimeFormatLocaleMatcher;
+        localeMatcher?: LocaleMatcher;
         style?: RelativeTimeFormatStyle;
         type: DisplayNamesType;
         languageDisplay?: DisplayNamesLanguageDisplay;
@@ -426,7 +426,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/supportedLocalesOf).
          */
-        supportedLocalesOf(locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }): UnicodeBCP47LocaleIdentifier[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: { localeMatcher?: LocaleMatcher; }): UnicodeBCP47LocaleIdentifier[];
     };
 
     interface CollatorConstructor {
@@ -451,6 +451,6 @@ declare namespace Intl {
         new (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
         (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
 
-        supportedLocalesOf(locales: LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
+        supportedLocalesOf(locales: LocalesArgument, options?: { localeMatcher?: LocaleMatcher; }): string[];
     }
 }
