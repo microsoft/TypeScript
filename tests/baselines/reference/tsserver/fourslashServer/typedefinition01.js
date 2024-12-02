@@ -156,25 +156,5 @@ Info seq  [hh:mm:ss:mss] response:
       "command": "typeDefinition",
       "request_seq": 1,
       "success": true,
-      "body": [
-        {
-          "file": "/tests/cases/fourslash/server/a.ts",
-          "start": {
-            "line": 1,
-            "offset": 14
-          },
-          "end": {
-            "line": 1,
-            "offset": 17
-          },
-          "contextStart": {
-            "line": 1,
-            "offset": 1
-          },
-          "contextEnd": {
-            "line": 1,
-            "offset": 20
-          }
-        }
-      ]
+      "body": []
     }

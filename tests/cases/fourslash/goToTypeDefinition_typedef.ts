@@ -8,7 +8,13 @@
 //// * @property {number} x
 //// */
 ////
-/////** @type {I} */
-////const /*ref*/i = { x: 0 };
+/////** @typedef {{ name: string }} Foo */
 
-verify.baselineGoToType("ref");
+/////** @type {I} */
+////const /*a*/a = { x: 0 };
+////
+////const b = /** @type {/*b*/Foo} */({});
+////const c = /** @type {/*c*/Foo} */({}).name;
+////const d = /** @type {/*d*/Foo} */({})['name'];
+
+verify.baselineGoToType("a", "b", "c", "d");

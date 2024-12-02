@@ -1,17 +1,4 @@
 // === goToType ===
-// === /tests/cases/fourslash/server/a.ts ===
-// export class [|Foo|] {}
-
 // === /tests/cases/fourslash/server/b.ts ===
 // import n = require('./a');
 // var x/*GOTO TYPE*/ = new n.Foo();
-
-  // === Details ===
-  [
-   {
-    "containerKind": "",
-    "containerName": "",
-    "kind": "",
-    "name": ""
-   }
-  ]
