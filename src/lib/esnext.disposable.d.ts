@@ -171,5 +171,5 @@ declare var AsyncDisposableStack: AsyncDisposableStackConstructor;
 interface IteratorObject<T, TReturn, TNext> extends Disposable {
 }
 
-interface AsyncIteratorObject<T, TReturn, TNext> extends AsyncDisposable {
+interface AsyncIterator<T, TReturn, TNext> extends AsyncDisposable {
 }
