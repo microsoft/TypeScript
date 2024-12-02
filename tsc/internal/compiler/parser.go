@@ -2233,14 +2233,6 @@ func (p *Parser) parsePostfixTypeOrHigher() *ast.Node {
 	typeNode := p.parseNonArrayType()
 	for !p.hasPrecedingLineBreak() {
 		switch p.token {
-		case ast.KindQuestionToken:
-			// If next token is start of a type we are in the middle of a conditional type
-			if p.lookAhead(p.nextIsStartOfType) {
-				return typeNode
-			}
-			p.nextToken()
-			typeNode = p.factory.NewOptionalTypeNode(typeNode)
-			p.finishNode(typeNode, pos)
 		case ast.KindOpenBracketToken:
 			p.parseExpected(ast.KindOpenBracketToken)
 			if p.isStartOfType(false /*isStartOfParameter*/) {
@@ -3151,7 +3143,15 @@ func (p *Parser) parseTupleElementType() *ast.TypeNode {
 		p.finishNode(result, pos)
 		return result
 	}
-	return p.parseType()
+	typeNode := p.parseType()
+	// If next token is start of a type we have a conditional type and not an optional type
+	if p.token == ast.KindQuestionToken && !p.lookAhead(p.nextIsStartOfType) {
+		pos := p.nodePos()
+		p.nextToken()
+		typeNode = p.factory.NewOptionalTypeNode(typeNode)
+		p.finishNode(typeNode, pos)
+	}
+	return typeNode
 }
 
 func (p *Parser) parseParenthesizedType() *ast.Node {
