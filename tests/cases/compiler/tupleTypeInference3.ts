@@ -51,3 +51,11 @@ const v111: T11 = [1, (a) => { a === "" }];
 const v112: T11 = [1, (a) => { a === "" }, 0];
 const v113: T11 = [1, (a) => { a === 0 }, 0, ""];
 const v114: T11 = [1, (a) => { a === "" }, 0, true];
+
+type T12 = { 1: (arg: number) => void } | { 0?: number, 1: (arg: boolean) => void } | { 0: (arg: boolean) => void } | { 0: boolean, 1: (arg: number) => void } | [null, (arg: string) => void];
+function f(a: T12) { };
+f([null, (a) => { a === "" }]);
+f([true, (a) => { a === 0 }]);
+f([(a) => { a === true }]);
+f([,(a) => { }]); // Error
+

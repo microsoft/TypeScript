@@ -53,6 +53,14 @@ const v112: T11 = [1, (a) => { a === "" }, 0];
 const v113: T11 = [1, (a) => { a === 0 }, 0, ""];
 const v114: T11 = [1, (a) => { a === "" }, 0, true];
 
+type T12 = { 1: (arg: number) => void } | { 0?: number, 1: (arg: boolean) => void } | { 0: (arg: boolean) => void } | { 0: boolean, 1: (arg: number) => void } | [null, (arg: string) => void];
+function f(a: T12) { };
+f([null, (a) => { a === "" }]);
+f([true, (a) => { a === 0 }]);
+f([(a) => { a === true }]);
+f([,(a) => { }]); // Error
+
+
 
 //// [tupleTypeInference3.js]
 "use strict";
@@ -82,3 +90,9 @@ var v111 = [1, function (a) { a === ""; }];
 var v112 = [1, function (a) { a === ""; }, 0];
 var v113 = [1, function (a) { a === 0; }, 0, ""];
 var v114 = [1, function (a) { a === ""; }, 0, true];
+function f(a) { }
+;
+f([null, function (a) { a === ""; }]);
+f([true, function (a) { a === 0; }]);
+f([function (a) { a === true; }]);
+f([, function (a) { }]); // Error

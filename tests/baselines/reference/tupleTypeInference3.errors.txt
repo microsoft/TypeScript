@@ -8,9 +8,10 @@ tupleTypeInference3.ts(16,7): error TS2322: Type '[1, (a: boolean) => void]' is 
 tupleTypeInference3.ts(30,22): error TS7006: Parameter 'a' implicitly has an 'any' type.
 tupleTypeInference3.ts(35,22): error TS7006: Parameter 'a' implicitly has an 'any' type.
 tupleTypeInference3.ts(45,24): error TS7006: Parameter 'a' implicitly has an 'any' type.
+tupleTypeInference3.ts(58,6): error TS7006: Parameter 'a' implicitly has an 'any' type.
 
 
-==== tupleTypeInference3.ts (5 errors) ====
+==== tupleTypeInference3.ts (6 errors) ====
     // Repro from #55632
     
     type InferArg =
@@ -77,4 +78,14 @@ tupleTypeInference3.ts(45,24): error TS7006: Parameter 'a' implicitly has an 'an
     const v112: T11 = [1, (a) => { a === "" }, 0];
     const v113: T11 = [1, (a) => { a === 0 }, 0, ""];
     const v114: T11 = [1, (a) => { a === "" }, 0, true];
+    
+    type T12 = { 1: (arg: number) => void } | { 0?: number, 1: (arg: boolean) => void } | { 0: (arg: boolean) => void } | { 0: boolean, 1: (arg: number) => void } | [null, (arg: string) => void];
+    function f(a: T12) { };
+    f([null, (a) => { a === "" }]);
+    f([true, (a) => { a === 0 }]);
+    f([(a) => { a === true }]);
+    f([,(a) => { }]); // Error
+         ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
+    
     

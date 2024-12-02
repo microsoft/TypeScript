@@ -559,3 +559,106 @@ const v114: T11 = [1, (a) => { a === "" }, 0, true];
 >true : true
 >     : ^^^^
 
+type T12 = { 1: (arg: number) => void } | { 0?: number, 1: (arg: boolean) => void } | { 0: (arg: boolean) => void } | { 0: boolean, 1: (arg: number) => void } | [null, (arg: string) => void];
+>T12 : T12
+>    : ^^^
+>1 : (arg: number) => void
+>  : ^   ^^      ^^^^^    
+>arg : number
+>    : ^^^^^^
+>0 : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>1 : (arg: boolean) => void
+>  : ^   ^^       ^^^^^    
+>arg : boolean
+>    : ^^^^^^^
+>0 : (arg: boolean) => void
+>  : ^   ^^       ^^^^^    
+>arg : boolean
+>    : ^^^^^^^
+>0 : boolean
+>  : ^^^^^^^
+>1 : (arg: number) => void
+>  : ^   ^^      ^^^^^    
+>arg : number
+>    : ^^^^^^
+>arg : string
+>    : ^^^^^^
+
+function f(a: T12) { };
+>f : (a: T12) => void
+>  : ^ ^^   ^^^^^^^^^
+>a : T12
+>  : ^^^
+
+f([null, (a) => { a === "" }]);
+>f([null, (a) => { a === "" }]) : void
+>                               : ^^^^
+>f : (a: T12) => void
+>  : ^ ^^   ^^^^^^^^^
+>[null, (a) => { a === "" }] : [null, (a: string) => void]
+>                            : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>(a) => { a === "" } : (a: string) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>a === "" : boolean
+>         : ^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+f([true, (a) => { a === 0 }]);
+>f([true, (a) => { a === 0 }]) : void
+>                              : ^^^^
+>f : (a: T12) => void
+>  : ^ ^^   ^^^^^^^^^
+>[true, (a) => { a === 0 }] : [true, (a: number) => void]
+>                           : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>(a) => { a === 0 } : (a: number) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>a === 0 : boolean
+>        : ^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+f([(a) => { a === true }]);
+>f([(a) => { a === true }]) : void
+>                           : ^^^^
+>f : (a: T12) => void
+>  : ^ ^^   ^^^^^^^^^
+>[(a) => { a === true }] : [(a: boolean) => void]
+>                        : ^^ ^^^^^^^^^^^^^^^^^^^
+>(a) => { a === true } : (a: boolean) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>a === true : boolean
+>           : ^^^^^^^
+>a : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+
+f([,(a) => { }]); // Error
+>f([,(a) => { }]) : void
+>                 : ^^^^
+>f : (a: T12) => void
+>  : ^ ^^   ^^^^^^^^^
+>[,(a) => { }] : [undefined, (a: any) => void]
+>              : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+> : undefined
+> : ^^^^^^^^^
+>(a) => { } : (a: any) => void
+>           : ^ ^^^^^^^^^^^^^^
+>a : any
+>  : ^^^
+
+
