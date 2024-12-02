@@ -26,6 +26,7 @@ import {
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
+    every,
     ExportDeclaration,
     ExportKind,
     Expression,
@@ -885,24 +886,23 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const unusedImportsFromOldFile = new Set<Symbol>();
     for (const statement of toMove) {
         forEachReference(statement, checker, enclosingRange, (symbol, isValidTypeOnlyUseSite) => {
-            if (!symbol.declarations || isGlobalType(checker, symbol)) {
+            if (!symbol.declarations) {
                 return;
             }
             if (existingTargetLocals.has(skipAlias(symbol, checker))) {
                 unusedImportsFromOldFile.add(symbol);
                 return;
             }
-            for (const decl of symbol.declarations) {
-                if (isInImport(decl)) {
-                    const prevIsTypeOnly = oldImportsNeededByTargetFile.get(symbol);
-                    oldImportsNeededByTargetFile.set(symbol, [
-                        prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite,
-                        tryCast(decl, (d): d is codefix.ImportOrRequireAliasDeclaration => isImportSpecifier(d) || isImportClause(d) || isNamespaceImport(d) || isImportEqualsDeclaration(d) || isBindingElement(d) || isVariableDeclaration(d)),
-                    ]);
-                }
-                else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
-                    targetFileImportsFromOldFile.set(symbol, isValidTypeOnlyUseSite);
-                }
+            const importedDeclaration = find(symbol.declarations, isInImport);
+            if (importedDeclaration) {
+                const prevIsTypeOnly = oldImportsNeededByTargetFile.get(symbol);
+                oldImportsNeededByTargetFile.set(symbol, [
+                    prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite,
+                    tryCast(importedDeclaration, (d): d is codefix.ImportOrRequireAliasDeclaration => isImportSpecifier(d) || isImportClause(d) || isNamespaceImport(d) || isImportEqualsDeclaration(d) || isBindingElement(d) || isVariableDeclaration(d)),
+                ]);
+            }
+            else if (!movedSymbols.has(symbol) && every(symbol.declarations, decl => isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile)) {
+                targetFileImportsFromOldFile.set(symbol, isValidTypeOnlyUseSite);
             }
         });
     }
@@ -944,10 +944,6 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
             ? jsxNamespaceSymbol
             : undefined;
     }
-}
-
-function isGlobalType(checker: TypeChecker, symbol: Symbol) {
-    return !!checker.resolveName(symbol.name, /*location*/ undefined, SymbolFlags.Type, /*excludeGlobals*/ false);
 }
 
 function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {

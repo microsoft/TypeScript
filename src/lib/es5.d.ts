@@ -678,7 +678,7 @@ interface Math {
      */
     atan(x: number): number;
     /**
-     * Returns the angle (in radians) from the X axis to a point.
+     * Returns the angle (in radians) between the X axis and the line going through both the origin and the given point.
      * @param y A numeric expression representing the cartesian y-coordinate.
      * @param x A numeric expression representing the cartesian x-coordinate.
      */
