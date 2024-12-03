@@ -38731,7 +38731,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // A missing not-equal flag indicates that the type wasn't handled by some case.
             return !someType(operandConstraint, t => getTypeFacts(t, notEqualFacts) === notEqualFacts);
         }
-        const type = checkExpressionCached(node.expression);
+        const type = getBaseConstraintOrType(checkExpressionCached(node.expression));
         if (!isLiteralType(type)) {
             return false;
         }
@@ -39131,7 +39131,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 expr.expression.kind === SyntaxKind.ThisKeyword
             ) {
                 // Look for if this is the constructor for the class that `symbol` is a property of.
-                const ctor = getContainingFunction(expr);
+                const ctor = getControlFlowContainer(expr);
                 if (!(ctor && (ctor.kind === SyntaxKind.Constructor || isJSConstructor(ctor)))) {
                     return true;
                 }
