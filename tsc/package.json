@@ -22,9 +22,9 @@
     "devDependencies": {
         "@types/node": "latest",
         "@types/which": "^3.0.4",
-        "dprint": "^0.47.2",
-        "execa": "^9.4.0",
-        "glob": "^11.0.0",
+        "dprint": "^0.47.6",
+        "execa": "^9.5.1",
+        "glob": "^10.4.5",
         "hereby": "^1.10.0",
         "which": "^5.0.0"
     },
