@@ -68,7 +68,7 @@ function isInstalled(tool) {
 export const build = task({
     name: "build",
     run: async () => {
-        await $`go build -o ./bin/ ./cmd/...`;
+        await $`go build ${options.race ? ["-race"] : []} -o ./bin/ ./cmd/...`;
     },
 });
 
