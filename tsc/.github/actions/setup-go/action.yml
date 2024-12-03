@@ -1,0 +1,31 @@
+name: Setup Go
+description: Setup Go
+
+inputs:
+  go-version:
+    default: '>=1.23.0'
+  cache-name:
+    default: 'cache'
+
+runs:
+  using: composite
+  steps:
+    - name: Install Go
+      id: install-go
+      uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
+      with:
+        go-version: ${{ inputs.go-version }}
+        cache: false
+
+    - name: Go cache
+      uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+      with:
+        # There is more code downloaded and built than is covered by '**/go.sum',
+        # so give each job its own cache to try and not end up sharing the wrong
+        # cache between jobs.
+        key: ts-setup-go-${{ runner.os }}-${{ steps.install-go.outputs.go-version }}-${{ github.workflow }}-${{ inputs.cache-name }}-${{ hashFiles('**/go.sum', '**/Herebyfile.mjs') }}
+        path: |
+          ~/go/pkg/mod
+          ~/.cache/go-build
+          ~/Library/Caches/go-build
+          ~/AppData/Local/go-build

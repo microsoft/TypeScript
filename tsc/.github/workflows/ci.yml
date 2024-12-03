@@ -23,10 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
-      - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
+      - uses: ./.github/actions/setup-go
         with:
-          go-version: '>=1.23.0'
-          cache-dependency-path: '**/*.sum'
+          cache-name: build
 
       - run: npm ci
 
@@ -58,10 +57,9 @@ jobs:
         with:
           submodules: ${{ matrix.submodules }}
       - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
-      - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
+      - uses: ./.github/actions/setup-go
         with:
-          go-version: '>=1.23.0'
-          cache-dependency-path: '**/*.sum'
+          cache-name: test
 
       - run: npm ci
 
@@ -76,10 +74,9 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
-      - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
+      - uses: ./.github/actions/setup-go
         with:
-          go-version: '>=1.23.0'
-          cache-dependency-path: '**/*.sum'
+          cache-name: lint
 
       - run: npm ci
 
@@ -91,10 +88,9 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
-      - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
+      - uses: ./.github/actions/setup-go
         with:
-          go-version: '>=1.23.0'
-          cache-dependency-path: '**/*.sum'
+          cache-name: format
 
       - run: npm ci
 
@@ -107,10 +103,9 @@ jobs:
         with:
           submodules: true
       - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
-      - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
+      - uses: ./.github/actions/setup-go
         with:
-          go-version: '>=1.23.0'
-          cache-dependency-path: '**/*.sum'
+          cache-name: generate
 
       - run: npm ci
 
@@ -123,10 +118,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
+      - uses: ./.github/actions/setup-go
         with:
-          go-version: '>=1.23.0'
-          cache-dependency-path: '**/*.sum'
+          cache-name: tidy
 
       - run: go mod tidy
       - run: go -C ./_tools mod tidy
