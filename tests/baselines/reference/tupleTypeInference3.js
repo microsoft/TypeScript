@@ -15,7 +15,7 @@ type T2 = { 0: 1, 1: (a: boolean) => void, 2: number };
 type T3 = T1 | T2;
 const v31: T3 = [1, (a) => { a === 0 }];
 const v32: T3 = [1, (a) => { a === true }, 0];
-const v33: T3 = [1, (a) => { a === true }, 0, 0]; // Error
+const v33: T3 = [1, (a) => { a === true }, 0, 0];
 const v34: T3 = [1, (a: boolean) => { a === true }]; // Error
 
 type T4 = T3 | [2, (b: string) => void]
@@ -53,14 +53,33 @@ const v112: T11 = [1, (a) => { a === "" }, 0];
 const v113: T11 = [1, (a) => { a === 0 }, 0, ""];
 const v114: T11 = [1, (a) => { a === "" }, 0, true];
 
-type T12 = { 1: (arg: number) => void } | { 0?: number, 1: (arg: boolean) => void } | { 0: (arg: boolean) => void } | { 0: boolean, 1: (arg: number) => void } | [null, (arg: string) => void];
-function f(a: T12) { };
+type T12 =
+  | { 1: (arg: File) => void }
+  | { 0?: number, 1: (arg: Date) => void }
+  | { 0: (arg: boolean) => void }
+  | { 0: boolean, 1: (arg: number) => void }
+  | [null, (arg: string) => void];
+declare function f(a: T12): void;
 f([null, (a) => { a === "" }]);
 f([true, (a) => { a === 0 }]);
 f([(a) => { a === true }]);
-f([,(a) => { }]); // Error
+f([0, (a) => { a as Date }]);
+f([, (a) => { }]); // Error
 
+declare function f2(_: { 0: number, 1: (arg: number) => void } | { 0: number, 1: (arg: boolean) => void, 2: any }): void;
+f2([1, arg => { arg === 0 }] as const);
 
+declare function f3(_: { 0: number, 1: (arg: number) => void } | { 0: number, 1: (arg: boolean) => void, 2?: any }): void;
+f3([1, arg => { }] as const); // Error
+
+declare function f4(_: [(arg: number) => void] | [(arg: string) => void, true]): void;
+f4([arg => { arg === 0 }] as const);
+
+// declare function f5(arg: { 1: (arg: number) => void; foo?: string } | [1, (arg: boolean) => void]): void;
+// f5([null, (arg) => { arg === 0 }] as const);
+
+// declare function f6(arg: { 1: (arg: number) => void; [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
+// f6([() => {}, (arg) => { arg === 0 }] as const);
 
 //// [tupleTypeInference3.js]
 "use strict";
@@ -68,7 +87,7 @@ f([,(a) => { }]); // Error
 var arg = [1, function (a) { }];
 var v31 = [1, function (a) { a === 0; }];
 var v32 = [1, function (a) { a === true; }, 0];
-var v33 = [1, function (a) { a === true; }, 0, 0]; // Error
+var v33 = [1, function (a) { a === true; }, 0, 0];
 var v34 = [1, function (a) { a === true; }]; // Error
 var v41 = [1, function (a) { a === 0; }];
 var v42 = [1, function (a) { a === true; }, 0];
@@ -90,9 +109,15 @@ var v111 = [1, function (a) { a === ""; }];
 var v112 = [1, function (a) { a === ""; }, 0];
 var v113 = [1, function (a) { a === 0; }, 0, ""];
 var v114 = [1, function (a) { a === ""; }, 0, true];
-function f(a) { }
-;
 f([null, function (a) { a === ""; }]);
 f([true, function (a) { a === 0; }]);
 f([function (a) { a === true; }]);
+f([0, function (a) { a; }]);
 f([, function (a) { }]); // Error
+f2([1, function (arg) { arg === 0; }]);
+f3([1, function (arg) { }]); // Error
+f4([function (arg) { arg === 0; }]);
+// declare function f5(arg: { 1: (arg: number) => void; foo?: string } | [1, (arg: boolean) => void]): void;
+// f5([null, (arg) => { arg === 0 }] as const);
+// declare function f6(arg: { 1: (arg: number) => void; [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
+// f6([() => {}, (arg) => { arg === 0 }] as const);
