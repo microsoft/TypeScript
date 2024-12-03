@@ -470,8 +470,7 @@ func getErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		errorNode = getNameOfDeclaration(node)
 	case ast.KindArrowFunction:
 		return getErrorRangeForArrowFunction(sourceFile, node)
-	case ast.KindCaseClause:
-	case ast.KindDefaultClause:
+	case ast.KindCaseClause, ast.KindDefaultClause:
 		start := scanner.SkipTrivia(sourceFile.Text, node.Pos())
 		end := node.End()
 		statements := node.AsCaseOrDefaultClause().Statements.Nodes

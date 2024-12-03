@@ -93,9 +93,7 @@ func (options *CompilerOptions) GetESModuleInterop() bool {
 		return options.ESModuleInterop == TSTrue
 	}
 	switch options.GetEmitModuleKind() {
-	case ModuleKindNode16:
-	case ModuleKindNodeNext:
-	case ModuleKindPreserve:
+	case ModuleKindNode16, ModuleKindNodeNext, ModuleKindPreserve:
 		return true
 	}
 	return false

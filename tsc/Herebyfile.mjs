@@ -26,6 +26,20 @@ const { values: options } = parseArgs({
     allowNegative: true,
 });
 
+/**
+ * @type {<T>(fn: () => T) => (() => T)}
+ */
+function memoize(fn) {
+    let value;
+    return () => {
+        if (fn !== undefined) {
+            value = fn();
+            fn = /** @type {any} */ (undefined);
+        }
+        return value;
+    };
+}
+
 const typeScriptSubmodulePath = path.join(__dirname, "_submodules", "TypeScript");
 
 function assertTypeScriptCloned() {
@@ -41,7 +55,6 @@ function assertTypeScriptCloned() {
 }
 
 const tools = new Map([
-    ["github.com/golangci/golangci-lint/cmd/golangci-lint", "v1.62.0"],
     ["gotest.tools/gotestsum", "latest"],
 ]);
 
@@ -49,13 +62,7 @@ const tools = new Map([
  * @param {string} tool
  */
 function isInstalled(tool) {
-    try {
-        which.sync(tool);
-        return true;
-    }
-    catch {
-        return false;
-    }
+    return !!which.sync(tool, { nothrow: true });
 }
 
 export const build = task({
@@ -73,9 +80,10 @@ export const generate = task({
     },
 });
 
+const goTest = memoize(() => isInstalled("gotestsum") ? ["gotestsum", "--format-hide-empty-pkg", "--"] : ["go", "test"]);
+
 async function runTests() {
-    const goTest = isInstalled("gotestsum") ? ["gotestsum", "--format-hide-empty-pkg", "--"] : ["go", "test"];
-    await $`${goTest} ${options.race ? ["-race"] : []} ./...`;
+    await $`${goTest()} ${options.race ? ["-race"] : []} ./...`;
 }
 
 export const test = task({
@@ -93,29 +101,50 @@ export const testBenchmarks = task({
     run: runTestBenchmarks,
 });
 
+async function runTestTools() {
+    await $({ cwd: path.join(__dirname, "_tools") })`${goTest()} ${options.race ? ["-race"] : []} ./...`;
+}
+
+export const testTools = task({
+    name: "test:tools",
+    run: runTestTools,
+});
+
 export const testAll = task({
     name: "test:all",
     run: async () => {
         // Prevent interleaving by running these directly instead of in parallel.
         await runTests();
         await runTestBenchmarks();
+        await runTestTools();
     },
 });
+
+const customLinterPath = "./_tools/custom-gcl";
+const golangciLintVersion = "v1.62.2"; // NOTE: this must match the version in .custom-gcl.yml
+
+async function buildCustomLinter() {
+    await $`go run github.com/golangci/golangci-lint/cmd/golangci-lint@${golangciLintVersion} custom`;
+    await $`${customLinterPath} cache clean`;
+}
 
 export const lint = task({
     name: "lint",
     run: async () => {
-        if (!isInstalled("golangci-lint")) {
-            throw new Error("golangci-lint is not installed; run `hereby install-tools`");
+        if (!isInstalled(customLinterPath)) {
+            await buildCustomLinter();
         }
-        await $`golangci-lint run ${options.fix ? ["--fix"] : []}`;
+        await $`${customLinterPath} run ${options.fix ? ["--fix"] : []}`;
     },
 });
 
 export const installTools = task({
     name: "install-tools",
     run: async () => {
-        await Promise.all([...tools].map(([tool, version]) => $`go install ${tool}@${version}`));
+        await Promise.all([
+            ...[...tools].map(([tool, version]) => $`go install ${tool}@${version}`),
+            buildCustomLinter(),
+        ]);
     },
 });
 

@@ -41,6 +41,8 @@ linters:
     - whitespace
     - wrapcheck
 
+    - customlint
+
     # Need to add headers
     # - goheader
 
@@ -56,6 +58,10 @@ linters:
     # - unused
 
 linters-settings:
+  custom:
+    customlint:
+      type: module
+
   wrapcheck:
     ignorePackageGlobs:
       - encoding/*

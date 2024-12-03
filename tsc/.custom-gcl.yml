@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/custom-gcl.jsonschema.json
+
+version: v1.62.2 # NOTE: this must match golangciLintVersion in Herebyfile.mjs
+
+destination: ./_tools
+
+plugins:
+  - module: 'github.com/microsoft/typescript-go/_tools'
+    import: 'github.com/microsoft/typescript-go/_tools/customlint'
+    path: ./_tools
