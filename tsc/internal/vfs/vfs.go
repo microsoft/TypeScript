@@ -65,11 +65,40 @@ var (
 
 var _ FS = (*vfs)(nil)
 
+type RealpathFS interface {
+	fs.FS
+	Realpath(path string) (string, error)
+}
+
 // FromIOFS creates a new FS from an [fs.FS].
+//
 // For paths like `c:/foo/bar`, fsys will be used as though it's rooted at `/` and the path is `/c:/foo/bar`.
-func FromIOFS(useCaseSensitiveFileNames bool, fsys fs.FS) FS {
+//
+// If the provided [fs.FS] implements [RealpathFS], it will be used to implement the Realpath method.
+//
+// Deprecated: FromIOFS does not actually handle case-insensitivity; ensure the passed in [fs.FS]
+// respects case-insensitive file names if needed. Consider using [vfstest.FromMapFS] for testing.
+func FromIOFS(fsys fs.FS, useCaseSensitiveFileNames bool) FS {
+	var realpath func(path string) (string, error)
+	if fsys, ok := fsys.(RealpathFS); ok {
+		realpath = func(path string) (string, error) {
+			rest, hadSlash := strings.CutPrefix(path, "/")
+			rp, err := fsys.Realpath(rest)
+			if err != nil {
+				return "", err
+			}
+			if hadSlash {
+				return "/" + rp, nil
+			}
+			return rp, nil
+		}
+	} else {
+		realpath = func(path string) (string, error) {
+			return path, nil
+		}
+	}
+
 	return &vfs{
-		// !!! The passed in FS may not actually respect case insensitive file names.
 		useCaseSensitiveFileNames: useCaseSensitiveFileNames,
 		rootFor: func(root string) fs.FS {
 			if root == "/" {
@@ -83,10 +112,7 @@ func FromIOFS(useCaseSensitiveFileNames bool, fsys fs.FS) FS {
 			}
 			return sub
 		},
-		realpath: func(path string) (string, error) {
-			// TODO: replace once https://go.dev/cl/385534 is available
-			return path, nil
-		},
+		realpath: realpath,
 	}
 }
 
@@ -102,11 +128,11 @@ func FromOS() FS {
 			path = filepath.FromSlash(path)
 			path, err := filepath.EvalSymlinks(path)
 			if err != nil {
-				return "", err //nolint:wrapcheck
+				return "", err
 			}
 			path, err = filepath.Abs(path)
 			if err != nil {
-				return "", err //nolint:wrapcheck
+				return "", err
 			}
 			return tspath.NormalizeSlashes(path), nil
 		},
@@ -266,7 +292,7 @@ func (v *vfs) WalkDir(root string, walkFn WalkDirFunc) error {
 	if fsys == nil {
 		return nil
 	}
-	return fs.WalkDir(fsys, rest, func(path string, d fs.DirEntry, err error) error { //nolint:wrapcheck
+	return fs.WalkDir(fsys, rest, func(path string, d fs.DirEntry, err error) error {
 		if path == "." {
 			path = ""
 		}
@@ -275,7 +301,12 @@ func (v *vfs) WalkDir(root string, walkFn WalkDirFunc) error {
 }
 
 func (v *vfs) Realpath(path string) string {
-	_ = rootLength(path) // panic if not absolute
-	path, _ = v.realpath(path)
-	return path
+	root, rest := splitPath(path)
+	// splitPath normalizes the path into parts (e.g. "c:/foo/bar" -> "c:/", "foo/bar")
+	// Put them back together to call realpath.
+	realpath, err := v.realpath(root + rest)
+	if err != nil {
+		return path
+	}
+	return realpath
 }

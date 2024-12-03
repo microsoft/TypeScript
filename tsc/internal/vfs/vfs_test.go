@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
 
@@ -34,7 +35,7 @@ func TestIOFS(t *testing.T) {
 		},
 	}
 
-	fs := vfs.FromIOFS(true, testfs)
+	fs := vfs.FromIOFS(testfs, true)
 
 	t.Run("ReadFile", func(t *testing.T) {
 		t.Parallel()
@@ -133,10 +134,54 @@ func TestIOFS(t *testing.T) {
 	})
 }
 
-func TestIOFSWindows(t *testing.T) {
+func TestVFSTestMapFS(t *testing.T) {
 	t.Parallel()
 
-	testfs := fstest.MapFS{
+	fs := vfstest.FromMapFS(fstest.MapFS{
+		"foo.ts": &fstest.MapFile{
+			Data: []byte("hello, world"),
+		},
+		"dir1/file1.ts": &fstest.MapFile{
+			Data: []byte("export const foo = 42;"),
+		},
+		"dir1/file2.ts": &fstest.MapFile{
+			Data: []byte("export const foo = 42;"),
+		},
+		"dir2/file1.ts": &fstest.MapFile{
+			Data: []byte("export const foo = 42;"),
+		},
+	}, false /*useCaseSensitiveFileNames*/)
+
+	t.Run("ReadFile", func(t *testing.T) {
+		t.Parallel()
+
+		content, ok := fs.ReadFile("/foo.ts")
+		assert.Assert(t, ok)
+		assert.Equal(t, content, "hello, world")
+
+		content, ok = fs.ReadFile("/does/not/exist.ts")
+		assert.Assert(t, !ok)
+		assert.Equal(t, content, "")
+	})
+
+	t.Run("Realpath", func(t *testing.T) {
+		t.Parallel()
+
+		realpath := fs.Realpath("/foo.ts")
+		assert.Equal(t, realpath, "/foo.ts")
+
+		realpath = fs.Realpath("/Foo.ts")
+		assert.Equal(t, realpath, "/foo.ts")
+
+		realpath = fs.Realpath("/does/not/exist.ts")
+		assert.Equal(t, realpath, "/does/not/exist.ts")
+	})
+}
+
+func TestVFSTestMapFSWindows(t *testing.T) {
+	t.Parallel()
+
+	fs := vfstest.FromMapFS(fstest.MapFS{
 		"c:/foo.ts": &fstest.MapFile{
 			Data: []byte("hello, world"),
 		},
@@ -149,9 +194,7 @@ func TestIOFSWindows(t *testing.T) {
 		"c:/dir2/file1.ts": &fstest.MapFile{
 			Data: []byte("export const foo = 42;"),
 		},
-	}
-
-	fs := vfs.FromIOFS(true, testfs)
+	}, false)
 
 	t.Run("ReadFile", func(t *testing.T) {
 		t.Parallel()
@@ -163,6 +206,19 @@ func TestIOFSWindows(t *testing.T) {
 		content, ok = fs.ReadFile("c:/does/not/exist.ts")
 		assert.Assert(t, !ok)
 		assert.Equal(t, content, "")
+	})
+
+	t.Run("Realpath", func(t *testing.T) {
+		t.Parallel()
+
+		realpath := fs.Realpath("c:/foo.ts")
+		assert.Equal(t, realpath, "c:/foo.ts")
+
+		realpath = fs.Realpath("c:/Foo.ts")
+		assert.Equal(t, realpath, "c:/foo.ts")
+
+		realpath = fs.Realpath("c:/does/not/exist.ts")
+		assert.Equal(t, realpath, "c:/does/not/exist.ts")
 	})
 }
 
@@ -232,7 +288,7 @@ func TestBOM(t *testing.T) {
 				},
 			}
 
-			fs := vfs.FromIOFS(true, testfs)
+			fs := vfs.FromIOFS(testfs, true)
 
 			content, ok := fs.ReadFile("/foo.ts")
 			assert.Assert(t, ok)
@@ -249,7 +305,7 @@ func TestBOM(t *testing.T) {
 			},
 		}
 
-		fs := vfs.FromIOFS(true, testfs)
+		fs := vfs.FromIOFS(testfs, true)
 
 		content, ok := fs.ReadFile("/foo.ts")
 		assert.Assert(t, ok)

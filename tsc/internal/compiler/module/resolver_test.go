@@ -17,6 +17,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
 
@@ -288,9 +289,10 @@ var skip = []string{
 }
 
 type vfsModuleResolutionHost struct {
-	fs               vfs.FS
-	currentDirectory string
-	traces           []string
+	fs                        vfs.FS
+	useCaseSensitiveFileNames bool
+	currentDirectory          string
+	traces                    []string
 }
 
 func fixRoot(path string) string {
@@ -311,9 +313,13 @@ func newVFSModuleResolutionHost(files map[string]string) *vfsModuleResolutionHos
 			Data: []byte(content),
 		}
 	}
+
+	const useCaseSensitiveFileNames = true
+
 	return &vfsModuleResolutionHost{
-		fs:               vfs.FromIOFS(false, fs),
-		currentDirectory: "/",
+		fs:                        vfstest.FromMapFS(fs, useCaseSensitiveFileNames),
+		useCaseSensitiveFileNames: useCaseSensitiveFileNames,
+		currentDirectory:          "/",
 	}
 }
 
@@ -333,7 +339,7 @@ func (v *vfsModuleResolutionHost) Trace(msg string) {
 
 // UseCaseSensitiveFileNames implements ModuleResolutionHost.
 func (v *vfsModuleResolutionHost) UseCaseSensitiveFileNames() bool {
-	return false
+	return v.useCaseSensitiveFileNames
 }
 
 type functionCall struct {
