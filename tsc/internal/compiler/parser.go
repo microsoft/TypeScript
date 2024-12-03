@@ -1947,7 +1947,9 @@ func (p *Parser) parseImportOrExportSpecifier(kind ast.Kind) (isTypeOnly bool, p
 	// let checkIdentifierStart = scanner.getTokenStart();
 	// let checkIdentifierEnd = scanner.getTokenEnd();
 	canParseAsKeyword := true
-	name = p.parseModuleExportName(false /*disallowKeywords*/)
+	disallowKeywords := kind == ast.KindImportSpecifier
+	var nameOk bool
+	name, nameOk = p.parseModuleExportName(disallowKeywords)
 	if name.Kind == ast.KindIdentifier && name.AsIdentifier().Text == "type" {
 		// If the first token of an import specifier is 'type', there are a lot of possibilities,
 		// especially if we see 'as' afterwards:
@@ -1967,7 +1969,7 @@ func (p *Parser) parseImportOrExportSpecifier(kind ast.Kind) (isTypeOnly bool, p
 					// { type as as "something" }
 					isTypeOnly = true
 					propertyName = firstAs
-					name = p.parseModuleExportName(true /*disallowKeywords*/)
+					name, nameOk = p.parseModuleExportName(disallowKeywords)
 					canParseAsKeyword = false
 				} else {
 					// { type as as }
@@ -1980,7 +1982,7 @@ func (p *Parser) parseImportOrExportSpecifier(kind ast.Kind) (isTypeOnly bool, p
 				// { type as "something" }
 				propertyName = name
 				canParseAsKeyword = false
-				name = p.parseModuleExportName(true /*disallowKeywords*/)
+				name, nameOk = p.parseModuleExportName(disallowKeywords)
 			} else {
 				// { type as }
 				isTypeOnly = true
@@ -1990,14 +1992,19 @@ func (p *Parser) parseImportOrExportSpecifier(kind ast.Kind) (isTypeOnly bool, p
 			// { type something ...? }
 			// { type "something" ...? }
 			isTypeOnly = true
-			name = p.parseModuleExportName(true /*disallowKeywords*/)
+			name, nameOk = p.parseModuleExportName(disallowKeywords)
 		}
 	}
 	if canParseAsKeyword && p.token == ast.KindAsKeyword {
 		propertyName = name
 		p.parseExpected(ast.KindAsKeyword)
-		name = p.parseModuleExportName(kind == ast.KindImportSpecifier /*disallowKeywords*/)
+		name, nameOk = p.parseModuleExportName(disallowKeywords)
 	}
+
+	if !nameOk {
+		p.parseErrorAtRange(p.skipRangeTrivia(name.Loc), diagnostics.Identifier_expected)
+	}
+
 	return isTypeOnly, propertyName, name
 }
 
@@ -2005,14 +2012,16 @@ func (p *Parser) canParseModuleExportName() bool {
 	return tokenIsIdentifierOrKeyword(p.token) || p.token == ast.KindStringLiteral
 }
 
-func (p *Parser) parseModuleExportName(disallowKeywords bool) *ast.Node {
+func (p *Parser) parseModuleExportName(disallowKeywords bool) (node *ast.Node, nameOk bool) {
+	nameOk = true
+
 	if p.token == ast.KindStringLiteral {
-		return p.parseLiteralExpression()
+		return p.parseLiteralExpression(), nameOk
 	}
 	if disallowKeywords && isKeyword(p.token) && !p.isIdentifier() {
-		p.parseErrorAtCurrentToken(diagnostics.Identifier_expected)
+		nameOk = false
 	}
-	return p.parseIdentifierName()
+	return p.parseIdentifierName(), nameOk
 }
 
 func (p *Parser) tryParseImportAttributes() *ast.Node {
@@ -2088,7 +2097,8 @@ func (p *Parser) parseExportDeclaration(pos int, hasJSDoc bool, modifiers *ast.M
 }
 
 func (p *Parser) parseNamespaceExport(pos int) *ast.Node {
-	result := p.factory.NewNamespaceExport(p.parseModuleExportName(false /*disallowKeywords*/))
+	exportName, _ := p.parseModuleExportName(false /*disallowKeywords*/)
+	result := p.factory.NewNamespaceExport(exportName)
 	p.finishNode(result, pos)
 	return result
 }
