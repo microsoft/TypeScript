@@ -2,10 +2,13 @@ package compiler
 
 import (
 	"io/fs"
+	"iter"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -27,39 +30,86 @@ func BenchmarkParse(b *testing.B) {
 	}
 }
 
-func TestParseTypeScriptSrc(t *testing.T) {
+func TestParseTypeScriptRepo(t *testing.T) {
 	t.Parallel()
 
-	srcDir := filepath.Join(repo.TypeScriptSubmodulePath, "src")
-
-	if _, err := os.Stat(srcDir); os.IsNotExist(err) {
-		t.Skipf("TypeScript submodule not found at %s", srcDir)
+	tests := []struct {
+		name         string
+		ignoreErrors bool
+	}{
+		{"src", false},
+		{"scripts", false},
+		{"Herebyfile.mjs", false},
+		{"tests/cases", true},
 	}
 
-	err := filepath.WalkDir(srcDir, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
+	for _, test := range tests {
+		root := filepath.Join(repo.TypeScriptSubmodulePath, test.name)
+		if _, err := os.Stat(root); os.IsNotExist(err) {
+			t.Skipf("%q does not exist", root)
 		}
 
-		if d.IsDir() || tspath.TryExtractTSExtension(path) == "" {
-			return nil
-		}
-
-		testName, err := filepath.Rel(srcDir, path)
-		assert.NilError(t, err)
-		testName = filepath.ToSlash(testName)
-
-		t.Run(testName, func(t *testing.T) {
+		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			sourceText, err := os.ReadFile(path)
-			assert.NilError(t, err)
+			for f := range allParsableFiles(t, root) {
+				t.Run(f.name, func(t *testing.T) {
+					t.Parallel()
 
-			sourceFile := ParseSourceFile(path, string(sourceText), core.ScriptTargetESNext)
-			assert.Equal(t, len(sourceFile.Diagnostics()), 0)
+					// !!! TODO: Fix this bug
+					if f.name == "compiler/unicodeEscapesInNames01.ts" {
+						t.Skip("times out")
+					}
+
+					sourceText, err := os.ReadFile(f.path)
+					assert.NilError(t, err)
+
+					var sourceFile *ast.SourceFile
+
+					if strings.HasSuffix(f.name, ".json") {
+						sourceFile = ParseJSONText(f.path, string(sourceText))
+					} else {
+						sourceFile = ParseSourceFile(f.path, string(sourceText), core.ScriptTargetESNext)
+					}
+
+					if !test.ignoreErrors {
+						assert.Equal(t, len(sourceFile.Diagnostics()), 0)
+					}
+				})
+			}
 		})
+	}
+}
 
-		return nil
-	})
-	assert.NilError(t, err)
+type parsableFile struct {
+	path string
+	name string
+}
+
+func allParsableFiles(tb testing.TB, root string) iter.Seq[parsableFile] {
+	tb.Helper()
+	return func(yield func(parsableFile) bool) {
+		tb.Helper()
+		err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+
+			if d.IsDir() || tspath.TryGetExtensionFromPath(path) == "" {
+				return nil
+			}
+
+			testName, err := filepath.Rel(root, path)
+			if err != nil {
+				return err
+			}
+			testName = filepath.ToSlash(testName)
+
+			if !yield(parsableFile{path, testName}) {
+				return filepath.SkipAll
+			}
+			return nil
+		})
+		assert.NilError(tb, err)
+	}
 }
