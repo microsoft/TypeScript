@@ -1,10 +1,7 @@
 /loosey.cts(1,36): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
 /loosey.cts(6,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
-/main.mts(2,22): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node16'.
-/main.mts(3,19): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node16'.
 /main.mts(5,36): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
 /main.mts(6,52): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
-/main.mts(7,21): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node16'.
 /main.mts(8,10): error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node16'.
 /main.mts(8,41): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
 /main.mts(9,42): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
@@ -45,14 +42,10 @@
       "version": 1
     }
     
-==== /main.mts (9 errors) ====
+==== /main.mts (6 errors) ====
     import { oops } from "not.json"; // Ok
-    import moreOops from "actually-json"; // Error
-                         ~~~~~~~~~~~~~~~
-!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node16'.
-    import typed from "actually-json/typed"; // Error
-                      ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node16'.
+    import moreOops from "actually-json"; // Error in nodenext
+    import typed from "actually-json/typed"; // Error in nodenext
     
     import config from "./config.json" with { type: "json" }; // Ok
                                        ~~~~~~~~~~~~~~~~~~~~~
@@ -60,9 +53,7 @@
     import { default as config1 } from "./config.json" with { type: "json" }; // Ok
                                                        ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
-    import config2 from "./config.json"; // Error, no attribute
-                        ~~~~~~~~~~~~~~~
-!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node16'.
+    import config2 from "./config.json"; // Error in nodenext, no attribute
     import { version } from "./config.json" with { type: "json" }; // Error, named import
              ~~~~~~~
 !!! error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node16'.

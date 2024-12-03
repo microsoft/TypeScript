@@ -43,16 +43,16 @@
     
 ==== /main.mts (5 errors) ====
     import { oops } from "not.json"; // Ok
-    import moreOops from "actually-json"; // Error
+    import moreOops from "actually-json"; // Error in nodenext
                          ~~~~~~~~~~~~~~~
 !!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'NodeNext'.
-    import typed from "actually-json/typed"; // Error
+    import typed from "actually-json/typed"; // Error in nodenext
                       ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'NodeNext'.
     
     import config from "./config.json" with { type: "json" }; // Ok
     import { default as config1 } from "./config.json" with { type: "json" }; // Ok
-    import config2 from "./config.json"; // Error, no attribute
+    import config2 from "./config.json"; // Error in nodenext, no attribute
                         ~~~~~~~~~~~~~~~
 !!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'NodeNext'.
     import { version } from "./config.json" with { type: "json" }; // Error, named import
