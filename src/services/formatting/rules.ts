@@ -934,6 +934,13 @@ function isSemicolonDeletionContext(context: FormattingContext): boolean {
     }
 
     if (
+        nextTokenKind === SyntaxKind.SemicolonToken &&
+        context.currentTokenSpan.kind === SyntaxKind.SemicolonToken
+    ) {
+        return true;
+    }
+
+    if (
         nextTokenKind === SyntaxKind.SemicolonClassElement ||
         nextTokenKind === SyntaxKind.SemicolonToken
     ) {
