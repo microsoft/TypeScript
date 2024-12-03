@@ -262,7 +262,11 @@ Before running Timeout callback:: count: 3
 3: /a/username/workspace/project/tsconfig.json
 4: *ensureProjectForOpenFiles*
 5: /a/username/workspace/project/tsconfig.jsonFailedLookupInvalidation
+<<<<<<< HEAD
 //// [/a/username/workspace/project/src/file2.ts] Inode:: 112
+=======
+//// [/a/username/workspace/project/src/file2.ts] Inode:: 114
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 
 
 
@@ -333,7 +337,11 @@ FsWatches::
 /a/username/workspace/project/src/file1.ts:
   {"inode":7}
 /a/username/workspace/project/src/file2.ts: *new*
+<<<<<<< HEAD
   {"inode":112}
+=======
+  {"inode":114}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /a/username/workspace/project/tsconfig.json:
   {"inode":8}
 /home/src/tslibs/TS/Lib/lib.d.ts:

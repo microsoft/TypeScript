@@ -91,18 +91,30 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
+<<<<<<< HEAD
 //// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 141
+=======
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 143
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = 'test';
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 142
 export declare const c: string;
 
 
 //// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 143
+=======
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 144
+export declare const c: string;
+
+
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 145
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -122,6 +134,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./c"), exports);
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 144
 export * from './c';
 
@@ -130,6 +143,16 @@ export * from './c';
 {"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 146
+=======
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 146
+export * from './c';
+
+
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 147
+{"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 148
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 {
   "root": [
     "../src/c.ts",
@@ -139,18 +162,30 @@ export * from './c';
   "size": 68
 }
 
+<<<<<<< HEAD
 //// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 148
+=======
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 150
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 'test';
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 149
 export declare const a: string;
 
 
 //// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 150
+=======
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 151
+export declare const a: string;
+
+
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 152
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -171,15 +206,26 @@ __exportStar(require("./a"), exports);
 __exportStar(require("c"), exports);
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 151
+=======
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 153
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export * from './a';
 export * from 'c';
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 152
 {"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 153
+=======
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 154
+{"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 155
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 {
   "root": [
     "../src/a.ts",
@@ -771,7 +817,11 @@ After running Immedidate callback:: count: 0
 
 change in unrelated folder in a
 Before running Timeout callback:: count: 0
+<<<<<<< HEAD
 //// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 154
+=======
+//// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 156
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export const a = 10;
 
 
@@ -887,7 +937,11 @@ After running Immedidate callback:: count: 0
 
 change in unrelated folder in c
 Before running Timeout callback:: count: 0
+<<<<<<< HEAD
 //// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 155
+=======
+//// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 157
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export const a = 10;
 
 
@@ -1003,7 +1057,11 @@ After running Immedidate callback:: count: 0
 
 change in unrelated folder in a
 Before running Timeout callback:: count: 0
+<<<<<<< HEAD
 //// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 156
+=======
+//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 158
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export const a = 10;
 
 
@@ -1119,7 +1177,11 @@ After running Immedidate callback:: count: 0
 
 change in unrelated folder in c
 Before running Timeout callback:: count: 0
+<<<<<<< HEAD
 //// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 157
+=======
+//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 159
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export const a = 10;
 
 
@@ -1817,18 +1879,30 @@ Custom watchDirectory:: Triggered Ignored:: {"id":20,"path":"/home/src/projects/
 Custom watchDirectory:: Triggered Ignored:: {"id":20,"path":"/home/src/projects/b/2/b-impl/b/node_modules/a","recursive":true,"ignoreUpdate":true}:: /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt updated
 Custom watchDirectory:: Triggered Ignored:: {"id":20,"path":"/home/src/projects/b/2/b-impl/b/node_modules/a","recursive":true,"ignoreUpdate":true}:: /home/src/projects/b/2/b-impl/b/node_modules/a/lib updated
 Before request
+<<<<<<< HEAD
 //// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 159
+=======
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 161
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = 'test';
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 160
 export declare const c: string;
 
 
 //// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 161
+=======
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 162
+export declare const c: string;
+
+
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 163
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1848,6 +1922,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./c"), exports);
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 162
 export * from './c';
 
@@ -1856,6 +1931,16 @@ export * from './c';
 {"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 164
+=======
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 164
+export * from './c';
+
+
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 165
+{"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 166
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 {
   "root": [
     "../src/c.ts",
@@ -1865,18 +1950,30 @@ export * from './c';
   "size": 68
 }
 
+<<<<<<< HEAD
 //// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 166
+=======
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 168
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 'test';
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 167
 export declare const a: string;
 
 
 //// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 168
+=======
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 169
+export declare const a: string;
+
+
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 170
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1897,15 +1994,26 @@ __exportStar(require("./a"), exports);
 __exportStar(require("c"), exports);
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 169
+=======
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 171
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export * from './a';
 export * from 'c';
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 170
 {"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 171
+=======
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 172
+{"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 173
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 {
   "root": [
     "../src/a.ts",

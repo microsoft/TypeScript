@@ -95,7 +95,11 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined 
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 
 
+<<<<<<< HEAD
 //// [/home/user/projects/myproject/src/file.js] Inode:: 118
+=======
+//// [/home/user/projects/myproject/src/file.js] Inode:: 120
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -321,7 +325,11 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/no
 sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 
 
+<<<<<<< HEAD
 //// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 118
+=======
+//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 120
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 
 PolledWatches::
 /home/user/projects/myproject/node_modules/@types:

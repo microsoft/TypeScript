@@ -27,10 +27,17 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
+<<<<<<< HEAD
 //// [/home/src/Library/Caches/typescript/package.json] Inode:: 113
 { "private": true }
 
 //// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 115
+=======
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 115
+{ "private": true }
+
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 117
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 {
   "entries": {}
 }
@@ -182,7 +189,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 23
+//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 24
 
 
 PolledWatches::
@@ -211,7 +218,11 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
+<<<<<<< HEAD
   {"inode":113}
+=======
+  {"inode":115}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/Vscode: *new*
   {"inode":12}
 /home/src/Vscode/Projects: *new*
@@ -219,7 +230,7 @@ FsWatches::
 /home/src/Vscode/Projects/bin: *new*
   {"inode":14}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
-  {"inode":23}
+  {"inode":24}
 
 FsWatchesRecursive::
 /home/src/Library/Caches/typescript/node_modules: *new*
@@ -407,7 +418,11 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json:
+<<<<<<< HEAD
   {"inode":113}
+=======
+  {"inode":115}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/Vscode:
   {"inode":12}
 /home/src/Vscode/Projects:
@@ -415,7 +430,7 @@ FsWatches::
 /home/src/Vscode/Projects/bin:
   {"inode":14}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts:
-  {"inode":23}
+  {"inode":24}
 
 FsWatchesRecursive::
 /home/src/Library/Caches/typescript/node_modules:

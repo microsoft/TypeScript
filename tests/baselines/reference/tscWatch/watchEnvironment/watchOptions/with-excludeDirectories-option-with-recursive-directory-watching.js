@@ -52,7 +52,11 @@ Output::
 
 
 
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/src/main.js] Inode:: 115
+=======
+//// [/user/username/projects/myproject/src/main.js] Inode:: 117
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bar_1 = require("bar");
@@ -140,7 +144,11 @@ exitCode:: ExitStatus.undefined
 Change:: add new folder to temp
 
 Input::
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 117
+=======
+//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 119
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export function temp(): string;
 
 

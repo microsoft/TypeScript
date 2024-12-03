@@ -54,12 +54,20 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/foo.js] Inode:: 108
+=======
+//// [/user/username/projects/myproject/foo.js] Inode:: 110
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/main.js] Inode:: 109
+=======
+//// [/user/username/projects/myproject/main.js] Inode:: 111
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("./foo");
@@ -113,7 +121,11 @@ exitCode:: ExitStatus.undefined
 Change:: Introduce error such that when callback happens file is already appeared
 
 Input::
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/foo.ts] Inode:: 110
+=======
+//// [/user/username/projects/myproject/foo.ts] Inode:: 112
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export declare function foo2(): string;
 
 
@@ -173,8 +185,13 @@ CreatingProgramWith::
 
 
 
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 108
 //// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 109
+=======
+//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 110
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 111
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 
 
 Program root files: [
@@ -205,7 +222,11 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that fixes error
 
 Input::
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/foo.ts] Inode:: 111
+=======
+//// [/user/username/projects/myproject/foo.ts] Inode:: 113
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export declare function foo(): string;
 
 
@@ -234,7 +255,11 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":13}
 /user/username/projects/myproject/foo.ts:
+<<<<<<< HEAD
   {"inode":111} *new*
+=======
+  {"inode":113} *new*
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /user/username/projects/myproject/main.ts:
   {"inode":5}
 /user/username/projects/myproject/tsconfig.json:
@@ -263,8 +288,13 @@ CreatingProgramWith::
 
 
 
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 108
 //// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 109
+=======
+//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 110
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 111
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 
 
 Program root files: [

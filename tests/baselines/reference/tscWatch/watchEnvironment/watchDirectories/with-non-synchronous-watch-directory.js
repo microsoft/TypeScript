@@ -34,7 +34,11 @@ Output::
 
 
 
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/src/file1.js] Inode:: 111
+=======
+//// [/user/username/projects/myproject/src/file1.js] Inode:: 113
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -187,7 +191,11 @@ Output::
 
 
 
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 111
+=======
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 113
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 
 PolledWatches::
 /user/username/projects/myproject/node_modules:
@@ -337,7 +345,11 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
+<<<<<<< HEAD
   {"inode":112}
+=======
+  {"inode":114}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -365,7 +377,11 @@ exitCode:: ExitStatus.undefined
 Change:: npm install index file in file2
 
 Input::
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 114
+=======
+//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 116
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export const x = 10;
 
 
@@ -395,9 +411,15 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules:
+<<<<<<< HEAD
   {"inode":112}
 /user/username/projects/myproject/node_modules/file2: *new*
   {"inode":113}
+=======
+  {"inode":114}
+/user/username/projects/myproject/node_modules/file2: *new*
+  {"inode":115}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -447,7 +469,11 @@ Output::
 
 
 
+<<<<<<< HEAD
 //// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 111
+=======
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 113
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -473,11 +499,19 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules:
+<<<<<<< HEAD
   {"inode":112}
 /user/username/projects/myproject/node_modules/file2:
   {"inode":113}
 /user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
   {"inode":114}
+=======
+  {"inode":114}
+/user/username/projects/myproject/node_modules/file2:
+  {"inode":115}
+/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
+  {"inode":116}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:

@@ -654,7 +654,11 @@ Projects::
     dirty: true *changed*
 
 Before request
+<<<<<<< HEAD
 //// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 116
+=======
+//// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 118
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export function randomSeed(): string;
 
 
@@ -674,9 +678,15 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":18}
 /workspaces/somerepo/node_modules: *new*
+<<<<<<< HEAD
   {"inode":113}
 /workspaces/somerepo/node_modules/@types: *new*
   {"inode":114}
+=======
+  {"inode":115}
+/workspaces/somerepo/node_modules/@types: *new*
+  {"inode":116}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
@@ -770,9 +780,15 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":18}
 /workspaces/somerepo/node_modules:
+<<<<<<< HEAD
   {"inode":113}
 /workspaces/somerepo/node_modules/@types:
   {"inode":114}
+=======
+  {"inode":115}
+/workspaces/somerepo/node_modules/@types:
+  {"inode":116}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
@@ -902,11 +918,19 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":18}
 /workspaces/somerepo/node_modules:
+<<<<<<< HEAD
   {"inode":113}
 /workspaces/somerepo/node_modules/@types:
   {"inode":114}
 /workspaces/somerepo/node_modules/@types/random-seed: *new*
   {"inode":115}
+=======
+  {"inode":115}
+/workspaces/somerepo/node_modules/@types:
+  {"inode":116}
+/workspaces/somerepo/node_modules/@types/random-seed: *new*
+  {"inode":117}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:

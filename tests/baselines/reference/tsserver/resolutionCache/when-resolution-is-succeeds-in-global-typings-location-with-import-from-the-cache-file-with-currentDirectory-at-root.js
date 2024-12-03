@@ -27,10 +27,17 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
+<<<<<<< HEAD
 //// [/home/src/Library/Caches/typescript/package.json] Inode:: 110
 { "private": true }
 
 //// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 112
+=======
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 112
+{ "private": true }
+
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 114
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 {
   "entries": {}
 }
@@ -147,7 +154,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 20
+//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 21
 
 
 PolledWatches::
@@ -162,9 +169,13 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
+<<<<<<< HEAD
   {"inode":110}
+=======
+  {"inode":112}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
-  {"inode":20}
+  {"inode":21}
 
 FsWatchesRecursive::
 /home/src/Library/Caches/typescript/node_modules: *new*

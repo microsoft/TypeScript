@@ -85,22 +85,37 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 33
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 34
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 120
+=======
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 122
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 121
+=======
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 123
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export type FooType = "foo";
 export type BarType = "bar";
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 122
 {"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 123
+=======
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 124
+{"root":["./src/index.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 125
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 {
   "root": [
     "./src/index.ts"
@@ -1066,14 +1081,24 @@ Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/p
 Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}:: /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo updated
 Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}:: /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo.readable.baseline.txt updated
 Before request
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 122
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 123
 //// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 125
+=======
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 124
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 125
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 127
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 126
+=======
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 128
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export type FooType = "foo";
 export type BarType = "bar";
 

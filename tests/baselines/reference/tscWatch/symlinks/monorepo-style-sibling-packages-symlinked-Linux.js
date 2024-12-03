@@ -200,14 +200,22 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/packag
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Wild card directory
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 30
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 31
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package2/dist/index.js] Inode:: 117
+=======
+//// [/home/src/projects/project/packages/package2/dist/index.js] Inode:: 119
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package2/dist/index.d.ts] Inode:: 118
+=======
+//// [/home/src/projects/project/packages/package2/dist/index.d.ts] Inode:: 120
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export {};
 
 
@@ -242,7 +250,11 @@ FsWatches::
 /home/src/projects/project/packages/package2: *new*
   {"inode":11}
 /home/src/projects/project/packages/package2/dist: *new*
+<<<<<<< HEAD
   {"inode":116}
+=======
+  {"inode":118}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/projects/project/packages/package2/src: *new*
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts: *new*
@@ -250,7 +262,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json: *new*
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts: *new*
-  {"inode":30}
+  {"inode":31}
 
 Program root files: [
   "/home/src/projects/project/packages/package2/src/index.ts"
@@ -290,20 +302,35 @@ exitCode:: ExitStatus.undefined
 Change:: Build dependencies
 
 Input::
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 120
+=======
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 122
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 121
+=======
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 123
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export type FooType = "foo";
 export type BarType = "bar";
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 122
 {"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 123
+=======
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 124
+{"root":["./src/index.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 125
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 {
   "root": [
     "./src/index.ts"
@@ -355,7 +382,11 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
+<<<<<<< HEAD
   {"inode":119}
+=======
+  {"inode":121}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -363,7 +394,11 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
+<<<<<<< HEAD
   {"inode":116}
+=======
+  {"inode":118}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/projects/project/packages/package2/src:
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts:
@@ -371,7 +406,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 Timeout callback:: count: 1
 8: timerToInvalidateFailedLookupResolutions *new*
@@ -436,8 +471,13 @@ packages/package2/src/index.ts
 
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 117
 //// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 118
+=======
+//// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 119
+//// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 120
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 
 PolledWatches::
 /home/src/projects/node_modules/@types:
@@ -465,9 +505,15 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
+<<<<<<< HEAD
   {"inode":119}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"inode":121}
+=======
+  {"inode":121}
+/home/src/projects/project/packages/package1/dist/index.d.ts: *new*
+  {"inode":123}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -475,7 +521,11 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
+<<<<<<< HEAD
   {"inode":116}
+=======
+  {"inode":118}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/projects/project/packages/package2/src:
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts:
@@ -483,7 +533,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 
 Program root files: [
@@ -568,7 +618,11 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
+<<<<<<< HEAD
   {"inode":116}
+=======
+  {"inode":118}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/projects/project/packages/package2/src:
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts:
@@ -576,13 +630,19 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 FsWatches *deleted*::
 /home/src/projects/project/packages/package1/dist:
+<<<<<<< HEAD
   {"inode":119}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
   {"inode":121}
+=======
+  {"inode":121}
+/home/src/projects/project/packages/package1/dist/index.d.ts:
+  {"inode":123}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 
 Timeout callback:: count: 2
 10: timerToUpdateProgram *new*
@@ -690,8 +750,13 @@ Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1 :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 117
 //// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 118
+=======
+//// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 119
+//// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 120
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 
 PolledWatches::
 /home/src/projects/node_modules: *new*
@@ -729,7 +794,11 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
+<<<<<<< HEAD
   {"inode":116}
+=======
+  {"inode":118}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/projects/project/packages/package2/src:
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts:
@@ -737,7 +806,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 Timeout callback:: count: 1
 16: timerToInvalidateFailedLookupResolutions *new*
@@ -927,14 +996,24 @@ exitCode:: ExitStatus.undefined
 Change:: Build dependencies
 
 Input::
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 122
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 123
 //// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 125
+=======
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 124
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 125
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 127
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 126
+=======
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 128
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 export type FooType = "foo";
 export type BarType = "bar";
 
@@ -981,7 +1060,11 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
+<<<<<<< HEAD
   {"inode":124}
+=======
+  {"inode":126}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -989,7 +1072,11 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
+<<<<<<< HEAD
   {"inode":116}
+=======
+  {"inode":118}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/projects/project/packages/package2/src:
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts:
@@ -997,7 +1084,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 Timeout callback:: count: 1
 21: timerToInvalidateFailedLookupResolutions *new*
@@ -1062,8 +1149,13 @@ packages/package2/src/index.ts
 
 
 
+<<<<<<< HEAD
 //// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 117
 //// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 118
+=======
+//// [/home/src/projects/project/packages/package2/dist/index.js] file written with same contents Inode:: 119
+//// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 120
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 
 PolledWatches::
 /home/src/projects/node_modules/@types:
@@ -1091,9 +1183,15 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
+<<<<<<< HEAD
   {"inode":124}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"inode":126}
+=======
+  {"inode":126}
+/home/src/projects/project/packages/package1/dist/index.d.ts: *new*
+  {"inode":128}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1101,7 +1199,11 @@ FsWatches::
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
+<<<<<<< HEAD
   {"inode":116}
+=======
+  {"inode":118}
+>>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
 /home/src/projects/project/packages/package2/src:
   {"inode":14}
 /home/src/projects/project/packages/package2/src/index.ts:
@@ -1109,7 +1211,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 
 Program root files: [
