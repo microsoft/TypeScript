@@ -318,8 +318,38 @@ f4([arg => { arg === 0 }] as const);
 >arg : Symbol(arg, Decl(tupleTypeInference3.ts, 72, 4))
 >const : Symbol(const)
 
-// declare function f5(arg: { 1: (arg: number) => void; foo?: string } | [1, (arg: boolean) => void]): void;
-// f5([null, (arg) => { arg === 0 }] as const);
+declare function f5(arg: { 0: null, 1: (arg: number) => void, foo?: string } | [1, (arg: boolean) => void]): void;
+>f5 : Symbol(f5, Decl(tupleTypeInference3.ts, 72, 36))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 74, 20))
+>0 : Symbol(0, Decl(tupleTypeInference3.ts, 74, 26))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 74, 35))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 74, 40))
+>foo : Symbol(foo, Decl(tupleTypeInference3.ts, 74, 61))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 74, 84))
 
-// declare function f6(arg: { 1: (arg: number) => void; [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
-// f6([() => {}, (arg) => { arg === 0 }] as const);
+f5([null, (arg) => { arg === 0 }] as const);
+>f5 : Symbol(f5, Decl(tupleTypeInference3.ts, 72, 36))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 75, 11))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 75, 11))
+>const : Symbol(const)
+
+f5([1, (arg) => { arg === true }] as const);
+>f5 : Symbol(f5, Decl(tupleTypeInference3.ts, 72, 36))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 76, 8))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 76, 8))
+>const : Symbol(const)
+
+declare function f6(arg: { 1: (arg: number) => void, [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
+>f6 : Symbol(f6, Decl(tupleTypeInference3.ts, 76, 44))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 78, 20))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 78, 26))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 78, 31))
+>k : Symbol(k, Decl(tupleTypeInference3.ts, 78, 54))
+>args : Symbol(args, Decl(tupleTypeInference3.ts, 78, 67))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 78, 100))
+
+f6([1, (arg) => { }] as const); // Error
+>f6 : Symbol(f6, Decl(tupleTypeInference3.ts, 76, 44))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 79, 8))
+>const : Symbol(const)
+

@@ -75,11 +75,12 @@ f3([1, arg => { }] as const); // Error
 declare function f4(_: [(arg: number) => void] | [(arg: string) => void, true]): void;
 f4([arg => { arg === 0 }] as const);
 
-// declare function f5(arg: { 1: (arg: number) => void; foo?: string } | [1, (arg: boolean) => void]): void;
-// f5([null, (arg) => { arg === 0 }] as const);
+declare function f5(arg: { 0: null, 1: (arg: number) => void, foo?: string } | [1, (arg: boolean) => void]): void;
+f5([null, (arg) => { arg === 0 }] as const);
+f5([1, (arg) => { arg === true }] as const);
 
-// declare function f6(arg: { 1: (arg: number) => void; [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
-// f6([() => {}, (arg) => { arg === 0 }] as const);
+declare function f6(arg: { 1: (arg: number) => void, [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
+f6([1, (arg) => { }] as const); // Error
 
 //// [tupleTypeInference3.js]
 "use strict";
@@ -117,7 +118,6 @@ f([, function (a) { }]); // Error
 f2([1, function (arg) { arg === 0; }]);
 f3([1, function (arg) { }]); // Error
 f4([function (arg) { arg === 0; }]);
-// declare function f5(arg: { 1: (arg: number) => void; foo?: string } | [1, (arg: boolean) => void]): void;
-// f5([null, (arg) => { arg === 0 }] as const);
-// declare function f6(arg: { 1: (arg: number) => void; [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
-// f6([() => {}, (arg) => { arg === 0 }] as const);
+f5([null, function (arg) { arg === 0; }]);
+f5([1, function (arg) { arg === true; }]);
+f6([1, function (arg) { }]); // Error

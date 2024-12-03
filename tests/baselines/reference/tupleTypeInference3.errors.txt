@@ -9,9 +9,10 @@ tupleTypeInference3.ts(35,22): error TS7006: Parameter 'a' implicitly has an 'an
 tupleTypeInference3.ts(45,24): error TS7006: Parameter 'a' implicitly has an 'any' type.
 tupleTypeInference3.ts(64,7): error TS7006: Parameter 'a' implicitly has an 'any' type.
 tupleTypeInference3.ts(70,8): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+tupleTypeInference3.ts(80,9): error TS7006: Parameter 'arg' implicitly has an 'any' type.
 
 
-==== tupleTypeInference3.ts (6 errors) ====
+==== tupleTypeInference3.ts (7 errors) ====
     // Repro from #55632
     
     type InferArg =
@@ -103,8 +104,11 @@ tupleTypeInference3.ts(70,8): error TS7006: Parameter 'arg' implicitly has an 'a
     declare function f4(_: [(arg: number) => void] | [(arg: string) => void, true]): void;
     f4([arg => { arg === 0 }] as const);
     
-    // declare function f5(arg: { 1: (arg: number) => void; foo?: string } | [1, (arg: boolean) => void]): void;
-    // f5([null, (arg) => { arg === 0 }] as const);
+    declare function f5(arg: { 0: null, 1: (arg: number) => void, foo?: string } | [1, (arg: boolean) => void]): void;
+    f5([null, (arg) => { arg === 0 }] as const);
+    f5([1, (arg) => { arg === true }] as const);
     
-    // declare function f6(arg: { 1: (arg: number) => void; [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
-    // f6([() => {}, (arg) => { arg === 0 }] as const);
+    declare function f6(arg: { 1: (arg: number) => void, [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
+    f6([1, (arg) => { }] as const); // Error
+            ~~~
+!!! error TS7006: Parameter 'arg' implicitly has an 'any' type.

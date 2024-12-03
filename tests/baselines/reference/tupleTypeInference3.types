@@ -799,8 +799,93 @@ f4([arg => { arg === 0 }] as const);
 >0 : 0
 >  : ^
 
-// declare function f5(arg: { 1: (arg: number) => void; foo?: string } | [1, (arg: boolean) => void]): void;
-// f5([null, (arg) => { arg === 0 }] as const);
+declare function f5(arg: { 0: null, 1: (arg: number) => void, foo?: string } | [1, (arg: boolean) => void]): void;
+>f5 : (arg: { 0: null; 1: (arg: number) => void; foo?: string; } | [1, (arg: boolean) => void]) => void
+>   : ^   ^^                                                                                  ^^^^^    
+>arg : { 0: null; 1: (arg: number) => void; foo?: string; } | [1, (arg: boolean) => void]
+>    : ^^^^^    ^^^^^                     ^^^^^^^^      ^^^^^^^^^^^   ^^       ^^^^^    ^
+>0 : null
+>  : ^^^^
+>1 : (arg: number) => void
+>  : ^   ^^      ^^^^^    
+>arg : number
+>    : ^^^^^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>arg : boolean
+>    : ^^^^^^^
 
-// declare function f6(arg: { 1: (arg: number) => void; [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
-// f6([() => {}, (arg) => { arg === 0 }] as const);
+f5([null, (arg) => { arg === 0 }] as const);
+>f5([null, (arg) => { arg === 0 }] as const) : void
+>                                            : ^^^^
+>f5 : (arg: { 0: null; 1: (arg: number) => void; foo?: string; } | [1, (arg: boolean) => void]) => void
+>   : ^   ^^                                                                                  ^^^^^    
+>[null, (arg) => { arg === 0 }] as const : readonly [null, (arg: number) => void]
+>                                        : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
+>[null, (arg) => { arg === 0 }] : readonly [null, (arg: number) => void]
+>                               : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
+>(arg) => { arg === 0 } : (arg: number) => void
+>                       : ^   ^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+>arg === 0 : boolean
+>          : ^^^^^^^
+>arg : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+f5([1, (arg) => { arg === true }] as const);
+>f5([1, (arg) => { arg === true }] as const) : void
+>                                            : ^^^^
+>f5 : (arg: { 0: null; 1: (arg: number) => void; foo?: string; } | [1, (arg: boolean) => void]) => void
+>   : ^   ^^                                                                                  ^^^^^    
+>[1, (arg) => { arg === true }] as const : [1, (arg: boolean) => void]
+>                                        : ^^^^^   ^^^^^^^^^^^^^^^^^^^
+>[1, (arg) => { arg === true }] : [1, (arg: boolean) => void]
+>                               : ^^^^^   ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(arg) => { arg === true } : (arg: boolean) => void
+>                          : ^   ^^^^^^^^^^^^^^^^^^
+>arg : boolean
+>    : ^^^^^^^
+>arg === true : boolean
+>             : ^^^^^^^
+>arg : boolean
+>    : ^^^^^^^
+>true : true
+>     : ^^^^
+
+declare function f6(arg: { 1: (arg: number) => void, [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
+>f6 : (arg: { 1: (arg: number) => void; [k: number]: (...args: never) => void; } | [1, (arg: boolean) => void]) => void
+>   : ^   ^^                                                                                                  ^^^^^    
+>arg : { [k: number]: (...args: never) => void; 1: (arg: number) => void; } | [1, (arg: boolean) => void]
+>    : ^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^    ^^^^^                     ^^^^^^^^^^^   ^^       ^^^^^    ^
+>1 : (arg: number) => void
+>  : ^   ^^      ^^^^^    
+>arg : number
+>    : ^^^^^^
+>k : number
+>  : ^^^^^^
+>args : never
+>     : ^^^^^
+>arg : boolean
+>    : ^^^^^^^
+
+f6([1, (arg) => { }] as const); // Error
+>f6([1, (arg) => { }] as const) : void
+>                               : ^^^^
+>f6 : (arg: { 1: (arg: number) => void; [k: number]: (...args: never) => void; } | [1, (arg: boolean) => void]) => void
+>   : ^   ^^                                                                                                  ^^^^^    
+>[1, (arg) => { }] as const : [1, (arg: any) => void]
+>                           : ^^^^^   ^^^^^^^^^^^^^^^
+>[1, (arg) => { }] : [1, (arg: any) => void]
+>                  : ^^^^^   ^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>(arg) => { } : (arg: any) => void
+>             : ^   ^^^^^^^^^^^^^^
+>arg : any
+>    : ^^^
+
