@@ -32029,32 +32029,42 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function areTupleLikeProperties(properties: Symbol[]): boolean {
-        return properties.length > 0 && every(properties, p => p.escapedName === "length" as __String || /^\d+$/.test(p.escapedName.toString()));
-    }
-
     function discriminateContextualTypeByArrayElements(node: ArrayLiteralExpression, contextualType: UnionType) {
         const key = `D${getNodeId(node)},${getTypeId(contextualType)}`;
         const cachedType = getCachedType(key);
         if (cachedType) return cachedType;
 
+        const isIndexPropertyLike = (property: Symbol) => /^[-+]?\d+$/.test(property.escapedName as string);
+        const hasIndexPropertyOutOfRange = (type: Type, length: number) =>
+            some(getPropertiesOfType(type), p => {
+                if (p.flags & SymbolFlags.Optional || !isIndexPropertyLike(p)) return false;
+                const index = +p.escapedName;
+                return index < 0 || index >= length;
+            });
+        const hasIndexPropertyInRange = (type: Type, length: number) =>
+            some(getPropertiesOfType(type), p => {
+                if (!isIndexPropertyLike(p)) return false;
+                const index = +p.escapedName;
+                return index >= 0 || index < length;
+            });
+
         const elementsLength = node.elements.length;
         const filteredType = filterType(contextualType, type => {
             if (isTupleType(type)) {
-                return elementsLength >= type.target.minLength && (!!(type.target.combinedFlags & ElementFlags.Variable) || elementsLength <= type.target.fixedLength);
+                return (
+                    elementsLength >= type.target.minLength &&
+                    (!!(type.target.combinedFlags & ElementFlags.Variable) || elementsLength <= type.target.fixedLength)
+                );
             }
-            const properties = getPropertiesOfType(type);
-            if (!areTupleLikeProperties(properties)) return true;
-            if (elementsLength > properties.length || elementsLength < properties.reduce((c, p) => p.flags & SymbolFlags.Optional ? c : ++c, 0)) return false;
-            for (let i = 0; i < elementsLength; i++) {
-                if (!some(properties, p => p.escapedName === ("" + i) as __String)) return false;
-            }
-            return true;
+            return !hasIndexPropertyOutOfRange(type, elementsLength);
         });
 
         if (filteredType.flags & TypeFlags.Never) return setCachedType(key, contextualType);
         if (!(filteredType.flags & TypeFlags.Union)) {
-            return setCachedType(key, isTupleType(filteredType) || areTupleLikeProperties(getPropertiesOfType(filteredType)) ? filteredType : contextualType);
+            return setCachedType(
+                key,
+                isTupleType(filteredType) || hasIndexPropertyInRange(filteredType, elementsLength) ? filteredType : contextualType,
+            );
         }
 
         return setCachedType(
