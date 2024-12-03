@@ -1,4 +1,4 @@
-// @module: nodenext
+// @module: node16,nodenext
 // @resolveJsonModule: true
 // @noEmit: true
 
