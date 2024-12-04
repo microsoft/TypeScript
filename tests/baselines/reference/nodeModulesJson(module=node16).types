@@ -38,11 +38,11 @@ import { oops } from "not.json"; // Ok
 >oops : (json: string) => any
 >     : ^    ^^      ^^^^^   
 
-import moreOops from "actually-json"; // Error
+import moreOops from "actually-json"; // Error in nodenext
 >moreOops : {}
 >         : ^^
 
-import typed from "actually-json/typed"; // Error
+import typed from "actually-json/typed"; // Error in nodenext
 >typed : typeof typed
 >      : ^^^^^^^^^^^^
 
@@ -60,7 +60,7 @@ import { default as config1 } from "./config.json" with { type: "json" }; // Ok
 >type : any
 >     : ^^^
 
-import config2 from "./config.json"; // Error, no attribute
+import config2 from "./config.json"; // Error in nodenext, no attribute
 >config2 : { version: number; }
 >        : ^^^^^^^^^^^^^^^^^^^^
 
