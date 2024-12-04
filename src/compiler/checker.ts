@@ -23085,10 +23085,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (targetFlags & TypeFlags.IndexedAccess) {
                 if (sourceFlags & TypeFlags.IndexedAccess) {
+                    let objectType = (source as IndexedAccessType).objectType;
+                    let indexType = (source as IndexedAccessType).indexType;
+                    while (objectType.flags & TypeFlags.IndexedAccess && !isGenericIndexType(indexType)) {
+                        const type = getIndexedAccessTypeOrUndefined(getReducedApparentType(objectType), indexType);
+                        if (!type) {
+                            break;
+                        }
+                        if (!(type.flags & TypeFlags.IndexedAccess)) {
+                            if (result = isRelatedTo(type, target, RecursionFlags.Both, reportErrors)) {
+                                return result;
+                            }
+                            break;
+                        }
+                        objectType = (type as IndexedAccessType).objectType;
+                        indexType = (type as IndexedAccessType).indexType;
+                    }
                     // Relate components directly before falling back to constraint relationships
                     // A type S[K] is related to a type T[J] if S is related to T and K is related to J.
-                    if (result = isRelatedTo((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType, RecursionFlags.Both, reportErrors)) {
-                        result &= isRelatedTo((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType, RecursionFlags.Both, reportErrors);
+                    if (result = isRelatedTo(objectType, (target as IndexedAccessType).objectType, RecursionFlags.Both, reportErrors)) {
+                        result &= isRelatedTo(indexType, (target as IndexedAccessType).indexType, RecursionFlags.Both, reportErrors);
                     }
                     if (result) {
                         return result;
