@@ -122,7 +122,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 14
+//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 15
 
 
 PolledWatches::
@@ -149,7 +149,7 @@ FsWatches::
 /home/src/Vscode/Projects/bin: *new*
   {"inode":5}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
-  {"inode":14}
+  {"inode":15}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
@@ -176,10 +176,10 @@ TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 108
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 109
 { "private": true }
 
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 111
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 112
 {
   "entries": {}
 }
@@ -342,7 +342,7 @@ FsWatches::
 /home/src/Vscode/Projects/bin:
   {"inode":5}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts:
-  {"inode":14}
+  {"inode":15}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*

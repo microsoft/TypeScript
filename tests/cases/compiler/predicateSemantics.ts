@@ -58,3 +58,14 @@ class X {
     const p = new.target ?? 32;
   }
 }
+
+// https://github.com/microsoft/TypeScript/issues/60614
+declare function tag<T>(
+  strings: TemplateStringsArray,
+  ...values: number[]
+): T | null;
+
+tag`foo${1}` ?? 32; // ok
+
+`foo${1}` ?? 32; // error
+`foo` ?? 32; // error

@@ -30018,7 +30018,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // #38720/60122, allow null as jsxFragmentFactory
             let jsxFactorySym: Symbol | undefined;
             if (!(isJsxOpeningFragment(node) && jsxFactoryNamespace === "null")) {
-                jsxFactorySym = resolveName(jsxFactoryLocation, jsxFactoryNamespace, compilerOptions.jsx === JsxEmit.Preserve ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value, jsxFactoryRefErr, /*isUse*/ true);
+                jsxFactorySym = resolveName(
+                    jsxFactoryLocation,
+                    jsxFactoryNamespace,
+                    (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value,
+                    jsxFactoryRefErr,
+                    /*isUse*/ true,
+                );
             }
 
             if (jsxFactorySym) {
@@ -30037,7 +30043,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const file = getSourceFileOfNode(node);
                 const localJsxNamespace = getLocalJsxNamespace(file);
                 if (localJsxNamespace) {
-                    resolveName(jsxFactoryLocation, localJsxNamespace, compilerOptions.jsx === JsxEmit.Preserve ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value, jsxFactoryRefErr, /*isUse*/ true);
+                    resolveName(
+                        jsxFactoryLocation,
+                        localJsxNamespace,
+                        (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value,
+                        jsxFactoryRefErr,
+                        /*isUse*/ true,
+                    );
                 }
             }
         }
@@ -36825,7 +36837,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const jsxFactoryRefErr = diagnostics ? Diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found : undefined;
         const jsxFactorySymbol = getJsxNamespaceContainerForImplicitImport(node) ??
-            resolveName(node, jsxFragmentFactoryName, compilerOptions.jsx === JsxEmit.Preserve ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value, /*nameNotFoundMessage*/ jsxFactoryRefErr, /*isUse*/ true);
+            resolveName(
+                node,
+                jsxFragmentFactoryName,
+                (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value,
+                /*nameNotFoundMessage*/ jsxFactoryRefErr,
+                /*isUse*/ true,
+            );
 
         if (jsxFactorySymbol === undefined) return sourceFileLinks.jsxFragmentType = errorType;
         if (jsxFactorySymbol.escapedName === ReactNames.Fragment) return sourceFileLinks.jsxFragmentType = getTypeOfSymbol(jsxFactorySymbol);
@@ -38664,7 +38682,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // A missing not-equal flag indicates that the type wasn't handled by some case.
             return !someType(operandConstraint, t => getTypeFacts(t, notEqualFacts) === notEqualFacts);
         }
-        const type = checkExpressionCached(node.expression);
+        const type = getBaseConstraintOrType(checkExpressionCached(node.expression));
         if (!isLiteralType(type)) {
             return false;
         }
@@ -39064,7 +39082,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 expr.expression.kind === SyntaxKind.ThisKeyword
             ) {
                 // Look for if this is the constructor for the class that `symbol` is a property of.
-                const ctor = getContainingFunction(expr);
+                const ctor = getControlFlowContainer(expr);
                 if (!(ctor && (ctor.kind === SyntaxKind.Constructor || isJSConstructor(ctor)))) {
                     return true;
                 }
@@ -39909,6 +39927,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (node.kind) {
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.CallExpression:
+            case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ElementAccessExpression:
             case SyntaxKind.MetaProperty:
             case SyntaxKind.NewExpression:
