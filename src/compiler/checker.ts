@@ -34466,6 +34466,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function reportNonexistentProperty(propNode: Identifier | PrivateIdentifier, containingType: Type, isUncheckedJS: boolean) {
+        const links = getNodeLinks(propNode);
+        const cache = (links.nonExistentPropCheckCache ||= new Set());
+        const key = `${getTypeId(containingType)}|${isUncheckedJS}`;
+        if (cache.has(key)) {
+            return;
+        }
+        cache.add(key);
         let errorInfo: DiagnosticMessageChain | undefined;
         let relatedInfo: Diagnostic | undefined;
         if (!isPrivateIdentifier(propNode) && containingType.flags & TypeFlags.Union && !(containingType.flags & TypeFlags.Primitive)) {
