@@ -26,10 +26,10 @@ export default _default;
 import { oops } from "not.json"; // Ok
 >oops : Symbol(oops, Decl(main.mts, 0, 8))
 
-import moreOops from "actually-json"; // Error
+import moreOops from "actually-json"; // Error in nodenext
 >moreOops : Symbol(moreOops, Decl(main.mts, 1, 6))
 
-import typed from "actually-json/typed"; // Error
+import typed from "actually-json/typed"; // Error in nodenext
 >typed : Symbol(typed, Decl(main.mts, 2, 6))
 
 import config from "./config.json" with { type: "json" }; // Ok
@@ -39,7 +39,7 @@ import { default as config1 } from "./config.json" with { type: "json" }; // Ok
 >default : Symbol(config, Decl(config.json, 0, 0))
 >config1 : Symbol(config1, Decl(main.mts, 5, 8))
 
-import config2 from "./config.json"; // Error, no attribute
+import config2 from "./config.json"; // Error in nodenext, no attribute
 >config2 : Symbol(config2, Decl(main.mts, 6, 6))
 
 import { version } from "./config.json" with { type: "json" }; // Error, named import
