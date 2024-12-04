@@ -100,11 +100,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 {"synchron
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
 
 
-<<<<<<< HEAD
-//// [/home/user/projects/myproject/src/file.js] Inode:: 118
-=======
-//// [/home/user/projects/myproject/src/file.js] Inode:: 120
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/home/user/projects/myproject/src/file.js] Inode:: 119
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -319,11 +315,7 @@ FileWatcher:: Close:: WatchInfo: /home/user/projects/package.json 2000 {"synchro
 
 
 
-<<<<<<< HEAD
-//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 118
-=======
-//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 120
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 119
 
 PolledWatches::
 /home/user/projects/myproject/node_modules/@types:

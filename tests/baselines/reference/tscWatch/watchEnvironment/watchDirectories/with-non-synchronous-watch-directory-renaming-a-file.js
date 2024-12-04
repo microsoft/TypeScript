@@ -38,22 +38,14 @@ Output::
 
 
 
-<<<<<<< HEAD
-//// [/user/username/projects/myproject/dist/file2.js] Inode:: 110
-=======
-//// [/user/username/projects/myproject/dist/file2.js] Inode:: 112
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/user/username/projects/myproject/dist/file2.js] Inode:: 111
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
-<<<<<<< HEAD
-//// [/user/username/projects/myproject/dist/file1.js] Inode:: 111
-=======
-//// [/user/username/projects/myproject/dist/file1.js] Inode:: 113
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/user/username/projects/myproject/dist/file1.js] Inode:: 112
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -71,11 +63,7 @@ FsWatches::
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/dist: *new*
-<<<<<<< HEAD
-  {"inode":109}
-=======
-  {"inode":111}
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":110}
 /user/username/projects/myproject/src: *new*
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts: *new*
@@ -122,11 +110,7 @@ exitCode:: ExitStatus.undefined
 Change:: rename the file
 
 Input::
-<<<<<<< HEAD
-//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 112
-=======
-//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 114
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 113
 export const x = 10;
 
 //// [/user/username/projects/myproject/src/file2.ts] deleted
@@ -149,11 +133,7 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-<<<<<<< HEAD
-  {"inode":109}
-=======
-  {"inode":111}
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":110}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -187,11 +167,7 @@ Output::
 
 
 
-<<<<<<< HEAD
-//// [/user/username/projects/myproject/dist/file1.js] file written with same contents Inode:: 111
-=======
-//// [/user/username/projects/myproject/dist/file1.js] file written with same contents Inode:: 113
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/user/username/projects/myproject/dist/file1.js] file written with same contents Inode:: 112
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -211,11 +187,7 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-<<<<<<< HEAD
-  {"inode":109}
-=======
-  {"inode":111}
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":110}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -278,11 +250,7 @@ Output::
 
 
 
-<<<<<<< HEAD
-//// [/user/username/projects/myproject/dist/renamed.js] Inode:: 113
-=======
-//// [/user/username/projects/myproject/dist/renamed.js] Inode:: 115
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/user/username/projects/myproject/dist/renamed.js] Inode:: 114
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -306,21 +274,13 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-<<<<<<< HEAD
-  {"inode":109}
-=======
-  {"inode":111}
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":110}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
   {"inode":6}
 /user/username/projects/myproject/src/renamed.ts: *new*
-<<<<<<< HEAD
-  {"inode":112}
-=======
-  {"inode":114}
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":113}
 /user/username/projects/myproject/tsconfig.json:
   {"inode":8}
 

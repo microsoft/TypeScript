@@ -217,11 +217,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/username/workspaces/project/tsconfig.j
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/username/workspaces/project/src/b.ts 2:: WatchInfo: /home/username/workspaces/project/src/b.ts 500 undefined WatchType: Closed Script info
 Before request
-<<<<<<< HEAD
-//// [/home/username/workspaces/project/src/c.ts] Inode:: 111
-=======
-//// [/home/username/workspaces/project/src/c.ts] Inode:: 113
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/home/username/workspaces/project/src/c.ts] Inode:: 112
 export const b = 10;
 
 //// [/home/username/workspaces/project/src/b.ts] deleted
@@ -499,11 +495,7 @@ FsWatches::
 /home/username/workspaces/project/src:
   {"inode":5}
 /home/username/workspaces/project/src/c.ts: *new*
-<<<<<<< HEAD
-  {"inode":111}
-=======
-  {"inode":113}
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":112}
 /home/username/workspaces/project/tsconfig.json:
   {"inode":8}
 

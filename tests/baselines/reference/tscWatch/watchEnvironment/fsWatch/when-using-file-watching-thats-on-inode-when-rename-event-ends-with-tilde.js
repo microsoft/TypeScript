@@ -58,11 +58,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 
-<<<<<<< HEAD
-//// [/user/username/projects/myproject/main.js] Inode:: 108
-=======
-//// [/user/username/projects/myproject/main.js] Inode:: 110
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/user/username/projects/myproject/main.js] Inode:: 109
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("./foo");
@@ -118,11 +114,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that introduces error
 
 Input::
-<<<<<<< HEAD
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 109
-=======
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 111
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 110
 export function foo2(): string;
 
 
@@ -171,11 +163,7 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/foo.d.ts:
-<<<<<<< HEAD
-  {"inode":109} *new*
-=======
-  {"inode":111} *new*
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":110} *new*
 /user/username/projects/myproject/main.ts:
   {"inode":5}
 /user/username/projects/myproject/tsconfig.json:
@@ -216,11 +204,7 @@ CreatingProgramWith::
 
 
 
-<<<<<<< HEAD
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 108
-=======
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 110
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 109
 
 Timeout callback:: count: 0
 9: timerToInvalidateFailedLookupResolutions *deleted*
@@ -254,11 +238,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that fixes error
 
 Input::
-<<<<<<< HEAD
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 110
-=======
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 112
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 111
 export function foo(): string;
 
 
@@ -307,11 +287,7 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/foo.d.ts:
-<<<<<<< HEAD
-  {"inode":110} *new*
-=======
-  {"inode":112} *new*
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":111} *new*
 /user/username/projects/myproject/main.ts:
   {"inode":5}
 /user/username/projects/myproject/tsconfig.json:
@@ -319,11 +295,7 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
-<<<<<<< HEAD
-  {"inode":109}
-=======
-  {"inode":111}
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":110}
 
 Timeout callback:: count: 2
 16: timerToUpdateProgram *new*
@@ -346,11 +318,7 @@ CreatingProgramWith::
 
 
 
-<<<<<<< HEAD
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 108
-=======
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 110
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 109
 
 Timeout callback:: count: 0
 18: timerToInvalidateFailedLookupResolutions *deleted*

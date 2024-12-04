@@ -27,17 +27,10 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-<<<<<<< HEAD
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 113
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 114
 { "private": true }
 
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 115
-=======
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 115
-{ "private": true }
-
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 117
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 116
 {
   "entries": {}
 }
@@ -218,11 +211,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
-<<<<<<< HEAD
-  {"inode":113}
-=======
-  {"inode":115}
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":114}
 /home/src/Vscode: *new*
   {"inode":12}
 /home/src/Vscode/Projects: *new*
@@ -418,11 +407,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json:
-<<<<<<< HEAD
-  {"inode":113}
-=======
-  {"inode":115}
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":114}
 /home/src/Vscode:
   {"inode":12}
 /home/src/Vscode/Projects:

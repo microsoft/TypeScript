@@ -176,17 +176,10 @@ TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-<<<<<<< HEAD
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 107
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 108
 { "private": true }
 
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 110
-=======
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 109
-{ "private": true }
-
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 112
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 111
 {
   "entries": {}
 }

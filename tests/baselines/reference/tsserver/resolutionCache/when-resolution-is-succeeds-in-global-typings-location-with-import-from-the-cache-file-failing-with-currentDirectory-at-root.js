@@ -23,17 +23,10 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-<<<<<<< HEAD
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 108
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 109
 { "private": true }
 
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 110
-=======
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 110
-{ "private": true }
-
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 112
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 111
 {
   "entries": {}
 }
@@ -160,11 +153,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
-<<<<<<< HEAD
-  {"inode":108}
-=======
-  {"inode":110}
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+  {"inode":109}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
   {"inode":19}
 

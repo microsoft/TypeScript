@@ -38,19 +38,11 @@ Output::
 
 
 
-<<<<<<< HEAD
-//// [/user/username/projects/project/commonFile1.js] Inode:: 108
+//// [/user/username/projects/project/commonFile1.js] Inode:: 109
 var x = 1;
 
 
-//// [/user/username/projects/project/commonFile2.js] Inode:: 109
-=======
-//// [/user/username/projects/project/commonFile1.js] Inode:: 110
-var x = 1;
-
-
-//// [/user/username/projects/project/commonFile2.js] Inode:: 111
->>>>>>> 6f75783184 (Fix library inclusions for ES2024 target (#60622))
+//// [/user/username/projects/project/commonFile2.js] Inode:: 110
 var y = 1;
 
 
