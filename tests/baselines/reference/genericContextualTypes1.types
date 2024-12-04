@@ -235,9 +235,9 @@ const f13: <T>(x: Box<T[]>) => T = compose(unbox, unlist);
 
 const arrayMap = <T, U>(f: (x: T) => U) => (a: T[]) => a.map(f);
 >arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
->         : ^ ^^ ^^ ^^           ^^^^^^ ^^   ^^^^^^^^
+>         : ^ ^^ ^^ ^^           ^^^^^^      ^^^^^^^^
 ><T, U>(f: (x: T) => U) => (a: T[]) => a.map(f) : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
->                                               : ^ ^^ ^^ ^^           ^^^^^^ ^^   ^^^^^^^^
+>                                               : ^ ^^ ^^ ^^           ^^^^^^      ^^^^^^^^
 >f : (x: T) => U
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -259,9 +259,9 @@ const arrayMap = <T, U>(f: (x: T) => U) => (a: T[]) => a.map(f);
 
 const arrayFilter = <T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f);
 >arrayFilter : <T>(f: (x: T) => boolean) => (a: T[]) => T[]
->            : ^ ^^ ^^                 ^^^^^^ ^^   ^^^^^^^^
+>            : ^ ^^ ^^                 ^^^^^^      ^^^^^^^^
 ><T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f) : <T>(f: (x: T) => boolean) => (a: T[]) => T[]
->                                                     : ^ ^^ ^^                 ^^^^^^ ^^   ^^^^^^^^
+>                                                     : ^ ^^ ^^                 ^^^^^^      ^^^^^^^^
 >f : (x: T) => boolean
 >  : ^ ^^ ^^^^^       
 >x : T
@@ -289,7 +289,7 @@ const f20: (a: string[]) => number[] = arrayMap(x => x.length);
 >arrayMap(x => x.length) : (a: string[]) => number[]
 >                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
->         : ^ ^^ ^^ ^^           ^^^^^^ ^^   ^^^^^^^^
+>         : ^ ^^ ^^ ^^           ^^^^^^      ^^^^^^^^
 >x => x.length : (x: string) => number
 >              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -309,7 +309,7 @@ const f21: <A>(a: A[]) => A[][] = arrayMap(x => [x]);
 >arrayMap(x => [x]) : (a: A[]) => A[][]
 >                   : ^ ^^^^^^^^^^^^^^^
 >arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
->         : ^ ^^ ^^ ^^           ^^^^^^ ^^   ^^^^^^^^
+>         : ^ ^^ ^^ ^^           ^^^^^^      ^^^^^^^^
 >x => [x] : (x: A) => A[]
 >         : ^ ^^^^^^^^^^^
 >x : A
@@ -327,7 +327,7 @@ const f22: <A>(a: A[]) => A[] = arrayMap(identity);
 >arrayMap(identity) : (a: A[]) => A[]
 >                   : ^ ^^^^^^^^^^^^^
 >arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
->         : ^ ^^ ^^ ^^           ^^^^^^ ^^   ^^^^^^^^
+>         : ^ ^^ ^^ ^^           ^^^^^^      ^^^^^^^^
 >identity : <T>(x: T) => T
 >         : ^ ^^ ^^ ^^^^^ 
 
@@ -339,7 +339,7 @@ const f23: <A>(a: A[]) => Box<A>[] = arrayMap(value => ({ value }));
 >arrayMap(value => ({ value })) : (a: A[]) => { value: A; }[]
 >                               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
->         : ^ ^^ ^^ ^^           ^^^^^^ ^^   ^^^^^^^^
+>         : ^ ^^ ^^ ^^           ^^^^^^      ^^^^^^^^
 >value => ({ value }) : (value: A) => { value: A; }
 >                     : ^     ^^^^^^^^^^^^^^^^^^^^^
 >value : A
@@ -359,7 +359,7 @@ const f30: (a: string[]) => string[] = arrayFilter(x => x.length > 10);
 >arrayFilter(x => x.length > 10) : (a: string[]) => string[]
 >                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >arrayFilter : <T>(f: (x: T) => boolean) => (a: T[]) => T[]
->            : ^ ^^ ^^                 ^^^^^^ ^^   ^^^^^^^^
+>            : ^ ^^ ^^                 ^^^^^^      ^^^^^^^^
 >x => x.length > 10 : (x: string) => boolean
 >                   : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -383,7 +383,7 @@ const f31: <T extends Box<number>>(a: T[]) => T[] = arrayFilter(x => x.value > 1
 >arrayFilter(x => x.value > 10) : (a: T[]) => T[]
 >                               : ^ ^^^^^^^^^^^^^
 >arrayFilter : <T>(f: (x: T) => boolean) => (a: T[]) => T[]
->            : ^ ^^ ^^                 ^^^^^^ ^^   ^^^^^^^^
+>            : ^ ^^ ^^                 ^^^^^^      ^^^^^^^^
 >x => x.value > 10 : (x: T) => boolean
 >                  : ^ ^^^^^^^^^^^^^^^
 >x : T

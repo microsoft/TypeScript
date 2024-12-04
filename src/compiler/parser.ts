@@ -458,14 +458,14 @@ function visitNodes<T>(cbNode: (node: Node) => T, cbNodes: ((node: NodeArray<Nod
 }
 
 /** @internal */
-export function isJSDocLikeText(text: string, start: number) {
+export function isJSDocLikeText(text: string, start: number): boolean {
     return text.charCodeAt(start + 1) === CharacterCodes.asterisk &&
         text.charCodeAt(start + 2) === CharacterCodes.asterisk &&
         text.charCodeAt(start + 3) !== CharacterCodes.slash;
 }
 
 /** @internal */
-export function isFileProbablyExternalModule(sourceFile: SourceFile) {
+export function isFileProbablyExternalModule(sourceFile: SourceFile): Node | undefined {
     // Try to use the first top-level import/export when available, then
     // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
     return forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ||
@@ -1404,7 +1404,13 @@ export function updateSourceFile(sourceFile: SourceFile, newText: string, textCh
 }
 
 /** @internal */
-export function parseIsolatedJSDocComment(content: string, start?: number, length?: number) {
+export interface JsDocWithDiagnostics {
+    jsDoc: JSDoc;
+    diagnostics: Diagnostic[];
+}
+
+/** @internal */
+export function parseIsolatedJSDocComment(content: string, start?: number, length?: number): JsDocWithDiagnostics | undefined {
     const result = Parser.JSDocParser.parseIsolatedJSDocComment(content, start, length);
     if (result && result.jsDoc) {
         // because the jsDocComment was parsed out of the source file, it might
@@ -1417,7 +1423,10 @@ export function parseIsolatedJSDocComment(content: string, start?: number, lengt
 
 /** @internal */
 // Exposed only for testing.
-export function parseJSDocTypeExpressionForTests(content: string, start?: number, length?: number) {
+export function parseJSDocTypeExpressionForTests(content: string, start?: number, length?: number): {
+    jsDocTypeExpression: JSDocTypeExpression;
+    diagnostics: Diagnostic[];
+} | undefined {
     return Parser.JSDocParser.parseJSDocTypeExpressionForTests(content, start, length);
 }
 
@@ -2770,10 +2779,12 @@ namespace Parser {
             case SyntaxKind.DefaultKeyword:
                 return nextTokenCanFollowDefaultKeyword();
             case SyntaxKind.StaticKeyword:
+                nextToken();
+                return canFollowModifier();
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
                 nextToken();
-                return canFollowModifier();
+                return canFollowGetOrSetKeyword();
             default:
                 return nextTokenIsOnSameLineAndCanFollowModifier();
         }
@@ -2801,6 +2812,11 @@ namespace Parser {
             || token() === SyntaxKind.OpenBraceToken
             || token() === SyntaxKind.AsteriskToken
             || token() === SyntaxKind.DotDotDotToken
+            || isLiteralPropertyName();
+    }
+
+    function canFollowGetOrSetKeyword(): boolean {
+        return token() === SyntaxKind.OpenBracketToken
             || isLiteralPropertyName();
     }
 
@@ -10508,9 +10524,10 @@ export function getDeclarationFileExtension(fileName: string): string | undefine
         return standardExtension;
     }
     if (fileExtensionIs(fileName, Extension.Ts)) {
-        const index = getBaseFileName(fileName).lastIndexOf(".d.");
+        const baseName = getBaseFileName(fileName);
+        const index = baseName.lastIndexOf(".d.");
         if (index >= 0) {
-            return fileName.substring(index);
+            return baseName.substring(index);
         }
     }
     return undefined;

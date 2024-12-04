@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/isolatedDeclarationsAddUndefined2.ts] ////
+
+=== isolatedDeclarationsAddUndefined2.ts ===
+// https://github.com/microsoft/TypeScript/issues/60123
+
+export class Bar {
+>Bar : Symbol(Bar, Decl(isolatedDeclarationsAddUndefined2.ts, 0, 0))
+
+    constructor(private x?: Array | undefined) {}
+>x : Symbol(Bar.x, Decl(isolatedDeclarationsAddUndefined2.ts, 3, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+export class Bar2 {
+>Bar2 : Symbol(Bar2, Decl(isolatedDeclarationsAddUndefined2.ts, 4, 1))
+
+    constructor(private x?: Array) {}
+>x : Symbol(Bar2.x, Decl(isolatedDeclarationsAddUndefined2.ts, 7, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+export class Bar3 {
+>Bar3 : Symbol(Bar3, Decl(isolatedDeclarationsAddUndefined2.ts, 8, 1))
+
+    constructor(private x: Array | undefined) {}
+>x : Symbol(Bar3.x, Decl(isolatedDeclarationsAddUndefined2.ts, 11, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+export class Bar4 {
+>Bar4 : Symbol(Bar4, Decl(isolatedDeclarationsAddUndefined2.ts, 12, 1))
+
+    constructor(private x: Array) {}
+>x : Symbol(Bar4.x, Decl(isolatedDeclarationsAddUndefined2.ts, 15, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+export function test1(x?: Array | undefined): void {}
+>test1 : Symbol(test1, Decl(isolatedDeclarationsAddUndefined2.ts, 16, 1))
+>x : Symbol(x, Decl(isolatedDeclarationsAddUndefined2.ts, 18, 22))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+export function test2(x?: Unresolved | undefined): void {}
+>test2 : Symbol(test2, Decl(isolatedDeclarationsAddUndefined2.ts, 18, 53))
+>x : Symbol(x, Decl(isolatedDeclarationsAddUndefined2.ts, 20, 22))
+>Unresolved : Symbol(Unresolved)
+
+export function test3(x?: Unresolved): void {}
+>test3 : Symbol(test3, Decl(isolatedDeclarationsAddUndefined2.ts, 20, 58))
+>x : Symbol(x, Decl(isolatedDeclarationsAddUndefined2.ts, 22, 22))
+>Unresolved : Symbol(Unresolved)
+

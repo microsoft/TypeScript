@@ -23,6 +23,7 @@ import {
     flatMap,
     FunctionDeclaration,
     FunctionExpression,
+    GenericType,
     GetAccessorDeclaration,
     getAllAccessorDeclarations,
     getCheckFlags,
@@ -59,6 +60,7 @@ import {
     isSetAccessorDeclaration,
     isStringLiteral,
     isTypeNode,
+    isTypeReferenceNode,
     isTypeUsableAsPropertyName,
     isYieldExpression,
     LanguageServiceHost,
@@ -180,7 +182,7 @@ export function addNewNodeForMemberSymbol(
     importAdder: ImportAdder | undefined,
     addClassElement: (node: AddNode) => void,
     body: Block | undefined,
-    preserveOptional = PreserveOptionalFlags.All,
+    preserveOptional: PreserveOptionalFlags = PreserveOptionalFlags.All,
     isAmbient = false,
 ): void {
     const declarations = symbol.getDeclarations();
@@ -217,12 +219,12 @@ export function addNewNodeForMemberSymbol(
     const optional = !!(symbol.flags & SymbolFlags.Optional);
     const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
     const quotePreference = getQuotePreference(sourceFile, preferences);
+    const flags = NodeBuilderFlags.NoTruncation
+        | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
 
     switch (kind) {
         case SyntaxKind.PropertySignature:
         case SyntaxKind.PropertyDeclaration:
-            let flags = NodeBuilderFlags.NoTruncation;
-            flags |= quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0;
             let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, InternalNodeBuilderFlags.AllowUnresolvedNames, getNoopSymbolTrackerWithResolver(context));
             if (importAdder) {
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
@@ -242,7 +244,7 @@ export function addNewNodeForMemberSymbol(
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor: {
             Debug.assertIsDefined(declarations);
-            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, /*internalFlags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, /*internalFlags*/ undefined, getNoopSymbolTrackerWithResolver(context));
             const allAccessors = getAllAccessorDeclarations(declarations, declaration as AccessorDeclaration);
             const orderedAccessors = allAccessors.secondAccessor
                 ? [allAccessors.firstAccessor, allAccessors.secondAccessor]
@@ -387,7 +389,7 @@ export function createSignatureDeclarationFromSignature(
     optional: boolean | undefined,
     enclosingDeclaration: Node | undefined,
     importAdder: ImportAdder | undefined,
-) {
+): FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | undefined {
     const program = context.program;
     const checker = program.getTypeChecker();
     const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
@@ -595,17 +597,57 @@ function createTypeParameterName(index: number) {
 
 /** @internal */
 export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
-    let typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
-    if (typeNode && isImportTypeNode(typeNode)) {
-        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
-        if (importableReference) {
-            importSymbols(importAdder, importableReference.symbols);
-            typeNode = importableReference.typeNode;
-        }
+    const typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
+    if (!typeNode) {
+        return undefined;
+    }
+    return typeNodeToAutoImportableTypeNode(typeNode, importAdder, scriptTarget);
+}
+
+/** @internal */
+export function typeNodeToAutoImportableTypeNode(typeNode: TypeNode, importAdder: ImportAdder, scriptTarget: ScriptTarget): TypeNode | undefined {
+    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+    if (importableReference) {
+        importSymbols(importAdder, importableReference.symbols);
+        typeNode = importableReference.typeNode;
     }
 
     // Ensure nodes are fresh so they can have different positions when going through formatting.
     return getSynthesizedDeepClone(typeNode);
+}
+
+function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType): number {
+    Debug.assert(type.typeArguments);
+    const fullTypeArguments = type.typeArguments;
+    const target = type.target;
+    for (let cutoff = 0; cutoff < fullTypeArguments.length; cutoff++) {
+        const typeArguments = fullTypeArguments.slice(0, cutoff);
+        const filledIn = checker.fillMissingTypeArguments(typeArguments, target.typeParameters, cutoff, /*isJavaScriptImplicitAny*/ false);
+        if (filledIn.every((fill, i) => fill === fullTypeArguments[i])) {
+            return cutoff;
+        }
+    }
+    // If we make it all the way here, all the type arguments are required.
+    return fullTypeArguments.length;
+}
+
+/** @internal */
+export function typeToMinimizedReferenceType(checker: TypeChecker, type: Type, contextNode: Node | undefined, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+    let typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
+    if (!typeNode) {
+        return undefined;
+    }
+    if (isTypeReferenceNode(typeNode)) {
+        const genericType = type as GenericType;
+        if (genericType.typeArguments && typeNode.typeArguments) {
+            const cutoff = endOfRequiredTypeParameters(checker, genericType);
+            if (cutoff < typeNode.typeArguments.length) {
+                const newTypeArguments = factory.createNodeArray(typeNode.typeArguments.slice(0, cutoff));
+                typeNode = factory.updateTypeReferenceNode(typeNode, typeNode.typeName, newTypeArguments);
+            }
+        }
+    }
+    return typeNode;
 }
 
 /** @internal */
@@ -850,7 +892,7 @@ export function setJsonCompilerOptionValues(
     changeTracker: textChanges.ChangeTracker,
     configFile: TsConfigSourceFile,
     options: [string, Expression][],
-) {
+): undefined {
     const tsconfigObjectLiteral = getTsConfigObjectLiteralExpression(configFile);
     if (!tsconfigObjectLiteral) return undefined;
 
@@ -889,7 +931,7 @@ export function setJsonCompilerOptionValue(
     configFile: TsConfigSourceFile,
     optionName: string,
     optionValue: Expression,
-) {
+): void {
     setJsonCompilerOptionValues(changeTracker, configFile, [[optionName, optionValue]]);
 }
 
@@ -908,7 +950,10 @@ function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyA
  *
  * @internal
  */
-export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined, scriptTarget: ScriptTarget) {
+export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined, scriptTarget: ScriptTarget): {
+    typeNode: TypeNode;
+    symbols: Symbol[];
+} | undefined {
     let symbols: Symbol[] | undefined;
     const typeNode = visitNode(importTypeNode, visit, isTypeNode);
     if (symbols && typeNode) {
@@ -946,7 +991,7 @@ function replaceFirstIdentifierOfEntityName(name: EntityName, newIdentifier: Ide
 }
 
 /** @internal */
-export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
+export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]): void {
     symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
 }
 

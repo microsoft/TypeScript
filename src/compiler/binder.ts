@@ -21,6 +21,7 @@ import {
     BreakOrContinueStatement,
     CallChain,
     CallExpression,
+    canHaveFlowNode,
     canHaveLocals,
     canHaveSymbol,
     CaseBlock,
@@ -509,7 +510,7 @@ export function createFlowNode(flags: FlowFlags, node: unknown, antecedent: Flow
 const binder = /* @__PURE__ */ createBinder();
 
 /** @internal */
-export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
+export function bindSourceFile(file: SourceFile, options: CompilerOptions): void {
     performance.mark("beforeBind");
     binder(file, options);
     performance.mark("afterBind");
@@ -543,6 +544,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var preSwitchCaseFlow: FlowNode | undefined;
     var activeLabelList: ActiveLabel | undefined;
     var hasExplicitReturn: boolean;
+    var inReturnPosition: boolean;
     var hasFlowEffects: boolean;
 
     // state used for emit helpers
@@ -622,6 +624,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentExceptionTarget = undefined;
         activeLabelList = undefined;
         hasExplicitReturn = false;
+        inReturnPosition = false;
         hasFlowEffects = false;
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
@@ -967,7 +970,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const saveContainer = container;
         const saveThisParentContainer = thisParentContainer;
         const savedBlockScopeContainer = blockScopeContainer;
+        const savedInReturnPosition = inReturnPosition;
 
+        if (node.kind === SyntaxKind.ArrowFunction && node.body.kind !== SyntaxKind.Block) inReturnPosition = true;
         // Depending on what kind of node this is, we may have to adjust the current container
         // and block-container.   If the current node is a container, then it is automatically
         // considered the current block-container as well.  Also, for containers that we know
@@ -1071,6 +1076,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             bindChildren(node);
         }
 
+        inReturnPosition = savedInReturnPosition;
         container = saveContainer;
         thisParentContainer = saveThisParentContainer;
         blockScopeContainer = savedBlockScopeContainer;
@@ -1099,6 +1105,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // and set it before we descend into nodes that could actually be part of an assignment pattern.
         inAssignmentPattern = false;
         if (checkUnreachable(node)) {
+            if (canHaveFlowNode(node) && node.flowNode) {
+                node.flowNode = undefined;
+            }
             bindEachChild(node);
             bindJSDoc(node);
             inAssignmentPattern = saveInAssignmentPattern;
@@ -1571,7 +1580,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
+        const savedInReturnPosition = inReturnPosition;
+        inReturnPosition = true;
         bind(node.expression);
+        inReturnPosition = savedInReturnPosition;
         if (node.kind === SyntaxKind.ReturnStatement) {
             hasExplicitReturn = true;
             if (currentReturnTarget) {
@@ -2016,10 +2028,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         hasFlowEffects = false;
         bindCondition(node.condition, trueLabel, falseLabel);
         currentFlow = finishFlowLabel(trueLabel);
+        if (inReturnPosition) {
+            node.flowNodeWhenTrue = currentFlow;
+        }
         bind(node.questionToken);
         bind(node.whenTrue);
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(falseLabel);
+        if (inReturnPosition) {
+            node.flowNodeWhenFalse = currentFlow;
+        }
         bind(node.colonToken);
         bind(node.whenFalse);
         addAntecedent(postExpressionLabel, currentFlow);

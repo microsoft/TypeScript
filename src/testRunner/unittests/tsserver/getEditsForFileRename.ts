@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { libContent } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -12,27 +11,26 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: getEditsForFileRename", () => {
+describe("unittests:: tsserver:: getEditsForFileRename::", () => {
     it("works for host implementing 'resolveModuleNames' and 'getResolvedModuleWithFailedLookupLocationsFromCache'", () => {
         const userTs: File = {
-            path: "/user.ts",
+            path: "/home/src/projects/project//user.ts",
             content: 'import { x } from "./old";',
         };
         const newTs: File = {
-            path: "/new.ts",
+            path: "/home/src/projects/project/new.ts",
             content: "export const x = 0;",
         };
         const tsconfig: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: "{}",
         };
 
-        const host = createServerHost([userTs, newTs, tsconfig]);
+        const host = TestServerHost.createServerHost([userTs, newTs, tsconfig]);
         const options: ts.CompilerOptions = {};
         const moduleResolutionCache = ts.createModuleResolutionCache(host.getCurrentDirectory(), ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames), options);
         const lsHost: ts.LanguageServiceHost = {
@@ -51,9 +49,9 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
             getResolvedModuleWithFailedLookupLocationsFromCache: (moduleName, containingFile, mode) => moduleResolutionCache.getFromDirectoryCache(moduleName, mode, ts.getDirectoryPath(containingFile), /*redirectedReference*/ undefined),
         };
         const service = ts.createLanguageService(lsHost);
-        const edits = service.getEditsForFileRename("/old.ts", "/new.ts", ts.testFormatSettings, ts.emptyOptions);
+        const edits = service.getEditsForFileRename("/home/src/projects/project/old.ts", "/home/src/projects/project/new.ts", ts.testFormatSettings, ts.emptyOptions);
         assert.deepEqual<readonly ts.FileTextChanges[]>(edits, [{
-            fileName: "/user.ts",
+            fileName: "/home/src/projects/project/user.ts",
             textChanges: [{
                 span: textSpanFromSubstring(userTs.content, "./old"),
                 newText: "./new",
@@ -63,27 +61,27 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
 
     it("works with multiple projects", () => {
         const aUserTs: File = {
-            path: "/a/user.ts",
+            path: "/home/src/projects/project/a/user.ts",
             content: 'import { x } from "./old";',
         };
         const aOldTs: File = {
-            path: "/a/old.ts",
+            path: "/home/src/projects/project/a/old.ts",
             content: "export const x = 0;",
         };
         const aTsconfig: File = {
-            path: "/a/tsconfig.json",
+            path: "/home/src/projects/project/a/tsconfig.json",
             content: jsonToReadableText({ files: ["./old.ts", "./user.ts"] }),
         };
         const bUserTs: File = {
-            path: "/b/user.ts",
+            path: "/home/src/projects/project/b/user.ts",
             content: 'import { x } from "../a/old";',
         };
         const bTsconfig: File = {
-            path: "/b/tsconfig.json",
+            path: "/home/src/projects/project/b/tsconfig.json",
             content: "{}",
         };
 
-        const host = createServerHost([aUserTs, aOldTs, aTsconfig, bUserTs, bTsconfig]);
+        const host = TestServerHost.createServerHost([aUserTs, aOldTs, aTsconfig, bUserTs, bTsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aUserTs, bUserTs], session);
 
@@ -91,25 +89,25 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
             command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
             arguments: {
                 oldFilePath: aOldTs.path,
-                newFilePath: "/a/new.ts",
+                newFilePath: "/home/src/projects/project/a/new.ts",
             },
         });
         baselineTsserverLogs("getEditsForFileRename", "works with multiple projects", session);
     });
 
     it("works with file moved to inferred project", () => {
-        const aTs: File = { path: "/a.ts", content: 'import {} from "./b";' };
-        const cTs: File = { path: "/c.ts", content: "export {};" };
-        const tsconfig: File = { path: "/tsconfig.json", content: jsonToReadableText({ files: ["./a.ts", "./b.ts"] }) };
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: 'import {} from "./b";' };
+        const cTs: File = { path: "/home/src/projects/project/c.ts", content: "export {};" };
+        const tsconfig: File = { path: "/home/src/projects/project/tsconfig.json", content: jsonToReadableText({ files: ["./a.ts", "./b.ts"] }) };
 
-        const host = createServerHost([aTs, cTs, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, cTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs, cTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
             command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
             arguments: {
-                oldFilePath: "/b.ts",
+                oldFilePath: "/home/src/projects/project/b.ts",
                 newFilePath: cTs.path,
             },
         });
@@ -121,18 +119,17 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
             [true, false].forEach(closedBeforeChange => {
                 if (closedBeforeChange && !openedBeforeChange) return;
                 it(`works with when file is opened ${openedBeforeChange ? "before" : "after"} seeing file existance on the disk${closedBeforeChange ? " closed before change" : ""}${withUpdateOpen ? " with updateOpen" : ""}`, () => {
-                    const oldFilePath = "/home/src/myproject/src/old.ts";
-                    const host = createServerHost({
-                        "/home/src/myproject/src/index.ts": `import {} from '@/old';`,
+                    const oldFilePath = "/home/src/projects/myproject/src/old.ts";
+                    const host = TestServerHost.createServerHost({
+                        "/home/src/projects/myproject/src/index.ts": `import {} from '@/old';`,
                         [oldFilePath]: `export const x = 10;`,
-                        "/home/src/myproject/tsconfig.json": jsonToReadableText({
+                        "/home/src/projects/myproject/tsconfig.json": jsonToReadableText({
                             compilerOptions: {
                                 paths: {
                                     "@/*": ["./src/*"],
                                 },
                             },
                         }),
-                        [libFile.path]: libFile.content,
                     });
                     const session = new TestSession({ host, canUseWatchEvents: true, canUseEvents: true });
                     if (withUpdateOpen) {
@@ -141,12 +138,12 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
                             arguments: {
                                 openFiles: [
                                     {
-                                        file: "/home/src/myproject/src/index.ts",
-                                        projectRootPath: "/home/src/myproject",
+                                        file: "/home/src/projects/myproject/src/index.ts",
+                                        projectRootPath: "/home/src/projects/myproject",
                                     },
                                     {
                                         file: oldFilePath,
-                                        projectRootPath: "/home/src/myproject",
+                                        projectRootPath: "/home/src/projects/myproject",
                                     },
                                 ],
                             },
@@ -154,11 +151,11 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
                     }
                     else {
                         openFilesForSession([
-                            { file: "/home/src/myproject/src/index.ts", projectRootPath: "/home/src/myproject" },
-                            { file: oldFilePath, projectRootPath: "/home/src/myproject" },
+                            { file: "/home/src/projects/myproject/src/index.ts", projectRootPath: "/home/src/projects/myproject" },
+                            { file: oldFilePath, projectRootPath: "/home/src/projects/myproject" },
                         ], session);
                     }
-                    const newFilePath = "/home/src/myproject/src/new.ts";
+                    const newFilePath = "/home/src/projects/myproject/src/new.ts";
                     host.renameFile(oldFilePath, newFilePath);
                     if (!openedBeforeChange) session.invokeWatchChanges();
                     if (withUpdateOpen) {
@@ -168,7 +165,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
                                 openFiles: [{
                                     file: newFilePath,
                                     fileContent: `export const x = 10;`,
-                                    projectRootPath: "/home/src/myproject",
+                                    projectRootPath: "/home/src/projects/myproject",
                                 }],
                                 closedFiles: [oldFilePath],
                             },
@@ -176,7 +173,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
                     }
                     else {
                         closeFilesForSession([oldFilePath], session);
-                        openFilesForSession([{ file: newFilePath, projectRootPath: "/home/src/myproject", content: `export const x = 10;` }], session);
+                        openFilesForSession([{ file: newFilePath, projectRootPath: "/home/src/projects/myproject", content: `export const x = 10;` }], session);
                     }
                     session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
                         command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
@@ -203,7 +200,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
                     }
                     verifyGetErrRequest({
                         session,
-                        files: ["/home/src/myproject/src/index.ts"],
+                        files: ["/home/src/projects/myproject/src/index.ts"],
                     });
                     baselineTsserverLogs("getEditsForFileRename", `works with when file is opened ${openedBeforeChange ? "before" : "after"} seeing file existance on the disk${closedBeforeChange ? " closed before change" : ""}${withUpdateOpen ? " with updateOpen" : ""}`, session);
                 });
@@ -226,7 +223,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
             `;
             const componentsWhatever = `${projectRootPath}/components/whatever`;
             const functionsWhatever = `${projectRootPath}/functions/whatever`;
-            const host = createServerHost({
+            const host = TestServerHost.createServerHost({
                 "/home/src/myprojects/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         target: "es2016",
@@ -245,7 +242,6 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
                 [indexTs]: indexFileText,
                 [`${componentsWhatever}/alert.ts`]: alertText,
                 [`${functionsWhatever}/placeholder.txt`]: "",
-                "/a/lib/lib.es2016.full.d.ts": libContent,
             });
             const session = new TestSession({ host, canUseWatchEvents, canUseEvents: true });
             openFilesForSession([{ file: indexTs, projectRootPath }], session);
