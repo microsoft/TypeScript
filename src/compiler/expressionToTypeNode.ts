@@ -29,7 +29,6 @@ import {
     getFunctionFlags,
     getJSDocType,
     getJSDocTypeAssertionType,
-    getOriginalNode,
     getSourceFileOfNode,
     getStrictOptionValue,
     hasDynamicName,
