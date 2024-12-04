@@ -2150,6 +2150,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var silentNeverSignature = createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, emptyArray, silentNeverType, /*resolvedTypePredicate*/ undefined, 0, SignatureFlags.None);
 
     var enumNumberIndexInfo = createIndexInfo(numberType, stringType, /*isReadonly*/ true);
+    var anyBaseTypeIndexInfo = createIndexInfo(stringType, anyType, /*isReadonly*/ false);
 
     var iterationTypesCache = new Map<string, IterationTypes>(); // cache for common IterationTypes instances
     var noIterationTypes: IterationTypes = {
@@ -13385,7 +13386,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 addInheritedMembers(members, getPropertiesOfType(instantiatedBaseType));
                 callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
                 constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
-                const inheritedIndexInfos = instantiatedBaseType !== anyType ? getIndexInfosOfType(instantiatedBaseType) : [createIndexInfo(stringType, anyType, /*isReadonly*/ false)];
+                const inheritedIndexInfos = instantiatedBaseType !== anyType ? getIndexInfosOfType(instantiatedBaseType) : [anyBaseTypeIndexInfo];
                 indexInfos = concatenate(indexInfos, filter(inheritedIndexInfos, info => !findIndexInfo(indexInfos, info.keyType)));
             }
         }
@@ -13917,7 +13918,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 addInheritedMembers(members, getPropertiesOfType(baseConstructorType));
             }
             else if (baseConstructorType === anyType) {
-                baseConstructorIndexInfo = createIndexInfo(stringType, anyType, /*isReadonly*/ false);
+                baseConstructorIndexInfo = anyBaseTypeIndexInfo;
             }
         }
 
@@ -50341,6 +50342,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     result ||= [];
                     for (const info of infoList!) {
                         if (info.declaration) continue;
+                        if (info === anyBaseTypeIndexInfo) continue; // inherited, but looks like a late-bound signature because it has no declarations
                         const node = nodeBuilder.indexInfoToIndexSignatureDeclaration(info, enclosing, flags, internalFlags, tracker);
                         if (node && infoList === staticInfos) {
                             (((node as Mutable<typeof node>).modifiers ||= factory.createNodeArray()) as MutableNodeArray<Modifier>).unshift(factory.createModifier(SyntaxKind.StaticKeyword));
