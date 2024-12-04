@@ -1056,7 +1056,7 @@ func (s *Scanner) scanString(jsxAttributeString bool) string {
 			start = s.pos
 			continue
 		}
-		if ch == '\n' || ch == '\r' && !jsxAttributeString {
+		if (ch == '\n' || ch == '\r') && !jsxAttributeString {
 			sb.WriteString(s.text[start:s.pos])
 			s.tokenFlags |= ast.TokenFlagsUnterminated
 			s.error(diagnostics.Unterminated_string_literal)
