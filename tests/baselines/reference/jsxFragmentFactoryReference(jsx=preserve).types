@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/jsxFragmentFactoryReference.tsx] ////
+
+=== jsxFragmentFactoryReference.tsx ===
+export class LoggedOut {
+>LoggedOut : LoggedOut
+>          : ^^^^^^^^^
+
+    content = () => (
+>content : () => any
+>        : ^^^^^^^^^
+>() => (        <>        </>    ) : () => any
+>                                  : ^^^^^^^^^
+>(        <>        </>    ) : any
+>                            : ^^^
+
+        <>        </>
+><>        </> : any
+>              : ^^^
+
+    )
+}
+

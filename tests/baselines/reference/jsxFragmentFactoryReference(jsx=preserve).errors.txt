@@ -1,0 +1,12 @@
+jsxFragmentFactoryReference.tsx(3,9): error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
+
+
+==== jsxFragmentFactoryReference.tsx (1 errors) ====
+    export class LoggedOut {
+        content = () => (
+            <>        </>
+            ~~
+!!! error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
+        )
+    }
+    
