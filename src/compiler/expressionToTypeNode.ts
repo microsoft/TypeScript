@@ -707,15 +707,12 @@ export function createSyntacticTypeNodeBuilder(
         }
         if (!result && node.kind === SyntaxKind.PropertyAssignment) {
             const initializer = node.initializer;
-            const type = isJSDocTypeAssertion(initializer) ? getJSDocTypeAssertionType(initializer) :
+            const assertionNode = isJSDocTypeAssertion(initializer) ? getJSDocTypeAssertionType(initializer) :
                 initializer.kind === SyntaxKind.AsExpression || initializer.kind === SyntaxKind.TypeAssertionExpression ? (initializer as AsExpression | TypeAssertion).type :
                 undefined;
 
-            if (type && !isConstTypeReference(type)) {
-                const assertionNode = serializeExistingTypeNode(type, context);
-                if (resolver.canReuseTypeNodeAnnotation(context, node, getOriginalNode(assertionNode, isTypeNode), symbol)) {
-                    result = assertionNode;
-                }
+            if (assertionNode && !isConstTypeReference(assertionNode) && resolver.canReuseTypeNodeAnnotation(context, node, assertionNode, symbol)) {
+                result = serializeExistingTypeNode(assertionNode, context);
             }
         }
         return result ?? inferTypeOfDeclaration(node, symbol, context, /*reportFallback*/ false);
