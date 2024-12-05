@@ -20,60 +20,36 @@ interface UserName {
 >last : Symbol(UserName.last, Decl(000.ts, 5, 16))
 }
 
-// Can't union narrow of string | object:
 
-const nameState1 = {} as unknown as {
->nameState1 : Symbol(nameState1, Decl(000.ts, 11, 5))
+const nameState = {} as {
+>nameState : Symbol(nameState, Decl(000.ts, 10, 5))
 
   value: string;
->value : Symbol(value, Decl(000.ts, 11, 37))
+>value : Symbol(value, Decl(000.ts, 10, 25))
 
   state: State<string>;
->state : Symbol(state, Decl(000.ts, 12, 16))
+>state : Symbol(state, Decl(000.ts, 11, 16))
 >State : Symbol(State, Decl(000.ts, 0, 0))
 
 } | {
   value: UserName;
->value : Symbol(value, Decl(000.ts, 14, 5))
+>value : Symbol(value, Decl(000.ts, 13, 5))
 >UserName : Symbol(UserName, Decl(000.ts, 2, 1))
 
   state: State<UserName>;
->state : Symbol(state, Decl(000.ts, 15, 18))
+>state : Symbol(state, Decl(000.ts, 14, 18))
 >State : Symbol(State, Decl(000.ts, 0, 0))
 >UserName : Symbol(UserName, Decl(000.ts, 2, 1))
-} 
-//  | {
-//   value: undefined;
-//   state: State<undefined>;
-// };
-
-if (typeof nameState1.value === "string") {
->nameState1.value : Symbol(value, Decl(000.ts, 11, 37), Decl(000.ts, 14, 5))
->nameState1 : Symbol(nameState1, Decl(000.ts, 11, 5))
->value : Symbol(value, Decl(000.ts, 11, 37), Decl(000.ts, 14, 5))
-
-  const a: State<string> = nameState1.state;
->a : Symbol(a, Decl(000.ts, 24, 7))
->State : Symbol(State, Decl(000.ts, 0, 0))
->nameState1.state : Symbol(state, Decl(000.ts, 12, 16))
->nameState1 : Symbol(nameState1, Decl(000.ts, 11, 5))
->state : Symbol(state, Decl(000.ts, 12, 16))
-
-  //               ^^^^^^^^^
-  // Type 'State<string> | State<UserName>' does not satisfy the expected type 'State<string>'.
-  //   Type 'State<UserName>' is not assignable to type 'State<string>'.
-  //     Type 'UserName' is not assignable to type 'string'.(1360)
 }
 
-// But it works if I add undefined to the mix:
+if (typeof nameState.value === "string") {
+>nameState.value : Symbol(value, Decl(000.ts, 10, 25), Decl(000.ts, 13, 5))
+>nameState : Symbol(nameState, Decl(000.ts, 10, 5))
+>value : Symbol(value, Decl(000.ts, 10, 25), Decl(000.ts, 13, 5))
 
-// const nameState2 = {} as unknown as {
-//   value: undefined;
-//   state: State<undefined>;
-// } | {
-//   value: string;
-//   state: State<string>;
-// } | {
-//   value: UserName;
-//   state: State<UserName>;
-// };
+  nameState.state satisfies  State<string>;
+>nameState.state : Symbol(state, Decl(000.ts, 11, 16))
+>nameState : Symbol(nameState, Decl(000.ts, 10, 5))
+>state : Symbol(state, Decl(000.ts, 11, 16))
+>State : Symbol(State, Decl(000.ts, 0, 0))
+}

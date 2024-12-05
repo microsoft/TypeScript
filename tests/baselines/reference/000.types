@@ -17,15 +17,12 @@ interface UserName {
 >     : ^^^^^^
 }
 
-// Can't union narrow of string | object:
 
-const nameState1 = {} as unknown as {
->nameState1 : { value: string; state: State<string>; } | { value: UserName; state: State<UserName>; }
->           : ^^^^^^^^^      ^^^^^^^^^             ^^^^^^^^^^^^^^^        ^^^^^^^^^               ^^^
->{} as unknown as {  value: string;  state: State<string>;} | {  value: UserName;  state: State<UserName>;} : { value: string; state: State<string>; } | { value: UserName; state: State<UserName>; }
->                                                                                                           : ^^^^^^^^^      ^^^^^^^^^             ^^^^^^^^^^^^^^^        ^^^^^^^^^               ^^^
->{} as unknown : unknown
->              : ^^^^^^^
+const nameState = {} as {
+>nameState : { value: string; state: State<string>; } | { value: UserName; state: State<UserName>; }
+>          : ^^^^^^^^^      ^^^^^^^^^             ^^^^^^^^^^^^^^^        ^^^^^^^^^               ^^^
+>{} as {  value: string;  state: State<string>;} | {  value: UserName;  state: State<UserName>;} : { value: string; state: State<string>; } | { value: UserName; state: State<UserName>; }
+>                                                                                                : ^^^^^^^^^      ^^^^^^^^^             ^^^^^^^^^^^^^^^        ^^^^^^^^^               ^^^
 >{} : {}
 >   : ^^
 
@@ -45,51 +42,29 @@ const nameState1 = {} as unknown as {
   state: State<UserName>;
 >state : State<UserName>
 >      : ^^^^^^^^^^^^^^^
-} 
-//  | {
-//   value: undefined;
-//   state: State<undefined>;
-// };
+}
 
-if (typeof nameState1.value === "string") {
->typeof nameState1.value === "string" : boolean
->                                     : ^^^^^^^
->typeof nameState1.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->nameState1.value : string | UserName
->                 : ^^^^^^^^^^^^^^^^^
->nameState1 : { value: string; state: State<string>; } | { value: UserName; state: State<UserName>; }
->           : ^^^^^^^^^      ^^^^^^^^^             ^^^^^^^^^^^^^^^        ^^^^^^^^^               ^^^
+if (typeof nameState.value === "string") {
+>typeof nameState.value === "string" : boolean
+>                                    : ^^^^^^^
+>typeof nameState.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nameState.value : string | UserName
+>                : ^^^^^^^^^^^^^^^^^
+>nameState : { value: string; state: State<string>; } | { value: UserName; state: State<UserName>; }
+>          : ^^^^^^^^^      ^^^^^^^^^             ^^^^^^^^^^^^^^^        ^^^^^^^^^               ^^^
 >value : string | UserName
 >      : ^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
-  const a: State<string> = nameState1.state;
->a : State<string>
->  : ^^^^^^^^^^^^^
->nameState1.state : State<string>
->                 : ^^^^^^^^^^^^^
->nameState1 : { value: string; state: State<string>; }
->           : ^^^^^^^^^      ^^^^^^^^^             ^^^
+  nameState.state satisfies  State<string>;
+>nameState.state satisfies  State<string> : State<string>
+>                                         : ^^^^^^^^^^^^^
+>nameState.state : State<string>
+>                : ^^^^^^^^^^^^^
+>nameState : { value: string; state: State<string>; }
+>          : ^^^^^^^^^      ^^^^^^^^^             ^^^
 >state : State<string>
 >      : ^^^^^^^^^^^^^
-
-  //               ^^^^^^^^^
-  // Type 'State<string> | State<UserName>' does not satisfy the expected type 'State<string>'.
-  //   Type 'State<UserName>' is not assignable to type 'State<string>'.
-  //     Type 'UserName' is not assignable to type 'string'.(1360)
 }
-
-// But it works if I add undefined to the mix:
-
-// const nameState2 = {} as unknown as {
-//   value: undefined;
-//   state: State<undefined>;
-// } | {
-//   value: string;
-//   state: State<string>;
-// } | {
-//   value: UserName;
-//   state: State<UserName>;
-// };
