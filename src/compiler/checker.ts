@@ -27285,10 +27285,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (type && type.flags & TypeFlags.Union) {
             const prop = getUnionOrIntersectionProperty(type as UnionType, name);
             if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
+                const propType = getTypeOfSymbol(prop)
                 // NOTE: cast to TransientSymbol should be safe because only TransientSymbols can have CheckFlags.SyntheticProperty
                 if ((prop as TransientSymbol).links.isDiscriminantProperty === undefined) {
-                    (prop as TransientSymbol).links.isDiscriminantProperty = ((prop as TransientSymbol).links.checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant &&
-                        !isGenericType(getTypeOfSymbol(prop));
+                    (prop as TransientSymbol).links.isDiscriminantProperty =
+                      ((((prop as TransientSymbol).links.checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant)
+                      || !!(((prop as TransientSymbol).links.checkFlags & CheckFlags.HasNonUniformType) && someType(propType, t => !!(t.flags & TypeFlags.Primitive))))
+                      && !isGenericType(propType);
                 }
                 return !!(prop as TransientSymbol).links.isDiscriminantProperty;
             }
