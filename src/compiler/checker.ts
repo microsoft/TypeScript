@@ -27281,7 +27281,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function isDiscriminantProperty(type: Type | undefined, name: __String) {
+    function isDiscriminantProperty(type: Type | undefined, name: __String, skipNonUniformPrimitiveFallback: boolean = false) {
         if (type && type.flags & TypeFlags.Union) {
             const prop = getUnionOrIntersectionProperty(type as UnionType, name);
             if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
@@ -27290,7 +27290,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if ((prop as TransientSymbol).links.isDiscriminantProperty === undefined) {
                     (prop as TransientSymbol).links.isDiscriminantProperty =
                       ((((prop as TransientSymbol).links.checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant)
-                      || !!(((prop as TransientSymbol).links.checkFlags & CheckFlags.HasNonUniformType) && someType(propType, t => !!(t.flags & TypeFlags.Primitive))))
+                      || !!(((prop as TransientSymbol).links.checkFlags & CheckFlags.HasNonUniformType) && !skipNonUniformPrimitiveFallback && someType(propType, t => !!(t.flags & TypeFlags.Primitive))))
                       && !isGenericType(propType);
                 }
                 return !!(prop as TransientSymbol).links.isDiscriminantProperty;
@@ -27302,7 +27302,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function findDiscriminantProperties(sourceProperties: Symbol[], target: Type): Symbol[] | undefined {
         let result: Symbol[] | undefined;
         for (const sourceProperty of sourceProperties) {
-            if (isDiscriminantProperty(target, sourceProperty.escapedName)) {
+            if (isDiscriminantProperty(target, sourceProperty.escapedName, /*skipNonUniformPrimitiveFallback*/ true)) {
                 if (result) {
                     result.push(sourceProperty);
                     continue;
@@ -31982,10 +31982,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 return false;
                             }
                             if (p.kind === SyntaxKind.PropertyAssignment) {
-                                return isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName);
+                                return isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName, /*skipNonUniformPrimitiveFallback*/ true);
                             }
                             if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                                return isDiscriminantProperty(contextualType, p.symbol.escapedName);
+                                return isDiscriminantProperty(contextualType, p.symbol.escapedName, /*skipNonUniformPrimitiveFallback*/ true);
                             }
                             return false;
                         }),
