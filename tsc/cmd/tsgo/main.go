@@ -103,7 +103,6 @@ func main() {
 
 	if !quiet && len(diagnostics) != 0 {
 		if pretty {
-			var output strings.Builder
 			formatOpts := ts.DiagnosticsFormattingOptions{
 				NewLine: "\n",
 				ComparePathsOptions: tspath.ComparePathsOptions{
@@ -111,10 +110,9 @@ func main() {
 					UseCaseSensitiveFileNames: useCaseSensitiveFileNames,
 				},
 			}
-			ts.FormatDiagnosticsWithColorAndContext(&output, diagnostics, &formatOpts)
-			output.WriteByte('\n')
-			ts.WriteErrorSummaryText(&output, diagnostics, &formatOpts)
-			fmt.Print(output.String())
+			ts.FormatDiagnosticsWithColorAndContext(os.Stdout, diagnostics, &formatOpts)
+			fmt.Fprintln(os.Stdout)
+			ts.WriteErrorSummaryText(os.Stdout, diagnostics, &formatOpts)
 		} else {
 			for _, diagnostic := range diagnostics {
 				printDiagnostic(diagnostic, 0)

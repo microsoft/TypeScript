@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"fmt"
+	"io"
 	"maps"
 	"slices"
 	"strconv"
@@ -34,21 +35,21 @@ const (
 	ellipsis            = "..."
 )
 
-func FormatDiagnosticsWithColorAndContext(output *strings.Builder, diags []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
 	if len(diags) == 0 {
 		return
 	}
 
 	for i, diagnostic := range diags {
 		if i > 0 {
-			output.WriteString(formatOpts.NewLine)
+			fmt.Fprint(output, formatOpts.NewLine)
 		}
 
 		if diagnostic.File() != nil {
 			file := diagnostic.File()
 			pos := diagnostic.Loc().Pos()
 			WriteLocation(output, file, pos, formatOpts, writeWithStyleAndReset)
-			output.WriteString(" - ")
+			fmt.Fprint(output, " - ")
 		}
 
 		writeWithStyleAndReset(output, diagnostic.Category().Name(), getCategoryFormat(diagnostic.Category()))
@@ -56,30 +57,30 @@ func FormatDiagnosticsWithColorAndContext(output *strings.Builder, diags []*ast.
 		WriteFlattenedDiagnosticMessage(output, diagnostic, formatOpts.NewLine)
 
 		if diagnostic.File() != nil && diagnostic.Code() != diagnostics.File_appears_to_be_binary.Code() {
-			output.WriteString(formatOpts.NewLine)
+			fmt.Fprint(output, formatOpts.NewLine)
 			writeCodeSnippet(output, diagnostic.File(), diagnostic.Pos(), diagnostic.Len(), getCategoryFormat(diagnostic.Category()), formatOpts)
 		}
 
 		if (diagnostic.RelatedInformation() != nil) && (len(diagnostic.RelatedInformation()) > 0) {
-			output.WriteString(formatOpts.NewLine)
+			fmt.Fprint(output, formatOpts.NewLine)
 			for _, relatedInformation := range diagnostic.RelatedInformation() {
 				file := relatedInformation.File()
 				if file != nil {
-					output.WriteString(formatOpts.NewLine)
+					fmt.Fprint(output, formatOpts.NewLine)
 					pos := relatedInformation.Pos()
 					WriteLocation(output, file, pos, formatOpts, writeWithStyleAndReset)
 					writeCodeSnippet(output, file, pos, relatedInformation.Len(), foregroundColorEscapeCyan, formatOpts)
 				}
-				output.WriteString(formatOpts.NewLine)
+				fmt.Fprint(output, formatOpts.NewLine)
 				WriteFlattenedDiagnosticMessage(output, relatedInformation, formatOpts.NewLine)
 			}
 		}
 
-		output.WriteString(formatOpts.NewLine)
+		fmt.Fprint(output, formatOpts.NewLine)
 	}
 }
 
-func writeCodeSnippet(writer *strings.Builder, sourceFile *ast.SourceFile, start int, length int, squiggleColor string, formatOpts *DiagnosticsFormattingOptions) {
+func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, length int, squiggleColor string, formatOpts *DiagnosticsFormattingOptions) {
 	firstLine, firstLineChar := scanner.GetLineAndCharacterOfPosition(sourceFile, start)
 	lastLine, lastLineChar := scanner.GetLineAndCharacterOfPosition(sourceFile, start+length)
 
@@ -89,16 +90,16 @@ func writeCodeSnippet(writer *strings.Builder, sourceFile *ast.SourceFile, start
 	gutterWidth := len(strconv.Itoa(lastLineOfFile + 1))
 
 	for i := firstLine; i <= lastLine; i++ {
-		writer.WriteString(formatOpts.NewLine)
+		fmt.Fprint(writer, formatOpts.NewLine)
 
 		// If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
 		// so we'll skip ahead to the second-to-last line.
 		if hasMoreThanFiveLines && firstLine+1 < i && i < lastLine-1 {
-			writer.WriteString(gutterStyleSequence)
+			fmt.Fprint(writer, gutterStyleSequence)
 			fmt.Fprintf(writer, "%*s", gutterWidth, ellipsis)
-			writer.WriteString(resetEscapeSequence)
-			writer.WriteString(gutterSeparator)
-			writer.WriteString(formatOpts.NewLine)
+			fmt.Fprint(writer, resetEscapeSequence)
+			fmt.Fprint(writer, gutterSeparator)
+			fmt.Fprint(writer, formatOpts.NewLine)
 			i = lastLine - 1
 		}
 
@@ -114,19 +115,19 @@ func writeCodeSnippet(writer *strings.Builder, sourceFile *ast.SourceFile, start
 		lineContent = strings.ReplaceAll(lineContent, "\t", " ")                                  // convert tabs to single spaces
 
 		// Output the gutter and the actual contents of the line.
-		writer.WriteString(gutterStyleSequence)
+		fmt.Fprint(writer, gutterStyleSequence)
 		fmt.Fprintf(writer, "%*d", gutterWidth, i+1)
-		writer.WriteString(resetEscapeSequence)
-		writer.WriteString(gutterSeparator)
-		writer.WriteString(lineContent)
-		writer.WriteString(formatOpts.NewLine)
+		fmt.Fprint(writer, resetEscapeSequence)
+		fmt.Fprint(writer, gutterSeparator)
+		fmt.Fprint(writer, lineContent)
+		fmt.Fprint(writer, formatOpts.NewLine)
 
 		// Output the gutter and the error span for the line using tildes.
-		writer.WriteString(gutterStyleSequence)
+		fmt.Fprint(writer, gutterStyleSequence)
 		fmt.Fprintf(writer, "%*s", gutterWidth, "")
-		writer.WriteString(resetEscapeSequence)
-		writer.WriteString(gutterSeparator)
-		writer.WriteString(squiggleColor)
+		fmt.Fprint(writer, resetEscapeSequence)
+		fmt.Fprint(writer, gutterSeparator)
+		fmt.Fprint(writer, squiggleColor)
 		if i == firstLine {
 			// If we're on the last line, then limit it to the last character of the last line.
 			// Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
@@ -139,35 +140,35 @@ func writeCodeSnippet(writer *strings.Builder, sourceFile *ast.SourceFile, start
 
 			// Fill with spaces until the first character,
 			// then squiggle the remainder of the line.
-			writer.WriteString(strings.Repeat(" ", firstLineChar))
-			writer.WriteString(strings.Repeat("~", lastCharForLine-firstLineChar))
+			fmt.Fprint(writer, strings.Repeat(" ", firstLineChar))
+			fmt.Fprint(writer, strings.Repeat("~", lastCharForLine-firstLineChar))
 		} else if i == lastLine {
 			// Squiggle until the final character.
-			writer.WriteString(strings.Repeat("~", lastLineChar))
+			fmt.Fprint(writer, strings.Repeat("~", lastLineChar))
 		} else {
 			// Squiggle the entire line.
-			writer.WriteString(strings.Repeat("~", len(lineContent)))
+			fmt.Fprint(writer, strings.Repeat("~", len(lineContent)))
 		}
 
-		writer.WriteString(resetEscapeSequence)
+		fmt.Fprint(writer, resetEscapeSequence)
 	}
 }
 
-func WriteFlattenedDiagnosticMessage(writer *strings.Builder, diagnostic *ast.Diagnostic, newline string) {
-	writer.WriteString(diagnostic.Message())
+func WriteFlattenedDiagnosticMessage(writer io.Writer, diagnostic *ast.Diagnostic, newline string) {
+	fmt.Fprint(writer, diagnostic.Message())
 
 	for _, chain := range diagnostic.MessageChain() {
 		flattenDiagnosticMessageChain(writer, chain, newline, 1 /*level*/)
 	}
 }
 
-func flattenDiagnosticMessageChain(writer *strings.Builder, chain *ast.MessageChain, newLine string, level int) {
-	writer.WriteString(newLine)
+func flattenDiagnosticMessageChain(writer io.Writer, chain *ast.MessageChain, newLine string, level int) {
+	fmt.Fprint(writer, newLine)
 	for range level {
-		writer.WriteString("  ")
+		fmt.Fprint(writer, "  ")
 	}
 
-	writer.WriteString(chain.Message())
+	fmt.Fprint(writer, chain.Message())
 	for _, child := range chain.MessageChain() {
 		flattenDiagnosticMessageChain(writer, child, newLine, level+1)
 	}
@@ -187,15 +188,15 @@ func getCategoryFormat(category diagnostics.Category) string {
 	panic("Unhandled diagnostic category")
 }
 
-type FormattedWriter func(output *strings.Builder, text string, formatStyle string)
+type FormattedWriter func(output io.Writer, text string, formatStyle string)
 
-func writeWithStyleAndReset(output *strings.Builder, text string, formatStyle string) {
-	output.WriteString(formatStyle)
-	output.WriteString(text)
-	output.WriteString(resetEscapeSequence)
+func writeWithStyleAndReset(output io.Writer, text string, formatStyle string) {
+	fmt.Fprint(output, formatStyle)
+	fmt.Fprint(output, text)
+	fmt.Fprint(output, resetEscapeSequence)
 }
 
-func WriteLocation(output *strings.Builder, file *ast.SourceFile, pos int, formatOpts *DiagnosticsFormattingOptions, writeWithStyleAndReset FormattedWriter) {
+func WriteLocation(output io.Writer, file *ast.SourceFile, pos int, formatOpts *DiagnosticsFormattingOptions, writeWithStyleAndReset FormattedWriter) {
 	firstLine, firstChar := scanner.GetLineAndCharacterOfPosition(file, pos)
 	var relativeFileName string
 	if formatOpts != nil {
@@ -205,9 +206,9 @@ func WriteLocation(output *strings.Builder, file *ast.SourceFile, pos int, forma
 	}
 
 	writeWithStyleAndReset(output, relativeFileName, foregroundColorEscapeCyan)
-	output.WriteByte(':')
+	fmt.Fprint(output, ":")
 	writeWithStyleAndReset(output, strconv.Itoa(firstLine+1), foregroundColorEscapeYellow)
-	output.WriteByte(':')
+	fmt.Fprint(output, ":")
 	writeWithStyleAndReset(output, strconv.Itoa(firstChar+1), foregroundColorEscapeYellow)
 }
 
@@ -220,7 +221,7 @@ type ErrorSummary struct {
 	SortedFileList  []*ast.SourceFile
 }
 
-func WriteErrorSummaryText(output *strings.Builder, allDiagnostics []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+func WriteErrorSummaryText(output io.Writer, allDiagnostics []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
 	// Roughly corresponds to 'getErrorSummaryText' from watch.ts
 
 	errorSummary := getErrorSummary(allDiagnostics)
@@ -253,13 +254,13 @@ func WriteErrorSummaryText(output *strings.Builder, allDiagnostics []*ast.Diagno
 			message = diagnostics.Found_0_errors_in_1_files.Format(totalErrorCount, numErroringFiles)
 		}
 	}
-	output.WriteString(formatOpts.NewLine)
-	output.WriteString(message)
-	output.WriteString(formatOpts.NewLine)
-	output.WriteString(formatOpts.NewLine)
+	fmt.Fprint(output, formatOpts.NewLine)
+	fmt.Fprint(output, message)
+	fmt.Fprint(output, formatOpts.NewLine)
+	fmt.Fprint(output, formatOpts.NewLine)
 	if numErroringFiles > 1 {
 		writeTabularErrorsDisplay(output, errorSummary, formatOpts)
-		output.WriteString(formatOpts.NewLine)
+		fmt.Fprint(output, formatOpts.NewLine)
 	}
 }
 
@@ -298,7 +299,7 @@ func getErrorSummary(diags []*ast.Diagnostic) *ErrorSummary {
 	}
 }
 
-func writeTabularErrorsDisplay(output *strings.Builder, errorSummary *ErrorSummary, formatOpts *DiagnosticsFormattingOptions) {
+func writeTabularErrorsDisplay(output io.Writer, errorSummary *ErrorSummary, formatOpts *DiagnosticsFormattingOptions) {
 	sortedFiles := errorSummary.SortedFileList
 
 	maxErrors := 0
@@ -315,17 +316,17 @@ func writeTabularErrorsDisplay(output *strings.Builder, errorSummary *ErrorSumma
 	leftPaddingGoal := max(leftColumnHeadingLength, lengthOfBiggestErrorCount)
 	headerPadding := max(lengthOfBiggestErrorCount-leftColumnHeadingLength, 0)
 
-	output.WriteString(strings.Repeat(" ", headerPadding))
-	output.WriteString(headerRow)
-	output.WriteString(formatOpts.NewLine)
+	fmt.Fprint(output, strings.Repeat(" ", headerPadding))
+	fmt.Fprint(output, headerRow)
+	fmt.Fprint(output, formatOpts.NewLine)
 
 	for _, file := range sortedFiles {
 		fileErrors := errorSummary.ErrorsByFiles[file]
 		errorCount := len(fileErrors)
 
 		fmt.Fprintf(output, "%*d  ", leftPaddingGoal, errorCount)
-		output.WriteString(prettyPathForFileError(file, fileErrors, formatOpts))
-		output.WriteString(formatOpts.NewLine)
+		fmt.Fprint(output, prettyPathForFileError(file, fileErrors, formatOpts))
+		fmt.Fprint(output, formatOpts.NewLine)
 	}
 }
 
@@ -343,13 +344,13 @@ func prettyPathForFileError(file *ast.SourceFile, fileErrors []*ast.Diagnostic, 
 	)
 }
 
-func WriteFormatDiagnostics(output *strings.Builder, diagnostics []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+func WriteFormatDiagnostics(output io.Writer, diagnostics []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
 	for _, diagnostic := range diagnostics {
 		WriteFormatDiagnostic(output, diagnostic, formatOpts)
 	}
 }
 
-func WriteFormatDiagnostic(output *strings.Builder, diagnostic *ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+func WriteFormatDiagnostic(output io.Writer, diagnostic *ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
 	if diagnostic.File() != nil {
 		line, character := scanner.GetLineAndCharacterOfPosition(diagnostic.File(), diagnostic.Loc().Pos())
 		fileName := diagnostic.File().FileName()
@@ -359,5 +360,5 @@ func WriteFormatDiagnostic(output *strings.Builder, diagnostic *ast.Diagnostic, 
 
 	fmt.Fprintf(output, "%s TS%d: ", diagnostic.Category().String(), diagnostic.Code())
 	WriteFlattenedDiagnosticMessage(output, diagnostic, formatOpts.NewLine)
-	output.WriteString(formatOpts.NewLine)
+	fmt.Fprint(output, formatOpts.NewLine)
 }
