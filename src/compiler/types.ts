@@ -2735,6 +2735,10 @@ export interface ConditionalExpression extends Expression {
     readonly whenTrue: Expression;
     readonly colonToken: ColonToken;
     readonly whenFalse: Expression;
+    /** @internal*/
+    flowNodeWhenTrue: FlowNode | undefined;
+    /** @internal */
+    flowNodeWhenFalse: FlowNode | undefined;
 }
 
 export type FunctionBody = Block;
@@ -5042,6 +5046,11 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFi
     packageBundlesTypes(packageName: string): boolean;
 }
 
+/** @internal */
+export interface WriterContextOut {
+    couldUnfoldMore: boolean;
+}
+
 export interface TypeChecker {
     getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
     getTypeOfSymbol(symbol: Symbol): Type;
@@ -5128,6 +5137,7 @@ export interface TypeChecker {
     symbolToParameterDeclaration(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): ParameterDeclaration | undefined;
     /** Note that the resulting nodes cannot be checked. */
     typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeParameterDeclaration | undefined;
+    /** @internal */ typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number): TypeParameterDeclaration | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
 
     getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
     getSymbolAtLocation(node: Node): Symbol | undefined;
@@ -5160,7 +5170,7 @@ export interface TypeChecker {
     typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
 
     /** @internal */ writeSignature(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, writer?: EmitTextWriter): string;
-    /** @internal */ writeType(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
+    /** @internal */ writeType(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter, verbosityLevel?: number, out?: WriterContextOut): string;
     /** @internal */ writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, writer?: EmitTextWriter): string;
     /** @internal */ writeTypePredicate(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
 
@@ -6234,6 +6244,7 @@ export interface NodeLinks {
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
     spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
+    contextualReturnType?: Type;        // If the node is a return statement's expression, then this is the contextual return type.
     fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
     potentialThisCollisions?: Node[];
@@ -6243,6 +6254,7 @@ export interface NodeLinks {
     potentialUnusedRenamedBindingElementsInTypes?: BindingElement[];
     externalHelpersModule?: Symbol;     // Resolved symbol for the external helpers module
     instantiationExpressionTypes?: Map<number, Type>; // Cache of instantiation expression types for the node
+    nonExistentPropCheckCache?: Set<string>;
 }
 
 /** @internal */
@@ -6500,6 +6512,8 @@ export const enum ObjectFlags {
     IsGenericIndexType = 1 << 23, // Union or intersection contains generic index type
     /** @internal */
     IsGenericType = IsGenericObjectType | IsGenericIndexType,
+    /** @internal */
+    IsNarrowingType = 1 << 24, // Substitution type that comes from type narrowing
 
     // Flags that require TypeFlags.Union
     /** @internal */
@@ -6899,12 +6913,16 @@ export interface StringMappingType extends InstantiableType {
 }
 
 // Type parameter substitution (TypeFlags.Substitution)
-// Substitution types are created for type parameters or indexed access types that occur in the
+// - Substitution types are created for type parameters or indexed access types that occur in the
 // true branch of a conditional type. For example, in 'T extends string ? Foo<T> : Bar<T>', the
 // reference to T in Foo<T> is resolved as a substitution type that substitutes 'string & T' for T.
 // Thus, if Foo has a 'string' constraint on its type parameter, T will satisfy it.
-// Substitution type are also created for NoInfer<T> types. Those are represented as substitution
+// - Substitution types are also created for NoInfer<T> types. Those are represented as substitution
 // types where the constraint is type 'unknown' (which is never generated for the case above).
+// - Substitution types are also created for return type narrowing:
+// if a type parameter `T` is linked to a parameter `x` and `x`'s narrowed type is `S`,
+// we represent that with a substitution type with base `T` and constraint `S`.
+// The resulting substitution type has `ObjectFlags.IsNarrowedType` set.
 export interface SubstitutionType extends InstantiableType {
     objectFlags: ObjectFlags;
     baseType: Type; // Target type
@@ -7580,8 +7598,8 @@ export const enum ScriptKind {
 
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
-//       lib/esnext.*.d.ts file.
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
@@ -8389,8 +8407,8 @@ export type LanugageFeatures =
     // Upcoming Features
     // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
     //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
-    //       lib/esnext.*.d.ts file.
+    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+    //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
     | "UsingAndAwaitUsing" // `using x = y`, `await using x = y`
     | "ClassAndClassElementDecorators" // `@dec class C {}`, `class C { @dec m() {} }`
 ;
@@ -8551,8 +8569,9 @@ export const enum OuterExpressionKinds {
     NonNullAssertions = 1 << 2,
     PartiallyEmittedExpressions = 1 << 3,
     ExpressionsWithTypeArguments = 1 << 4,
+    Satisfies = 1 << 5,
 
-    Assertions = TypeAssertions | NonNullAssertions,
+    Assertions = TypeAssertions | NonNullAssertions | Satisfies,
     All = Parentheses | Assertions | PartiallyEmittedExpressions | ExpressionsWithTypeArguments,
 
     ExcludeJSDocTypeAssertion = 1 << 31,

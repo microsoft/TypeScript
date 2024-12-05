@@ -147,8 +147,8 @@ export const inverseJsxOptionMap: Map<string, string> = new Map(mapIterator(jsxO
 //       augmented in another lib.
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
-//       lib/esnext.*.d.ts file.
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 const libEntries: [string, string][] = [
     // JavaScript only
     ["es5", "lib.es5.d.ts"],
@@ -247,6 +247,7 @@ const libEntries: [string, string][] = [
     ["esnext.regexp", "lib.es2024.regexp.d.ts"],
     ["esnext.string", "lib.es2024.string.d.ts"],
     ["esnext.iterator", "lib.esnext.iterator.d.ts"],
+    ["esnext.promise", "lib.esnext.promise.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];

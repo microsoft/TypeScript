@@ -390,6 +390,7 @@ import {
     visitEachChild,
     VoidExpression,
     walkUpParenthesizedExpressions,
+    WriterContextOut,
     YieldExpression,
 } from "./_namespaces/ts.js";
 
@@ -3055,9 +3056,9 @@ export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbol
 }
 
 /** @internal */
-export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
+export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None, verbosityLevel?: number, out?: WriterContextOut): SymbolDisplayPart[] {
     return mapToDisplayParts(writer => {
-        typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
+        typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer, verbosityLevel, out);
     });
 }
 
@@ -4060,7 +4061,7 @@ export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: Scri
 
 /** @internal */
 export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget | undefined, forceCapitalize?: boolean): string {
-    const baseName = getBaseFileName(removeSuffix(moduleSpecifier, "/index"));
+    const baseName = getBaseFileName(removeSuffix(removeFileExtension(moduleSpecifier), "/index"));
     let res = "";
     let lastCharWasValid = true;
     const firstCharCode = baseName.charCodeAt(0);
