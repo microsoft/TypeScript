@@ -68,3 +68,33 @@ if (typeof nameState.value === "string") {
 >state : State<string>
 >      : ^^^^^^^^^^^^^
 }
+
+declare const x: [string, number] | [number, string];
+>x : [string, number] | [number, string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+if(x[0] === "string") {
+>x[0] === "string" : boolean
+>                  : ^^^^^^^
+>x[0] : string | number
+>     : ^^^^^^^^^^^^^^^
+>x : [string, number] | [number, string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>"string" : "string"
+>         : ^^^^^^^^
+
+  x[1] satisfies number;
+>x[1] satisfies number : number
+>                      : ^^^^^^
+>x[1] : number
+>     : ^^^^^^
+>x : [string, number]
+>  : ^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+} // else {
+//   x[1] satisfies string;
+// }

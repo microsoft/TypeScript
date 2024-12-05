@@ -23,8 +23,20 @@ if (typeof nameState.value === "string") {
   nameState.state satisfies  State<string>;
 }
 
+declare const x: [string, number] | [number, string];
+if(x[0] === "string") {
+  x[1] satisfies number;
+} // else {
+//   x[1] satisfies string;
+// }
+
 //// [000.js]
 var nameState = {};
 if (typeof nameState.value === "string") {
     nameState.state;
 }
+if (x[0] === "string") {
+    x[1];
+} // else {
+//   x[1] satisfies string;
+// }

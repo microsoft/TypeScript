@@ -53,3 +53,18 @@ if (typeof nameState.value === "string") {
 >state : Symbol(state, Decl(000.ts, 11, 16))
 >State : Symbol(State, Decl(000.ts, 0, 0))
 }
+
+declare const x: [string, number] | [number, string];
+>x : Symbol(x, Decl(000.ts, 22, 13))
+
+if(x[0] === "string") {
+>x : Symbol(x, Decl(000.ts, 22, 13))
+>0 : Symbol(0)
+
+  x[1] satisfies number;
+>x : Symbol(x, Decl(000.ts, 22, 13))
+>1 : Symbol(1)
+
+} // else {
+//   x[1] satisfies string;
+// }
