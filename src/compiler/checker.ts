@@ -30042,8 +30042,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // if JsxFragment, additionally mark jsx pragma as referenced, since `getJsxNamespace` above would have resolved to only the fragment factory if they are distinct
             if (isJsxOpeningFragment(node)) {
                 const file = getSourceFileOfNode(node);
-                const localJsxNamespace = getLocalJsxNamespace(file);
-                if (localJsxNamespace) {
+                const entity = getJsxFactoryEntity(file);
+                if (entity) {
+                    const localJsxNamespace = getFirstIdentifier(entity).escapedText;
                     resolveName(
                         jsxFactoryLocation,
                         localJsxNamespace,
