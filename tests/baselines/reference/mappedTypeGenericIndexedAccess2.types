@@ -68,6 +68,38 @@ function overwriteAppName<T extends keyof EventPayloads>(
 >scheduled : CompletedEvent<T>
 >          : ^^^^^^^^^^^^^^^^^
 
+  scheduled.payload = rest.payload // ok
+>scheduled.payload = rest.payload : CompletedEvent<T>["payload"]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>scheduled.payload : EventPayloads[T]
+>                  : ^^^^^^^^^^^^^^^^
+>scheduled : CompletedEvent<T>
+>          : ^^^^^^^^^^^^^^^^^
+>payload : EventPayloads[T]
+>        : ^^^^^^^^^^^^^^^^
+>rest.payload : CompletedEvent<T>["payload"]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest : Omit<CompletedEvent<T>, "appName">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload : CompletedEvent<T>["payload"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  rest.payload = scheduled.payload // ok
+>rest.payload = scheduled.payload : EventPayloads[T]
+>                                 : ^^^^^^^^^^^^^^^^
+>rest.payload : CompletedEvent<T>["payload"]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest : Omit<CompletedEvent<T>, "appName">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload : CompletedEvent<T>["payload"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>scheduled.payload : EventPayloads[T]
+>                  : ^^^^^^^^^^^^^^^^
+>scheduled : CompletedEvent<T>
+>          : ^^^^^^^^^^^^^^^^^
+>payload : EventPayloads[T]
+>        : ^^^^^^^^^^^^^^^^
+
   // ok
   return {
 >{    ...rest,    appName: "test",  } : Omit<CompletedEvent<T>, "appName"> & { appName: string; }

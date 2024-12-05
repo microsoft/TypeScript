@@ -69,13 +69,29 @@ function overwriteAppName<T extends keyof EventPayloads>(
 >rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess2.ts, 23, 18))
 >scheduled : Symbol(scheduled, Decl(mappedTypeGenericIndexedAccess2.ts, 20, 57))
 
+  scheduled.payload = rest.payload // ok
+>scheduled.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>scheduled : Symbol(scheduled, Decl(mappedTypeGenericIndexedAccess2.ts, 20, 57))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>rest.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess2.ts, 23, 18))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+
+  rest.payload = scheduled.payload // ok
+>rest.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess2.ts, 23, 18))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>scheduled.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+>scheduled : Symbol(scheduled, Decl(mappedTypeGenericIndexedAccess2.ts, 20, 57))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess2.ts, 14, 12))
+
   // ok
   return {
     ...rest,
 >rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess2.ts, 23, 18))
 
     appName: "test",
->appName : Symbol(appName, Decl(mappedTypeGenericIndexedAccess2.ts, 26, 12))
+>appName : Symbol(appName, Decl(mappedTypeGenericIndexedAccess2.ts, 30, 12))
 
   };
 }

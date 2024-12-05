@@ -116,6 +116,46 @@ function overwriteAppName<
 >payload : CompletedEvent<U, Z>["payload"]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+  rest.payload.nested = restrest.nested; // ok
+>rest.payload.nested = restrest.nested : CompletedEvent<U, Z>["payload"]["nested"]
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest.payload.nested : Nested[Z]
+>                    : ^^^^^^^^^
+>rest.payload : CompletedEvent<U, Z>["payload"]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest : Omit<CompletedEvent<U, Z>, "appName" | "type">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload : CompletedEvent<U, Z>["payload"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nested : Nested[Z]
+>       : ^^^^^^^^^
+>restrest.nested : CompletedEvent<U, Z>["payload"]["nested"]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>restrest : Omit<CompletedEvent<U, Z>["payload"], "other">
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nested : CompletedEvent<U, Z>["payload"]["nested"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  restrest.nested = rest.payload.nested; // ok
+>restrest.nested = rest.payload.nested : Nested[Z]
+>                                      : ^^^^^^^^^
+>restrest.nested : CompletedEvent<U, Z>["payload"]["nested"]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>restrest : Omit<CompletedEvent<U, Z>["payload"], "other">
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nested : CompletedEvent<U, Z>["payload"]["nested"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest.payload.nested : Nested[Z]
+>                    : ^^^^^^^^^
+>rest.payload : CompletedEvent<U, Z>["payload"]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest : Omit<CompletedEvent<U, Z>, "appName" | "type">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload : CompletedEvent<U, Z>["payload"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nested : Nested[Z]
+>       : ^^^^^^^^^
+
   return {
 >{    type,    payload: {      ...restrest,      other,    },    appName: "test",  } : { type: U; payload: Omit<CompletedEvent<U, Z>["payload"], "other"> & { other: string; }; appName: string; }
 >                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

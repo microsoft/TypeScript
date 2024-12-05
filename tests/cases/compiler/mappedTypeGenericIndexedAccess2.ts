@@ -25,6 +25,10 @@ function overwriteAppName<T extends keyof EventPayloads>(
   scheduled: CompletedEvent<T>,
 ): CompletedEvent<T> {
   const { appName, ...rest } = scheduled;
+
+  scheduled.payload = rest.payload // ok
+  rest.payload = scheduled.payload // ok
+
   // ok
   return {
     ...rest,

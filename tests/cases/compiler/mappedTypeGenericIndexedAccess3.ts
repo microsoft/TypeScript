@@ -40,6 +40,9 @@ function overwriteAppName<
   const { appName, type, ...rest } = scheduled;
   const { other, ...restrest } = rest.payload;
 
+  rest.payload.nested = restrest.nested; // ok
+  restrest.nested = rest.payload.nested; // ok
+
   return {
     type,
     payload: {

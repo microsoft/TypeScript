@@ -116,22 +116,42 @@ function overwriteAppName<
 >rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess3.ts, 36, 24))
 >payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
 
+  rest.payload.nested = restrest.nested; // ok
+>rest.payload.nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>rest.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess3.ts, 36, 24))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
+>nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>restrest.nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>restrest : Symbol(restrest, Decl(mappedTypeGenericIndexedAccess3.ts, 37, 16))
+>nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+
+  restrest.nested = rest.payload.nested; // ok
+>restrest.nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>restrest : Symbol(restrest, Decl(mappedTypeGenericIndexedAccess3.ts, 37, 16))
+>nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>rest.payload.nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+>rest.payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
+>rest : Symbol(rest, Decl(mappedTypeGenericIndexedAccess3.ts, 36, 24))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 21, 12))
+>nested : Symbol(nested, Decl(mappedTypeGenericIndexedAccess3.ts, 24, 22))
+
   return {
     type,
->type : Symbol(type, Decl(mappedTypeGenericIndexedAccess3.ts, 39, 10))
+>type : Symbol(type, Decl(mappedTypeGenericIndexedAccess3.ts, 42, 10))
 
     payload: {
->payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 40, 9))
+>payload : Symbol(payload, Decl(mappedTypeGenericIndexedAccess3.ts, 43, 9))
 
       ...restrest,
 >restrest : Symbol(restrest, Decl(mappedTypeGenericIndexedAccess3.ts, 37, 16))
 
       other,
->other : Symbol(other, Decl(mappedTypeGenericIndexedAccess3.ts, 42, 18))
+>other : Symbol(other, Decl(mappedTypeGenericIndexedAccess3.ts, 45, 18))
 
     },
     appName: "test",
->appName : Symbol(appName, Decl(mappedTypeGenericIndexedAccess3.ts, 44, 6))
+>appName : Symbol(appName, Decl(mappedTypeGenericIndexedAccess3.ts, 47, 6))
 
   };
 }
