@@ -21,6 +21,8 @@ const nameState = {} as {
 
 if (typeof nameState.value === "string") {
   nameState.state satisfies  State<string>;
+} else {
+  nameState.state satisfies State<UserName>;
 }
 
 declare const x: [string, number] | [number, string];
@@ -33,6 +35,9 @@ if(x[0] === "string") {
 //// [000.js]
 var nameState = {};
 if (typeof nameState.value === "string") {
+    nameState.state;
+}
+else {
     nameState.state;
 }
 if (x[0] === "string") {

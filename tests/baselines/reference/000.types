@@ -67,6 +67,17 @@ if (typeof nameState.value === "string") {
 >          : ^^^^^^^^^      ^^^^^^^^^             ^^^
 >state : State<string>
 >      : ^^^^^^^^^^^^^
+
+} else {
+  nameState.state satisfies State<UserName>;
+>nameState.state satisfies State<UserName> : State<UserName>
+>                                          : ^^^^^^^^^^^^^^^
+>nameState.state : State<UserName>
+>                : ^^^^^^^^^^^^^^^
+>nameState : { value: UserName; state: State<UserName>; }
+>          : ^^^^^^^^^        ^^^^^^^^^               ^^^
+>state : State<UserName>
+>      : ^^^^^^^^^^^^^^^
 }
 
 declare const x: [string, number] | [number, string];

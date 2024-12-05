@@ -52,17 +52,25 @@ if (typeof nameState.value === "string") {
 >nameState : Symbol(nameState, Decl(000.ts, 10, 5))
 >state : Symbol(state, Decl(000.ts, 11, 16))
 >State : Symbol(State, Decl(000.ts, 0, 0))
+
+} else {
+  nameState.state satisfies State<UserName>;
+>nameState.state : Symbol(state, Decl(000.ts, 14, 18))
+>nameState : Symbol(nameState, Decl(000.ts, 10, 5))
+>state : Symbol(state, Decl(000.ts, 14, 18))
+>State : Symbol(State, Decl(000.ts, 0, 0))
+>UserName : Symbol(UserName, Decl(000.ts, 2, 1))
 }
 
 declare const x: [string, number] | [number, string];
->x : Symbol(x, Decl(000.ts, 22, 13))
+>x : Symbol(x, Decl(000.ts, 24, 13))
 
 if(x[0] === "string") {
->x : Symbol(x, Decl(000.ts, 22, 13))
+>x : Symbol(x, Decl(000.ts, 24, 13))
 >0 : Symbol(0)
 
   x[1] satisfies number;
->x : Symbol(x, Decl(000.ts, 22, 13))
+>x : Symbol(x, Decl(000.ts, 24, 13))
 >1 : Symbol(1)
 
 } // else {

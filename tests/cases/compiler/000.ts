@@ -18,6 +18,8 @@ const nameState = {} as {
 
 if (typeof nameState.value === "string") {
   nameState.state satisfies  State<string>;
+} else {
+  nameState.state satisfies State<UserName>;
 }
 
 declare const x: [string, number] | [number, string];
