@@ -123,7 +123,6 @@ declare namespace ts {
                 ProvideInlayHints = "provideInlayHints",
                 WatchChange = "watchChange",
                 MapCode = "mapCode",
-                CopilotRelated = "copilotRelated",
             }
             /**
              * A TypeScript Server message
@@ -1488,6 +1487,10 @@ declare namespace ts {
                 command: CommandTypes.Quickinfo;
                 arguments: FileLocationRequestArgs;
             }
+            export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
+                /** TODO */
+                verbosityLevel?: number;
+            }
             /**
              * Body of QuickInfoResponse.
              */
@@ -1521,6 +1524,10 @@ declare namespace ts {
                  * JSDoc tags associated with symbol.
                  */
                 tags: JSDocTagInfo[];
+                /**
+                 * TODO
+                 */
+                canIncreaseVerbosityLevel?: boolean;
             }
             /**
              * Quickinfo response message.
@@ -1831,16 +1838,6 @@ declare namespace ts {
             }
             export interface MapCodeResponse extends Response {
                 body: readonly FileCodeEdits[];
-            }
-            export interface CopilotRelatedRequest extends FileRequest {
-                command: CommandTypes.CopilotRelated;
-                arguments: FileRequestArgs;
-            }
-            export interface CopilotRelatedItems {
-                relatedFiles: readonly string[];
-            }
-            export interface CopilotRelatedResponse extends Response {
-                body: CopilotRelatedItems;
             }
             /**
              * Synchronous request for semantic diagnostics of one file.
@@ -3646,7 +3643,7 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
-    const versionMajorMinor = "5.7";
+    const versionMajorMinor = "5.8";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -7435,8 +7432,9 @@ declare namespace ts {
         NonNullAssertions = 4,
         PartiallyEmittedExpressions = 8,
         ExpressionsWithTypeArguments = 16,
-        Assertions = 6,
-        All = 31,
+        Satisfies = 32,
+        Assertions = 38,
+        All = 63,
         ExcludeJSDocTypeAssertion = -2147483648,
     }
     type ImmediatelyInvokedFunctionExpression = CallExpression & {
@@ -10771,6 +10769,7 @@ declare namespace ts {
         displayParts?: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
+        canIncreaseVerbosityLevel?: boolean;
     }
     type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
     interface RenameInfoSuccess {

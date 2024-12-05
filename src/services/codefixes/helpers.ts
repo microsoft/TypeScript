@@ -606,12 +606,10 @@ export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: 
 
 /** @internal */
 export function typeNodeToAutoImportableTypeNode(typeNode: TypeNode, importAdder: ImportAdder, scriptTarget: ScriptTarget): TypeNode | undefined {
-    if (typeNode && isImportTypeNode(typeNode)) {
-        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
-        if (importableReference) {
-            importSymbols(importAdder, importableReference.symbols);
-            typeNode = importableReference.typeNode;
-        }
+    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+    if (importableReference) {
+        importSymbols(importAdder, importableReference.symbols);
+        typeNode = importableReference.typeNode;
     }
 
     // Ensure nodes are fresh so they can have different positions when going through formatting.

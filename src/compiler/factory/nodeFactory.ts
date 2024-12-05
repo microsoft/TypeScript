@@ -3488,6 +3488,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             propagateChildFlags(node.whenTrue) |
             propagateChildFlags(node.colonToken) |
             propagateChildFlags(node.whenFalse);
+        node.flowNodeWhenFalse = undefined;
+        node.flowNodeWhenTrue = undefined;
         return node;
     }
 

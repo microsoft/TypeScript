@@ -583,6 +583,8 @@ export interface LanguageService {
      * @param position A zero-based index of the character where you want the quick info
      */
     getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
+    /** @internal */
+    getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel: number | undefined): QuickInfo | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
 
     getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
 
@@ -697,7 +699,6 @@ export interface LanguageService {
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
     /** @internal */ mapCode(fileName: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly FileTextChanges[];
-    /** @internal */ getImports(fileName: string): readonly string[];
 
     dispose(): void;
     preparePasteEditsForFile(fileName: string, copiedTextRanges: TextRange[]): boolean;
@@ -1325,6 +1326,7 @@ export interface QuickInfo {
     displayParts?: SymbolDisplayPart[];
     documentation?: SymbolDisplayPart[];
     tags?: JSDocTagInfo[];
+    canIncreaseVerbosityLevel?: boolean;
 }
 
 export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;

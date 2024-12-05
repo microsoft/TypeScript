@@ -2,7 +2,6 @@
     "files": [],
     "include": [],
     "references": [
-        { "path": "./cancellationToken" },
         { "path": "./compiler" },
         { "path": "./deprecatedCompat" },
         { "path": "./harness" },
