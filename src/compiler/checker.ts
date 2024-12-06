@@ -27285,22 +27285,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (type && type.flags & TypeFlags.Union) {
             const prop = getUnionOrIntersectionProperty(type as UnionType, name);
             if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
-                const propType = getTypeOfSymbol(prop)
+                const propType = getTypeOfSymbol(prop);
                 // NOTE: cast to TransientSymbol should be safe because only TransientSymbols can have CheckFlags.SyntheticProperty
                 if ((prop as TransientSymbol).links.isDiscriminantProperty === undefined) {
-                  (prop as TransientSymbol).links.isDiscriminantProperty = {
-                    'true': undefined,
-                    'false': undefined
-                  }
+                    (prop as TransientSymbol).links.isDiscriminantProperty = {
+                        true: undefined,
+                        false: undefined,
+                    };
                 }
 
-                const key = skipNonUniformPrimitiveFallback ? "true" : "false"
+                const key = skipNonUniformPrimitiveFallback ? "true" : "false";
 
-                if((prop as TransientSymbol).links.isDiscriminantProperty![key] === undefined) {
-                    (prop as TransientSymbol).links.isDiscriminantProperty![key] =
-                      ((((prop as TransientSymbol).links.checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant)
-                      || !!(((prop as TransientSymbol).links.checkFlags & CheckFlags.HasNonUniformType) && !skipNonUniformPrimitiveFallback && someType(propType, t => !!(t.flags & TypeFlags.Primitive))))
-                      && !isGenericType(propType);
+                if ((prop as TransientSymbol).links.isDiscriminantProperty![key] === undefined) {
+                    (prop as TransientSymbol).links.isDiscriminantProperty![key] = ((((prop as TransientSymbol).links.checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant)
+                        || !!(((prop as TransientSymbol).links.checkFlags & CheckFlags.HasNonUniformType) && !skipNonUniformPrimitiveFallback && someType(propType, t => !!(t.flags & TypeFlags.Primitive))))
+                        && !isGenericType(propType);
                 }
                 return !!(prop as TransientSymbol).links.isDiscriminantProperty![key];
             }
