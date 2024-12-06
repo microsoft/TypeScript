@@ -7,7 +7,7 @@ export class LoggedOut {
     content = () => (
 >content : Symbol(LoggedOut.content, Decl(jsxFragmentFactoryReference.tsx, 0, 24))
 
-        <>        </>
+        <></>
     )
 }
 

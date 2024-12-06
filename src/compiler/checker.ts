@@ -36833,16 +36833,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (sourceFileLinks.jsxFragmentType !== undefined) return sourceFileLinks.jsxFragmentType;
 
         const jsxFragmentFactoryName = getJsxNamespace(node);
-        // #38720/60122, allow null as jsxFragmentFactory
-        if (jsxFragmentFactoryName === "null") return sourceFileLinks.jsxFragmentType = anyType;
 
-        const shouldFactoryRefErr = compilerOptions.jsx !== JsxEmit.Preserve && compilerOptions.jsx !== JsxEmit.ReactNative;
-        const jsxFactoryRefErr = diagnostics && shouldFactoryRefErr ? Diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found : undefined;
+        // #38720/60122, allow null as jsxFragmentFactory
+        const shouldResolveFactoryReference = (compilerOptions.jsx === JsxEmit.React || compilerOptions.jsxFragmentFactory !== undefined) && jsxFragmentFactoryName !== "null";
+        if (!shouldResolveFactoryReference) return sourceFileLinks.jsxFragmentType = anyType;
+
+        const shouldModuleRefErr = compilerOptions.jsx !== JsxEmit.Preserve && compilerOptions.jsx !== JsxEmit.ReactNative;
+        const jsxFactoryRefErr = diagnostics ? Diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found : undefined;
         const jsxFactorySymbol = getJsxNamespaceContainerForImplicitImport(node) ??
             resolveName(
                 node,
                 jsxFragmentFactoryName,
-                shouldFactoryRefErr ? SymbolFlags.Value : SymbolFlags.Value & ~SymbolFlags.Enum,
+                shouldModuleRefErr ? SymbolFlags.Value : SymbolFlags.Value & ~SymbolFlags.Enum,
                 /*nameNotFoundMessage*/ jsxFactoryRefErr,
                 /*isUse*/ true,
             );

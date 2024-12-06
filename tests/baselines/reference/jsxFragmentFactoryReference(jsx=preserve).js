@@ -3,7 +3,7 @@
 //// [jsxFragmentFactoryReference.tsx]
 export class LoggedOut {
     content = () => (
-        <>        </>
+        <></>
     )
 }
 
@@ -11,6 +11,6 @@ export class LoggedOut {
 //// [jsxFragmentFactoryReference.jsx]
 export class LoggedOut {
     constructor() {
-        this.content = () => (<>        </>);
+        this.content = () => (<></>);
     }
 }

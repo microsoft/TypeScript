@@ -1,4 +1,4 @@
-// @jsx: preserve, react, react-jsx
+// @jsx: preserve, react, react-jsx, react-jsxdev, react-native
 // @strict: true
 // @skipLibCheck: true
 // @target: ES2017
@@ -7,6 +7,6 @@
 
 export class LoggedOut {
     content = () => (
-        <>        </>
+        <></>
     )
 }
