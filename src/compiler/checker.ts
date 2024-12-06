@@ -8069,9 +8069,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!context.tracker.canTrackSymbol) return;
             // get symbol of the first identifier of the entityName
             const firstIdentifier = getFirstIdentifier(accessExpression);
-            const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
+            const name = resolveName(enclosingDeclaration, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
             if (name) {
                 context.tracker.trackSymbol(name, enclosingDeclaration, SymbolFlags.Value);
+            }
+            else {
+                // Name does not resolve at target location, track symbol at dest location (should be inaccessible)
+                const fallback = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
+                if (fallback) {
+                    context.tracker.trackSymbol(fallback, enclosingDeclaration, SymbolFlags.Value);
+                }
             }
         }
 
