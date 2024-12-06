@@ -32,6 +32,7 @@ func BenchmarkParse(b *testing.B) {
 
 func TestParseTypeScriptRepo(t *testing.T) {
 	t.Parallel()
+	repo.SkipIfNoTypeScriptSubmodule(t)
 
 	tests := []struct {
 		name         string
@@ -45,9 +46,6 @@ func TestParseTypeScriptRepo(t *testing.T) {
 
 	for _, test := range tests {
 		root := filepath.Join(repo.TypeScriptSubmodulePath, test.name)
-		if _, err := os.Stat(root); os.IsNotExist(err) {
-			t.Skipf("%q does not exist", root)
-		}
 
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
