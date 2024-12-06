@@ -65,7 +65,7 @@ if (typeof nameState.value === "string") {
 declare const x: [string, number] | [number, string];
 >x : Symbol(x, Decl(000.ts, 24, 13))
 
-if(x[0] === "string") {
+if (typeof x[0] === "string") {
 >x : Symbol(x, Decl(000.ts, 24, 13))
 >0 : Symbol(0)
 
@@ -73,6 +73,9 @@ if(x[0] === "string") {
 >x : Symbol(x, Decl(000.ts, 24, 13))
 >1 : Symbol(1)
 
-} // else {
-//   x[1] satisfies string;
-// }
+} else {
+  x[1] satisfies string;
+>x : Symbol(x, Decl(000.ts, 24, 13))
+>1 : Symbol(1)
+}
+
