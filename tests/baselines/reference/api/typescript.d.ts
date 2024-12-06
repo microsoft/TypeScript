@@ -4989,7 +4989,7 @@ declare namespace ts {
         readonly modifiers?: NodeArray<Modifier>;
         readonly equalsGreaterThanToken: EqualsGreaterThanToken;
         readonly body: ConciseBody;
-        readonly name: never;
+        readonly name?: never;
     }
     interface LiteralLikeNode extends Node {
         text: string;
