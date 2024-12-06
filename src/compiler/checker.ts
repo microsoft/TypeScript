@@ -31991,10 +31991,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 return false;
                             }
                             if (p.kind === SyntaxKind.PropertyAssignment) {
-                                return isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName, /*skipNonUniformPrimitiveFallback*/ true);
+                                return isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName);
                             }
                             if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                                return isDiscriminantProperty(contextualType, p.symbol.escapedName, /*skipNonUniformPrimitiveFallback*/ true);
+                                return isDiscriminantProperty(contextualType, p.symbol.escapedName);
                             }
                             return false;
                         }),
