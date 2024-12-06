@@ -186,7 +186,7 @@ type ResolutionMode = ModuleKind // ModuleKindNone | ModuleKindCommonJS | Module
 const (
 	ResolutionModeNone     = ModuleKindNone
 	ResolutionModeCommonJS = ModuleKindCommonJS
-	ResolutionModeESM      = ModuleKindES2015
+	ResolutionModeESM      = ModuleKindESNext
 )
 
 type ModuleResolutionKind int32

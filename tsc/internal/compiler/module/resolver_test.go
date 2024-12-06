@@ -35,12 +35,8 @@ var skip = []string{
 	"APISample_WatchWithOwnWatchHost.ts",
 	"bundlerConditionsExcludesNode(module=esnext).ts",
 	"bundlerConditionsExcludesNode(module=preserve).ts",
-	"bundlerDirectoryModule(moduleresolution=bundler).ts",
-	"bundlerDirectoryModule(moduleresolution=nodenext).ts",
 	"bundlerNodeModules1(module=esnext).ts",
 	"bundlerNodeModules1(module=preserve).ts",
-	"bundlerRelative1(module=esnext).ts",
-	"bundlerRelative1(module=preserve).ts",
 	"commonJsExportTypeDeclarationError.ts",
 	"commonSourceDir5.ts",
 	"commonSourceDirectory.ts",
@@ -49,31 +45,27 @@ var skip = []string{
 	"conditionalExportsResolutionFallback(moduleresolution=bundler).ts",
 	"conditionalExportsResolutionFallback(moduleresolution=node16).ts",
 	"conditionalExportsResolutionFallback(moduleresolution=nodenext).ts",
-	"conflictingDeclarationsImportFromNamespace1.ts",
-	"conflictingDeclarationsImportFromNamespace2.ts",
 	"customConditions(resolvepackagejsonexports=true).ts",
 	"declarationEmitBundlerConditions.ts",
 	"declarationEmitCommonSourceDirectoryDoesNotContainAllFiles.ts",
-	"declarationEmitExportAssignedNamespaceNoTripleSlashTypesReference.ts",
 	"declarationEmitForGlobalishSpecifierSymlink.ts",
 	"declarationEmitForGlobalishSpecifierSymlink2.ts",
 	"declarationEmitReexportedSymlinkReference.ts",
 	"declarationEmitReexportedSymlinkReference2.ts",
 	"declarationEmitReexportedSymlinkReference3.ts",
 	"declarationEmitSymlinkPaths.ts",
-	"declarationEmitUnnessesaryTypeReferenceNotAdded.ts",
 	"declarationEmitUsingAlternativeContainingModules1.ts",
 	"declarationEmitUsingAlternativeContainingModules2.ts",
 	"declarationEmitUsingTypeAlias1.ts",
 	"declarationEmitUsingTypeAlias2.ts",
-	"declarationEmitWithInvalidPackageJsonTypings.ts",
 	"decoratorMetadataTypeOnlyExport.ts",
 	"decoratorMetadataTypeOnlyImport.ts",
+	"emit(jsx=preserve).ts",
+	"emit(jsx=react).ts",
 	"enumNoInitializerFollowsNonLiteralInitializer.ts",
 	"enumWithNonLiteralStringInitializer.ts",
 	"es6ImportWithJsDocTags.ts",
 	"importAttributes9.ts",
-	"importNonExportedMember12.ts",
 	"importSpecifiers_js.ts",
 	"importTag17.ts",
 	"importTag21.ts",
@@ -82,27 +74,15 @@ var skip = []string{
 	"isolatedModulesShadowGlobalTypeNotValue(isolatedmodules=true,verbatimmodulesyntax=false).ts",
 	"isolatedModulesShadowGlobalTypeNotValue(isolatedmodules=true,verbatimmodulesyntax=true).ts",
 	"jsDeclarationEmitExportedClassWithExtends.ts",
-	"jsDeclarationsTypeReferences.ts",
-	"jsDeclarationsTypeReferences3.ts",
-	"jsDeclarationsTypeReferences4.ts",
 	"jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.ts",
-	"jsxClassAttributeResolution.tsx",
+	"jsxNamespaceGlobalReexport.tsx",
+	"jsxNamespaceGlobalReexportMissingAliasTarget.tsx",
 	"legacyNodeModulesExportsSpecifierGenerationConditions.ts",
-	"library-reference-10.ts",
-	"library-reference-11.ts",
-	"library-reference-12.ts",
-	"library-reference-2.ts",
-	"library-reference-scoped-packages.ts",
 	"mergeSymbolReexportedTypeAliasInstantiation.ts",
 	"mergeSymbolReexportInterface.ts",
 	"mergeSymbolRexportFunction.ts",
 	"missingMemberErrorHasShortPath.ts",
-	"moduleLocalImportNotIncorrectlyRedirected.ts",
 	"modulePreserve2.ts",
-	"moduleResolution_packageJson_notAtPackageRoot_fakeScopedPackage.ts",
-	"moduleResolution_packageJson_notAtPackageRoot.ts",
-	"moduleResolution_packageJson_scopedPackage.ts",
-	"moduleResolution_packageJson_yesAtPackageRoot_mainFieldInSubDirectory.ts",
 	"moduleResolutionAsTypeReferenceDirective.ts",
 	"moduleResolutionAsTypeReferenceDirectiveAmbient.ts",
 	"moduleResolutionAsTypeReferenceDirectiveScoped.ts",
@@ -114,11 +94,9 @@ var skip = []string{
 	"moduleResolutionWithModule(module=nodenext,moduleresolution=nodenext).ts",
 	"moduleResolutionWithSymlinks_notInNodeModules.ts",
 	"moduleResolutionWithSymlinks_preserveSymlinks.ts",
+	"moduleResolutionWithSymlinks_referenceTypes.ts",
 	"moduleResolutionWithSymlinks_withOutDir.ts",
 	"moduleResolutionWithSymlinks.ts",
-	"nestedPackageJsonRedirect(moduleresolution=bundler).ts",
-	"nestedPackageJsonRedirect(moduleresolution=node16).ts",
-	"nestedPackageJsonRedirect(moduleresolution=nodenext).ts",
 	"node10AlternateResult_noResolution.ts",
 	"node10Alternateresult_noTypes.ts",
 	"node10IsNode_node.ts",
@@ -171,6 +149,8 @@ var skip = []string{
 	"nodeModulesImportModeDeclarationEmitErrors1(module=nodenext).ts",
 	"nodeModulesImportResolutionIntoExport(module=node16).ts",
 	"nodeModulesImportResolutionIntoExport(module=nodenext).ts",
+	"nodeModulesImportResolutionNoCycle(module=node16).ts",
+	"nodeModulesImportResolutionNoCycle(module=nodenext).ts",
 	"nodeModulesImportTypeModeDeclarationEmit1(module=node16).ts",
 	"nodeModulesImportTypeModeDeclarationEmit1(module=nodenext).ts",
 	"nodeModulesImportTypeModeDeclarationEmitErrors1(module=node16).ts",
@@ -215,7 +195,6 @@ var skip = []string{
 	"nodeModulesTripleSlashReferenceModeOverrideOldResolutionError.ts",
 	"nodeModulesTypesVersionPackageExports(module=node16).ts",
 	"nodeModulesTypesVersionPackageExports(module=nodenext).ts",
-	"nodeNextEsmImportsOfPackagesWithExtensionlessMains.ts",
 	"nodeNextImportModeImplicitIndexResolution.ts",
 	"nodeNextImportModeImplicitIndexResolution2.ts",
 	"nodeNextModuleResolution2.ts",
@@ -232,12 +211,9 @@ var skip = []string{
 	"nodePackageSelfNameScoped(module=node16).ts",
 	"nodePackageSelfNameScoped(module=nodenext).ts",
 	"packageJsonImportsErrors.ts",
-	"packageJsonMain.ts",
 	"parseAssertEntriesError.ts",
 	"parseImportAttributesError.ts",
-	"reactJsxReactResolvedNodeNext.tsx",
 	"reactJsxReactResolvedNodeNextEsm.tsx",
-	"referenceTypesPreferedToPathIfPossible.ts",
 	"resolutionModeImportType1(moduleresolution=bundler).ts",
 	"resolutionModeImportType1(moduleresolution=node10).ts",
 	"resolutionModeTripleSlash1.ts",
@@ -247,7 +223,6 @@ var skip = []string{
 	"resolutionModeTypeOnlyImport1(moduleresolution=node10).ts",
 	"resolvesWithoutExportsDiagnostic1(moduleresolution=bundler).ts",
 	"resolvesWithoutExportsDiagnostic1(moduleresolution=node16).ts",
-	"scopedPackages.ts",
 	"selfNameAndImportsEmitInclusion.ts",
 	"selfNameModuleAugmentation.ts",
 	"sideEffectImports4(nouncheckedsideeffectimports=false).ts",
@@ -260,20 +235,12 @@ var skip = []string{
 	"symlinkedWorkspaceDependenciesNoDirectLinkOptionalGeneratesNonrelativeName.ts",
 	"symlinkedWorkspaceDependenciesNoDirectLinkPeerGeneratesNonrelativeName.ts",
 	"typeGuardNarrowsIndexedAccessOfKnownProperty8.ts",
-	"typeReferenceRelatedFiles.ts",
 	"typesVersions.ambientModules.ts",
 	"typesVersions.multiFile.ts",
 	"typesVersionsDeclarationEmit.ambient.ts",
 	"typesVersionsDeclarationEmit.multiFile.ts",
 	"typesVersionsDeclarationEmit.multiFileBackReferenceToSelf.ts",
 	"typesVersionsDeclarationEmit.multiFileBackReferenceToUnmapped.ts",
-	"typingsLookup4.ts",
-	"unionReductionWithStringMappingAndIdenticalBaseTypeExistsNoCrash.tsx",
-	"untypedModuleImport_noImplicitAny_typesForPackageExist.ts",
-	"unusedImports13.ts",
-	"unusedImports14.ts",
-	"unusedImports15.ts",
-	"unusedImports16.ts",
 }
 
 type vfsModuleResolutionHost struct {
@@ -293,17 +260,21 @@ func fixRoot(path string) string {
 	return path[rootLength:]
 }
 
-func newVFSModuleResolutionHost(files map[string]string) *vfsModuleResolutionHost {
+func newVFSModuleResolutionHost(files map[string]string, currentDirectory string) *vfsModuleResolutionHost {
 	fs := fstest.MapFS{}
 	for name, content := range files {
 		fs[fixRoot(name)] = &fstest.MapFile{
 			Data: []byte(content),
 		}
 	}
-
+	if currentDirectory == "" {
+		currentDirectory = "/.src"
+	} else if currentDirectory[0] != '/' {
+		currentDirectory = "/.src/" + currentDirectory
+	}
 	return &vfsModuleResolutionHost{
 		fs:               vfstest.FromMapFS(fs, true /*useCaseSensitiveFileNames*/),
-		currentDirectory: "/",
+		currentDirectory: currentDirectory,
 	}
 }
 
@@ -327,11 +298,12 @@ type functionCall struct {
 	returnValue map[string]any
 }
 type traceTestCase struct {
-	name            string
-	trace           bool
-	compilerOptions *core.CompilerOptions
-	files           map[string]string
-	calls           []functionCall
+	name             string
+	currentDirectory string
+	trace            bool
+	compilerOptions  *core.CompilerOptions
+	files            map[string]string
+	calls            []functionCall
 }
 type rawFile struct {
 	Name    string `json:"name"`
@@ -356,12 +328,13 @@ type rawArgs struct {
 	} `json:"redirectedReference"`
 }
 type rawTest struct {
-	Test   string         `json:"test"`
-	Trace  bool           `json:"trace"`
-	Files  []rawFile      `json:"files"`
-	Call   string         `json:"call"`
-	Args   rawArgs        `json:"args"`
-	Return map[string]any `json:"return"`
+	Test             string         `json:"test"`
+	CurrentDirectory string         `json:"currentDirectory"`
+	Trace            bool           `json:"trace"`
+	Files            []rawFile      `json:"files"`
+	Call             string         `json:"call"`
+	Args             rawArgs        `json:"args"`
+	Return           map[string]any `json:"return"`
 }
 
 var typesVersionsMessageRegex = regexp.MustCompile(`that matches compiler version '[^']+'`)
@@ -374,13 +347,8 @@ func runTraceBaseline(t *testing.T, test traceTestCase) {
 	t.Run(test.name, func(t *testing.T) {
 		t.Parallel()
 
-		host := newVFSModuleResolutionHost(test.files)
-		resolver := module.NewResolver(
-			host,
-			nil,
-			nil,
-			test.compilerOptions,
-		)
+		host := newVFSModuleResolutionHost(test.files, test.currentDirectory)
+		resolver := module.NewResolver(host, test.compilerOptions)
 
 		for _, call := range test.calls {
 			switch call.call {
@@ -395,9 +363,11 @@ func runTraceBaseline(t *testing.T, test traceTestCase) {
 					}
 				}
 
+				var locations module.WithFailedLookupLocations
 				if call.call == "resolveModuleName" {
 					resolved := resolver.ResolveModuleName(call.args.Name, call.args.ContainingFile, core.ModuleKind(call.args.ResolutionMode), redirectedReference)
 					assert.Assert(t, resolved != nil, "ResolveModuleName should not return nil")
+					locations = resolved.WithFailedLookupLocations
 					if expectedResolvedModule, ok := call.returnValue["resolvedModule"].(map[string]any); ok {
 						assert.Assert(t, resolved.IsResolved())
 						assert.Equal(t, resolved.ResolvedModule.ResolvedFileName, expectedResolvedModule["resolvedFileName"].(string))
@@ -410,6 +380,7 @@ func runTraceBaseline(t *testing.T, test traceTestCase) {
 				} else {
 					resolved := resolver.ResolveTypeReferenceDirective(call.args.Name, call.args.ContainingFile, core.ModuleKind(call.args.ResolutionMode), redirectedReference)
 					assert.Assert(t, resolved != nil, "ResolveTypeReferenceDirective should not return nil")
+					locations = resolved.WithFailedLookupLocations
 					if expectedResolvedTypeReferenceDirective, ok := call.returnValue["resolvedTypeReferenceDirective"].(map[string]any); ok {
 						assert.Assert(t, resolved.IsResolved())
 						assert.Equal(t, resolved.ResolvedTypeReferenceDirective.ResolvedFileName, expectedResolvedTypeReferenceDirective["resolvedFileName"].(string))
@@ -418,6 +389,16 @@ func runTraceBaseline(t *testing.T, test traceTestCase) {
 					} else {
 						assert.Assert(t, !resolved.IsResolved())
 					}
+				}
+				if expectedFailedLookupLocations, ok := call.returnValue["failedLookupLocations"].([]interface{}); ok {
+					assert.DeepEqual(t, locations.FailedLookupLocations, core.Map(expectedFailedLookupLocations, func(i interface{}) string { return i.(string) }))
+				} else {
+					assert.Equal(t, len(locations.FailedLookupLocations), 0)
+				}
+				if expectedAffectingLocations, ok := call.returnValue["affectingLocations"].([]interface{}); ok {
+					assert.DeepEqual(t, locations.AffectingLocations, core.Map(expectedAffectingLocations, func(i interface{}) string { return i.(string) }))
+				} else {
+					assert.Equal(t, len(locations.AffectingLocations), 0)
 				}
 			case "getPackageScopeForPath":
 				resolver.GetPackageScopeForPath(call.args.Directory)
@@ -472,7 +453,8 @@ func TestModuleResolver(t *testing.T) {
 				runTraceBaseline(t, currentTestCase)
 			}
 			currentTestCase = traceTestCase{
-				name: json.Test,
+				name:             json.Test,
+				currentDirectory: json.CurrentDirectory,
 				// !!! no traces are passing yet because of missing cache implementation
 				trace: false,
 				files: make(map[string]string, len(json.Files)),

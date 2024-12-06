@@ -26,7 +26,11 @@ func ParseNodeModuleFromPath(resolved string, isFolder bool) string {
 func ParsePackageName(moduleName string) (packageName, rest string) {
 	idx := strings.Index(moduleName, "/")
 	if len(moduleName) > 0 && moduleName[0] == '@' {
-		idx = strings.Index(moduleName[idx+1:], "/") + idx + 1
+		offset := idx + 1
+		idx = strings.Index(moduleName[offset:], "/")
+		if idx != -1 {
+			idx += offset
+		}
 	}
 	if idx == -1 {
 		return moduleName, ""
