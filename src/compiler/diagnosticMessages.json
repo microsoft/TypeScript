@@ -4417,6 +4417,14 @@
         "category": "Error",
         "code": 4126
     },
+    "This member cannot have an 'override' modifier because its name is dynamic.": {
+        "category": "Error",
+        "code": 4127
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because its name is dynamic.": {
+        "category": "Error",
+        "code": 4128
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
