@@ -31,19 +31,19 @@ class Derived3 extends Base3 {
 //// [overrideLateBindableIndexSignature1.d.ts]
 declare const sym: symbol;
 declare class Base1 {
-    [x: symbol]: () => void;
+    [sym]: () => void;
 }
 declare class Derived1 extends Base1 {
-    [x: symbol]: () => void;
+    [sym]: () => void;
 }
 declare class Base2 {
-    [x: symbol]: () => void;
+    [sym]: () => void;
 }
 declare class Derived2 extends Base2 {
-    [x: symbol]: () => void;
+    [sym]: () => void;
 }
 declare class Base3 {
 }
 declare class Derived3 extends Base3 {
-    [x: symbol]: () => void;
+    [sym]: () => void;
 }
