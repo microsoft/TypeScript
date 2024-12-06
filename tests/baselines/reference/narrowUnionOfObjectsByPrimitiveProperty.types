@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/000.ts] ////
+//// [tests/cases/compiler/narrowUnionOfObjectsByPrimitiveProperty.ts] ////
 
-=== 000.ts ===
+=== narrowUnionOfObjectsByPrimitiveProperty.ts ===
 interface State<Type> {
   state: Type;
 >state : Type
@@ -13,8 +13,8 @@ interface UserName {
 >      : ^^^^^^
 
   last?: string;
->last : string
->     : ^^^^^^
+>last : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 }
 
 
@@ -80,43 +80,42 @@ if (typeof nameState.value === "string") {
 >      : ^^^^^^^^^^^^^^^
 }
 
-declare const x: [string, number] | [number, string];
->x : [string, number] | [number, string]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+declare const arr: [string, number] | [number, string];
+>arr : [string, number] | [number, string]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-if (typeof x[0] === "string") {
->typeof x[0] === "string" : boolean
->                         : ^^^^^^^
->typeof x[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x[0] : string | number
->     : ^^^^^^^^^^^^^^^
->x : [string, number] | [number, string]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+if (typeof arr[0] === "string") {
+>typeof arr[0] === "string" : boolean
+>                           : ^^^^^^^
+>typeof arr[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr[0] : string | number
+>       : ^^^^^^^^^^^^^^^
+>arr : [string, number] | [number, string]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >"string" : "string"
 >         : ^^^^^^^^
 
-  x[1] satisfies number;
->x[1] satisfies number : number
->                      : ^^^^^^
->x[1] : number
->     : ^^^^^^
->x : [string, number]
->  : ^^^^^^^^^^^^^^^^
+  arr[1] satisfies number;
+>arr[1] satisfies number : number
+>                        : ^^^^^^
+>arr[1] : number
+>       : ^^^^^^
+>arr : [string, number]
+>    : ^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
 } else {
-  x[1] satisfies string;
->x[1] satisfies string : string
->                      : ^^^^^^
->x[1] : string
->     : ^^^^^^
->x : [number, string]
->  : ^^^^^^^^^^^^^^^^
+  arr[1] satisfies string;
+>arr[1] satisfies string : string
+>                        : ^^^^^^
+>arr[1] : string
+>       : ^^^^^^
+>arr : [number, string]
+>    : ^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }
-

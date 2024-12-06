@@ -1,3 +1,5 @@
+// @strict: true
+
 interface State<Type> {
   state: Type;
 }
@@ -22,9 +24,9 @@ if (typeof nameState.value === "string") {
   nameState.state satisfies State<UserName>;
 }
 
-declare const x: [string, number] | [number, string];
-if (typeof x[0] === "string") {
-  x[1] satisfies number;
+declare const arr: [string, number] | [number, string];
+if (typeof arr[0] === "string") {
+  arr[1] satisfies number;
 } else {
-  x[1] satisfies string;
+  arr[1] satisfies string;
 }

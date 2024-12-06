@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/000.ts] ////
+//// [tests/cases/compiler/narrowUnionOfObjectsByPrimitiveProperty.ts] ////
 
-//// [000.ts]
+//// [narrowUnionOfObjectsByPrimitiveProperty.ts]
 interface State<Type> {
   state: Type;
 }
@@ -25,15 +25,15 @@ if (typeof nameState.value === "string") {
   nameState.state satisfies State<UserName>;
 }
 
-declare const x: [string, number] | [number, string];
-if (typeof x[0] === "string") {
-  x[1] satisfies number;
+declare const arr: [string, number] | [number, string];
+if (typeof arr[0] === "string") {
+  arr[1] satisfies number;
 } else {
-  x[1] satisfies string;
+  arr[1] satisfies string;
 }
 
-
-//// [000.js]
+//// [narrowUnionOfObjectsByPrimitiveProperty.js]
+"use strict";
 var nameState = {};
 if (typeof nameState.value === "string") {
     nameState.state;
@@ -41,9 +41,9 @@ if (typeof nameState.value === "string") {
 else {
     nameState.state;
 }
-if (typeof x[0] === "string") {
-    x[1];
+if (typeof arr[0] === "string") {
+    arr[1];
 }
 else {
-    x[1];
+    arr[1];
 }

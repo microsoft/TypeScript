@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/narrowUnionOfObjectsByPrimitiveProperty.ts] ////
+
+=== narrowUnionOfObjectsByPrimitiveProperty.ts ===
+interface State<Type> {
+>State : Symbol(State, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 0))
+>Type : Symbol(Type, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 16))
+
+  state: Type;
+>state : Symbol(State.state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 23))
+>Type : Symbol(Type, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 16))
+}
+
+interface UserName {
+>UserName : Symbol(UserName, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 2, 1))
+
+  first: string;
+>first : Symbol(UserName.first, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 4, 20))
+
+  last?: string;
+>last : Symbol(UserName.last, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 5, 16))
+}
+
+
+const nameState = {} as {
+>nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 5))
+
+  value: string;
+>value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 25))
+
+  state: State<string>;
+>state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 11, 16))
+>State : Symbol(State, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 0))
+
+} | {
+  value: UserName;
+>value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 13, 5))
+>UserName : Symbol(UserName, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 2, 1))
+
+  state: State<UserName>;
+>state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 14, 18))
+>State : Symbol(State, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 0))
+>UserName : Symbol(UserName, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 2, 1))
+}
+
+if (typeof nameState.value === "string") {
+>nameState.value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 25), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 13, 5))
+>nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 5))
+>value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 25), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 13, 5))
+
+  nameState.state satisfies  State<string>;
+>nameState.state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 11, 16))
+>nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 5))
+>state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 11, 16))
+>State : Symbol(State, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 0))
+
+} else {
+  nameState.state satisfies State<UserName>;
+>nameState.state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 14, 18))
+>nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 5))
+>state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 14, 18))
+>State : Symbol(State, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 0))
+>UserName : Symbol(UserName, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 2, 1))
+}
+
+declare const arr: [string, number] | [number, string];
+>arr : Symbol(arr, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 24, 13))
+
+if (typeof arr[0] === "string") {
+>arr : Symbol(arr, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 24, 13))
+>0 : Symbol(0)
+
+  arr[1] satisfies number;
+>arr : Symbol(arr, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 24, 13))
+>1 : Symbol(1)
+
+} else {
+  arr[1] satisfies string;
+>arr : Symbol(arr, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 24, 13))
+>1 : Symbol(1)
+}
