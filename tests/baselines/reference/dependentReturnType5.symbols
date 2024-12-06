@@ -1,0 +1,220 @@
+//// [tests/cases/compiler/dependentReturnType5.ts] ////
+
+=== dependentReturnType5.ts ===
+// Indexed access return type
+interface A1 {
+>A1 : Symbol(A1, Decl(dependentReturnType5.ts, 0, 0))
+
+    "prop": true;
+>"prop" : Symbol(A1["prop"], Decl(dependentReturnType5.ts, 1, 14))
+
+    [s: string]: boolean;
+>s : Symbol(s, Decl(dependentReturnType5.ts, 3, 5))
+}
+
+// This was already allowed but is unsound.
+function foo1<T extends string>(x: T): A1[T] {
+>foo1 : Symbol(foo1, Decl(dependentReturnType5.ts, 4, 1))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 7, 14))
+>x : Symbol(x, Decl(dependentReturnType5.ts, 7, 32))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 7, 14))
+>A1 : Symbol(A1, Decl(dependentReturnType5.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 7, 14))
+
+    return false;
+}
+const rfoo1 = foo1("prop"); // Type says true, but actually returns false.
+>rfoo1 : Symbol(rfoo1, Decl(dependentReturnType5.ts, 10, 5))
+>foo1 : Symbol(foo1, Decl(dependentReturnType5.ts, 4, 1))
+
+interface A2 {
+>A2 : Symbol(A2, Decl(dependentReturnType5.ts, 10, 27))
+
+    "prop": true;
+>"prop" : Symbol(A2["prop"], Decl(dependentReturnType5.ts, 12, 14))
+
+    [n: number]: string;
+>n : Symbol(n, Decl(dependentReturnType5.ts, 14, 5))
+}
+
+// We could soundly allow that, because `"prop"` and `[n: number]` are disjoint types.
+function foo2<T extends "prop" | number>(x: T): A2[T] {
+>foo2 : Symbol(foo2, Decl(dependentReturnType5.ts, 15, 1))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 18, 14))
+>x : Symbol(x, Decl(dependentReturnType5.ts, 18, 41))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 18, 14))
+>A2 : Symbol(A2, Decl(dependentReturnType5.ts, 10, 27))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 18, 14))
+
+    if (x === "prop") {
+>x : Symbol(x, Decl(dependentReturnType5.ts, 18, 41))
+
+        return true;
+    }
+    return "some string";
+}
+const rfoo2 = foo2("prop");
+>rfoo2 : Symbol(rfoo2, Decl(dependentReturnType5.ts, 24, 5))
+>foo2 : Symbol(foo2, Decl(dependentReturnType5.ts, 15, 1))
+
+const rfoo22 = foo2(34);
+>rfoo22 : Symbol(rfoo22, Decl(dependentReturnType5.ts, 25, 5))
+>foo2 : Symbol(foo2, Decl(dependentReturnType5.ts, 15, 1))
+
+const rfoo222 = foo2(Math.random() ? "prop" : 34);
+>rfoo222 : Symbol(rfoo222, Decl(dependentReturnType5.ts, 26, 5))
+>foo2 : Symbol(foo2, Decl(dependentReturnType5.ts, 15, 1))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+interface A3 {
+>A3 : Symbol(A3, Decl(dependentReturnType5.ts, 26, 50))
+
+    [s: string]: boolean;
+>s : Symbol(s, Decl(dependentReturnType5.ts, 29, 5))
+}
+
+// No need for return type narrowing.
+function foo3<T extends string>(x: T): A3[T] {
+>foo3 : Symbol(foo3, Decl(dependentReturnType5.ts, 30, 1))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 33, 14))
+>x : Symbol(x, Decl(dependentReturnType5.ts, 33, 32))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 33, 14))
+>A3 : Symbol(A3, Decl(dependentReturnType5.ts, 26, 50))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 33, 14))
+
+    if (Math.random()) return true;
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    return false;
+}
+
+interface Comp {
+>Comp : Symbol(Comp, Decl(dependentReturnType5.ts, 36, 1))
+
+    foo: 2;
+>foo : Symbol(Comp.foo, Decl(dependentReturnType5.ts, 38, 16))
+
+    [n: number]: 3;
+>n : Symbol(n, Decl(dependentReturnType5.ts, 40, 5))
+
+    [s: string]: 2 | 3 | 4;
+>s : Symbol(s, Decl(dependentReturnType5.ts, 41, 5))
+}
+
+function indexedComp<T extends number | string>(x: T): Comp[T] {
+>indexedComp : Symbol(indexedComp, Decl(dependentReturnType5.ts, 42, 1))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 44, 21))
+>x : Symbol(x, Decl(dependentReturnType5.ts, 44, 48))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 44, 21))
+>Comp : Symbol(Comp, Decl(dependentReturnType5.ts, 36, 1))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 44, 21))
+
+    if (x === "foo") {
+>x : Symbol(x, Decl(dependentReturnType5.ts, 44, 48))
+
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            return 3; // Error
+        }
+        return 2; // Ok
+    }
+    if (typeof x === "number") {
+>x : Symbol(x, Decl(dependentReturnType5.ts, 44, 48))
+
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            return 2; // Error
+        }
+        return 3; // Ok
+    }
+    return 4; // Ok
+}
+
+function indexedComp2<T extends number | string>(x: T): Comp[T] {
+>indexedComp2 : Symbol(indexedComp2, Decl(dependentReturnType5.ts, 58, 1))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 60, 22))
+>x : Symbol(x, Decl(dependentReturnType5.ts, 60, 49))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 60, 22))
+>Comp : Symbol(Comp, Decl(dependentReturnType5.ts, 36, 1))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 60, 22))
+
+    if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+        return 3; // Bad, unsound
+    }
+    return 2; // Error
+}
+
+
+// Most common case supported:
+interface F {
+>F : Symbol(F, Decl(dependentReturnType5.ts, 65, 1))
+
+    "t": number,
+>"t" : Symbol(F["t"], Decl(dependentReturnType5.ts, 69, 13))
+
+    "f": boolean,
+>"f" : Symbol(F["f"], Decl(dependentReturnType5.ts, 70, 16))
+}
+
+// Ok
+function depLikeFun<T extends "t" | "f">(str: T): F[T] {
+>depLikeFun : Symbol(depLikeFun, Decl(dependentReturnType5.ts, 72, 1))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 75, 20))
+>str : Symbol(str, Decl(dependentReturnType5.ts, 75, 41))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 75, 20))
+>F : Symbol(F, Decl(dependentReturnType5.ts, 65, 1))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 75, 20))
+
+    if (str === "t") {
+>str : Symbol(str, Decl(dependentReturnType5.ts, 75, 41))
+
+        return 1;
+    } else {
+        return true;
+    }
+}
+
+depLikeFun("t"); // has type number
+>depLikeFun : Symbol(depLikeFun, Decl(dependentReturnType5.ts, 72, 1))
+
+depLikeFun("f"); // has type boolean
+>depLikeFun : Symbol(depLikeFun, Decl(dependentReturnType5.ts, 72, 1))
+
+type IndirectF<T extends keyof F> = F[T];
+>IndirectF : Symbol(IndirectF, Decl(dependentReturnType5.ts, 84, 16))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 86, 15))
+>F : Symbol(F, Decl(dependentReturnType5.ts, 65, 1))
+>F : Symbol(F, Decl(dependentReturnType5.ts, 65, 1))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 86, 15))
+
+// Ok
+function depLikeFun2<T extends "t" | "f">(str: T): IndirectF<T> {
+>depLikeFun2 : Symbol(depLikeFun2, Decl(dependentReturnType5.ts, 86, 41))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 89, 21))
+>str : Symbol(str, Decl(dependentReturnType5.ts, 89, 42))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 89, 21))
+>IndirectF : Symbol(IndirectF, Decl(dependentReturnType5.ts, 84, 16))
+>T : Symbol(T, Decl(dependentReturnType5.ts, 89, 21))
+
+    if (str === "t") {
+>str : Symbol(str, Decl(dependentReturnType5.ts, 89, 42))
+
+        return 1;
+    } else {
+        return true;
+    }
+}

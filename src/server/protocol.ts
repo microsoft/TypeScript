@@ -202,6 +202,7 @@ export const enum CommandTypes {
     ProvideInlayHints = "provideInlayHints",
     WatchChange = "watchChange",
     MapCode = "mapCode",
+    /** @internal */
     CopilotRelated = "copilotRelated",
 }
 
@@ -2004,6 +2005,11 @@ export interface QuickInfoRequest extends FileLocationRequest {
     arguments: FileLocationRequestArgs;
 }
 
+export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
+    /** TODO */
+    verbosityLevel?: number;
+}
+
 /**
  * Body of QuickInfoResponse.
  */
@@ -2043,6 +2049,11 @@ export interface QuickInfoResponseBody {
      * JSDoc tags associated with symbol.
      */
     tags: JSDocTagInfo[];
+
+    /**
+     * TODO
+     */
+    canIncreaseVerbosityLevel?: boolean;
 }
 
 /**
@@ -2407,18 +2418,6 @@ export interface MapCodeResponse extends Response {
     body: readonly FileCodeEdits[];
 }
 
-export interface CopilotRelatedRequest extends FileRequest {
-    command: CommandTypes.CopilotRelated;
-    arguments: FileRequestArgs;
-}
-
-export interface CopilotRelatedItems {
-    relatedFiles: readonly string[];
-}
-
-export interface CopilotRelatedResponse extends Response {
-    body: CopilotRelatedItems;
-}
 /**
  * Synchronous request for semantic diagnostics of one file.
  */
