@@ -46774,6 +46774,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     ): MemberOverrideStatus {
         const isJs = isInJSFile(node);
         const nodeInAmbientContext = !!(node.flags & NodeFlags.Ambient);
+        if (memberHasOverrideModifier && member?.valueDeclaration && isClassElement(member.valueDeclaration) && member.valueDeclaration.name && isNonBindableDynamicName(member.valueDeclaration.name)) {
+            error(
+                errorNode,
+                isJs ?
+                    Diagnostics.This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic :
+                    Diagnostics.This_member_cannot_have_an_override_modifier_because_its_name_is_dynamic,
+            );
+            return MemberOverrideStatus.HasInvalidOverride;
+        }
         if (baseWithThis && (memberHasOverrideModifier || compilerOptions.noImplicitOverride)) {
             const thisType = memberIsStatic ? staticType : typeWithThis;
             const baseType = memberIsStatic ? baseStaticType : baseWithThis;
