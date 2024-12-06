@@ -67,9 +67,9 @@ function numberOk(wrapped: WrappedStringOr<number> | null) {
         return null;
     }
     return wrapped.value;
->wrapped.value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27), Decl(narrowingTypeofDiscriminant.ts, 20, 48))
+>wrapped.value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27))
 >wrapped : Symbol(wrapped, Decl(narrowingTypeofDiscriminant.ts, 22, 18))
->value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27), Decl(narrowingTypeofDiscriminant.ts, 20, 48))
+>value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27))
 }
 
 function booleanBad(wrapped: WrappedStringOr<boolean> | null) {
