@@ -40,7 +40,7 @@ func printDiagnostic(d *ast.Diagnostic, level int) {
 	}
 }
 
-func printMessageChain(messageChain []*ast.MessageChain, level int) {
+func printMessageChain(messageChain []*ast.Diagnostic, level int) {
 	for _, c := range messageChain {
 		fmt.Printf("%v%v\n", strings.Repeat(" ", level*2), c.Message())
 		printMessageChain(c.MessageChain(), level+1)

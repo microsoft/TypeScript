@@ -77,18 +77,11 @@ func NewDiagnosticForNode(node *ast.Node, message *diagnostics.Message, args ...
 	return ast.NewDiagnostic(file, loc, message, args...)
 }
 
-func NewDiagnosticForNodeFromMessageChain(node *ast.Node, messageChain *ast.MessageChain) *ast.Diagnostic {
-	var file *ast.SourceFile
-	var loc core.TextRange
-	if node != nil {
-		file = ast.GetSourceFileOfNode(node)
-		loc = getErrorRangeForNode(file, node)
+func NewDiagnosticChainForNode(chain *ast.Diagnostic, node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
+	if chain != nil {
+		return ast.NewDiagnosticChain(chain, message, args...)
 	}
-	return ast.NewDiagnosticFromMessageChain(file, loc, messageChain)
-}
-
-func chainDiagnosticMessages(details *ast.MessageChain, message *diagnostics.Message, args ...any) *ast.MessageChain {
-	return ast.NewMessageChain(message, args...).AddMessageChain(details)
+	return NewDiagnosticForNode(node, message, args...)
 }
 
 type OperatorPrecedence int
@@ -633,14 +626,14 @@ func hasEffectiveReadonlyModifier(node *ast.Node) bool {
 }
 
 func getImmediatelyInvokedFunctionExpression(fn *ast.Node) *ast.Node {
-	if fn.Kind == ast.KindFunctionExpression || fn.Kind == ast.KindArrowFunction {
+	if ast.IsFunctionExpressionOrArrowFunction(fn) {
 		prev := fn
 		parent := fn.Parent
-		for parent.Kind == ast.KindParenthesizedExpression {
+		for ast.IsParenthesizedExpression(parent) {
 			prev = parent
 			parent = parent.Parent
 		}
-		if parent.Kind == ast.KindCallExpression && parent.AsCallExpression().Expression == prev {
+		if ast.IsCallExpression(parent) && parent.AsCallExpression().Expression == prev {
 			return parent
 		}
 	}
@@ -1343,7 +1336,7 @@ func equalDiagnostics(d1, d2 *ast.Diagnostic) bool {
 		slices.EqualFunc(d1.RelatedInformation(), d2.RelatedInformation(), equalDiagnostics)
 }
 
-func equalMessageChain(c1, c2 *ast.MessageChain) bool {
+func equalMessageChain(c1, c2 *ast.Diagnostic) bool {
 	return c1.Code() == c2.Code() &&
 		c1.Message() == c2.Message() &&
 		slices.EqualFunc(c1.MessageChain(), c2.MessageChain(), equalMessageChain)
@@ -1381,7 +1374,7 @@ func CompareDiagnostics(d1, d2 *ast.Diagnostic) int {
 	return compareRelatedInfo(d1.RelatedInformation(), d2.RelatedInformation())
 }
 
-func compareMessageChainSize(c1, c2 []*ast.MessageChain) int {
+func compareMessageChainSize(c1, c2 []*ast.Diagnostic) int {
 	c := len(c2) - len(c1)
 	if c != 0 {
 		return c
@@ -1395,7 +1388,7 @@ func compareMessageChainSize(c1, c2 []*ast.MessageChain) int {
 	return 0
 }
 
-func compareMessageChainContent(c1, c2 []*ast.MessageChain) int {
+func compareMessageChainContent(c1, c2 []*ast.Diagnostic) int {
 	for i := range c1 {
 		c := strings.Compare(c1[i].Message(), c2[i].Message())
 		if c != 0 {
@@ -1432,12 +1425,22 @@ func getDiagnosticPath(d *ast.Diagnostic) string {
 	return ""
 }
 
-func isConstAssertion(location *ast.Node) bool {
-	switch location.Kind {
+func getAssertedTypeNode(node *ast.Node) *ast.Node {
+	switch node.Kind {
 	case ast.KindAsExpression:
-		return isConstTypeReference(location.AsAsExpression().Type)
+		return node.AsAsExpression().Type
+	case ast.KindSatisfiesExpression:
+		return node.AsSatisfiesExpression().Type
 	case ast.KindTypeAssertionExpression:
-		return isConstTypeReference(location.AsTypeAssertion().Type)
+		return node.AsTypeAssertion().Type
+	}
+	panic("Unhandled case in getAssertedTypeNode")
+}
+
+func isConstAssertion(node *ast.Node) bool {
+	switch node.Kind {
+	case ast.KindAsExpression, ast.KindTypeAssertionExpression:
+		return isConstTypeReference(getAssertedTypeNode(node))
 	}
 	return false
 }
@@ -3060,14 +3063,6 @@ func getClassExtendsHeritageElement(node *ast.Node) *ast.Node {
 	return nil
 }
 
-func concatenateDiagnosticMessageChains(headChain *ast.MessageChain, tailChain *ast.MessageChain) {
-	lastChain := headChain
-	for len(lastChain.MessageChain()) != 0 {
-		lastChain = lastChain.MessageChain()[0]
-	}
-	lastChain.SetMessageChain([]*ast.MessageChain{tailChain})
-}
-
 func isObjectOrArrayLiteralType(t *Type) bool {
 	return t.objectFlags&(ObjectFlagsObjectLiteral|ObjectFlagsArrayLiteral) != 0
 }
@@ -3432,4 +3427,56 @@ func getBindingElementPropertyName(node *ast.Node) *ast.Node {
 		return name
 	}
 	return node.Name()
+}
+
+func indexOfNode(nodes []*ast.Node, node *ast.Node) int {
+	index, ok := slices.BinarySearchFunc(nodes, node, compareNodePositions)
+	if ok {
+		return index
+	}
+	return -1
+}
+
+func compareNodePositions(n1, n2 *ast.Node) int {
+	return n1.Pos() - n2.Pos()
+}
+
+func hasContextSensitiveParameters(node *ast.Node) bool {
+	// Functions with type parameters are not context sensitive.
+	if node.TypeParameters() == nil {
+		// Functions with any parameters that lack type annotations are context sensitive.
+		if core.Some(node.Parameters(), func(p *ast.Node) bool { return p.Type() == nil }) {
+			return true
+		}
+		if !ast.IsArrowFunction(node) {
+			// If the first parameter is not an explicit 'this' parameter, then the function has
+			// an implicit 'this' parameter which is subject to contextual typing.
+			parameter := core.FirstOrNil(node.Parameters())
+			if parameter == nil || !parameterIsThisKeyword(parameter) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func isCallChain(node *ast.Node) bool {
+	return ast.IsCallExpression(node) && node.Flags&ast.NodeFlagsOptionalChain != 0
+}
+
+func (c *Checker) callLikeExpressionMayHaveTypeArguments(node *ast.Node) bool {
+	return isCallOrNewExpression(node) || ast.IsTaggedTemplateExpression(node) || isJsxOpeningLikeElement(node)
+}
+
+func isSuperCall(n *ast.Node) bool {
+	return ast.IsCallExpression(n) && n.Expression().Kind == ast.KindSuperKeyword
+}
+
+/**
+ * Determines whether a node is a property or element access expression for `super`.
+ *
+ * @internal
+ */
+func isSuperProperty(node *ast.Node) bool {
+	return ast.IsAccessExpression(node) && node.Expression().Kind == ast.KindSuperKeyword
 }

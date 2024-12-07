@@ -2525,6 +2525,8 @@ func setReturnFlowNode(node *ast.Node, returnFlowNode *ast.FlowNode) {
 		node.AsFunctionDeclaration().ReturnFlowNode = returnFlowNode
 	case ast.KindFunctionExpression:
 		node.AsFunctionExpression().ReturnFlowNode = returnFlowNode
+	case ast.KindClassStaticBlockDeclaration:
+		node.AsClassStaticBlockDeclaration().ReturnFlowNode = returnFlowNode
 	}
 }
 

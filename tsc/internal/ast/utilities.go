@@ -646,3 +646,21 @@ func IsFunctionOrModuleBlock(node *Node) bool {
 func IsFunctionExpressionOrArrowFunction(node *Node) bool {
 	return IsFunctionExpression(node) || IsArrowFunction(node)
 }
+
+// Warning: This has the same semantics as the forEach family of functions in that traversal terminates
+// in the event that 'visitor' returns true.
+func ForEachReturnStatement(body *Node, visitor func(stmt *Node) bool) bool {
+	var traverse func(*Node) bool
+	traverse = func(node *Node) bool {
+		switch node.Kind {
+		case KindReturnStatement:
+			return visitor(node)
+		case KindCaseBlock, KindBlock, KindIfStatement, KindDoStatement, KindWhileStatement, KindForStatement, KindForInStatement,
+			KindForOfStatement, KindWithStatement, KindSwitchStatement, KindCaseClause, KindDefaultClause, KindLabeledStatement,
+			KindTryStatement, KindCatchClause:
+			return node.ForEachChild(traverse)
+		}
+		return false
+	}
+	return traverse(body)
+}

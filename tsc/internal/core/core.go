@@ -222,6 +222,13 @@ func IfElse[T any](b bool, whenTrue T, whenFalse T) T {
 	return whenFalse
 }
 
+func OrElse[T comparable](value T, defaultValue T) T {
+	if value != *new(T) {
+		return value
+	}
+	return defaultValue
+}
+
 func ComputeLineStarts(text string) []TextPos {
 	var result []TextPos
 	pos := 0

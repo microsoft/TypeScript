@@ -262,15 +262,15 @@ func (c *Checker) isEnumTypeRelatedTo(source *ast.Symbol, target *ast.Symbol, er
 }
 
 func (c *Checker) checkTypeAssignableTo(source *Type, target *Type, errorNode *ast.Node, headMessage *diagnostics.Message) bool {
-	return c.checkTypeRelatedToEx(source, target, c.assignableRelation, errorNode, headMessage, nil, nil)
+	return c.checkTypeRelatedToEx(source, target, c.assignableRelation, errorNode, headMessage, nil)
 }
 
-func (c *Checker) checkTypeAssignableToEx(source *Type, target *Type, errorNode *ast.Node, headMessage *diagnostics.Message, containingMessageChain func() *ast.MessageChain, errorOutputObject *ErrorOutputContainer) bool {
-	return c.checkTypeRelatedToEx(source, target, c.assignableRelation, errorNode, headMessage, containingMessageChain, errorOutputObject)
+func (c *Checker) checkTypeAssignableToEx(source *Type, target *Type, errorNode *ast.Node, headMessage *diagnostics.Message, diagnosticOutput **ast.Diagnostic) bool {
+	return c.checkTypeRelatedToEx(source, target, c.assignableRelation, errorNode, headMessage, diagnosticOutput)
 }
 
 func (c *Checker) checkTypeRelatedTo(source *Type, target *Type, relation *Relation, errorNode *ast.Node) bool {
-	return c.checkTypeRelatedToEx(source, target, relation, errorNode, nil, nil, nil)
+	return c.checkTypeRelatedToEx(source, target, relation, errorNode, nil, nil)
 }
 
 func (c *Checker) checkTypeRelatedToEx(
@@ -279,8 +279,7 @@ func (c *Checker) checkTypeRelatedToEx(
 	relation *Relation,
 	errorNode *ast.Node,
 	headMessage *diagnostics.Message,
-	containingMessageChain func() *ast.MessageChain,
-	errorOutputContainer *ErrorOutputContainer,
+	diagnosticOutput **ast.Diagnostic,
 ) bool {
 	r := Relater{}
 	r.c = c
@@ -296,18 +295,14 @@ func (c *Checker) checkTypeRelatedToEx(
 		if errorNode == nil {
 			errorNode = c.currentNode
 		}
-		diag := c.error(errorNode, message, c.typeToString(source), c.typeToString(target))
-		if errorOutputContainer != nil {
-			errorOutputContainer.errors = append(errorOutputContainer.errors, diag)
+		diag := NewDiagnosticForNode(errorNode, message, c.typeToString(source), c.typeToString(target))
+		if diagnosticOutput != nil {
+			*diagnosticOutput = diag
+		} else {
+			c.diagnostics.add(diag)
 		}
 	} else if r.errorChain != nil {
-		messageChain := createMessageChainFromErrorChain(r.errorChain)
-		if containingMessageChain != nil {
-			chain := containingMessageChain()
-			if chain != nil {
-				concatenateDiagnosticMessageChains(chain, messageChain)
-			}
-		}
+		diag := createDiagnosticChainFromErrorChain(r.errorChain, r.errorNode, r.relatedInfo)
 		// !!!
 		// var relatedInformation []*Diagnostic
 		// // Check if we should issue an extra diagnostic to produce a quickfix for a slightly incorrect import statement
@@ -323,12 +318,12 @@ func (c *Checker) checkTypeRelatedToEx(
 		// 		}
 		// 	}
 		// }
-		diag := NewDiagnosticForNodeFromMessageChain(r.errorNode, messageChain).SetRelatedInfo(r.relatedInfo)
-		if errorOutputContainer != nil {
-			errorOutputContainer.errors = append(errorOutputContainer.errors, diag)
-		}
-		if errorOutputContainer == nil || !errorOutputContainer.skipLogging {
-			c.diagnostics.add(diag)
+		if diag != nil {
+			if diagnosticOutput != nil {
+				*diagnosticOutput = diag
+			} else {
+				c.diagnostics.add(diag)
+			}
 		}
 	}
 	// !!!
@@ -338,31 +333,35 @@ func (c *Checker) checkTypeRelatedToEx(
 	return result != TernaryFalse
 }
 
-func createMessageChainFromErrorChain(chain *ErrorChain) *ast.MessageChain {
+func createDiagnosticChainFromErrorChain(chain *ErrorChain, errorNode *ast.Node, relatedInfo []*ast.Diagnostic) *ast.Diagnostic {
 	for chain != nil && chain.message.ElidedInCompatabilityPyramid() {
 		chain = chain.next
 	}
 	if chain == nil {
 		return nil
 	}
-	return chainDiagnosticMessages(createMessageChainFromErrorChain(chain.next), chain.message, chain.args...)
+	next := createDiagnosticChainFromErrorChain(chain.next, errorNode, relatedInfo)
+	if next == nil {
+		return NewDiagnosticForNode(errorNode, chain.message, chain.args...).SetRelatedInfo(relatedInfo)
+	}
+	return ast.NewDiagnosticChain(next, chain.message, chain.args...)
 }
 
-func (c *Checker) checkTypeAssignableToAndOptionallyElaborate(source *Type, target *Type, errorNode *ast.Node, expr *ast.Node, headMessage *diagnostics.Message, containingMessageChain func() *ast.MessageChain) bool {
-	return c.checkTypeRelatedToAndOptionallyElaborate(source, target, c.assignableRelation, errorNode, expr, headMessage, containingMessageChain /*errorOutputContainer*/, nil)
+func (c *Checker) checkTypeAssignableToAndOptionallyElaborate(source *Type, target *Type, errorNode *ast.Node, expr *ast.Node, headMessage *diagnostics.Message, diagnosticOutput **ast.Diagnostic) bool {
+	return c.checkTypeRelatedToAndOptionallyElaborate(source, target, c.assignableRelation, errorNode, expr, headMessage, diagnosticOutput)
 }
 
-func (c *Checker) checkTypeRelatedToAndOptionallyElaborate(source *Type, target *Type, relation *Relation, errorNode *ast.Node, expr *ast.Node, headMessage *diagnostics.Message, containingMessageChain func() *ast.MessageChain, errorOutputContainer *ErrorOutputContainer) bool {
+func (c *Checker) checkTypeRelatedToAndOptionallyElaborate(source *Type, target *Type, relation *Relation, errorNode *ast.Node, expr *ast.Node, headMessage *diagnostics.Message, diagnosticOutput **ast.Diagnostic) bool {
 	if c.isTypeRelatedTo(source, target, relation) {
 		return true
 	}
-	if errorNode == nil || !c.elaborateError(expr, source, target, relation, headMessage, containingMessageChain, errorOutputContainer) {
-		return c.checkTypeRelatedToEx(source, target, relation, errorNode, headMessage, containingMessageChain, errorOutputContainer)
+	if errorNode == nil || !c.elaborateError(expr, source, target, relation, headMessage, diagnosticOutput) {
+		return c.checkTypeRelatedToEx(source, target, relation, errorNode, headMessage, diagnosticOutput)
 	}
 	return false
 }
 
-func (c *Checker) elaborateError(node *ast.Node, source *Type, target *Type, relation *Relation, headMessage *diagnostics.Message, containingMessageChain func() *ast.MessageChain, errorOutputContainer *ErrorOutputContainer) bool {
+func (c *Checker) elaborateError(node *ast.Node, source *Type, target *Type, relation *Relation, headMessage *diagnostics.Message, diagnosticOutput **ast.Diagnostic) bool {
 	return false // !!!
 }
 

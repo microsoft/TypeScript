@@ -162,7 +162,7 @@ func WriteFlattenedDiagnosticMessage(writer io.Writer, diagnostic *ast.Diagnosti
 	}
 }
 
-func flattenDiagnosticMessageChain(writer io.Writer, chain *ast.MessageChain, newLine string, level int) {
+func flattenDiagnosticMessageChain(writer io.Writer, chain *ast.Diagnostic, newLine string, level int) {
 	fmt.Fprint(writer, newLine)
 	for range level {
 		fmt.Fprint(writer, "  ")

@@ -147,6 +147,12 @@ type SwitchStatementLinks struct {
 	witnesses           []string
 }
 
+type ArrayLiteralLinks struct {
+	indicesComputed  bool
+	firstSpreadIndex int // Index of first spread expression (or -1 if none)
+	lastSpreadIndex  int // Index of last spread expression (or -1 if none)
+}
+
 // Links for late-binding containers
 
 type MembersOrExportsResolutionKind int

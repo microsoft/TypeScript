@@ -194,70 +194,85 @@ func (n *Node) Expression() *Node {
 		return n.AsSwitchStatement().Expression
 	case KindCaseClause:
 		return n.AsCaseOrDefaultClause().Expression
+	case KindExpressionStatement:
+		return n.AsExpressionStatement().Expression
+	case KindReturnStatement:
+		return n.AsReturnStatement().Expression
 	}
 	panic("Unhandled case in Node.Expression")
 }
 
-func (n *Node) Arguments() []*Node {
-	var list *NodeList
+func (n *Node) ArgumentList() *NodeList {
 	switch n.Kind {
 	case KindCallExpression:
-		list = n.AsCallExpression().Arguments
+		return n.AsCallExpression().Arguments
 	case KindNewExpression:
-		list = n.AsNewExpression().Arguments
-	default:
-		panic("Unhandled case in Node.Arguments")
+		return n.AsNewExpression().Arguments
 	}
+	panic("Unhandled case in Node.Arguments")
+}
+
+func (n *Node) Arguments() []*Node {
+	list := n.ArgumentList()
 	if list != nil {
 		return list.Nodes
 	}
 	return nil
+}
+
+func (n *Node) TypeArgumentList() *NodeList {
+	switch n.Kind {
+	case KindCallExpression:
+		return n.AsCallExpression().TypeArguments
+	case KindNewExpression:
+		return n.AsNewExpression().TypeArguments
+	case KindTaggedTemplateExpression:
+		return n.AsTaggedTemplateExpression().TypeArguments
+	case KindTypeReference:
+		return n.AsTypeReference().TypeArguments
+	case KindExpressionWithTypeArguments:
+		return n.AsExpressionWithTypeArguments().TypeArguments
+	case KindImportType:
+		return n.AsImportTypeNode().TypeArguments
+	case KindTypeQuery:
+		return n.AsTypeQueryNode().TypeArguments
+	case KindJsxOpeningElement:
+		return n.AsJsxOpeningElement().TypeArguments
+	case KindJsxSelfClosingElement:
+		return n.AsJsxSelfClosingElement().TypeArguments
+	}
+	panic("Unhandled case in Node.TypeArguments")
 }
 
 func (n *Node) TypeArguments() []*Node {
-	var list *NodeList
-	switch n.Kind {
-	case KindCallExpression:
-		list = n.AsCallExpression().TypeArguments
-	case KindNewExpression:
-		list = n.AsNewExpression().TypeArguments
-	case KindTaggedTemplateExpression:
-		list = n.AsTaggedTemplateExpression().TypeArguments
-	case KindTypeReference:
-		list = n.AsTypeReference().TypeArguments
-	case KindExpressionWithTypeArguments:
-		list = n.AsExpressionWithTypeArguments().TypeArguments
-	case KindImportType:
-		list = n.AsImportTypeNode().TypeArguments
-	case KindTypeQuery:
-		list = n.AsTypeQueryNode().TypeArguments
-	default:
-		panic("Unhandled case in Node.TypeArguments")
-	}
+	list := n.TypeArgumentList()
 	if list != nil {
 		return list.Nodes
 	}
 	return nil
 }
 
-func (n *Node) TypeParameters() []*Node {
-	var list *NodeList
+func (n *Node) TypeParameterList() *NodeList {
 	switch n.Kind {
 	case KindClassDeclaration:
-		list = n.AsClassDeclaration().TypeParameters
+		return n.AsClassDeclaration().TypeParameters
 	case KindClassExpression:
-		list = n.AsClassExpression().TypeParameters
+		return n.AsClassExpression().TypeParameters
 	case KindInterfaceDeclaration:
-		list = n.AsInterfaceDeclaration().TypeParameters
+		return n.AsInterfaceDeclaration().TypeParameters
 	case KindTypeAliasDeclaration:
-		list = n.AsTypeAliasDeclaration().TypeParameters
+		return n.AsTypeAliasDeclaration().TypeParameters
 	default:
 		funcLike := n.FunctionLikeData()
-		if funcLike == nil {
-			panic("Unhandled case in Node.TypeParameters")
+		if funcLike != nil {
+			return funcLike.TypeParameters
 		}
-		list = funcLike.TypeParameters
 	}
+	panic("Unhandled case in Node.TypeParameters")
+}
+
+func (n *Node) TypeParameters() []*Node {
+	list := n.TypeParameterList()
 	if list != nil {
 		return list.Nodes
 	}
@@ -316,7 +331,7 @@ func (n *Node) Type() *Node {
 		return n.AsJSDocFunctionType().Type
 	case KindJSDocOptionalType:
 		return n.AsJSDocOptionalType().Type
-	case KindEnumMember, KindBindingElement:
+	case KindEnumMember, KindBindingElement, KindExportAssignment:
 		return nil
 	default:
 		funcLike := n.FunctionLikeData()
@@ -861,6 +876,12 @@ func (n *Node) AsFlowReduceLabelData() *FlowReduceLabelData {
 }
 func (n *Node) AsJsxExpression() *JsxExpression {
 	return n.data.(*JsxExpression)
+}
+func (n *Node) AsClassStaticBlockDeclaration() *ClassStaticBlockDeclaration {
+	return n.data.(*ClassStaticBlockDeclaration)
+}
+func (n *Node) AsSyntheticExpression() *SyntheticExpression {
+	return n.data.(*SyntheticExpression)
 }
 
 // NodeData
@@ -2821,7 +2842,8 @@ type ClassStaticBlockDeclaration struct {
 	ModifiersBase
 	LocalsContainerBase
 	ClassElementBase
-	Body *BlockNode // BlockNode
+	Body           *BlockNode // BlockNode
+	ReturnFlowNode *FlowNode
 }
 
 func (f *NodeFactory) NewClassStaticBlockDeclaration(modifiers *ModifierList, body *BlockNode) *Node {
@@ -3148,6 +3170,10 @@ func (f *NodeFactory) NewSatisfiesExpression(expression *Expression, typeNode *T
 
 func (node *SatisfiesExpression) ForEachChild(v Visitor) bool {
 	return visit(v, node.Expression) || visit(v, node.Type)
+}
+
+func IsSatisfiesExpression(node *Node) bool {
+	return node.Kind == KindSatisfiesExpression
 }
 
 // ConditionalExpression
@@ -4333,6 +4359,27 @@ func (f *NodeFactory) NewTemplateLiteralTypeSpan(typeNode *TypeNode, literal *Te
 
 func (node *TemplateLiteralTypeSpan) ForEachChild(v Visitor) bool {
 	return visit(v, node.Type) || visit(v, node.Literal)
+}
+
+// SyntheticExpression
+
+type SyntheticExpression struct {
+	ExpressionBase
+	Type            any
+	IsSpread        bool
+	TupleNameSource *Node
+}
+
+func (f *NodeFactory) NewSyntheticExpression(t any, isSpread bool, tupleNameSource *Node) *Node {
+	data := &SyntheticExpression{}
+	data.Type = t
+	data.IsSpread = isSpread
+	data.TupleNameSource = tupleNameSource
+	return newNode(KindSyntheticExpression, data)
+}
+
+func IsSyntheticExpression(node *Node) bool {
+	return node.Kind == KindSyntheticExpression
 }
 
 /// A JSX expression of the form <TagName attrs>...</TagName>

@@ -14,7 +14,7 @@ type Diagnostic struct {
 	code               int32
 	category           diagnostics.Category
 	message            string
-	messageChain       []*MessageChain
+	messageChain       []*Diagnostic
 	relatedInformation []*Diagnostic
 }
 
@@ -26,18 +26,19 @@ func (d *Diagnostic) Loc() core.TextRange               { return d.loc }
 func (d *Diagnostic) Code() int32                       { return d.code }
 func (d *Diagnostic) Category() diagnostics.Category    { return d.category }
 func (d *Diagnostic) Message() string                   { return d.message }
-func (d *Diagnostic) MessageChain() []*MessageChain     { return d.messageChain }
+func (d *Diagnostic) MessageChain() []*Diagnostic       { return d.messageChain }
 func (d *Diagnostic) RelatedInformation() []*Diagnostic { return d.relatedInformation }
 
 func (d *Diagnostic) SetFile(file *SourceFile)                  { d.file = file }
+func (d *Diagnostic) SetLocation(loc core.TextRange)            { d.loc = loc }
 func (d *Diagnostic) SetCategory(category diagnostics.Category) { d.category = category }
 
-func (d *Diagnostic) SetMessageChain(messageChain []*MessageChain) *Diagnostic {
+func (d *Diagnostic) SetMessageChain(messageChain []*Diagnostic) *Diagnostic {
 	d.messageChain = messageChain
 	return d
 }
 
-func (d *Diagnostic) AddMessageChain(messageChain *MessageChain) *Diagnostic {
+func (d *Diagnostic) AddMessageChain(messageChain *Diagnostic) *Diagnostic {
 	if messageChain != nil {
 		d.messageChain = append(d.messageChain, messageChain)
 	}
@@ -70,48 +71,9 @@ func NewDiagnostic(file *SourceFile, loc core.TextRange, message *diagnostics.Me
 	}
 }
 
-func NewDiagnosticFromMessageChain(file *SourceFile, loc core.TextRange, messageChain *MessageChain) *Diagnostic {
-	return &Diagnostic{
-		file:         file,
-		loc:          loc,
-		code:         messageChain.code,
-		category:     messageChain.category,
-		message:      messageChain.message,
-		messageChain: messageChain.messageChain,
+func NewDiagnosticChain(chain *Diagnostic, message *diagnostics.Message, args ...any) *Diagnostic {
+	if chain != nil {
+		return NewDiagnostic(chain.file, chain.loc, message, args...).SetRelatedInfo(chain.relatedInformation)
 	}
-}
-
-// MessageChain
-
-type MessageChain struct {
-	code         int32
-	category     diagnostics.Category
-	message      string
-	messageChain []*MessageChain
-}
-
-func (m *MessageChain) Code() int32                    { return m.code }
-func (m *MessageChain) Category() diagnostics.Category { return m.category }
-func (m *MessageChain) Message() string                { return m.message }
-func (m *MessageChain) MessageChain() []*MessageChain  { return m.messageChain }
-
-func (m *MessageChain) SetMessageChain(chain []*MessageChain) { m.messageChain = chain }
-
-func (m *MessageChain) AddMessageChain(messageChain *MessageChain) *MessageChain {
-	if messageChain != nil {
-		m.messageChain = append(m.messageChain, messageChain)
-	}
-	return m
-}
-
-func NewMessageChain(message *diagnostics.Message, args ...any) *MessageChain {
-	text := message.Message()
-	if len(args) != 0 {
-		text = stringutil.Format(text, args)
-	}
-	return &MessageChain{
-		code:     message.Code(),
-		category: message.Category(),
-		message:  text,
-	}
+	return NewDiagnostic(nil, core.TextRange{}, message, args...)
 }

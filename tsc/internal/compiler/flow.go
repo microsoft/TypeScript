@@ -4,6 +4,7 @@ import (
 	"math"
 	"slices"
 	"strconv"
+	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
@@ -1583,7 +1584,7 @@ func (c *Checker) tryGetNameFromEntityNameExpression(node *ast.Node) (string, bo
 		}
 	}
 	if hasOnlyExpressionInitializer(declaration) && c.isBlockScopedNameDeclaredBeforeUse(declaration, node) {
-		initializer := c.getEffectiveInitializer(declaration)
+		initializer := declaration.Initializer()
 		if initializer != nil {
 			var initializerType *Type
 			if ast.IsBindingPattern(declaration.Parent) {
@@ -2083,6 +2084,53 @@ func (c *Checker) typeMaybeAssignableTo(source *Type, target *Type) bool {
 		}
 	}
 	return false
+}
+
+func (c *Checker) getFlowTypeInConstructor(symbol *ast.Symbol, constructor *ast.Node) *Type {
+	var accessName *ast.Node
+	if strings.HasPrefix(symbol.Name, InternalSymbolNamePrefix+"#") {
+		accessName = c.factory.NewPrivateIdentifier(symbol.Name[strings.Index(symbol.Name, "@")+1:])
+	} else {
+		accessName = c.factory.NewIdentifier(symbol.Name)
+	}
+	reference := c.factory.NewPropertyAccessExpression(c.factory.NewKeywordExpression(ast.KindThisKeyword), nil, accessName, ast.NodeFlagsNone)
+	reference.Expression().Parent = reference
+	reference.Parent = constructor
+	reference.FlowNodeData().FlowNode = constructor.AsConstructorDeclaration().ReturnFlowNode
+	flowType := c.getFlowTypeOfProperty(reference, symbol)
+	if c.noImplicitAny && (flowType == c.autoType || flowType == c.autoArrayType) {
+		c.error(symbol.ValueDeclaration, diagnostics.Member_0_implicitly_has_an_1_type, c.symbolToString(symbol), c.typeToString(flowType))
+	}
+	// We don't infer a type if assignments are only null or undefined.
+	if everyType(flowType, c.isNullableType) {
+		return nil
+	}
+	return c.convertAutoToAny(flowType)
+}
+
+func (c *Checker) getFlowTypeInStaticBlocks(symbol *ast.Symbol, staticBlocks []*ast.Node) *Type {
+	var accessName *ast.Node
+	if strings.HasPrefix(symbol.Name, InternalSymbolNamePrefix+"#") {
+		accessName = c.factory.NewPrivateIdentifier(symbol.Name[strings.Index(symbol.Name, "@")+1:])
+	} else {
+		accessName = c.factory.NewIdentifier(symbol.Name)
+	}
+	for _, staticBlock := range staticBlocks {
+		reference := c.factory.NewPropertyAccessExpression(c.factory.NewKeywordExpression(ast.KindThisKeyword), nil, accessName, ast.NodeFlagsNone)
+		reference.Expression().Parent = reference
+		reference.Parent = staticBlock
+		reference.FlowNodeData().FlowNode = staticBlock.AsClassStaticBlockDeclaration().ReturnFlowNode
+		flowType := c.getFlowTypeOfProperty(reference, symbol)
+		if c.noImplicitAny && (flowType == c.autoType || flowType == c.autoArrayType) {
+			c.error(symbol.ValueDeclaration, diagnostics.Member_0_implicitly_has_an_1_type, c.symbolToString(symbol), c.typeToString(flowType))
+		}
+		// We don't infer a type if assignments are only null or undefined.
+		if everyType(flowType, c.isNullableType) {
+			continue
+		}
+		return c.convertAutoToAny(flowType)
+	}
+	return nil
 }
 
 func (c *Checker) isReachableFlowNode(flow *ast.FlowNode) bool {
