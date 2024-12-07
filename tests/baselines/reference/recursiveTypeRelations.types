@@ -134,16 +134,16 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >    : ^^^^^^^
 
         obj[exportedClassName] = (arg as ClassNameMap<S>)[key]; 
->obj[exportedClassName] = (arg as ClassNameMap<S>)[key] : boolean
->                                                       : ^^^^^^^
+>obj[exportedClassName] = (arg as ClassNameMap<S>)[key] : ClassNameMap<S>[keyof S]
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >obj[exportedClassName] : ClassNameObject
 >                       : ^^^^^^^^^^^^^^^
 >obj : ClassNameObject
 >    : ^^^^^^^^^^^^^^^
 >exportedClassName : S[keyof S]
 >                  : ^^^^^^^^^^
->(arg as ClassNameMap<S>)[key] : boolean
->                              : ^^^^^^^
+>(arg as ClassNameMap<S>)[key] : ClassNameMap<S>[keyof S]
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >(arg as ClassNameMap<S>) : ClassNameMap<S>
 >                         : ^^^^^^^^^^^^^^^
 >arg as ClassNameMap<S> : ClassNameMap<S>

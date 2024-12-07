@@ -1719,8 +1719,8 @@ function test1<T extends any[] | Record<string, any>>(obj: T) {
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
 >        : ^   ^^   ^^^^^            
->obj : any[] | Record<string, any>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
 >'length' in obj : boolean
 >                : ^^^^^^^
 >'length' : "length"
@@ -1754,8 +1754,8 @@ function test2<T extends any[] | Record<string, any>>(obj: T) {
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
 >        : ^   ^^   ^^^^^            
->obj : any[] | Record<string, any>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
 
       obj;  // T & any[]
 >obj : T & any[]

@@ -19,7 +19,7 @@ verify.codeFix({
   added2(et)
 }
 
-function added1(et: string) {
+function added1<T extends "phone" | "home">(et: T) {
     throw new Error("Function not implemented.")
 }
 `,
@@ -27,8 +27,8 @@ function added1(et: string) {
 
 goTo.marker("2");
 verify.codeFix({
-  description: "Add missing function declaration 'added1'",
-  index: 0,
+  description: "Add missing function declaration 'added2'",
+  index: 1,
   newFileContent: `function e<T extends "phone" | "home">() {
   let et: T = 'phone'
   added1(et)
@@ -36,7 +36,7 @@ verify.codeFix({
   added2(et)
 }
 
-function added1(et: string) {
+function added2<T extends "phone" | "home">(et: T) {
     throw new Error("Function not implemented.")
 }
 `,

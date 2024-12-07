@@ -188,22 +188,22 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 >  : ^^^^^^^^   ^^^^^      ^^^
 
         const r2 = (({ kind, ...rest }) => rest)(t);
->r2 : { a: string; }
->   : ^^^^^      ^^^
->(({ kind, ...rest }) => rest)(t) : { a: string; }
->                                 : ^^^^^      ^^^
->(({ kind, ...rest }) => rest) : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
->                              : ^                 ^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^      ^^^
->({ kind, ...rest }) => rest : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
->                            : ^                 ^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^      ^^^
->kind : "a"
->     : ^^^
->rest : { a: string; }
->     : ^^^^^      ^^^
->rest : { a: string; }
->     : ^^^^^      ^^^
->t : { kind: "a"; a: string; }
->  : ^^^^^^^^   ^^^^^      ^^^
+>r2 : Omit<T, "kind">
+>   : ^^^^^^^^^^^^^^^
+>(({ kind, ...rest }) => rest)(t) : Omit<T, "kind">
+>                                 : ^^^^^^^^^^^^^^^
+>(({ kind, ...rest }) => rest) : ({ kind, ...rest }: T) => Omit<T, "kind">
+>                              : ^                 ^^^^^^^^^^^^^^^^^^^^^^^
+>({ kind, ...rest }) => rest : ({ kind, ...rest }: T) => Omit<T, "kind">
+>                            : ^                 ^^^^^^^^^^^^^^^^^^^^^^^
+>kind : "a" | "b"
+>     : ^^^^^^^^^
+>rest : Omit<T, "kind">
+>     : ^^^^^^^^^^^^^^^
+>rest : Omit<T, "kind">
+>     : ^^^^^^^^^^^^^^^
+>t : T
+>  : ^
     }
 }
 

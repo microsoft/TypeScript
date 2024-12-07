@@ -494,8 +494,8 @@ function f9<T extends "a"[] | "b"[] | number>(x: T): T extends Array<infer P> ? 
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
 >        : ^   ^^   ^^^^^            
->x : number | "a"[] | "b"[]
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
 
         // If we allowed narrowing of the conditional return type, when resolving the conditional `T & ("a"[] | "b"[]) extends Array<infer P> ? P : ...`,
         // we could infer `"a" | "b"` for `P`, and allow "a" to be returned. However, when calling `f10`, `T` could be instantiated with `"b"[]`, and the return type would be `"b"`,

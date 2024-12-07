@@ -927,8 +927,8 @@ class NewAgenda {
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
 >        : ^   ^^   ^^^^^            
->name : string[]
->     : ^^^^^^^^
+>name : T
+>     : ^
 
             return this._createIntervalJobs(interval, name, data, options); // Ok
 >this._createIntervalJobs(interval, name, data, options) : Promise<MyObj[]> | undefined
