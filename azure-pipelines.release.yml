@@ -11,7 +11,7 @@ resources:
       ref: refs/tags/release
 
 variables:
-  Codeql.ExcludePathPatterns: '**/tests/**'
+  Codeql.ExcludePathPatterns: 'tests'
 
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
