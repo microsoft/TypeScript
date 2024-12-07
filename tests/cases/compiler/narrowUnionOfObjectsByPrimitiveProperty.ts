@@ -44,3 +44,33 @@ function aStringOrANumber<T extends { a: string } | { a: number }>(param: T): T 
 
 aStringOrANumber({ a: "string" })
 aStringOrANumber({ a: 42 })
+
+
+// The following two tests ensure that the discriminativeness of property 'prop'
+// is treated differently in assignability and narrowing, and that the discriminativeness is properly cached.
+declare let obj: { prop: string, other: string } | { prop: number, other: number }
+
+// Here, we first perform narrowing, but the subsequent assignability should not be affected.
+// We expect an error there because of an incorrect value assigned to 'prop'.
+// See contextualTypeWithUnionTypeObjectLiteral.ts
+if(typeof obj.prop === "string") {
+  obj.other.repeat(3);
+} else {
+  Math.exp(obj.other);
+}
+
+obj = { prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" as never }
+
+
+declare let obj2: { prop: string, other: string } | { prop: number, other: number }
+
+// Here, we first assign a value to 'obj2' and then perform narrowing.
+// We expect an error here because of an incorrect value assigned to 'prop', like above,
+// but the subsequent narrowing should not be affected by the assignability.
+obj2 = { prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" as never }
+
+if(typeof obj2.prop === "string") {
+  obj2.other.repeat(3);
+} else {
+  Math.exp(obj2.other);
+}

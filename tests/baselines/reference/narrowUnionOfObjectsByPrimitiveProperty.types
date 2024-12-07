@@ -226,3 +226,200 @@ aStringOrANumber({ a: 42 })
 >42 : 42
 >   : ^^
 
+
+// The following two tests ensure that the discriminativeness of property 'prop'
+// is treated differently in assignability and narrowing, and that the discriminativeness is properly cached.
+declare let obj: { prop: string, other: string } | { prop: number, other: number }
+>obj : { prop: string; other: string; } | { prop: number; other: number; }
+>    : ^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^
+>prop : string
+>     : ^^^^^^
+>other : string
+>      : ^^^^^^
+>prop : number
+>     : ^^^^^^
+>other : number
+>      : ^^^^^^
+
+// Here, we first perform narrowing, but the subsequent assignability should not be affected.
+// We expect an error there because of an incorrect value assigned to 'prop'.
+// See contextualTypeWithUnionTypeObjectLiteral.ts
+if(typeof obj.prop === "string") {
+>typeof obj.prop === "string" : boolean
+>                             : ^^^^^^^
+>typeof obj.prop : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj.prop : string | number
+>         : ^^^^^^^^^^^^^^^
+>obj : { prop: string; other: string; } | { prop: number; other: number; }
+>    : ^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^
+>prop : string | number
+>     : ^^^^^^^^^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+  obj.other.repeat(3);
+>obj.other.repeat(3) : any
+>                    : ^^^
+>obj.other.repeat : any
+>                 : ^^^
+>obj.other : string
+>          : ^^^^^^
+>obj : { prop: string; other: string; }
+>    : ^^^^^^^^      ^^^^^^^^^      ^^^
+>other : string
+>      : ^^^^^^
+>repeat : any
+>       : ^^^
+>3 : 3
+>  : ^
+
+} else {
+  Math.exp(obj.other);
+>Math.exp(obj.other) : number
+>                    : ^^^^^^
+>Math.exp : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>Math : Math
+>     : ^^^^
+>exp : (x: number) => number
+>    : ^ ^^      ^^^^^      
+>obj.other : number
+>          : ^^^^^^
+>obj : { prop: number; other: number; }
+>    : ^^^^^^^^      ^^^^^^^^^      ^^^
+>other : number
+>      : ^^^^^^
+}
+
+obj = { prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" as never }
+>obj = { prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" as never } : { prop: string | number; other: never; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>obj : { prop: string; other: string; } | { prop: number; other: number; }
+>    : ^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^
+>{ prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" as never } : { prop: string | number; other: never; }
+>                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>prop : string | number
+>     : ^^^^^^^^^^^^^^^
+>Math.random() > 0.5 ? "whatever" : 42 : 42 | "whatever"
+>                                      : ^^^^^^^^^^^^^^^
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"whatever" : "whatever"
+>           : ^^^^^^^^^^
+>42 : 42
+>   : ^^
+>other : never
+>      : ^^^^^
+>"irrelevant" as never : never
+>                      : ^^^^^
+>"irrelevant" : "irrelevant"
+>             : ^^^^^^^^^^^^
+
+
+declare let obj2: { prop: string, other: string } | { prop: number, other: number }
+>obj2 : { prop: string; other: string; } | { prop: number; other: number; }
+>     : ^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^
+>prop : string
+>     : ^^^^^^
+>other : string
+>      : ^^^^^^
+>prop : number
+>     : ^^^^^^
+>other : number
+>      : ^^^^^^
+
+// Here, we first assign a value to 'obj2' and then perform narrowing.
+// We expect an error here because of an incorrect value assigned to 'prop', like above,
+// but the subsequent narrowing should not be affected by the assignability.
+obj2 = { prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" as never }
+>obj2 = { prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" as never } : { prop: string | number; other: never; }
+>                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>obj2 : { prop: string; other: string; } | { prop: number; other: number; }
+>     : ^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^
+>{ prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" as never } : { prop: string | number; other: never; }
+>                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^
+>prop : string | number
+>     : ^^^^^^^^^^^^^^^
+>Math.random() > 0.5 ? "whatever" : 42 : 42 | "whatever"
+>                                      : ^^^^^^^^^^^^^^^
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"whatever" : "whatever"
+>           : ^^^^^^^^^^
+>42 : 42
+>   : ^^
+>other : never
+>      : ^^^^^
+>"irrelevant" as never : never
+>                      : ^^^^^
+>"irrelevant" : "irrelevant"
+>             : ^^^^^^^^^^^^
+
+if(typeof obj2.prop === "string") {
+>typeof obj2.prop === "string" : boolean
+>                              : ^^^^^^^
+>typeof obj2.prop : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj2.prop : string | number
+>          : ^^^^^^^^^^^^^^^
+>obj2 : { prop: string; other: string; } | { prop: number; other: number; }
+>     : ^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^
+>prop : string | number
+>     : ^^^^^^^^^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+  obj2.other.repeat(3);
+>obj2.other.repeat(3) : any
+>                     : ^^^
+>obj2.other.repeat : any
+>                  : ^^^
+>obj2.other : string
+>           : ^^^^^^
+>obj2 : { prop: string; other: string; }
+>     : ^^^^^^^^      ^^^^^^^^^      ^^^
+>other : string
+>      : ^^^^^^
+>repeat : any
+>       : ^^^
+>3 : 3
+>  : ^
+
+} else {
+  Math.exp(obj2.other);
+>Math.exp(obj2.other) : number
+>                     : ^^^^^^
+>Math.exp : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>Math : Math
+>     : ^^^^
+>exp : (x: number) => number
+>    : ^ ^^      ^^^^^      
+>obj2.other : number
+>           : ^^^^^^
+>obj2 : { prop: number; other: number; }
+>     : ^^^^^^^^      ^^^^^^^^^      ^^^
+>other : number
+>      : ^^^^^^
+}
