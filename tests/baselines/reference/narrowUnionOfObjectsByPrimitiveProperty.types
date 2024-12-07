@@ -17,7 +17,6 @@ interface UserName {
 >     : ^^^^^^^^^^^^^^^^^^
 }
 
-
 const nameState = {} as {
 >nameState : { value: string; state: State<string>; } | { value: UserName; state: State<UserName>; }
 >          : ^^^^^^^^^      ^^^^^^^^^             ^^^^^^^^^^^^^^^        ^^^^^^^^^               ^^^
@@ -80,6 +79,7 @@ if (typeof nameState.value === "string") {
 >      : ^^^^^^^^^^^^^^^
 }
 
+
 declare const arr: [string, number] | [number, string];
 >arr : [string, number] | [number, string]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -119,3 +119,110 @@ if (typeof arr[0] === "string") {
 >1 : 1
 >  : ^
 }
+
+
+function aStringOrANumber<T extends { a: string } | { a: number }>(param: T): T extends { a: string } ? string : T extends { a: number } ? number : never {
+>aStringOrANumber : <T extends { a: string; } | { a: number; }>(param: T) => T extends { a: string; } ? string : T extends { a: number; } ? number : never
+>                 : ^ ^^^^^^^^^                               ^^     ^^ ^^^^^                                                                             
+>a : string
+>  : ^^^^^^
+>a : number
+>  : ^^^^^^
+>param : T
+>      : ^
+>a : string
+>  : ^^^^^^
+>a : number
+>  : ^^^^^^
+
+  if (typeof param.a === "string") {
+>typeof param.a === "string" : boolean
+>                            : ^^^^^^^
+>typeof param.a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>param.a : string | number
+>        : ^^^^^^^^^^^^^^^
+>param : { a: string; } | { a: number; }
+>      : ^^^^^      ^^^^^^^^^^^      ^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+    return param.a.repeat(3);
+>param.a.repeat(3) : any
+>                  : ^^^
+>param.a.repeat : any
+>               : ^^^
+>param.a : string
+>        : ^^^^^^
+>param : { a: string; }
+>      : ^^^^^      ^^^
+>a : string
+>  : ^^^^^^
+>repeat : any
+>       : ^^^
+>3 : 3
+>  : ^
+  }
+  if (typeof param.a === "number") {
+>typeof param.a === "number" : boolean
+>                            : ^^^^^^^
+>typeof param.a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>param.a : number
+>        : ^^^^^^
+>param : { a: number; }
+>      : ^^^^^      ^^^
+>a : number
+>  : ^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+
+    return Math.exp(param.a);
+>Math.exp(param.a) : number
+>                  : ^^^^^^
+>Math.exp : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>Math : Math
+>     : ^^^^
+>exp : (x: number) => number
+>    : ^ ^^      ^^^^^      
+>param.a : number
+>        : ^^^^^^
+>param : { a: number; }
+>      : ^^^^^      ^^^
+>a : number
+>  : ^^^^^^
+  }
+  throw new Error()
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+}
+
+aStringOrANumber({ a: "string" })
+>aStringOrANumber({ a: "string" }) : string
+>                                  : ^^^^^^
+>aStringOrANumber : <T extends { a: string; } | { a: number; }>(param: T) => T extends { a: string; } ? string : T extends { a: number; } ? number : never
+>                 : ^ ^^^^^^^^^                               ^^     ^^ ^^^^^                                                                             
+>{ a: "string" } : { a: string; }
+>                : ^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+aStringOrANumber({ a: 42 })
+>aStringOrANumber({ a: 42 }) : number
+>                            : ^^^^^^
+>aStringOrANumber : <T extends { a: string; } | { a: number; }>(param: T) => T extends { a: string; } ? string : T extends { a: number; } ? number : never
+>                 : ^ ^^^^^^^^^                               ^^     ^^ ^^^^^                                                                             
+>{ a: 42 } : { a: number; }
+>          : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+

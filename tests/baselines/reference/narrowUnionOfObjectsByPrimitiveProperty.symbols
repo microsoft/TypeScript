@@ -20,47 +20,47 @@ interface UserName {
 >last : Symbol(UserName.last, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 5, 16))
 }
 
-
 const nameState = {} as {
->nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 5))
+>nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 9, 5))
 
   value: string;
->value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 25))
+>value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 9, 25))
 
   state: State<string>;
->state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 11, 16))
+>state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 16))
 >State : Symbol(State, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 0))
 
 } | {
   value: UserName;
->value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 13, 5))
+>value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 12, 5))
 >UserName : Symbol(UserName, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 2, 1))
 
   state: State<UserName>;
->state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 14, 18))
+>state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 13, 18))
 >State : Symbol(State, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 0))
 >UserName : Symbol(UserName, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 2, 1))
 }
 
 if (typeof nameState.value === "string") {
->nameState.value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 25), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 13, 5))
->nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 5))
->value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 25), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 13, 5))
+>nameState.value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 9, 25), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 12, 5))
+>nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 9, 5))
+>value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 9, 25), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 12, 5))
 
   nameState.state satisfies  State<string>;
->nameState.state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 11, 16))
->nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 5))
->state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 11, 16))
+>nameState.state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 16))
+>nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 9, 5))
+>state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 16))
 >State : Symbol(State, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 0))
 
 } else {
   nameState.state satisfies State<UserName>;
->nameState.state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 14, 18))
->nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 10, 5))
->state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 14, 18))
+>nameState.state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 13, 18))
+>nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 9, 5))
+>state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 13, 18))
 >State : Symbol(State, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 0, 0))
 >UserName : Symbol(UserName, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 2, 1))
 }
+
 
 declare const arr: [string, number] | [number, string];
 >arr : Symbol(arr, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 24, 13))
@@ -78,3 +78,52 @@ if (typeof arr[0] === "string") {
 >arr : Symbol(arr, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 24, 13))
 >1 : Symbol(1)
 }
+
+
+function aStringOrANumber<T extends { a: string } | { a: number }>(param: T): T extends { a: string } ? string : T extends { a: number } ? number : never {
+>aStringOrANumber : Symbol(aStringOrANumber, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 29, 1))
+>T : Symbol(T, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 26))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 37))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 53))
+>param : Symbol(param, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 67))
+>T : Symbol(T, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 26))
+>T : Symbol(T, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 26))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 89))
+>T : Symbol(T, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 26))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 124))
+
+  if (typeof param.a === "string") {
+>param.a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 37), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 53))
+>param : Symbol(param, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 67))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 37), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 53))
+
+    return param.a.repeat(3);
+>param.a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 37))
+>param : Symbol(param, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 67))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 37))
+  }
+  if (typeof param.a === "number") {
+>param.a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 53))
+>param : Symbol(param, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 67))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 53))
+
+    return Math.exp(param.a);
+>Math.exp : Symbol(Math.exp, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>exp : Symbol(Math.exp, Decl(lib.es5.d.ts, --, --))
+>param.a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 53))
+>param : Symbol(param, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 67))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 32, 53))
+  }
+  throw new Error()
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+aStringOrANumber({ a: "string" })
+>aStringOrANumber : Symbol(aStringOrANumber, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 29, 1))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 42, 18))
+
+aStringOrANumber({ a: 42 })
+>aStringOrANumber : Symbol(aStringOrANumber, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 29, 1))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 43, 18))
+
