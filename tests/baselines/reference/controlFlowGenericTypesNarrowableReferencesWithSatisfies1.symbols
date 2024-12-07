@@ -1,0 +1,158 @@
+//// [tests/cases/compiler/controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts] ////
+
+=== controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts ===
+// https://github.com/microsoft/TypeScript/issues/52394
+
+const foo52394 = <T extends 1 | 2>(bar: T) => {
+>foo52394 : Symbol(foo52394, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 2, 5))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 2, 18))
+>bar : Symbol(bar, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 2, 35))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 2, 18))
+
+  const a = bar satisfies any;
+>a : Symbol(a, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 3, 7))
+>bar : Symbol(bar, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 2, 35))
+
+  return a;
+>a : Symbol(a, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 3, 7))
+
+};
+
+type MyType52394 = {
+>MyType52394 : Symbol(MyType52394, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 5, 2))
+
+  a: string;
+>a : Symbol(a, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 7, 20))
+
+  b: "a" | "b" | "c" | "d" | "e";
+>b : Symbol(b, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 8, 12))
+
+};
+const foo2_52394 = <T extends "a" | "b" | "c">(bar: T) =>
+>foo2_52394 : Symbol(foo2_52394, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 11, 5))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 11, 20))
+>bar : Symbol(bar, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 11, 47))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 11, 20))
+
+  ({
+    a: bar,
+>a : Symbol(a, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 12, 4))
+>bar : Symbol(bar, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 11, 47))
+
+    b: bar,
+>b : Symbol(b, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 13, 11))
+>bar : Symbol(bar, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 11, 47))
+
+  }) satisfies MyType52394;
+>MyType52394 : Symbol(MyType52394, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 5, 2))
+
+type BoxState = "open" | "closed";
+>BoxState : Symbol(BoxState, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 15, 27))
+
+type Box = {
+>Box : Symbol(Box, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 17, 34))
+
+  boxState: BoxState;
+>boxState : Symbol(boxState, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 19, 12))
+>BoxState : Symbol(BoxState, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 15, 27))
+
+  boxedObject: unknown;
+>boxedObject : Symbol(boxedObject, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 20, 21))
+
+};
+
+function boxFactorySafe<BS extends BoxState>(
+>boxFactorySafe : Symbol(boxFactorySafe, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 22, 2))
+>BS : Symbol(BS, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 24, 24))
+>BoxState : Symbol(BoxState, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 15, 27))
+
+  boxState: BS,
+>boxState : Symbol(boxState, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 24, 45))
+>BS : Symbol(BS, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 24, 24))
+
+  boxedObject: unknown,
+>boxedObject : Symbol(boxedObject, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 25, 15))
+
+) {
+  return {
+    boxState,
+>boxState : Symbol(boxState, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 28, 10))
+
+    boxedObject,
+>boxedObject : Symbol(boxedObject, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 29, 13))
+
+  } as const satisfies Box;
+>const : Symbol(const)
+>Box : Symbol(Box, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 17, 34))
+}
+
+const safeBoxedObject = boxFactorySafe("open", "some value");
+>safeBoxedObject : Symbol(safeBoxedObject, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 34, 5))
+>boxFactorySafe : Symbol(boxFactorySafe, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 22, 2))
+
+// https://github.com/microsoft/TypeScript/issues/60698
+
+type Table = "block" | "collection" | "space";
+>Table : Symbol(Table, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 34, 61))
+
+type RecordPointer<T extends Table> = {
+>RecordPointer : Symbol(RecordPointer, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 38, 46))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 40, 19))
+>Table : Symbol(Table, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 34, 61))
+
+  [T_ in T]: {
+>T_ : Symbol(T_, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 41, 3))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 40, 19))
+
+    id: string;
+>id : Symbol(id, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 41, 14))
+
+    table: T_;
+>table : Symbol(table, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 42, 15))
+>T_ : Symbol(T_, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 41, 3))
+
+  };
+}[T];
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 40, 19))
+
+function g<T extends Table>(t: T): RecordPointer<Table> {
+>g : Symbol(g, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 45, 5))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 47, 11))
+>Table : Symbol(Table, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 34, 61))
+>t : Symbol(t, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 47, 28))
+>T : Symbol(T, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 47, 11))
+>RecordPointer : Symbol(RecordPointer, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 38, 46))
+>Table : Symbol(Table, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 34, 61))
+
+  const x = { table: t, id: "foo" } as const satisfies RecordPointer<Table>;
+>x : Symbol(x, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 48, 7))
+>table : Symbol(table, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 48, 13))
+>t : Symbol(t, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 47, 28))
+>id : Symbol(id, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 48, 23))
+>const : Symbol(const)
+>RecordPointer : Symbol(RecordPointer, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 38, 46))
+>Table : Symbol(Table, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 34, 61))
+
+  return x; // error
+>x : Symbol(x, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 48, 7))
+}
+
+export function bounceAndTakeIfA<AB extends "A" | "B">(value: AB) {
+>bounceAndTakeIfA : Symbol(bounceAndTakeIfA, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 50, 1))
+>AB : Symbol(AB, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 52, 33))
+>value : Symbol(value, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 52, 55))
+>AB : Symbol(AB, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 52, 33))
+
+  if (value === "A") {
+>value : Symbol(value, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 52, 55))
+
+    const temp = value satisfies "A"
+>temp : Symbol(temp, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 54, 9))
+>value : Symbol(value, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 52, 55))
+
+    const takeA: "A" = value satisfies "A";
+>takeA : Symbol(takeA, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 55, 9))
+>value : Symbol(value, Decl(controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts, 52, 55))
+  }
+}
+

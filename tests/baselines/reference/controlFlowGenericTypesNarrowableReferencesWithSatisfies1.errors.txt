@@ -1,0 +1,75 @@
+controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts(50,3): error TS2322: Type '{ readonly table: T; readonly id: "foo"; }' is not assignable to type 'RecordPointer<Table>'.
+  Type '{ readonly table: T; readonly id: "foo"; }' is not assignable to type '{ id: string; table: "space"; }'.
+    Types of property 'table' are incompatible.
+      Type 'T' is not assignable to type '"space"'.
+        Type 'Table' is not assignable to type '"space"'.
+          Type '"block"' is not assignable to type '"space"'.
+
+
+==== controlFlowGenericTypesNarrowableReferencesWithSatisfies1.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/52394
+    
+    const foo52394 = <T extends 1 | 2>(bar: T) => {
+      const a = bar satisfies any;
+      return a;
+    };
+    
+    type MyType52394 = {
+      a: string;
+      b: "a" | "b" | "c" | "d" | "e";
+    };
+    const foo2_52394 = <T extends "a" | "b" | "c">(bar: T) =>
+      ({
+        a: bar,
+        b: bar,
+      }) satisfies MyType52394;
+    
+    type BoxState = "open" | "closed";
+    
+    type Box = {
+      boxState: BoxState;
+      boxedObject: unknown;
+    };
+    
+    function boxFactorySafe<BS extends BoxState>(
+      boxState: BS,
+      boxedObject: unknown,
+    ) {
+      return {
+        boxState,
+        boxedObject,
+      } as const satisfies Box;
+    }
+    
+    const safeBoxedObject = boxFactorySafe("open", "some value");
+    
+    // https://github.com/microsoft/TypeScript/issues/60698
+    
+    type Table = "block" | "collection" | "space";
+    
+    type RecordPointer<T extends Table> = {
+      [T_ in T]: {
+        id: string;
+        table: T_;
+      };
+    }[T];
+    
+    function g<T extends Table>(t: T): RecordPointer<Table> {
+      const x = { table: t, id: "foo" } as const satisfies RecordPointer<Table>;
+      return x; // error
+      ~~~~~~
+!!! error TS2322: Type '{ readonly table: T; readonly id: "foo"; }' is not assignable to type 'RecordPointer<Table>'.
+!!! error TS2322:   Type '{ readonly table: T; readonly id: "foo"; }' is not assignable to type '{ id: string; table: "space"; }'.
+!!! error TS2322:     Types of property 'table' are incompatible.
+!!! error TS2322:       Type 'T' is not assignable to type '"space"'.
+!!! error TS2322:         Type 'Table' is not assignable to type '"space"'.
+!!! error TS2322:           Type '"block"' is not assignable to type '"space"'.
+    }
+    
+    export function bounceAndTakeIfA<AB extends "A" | "B">(value: AB) {
+      if (value === "A") {
+        const temp = value satisfies "A"
+        const takeA: "A" = value satisfies "A";
+      }
+    }
+    
