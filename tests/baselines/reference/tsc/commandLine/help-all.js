@@ -122,6 +122,11 @@ Use the package.json 'imports' field when resolving imports.
 type: boolean
 default: `true` when 'moduleResolution' is 'node16', 'nodenext', or 'bundler'; otherwise `false`.
 
+[94m--rewriteImports[39m
+Rewrite import paths in output files.
+type: boolean
+default: false
+
 [94m--rewriteRelativeImportExtensions[39m
 Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files.
 type: boolean
