@@ -882,6 +882,7 @@ import {
     ModuleKind,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
+    moduleSupportsImportAttributes,
     Mutable,
     MutableNodeArray,
     NamedDeclaration,
@@ -37627,7 +37628,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkImportMetaProperty(node: MetaProperty) {
-        if (moduleKind === ModuleKind.Node16 || moduleKind === ModuleKind.NodeNext) {
+        if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
             if (getSourceFileOfNode(node).impliedNodeFormat !== ModuleKind.ESNext) {
                 error(node, Diagnostics.The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output);
             }
@@ -48060,16 +48061,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return; // Other grammar checks do not apply to type-only imports with resolution mode assertions
             }
 
-            const mode = (moduleKind === ModuleKind.NodeNext) && declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier);
-            if (mode !== ModuleKind.ESNext && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
-                const message = isImportAttributes
-                    ? moduleKind === ModuleKind.NodeNext
+            if (!moduleSupportsImportAttributes(moduleKind)) {
+                return grammarErrorOnNode(
+                    node,
+                    isImportAttributes
+                        ? Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve
+                        : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve,
+                );
+            }
+
+            if (declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier) === ModuleKind.CommonJS) {
+                return grammarErrorOnNode(
+                    node,
+                    isImportAttributes
                         ? Diagnostics.Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
-                        : Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve
-                    : moduleKind === ModuleKind.NodeNext
-                    ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
-                    : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve;
-                return grammarErrorOnNode(node, message);
+                        : Diagnostics.Import_assertions_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls,
+                );
             }
 
             const isTypeOnly = isJSDocImportTag(declaration) || (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly);
@@ -48118,7 +48125,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
 
-                if (moduleKind === ModuleKind.NodeNext && isOnlyImportableAsDefault(node.moduleSpecifier, resolvedModule) && !hasTypeJsonImportAttribute(node)) {
+                if (ModuleKind.Node18 <= moduleKind && moduleKind <= ModuleKind.NodeNext && isOnlyImportableAsDefault(node.moduleSpecifier, resolvedModule) && !hasTypeJsonImportAttribute(node)) {
                     // Import attributes/assertions are not allowed in --module node16, so don't suggest adding one
                     error(node.moduleSpecifier, Diagnostics.Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_import_attribute_when_module_is_set_to_0, ModuleKind[moduleKind]);
                 }
@@ -52886,7 +52893,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const nodeArguments = node.arguments;
-        if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.NodeNext && moduleKind !== ModuleKind.Node16 && moduleKind !== ModuleKind.Preserve) {
+        if (!(ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
             // We are allowed trailing comma after proposal-import-assertions.
             checkGrammarForDisallowedTrailingComma(nodeArguments);
 

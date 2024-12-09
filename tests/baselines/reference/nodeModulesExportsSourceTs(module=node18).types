@@ -1,0 +1,47 @@
+//// [tests/cases/conformance/node/nodeModulesExportsSourceTs.ts] ////
+
+=== index.ts ===
+// esm format file
+import { Thing } from "inner/other";
+>Thing : any
+>      : ^^^
+
+export const a = (await import("inner")).x();
+>a : any
+>  : ^^^
+>(await import("inner")).x() : any
+>                            : ^^^
+>(await import("inner")).x : any
+>                          : ^^^
+>(await import("inner")) : any
+>                        : ^^^
+>await import("inner") : any
+>                      : ^^^
+>import("inner") : Promise<any>
+>                : ^^^^^^^^^^^^
+>"inner" : "inner"
+>        : ^^^^^^^
+>x : any
+>  : ^^^
+
+import {a as a2} from "package";
+>a : any
+>  : ^^^
+>a2 : any
+>   : ^^^
+
+=== node_modules/inner/index.ts ===
+// esm format file
+export { x } from "./other.js";
+>x : () => import("node_modules/inner/other").Thing
+>  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
+
+=== node_modules/inner/other.ts ===
+// esm format file
+export interface Thing {}
+export const x: () => Thing = null as any;
+>x : () => Thing
+>  : ^^^^^^     
+>null as any : any
+>            : ^^^
+

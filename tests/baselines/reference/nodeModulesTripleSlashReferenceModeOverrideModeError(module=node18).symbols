@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeOverrideModeError.ts] ////
+
+=== /index.ts ===
+
+/// <reference types="pkg" resolution-mode="esm"/>
+foo; // bad resolution mode, which resolves is arbitrary
+bar;
+export {};

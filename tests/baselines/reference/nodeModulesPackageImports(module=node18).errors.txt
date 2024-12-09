@@ -1,0 +1,67 @@
+error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+index.cts(2,22): error TS2792: Cannot find module '#cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.cts(3,22): error TS2792: Cannot find module '#mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.cts(4,23): error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.mts(2,22): error TS2792: Cannot find module '#cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.mts(3,22): error TS2792: Cannot find module '#mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.mts(4,23): error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.ts(2,22): error TS2792: Cannot find module '#cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.ts(3,22): error TS2792: Cannot find module '#mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.ts(4,23): error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+==== index.ts (3 errors) ====
+    // esm format file
+    import * as cjs from "#cjs";
+                         ~~~~~~
+!!! error TS2792: Cannot find module '#cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as mjs from "#mjs";
+                         ~~~~~~
+!!! error TS2792: Cannot find module '#mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as type from "#type";
+                          ~~~~~~~
+!!! error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    cjs;
+    mjs;
+    type;
+==== index.mts (3 errors) ====
+    // esm format file
+    import * as cjs from "#cjs";
+                         ~~~~~~
+!!! error TS2792: Cannot find module '#cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as mjs from "#mjs";
+                         ~~~~~~
+!!! error TS2792: Cannot find module '#mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as type from "#type";
+                          ~~~~~~~
+!!! error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    cjs;
+    mjs;
+    type;
+==== index.cts (3 errors) ====
+    // esm format file
+    import * as cjs from "#cjs";
+                         ~~~~~~
+!!! error TS2792: Cannot find module '#cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as mjs from "#mjs";
+                         ~~~~~~
+!!! error TS2792: Cannot find module '#mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as type from "#type";
+                          ~~~~~~~
+!!! error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    cjs;
+    mjs;
+    type;
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "exports": "./index.js",
+        "imports": {
+            "#cjs": "./index.cjs",
+            "#mjs": "./index.mjs",
+            "#type": "./index.js"
+        }
+    }

@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/node/nodePackageSelfName.ts] ////
+
+=== index.ts ===
+// esm format file
+import * as self from "package";
+>self : any
+>     : ^^^
+
+self;
+>self : any
+>     : ^^^
+
+=== index.mts ===
+// esm format file
+import * as self from "package";
+>self : any
+>     : ^^^
+
+self;
+>self : any
+>     : ^^^
+
+=== index.cts ===
+// esm format file
+import * as self from "package";
+>self : any
+>     : ^^^
+
+self;
+>self : any
+>     : ^^^
+

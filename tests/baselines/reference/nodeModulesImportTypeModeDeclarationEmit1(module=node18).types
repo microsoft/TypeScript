@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/node/nodeModulesImportTypeModeDeclarationEmit1.ts] ////
+
+=== /index.ts ===
+export type LocalInterface =
+>LocalInterface : any
+>               : ^^^
+
+    & import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface
+    & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
+
+export const a = (null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface);
+>a : any
+>  : ^^^
+>(null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface) : any
+>                                                                                            : ^^^
+>null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface : any
+>                                                                                          : ^^^
+>null as any : any
+>            : ^^^
+
+export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
+>b : any
+>  : ^^^
+>(null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface) : any
+>                                                                                          : ^^^
+>null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface : any
+>                                                                                        : ^^^
+>null as any : any
+>            : ^^^
+

@@ -1,0 +1,51 @@
+error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+/index.ts(2,39): error TS2792: Cannot find module 'pkg'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+/index.ts(2,45): error TS2822: Import assertions cannot be used with type-only imports or exports.
+/index.ts(2,73): error TS1453: `resolution-mode` should be either `require` or `import`.
+/index.ts(4,33): error TS2792: Cannot find module 'pkg'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+/index.ts(4,39): error TS1454: `resolution-mode` can only be set for type-only imports.
+/index.ts(6,70): error TS2792: Cannot find module 'pkg'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+/index.ts(6,76): error TS1454: `resolution-mode` can only be set for type-only imports.
+
+
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+==== /index.ts (7 errors) ====
+    // incorrect mode
+    import type { RequireInterface } from "pkg" assert { "resolution-mode": "foobar" };
+                                          ~~~~~
+!!! error TS2792: Cannot find module 'pkg'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2822: Import assertions cannot be used with type-only imports or exports.
+                                                                            ~~~~~~~~
+!!! error TS1453: `resolution-mode` should be either `require` or `import`.
+    // not type-only
+    import { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+                                    ~~~~~
+!!! error TS2792: Cannot find module 'pkg'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1454: `resolution-mode` can only be set for type-only imports.
+    // not exclusively type-only
+    import {type RequireInterface as Req, RequireInterface as Req2} from "pkg" assert { "resolution-mode": "require" };
+                                                                         ~~~~~
+!!! error TS2792: Cannot find module 'pkg'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1454: `resolution-mode` can only be set for type-only imports.
+    
+    export interface LocalInterface extends RequireInterface, ImportInterface {}
+    
+    
+    
+    
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export interface ImportInterface {}
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export interface RequireInterface {}

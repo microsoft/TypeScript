@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit7.ts] ////
+
+=== /index.ts ===
+// only an esm file can `import` both kinds of files
+import obj1 from "./sub1/uses.js"
+>obj1 : Symbol(obj1, Decl(index.ts, 1, 6))
+
+import obj2 from "./sub2/uses.js"
+>obj2 : Symbol(obj2, Decl(index.ts, 2, 6))
+
+export default [obj1, obj2.default] as const;
+>obj1 : Symbol(obj1, Decl(index.ts, 1, 6))
+>obj2 : Symbol(obj2, Decl(index.ts, 2, 6))
+>const : Symbol(const)
+
+=== /sub1/uses.ts ===
+
+/// <reference types="pkg" preserve="true" />
+export default getInterI();
+=== /sub2/uses.ts ===
+
+/// <reference types="pkg" preserve="true" />
+export default getInterR();

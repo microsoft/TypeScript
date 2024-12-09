@@ -1,0 +1,230 @@
+//// [tests/cases/conformance/node/nodeModulesPackageExports.ts] ////
+
+=== index.ts ===
+// esm format file
+import * as cjs from "package/cjs";
+>cjs : any
+>    : ^^^
+
+import * as mjs from "package/mjs";
+>mjs : any
+>    : ^^^
+
+import * as type from "package";
+>type : any
+>     : ^^^
+
+cjs;
+>cjs : any
+>    : ^^^
+
+mjs;
+>mjs : any
+>    : ^^^
+
+type;
+>type : any
+>     : ^^^
+
+import * as cjsi from "inner/cjs";
+>cjsi : any
+>     : ^^^
+
+import * as mjsi from "inner/mjs";
+>mjsi : any
+>     : ^^^
+
+import * as typei from "inner";
+>typei : any
+>      : ^^^
+
+cjsi;
+>cjsi : any
+>     : ^^^
+
+mjsi;
+>mjsi : any
+>     : ^^^
+
+typei;
+>typei : any
+>      : ^^^
+
+=== index.mts ===
+// esm format file
+import * as cjs from "package/cjs";
+>cjs : any
+>    : ^^^
+
+import * as mjs from "package/mjs";
+>mjs : any
+>    : ^^^
+
+import * as type from "package";
+>type : any
+>     : ^^^
+
+cjs;
+>cjs : any
+>    : ^^^
+
+mjs;
+>mjs : any
+>    : ^^^
+
+type;
+>type : any
+>     : ^^^
+
+import * as cjsi from "inner/cjs";
+>cjsi : any
+>     : ^^^
+
+import * as mjsi from "inner/mjs";
+>mjsi : any
+>     : ^^^
+
+import * as typei from "inner";
+>typei : any
+>      : ^^^
+
+cjsi;
+>cjsi : any
+>     : ^^^
+
+mjsi;
+>mjsi : any
+>     : ^^^
+
+typei;
+>typei : any
+>      : ^^^
+
+=== index.cts ===
+// cjs format file
+import * as cjs from "package/cjs";
+>cjs : any
+>    : ^^^
+
+import * as mjs from "package/mjs";
+>mjs : any
+>    : ^^^
+
+import * as type from "package";
+>type : any
+>     : ^^^
+
+cjs;
+>cjs : any
+>    : ^^^
+
+mjs;
+>mjs : any
+>    : ^^^
+
+type;
+>type : any
+>     : ^^^
+
+import * as cjsi from "inner/cjs";
+>cjsi : any
+>     : ^^^
+
+import * as mjsi from "inner/mjs";
+>mjsi : any
+>     : ^^^
+
+import * as typei from "inner";
+>typei : any
+>      : ^^^
+
+cjsi;
+>cjsi : any
+>     : ^^^
+
+mjsi;
+>mjsi : any
+>     : ^^^
+
+typei;
+>typei : any
+>      : ^^^
+
+=== node_modules/inner/index.d.ts ===
+// cjs format file
+import * as cjs from "inner/cjs";
+>cjs : any
+>    : ^^^
+
+import * as mjs from "inner/mjs";
+>mjs : any
+>    : ^^^
+
+import * as type from "inner";
+>type : any
+>     : ^^^
+
+export { cjs };
+>cjs : any
+>    : ^^^
+
+export { mjs };
+>mjs : any
+>    : ^^^
+
+export { type };
+>type : any
+>     : ^^^
+
+=== node_modules/inner/index.d.mts ===
+// esm format file
+import * as cjs from "inner/cjs";
+>cjs : any
+>    : ^^^
+
+import * as mjs from "inner/mjs";
+>mjs : any
+>    : ^^^
+
+import * as type from "inner";
+>type : any
+>     : ^^^
+
+export { cjs };
+>cjs : any
+>    : ^^^
+
+export { mjs };
+>mjs : any
+>    : ^^^
+
+export { type };
+>type : any
+>     : ^^^
+
+=== node_modules/inner/index.d.cts ===
+// cjs format file
+import * as cjs from "inner/cjs";
+>cjs : any
+>    : ^^^
+
+import * as mjs from "inner/mjs";
+>mjs : any
+>    : ^^^
+
+import * as type from "inner";
+>type : any
+>     : ^^^
+
+export { cjs };
+>cjs : any
+>    : ^^^
+
+export { mjs };
+>mjs : any
+>    : ^^^
+
+export { type };
+>type : any
+>     : ^^^
+

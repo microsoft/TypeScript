@@ -1,0 +1,122 @@
+error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+index.cjs(2,23): error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.cjs(3,23): error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.cjs(4,24): error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.js(2,23): error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.js(3,23): error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.js(4,24): error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.mjs(2,23): error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.mjs(3,23): error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.mjs(4,24): error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+node_modules/inner/index.d.cts(2,22): error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+node_modules/inner/index.d.cts(3,22): error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+node_modules/inner/index.d.cts(4,23): error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+node_modules/inner/index.d.mts(2,22): error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+node_modules/inner/index.d.mts(3,22): error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+node_modules/inner/index.d.mts(4,23): error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+node_modules/inner/index.d.ts(2,22): error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+node_modules/inner/index.d.ts(3,22): error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+node_modules/inner/index.d.ts(4,23): error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+==== index.js (3 errors) ====
+    // esm format file
+    import * as cjsi from "inner/cjs/index.cjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as mjsi from "inner/mjs/index.mjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as typei from "inner/js/index.js";
+                           ~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    cjsi;
+    mjsi;
+    typei;
+==== index.mjs (3 errors) ====
+    // esm format file
+    import * as cjsi from "inner/cjs/index.cjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as mjsi from "inner/mjs/index.mjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as typei from "inner/js/index.js";
+                           ~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    cjsi;
+    mjsi;
+    typei;
+==== index.cjs (3 errors) ====
+    // cjs format file
+    import * as cjsi from "inner/cjs/index.cjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as mjsi from "inner/mjs/index.mjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as typei from "inner/js/index.js";
+                           ~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    cjsi;
+    mjsi;
+    typei;
+==== node_modules/inner/index.d.ts (3 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs/index.cjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as mjs from "inner/mjs/index.mjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as type from "inner/js/index.js";
+                          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    export { cjs };
+    export { mjs };
+    export { type };
+==== node_modules/inner/index.d.mts (3 errors) ====
+    // esm format file
+    import * as cjs from "inner/cjs/index.cjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as mjs from "inner/mjs/index.mjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as type from "inner/js/index.js";
+                          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    export { cjs };
+    export { mjs };
+    export { type };
+==== node_modules/inner/index.d.cts (3 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs/index.cjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/cjs/index.cjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as mjs from "inner/mjs/index.mjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/mjs/index.mjs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import * as type from "inner/js/index.js";
+                          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'inner/js/index.js'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    export { cjs };
+    export { mjs };
+    export { type };
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+    }
+==== node_modules/inner/package.json (0 errors) ====
+    {
+        "name": "inner",
+        "private": true,
+        "exports": {
+            "./cjs/*.cjs": "./*.cjs",
+            "./mjs/*.mjs": "./*.mjs",
+            "./js/*.js": "./*.js"
+        }
+    }

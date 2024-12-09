@@ -1,0 +1,32 @@
+error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+index.cjs(2,23): error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.js(2,23): error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.mjs(2,23): error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+==== index.js (1 errors) ====
+    // esm format file
+    import * as self from "package";
+                          ~~~~~~~~~
+!!! error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    self;
+==== index.mjs (1 errors) ====
+    // esm format file
+    import * as self from "package";
+                          ~~~~~~~~~
+!!! error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    self;
+==== index.cjs (1 errors) ====
+    // esm format file
+    import * as self from "package";
+                          ~~~~~~~~~
+!!! error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    self;
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "exports": "./index.js"
+    }

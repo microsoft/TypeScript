@@ -1,0 +1,6 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit2.ts] ////
+
+=== /index.ts ===
+
+/// <reference types="pkg" preserve="true" />
+export interface LocalInterface extends ImportInterface {}

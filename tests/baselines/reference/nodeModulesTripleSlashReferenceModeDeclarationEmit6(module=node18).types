@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit6.ts] ////
+
+=== /index.ts ===
+import obj from "./uses.js"
+>obj : any
+>    : ^^^
+
+export default (obj as typeof obj);
+>(obj as typeof obj) : any
+>                    : ^^^
+>obj as typeof obj : any
+>                  : ^^^
+>obj : any
+>    : ^^^
+>obj : any
+>    : ^^^
+
+=== /uses.ts ===
+/// <reference types="pkg" preserve="true" />
+export default getInterR();
+>getInterR() : any
+>            : ^^^
+>getInterR : any
+>          : ^^^
+

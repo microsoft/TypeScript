@@ -1,10 +1,10 @@
-/loosey.cts(1,36): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+/loosey.cts(1,36): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
 /loosey.cts(6,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
-/main.mts(5,36): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
-/main.mts(6,52): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+/main.mts(5,36): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+/main.mts(6,52): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
 /main.mts(8,10): error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node16'.
-/main.mts(8,41): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
-/main.mts(9,42): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+/main.mts(8,41): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+/main.mts(9,42): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
 /main.mts(10,9): error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
 
 
@@ -49,19 +49,19 @@
     
     import config from "./config.json" with { type: "json" }; // Ok
                                        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     import { default as config1 } from "./config.json" with { type: "json" }; // Ok
                                                        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     import config2 from "./config.json"; // Error in nodenext, no attribute
     import { version } from "./config.json" with { type: "json" }; // Error, named import
              ~~~~~~~
 !!! error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node16'.
                                             ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     import * as config3 from "./config.json" with { type: "json" };
                                              ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     config3.version; // Error
             ~~~~~~~
 !!! error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
@@ -70,7 +70,7 @@
 ==== /loosey.cts (2 errors) ====
     import config from "./config.json" with { type: "json" }; // Error
                                        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     import config2 from "./config.json"; // Ok
     import { version } from "./config.json"; // Ok
     import * as config3 from "./config.json";

@@ -1,5 +1,5 @@
 // @module: esnext
-// @moduleResolution: node16,nodenext,bundler
+// @moduleResolution: node16,node18,nodenext,bundler
 // @traceResolution: true
 // @allowJs: true
 // @noTypesAndSymbols: true

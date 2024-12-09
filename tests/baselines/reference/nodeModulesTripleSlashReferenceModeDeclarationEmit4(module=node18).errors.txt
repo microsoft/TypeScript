@@ -1,0 +1,26 @@
+error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+
+
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+==== /index.ts (0 errors) ====
+    /// <reference types="pkg" resolution-mode="import" preserve="true" />
+    export interface LocalInterface extends ImportInterface {}
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export {};
+    declare global {
+        interface ImportInterface {}
+    }
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export {};
+    declare global {
+        interface RequireInterface {}
+    }

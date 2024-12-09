@@ -1,0 +1,16 @@
+error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+
+
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+==== node_modules/pkg/index.d.ts (0 errors) ====
+    interface GlobalThing { a: number }
+==== node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "types": "index.d.ts",
+        "exports": "some-other-thing.js"
+    }
+==== usage.ts (0 errors) ====
+    /// <reference types="pkg" />
+    
+    const a: GlobalThing = { a: 0 };

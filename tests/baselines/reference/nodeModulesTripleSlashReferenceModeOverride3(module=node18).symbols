@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeOverride3.ts] ////
+
+=== /index.ts ===
+/// <reference types="pkg" resolution-mode="require" />
+foo;
+bar; // bar should resolve while foo should not, since even though index.js is esm, the reference is cjs
+>bar : Symbol(bar, Decl(require.d.ts, 2, 7))
+
+export {};
+=== /node_modules/pkg/require.d.ts ===
+export {};
+declare global {
+>global : Symbol(global, Decl(require.d.ts, 0, 10))
+
+    var bar: number;
+>bar : Symbol(bar, Decl(require.d.ts, 2, 7))
+}

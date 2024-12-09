@@ -1,0 +1,93 @@
+error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
+error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+/loosey.cts(1,8): error TS1259: Module '"/config"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
+/loosey.cts(1,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+/loosey.cts(2,8): error TS1259: Module '"/config"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
+/loosey.cts(6,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
+/main.mts(1,22): error TS2792: Cannot find module 'not.json'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+/main.mts(2,22): error TS2792: Cannot find module 'actually-json'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+/main.mts(3,19): error TS2792: Cannot find module 'actually-json/typed'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+/main.mts(7,21): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
+/main.mts(8,10): error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node18'.
+/main.mts(10,9): error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
+
+
+!!! error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+==== /node_modules/not.json/package.json (0 errors) ====
+    {
+      "name": "not.json",
+      "version": "1.0.0",
+      "type": "module",
+      "exports": "./index.js"
+    }
+    
+==== /node_modules/not.json/index.d.ts (0 errors) ====
+    export function oops(json: string): any;
+    
+==== /node_modules/actually-json/package.json (0 errors) ====
+    {
+      "name": "actually-json",
+      "version": "1.0.0",
+      "type": "module",
+      "exports": {
+        ".": "./index.json",
+        "./typed": "./typed.d.json.ts"
+      }
+    }
+    
+==== /node_modules/actually-json/index.json (0 errors) ====
+    {}
+    
+==== /node_modules/actually-json/typed.d.json.ts (0 errors) ====
+    declare const _default: {};
+    export default _default;
+    
+==== /config.json (0 errors) ====
+    {
+      "version": 1
+    }
+    
+==== /main.mts (6 errors) ====
+    import { oops } from "not.json"; // Ok
+                         ~~~~~~~~~~
+!!! error TS2792: Cannot find module 'not.json'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import moreOops from "actually-json"; // Error in nodenext
+                         ~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'actually-json'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    import typed from "actually-json/typed"; // Error in nodenext
+                      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'actually-json/typed'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    
+    import config from "./config.json" with { type: "json" }; // Ok
+    import { default as config1 } from "./config.json" with { type: "json" }; // Ok
+    import config2 from "./config.json"; // Error in nodenext, no attribute
+                        ~~~~~~~~~~~~~~~
+!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'Node18'.
+    import { version } from "./config.json" with { type: "json" }; // Error, named import
+             ~~~~~~~
+!!! error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'Node18'.
+    import * as config3 from "./config.json" with { type: "json" };
+    config3.version; // Error
+            ~~~~~~~
+!!! error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
+    config3.default; // Ok
+    
+==== /loosey.cts (4 errors) ====
+    import config from "./config.json" with { type: "json" }; // Error
+           ~~~~~~
+!!! error TS1259: Module '"/config"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
+!!! related TS2594 /config.json:1:1: This module is declared with 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
+                                       ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+    import config2 from "./config.json"; // Ok
+           ~~~~~~~
+!!! error TS1259: Module '"/config"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
+!!! related TS2594 /config.json:1:1: This module is declared with 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
+    import { version } from "./config.json"; // Ok
+    import * as config3 from "./config.json";
+    config3.version; // Ok
+    config3.default; // Error
+            ~~~~~~~
+!!! error TS2339: Property 'default' does not exist on type '{ version: number; }'.
+    

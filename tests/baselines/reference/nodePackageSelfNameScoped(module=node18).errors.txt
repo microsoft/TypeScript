@@ -1,0 +1,32 @@
+error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+index.cts(2,23): error TS2792: Cannot find module '@scope/package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.mts(2,23): error TS2792: Cannot find module '@scope/package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.ts(2,23): error TS2792: Cannot find module '@scope/package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
+==== index.ts (1 errors) ====
+    // esm format file
+    import * as self from "@scope/package";
+                          ~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module '@scope/package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    self;
+==== index.mts (1 errors) ====
+    // esm format file
+    import * as self from "@scope/package";
+                          ~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module '@scope/package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    self;
+==== index.cts (1 errors) ====
+    // cjs format file
+    import * as self from "@scope/package";
+                          ~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module '@scope/package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+    self;
+==== package.json (0 errors) ====
+    {
+        "name": "@scope/package",
+        "private": true,
+        "type": "module",
+        "exports": "./index.js"
+    }
