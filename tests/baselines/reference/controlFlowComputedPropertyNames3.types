@@ -1,0 +1,66 @@
+//// [tests/cases/conformance/controlFlow/controlFlowComputedPropertyNames3.ts] ////
+
+=== controlFlowComputedPropertyNames3.ts ===
+function goThroughArray() {
+>goThroughArray : () => void
+>               : ^^^^^^^^^^
+
+  const a: number[] = [1, 2, 3];
+>a : number[]
+>  : ^^^^^^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+  for (let i = 0; i < a.length; i++) {
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>i < a.length : boolean
+>             : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>a.length : number
+>         : ^^^^^^
+>a : number[]
+>  : ^^^^^^^^
+>length : number
+>       : ^^^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+    if (typeof a[i] === "number") {
+>typeof a[i] === "number" : boolean
+>                         : ^^^^^^^
+>typeof a[i] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a[i] : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>a : number[]
+>  : ^^^^^^^^
+>i : number
+>  : ^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+
+      a[i]++;
+>a[i]++ : number
+>       : ^^^^^^
+>a[i] : number
+>     : ^^^^^^
+>a : number[]
+>  : ^^^^^^^^
+>i : number
+>  : ^^^^^^
+    }
+  }
+}
+
