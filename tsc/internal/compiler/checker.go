@@ -65,6 +65,13 @@ type ContextualInfo struct {
 	isCache bool
 }
 
+// InferenceContextInfo
+
+type InferenceContextInfo struct {
+	node    *ast.Node
+	context *InferenceContext
+}
+
 // WideningKind
 
 type WideningKind int32
@@ -169,11 +176,52 @@ const (
 // InferenceContext
 
 type InferenceContext struct {
-	typeParameters         []*Type
-	flags                  InferenceFlags
-	mapper                 *TypeMapper // Mapper that fixes inferences
-	nonFixingMapper        *TypeMapper // Mapper that doesn't fix inferences
-	inferredTypeParameters []*Type
+	inferences                    []*InferenceInfo // Inferences made for each type parameter
+	signature                     *Signature       // Generic signature for which inferences are made (if any)
+	flags                         InferenceFlags   // Inference flags
+	compareTypes                  TypeComparer     // Type comparer function
+	mapper                        *TypeMapper      // Mapper that fixes inferences
+	nonFixingMapper               *TypeMapper      // Mapper that doesn't fix inferences
+	returnMapper                  *TypeMapper      // Type mapper for inferences from return types (if any)
+	inferredTypeParameters        []*Type          // Inferred type parameters for function result
+	intraExpressionInferenceSites []IntraExpressionInferenceSite
+}
+
+type InferenceInfo struct {
+	typeParameter    *Type             // Type parameter for which inferences are being made
+	candidates       []*Type           // Candidates in covariant positions
+	contraCandidates []*Type           // Candidates in contravariant positions
+	inferredType     *Type             // Cache for resolved inferred type
+	priority         InferencePriority // Priority of current inference set
+	topLevel         bool              // True if all inferences are to top level occurrences
+	isFixed          bool              // True if inferences are fixed
+	impliedArity     int               // Implied arity (or -1)
+}
+
+type InferencePriority int32
+
+const (
+	InferencePriorityNone                         InferencePriority = 0
+	InferencePriorityNakedTypeVariable            InferencePriority = 1 << 0  // Naked type variable in union or intersection type
+	InferencePrioritySpeculativeTuple             InferencePriority = 1 << 1  // Speculative tuple inference
+	InferencePrioritySubstituteSource             InferencePriority = 1 << 2  // Source of inference originated within a substitution type's substitute
+	InferencePriorityHomomorphicMappedType        InferencePriority = 1 << 3  // Reverse inference for homomorphic mapped type
+	InferencePriorityPartialHomomorphicMappedType InferencePriority = 1 << 4  // Partial reverse inference for homomorphic mapped type
+	InferencePriorityMappedTypeConstraint         InferencePriority = 1 << 5  // Reverse inference for mapped type
+	InferencePriorityContravariantConditional     InferencePriority = 1 << 6  // Conditional type in contravariant position
+	InferencePriorityReturnType                   InferencePriority = 1 << 7  // Inference made from return type of generic function
+	InferencePriorityLiteralKeyof                 InferencePriority = 1 << 8  // Inference made from a string literal to a keyof T
+	InferencePriorityNoConstraints                InferencePriority = 1 << 9  // Don't infer from constraints of instantiable types
+	InferencePriorityAlwaysStrict                 InferencePriority = 1 << 10 // Always use strict rules for contravariant inferences
+	InferencePriorityMaxValue                     InferencePriority = 1 << 11 // Seed for inference priority tracking
+	InferencePriorityCircularity                  InferencePriority = -1      // Inference circularity (value less than all other priorities)
+
+	InferencePriorityPriorityImpliesCombination = InferencePriorityReturnType | InferencePriorityMappedTypeConstraint | InferencePriorityLiteralKeyof // These priorities imply that the resulting type should be a combination of all candidates
+)
+
+type IntraExpressionInferenceSite struct {
+	node *ast.Node
+	t    *Type
 }
 
 type DeclarationMeaning uint32
@@ -433,6 +481,7 @@ type Checker struct {
 	anyType                            *Type
 	autoType                           *Type
 	wildcardType                       *Type
+	blockedStringType                  *Type
 	errorType                          *Type
 	nonInferrableAnyType               *Type
 	intrinsicMarkerType                *Type
@@ -527,6 +576,7 @@ type Checker struct {
 	flowNodeReachable                  map[*ast.FlowNode]bool
 	flowNodePostSuper                  map[*ast.FlowNode]bool
 	contextualInfos                    []ContextualInfo
+	inferenceContextInfos              []InferenceContextInfo
 	awaitedTypeStack                   []*Type
 	subtypeRelation                    *Relation
 	strictSubtypeRelation              *Relation
@@ -607,6 +657,7 @@ func NewChecker(program *Program) *Checker {
 	c.anyType = c.newIntrinsicType(TypeFlagsAny, "any")
 	c.autoType = c.newIntrinsicTypeEx(TypeFlagsAny, "any", ObjectFlagsNonInferrableType)
 	c.wildcardType = c.newIntrinsicType(TypeFlagsAny, "any")
+	c.blockedStringType = c.newIntrinsicType(TypeFlagsAny, "any")
 	c.errorType = c.newIntrinsicType(TypeFlagsAny, "error")
 	c.nonInferrableAnyType = c.newIntrinsicTypeEx(TypeFlagsAny, "any", ObjectFlagsContainsWideningType)
 	c.intrinsicMarkerType = c.newIntrinsicType(TypeFlagsAny, "intrinsic")
@@ -3142,7 +3193,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 					continue
 				}
 			} else {
-				inferenceContext = c.createInferenceContext(candidate.typeParameters, candidate, InferenceFlagsNone /*flags*/)
+				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, InferenceFlagsNone /*flags*/, nil)
 				// The resulting type arguments are instantiated with the inference context mapper, as the inferred types may still contain references to the inference context's
 				//  type variables via contextual projection. These are kept generic until all inferences are locked in, so the dependencies expressed can pass constraint checks.
 				typeArgumentTypes = c.instantiateTypes(c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode|CheckModeSkipGenericFunctions, inferenceContext), inferenceContext.nonFixingMapper)
@@ -3500,14 +3551,109 @@ func (c *Checker) getEffectiveCheckNode(argument *ast.Node) *ast.Node {
 	return argument
 }
 
-func (c *Checker) createInferenceContext(typeParameters []*Type, signature *Signature, flags InferenceFlags) *InferenceContext {
-	// !!!
-	return &InferenceContext{typeParameters: typeParameters}
-}
-
 func (c *Checker) inferTypeArguments(node *ast.Node, signature *Signature, args []*ast.Node, checkMode CheckMode, context *InferenceContext) []*Type {
-	// !!!
-	return core.Map(context.typeParameters, func(*Type) *Type { return c.anyType })
+	if isJsxOpeningLikeElement(node) {
+		// !!!
+		// return c.inferJsxTypeArguments(node, signature, checkMode, context)
+		return core.Map(context.inferences, func(*InferenceInfo) *Type { return c.anyType })
+	}
+	// If a contextual type is available, infer from that type to the return type of the call expression. For
+	// example, given a 'function wrap<T, U>(cb: (x: T) => U): (x: T) => U' and a call expression
+	// 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type of 'f' to the
+	// return type of 'wrap'.
+	if !ast.IsDecorator(node) && !ast.IsBinaryExpression(node) {
+		skipBindingPatterns := core.Every(signature.typeParameters, func(p *Type) bool { return c.getDefaultFromTypeParameter(p) != nil })
+		contextualType := c.getContextualType(node, core.IfElse(skipBindingPatterns, ContextFlagsSkipBindingPatterns, ContextFlagsNone))
+		if contextualType != nil {
+			inferenceTargetType := c.getReturnTypeOfSignature(signature)
+			if c.couldContainTypeVariables(inferenceTargetType) {
+				outerContext := c.getInferenceContext(node)
+				isFromBindingPattern := !skipBindingPatterns && c.getContextualType(node, ContextFlagsSkipBindingPatterns) != contextualType
+				// A return type inference from a binding pattern can be used in instantiating the contextual
+				// type of an argument later in inference, but cannot stand on its own as the final return type.
+				// It is incorporated into `context.returnMapper` which is used in `instantiateContextualType`,
+				// but doesn't need to go into `context.inferences`. This allows a an array binding pattern to
+				// produce a tuple for `T` in
+				//   declare function f<T>(cb: () => T): T;
+				//   const [e1, e2, e3] = f(() => [1, "hi", true]);
+				// but does not produce any inference for `T` in
+				//   declare function f<T>(): T;
+				//   const [e1, e2, e3] = f();
+				if !isFromBindingPattern {
+					// We clone the inference context to avoid disturbing a resolution in progress for an
+					// outer call expression. Effectively we just want a snapshot of whatever has been
+					// inferred for any outer call expression so far.
+					outerMapper := c.getMapperFromContext(c.cloneInferenceContext(outerContext, InferenceFlagsNoDefault))
+					instantiatedType := c.instantiateType(contextualType, outerMapper)
+					// If the contextual type is a generic function type with a single call signature, we
+					// instantiate the type with its own type parameters and type arguments. This ensures that
+					// the type parameters are not erased to type any during type inference such that they can
+					// be inferred as actual types from the contextual type. For example:
+					//   declare function arrayMap<T, U>(f: (x: T) => U): (a: T[]) => U[];
+					//   const boxElements: <A>(a: A[]) => { value: A }[] = arrayMap(value => ({ value }));
+					// Above, the type of the 'value' parameter is inferred to be 'A'.
+					contextualSignature := c.getSingleCallSignature(instantiatedType)
+					var inferenceSourceType *Type
+					if contextualSignature != nil && contextualSignature.typeParameters != nil {
+						inferenceSourceType = c.getOrCreateTypeFromSignature(c.getSignatureInstantiationWithoutFillingInTypeArguments(contextualSignature, contextualSignature.typeParameters), nil)
+					} else {
+						inferenceSourceType = instantiatedType
+					}
+					// Inferences made from return types have lower priority than all other inferences.
+					c.inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriorityReturnType, false)
+				}
+				// Create a type mapper for instantiating generic contextual types using the inferences made
+				// from the return type. We need a separate inference pass here because (a) instantiation of
+				// the source type uses the outer context's return mapper (which excludes inferences made from
+				// outer arguments), and (b) we don't want any further inferences going into this context.
+				returnContext := c.newInferenceContext(signature.typeParameters, signature, context.flags, nil)
+				var outerReturnMapper *TypeMapper
+				if outerContext != nil {
+					outerReturnMapper = outerContext.returnMapper
+				}
+				returnSourceType := c.instantiateType(contextualType, outerReturnMapper)
+				c.inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType, InferencePriorityNone, false)
+				if core.Some(returnContext.inferences, hasInferenceCandidates) {
+					context.returnMapper = c.getMapperFromContext(c.cloneInferredPartOfContext(returnContext))
+				} else {
+					context.returnMapper = nil
+				}
+			}
+		}
+	}
+	restType := c.getNonArrayRestType(signature)
+	argCount := len(args)
+	if restType != nil {
+		argCount = min(c.getParameterCount(signature)-1, argCount)
+	}
+	if restType != nil && restType.flags&TypeFlagsTypeParameter != 0 {
+		info := core.Find(context.inferences, func(info *InferenceInfo) bool { return info.typeParameter == restType })
+		if info != nil {
+			if core.FindIndex(args[argCount:], isSpreadArgument) < 0 {
+				info.impliedArity = len(args) - argCount
+			}
+		}
+	}
+	thisType := c.getThisTypeOfSignature(signature)
+	if thisType != nil && c.couldContainTypeVariables(thisType) {
+		thisArgumentNode := c.getThisArgumentOfCall(node)
+		c.inferTypes(context.inferences, c.getThisArgumentType(thisArgumentNode), thisType, InferencePriorityNone, false)
+	}
+	for i := range argCount {
+		arg := args[i]
+		if arg.Kind != ast.KindOmittedExpression {
+			paramType := c.getTypeAtPosition(signature, i)
+			if c.couldContainTypeVariables(paramType) {
+				argType := c.checkExpressionWithContextualType(arg, paramType, context, checkMode)
+				c.inferTypes(context.inferences, argType, paramType, InferencePriorityNone, false)
+			}
+		}
+	}
+	if restType != nil && c.couldContainTypeVariables(restType) {
+		spreadType := c.getSpreadArgumentType(args, argCount, len(args), restType, context, checkMode)
+		c.inferTypes(context.inferences, spreadType, restType, InferencePriorityNone, false)
+	}
+	return c.getInferredTypes(context)
 }
 
 // No signature was applicable. We have already reported the errors for the invalid signature.
@@ -3546,8 +3692,7 @@ func (c *Checker) pickLongestCandidateSignature(node *ast.Node, candidates []*Si
 	}
 	var instantiated *Signature
 	if len(typeArgumentNodes) != 0 {
-		typeArgumentTypes := c.fillMissingTypeArguments(core.Map(typeArgumentNodes, c.getTypeFromTypeNode), typeParameters, c.getMinTypeArgumentCount(typeParameters))
-		instantiated = c.createSignatureInstantiation(candidate, typeArgumentTypes)
+		instantiated = c.createSignatureInstantiation(candidate, c.getTypeArgumentsFromNodes(typeArgumentNodes, typeParameters))
 	} else {
 		instantiated = c.inferSignatureInstantiationForOverloadFailure(node, typeParameters, candidate, args, checkMode)
 	}
@@ -3571,8 +3716,26 @@ func (c *Checker) getLongestCandidateIndex(candidates []*Signature, argsCount in
 	return maxParamsIndex
 }
 
+func (c *Checker) getTypeArgumentsFromNodes(typeArgumentNodes []*ast.Node, typeParameters []*Type) []*Type {
+	if len(typeArgumentNodes) > len(typeParameters) {
+		typeArgumentNodes = typeArgumentNodes[:len(typeParameters)]
+	}
+	typeArguments := core.Map(typeArgumentNodes, c.getTypeFromTypeNode)
+	for len(typeArguments) < len(typeParameters) {
+		t := c.getDefaultFromTypeParameter(typeParameters[len(typeArguments)])
+		if t == nil {
+			t = c.getConstraintOfTypeParameter(typeParameters[len(typeArguments)])
+			if t == nil {
+				t = c.unknownType
+			}
+		}
+		typeArguments = append(typeArguments, t)
+	}
+	return typeArguments
+}
+
 func (c *Checker) inferSignatureInstantiationForOverloadFailure(node *ast.Node, typeParameters []*Type, candidate *Signature, args []*ast.Node, checkMode CheckMode) *Signature {
-	inferenceContext := c.createInferenceContext(typeParameters, candidate, InferenceFlagsNone)
+	inferenceContext := c.newInferenceContext(typeParameters, candidate, InferenceFlagsNone, nil)
 	typeArgumentTypes := c.inferTypeArguments(node, candidate, args, checkMode|CheckModeSkipContextSensitive|CheckModeSkipGenericFunctions, inferenceContext)
 	return c.createSignatureInstantiation(candidate, typeArgumentTypes)
 }
@@ -4842,10 +5005,6 @@ func (c *Checker) isUncalledFunctionReference(node *ast.Node, symbol *ast.Symbol
 		})
 	}
 	return true
-}
-
-func (c *Checker) hasMatchingArgument(expression *ast.Node, reference *ast.Node) bool {
-	return false // !!!
 }
 
 func (c *Checker) checkPropertyNotUsedBeforeDeclaration(prop *ast.Symbol, node *ast.Node, right *ast.Node) {
@@ -8299,9 +8458,9 @@ func (c *Checker) getTypeOfSymbol(symbol *ast.Symbol) *Type {
 	// if symbol.flags&SymbolFlagsAccessor != 0 {
 	// 	return c.getTypeOfAccessors(symbol)
 	// }
-	// if symbol.flags&SymbolFlagsAlias != 0 {
-	// 	return c.getTypeOfAlias(symbol)
-	// }
+	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+		return c.getTypeOfAlias(symbol)
+	}
 	return c.errorType
 }
 
@@ -8811,6 +8970,10 @@ func (c *Checker) getConstraintFromConditionalType(t *Type) *Type {
 	return c.anyType // !!!
 }
 
+func (c *Checker) getDefaultConstraintOfConditionalType(t *Type) *Type {
+	return c.anyType // !!!
+}
+
 func (c *Checker) getDeclaredTypeOfClassOrInterface(symbol *ast.Symbol) *Type {
 	links := c.declaredTypeLinks.get(symbol)
 	if links.declaredType == nil {
@@ -9279,6 +9442,54 @@ func (c *Checker) getTypeOfEnumMember(symbol *ast.Symbol) *Type {
 	return links.resolvedType
 }
 
+func (c *Checker) getTypeOfAlias(symbol *ast.Symbol) *Type {
+	links := c.valueSymbolLinks.get(symbol)
+	if links.resolvedType == nil {
+		if !c.pushTypeResolution(symbol, TypeSystemPropertyNameType) {
+			return c.errorType
+		}
+		targetSymbol := c.resolveAlias(symbol)
+		exportSymbol := c.getTargetOfAliasDeclaration(c.getDeclarationOfAliasSymbol(symbol), true /*dontRecursivelyResolve*/)
+		declaredType := c.getExportAssignmentType(exportSymbol)
+		// It only makes sense to get the type of a value symbol. If the result of resolving
+		// the alias is not a value, then it has no type. To get the type associated with a
+		// type symbol, call getDeclaredTypeOfSymbol.
+		// This check is important because without it, a call to getTypeOfSymbol could end
+		// up recursively calling getTypeOfAlias, causing a stack overflow.
+		if links.resolvedType == nil {
+			if declaredType != nil {
+				links.resolvedType = declaredType
+			} else if c.getSymbolFlags(targetSymbol)&ast.SymbolFlagsValue != 0 {
+				links.resolvedType = c.getTypeOfSymbol(targetSymbol)
+			} else {
+				links.resolvedType = c.errorType
+			}
+		}
+		if !c.popTypeResolution() {
+			c.reportCircularityError(core.OrElse(exportSymbol, symbol))
+			if links.resolvedType == nil {
+				links.resolvedType = c.errorType
+			}
+			return links.resolvedType
+		}
+	}
+	return links.resolvedType
+}
+
+func (c *Checker) getExportAssignmentType(symbol *ast.Symbol) *Type {
+	if symbol != nil {
+		for _, d := range symbol.Declarations {
+			if ast.IsExportAssignment(d) {
+				t := c.tryGetTypeFromEffectiveTypeNode(d)
+				if t != nil {
+					return t
+				}
+			}
+		}
+	}
+	return nil
+}
+
 func (c *Checker) addOptionalityEx(t *Type, isProperty bool, isOptional bool) *Type {
 	if c.strictNullChecks && isOptional {
 		return c.getOptionalType(t, isProperty)
@@ -9293,6 +9504,20 @@ func (c *Checker) getOptionalType(t *Type, isProperty bool) *Type {
 		return t
 	}
 	return c.getUnionType([]*Type{t, missingOrUndefined})
+}
+
+// Add undefined or null or both to a type if they are missing.
+func (c *Checker) getNullableType(t *Type, flags TypeFlags) *Type {
+	missing := (flags & ^t.flags) & (TypeFlagsUndefined | TypeFlagsNull)
+	switch {
+	case missing == 0:
+		return t
+	case missing == TypeFlagsUndefined:
+		return c.getUnionType([]*Type{t, c.undefinedType})
+	case missing == TypeFlagsNull:
+		return c.getUnionType([]*Type{t, c.nullType})
+	}
+	return c.getUnionType([]*Type{t, c.undefinedType, c.nullType})
 }
 
 func (c *Checker) getNonNullableType(t *Type) *Type {
@@ -9767,7 +9992,7 @@ func (c *Checker) resolveObjectTypeMembers(t *Type, source *Type, typeParameters
 				inheritedIndexInfos = []*IndexInfo{{keyType: c.stringType, valueType: c.anyType}}
 			}
 			indexInfos = core.Concatenate(indexInfos, core.Filter(inheritedIndexInfos, func(info *IndexInfo) bool {
-				return findIndexInfo(indexInfos, info.keyType) != nil
+				return findIndexInfo(indexInfos, info.keyType) == nil
 			}))
 		}
 	}
@@ -10056,9 +10281,64 @@ func (c *Checker) createCanonicalSignature(signature *Signature) *Signature {
 	}), nil)
 }
 
+func (c *Checker) getBaseSignature(signature *Signature) *Signature {
+	typeParameters := signature.typeParameters
+	if len(typeParameters) == 0 {
+		return signature
+	}
+	key := CachedSignatureKey{sig: signature, key: "#"}
+	if cached := c.cachedSignatures[key]; cached != nil {
+		return cached
+	}
+	baseConstraintMapper := newTypeMapper(typeParameters, core.Map(typeParameters, func(tp *Type) *Type {
+		return core.OrElse(c.getConstraintOfTypeParameter(tp), c.unknownType)
+	}))
+	baseConstraints := core.Map(typeParameters, func(tp *Type) *Type {
+		return c.instantiateType(tp, baseConstraintMapper)
+	})
+	// Run N type params thru the immediate constraint mapper up to N times
+	// This way any noncircular interdependent type parameters are definitely resolved to their external dependencies
+	for range typeParameters {
+		baseConstraints = c.instantiateTypes(baseConstraints, baseConstraintMapper)
+	}
+	// and then apply a type eraser to remove any remaining circularly dependent type parameters
+	baseConstraints = c.instantiateTypes(baseConstraints, newArrayToSingleTypeMapper(typeParameters, c.anyType))
+	result := c.instantiateSignatureEx(signature, newTypeMapper(typeParameters, baseConstraints), true /*eraseTypeParameters*/)
+	c.cachedSignatures[key] = result
+	return result
+}
+
 // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
 func (c *Checker) instantiateSignatureInContextOf(signature *Signature, contextualSignature *Signature, inferenceContext *InferenceContext, compareTypes TypeComparer) *Signature {
-	return signature // !!!
+	context := c.newInferenceContext(c.getTypeParametersForMapper(signature), signature, InferenceFlagsNone, compareTypes)
+	// We clone the inferenceContext to avoid fixing. For example, when the source signature is <T>(x: T) => T[] and
+	// the contextual signature is (...args: A) => B, we want to infer the element type of A's constraint (say 'any')
+	// for T but leave it possible to later infer '[any]' back to A.
+	restType := c.getEffectiveRestType(contextualSignature)
+	var mapper *TypeMapper
+	if inferenceContext != nil {
+		if restType != nil && restType.flags&TypeFlagsTypeParameter != 0 {
+			mapper = inferenceContext.nonFixingMapper
+		} else {
+			mapper = inferenceContext.mapper
+		}
+	}
+	var sourceSignature *Signature
+	if mapper != nil {
+		sourceSignature = c.instantiateSignature(contextualSignature, mapper)
+	} else {
+		sourceSignature = contextualSignature
+	}
+	c.applyToParameterTypes(sourceSignature, signature, func(source *Type, target *Type) {
+		// Type parameters from outer context referenced by source type are fixed by instantiation of the source type
+		c.inferTypes(context.inferences, source, target, InferencePriorityNone, false)
+	})
+	if inferenceContext == nil {
+		c.applyToReturnTypes(contextualSignature, signature, func(source *Type, target *Type) {
+			c.inferTypes(context.inferences, source, target, InferencePriorityReturnType, false)
+		})
+	}
+	return c.getSignatureInstantiation(signature, c.getInferredTypes(context), nil)
 }
 
 func (c *Checker) resolveBaseTypesOfInterface(t *Type) {
@@ -11786,20 +12066,17 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 	return result
 }
 
-func (c *Checker) maybeTypeParameterReference(node *ast.Node) bool {
-	return !(ast.IsTypeReferenceNode(node.Parent) && len(node.Parent.TypeArguments()) != 0 && node == node.Parent.AsTypeReferenceNode().TypeName ||
-		ast.IsImportTypeNode(node.Parent) && len(node.Parent.TypeArguments()) != 0 && node == node.Parent.AsImportTypeNode().Qualifier)
-}
-
 func (c *Checker) isTypeParameterPossiblyReferenced(tp *Type, node *ast.Node) bool {
 	var containsReference func(*ast.Node) bool
 	containsReference = func(node *ast.Node) bool {
 		switch node.Kind {
 		case ast.KindThisType:
 			return tp.AsTypeParameter().isThisType
-		case ast.KindIdentifier:
-			return !tp.AsTypeParameter().isThisType && isPartOfTypeNode(node) && c.maybeTypeParameterReference(node) && c.getTypeFromTypeNodeWorker(node) == tp
+		case ast.KindTypeReference:
 			// use worker because we're looking for === equality
+			if !tp.AsTypeParameter().isThisType && len(node.TypeArguments()) == 0 && c.getTypeFromTypeNodeWorker(node) == tp {
+				return true
+			}
 		case ast.KindTypeQuery:
 			entityName := node.AsTypeQueryNode().ExprName
 			firstIdentifier := getFirstIdentifier(entityName)
@@ -11835,7 +12112,7 @@ func (c *Checker) isTypeParameterPossiblyReferenced(tp *Type, node *ast.Node) bo
 	if tp.symbol != nil && tp.symbol.Declarations != nil && len(tp.symbol.Declarations) == 1 {
 		container := tp.symbol.Declarations[0].Parent
 		for n := node; n != container; n = n.Parent {
-			if n == nil || ast.IsBlock(n) || ast.IsConditionalTypeNode(n) && n.AsConditionalTypeNode().ExtendsType.ForEachChild(containsReference) {
+			if n == nil || ast.IsBlock(n) || ast.IsConditionalTypeNode(n) && containsReference(n.AsConditionalTypeNode().ExtendsType) {
 				return true
 			}
 		}
@@ -16003,6 +16280,10 @@ func (c *Checker) getSimplifiedType(t *Type, writing bool) *Type {
 	return t // !!!
 }
 
+func (c *Checker) distributeIndexOverObjectType(objectType *Type, indexType *Type, writing bool) *Type {
+	return nil // !!!
+}
+
 func (c *Checker) getSimplifiedTypeOrConstraint(t *Type) *Type {
 	if simplified := c.getSimplifiedType(t, false /*writing*/); simplified != t {
 		return simplified
@@ -16674,7 +16955,9 @@ func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags
 	switch binary.OperatorToken.Kind {
 	case ast.KindEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindBarBarEqualsToken, ast.KindQuestionQuestionEqualsToken:
 		// In an assignment expression, the right operand is contextually typed by the type of the left operand.
-		return c.getTypeOfExpression(binary.Left)
+		if node == binary.Right {
+			return c.getTypeOfExpression(binary.Left)
+		}
 	case ast.KindBarBarToken, ast.KindQuestionQuestionToken:
 		// When an || expression has a contextual type, the operands are contextually typed by that type, except
 		// when that type originates in a binding pattern, the right operand is contextually typed by the type of
@@ -17089,25 +17372,20 @@ func (c *Checker) hasContextSensitiveReturnExpression(node *ast.Node) bool {
 	})
 }
 
-func (c *Checker) pushInferenceContext(node *ast.Node, inferenceContext *InferenceContext) {
-	// !!!
-	// c.inferenceContextNodes[c.inferenceContextCount] = node
-	// c.inferenceContexts[c.inferenceContextCount] = inferenceContext
-	// c.inferenceContextCount++
+func (c *Checker) pushInferenceContext(node *ast.Node, context *InferenceContext) {
+	c.inferenceContextInfos = append(c.inferenceContextInfos, InferenceContextInfo{node, context})
 }
 
 func (c *Checker) popInferenceContext() {
-	// !!!
-	// c.inferenceContextCount--
+	c.inferenceContextInfos = c.inferenceContextInfos[:len(c.inferenceContextInfos)-1]
 }
 
 func (c *Checker) getInferenceContext(node *ast.Node) *InferenceContext {
-	// !!!
-	// for i := c.inferenceContextCount - 1; i >= 0; i-- {
-	// 	if isNodeDescendantOf(node, c.inferenceContextNodes[i]) {
-	// 		return c.inferenceContexts[i]
-	// 	}
-	// }
+	for i := len(c.inferenceContextInfos) - 1; i >= 0; i-- {
+		if isNodeDescendantOf(node, c.inferenceContextInfos[i].node) {
+			return c.inferenceContextInfos[i].context
+		}
+	}
 	return nil
 }
 
@@ -17695,4 +17973,14 @@ func (c *Checker) isGenericTypeWithUndefinedConstraint(t *Type) bool {
 		}
 	}
 	return false
+}
+
+func (c *Checker) getActualTypeVariable(t *Type) *Type {
+	if t.flags&TypeFlagsSubstitution != 0 {
+		return c.getActualTypeVariable(t.AsSubstitutionType().baseType)
+	}
+	if t.flags&TypeFlagsIndexedAccess != 0 && (t.AsIndexedAccessType().objectType.flags&TypeFlagsSubstitution != 0 || t.AsIndexedAccessType().indexType.flags&TypeFlagsSubstitution != 0) {
+		return c.getIndexedAccessType(c.getActualTypeVariable(t.AsIndexedAccessType().objectType), c.getActualTypeVariable(t.AsIndexedAccessType().indexType))
+	}
+	return t
 }

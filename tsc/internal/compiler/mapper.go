@@ -1,5 +1,7 @@
 package compiler
 
+import "github.com/microsoft/typescript-go/internal/core"
+
 // TypeMapper
 
 type TypeMapper struct {
@@ -49,6 +51,16 @@ func appendTypeMapping(mapper *TypeMapper, source *Type, target *Type) *TypeMapp
 		return newSimpleTypeMapper(source, target)
 	}
 	return newMergedTypeMapper(mapper, newSimpleTypeMapper(source, target))
+}
+
+// Maps forward-references to later types parameters to the empty object type.
+// This is used during inference when instantiating type parameter defaults.
+func (c *Checker) newBackreferenceMapper(context *InferenceContext, index int) *TypeMapper {
+	forwardInferences := context.inferences[index:]
+	typeParameters := core.Map(forwardInferences, func(i *InferenceInfo) *Type {
+		return i.typeParameter
+	})
+	return newArrayToSingleTypeMapper(typeParameters, c.unknownType)
 }
 
 // SimpleTypeMapper
@@ -211,4 +223,37 @@ func (m *CompositeTypeMapper) Map(t *Type) *Type {
 		return m.c.instantiateType(t1, m.m2)
 	}
 	return m.m2.Map(t)
+}
+
+// InferenceTypeMapper
+
+type InferenceTypeMapper struct {
+	TypeMapper
+	c      *Checker
+	n      *InferenceContext
+	fixing bool
+}
+
+func (c *Checker) newInferenceTypeMapper(n *InferenceContext, fixing bool) *TypeMapper {
+	m := &InferenceTypeMapper{}
+	m.data = m
+	m.c = c
+	m.n = n
+	return &m.TypeMapper
+}
+
+func (m *InferenceTypeMapper) Map(t *Type) *Type {
+	for i, inference := range m.n.inferences {
+		if t == inference.typeParameter {
+			if m.fixing && !inference.isFixed {
+				// Before we commit to a particular inference (and thus lock out any further inferences),
+				// we infer from any intra-expression inference sites we have collected.
+				m.c.inferFromIntraExpressionSites(m.n)
+				clearCachedInferences(m.n.inferences)
+				inference.isFixed = true
+			}
+			return m.c.getInferredType(m.n, i)
+		}
+	}
+	return t
 }

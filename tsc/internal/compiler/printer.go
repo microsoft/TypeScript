@@ -415,7 +415,7 @@ func (p *Printer) printTypePredicate(pred *TypePredicate) {
 	} else {
 		p.print(pred.parameterName)
 	}
-	if pred.kind == TypePredicateKindThis || pred.kind == TypePredicateKindIdentifier {
+	if pred.t != nil {
 		p.print(" is ")
 		p.printType(pred.t)
 	}
@@ -424,8 +424,10 @@ func (p *Printer) printTypePredicate(pred *TypePredicate) {
 func (p *Printer) printTypeParameter(t *Type) {
 	if t.AsTypeParameter().isThisType {
 		p.print("this")
-	} else {
+	} else if t.symbol != nil {
 		p.print(t.symbol.Name)
+	} else {
+		p.print("???")
 	}
 }
 

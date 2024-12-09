@@ -126,6 +126,13 @@ func (c *Checker) compareTypesIdentical(source *Type, target *Type) Ternary {
 	return TernaryFalse
 }
 
+func (c *Checker) compareTypesAssignable(source *Type, target *Type, reportErrors bool) Ternary {
+	if c.isTypeRelatedTo(source, target, c.assignableRelation) {
+		return TernaryTrue
+	}
+	return TernaryFalse
+}
+
 func (c *Checker) isTypeAssignableTo(source *Type, target *Type) bool {
 	return c.isTypeRelatedTo(source, target, c.assignableRelation)
 }
@@ -3044,7 +3051,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		}
 	case target.flags&TypeFlagsConditional != 0:
-		// !!!
+		return TernaryTrue // !!!
 	case target.flags&TypeFlagsTemplateLiteral != 0:
 		if source.flags&TypeFlagsTemplateLiteral != 0 {
 			if r.relation == r.c.comparableRelation {
@@ -3067,7 +3074,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		}
 	case r.c.isGenericMappedType(target) && r.relation != r.c.identityRelation:
-		// !!!
+		return TernaryTrue // !!!
 	}
 	switch {
 	case source.flags&TypeFlagsTypeVariable != 0:
@@ -3127,7 +3134,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		}
 	case source.flags&TypeFlagsConditional != 0:
-		// !!!
+		return TernaryTrue // !!!
 	case source.flags&TypeFlagsTemplateLiteral != 0 && target.flags&TypeFlagsObject == 0:
 		if target.flags&TypeFlagsTemplateLiteral == 0 {
 			constraint := r.c.getBaseConstraintOfType(source)
@@ -3336,7 +3343,7 @@ func (r *Relater) mappedTypeRelatedTo(source *Type, target *Type, reportErrors b
 	// 		}
 	// 	}
 	// }
-	return TernaryFalse
+	return TernaryTrue
 }
 
 func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ternary {
