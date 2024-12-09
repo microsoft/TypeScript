@@ -77,3 +77,7 @@ func NewDiagnosticChain(chain *Diagnostic, message *diagnostics.Message, args ..
 	}
 	return NewDiagnostic(nil, core.TextRange{}, message, args...)
 }
+
+func NewCompilerDiagnostic(message *diagnostics.Message, args ...any) *Diagnostic {
+	return NewDiagnostic(nil, core.UndefinedTextRange(), message, args...)
+}

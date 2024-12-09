@@ -15,6 +15,10 @@ func NewTextRange(pos int, end int) TextRange {
 	return TextRange{pos: TextPos(pos), end: TextPos(end)}
 }
 
+func UndefinedTextRange() TextRange {
+	return TextRange{pos: TextPos(-1), end: TextPos(-1)}
+}
+
 func (t TextRange) Pos() int {
 	return int(t.pos)
 }
