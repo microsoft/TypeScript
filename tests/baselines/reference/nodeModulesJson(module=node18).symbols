@@ -5,6 +5,10 @@ export function oops(json: string): any;
 >oops : Symbol(oops, Decl(index.d.ts, 0, 0))
 >json : Symbol(json, Decl(index.d.ts, 0, 21))
 
+=== /node_modules/actually-json/index.json ===
+
+{}
+
 === /node_modules/actually-json/typed.d.json.ts ===
 declare const _default: {};
 >_default : Symbol(_default, Decl(typed.d.json.ts, 0, 13))

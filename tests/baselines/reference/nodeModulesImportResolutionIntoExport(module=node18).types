@@ -3,30 +3,30 @@
 === index.ts ===
 // esm format file
 import * as type from "#type";
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 type;
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 === index.mts ===
 // esm format file
 import * as type from "#type";
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 type;
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 === index.cts ===
 // esm format file
 import * as type from "#type";
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 type;
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 

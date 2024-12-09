@@ -8963,6 +8963,7 @@ const _computedOptions = createComputedCompilerOptions({
                         moduleResolution = ModuleResolutionKind.Node10;
                         break;
                     case ModuleKind.Node16:
+                    case ModuleKind.Node18:
                         moduleResolution = ModuleResolutionKind.Node16;
                         break;
                     case ModuleKind.NodeNext:
@@ -9005,6 +9006,7 @@ const _computedOptions = createComputedCompilerOptions({
             }
             switch (_computedOptions.module.computeValue(compilerOptions)) {
                 case ModuleKind.Node16:
+                case ModuleKind.Node18:
                 case ModuleKind.NodeNext:
                 case ModuleKind.Preserve:
                     return true;

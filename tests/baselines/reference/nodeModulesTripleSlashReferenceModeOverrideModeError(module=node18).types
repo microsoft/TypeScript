@@ -7,7 +7,17 @@ foo; // bad resolution mode, which resolves is arbitrary
 >    : ^^^
 
 bar;
->bar : any
->    : ^^^
+>bar : number
+>    : ^^^^^^
 
 export {};
+=== /node_modules/pkg/require.d.ts ===
+export {};
+declare global {
+>global : typeof global
+>       : ^^^^^^^^^^^^^
+
+    var bar: number;
+>bar : number
+>    : ^^^^^^
+}

@@ -1,15 +1,10 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
 index.ts(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-subfolder/index.ts(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
-==== subfolder/index.ts (1 errors) ====
+==== subfolder/index.ts (0 errors) ====
     // cjs format file
     const a = {};
     export = a;
-    ~~~~~~~~~~~
-!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 ==== index.ts (1 errors) ====
     // esm format file
     const a = {};

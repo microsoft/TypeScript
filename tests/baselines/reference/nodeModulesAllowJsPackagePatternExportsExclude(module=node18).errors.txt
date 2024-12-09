@@ -1,36 +1,34 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
-index.cjs(2,23): error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.cjs(3,23): error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.cjs(4,24): error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.js(2,23): error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.js(3,23): error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.js(4,24): error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.mjs(2,23): error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.mjs(3,23): error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.mjs(4,24): error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-node_modules/inner/exclude/index.d.cts(2,22): error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-node_modules/inner/exclude/index.d.cts(3,22): error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-node_modules/inner/exclude/index.d.cts(4,23): error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-node_modules/inner/exclude/index.d.mts(2,22): error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-node_modules/inner/exclude/index.d.mts(3,22): error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-node_modules/inner/exclude/index.d.mts(4,23): error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-node_modules/inner/exclude/index.d.ts(2,22): error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-node_modules/inner/exclude/index.d.ts(3,22): error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-node_modules/inner/exclude/index.d.ts(4,23): error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.cjs(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+index.cjs(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+index.cjs(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+index.js(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+index.js(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+index.js(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+index.mjs(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+index.mjs(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+index.mjs(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.cts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.cts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.cts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.mts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.mts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.mts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.ts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.ts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+node_modules/inner/exclude/index.d.ts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
 ==== index.js (3 errors) ====
     // esm format file
     import * as cjsi from "inner/cjs/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
     import * as mjsi from "inner/mjs/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
     import * as typei from "inner/js/exclude/index";
                            ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
     cjsi;
     mjsi;
     typei;
@@ -38,13 +36,13 @@ node_modules/inner/exclude/index.d.ts(4,23): error TS2792: Cannot find module 'i
     // esm format file
     import * as cjsi from "inner/cjs/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
     import * as mjsi from "inner/mjs/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
     import * as typei from "inner/js/exclude/index";
                            ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
     cjsi;
     mjsi;
     typei;
@@ -52,13 +50,13 @@ node_modules/inner/exclude/index.d.ts(4,23): error TS2792: Cannot find module 'i
     // cjs format file
     import * as cjsi from "inner/cjs/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
     import * as mjsi from "inner/mjs/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
     import * as typei from "inner/js/exclude/index";
                            ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
     cjsi;
     mjsi;
     typei;
@@ -66,13 +64,13 @@ node_modules/inner/exclude/index.d.ts(4,23): error TS2792: Cannot find module 'i
     // cjs format file
     import * as cjs from "inner/cjs/exclude/index";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
     import * as mjs from "inner/mjs/exclude/index";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
     import * as type from "inner/js/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
     export { cjs };
     export { mjs };
     export { type };
@@ -80,13 +78,13 @@ node_modules/inner/exclude/index.d.ts(4,23): error TS2792: Cannot find module 'i
     // esm format file
     import * as cjs from "inner/cjs/exclude/index";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
     import * as mjs from "inner/mjs/exclude/index";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
     import * as type from "inner/js/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
     export { cjs };
     export { mjs };
     export { type };
@@ -94,13 +92,13 @@ node_modules/inner/exclude/index.d.ts(4,23): error TS2792: Cannot find module 'i
     // cjs format file
     import * as cjs from "inner/cjs/exclude/index";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/cjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
     import * as mjs from "inner/mjs/exclude/index";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/mjs/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
     import * as type from "inner/js/exclude/index";
                           ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'inner/js/exclude/index'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
     export { cjs };
     export { mjs };
     export { type };

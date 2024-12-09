@@ -3,152 +3,152 @@
 === index.ts ===
 // esm format file
 import * as cjs from "package/cjs";
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 import * as mjs from "package/mjs";
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 import * as type from "package";
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 cjs;
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 mjs;
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 type;
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 import * as cjsi from "inner/cjs";
->cjsi : any
->     : ^^^
+>cjsi : typeof cjsi
+>     : ^^^^^^^^^^^
 
 import * as mjsi from "inner/mjs";
->mjsi : any
->     : ^^^
+>mjsi : typeof cjsi.cjs.mjs
+>     : ^^^^^^^^^^^^^^^^^^^
 
 import * as typei from "inner";
->typei : any
->      : ^^^
+>typei : typeof typei
+>      : ^^^^^^^^^^^^
 
 cjsi;
->cjsi : any
->     : ^^^
+>cjsi : typeof cjsi
+>     : ^^^^^^^^^^^
 
 mjsi;
->mjsi : any
->     : ^^^
+>mjsi : typeof cjsi.cjs.mjs
+>     : ^^^^^^^^^^^^^^^^^^^
 
 typei;
->typei : any
->      : ^^^
+>typei : typeof typei
+>      : ^^^^^^^^^^^^
 
 === index.mts ===
 // esm format file
 import * as cjs from "package/cjs";
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 import * as mjs from "package/mjs";
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 import * as type from "package";
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 cjs;
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 mjs;
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 type;
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 import * as cjsi from "inner/cjs";
->cjsi : any
->     : ^^^
+>cjsi : typeof cjsi
+>     : ^^^^^^^^^^^
 
 import * as mjsi from "inner/mjs";
->mjsi : any
->     : ^^^
+>mjsi : typeof cjsi.cjs.mjs
+>     : ^^^^^^^^^^^^^^^^^^^
 
 import * as typei from "inner";
->typei : any
->      : ^^^
+>typei : typeof typei
+>      : ^^^^^^^^^^^^
 
 cjsi;
->cjsi : any
->     : ^^^
+>cjsi : typeof cjsi
+>     : ^^^^^^^^^^^
 
 mjsi;
->mjsi : any
->     : ^^^
+>mjsi : typeof cjsi.cjs.mjs
+>     : ^^^^^^^^^^^^^^^^^^^
 
 typei;
->typei : any
->      : ^^^
+>typei : typeof typei
+>      : ^^^^^^^^^^^^
 
 === index.cts ===
 // cjs format file
 import * as cjs from "package/cjs";
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 import * as mjs from "package/mjs";
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 import * as type from "package";
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 cjs;
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 mjs;
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 type;
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 import * as cjsi from "inner/cjs";
->cjsi : any
->     : ^^^
+>cjsi : typeof cjsi
+>     : ^^^^^^^^^^^
 
 import * as mjsi from "inner/mjs";
->mjsi : any
->     : ^^^
+>mjsi : typeof cjsi.mjs
+>     : ^^^^^^^^^^^^^^^
 
 import * as typei from "inner";
->typei : any
->      : ^^^
+>typei : typeof cjsi.mjs.cjs.type
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 cjsi;
->cjsi : any
->     : ^^^
+>cjsi : typeof cjsi
+>     : ^^^^^^^^^^^
 
 mjsi;
->mjsi : any
->     : ^^^
+>mjsi : typeof cjsi.mjs
+>     : ^^^^^^^^^^^^^^^
 
 typei;
->typei : any
->      : ^^^
+>typei : typeof cjsi.mjs.cjs.type
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 === node_modules/inner/index.d.ts ===
 // cjs format file
@@ -157,74 +157,74 @@ import * as cjs from "inner/cjs";
 >    : ^^^
 
 import * as mjs from "inner/mjs";
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 import * as type from "inner";
->type : any
->     : ^^^
+>type : typeof mjs.cjs.cjs.type
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export { cjs };
 >cjs : any
 >    : ^^^
 
 export { mjs };
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 export { type };
->type : any
->     : ^^^
+>type : typeof mjs.cjs.cjs.type
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 === node_modules/inner/index.d.mts ===
 // esm format file
 import * as cjs from "inner/cjs";
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 import * as mjs from "inner/mjs";
->mjs : any
->    : ^^^
+>mjs : typeof cjs.cjs.mjs
+>    : ^^^^^^^^^^^^^^^^^^
 
 import * as type from "inner";
->type : any
->     : ^^^
+>type : typeof cjs.cjs.mjs.type
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export { cjs };
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 export { mjs };
->mjs : any
->    : ^^^
+>mjs : typeof cjs.cjs.mjs
+>    : ^^^^^^^^^^^^^^^^^^
 
 export { type };
->type : any
->     : ^^^
+>type : typeof cjs.cjs.mjs.type
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 === node_modules/inner/index.d.cts ===
 // cjs format file
 import * as cjs from "inner/cjs";
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 import * as mjs from "inner/mjs";
->mjs : any
->    : ^^^
+>mjs : typeof cjs.mjs
+>    : ^^^^^^^^^^^^^^
 
 import * as type from "inner";
->type : any
->     : ^^^
+>type : typeof cjs.mjs.cjs.type
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export { cjs };
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 export { mjs };
->mjs : any
->    : ^^^
+>mjs : typeof cjs.mjs
+>    : ^^^^^^^^^^^^^^
 
 export { type };
->type : any
->     : ^^^
+>type : typeof cjs.mjs.cjs.type
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,22 +1,10 @@
-error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
-error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
-index.ts(1,8): error TS1259: Module '"package"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
-otherc.cts(1,8): error TS1259: Module '"package"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
 otherc.cts(1,35): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 
 
-!!! error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
-==== index.ts (1 errors) ====
+==== index.ts (0 errors) ====
     import json from "./package.json" with { type: "json" };
-           ~~~~
-!!! error TS1259: Module '"package"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
-!!! related TS2594 package.json:1:1: This module is declared with 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
-==== otherc.cts (2 errors) ====
+==== otherc.cts (1 errors) ====
     import json from "./package.json" with { type: "json" }; // should error, cjs mode imports don't support attributes
-           ~~~~
-!!! error TS1259: Module '"package"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
-!!! related TS2594 package.json:1:1: This module is declared with 'export =', and can only be used with a default import when using the 'allowSyntheticDefaultImports' flag.
                                       ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
     const json2 = import("./package.json", { with: { type: "json" } }); // should be fine

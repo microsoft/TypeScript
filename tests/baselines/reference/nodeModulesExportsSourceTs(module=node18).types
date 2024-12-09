@@ -7,28 +7,28 @@ import { Thing } from "inner/other";
 >      : ^^^
 
 export const a = (await import("inner")).x();
->a : any
->  : ^^^
->(await import("inner")).x() : any
->                            : ^^^
->(await import("inner")).x : any
->                          : ^^^
->(await import("inner")) : any
->                        : ^^^
->await import("inner") : any
->                      : ^^^
->import("inner") : Promise<any>
->                : ^^^^^^^^^^^^
+>a : import("node_modules/inner/other").Thing
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(await import("inner")).x() : import("node_modules/inner/other").Thing
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(await import("inner")).x : () => import("node_modules/inner/other").Thing
+>                          : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
+>(await import("inner")) : typeof import("node_modules/inner/index")
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await import("inner") : typeof import("node_modules/inner/index")
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("inner") : Promise<typeof import("node_modules/inner/index")>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"inner" : "inner"
 >        : ^^^^^^^
->x : any
->  : ^^^
+>x : () => import("node_modules/inner/other").Thing
+>  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
 
 import {a as a2} from "package";
->a : any
->  : ^^^
->a2 : any
->   : ^^^
+>a : import("node_modules/inner/other").Thing
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a2 : import("node_modules/inner/other").Thing
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === node_modules/inner/index.ts ===
 // esm format file

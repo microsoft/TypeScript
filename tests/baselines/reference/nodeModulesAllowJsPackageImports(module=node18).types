@@ -3,78 +3,78 @@
 === index.js ===
 // esm format file
 import * as cjs from "#cjs";
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 import * as mjs from "#mjs";
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 import * as type from "#type";
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 cjs;
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 mjs;
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 type;
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 === index.mjs ===
 // esm format file
 import * as cjs from "#cjs";
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 import * as mjs from "#mjs";
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 import * as type from "#type";
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 cjs;
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 mjs;
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 type;
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 === index.cjs ===
 // esm format file
 import * as cjs from "#cjs";
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 import * as mjs from "#mjs";
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 import * as type from "#type";
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 
 cjs;
->cjs : any
->    : ^^^
+>cjs : typeof cjs
+>    : ^^^^^^^^^^
 
 mjs;
->mjs : any
->    : ^^^
+>mjs : typeof mjs
+>    : ^^^^^^^^^^
 
 type;
->type : any
->     : ^^^
+>type : typeof type
+>     : ^^^^^^^^^^^
 

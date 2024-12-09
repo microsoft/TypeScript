@@ -2,15 +2,15 @@
 
 === index.ts ===
 import json from "./package.json" assert { type: "json" };
->json : any
->     : ^^^
+>json : { name: string; private: boolean; type: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : any
 >     : ^^^
 
 === otherc.cts ===
 import json from "./package.json" assert { type: "json" }; // should error, cjs mode imports don't support assertions
->json : any
->     : ^^^
+>json : { name: string; private: boolean; type: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : any
 >     : ^^^
 

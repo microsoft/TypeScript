@@ -11,7 +11,9 @@ import { ImportInterface } from "pkg" with { "resolution-mode": "import" };
 
 // not exclusively type-only
 import {type RequireInterface as Req, RequireInterface as Req2} from "pkg" with { "resolution-mode": "require" };
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
 >Req : Symbol(Req, Decl(index.ts, 5, 8))
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
 >Req2 : Symbol(Req2, Decl(index.ts, 5, 37))
 
 export interface LocalInterface extends RequireInterface, ImportInterface {}
@@ -21,4 +23,8 @@ export interface LocalInterface extends RequireInterface, ImportInterface {}
 
 
 
+
+=== /node_modules/pkg/require.d.ts ===
+export interface RequireInterface {}
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
 

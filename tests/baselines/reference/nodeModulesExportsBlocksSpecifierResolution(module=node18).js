@@ -27,11 +27,4 @@ export const x: () => Thing;
 }
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = (await import("inner")).x();
-
-
-//// [index.d.ts]
-export declare const a: any;
+export const a = (await import("inner")).x();

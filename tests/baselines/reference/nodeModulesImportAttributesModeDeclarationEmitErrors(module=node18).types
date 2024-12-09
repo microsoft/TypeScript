@@ -3,8 +3,8 @@
 === /index.ts ===
 // incorrect mode
 import type { RequireInterface } from "pkg" with { "resolution-mode": "foobar" };
->RequireInterface : any
->                 : ^^^
+>RequireInterface : RequireInterface
+>                 : ^^^^^^^^^^^^^^^^
 
 // not type-only
 import { ImportInterface } from "pkg" with { "resolution-mode": "import" };
@@ -27,3 +27,6 @@ export interface LocalInterface extends RequireInterface, ImportInterface {}
 
 
 
+=== /node_modules/pkg/require.d.ts ===
+
+export interface RequireInterface {}

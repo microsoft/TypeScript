@@ -27,27 +27,15 @@ export const x: () => Thing = null as any;
     "exports": "./index.ts"
 }
 
-//// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = (await import("inner")).x();
 //// [other.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = null;
+export const x = null;
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
 // esm format file
-var other_js_1 = require("./other.js");
-Object.defineProperty(exports, "x", { enumerable: true, get: function () { return other_js_1.x; } });
+export { x } from "./other.js";
+//// [index.js]
+export const a = (await import("inner")).x();
 
 
-//// [index.d.ts]
-export declare const a: any;
 //// [other.d.ts]
 export interface Thing {
 }

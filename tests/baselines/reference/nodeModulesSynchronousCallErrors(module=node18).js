@@ -34,14 +34,11 @@ export async function h() {
 }
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.h = h;
-const index_js_1 = require("./subfolder/index.js");
-async function h() {
+import { f } from "./subfolder/index.js";
+export async function h() {
     const mod3 = await import("./index.js");
     const mod4 = await import("./subfolder/index.js");
-    (0, index_js_1.f)();
+    f();
 }
 //// [index.js]
 "use strict";

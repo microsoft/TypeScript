@@ -1,27 +1,19 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
-index.cts(2,23): error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.mts(2,23): error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.ts(2,23): error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.cts(2,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
-==== index.ts (1 errors) ====
+==== index.ts (0 errors) ====
     // esm format file
     import * as self from "package";
-                          ~~~~~~~~~
-!!! error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     self;
-==== index.mts (1 errors) ====
+==== index.mts (0 errors) ====
     // esm format file
     import * as self from "package";
-                          ~~~~~~~~~
-!!! error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     self;
 ==== index.cts (1 errors) ====
     // esm format file
     import * as self from "package";
                           ~~~~~~~~~
-!!! error TS2792: Cannot find module 'package'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
     self;
 ==== package.json (0 errors) ====
     {

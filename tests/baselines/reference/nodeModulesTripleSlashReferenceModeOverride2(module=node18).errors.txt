@@ -1,17 +1,9 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
-/index.ts(1,23): error TS2688: Cannot find type definition file for 'pkg'.
-/index.ts(2,1): error TS2304: Cannot find name 'foo'.
 /index.ts(3,1): error TS2304: Cannot find name 'bar'.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
-==== /index.ts (3 errors) ====
+==== /index.ts (1 errors) ====
     /// <reference types="pkg" />
-                          ~~~
-!!! error TS2688: Cannot find type definition file for 'pkg'.
     foo; // foo should resolve while bar should not, since index.js is esm
-    ~~~
-!!! error TS2304: Cannot find name 'foo'.
     bar;
     ~~~
 !!! error TS2304: Cannot find name 'bar'.

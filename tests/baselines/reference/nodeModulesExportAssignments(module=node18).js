@@ -25,10 +25,9 @@ export = a;
 const a = {};
 module.exports = a;
 //// [index.js]
-"use strict";
 // esm format file
 const a = {};
-module.exports = a;
+export {};
 
 
 //// [index.d.ts]

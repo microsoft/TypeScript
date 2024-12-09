@@ -1,22 +1,16 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
 error TS6504: File '/node_modules/exports-and-types-versions/dist/foo.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
   The file is in the program because:
     Root file specified for compilation
-/main.cts(1,16): error TS2792: Cannot find module 'exports-and-types-versions/foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-/main.cts(2,16): error TS2792: Cannot find module 'exports-and-types-versions/nope'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-/main.cts(3,16): error TS2792: Cannot find module 'exports-and-types-versions/yep'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-/main.cts(4,16): error TS2792: Cannot find module 'exports-and-types-versions/versioned-yep'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-/main.cts(5,16): error TS2792: Cannot find module 'exports-and-types-versions/versioned-nah'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-/main.cts(6,16): error TS2792: Cannot find module 'just-types-versions/foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-/main.mts(1,16): error TS2792: Cannot find module 'exports-and-types-versions/foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-/main.mts(2,16): error TS2792: Cannot find module 'exports-and-types-versions/nope'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-/main.mts(3,16): error TS2792: Cannot find module 'exports-and-types-versions/yep'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-/main.mts(4,16): error TS2792: Cannot find module 'exports-and-types-versions/versioned-yep'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-/main.mts(5,16): error TS2792: Cannot find module 'exports-and-types-versions/versioned-nah'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-/main.mts(6,16): error TS2792: Cannot find module 'just-types-versions/foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+/main.cts(1,16): error TS7016: Could not find a declaration file for module 'exports-and-types-versions/foo'. '/node_modules/exports-and-types-versions/dist/foo.js' implicitly has an 'any' type.
+  If the 'exports-and-types-versions' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module 'exports-and-types-versions/foo';`
+/main.cts(2,16): error TS2307: Cannot find module 'exports-and-types-versions/nope' or its corresponding type declarations.
+/main.cts(5,16): error TS2307: Cannot find module 'exports-and-types-versions/versioned-nah' or its corresponding type declarations.
+/main.mts(1,16): error TS7016: Could not find a declaration file for module 'exports-and-types-versions/foo'. '/node_modules/exports-and-types-versions/dist/foo.js' implicitly has an 'any' type.
+  There are types at '/node_modules/exports-and-types-versions/types/foo.d.ts', but this result could not be resolved when respecting package.json "exports". The 'exports-and-types-versions' library may need to update its package.json or typings.
+/main.mts(2,16): error TS2307: Cannot find module 'exports-and-types-versions/nope' or its corresponding type declarations.
+/main.mts(5,16): error TS2307: Cannot find module 'exports-and-types-versions/versioned-nah' or its corresponding type declarations.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
 !!! error TS6504: File '/node_modules/exports-and-types-versions/dist/foo.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 !!! error TS6504:   The file is in the program because:
 !!! error TS6504:     Root file specified for compilation
@@ -66,43 +60,33 @@ error TS6504: File '/node_modules/exports-and-types-versions/dist/foo.js' is a J
 ==== /node_modules/just-types-versions/types/foo.d.ts (0 errors) ====
     export {};
     
-==== /main.cts (6 errors) ====
+==== /main.cts (3 errors) ====
     import {} from "exports-and-types-versions/foo";
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'exports-and-types-versions/foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS7016: Could not find a declaration file for module 'exports-and-types-versions/foo'. '/node_modules/exports-and-types-versions/dist/foo.js' implicitly has an 'any' type.
+!!! error TS7016:   If the 'exports-and-types-versions' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module 'exports-and-types-versions/foo';`
     import {} from "exports-and-types-versions/nope";
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'exports-and-types-versions/nope'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'exports-and-types-versions/nope' or its corresponding type declarations.
     import {} from "exports-and-types-versions/yep";
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'exports-and-types-versions/yep'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     import {} from "exports-and-types-versions/versioned-yep";
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'exports-and-types-versions/versioned-yep'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     import {} from "exports-and-types-versions/versioned-nah";
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'exports-and-types-versions/versioned-nah'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'exports-and-types-versions/versioned-nah' or its corresponding type declarations.
     import {} from "just-types-versions/foo";
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'just-types-versions/foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
-==== /main.mts (6 errors) ====
+==== /main.mts (3 errors) ====
     import {} from "exports-and-types-versions/foo";
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'exports-and-types-versions/foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS7016: Could not find a declaration file for module 'exports-and-types-versions/foo'. '/node_modules/exports-and-types-versions/dist/foo.js' implicitly has an 'any' type.
+!!! error TS7016:   There are types at '/node_modules/exports-and-types-versions/types/foo.d.ts', but this result could not be resolved when respecting package.json "exports". The 'exports-and-types-versions' library may need to update its package.json or typings.
     import {} from "exports-and-types-versions/nope";
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'exports-and-types-versions/nope'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'exports-and-types-versions/nope' or its corresponding type declarations.
     import {} from "exports-and-types-versions/yep";
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'exports-and-types-versions/yep'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     import {} from "exports-and-types-versions/versioned-yep";
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'exports-and-types-versions/versioned-yep'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     import {} from "exports-and-types-versions/versioned-nah";
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'exports-and-types-versions/versioned-nah'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'exports-and-types-versions/versioned-nah' or its corresponding type declarations.
     import {} from "just-types-versions/foo";
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'just-types-versions/foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     

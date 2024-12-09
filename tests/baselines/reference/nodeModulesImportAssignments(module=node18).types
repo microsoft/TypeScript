@@ -8,7 +8,6 @@ import fs = require("fs");
 
 fs.readFile;
 >fs.readFile : any
->            : ^^^
 >fs : any
 >   : ^^^
 >readFile : any
@@ -26,7 +25,6 @@ import fs = require("fs");
 
 fs.readFile;
 >fs.readFile : any
->            : ^^^
 >fs : any
 >   : ^^^
 >readFile : any
@@ -40,11 +38,9 @@ export import fs2 = require("fs");
 // esm format file
 const __require = null;
 >__require : any
->          : ^^^
 
 const _createRequire = null;
 >_createRequire : any
->               : ^^^
 
 import fs = require("fs");
 >fs : any
@@ -52,7 +48,6 @@ import fs = require("fs");
 
 fs.readFile;
 >fs.readFile : any
->            : ^^^
 >fs : any
 >   : ^^^
 >readFile : any
@@ -65,5 +60,4 @@ export import fs2 = require("fs");
 === types.d.ts ===
 declare module "fs";
 >"fs" : any
->     : ^^^
 

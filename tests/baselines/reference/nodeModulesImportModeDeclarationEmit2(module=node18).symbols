@@ -16,6 +16,7 @@ import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "re
 >Req : Symbol(Req, Decl(index.ts, 5, 8))
 
 import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
 >Imp : Symbol(Imp, Decl(index.ts, 6, 8))
 
 export interface Loc extends Req, Imp {}
@@ -28,4 +29,12 @@ export type { RequireInterface } from "pkg" assert { "resolution-mode": "require
 
 export type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
 >ImportInterface : Symbol(ImportInterface, Decl(index.ts, 10, 13))
+
+=== /node_modules/pkg/import.d.ts ===
+export interface ImportInterface {}
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+
+=== /node_modules/pkg/require.d.ts ===
+export interface RequireInterface {}
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
 

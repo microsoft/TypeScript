@@ -11,5 +11,7 @@ import foo from "./foo.cjs"
 >foo : Symbol(foo, Decl(bar.ts, 0, 6))
 
 foo.foo;
+>foo.foo : Symbol(foo.foo, Decl(foo.cjs, 0, 0))
 >foo : Symbol(foo, Decl(bar.ts, 0, 6))
+>foo : Symbol(foo.foo, Decl(foo.cjs, 0, 0))
 

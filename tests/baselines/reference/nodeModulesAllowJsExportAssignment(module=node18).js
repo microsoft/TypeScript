@@ -39,15 +39,12 @@ module.exports = a;
 const a = {};
 module.exports = a;
 //// [index.js]
-"use strict";
 // esm format file
 const a = {};
-module.exports = a;
+export {};
 //// [file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
-require("fs");
+import "fs";
 const a = {};
 module.exports = a;
 

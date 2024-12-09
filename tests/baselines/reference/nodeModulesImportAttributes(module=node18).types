@@ -2,15 +2,15 @@
 
 === index.ts ===
 import json from "./package.json" with { type: "json" };
->json : any
->     : ^^^
+>json : { name: string; private: boolean; type: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : any
 >     : ^^^
 
 === otherc.cts ===
 import json from "./package.json" with { type: "json" }; // should error, cjs mode imports don't support attributes
->json : any
->     : ^^^
+>json : { name: string; private: boolean; type: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : any
 >     : ^^^
 

@@ -1,27 +1,25 @@
-error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
-index.cts(2,23): error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.mts(2,23): error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-index.ts(2,23): error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+index.cts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
+index.mts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
+index.ts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
 
 
-!!! error TS5109: Option 'moduleResolution' must be set to 'Node18' (or left unspecified) when option 'module' is set to 'Node18'.
 ==== index.ts (1 errors) ====
     // esm format file
     import * as type from "#type";
                           ~~~~~~~
-!!! error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
     type;
 ==== index.mts (1 errors) ====
     // esm format file
     import * as type from "#type";
                           ~~~~~~~
-!!! error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
     type;
 ==== index.cts (1 errors) ====
     // esm format file
     import * as type from "#type";
                           ~~~~~~~
-!!! error TS2792: Cannot find module '#type'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module '#type' or its corresponding type declarations.
     type;
 ==== package.json (0 errors) ====
     {

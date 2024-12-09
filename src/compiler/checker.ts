@@ -39209,6 +39209,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     switch (moduleKind) {
                         case ModuleKind.Node16:
+                        case ModuleKind.Node18:
                         case ModuleKind.NodeNext:
                             if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) {
                                 span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
@@ -52065,6 +52066,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         switch (moduleKind) {
                             case ModuleKind.Node16:
+                            case ModuleKind.Node18:
                             case ModuleKind.NodeNext:
                                 if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) {
                                     diagnostics.add(

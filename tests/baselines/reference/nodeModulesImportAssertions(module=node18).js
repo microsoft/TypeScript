@@ -13,8 +13,7 @@ const json2 = import("./package.json", { assert: { type: "json" } }); // should 
 }
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [otherc.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

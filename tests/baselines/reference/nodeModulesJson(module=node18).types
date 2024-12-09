@@ -7,6 +7,11 @@ export function oops(json: string): any;
 >json : string
 >     : ^^^^^^
 
+=== /node_modules/actually-json/index.json ===
+{}
+>{} : {}
+>   : ^^
+
 === /node_modules/actually-json/typed.d.json.ts ===
 declare const _default: {};
 >_default : {}
@@ -30,16 +35,16 @@ export default _default;
 
 === /main.mts ===
 import { oops } from "not.json"; // Ok
->oops : any
->     : ^^^
+>oops : (json: string) => any
+>     : ^    ^^      ^^^^^   
 
 import moreOops from "actually-json"; // Error in nodenext
->moreOops : any
->         : ^^^
+>moreOops : {}
+>         : ^^
 
 import typed from "actually-json/typed"; // Error in nodenext
->typed : any
->      : ^^^
+>typed : typeof typed
+>      : ^^^^^^^^^^^^
 
 import config from "./config.json" with { type: "json" }; // Ok
 >config : { version: number; }
@@ -89,14 +94,14 @@ config3.default; // Ok
 
 === /loosey.cts ===
 import config from "./config.json" with { type: "json" }; // Error
->config : any
->       : ^^^
+>config : { version: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^
 >type : any
 >     : ^^^
 
 import config2 from "./config.json"; // Ok
->config2 : any
->        : ^^^
+>config2 : { version: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^
 
 import { version } from "./config.json"; // Ok
 >version : number

@@ -33,8 +33,7 @@ export type { ImportInterface } from "pkg" assert { "resolution-mode": "import" 
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [index.d.ts]
