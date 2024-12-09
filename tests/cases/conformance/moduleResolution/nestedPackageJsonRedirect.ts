@@ -1,4 +1,4 @@
-// @moduleResolution: node16,node18,nodenext,bundler
+// @moduleResolution: node16,nodenext,bundler
 // @noEmit: true
 // @noTypesAndSymbols: true
 // @traceResolution: true
