@@ -17,6 +17,7 @@ import {
     BindingOrAssignmentPattern,
     BitwiseOperator,
     BitwiseOperatorOrHigher,
+    changeExtension,
     CharacterCodes,
     CommaListExpression,
     compareStringsCaseSensitive,
@@ -64,7 +65,9 @@ import {
     getNamespaceDeclarationNode,
     getOrCreateEmitNode,
     getOriginalNode,
+    getOutputExtension,
     getParseTreeNode,
+    getRelativePathFromFile,
     getSourceTextOfNodeFromSourceFile,
     HasIllegalDecorators,
     HasIllegalModifiers,
@@ -129,6 +132,7 @@ import {
     ModifiersArray,
     ModuleKind,
     ModuleName,
+    ModuleResolutionHost,
     MultiplicativeOperator,
     MultiplicativeOperatorOrHigher,
     Mutable,
@@ -155,6 +159,7 @@ import {
     ReadonlyKeyword,
     RelationalOperator,
     RelationalOperatorOrHigher,
+    resolveModuleName,
     SetAccessorDeclaration,
     setOriginalNode,
     setParent,
@@ -815,9 +820,25 @@ export function getExternalModuleNameLiteral(factory: NodeFactory, importNode: I
     if (moduleName && isStringLiteral(moduleName)) {
         return tryGetModuleNameFromDeclaration(importNode, host, factory, resolver, compilerOptions)
             || tryRenameExternalModule(factory, moduleName, sourceFile)
+            || tryRenameInternalModule(factory, moduleName, sourceFile, host, compilerOptions)
             || factory.cloneNode(moduleName);
     }
 
+    return undefined;
+}
+
+//import { resolveModuleName } from "../moduleNameResolver"; // Import the resolveModuleName function
+function tryRenameInternalModule(factory: NodeFactory, moduleName: LiteralExpression, sourceFile: SourceFile, host: EmitHost, options: CompilerOptions) {
+    if (options.rewriteImports) {
+        const cache = host.getModuleResolutionCache?.();
+        const resolvedModule = resolveModuleName(moduleName.text, sourceFile.fileName, options, host as ModuleResolutionHost, cache);
+        if (resolvedModule.resolvedModule && !resolvedModule.resolvedModule.resolvedFileName.includes('/node_modules/')) {
+            const relative = getRelativePathFromFile(sourceFile.fileName, resolvedModule.resolvedModule.resolvedFileName, host.getCanonicalFileName);
+            const updated = changeExtension(relative, getOutputExtension(relative, options));
+
+            return factory.createStringLiteral(updated);
+        }
+    }
     return undefined;
 }
 

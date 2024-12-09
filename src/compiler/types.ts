@@ -7472,6 +7472,7 @@ export interface CompilerOptions {
     resolvePackageJsonExports?: boolean;
     resolvePackageJsonImports?: boolean;
     rewriteRelativeImportExtensions?: boolean;
+    rewriteImports?: boolean;
     rootDir?: string;
     rootDirs?: string[];
     skipLibCheck?: boolean;

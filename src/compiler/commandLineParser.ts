@@ -1189,6 +1189,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: false,
     },
     {
+        name: "rewriteImports",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Rewrite_import_paths_in_output_files,
+        defaultValueDescription: false,
+    },
+    {
         name: "resolvePackageJsonExports",
         type: "boolean",
         affectsModuleResolution: true,
