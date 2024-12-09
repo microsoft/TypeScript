@@ -27281,6 +27281,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
+    // The flag `considerNonUniformPrimitivePropDiscriminant`, when enabled, introduces a new criterion for a property to be considered discriminant:
+    // 1 The property must be non-uniform
+    // 2 The property must include at least one primitive type as a possible type
     function isDiscriminantProperty(type: Type | undefined, name: __String, considerNonUniformPrimitivePropDiscriminant: boolean = true) {
         if (type && type.flags & TypeFlags.Union) {
             const prop = getUnionOrIntersectionProperty(type as UnionType, name);
