@@ -80,7 +80,7 @@
         "playwright": "^1.47.2",
         "source-map-support": "^0.5.21",
         "tslib": "^2.7.0",
-        "typescript": "npm:@typescript-deploys/pr-build@5.8.0-pr-60039-24",
+        "typescript": "^5.6.2",
         "typescript-eslint": "^8.8.0",
         "which": "^3.0.1"
     },
