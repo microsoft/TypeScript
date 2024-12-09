@@ -22340,11 +22340,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function getTypeOfPropertyInTypes(types: Type[], name: __String) {
+        function getTypeOfPropertyInTargetTypes(types: Type[], name: __String) {
             const appendPropType = (propTypes: Type[] | undefined, type: Type) => {
                 type = getApparentType(type);
                 const prop = type.flags & TypeFlags.UnionOrIntersection ? getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name) : getPropertyOfObjectType(type, name);
-                const propType = prop && getTypeOfSymbol(prop) || getApplicableIndexInfoForName(type, name)?.type || undefinedType;
+                const propType = prop && getNonMissingTypeOfSymbol(prop) || getApplicableIndexInfoForName(type, name)?.type || undefinedType;
                 return append(propTypes, propType);
             };
             return getUnionType(reduceLeft(types, appendPropType, /*initial*/ undefined) || emptyArray);
@@ -22421,7 +22421,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         return true;
                     }
-                    if (checkTypes && !isRelatedTo(getTypeOfSymbol(prop), getTypeOfPropertyInTypes(checkTypes, prop.escapedName), RecursionFlags.Both, reportErrors)) {
+                    if (checkTypes && !isRelatedTo(getTypeOfSymbol(prop), getTypeOfPropertyInTargetTypes(checkTypes, prop.escapedName), RecursionFlags.Both, reportErrors)) {
                         if (reportErrors) {
                             reportIncompatibleError(Diagnostics.Types_of_property_0_are_incompatible, symbolToString(prop));
                         }
@@ -23646,8 +23646,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function isPropertySymbolTypeRelated(sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
-            const targetIsOptional = strictNullChecks && !!(getCheckFlags(targetProp) & CheckFlags.Partial);
-            const effectiveTarget = addOptionality(getNonMissingTypeOfSymbol(targetProp), /*isProperty*/ false, targetIsOptional);
+            const effectiveTarget = getNonMissingTypeOfSymbol(targetProp);
             const effectiveSource = getTypeOfSourceProperty(sourceProp);
             return isRelatedTo(effectiveSource, effectiveTarget, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
         }
