@@ -1,4 +1,8 @@
 // @strict: true
+// @exactOptionalPropertyTypes: true
+// @noEmit: true
+
+export {}
 
 interface State<Type> {
   state: Type;
@@ -74,3 +78,88 @@ if(typeof obj2.prop === "string") {
 } else {
   Math.exp(obj2.other);
 }
+
+
+interface ILocalizedString {
+    original: string;
+    value: string;
+}
+
+type Opt = ({
+    label: ILocalizedString;
+    alias?: string;
+} | {
+    label: string;
+    alias: string;
+})
+
+declare const opt: Opt
+
+if (typeof opt.label === 'string') {
+    opt
+    // ^?
+    const l = opt.label;
+    const a = opt.alias ?? opt.label;
+} else {
+    opt
+    // ^?
+    const l = opt.label;
+    const a = opt.alias ?? opt.label.original;
+}
+
+
+type PackageDetails = {
+  docsLink?: string;
+  docsLinkWarning?: string;
+  title?: string;
+  description?: string;
+  repo?: string;
+  license?: string;
+};
+
+type PackageDetailsSuccess = PackageDetails & {
+  docsLink: string;
+};
+
+interface FilePathAndName {
+  path: string;
+  name: string;
+}
+
+interface PackageFilePathAndName extends FilePathAndName {
+  packageRegistry: string; // e.g. npm, pypi
+}
+
+type ParsedPackageInfo = {
+  name: string;
+  packageFile: PackageFilePathAndName;
+  language: string;
+  version: string;
+};
+
+
+type PackageDocsResult = {
+    packageInfo: ParsedPackageInfo;
+} & ({
+    error: string;
+    details?: never;
+} | {
+    details: PackageDetailsSuccess;
+    error?: never;
+})
+
+declare const filtered: PackageDocsResult[];
+
+filtered.sort((a, b) => {
+  const rank = (result: PackageDocsResult) => {
+    result.details
+    if (result.error) {
+      return 2;
+    } else if (result.details?.docsLinkWarning) {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
+  return rank(a) - rank(b);
+});
