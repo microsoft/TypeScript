@@ -26,17 +26,18 @@ var printTypes = false
 var pretty = true
 var pprofDir = ""
 
-func printDiagnostic(d *ast.Diagnostic, level int) {
+func printDiagnostic(d *ast.Diagnostic, level int, comparePathOptions tspath.ComparePathsOptions) {
 	file := d.File()
 	if file != nil {
+		p := tspath.ConvertToRelativePath(file.FileName(), comparePathOptions)
 		line, character := scanner.GetLineAndCharacterOfPosition(file, d.Loc().Pos())
-		fmt.Printf("%v%v(%v,%v): error TS%v: %v\n", strings.Repeat(" ", level*2), file.FileName(), line+1, character+1, d.Code(), d.Message())
+		fmt.Printf("%v%v(%v,%v): error TS%v: %v\n", strings.Repeat(" ", level*2), p, line+1, character+1, d.Code(), d.Message())
 	} else {
 		fmt.Printf("%verror TS%v: %v\n", strings.Repeat(" ", level*2), d.Code(), d.Message())
 	}
 	printMessageChain(d.MessageChain(), level+1)
 	for _, r := range d.RelatedInformation() {
-		printDiagnostic(r, level+1)
+		printDiagnostic(r, level+1, comparePathOptions)
 	}
 }
 
@@ -102,20 +103,21 @@ func main() {
 	runtime.ReadMemStats(&memStats)
 
 	if !quiet && len(diagnostics) != 0 {
+		comparePathOptions := tspath.ComparePathsOptions{
+			CurrentDirectory:          currentDirectory,
+			UseCaseSensitiveFileNames: useCaseSensitiveFileNames,
+		}
 		if pretty {
 			formatOpts := ts.DiagnosticsFormattingOptions{
-				NewLine: "\n",
-				ComparePathsOptions: tspath.ComparePathsOptions{
-					CurrentDirectory:          currentDirectory,
-					UseCaseSensitiveFileNames: useCaseSensitiveFileNames,
-				},
+				NewLine:             "\n",
+				ComparePathsOptions: comparePathOptions,
 			}
 			ts.FormatDiagnosticsWithColorAndContext(os.Stdout, diagnostics, &formatOpts)
 			fmt.Fprintln(os.Stdout)
 			ts.WriteErrorSummaryText(os.Stdout, diagnostics, &formatOpts)
 		} else {
 			for _, diagnostic := range diagnostics {
-				printDiagnostic(diagnostic, 0)
+				printDiagnostic(diagnostic, 0, comparePathOptions)
 			}
 		}
 	}
