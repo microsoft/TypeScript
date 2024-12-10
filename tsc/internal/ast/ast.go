@@ -1923,7 +1923,7 @@ func (f *NodeFactory) NewBindingElement(dotDotDotToken *TokenNode, propertyName 
 }
 
 func (node *BindingElement) ForEachChild(v Visitor) bool {
-	return visit(v, node.PropertyName) || visit(v, node.DotDotDotToken) || visit(v, node.name) || visit(v, node.Initializer)
+	return visit(v, node.DotDotDotToken) || visit(v, node.PropertyName) || visit(v, node.name) || visit(v, node.Initializer)
 }
 
 func (node *BindingElement) Name() *DeclarationName {
