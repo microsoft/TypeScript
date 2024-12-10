@@ -8,7 +8,7 @@ import { boxedBox } from "./boxedBox";
 export const _ = boxedBox;
 >_ : import("box").Box<{ boxed: import("box").Box<number>; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^^^^
->boxedBox : import("box").Box<{ boxed: import("box").Box<number>; }>
+>boxedBox : import("box").Box<{ boxed: import('box').Box<number>; }>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^^^^
 
 // At index 83

@@ -214,8 +214,8 @@ const fooConst54374 = {
 
 
 //// [constAssertions.d.ts]
-declare let v1: "abc";
-declare let v2: "abc";
+declare let v1: 'abc';
+declare let v2: `abc`;
 declare let v3: 10;
 declare let v4: -10;
 declare let v5: 10;
@@ -223,8 +223,8 @@ declare let v6: 10n;
 declare let v7: -10n;
 declare let v8: true;
 declare let v9: false;
-declare let c1: "abc";
-declare let c2: "abc";
+declare let c1: 'abc';
+declare let c2: `abc`;
 declare let c3: 10;
 declare let c4: -10;
 declare let c5: 10;
@@ -301,7 +301,7 @@ declare let x1: {
     };
 };
 declare let q1: 10;
-declare let q2: "abc";
+declare let q2: 'abc';
 declare let q3: true;
 declare let q4: readonly [1, 2, 3];
 declare let q5: {
@@ -312,8 +312,8 @@ declare function id<T>(x: T): T;
 declare let e1: "abc";
 declare let e2: 0 | 1;
 declare let e3: 1;
-declare let t1: "foo";
-declare let t2: "bar";
+declare let t1: 'foo';
+declare let t2: 'bar';
 declare let t3: "foo-bar";
 declare let t4: "(foo)-(bar)";
 declare function ff1(x: 'foo' | 'bar', y: 1 | 2): "foo-1" | "foo-2" | "bar-1" | "bar-2";

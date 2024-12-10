@@ -20024,7 +20024,7 @@ type ChildrenOf<T extends BigUnion> = T['children'][number];
 >           : ^^^^^^^^^^^^^
 
 export function makeThing<T extends BigUnion['name']>(
->makeThing : <T extends BigUnion["name"]>(name: T, children?: ChildrenOf<WithName<T>>[]) => void
+>makeThing : <T extends BigUnion['name']>(name: T, children?: ChildrenOf<WithName<T>>[]) => void
 >          : ^ ^^^^^^^^^                ^^    ^^ ^^        ^^^                         ^^^^^^^^^
 
     name: T,

@@ -878,7 +878,7 @@ f50((kind, data) => {
 });
 
 const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) => {
->f51 : (...args: ["A", number] | ["B", string]) => void
+>f51 : (...args: ['A', number] | ['B', string]) => void
 >    : ^^^^    ^^                             ^^^^^    
 >args : ["A", number] | ["B", string]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -928,7 +928,7 @@ const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) =>
 };
 
 const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
->f52 : (...args: ["A", number] | ["B"]) => void
+>f52 : (...args: ['A', number] | ['B']) => void
 >    : ^^^^    ^^                     ^^^^^    
 >args : ["A", number] | ["B"]
 >     : ^^^^^^^^^^^^^^^^^^^^^

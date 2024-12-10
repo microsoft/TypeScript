@@ -41,7 +41,7 @@ import {e} from "../projC";
 export const d = {e};
 >d : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
 >  : ^^^^^^^^^^                                           ^^^^^^
->{e} : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
+>{e} : { e: { f: (foo: import('projA/index').Foo) => boolean; }; }
 >    : ^^^^^^^^^^                                           ^^^^^^
 >e : { f: (foo: import("projA/index").Foo) => boolean; }
 >  : ^^^^^                                           ^^^

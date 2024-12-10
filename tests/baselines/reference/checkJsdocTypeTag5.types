@@ -68,7 +68,7 @@ var k = function (x) { return x }
 /** @typedef {(x: 'hi' | 'bye') => 0 | 1 | 2} Argle */
 /** @type {Argle} */
 function blargle(s) {
->blargle : (x: "hi" | "bye") => 0 | 1 | 2
+>blargle : (x: 'hi' | 'bye') => 0 | 1 | 2
 >        : ^ ^^            ^^^^^         
 >s : "hi" | "bye"
 >  : ^^^^^^^^^^^^
@@ -84,7 +84,7 @@ var zeroonetwo = blargle('hi')
 >           : ^^^^^^^^^
 >blargle('hi') : 0 | 1 | 2
 >              : ^^^^^^^^^
->blargle : (x: "hi" | "bye") => 0 | 1 | 2
+>blargle : (x: 'hi' | 'bye') => 0 | 1 | 2
 >        : ^ ^^            ^^^^^         
 >'hi' : "hi"
 >     : ^^^^

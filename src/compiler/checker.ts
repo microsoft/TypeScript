@@ -742,6 +742,7 @@ import {
     isStatic,
     isString,
     isStringANonContextualKeyword,
+    isStringDoubleQuoted,
     isStringLiteral,
     isStringLiteralLike,
     isStringOrNumericLiteralLike,
@@ -6309,8 +6310,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * It also calls `setOriginalNode` to setup a `.original` pointer, since you basically *always* want these in the node builder.
          */
         function setTextRange<T extends Node>(context: NodeBuilderContext, range: T, location: Node | undefined): T {
-            if (!nodeIsSynthesized(range) || !(range.flags & NodeFlags.Synthesized) || !context.enclosingFile || context.enclosingFile !== getSourceFileOfNode(getOriginalNode(range))) {
-                range = factory.cloneNode(range); // if `range` is synthesized or originates in another file, copy it so it definitely has synthetic positions
+            const nodeSourceFile = getSourceFileOfNode(getOriginalNode(range));
+            if (!nodeIsSynthesized(range) || !(range.flags & NodeFlags.Synthesized) || !context.enclosingFile || context.enclosingFile !== nodeSourceFile) {
+                if (range.kind === SyntaxKind.StringLiteral) {
+                    const stringLiteral = range as Node as StringLiteral;
+                    range = factory.createStringLiteral(stringLiteral.text, !!nodeSourceFile && !isStringDoubleQuoted(stringLiteral, nodeSourceFile)) as Node as T;
+                }
+                else {
+                    range = factory.cloneNode(range); // if `range` is synthesized or originates in another file, copy it so it definitely has synthetic positions
+                }
             }
             if (range === location) return range;
             if (!location) {

@@ -155,7 +155,7 @@ packages/b/index.js
 //// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/packages/a/types/index.d.ts]
-export const a: "a";
+export const a: 'a';
 
 
 //// [/home/src/workspaces/project/packages/a/types/test/index.d.ts]
@@ -163,7 +163,7 @@ export {};
 
 
 //// [/home/src/workspaces/project/packages/a/types/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../tslibs/ts/lib/lib.esnext.full.d.ts","../index.js","../test/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15642581130-export const a = 'a';","signature":"-13259723213-export const a: \"a\";\n","impliedFormat":99},{"version":"-3920874422-import 'a';","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[2,3],"options":{"checkJs":true,"composite":true,"declaration":true,"emitDeclarationOnly":true,"module":199,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./test/index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../tslibs/ts/lib/lib.esnext.full.d.ts","../index.js","../test/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15642581130-export const a = 'a';","signature":"-13253788163-export const a: 'a';\n","impliedFormat":99},{"version":"-3920874422-import 'a';","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[2,3],"options":{"checkJs":true,"composite":true,"declaration":true,"emitDeclarationOnly":true,"module":199,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./test/index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/packages/a/types/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -192,11 +192,11 @@ export {};
     "../index.js": {
       "original": {
         "version": "-15642581130-export const a = 'a';",
-        "signature": "-13259723213-export const a: \"a\";\n",
+        "signature": "-13253788163-export const a: 'a';\n",
         "impliedFormat": 99
       },
       "version": "-15642581130-export const a = 'a';",
-      "signature": "-13259723213-export const a: \"a\";\n",
+      "signature": "-13253788163-export const a: 'a';\n",
       "impliedFormat": "esnext"
     },
     "../test/index.js": {
@@ -235,7 +235,7 @@ export {};
   },
   "latestChangedDtsFile": "./test/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1070
+  "size": 1068
 }
 
 //// [/home/src/workspaces/project/packages/b/tsconfig.tsbuildinfo]

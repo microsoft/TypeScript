@@ -12,8 +12,8 @@
 verify.signatureHelp({
     marker: "1",
     overloadsCount: 4,
-    text: 'foo(name: "order"): string',
+    text: "foo(name: 'order'): string",
 })
-edit.insert('"hi"');
+edit.insert("'hi'");
 
 verify.quickInfoAt("2", "var x: string");

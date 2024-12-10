@@ -1047,7 +1047,7 @@ const ref: MyObj = {
 };
 
 function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
->func : <K extends keyof MyObj>(k: K) => MyObj[K]["name"] | undefined
+>func : <K extends keyof MyObj>(k: K) => MyObj[K]['name'] | undefined
 >     : ^ ^^^^^^^^^           ^^ ^^ ^^^^^                            
 >k : K
 >  : ^
