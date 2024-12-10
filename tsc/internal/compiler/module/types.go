@@ -65,7 +65,7 @@ func (p *PackageId) PackageName() string {
 	return p.Name
 }
 
-type WithFailedLookupLocations struct {
+type LookupLocations struct {
 	FailedLookupLocations []string
 	AffectingLocations    []string
 	ResolutionDiagnostics []ast.Diagnostic
@@ -80,13 +80,8 @@ type ResolvedModule struct {
 	IsExternalLibraryImport  bool
 }
 
-type ResolvedModuleWithFailedLookupLocations struct {
-	WithFailedLookupLocations
-	ResolvedModule
-}
-
-func (r *ResolvedModuleWithFailedLookupLocations) IsResolved() bool {
-	return r.ResolvedModule.ResolvedFileName != ""
+func (r *ResolvedModule) IsResolved() bool {
+	return r.ResolvedFileName != ""
 }
 
 type ResolvedTypeReferenceDirective struct {
@@ -97,13 +92,8 @@ type ResolvedTypeReferenceDirective struct {
 	IsExternalLibraryImport bool
 }
 
-type ResolvedTypeReferenceDirectiveWithFailedLookupLocations struct {
-	WithFailedLookupLocations
-	ResolvedTypeReferenceDirective
-}
-
-func (r *ResolvedTypeReferenceDirectiveWithFailedLookupLocations) IsResolved() bool {
-	return r.ResolvedTypeReferenceDirective.ResolvedFileName != ""
+func (r *ResolvedTypeReferenceDirective) IsResolved() bool {
+	return r.ResolvedFileName != ""
 }
 
 type extensions int32
