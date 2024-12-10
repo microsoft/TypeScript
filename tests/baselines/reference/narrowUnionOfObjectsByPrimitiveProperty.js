@@ -1,5 +1,6 @@
-// @strict: true
+//// [tests/cases/compiler/narrowUnionOfObjectsByPrimitiveProperty.ts] ////
 
+//// [narrowUnionOfObjectsByPrimitiveProperty.ts]
 export {}
 
 interface State<Type> {
@@ -99,4 +100,61 @@ if (typeof opt.label === 'string') {
 } else {
     const l = opt.label;
     const a = opt.alias ?? opt.label.original;
+}
+
+//// [narrowUnionOfObjectsByPrimitiveProperty.js]
+"use strict";
+var _a, _b;
+Object.defineProperty(exports, "__esModule", { value: true });
+var nameState = {};
+if (typeof nameState.value === "string") {
+    nameState.state;
+}
+else {
+    nameState.state;
+}
+if (typeof arr[0] === "string") {
+    arr[1];
+}
+else {
+    arr[1];
+}
+function aStringOrANumber(param) {
+    if (typeof param.a === "string") {
+        return param.a.repeat(3);
+    }
+    if (typeof param.a === "number") {
+        return Math.exp(param.a);
+    }
+    throw new Error();
+}
+aStringOrANumber({ a: "string" });
+aStringOrANumber({ a: 42 });
+// Here, we first perform narrowing, but the subsequent assignability should not be affected.
+// We expect an error there because of an incorrect value assigned to 'prop'.
+// See contextualTypeWithUnionTypeObjectLiteral.ts
+if (typeof obj.prop === "string") {
+    obj.other.repeat(3);
+}
+else {
+    Math.exp(obj.other);
+}
+obj = { prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" };
+// Here, we first assign a value to 'obj2' and then perform narrowing.
+// We expect an error here because of an incorrect value assigned to 'prop', like above,
+// but the subsequent narrowing should not be affected by the assignability.
+obj2 = { prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" };
+if (typeof obj2.prop === "string") {
+    obj2.other.repeat(3);
+}
+else {
+    Math.exp(obj2.other);
+}
+if (typeof opt.label === 'string') {
+    var l = opt.label;
+    var a = (_a = opt.alias) !== null && _a !== void 0 ? _a : opt.label;
+}
+else {
+    var l = opt.label;
+    var a = (_b = opt.alias) !== null && _b !== void 0 ? _b : opt.label.original;
 }

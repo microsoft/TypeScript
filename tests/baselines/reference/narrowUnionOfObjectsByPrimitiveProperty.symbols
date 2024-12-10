@@ -248,36 +248,28 @@ if (typeof opt.label === 'string') {
 >opt : Symbol(opt, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 91, 13))
 >label : Symbol(label, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 83, 13), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 86, 5))
 
-    opt
->opt : Symbol(opt, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 91, 13))
-
-    // ^?
     const l = opt.label;
->l : Symbol(l, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 96, 9))
+>l : Symbol(l, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 94, 9))
 >opt.label : Symbol(label, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 86, 5))
 >opt : Symbol(opt, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 91, 13))
 >label : Symbol(label, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 86, 5))
 
     const a = opt.alias ?? opt.label;
->a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 97, 9))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 95, 9))
 >opt.alias : Symbol(alias, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 87, 18))
 >opt : Symbol(opt, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 91, 13))
 >alias : Symbol(alias, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 87, 18))
 >opt : Symbol(opt, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 91, 13))
 
 } else {
-    opt
->opt : Symbol(opt, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 91, 13))
-
-    // ^?
     const l = opt.label;
->l : Symbol(l, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 101, 9))
+>l : Symbol(l, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 97, 9))
 >opt.label : Symbol(label, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 83, 13))
 >opt : Symbol(opt, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 91, 13))
 >label : Symbol(label, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 83, 13))
 
     const a = opt.alias ?? opt.label.original;
->a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 102, 9))
+>a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 98, 9))
 >opt.alias : Symbol(alias, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 84, 28))
 >opt : Symbol(opt, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 91, 13))
 >alias : Symbol(alias, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 84, 28))
@@ -287,144 +279,3 @@ if (typeof opt.label === 'string') {
 >label : Symbol(label, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 83, 13))
 >original : Symbol(ILocalizedString.original, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 78, 28))
 }
-
-
-type PackageDetails = {
->PackageDetails : Symbol(PackageDetails, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 103, 1))
-
-  docsLink?: string;
->docsLink : Symbol(docsLink, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 106, 23))
-
-  docsLinkWarning?: string;
->docsLinkWarning : Symbol(docsLinkWarning, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 107, 20))
-
-  title?: string;
->title : Symbol(title, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 108, 27))
-
-  description?: string;
->description : Symbol(description, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 109, 17))
-
-  repo?: string;
->repo : Symbol(repo, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 110, 23))
-
-  license?: string;
->license : Symbol(license, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 111, 16))
-
-};
-
-type PackageDetailsSuccess = PackageDetails & {
->PackageDetailsSuccess : Symbol(PackageDetailsSuccess, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 113, 2))
->PackageDetails : Symbol(PackageDetails, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 103, 1))
-
-  docsLink: string;
->docsLink : Symbol(docsLink, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 115, 47))
-
-};
-
-interface FilePathAndName {
->FilePathAndName : Symbol(FilePathAndName, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 117, 2))
-
-  path: string;
->path : Symbol(FilePathAndName.path, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 119, 27))
-
-  name: string;
->name : Symbol(FilePathAndName.name, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 120, 15))
-}
-
-interface PackageFilePathAndName extends FilePathAndName {
->PackageFilePathAndName : Symbol(PackageFilePathAndName, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 122, 1))
->FilePathAndName : Symbol(FilePathAndName, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 117, 2))
-
-  packageRegistry: string; // e.g. npm, pypi
->packageRegistry : Symbol(PackageFilePathAndName.packageRegistry, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 124, 58))
-}
-
-type ParsedPackageInfo = {
->ParsedPackageInfo : Symbol(ParsedPackageInfo, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 126, 1))
-
-  name: string;
->name : Symbol(name, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 128, 26))
-
-  packageFile: PackageFilePathAndName;
->packageFile : Symbol(packageFile, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 129, 15))
->PackageFilePathAndName : Symbol(PackageFilePathAndName, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 122, 1))
-
-  language: string;
->language : Symbol(language, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 130, 38))
-
-  version: string;
->version : Symbol(version, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 131, 19))
-
-};
-
-
-type PackageDocsResult = {
->PackageDocsResult : Symbol(PackageDocsResult, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 133, 2))
-
-    packageInfo: ParsedPackageInfo;
->packageInfo : Symbol(packageInfo, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 136, 26))
->ParsedPackageInfo : Symbol(ParsedPackageInfo, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 126, 1))
-
-} & ({
-    error: string;
->error : Symbol(error, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 138, 6))
-
-    details?: never;
->details : Symbol(details, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 139, 18))
-
-} | {
-    details: PackageDetailsSuccess;
->details : Symbol(details, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 141, 5))
->PackageDetailsSuccess : Symbol(PackageDetailsSuccess, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 113, 2))
-
-    error?: never;
->error : Symbol(error, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 142, 35))
-
-})
-
-declare const filtered: PackageDocsResult[];
->filtered : Symbol(filtered, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 146, 13))
->PackageDocsResult : Symbol(PackageDocsResult, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 133, 2))
-
-filtered.sort((a, b) => {
->filtered.sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
->filtered : Symbol(filtered, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 146, 13))
->sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
->a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 148, 15))
->b : Symbol(b, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 148, 17))
-
-  const rank = (result: PackageDocsResult) => {
->rank : Symbol(rank, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 149, 7))
->result : Symbol(result, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 149, 16))
->PackageDocsResult : Symbol(PackageDocsResult, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 133, 2))
-
-    result.details
->result.details : Symbol(details, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 139, 18), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 141, 5))
->result : Symbol(result, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 149, 16))
->details : Symbol(details, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 139, 18), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 141, 5))
-
-    if (result.error) {
->result.error : Symbol(error, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 138, 6), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 142, 35))
->result : Symbol(result, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 149, 16))
->error : Symbol(error, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 138, 6), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 142, 35))
-
-      return 2;
-    } else if (result.details?.docsLinkWarning) {
->result.details?.docsLinkWarning : Symbol(docsLinkWarning, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 107, 20))
->result.details : Symbol(details, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 139, 18), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 141, 5))
->result : Symbol(result, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 149, 16))
->details : Symbol(details, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 139, 18), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 141, 5))
->docsLinkWarning : Symbol(docsLinkWarning, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 107, 20))
-
-      return 1;
-    } else {
-      return 0;
-    }
-  };
-  return rank(a) - rank(b);
->rank : Symbol(rank, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 149, 7))
->a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 148, 15))
->rank : Symbol(rank, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 149, 7))
->b : Symbol(b, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 148, 17))
-
-});

@@ -11,7 +11,7 @@ narrowUnionOfObjectsByPrimitiveProperty.ts(70,1): error TS2322: Type '{ prop: st
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
 narrowUnionOfObjectsByPrimitiveProperty.ts(73,14): error TS2550: Property 'repeat' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-narrowUnionOfObjectsByPrimitiveProperty.ts(98,32): error TS2339: Property 'label' does not exist on type 'never'.
+narrowUnionOfObjectsByPrimitiveProperty.ts(96,32): error TS2339: Property 'label' does not exist on type 'never'.
 
 
 ==== narrowUnionOfObjectsByPrimitiveProperty.ts (6 errors) ====
@@ -127,72 +127,11 @@ narrowUnionOfObjectsByPrimitiveProperty.ts(98,32): error TS2339: Property 'label
     declare const opt: Opt
     
     if (typeof opt.label === 'string') {
-        opt
-        // ^?
         const l = opt.label;
         const a = opt.alias ?? opt.label;
                                    ~~~~~
 !!! error TS2339: Property 'label' does not exist on type 'never'.
     } else {
-        opt
-        // ^?
         const l = opt.label;
         const a = opt.alias ?? opt.label.original;
     }
-    
-    
-    type PackageDetails = {
-      docsLink?: string;
-      docsLinkWarning?: string;
-      title?: string;
-      description?: string;
-      repo?: string;
-      license?: string;
-    };
-    
-    type PackageDetailsSuccess = PackageDetails & {
-      docsLink: string;
-    };
-    
-    interface FilePathAndName {
-      path: string;
-      name: string;
-    }
-    
-    interface PackageFilePathAndName extends FilePathAndName {
-      packageRegistry: string; // e.g. npm, pypi
-    }
-    
-    type ParsedPackageInfo = {
-      name: string;
-      packageFile: PackageFilePathAndName;
-      language: string;
-      version: string;
-    };
-    
-    
-    type PackageDocsResult = {
-        packageInfo: ParsedPackageInfo;
-    } & ({
-        error: string;
-        details?: never;
-    } | {
-        details: PackageDetailsSuccess;
-        error?: never;
-    })
-    
-    declare const filtered: PackageDocsResult[];
-    
-    filtered.sort((a, b) => {
-      const rank = (result: PackageDocsResult) => {
-        result.details
-        if (result.error) {
-          return 2;
-        } else if (result.details?.docsLinkWarning) {
-          return 1;
-        } else {
-          return 0;
-        }
-      };
-      return rank(a) - rank(b);
-    });
