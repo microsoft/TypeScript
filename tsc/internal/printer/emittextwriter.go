@@ -14,7 +14,7 @@ type EmitTextWriter interface {
 	writeStringLiteral(text string)
 	writeParameter(text string)
 	writeProperty(text string)
-	writeSymbol(text string, symbol ast.Symbol)
+	writeSymbol(text string, symbol *ast.Symbol)
 	writeLine()
 	writeLineForce(force bool)
 	increaseIndent()

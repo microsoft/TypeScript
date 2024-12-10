@@ -1,0 +1,4307 @@
+// Package printer exports a Printer for pretty-printing TS ASTs and writer interfaces and implementations for using them
+// Intended ultimate usage:
+//
+//	func nodeToInlineStr(node *ast.Node) {
+//		// Reuse singleton single-line writer (TODO: thread safety?)
+//		p = printer.NewPrinter(printer.PrinterOptions{ RemoveComments: true }, printer.PrintHandlers{})
+//		p.Write(node, nil /*sourceFile*/, printer.SingleLineTextWriter)
+//		return printer.SingleLineTextWriter.getText()
+//	}
+//
+// // or
+//
+//	func nodeToStr(node *ast.Node, options CompilerOptions) {
+//		// Use own writer
+//		p := printer.NewPrinter(printer.PrinterOptions{ NewLine: options.NewLine}, printer.PrintHandlers{})
+//		return p.Emit(node, nil /*sourceFile*/)
+//	}
+package printer
+
+import (
+	"fmt"
+	"math"
+	"strings"
+
+	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/scanner"
+)
+
+type Printer struct {
+	PrintHandlers
+	Options            PrinterOptions
+	factory            ast.NodeFactory
+	currentSourceFile  *ast.SourceFile
+	nextListElementPos int
+	writer             EmitTextWriter
+	ownWriter          EmitTextWriter
+	writeKind          WriteKind
+	commentsDisabled   bool
+}
+
+type PrinterOptions struct {
+	// RemoveComments                bool
+	NewLine string
+	// OmitTrailingSemicolon         bool
+	// NoEmitHelpers                 bool
+	// Module                        core.ModuleKind
+	// ModuleResolution              core.ModuleResolutionKind
+	// Target                        core.ScriptTarget
+	// SourceMap                     bool
+	// InlineSourceMap               bool
+	// InlineSources                 bool
+	OmitBraceSourceMapPositions bool
+	// ExtendedDiagnostics           bool
+	// OnlyPrintJsDocStyle           bool
+	// NeverAsciiEscape              bool
+	// StripInternal                 bool
+	PreserveSourceNewlines bool
+	// TerminateUnterminatedLiterals bool
+}
+
+type PrintHandlers struct {
+	// A hook used by the Printer when generating unique names to avoid collisions with
+	// globally defined names that exist outside of the current source file.
+	HasGlobalName func(name string) bool
+
+	// !!!
+	////// A hook used by the Printer to provide notifications prior to emitting a node. A
+	////// compatible implementation **must** invoke `emitCallback` with the provided `hint` and
+	////// `node` values.
+	////// @param hint A hint indicating the intended purpose of the node.
+	////// @param node The node to emit.
+	////// @param emitCallback A callback that, when invoked, will emit the node.
+	////// @example
+	////// ```ts
+	////// var printer = createPrinter(printerOptions, {
+	//////   onEmitNode(hint, node, emitCallback) {
+	//////     // set up or track state prior to emitting the node...
+	//////     emitCallback(hint, node);
+	//////     // restore state after emitting the node...
+	//////   }
+	////// });
+	////// ```
+	////OnEmitNode func(hint EmitHint, node *ast.Node, emitCallback func(hint EmitHint, node *ast.Node))
+
+	// !!!
+	////// A hook used to check if an emit notification is required for a node.
+	////// @param node The node to emit.
+	////IsEmitNotificationEnabled func(node *ast.Node) bool
+
+	// !!!
+	////// A hook used by the Printer to perform just-in-time substitution of a node. This is
+	////// primarily used by node transformations that need to substitute one node for another,
+	////// such as replacing `myExportedVar` with `exports.myExportedVar`.
+	////// @param hint A hint indicating the intended purpose of the node.
+	////// @param node The node to emit.
+	////// @example
+	////// ```ts
+	////// var printer = createPrinter(printerOptions, {
+	//////   substituteNode(hint, node) {
+	//////     // perform substitution if necessary...
+	//////     return node;
+	//////   }
+	////// });
+	////// ```
+	////SubstituteNode func(hint EmitHint, node *ast.Node) *ast.Node
+
+	// !!!
+	////OnEmitSourceMapOfNode func(hint EmitHint, node *ast.Node, emitCallback func(hint EmitHint, node *ast.Node))
+	////OnEmitSourceMapOfToken func(nodeOpt *ast.Node | undefined, toke: ast.Kind, writeKind WriteKind, pos int, emitCallback func(token ast.Kind, writeKind WriteKind, pos int) int) int
+	////OnEmitSourceMapOfPosition func(pos int)
+
+	OnBeforeEmitNode     func(nodeOpt *ast.Node)
+	OnAfterEmitNode      func(nodeOpt *ast.Node)
+	OnBeforeEmitNodeList func(nodesOpt *ast.NodeList)
+	OnAfterEmitNodeList  func(nodesOpt *ast.NodeList)
+	OnBeforeEmitToken    func(nodeOpt *ast.TokenNode)
+	OnAfterEmitToken     func(nodeOpt *ast.TokenNode)
+}
+
+func NewPrinter(options PrinterOptions, handlers PrintHandlers) *Printer {
+	return &Printer{
+		PrintHandlers: handlers,
+		Options:       options,
+	}
+}
+
+func (p *Printer) getLiteralTextOfNode(node *ast.LiteralLikeNode, sourceFile *ast.SourceFile, flags getLiteralTextFlags) string {
+	// !!! Escape strings from a textSourceNode. We will need this if we opt to downlevel decorators
+	// !!! Printer option to control whether to terminate unterminated literals
+	// !!! If necessary, printer option to control whether to preserve numeric seperators
+	return getLiteralText(node, core.Coalesce(sourceFile, p.currentSourceFile), flags)
+}
+
+// `node` must be one of Identifier | PrivateIdentifier | LiteralExpression | JsxNamespacedName
+func (p *Printer) getTextOfNode(node *ast.Node, includeTrivia bool) string {
+	// !!! Generated Identifiers
+	// !!! StringLiteral from source
+	switch node.Kind {
+	case ast.KindIdentifier,
+		ast.KindPrivateIdentifier,
+		ast.KindJsxNamespacedName:
+		// !!! If `node` is not a parse tree node, verify its original node comes from the same source file
+		if p.currentSourceFile == nil || node.Parent == nil || ast.NodeIsSynthesized(node) {
+			return node.Text()
+		}
+	case ast.KindStringLiteral,
+		ast.KindNumericLiteral,
+		ast.KindBigIntLiteral,
+		ast.KindNoSubstitutionTemplateLiteral,
+		ast.KindTemplateHead,
+		ast.KindTemplateMiddle,
+		ast.KindTemplateTail:
+		return p.getLiteralTextOfNode(node, nil /*sourceFile*/, getLiteralTextFlagsNone)
+	default:
+		panic(fmt.Sprintf("unexpected node: %v", node.Kind))
+	}
+	return scanner.GetSourceTextOfNodeFromSourceFile(p.currentSourceFile, node, includeTrivia)
+}
+
+//
+// Low-level writing
+//
+
+type WriteKind int
+
+const (
+	WriteKindNone WriteKind = iota
+	WriteKindKeyword
+	WriteKindOperator
+	WriteKindPunctuation
+	WriteKindStringLiteral
+	WriteKindParameter
+	WriteKindProperty
+	WriteKindComment
+	WriteKindLiteral
+)
+
+func (p *Printer) writeAs(text string, writeKind WriteKind) {
+	switch writeKind {
+	case WriteKindNone:
+		p.writer.write(text)
+	case WriteKindParameter:
+		p.writeParameter(text)
+	case WriteKindKeyword:
+		p.writeKeyword(text)
+	case WriteKindOperator:
+		p.writeOperator(text)
+	case WriteKindProperty:
+		p.writeProperty(text)
+	case WriteKindPunctuation:
+		p.writePunctuation(text)
+	case WriteKindStringLiteral:
+		p.writer.writeStringLiteral(text)
+	case WriteKindComment:
+		p.writeComment(text)
+	case WriteKindLiteral:
+		p.writeLiteral(text)
+	default:
+		panic(fmt.Sprintf("unexpected printer.WriteKind: %v", p.writeKind))
+	}
+}
+
+func (p *Printer) write(text string) {
+	p.writeAs(text, p.writeKind)
+}
+
+func (p *Printer) setWriteKind(kind WriteKind) WriteKind {
+	previous := p.writeKind
+	p.writeKind = kind
+	return previous
+}
+
+func (p *Printer) writeSymbol(text string, optSymbol *ast.Symbol) {
+	if optSymbol == nil {
+		p.write(text)
+	} else {
+		p.writer.writeSymbol(text, optSymbol)
+	}
+}
+
+func (p *Printer) writeLiteral(text string) {
+	p.writer.writeLiteral(text)
+}
+
+func (p *Printer) writePunctuation(text string) {
+	p.writer.writePunctuation(text)
+}
+
+func (p *Printer) writeOperator(text string) {
+	p.writer.writeOperator(text)
+}
+
+func (p *Printer) writeKeyword(text string) {
+	p.writer.writeKeyword(text)
+}
+
+func (p *Printer) writeProperty(text string) {
+	p.writer.writeProperty(text)
+}
+
+func (p *Printer) writeParameter(text string) {
+	p.writer.writeParameter(text)
+}
+
+func (p *Printer) writeComment(text string) {
+	p.writer.writeComment(text)
+}
+
+func (p *Printer) writeSpace() {
+	p.writer.writeSpace(" ")
+}
+
+func (p *Printer) writeLine() {
+	p.writer.writeLine()
+}
+
+func (p *Printer) writeLineRepeat(count int) {
+	for range count {
+		p.writeLine()
+	}
+}
+
+func (p *Printer) writeTrailingSemicolon() {
+	p.writer.writeTrailingSemicolon(";")
+}
+
+func (p *Printer) increaseIndent() {
+	p.writer.increaseIndent()
+}
+
+func (p *Printer) decreaseIndent() {
+	p.writer.decreaseIndent()
+}
+
+func (p *Printer) increaseIndentIf(indentRequested bool) {
+	if indentRequested {
+		p.increaseIndent()
+	}
+}
+
+func (p *Printer) decreaseIndentIf(indentRequested bool) {
+	if indentRequested {
+		p.decreaseIndent()
+	}
+}
+
+func (p *Printer) writeLineOrSpace(parentNode *ast.Node, prevChildNode *ast.Node, nextChildNode *ast.Node) {
+	if p.shouldEmitOnSingleLine(parentNode) {
+		p.writeSpace()
+	} else if p.Options.PreserveSourceNewlines {
+		lines := p.getLinesBetweenNodes(parentNode, prevChildNode, nextChildNode)
+		if lines > 0 {
+			p.writeLineRepeat(lines)
+		} else {
+			p.writeSpace()
+		}
+	} else {
+		p.writeLine()
+	}
+}
+
+func (p *Printer) writeLinesAndIndent(lineCount int, writeSpaceIfNotIndenting bool) {
+	if lineCount > 0 {
+		p.increaseIndent()
+		p.writeLineRepeat(lineCount)
+	} else if writeSpaceIfNotIndenting {
+		p.writeSpace()
+	}
+}
+
+func (p *Printer) writeLineSeparatorsAndIndentBefore(node *ast.Node, parent *ast.Node) bool {
+	if p.Options.PreserveSourceNewlines {
+		leadingNewlines := p.getLeadingLineTerminatorCount(parent, node, LFNone)
+		if leadingNewlines > 0 {
+			p.writeLinesAndIndent(leadingNewlines /*writeSpaceIfNotIndenting*/, false)
+			return true
+		}
+	}
+	return false
+}
+
+func (p *Printer) writeLineSeparatorsAfter(node *ast.Node, parent *ast.Node) {
+	if p.Options.PreserveSourceNewlines {
+		trailingNewlines := p.getClosingLineTerminatorCount(parent, node, LFNone, core.NewTextRange(-1, -1) /*childrenTextRange*/)
+		if trailingNewlines > 0 {
+			p.writeLineRepeat(trailingNewlines)
+		}
+	}
+}
+
+func (p *Printer) getLinesBetweenNodes(parent *ast.Node, node1 *ast.Node, node2 *ast.Node) int {
+	if p.shouldElideIndentation(parent) {
+		return 0
+	}
+
+	parent = skipSynthesizedParentheses(parent)
+	node1 = skipSynthesizedParentheses(node1)
+	node2 = skipSynthesizedParentheses(node2)
+
+	// Always use a newline for synthesized code if the synthesizer desires it.
+	if p.shouldEmitOnNewLine(node2, LFNone) {
+		return 1
+	}
+
+	if p.currentSourceFile != nil && !ast.NodeIsSynthesized(parent) && !ast.NodeIsSynthesized(node1) && !ast.NodeIsSynthesized(node2) {
+		if p.Options.PreserveSourceNewlines {
+			return p.getEffectiveLines(
+				func(includeComments bool) int {
+					return getLinesBetweenRangeEndAndRangeStart(
+						node1.Loc,
+						node2.Loc,
+						p.currentSourceFile,
+						includeComments,
+					)
+				},
+			)
+		}
+		return core.IfElse(rangeEndIsOnSameLineAsRangeStart(node1.Loc, node2.Loc, p.currentSourceFile), 0, 1)
+	}
+
+	return 0
+}
+
+func (p *Printer) getEffectiveLines(getLineDifference func(includeComments bool) int) int {
+	// If 'preserveSourceNewlines' is disabled, we should never call this function
+	// because it could be more expensive than alternative approximations.
+	if !p.Options.PreserveSourceNewlines {
+		panic("Should not be called when preserveSourceNewlines is false")
+	}
+	// We start by measuring the line difference from a position to its adjacent comments,
+	// so that this is counted as a one-line difference, not two:
+	//
+	//   node1;
+	//   // NODE2 COMMENT
+	//   node2;
+	lines := getLineDifference( /*includeComments*/ true)
+	if lines == 0 {
+		// However, if the line difference considering comments was 0, we might have this:
+		//
+		//   node1; // NODE2 COMMENT
+		//   node2;
+		//
+		// in which case we should be ignoring node2's comment, so this too is counted as
+		// a one-line difference, not zero.
+		return getLineDifference( /*includeComments*/ false)
+	}
+	return lines
+}
+
+func (p *Printer) getLeadingLineTerminatorCount(parentNode *ast.Node, firstChild *ast.Node, format ListFormat) int {
+	if format&LFPreserveLines != 0 || p.Options.PreserveSourceNewlines {
+		if format&LFPreferNewLine != 0 {
+			return 1
+		}
+
+		if firstChild == nil {
+			return core.IfElse(parentNode == nil || p.currentSourceFile != nil && rangeIsOnSingleLine(parentNode.Loc, p.currentSourceFile), 0, 1)
+		}
+		if p.nextListElementPos > 0 && firstChild.Pos() == p.nextListElementPos {
+			// If this child starts at the beginning of a list item in a parent list, its leading
+			// line terminators have already been written as the separating line terminators of the
+			// parent list. Example:
+			//
+			// class Foo {
+			//   constructor() {}
+			//   public foo() {}
+			// }
+			//
+			// The outer list is the list of class members, with one line terminator between the
+			// constructor and the method. The constructor is written, the separating line terminator
+			// is written, and then we start emitting the method. Its modifiers ([public]) constitute an inner
+			// list, so we look for its leading line terminators. If we didn't know that we had already
+			// written a newline as part of the parent list, it would appear that we need to write a
+			// leading newline to start the modifiers.
+			return 0
+		}
+		if firstChild.Kind == ast.KindJsxText {
+			// JsxText will be written with its leading whitespace, so don't add more manually.
+			return 0
+		}
+		if p.currentSourceFile != nil && parentNode != nil &&
+			!ast.PositionIsSynthesized(parentNode.Pos()) &&
+			!ast.NodeIsSynthesized(firstChild) &&
+			(firstChild.Parent == nil /*|| getOriginalNode(firstChild.Parent) == getOriginalNode(parentNode)*/) {
+			if p.Options.PreserveSourceNewlines {
+				return p.getEffectiveLines(
+					func(includeComments bool) int {
+						return getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(
+							firstChild.Pos(),
+							parentNode.Pos(),
+							p.currentSourceFile,
+							includeComments,
+						)
+					},
+				)
+			}
+			return core.IfElse(rangeStartPositionsAreOnSameLine(parentNode.Loc, firstChild.Loc, p.currentSourceFile), 0, 1)
+		}
+		if p.shouldEmitOnNewLine(firstChild, format) {
+			return 1
+		}
+	}
+	return core.IfElse(format&LFMultiLine != 0, 1, 0)
+}
+
+func (p *Printer) getSeparatingLineTerminatorCount(previousNode *ast.Node, nextNode *ast.Node, format ListFormat) int {
+	if format&LFPreserveLines != 0 || p.Options.PreserveSourceNewlines {
+		if previousNode == nil || nextNode == nil {
+			return 0
+		}
+		if nextNode.Kind == ast.KindJsxText {
+			// JsxText will be written with its leading whitespace, so don't add more manually.
+			return 0
+		} else if p.currentSourceFile != nil && !ast.NodeIsSynthesized(previousNode) && !ast.NodeIsSynthesized(nextNode) {
+			if p.Options.PreserveSourceNewlines && siblingNodePositionsAreComparable(previousNode, nextNode) {
+				return p.getEffectiveLines(
+					func(includeComments bool) int {
+						return getLinesBetweenRangeEndAndRangeStart(
+							previousNode.Loc,
+							nextNode.Loc,
+							p.currentSourceFile,
+							includeComments,
+						)
+					},
+				)
+			} else if !p.Options.PreserveSourceNewlines && originalNodesHaveSameParent(previousNode, nextNode) {
+				// If `preserveSourceNewlines` is `false` we do not intend to preserve the effective lines between the
+				// previous and next node. Instead we naively check whether nodes are on separate lines within the
+				// same node parent. If so, we intend to preserve a single line terminator. This is less precise and
+				// expensive than checking with `preserveSourceNewlines` as above, but the goal is not to preserve the
+				// effective source lines between two sibling nodes.
+				return core.IfElse(rangeEndIsOnSameLineAsRangeStart(previousNode.Loc, nextNode.Loc, p.currentSourceFile), 0, 1)
+			}
+			// If the two nodes are not comparable, add a line terminator based on the format that can indicate
+			// whether new lines are preferred or not.
+			return core.IfElse(format&LFPreferNewLine != 0, 1, 0)
+		} else if p.shouldEmitOnNewLine(previousNode, format) || p.shouldEmitOnNewLine(nextNode, format) {
+			return 1
+		}
+	} else if p.shouldEmitOnNewLine(nextNode, LFNone) {
+		return 1
+	}
+	return core.IfElse(format&LFMultiLine != 0, 1, 0)
+}
+
+func (p *Printer) getClosingLineTerminatorCount(parentNode *ast.Node, lastChild *ast.Node, format ListFormat, childrenTextRange core.TextRange) int {
+	if format&LFPreserveLines != 0 || p.Options.PreserveSourceNewlines {
+		if format&LFPreferNewLine != 0 {
+			return 1
+		}
+		if lastChild == nil {
+			return core.IfElse(parentNode == nil || p.currentSourceFile != nil && rangeIsOnSingleLine(parentNode.Loc, p.currentSourceFile), 0, 1)
+		}
+		if p.currentSourceFile != nil && parentNode != nil && !ast.PositionIsSynthesized(parentNode.Pos()) && !ast.NodeIsSynthesized(lastChild) && (lastChild.Parent == nil || lastChild.Parent == parentNode) {
+			if p.Options.PreserveSourceNewlines {
+				end := greatestEnd(lastChild.End(), childrenTextRange)
+				return p.getEffectiveLines(
+					func(includeComments bool) int {
+						return getLinesBetweenPositionAndNextNonWhitespaceCharacter(
+							end,
+							parentNode.End(),
+							p.currentSourceFile,
+							includeComments,
+						)
+					},
+				)
+			}
+			return core.IfElse(rangeEndPositionsAreOnSameLine(parentNode.Loc, lastChild.Loc, p.currentSourceFile), 0, 1)
+		}
+		if p.shouldEmitOnNewLine(lastChild, format) {
+			return 1
+		}
+	}
+	if format&LFMultiLine != 0 && format&LFNoTrailingNewLine == 0 {
+		return 1
+	}
+	return 0
+}
+
+//
+// Custom emit behavior stubs (i.e., from `EmitNode`, `EmitFlags`, etc.)
+//
+
+func (p *Printer) getConstantValue(node *ast.Node) any {
+	// !!! Const-enum inlining (low priority)
+	return nil
+}
+
+func (p *Printer) shouldEmitIndented(node *ast.Node) bool {
+	// !!! return getEmitFlags(node)&EmitFlagsIndented != 0
+	return false
+}
+
+func (p *Printer) shouldElideIndentation(node *ast.Node) bool {
+	// !!! return getEmitFlags(node)&EmitFlagsNoIndentation != 0
+	return false
+}
+
+func (p *Printer) shouldEmitOnSingleLine(node *ast.Node) bool {
+	// !!! return getEmitFlags(node)&EmitFlagsSingleLine != 0
+	return false
+}
+
+func (p *Printer) shouldEmitBlockFunctionBodyOnSingleLine(body *ast.Block) bool {
+	// We must emit a function body as a single-line body in the following case:
+	// * The body has NodeEmitFlags.SingleLine specified.
+
+	// We must emit a function body as a multi-line body in the following cases:
+	// * The body is explicitly marked as multi-line.
+	// * A non-synthesized body's start and end position are on different lines.
+	// * Any statement in the body starts on a new line.
+
+	if p.shouldEmitOnSingleLine(body.AsNode()) {
+		return true
+	}
+
+	if body.Multiline {
+		return false
+	}
+
+	if !ast.NodeIsSynthesized(body.AsNode()) && p.currentSourceFile != nil && !rangeIsOnSingleLine(body.Loc, p.currentSourceFile) {
+		return false
+	}
+
+	if p.getLeadingLineTerminatorCount(body.AsNode(), core.FirstOrNil(body.Statements.Nodes), LFPreserveLines) > 0 ||
+		p.getClosingLineTerminatorCount(body.AsNode(), core.LastOrNil(body.Statements.Nodes), LFPreserveLines, body.Statements.Loc) > 0 {
+		return false
+	}
+
+	var previousStatement *ast.Statement
+	for _, statement := range body.Statements.Nodes {
+		if p.getSeparatingLineTerminatorCount(previousStatement, statement, LFPreserveLines) > 0 {
+			return false
+		}
+
+		previousStatement = statement
+	}
+
+	return true
+}
+
+func (p *Printer) shouldEmitOnNewLine(node *ast.Node, format ListFormat) bool {
+	// !!! if startsOnNewLine := getStartsOnNewLine(node); startsOnNewLine != nil { return *startsOnNewLine }
+	return format&LFPreferNewLine != 0
+}
+
+func (p *Printer) shouldEmitLeadingComments(node *ast.Node) bool {
+	// !!! return getEmitFlags(node)&EmitFlagsNoLeadingComments == 0
+	return true
+}
+
+func (p *Printer) shouldEmitTrailingComments(node *ast.Node) bool {
+	// !!! return getEmitFlags(node)&EmitFlagsNoTrailingComments == 0
+	return true
+}
+
+func (p *Printer) shouldEmitNestedComments(node *ast.Node) bool {
+	// !!! return getEmitFlags(node)&EmitFlagsNoNestedComments == 0
+	return true
+}
+
+func (p *Printer) shouldEmitIndirectCall(node *ast.Node) bool {
+	// !!! return getInternalEmitFlags(node)&InternalEmitFlagsIndirectCall != 0
+	return false
+}
+
+func (p *Printer) shouldAllowTrailingComma(node *ast.Node, list *ast.NodeList) bool {
+	if p.currentSourceFile == nil || p.currentSourceFile.ScriptKind == core.ScriptKindJSON {
+		return false
+	}
+
+	target := p.currentSourceFile.LanguageVersion
+	switch node.Kind {
+	case ast.KindObjectLiteralExpression:
+		return target >= core.ScriptTargetES5
+	case ast.KindArrayLiteralExpression,
+		ast.KindArrowFunction,
+		ast.KindConstructor,
+		ast.KindGetAccessor,
+		ast.KindSetAccessor,
+		ast.KindTypeAliasDeclaration,
+		ast.KindFunctionType,
+		ast.KindConstructorType,
+		ast.KindCallSignature,
+		ast.KindConstructSignature,
+		ast.KindTaggedTemplateExpression,
+		ast.KindObjectBindingPattern,
+		ast.KindArrayBindingPattern,
+		ast.KindNamedImports,
+		ast.KindNamedExports,
+		ast.KindImportAttributes:
+		return true
+	case ast.KindClassExpression,
+		ast.KindClassDeclaration:
+		return list == node.ClassLikeData().TypeParameters
+	case ast.KindInterfaceDeclaration:
+		return list == node.AsInterfaceDeclaration().TypeParameters
+	case ast.KindFunctionDeclaration,
+		ast.KindFunctionExpression,
+		ast.KindMethodDeclaration:
+		return target >= core.ScriptTargetES2015 || list == node.FunctionLikeData().TypeParameters
+	case ast.KindCallExpression:
+		return target >= core.ScriptTargetES2015 || list == node.AsCallExpression().TypeArguments
+	case ast.KindNewExpression:
+		return target >= core.ScriptTargetES2015 || list == node.AsNewExpression().TypeArguments
+	}
+
+	return false
+}
+
+//
+// Tokens/Keywords
+//
+
+func (p *Printer) writeTokenText(token ast.Kind, writeKind WriteKind, pos int) int {
+	// !!! emit leading and trailing comments
+	// !!! emit leading and trailing source maps
+	tokenString := scanner.TokenToString(token)
+	p.writeAs(tokenString, writeKind)
+	if ast.PositionIsSynthesized(pos) {
+		return pos
+	} else {
+		return pos + len(tokenString)
+	}
+}
+
+func (p *Printer) emitTokenWithSourceMap(token ast.Kind, pos int, writeKind WriteKind, contextNode *ast.Node) int {
+	// !!! can we inline into `writeTokenText`?
+	// !!! conditionally emit leading source map
+	pos = p.writeTokenText(token, writeKind, pos)
+	// !!! conditionally emit trailing source map
+	return pos
+}
+
+func (p *Printer) emitTokenWithComment(token ast.Kind, pos int, writeKind WriteKind, contextNode *ast.Node) int {
+	return p.emitTokenWithCommentEx(token, pos, writeKind, contextNode, false /*indentLeading*/)
+}
+
+func (p *Printer) emitTokenWithCommentEx(token ast.Kind, pos int, writeKind WriteKind, contextNode *ast.Node, indentLeading bool) int {
+	// !!! can we remove 'indentLeading'?
+	// !!! can we inline into `emitTokenWithSourceMap`?
+	// !!! conditionally emit leading comment
+
+	// We don't emit source positions for most tokens as it tends to be quite noisy, however
+	// we need to emit source positions for open and close braces so that tools like istanbul
+	// can map branches for code coverage. However, we still omit brace source positions when
+	// the output is a declaration file.
+	if !p.Options.OmitBraceSourceMapPositions && (token == ast.KindOpenBraceToken || token == ast.KindCloseBraceToken) {
+		pos = p.emitTokenWithSourceMap(token, pos, writeKind, contextNode)
+	} else {
+		pos = p.writeTokenText(token, writeKind, pos)
+	}
+
+	// !!! conditionally emit trailing comment
+	return pos
+}
+
+func (p *Printer) emitKeywordNode(node *ast.TokenNode) {
+	if node == nil {
+		return
+	}
+
+	p.enterToken(node)
+	p.writeTokenText(node.Kind, WriteKindKeyword, node.Pos())
+	p.exitToken(node)
+}
+
+func (p *Printer) emitPunctuationNode(node *ast.TokenNode) {
+	if node == nil {
+		return
+	}
+
+	p.enterToken(node)
+	p.writeTokenText(node.Kind, WriteKindPunctuation, node.Pos())
+	p.exitToken(node)
+}
+
+func (p *Printer) emitTokenNode(node *ast.TokenNode) {
+	if node == nil {
+		return
+	}
+
+	switch {
+	case ast.IsKeywordKind(node.Kind):
+		p.emitKeywordNode(node)
+	case ast.IsPunctuationKind(node.Kind):
+		p.emitPunctuationNode(node)
+	default:
+		panic(fmt.Sprintf("unexpected TokenNode: %v", node.Kind))
+	}
+}
+
+//
+// Literals
+//
+
+// Emits literals of the following kinds
+//
+//	SyntaxKindNumericLiteral
+//	SyntaxKindBigIntLiteral
+//	SyntaxKindStringLiteral
+//	SyntaxKindNoSubstitutionTemplateLiteral
+//	SyntaxKindRegularExpressionLiteral
+//	SyntaxKindTemplateHead
+//	SyntaxKindTemplateMiddle
+//	SyntaxKindTemplateTail
+func (p *Printer) emitLiteral(node *ast.LiteralLikeNode, flags getLiteralTextFlags) {
+	// !!! Printer option to control whether to escape non-ASCII characters
+	text := p.getLiteralTextOfNode(node, nil /*sourceFile*/, flags)
+
+	// !!! Printer option to control source map emit, which causes us to use a different write method on the
+	// emit text writer:
+
+	////if (
+	////	(printerOptions.sourceMap || printerOptions.inlineSourceMap)
+	////	&& (node.kind === SyntaxKindStringLiteral || isTemplateLiteralKind(node.kind))
+	////) {
+	////	writeLiteral(text);
+	////} else {
+
+	// Quick info expects all literals to be called with writeStringLiteral, as there's no specific type for
+	// numberLiterals
+	p.writer.writeStringLiteral(text)
+
+	// }
+}
+
+func (p *Printer) emitNumericLiteral(node *ast.NumericLiteral) {
+	p.enterNode(node.AsNode())
+	p.emitLiteral(node.AsNode(), getLiteralTextFlagsNone)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitBigIntLiteral(node *ast.BigIntLiteral) {
+	p.enterNode(node.AsNode())
+	p.emitLiteral(node.AsNode(), getLiteralTextFlagsNone)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitStringLiteral(node *ast.StringLiteral) {
+	p.enterNode(node.AsNode())
+	p.emitLiteral(node.AsNode(), getLiteralTextFlagsNone)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitNoSubstitutionTemplateLiteral(node *ast.NoSubstitutionTemplateLiteral) {
+	p.enterNode(node.AsNode())
+	p.emitLiteral(node.AsNode(), getLiteralTextFlagsNone)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitRegularExpressionLiteral(node *ast.RegularExpressionLiteral) {
+	p.enterNode(node.AsNode())
+	p.emitLiteral(node.AsNode(), getLiteralTextFlagsNone)
+	p.exitNode(node.AsNode())
+}
+
+//
+// Pseudo-literals
+//
+
+func (p *Printer) emitTemplateHead(node *ast.TemplateHead) {
+	p.enterNode(node.AsNode())
+	p.emitLiteral(node.AsNode(), getLiteralTextFlagsNone)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTemplateMiddle(node *ast.TemplateMiddle) {
+	p.enterNode(node.AsNode())
+	p.emitLiteral(node.AsNode(), getLiteralTextFlagsNone)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTemplateTail(node *ast.TemplateTail) {
+	p.enterNode(node.AsNode())
+	p.emitLiteral(node.AsNode(), getLiteralTextFlagsNone)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTemplateMiddleTail(node *ast.TemplateMiddleOrTail) {
+	switch node.Kind {
+	case ast.KindTemplateMiddle:
+		p.emitTemplateMiddle(node.AsTemplateMiddle())
+	case ast.KindTemplateTail:
+		p.emitTemplateTail(node.AsTemplateTail())
+	}
+}
+
+//
+// Snippet Elements
+//
+
+// !!! Snippet elements
+
+//
+// Names
+//
+
+func (p *Printer) emitIdentifierText(node *ast.Identifier) {
+	text := p.getTextOfNode(node.AsNode(), false /*includeTrivia*/)
+
+	// !!! In the old emitter, an Identifier could have a Symbol associated with it. That
+	// doesn't seem to be the case in the new emitter. Do we need to get the symbol from somewhere else?
+	////p.writeSymbol(text, node.Symbol())
+	p.write(text)
+
+	// !!! In the old emitter, an Identifier could have type arguments for use with quickinfo:
+	////p.emitList(node, getIdentifierTypeArguments(node), LFTypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
+}
+
+func (p *Printer) emitIdentifierName(node *ast.Identifier) {
+	p.enterNode(node.AsNode())
+	p.emitIdentifierText(node)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitIdentifierReference(node *ast.Identifier) {
+	p.enterNode(node.AsNode())
+	p.emitIdentifierText(node)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitBindingIdentifier(node *ast.Identifier) {
+	p.enterNode(node.AsNode())
+	p.emitIdentifierText(node)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitLabelIdentifier(node *ast.Identifier) {
+	p.enterNode(node.AsNode())
+	p.emitIdentifierText(node)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitPrivateIdentifier(node *ast.PrivateIdentifier) {
+	p.enterNode(node.AsNode())
+	p.write(p.getTextOfNode(node.AsNode(), false /*includeTrivia*/))
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitQualifiedName(node *ast.QualifiedName) {
+	p.enterNode(node.AsNode())
+	p.emitEntityName(node.Left)
+	p.writePunctuation(".")
+	p.emitIdentifierName(node.Right.AsIdentifier())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitComputedPropertyName(node *ast.ComputedPropertyName) {
+	p.enterNode(node.AsNode())
+	p.writePunctuation("[")
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionOfComputedPropertyName*/) // !!!
+	p.writePunctuation("]")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitEntityName(node *ast.EntityName) {
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitIdentifierReference(node.AsIdentifier())
+	case ast.KindQualifiedName:
+		p.emitQualifiedName(node.AsQualifiedName())
+	default:
+		panic(fmt.Sprintf("unexpected EntityName: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitBindingName(node *ast.BindingName) {
+	if node == nil {
+		return
+	}
+
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitBindingIdentifier(node.AsIdentifier())
+	case ast.KindObjectBindingPattern:
+		p.emitObjectBindingPattern(node.AsBindingPattern())
+	case ast.KindArrayBindingPattern:
+		p.emitArrayBindingPattern(node.AsBindingPattern())
+	default:
+		panic(fmt.Sprintf("unexpected BindingName: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitPropertyName(node *ast.PropertyName) {
+	if node == nil {
+		return
+	}
+
+	savedWriteKind := p.writeKind
+	p.writeKind = WriteKindProperty
+
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitIdentifierName(node.AsIdentifier())
+	case ast.KindPrivateIdentifier:
+		p.emitPrivateIdentifier(node.AsPrivateIdentifier())
+	case ast.KindStringLiteral:
+		p.emitStringLiteral(node.AsStringLiteral())
+	case ast.KindNoSubstitutionTemplateLiteral:
+		p.emitNoSubstitutionTemplateLiteral(node.AsNoSubstitutionTemplateLiteral())
+	case ast.KindNumericLiteral:
+		p.emitNumericLiteral(node.AsNumericLiteral())
+	case ast.KindBigIntLiteral:
+		p.emitBigIntLiteral(node.AsBigIntLiteral())
+	case ast.KindComputedPropertyName:
+		p.emitComputedPropertyName(node.AsComputedPropertyName())
+	default:
+		panic(fmt.Sprintf("unexpected PropertyName: %v", node.Kind))
+	}
+
+	p.writeKind = savedWriteKind
+}
+
+func (p *Printer) emitMemberName(node *ast.MemberName) {
+	if node == nil {
+		return
+	}
+
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitIdentifierName(node.AsIdentifier())
+	case ast.KindPrivateIdentifier:
+		p.emitPrivateIdentifier(node.AsPrivateIdentifier())
+	default:
+		panic(fmt.Sprintf("unexpected MemberName: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitModuleName(node *ast.ModuleName) {
+	if node == nil {
+		return
+	}
+
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitBindingIdentifier(node.AsIdentifier())
+	case ast.KindStringLiteral:
+		p.emitStringLiteral(node.AsStringLiteral())
+	default:
+		panic(fmt.Sprintf("unexpected ModuleName: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitModuleExportName(node *ast.ModuleExportName) {
+	if node == nil {
+		return
+	}
+
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitIdentifierName(node.AsIdentifier())
+	case ast.KindStringLiteral:
+		p.emitStringLiteral(node.AsStringLiteral())
+	default:
+		panic(fmt.Sprintf("unexpected ModuleExportName: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitImportAttributeName(node *ast.ImportAttributeName) {
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitIdentifierName(node.AsIdentifier())
+	case ast.KindStringLiteral:
+		p.emitStringLiteral(node.AsStringLiteral())
+	default:
+		panic(fmt.Sprintf("unexpected ImportAttributeName: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitNestedModuleName(node *ast.ModuleName) {
+	if node == nil {
+		return
+	}
+
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitIdentifierName(node.AsIdentifier())
+	case ast.KindStringLiteral:
+		p.emitStringLiteral(node.AsStringLiteral())
+	default:
+		panic(fmt.Sprintf("unexpected ModuleName: %v", node.Kind))
+	}
+}
+
+//
+// Signature elements
+//
+
+func (p *Printer) emitModifierList(parentNode *ast.Node, modifiers *ast.ModifierList, allowDecorators bool) int {
+	if modifiers == nil || len(modifiers.Nodes) == 0 {
+		return parentNode.Pos()
+	}
+
+	if core.Every(modifiers.Nodes, ast.IsModifier) {
+		// if all modifier-likes are `Modifier`, simply emit the list as modifiers.
+		p.emitList((*Printer).emitKeywordNode, parentNode, &modifiers.NodeList, LFModifiers)
+	} else if core.Every(modifiers.Nodes, ast.IsDecorator) {
+		if !allowDecorators {
+			return parentNode.Pos()
+		}
+
+		// if all modifier-likes are `Decorator`, simply emit the list as decorators.
+		p.emitList((*Printer).emitModifierLike, parentNode, &modifiers.NodeList, LFDecorators)
+	} else {
+		if p.OnBeforeEmitNodeList != nil {
+			p.OnBeforeEmitNodeList(&modifiers.NodeList)
+		}
+
+		// partition modifiers into contiguous chunks of `Modifier` or `Decorator` so as to
+		// use consistent formatting for each chunk
+		type Mode int
+		const (
+			ModeNone Mode = iota
+			ModeModifiers
+			ModeDecorators
+		)
+
+		lastMode := ModeNone
+		mode := ModeNone
+		start := 0
+		pos := 0
+
+		var lastModifier *ast.ModifierLike
+		for start < len(modifiers.Nodes) {
+			for pos < len(modifiers.Nodes) {
+				lastModifier = modifiers.Nodes[pos]
+				if ast.IsDecorator(lastModifier) {
+					mode = ModeDecorators
+				} else {
+					mode = ModeModifiers
+				}
+				if lastMode == ModeNone {
+					lastMode = mode
+				} else if mode != lastMode {
+					break
+				}
+				pos++
+			}
+
+			textRange := core.NewTextRange(-1, -1)
+			if start == 0 {
+				textRange = core.NewTextRange(modifiers.Pos(), textRange.End())
+			}
+			if pos == len(modifiers.Nodes)-1 {
+				textRange = core.NewTextRange(textRange.Pos(), modifiers.End())
+			}
+			if allowDecorators || lastMode == ModeModifiers {
+				p.emitListItems(
+					(*Printer).emitModifierLike,
+					parentNode,
+					modifiers.Nodes[start:pos],
+					core.IfElse(lastMode == ModeModifiers, LFModifiers, LFDecorators),
+					// nil, /*parenthesizerRule*/
+					false, /*hasTrailingComma*/
+					textRange,
+				)
+			}
+			start = pos
+			lastMode = mode
+			pos++
+		}
+
+		if p.OnAfterEmitNodeList != nil {
+			p.OnAfterEmitNodeList(&modifiers.NodeList)
+		}
+	}
+
+	return greatestEnd(parentNode.Pos(), modifiers, core.LastOrNil(modifiers.Nodes))
+}
+
+func (p *Printer) emitTypeParameter(node *ast.TypeParameterDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	if node.Constraint != nil {
+		p.writeSpace()
+		p.writeKeyword("extends")
+		p.writeSpace()
+		p.emitTypeNode(node.Constraint)
+	}
+	if node.DefaultType != nil {
+		p.writeSpace()
+		p.writeOperator("=")
+		p.writeSpace()
+		p.emitTypeNode(node.DefaultType)
+	}
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTypeParameterNode(node *ast.TypeParameterDeclarationNode) {
+	p.emitTypeParameter(node.AsTypeParameter())
+}
+
+func (p *Printer) emitParameterName(node *ast.BindingName) {
+	// A JSDocFunctionType may have a parameter with a Name that is nil
+	if node == nil {
+		return
+	}
+
+	savedWriteKind := p.writeKind
+	p.writeKind = WriteKindParameter
+	p.emitBindingName(node)
+	p.writeKind = savedWriteKind
+}
+
+func (p *Printer) emitParameter(node *ast.ParameterDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), true /*allowDecorators*/)
+	p.emitTokenNode(node.DotDotDotToken)
+	p.emitParameterName(node.Name())
+	p.emitTokenNode(node.QuestionToken)
+
+	if node.Parent != nil && node.Parent.Kind == ast.KindJSDocFunctionType && node.Name() == nil {
+		p.emitTypeNode(node.Type)
+	} else {
+		p.emitTypeAnnotation(node.Type)
+	}
+
+	// The comment position has to fallback to any present node within the parameter declaration because as it turns
+	// out, the parser can make parameter declarations with _just_ an initializer.
+	p.emitInitializer(node.Initializer, greatestEnd(node.Pos(), node.Type, node.QuestionToken, node.Name(), node.Modifiers()), node.AsNode() /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitParameterNode(node *ast.ParameterDeclarationNode) {
+	p.emitParameter(node.AsParameterDeclaration())
+}
+
+func (p *Printer) emitDecorator(node *ast.Decorator) {
+	p.writePunctuation("@")
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess*/) // !!!
+}
+
+func (p *Printer) emitModifierLike(node *ast.ModifierLike) {
+	switch {
+	case ast.IsDecorator(node):
+		p.emitDecorator(node.AsDecorator())
+	case ast.IsModifier(node):
+		p.emitKeywordNode(node)
+	default:
+		panic(fmt.Sprintf("unhandled ModifierLike: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitTypeParameters(parentNode *ast.Node, nodes *ast.TypeParameterList) {
+	// NOTE: for quickinfo, the old emitter emits TypeArguments instead of TypeParameters if they are present. this
+	// behavior should be moved to the caller if it is needed
+	if nodes == nil {
+		return
+	}
+
+	p.emitList((*Printer).emitTypeParameterNode, parentNode, nodes, LFTypeParameters|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone))
+}
+
+func (p *Printer) emitTypeAnnotation(node *ast.TypeNode) {
+	if node == nil {
+		return
+	}
+
+	p.writePunctuation(":")
+	p.writeSpace()
+	p.emitTypeNode(node)
+}
+
+func (p *Printer) emitInitializer(node *ast.Expression, equalTokenPos int, contextNode *ast.Node /*, parenthesizerRule*/) { // !!!
+	if node == nil {
+		return
+	}
+
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindEqualsToken, equalTokenPos, WriteKindOperator, contextNode)
+	p.writeSpace()
+	p.emitExpression(node /*, parenthesizerRule*/) // !!!
+}
+
+func (p *Printer) emitParameters(parentNode *ast.Node, parameters *ast.ParameterList) {
+	p.generateAllNames(parameters)
+	p.emitList((*Printer).emitParameterNode, parentNode, parameters, LFParameters|core.IfElse(p.shouldAllowTrailingComma(parentNode, parameters), LFAllowTrailingComma, LFNone))
+}
+
+func canEmitSimpleArrowHead(parentNode *ast.Node, parameters *ast.ParameterList) bool {
+	// only arrow functions with a single parameter may have simple arrow head
+	if !ast.IsArrowFunction(parentNode) || len(parameters.Nodes) != 1 {
+		return false
+	}
+
+	parent := parentNode.AsArrowFunction()
+	parameter := parameters.Nodes[0].AsParameterDeclaration()
+
+	return parameter.Pos() == greatestEnd(parent.Pos(), parent.Modifiers()) && // may not have parsed tokens between modifiers/start of parent and parameter
+		parent.TypeParameters == nil && // parent may not have type parameters
+		parent.Type == nil && // parent may not have return type annotation
+		!parameters.HasTrailingComma() && // parameters may not have a trailing comma
+		parameter.Modifiers() == nil && // parameter may not have decorators or modifiers
+		parameter.DotDotDotToken == nil && // parameter may not be rest
+		parameter.QuestionToken == nil && // parameter may not be optional
+		parameter.Type == nil && // parameter may not have a type annotation
+		parameter.Initializer == nil && // parameter may not have an initializer
+		ast.IsIdentifier(parameter.Name()) // parameter name must be identifier
+}
+
+func (p *Printer) emitParametersForArrow(parentNode *ast.Node /*FunctionTypeNode | ConstructorTypeNode | ArrowFunction*/, parameters *ast.ParameterList) {
+	if canEmitSimpleArrowHead(parentNode, parameters) {
+		p.generateAllNames(parameters)
+		p.emitList((*Printer).emitParameterNode, parentNode, parameters, LFSingleArrowParameter)
+	} else {
+		p.emitParameters(parentNode, parameters)
+	}
+}
+
+func (p *Printer) emitParametersForIndexSignature(parentNode *ast.Node, parameters *ast.ParameterList) {
+	p.generateAllNames(parameters)
+	p.emitList((*Printer).emitParameterNode, parentNode, parameters, LFIndexSignatureParameters)
+}
+
+func (p *Printer) emitSignature(node *ast.Node) {
+	n := node.FunctionLikeData()
+
+	// !!! In old emitter, quickinfo used type arguments in place of type parameters on instantiated signatures
+	////if n.TypeArguments != nil {
+	////	p.emitTypeArguments(node, n.TypeArguments)
+	////} else {
+	p.emitTypeParameters(node, n.TypeParameters)
+	////}
+
+	p.emitParameters(node, n.Parameters)
+	p.emitTypeAnnotation(n.Type)
+}
+
+func (p *Printer) emitFunctionBody(body *ast.Block) {
+	p.enterNode(body.AsNode())
+	p.generateNames(body.AsNode())
+	p.emitTokenWithComment(ast.KindOpenBraceToken, body.Pos(), WriteKindPunctuation, body.AsNode())
+	p.increaseIndent()
+
+	// !!! Emit detached comments of body
+
+	statementOffset := p.emitPrologueDirectives(body.Statements)
+	pos := p.writer.getTextPos()
+	p.emitHelpers(body.AsNode())
+
+	if p.shouldEmitBlockFunctionBodyOnSingleLine(body) && statementOffset == 0 && pos == p.writer.getTextPos() {
+		p.decreaseIndent()
+		p.emitList((*Printer).emitStatement, body.AsNode(), body.Statements, LFSingleLineFunctionBodyStatements)
+		p.increaseIndent()
+	} else {
+		p.emitList((*Printer).emitStatement, body.AsNode(), body.Statements, LFMultiLineFunctionBodyStatements)
+	}
+
+	p.decreaseIndent()
+	p.emitTokenWithComment(ast.KindCloseBraceToken, body.Statements.End(), WriteKindPunctuation, body.AsNode())
+	p.exitNode(body.AsNode())
+}
+
+func (p *Printer) emitFunctionBodyNode(node *ast.BlockNode) {
+	if node == nil {
+		p.writeTrailingSemicolon()
+		return
+	}
+
+	p.writeSpace()
+	p.emitFunctionBody(node.AsBlock())
+}
+
+//
+// Type Members
+//
+
+func (p *Printer) emitPropertySignature(node *ast.PropertySignatureDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.emitPropertyName(node.Name())
+	p.emitTokenNode(node.PostfixToken)
+	p.emitTypeAnnotation(node.Type)
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitPropertyDeclaration(node *ast.PropertyDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), true /*allowDecorators*/)
+	p.emitPropertyName(node.Name())
+	p.emitTokenNode(node.PostfixToken)
+	p.emitTypeAnnotation(node.Type)
+	p.emitInitializer(node.Initializer, greatestEnd(node.Name().End(), node.Type, node.PostfixToken), node.AsNode())
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitMethodSignature(node *ast.MethodSignatureDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.emitPropertyName(node.Name())
+	p.emitTokenNode(node.PostfixToken)
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	p.emitSignature(node.AsNode())
+	p.writeTrailingSemicolon()
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitMethodDeclaration(node *ast.MethodDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), true /*allowDecorators*/)
+	p.emitTokenNode(node.AsteriskToken)
+	p.emitPropertyName(node.Name())
+	p.emitTokenNode(node.PostfixToken)
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	p.emitSignature(node.AsNode())
+	p.emitFunctionBodyNode(node.Body)
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitClassStaticBlockDeclaration(node *ast.ClassStaticBlockDeclaration) {
+	p.enterNode(node.AsNode())
+	p.writeKeyword("static")
+	p.pushNameGenerationScope(node.AsNode())
+	p.emitFunctionBodyNode(node.Body)
+	p.popNameGenerationScope(node.AsNode())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitConstructor(node *ast.ConstructorDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.writeKeyword("constructor")
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	p.emitSignature(node.AsNode())
+	p.emitFunctionBodyNode(node.Body)
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitAccessorDeclaration(token ast.Kind, node *ast.AccessorDeclarationBase) {
+	p.enterNode(node.AsNode())
+	pos := p.emitModifierList(node.AsNode(), node.Modifiers(), true /*allowDecorators*/)
+	p.emitTokenWithComment(token, pos, WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitPropertyName(node.Name())
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	p.emitSignature(node.AsNode())
+	p.emitFunctionBodyNode(node.Body)
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitGetAccessorDeclaration(node *ast.GetAccessorDeclaration) {
+	p.emitAccessorDeclaration(ast.KindGetKeyword, &node.AccessorDeclarationBase)
+}
+
+func (p *Printer) emitSetAccessorDeclaration(node *ast.SetAccessorDeclaration) {
+	p.emitAccessorDeclaration(ast.KindSetKeyword, &node.AccessorDeclarationBase)
+}
+
+func (p *Printer) emitCallSignature(node *ast.CallSignatureDeclaration) {
+	p.enterNode(node.AsNode())
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	p.emitSignature(node.AsNode())
+	p.writeTrailingSemicolon()
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitConstructSignature(node *ast.ConstructSignatureDeclaration) {
+	p.enterNode(node.AsNode())
+	p.writeKeyword("new")
+	p.writeSpace()
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	p.emitSignature(node.AsNode())
+	p.writeTrailingSemicolon()
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitIndexSignature(node *ast.IndexSignatureDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	p.emitParametersForIndexSignature(node.AsNode(), node.Parameters)
+	p.emitTypeAnnotation(node.Type)
+	p.writeTrailingSemicolon()
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitClassElement(node *ast.ClassElement) {
+	switch node.Kind {
+	case ast.KindPropertyDeclaration:
+		p.emitPropertyDeclaration(node.AsPropertyDeclaration())
+	case ast.KindMethodDeclaration:
+		p.emitMethodDeclaration(node.AsMethodDeclaration())
+	case ast.KindClassStaticBlockDeclaration:
+		p.emitClassStaticBlockDeclaration(node.AsClassStaticBlockDeclaration())
+	case ast.KindConstructor:
+		p.emitConstructor(node.AsConstructorDeclaration())
+	case ast.KindGetAccessor:
+		p.emitGetAccessorDeclaration(node.AsGetAccessorDeclaration())
+	case ast.KindSetAccessor:
+		p.emitSetAccessorDeclaration(node.AsSetAccessorDeclaration())
+	case ast.KindIndexSignature:
+		p.emitIndexSignature(node.AsIndexSignatureDeclaration())
+	case ast.KindSemicolonClassElement:
+		p.emitSemicolonClassElement(node.AsSemicolonClassElement())
+	default:
+		panic(fmt.Sprintf("unexpected ClassElement: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitTypeElement(node *ast.TypeElement) {
+	switch node.Kind {
+	case ast.KindPropertySignature:
+		p.emitPropertySignature(node.AsPropertySignatureDeclaration())
+	case ast.KindMethodSignature:
+		p.emitMethodSignature(node.AsMethodSignatureDeclaration())
+	case ast.KindCallSignature:
+		p.emitCallSignature(node.AsCallSignatureDeclaration())
+	case ast.KindConstructSignature:
+		p.emitConstructSignature(node.AsConstructSignatureDeclaration())
+	case ast.KindGetAccessor:
+		p.emitGetAccessorDeclaration(node.AsGetAccessorDeclaration())
+	case ast.KindSetAccessor:
+		p.emitSetAccessorDeclaration(node.AsSetAccessorDeclaration())
+	case ast.KindIndexSignature:
+		p.emitIndexSignature(node.AsIndexSignatureDeclaration())
+	default:
+		panic(fmt.Sprintf("unexpected TypeElement: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitObjectLiteralElement(node *ast.ObjectLiteralElement) {
+	switch node.Kind {
+	case ast.KindPropertyAssignment:
+		p.emitPropertyAssignment(node.AsPropertyAssignment())
+	case ast.KindShorthandPropertyAssignment:
+		p.emitShorthandPropertyAssignment(node.AsShorthandPropertyAssignment())
+	case ast.KindSpreadAssignment:
+		p.emitSpreadAssignment(node.AsSpreadAssignment())
+	case ast.KindMethodDeclaration:
+		p.emitMethodDeclaration(node.AsMethodDeclaration())
+	case ast.KindGetAccessor:
+		p.emitGetAccessorDeclaration(node.AsGetAccessorDeclaration())
+	case ast.KindSetAccessor:
+		p.emitSetAccessorDeclaration(node.AsSetAccessorDeclaration())
+	default:
+		panic(fmt.Sprintf("unhandled ObjectLiteralElement: %v", node.Kind))
+	}
+}
+
+//
+// Types
+//
+
+func (p *Printer) emitKeywordTypeNode(node *ast.KeywordTypeNode) {
+	p.emitKeywordNode(node.AsNode())
+}
+
+func (p *Printer) emitTypePredicateParameterName(node *ast.TypePredicateParameterName) {
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitIdentifierReference(node.AsIdentifier())
+	case ast.KindThisType:
+		p.emitThisType(node.AsThisTypeNode())
+	default:
+		panic(fmt.Sprintf("unexpected TypePredicateParameterName: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitTypePredicate(node *ast.TypePredicateNode) {
+	p.enterNode(node.AsNode())
+	if node.AssertsModifier != nil {
+		p.emitTokenNode(node.AssertsModifier)
+		p.writeSpace()
+	}
+	p.emitTypePredicateParameterName(node.ParameterName)
+	if node.Type != nil {
+		p.writeSpace()
+		p.writeKeyword("is")
+		p.writeSpace()
+		p.emitTypeNode(node.Type)
+	}
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTypeArguments(parentNode *ast.Node, nodes *ast.TypeArgumentList) {
+	if nodes == nil {
+		return
+	}
+
+	p.emitList((*Printer).emitTypeNode, parentNode, nodes, LFTypeArguments|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone) /*, typeArgumentParenthesizerRuleSelector */)
+}
+
+func (p *Printer) emitTypeReference(node *ast.TypeReferenceNode) {
+	p.enterNode(node.AsNode())
+	p.emitEntityName(node.TypeName)
+	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitFunctionType(node *ast.FunctionTypeNode) {
+	p.enterNode(node.AsNode())
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	// !!! in the old emitter, quickinfo uses type arguments in place of type parameters for instantiated signatures
+	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitParameters(node.AsNode(), node.Parameters)
+	p.writeSpace()
+	p.writePunctuation("=>")
+	p.writeSpace()
+	p.emitTypeNode(node.Type)
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitConstructorType(node *ast.ConstructorTypeNode) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.writeKeyword("new")
+	p.writeSpace()
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	// !!! in the old emitter, quickinfo uses type arguments in place of type parameters for instantiated signatures
+	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitParameters(node.AsNode(), node.Parameters)
+	p.writeSpace()
+	p.writePunctuation("=>")
+	p.writeSpace()
+	p.emitTypeNode(node.Type)
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTypeQuery(node *ast.TypeQueryNode) {
+	p.enterNode(node.AsNode())
+	p.writeKeyword("typeof")
+	p.writeSpace()
+	p.emitEntityName(node.ExprName)
+	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTypeLiteral(node *ast.TypeLiteralNode) {
+	p.enterNode(node.AsNode())
+	p.pushNameGenerationScope(node.AsNode())
+	p.generateAllMemberNames(node.Members)
+	p.writePunctuation("{")
+	flags := core.IfElse(p.shouldEmitOnSingleLine(node.AsNode()), LFSingleLineTypeLiteralMembers, LFMultiLineTypeLiteralMembers)
+	p.emitList((*Printer).emitTypeElement, node.AsNode(), node.Members, flags|LFNoSpaceIfEmpty)
+	p.writePunctuation("}")
+	p.popNameGenerationScope(node.AsNode())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitArrayType(node *ast.ArrayTypeNode) {
+	p.enterNode(node.AsNode())
+	p.emitTypeNode(node.ElementType /*, parenthesizer.parenthesizeNonArrayTypeOfPostfixType*/) // !!!
+	p.writePunctuation("[")
+	p.writePunctuation("]")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTupleType(node *ast.TupleTypeNode) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindOpenBracketToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+	flags := core.IfElse(p.shouldEmitOnSingleLine(node.AsNode()), LFSingleLineTupleTypeElements, LFMultiLineTupleTypeElements)
+	p.emitList((*Printer).emitTypeNode, node.AsNode(), node.Elements, flags|LFNoSpaceIfEmpty /*, parenthesizer.parenthesizeElementTypeOfTupleType*/) // !!!
+	p.emitTokenWithComment(ast.KindCloseBracketToken, node.Elements.End(), WriteKindPunctuation, node.AsNode())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitRestType(node *ast.RestTypeNode) {
+	p.enterNode(node.AsNode())
+	p.writePunctuation("...")
+	p.emitTypeNode(node.Type)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitOptionalType(node *ast.OptionalTypeNode) {
+	p.enterNode(node.AsNode())
+	p.emitTypeNode(node.Type /*, parenthesizer.parenthesizeTypeOfOptionalType*/) // !!!
+	p.writePunctuation("?")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitNamedTupleMember(node *ast.NamedTupleMember) {
+	p.enterNode(node.AsNode())
+	p.emitPunctuationNode(node.DotDotDotToken)
+	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	p.emitPunctuationNode(node.QuestionToken)
+	p.emitTokenWithComment(ast.KindColonToken, greatestEnd(node.Name().End(), node.QuestionToken), WriteKindPunctuation, node.AsNode())
+	p.writeSpace()
+	p.emitTypeNode(node.Type)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitUnionType(node *ast.UnionTypeNode) {
+	p.enterNode(node.AsNode())
+	p.emitList((*Printer).emitTypeNode, node.AsNode(), node.Types, LFUnionTypeConstituents /*, parenthesizer.parenthesizeConstituentTypeOfUnionType*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitIntersectionType(node *ast.IntersectionTypeNode) {
+	p.enterNode(node.AsNode())
+	p.emitList((*Printer).emitTypeNode, node.AsNode(), node.Types, LFIntersectionTypeConstituents /*, parenthesizer.parenthesizeConstituentTypeOfIntersectionType*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitConditionalType(node *ast.ConditionalTypeNode) {
+	p.enterNode(node.AsNode())
+	p.emitTypeNode(node.CheckType /*, parenthesizer.parenthesizeCheckTypeOfConditionalType*/) // !!!
+	p.writeSpace()
+	p.writeKeyword("extends")
+	p.writeSpace()
+	p.emitTypeNode(node.ExtendsType /*, parenthesizer.parenthesizeExtendsTypeOfConditionalType*/) // !!!
+	p.writeSpace()
+	p.writePunctuation("?")
+	p.writeSpace()
+	p.emitTypeNode(node.TrueType)
+	p.writeSpace()
+	p.writePunctuation(":")
+	p.writeSpace()
+	p.emitTypeNode(node.FalseType)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitInferType(node *ast.InferTypeNode) {
+	p.enterNode(node.AsNode())
+	p.writeKeyword("infer")
+	p.writeSpace()
+	p.emitTypeParameter(node.TypeParameter.AsTypeParameter())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitParenthesizedType(node *ast.ParenthesizedTypeNode) {
+	p.enterNode(node.AsNode())
+	p.writePunctuation("(")
+	p.emitTypeNode(node.Type)
+	p.writePunctuation(")")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitThisType(node *ast.ThisTypeNode) {
+	p.enterNode(node.AsNode())
+	p.writeKeyword("this")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTypeOperator(node *ast.TypeOperatorNode) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(node.Operator, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitTypeNode(node.Type /*, core.IfElse(node.Operator == ast.KindReadonlyKeyword, parenthesizer.parenthesizeOperandOfReadonlyTypeOperator, parenthesizer.parenthesizeOperandOfTypeOperator)*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitIndexedAccessType(node *ast.IndexedAccessTypeNode) {
+	p.enterNode(node.AsNode())
+	p.emitTypeNode(node.ObjectType) //, parenthesizer.parenthesizeNonArrayTypeOfPostfixType);
+	p.writePunctuation("[")
+	p.emitTypeNode(node.IndexType)
+	p.writePunctuation("]")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitMappedTypeParamerter(node *ast.TypeParameterDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	p.writeSpace()
+	p.writeKeyword("in")
+	p.writeSpace()
+	p.emitTypeNode(node.Constraint)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitMappedType(node *ast.MappedTypeNode) {
+	p.enterNode(node.AsNode())
+	singleLine := p.shouldEmitOnSingleLine(node.AsNode())
+	p.writePunctuation("{")
+	if singleLine {
+		p.writeSpace()
+	} else {
+		p.writeLine()
+		p.increaseIndent()
+	}
+	if node.ReadonlyToken != nil {
+		p.emitTokenNode(node.ReadonlyToken)
+		if node.ReadonlyToken.Kind != ast.KindReadonlyKeyword {
+			p.writeKeyword("readonly")
+		}
+		p.writeSpace()
+	}
+	p.writePunctuation("[")
+	p.emitMappedTypeParamerter(node.TypeParameter.AsTypeParameter())
+	if node.NameType != nil {
+		p.writeSpace()
+		p.writeKeyword("as")
+		p.writeSpace()
+		p.emitTypeNode(node.NameType)
+	}
+	p.writePunctuation("]")
+	if node.QuestionToken != nil {
+		p.emitPunctuationNode(node.QuestionToken)
+		if node.QuestionToken.Kind != ast.KindQuestionToken {
+			p.writePunctuation("?")
+		}
+	}
+	p.writePunctuation(":")
+	p.writeSpace()
+	p.emitTypeNode(node.Type)
+	p.writeTrailingSemicolon()
+	if node.Members != nil {
+		if singleLine {
+			p.writeSpace()
+		} else {
+			p.writeLine()
+		}
+		p.emitList((*Printer).emitTypeElement, node.AsNode(), node.Members, LFPreserveLines)
+	}
+	if singleLine {
+		p.writeSpace()
+	} else {
+		p.writeLine()
+		p.decreaseIndent()
+	}
+	p.writePunctuation("}")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitLiteralType(node *ast.LiteralTypeNode) {
+	p.enterNode(node.AsNode())
+	p.emitExpression(node.Literal)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTemplateTypeSpan(node *ast.TemplateLiteralTypeSpan) {
+	p.enterNode(node.AsNode())
+	p.emitTypeNode(node.Type)
+	p.emitTemplateMiddleTail(node.Literal)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTemplateTypeSpanNode(node *ast.TemplateLiteralTypeSpanNode) {
+	p.emitTemplateTypeSpan(node.AsTemplateLiteralTypeSpan())
+}
+
+func (p *Printer) emitTemplateType(node *ast.TemplateLiteralTypeNode) {
+	p.enterNode(node.AsNode())
+	p.emitTemplateHead(node.Head.AsTemplateHead())
+	p.emitList((*Printer).emitTemplateTypeSpanNode, node.AsNode(), node.TemplateSpans, LFTemplateExpressionSpans)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitImportTypeNode(node *ast.ImportTypeNode) {
+	p.enterNode(node.AsNode())
+	if node.IsTypeOf {
+		p.writeKeyword("typeof")
+		p.writeSpace()
+	}
+	p.writeKeyword("import")
+	p.writePunctuation("(")
+	p.emitTypeNode(node.Argument)
+	if node.Attributes != nil {
+		p.writePunctuation(",")
+		p.writeSpace()
+		p.emitImportTypeNodeAttributes(node.Attributes.AsImportAttributes())
+	}
+	p.writePunctuation(")")
+	if node.Qualifier != nil {
+		p.writePunctuation(".")
+		p.emitEntityName(node.Qualifier)
+	}
+	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitImportTypeNodeAttributes(node *ast.ImportAttributes) {
+	p.enterNode(node.AsNode())
+	p.writePunctuation("{")
+	p.writeSpace()
+	p.writeKeyword(core.IfElse(node.Token == ast.KindAssertKeyword, "assert", "with"))
+	p.writePunctuation(":")
+	p.writeSpace()
+	p.emitList((*Printer).emitImportAttributeNode, node.AsNode(), node.Attributes, LFImportAttributes)
+	p.writeSpace()
+	p.writePunctuation("}")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTypeNode(node *ast.TypeNode) {
+	switch node.Kind {
+	// Keyword Types
+	case ast.KindAnyKeyword,
+		ast.KindUnknownKeyword,
+		ast.KindNumberKeyword,
+		ast.KindBigIntKeyword,
+		ast.KindObjectKeyword,
+		ast.KindBooleanKeyword,
+		ast.KindStringKeyword,
+		ast.KindSymbolKeyword,
+		ast.KindVoidKeyword,
+		ast.KindUndefinedKeyword,
+		ast.KindNeverKeyword,
+		ast.KindIntrinsicKeyword:
+		p.emitKeywordTypeNode(node.AsKeywordTypeNode())
+
+	// Types
+	case ast.KindTypePredicate:
+		p.emitTypePredicate(node.AsTypePredicateNode())
+	case ast.KindTypeReference:
+		p.emitTypeReference(node.AsTypeReferenceNode())
+	case ast.KindFunctionType:
+		p.emitFunctionType(node.AsFunctionTypeNode())
+	case ast.KindConstructorType:
+		p.emitConstructorType(node.AsConstructorTypeNode())
+	case ast.KindTypeQuery:
+		p.emitTypeQuery(node.AsTypeQueryNode())
+	case ast.KindTypeLiteral:
+		p.emitTypeLiteral(node.AsTypeLiteralNode())
+	case ast.KindArrayType:
+		p.emitArrayType(node.AsArrayTypeNode())
+	case ast.KindTupleType:
+		p.emitTupleType(node.AsTupleTypeNode())
+	case ast.KindOptionalType:
+		p.emitOptionalType(node.AsOptionalTypeNode())
+	case ast.KindRestType:
+		p.emitRestType(node.AsRestTypeNode())
+	case ast.KindUnionType:
+		p.emitUnionType(node.AsUnionTypeNode())
+	case ast.KindIntersectionType:
+		p.emitIntersectionType(node.AsIntersectionTypeNode())
+	case ast.KindConditionalType:
+		p.emitConditionalType(node.AsConditionalTypeNode())
+	case ast.KindInferType:
+		p.emitInferType(node.AsInferTypeNode())
+	case ast.KindParenthesizedType:
+		p.emitParenthesizedType(node.AsParenthesizedTypeNode())
+	case ast.KindThisType:
+		p.emitThisType(node.AsThisTypeNode())
+	case ast.KindTypeOperator:
+		p.emitTypeOperator(node.AsTypeOperatorNode())
+	case ast.KindIndexedAccessType:
+		p.emitIndexedAccessType(node.AsIndexedAccessTypeNode())
+	case ast.KindMappedType:
+		p.emitMappedType(node.AsMappedTypeNode())
+	case ast.KindLiteralType:
+		p.emitLiteralType(node.AsLiteralTypeNode())
+	case ast.KindNamedTupleMember:
+		p.emitNamedTupleMember(node.AsNamedTupleMember())
+	case ast.KindTemplateLiteralType:
+		p.emitTemplateType(node.AsTemplateLiteralTypeNode())
+	case ast.KindTemplateLiteralTypeSpan:
+		p.emitTemplateTypeSpan(node.AsTemplateLiteralTypeSpan())
+	case ast.KindImportType:
+		p.emitImportTypeNode(node.AsImportTypeNode())
+
+	case ast.KindExpressionWithTypeArguments:
+		// !!! Should this actually be considered a type?
+		p.emitExpressionWithTypeArguments(node.AsExpressionWithTypeArguments())
+
+	case ast.KindJSDocAllType,
+		ast.KindJSDocUnknownType,
+		ast.KindJSDocNullableType,
+		ast.KindJSDocNonNullableType,
+		ast.KindJSDocOptionalType,
+		ast.KindJSDocFunctionType,
+		ast.KindJSDocVariadicType:
+		// TODO
+		panic("not implemented")
+
+	default:
+		panic(fmt.Sprintf("unhandled TypeNode: %v", node.Kind))
+	}
+}
+
+//
+// Binding patterns
+//
+
+func (p *Printer) emitObjectBindingPattern(node *ast.BindingPattern) {
+	p.enterNode(node.AsNode())
+	p.writePunctuation("{")
+	p.emitList((*Printer).emitBindingElementNode, node.AsNode(), node.Elements, LFObjectBindingPatternElements)
+	p.writePunctuation("}")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitArrayBindingPattern(node *ast.BindingPattern) {
+	p.enterNode(node.AsNode())
+	p.writePunctuation("[")
+	p.emitList((*Printer).emitBindingElementNode, node.AsNode(), node.Elements, LFArrayBindingPatternElements)
+	p.writePunctuation("]")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitBindingElement(node *ast.BindingElement) {
+	p.enterNode(node.AsNode())
+	p.emitTokenNode(node.DotDotDotToken)
+	if node.PropertyName != nil {
+		p.emitPropertyName(node.PropertyName)
+		p.writePunctuation(":")
+		p.writeSpace()
+	}
+	// Old parser used `OmittedExpression` as a substitute for `Elision`. New parser uses a `BindingElement` with nil members
+	if name := node.Name(); name != nil {
+		p.emitBindingName(name)
+		p.emitInitializer(node.Initializer, node.Name().End(), node.AsNode() /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	}
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitBindingElementNode(node *ast.BindingElementNode) {
+	p.emitBindingElement(node.AsBindingElement())
+}
+
+//
+// Expressions
+//
+
+func (p *Printer) emitKeywordExpression(node *ast.KeywordExpression) {
+	p.emitKeywordNode(node.AsNode())
+}
+
+func (p *Printer) emitArrayLiteralExpression(node *ast.ArrayLiteralExpression) {
+	p.enterNode(node.AsNode())
+	p.emitList((*Printer).emitExpression, node.AsNode(), node.Elements, LFArrayLiteralExpressionElements|core.IfElse(node.MultiLine, LFPreferNewLine, LFNone) /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitObjectLiteralExpression(node *ast.ObjectLiteralExpression) {
+	p.enterNode(node.AsNode())
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	p.generateAllMemberNames(node.Properties)
+	p.emitList((*Printer).emitObjectLiteralElement, node.AsNode(), node.Properties, LFObjectLiteralExpressionProperties|
+		core.IfElse(node.MultiLine, LFPreferNewLine, LFNone)|
+		core.IfElse(p.shouldAllowTrailingComma(node.AsNode(), node.Properties), LFAllowTrailingComma, LFNone))
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+// 1..toString is a valid property access, emit a dot after the literal
+// Also emit a dot if expression is a integer const enum value - it will appear in generated code as numeric literal
+func (p *Printer) mayNeedDotDotForPropertyAccess(expression *ast.Expression) bool {
+	expression = ast.SkipPartiallyEmittedExpressions(expression)
+	if ast.IsNumericLiteral(expression) {
+		// check if numeric literal is a decimal literal that was originally written with a dot
+		text := p.getLiteralTextOfNode(expression /*sourceFile*/, nil, getLiteralTextFlagsNeverAsciiEscape)
+		// If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
+		// if the expression doesn't have any comments that will be emitted.
+		return expression.AsNumericLiteral().TokenFlags&ast.TokenFlagsWithSpecifier == 0 &&
+			!strings.Contains(text, scanner.TokenToString(ast.KindDotToken)) &&
+			!strings.Contains(text, "E") &&
+			!strings.Contains(text, "e")
+	} else if ast.IsAccessExpression(expression) {
+		// check if constant enum value is a non-negative integer
+		if constantValue, ok := p.getConstantValue(expression).(float64); ok {
+			return !math.IsInf(constantValue, 0 /*sign*/) && constantValue >= 0 && math.Floor(constantValue) == constantValue
+		}
+		return false
+	}
+	return false
+}
+
+func (p *Printer) emitPropertyAccessExpression(node *ast.PropertyAccessExpression) {
+	p.enterNode(node.AsNode())
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess */) // !!!
+	token := node.QuestionDotToken
+	if token == nil {
+		token = p.factory.NewToken(ast.KindDotToken)
+		token.Loc = core.NewTextRange(node.Expression.End(), node.Name().Pos())
+	}
+	linesBeforeDot := p.getLinesBetweenNodes(node.AsNode(), node.Expression, token)
+	p.writeLineRepeat(linesBeforeDot)
+	p.increaseIndentIf(linesBeforeDot > 0)
+	shouldEmitDotDot := token.Kind != ast.KindQuestionDotToken &&
+		p.mayNeedDotDotForPropertyAccess(node.Expression) &&
+		!p.writer.hasTrailingComment() &&
+		!p.writer.hasTrailingWhitespace()
+	if shouldEmitDotDot {
+		p.writePunctuation(".")
+	}
+	p.emitTokenNode(token)
+	linesAfterDot := p.getLinesBetweenNodes(node.AsNode(), token, node.Name())
+	p.writeLineRepeat(linesAfterDot)
+	p.increaseIndentIf(linesAfterDot > 0)
+	p.emitMemberName(node.Name())
+	p.decreaseIndentIf(linesAfterDot > 0)
+	p.decreaseIndentIf(linesBeforeDot > 0)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitElementAccessExpression(node *ast.ElementAccessExpression) {
+	p.enterNode(node.AsNode())
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess*/) // !!!
+	p.emitTokenNode(node.QuestionDotToken)
+	p.emitTokenWithComment(ast.KindOpenBracketToken, greatestEnd(-1, node.Expression, node.QuestionDotToken), WriteKindPunctuation, node.AsNode())
+	p.emitExpression(node.ArgumentExpression)
+	p.emitTokenWithComment(ast.KindCloseBracketToken, node.ArgumentExpression.End(), WriteKindPunctuation, node.AsNode())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitCallExpression(node *ast.CallExpression) {
+	p.enterNode(node.AsNode())
+	indirectCall := p.shouldEmitIndirectCall(node.AsNode())
+	if indirectCall {
+		p.writePunctuation("(")
+		p.writeLiteral("0")
+		p.writePunctuation(",")
+		p.writeSpace()
+	}
+
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess*/) // !!!
+
+	if indirectCall {
+		p.writePunctuation(")")
+	}
+
+	p.emitTokenNode(node.QuestionDotToken)
+	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	p.emitList((*Printer).emitExpression, node.AsNode(), node.Arguments, LFCallExpressionArguments /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitNewExpression(node *ast.NewExpression) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindNewKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionOfNew */) // !!!
+	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	p.emitList((*Printer).emitExpression, node.AsNode(), node.Arguments, LFNewExpressionArguments /*, parenthesizer.parenthesizeExpressionForDisallowedComma */) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTaggedTemplateExpression(node *ast.TaggedTemplateExpression) {
+	p.enterNode(node.AsNode())
+	indirectCall := p.shouldEmitIndirectCall(node.AsNode())
+	if indirectCall {
+		p.writePunctuation("(")
+		p.writeLiteral("0")
+		p.writePunctuation(",")
+		p.writeSpace()
+	}
+	p.emitExpression(node.Tag /*, parenthesizer.parenthesizeLeftSideOfAccess */) // !!!
+	if indirectCall {
+		p.writePunctuation(")")
+	}
+	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	p.writeSpace()
+	p.emitExpression(node.Template)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTypeAssertionExpression(node *ast.TypeAssertion) {
+	p.enterNode(node.AsNode())
+	p.writePunctuation("<")
+	p.emitTypeNode(node.Type)
+	p.writePunctuation(">")
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitParenthesizedExpression(node *ast.ParenthesizedExpression) {
+	p.enterNode(node.AsNode())
+	openParenPos := p.emitTokenWithComment(ast.KindOpenParenToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+	indented := p.writeLineSeparatorsAndIndentBefore(node.Expression, node.AsNode())
+	p.emitExpression(node.Expression)
+	p.writeLineSeparatorsAfter(node.Expression, node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.emitTokenWithComment(ast.KindCloseParenToken, greatestEnd(openParenPos, node.Expression), WriteKindPunctuation, node.AsNode())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitFunctionExpression(node *ast.FunctionExpression) {
+	p.enterNode(node.AsNode())
+	p.generateNameIfNeeded(node.Name())
+
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.writeKeyword("function")
+	p.emitTokenNode(node.AsteriskToken)
+	p.writeSpace()
+
+	if name := node.Name(); name != nil {
+		p.emitIdentifierName(name.AsIdentifier())
+	}
+
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+
+	p.emitSignature(node.AsNode())
+	p.emitFunctionBodyNode(node.Body)
+
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitConciseBody(node *ast.BlockOrExpression) {
+	switch {
+	case ast.IsBlock(node):
+		p.emitFunctionBody(node.AsBlock())
+	case ast.IsExpression(node):
+		p.emitExpression(node /*, parenthesizer.parenthesizeConciseBodyOfArrowFunction*/) // !!!
+	default:
+		panic(fmt.Sprintf("unexpected body: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitArrowFunction(node *ast.ArrowFunction) {
+	p.enterNode(node.AsNode())
+
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitParametersForArrow(node.AsNode(), node.Parameters)
+	p.emitTypeAnnotation(node.Type)
+	p.writeSpace()
+	p.emitTokenNode(node.EqualsGreaterThanToken)
+	p.writeSpace()
+
+	p.emitConciseBody(node.Body)
+
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitDeleteExpression(node *ast.DeleteExpression) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindDeleteKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTypeOfExpression(node *ast.TypeOfExpression) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindTypeOfKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitVoidExpression(node *ast.VoidExpression) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindVoidKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitAwaitExpression(node *ast.AwaitExpression) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindAwaitKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitPrefixUnaryExpression(node *ast.PrefixUnaryExpression) {
+	p.enterNode(node.AsNode())
+	operator := node.Operator
+	operand := node.Operand
+	p.emitTokenWithComment(operator, node.Pos(), WriteKindOperator, node.AsNode())
+
+	// In some cases, we need to emit a space between the operator and the operand. One obvious case
+	// is when the operator is an identifier, like delete or typeof. We also need to do this for plus
+	// and minus expressions in certain cases. Specifically, consider the following two cases (parens
+	// are just for clarity of exposition, and not part of the source code):
+	//
+	//  (+(+1))
+	//  (+(++1))
+	//
+	// We need to emit a space in both cases. In the first case, the absence of a space will make
+	// the resulting expression a prefix increment operation. And in the second, it will make the resulting
+	// expression a prefix increment whose operand is a plus expression - (++(+x))
+	// The same is true of minus of course.
+	if operand.Kind == ast.KindPrefixUnaryExpression {
+		inner := operand.AsPrefixUnaryExpression().Operator
+		if (operator == ast.KindPlusToken && (inner == ast.KindPlusToken || inner == ast.KindPlusPlusToken)) ||
+			(operator == ast.KindMinusToken && (inner == ast.KindMinusToken || inner == ast.KindMinusMinusToken)) {
+			p.writeSpace()
+		}
+	}
+
+	p.emitExpression(node.Operand /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitPostfixUnaryExpression(node *ast.PostfixUnaryExpression) {
+	p.enterNode(node.AsNode())
+	p.emitExpression(node.Operand /*, parenthesizer.parenthesizeOperandOfPostfixUnary*/) // !!!
+	p.emitTokenWithComment(node.Operator, node.Operand.End(), WriteKindOperator, node.AsNode())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitBinaryExpression(node *ast.BinaryExpression) {
+	p.enterNode(node.AsNode())
+
+	p.emitExpression(node.Left /*, parenthesizer.getParenthesizeLeftSideOfBinaryForOperator(node.OperatorToken.Kind)*/) // !!!
+
+	linesBeforeOperator := p.getLinesBetweenNodes(node.AsNode(), node.Left, node.OperatorToken)
+	p.writeLinesAndIndent(linesBeforeOperator, node.OperatorToken.Kind != ast.KindCommaToken /*writeSpaceIfNotIndenting*/)
+	p.emitTokenNode(node.OperatorToken)
+
+	linesAfterOperator := p.getLinesBetweenNodes(node.AsNode(), node.Left, node.OperatorToken)
+	p.writeLinesAndIndent(linesAfterOperator, true /*writeSpaceIfNotIndenting*/) // Binary operators should have a space before the comment starts
+
+	p.emitExpression(node.Right /*, parenthesizer.getParenthesizeRightSideOfBinaryForOperator(node.OperatorToken.Kind)*/) // !!!
+
+	p.decreaseIndentIf(linesAfterOperator > 0)
+	p.decreaseIndentIf(linesBeforeOperator > 0)
+
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitConditionalExpression(node *ast.ConditionalExpression) {
+	p.enterNode(node.AsNode())
+	linesBeforeQuestion := p.getLinesBetweenNodes(node.AsNode(), node.Condition, node.QuestionToken)
+	linesAfterQuestion := p.getLinesBetweenNodes(node.AsNode(), node.QuestionToken, node.WhenTrue)
+	linesBeforeColon := p.getLinesBetweenNodes(node.AsNode(), node.WhenTrue, node.ColonToken)
+	linesAfterColon := p.getLinesBetweenNodes(node.AsNode(), node.ColonToken, node.WhenFalse)
+	p.emitExpression(node.Condition /*, parenthesizer.parenthesizeConditionOfConditionalExpression*/) // !!!
+	p.writeLinesAndIndent(linesBeforeQuestion /*writeSpaceIfNotIndenting*/, true)
+	p.emitPunctuationNode(node.QuestionToken)
+	p.writeLinesAndIndent(linesAfterQuestion /*writeSpaceIfNotIndenting*/, true)
+	p.emitExpression(node.WhenTrue /*, parenthesizer.parenthesizeBranchOfConditionalExpression*/) // !!!
+	p.decreaseIndentIf(linesAfterQuestion > 0)
+	p.decreaseIndentIf(linesBeforeQuestion > 0)
+	p.writeLinesAndIndent(linesBeforeColon /*writeSpaceIfNotIndenting*/, true)
+	p.emitPunctuationNode(node.ColonToken)
+	p.writeLinesAndIndent(linesAfterColon /*writeSpaceIfNotIndenting*/, true)
+	p.emitExpression(node.WhenFalse /*, parenthesizer.parenthesizeBranchOfConditionalExpression*/) // !!!
+	p.decreaseIndentIf(linesAfterColon > 0)
+	p.decreaseIndentIf(linesBeforeColon > 0)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTemplateExpression(node *ast.TemplateExpression) {
+	p.enterNode(node.AsNode())
+	p.emitTemplateHead(node.Head.AsTemplateHead())
+	p.emitList((*Printer).emitTemplateSpanNode, node.AsNode(), node.TemplateSpans, LFTemplateExpressionSpans)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitYieldExpression(node *ast.YieldExpression) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindYieldKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.emitPunctuationNode(node.AsteriskToken)
+	if node.Expression != nil {
+		p.writeSpace()
+		p.emitExpression(node.Expression /*, parenthesizeExpressionForNoAsiAndDisallowedComma*/) // !!!
+	}
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitSpreadElement(node *ast.SpreadElement) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindDotDotDotToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitClassExpression(node *ast.ClassExpression) {
+	p.enterNode(node.AsNode())
+	p.generateNameIfNeeded(node.Name())
+
+	p.emitModifierList(node.AsNode(), node.Modifiers(), true /*allowDecorators*/)
+	p.emitTokenWithComment(ast.KindClassKeyword, greatestEnd(node.Pos(), node.Modifiers()), WriteKindKeyword, node.AsNode())
+
+	if node.Name() != nil {
+		p.writeSpace()
+		p.emitIdentifierName(node.Name().AsIdentifier())
+	}
+
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+
+	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitList((*Printer).emitHeritageClauseNode, node.AsNode(), node.HeritageClauses, LFClassHeritageClauses)
+	p.writeSpace()
+	p.writePunctuation("{")
+	p.pushNameGenerationScope(node.AsNode())
+	p.generateAllMemberNames(node.Members)
+	p.emitList((*Printer).emitClassElement, node.AsNode(), node.Members, LFClassMembers)
+	p.popNameGenerationScope(node.AsNode())
+	p.writePunctuation("}")
+
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitOmittedExpression(node *ast.Node) {
+	p.enterNode(node)
+	p.exitNode(node)
+}
+
+func (p *Printer) emitExpressionWithTypeArguments(node *ast.ExpressionWithTypeArguments) {
+	p.enterNode(node.AsNode())
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess*/) // !!!
+	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitExpressionWithTypeArgumentsNode(node *ast.ExpressionWithTypeArgumentsNode) {
+	p.emitExpressionWithTypeArguments(node.AsExpressionWithTypeArguments())
+}
+
+func (p *Printer) emitAsExpression(node *ast.AsExpression) {
+	p.enterNode(node.AsNode())
+	p.emitExpression(node.Expression)
+	if node.Type != nil {
+		p.writeSpace()
+		p.writeKeyword("as")
+		p.writeSpace()
+		p.emitTypeNode(node.Type)
+	}
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitSatisfiesExpression(node *ast.SatisfiesExpression) {
+	p.enterNode(node.AsNode())
+	p.emitExpression(node.Expression)
+	if node.Type != nil {
+		p.writeSpace()
+		p.writeKeyword("satisfies")
+		p.writeSpace()
+		p.emitTypeNode(node.Type)
+	}
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitNonNullExpression(node *ast.NonNullExpression) {
+	p.enterNode(node.AsNode())
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess*/) // !!!
+	p.writeOperator("!")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitMetaProperty(node *ast.MetaProperty) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(node.KeywordToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+	p.writePunctuation(".")
+	p.emitIdentifierName(node.Name().AsIdentifier())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitExpression(node *ast.Node) {
+	switch node.Kind {
+	// Keywords
+	case ast.KindTrueKeyword, ast.KindFalseKeyword, ast.KindNullKeyword:
+		p.emitTokenNode(node)
+	case ast.KindThisKeyword, ast.KindSuperKeyword, ast.KindImportKeyword:
+		p.emitKeywordExpression(node.AsKeywordExpression())
+
+	// Literals
+	case ast.KindNumericLiteral:
+		p.emitNumericLiteral(node.AsNumericLiteral())
+	case ast.KindBigIntLiteral:
+		p.emitBigIntLiteral(node.AsBigIntLiteral())
+	case ast.KindStringLiteral:
+		p.emitStringLiteral(node.AsStringLiteral())
+	case ast.KindRegularExpressionLiteral:
+		p.emitRegularExpressionLiteral(node.AsRegularExpressionLiteral())
+	case ast.KindNoSubstitutionTemplateLiteral:
+		p.emitNoSubstitutionTemplateLiteral(node.AsNoSubstitutionTemplateLiteral())
+
+	// Identifiers
+	case ast.KindIdentifier:
+		p.emitIdentifierReference(node.AsIdentifier())
+	case ast.KindPrivateIdentifier:
+		p.emitPrivateIdentifier(node.AsPrivateIdentifier())
+
+	// Expressions
+	case ast.KindArrayLiteralExpression:
+		p.emitArrayLiteralExpression(node.AsArrayLiteralExpression())
+	case ast.KindObjectLiteralExpression:
+		p.emitObjectLiteralExpression(node.AsObjectLiteralExpression())
+	case ast.KindPropertyAccessExpression:
+		p.emitPropertyAccessExpression(node.AsPropertyAccessExpression())
+	case ast.KindElementAccessExpression:
+		p.emitElementAccessExpression(node.AsElementAccessExpression())
+	case ast.KindCallExpression:
+		p.emitCallExpression(node.AsCallExpression())
+	case ast.KindNewExpression:
+		p.emitNewExpression(node.AsNewExpression())
+	case ast.KindTaggedTemplateExpression:
+		p.emitTaggedTemplateExpression(node.AsTaggedTemplateExpression())
+	case ast.KindTypeAssertionExpression:
+		p.emitTypeAssertionExpression(node.AsTypeAssertion())
+	case ast.KindParenthesizedExpression:
+		p.emitParenthesizedExpression(node.AsParenthesizedExpression())
+	case ast.KindFunctionExpression:
+		p.emitFunctionExpression(node.AsFunctionExpression())
+	case ast.KindArrowFunction:
+		p.emitArrowFunction(node.AsArrowFunction())
+	case ast.KindDeleteExpression:
+		p.emitDeleteExpression(node.AsDeleteExpression())
+	case ast.KindTypeOfExpression:
+		p.emitTypeOfExpression(node.AsTypeOfExpression())
+	case ast.KindVoidExpression:
+		p.emitVoidExpression(node.AsVoidExpression())
+	case ast.KindAwaitExpression:
+		p.emitAwaitExpression(node.AsAwaitExpression())
+	case ast.KindPrefixUnaryExpression:
+		p.emitPrefixUnaryExpression(node.AsPrefixUnaryExpression())
+	case ast.KindPostfixUnaryExpression:
+		p.emitPostfixUnaryExpression(node.AsPostfixUnaryExpression())
+	case ast.KindBinaryExpression:
+		p.emitBinaryExpression(node.AsBinaryExpression())
+	case ast.KindConditionalExpression:
+		p.emitConditionalExpression(node.AsConditionalExpression())
+	case ast.KindTemplateExpression:
+		p.emitTemplateExpression(node.AsTemplateExpression())
+	case ast.KindYieldExpression:
+		p.emitYieldExpression(node.AsYieldExpression())
+	case ast.KindSpreadElement:
+		p.emitSpreadElement(node.AsSpreadElement())
+	case ast.KindClassExpression:
+		p.emitClassExpression(node.AsClassExpression())
+	case ast.KindOmittedExpression:
+		p.emitOmittedExpression(node)
+	case ast.KindAsExpression:
+		p.emitAsExpression(node.AsAsExpression())
+	case ast.KindNonNullExpression:
+		p.emitNonNullExpression(node.AsNonNullExpression())
+	case ast.KindExpressionWithTypeArguments:
+		p.emitExpressionWithTypeArguments(node.AsExpressionWithTypeArguments())
+	case ast.KindSatisfiesExpression:
+		p.emitSatisfiesExpression(node.AsSatisfiesExpression())
+	case ast.KindMetaProperty:
+		p.emitMetaProperty(node.AsMetaProperty())
+	case ast.KindSyntheticExpression:
+		panic("SyntheticExpression should never be printed.")
+	case ast.KindMissingDeclaration:
+		break
+
+	// JSX
+	case ast.KindJsxElement:
+		p.emitJsxElement(node.AsJsxElement())
+	case ast.KindJsxSelfClosingElement:
+		p.emitJsxSelfClosingElement(node.AsJsxSelfClosingElement())
+	case ast.KindJsxFragment:
+		p.emitJsxFragment(node.AsJsxFragment())
+
+	// Synthesized list
+	case ast.KindSyntaxList:
+		panic("SyntaxList should not be printed")
+
+		// !!!
+		//////Transformation nodes
+		////case ast.KindNotEmittedStatement:
+		////	return
+		////case ast.KindPartiallyEmittedExpression:
+		////	p.emitPartiallyEmittedExpression(node.AsPartiallyEmittedExpression())
+		////case ast.KindCommaListExpression:
+		////	p.emitCommaList(node.AsCommaListExpression())
+		////case ast.KindSyntheticReferenceExpression:
+		////	return Debug.fail("SyntheticReferenceExpression should not be printed")
+
+	default:
+		panic(fmt.Sprintf("unexpected Expression: %v", node.Kind))
+	}
+}
+
+//
+// Misc
+//
+
+func (p *Printer) emitTemplateSpan(node *ast.TemplateSpan) {
+	p.enterNode(node.AsNode())
+	p.emitExpression(node.Expression)
+	p.emitTemplateMiddleTail(node.Literal)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTemplateSpanNode(node *ast.TemplateSpanNode) {
+	p.emitTemplateSpan(node.AsTemplateSpan())
+}
+
+func (p *Printer) emitSemicolonClassElement(node *ast.SemicolonClassElement) {
+	p.enterNode(node.AsNode())
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+//
+// Statements
+//
+
+func (p *Printer) isEmptyBlock(block *ast.Node, statements *ast.StatementList) bool {
+	return len(statements.Nodes) == 0 &&
+		(p.currentSourceFile == nil || rangeEndIsOnSameLineAsRangeStart(block.Loc, block.Loc, p.currentSourceFile))
+}
+
+func (p *Printer) emitBlock(node *ast.Block) {
+	p.enterNode(node.AsNode())
+	p.generateNames(node.AsNode())
+	p.emitTokenWithComment(ast.KindOpenBraceToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+	p.increaseIndent()
+
+	format := core.IfElse(!node.Multiline && p.isEmptyBlock(node.AsNode(), node.Statements) || p.shouldEmitOnSingleLine(node.AsNode()),
+		LFSingleLineBlockStatements,
+		LFMultiLineBlockStatements)
+	p.emitList((*Printer).emitStatement, node.AsNode(), node.Statements, format)
+
+	p.decreaseIndent()
+	p.emitTokenWithCommentEx(ast.KindCloseBraceToken, node.Statements.End(), WriteKindPunctuation, node.AsNode(), format&LFMultiLine != 0 /*indentLeading*/)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitVariableStatement(node *ast.VariableStatement) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.emitVariableDeclarationList(node.DeclarationList.AsVariableDeclarationList())
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitEmptyStatement(node *ast.EmptyStatement, isEmbeddedStatement bool) {
+	p.enterNode(node.AsNode())
+
+	// While most trailing semicolons are possibly insignificant, an embedded "empty"
+	// statement is significant and cannot be elided by a trailing-semicolon-omitting writer.
+	if isEmbeddedStatement {
+		p.writePunctuation(";")
+	} else {
+		p.writeTrailingSemicolon()
+	}
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitExpressionStatement(node *ast.ExpressionStatement) {
+	p.enterNode(node.AsNode())
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionOfExpressionStatement */) // !!!
+
+	// Emit semicolon in non json files
+	// or if json file that created synthesized expression(eg.define expression statement when --out and amd code generation)
+	if p.currentSourceFile == nil ||
+		p.currentSourceFile.ScriptKind != core.ScriptKindJSON ||
+		ast.NodeIsSynthesized(node.Expression) {
+		p.writeTrailingSemicolon()
+	}
+
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitIfStatement(node *ast.IfStatement) {
+	p.enterNode(node.AsNode())
+	pos := p.emitTokenWithComment(ast.KindIfKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindOpenParenToken, pos, WriteKindPunctuation, node.AsNode())
+	p.emitExpression(node.Expression)
+	p.emitTokenWithComment(ast.KindCloseParenToken, node.Expression.End(), WriteKindPunctuation, node.AsNode())
+	p.emitEmbeddedStatement(node.AsNode(), node.ThenStatement)
+	if node.ElseStatement != nil {
+		p.writeLineOrSpace(node.AsNode(), node.ThenStatement, node.ElseStatement)
+		p.emitTokenWithComment(ast.KindElseKeyword, node.ThenStatement.End(), WriteKindKeyword, node.AsNode())
+		if node.ElseStatement.Kind == ast.KindIfStatement {
+			p.writeSpace()
+			p.emitIfStatement(node.ElseStatement.AsIfStatement())
+		} else {
+			p.emitEmbeddedStatement(node.AsNode(), node.ElseStatement)
+		}
+	}
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitWhileClause(node *ast.Node, expression *ast.Expression, startPos int) {
+	pos := p.emitTokenWithComment(ast.KindWhileKeyword, startPos, WriteKindKeyword, node)
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindOpenParenToken, pos, WriteKindPunctuation, node)
+	p.emitExpression(expression)
+	p.emitTokenWithComment(ast.KindCloseParenToken, expression.End(), WriteKindPunctuation, node)
+}
+
+func (p *Printer) emitDoStatement(node *ast.DoStatement) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindDoKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.emitEmbeddedStatement(node.AsNode(), node.Statement)
+	if ast.IsBlock(node.Statement) && !p.Options.PreserveSourceNewlines {
+		p.writeSpace()
+	} else {
+		p.writeLineOrSpace(node.AsNode(), node.Statement, node.Expression)
+	}
+
+	p.emitWhileClause(node.AsNode(), node.Expression, node.Statement.End())
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitWhileStatement(node *ast.WhileStatement) {
+	p.enterNode(node.AsNode())
+	p.emitWhileClause(node.AsNode(), node.Expression, node.Pos())
+	p.emitEmbeddedStatement(node.AsNode(), node.Statement)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitForInitializer(node *ast.ForInitializer) {
+	if node.Kind == ast.KindVariableDeclarationList {
+		p.emitVariableDeclarationList(node.AsVariableDeclarationList())
+	} else {
+		p.emitExpression(node)
+	}
+}
+
+func (p *Printer) emitForStatement(node *ast.ForStatement) {
+	p.enterNode(node.AsNode())
+	pos := p.emitTokenWithComment(ast.KindForKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	pos = p.emitTokenWithComment(ast.KindOpenParenToken, pos, WriteKindPunctuation, node.AsNode())
+	if node.Initializer != nil {
+		p.emitForInitializer(node.Initializer)
+		pos = node.Initializer.End()
+	}
+	pos = p.emitTokenWithComment(ast.KindSemicolonToken, pos, WriteKindPunctuation, node.AsNode())
+	if node.Condition != nil {
+		p.writeSpace()
+		p.emitExpression(node.Condition)
+		pos = node.Condition.End()
+	}
+	pos = p.emitTokenWithComment(ast.KindSemicolonToken, pos, WriteKindPunctuation, node.AsNode())
+	if node.Incrementor != nil {
+		p.writeSpace()
+		p.emitExpression(node.Incrementor)
+		pos = node.Incrementor.End()
+	}
+	p.emitTokenWithComment(ast.KindCloseParenToken, pos, WriteKindPunctuation, node.AsNode())
+	p.emitEmbeddedStatement(node.AsNode(), node.Statement)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitForInStatement(node *ast.ForInOrOfStatement) {
+	p.enterNode(node.AsNode())
+	pos := p.emitTokenWithComment(ast.KindForKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindOpenParenToken, pos, WriteKindPunctuation, node.AsNode())
+	p.emitForInitializer(node.Initializer)
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindInKeyword, node.Initializer.End(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitExpression(node.Expression)
+	p.emitTokenWithComment(ast.KindCloseParenToken, node.Expression.End(), WriteKindPunctuation, node.AsNode())
+	p.emitEmbeddedStatement(node.AsNode(), node.Statement)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitForOfStatement(node *ast.ForInOrOfStatement) {
+	p.enterNode(node.AsNode())
+	openParenPos := p.emitTokenWithComment(ast.KindForKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	if node.AwaitModifier != nil {
+		p.emitKeywordNode(node.AwaitModifier)
+		p.writeSpace()
+	}
+	p.emitTokenWithComment(ast.KindOpenParenToken, openParenPos, WriteKindPunctuation, node.AsNode())
+	p.emitForInitializer(node.Initializer)
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindOfKeyword, node.Initializer.End(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitExpression(node.Expression)
+	p.emitTokenWithComment(ast.KindCloseParenToken, node.Expression.End(), WriteKindPunctuation, node.AsNode())
+	p.emitEmbeddedStatement(node.AsNode(), node.Statement)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitContinueStatement(node *ast.ContinueStatement) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindContinueKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	if node.Label != nil {
+		p.writeSpace()
+		p.emitLabelIdentifier(node.Label.AsIdentifier())
+	}
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitBreakStatement(node *ast.BreakStatement) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindBreakKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	if node.Label != nil {
+		p.writeSpace()
+		p.emitLabelIdentifier(node.Label.AsIdentifier())
+	}
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitReturnStatement(node *ast.ReturnStatement) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindReturnKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	if node.Expression != nil {
+		p.writeSpace()
+		p.emitExpression(node.Expression /*, parenthesizeExpressionForNoAsi*/) // !!!
+	}
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitWithStatement(node *ast.WithStatement) {
+	p.enterNode(node.AsNode())
+	pos := p.emitTokenWithComment(ast.KindWithKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindOpenParenToken, pos, WriteKindPunctuation, node.AsNode())
+	p.emitExpression(node.Expression)
+	p.emitTokenWithComment(ast.KindCloseParenToken, node.Expression.End(), WriteKindPunctuation, node.AsNode())
+	p.emitEmbeddedStatement(node.AsNode(), node.Statement)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitSwitchStatement(node *ast.SwitchStatement) {
+	p.enterNode(node.AsNode())
+	pos := p.emitTokenWithComment(ast.KindSwitchKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindOpenParenToken, pos, WriteKindPunctuation, node.AsNode())
+	p.emitExpression(node.Expression)
+	p.emitTokenWithComment(ast.KindCloseParenToken, node.Expression.End(), WriteKindPunctuation, node.AsNode())
+	p.writeSpace()
+	p.emitCaseBlock(node.CaseBlock.AsCaseBlock())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitLabeledStatement(node *ast.LabeledStatement) {
+	p.enterNode(node.AsNode())
+	p.emitLabelIdentifier(node.Label.AsIdentifier())
+	p.emitTokenWithComment(ast.KindColonToken, node.Label.End(), WriteKindPunctuation, node.AsNode())
+	p.emitEmbeddedStatement(node.AsNode(), node.Statement)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitThrowStatement(node *ast.ThrowStatement) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindThrowKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitExpression(node.Expression /*, parenthesizeExpressionForNoAsi*/) // !!!
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTryStatement(node *ast.TryStatement) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindTryKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitBlock(node.TryBlock.AsBlock())
+	if node.CatchClause != nil {
+		p.writeLineOrSpace(node.AsNode(), node.TryBlock, node.CatchClause)
+		p.emitCatchClause(node.CatchClause.AsCatchClause())
+	}
+	if node.FinallyBlock != nil {
+		p.writeLineOrSpace(node.AsNode(), core.Coalesce(node.CatchClause, node.TryBlock), node.FinallyBlock)
+		p.emitTokenWithComment(ast.KindFinallyKeyword, core.Coalesce(node.CatchClause, node.TryBlock).End(), WriteKindKeyword, node.AsNode())
+		p.writeSpace()
+		p.emitBlock(node.FinallyBlock.AsBlock())
+	}
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitDebuggerStatement(node *ast.DebuggerStatement) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindDebuggerKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+//
+// Declarations
+//
+
+func (p *Printer) emitVariableDeclaration(node *ast.VariableDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitBindingName(node.Name())
+	p.emitPunctuationNode(node.ExclamationToken)
+	p.emitTypeAnnotation(node.Type)
+	// !!! old compiler can set a type node purely for emit. Is this necessary?
+	p.emitInitializer(node.Initializer, greatestEnd(node.Name().End(), node.Type /*, node.Name().emitNode?.typeNode*/), node.AsNode() /*, parenthesizer.parenthesizeExpressionForDisallowedComma */) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitVariableDeclarationNode(node *ast.VariableDeclarationNode) {
+	p.emitVariableDeclaration(node.AsVariableDeclaration())
+}
+
+func (p *Printer) emitVariableDeclarationList(node *ast.VariableDeclarationList) {
+	p.enterNode(node.AsNode())
+	switch {
+	case ast.IsVarLet(node.AsNode()):
+		p.writeKeyword("let")
+	case ast.IsVarConst(node.AsNode()):
+		p.writeKeyword("const")
+	case ast.IsVarUsing(node.AsNode()):
+		p.writeKeyword("using")
+	case ast.IsVarAwaitUsing(node.AsNode()):
+		p.writeKeyword("await")
+		p.writeSpace()
+		p.writeKeyword("using")
+	default:
+		p.writeKeyword("var")
+	}
+	p.writeSpace()
+	p.emitList((*Printer).emitVariableDeclarationNode, node.AsNode(), node.Declarations, LFVariableDeclarationList)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitFunctionDeclaration(node *ast.FunctionDeclaration) {
+	p.enterNode(node.AsNode())
+	p.generateNameIfNeeded(node.Name())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.writeKeyword("function")
+	p.emitTokenNode(node.AsteriskToken)
+	p.writeSpace()
+	if name := node.Name(); name != nil {
+		p.emitIdentifierName(name.AsIdentifier())
+	}
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.pushNameGenerationScope(node.AsNode())
+	p.emitSignature(node.AsNode())
+	p.emitFunctionBodyNode(node.Body)
+	p.popNameGenerationScope(node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitClassDeclaration(node *ast.ClassDeclaration) {
+	p.enterNode(node.AsNode())
+	p.generateNameIfNeeded(node.Name())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), true /*allowDecorators*/)
+	p.emitTokenWithComment(ast.KindClassKeyword, greatestEnd(node.Pos(), node.Modifiers()), WriteKindKeyword, node.AsNode())
+	if node.Name() != nil {
+		p.writeSpace()
+		p.emitIdentifierName(node.Name().AsIdentifier())
+	}
+	indented := p.shouldEmitIndented(node.AsNode())
+	p.increaseIndentIf(indented)
+	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitList((*Printer).emitHeritageClauseNode, node.AsNode(), node.HeritageClauses, LFClassHeritageClauses)
+	p.writeSpace()
+	p.writePunctuation("{")
+	p.pushNameGenerationScope(node.AsNode())
+	p.generateAllMemberNames(node.Members)
+	p.emitList((*Printer).emitClassElement, node.AsNode(), node.Members, LFClassMembers)
+	p.popNameGenerationScope(node.AsNode())
+	p.writePunctuation("}")
+	p.decreaseIndentIf(indented)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitInterfaceDeclaration(node *ast.InterfaceDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.writeKeyword("interface")
+	p.writeSpace()
+	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.emitList((*Printer).emitHeritageClauseNode, node.AsNode(), node.HeritageClauses, LFHeritageClauses)
+	p.writeSpace()
+	p.writePunctuation("{")
+	p.pushNameGenerationScope(node.AsNode())
+	p.generateAllMemberNames(node.Members)
+	p.emitList((*Printer).emitTypeElement, node.AsNode(), node.Members, LFInterfaceMembers)
+	p.popNameGenerationScope(node.AsNode())
+	p.writePunctuation("}")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTypeAliasDeclaration(node *ast.TypeAliasDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.writeKeyword("type")
+	p.writeSpace()
+	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
+	p.writeSpace()
+	p.writePunctuation("=")
+	p.writeSpace()
+	p.emitTypeNode(node.Type)
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitEnumDeclaration(node *ast.EnumDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.writeKeyword("enum")
+	p.writeSpace()
+	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	p.writeSpace()
+	p.writePunctuation("{")
+	p.emitList((*Printer).emitEnumMemberNode, node.AsNode(), node.Members, LFEnumMembers)
+	p.writePunctuation("}")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitModuleDeclaration(node *ast.ModuleDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	if node.Flags&ast.NodeFlagsGlobalAugmentation == 0 {
+		p.writeKeyword(core.IfElse(node.Flags&ast.NodeFlagsNamespace != 0, "namespace", "module"))
+		p.writeSpace()
+	}
+	p.emitModuleName(node.Name())
+	body := node.Body
+	for body != nil && ast.IsModuleDeclaration(body) {
+		module := body.AsModuleDeclaration()
+		p.writePunctuation(".")
+		p.emitNestedModuleName(module.Name())
+		body = module.Body
+	}
+	if body == nil {
+		p.writeTrailingSemicolon()
+		return
+	}
+	p.writeSpace()
+	p.emitModuleBlock(body.AsModuleBlock())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitModuleBlock(node *ast.ModuleBlock) {
+	p.enterNode(node.AsNode())
+	p.generateNames(node.AsNode())
+	p.emitTokenWithComment(ast.KindOpenBraceToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+	p.increaseIndent()
+	format := core.IfElse(p.isEmptyBlock(node.AsNode(), node.Statements) || p.shouldEmitOnSingleLine(node.AsNode()),
+		LFSingleLineBlockStatements,
+		LFMultiLineBlockStatements)
+	p.emitList((*Printer).emitStatement, node.AsNode(), node.Statements, format)
+	p.decreaseIndent()
+	p.emitTokenWithCommentEx(ast.KindCloseBraceToken, node.Statements.End(), WriteKindPunctuation, node.AsNode(), format&LFMultiLine != 0)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitCaseBlock(node *ast.CaseBlock) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindOpenBraceToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+	p.emitList((*Printer).emitCaseOrDefaultClauseNode, node.AsNode(), node.Clauses, LFCaseBlockClauses)
+	p.emitTokenWithCommentEx(ast.KindCloseBraceToken, node.Clauses.End(), WriteKindPunctuation, node.AsNode(), true /*indentLeading*/)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitImportEqualsDeclaration(node *ast.ImportEqualsDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	pos := p.emitTokenWithComment(ast.KindImportKeyword, greatestEnd(node.Pos(), node.Modifiers()), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	if node.IsTypeOnly {
+		p.emitTokenWithComment(ast.KindTypeKeyword, pos, WriteKindKeyword, node.AsNode())
+		p.writeSpace()
+	}
+	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindEqualsToken, node.Name().End(), WriteKindPunctuation, node.AsNode())
+	p.writeSpace()
+	p.emitModuleReference(node.ModuleReference)
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitModuleReference(node *ast.ModuleReference) {
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitIdentifierReference(node.AsIdentifier())
+	case ast.KindQualifiedName:
+		p.emitQualifiedName(node.AsQualifiedName())
+	case ast.KindExternalModuleReference:
+		p.emitExternalModuleReference(node.AsExternalModuleReference())
+	default:
+		panic(fmt.Sprintf("unhandled ModuleReference: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitImportDeclaration(node *ast.ImportDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	p.emitTokenWithComment(ast.KindImportKeyword, greatestEnd(node.Pos(), node.Modifiers()), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	if node.ImportClause != nil {
+		p.emitImportClause(node.ImportClause.AsImportClause())
+		p.writeSpace()
+		p.emitTokenWithComment(ast.KindFromKeyword, node.ImportClause.End(), WriteKindKeyword, node.AsNode())
+		p.writeSpace()
+	}
+	p.emitExpression(node.ModuleSpecifier)
+	if node.Attributes != nil {
+		p.writeSpace()
+		p.emitImportAttributes(node.Attributes.AsImportAttributes())
+	}
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitImportClause(node *ast.ImportClause) {
+	p.enterNode(node.AsNode())
+	if node.IsTypeOnly {
+		p.emitTokenWithComment(ast.KindTypeKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+		p.writeSpace()
+	}
+	if name := node.Name(); name != nil {
+		p.emitBindingIdentifier(node.Name().AsIdentifier())
+		if node.NamedBindings != nil {
+			p.emitTokenWithComment(ast.KindCommaToken, name.End(), WriteKindPunctuation, node.AsNode())
+			p.writeSpace()
+		}
+	}
+	p.emitNamedImportBindings(node.NamedBindings)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitNamespaceImport(node *ast.NamespaceImport) {
+	p.enterNode(node.AsNode())
+	pos := p.emitTokenWithComment(ast.KindAsteriskToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindAsKeyword, pos, WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitNamedImports(node *ast.NamedImports) {
+	p.enterNode(node.AsNode())
+	p.writePunctuation("{")
+	p.emitList((*Printer).emitImportSpecifierNode, node.AsNode(), node.Elements, LFNamedImportsOrExportsElements)
+	p.writePunctuation("}")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitNamedImportBindings(node *ast.NamedImportBindings) {
+	if node == nil {
+		return
+	}
+	switch node.Kind {
+	case ast.KindNamespaceImport:
+		p.emitNamespaceImport(node.AsNamespaceImport())
+	case ast.KindNamedImports:
+		p.emitNamedImports(node.AsNamedImports())
+	default:
+		panic(fmt.Sprintf("unhandled NamedImportBindings: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitImportSpecifier(node *ast.ImportSpecifier) {
+	p.enterNode(node.AsNode())
+	if node.IsTypeOnly {
+		p.writeKeyword("type")
+		p.writeSpace()
+	}
+	if node.PropertyName != nil {
+		p.emitModuleExportName(node.PropertyName)
+		p.writeSpace()
+		p.emitTokenWithComment(ast.KindAsKeyword, node.PropertyName.End(), WriteKindKeyword, node.AsNode())
+		p.writeSpace()
+	}
+	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitImportSpecifierNode(node *ast.ImportSpecifierNode) {
+	p.emitImportSpecifier(node.AsImportSpecifier())
+}
+
+func (p *Printer) emitExportAssignment(node *ast.ExportAssignment) {
+	p.enterNode(node.AsNode())
+	nextPos := p.emitTokenWithComment(ast.KindExportKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	if node.IsExportEquals {
+		p.emitTokenWithComment(ast.KindEqualsToken, nextPos, WriteKindOperator, node.AsNode())
+	} else {
+		p.emitTokenWithComment(ast.KindDefaultKeyword, nextPos, WriteKindKeyword, node.AsNode())
+	}
+	p.writeSpace()
+	p.emitExpression(node.Expression /*, core.IfElse(node.IsExportEquals, parenthesizer.getParenthesizeRightSideOfBinaryForOperator(ast.KindEqualsToken), parenthesizer.parenthesizeExpressionOfExportDefault)*/) // !!!
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitExportDeclaration(node *ast.ExportDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
+	pos := p.emitTokenWithComment(ast.KindExportKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	if node.IsTypeOnly {
+		pos = p.emitTokenWithComment(ast.KindTypeKeyword, pos, WriteKindKeyword, node.AsNode())
+		p.writeSpace()
+	}
+	if node.ExportClause != nil {
+		p.emitNamedExportBindings(node.ExportClause)
+	} else {
+		pos = p.emitTokenWithComment(ast.KindAsteriskToken, pos, WriteKindPunctuation, node.AsNode())
+	}
+	if node.ModuleSpecifier != nil {
+		p.writeSpace()
+		p.emitTokenWithComment(ast.KindFromKeyword, greatestEnd(pos, node.ExportClause), WriteKindKeyword, node.AsNode())
+		p.writeSpace()
+		p.emitExpression(node.ModuleSpecifier)
+	}
+	if node.Attributes != nil {
+		p.writeSpace()
+		p.emitImportAttributes(node.Attributes.AsImportAttributes())
+	}
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitImportAttributes(node *ast.ImportAttributes) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(node.Token, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitList((*Printer).emitImportAttributeNode, node.AsNode(), node.Attributes, LFImportAttributes)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitImportAttribute(node *ast.ImportAttribute) {
+	p.enterNode(node.AsNode())
+	p.emitImportAttributeName(node.Name())
+	p.writePunctuation(":")
+	p.writeSpace()
+	/// !!! emit trailing comments of value
+	p.emitExpression(node.Value /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitImportAttributeNode(node *ast.ImportAttributeNode) {
+	p.emitImportAttribute(node.AsImportAttribute())
+}
+
+func (p *Printer) emitNamespaceExportDeclaration(node *ast.NamespaceExportDeclaration) {
+	p.enterNode(node.AsNode())
+	pos := p.emitTokenWithComment(ast.KindExportKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	pos = p.emitTokenWithComment(ast.KindAsKeyword, pos, WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindNamespaceKeyword, pos, WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	p.writeTrailingSemicolon()
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitNamespaceExport(node *ast.NamespaceExport) {
+	p.enterNode(node.AsNode())
+	pos := p.emitTokenWithComment(ast.KindAsteriskToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+	p.writeSpace()
+	p.emitTokenWithComment(ast.KindAsKeyword, pos, WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitModuleExportName(node.Name())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitNamedExports(node *ast.NamedExports) {
+	p.enterNode(node.AsNode())
+	p.writePunctuation("{")
+	p.emitList((*Printer).emitExportSpecifierNode, node.AsNode(), node.Elements, LFNamedImportsOrExportsElements)
+	p.writePunctuation("}")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitNamedExportBindings(node *ast.NamedExportBindings) {
+	switch node.Kind {
+	case ast.KindNamespaceExport:
+		p.emitNamespaceExport(node.AsNamespaceExport())
+	case ast.KindNamedExports:
+		p.emitNamedExports(node.AsNamedExports())
+	default:
+		panic(fmt.Sprintf("unhandled NamedExportBindings: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitExportSpecifier(node *ast.ExportSpecifier) {
+	p.enterNode(node.AsNode())
+	if node.IsTypeOnly {
+		p.writeKeyword("type")
+		p.writeSpace()
+	}
+	if node.PropertyName != nil {
+		p.emitModuleExportName(node.PropertyName)
+		p.writeSpace()
+		p.emitTokenWithComment(ast.KindAsKeyword, node.PropertyName.End(), WriteKindKeyword, node.AsNode())
+		p.writeSpace()
+	}
+	p.emitModuleExportName(node.Name())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitExportSpecifierNode(node *ast.ExportSpecifierNode) {
+	p.emitExportSpecifier(node.AsExportSpecifier())
+}
+
+func (p *Printer) emitEmbeddedStatement(parentNode *ast.Node, node *ast.Statement) {
+	if ast.IsBlock(node) ||
+		p.shouldEmitOnSingleLine(parentNode) ||
+		p.Options.PreserveSourceNewlines && p.getLeadingLineTerminatorCount(parentNode, node, LFNone) == 0 {
+		p.writeSpace()
+		p.emitBlock(node.AsBlock())
+	} else {
+		p.writeLine()
+		p.increaseIndent()
+		if node.Kind == ast.KindEmptyStatement {
+			p.emitEmptyStatement(node.AsEmptyStatement(), true /*isEmbeddedStatement*/)
+		} else {
+			p.emitStatement(node)
+		}
+		p.decreaseIndent()
+	}
+}
+
+func (p *Printer) emitStatement(node *ast.Statement) {
+	switch node.Kind {
+	// Statements
+	case ast.KindBlock:
+		p.emitBlock(node.AsBlock())
+	case ast.KindEmptyStatement:
+		p.emitEmptyStatement(node.AsEmptyStatement(), false /*isEmbeddedStatement*/)
+	case ast.KindVariableStatement:
+		p.emitVariableStatement(node.AsVariableStatement())
+	case ast.KindExpressionStatement:
+		p.emitExpressionStatement(node.AsExpressionStatement())
+	case ast.KindIfStatement:
+		p.emitIfStatement(node.AsIfStatement())
+	case ast.KindDoStatement:
+		p.emitDoStatement(node.AsDoStatement())
+	case ast.KindWhileStatement:
+		p.emitWhileStatement(node.AsWhileStatement())
+	case ast.KindForStatement:
+		p.emitForStatement(node.AsForStatement())
+	case ast.KindForInStatement:
+		p.emitForInStatement(node.AsForInOrOfStatement())
+	case ast.KindForOfStatement:
+		p.emitForOfStatement(node.AsForInOrOfStatement())
+	case ast.KindContinueStatement:
+		p.emitContinueStatement(node.AsContinueStatement())
+	case ast.KindBreakStatement:
+		p.emitBreakStatement(node.AsBreakStatement())
+	case ast.KindReturnStatement:
+		p.emitReturnStatement(node.AsReturnStatement())
+	case ast.KindWithStatement:
+		p.emitWithStatement(node.AsWithStatement())
+	case ast.KindSwitchStatement:
+		p.emitSwitchStatement(node.AsSwitchStatement())
+	case ast.KindLabeledStatement:
+		p.emitLabeledStatement(node.AsLabeledStatement())
+	case ast.KindThrowStatement:
+		p.emitThrowStatement(node.AsThrowStatement())
+	case ast.KindTryStatement:
+		p.emitTryStatement(node.AsTryStatement())
+	case ast.KindDebuggerStatement:
+		p.emitDebuggerStatement(node.AsDebuggerStatement())
+	case ast.KindNotEmittedStatement:
+		panic("not implemented")
+
+	// Declaration Statements
+	case ast.KindFunctionDeclaration:
+		p.emitFunctionDeclaration(node.AsFunctionDeclaration())
+	case ast.KindClassDeclaration:
+		p.emitClassDeclaration(node.AsClassDeclaration())
+	case ast.KindInterfaceDeclaration:
+		p.emitInterfaceDeclaration(node.AsInterfaceDeclaration())
+	case ast.KindTypeAliasDeclaration:
+		p.emitTypeAliasDeclaration(node.AsTypeAliasDeclaration())
+	case ast.KindEnumDeclaration:
+		p.emitEnumDeclaration(node.AsEnumDeclaration())
+	case ast.KindModuleDeclaration:
+		p.emitModuleDeclaration(node.AsModuleDeclaration())
+	case ast.KindMissingDeclaration:
+		break
+
+	// Import/Export Statements
+	case ast.KindNamespaceExportDeclaration:
+		p.emitNamespaceExportDeclaration(node.AsNamespaceExportDeclaration())
+	case ast.KindImportEqualsDeclaration:
+		p.emitImportEqualsDeclaration(node.AsImportEqualsDeclaration())
+	case ast.KindImportDeclaration:
+		p.emitImportDeclaration(node.AsImportDeclaration())
+	case ast.KindExportAssignment:
+		p.emitExportAssignment(node.AsExportAssignment())
+	case ast.KindExportDeclaration:
+		p.emitExportDeclaration(node.AsExportDeclaration())
+
+	default:
+		panic(fmt.Sprintf("unhandled statement: %v", node.Kind))
+	}
+}
+
+//
+// Module references
+//
+
+func (p *Printer) emitExternalModuleReference(node *ast.ExternalModuleReference) {
+	p.enterNode(node.AsNode())
+	p.writeKeyword("require")
+	p.writePunctuation("(")
+	p.emitExpression(node.Expression_)
+	p.writePunctuation(")")
+	p.exitNode(node.AsNode())
+}
+
+//
+// JSX
+//
+
+func (p *Printer) emitJsxElement(node *ast.JsxElement) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxSelfClosingElement(node *ast.JsxSelfClosingElement) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxFragment(node *ast.JsxFragment) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxOpeningElement(node *ast.JsxOpeningElement) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxClosingElement(node *ast.JsxClosingElement) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxOpeningFragment(node *ast.JsxOpeningFragment) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxClosingFragment(node *ast.JsxClosingFragment) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxText(node *ast.JsxText) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxAttributes(node *ast.JsxAttributes) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxAttribute(node *ast.JsxAttribute) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxSpreadAttribute(node *ast.JsxSpreadAttribute) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxExpression(node *ast.JsxExpression) {
+	// !!!
+	panic("not implemented")
+}
+
+func (p *Printer) emitJsxNamespacedName(node *ast.JsxNamespacedName) {
+	// !!!
+	panic("not implemented")
+}
+
+//
+// Clauses
+//
+
+func (p *Printer) emitCaseOrDefaultClauseStatements(node *ast.CaseOrDefaultClause) {
+	emitAsSingleStatement := len(node.Statements.Nodes) == 1 &&
+		// treat synthesized nodes as located on the same line for emit purposes
+		(p.currentSourceFile == nil ||
+			ast.NodeIsSynthesized(node.AsNode()) ||
+			ast.NodeIsSynthesized(node.Statements.Nodes[0]) ||
+			rangeStartPositionsAreOnSameLine(node.Loc, node.Statements.Nodes[0].Loc, p.currentSourceFile))
+
+	format := LFCaseOrDefaultClauseStatements
+	if emitAsSingleStatement {
+		p.writeSpace()
+		format &= ^(LFMultiLine | LFIndented)
+	}
+
+	p.emitList((*Printer).emitStatement, node.AsNode(), node.Statements, format)
+}
+
+func (p *Printer) emitCaseClause(node *ast.CaseOrDefaultClause) {
+	p.enterNode(node.AsNode())
+	p.emitTokenWithComment(ast.KindCaseKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.emitTokenWithComment(ast.KindColonToken, node.Expression.End(), WriteKindPunctuation, node.AsNode())
+	p.emitCaseOrDefaultClauseStatements(node)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitDefaultClause(node *ast.CaseOrDefaultClause) {
+	p.enterNode(node.AsNode())
+	pos := p.emitTokenWithComment(ast.KindDefaultKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.emitTokenWithComment(ast.KindColonToken, pos, WriteKindPunctuation, node.AsNode())
+	p.emitCaseOrDefaultClauseStatements(node)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitCaseOrDefaultClauseNode(node *ast.CaseOrDefaultClauseNode) {
+	switch node.Kind {
+	case ast.KindCaseClause:
+		p.emitCaseClause(node.AsCaseOrDefaultClause())
+	case ast.KindDefaultClause:
+		p.emitDefaultClause(node.AsCaseOrDefaultClause())
+	default:
+		panic(fmt.Sprintf("unhandled CaseOrDefaultClause: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitHeritageClause(node *ast.HeritageClause) {
+	p.enterNode(node.AsNode())
+	p.writeSpace()
+	p.emitTokenWithComment(node.Token, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+	p.emitList((*Printer).emitExpressionWithTypeArgumentsNode, node.AsNode(), node.Types, LFHeritageClauseTypes)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitHeritageClauseNode(node *ast.HeritageClauseNode) {
+	p.emitHeritageClause(node.AsHeritageClause())
+}
+
+func (p *Printer) emitCatchClause(node *ast.CatchClause) {
+	p.enterNode(node.AsNode())
+	openParenPos := p.emitTokenWithComment(ast.KindCatchKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
+	p.writeSpace()
+
+	if node.VariableDeclaration != nil {
+		p.emitTokenWithComment(ast.KindOpenParenToken, openParenPos, WriteKindPunctuation, node.AsNode())
+		p.emitVariableDeclaration(node.VariableDeclaration.AsVariableDeclaration())
+		p.emitTokenWithComment(ast.KindCloseParenToken, node.VariableDeclaration.End(), WriteKindPunctuation, node.AsNode())
+		p.writeSpace()
+	}
+
+	p.emitBlock(node.Block.AsBlock())
+	p.exitNode(node.AsNode())
+}
+
+//
+// Property assignments
+//
+
+func (p *Printer) emitPropertyAssignment(node *ast.PropertyAssignment) {
+	p.enterNode(node.AsNode())
+	p.emitPropertyName(node.Name())
+	p.writePunctuation(":")
+	p.writeSpace()
+	// This is to ensure that we emit comment in the following case:
+	//      For example:
+	//          obj = {
+	//              id: /*comment1*/ ()=>void
+	//          }
+	// "comment1" is not considered to be leading comment for node.initializer
+	// but rather a trailing comment on the previous node.
+	initializer := node.Initializer
+
+	// !!! emit trailing comments of initializer
+
+	p.emitExpression(initializer /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitShorthandPropertyAssignment(node *ast.ShorthandPropertyAssignment) {
+	p.enterNode(node.AsNode())
+	p.emitPropertyName(node.Name())
+	if node.ObjectAssignmentInitializer != nil {
+		p.writeSpace()
+		p.writePunctuation("=")
+		p.writeSpace()
+		p.emitExpression(node.ObjectAssignmentInitializer /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	}
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitSpreadAssignment(node *ast.SpreadAssignment) {
+	p.enterNode(node.AsNode())
+	if node.Expression != nil {
+		p.emitTokenWithComment(ast.KindDotDotDotToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+		p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	}
+	p.exitNode(node.AsNode())
+}
+
+//
+// Enum
+//
+
+func (p *Printer) emitEnumMember(node *ast.EnumMember) {
+	p.enterNode(node.AsNode())
+	p.emitPropertyName(node.Name())
+	p.emitInitializer(node.Initializer, node.Name().End(), node.AsNode() /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitEnumMemberNode(node *ast.EnumMemberNode) {
+	p.emitEnumMember(node.AsEnumMember())
+}
+
+//
+// JSDoc
+//
+
+func (p *Printer) emitJSDocNode(node *ast.Node) {
+	// !!!
+	panic("not implemented")
+}
+
+//
+// Top-level nodes
+//
+
+func (p *Printer) emitPrologueDirectives(statements *ast.StatementList) int {
+	// !!!
+	return 0
+}
+
+func (p *Printer) emitHelpers(node *ast.Node) {
+	// !!!
+}
+
+func (p *Printer) emitSourceFile(node *ast.SourceFile) {
+	savedCurrentSourceFile := p.currentSourceFile
+	p.currentSourceFile = node
+
+	p.writeLine()
+
+	/// !!! Emit detached comments of source file
+
+	p.pushNameGenerationScope(node.AsNode())
+	p.generateAllNames(node.Statements)
+	p.emitHelpers(node.AsNode())
+
+	index := -1
+	if node.ScriptKind != core.ScriptKindJSON {
+		index = core.FindIndex(node.Statements.Nodes, isNotPrologueDirective)
+	}
+
+	// !!! Emit triple-slash directives
+	p.emitListRange(
+		(*Printer).emitStatement,
+		node.AsNode(),
+		node.Statements,
+		LFMultiLine,
+		//nil, /*parenthesizerRule*/
+		core.IfElse(index >= 0, index, len(node.Statements.Nodes)),
+		-1, /*count*/
+	)
+	p.popNameGenerationScope(node.AsNode())
+	p.currentSourceFile = savedCurrentSourceFile
+}
+
+//
+// Lists
+//
+
+func (p *Printer) emitList(emit func(p *Printer, node *ast.Node /*, parenthesizerRule */), parentNode *ast.Node, children *ast.NodeList, format ListFormat /*, parenthesizerRule */) { // !!!
+	p.emitListRange(emit, parentNode, children, format /*, parenthesizerRule */, -1 /*start*/, -1 /*count*/) // !!!
+}
+
+func (p *Printer) emitListRange(emit func(p *Printer, node *ast.Node /*, parenthesizerRule */), parentNode *ast.Node, children *ast.NodeList, format ListFormat /*, parenthesizerRule */, start int, count int) { // !!!
+	isNil := children == nil
+
+	length := 0
+	if !isNil {
+		length = len(children.Nodes)
+	}
+
+	if start < 0 {
+		start = 0
+	}
+
+	if count < 0 {
+		count = length - start
+	}
+
+	if isNil && format&LFOptionalIfNil != 0 {
+		return
+	}
+
+	isEmpty := isNil || start >= length || count <= 0
+	if isEmpty && format&LFOptionalIfEmpty != 0 {
+		if p.OnBeforeEmitNodeList != nil {
+			p.OnBeforeEmitNodeList(children)
+		}
+		if p.OnAfterEmitNodeList != nil {
+			p.OnAfterEmitNodeList(children)
+		}
+		return
+	}
+
+	if format&LFBracketsMask != 0 {
+		p.writePunctuation(getOpeningBracket(format))
+		if isEmpty && !isNil {
+			p.emitTrailingCommentsOfPosition(children.Pos(), true /*prefixSpace*/, false /*forceNoNewLine*/) // Emit comments within empty lists
+		}
+	}
+
+	if p.OnBeforeEmitNodeList != nil {
+		p.OnBeforeEmitNodeList(children)
+	}
+
+	if isEmpty {
+		// Write a line terminator if the parent node was multi-line
+		if format&LFMultiLine != 0 && !(p.Options.PreserveSourceNewlines && (parentNode == nil || p.currentSourceFile != nil && rangeIsOnSingleLine(parentNode.Loc, p.currentSourceFile))) {
+			p.writeLine()
+		} else if format&LFSpaceBetweenBraces != 0 && format&LFNoSpaceIfEmpty == 0 {
+			p.writeSpace()
+		}
+	} else {
+		end := start + count
+		if end > length {
+			end = length
+		}
+
+		p.emitListItems(emit, parentNode, children.Nodes[start:end], format /*, parenthesizerRules*/, children.HasTrailingComma(), children.Loc) // !!!
+	}
+
+	if p.OnAfterEmitNodeList != nil {
+		p.OnAfterEmitNodeList(children)
+	}
+
+	if format&LFBracketsMask != 0 {
+		if isEmpty && !isNil {
+			p.emitTrailingCommentsOfPosition(children.Pos(), true /*prefixSpace*/, false /*forceNoNewLine*/) // Emit comments within empty lists
+		}
+		p.writePunctuation(getClosingBracket(format))
+	}
+}
+
+func (p *Printer) writeDelimiter(format ListFormat) {
+	switch format & LFDelimitersMask {
+	case LFNone:
+		break
+	case LFCommaDelimited:
+		p.writePunctuation(",")
+	case LFBarDelimited:
+		p.writeSpace()
+		p.writePunctuation("|")
+	case LFAsteriskDelimited:
+		p.writeSpace()
+		p.writePunctuation("*")
+		p.writeSpace()
+	case LFAmpersandDelimited:
+		p.writeSpace()
+		p.writePunctuation("&")
+	}
+}
+
+// Emits a list without brackets or raising events.
+//
+// NOTE: You probably don't want to call this directly and should be using `emitList` instead.
+func (p *Printer) emitListItems(
+	emit func(p *Printer, node *ast.Node /*, parenthesizerRule */), // !!!
+	parentNode *ast.Node,
+	children []*ast.Node,
+	format ListFormat,
+	// parenthesizerRule,
+	hasTrailingComma bool,
+	childrenTextRange core.TextRange,
+) {
+	// Write the opening line terminator or leading whitespace.
+	mayEmitInterveningComments := format&LFNoInterveningComments == 0
+	shouldEmitInterveningComments := mayEmitInterveningComments
+
+	leadingLineTerminatorCount := 0
+	if len(children) > 0 {
+		leadingLineTerminatorCount = p.getLeadingLineTerminatorCount(parentNode, children[0], format)
+	}
+	if leadingLineTerminatorCount > 0 {
+		for range leadingLineTerminatorCount {
+			p.writeLine()
+		}
+		shouldEmitInterveningComments = false
+	} else if format&LFSpaceBetweenBraces != 0 {
+		p.writeSpace()
+	}
+
+	// Increase the indent, if requested.
+	if format&LFIndented != 0 {
+		p.increaseIndent()
+	}
+
+	parentEnd := greatestEnd(-1, parentNode)
+
+	// Emit each child.
+	var previousSibling *ast.Node
+	shouldDecreaseIndentAfterEmit := false
+	for _, child := range children {
+		// Write the delimiter if this is not the first node.
+		if format&LFAsteriskDelimited != 0 {
+			// always write JSDoc in the format "\n *"
+			p.writeLine()
+			p.writeDelimiter(format)
+		} else if previousSibling != nil {
+			// i.e
+			//      function commentedParameters(
+			//          /* Parameter a */
+			//          a
+			//          /* End of parameter a */ -> this comment isn't considered to be trailing comment of parameter "a" due to newline
+			//          ,
+			if format&LFDelimitersMask != 0 && previousSibling.End() != parentEnd {
+				if p.shouldEmitTrailingComments(previousSibling) {
+					p.emitLeadingCommentsOfPosition(previousSibling.End(), false /*prefixSpace*/)
+				}
+			}
+
+			p.writeDelimiter(format)
+
+			// Write either a line terminator or whitespace to separate the elements.
+			separatingLineTerminatorCount := p.getSeparatingLineTerminatorCount(previousSibling, child, format)
+			if separatingLineTerminatorCount > 0 {
+				// If a synthesized node in a single-line list starts on a new
+				// line, we should increase the indent.
+				if format&(LFLinesMask|LFIndented) == LFSingleLine {
+					p.increaseIndent()
+					shouldDecreaseIndentAfterEmit = true
+				}
+
+				if shouldEmitInterveningComments && format&LFDelimitersMask != 0 && !ast.PositionIsSynthesized(child.Pos()) {
+					commentRange := getCommentRange(child)
+					p.emitTrailingCommentsOfPosition(commentRange.Pos(), format&LFSpaceBetweenSiblings != 0 /*prefixSpace*/, true /*forceNoNewline*/)
+				}
+
+				for range separatingLineTerminatorCount {
+					p.writeLine()
+				}
+
+				shouldEmitInterveningComments = false
+			} else if previousSibling != nil && format&LFSpaceBetweenSiblings != 0 {
+				p.writeSpace()
+			}
+		}
+
+		// Emit this child.
+		if shouldEmitInterveningComments {
+			commentRange := getCommentRange(child)
+			p.emitTrailingCommentsOfPosition(commentRange.Pos(), false /*prefixSpace*/, false /*forceNoNewLine*/)
+		} else {
+			shouldEmitInterveningComments = mayEmitInterveningComments
+		}
+
+		p.nextListElementPos = child.Pos()
+		emit(p, child /*, parenthesizerRule, i*/) // !!!
+
+		if shouldDecreaseIndentAfterEmit {
+			p.decreaseIndent()
+			shouldDecreaseIndentAfterEmit = false
+		}
+
+		previousSibling = child
+	}
+
+	// Write a trailing comma, if requested.
+	skipTrailingComments := p.commentsDisabled || !p.shouldEmitTrailingComments(previousSibling)
+	emitTrailingComma := hasTrailingComma && format&LFAllowTrailingComma != 0 && format&LFCommaDelimited != 0
+	if emitTrailingComma {
+		if previousSibling != nil && !skipTrailingComments {
+			p.emitTokenWithComment(ast.KindCommaToken, previousSibling.End(), WriteKindPunctuation, previousSibling)
+		} else {
+			p.writePunctuation(",")
+		}
+	}
+
+	// Emit any trailing comment of the last element in the list
+	// i.e
+	//       var array = [...
+	//          2
+	//          /* end of element 2 */
+	//       ];
+	if previousSibling != nil && parentEnd != previousSibling.End() && format&LFDelimitersMask != 0 && !skipTrailingComments {
+		p.emitLeadingCommentsOfPosition(greatestEnd(previousSibling.End(), childrenTextRange), false /*prefixSpace*/)
+	}
+
+	// Decrease the indent, if requested.
+	if format&LFIndented != 0 {
+		p.decreaseIndent()
+	}
+
+	// Write the closing line terminator or closing whitespace.
+	closingLineTerminatorCount := p.getClosingLineTerminatorCount(parentNode, core.LastOrNil(children), format, childrenTextRange)
+	if closingLineTerminatorCount > 0 {
+		for range closingLineTerminatorCount {
+			p.writeLine()
+		}
+	} else if format&(LFSpaceAfterList|LFSpaceBetweenBraces) != 0 {
+		p.writeSpace()
+	}
+}
+
+//
+// General
+//
+
+func (p *Printer) Emit(node *ast.Node, sourceFile *ast.SourceFile) string {
+	// ensure a reusable writer
+	if p.ownWriter == nil {
+		p.ownWriter = NewTextWriter(core.IfElse(len(p.Options.NewLine) > 0, p.Options.NewLine, "\n"))
+	}
+
+	p.Write(node, sourceFile, p.ownWriter)
+	text := p.ownWriter.getText()
+
+	p.ownWriter.clear()
+	return text
+}
+
+func (p *Printer) EmitSourceFile(sourceFile *ast.SourceFile) string {
+	return p.Emit(sourceFile.AsNode(), sourceFile)
+}
+
+func (p *Printer) setSourceFile(sourceFile *ast.SourceFile) {
+	p.currentSourceFile = sourceFile
+	// !!!
+}
+
+func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitTextWriter) {
+	savedCurrentSourceFile := p.currentSourceFile
+	savedWriter := p.writer
+
+	p.setSourceFile(sourceFile)
+	p.writer = writer
+	p.writer.clear()
+
+	switch node.Kind {
+	// Pseudo-literals
+	case ast.KindTemplateHead:
+		p.emitTemplateHead(node.AsTemplateHead())
+	case ast.KindTemplateMiddle:
+		p.emitTemplateMiddle(node.AsTemplateMiddle())
+	case ast.KindTemplateTail:
+		p.emitTemplateTail(node.AsTemplateTail())
+
+	// Identifiers
+	case ast.KindIdentifier:
+		p.emitIdentifierName(node.AsIdentifier())
+
+	// PrivateIdentifiers
+	case ast.KindPrivateIdentifier:
+		p.emitPrivateIdentifier(node.AsPrivateIdentifier())
+
+	// Parse tree nodes
+	// Names
+	case ast.KindQualifiedName:
+		p.emitQualifiedName(node.AsQualifiedName())
+	case ast.KindComputedPropertyName:
+		p.emitComputedPropertyName(node.AsComputedPropertyName())
+
+	// Signature elements
+	case ast.KindTypeParameter:
+		p.emitTypeParameter(node.AsTypeParameter())
+	case ast.KindParameter:
+		p.emitParameter(node.AsParameterDeclaration())
+	case ast.KindDecorator:
+		p.emitDecorator(node.AsDecorator())
+
+	// Type members
+	case ast.KindPropertySignature:
+		p.emitPropertySignature(node.AsPropertySignatureDeclaration())
+	case ast.KindPropertyDeclaration:
+		p.emitPropertyDeclaration(node.AsPropertyDeclaration())
+	case ast.KindMethodSignature:
+		p.emitMethodSignature(node.AsMethodSignatureDeclaration())
+	case ast.KindMethodDeclaration:
+		p.emitMethodDeclaration(node.AsMethodDeclaration())
+	case ast.KindClassStaticBlockDeclaration:
+		p.emitClassStaticBlockDeclaration(node.AsClassStaticBlockDeclaration())
+	case ast.KindConstructor:
+		p.emitConstructor(node.AsConstructorDeclaration())
+	case ast.KindGetAccessor:
+		p.emitGetAccessorDeclaration(node.AsGetAccessorDeclaration())
+	case ast.KindSetAccessor:
+		p.emitSetAccessorDeclaration(node.AsSetAccessorDeclaration())
+	case ast.KindCallSignature:
+		p.emitCallSignature(node.AsCallSignatureDeclaration())
+	case ast.KindConstructSignature:
+		p.emitConstructSignature(node.AsConstructSignatureDeclaration())
+	case ast.KindIndexSignature:
+		p.emitIndexSignature(node.AsIndexSignatureDeclaration())
+
+	// Binding patterns
+	case ast.KindObjectBindingPattern:
+		p.emitObjectBindingPattern(node.AsBindingPattern())
+	case ast.KindArrayBindingPattern:
+		p.emitArrayBindingPattern(node.AsBindingPattern())
+	case ast.KindBindingElement:
+		p.emitBindingElement(node.AsBindingElement())
+
+	// Misc
+	case ast.KindTemplateSpan:
+		p.emitTemplateSpan(node.AsTemplateSpan())
+	case ast.KindSemicolonClassElement:
+		p.emitSemicolonClassElement(node.AsSemicolonClassElement())
+
+	// Declarations (non-statement)
+	case ast.KindVariableDeclaration:
+		p.emitVariableDeclaration(node.AsVariableDeclaration())
+	case ast.KindVariableDeclarationList:
+		p.emitVariableDeclarationList(node.AsVariableDeclarationList())
+	case ast.KindModuleBlock:
+		p.emitModuleBlock(node.AsModuleBlock())
+	case ast.KindCaseBlock:
+		p.emitCaseBlock(node.AsCaseBlock())
+	case ast.KindImportClause:
+		p.emitImportClause(node.AsImportClause())
+	case ast.KindNamespaceImport:
+		p.emitNamespaceImport(node.AsNamespaceImport())
+	case ast.KindNamespaceExport:
+		p.emitNamespaceExport(node.AsNamespaceExport())
+	case ast.KindNamedImports:
+		p.emitNamedImports(node.AsNamedImports())
+	case ast.KindImportSpecifier:
+		p.emitImportSpecifier(node.AsImportSpecifier())
+	case ast.KindNamedExports:
+		p.emitNamedExports(node.AsNamedExports())
+	case ast.KindExportSpecifier:
+		p.emitExportSpecifier(node.AsExportSpecifier())
+	case ast.KindImportAttributes:
+		p.emitImportAttributes(node.AsImportAttributes())
+	case ast.KindImportAttribute:
+		p.emitImportAttribute(node.AsImportAttribute())
+
+	// Module references
+	case ast.KindExternalModuleReference:
+		p.emitExternalModuleReference(node.AsExternalModuleReference())
+
+	// JSX (non-expression)
+	case ast.KindJsxText:
+		p.emitJsxText(node.AsJsxText())
+	case ast.KindJsxOpeningElement:
+		p.emitJsxOpeningElement(node.AsJsxOpeningElement())
+	case ast.KindJsxOpeningFragment:
+		p.emitJsxOpeningFragment(node.AsJsxOpeningFragment())
+	case ast.KindJsxClosingElement:
+		p.emitJsxClosingElement(node.AsJsxClosingElement())
+	case ast.KindJsxClosingFragment:
+		p.emitJsxClosingFragment(node.AsJsxClosingFragment())
+	case ast.KindJsxAttribute:
+		p.emitJsxAttribute(node.AsJsxAttribute())
+	case ast.KindJsxAttributes:
+		p.emitJsxAttributes(node.AsJsxAttributes())
+	case ast.KindJsxSpreadAttribute:
+		p.emitJsxSpreadAttribute(node.AsJsxSpreadAttribute())
+	case ast.KindJsxExpression:
+		p.emitJsxExpression(node.AsJsxExpression())
+	case ast.KindJsxNamespacedName:
+		p.emitJsxNamespacedName(node.AsJsxNamespacedName())
+
+	// Clauses
+	case ast.KindCaseClause:
+		p.emitCaseClause(node.AsCaseOrDefaultClause())
+	case ast.KindDefaultClause:
+		p.emitDefaultClause(node.AsCaseOrDefaultClause())
+	case ast.KindHeritageClause:
+		p.emitHeritageClause(node.AsHeritageClause())
+	case ast.KindCatchClause:
+		p.emitCatchClause(node.AsCatchClause())
+
+	// Property assignments
+	case ast.KindPropertyAssignment:
+		p.emitPropertyAssignment(node.AsPropertyAssignment())
+	case ast.KindShorthandPropertyAssignment:
+		p.emitShorthandPropertyAssignment(node.AsShorthandPropertyAssignment())
+	case ast.KindSpreadAssignment:
+		p.emitSpreadAssignment(node.AsSpreadAssignment())
+
+	// Enum
+	case ast.KindEnumMember:
+		p.emitEnumMember(node.AsEnumMember())
+
+		// Top-level nodes
+	case ast.KindSourceFile:
+		p.emitSourceFile(node.AsSourceFile())
+
+	case ast.KindBundle:
+		panic("not implemented")
+
+	// Transformation nodes
+	case ast.KindNotEmittedStatement:
+		// case ast.KindNotEmittedTypeElement:
+		panic("not implemented")
+
+	default:
+		switch {
+		case ast.IsTypeNode(node):
+			p.emitTypeNode(node)
+		case ast.IsStatement(node):
+			p.emitStatement(node)
+		case ast.IsExpression(node):
+			p.emitExpression(node)
+		case ast.IsKeywordKind(node.Kind):
+			p.emitKeywordNode(node)
+		case ast.IsPunctuationKind(node.Kind):
+			p.emitPunctuationNode(node)
+		case ast.IsJSDocKind(node.Kind):
+			p.emitJSDocNode(node)
+		default:
+			panic(fmt.Sprintf("unhandled Node: %v", node.Kind))
+		}
+	}
+
+	p.writer = savedWriter
+	p.currentSourceFile = savedCurrentSourceFile
+}
+
+//
+// Comments
+//
+
+func (p *Printer) emitCommentsBeforeNode(node *ast.Node) {
+	// !!!
+}
+
+func (p *Printer) emitCommentsAfterNode(node *ast.Node) {
+	// !!!
+}
+
+func (p *Printer) emitLeadingCommentsOfPosition(pos int, prefixSpace bool) {
+	// !!!
+}
+
+func (p *Printer) emitTrailingCommentsOfPosition(pos int, prefixSpace bool, forceNoNewLine bool) {
+	// !!!
+}
+
+//
+// Source Maps
+//
+
+func (p *Printer) emitSourcePos(pos int) {
+	// !!!
+}
+
+func (p *Printer) emitSourceMapsBeforeNode(node *ast.Node) {
+	// !!!
+}
+
+func (p *Printer) emitSourceMapsAfterNode(node *ast.Node) {
+	// !!!
+}
+
+//
+// Name Generation
+//
+
+func (p *Printer) pushNameGenerationScope(node *ast.Node) {
+	// !!!
+}
+
+func (p *Printer) popNameGenerationScope(node *ast.Node) {
+	// !!!
+}
+
+func (p *Printer) generateNameIfNeeded(node *ast.Node) {
+	// !!!
+}
+
+func (p *Printer) generateNames(node *ast.Node) {
+	// !!!
+}
+
+func (p *Printer) generateMemberNames(node *ast.Node) {
+	// !!!
+}
+
+func (p *Printer) generateAllNames(nodes *ast.NodeList) {
+	// !!!
+}
+
+func (p *Printer) generateAllMemberNames(nodes *ast.NodeList) {
+	// !!!
+}
+
+//
+// Scoped operations
+//
+
+func (p *Printer) enterNode(node *ast.Node) {
+	if p.OnBeforeEmitNode != nil {
+		p.OnBeforeEmitNode(node)
+	}
+
+	p.emitCommentsBeforeNode(node)
+	p.emitSourceMapsBeforeNode(node)
+}
+
+func (p *Printer) exitNode(node *ast.Node) {
+	p.emitSourceMapsAfterNode(node)
+	p.emitCommentsAfterNode(node)
+
+	if p.OnAfterEmitNode != nil {
+		p.OnAfterEmitNode(node)
+	}
+}
+
+func (p *Printer) enterToken(node *ast.Node) {
+	if p.OnBeforeEmitToken != nil {
+		p.OnBeforeEmitToken(node)
+	}
+
+	p.emitCommentsBeforeNode(node)
+	p.emitSourceMapsBeforeNode(node)
+}
+
+func (p *Printer) exitToken(node *ast.Node) {
+	p.emitSourceMapsAfterNode(node)
+	p.emitCommentsAfterNode(node)
+
+	if p.OnAfterEmitToken != nil {
+		p.OnAfterEmitToken(node)
+	}
+}
+
+type ListFormat int
+
+const (
+	LFNone ListFormat = 0
+
+	// Line separators
+	LFSingleLine    ListFormat = 0      // Prints the list on a single line (default).
+	LFMultiLine     ListFormat = 1 << 0 // Prints the list on multiple lines.
+	LFPreserveLines ListFormat = 1 << 1 // Prints the list using line preservation if possible.
+	LFLinesMask     ListFormat = LFSingleLine | LFMultiLine | LFPreserveLines
+
+	// Delimiters
+	LFNotDelimited       ListFormat = 0      // There is no delimiter between list items (default).
+	LFBarDelimited       ListFormat = 1 << 2 // Each list item is space-and-bar (" |") delimited.
+	LFAmpersandDelimited ListFormat = 1 << 3 // Each list item is space-and-ampersand (" &") delimited.
+	LFCommaDelimited     ListFormat = 1 << 4 // Each list item is comma (",") delimited.
+	LFAsteriskDelimited  ListFormat = 1 << 5 // Each list item is asterisk ("\n *") delimited, used with JSDoc.
+	LFDelimitersMask     ListFormat = LFBarDelimited | LFAmpersandDelimited | LFCommaDelimited | LFAsteriskDelimited
+
+	LFAllowTrailingComma ListFormat = 1 << 6 // Write a trailing comma (",") if present.
+
+	// Whitespace
+	LFIndented             ListFormat = 1 << 7 // The list should be indented.
+	LFSpaceBetweenBraces   ListFormat = 1 << 8 // Inserts a space after the opening brace and before the closing brace.
+	LFSpaceBetweenSiblings ListFormat = 1 << 9 // Inserts a space between each sibling node.
+
+	// Brackets/Braces
+	LFBraces         ListFormat = 1 << 10 // The list is surrounded by "{" and "}".
+	LFParenthesis    ListFormat = 1 << 11 // The list is surrounded by "(" and ")".
+	LFAngleBrackets  ListFormat = 1 << 12 // The list is surrounded by "<" and ">".
+	LFSquareBrackets ListFormat = 1 << 13 // The list is surrounded by "[" and "]".
+	LFBracketsMask   ListFormat = LFBraces | LFParenthesis | LFAngleBrackets | LFSquareBrackets
+
+	LFOptionalIfNil   ListFormat = 1 << 14 // Do not emit brackets if the list is nil.
+	LFOptionalIfEmpty ListFormat = 1 << 15 // Do not emit brackets if the list is empty.
+	LFOptional        ListFormat = LFOptionalIfNil | LFOptionalIfEmpty
+
+	// Other
+	LFPreferNewLine         ListFormat = 1 << 16 // Prefer adding a LineTerminator between synthesized nodes.
+	LFNoTrailingNewLine     ListFormat = 1 << 17 // Do not emit a trailing NewLine for a MultiLine list.
+	LFNoInterveningComments ListFormat = 1 << 18 // Do not emit comments between each node
+	LFNoSpaceIfEmpty        ListFormat = 1 << 19 // If the literal is empty, do not add spaces between braces.
+	LFSingleElement         ListFormat = 1 << 20
+	LFSpaceAfterList        ListFormat = 1 << 21 // Add space after list
+
+	// Precomputed Formats
+	LFModifiers                    ListFormat = LFSingleLine | LFSpaceBetweenSiblings | LFNoInterveningComments | LFSpaceAfterList
+	LFHeritageClauses              ListFormat = LFSingleLine | LFSpaceBetweenSiblings
+	LFSingleLineTypeLiteralMembers ListFormat = LFSingleLine | LFSpaceBetweenBraces | LFSpaceBetweenSiblings
+	LFMultiLineTypeLiteralMembers  ListFormat = LFMultiLine | LFIndented | LFOptionalIfEmpty
+
+	LFSingleLineTupleTypeElements       ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFSingleLine
+	LFMultiLineTupleTypeElements        ListFormat = LFCommaDelimited | LFIndented | LFSpaceBetweenSiblings | LFMultiLine
+	LFUnionTypeConstituents             ListFormat = LFBarDelimited | LFSpaceBetweenSiblings | LFSingleLine
+	LFIntersectionTypeConstituents      ListFormat = LFAmpersandDelimited | LFSpaceBetweenSiblings | LFSingleLine
+	LFObjectBindingPatternElements      ListFormat = LFSingleLine | LFAllowTrailingComma | LFSpaceBetweenBraces | LFCommaDelimited | LFSpaceBetweenSiblings | LFNoSpaceIfEmpty
+	LFArrayBindingPatternElements       ListFormat = LFSingleLine | LFAllowTrailingComma | LFCommaDelimited | LFSpaceBetweenSiblings | LFNoSpaceIfEmpty
+	LFObjectLiteralExpressionProperties ListFormat = LFPreserveLines | LFCommaDelimited | LFSpaceBetweenSiblings | LFSpaceBetweenBraces | LFIndented | LFBraces | LFNoSpaceIfEmpty
+	LFImportAttributes                  ListFormat = LFPreserveLines | LFCommaDelimited | LFSpaceBetweenSiblings | LFSpaceBetweenBraces | LFIndented | LFBraces | LFNoSpaceIfEmpty
+	LFArrayLiteralExpressionElements    ListFormat = LFPreserveLines | LFCommaDelimited | LFSpaceBetweenSiblings | LFAllowTrailingComma | LFIndented | LFSquareBrackets
+	LFCommaListElements                 ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFSingleLine
+	LFCallExpressionArguments           ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFSingleLine | LFParenthesis
+	LFNewExpressionArguments            ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFSingleLine | LFParenthesis | LFOptionalIfNil
+	LFTemplateExpressionSpans           ListFormat = LFSingleLine | LFNoInterveningComments
+	LFSingleLineBlockStatements         ListFormat = LFSpaceBetweenBraces | LFSpaceBetweenSiblings | LFSingleLine
+	LFMultiLineBlockStatements          ListFormat = LFIndented | LFMultiLine
+	LFVariableDeclarationList           ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFSingleLine
+	LFSingleLineFunctionBodyStatements  ListFormat = LFSingleLine | LFSpaceBetweenSiblings | LFSpaceBetweenBraces
+	LFMultiLineFunctionBodyStatements   ListFormat = LFMultiLine
+	LFClassHeritageClauses              ListFormat = LFSingleLine
+	LFClassMembers                      ListFormat = LFIndented | LFMultiLine
+	LFInterfaceMembers                  ListFormat = LFIndented | LFMultiLine
+	LFEnumMembers                       ListFormat = LFCommaDelimited | LFIndented | LFMultiLine
+	LFCaseBlockClauses                  ListFormat = LFIndented | LFMultiLine
+	LFNamedImportsOrExportsElements     ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFAllowTrailingComma | LFSingleLine | LFSpaceBetweenBraces | LFNoSpaceIfEmpty
+	LFJsxElementOrFragmentChildren      ListFormat = LFSingleLine | LFNoInterveningComments
+	LFJsxElementAttributes              ListFormat = LFSingleLine | LFSpaceBetweenSiblings | LFNoInterveningComments
+	LFCaseOrDefaultClauseStatements     ListFormat = LFIndented | LFMultiLine | LFNoTrailingNewLine | LFOptionalIfEmpty
+	LFHeritageClauseTypes               ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFSingleLine
+	LFSourceFileStatements              ListFormat = LFMultiLine | LFNoTrailingNewLine
+	LFDecorators                        ListFormat = LFMultiLine | LFOptional | LFSpaceAfterList
+	LFTypeArguments                     ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFSingleLine | LFAngleBrackets | LFOptional
+	LFTypeParameters                    ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFSingleLine | LFAngleBrackets | LFOptional
+	LFParameters                        ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFSingleLine | LFParenthesis
+	LFSingleArrowParameter              ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFSingleLine
+	LFIndexSignatureParameters          ListFormat = LFCommaDelimited | LFSpaceBetweenSiblings | LFSingleLine | LFIndented | LFSquareBrackets
+	LFJSDocComment                      ListFormat = LFMultiLine | LFAsteriskDelimited
+	LFImportClauseEntries               ListFormat = LFImportAttributes // Deprecated: Use LFImportAttributes
+)
+
+func getOpeningBracket(format ListFormat) string {
+	switch format & LFBracketsMask {
+	case LFBraces:
+		return "{"
+	case LFParenthesis:
+		return "("
+	case LFAngleBrackets:
+		return "<"
+	case LFSquareBrackets:
+		return "["
+	default:
+		panic(fmt.Sprintf("Unexpected bracket: %v", format&LFBracketsMask))
+	}
+}
+
+func getClosingBracket(format ListFormat) string {
+	switch format & LFBracketsMask {
+	case LFBraces:
+		return "}"
+	case LFParenthesis:
+		return ")"
+	case LFAngleBrackets:
+		return ">"
+	case LFSquareBrackets:
+		return "]"
+	default:
+		panic(fmt.Sprintf("Unexpected bracket: %v", format&LFBracketsMask))
+	}
+}

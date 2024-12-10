@@ -188,7 +188,7 @@ func (w *textWriter) writeStringLiteral(text string) {
 	w.write(text)
 }
 
-func (w *textWriter) writeSymbol(text string, symbol ast.Symbol) {
+func (w *textWriter) writeSymbol(text string, symbol *ast.Symbol) {
 	w.write(text)
 }
 
@@ -198,6 +198,7 @@ func (w *textWriter) writeTrailingSemicolon(text string) {
 
 func NewTextWriter(newLine string) EmitTextWriter {
 	var w textWriter
+	w.newLine = newLine
 	w.clear()
 	return &w
 }

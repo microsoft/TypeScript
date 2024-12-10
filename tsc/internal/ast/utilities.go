@@ -28,6 +28,44 @@ func NodeKindIs(node *Node, kinds ...Kind) bool {
 	return slices.Contains(kinds, node.Kind)
 }
 
+func IsModifierKind(token Kind) bool {
+	switch token {
+	case KindAbstractKeyword,
+		KindAccessorKeyword,
+		KindAsyncKeyword,
+		KindConstKeyword,
+		KindDeclareKeyword,
+		KindDefaultKeyword,
+		KindExportKeyword,
+		KindInKeyword,
+		KindPublicKeyword,
+		KindPrivateKeyword,
+		KindProtectedKeyword,
+		KindReadonlyKeyword,
+		KindStaticKeyword,
+		KindOutKeyword,
+		KindOverrideKeyword:
+		return true
+	}
+	return false
+}
+
+func IsModifier(node *Node) bool {
+	return IsModifierKind(node.Kind)
+}
+
+func IsKeywordKind(token Kind) bool {
+	return KindFirstKeyword <= token && token <= KindLastKeyword
+}
+
+func IsPunctuationKind(token Kind) bool {
+	return KindFirstPunctuation <= token && token <= KindLastPunctuation
+}
+
+func IsTokenKind(token Kind) bool {
+	return KindFirstToken <= token && token <= KindLastToken
+}
+
 func IsAccessor(node *Node) bool {
 	return node.Kind == KindGetAccessor || node.Kind == KindSetAccessor
 }
@@ -279,6 +317,21 @@ func IsClassElement(node *Node) bool {
 	return false
 }
 
+func IsTypeElement(node *Node) bool {
+	switch node.Kind {
+	case KindConstructSignature,
+		KindCallSignature,
+		KindPropertySignature,
+		KindMethodSignature,
+		KindIndexSignature,
+		KindGetAccessor,
+		KindSetAccessor:
+		// !!! KindNotEmittedTypeElement
+		return true
+	}
+	return false
+}
+
 func IsObjectLiteralElement(node *Node) bool {
 	switch node.Kind {
 	case KindPropertyAssignment,
@@ -287,6 +340,18 @@ func IsObjectLiteralElement(node *Node) bool {
 		KindMethodDeclaration,
 		KindGetAccessor,
 		KindSetAccessor:
+		return true
+	}
+	return false
+}
+
+func IsJsxChild(node *Node) bool {
+	switch node.Kind {
+	case KindJsxElement,
+		KindJsxExpression,
+		KindJsxSelfClosingElement,
+		KindJsxText,
+		KindJsxFragment:
 		return true
 	}
 	return false
@@ -410,8 +475,17 @@ func IsTypeNode(node *Node) bool {
 	return IsTypeNodeKind(node.Kind)
 }
 
+func IsJSDocKind(kind Kind) bool {
+	return KindFirstJSDocNode <= kind && kind <= KindLastJSDocNode
+}
+
 func isJSDocTypeAssertion(_ *Node) bool {
 	return false // !!!
+}
+
+func IsPrologueDirective(node *Node) bool {
+	return node.Kind == KindExpressionStatement &&
+		node.AsExpressionStatement().Expression.Kind == KindStringLiteral
 }
 
 type OuterExpressionKinds int16
@@ -420,10 +494,11 @@ const (
 	OEKParentheses                  OuterExpressionKinds = 1 << 0
 	OEKTypeAssertions               OuterExpressionKinds = 1 << 1
 	OEKNonNullAssertions            OuterExpressionKinds = 1 << 2
-	OEKExpressionsWithTypeArguments OuterExpressionKinds = 1 << 3
-	OEKExcludeJSDocTypeAssertion                         = 1 << 4
+	OEKPartiallyEmittedExpressions  OuterExpressionKinds = 1 << 3
+	OEKExpressionsWithTypeArguments OuterExpressionKinds = 1 << 4
+	OEKExcludeJSDocTypeAssertion                         = 1 << 5
 	OEKAssertions                                        = OEKTypeAssertions | OEKNonNullAssertions
-	OEKAll                                               = OEKParentheses | OEKAssertions | OEKExpressionsWithTypeArguments
+	OEKAll                                               = OEKParentheses | OEKAssertions | OEKPartiallyEmittedExpressions | OEKExpressionsWithTypeArguments
 )
 
 // Determines whether node is an "outer expression" of the provided kinds
@@ -452,6 +527,10 @@ func SkipOuterExpressions(node *Expression, kinds OuterExpressionKinds) *Express
 // Skips past the parentheses of an expression
 func SkipParentheses(node *Expression) *Expression {
 	return SkipOuterExpressions(node, OEKParentheses)
+}
+
+func SkipPartiallyEmittedExpressions(node *Expression) *Expression {
+	return SkipOuterExpressions(node, OEKPartiallyEmittedExpressions)
 }
 
 // Walks up the parents of a parenthesized expression to find the containing node
@@ -663,4 +742,68 @@ func ForEachReturnStatement(body *Node, visitor func(stmt *Node) bool) bool {
 		return false
 	}
 	return traverse(body)
+}
+
+func GetRootDeclaration(node *Node) *Node {
+	for node.Kind == KindBindingElement {
+		node = node.Parent.Parent
+	}
+	return node
+}
+
+func getCombinedFlags[T ~uint32](node *Node, getFlags func(*Node) T) T {
+	node = GetRootDeclaration(node)
+	flags := getFlags(node)
+	if node.Kind == KindVariableDeclaration {
+		node = node.Parent
+	}
+	if node != nil && node.Kind == KindVariableDeclarationList {
+		flags |= getFlags(node)
+		node = node.Parent
+	}
+	if node != nil && node.Kind == KindVariableStatement {
+		flags |= getFlags(node)
+	}
+	return flags
+}
+
+func GetCombinedModifierFlags(node *Node) ModifierFlags {
+	return getCombinedFlags(node, (*Node).ModifierFlags)
+}
+
+func GetCombinedNodeFlags(node *Node) NodeFlags {
+	return getCombinedFlags(node, getNodeFlags)
+}
+
+func getNodeFlags(node *Node) NodeFlags {
+	return node.Flags
+}
+
+// Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of an `await using` declaration.
+func IsVarAwaitUsing(node *Node) bool {
+	return GetCombinedNodeFlags(node)&NodeFlagsBlockScoped == NodeFlagsAwaitUsing
+}
+
+// Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `using` declaration.
+func IsVarUsing(node *Node) bool {
+	return GetCombinedNodeFlags(node)&NodeFlagsBlockScoped == NodeFlagsUsing
+}
+
+// Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `const` declaration.
+func IsVarConst(node *Node) bool {
+	return GetCombinedNodeFlags(node)&NodeFlagsBlockScoped == NodeFlagsConst
+}
+
+// Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `const`, `using` or `await using` declaration.
+func IsVarConstLike(node *Node) bool {
+	switch GetCombinedNodeFlags(node) & NodeFlagsBlockScoped {
+	case NodeFlagsConst, NodeFlagsUsing, NodeFlagsAwaitUsing:
+		return true
+	}
+	return false
+}
+
+// Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `let` declaration.
+func IsVarLet(node *Node) bool {
+	return GetCombinedNodeFlags(node)&NodeFlagsBlockScoped == NodeFlagsLet
 }

@@ -1073,7 +1073,7 @@ func (c *Checker) onSuccessfullyResolvedSymbol(errorLocation *ast.Node, result *
 	// If we're in a parameter initializer or binding name, we can't reference the values of the parameter whose initializer we're within or parameters to the right
 	if associatedDeclarationForContainingInitializerOrBindingName != nil && !withinDeferredContext && (meaning&ast.SymbolFlagsValue) == ast.SymbolFlagsValue {
 		candidate := c.getMergedSymbol(c.getLateBoundSymbol(result))
-		root := getRootDeclaration(associatedDeclarationForContainingInitializerOrBindingName)
+		root := ast.GetRootDeclaration(associatedDeclarationForContainingInitializerOrBindingName)
 		// A parameter initializer or binding pattern initializer within a parameter cannot refer to itself
 		if candidate == c.getSymbolOfDeclaration(associatedDeclarationForContainingInitializerOrBindingName) {
 			c.error(errorLocation, diagnostics.Parameter_0_cannot_reference_itself, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.Name()))
@@ -4506,7 +4506,7 @@ func (c *Checker) checkIdentifier(node *ast.Node, checkMode CheckMode) *Type {
 	// The declaration container is the innermost function that encloses the declaration of the variable
 	// or parameter. The flow container is the innermost function starting with which we analyze the control
 	// flow graph to determine the control flow based type.
-	isParameter := getRootDeclaration(declaration).Kind == ast.KindParameter
+	isParameter := ast.GetRootDeclaration(declaration).Kind == ast.KindParameter
 	declarationContainer := c.getControlFlowContainer(declaration)
 	flowContainer := c.getControlFlowContainer(node)
 	isOuterVariable := flowContainer != declarationContainer
@@ -4584,7 +4584,7 @@ func (c *Checker) checkIdentifier(node *ast.Node, checkMode CheckMode) *Type {
 func (c *Checker) isSameScopedBindingElement(node *ast.Node, declaration *ast.Node) bool {
 	if ast.IsBindingElement(declaration) {
 		bindingElement := ast.FindAncestor(node, ast.IsBindingElement)
-		return bindingElement != nil && getRootDeclaration(bindingElement) == getRootDeclaration(declaration)
+		return bindingElement != nil && ast.GetRootDeclaration(bindingElement) == ast.GetRootDeclaration(declaration)
 	}
 	return false
 }
@@ -8713,7 +8713,7 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 			t = c.checkExpressionCachedEx(initializer, checkMode)
 		}
 	}
-	if ast.IsParameter(getRootDeclaration(declaration)) {
+	if ast.IsParameter(ast.GetRootDeclaration(declaration)) {
 		name := declaration.Name()
 		switch name.Kind {
 		case ast.KindObjectBindingPattern:
@@ -9551,7 +9551,7 @@ func (c *Checker) getCombinedNodeFlagsCached(node *ast.Node) ast.NodeFlags {
 		return c.lastGetCombinedNodeFlagsResult
 	}
 	c.lastGetCombinedNodeFlagsNode = node
-	c.lastGetCombinedNodeFlagsResult = getCombinedNodeFlags(node)
+	c.lastGetCombinedNodeFlagsResult = ast.GetCombinedNodeFlags(node)
 	return c.lastGetCombinedNodeFlagsResult
 }
 
@@ -9592,7 +9592,7 @@ func (c *Checker) getCombinedModifierFlagsCached(node *ast.Node) ast.ModifierFla
 		return c.lastGetCombinedModifierFlagsResult
 	}
 	c.lastGetCombinedModifierFlagsNode = node
-	c.lastGetCombinedModifierFlagsResult = getCombinedModifierFlags(node)
+	c.lastGetCombinedModifierFlagsResult = ast.GetCombinedModifierFlags(node)
 	return c.lastGetCombinedModifierFlagsResult
 }
 

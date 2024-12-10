@@ -583,7 +583,7 @@ func (c *Checker) findFirstModifierExcept(node *ast.Node, allowedModifier ast.Ki
 	if modifiers == nil {
 		return nil
 	}
-	modifier := core.Find(modifiers.Nodes, isModifier)
+	modifier := core.Find(modifiers.Nodes, ast.IsModifier)
 	if modifier != nil && modifier.Kind != allowedModifier {
 		return modifier
 	} else {
@@ -617,7 +617,7 @@ func (c *Checker) findFirstIllegalModifier(node *ast.Node) *ast.Node {
 		ast.KindNamespaceExportDeclaration,
 		ast.KindMissingDeclaration:
 		if modifiers := node.Modifiers(); modifiers != nil {
-			return core.Find(modifiers.Nodes, isModifier)
+			return core.Find(modifiers.Nodes, ast.IsModifier)
 		}
 		return nil
 	default:
@@ -634,14 +634,14 @@ func (c *Checker) findFirstIllegalModifier(node *ast.Node) *ast.Node {
 			ast.KindInterfaceDeclaration,
 			ast.KindTypeAliasDeclaration:
 			if modifiers := node.Modifiers(); modifiers != nil {
-				return core.Find(modifiers.Nodes, isModifier)
+				return core.Find(modifiers.Nodes, ast.IsModifier)
 			}
 			return nil
 		case ast.KindVariableStatement:
 			if node.AsVariableStatement().DeclarationList.Flags&ast.NodeFlagsUsing != 0 {
 				return c.findFirstModifierExcept(node, ast.KindAwaitKeyword)
 			} else if modifiers := node.Modifiers(); modifiers != nil {
-				return core.Find(modifiers.Nodes, isModifier)
+				return core.Find(modifiers.Nodes, ast.IsModifier)
 			}
 			return nil
 		case ast.KindEnumDeclaration:
@@ -1067,13 +1067,13 @@ func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExp
 		if modifiers := prop.Modifiers(); modifiers != nil {
 			if ast.CanHaveModifiers(prop) {
 				for _, mod := range modifiers.Nodes {
-					if isModifier(mod) && (mod.Kind != ast.KindAsyncKeyword || prop.Kind != ast.KindMethodDeclaration) {
+					if ast.IsModifier(mod) && (mod.Kind != ast.KindAsyncKeyword || prop.Kind != ast.KindMethodDeclaration) {
 						c.grammarErrorOnNode(mod, diagnostics.X_0_modifier_cannot_be_used_here, getTextOfNode(mod))
 					}
 				}
 			} else if ast.CanHaveIllegalModifiers(prop) {
 				for _, mod := range modifiers.Nodes {
-					if isModifier(mod) {
+					if ast.IsModifier(mod) {
 						c.grammarErrorOnNode(mod, diagnostics.X_0_modifier_cannot_be_used_here, getTextOfNode(mod))
 					}
 				}

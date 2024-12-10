@@ -350,7 +350,7 @@ func getSymbolNameForPrivateIdentifier(containingClassSymbol *ast.Symbol, descri
 }
 
 func (b *Binder) declareModuleMember(node *ast.Node, symbolFlags ast.SymbolFlags, symbolExcludes ast.SymbolFlags) *ast.Symbol {
-	hasExportModifier := getCombinedModifierFlags(node)&ast.ModifierFlagsExport != 0
+	hasExportModifier := ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsExport != 0
 	if symbolFlags&ast.SymbolFlagsAlias != 0 {
 		if node.Kind == ast.KindExportSpecifier || (node.Kind == ast.KindImportEqualsDeclaration && hasExportModifier) {
 			return b.declareSymbol(getExports(b.container.Symbol()), b.container.Symbol(), node, symbolFlags, symbolExcludes)
@@ -1736,7 +1736,7 @@ func (b *Binder) checkUnreachable(node *ast.Node) bool {
 				//   Rationale: we don't want to report errors on non-initialized var's since they are hoisted
 				//   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
 				isError := unreachableCodeIsError(b.options) && node.Flags&ast.NodeFlagsAmbient == 0 && (!ast.IsVariableStatement(node) ||
-					getCombinedNodeFlags(node.AsVariableStatement().DeclarationList)&ast.NodeFlagsBlockScoped != 0 ||
+					ast.GetCombinedNodeFlags(node.AsVariableStatement().DeclarationList)&ast.NodeFlagsBlockScoped != 0 ||
 					core.Some(node.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes, func(d *ast.Node) bool {
 						return d.AsVariableDeclaration().Initializer != nil
 					}))
@@ -1779,7 +1779,7 @@ func (b *Binder) errorOnEachUnreachableRange(node *ast.Node, isError bool) {
 // As opposed to a pure declaration like an `interface`
 func (b *Binder) isExecutableStatement(s *ast.Node) bool {
 	// Don't remove statements that can validly be used before they appear.
-	return !ast.IsFunctionDeclaration(s) && !b.isPurelyTypeDeclaration(s) && !(ast.IsVariableStatement(s) && getCombinedNodeFlags(s)&ast.NodeFlagsBlockScoped == 0 &&
+	return !ast.IsFunctionDeclaration(s) && !b.isPurelyTypeDeclaration(s) && !(ast.IsVariableStatement(s) && ast.GetCombinedNodeFlags(s)&ast.NodeFlagsBlockScoped == 0 &&
 		core.Some(s.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes, func(d *ast.Node) bool {
 			return d.AsVariableDeclaration().Initializer == nil
 		}))
@@ -2774,5 +2774,5 @@ func (b *Binder) addDiagnostic(diagnostic *ast.Diagnostic) {
 }
 
 func isEnumConst(node *ast.Node) bool {
-	return getCombinedModifierFlags(node)&ast.ModifierFlagsConst != 0
+	return ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsConst != 0
 }

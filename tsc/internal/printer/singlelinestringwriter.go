@@ -132,7 +132,7 @@ func (w *singleLineStringWriter) writeStringLiteral(text string) {
 	w.builder.WriteString(text)
 }
 
-func (w *singleLineStringWriter) writeSymbol(text string, symbol ast.Symbol) {
+func (w *singleLineStringWriter) writeSymbol(text string, symbol *ast.Symbol) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }

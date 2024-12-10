@@ -773,11 +773,11 @@ func isAssignmentExpression(node *ast.Node, excludeCompoundAssignment bool) bool
 }
 
 func isBlockOrCatchScoped(declaration *ast.Node) bool {
-	return getCombinedNodeFlags(declaration)&ast.NodeFlagsBlockScoped != 0 || isCatchClauseVariableDeclarationOrBindingElement(declaration)
+	return ast.GetCombinedNodeFlags(declaration)&ast.NodeFlagsBlockScoped != 0 || isCatchClauseVariableDeclarationOrBindingElement(declaration)
 }
 
 func isCatchClauseVariableDeclarationOrBindingElement(declaration *ast.Node) bool {
-	node := getRootDeclaration(declaration)
+	node := ast.GetRootDeclaration(declaration)
 	return node.Kind == ast.KindVariableDeclaration && node.Parent.Kind == ast.KindCatchClause
 }
 
@@ -801,34 +801,6 @@ func setParentInChildren(node *ast.Node) {
 		setParentInChildren(child)
 		return false
 	})
-}
-
-func getCombinedFlags[T ~uint32](node *ast.Node, getFlags func(*ast.Node) T) T {
-	node = getRootDeclaration(node)
-	flags := getFlags(node)
-	if node.Kind == ast.KindVariableDeclaration {
-		node = node.Parent
-	}
-	if node != nil && node.Kind == ast.KindVariableDeclarationList {
-		flags |= getFlags(node)
-		node = node.Parent
-	}
-	if node != nil && node.Kind == ast.KindVariableStatement {
-		flags |= getFlags(node)
-	}
-	return flags
-}
-
-func getCombinedModifierFlags(node *ast.Node) ast.ModifierFlags {
-	return getCombinedFlags(node, (*ast.Node).ModifierFlags)
-}
-
-func getCombinedNodeFlags(node *ast.Node) ast.NodeFlags {
-	return getCombinedFlags(node, getNodeFlags)
-}
-
-func getNodeFlags(node *ast.Node) ast.NodeFlags {
-	return node.Flags
 }
 
 func isParameterPropertyDeclaration(node *ast.Node, parent *ast.Node) bool {
@@ -884,14 +856,7 @@ func isRequireCall(node *ast.Node, requireStringLiteralLikeArgument bool) bool {
  * If you are looking to test that a `Node` is a `ParameterDeclaration`, use `isParameter`.
  */
 func isPartOfParameterDeclaration(node *ast.Node) bool {
-	return getRootDeclaration(node).Kind == ast.KindParameter
-}
-
-func getRootDeclaration(node *ast.Node) *ast.Node {
-	for node.Kind == ast.KindBindingElement {
-		node = node.Parent.Parent
-	}
-	return node
+	return ast.GetRootDeclaration(node).Kind == ast.KindParameter
 }
 
 func isExternalOrCommonJsModule(file *ast.SourceFile) bool {
@@ -928,10 +893,6 @@ func isStaticPrivateIdentifierProperty(s *ast.Symbol) bool {
 
 func isPrivateIdentifierClassElementDeclaration(node *ast.Node) bool {
 	return (ast.IsPropertyDeclaration(node) || isMethodOrAccessor(node)) && ast.IsPrivateIdentifier(node.Name())
-}
-
-func isModifier(node *ast.Node) bool {
-	return isModifierKind(node.Kind)
 }
 
 func isMethodOrAccessor(node *ast.Node) bool {
@@ -2588,7 +2549,7 @@ func isEmptyArrayLiteral(expression *ast.Node) bool {
 }
 
 func declarationBelongsToPrivateAmbientMember(declaration *ast.Node) bool {
-	root := getRootDeclaration(declaration)
+	root := ast.GetRootDeclaration(declaration)
 	memberDeclaration := root
 	if root.Kind == ast.KindParameter {
 		memberDeclaration = root.Parent
@@ -2692,7 +2653,7 @@ func getDeclarationModifierFlagsFromSymbolEx(s *ast.Symbol, isWrite bool) ast.Mo
 		if declaration == nil {
 			declaration = s.ValueDeclaration
 		}
-		flags := getCombinedModifierFlags(declaration)
+		flags := ast.GetCombinedModifierFlags(declaration)
 		if s.Parent != nil && s.Parent.Flags&ast.SymbolFlagsClass != 0 {
 			return flags
 		}
@@ -2797,7 +2758,7 @@ func isObjectLiteralType(t *Type) bool {
 }
 
 func isDeclarationReadonly(declaration *ast.Node) bool {
-	return getCombinedModifierFlags(declaration)&ast.ModifierFlagsReadonly != 0 && !isParameterPropertyDeclaration(declaration, declaration.Parent)
+	return ast.GetCombinedModifierFlags(declaration)&ast.ModifierFlagsReadonly != 0 && !isParameterPropertyDeclaration(declaration, declaration.Parent)
 }
 
 func getPostfixTokenFromNode(node *ast.Node) *ast.Node {
@@ -2974,16 +2935,12 @@ func isValidBigIntString(s string, roundTripOnly bool) bool {
 
 func isValidESSymbolDeclaration(node *ast.Node) bool {
 	if ast.IsVariableDeclaration(node) {
-		return isVarConst(node) && ast.IsIdentifier(node.AsVariableDeclaration().Name()) && isVariableDeclarationInVariableStatement(node)
+		return ast.IsVarConst(node) && ast.IsIdentifier(node.AsVariableDeclaration().Name()) && isVariableDeclarationInVariableStatement(node)
 	}
 	if ast.IsPropertyDeclaration(node) {
 		return hasEffectiveReadonlyModifier(node) && hasStaticModifier(node)
 	}
 	return ast.IsPropertySignatureDeclaration(node) && hasEffectiveReadonlyModifier(node)
-}
-
-func isVarConst(node *ast.Node) bool {
-	return getCombinedNodeFlags(node)&ast.NodeFlagsBlockScoped == ast.NodeFlagsConst
 }
 
 func isVariableDeclarationInVariableStatement(node *ast.Node) bool {
@@ -3356,7 +3313,7 @@ func (c *Checker) isConstantVariable(symbol *ast.Symbol) bool {
 func (c *Checker) isParameterOrMutableLocalVariable(symbol *ast.Symbol) bool {
 	// Return true if symbol is a parameter, a catch clause variable, or a mutable local variable
 	if symbol.ValueDeclaration != nil {
-		declaration := getRootDeclaration(symbol.ValueDeclaration)
+		declaration := ast.GetRootDeclaration(symbol.ValueDeclaration)
 		return declaration != nil && (ast.IsParameter(declaration) || ast.IsVariableDeclaration(declaration) && (ast.IsCatchClause(declaration.Parent) || c.isMutableLocalVariableDeclaration(declaration)))
 	}
 	return false
@@ -3364,7 +3321,7 @@ func (c *Checker) isParameterOrMutableLocalVariable(symbol *ast.Symbol) bool {
 
 func (c *Checker) isMutableLocalVariableDeclaration(declaration *ast.Node) bool {
 	// Return true if symbol is a non-exported and non-global `let` variable
-	return declaration.Parent.Flags&ast.NodeFlagsLet != 0 && !(getCombinedModifierFlags(declaration)&ast.ModifierFlagsExport != 0 || declaration.Parent.Parent.Kind == ast.KindVariableStatement && isGlobalSourceFile(declaration.Parent.Parent.Parent))
+	return declaration.Parent.Flags&ast.NodeFlagsLet != 0 && !(ast.GetCombinedModifierFlags(declaration)&ast.ModifierFlagsExport != 0 || declaration.Parent.Parent.Kind == ast.KindVariableStatement && isGlobalSourceFile(declaration.Parent.Parent.Parent))
 }
 
 func isInAmbientOrTypeNode(node *ast.Node) bool {

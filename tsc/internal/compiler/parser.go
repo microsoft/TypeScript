@@ -2026,7 +2026,7 @@ func (p *Parser) parseModuleExportName(disallowKeywords bool) (node *ast.Node, n
 
 func (p *Parser) tryParseImportAttributes() *ast.Node {
 	if (p.token == ast.KindWithKeyword || p.token == ast.KindAssertKeyword) && !p.hasPrecedingLineBreak() {
-		return p.parseImportAttributes(p.token, true /*skipKeyword*/)
+		return p.parseImportAttributes(p.token, false /*skipKeyword*/)
 	}
 	return nil
 }
@@ -2086,7 +2086,7 @@ func (p *Parser) parseExportDeclaration(pos int, hasJSDoc bool, modifiers *ast.M
 		}
 	}
 	if moduleSpecifier != nil && (p.token == ast.KindWithKeyword || p.token == ast.KindAssertKeyword) && !p.hasPrecedingLineBreak() {
-		attributes = p.parseImportAttributes(p.token, true /*skipKeyword*/)
+		attributes = p.parseImportAttributes(p.token, false /*skipKeyword*/)
 	}
 	p.parseSemicolon()
 	p.contextFlags = saveContextFlags
@@ -2864,7 +2864,7 @@ func (p *Parser) parseNameOfParameter(modifiers *ast.ModifierList) *ast.Node {
 	// FormalParameter [Yield,Await]:
 	//      BindingElement[?Yield,?Await]
 	name := p.parseIdentifierOrPatternWithDiagnostic(diagnostics.Private_identifiers_cannot_be_used_as_parameters)
-	if name.Loc.Len() == 0 && modifiers == nil && isModifierKind(p.token) {
+	if name.Loc.Len() == 0 && modifiers == nil && ast.IsModifierKind(p.token) {
 		// in cases like
 		// 'use strict'
 		// function foo(static)
@@ -3030,7 +3030,7 @@ func (p *Parser) nextIsUnambiguouslyIndexSignature() bool {
 	if p.token == ast.KindDotDotDotToken || p.token == ast.KindCloseBracketToken {
 		return true
 	}
-	if isModifierKind(p.token) {
+	if ast.IsModifierKind(p.token) {
 		p.nextToken()
 		if p.isIdentifier() {
 			return true
@@ -3353,7 +3353,7 @@ func (p *Parser) nextIsUnambiguouslyStartOfFunctionType() bool {
 }
 
 func (p *Parser) skipParameterStart() bool {
-	if isModifierKind(p.token) {
+	if ast.IsModifierKind(p.token) {
 		// Skip modifiers
 		p.parseModifiers()
 	}
@@ -3475,7 +3475,7 @@ func (p *Parser) parseContextualModifier(t ast.Kind) bool {
 
 func (p *Parser) parseAnyContextualModifier() bool {
 	state := p.mark()
-	if isModifierKind(p.token) && p.nextTokenCanFollowModifier() {
+	if ast.IsModifierKind(p.token) && p.nextTokenCanFollowModifier() {
 		return true
 	}
 	p.rewind(state)
@@ -3770,7 +3770,7 @@ func (p *Parser) nextIsParenthesizedArrowFunctionExpression() core.Tristate {
 		// Check for "(xxx yyy", where xxx is a modifier and yyy is an identifier. This
 		// isn't actually allowed, but we want to treat it as a lambda so we can provide
 		// a good error message.
-		if isModifierKind(second) && second != ast.KindAsyncKeyword && p.lookAhead(p.nextTokenIsIdentifier) {
+		if ast.IsModifierKind(second) && second != ast.KindAsyncKeyword && p.lookAhead(p.nextTokenIsIdentifier) {
 			if p.nextToken() == ast.KindAsKeyword {
 				// https://github.com/microsoft/TypeScript/issues/44466
 				return core.TSFalse
@@ -5323,18 +5323,23 @@ func (p *Parser) parseKeywordExpression() *ast.Node {
 func (p *Parser) parseLiteralExpression() *ast.Node {
 	pos := p.nodePos()
 	text := p.scanner.TokenValue()
+	tokenFlags := p.scanner.TokenFlags()
 	var result *ast.Node
 	switch p.token {
 	case ast.KindStringLiteral:
 		result = p.factory.NewStringLiteral(text)
+		result.AsStringLiteral().TokenFlags |= tokenFlags & ast.TokenFlagsStringLiteralFlags
 	case ast.KindNumericLiteral:
 		result = p.factory.NewNumericLiteral(text)
+		result.AsNumericLiteral().TokenFlags |= tokenFlags & ast.TokenFlagsNumericLiteralFlags
 	case ast.KindBigIntLiteral:
 		result = p.factory.NewBigIntLiteral(text)
+		result.AsBigIntLiteral().TokenFlags |= tokenFlags & ast.TokenFlagsNumericLiteralFlags
 	case ast.KindRegularExpressionLiteral:
 		result = p.factory.NewRegularExpressionLiteral(text)
 	case ast.KindNoSubstitutionTemplateLiteral:
 		result = p.factory.NewNoSubstitutionTemplateLiteral(text)
+		result.AsNoSubstitutionTemplateLiteral().TokenFlags |= tokenFlags & ast.TokenFlagsTemplateLiteralLikeFlags
 	default:
 		panic("Unhandled case in parseLiteralExpression")
 	}
@@ -5428,7 +5433,7 @@ func (p *Parser) scanTypeMemberStart() bool {
 	}
 	idToken := false
 	// Eat up all modifiers, but hold on to the last one in case it is actually an identifier
-	for isModifierKind(p.token) {
+	for ast.IsModifierKind(p.token) {
 		idToken = true
 		p.nextToken()
 	}
@@ -5455,7 +5460,7 @@ func (p *Parser) scanClassMemberStart() bool {
 		return true
 	}
 	// Eat up all modifiers, but hold on to the last one in case it is actually an identifier.
-	for isModifierKind(p.token) {
+	for ast.IsModifierKind(p.token) {
 		idToken = p.token
 		// If the idToken is a class modifier (protected, private, public, and static), it is
 		// certain that we are starting to parse class member. This allows better error recovery
@@ -5712,7 +5717,7 @@ func (p *Parser) nextIsParenthesizedOrFunctionType() bool {
 func (p *Parser) isStartOfParameter(isJSDocParameter bool) bool {
 	return p.token == ast.KindDotDotDotToken ||
 		p.isBindingIdentifierOrPrivateIdentifierOrPattern() ||
-		isModifierKind(p.token) ||
+		ast.IsModifierKind(p.token) ||
 		p.token == ast.KindAtToken ||
 		p.isStartOfType(!isJSDocParameter /*inStartOfParameter*/)
 }
@@ -5872,17 +5877,6 @@ func (p *Parser) inAwaitContext() bool {
 
 func (p *Parser) skipRangeTrivia(textRange core.TextRange) core.TextRange {
 	return core.NewTextRange(scanner.SkipTrivia(p.sourceText, textRange.Pos()), textRange.End())
-}
-
-func isModifierKind(token ast.Kind) bool {
-	switch token {
-	case ast.KindAbstractKeyword, ast.KindAccessorKeyword, ast.KindAsyncKeyword, ast.KindConstKeyword, ast.KindDeclareKeyword,
-		ast.KindDefaultKeyword, ast.KindExportKeyword, ast.KindImmediateKeyword, ast.KindInKeyword, ast.KindPublicKeyword,
-		ast.KindPrivateKeyword, ast.KindProtectedKeyword, ast.KindReadonlyKeyword, ast.KindStaticKeyword, ast.KindOutKeyword,
-		ast.KindOverrideKeyword:
-		return true
-	}
-	return false
 }
 
 func isClassMemberModifier(token ast.Kind) bool {

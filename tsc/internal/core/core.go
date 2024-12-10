@@ -222,11 +222,23 @@ func IfElse[T any](b bool, whenTrue T, whenFalse T) T {
 	return whenFalse
 }
 
+// Returns value if value is not the zero value of T; Otherwise, returns defaultValue. OrElse should only be used when
+// defaultValue is constant or precomputed as its argument will be evaluated regardless as to the content of value.
 func OrElse[T comparable](value T, defaultValue T) T {
 	if value != *new(T) {
 		return value
 	}
 	return defaultValue
+}
+
+// Returns `a` if `a` is not `nil`; Otherwise, returns `b`. Coalesce is roughly analogous to `??` in JS, except that it
+// non-shortcutting, so it is advised to only use a constant or precomputed value for `b`
+func Coalesce[T *U, U any](a T, b T) T {
+	if a == nil {
+		return b
+	} else {
+		return a
+	}
 }
 
 func ComputeLineStarts(text string) []TextPos {
