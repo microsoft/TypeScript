@@ -4760,7 +4760,7 @@ func (p *Parser) parseSuperExpression() *ast.Expression {
 		if typeArguments != nil {
 			p.parseErrorAt(startPos, p.nodePos(), diagnostics.X_super_may_not_use_type_arguments)
 			if !p.isTemplateStartOfTaggedTemplate() {
-				expression := p.factory.NewExpressionWithTypeArguments(expression, typeArguments)
+				expression = p.factory.NewExpressionWithTypeArguments(expression, typeArguments)
 				p.finishNode(expression, pos)
 			}
 		}
