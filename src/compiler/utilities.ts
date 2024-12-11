@@ -8941,6 +8941,7 @@ const _computedOptions = createComputedCompilerOptions({
             return target ??
                 ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
                     (compilerOptions.module === ModuleKind.Node18 && ScriptTarget.ES2022) ||
+                    (compilerOptions.module === ModuleKind.Node20 && ScriptTarget.ES2023) ||
                     (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
                     ScriptTarget.ES5);
         },
@@ -8964,6 +8965,7 @@ const _computedOptions = createComputedCompilerOptions({
                         break;
                     case ModuleKind.Node16:
                     case ModuleKind.Node18:
+                    case ModuleKind.Node20:
                         moduleResolution = ModuleResolutionKind.Node16;
                         break;
                     case ModuleKind.NodeNext:
@@ -9007,6 +9009,7 @@ const _computedOptions = createComputedCompilerOptions({
             switch (_computedOptions.module.computeValue(compilerOptions)) {
                 case ModuleKind.Node16:
                 case ModuleKind.Node18:
+                case ModuleKind.Node20:
                 case ModuleKind.NodeNext:
                 case ModuleKind.Preserve:
                     return true;
