@@ -1,6 +1,8 @@
 package tspath
 
 import (
+	"regexp"
+	"strings"
 	"testing"
 
 	"gotest.tools/v3/assert"
@@ -310,4 +312,54 @@ func TestToPath(t *testing.T) {
 	assert.Equal(t, string(ToPath("file.ext", "path/to", false /*useCaseSensitiveFileNames*/)), "path/to/file.ext")
 	assert.Equal(t, string(ToPath("file.ext", "/path/to", true /*useCaseSensitiveFileNames*/)), "/path/to/file.ext")
 	assert.Equal(t, string(ToPath("/path/to/../file.ext", "path/to", true /*useCaseSensitiveFileNames*/)), "/path/file.ext")
+}
+
+var relativePathSegmentRegExp = regexp.MustCompile(`//|(?:^|/)\.\.?(?:$|/)`)
+
+func oldHasRelativePathSegment(p string) bool {
+	return relativePathSegmentRegExp.MatchString(p)
+}
+
+var hasRelativePathSegmentTests = []struct {
+	p     string
+	bench bool
+}{
+	{"//", false},
+	{"foo/bar/baz", true},
+	{"foo/./baz", false},
+	{"foo/../baz", false},
+	{"foo/bar/baz/.", false},
+	{"./some/path", true},
+	{"/foo//bar/", false},
+	{"/foo/./bar/../../.", true},
+	{strings.Repeat("foo/", 100) + "..", true},
+}
+
+func BenchmarkHasRelativePathSegment(b *testing.B) {
+	for _, tt := range hasRelativePathSegmentTests {
+		if !tt.bench {
+			continue
+		}
+		name := tt.p
+		if len(name) > 20 {
+			name = name[:20] + "...etc"
+		}
+
+		b.Run(name, func(b *testing.B) {
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				hasRelativePathSegment(tt.p)
+			}
+		})
+	}
+}
+
+func FuzzHasRelativePathSegment(f *testing.F) {
+	for _, tt := range hasRelativePathSegmentTests {
+		f.Add(tt.p)
+	}
+
+	f.Fuzz(func(t *testing.T, p string) {
+		assert.Equal(t, oldHasRelativePathSegment(p), hasRelativePathSegment(p))
+	})
 }
