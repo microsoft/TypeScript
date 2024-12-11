@@ -9,33 +9,22 @@ import (
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
-type TypePrecedence int32
-
-const (
-	TypePrecedenceConditional TypePrecedence = iota
-	TypePrecedenceUnion
-	TypePrecedenceIntersection
-	TypePrecedenceTypeOperator
-	TypePrecedencePostfix
-	TypePrecedenceNonArray
-)
-
-func (c *Checker) getTypePrecedence(t *Type) TypePrecedence {
+func (c *Checker) getTypePrecedence(t *Type) ast.TypePrecedence {
 	if t.alias == nil {
 		switch {
 		case t.flags&TypeFlagsConditional != 0:
-			return TypePrecedenceConditional
+			return ast.TypePrecedenceConditional
 		case t.flags&TypeFlagsIntersection != 0:
-			return TypePrecedenceIntersection
+			return ast.TypePrecedenceIntersection
 		case t.flags&TypeFlagsUnion != 0 && t.flags&TypeFlagsBoolean == 0:
-			return TypePrecedenceUnion
+			return ast.TypePrecedenceUnion
 		case t.flags&TypeFlagsIndex != 0:
-			return TypePrecedenceTypeOperator
+			return ast.TypePrecedenceTypeOperator
 		case c.isArrayType(t):
-			return TypePrecedencePostfix
+			return ast.TypePrecedencePostfix
 		}
 	}
-	return TypePrecedenceNonArray
+	return ast.TypePrecedenceNonArray
 }
 
 func (c *Checker) symbolToString(s *ast.Symbol) string {
@@ -102,7 +91,7 @@ func (p *Printer) print(s string) {
 	p.sb.WriteString(s)
 }
 
-func (p *Printer) printTypeEx(t *Type, precedence TypePrecedence) {
+func (p *Printer) printTypeEx(t *Type, precedence ast.TypePrecedence) {
 	if p.c.getTypePrecedence(t) < precedence {
 		p.print("(")
 		p.printType(t)
@@ -274,7 +263,7 @@ func (p *Printer) printArrayType(t *Type) {
 	if d.target != p.c.globalArrayType {
 		p.print("readonly ")
 	}
-	p.printTypeEx(p.c.getTypeArguments(t)[0], TypePrecedencePostfix)
+	p.printTypeEx(p.c.getTypeArguments(t)[0], ast.TypePrecedencePostfix)
 	p.print("[]")
 }
 
@@ -291,10 +280,10 @@ func (p *Printer) printTupleType(t *Type) {
 			p.print("...")
 		}
 		if info.flags&ElementFlagsOptional != 0 {
-			p.printTypeEx(t, TypePrecedencePostfix)
+			p.printTypeEx(t, ast.TypePrecedencePostfix)
 			p.print("?")
 		} else if info.flags&ElementFlagsRest != 0 {
-			p.printTypeEx(t, TypePrecedencePostfix)
+			p.printTypeEx(t, ast.TypePrecedencePostfix)
 			p.print("[]")
 		} else {
 			p.printType(t)
@@ -447,7 +436,7 @@ func (p *Printer) printUnionType(t *Type) {
 				if tail {
 					p.print(" | ")
 				}
-				p.printTypeEx(t, TypePrecedenceUnion)
+				p.printTypeEx(t, ast.TypePrecedenceUnion)
 				tail = true
 			}
 		}
@@ -460,14 +449,14 @@ func (p *Printer) printIntersectionType(t *Type) {
 		if tail {
 			p.print(" & ")
 		}
-		p.printTypeEx(t, TypePrecedenceIntersection)
+		p.printTypeEx(t, ast.TypePrecedenceIntersection)
 		tail = true
 	}
 }
 
 func (p *Printer) printIndexType(t *Type) {
 	p.print("keyof ")
-	p.printTypeEx(t.AsIndexType().target, TypePrecedenceTypeOperator)
+	p.printTypeEx(t.AsIndexType().target, ast.TypePrecedenceTypeOperator)
 }
 
 func (p *Printer) printIndexedAccessType(t *Type) {

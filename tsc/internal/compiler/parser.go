@@ -3645,7 +3645,7 @@ func (p *Parser) parseAssignmentExpressionOrHigherWorker(allowReturnTypeInArrowF
 	// and consumes anything.
 	pos := p.nodePos()
 	hasJSDoc := p.hasPrecedingJSDocComment()
-	expr := p.parseBinaryExpressionOrHigher(OperatorPrecedenceLowest)
+	expr := p.parseBinaryExpressionOrHigher(ast.OperatorPrecedenceLowest)
 	// To avoid a look-ahead, we did not handle the case of an arrow function with a single un-parenthesized
 	// parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
 	// identifier and the current token is an arrow.
@@ -4031,7 +4031,7 @@ func (p *Parser) tryParseAsyncSimpleArrowFunctionExpression(allowReturnTypeInArr
 		pos := p.nodePos()
 		hasJSDoc := p.hasPrecedingJSDocComment()
 		asyncModifier := p.parseModifiersForArrowFunction()
-		expr := p.parseBinaryExpressionOrHigher(OperatorPrecedenceLowest)
+		expr := p.parseBinaryExpressionOrHigher(ast.OperatorPrecedenceLowest)
 		return p.parseSimpleArrowFunctionExpression(pos, expr, allowReturnTypeInArrowFunction, hasJSDoc, asyncModifier)
 	}
 	return nil
@@ -4049,7 +4049,7 @@ func (p *Parser) nextIsUnParenthesizedAsyncArrowFunction() bool {
 			return false
 		}
 		// Check for un-parenthesized AsyncArrowFunction
-		expr := p.parseBinaryExpressionOrHigher(OperatorPrecedenceLowest)
+		expr := p.parseBinaryExpressionOrHigher(ast.OperatorPrecedenceLowest)
 		if !p.hasPrecedingLineBreak() && expr.Kind == ast.KindIdentifier && p.token == ast.KindEqualsGreaterThanToken {
 			return true
 		}
@@ -4095,18 +4095,18 @@ func (p *Parser) parseConditionalExpressionRest(leftOperand *ast.Expression, pos
 	return result
 }
 
-func (p *Parser) parseBinaryExpressionOrHigher(precedence OperatorPrecedence) *ast.Expression {
+func (p *Parser) parseBinaryExpressionOrHigher(precedence ast.OperatorPrecedence) *ast.Expression {
 	pos := p.nodePos()
 	leftOperand := p.parseUnaryExpressionOrHigher()
 	return p.parseBinaryExpressionRest(precedence, leftOperand, pos)
 }
 
-func (p *Parser) parseBinaryExpressionRest(precedence OperatorPrecedence, leftOperand *ast.Expression, pos int) *ast.Expression {
+func (p *Parser) parseBinaryExpressionRest(precedence ast.OperatorPrecedence, leftOperand *ast.Expression, pos int) *ast.Expression {
 	for {
 		// We either have a binary operator here, or we're finished.  We call
 		// reScanGreaterToken so that we merge token sequences like > and = into >=
 		p.reScanGreaterThanToken()
-		newPrecedence := getBinaryOperatorPrecedence(p.token)
+		newPrecedence := ast.GetBinaryOperatorPrecedence(p.token)
 		// Check the precedence to see if we should "take" this operator
 		// - For left associative operator (all operator but **), consume the operator,
 		//   recursively call the function below, and parse binaryExpression as a rightOperand
@@ -4193,7 +4193,7 @@ func (p *Parser) parseUnaryExpressionOrHigher() *ast.Expression {
 		pos := p.nodePos()
 		updateExpression := p.parseUpdateExpression()
 		if p.token == ast.KindAsteriskAsteriskToken {
-			return p.parseBinaryExpressionRest(getBinaryOperatorPrecedence(p.token), updateExpression, pos)
+			return p.parseBinaryExpressionRest(ast.GetBinaryOperatorPrecedence(p.token), updateExpression, pos)
 		}
 		return updateExpression
 	}
@@ -5776,7 +5776,7 @@ func (p *Parser) isBinaryOperator() bool {
 	if p.inDisallowInContext() && p.token == ast.KindInKeyword {
 		return false
 	}
-	return getBinaryOperatorPrecedence(p.token) != OperatorPrecedenceInvalid
+	return ast.GetBinaryOperatorPrecedence(p.token) != ast.OperatorPrecedenceInvalid
 }
 
 func (p *Parser) isValidHeritageClauseObjectLiteral() bool {

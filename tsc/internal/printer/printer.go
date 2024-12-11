@@ -37,6 +37,7 @@ type Printer struct {
 	ownWriter          EmitTextWriter
 	writeKind          WriteKind
 	commentsDisabled   bool
+	inExtends          bool // whether we are emitting the `extends` clause of a ConditionalType or InferType
 }
 
 type PrinterOptions struct {
@@ -855,6 +856,13 @@ func (p *Printer) emitIdentifierName(node *ast.Identifier) {
 	p.exitNode(node.AsNode())
 }
 
+func (p *Printer) emitIdentifierNameNode(node *ast.IdentifierNode) {
+	if node == nil {
+		return
+	}
+	p.emitIdentifierName(node.AsIdentifier())
+}
+
 func (p *Printer) emitIdentifierReference(node *ast.Identifier) {
 	p.enterNode(node.AsNode())
 	p.emitIdentifierText(node)
@@ -890,7 +898,7 @@ func (p *Printer) emitQualifiedName(node *ast.QualifiedName) {
 func (p *Printer) emitComputedPropertyName(node *ast.ComputedPropertyName) {
 	p.enterNode(node.AsNode())
 	p.writePunctuation("[")
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionOfComputedPropertyName*/) // !!!
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceDisallowComma)
 	p.writePunctuation("]")
 	p.exitNode(node.AsNode())
 }
@@ -1092,7 +1100,6 @@ func (p *Printer) emitModifierList(parentNode *ast.Node, modifiers *ast.Modifier
 					parentNode,
 					modifiers.Nodes[start:pos],
 					core.IfElse(lastMode == ModeModifiers, LFModifiers, LFDecorators),
-					// nil, /*parenthesizerRule*/
 					false, /*hasTrailingComma*/
 					textRange,
 				)
@@ -1118,13 +1125,13 @@ func (p *Printer) emitTypeParameter(node *ast.TypeParameterDeclaration) {
 		p.writeSpace()
 		p.writeKeyword("extends")
 		p.writeSpace()
-		p.emitTypeNode(node.Constraint)
+		p.emitTypeNodeOutsideExtends(node.Constraint)
 	}
 	if node.DefaultType != nil {
 		p.writeSpace()
 		p.writeOperator("=")
 		p.writeSpace()
-		p.emitTypeNode(node.DefaultType)
+		p.emitTypeNodeOutsideExtends(node.DefaultType)
 	}
 	p.exitNode(node.AsNode())
 }
@@ -1153,14 +1160,14 @@ func (p *Printer) emitParameter(node *ast.ParameterDeclaration) {
 	p.emitTokenNode(node.QuestionToken)
 
 	if node.Parent != nil && node.Parent.Kind == ast.KindJSDocFunctionType && node.Name() == nil {
-		p.emitTypeNode(node.Type)
+		p.emitTypeNodeOutsideExtends(node.Type)
 	} else {
 		p.emitTypeAnnotation(node.Type)
 	}
 
 	// The comment position has to fallback to any present node within the parameter declaration because as it turns
 	// out, the parser can make parameter declarations with _just_ an initializer.
-	p.emitInitializer(node.Initializer, greatestEnd(node.Pos(), node.Type, node.QuestionToken, node.Name(), node.Modifiers()), node.AsNode() /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.emitInitializer(node.Initializer, greatestEnd(node.Pos(), node.Type, node.QuestionToken, node.Name(), node.Modifiers()), node.AsNode())
 	p.exitNode(node.AsNode())
 }
 
@@ -1170,7 +1177,7 @@ func (p *Printer) emitParameterNode(node *ast.ParameterDeclarationNode) {
 
 func (p *Printer) emitDecorator(node *ast.Decorator) {
 	p.writePunctuation("@")
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess*/) // !!!
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceMember)
 }
 
 func (p *Printer) emitModifierLike(node *ast.ModifierLike) {
@@ -1201,10 +1208,10 @@ func (p *Printer) emitTypeAnnotation(node *ast.TypeNode) {
 
 	p.writePunctuation(":")
 	p.writeSpace()
-	p.emitTypeNode(node)
+	p.emitTypeNodeOutsideExtends(node)
 }
 
-func (p *Printer) emitInitializer(node *ast.Expression, equalTokenPos int, contextNode *ast.Node /*, parenthesizerRule*/) { // !!!
+func (p *Printer) emitInitializer(node *ast.Expression, equalTokenPos int, contextNode *ast.Node) {
 	if node == nil {
 		return
 	}
@@ -1212,7 +1219,7 @@ func (p *Printer) emitInitializer(node *ast.Expression, equalTokenPos int, conte
 	p.writeSpace()
 	p.emitTokenWithComment(ast.KindEqualsToken, equalTokenPos, WriteKindOperator, contextNode)
 	p.writeSpace()
-	p.emitExpression(node /*, parenthesizerRule*/) // !!!
+	p.emitExpressionEx(node, ast.OperatorPrecedenceDisallowComma)
 }
 
 func (p *Printer) emitParameters(parentNode *ast.Node, parameters *ast.ParameterList) {
@@ -1540,17 +1547,20 @@ func (p *Printer) emitTypePredicate(node *ast.TypePredicateNode) {
 		p.writeSpace()
 		p.writeKeyword("is")
 		p.writeSpace()
-		p.emitTypeNode(node.Type)
+		p.emitTypeNodeOutsideExtends(node.Type)
 	}
 	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTypeArgument(node *ast.TypeNode) {
+	p.emitTypeNodeOutsideExtends(node)
 }
 
 func (p *Printer) emitTypeArguments(parentNode *ast.Node, nodes *ast.TypeArgumentList) {
 	if nodes == nil {
 		return
 	}
-
-	p.emitList((*Printer).emitTypeNode, parentNode, nodes, LFTypeArguments|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone) /*, typeArgumentParenthesizerRuleSelector */)
+	p.emitList((*Printer).emitTypeArgument, parentNode, nodes, LFTypeArguments|core.IfElse(p.shouldAllowTrailingComma(parentNode, nodes), LFAllowTrailingComma, LFNone) /*, typeArgumentParenthesizerRuleSelector */)
 }
 
 func (p *Printer) emitTypeReference(node *ast.TypeReferenceNode) {
@@ -1558,6 +1568,22 @@ func (p *Printer) emitTypeReference(node *ast.TypeReferenceNode) {
 	p.emitEntityName(node.TypeName)
 	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
 	p.exitNode(node.AsNode())
+}
+
+// Emits the return type of a FunctionTypeNode or ConstructorTypeNode, including the arrow (`=>`)
+func (p *Printer) emitReturnType(node *ast.TypeNode) {
+	p.writePunctuation("=>")
+	p.writeSpace()
+	if p.inExtends && node.Kind == ast.KindInferType && node.AsInferTypeNode().TypeParameter.AsTypeParameter().Constraint != nil {
+		// if the parent FunctionTypeNode or ConstructorTypeNode is in the `extends` clause of a ConditionalTypeNode,
+		// we must parenthesize `infer ... extends ...` so as not to result in an ambiguous parse.
+		//
+		// `T extends () => infer U extends V ? W : X` would parse the `? W : X` as part of a ConditionalTypeNode in the
+		// return type of the FunctionTypeNode, thus we must emit as `T extends () => (infer U extends V) ? W : X`
+		p.emitTypeNodePreservingExtends(node, ast.TypePrecedenceHighest)
+	} else {
+		p.emitTypeNodePreservingExtends(node, ast.TypePrecedenceLowest)
+	}
 }
 
 func (p *Printer) emitFunctionType(node *ast.FunctionTypeNode) {
@@ -1569,9 +1595,7 @@ func (p *Printer) emitFunctionType(node *ast.FunctionTypeNode) {
 	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
 	p.emitParameters(node.AsNode(), node.Parameters)
 	p.writeSpace()
-	p.writePunctuation("=>")
-	p.writeSpace()
-	p.emitTypeNode(node.Type)
+	p.emitReturnType(node.Type)
 	p.popNameGenerationScope(node.AsNode())
 	p.decreaseIndentIf(indented)
 	p.exitNode(node.AsNode())
@@ -1589,9 +1613,7 @@ func (p *Printer) emitConstructorType(node *ast.ConstructorTypeNode) {
 	p.emitTypeParameters(node.AsNode(), node.TypeParameters)
 	p.emitParameters(node.AsNode(), node.Parameters)
 	p.writeSpace()
-	p.writePunctuation("=>")
-	p.writeSpace()
-	p.emitTypeNode(node.Type)
+	p.emitReturnType(node.Type)
 	p.popNameGenerationScope(node.AsNode())
 	p.decreaseIndentIf(indented)
 	p.exitNode(node.AsNode())
@@ -1620,17 +1642,21 @@ func (p *Printer) emitTypeLiteral(node *ast.TypeLiteralNode) {
 
 func (p *Printer) emitArrayType(node *ast.ArrayTypeNode) {
 	p.enterNode(node.AsNode())
-	p.emitTypeNode(node.ElementType /*, parenthesizer.parenthesizeNonArrayTypeOfPostfixType*/) // !!!
+	p.emitTypeNode(node.ElementType, ast.TypePrecedencePostfix)
 	p.writePunctuation("[")
 	p.writePunctuation("]")
 	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTupleElementType(node *ast.Node) {
+	p.emitTypeNodeOutsideExtends(node)
 }
 
 func (p *Printer) emitTupleType(node *ast.TupleTypeNode) {
 	p.enterNode(node.AsNode())
 	p.emitTokenWithComment(ast.KindOpenBracketToken, node.Pos(), WriteKindPunctuation, node.AsNode())
 	flags := core.IfElse(p.shouldEmitOnSingleLine(node.AsNode()), LFSingleLineTupleTypeElements, LFMultiLineTupleTypeElements)
-	p.emitList((*Printer).emitTypeNode, node.AsNode(), node.Elements, flags|LFNoSpaceIfEmpty /*, parenthesizer.parenthesizeElementTypeOfTupleType*/) // !!!
+	p.emitList((*Printer).emitTupleElementType, node.AsNode(), node.Elements, flags|LFNoSpaceIfEmpty)
 	p.emitTokenWithComment(ast.KindCloseBracketToken, node.Elements.End(), WriteKindPunctuation, node.AsNode())
 	p.exitNode(node.AsNode())
 }
@@ -1638,13 +1664,14 @@ func (p *Printer) emitTupleType(node *ast.TupleTypeNode) {
 func (p *Printer) emitRestType(node *ast.RestTypeNode) {
 	p.enterNode(node.AsNode())
 	p.writePunctuation("...")
-	p.emitTypeNode(node.Type)
+	p.emitTypeNodeOutsideExtends(node.Type)
 	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitOptionalType(node *ast.OptionalTypeNode) {
 	p.enterNode(node.AsNode())
-	p.emitTypeNode(node.Type /*, parenthesizer.parenthesizeTypeOfOptionalType*/) // !!!
+	// !!! May need extra parenthesization if we also have JSDocNullableType
+	p.emitTypeNode(node.Type, ast.TypePrecedencePostfix)
 	p.writePunctuation("?")
 	p.exitNode(node.AsNode())
 }
@@ -1652,41 +1679,61 @@ func (p *Printer) emitOptionalType(node *ast.OptionalTypeNode) {
 func (p *Printer) emitNamedTupleMember(node *ast.NamedTupleMember) {
 	p.enterNode(node.AsNode())
 	p.emitPunctuationNode(node.DotDotDotToken)
-	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	p.emitIdentifierName(node.Name().AsIdentifier())
 	p.emitPunctuationNode(node.QuestionToken)
 	p.emitTokenWithComment(ast.KindColonToken, greatestEnd(node.Name().End(), node.QuestionToken), WriteKindPunctuation, node.AsNode())
 	p.writeSpace()
-	p.emitTypeNode(node.Type)
+	p.emitTypeNodeOutsideExtends(node.Type)
 	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitUnionTypeConstituent(node *ast.TypeNode) {
+	p.emitTypeNode(node, ast.TypePrecedenceIntersection)
 }
 
 func (p *Printer) emitUnionType(node *ast.UnionTypeNode) {
 	p.enterNode(node.AsNode())
-	p.emitList((*Printer).emitTypeNode, node.AsNode(), node.Types, LFUnionTypeConstituents /*, parenthesizer.parenthesizeConstituentTypeOfUnionType*/) // !!!
+	p.emitList((*Printer).emitUnionTypeConstituent, node.AsNode(), node.Types, LFUnionTypeConstituents /*, parenthesizer.parenthesizeConstituentTypeOfUnionType*/) // !!!
 	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitIntersectionTypeConstituent(node *ast.TypeNode) {
+	p.emitTypeNode(node, ast.TypePrecedenceTypeOperator)
 }
 
 func (p *Printer) emitIntersectionType(node *ast.IntersectionTypeNode) {
 	p.enterNode(node.AsNode())
-	p.emitList((*Printer).emitTypeNode, node.AsNode(), node.Types, LFIntersectionTypeConstituents /*, parenthesizer.parenthesizeConstituentTypeOfIntersectionType*/) // !!!
+	p.emitList((*Printer).emitIntersectionTypeConstituent, node.AsNode(), node.Types, LFIntersectionTypeConstituents /*, parenthesizer.parenthesizeConstituentTypeOfIntersectionType*/) // !!!
 	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitConditionalType(node *ast.ConditionalTypeNode) {
 	p.enterNode(node.AsNode())
-	p.emitTypeNode(node.CheckType /*, parenthesizer.parenthesizeCheckTypeOfConditionalType*/) // !!!
+	p.emitTypeNode(node.CheckType, ast.TypePrecedenceUnion)
 	p.writeSpace()
 	p.writeKeyword("extends")
 	p.writeSpace()
-	p.emitTypeNode(node.ExtendsType /*, parenthesizer.parenthesizeExtendsTypeOfConditionalType*/) // !!!
+	p.emitTypeNodeInExtends(node.ExtendsType)
 	p.writeSpace()
 	p.writePunctuation("?")
 	p.writeSpace()
-	p.emitTypeNode(node.TrueType)
+	p.emitTypeNodeOutsideExtends(node.TrueType)
 	p.writeSpace()
 	p.writePunctuation(":")
 	p.writeSpace()
-	p.emitTypeNode(node.FalseType)
+	p.emitTypeNodeOutsideExtends(node.FalseType)
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitInferTypeParameter(node *ast.TypeParameterDeclaration) {
+	p.enterNode(node.AsNode())
+	p.emitBindingIdentifier(node.Name().AsIdentifier())
+	if node.Constraint != nil {
+		p.writeSpace()
+		p.writeKeyword("extends")
+		p.writeSpace()
+		p.emitTypeNodeInExtends(node.Constraint)
+	}
 	p.exitNode(node.AsNode())
 }
 
@@ -1694,14 +1741,14 @@ func (p *Printer) emitInferType(node *ast.InferTypeNode) {
 	p.enterNode(node.AsNode())
 	p.writeKeyword("infer")
 	p.writeSpace()
-	p.emitTypeParameter(node.TypeParameter.AsTypeParameter())
+	p.emitInferTypeParameter(node.TypeParameter.AsTypeParameter())
 	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitParenthesizedType(node *ast.ParenthesizedTypeNode) {
 	p.enterNode(node.AsNode())
 	p.writePunctuation("(")
-	p.emitTypeNode(node.Type)
+	p.emitTypeNodeOutsideExtends(node.Type)
 	p.writePunctuation(")")
 	p.exitNode(node.AsNode())
 }
@@ -1716,15 +1763,15 @@ func (p *Printer) emitTypeOperator(node *ast.TypeOperatorNode) {
 	p.enterNode(node.AsNode())
 	p.emitTokenWithComment(node.Operator, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	p.emitTypeNode(node.Type /*, core.IfElse(node.Operator == ast.KindReadonlyKeyword, parenthesizer.parenthesizeOperandOfReadonlyTypeOperator, parenthesizer.parenthesizeOperandOfTypeOperator)*/) // !!!
+	p.emitTypeNode(node.Type, core.IfElse(node.Operator == ast.KindReadonlyKeyword, ast.TypePrecedencePostfix, ast.TypePrecedenceTypeOperator))
 	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitIndexedAccessType(node *ast.IndexedAccessTypeNode) {
 	p.enterNode(node.AsNode())
-	p.emitTypeNode(node.ObjectType) //, parenthesizer.parenthesizeNonArrayTypeOfPostfixType);
+	p.emitTypeNode(node.ObjectType, ast.TypePrecedencePostfix)
 	p.writePunctuation("[")
-	p.emitTypeNode(node.IndexType)
+	p.emitTypeNodeOutsideExtends(node.IndexType)
 	p.writePunctuation("]")
 	p.exitNode(node.AsNode())
 }
@@ -1735,7 +1782,7 @@ func (p *Printer) emitMappedTypeParamerter(node *ast.TypeParameterDeclaration) {
 	p.writeSpace()
 	p.writeKeyword("in")
 	p.writeSpace()
-	p.emitTypeNode(node.Constraint)
+	p.emitTypeNodeOutsideExtends(node.Constraint)
 	p.exitNode(node.AsNode())
 }
 
@@ -1762,7 +1809,7 @@ func (p *Printer) emitMappedType(node *ast.MappedTypeNode) {
 		p.writeSpace()
 		p.writeKeyword("as")
 		p.writeSpace()
-		p.emitTypeNode(node.NameType)
+		p.emitTypeNodeOutsideExtends(node.NameType)
 	}
 	p.writePunctuation("]")
 	if node.QuestionToken != nil {
@@ -1773,7 +1820,7 @@ func (p *Printer) emitMappedType(node *ast.MappedTypeNode) {
 	}
 	p.writePunctuation(":")
 	p.writeSpace()
-	p.emitTypeNode(node.Type)
+	p.emitTypeNodeOutsideExtends(node.Type)
 	p.writeTrailingSemicolon()
 	if node.Members != nil {
 		if singleLine {
@@ -1795,13 +1842,13 @@ func (p *Printer) emitMappedType(node *ast.MappedTypeNode) {
 
 func (p *Printer) emitLiteralType(node *ast.LiteralTypeNode) {
 	p.enterNode(node.AsNode())
-	p.emitExpression(node.Literal)
+	p.emitExpressionEx(node.Literal, ast.OperatorPrecedenceComma)
 	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitTemplateTypeSpan(node *ast.TemplateLiteralTypeSpan) {
 	p.enterNode(node.AsNode())
-	p.emitTypeNode(node.Type)
+	p.emitTypeNodeOutsideExtends(node.Type)
 	p.emitTemplateMiddleTail(node.Literal)
 	p.exitNode(node.AsNode())
 }
@@ -1814,29 +1861,6 @@ func (p *Printer) emitTemplateType(node *ast.TemplateLiteralTypeNode) {
 	p.enterNode(node.AsNode())
 	p.emitTemplateHead(node.Head.AsTemplateHead())
 	p.emitList((*Printer).emitTemplateTypeSpanNode, node.AsNode(), node.TemplateSpans, LFTemplateExpressionSpans)
-	p.exitNode(node.AsNode())
-}
-
-func (p *Printer) emitImportTypeNode(node *ast.ImportTypeNode) {
-	p.enterNode(node.AsNode())
-	if node.IsTypeOf {
-		p.writeKeyword("typeof")
-		p.writeSpace()
-	}
-	p.writeKeyword("import")
-	p.writePunctuation("(")
-	p.emitTypeNode(node.Argument)
-	if node.Attributes != nil {
-		p.writePunctuation(",")
-		p.writeSpace()
-		p.emitImportTypeNodeAttributes(node.Attributes.AsImportAttributes())
-	}
-	p.writePunctuation(")")
-	if node.Qualifier != nil {
-		p.writePunctuation(".")
-		p.emitEntityName(node.Qualifier)
-	}
-	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
 	p.exitNode(node.AsNode())
 }
 
@@ -1853,7 +1877,63 @@ func (p *Printer) emitImportTypeNodeAttributes(node *ast.ImportAttributes) {
 	p.exitNode(node.AsNode())
 }
 
-func (p *Printer) emitTypeNode(node *ast.TypeNode) {
+func (p *Printer) emitImportTypeNode(node *ast.ImportTypeNode) {
+	p.enterNode(node.AsNode())
+	if node.IsTypeOf {
+		p.writeKeyword("typeof")
+		p.writeSpace()
+	}
+	p.writeKeyword("import")
+	p.writePunctuation("(")
+	p.emitTypeNodeOutsideExtends(node.Argument)
+	if node.Attributes != nil {
+		p.writePunctuation(",")
+		p.writeSpace()
+		p.emitImportTypeNodeAttributes(node.Attributes.AsImportAttributes())
+	}
+	p.writePunctuation(")")
+	if node.Qualifier != nil {
+		p.writePunctuation(".")
+		p.emitEntityName(node.Qualifier)
+	}
+	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	p.exitNode(node.AsNode())
+}
+
+// emits a Type node in the `extends` clause of a ConditionalType
+func (p *Printer) emitTypeNodeInExtends(node *ast.TypeNode) {
+	savedInExtends := p.inExtends
+	p.inExtends = true
+	p.emitTypeNodePreservingExtends(node, ast.TypePrecedenceLowest)
+	p.inExtends = savedInExtends
+}
+
+// emits a Type node not in the `extends` clause of a ConditionalType or InferType
+func (p *Printer) emitTypeNodeOutsideExtends(node *ast.TypeNode) {
+	savedInExtends := p.inExtends
+	p.inExtends = false
+	p.emitTypeNodePreservingExtends(node, ast.TypePrecedenceLowest)
+	p.inExtends = savedInExtends
+}
+
+// emits a Type node preserving whether or not we are currently in the `extends` clause of a ConditionalType or InferType
+func (p *Printer) emitTypeNodePreservingExtends(node *ast.TypeNode, precedence ast.TypePrecedence) {
+	p.emitTypeNode(node, precedence)
+}
+
+func (p *Printer) emitTypeNode(node *ast.TypeNode, precedence ast.TypePrecedence) {
+	if p.inExtends && precedence <= ast.TypePrecedenceConditional {
+		// in the `extends` clause of a ConditionalType or InferType, a ConditionalType must be parenthesized
+		precedence = ast.TypePrecedenceFunction
+	}
+
+	savedInExtends := p.inExtends
+	parens := ast.GetTypeNodePrecedence(node) < precedence
+	if parens {
+		p.inExtends = false
+		p.writePunctuation("(")
+	}
+
 	switch node.Kind {
 	// Keyword Types
 	case ast.KindAnyKeyword,
@@ -1937,6 +2017,12 @@ func (p *Printer) emitTypeNode(node *ast.TypeNode) {
 	default:
 		panic(fmt.Sprintf("unhandled TypeNode: %v", node.Kind))
 	}
+
+	if parens {
+		p.writePunctuation(")")
+	}
+
+	p.inExtends = savedInExtends
 }
 
 //
@@ -1970,7 +2056,7 @@ func (p *Printer) emitBindingElement(node *ast.BindingElement) {
 	// Old parser used `OmittedExpression` as a substitute for `Elision`. New parser uses a `BindingElement` with nil members
 	if name := node.Name(); name != nil {
 		p.emitBindingName(name)
-		p.emitInitializer(node.Initializer, node.Name().End(), node.AsNode() /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+		p.emitInitializer(node.Initializer, node.Name().End(), node.AsNode())
 	}
 	p.exitNode(node.AsNode())
 }
@@ -1987,9 +2073,13 @@ func (p *Printer) emitKeywordExpression(node *ast.KeywordExpression) {
 	p.emitKeywordNode(node.AsNode())
 }
 
+func (p *Printer) emitArrayLiteralExpressionElement(node *ast.Expression) {
+	p.emitExpressionEx(node, ast.OperatorPrecedenceSpread)
+}
+
 func (p *Printer) emitArrayLiteralExpression(node *ast.ArrayLiteralExpression) {
 	p.enterNode(node.AsNode())
-	p.emitList((*Printer).emitExpression, node.AsNode(), node.Elements, LFArrayLiteralExpressionElements|core.IfElse(node.MultiLine, LFPreferNewLine, LFNone) /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.emitList((*Printer).emitArrayLiteralExpressionElement, node.AsNode(), node.Elements, LFArrayLiteralExpressionElements|core.IfElse(node.MultiLine, LFPreferNewLine, LFNone))
 	p.exitNode(node.AsNode())
 }
 
@@ -2032,7 +2122,7 @@ func (p *Printer) mayNeedDotDotForPropertyAccess(expression *ast.Expression) boo
 
 func (p *Printer) emitPropertyAccessExpression(node *ast.PropertyAccessExpression) {
 	p.enterNode(node.AsNode())
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess */) // !!!
+	p.emitExpressionEx(node.Expression, core.IfElse(ast.IsOptionalChain(node.AsNode()), ast.OperatorPrecedenceOptionalChain, ast.OperatorPrecedenceMember))
 	token := node.QuestionDotToken
 	if token == nil {
 		token = p.factory.NewToken(ast.KindDotToken)
@@ -2060,33 +2150,40 @@ func (p *Printer) emitPropertyAccessExpression(node *ast.PropertyAccessExpressio
 
 func (p *Printer) emitElementAccessExpression(node *ast.ElementAccessExpression) {
 	p.enterNode(node.AsNode())
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess*/) // !!!
+	p.emitExpressionEx(node.Expression, core.IfElse(ast.IsOptionalChain(node.AsNode()), ast.OperatorPrecedenceOptionalChain, ast.OperatorPrecedenceMember))
 	p.emitTokenNode(node.QuestionDotToken)
 	p.emitTokenWithComment(ast.KindOpenBracketToken, greatestEnd(-1, node.Expression, node.QuestionDotToken), WriteKindPunctuation, node.AsNode())
-	p.emitExpression(node.ArgumentExpression)
+	p.emitExpressionEx(node.ArgumentExpression, ast.OperatorPrecedenceComma)
 	p.emitTokenWithComment(ast.KindCloseBracketToken, node.ArgumentExpression.End(), WriteKindPunctuation, node.AsNode())
 	p.exitNode(node.AsNode())
 }
 
-func (p *Printer) emitCallExpression(node *ast.CallExpression) {
-	p.enterNode(node.AsNode())
-	indirectCall := p.shouldEmitIndirectCall(node.AsNode())
-	if indirectCall {
+func (p *Printer) emitArgument(node *ast.Expression) {
+	p.emitExpressionEx(node, ast.OperatorPrecedenceSpread)
+}
+
+func (p *Printer) emitCallee(callee *ast.Expression, parentNode *ast.Node) {
+	if p.shouldEmitIndirectCall(parentNode) {
 		p.writePunctuation("(")
 		p.writeLiteral("0")
 		p.writePunctuation(",")
 		p.writeSpace()
-	}
-
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess*/) // !!!
-
-	if indirectCall {
+		p.emitExpressionEx(callee, ast.OperatorPrecedenceComma)
 		p.writePunctuation(")")
+	} else if parentNode.Kind == ast.KindCallExpression && isNewExpressionWithoutArguments(ast.SkipPartiallyEmittedExpressions(callee)) {
+		// Parenthesize `new C` inside of a CallExpression so it is treated as `(new C)()` and not `new C()`
+		p.emitExpressionWithParentheses(callee)
+	} else {
+		p.emitExpressionEx(callee, ast.OperatorPrecedenceMember)
 	}
+}
 
+func (p *Printer) emitCallExpression(node *ast.CallExpression) {
+	p.enterNode(node.AsNode())
+	p.emitCallee(node.Expression, node.AsNode())
 	p.emitTokenNode(node.QuestionDotToken)
 	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
-	p.emitList((*Printer).emitExpression, node.AsNode(), node.Arguments, LFCallExpressionArguments /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.emitList((*Printer).emitArgument, node.AsNode(), node.Arguments, LFCallExpressionArguments)
 	p.exitNode(node.AsNode())
 }
 
@@ -2094,37 +2191,43 @@ func (p *Printer) emitNewExpression(node *ast.NewExpression) {
 	p.enterNode(node.AsNode())
 	p.emitTokenWithComment(ast.KindNewKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionOfNew */) // !!!
+	if ast.SkipPartiallyEmittedExpressions(node.Expression).Kind == ast.KindCallExpression {
+		// Parenthesize `C()` inside of a NewExpression so it is treated as `new (C())` and not `new C()`
+		p.emitExpressionWithParentheses(node.Expression)
+	} else {
+		p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceMember)
+	}
 	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
-	p.emitList((*Printer).emitExpression, node.AsNode(), node.Arguments, LFNewExpressionArguments /*, parenthesizer.parenthesizeExpressionForDisallowedComma */) // !!!
+	p.emitList((*Printer).emitArgument, node.AsNode(), node.Arguments, LFNewExpressionArguments)
 	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitTemplateLiteral(node *ast.TemplateLiteral) {
+	switch node.Kind {
+	case ast.KindNoSubstitutionTemplateLiteral:
+		p.emitNoSubstitutionTemplateLiteral(node.AsNoSubstitutionTemplateLiteral())
+	case ast.KindTemplateExpression:
+		p.emitTemplateExpression(node.AsTemplateExpression())
+	default:
+		panic(fmt.Sprintf("unhandled TemplateLiteral: %v", node.Kind))
+	}
 }
 
 func (p *Printer) emitTaggedTemplateExpression(node *ast.TaggedTemplateExpression) {
 	p.enterNode(node.AsNode())
-	indirectCall := p.shouldEmitIndirectCall(node.AsNode())
-	if indirectCall {
-		p.writePunctuation("(")
-		p.writeLiteral("0")
-		p.writePunctuation(",")
-		p.writeSpace()
-	}
-	p.emitExpression(node.Tag /*, parenthesizer.parenthesizeLeftSideOfAccess */) // !!!
-	if indirectCall {
-		p.writePunctuation(")")
-	}
+	p.emitCallee(node.Tag, node.AsNode())
 	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
 	p.writeSpace()
-	p.emitExpression(node.Template)
+	p.emitTemplateLiteral(node.Template)
 	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitTypeAssertionExpression(node *ast.TypeAssertion) {
 	p.enterNode(node.AsNode())
 	p.writePunctuation("<")
-	p.emitTypeNode(node.Type)
+	p.emitTypeNodeOutsideExtends(node.Type)
 	p.writePunctuation(">")
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceUpdate)
 	p.exitNode(node.AsNode())
 }
 
@@ -2132,7 +2235,7 @@ func (p *Printer) emitParenthesizedExpression(node *ast.ParenthesizedExpression)
 	p.enterNode(node.AsNode())
 	openParenPos := p.emitTokenWithComment(ast.KindOpenParenToken, node.Pos(), WriteKindPunctuation, node.AsNode())
 	indented := p.writeLineSeparatorsAndIndentBefore(node.Expression, node.AsNode())
-	p.emitExpression(node.Expression)
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceComma)
 	p.writeLineSeparatorsAfter(node.Expression, node.AsNode())
 	p.decreaseIndentIf(indented)
 	p.emitTokenWithComment(ast.KindCloseParenToken, greatestEnd(openParenPos, node.Expression), WriteKindPunctuation, node.AsNode())
@@ -2142,23 +2245,16 @@ func (p *Printer) emitParenthesizedExpression(node *ast.ParenthesizedExpression)
 func (p *Printer) emitFunctionExpression(node *ast.FunctionExpression) {
 	p.enterNode(node.AsNode())
 	p.generateNameIfNeeded(node.Name())
-
 	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
 	p.writeKeyword("function")
 	p.emitTokenNode(node.AsteriskToken)
 	p.writeSpace()
-
-	if name := node.Name(); name != nil {
-		p.emitIdentifierName(name.AsIdentifier())
-	}
-
+	p.emitIdentifierNameNode(node.Name())
 	indented := p.shouldEmitIndented(node.AsNode())
 	p.increaseIndentIf(indented)
 	p.pushNameGenerationScope(node.AsNode())
-
 	p.emitSignature(node.AsNode())
 	p.emitFunctionBodyNode(node.Body)
-
 	p.popNameGenerationScope(node.AsNode())
 	p.decreaseIndentIf(indented)
 	p.exitNode(node.AsNode())
@@ -2168,18 +2264,18 @@ func (p *Printer) emitConciseBody(node *ast.BlockOrExpression) {
 	switch {
 	case ast.IsBlock(node):
 		p.emitFunctionBody(node.AsBlock())
+	case ast.IsObjectLiteralExpression(ast.GetLeftmostExpression(node, false /*stopAtCallExpressions*/)):
+		p.emitExpressionWithParentheses(node)
 	case ast.IsExpression(node):
-		p.emitExpression(node /*, parenthesizer.parenthesizeConciseBodyOfArrowFunction*/) // !!!
+		p.emitExpressionEx(node, ast.OperatorPrecedenceYield)
 	default:
-		panic(fmt.Sprintf("unexpected body: %v", node.Kind))
+		panic(fmt.Sprintf("unexpected ConciseBody: %v", node.Kind))
 	}
 }
 
 func (p *Printer) emitArrowFunction(node *ast.ArrowFunction) {
 	p.enterNode(node.AsNode())
-
 	p.emitModifierList(node.AsNode(), node.Modifiers(), false /*allowDecorators*/)
-
 	indented := p.shouldEmitIndented(node.AsNode())
 	p.increaseIndentIf(indented)
 	p.pushNameGenerationScope(node.AsNode())
@@ -2189,9 +2285,7 @@ func (p *Printer) emitArrowFunction(node *ast.ArrowFunction) {
 	p.writeSpace()
 	p.emitTokenNode(node.EqualsGreaterThanToken)
 	p.writeSpace()
-
 	p.emitConciseBody(node.Body)
-
 	p.popNameGenerationScope(node.AsNode())
 	p.decreaseIndentIf(indented)
 	p.exitNode(node.AsNode())
@@ -2201,7 +2295,7 @@ func (p *Printer) emitDeleteExpression(node *ast.DeleteExpression) {
 	p.enterNode(node.AsNode())
 	p.emitTokenWithComment(ast.KindDeleteKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceUnary)
 	p.exitNode(node.AsNode())
 }
 
@@ -2209,7 +2303,7 @@ func (p *Printer) emitTypeOfExpression(node *ast.TypeOfExpression) {
 	p.enterNode(node.AsNode())
 	p.emitTokenWithComment(ast.KindTypeOfKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceUnary)
 	p.exitNode(node.AsNode())
 }
 
@@ -2217,7 +2311,7 @@ func (p *Printer) emitVoidExpression(node *ast.VoidExpression) {
 	p.enterNode(node.AsNode())
 	p.emitTokenWithComment(ast.KindVoidKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceUnary)
 	p.exitNode(node.AsNode())
 }
 
@@ -2225,7 +2319,7 @@ func (p *Printer) emitAwaitExpression(node *ast.AwaitExpression) {
 	p.enterNode(node.AsNode())
 	p.emitTokenWithComment(ast.KindAwaitKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceUnary)
 	p.exitNode(node.AsNode())
 }
 
@@ -2255,35 +2349,142 @@ func (p *Printer) emitPrefixUnaryExpression(node *ast.PrefixUnaryExpression) {
 		}
 	}
 
-	p.emitExpression(node.Operand /*, parenthesizer.parenthesizeOperandOfPrefixUnary*/) // !!!
+	p.emitExpressionEx(node.Operand, ast.OperatorPrecedenceUnary)
 	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitPostfixUnaryExpression(node *ast.PostfixUnaryExpression) {
 	p.enterNode(node.AsNode())
-	p.emitExpression(node.Operand /*, parenthesizer.parenthesizeOperandOfPostfixUnary*/) // !!!
+	p.emitExpressionEx(node.Operand, ast.OperatorPrecedenceLeftHandSide)
 	p.emitTokenWithComment(node.Operator, node.Operand.End(), WriteKindOperator, node.AsNode())
 	p.exitNode(node.AsNode())
 }
 
+// This function determines whether an expression consists of a homogeneous set of
+// literal expressions or binary plus expressions that all share the same literal kind.
+// It is used to determine whether the right-hand operand of a binary plus expression can be
+// emitted without parentheses.
+func (p *Printer) getLiteralKindOfBinaryPlusOperand(node *ast.Expression) ast.Kind {
+	node = ast.SkipPartiallyEmittedExpressions(node)
+
+	if ast.IsLiteralKind(node.Kind) {
+		return node.Kind
+	}
+
+	if node.Kind == ast.KindBinaryExpression {
+		if n := node.AsBinaryExpression(); n.OperatorToken.Kind == ast.KindPlusToken {
+			// !!! Determine if caching this is worthwhile over recomputing
+			////if n.cachedLiteralKind != KindUnknown {
+			////	return n.cachedLiteralKind;
+			////}
+
+			leftKind := p.getLiteralKindOfBinaryPlusOperand(n.Left)
+			literalKind := ast.KindUnknown
+			if ast.IsLiteralKind(leftKind) && leftKind == p.getLiteralKindOfBinaryPlusOperand(n.Right) {
+				literalKind = leftKind
+			}
+
+			////n.cachedLiteralKind = literalKind;
+			return literalKind
+		}
+	}
+
+	return ast.KindUnknown
+}
+
 func (p *Printer) emitBinaryExpression(node *ast.BinaryExpression) {
+	precedence := ast.GetExpressionPrecedence(node.AsNode())
+	leftPrec := precedence
+	rightPrec := precedence
+	switch precedence {
+	case ast.OperatorPrecedenceComma:
+		// No need to parenthesize the right operand when the binary operator and
+		// operand are both ,:
+		//  x,(a,b)     => x,a,b
+		break
+	case ast.OperatorPrecedenceAssignment:
+		// assignment is right-associative
+		leftPrec = ast.OperatorPrecedenceLeftHandSide
+	case ast.OperatorPrecedenceCoalesce:
+		// allow coalesce on the left, but short circuit to BitwiseOR
+		if isBinaryOperation(node.Left, ast.KindQuestionQuestionToken) {
+			leftPrec = ast.OperatorPrecedenceCoalesce
+		} else {
+			leftPrec = ast.OperatorPrecedenceBitwiseOR
+		}
+		rightPrec = ast.OperatorPrecedenceBitwiseOR
+	case ast.OperatorPrecedenceLogicalOR:
+		rightPrec = ast.OperatorPrecedenceLogicalAND
+	case ast.OperatorPrecedenceLogicalAND:
+		rightPrec = ast.OperatorPrecedenceBitwiseOR
+	case ast.OperatorPrecedenceBitwiseOR:
+		// No need to parenthesize the right operand when the binary operator and
+		// operand are both | due to the associative property of mathematics:
+		//  x|(a|b)     => x|a|b
+		break
+	case ast.OperatorPrecedenceBitwiseXOR:
+		// No need to parenthesize the right operand when the binary operator and
+		// operand are both ^ due to the associative property of mathematics:
+		//  x^(a^b)     => x^a^b
+		break
+	case ast.OperatorPrecedenceBitwiseAND:
+		// No need to parenthesize the right operand when the binary operator and
+		// operand are both & due to the associative property of mathematics:
+		//  x&(a&b)     => x&a&b
+		break
+	case ast.OperatorPrecedenceEquality:
+		rightPrec = ast.OperatorPrecedenceRelational
+	case ast.OperatorPrecedenceRelational:
+		rightPrec = ast.OperatorPrecedenceShift
+	case ast.OperatorPrecedenceShift:
+		rightPrec = ast.OperatorPrecedenceAdditive
+	case ast.OperatorPrecedenceAdditive:
+		if node.OperatorToken.Kind == ast.KindPlusToken && isBinaryOperation(node.Right, ast.KindPlusToken) {
+			leftKind := p.getLiteralKindOfBinaryPlusOperand(node.Left)
+			if ast.IsLiteralKind(leftKind) && leftKind == p.getLiteralKindOfBinaryPlusOperand(node.Right) {
+				// No need to parenthesize the right operand when the binary operator
+				// is plus (+) if both the left and right operands consist solely of either
+				// literals of the same kind or binary plus (+) expressions for literals of
+				// the same kind (recursively).
+				//  "a"+(1+2)       => "a"+(1+2)
+				//  "a"+("b"+"c")   => "a"+"b"+"c"
+				break
+			}
+		}
+		rightPrec = ast.OperatorPrecedenceMultiplicative
+	case ast.OperatorPrecedenceMultiplicative:
+		if node.OperatorToken.Kind == ast.KindAsteriskToken && isBinaryOperation(node.Right, ast.KindAsteriskToken) {
+			// No need to parenthesize the right operand when the binary operator and
+			// operand are both * due to the associative property of mathematics:
+			//  x*(a*b)     => x*a*b
+			break
+		}
+		rightPrec = ast.OperatorPrecedenceExponentiation
+	case ast.OperatorPrecedenceExponentiation:
+		// exponentiation is right-associative
+		leftPrec = ast.OperatorPrecedenceUpdate
+	default:
+		panic(fmt.Sprintf("unhandled precedence: %v", precedence))
+	}
 	p.enterNode(node.AsNode())
-
-	p.emitExpression(node.Left /*, parenthesizer.getParenthesizeLeftSideOfBinaryForOperator(node.OperatorToken.Kind)*/) // !!!
-
+	p.emitExpressionEx(node.Left, leftPrec)
 	linesBeforeOperator := p.getLinesBetweenNodes(node.AsNode(), node.Left, node.OperatorToken)
+	linesAfterOperator := p.getLinesBetweenNodes(node.AsNode(), node.Left, node.OperatorToken)
 	p.writeLinesAndIndent(linesBeforeOperator, node.OperatorToken.Kind != ast.KindCommaToken /*writeSpaceIfNotIndenting*/)
 	p.emitTokenNode(node.OperatorToken)
-
-	linesAfterOperator := p.getLinesBetweenNodes(node.AsNode(), node.Left, node.OperatorToken)
 	p.writeLinesAndIndent(linesAfterOperator, true /*writeSpaceIfNotIndenting*/) // Binary operators should have a space before the comment starts
-
-	p.emitExpression(node.Right /*, parenthesizer.getParenthesizeRightSideOfBinaryForOperator(node.OperatorToken.Kind)*/) // !!!
-
+	p.emitExpressionEx(node.Right, rightPrec)
 	p.decreaseIndentIf(linesAfterOperator > 0)
 	p.decreaseIndentIf(linesBeforeOperator > 0)
-
 	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitShortCircuitExpression(node *ast.Expression) {
+	if isBinaryOperation(ast.SkipPartiallyEmittedExpressions(node), ast.KindQuestionQuestionToken) {
+		p.emitExpressionEx(node, ast.OperatorPrecedenceCoalesce)
+	} else {
+		p.emitExpressionEx(node, ast.OperatorPrecedenceLogicalOR)
+	}
 }
 
 func (p *Printer) emitConditionalExpression(node *ast.ConditionalExpression) {
@@ -2292,17 +2493,17 @@ func (p *Printer) emitConditionalExpression(node *ast.ConditionalExpression) {
 	linesAfterQuestion := p.getLinesBetweenNodes(node.AsNode(), node.QuestionToken, node.WhenTrue)
 	linesBeforeColon := p.getLinesBetweenNodes(node.AsNode(), node.WhenTrue, node.ColonToken)
 	linesAfterColon := p.getLinesBetweenNodes(node.AsNode(), node.ColonToken, node.WhenFalse)
-	p.emitExpression(node.Condition /*, parenthesizer.parenthesizeConditionOfConditionalExpression*/) // !!!
+	p.emitShortCircuitExpression(node.Condition)
 	p.writeLinesAndIndent(linesBeforeQuestion /*writeSpaceIfNotIndenting*/, true)
 	p.emitPunctuationNode(node.QuestionToken)
 	p.writeLinesAndIndent(linesAfterQuestion /*writeSpaceIfNotIndenting*/, true)
-	p.emitExpression(node.WhenTrue /*, parenthesizer.parenthesizeBranchOfConditionalExpression*/) // !!!
+	p.emitExpressionEx(node.WhenTrue, ast.OperatorPrecedenceYield)
 	p.decreaseIndentIf(linesAfterQuestion > 0)
 	p.decreaseIndentIf(linesBeforeQuestion > 0)
 	p.writeLinesAndIndent(linesBeforeColon /*writeSpaceIfNotIndenting*/, true)
 	p.emitPunctuationNode(node.ColonToken)
 	p.writeLinesAndIndent(linesAfterColon /*writeSpaceIfNotIndenting*/, true)
-	p.emitExpression(node.WhenFalse /*, parenthesizer.parenthesizeBranchOfConditionalExpression*/) // !!!
+	p.emitExpressionEx(node.WhenFalse, ast.OperatorPrecedenceYield)
 	p.decreaseIndentIf(linesAfterColon > 0)
 	p.decreaseIndentIf(linesBeforeColon > 0)
 	p.exitNode(node.AsNode())
@@ -2321,7 +2522,7 @@ func (p *Printer) emitYieldExpression(node *ast.YieldExpression) {
 	p.emitPunctuationNode(node.AsteriskToken)
 	if node.Expression != nil {
 		p.writeSpace()
-		p.emitExpression(node.Expression /*, parenthesizeExpressionForNoAsiAndDisallowedComma*/) // !!!
+		p.emitExpressionNoASI(node.Expression, ast.OperatorPrecedenceDisallowComma)
 	}
 	p.exitNode(node.AsNode())
 }
@@ -2329,7 +2530,7 @@ func (p *Printer) emitYieldExpression(node *ast.YieldExpression) {
 func (p *Printer) emitSpreadElement(node *ast.SpreadElement) {
 	p.enterNode(node.AsNode())
 	p.emitTokenWithComment(ast.KindDotDotDotToken, node.Pos(), WriteKindPunctuation, node.AsNode())
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceDisallowComma)
 	p.exitNode(node.AsNode())
 }
 
@@ -2369,7 +2570,7 @@ func (p *Printer) emitOmittedExpression(node *ast.Node) {
 
 func (p *Printer) emitExpressionWithTypeArguments(node *ast.ExpressionWithTypeArguments) {
 	p.enterNode(node.AsNode())
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess*/) // !!!
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceMember)
 	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
 	p.exitNode(node.AsNode())
 }
@@ -2380,31 +2581,27 @@ func (p *Printer) emitExpressionWithTypeArgumentsNode(node *ast.ExpressionWithTy
 
 func (p *Printer) emitAsExpression(node *ast.AsExpression) {
 	p.enterNode(node.AsNode())
-	p.emitExpression(node.Expression)
-	if node.Type != nil {
-		p.writeSpace()
-		p.writeKeyword("as")
-		p.writeSpace()
-		p.emitTypeNode(node.Type)
-	}
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceRelational)
+	p.writeSpace()
+	p.writeKeyword("as")
+	p.writeSpace()
+	p.emitTypeNodeOutsideExtends(node.Type)
 	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitSatisfiesExpression(node *ast.SatisfiesExpression) {
 	p.enterNode(node.AsNode())
-	p.emitExpression(node.Expression)
-	if node.Type != nil {
-		p.writeSpace()
-		p.writeKeyword("satisfies")
-		p.writeSpace()
-		p.emitTypeNode(node.Type)
-	}
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceRelational)
+	p.writeSpace()
+	p.writeKeyword("satisfies")
+	p.writeSpace()
+	p.emitTypeNodeOutsideExtends(node.Type)
 	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitNonNullExpression(node *ast.NonNullExpression) {
 	p.enterNode(node.AsNode())
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeLeftSideOfAccess*/) // !!!
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceMember)
 	p.writeOperator("!")
 	p.exitNode(node.AsNode())
 }
@@ -2417,7 +2614,46 @@ func (p *Printer) emitMetaProperty(node *ast.MetaProperty) {
 	p.exitNode(node.AsNode())
 }
 
-func (p *Printer) emitExpression(node *ast.Node) {
+func (p *Printer) emitExpressionEx(node *ast.Expression, precedence ast.OperatorPrecedence) {
+	if ast.GetExpressionPrecedence(ast.SkipPartiallyEmittedExpressions(node)) < precedence {
+		p.emitExpressionWithParentheses(node)
+	} else {
+		p.emitExpression(node)
+	}
+}
+
+func (p *Printer) emitExpressionWithParentheses(node *ast.Expression) {
+	p.writePunctuation("(")
+	p.emitExpression(node)
+	p.writePunctuation(")")
+}
+
+func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
+	return false // !!! check if node will emit a leading comment that contains a trailing newline
+}
+
+func (p *Printer) emitExpressionNoASI(node *ast.Expression, precedence ast.OperatorPrecedence) {
+	// !!! restore parens when necessary to ensure a leading single-line comment doesn't introduce ASI:
+	//	function f() {
+	//	  return (// comment
+	//	    a as T
+	//	  )
+	//	}
+	// If we do not restore the parens, we would produce the following incorrect output:
+	//	function f() {
+	//	  return // comment
+	//	    a;
+	//	}
+	// Due to ASI, this would result in a `return` with no value followed by an unreachable expression statement.
+	if !p.commentsDisabled && node.Kind == ast.KindPartiallyEmittedExpression && p.willEmitLeadingNewLine(node) {
+		// !!! if there is an original parse tree node, restore it with location to preserve comments and source maps.
+		p.emitExpressionWithParentheses(node)
+	} else {
+		p.emitExpressionEx(node, precedence)
+	}
+}
+
+func (p *Printer) emitExpression(node *ast.Expression) {
 	switch node.Kind {
 	// Keywords
 	case ast.KindTrueKeyword, ast.KindFalseKeyword, ast.KindNullKeyword:
@@ -2541,7 +2777,7 @@ func (p *Printer) emitExpression(node *ast.Node) {
 
 func (p *Printer) emitTemplateSpan(node *ast.TemplateSpan) {
 	p.enterNode(node.AsNode())
-	p.emitExpression(node.Expression)
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceComma)
 	p.emitTemplateMiddleTail(node.Literal)
 	p.exitNode(node.AsNode())
 }
@@ -2604,7 +2840,18 @@ func (p *Printer) emitEmptyStatement(node *ast.EmptyStatement, isEmbeddedStateme
 
 func (p *Printer) emitExpressionStatement(node *ast.ExpressionStatement) {
 	p.enterNode(node.AsNode())
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionOfExpressionStatement */) // !!!
+
+	if isImmediatelyInvokedFunctionExpressionOrArrowFunction(node.Expression) {
+		// !!! introduce parentheses around callee
+		p.emitExpressionWithParentheses(node.Expression)
+	} else {
+		switch ast.GetLeftmostExpression(node.Expression, false /*stopAtCallExpression*/).Kind {
+		case ast.KindFunctionExpression, ast.KindClassExpression, ast.KindObjectLiteralExpression:
+			p.emitExpressionWithParentheses(node.Expression)
+		default:
+			p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceComma)
+		}
+	}
 
 	// Emit semicolon in non json files
 	// or if json file that created synthesized expression(eg.define expression statement when --out and amd code generation)
@@ -2763,7 +3010,7 @@ func (p *Printer) emitReturnStatement(node *ast.ReturnStatement) {
 	p.emitTokenWithComment(ast.KindReturnKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	if node.Expression != nil {
 		p.writeSpace()
-		p.emitExpression(node.Expression /*, parenthesizeExpressionForNoAsi*/) // !!!
+		p.emitExpressionNoASI(node.Expression, ast.OperatorPrecedenceComma)
 	}
 	p.writeTrailingSemicolon()
 	p.exitNode(node.AsNode())
@@ -2804,7 +3051,7 @@ func (p *Printer) emitThrowStatement(node *ast.ThrowStatement) {
 	p.enterNode(node.AsNode())
 	p.emitTokenWithComment(ast.KindThrowKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	p.emitExpression(node.Expression /*, parenthesizeExpressionForNoAsi*/) // !!!
+	p.emitExpressionNoASI(node.Expression, ast.OperatorPrecedenceComma)
 	p.writeTrailingSemicolon()
 	p.exitNode(node.AsNode())
 }
@@ -2844,7 +3091,7 @@ func (p *Printer) emitVariableDeclaration(node *ast.VariableDeclaration) {
 	p.emitPunctuationNode(node.ExclamationToken)
 	p.emitTypeAnnotation(node.Type)
 	// !!! old compiler can set a type node purely for emit. Is this necessary?
-	p.emitInitializer(node.Initializer, greatestEnd(node.Name().End(), node.Type /*, node.Name().emitNode?.typeNode*/), node.AsNode() /*, parenthesizer.parenthesizeExpressionForDisallowedComma */) // !!!
+	p.emitInitializer(node.Initializer, greatestEnd(node.Name().End(), node.Type /*, node.Name().emitNode?.typeNode*/), node.AsNode())
 	p.exitNode(node.AsNode())
 }
 
@@ -2945,7 +3192,7 @@ func (p *Printer) emitTypeAliasDeclaration(node *ast.TypeAliasDeclaration) {
 	p.writeSpace()
 	p.writePunctuation("=")
 	p.writeSpace()
-	p.emitTypeNode(node.Type)
+	p.emitTypeNodeOutsideExtends(node.Type)
 	p.writeTrailingSemicolon()
 	p.exitNode(node.AsNode())
 }
@@ -3139,7 +3386,17 @@ func (p *Printer) emitExportAssignment(node *ast.ExportAssignment) {
 		p.emitTokenWithComment(ast.KindDefaultKeyword, nextPos, WriteKindKeyword, node.AsNode())
 	}
 	p.writeSpace()
-	p.emitExpression(node.Expression /*, core.IfElse(node.IsExportEquals, parenthesizer.getParenthesizeRightSideOfBinaryForOperator(ast.KindEqualsToken), parenthesizer.parenthesizeExpressionOfExportDefault)*/) // !!!
+	if node.IsExportEquals {
+		p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceAssignment)
+	} else {
+		// parenthesize `class` and `function` expressions so as not to conflict with exported `class` and `function` declarations
+		expr := ast.GetLeftmostExpression(node.Expression, false /*stopAtCallExpressions*/)
+		if ast.IsClassExpression(expr) || ast.IsFunctionExpression(expr) {
+			p.emitExpressionWithParentheses(node.Expression)
+		} else {
+			p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceAssignment)
+		}
+	}
 	p.writeTrailingSemicolon()
 	p.exitNode(node.AsNode())
 }
@@ -3186,7 +3443,7 @@ func (p *Printer) emitImportAttribute(node *ast.ImportAttribute) {
 	p.writePunctuation(":")
 	p.writeSpace()
 	/// !!! emit trailing comments of value
-	p.emitExpression(node.Value /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.emitExpressionEx(node.Value, ast.OperatorPrecedenceDisallowComma)
 	p.exitNode(node.AsNode())
 }
 
@@ -3359,7 +3616,7 @@ func (p *Printer) emitExternalModuleReference(node *ast.ExternalModuleReference)
 	p.enterNode(node.AsNode())
 	p.writeKeyword("require")
 	p.writePunctuation("(")
-	p.emitExpression(node.Expression_)
+	p.emitExpressionEx(node.Expression_, ast.OperatorPrecedenceDisallowComma)
 	p.writePunctuation(")")
 	p.exitNode(node.AsNode())
 }
@@ -3458,7 +3715,7 @@ func (p *Printer) emitCaseClause(node *ast.CaseOrDefaultClause) {
 	p.enterNode(node.AsNode())
 	p.emitTokenWithComment(ast.KindCaseKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
-	p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.emitExpression(node.Expression)
 	p.emitTokenWithComment(ast.KindColonToken, node.Expression.End(), WriteKindPunctuation, node.AsNode())
 	p.emitCaseOrDefaultClauseStatements(node)
 	p.exitNode(node.AsNode())
@@ -3532,7 +3789,7 @@ func (p *Printer) emitPropertyAssignment(node *ast.PropertyAssignment) {
 
 	// !!! emit trailing comments of initializer
 
-	p.emitExpression(initializer /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.emitExpressionEx(initializer, ast.OperatorPrecedenceDisallowComma)
 	p.exitNode(node.AsNode())
 }
 
@@ -3543,7 +3800,7 @@ func (p *Printer) emitShorthandPropertyAssignment(node *ast.ShorthandPropertyAss
 		p.writeSpace()
 		p.writePunctuation("=")
 		p.writeSpace()
-		p.emitExpression(node.ObjectAssignmentInitializer /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+		p.emitExpressionEx(node.ObjectAssignmentInitializer, ast.OperatorPrecedenceDisallowComma)
 	}
 	p.exitNode(node.AsNode())
 }
@@ -3552,7 +3809,7 @@ func (p *Printer) emitSpreadAssignment(node *ast.SpreadAssignment) {
 	p.enterNode(node.AsNode())
 	if node.Expression != nil {
 		p.emitTokenWithComment(ast.KindDotDotDotToken, node.Pos(), WriteKindPunctuation, node.AsNode())
-		p.emitExpression(node.Expression /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+		p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceDisallowComma)
 	}
 	p.exitNode(node.AsNode())
 }
@@ -3564,7 +3821,7 @@ func (p *Printer) emitSpreadAssignment(node *ast.SpreadAssignment) {
 func (p *Printer) emitEnumMember(node *ast.EnumMember) {
 	p.enterNode(node.AsNode())
 	p.emitPropertyName(node.Name())
-	p.emitInitializer(node.Initializer, node.Name().End(), node.AsNode() /*, parenthesizer.parenthesizeExpressionForDisallowedComma*/) // !!!
+	p.emitInitializer(node.Initializer, node.Name().End(), node.AsNode())
 	p.exitNode(node.AsNode())
 }
 
@@ -3617,7 +3874,6 @@ func (p *Printer) emitSourceFile(node *ast.SourceFile) {
 		node.AsNode(),
 		node.Statements,
 		LFMultiLine,
-		//nil, /*parenthesizerRule*/
 		core.IfElse(index >= 0, index, len(node.Statements.Nodes)),
 		-1, /*count*/
 	)
@@ -3629,11 +3885,11 @@ func (p *Printer) emitSourceFile(node *ast.SourceFile) {
 // Lists
 //
 
-func (p *Printer) emitList(emit func(p *Printer, node *ast.Node /*, parenthesizerRule */), parentNode *ast.Node, children *ast.NodeList, format ListFormat /*, parenthesizerRule */) { // !!!
-	p.emitListRange(emit, parentNode, children, format /*, parenthesizerRule */, -1 /*start*/, -1 /*count*/) // !!!
+func (p *Printer) emitList(emit func(p *Printer, node *ast.Node), parentNode *ast.Node, children *ast.NodeList, format ListFormat) {
+	p.emitListRange(emit, parentNode, children, format, -1 /*start*/, -1 /*count*/)
 }
 
-func (p *Printer) emitListRange(emit func(p *Printer, node *ast.Node /*, parenthesizerRule */), parentNode *ast.Node, children *ast.NodeList, format ListFormat /*, parenthesizerRule */, start int, count int) { // !!!
+func (p *Printer) emitListRange(emit func(p *Printer, node *ast.Node), parentNode *ast.Node, children *ast.NodeList, format ListFormat, start int, count int) {
 	isNil := children == nil
 
 	length := 0
@@ -3688,7 +3944,7 @@ func (p *Printer) emitListRange(emit func(p *Printer, node *ast.Node /*, parenth
 			end = length
 		}
 
-		p.emitListItems(emit, parentNode, children.Nodes[start:end], format /*, parenthesizerRules*/, children.HasTrailingComma(), children.Loc) // !!!
+		p.emitListItems(emit, parentNode, children.Nodes[start:end], format, children.HasTrailingComma(), children.Loc)
 	}
 
 	if p.OnAfterEmitNodeList != nil {
@@ -3726,11 +3982,10 @@ func (p *Printer) writeDelimiter(format ListFormat) {
 //
 // NOTE: You probably don't want to call this directly and should be using `emitList` instead.
 func (p *Printer) emitListItems(
-	emit func(p *Printer, node *ast.Node /*, parenthesizerRule */), // !!!
+	emit func(p *Printer, node *ast.Node),
 	parentNode *ast.Node,
 	children []*ast.Node,
 	format ListFormat,
-	// parenthesizerRule,
 	hasTrailingComma bool,
 	childrenTextRange core.TextRange,
 ) {
@@ -3816,7 +4071,7 @@ func (p *Printer) emitListItems(
 		}
 
 		p.nextListElementPos = child.Pos()
-		emit(p, child /*, parenthesizerRule, i*/) // !!!
+		emit(p, child)
 
 		if shouldDecreaseIndentAfterEmit {
 			p.decreaseIndent()
@@ -4058,7 +4313,7 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 	default:
 		switch {
 		case ast.IsTypeNode(node):
-			p.emitTypeNode(node)
+			p.emitTypeNodeOutsideExtends(node)
 		case ast.IsStatement(node):
 			p.emitStatement(node)
 		case ast.IsExpression(node):

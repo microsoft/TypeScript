@@ -105,6 +105,10 @@ func IsBooleanLiteral(node *Node) bool {
 	return node.Kind == KindTrueKeyword || node.Kind == KindFalseKeyword
 }
 
+func IsLiteralKind(kind Kind) bool {
+	return KindFirstLiteralToken <= kind && kind <= KindLastLiteralToken
+}
+
 // Determines if a node is part of an OptionalChain
 func IsOptionalChain(node *Node) bool {
 	if node.Flags&NodeFlagsOptionalChain != 0 {

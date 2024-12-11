@@ -534,16 +534,26 @@ func TestEmit(t *testing.T) {
 		t.Run(rec.title, func(t *testing.T) {
 			t.Parallel()
 			file := parseJavaScript(rec.input)
-			if len(file.Diagnostics()) > 0 {
-				t.Error(formatDiagnostics(file.Diagnostics()))
-			}
-			printer := &Printer{}
-			text := printer.EmitSourceFile(file)
-			actual := strings.TrimSuffix(text, "\n")
-			expected := rec.output
-			assert.Equal(t, expected, actual)
+			checkDiagnostics(t, file)
+			checkEmit(t, file, rec.output)
 		})
 	}
+}
+
+func checkDiagnostics(t *testing.T, file *ast.SourceFile) {
+	t.Helper()
+	if len(file.Diagnostics()) > 0 {
+		t.Error(formatDiagnostics(file.Diagnostics()))
+	}
+}
+
+func checkEmit(t *testing.T, file *ast.SourceFile, expected string) {
+	t.Helper()
+	printer := &Printer{}
+	text := printer.EmitSourceFile(file)
+	actual := strings.TrimSuffix(text, "\n")
+	assert.Equal(t, expected, actual)
+	checkDiagnostics(t, parseJavaScript(text))
 }
 
 func setParentRecursive(node *ast.Node, parent *ast.Node) {
@@ -587,4 +597,1867 @@ func formatMessageChain(b *strings.Builder, messageChain []*ast.Diagnostic, leve
 		b.WriteString(fmt.Sprintf("%v%v\n", strings.Repeat(" ", level*2), c.Message()))
 		formatMessageChain(b, c.MessageChain(), level+1)
 	}
+}
+
+func markSyntheticRecursive(node *ast.Node) bool {
+	node.Loc = core.NewTextRange(-1, -1)
+	node.ForEachChild(markSyntheticRecursive)
+	return false
+}
+
+func TestParenthesizeDecorator(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewClassDeclaration(
+				factory.NewModifierList(
+					core.NewTextRange(-1, -1),
+					[]*ast.Node{
+						factory.NewDecorator(
+							factory.NewBinaryExpression(
+								factory.NewIdentifier("a"),
+								factory.NewToken(ast.KindPlusToken),
+								factory.NewIdentifier("b"),
+							),
+						),
+					},
+				),
+				factory.NewIdentifier("C"),
+				nil,
+				nil,
+				factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+			),
+		},
+	))
+
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "@(a + b)\nclass C {\n}")
+}
+
+func TestParenthesizeComputedPropertyName(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewClassDeclaration(
+				nil, /*modifiers*/
+				factory.NewIdentifier("C"),
+				nil, /*typeParameters*/
+				nil, /*heritageClauses*/
+				factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{
+					factory.NewPropertyDeclaration(
+						nil, /*modifiers*/
+						factory.NewComputedPropertyName(
+							// will be parenthesized on emit:
+							factory.NewBinaryExpression(
+								factory.NewIdentifier("a"),
+								factory.NewToken(ast.KindCommaToken),
+								factory.NewIdentifier("b"),
+							),
+						),
+						nil, /*postfixToken*/
+						nil, /*typeNode*/
+						nil, /*initializer*/
+					),
+				}),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "class C {\n    [(a, b)];\n}")
+}
+
+func TestParenthesizeArrayLiteral(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewArrayLiteralExpression(
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{
+							// will be parenthesized on emit:
+							factory.NewBinaryExpression(
+								factory.NewIdentifier("a"),
+								factory.NewToken(ast.KindCommaToken),
+								factory.NewIdentifier("b"),
+							),
+						},
+					),
+					false, /*multiLine*/
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "[(a, b)];")
+}
+
+func TestParenthesizePropertyAccess1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewPropertyAccessExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("b"),
+					),
+					nil, /*questionDotToken*/
+					factory.NewIdentifier("c"),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a, b).c;")
+}
+
+func TestParenthesizePropertyAccess2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewPropertyAccessExpression(
+					// will be parenthesized on emit:
+					factory.NewPropertyAccessExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindQuestionDotToken),
+						factory.NewIdentifier("b"),
+						ast.NodeFlagsOptionalChain,
+					),
+					nil, /*questionDotToken*/
+					factory.NewIdentifier("c"),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a?.b).c;")
+}
+
+func TestParenthesizePropertyAccess3(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewPropertyAccessExpression(
+					// will be parenthesized on emit:
+					factory.NewNewExpression(
+						factory.NewIdentifier("a"),
+						nil, /*typeArguments*/
+						nil, /*arguments*/
+					),
+					nil, /*questionDotToken*/
+					factory.NewIdentifier("b"),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(new a).b;")
+}
+
+func TestParenthesizeElementAccess1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewElementAccessExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("b"),
+					),
+					nil, /*questionDotToken*/
+					factory.NewIdentifier("c"),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a, b)[c];")
+}
+
+func TestParenthesizeElementAccess2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewElementAccessExpression(
+					// will be parenthesized on emit:
+					factory.NewPropertyAccessExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindQuestionDotToken),
+						factory.NewIdentifier("b"),
+						ast.NodeFlagsOptionalChain,
+					),
+					nil, /*questionDotToken*/
+					factory.NewIdentifier("c"),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a?.b)[c];")
+}
+
+func TestParenthesizeElementAccess3(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewElementAccessExpression(
+					// will be parenthesized on emit:
+					factory.NewNewExpression(
+						factory.NewIdentifier("a"),
+						nil, /*typeArguments*/
+						nil, /*arguments*/
+					),
+					nil, /*questionDotToken*/
+					factory.NewIdentifier("b"),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(new a)[b];")
+}
+
+func TestParenthesizeCall1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewCallExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("b"),
+					),
+					nil, /*questionDotToken*/
+					nil, /*typeArguments*/
+					factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a, b)();")
+}
+
+func TestParenthesizeCall2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewCallExpression(
+					// will be parenthesized on emit:
+					factory.NewPropertyAccessExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindQuestionDotToken),
+						factory.NewIdentifier("b"),
+						ast.NodeFlagsOptionalChain,
+					),
+					nil, /*questionDotToken*/
+					nil, /*typeArguments*/
+					factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a?.b)();")
+}
+
+func TestParenthesizeCall3(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewCallExpression(
+					// will be parenthesized on emit:
+					factory.NewNewExpression(
+						factory.NewIdentifier("C"),
+						nil, /*typeArguments*/
+						nil, /*arguments*/
+					),
+					nil, /*questionDotToken*/
+					nil, /*typeArguments*/
+					factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(new C)();")
+}
+
+func TestParenthesizeCall4(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewCallExpression(
+					factory.NewIdentifier("a"),
+					nil, /*questionDotToken*/
+					nil, /*typeArguments*/
+					factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{
+						factory.NewBinaryExpression(
+							factory.NewIdentifier("b"),
+							factory.NewToken(ast.KindCommaToken),
+							factory.NewIdentifier("c"),
+						),
+					}),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "a((b, c));")
+}
+
+func TestParenthesizeNew1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewNewExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("b"),
+					),
+					nil, /*typeArguments*/
+					factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "new (a, b)();")
+}
+
+func TestParenthesizeNew2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewNewExpression(
+					// will be parenthesized on emit:
+					factory.NewCallExpression(
+						factory.NewIdentifier("C"),
+						nil, /*questionDotToken*/
+						nil, /*typeArguments*/
+						factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+						ast.NodeFlagsNone,
+					),
+					nil, /*typeArguments*/
+					nil, /*arguments*/
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "new (C());")
+}
+
+func TestParenthesizeNew3(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewNewExpression(
+					factory.NewIdentifier("C"),
+					nil, /*typeArguments*/
+					factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{
+						factory.NewBinaryExpression(
+							factory.NewIdentifier("a"),
+							factory.NewToken(ast.KindCommaToken),
+							factory.NewIdentifier("b"),
+						),
+					}),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "new C((a, b));")
+}
+
+func TestParenthesizeTaggedTemplate1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewTaggedTemplateExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("b"),
+					),
+					nil, /*questionDotToken*/
+					nil, /*typeArguments*/
+					factory.NewNoSubstitutionTemplateLiteral(""),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a, b) ``;")
+}
+
+func TestParenthesizeTaggedTemplate2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewTaggedTemplateExpression(
+					// will be parenthesized on emit:
+					factory.NewPropertyAccessExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindQuestionDotToken),
+						factory.NewIdentifier("b"),
+						ast.NodeFlagsOptionalChain,
+					),
+					nil, /*questionDotToken*/
+					nil, /*typeArguments*/
+					factory.NewNoSubstitutionTemplateLiteral(""),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a?.b) ``;")
+}
+
+func TestParenthesizeTypeAssertion1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewTypeAssertion(
+					factory.NewTypeReferenceNode(
+						factory.NewIdentifier("T"),
+						nil, /*typeArguments*/
+					),
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindPlusToken),
+						factory.NewIdentifier("b"),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "<T>(a + b);")
+}
+
+func TestParenthesizeArrowFunction1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewArrowFunction(
+					nil, /*modifiers*/
+					nil, /*typeParameters*/
+					factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+					nil, /*returnType*/
+					factory.NewToken(ast.KindEqualsGreaterThanToken),
+					// will be parenthesized on emit:
+					factory.NewObjectLiteralExpression(
+						factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+						false, /*multiLine*/
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "() => ({});")
+}
+
+func TestParenthesizeArrowFunction2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewArrowFunction(
+					nil, /*modifiers*/
+					nil, /*typeParameters*/
+					factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+					nil, /*returnType*/
+					factory.NewToken(ast.KindEqualsGreaterThanToken),
+					// will be parenthesized on emit:
+					factory.NewPropertyAccessExpression(
+						factory.NewObjectLiteralExpression(
+							factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+							false, /*multiLine*/
+						),
+						nil, /*questionDotToken*/
+						factory.NewIdentifier("a"),
+						ast.NodeFlagsNone,
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "() => ({}.a);")
+}
+
+func TestParenthesizeDelete(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewDeleteExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindPlusToken),
+						factory.NewIdentifier("b"),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "delete (a + b);")
+}
+
+func TestParenthesizeVoid(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewVoidExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindPlusToken),
+						factory.NewIdentifier("b"),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "void (a + b);")
+}
+
+func TestParenthesizeTypeOf(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewTypeOfExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindPlusToken),
+						factory.NewIdentifier("b"),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "typeof (a + b);")
+}
+
+func TestParenthesizeAwait(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewAwaitExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindPlusToken),
+						factory.NewIdentifier("b"),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "await (a + b);")
+}
+
+func isBinaryOperator(token ast.Kind) bool {
+	switch token {
+	case ast.KindCommaToken,
+		ast.KindLessThanToken,
+		ast.KindGreaterThanToken,
+		ast.KindLessThanEqualsToken,
+		ast.KindGreaterThanEqualsToken,
+		ast.KindEqualsEqualsToken,
+		ast.KindEqualsEqualsEqualsToken,
+		ast.KindExclamationEqualsToken,
+		ast.KindExclamationEqualsEqualsToken,
+		ast.KindPlusToken,
+		ast.KindMinusToken,
+		ast.KindAsteriskToken,
+		ast.KindAsteriskAsteriskToken,
+		ast.KindSlashToken,
+		ast.KindPercentToken,
+		ast.KindLessThanLessThanToken,
+		ast.KindGreaterThanGreaterThanToken,
+		ast.KindGreaterThanGreaterThanGreaterThanToken,
+		ast.KindAmpersandToken,
+		ast.KindBarToken,
+		ast.KindCaretToken,
+		ast.KindAmpersandAmpersandToken,
+		ast.KindBarBarToken,
+		ast.KindQuestionQuestionToken,
+		ast.KindEqualsToken,
+		ast.KindPlusEqualsToken,
+		ast.KindMinusEqualsToken,
+		ast.KindAsteriskEqualsToken,
+		ast.KindAsteriskAsteriskEqualsToken,
+		ast.KindSlashEqualsToken,
+		ast.KindPercentEqualsToken,
+		ast.KindLessThanLessThanEqualsToken,
+		ast.KindGreaterThanGreaterThanEqualsToken,
+		ast.KindGreaterThanGreaterThanGreaterThanEqualsToken,
+		ast.KindAmpersandEqualsToken,
+		ast.KindBarEqualsToken,
+		ast.KindBarBarEqualsToken,
+		ast.KindAmpersandAmpersandEqualsToken,
+		ast.KindQuestionQuestionEqualsToken,
+		ast.KindCaretEqualsToken,
+		ast.KindInKeyword,
+		ast.KindInstanceOfKeyword:
+		return true
+	}
+	return false
+}
+
+func makeSide(label string, kind ast.Kind, factory *ast.NodeFactory) *ast.Node {
+	switch {
+	case kind == ast.KindIdentifier || kind == ast.KindUnknown:
+		return factory.NewIdentifier(label)
+	case kind == ast.KindArrowFunction:
+		return factory.NewArrowFunction(
+			nil, /*modifiers*/
+			nil, /*typeParameters*/
+			factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+			nil, /*returnType*/
+			factory.NewToken(ast.KindEqualsGreaterThanToken),
+			factory.NewBlock(factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}), false /*multiLine*/),
+		)
+	case isBinaryOperator(kind):
+		return factory.NewBinaryExpression(
+			factory.NewIdentifier(label+"l"),
+			factory.NewToken(kind),
+			factory.NewIdentifier(label+"r"),
+		)
+	default:
+		panic("unsupported kind")
+	}
+}
+
+func TestParenthesizeBinary(t *testing.T) {
+	t.Parallel()
+
+	data := []struct {
+		left     ast.Kind
+		operator ast.Kind
+		right    ast.Kind
+		output   string
+	}{
+		{operator: ast.KindCommaToken, output: "l, r"},
+		{operator: ast.KindCommaToken, left: ast.KindPlusToken, output: "ll + lr, r"},
+		{operator: ast.KindAsteriskToken, left: ast.KindPlusToken, output: "(ll + lr) * r"},
+		{operator: ast.KindAsteriskToken, right: ast.KindPlusToken, output: "l * (rl + rr)"},
+		{operator: ast.KindPlusToken, left: ast.KindAsteriskToken, output: "ll * lr + r"},
+		{operator: ast.KindPlusToken, right: ast.KindAsteriskToken, output: "l + rl * rr"},
+		{operator: ast.KindSlashToken, left: ast.KindAsteriskToken, output: "ll * lr / r"},
+		{operator: ast.KindSlashToken, left: ast.KindAsteriskAsteriskToken, output: "ll ** lr / r"},
+		{operator: ast.KindAsteriskAsteriskToken, left: ast.KindAsteriskToken, output: "(ll * lr) ** r"},
+		{operator: ast.KindAsteriskAsteriskToken, left: ast.KindAsteriskAsteriskToken, output: "(ll ** lr) ** r"},
+		{operator: ast.KindAsteriskToken, right: ast.KindAsteriskToken, output: "l * rl * rr"},
+		{operator: ast.KindBarToken, right: ast.KindBarToken, output: "l | rl | rr"},
+		{operator: ast.KindAmpersandToken, right: ast.KindAmpersandToken, output: "l & rl & rr"},
+		{operator: ast.KindCaretToken, right: ast.KindCaretToken, output: "l ^ rl ^ rr"},
+		{operator: ast.KindAmpersandAmpersandToken, right: ast.KindArrowFunction, output: "l && (() => { })"},
+	}
+	for _, rec := range data {
+		t.Run(rec.output, func(t *testing.T) {
+			t.Parallel()
+
+			var factory ast.NodeFactory
+			file := factory.NewSourceFile("", "", factory.NewNodeList(
+				core.NewTextRange(-1, -1),
+				[]*ast.Node{
+					factory.NewExpressionStatement(
+						factory.NewBinaryExpression(
+							makeSide("l", rec.left, &factory),
+							factory.NewToken(rec.operator),
+							makeSide("r", rec.right, &factory),
+						),
+					),
+				},
+			))
+			setParentRecursive(file, nil)
+			markSyntheticRecursive(file)
+			checkEmit(t, file.AsSourceFile(), rec.output+";")
+		})
+	}
+}
+
+func TestParenthesizeConditional1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewConditionalExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("b"),
+					),
+					factory.NewToken(ast.KindQuestionToken),
+					factory.NewIdentifier("c"),
+					factory.NewToken(ast.KindColonToken),
+					factory.NewIdentifier("d"),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a, b) ? c : d;")
+}
+
+func TestParenthesizeConditional2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewConditionalExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindEqualsToken),
+						factory.NewIdentifier("b"),
+					),
+					factory.NewToken(ast.KindQuestionToken),
+					factory.NewIdentifier("c"),
+					factory.NewToken(ast.KindColonToken),
+					factory.NewIdentifier("d"),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a = b) ? c : d;")
+}
+
+func TestParenthesizeConditional3(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewConditionalExpression(
+					// will be parenthesized on emit:
+					factory.NewArrowFunction(
+						nil, /*modifiers*/
+						nil, /*typeParameters*/
+						factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+						nil, /*returnType*/
+						factory.NewToken(ast.KindEqualsGreaterThanToken),
+						factory.NewBlock(
+							factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+							false, /*multiLine*/
+						),
+					),
+					factory.NewToken(ast.KindQuestionToken),
+					factory.NewIdentifier("a"),
+					factory.NewToken(ast.KindColonToken),
+					factory.NewIdentifier("b"),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(() => { }) ? a : b;")
+}
+
+func TestParenthesizeConditional4(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewConditionalExpression(
+					// will be parenthesized on emit:
+					factory.NewYieldExpression(nil, nil),
+					factory.NewToken(ast.KindQuestionToken),
+					factory.NewIdentifier("a"),
+					factory.NewToken(ast.KindColonToken),
+					factory.NewIdentifier("b"),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(yield) ? a : b;")
+}
+
+func TestParenthesizeConditional5(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewConditionalExpression(
+					factory.NewIdentifier("a"),
+					factory.NewToken(ast.KindQuestionToken),
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("b"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("c"),
+					),
+					factory.NewToken(ast.KindColonToken),
+					factory.NewIdentifier("d"),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "a ? (b, c) : d;")
+}
+
+func TestParenthesizeConditional6(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewConditionalExpression(
+					factory.NewIdentifier("a"),
+					factory.NewToken(ast.KindQuestionToken),
+					factory.NewIdentifier("b"),
+					factory.NewToken(ast.KindColonToken),
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("c"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("d"),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "a ? b : (c, d);")
+}
+
+func TestParenthesizeYield1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewYieldExpression(
+					nil, /*asteriskToken*/
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("b"),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "yield (a, b);")
+}
+
+// !!! test ASI avoidance from emitExpressionNoASI
+////func TestParenthesizeYield2(t *testing.T) {
+////}
+
+func TestParenthesizeSpreadElement1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewArrayLiteralExpression(
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{
+							factory.NewSpreadElement(
+								// will be parenthesized on emit:
+								factory.NewBinaryExpression(
+									factory.NewIdentifier("a"),
+									factory.NewToken(ast.KindCommaToken),
+									factory.NewIdentifier("b"),
+								),
+							),
+						},
+					),
+					false, /*multiLine*/
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "[...(a, b)];")
+}
+
+func TestParenthesizeSpreadElement2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewCallExpression(
+					factory.NewIdentifier("a"),
+					nil, /*questionDotToken*/
+					nil, /*typeArguments*/
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{
+							factory.NewSpreadElement(
+								// will be parenthesized on emit:
+								factory.NewBinaryExpression(
+									factory.NewIdentifier("b"),
+									factory.NewToken(ast.KindCommaToken),
+									factory.NewIdentifier("c"),
+								),
+							),
+						},
+					),
+					ast.NodeFlagsNone,
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "a(...(b, c));")
+}
+
+func TestParenthesizeSpreadElement3(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewNewExpression(
+					factory.NewIdentifier("a"),
+					nil, /*typeArguments*/
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{
+							factory.NewSpreadElement(
+								// will be parenthesized on emit:
+								factory.NewBinaryExpression(
+									factory.NewIdentifier("b"),
+									factory.NewToken(ast.KindCommaToken),
+									factory.NewIdentifier("c"),
+								),
+							),
+						},
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "new a(...(b, c));")
+}
+
+func TestParenthesizeExpressionWithTypeArguments(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewExpressionWithTypeArguments(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("b"),
+					),
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{
+							factory.NewTypeReferenceNode(
+								factory.NewIdentifier("c"),
+								nil,
+							),
+						},
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a, b)<c>;")
+}
+
+func TestParenthesizeAsExpression(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewAsExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("b"),
+					),
+					factory.NewTypeReferenceNode(
+						factory.NewIdentifier("c"),
+						nil,
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a, b) as c;")
+}
+
+func TestParenthesizeSatisfiesExpression(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewSatisfiesExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("b"),
+					),
+					factory.NewTypeReferenceNode(
+						factory.NewIdentifier("c"),
+						nil,
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a, b) satisfies c;")
+}
+
+func TestParenthesizeNonNullExpression(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewNonNullExpression(
+					// will be parenthesized on emit:
+					factory.NewBinaryExpression(
+						factory.NewIdentifier("a"),
+						factory.NewToken(ast.KindCommaToken),
+						factory.NewIdentifier("b"),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(a, b)!;")
+}
+
+func TestParenthesizeExpressionStatement1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewObjectLiteralExpression(
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{},
+					),
+					false, /*multiLine*/
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "({});")
+}
+
+func TestParenthesizeExpressionStatement2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewFunctionExpression(
+					nil, /*modifiers*/
+					nil, /*asteriskToken*/
+					nil, /*name*/
+					nil, /*typeParameters*/
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{},
+					),
+					nil, /*returnType*/
+					factory.NewBlock(
+						factory.NewNodeList(core.NewTextRange(-1, -1), []*ast.Node{}),
+						false, /*multiLine*/
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(function () { });")
+}
+
+func TestParenthesizeExpressionStatement3(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExpressionStatement(
+				factory.NewClassExpression(
+					nil, /*modifiers*/
+					nil, /*name*/
+					nil, /*typeParameters*/
+					nil, /*heritageClauses*/
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{},
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "(class {\n});")
+}
+
+func TestParenthesizeExpressionDefault1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExportAssignment(
+				nil,   /*modifiers*/
+				false, /*isExportEquals*/
+				// will be parenthesized on emit:
+				factory.NewClassExpression(
+					nil, /*modifiers*/
+					nil, /*name*/
+					nil, /*typeParameters*/
+					nil, /*heritageClauses*/
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{},
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "export default (class {\n});")
+}
+
+func TestParenthesizeExpressionDefault2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExportAssignment(
+				nil,   /*modifiers*/
+				false, /*isExportEquals*/
+				// will be parenthesized on emit:
+				factory.NewFunctionExpression(
+					nil, /*modifiers*/
+					nil, /*asteriskToken*/
+					nil, /*name*/
+					nil, /*typeParameters*/
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{},
+					),
+					nil, /*returnType*/
+					factory.NewBlock(
+						factory.NewNodeList(
+							core.NewTextRange(-1, -1),
+							[]*ast.Node{},
+						),
+						false, /*multiLine*/
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "export default (function () { });")
+}
+
+func TestParenthesizeExpressionDefault3(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewExportAssignment(
+				nil,   /*modifiers*/
+				false, /*isExportEquals*/
+				// will be parenthesized on emit:
+				factory.NewBinaryExpression(
+					factory.NewIdentifier("a"),
+					factory.NewToken(ast.KindCommaToken),
+					factory.NewIdentifier("b"),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "export default (a, b);")
+}
+
+func TestParenthesizeArrayType(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewArrayTypeNode(
+					// will be parenthesized on emit:
+					factory.NewUnionTypeNode(
+						factory.NewNodeList(
+							core.NewTextRange(-1, -1),
+							[]*ast.Node{
+								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+							},
+						),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = (a | b)[];")
+}
+
+func TestParenthesizeOptionalType(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewTupleTypeNode(
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{
+							factory.NewOptionalTypeNode(
+								// will be parenthesized on emit:
+								factory.NewUnionTypeNode(
+									factory.NewNodeList(
+										core.NewTextRange(-1, -1),
+										[]*ast.Node{
+											factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+											factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+										},
+									),
+								),
+							),
+						},
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = [\n    (a | b)?\n];")
+}
+
+func TestParenthesizeUnionType1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewUnionTypeNode(
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{
+							factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+							// will be parenthesized on emit:
+							factory.NewFunctionTypeNode(
+								nil, /*typeParameters*/
+								factory.NewNodeList(
+									core.NewTextRange(-1, -1),
+									[]*ast.Node{},
+								),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+							),
+						},
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = a | (() => b);")
+}
+
+func TestParenthesizeUnionType2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewUnionTypeNode(
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{
+							// will be parenthesized on emit:
+							factory.NewInferTypeNode(
+								factory.NewTypeParameterDeclaration(
+									nil,
+									factory.NewIdentifier("a"),
+									factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+									nil, /*defaultType*/
+								),
+							),
+							factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+						},
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = (infer a extends b) | c;")
+}
+
+func TestParenthesizeIntersectionType(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewIntersectionTypeNode(
+					factory.NewNodeList(
+						core.NewTextRange(-1, -1),
+						[]*ast.Node{
+							factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+							// will be parenthesized on emit:
+							factory.NewUnionTypeNode(
+								factory.NewNodeList(
+									core.NewTextRange(-1, -1),
+									[]*ast.Node{
+										factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+										factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+									},
+								),
+							),
+						},
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = a & (b | c);")
+}
+
+func TestParenthesizeReadonlyTypeOperator1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewTypeOperatorNode(
+					ast.KindReadonlyKeyword,
+					// will be parenthesized on emit:
+					factory.NewUnionTypeNode(
+						factory.NewNodeList(
+							core.NewTextRange(-1, -1),
+							[]*ast.Node{
+								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+							},
+						),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = readonly (a | b);")
+}
+
+func TestParenthesizeReadonlyTypeOperator2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewTypeOperatorNode(
+					ast.KindReadonlyKeyword,
+					// will be parenthesized on emit:
+					factory.NewTypeOperatorNode(
+						ast.KindKeyOfKeyword,
+						factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = readonly (keyof a);")
+}
+
+func TestParenthesizeKeyofTypeOperator(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewTypeOperatorNode(
+					ast.KindKeyOfKeyword,
+					// will be parenthesized on emit:
+					factory.NewUnionTypeNode(
+						factory.NewNodeList(
+							core.NewTextRange(-1, -1),
+							[]*ast.Node{
+								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+							},
+						),
+					),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = keyof (a | b);")
+}
+
+func TestParenthesizeIndexedAccessType(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewIndexedAccessTypeNode(
+					// will be parenthesized on emit:
+					factory.NewUnionTypeNode(
+						factory.NewNodeList(
+							core.NewTextRange(-1, -1),
+							[]*ast.Node{
+								factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+							},
+						),
+					),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = (a | b)[c];")
+}
+
+func TestParenthesizeConditionalType1(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewConditionalTypeNode(
+					// will be parenthesized on emit:
+					factory.NewFunctionTypeNode(
+						nil, /*typeParameters*/
+						factory.NewNodeList(
+							core.NewTextRange(-1, -1),
+							[]*ast.Node{},
+						),
+						factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+					),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("d"), nil /*typeArguments*/),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = (() => a) extends b ? c : d;")
+}
+
+func TestParenthesizeConditionalType2(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewConditionalTypeNode(
+					factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+					// will be parenthesized on emit:
+					factory.NewConditionalTypeNode(
+						factory.NewTypeReferenceNode(factory.NewIdentifier("b"), nil /*typeArguments*/),
+						factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+						factory.NewTypeReferenceNode(factory.NewIdentifier("d"), nil /*typeArguments*/),
+						factory.NewTypeReferenceNode(factory.NewIdentifier("e"), nil /*typeArguments*/),
+					),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("f"), nil /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("g"), nil /*typeArguments*/),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = a extends (b extends c ? d : e) ? f : g;")
+}
+
+func TestParenthesizeConditionalType3(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewConditionalTypeNode(
+					factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+					factory.NewFunctionTypeNode(
+						nil, /*typeParameters*/
+						factory.NewNodeList(
+							core.NewTextRange(-1, -1),
+							[]*ast.Node{},
+						),
+						// will be parenthesized on emit:
+						factory.NewInferTypeNode(
+							factory.NewTypeParameterDeclaration(
+								nil,
+								factory.NewIdentifier("b"),
+								factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+								nil, /*defaultType*/
+							),
+						),
+					),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("d"), nil /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("e"), nil /*typeArguments*/),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = a extends () => (infer b extends c) ? d : e;")
+}
+
+func TestParenthesizeConditionalType4(t *testing.T) {
+	t.Parallel()
+
+	var factory ast.NodeFactory
+	file := factory.NewSourceFile("", "", factory.NewNodeList(
+		core.NewTextRange(-1, -1),
+		[]*ast.Node{
+			factory.NewTypeAliasDeclaration(
+				nil,                        /*modifiers*/
+				factory.NewIdentifier("_"), /*name*/
+				nil,                        /*typeParameters*/
+				factory.NewConditionalTypeNode(
+					factory.NewTypeReferenceNode(factory.NewIdentifier("a"), nil /*typeArguments*/),
+					factory.NewFunctionTypeNode(
+						nil, /*typeParameters*/
+						factory.NewNodeList(
+							core.NewTextRange(-1, -1),
+							[]*ast.Node{},
+						),
+						// will be parenthesized on emit:
+						factory.NewUnionTypeNode(
+							factory.NewNodeList(
+								core.NewTextRange(-1, -1),
+								[]*ast.Node{
+									factory.NewInferTypeNode(
+										factory.NewTypeParameterDeclaration(
+											nil,
+											factory.NewIdentifier("b"),
+											factory.NewTypeReferenceNode(factory.NewIdentifier("c"), nil /*typeArguments*/),
+											nil, /*defaultType*/
+										),
+									),
+									factory.NewTypeReferenceNode(factory.NewIdentifier("d"), nil /*typeArguments*/),
+								},
+							),
+						),
+					),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("e"), nil /*typeArguments*/),
+					factory.NewTypeReferenceNode(factory.NewIdentifier("f"), nil /*typeArguments*/),
+				),
+			),
+		},
+	))
+	setParentRecursive(file, nil)
+	markSyntheticRecursive(file)
+	checkEmit(t, file.AsSourceFile(), "type _ = a extends () => (infer b extends c) | d ? e : f;")
 }

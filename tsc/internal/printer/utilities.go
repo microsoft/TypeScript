@@ -654,3 +654,22 @@ func skipSynthesizedParentheses(node *ast.Node) *ast.Node {
 	}
 	return node
 }
+
+func isNewExpressionWithoutArguments(node *ast.Node) bool {
+	return node.Kind == ast.KindNewExpression && node.AsNewExpression().Arguments == nil
+}
+
+func isBinaryOperation(node *ast.Node, token ast.Kind) bool {
+	node = ast.SkipPartiallyEmittedExpressions(node)
+	return node.Kind == ast.KindBinaryExpression &&
+		node.AsBinaryExpression().OperatorToken.Kind == token
+}
+
+func isImmediatelyInvokedFunctionExpressionOrArrowFunction(node *ast.Expression) bool {
+	node = ast.SkipPartiallyEmittedExpressions(node)
+	if !ast.IsCallExpression(node) {
+		return false
+	}
+	node = ast.SkipPartiallyEmittedExpressions(node.AsCallExpression().Expression)
+	return ast.IsFunctionExpression(node) || ast.IsArrowFunction(node)
+}
