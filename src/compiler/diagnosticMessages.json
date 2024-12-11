@@ -3980,6 +3980,10 @@
         "category": "Error",
         "code": 2879
     },
+    "Import assertions have been replaced by import attributes. Use 'with' instead of 'asserts'.": {
+        "category": "Error",
+        "code": 2880
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
