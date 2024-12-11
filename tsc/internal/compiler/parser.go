@@ -314,8 +314,8 @@ func (p *Parser) parseDelimitedList(kind ParsingContext, parseElement func(p *Pa
 	return p.factory.NewNodeList(core.NewTextRange(pos, p.nodePos()), slice)
 }
 
-// Return a non-nil (but possibly empty) slice if parsing was successful, or nil if opening token wasn't found
-// or parseElement returned nil
+// Return a non-nil (but possibly empty) NodeList if parsing was successful, or nil if opening token wasn't found
+// or parseElement returned nil.
 func (p *Parser) parseBracketedList(kind ParsingContext, parseElement func(p *Parser) *ast.Node, opening ast.Kind, closing ast.Kind) *ast.NodeList {
 	if p.parseExpected(opening) {
 		result := p.parseDelimitedList(kind, parseElement)
@@ -3973,7 +3973,7 @@ func typeHasArrowFunctionBlockingParseError(node *ast.TypeNode) bool {
 	case ast.KindTypeReference:
 		return ast.NodeIsMissing(node.AsTypeReference().TypeName)
 	case ast.KindFunctionType, ast.KindConstructorType:
-		return len(node.Parameters()) == 0 || typeHasArrowFunctionBlockingParseError(node.Type())
+		return typeHasArrowFunctionBlockingParseError(node.Type())
 	case ast.KindParenthesizedType:
 		return typeHasArrowFunctionBlockingParseError(node.AsParenthesizedTypeNode().Type)
 	}
