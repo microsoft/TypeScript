@@ -1,4 +1,4 @@
-package compiler
+package parser
 
 import (
 	"path"
@@ -3658,7 +3658,7 @@ func (p *Parser) parseAssignmentExpressionOrHigherWorker(allowReturnTypeInArrowF
 	//
 	// Note: we call reScanGreaterToken so that we get an appropriately merged token
 	// for cases like `> > =` becoming `>>=`
-	if ast.IsLeftHandSideExpression(expr) && isAssignmentOperator(p.reScanGreaterThanToken()) {
+	if ast.IsLeftHandSideExpression(expr) && ast.IsAssignmentOperator(p.reScanGreaterThanToken()) {
 		return p.makeBinaryExpression(expr, p.parseTokenNode(), p.parseAssignmentExpressionOrHigherWorker(allowReturnTypeInArrowFunction), pos)
 	}
 	// It wasn't an assignment or a lambda.  This is a conditional expression:
@@ -4974,7 +4974,7 @@ func (p *Parser) parseElementAccessExpressionRest(pos int, expression *ast.Expre
 		argumentExpression = p.createMissingIdentifier()
 	} else {
 		argument := p.parseExpressionAllowIn()
-		if isStringOrNumericLiteralLike(argument) {
+		if ast.IsStringOrNumericLiteralLike(argument) {
 			p.internIdentifier(argument.Text())
 		}
 		argumentExpression = argument
@@ -5905,14 +5905,14 @@ func isFileProbablyExternalModule(sourceFile *ast.SourceFile) *ast.Node {
 }
 
 func isAnExternalModuleIndicatorNode(node *ast.Statement) bool {
-	return hasSyntacticModifier(node, ast.ModifierFlagsExport) ||
+	return ast.HasSyntacticModifier(node, ast.ModifierFlagsExport) ||
 		ast.IsImportEqualsDeclaration(node) && ast.IsExternalModuleReference(node.AsImportEqualsDeclaration().ModuleReference) ||
 		ast.IsImportDeclaration(node) || ast.IsExportAssignment(node) || ast.IsExportDeclaration(node)
 }
 
 func getImportMetaIfNecessary(sourceFile *ast.SourceFile) *ast.Node {
 	if sourceFile.AsNode().Flags&ast.NodeFlagsPossiblyContainsImportMeta != 0 {
-		return findChildNode(sourceFile.AsNode(), isImportMeta)
+		return findChildNode(sourceFile.AsNode(), ast.IsImportMeta)
 	}
 	return nil
 }

@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	json2 "github.com/go-json-experiment/json"
-	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/compiler/packagejson"
+	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/testutil/filefixture"
 )
@@ -46,7 +46,7 @@ func BenchmarkPackageJSON(b *testing.B) {
 		b.Run("ParseJSONText", func(b *testing.B) {
 			b.Run(f.Name(), func(b *testing.B) {
 				for i := 0; i < b.N; i++ {
-					compiler.ParseJSONText(f.Name(), string(content))
+					parser.ParseJSONText(f.Name(), string(content))
 				}
 			})
 		})

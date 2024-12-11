@@ -1,4 +1,4 @@
-package compiler
+package parser
 
 import (
 	"io/fs"
@@ -11,12 +11,13 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/testutil/fixtures"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"gotest.tools/v3/assert"
 )
 
 func BenchmarkParse(b *testing.B) {
-	for _, f := range benchFixtures {
+	for _, f := range fixtures.BenchFixtures {
 		b.Run(f.Name(), func(b *testing.B) {
 			f.SkipIfNotExist(b)
 

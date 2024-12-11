@@ -12,7 +12,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
-	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 // Links store
@@ -109,20 +108,8 @@ func boolToTristate(b bool) core.Tristate {
 	return core.TSFalse
 }
 
-func isAssignmentOperator(token ast.Kind) bool {
-	return token >= ast.KindFirstAssignment && token <= ast.KindLastAssignment
-}
-
 func isCompoundAssignment(token ast.Kind) bool {
 	return token >= ast.KindFirstCompoundAssignment && token <= ast.KindLastCompoundAssignment
-}
-
-func isStringLiteralLike(node *ast.Node) bool {
-	return node.Kind == ast.KindStringLiteral || node.Kind == ast.KindNoSubstitutionTemplateLiteral
-}
-
-func isStringOrNumericLiteralLike(node *ast.Node) bool {
-	return isStringLiteralLike(node) || ast.IsNumericLiteral(node)
 }
 
 func isSignedNumericLiteral(node *ast.Node) bool {
@@ -328,32 +315,28 @@ func isPartOfTypeQuery(node *ast.Node) bool {
 	return node.Kind == ast.KindTypeQuery
 }
 
-func hasSyntacticModifier(node *ast.Node, flags ast.ModifierFlags) bool {
-	return node.ModifierFlags()&flags != 0
-}
-
 func hasAbstractModifier(node *ast.Node) bool {
-	return hasSyntacticModifier(node, ast.ModifierFlagsAbstract)
+	return ast.HasSyntacticModifier(node, ast.ModifierFlagsAbstract)
 }
 
 func hasAmbientModifier(node *ast.Node) bool {
-	return hasSyntacticModifier(node, ast.ModifierFlagsAmbient)
+	return ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient)
 }
 
 func hasAccessorModifier(node *ast.Node) bool {
-	return hasSyntacticModifier(node, ast.ModifierFlagsAccessor)
+	return ast.HasSyntacticModifier(node, ast.ModifierFlagsAccessor)
 }
 
 func hasAsyncModifier(node *ast.Node) bool {
-	return hasSyntacticModifier(node, ast.ModifierFlagsAsync)
+	return ast.HasSyntacticModifier(node, ast.ModifierFlagsAsync)
 }
 
 func hasDecorators(node *ast.Node) bool {
-	return hasSyntacticModifier(node, ast.ModifierFlagsDecorator)
+	return ast.HasSyntacticModifier(node, ast.ModifierFlagsDecorator)
 }
 
 func hasStaticModifier(node *ast.Node) bool {
-	return hasSyntacticModifier(node, ast.ModifierFlagsStatic)
+	return ast.HasSyntacticModifier(node, ast.ModifierFlagsStatic)
 }
 
 func getEffectiveModifierFlags(node *ast.Node) ast.ModifierFlags {
@@ -395,7 +378,7 @@ func getElementOrPropertyAccessArgumentExpressionOrName(node *ast.Node) *ast.Nod
 		return node.Name()
 	case ast.KindElementAccessExpression:
 		arg := ast.SkipParentheses(node.AsElementAccessExpression().ArgumentExpression)
-		if isStringOrNumericLiteralLike(arg) {
+		if ast.IsStringOrNumericLiteralLike(arg) {
 			return arg
 		}
 		return node
@@ -426,7 +409,7 @@ func isDynamicName(name *ast.Node) bool {
 	default:
 		return false
 	}
-	return !isStringOrNumericLiteralLike(expr) && !isSignedNumericLiteral(expr)
+	return !ast.IsStringOrNumericLiteralLike(expr) && !isSignedNumericLiteral(expr)
 }
 
 func getNameOfDeclaration(declaration *ast.Node) *ast.Node {
@@ -478,7 +461,7 @@ func getAssignedName(node *ast.Node) *ast.Node {
 					return left.AsPropertyAccessExpression().Name()
 				case ast.KindElementAccessExpression:
 					arg := ast.SkipParentheses(left.AsElementAccessExpression().ArgumentExpression)
-					if isStringOrNumericLiteralLike(arg) {
+					if ast.IsStringOrNumericLiteralLike(arg) {
 						return arg
 					}
 				}
@@ -513,7 +496,7 @@ func isFunctionPropertyAssignment(node *ast.Node) bool {
 func isAssignmentExpression(node *ast.Node, excludeCompoundAssignment bool) bool {
 	if node.Kind == ast.KindBinaryExpression {
 		expr := node.AsBinaryExpression()
-		return (expr.OperatorToken.Kind == ast.KindEqualsToken || !excludeCompoundAssignment && isAssignmentOperator(expr.OperatorToken.Kind)) &&
+		return (expr.OperatorToken.Kind == ast.KindEqualsToken || !excludeCompoundAssignment && ast.IsAssignmentOperator(expr.OperatorToken.Kind)) &&
 			ast.IsLeftHandSideExpression(expr.Left)
 	}
 	return false
@@ -551,7 +534,7 @@ func setParentInChildren(node *ast.Node) {
 }
 
 func isParameterPropertyDeclaration(node *ast.Node, parent *ast.Node) bool {
-	return ast.IsParameter(node) && hasSyntacticModifier(node, ast.ModifierFlagsParameterPropertyModifier) && parent.Kind == ast.KindConstructor
+	return ast.IsParameter(node) && ast.HasSyntacticModifier(node, ast.ModifierFlagsParameterPropertyModifier) && parent.Kind == ast.KindConstructor
 }
 
 func isBindingElementOfBareOrAccessedRequire(node *ast.Node) bool {
@@ -588,7 +571,7 @@ func isRequireCall(node *ast.Node, requireStringLiteralLikeArgument bool) bool {
 		callExpression := node.AsCallExpression()
 		if len(callExpression.Arguments.Nodes) == 1 {
 			if ast.IsIdentifier(callExpression.Expression) && callExpression.Expression.AsIdentifier().Text == "require" {
-				return !requireStringLiteralLikeArgument || isStringLiteralLike(callExpression.Arguments.Nodes[0])
+				return !requireStringLiteralLikeArgument || ast.IsStringLiteralLike(callExpression.Arguments.Nodes[0])
 			}
 		}
 	}
@@ -618,7 +601,7 @@ func isAsyncFunction(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindMethodDeclaration:
 		data := node.BodyData()
-		return data.Body != nil && data.AsteriskToken == nil && hasSyntacticModifier(node, ast.ModifierFlagsAsync)
+		return data.Body != nil && data.AsteriskToken == nil && ast.HasSyntacticModifier(node, ast.ModifierFlagsAsync)
 	}
 	return false
 }
@@ -828,7 +811,7 @@ func getAssignmentTarget(node *ast.Node) *ast.Node {
 		parent := node.Parent
 		switch parent.Kind {
 		case ast.KindBinaryExpression:
-			if isAssignmentOperator(parent.AsBinaryExpression().OperatorToken.Kind) && parent.AsBinaryExpression().Left == node {
+			if ast.IsAssignmentOperator(parent.AsBinaryExpression().OperatorToken.Kind) && parent.AsBinaryExpression().Left == node {
 				return parent
 			}
 			return nil
@@ -928,57 +911,6 @@ func nodeHasName(statement *ast.Node, id *ast.Node) bool {
 		return core.Some(declarations, func(d *ast.Node) bool { return nodeHasName(d, id) })
 	}
 	return false
-}
-
-func isImportMeta(node *ast.Node) bool {
-	if node.Kind == ast.KindMetaProperty {
-		return node.AsMetaProperty().KeywordToken == ast.KindImportKeyword && node.AsMetaProperty().Name().AsIdentifier().Text == "meta"
-	}
-	return false
-}
-
-func ensureScriptKind(fileName string, scriptKind core.ScriptKind) core.ScriptKind {
-	// Using scriptKind as a condition handles both:
-	// - 'scriptKind' is unspecified and thus it is `undefined`
-	// - 'scriptKind' is set and it is `Unknown` (0)
-	// If the 'scriptKind' is 'undefined' or 'Unknown' then we attempt
-	// to get the ScriptKind from the file name. If it cannot be resolved
-	// from the file name then the default 'TS' script kind is returned.
-	if scriptKind == core.ScriptKindUnknown {
-		scriptKind = getScriptKindFromFileName(fileName)
-	}
-	if scriptKind == core.ScriptKindUnknown {
-		scriptKind = core.ScriptKindTS
-	}
-	return scriptKind
-}
-
-func getScriptKindFromFileName(fileName string) core.ScriptKind {
-	dotPos := strings.LastIndex(fileName, ".")
-	if dotPos >= 0 {
-		switch strings.ToLower(fileName[dotPos:]) {
-		case tspath.ExtensionJs, tspath.ExtensionCjs, tspath.ExtensionMjs:
-			return core.ScriptKindJS
-		case tspath.ExtensionJsx:
-			return core.ScriptKindJSX
-		case tspath.ExtensionTs, tspath.ExtensionCts, tspath.ExtensionMts:
-			return core.ScriptKindTS
-		case tspath.ExtensionTsx:
-			return core.ScriptKindTSX
-		case tspath.ExtensionJson:
-			return core.ScriptKindJSON
-		}
-	}
-	return core.ScriptKindUnknown
-}
-
-func getLanguageVariant(scriptKind core.ScriptKind) core.LanguageVariant {
-	switch scriptKind {
-	case core.ScriptKindTSX, core.ScriptKindJSX, core.ScriptKindJS, core.ScriptKindJSON:
-		// .tsx and .jsx files are treated as jsx language variant.
-		return core.LanguageVariantJSX
-	}
-	return core.LanguageVariantStandard
 }
 
 type DiagnosticsCollection struct {
@@ -1211,7 +1143,7 @@ func getLocalSymbolForExportDefault(symbol *ast.Symbol) *ast.Symbol {
 }
 
 func isExportDefaultSymbol(symbol *ast.Symbol) bool {
-	return symbol != nil && len(symbol.Declarations) > 0 && hasSyntacticModifier(symbol.Declarations[0], ast.ModifierFlagsDefault)
+	return symbol != nil && len(symbol.Declarations) > 0 && ast.HasSyntacticModifier(symbol.Declarations[0], ast.ModifierFlagsDefault)
 }
 
 func getDeclarationOfKind(symbol *ast.Symbol, kind ast.Kind) *ast.Node {
@@ -1633,7 +1565,7 @@ func getIsDeferredContext(location *ast.Node, lastLocation *ast.Node) bool {
 		return false
 	}
 	// generator functions and async functions are not inlined in control flow when immediately invoked
-	if location.BodyData().AsteriskToken != nil || hasSyntacticModifier(location, ast.ModifierFlagsAsync) {
+	if location.BodyData().AsteriskToken != nil || ast.HasSyntacticModifier(location, ast.ModifierFlagsAsync) {
 		return true
 	}
 	return getImmediatelyInvokedFunctionExpression(location) == nil
@@ -1764,7 +1696,7 @@ func isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node *ast.Node) boo
 	if node.Kind != ast.KindComputedPropertyName {
 		return false
 	}
-	if hasSyntacticModifier(node.Parent, ast.ModifierFlagsAbstract) {
+	if ast.HasSyntacticModifier(node.Parent, ast.ModifierFlagsAbstract) {
 		return true
 	}
 	return ast.NodeKindIs(node.Parent.Parent, ast.KindInterfaceDeclaration, ast.KindTypeLiteral)
@@ -2212,7 +2144,7 @@ func isJsonSourceFile(file *ast.SourceFile) bool {
 
 func isSyntacticDefault(node *ast.Node) bool {
 	return (ast.IsExportAssignment(node) && !node.AsExportAssignment().IsExportEquals) ||
-		hasSyntacticModifier(node, ast.ModifierFlagsDefault) ||
+		ast.HasSyntacticModifier(node, ast.ModifierFlagsDefault) ||
 		ast.IsExportSpecifier(node) ||
 		ast.IsNamespaceExport(node)
 }
@@ -2493,7 +2425,7 @@ func isLogicalOperatorOrHigher(kind ast.Kind) bool {
 }
 
 func isAssignmentOperatorOrHigher(kind ast.Kind) bool {
-	return kind == ast.KindQuestionQuestionToken || isLogicalOperatorOrHigher(kind) || isAssignmentOperator(kind)
+	return kind == ast.KindQuestionQuestionToken || isLogicalOperatorOrHigher(kind) || ast.IsAssignmentOperator(kind)
 }
 
 func isBinaryOperator(kind ast.Kind) bool {
@@ -2634,7 +2566,7 @@ func getPropertyNameForPropertyNameNode(name *ast.Node) string {
 		return name.Text()
 	case ast.KindComputedPropertyName:
 		nameExpression := name.AsComputedPropertyName().Expression
-		if isStringOrNumericLiteralLike(nameExpression) {
+		if ast.IsStringOrNumericLiteralLike(nameExpression) {
 			return nameExpression.Text()
 		}
 		if isSignedNumericLiteral(nameExpression) {
@@ -2857,7 +2789,7 @@ func accessKind(node *ast.Node) AccessKind {
 	case ast.KindBinaryExpression:
 		if parent.AsBinaryExpression().Left == node {
 			operator := parent.AsBinaryExpression().OperatorToken
-			if isAssignmentOperator(operator.Kind) {
+			if ast.IsAssignmentOperator(operator.Kind) {
 				if operator.Kind == ast.KindEqualsToken {
 					return AccessKindWrite
 				}
@@ -3046,7 +2978,7 @@ func createEvaluator(evaluateEntity Evaluator) Evaluator {
 }
 
 func isComputedNonLiteralName(name *ast.Node) bool {
-	return ast.IsComputedPropertyName(name) && !isStringOrNumericLiteralLike(name.Expression())
+	return ast.IsComputedPropertyName(name) && !ast.IsStringOrNumericLiteralLike(name.Expression())
 }
 
 func isInfinityOrNaNString(name string) bool {

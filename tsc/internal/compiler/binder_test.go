@@ -6,10 +6,12 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/parser"
+	"github.com/microsoft/typescript-go/internal/testutil/fixtures"
 )
 
 func BenchmarkBind(b *testing.B) {
-	for _, f := range benchFixtures {
+	for _, f := range fixtures.BenchFixtures {
 		b.Run(f.Name(), func(b *testing.B) {
 			f.SkipIfNotExist(b)
 
@@ -18,7 +20,7 @@ func BenchmarkBind(b *testing.B) {
 
 			sourceFiles := make([]*ast.SourceFile, b.N)
 			for i := 0; i < b.N; i++ {
-				sourceFiles[i] = ParseSourceFile(fileName, sourceText, core.ScriptTargetESNext)
+				sourceFiles[i] = parser.ParseSourceFile(fileName, sourceText, core.ScriptTargetESNext)
 			}
 
 			compilerOptions := &core.CompilerOptions{Target: core.ScriptTargetESNext, ModuleKind: core.ModuleKindNodeNext}

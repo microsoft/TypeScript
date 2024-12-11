@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"gotest.tools/v3/assert"
 )
@@ -565,7 +565,7 @@ func setParentRecursive(node *ast.Node, parent *ast.Node) {
 }
 
 func parseJavaScript(text string) *ast.SourceFile {
-	file := compiler.ParseSourceFile("main.ts", text, core.ScriptTargetESNext)
+	file := parser.ParseSourceFile("main.ts", text, core.ScriptTargetESNext)
 	setParentRecursive(file.AsNode(), nil)
 	return file
 }

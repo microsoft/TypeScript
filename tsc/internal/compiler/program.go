@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
@@ -89,7 +90,7 @@ func (p *Program) parseSourceFiles(fileInfos []FileInfo) {
 		p.host.RunTask(func() {
 			fileName := fileInfos[i].Name
 			text, _ := p.host.FS().ReadFile(fileName)
-			sourceFile := ParseSourceFile(fileName, text, p.options.GetEmitScriptTarget())
+			sourceFile := parser.ParseSourceFile(fileName, text, p.options.GetEmitScriptTarget())
 			path := tspath.ToPath(fileName, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
 			sourceFile.SetPath(path)
 			p.collectExternalModuleReferences(sourceFile)
@@ -398,7 +399,7 @@ func (p *Program) collectModuleReferences(file *ast.SourceFile, node *ast.Statem
 		}
 		return
 	}
-	if ast.IsModuleDeclaration(node) && isAmbientModule(node) && (inAmbientModule || hasSyntacticModifier(node, ast.ModifierFlagsAmbient) || file.IsDeclarationFile) {
+	if ast.IsModuleDeclaration(node) && isAmbientModule(node) && (inAmbientModule || ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient) || file.IsDeclarationFile) {
 		setParentInChildren(node)
 		nameText := node.AsModuleDeclaration().Name().Text()
 		// Ambient module declarations can be interpreted as augmentations for some existing external modules.

@@ -1,4 +1,4 @@
-package compiler
+package fixtures
 
 import (
 	"path/filepath"
@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/testutil/filefixture"
 )
 
-var benchFixtures = []filefixture.Fixture{
+var BenchFixtures = []filefixture.Fixture{
 	filefixture.FromString("empty.ts", "empty.ts", ""),
 	filefixture.FromFile("checker.ts", filepath.Join(repo.TypeScriptSubmodulePath, "src/compiler/checker.ts")),
 	filefixture.FromFile("dom.generated.d.ts", filepath.Join(repo.TypeScriptSubmodulePath, "src/lib/dom.generated.d.ts")),
