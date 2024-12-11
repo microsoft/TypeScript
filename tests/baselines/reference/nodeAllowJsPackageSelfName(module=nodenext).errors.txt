@@ -1,5 +1,4 @@
 error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
-index.cjs(2,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
 
 
 !!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
@@ -11,11 +10,9 @@ index.cjs(2,23): error TS1479: The current file is a CommonJS module whose impor
     // esm format file
     import * as self from "package";
     self;
-==== index.cjs (1 errors) ====
+==== index.cjs (0 errors) ====
     // esm format file
     import * as self from "package";
-                          ~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
     self;
 ==== package.json (0 errors) ====
     {
