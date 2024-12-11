@@ -1,0 +1,20 @@
+error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
+error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node18'.
+
+
+!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
+!!! error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node18'.
+==== /app/test.ts (0 errors) ====
+    import { test } from '../lib';
+    
+==== /lib/package.json (0 errors) ====
+    {
+      "main": "./cjs/index.js"
+    }
+    
+==== /lib/cjs/index.js (0 errors) ====
+    export function test() {}
+    
+==== /lib/cjs/index.d.ts (0 errors) ====
+    export function test(): void;
+    

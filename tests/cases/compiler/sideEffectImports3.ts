@@ -1,5 +1,5 @@
 // @noUncheckedSideEffectImports: true,false
-// @module: nodenext
+// @module: node18,nodenext
 // @moduleDetection: legacy,auto,force
 
 // @filename: index.ts

@@ -1,4 +1,4 @@
-// @module: nodenext
+// @module: node18,nodenext
 
 // @Filename: /node_modules/@types/dedent/package.json
 { "name": "@types/dedent", "version": "1.0.0", "main": "" }

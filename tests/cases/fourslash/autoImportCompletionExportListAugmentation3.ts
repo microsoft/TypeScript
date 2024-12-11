@@ -1,5 +1,5 @@
 /// <reference path="fourslash.ts" />
-// @module: nodenext
+// @module: node18
 
 // @Filename: /node_modules/@sapphire/pieces/index.d.ts
 //// export interface Container {

@@ -2,7 +2,7 @@
 // @strict: true
 // @declaration: true
 // @moduleResolution: nodenext
-// @module: nodenext
+// @module: node18,nodenext
 
 // https://github.com/microsoft/TypeScript/issues/60192
 

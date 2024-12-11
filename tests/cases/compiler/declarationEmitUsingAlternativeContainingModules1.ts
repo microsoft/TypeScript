@@ -1,6 +1,6 @@
 // @strict: true
 // @declaration: true
-// @module: nodenext
+// @module: node18,nodenext
 // @moduleResolution: nodenext
 // @target: esnext
 

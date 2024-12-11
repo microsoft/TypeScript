@@ -1,5 +1,5 @@
 // @jsx: react-jsx
-// @module: nodenext
+// @module: node18,nodenext
 // @traceResolution: true
 // @filename: file.tsx
 export const a = <div></div>;

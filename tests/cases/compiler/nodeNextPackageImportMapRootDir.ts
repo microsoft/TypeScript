@@ -1,4 +1,4 @@
-// @module: nodenext
+// @module: node18,nodenext
 // @outDir: ./dist
 // @rootDir: .
 // @filename: package.json

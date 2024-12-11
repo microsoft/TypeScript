@@ -2,7 +2,7 @@
 // @checkJs: true
 // @strict: true
 // @target: esnext
-// @module: nodenext
+// @module: node18,nodenext
 // @moduleResolution: nodenext
 // @declaration: true
 // @emitDeclarationOnly: true

@@ -1,0 +1,19 @@
+common.cts(1,21): error TS1541: Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
+common.cts(4,25): error TS1542: Type import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
+
+
+==== module.mts (0 errors) ====
+    export {};
+    
+==== common.cts (2 errors) ====
+    import type {} from "./module.mts";
+                        ~~~~~~~~~~~~~~
+!!! error TS1541: Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
+    import type {} from "./module.mts" with { "resolution-mode": "import" };
+    import type {} from "./module.mts" with { "resolution-mode": "require" };
+    type _1 = typeof import("./module.mts");
+                            ~~~~~~~~~~~~~~
+!!! error TS1542: Type import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
+    type _2 = typeof import("./module.mts", { with: { "resolution-mode": "import" } });
+    type _3 = typeof import("./module.mts", { with: { "resolution-mode": "require" } });
+    

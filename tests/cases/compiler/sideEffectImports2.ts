@@ -1,5 +1,5 @@
 // @noUncheckedSideEffectImports: true,false
-// @module: nodenext
+// @module: node18,nodenext
 // @noImplicitAny: true,false
 // @noEmit: true
 

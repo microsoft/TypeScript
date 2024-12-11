@@ -1,4 +1,4 @@
-// @module: nodenext
+// @module: node18,nodenext
 // @moduleResolution: nodenext
 // @outDir: ./out
 // @declaration: true

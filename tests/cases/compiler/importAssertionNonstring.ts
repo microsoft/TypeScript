@@ -1,4 +1,4 @@
-// @module: nodenext
+// @module: node18,nodenext
 // @filename: mod.mts
 import * as thing1 from "./mod.mjs" assert {field: 0};
 
