@@ -1,5 +1,5 @@
 // @jsx: react-jsx
-// @module: node18,nodenext
+// @module: nodenext
 // @filename: file.tsx
 class App {}
 export const a = <App></App>;

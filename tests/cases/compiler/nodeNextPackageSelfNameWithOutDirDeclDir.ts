@@ -1,4 +1,4 @@
-// @module: node18,nodenext
+// @module: nodenext
 // @outDir: ./dist
 // @declarationDir: ./types
 // @declaration: true

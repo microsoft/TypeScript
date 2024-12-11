@@ -1,5 +1,5 @@
 // @declaration: true
-// @module: node18,nodenext
+// @module: nodenext
 // @target: esnext
 
 // @filename: /case0.ts

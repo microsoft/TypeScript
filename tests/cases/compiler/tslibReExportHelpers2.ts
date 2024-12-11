@@ -1,4 +1,4 @@
-// @module: node18,nodenext
+// @module: nodenext
 // @importHelpers: true
 // @target: es2021
 

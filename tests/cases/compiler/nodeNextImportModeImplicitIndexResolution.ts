@@ -1,4 +1,4 @@
-// @module: node18,nodenext
+// @module: nodenext
 // @filename: node_modules/pkg/package.json
 {
     "name": "pkg",

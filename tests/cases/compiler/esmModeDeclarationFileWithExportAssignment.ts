@@ -1,5 +1,5 @@
 // @target: esnext
-// @module: node18,nodenext
+// @module: nodenext
 // @allowSyntheticDefaultImports: true
 // @strict: true
 // @filename: other.d.mts

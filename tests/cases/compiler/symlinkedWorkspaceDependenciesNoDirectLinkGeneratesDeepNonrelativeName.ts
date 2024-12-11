@@ -1,5 +1,5 @@
 // @declaration: true
-// @module: node18,nodenext
+// @module: nodenext
 // @filename: workspace/packageA/foo.d.ts
 export declare class Foo {
     private f: any;

@@ -1,5 +1,5 @@
 // @noImplicitReferences: true
-// @module: node18,nodenext
+// @module: nodenext
 // @outDir: esm
 // @filename: node_modules/@types/ip/package.json
 {

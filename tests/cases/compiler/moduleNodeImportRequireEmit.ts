@@ -1,5 +1,5 @@
 // @target: es5,es2016,es2020,esnext
-// @module: node18,nodenext
+// @module: nodenext
 // @filename: package.json
 {
     "type": "module"

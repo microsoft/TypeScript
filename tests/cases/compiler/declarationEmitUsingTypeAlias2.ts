@@ -1,6 +1,6 @@
 // @strict: true
 // @declaration: true
-// @module: node18,nodenext
+// @module: nodenext
 
 // @filename: node_modules/some-dep/dist/inner.d.ts
 export declare type Other = { other: string };

@@ -1,7 +1,7 @@
 // @declaration: true
 // @emitDeclarationOnly: true
 // @noTypesAndSymbols: true
-// @module: node18,nodenext
+// @module: nodenext
 
 // @Filename: /node_modules/foo/index.d.ts
 declare module "foo" {

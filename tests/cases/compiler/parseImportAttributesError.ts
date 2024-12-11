@@ -1,5 +1,5 @@
 // @noImplicitReferences: true
-// @module: node18,nodenext
+// @module: nodenext
 // @declaration: true
 // @outDir: out
 // @filename: /node_modules/pkg/package.json

@@ -1,4 +1,4 @@
-// @module: node18,nodenext
+// @module: nodenext
 // @outDir: /pkg/dist
 // @declarationDir: /pkg/types
 // @declaration: true

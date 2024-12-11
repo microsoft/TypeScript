@@ -1,6 +1,6 @@
 // @strict: true
 // @declaration: true
-// @module: node18,nodenext
+// @module: nodenext
 // @filename: node_modules/react-select/index.d.ts
 export type Whatever = {x: string, y: number};
 export type Props<T, TThing = Whatever> = Omit<TThing, "y"> & Partial<TThing> & T;
