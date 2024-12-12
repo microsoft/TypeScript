@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/compiler/module"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -14,36 +16,66 @@ import (
 )
 
 type ProgramOptions struct {
-	RootPath       string
-	Host           CompilerHost
-	Options        *core.CompilerOptions
-	SingleThreaded bool
+	RootPath         string
+	Host             CompilerHost
+	Options          *core.CompilerOptions
+	SingleThreaded   bool
+	ProjectReference []ProjectReference
 }
 
 type Program struct {
-	host                        CompilerHost
-	options                     *core.CompilerOptions
-	rootPath                    string
-	files                       []*ast.SourceFile
-	filesByPath                 map[tspath.Path]*ast.SourceFile
-	nodeModules                 map[string]*ast.SourceFile
-	checker                     *Checker
+	host             CompilerHost
+	programOptions   ProgramOptions
+	compilerOptions  *core.CompilerOptions
+	rootPath         string
+	nodeModules      map[string]*ast.SourceFile
+	checker          *Checker
+	resolver         *module.Resolver
+	currentDirectory string
+
+	fileProcessingMutex sync.Mutex
+	files               []*ast.SourceFile
+	filesByPath         map[tspath.Path]*ast.SourceFile
+	processedFileNames  core.Set[string]
+
+	// The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
+	// This works as imported modules are discovered recursively in a depth first manner, specifically:
+	// - For each root file, findSourceFile is called.
+	// - This calls processImportedModules for each module imported in the source file.
+	// - This calls resolveModuleNames, and then calls findSourceFile for each resolved module.
+	// As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
+	// The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
+	//maxNodeModuleJsDepth      int
+	currentNodeModulesDepth int
+
 	usesUriStyleNodeCoreModules core.Tristate
-	currentNodeModulesDepth     int
 }
 
 var extensions = []string{".ts", ".tsx"}
 
 func NewProgram(options ProgramOptions) *Program {
 	p := &Program{}
-	p.options = options.Options
-	if p.options == nil {
-		p.options = &core.CompilerOptions{}
+	p.programOptions = options
+	p.compilerOptions = options.Options
+	if p.compilerOptions == nil {
+		p.compilerOptions = &core.CompilerOptions{}
 	}
+	p.filesByPath = make(map[tspath.Path]*ast.SourceFile)
+
+	//p.maxNodeModuleJsDepth = p.options.MaxNodeModuleJsDepth
+
+	// TODO(ercornel): !!! tracing?
+	// tracing?.push(tracing.Phase.Program, "createProgram", { configFilePath: options.configFilePath, rootDir: options.rootDir }, /*separateBeginAndEnd*/ true);
+	// performance.mark("beforeProgram");
+
 	p.host = options.Host
 	if p.host == nil {
 		panic("host required")
 	}
+
+	p.resolver = module.NewResolver(p.host, p.compilerOptions)
+
+	// TODO(ercornel): !!!: SKIPPING FOR NOW :: default lib
 	p.rootPath = options.RootPath
 	if p.rootPath == "" {
 		panic("root path required")
@@ -53,7 +85,9 @@ func NewProgram(options ProgramOptions) *Program {
 	slices.SortFunc(fileInfos, func(a FileInfo, b FileInfo) int {
 		return int(b.Size) - int(a.Size)
 	})
-	p.parseSourceFiles(fileInfos)
+
+	p.processRootFiles(fileInfos)
+
 	return p
 }
 
@@ -81,57 +115,151 @@ func readFileInfos(fs vfs.FS, rootPath string, extensions []string) []FileInfo {
 }
 
 func (p *Program) SourceFiles() []*ast.SourceFile { return p.files }
-func (p *Program) Options() *core.CompilerOptions { return p.options }
+func (p *Program) Options() *core.CompilerOptions { return p.compilerOptions }
 func (p *Program) Host() CompilerHost             { return p.host }
 
-func (p *Program) parseSourceFiles(fileInfos []FileInfo) {
-	p.files = make([]*ast.SourceFile, len(fileInfos))[:len(fileInfos)]
-	for i := range fileInfos {
-		p.host.RunTask(func() {
-			fileName := fileInfos[i].Name
-			text, _ := p.host.FS().ReadFile(fileName)
-			sourceFile := parser.ParseSourceFile(fileName, text, p.options.GetEmitScriptTarget())
-			path := tspath.ToPath(fileName, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
-			sourceFile.SetPath(path)
-			p.collectExternalModuleReferences(sourceFile)
-			p.files[i] = sourceFile
-		})
-	}
-	p.host.WaitForTasks()
-	p.filesByPath = make(map[tspath.Path]*ast.SourceFile)
-	for _, file := range p.files {
-		p.filesByPath[file.Path()] = file
-	}
-}
-
 func (p *Program) bindSourceFiles() {
+	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
 	for _, file := range p.files {
 		if !file.IsBound {
-			p.host.RunTask(func() {
-				bindSourceFile(file, p.options)
+			wg.Run(func() {
+				bindSourceFile(file, p.compilerOptions)
 			})
 		}
 	}
-	p.host.WaitForTasks()
+	wg.Wait()
+}
+
+func (p *Program) processRootFiles(rootFiles []FileInfo) {
+	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
+
+	absPaths := make([]string, 0, len(rootFiles))
+	for _, fileInfo := range rootFiles {
+		absPath := tspath.GetNormalizedAbsolutePath(fileInfo.Name, p.currentDirectory)
+		p.processedFileNames.Add(absPath)
+		absPaths = append(absPaths, absPath)
+	}
+
+	for _, absPath := range absPaths {
+		p.startParseTask(absPath, wg)
+	}
+
+	wg.Wait()
+}
+
+func (p *Program) startParseTask(fileName string, wg *core.WorkGroup) {
+	wg.Run(func() {
+		normalizedPath := tspath.NormalizePath(fileName)
+		file := p.parseSourceFile(normalizedPath)
+		p.collectExternalModuleReferences(file)
+
+		filesToParse := make([]string, 0, len(file.ReferencedFiles)+len(file.Imports)+len(file.ModuleAugmentations))
+
+		for _, ref := range file.ReferencedFiles {
+			resolvedPath := p.resolveTripleslashPathReference(ref.FileName, file.FileName())
+			filesToParse = append(filesToParse, resolvedPath)
+		}
+
+		filesToParse = append(filesToParse, p.resolveImportsAndModuleAugmentations(file)...)
+
+		p.fileProcessingMutex.Lock()
+		defer p.fileProcessingMutex.Unlock()
+		p.files = append(p.files, file)
+		p.filesByPath[file.Path()] = file
+
+		if len(filesToParse) > 0 {
+			for _, fileName := range filesToParse {
+				if !p.processedFileNames.Has(fileName) {
+					p.processedFileNames.Add(fileName)
+					p.startParseTask(fileName, wg)
+				}
+			}
+		}
+	})
 }
 
 func (p *Program) getResolvedModule(currentSourceFile *ast.SourceFile, moduleReference string) *ast.SourceFile {
 	directory := tspath.GetDirectoryPath(currentSourceFile.FileName())
 	if tspath.IsExternalModuleNameRelative(moduleReference) {
-		return p.findSourceFile(tspath.CombinePaths(directory, moduleReference))
+		return p.findSourceFile(tspath.CombinePaths(directory, moduleReference), FileIncludeReason{FileIncludeKindImport, 0})
 	}
 	return p.findNodeModule(moduleReference)
 }
 
-func (p *Program) findSourceFile(candidate string) *ast.SourceFile {
-	extensionless := tspath.RemoveFileExtension(candidate)
-	for _, ext := range []string{tspath.ExtensionTs, tspath.ExtensionTsx, tspath.ExtensionDts} {
-		path := tspath.ToPath(extensionless+ext, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
-		if result, ok := p.filesByPath[path]; ok {
-			return result
+func (p *Program) findSourceFile(candidate string, reason FileIncludeReason) *ast.SourceFile {
+	path := tspath.ToPath(candidate, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
+	return p.filesByPath[path]
+}
+
+func (p *Program) parseSourceFile(fileName string) *ast.SourceFile {
+	path := tspath.ToPath(fileName, p.currentDirectory, p.host.FS().UseCaseSensitiveFileNames())
+	text, _ := p.host.FS().ReadFile(fileName)
+	sourceFile := parser.ParseSourceFile(fileName, text, p.compilerOptions.GetEmitScriptTarget())
+	sourceFile.SetPath(path)
+	return sourceFile
+}
+
+func getModuleNames(file *ast.SourceFile) []*ast.Node {
+	res := slices.Clone(file.Imports)
+	for _, imp := range file.ModuleAugmentations {
+		if imp.Kind == ast.KindStringLiteral {
+			res = append(res, imp)
+		}
+		// Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
+	}
+	return res
+}
+
+func (p *Program) resolveModuleNames(entries []*ast.Node, file *ast.SourceFile) []*module.ResolvedModule {
+	if len(entries) == 0 {
+		return nil
+	}
+
+	resolvedModules := make([]*module.ResolvedModule, 0, len(entries))
+
+	for _, entry := range entries {
+		moduleName := entry.Text()
+		if moduleName == "" {
+			continue
+		}
+		resolvedModule := p.resolver.ResolveModuleName(moduleName, file.FileName(), core.ModuleKindNodeNext, nil)
+		resolvedModules = append(resolvedModules, resolvedModule)
+	}
+
+	return resolvedModules
+}
+
+func (p *Program) resolveImportsAndModuleAugmentations(file *ast.SourceFile) []string {
+	toParse := make([]string, 0, len(file.Imports))
+	if len(file.Imports) > 0 || len(file.ModuleAugmentations) > 0 {
+		moduleNames := getModuleNames(file)
+		resolutions := p.resolveModuleNames(moduleNames, file)
+
+		for _, resolution := range resolutions {
+			resolvedFileName := resolution.ResolvedFileName
+			// TODO(ercornel): !!!: check if from node modules
+
+			// add file to program only if:
+			// - resolution was successful
+			// - noResolve is falsy
+			// - module name comes from the list of imports
+			// - it's not a top level JavaScript module that exceeded the search max
+
+			//const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
+
+			// Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
+			// This may still end up being an untyped module -- the file won't be included but imports will be allowed.
+
+			shouldAddFile := resolution.IsResolved()
+			// TODO(ercornel): !!!: other checks on whether or not to add the file
+
+			if shouldAddFile {
+				//p.findSourceFile(resolvedFileName, FileIncludeReason{Import, 0})
+				toParse = append(toParse, resolvedFileName)
+			}
 		}
 	}
-	return nil
+	return toParse
 }
 
 func (p *Program) findNodeModule(moduleReference string) *ast.SourceFile {
@@ -211,7 +339,7 @@ func (p *Program) getSemanticDiagnosticsForFile(sourceFile *ast.SourceFile) []*a
 func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound bool, getDiagnostics func(*ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
 	if sourceFile != nil {
 		if ensureBound {
-			bindSourceFile(sourceFile, p.options)
+			bindSourceFile(sourceFile, p.compilerOptions)
 		}
 		return sortAndDeduplicateDiagnostics(getDiagnostics(sourceFile))
 	}
@@ -428,6 +556,16 @@ func (p *Program) collectModuleReferences(file *ast.SourceFile, node *ast.Statem
 	}
 }
 
+func (p *Program) resolveTripleslashPathReference(moduleName string, containingFile string) string {
+	basePath := tspath.GetDirectoryPath(containingFile)
+	referencedFileName := moduleName
+
+	if !tspath.IsRootedDiskPath(moduleName) {
+		referencedFileName = tspath.CombinePaths(basePath, moduleName)
+	}
+	return tspath.NormalizePath(referencedFileName)
+}
+
 func (p *Program) getEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.ModuleKind {
 	// !!!
 	// Must reimplement the below.
@@ -437,5 +575,5 @@ func (p *Program) getEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.Mod
 	// if !hadImpliedFormat {
 	// 	mode = options.GetEmitModuleKind()
 	// }
-	return p.options.GetEmitModuleKind()
+	return p.compilerOptions.GetEmitModuleKind()
 }

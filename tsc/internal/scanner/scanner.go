@@ -2,8 +2,10 @@ package scanner
 
 import (
 	"fmt"
+	"iter"
 	"strconv"
 	"strings"
+	"unicode"
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -1769,6 +1771,9 @@ func scanConflictMarkerTrivia(text string, pos int, reportError func(diag *diagn
 }
 
 func isShebangTrivia(text string, pos int) bool {
+	if len(text) < 2 {
+		return false
+	}
 	if pos != 0 {
 		panic("Shebangs check must only be done at the start of the file")
 	}
@@ -1874,4 +1879,119 @@ func ComputePositionOfLineAndCharacter(lineStarts []core.TextPos, line int, char
 	//     Debug.assert(res <= debugText.length); // Allow single character overflow for trailing newline
 	// }
 	return res
+}
+
+func GetLeadingCommentRanges(text string, pos int) iter.Seq[ast.CommentRange] {
+	return iterateCommentRanges(text, pos, false)
+}
+
+/*
+Returns an iterator over each comment range following the provided position.
+Single-line comment ranges include the leading double-slash characters but not the ending
+line break. Multi-line comment ranges include the leading slash-asterisk and trailing
+asterisk-slash characters.
+*/
+func iterateCommentRanges(text string, pos int, trailing bool) iter.Seq[ast.CommentRange] {
+	return func(yield func(ast.CommentRange) bool) {
+		var pendingPos int
+		var pendingEnd int
+		var pendingKind ast.Kind
+		var pendingHasTrailingNewLine bool
+		hasPendingCommentRange := false
+		var collecting = trailing
+		if pos == 0 {
+			collecting = true
+			if isShebangTrivia(text, pos) {
+				pos = scanShebangTrivia(text, pos)
+			}
+		}
+	scan:
+		for pos >= 0 && pos < len(text) {
+			ch, size := utf8.DecodeRuneInString(text[pos:])
+			switch ch {
+			case '\r':
+				if text[pos+1] == '\n' {
+					pos++
+				}
+				fallthrough
+			case '\n':
+				pos++
+				if trailing {
+					break scan
+				}
+
+				collecting = true
+				if hasPendingCommentRange {
+					pendingHasTrailingNewLine = true
+				}
+
+				continue
+			case '\t', '\v', '\f', ' ':
+				pos++
+				continue
+			case '/':
+				nextChar := text[pos+1]
+				hasTrailingNewLine := false
+				if nextChar == '/' || nextChar == '*' {
+					var kind ast.Kind
+					if nextChar == '/' {
+						kind = ast.KindSingleLineCommentTrivia
+					} else {
+						kind = ast.KindMultiLineCommentTrivia
+					}
+
+					startPos := pos
+					pos += 2
+					if nextChar == '/' {
+						for pos < len(text) {
+							c, s := utf8.DecodeRuneInString(text[pos:])
+							if stringutil.IsLineBreak(c) {
+								hasTrailingNewLine = true
+								break
+							}
+							pos += s
+						}
+					} else {
+						for pos < len(text) {
+							if text[pos] == '*' && text[pos+1] == '/' {
+								pos += 2
+								break
+							}
+							pos++
+						}
+					}
+
+					if collecting {
+						if hasPendingCommentRange {
+							if !yield(ast.NewCommentRange(pendingKind, pendingPos, pendingEnd, pendingHasTrailingNewLine)) {
+								return
+							}
+						}
+
+						pendingPos = startPos
+						pendingEnd = pos
+						pendingKind = kind
+						pendingHasTrailingNewLine = hasTrailingNewLine
+						hasPendingCommentRange = true
+					}
+
+					continue
+				}
+				break scan
+			default:
+				if ch > unicode.MaxASCII && (stringutil.IsWhiteSpaceLike(ch)) {
+					if hasPendingCommentRange && stringutil.IsLineBreak(ch) {
+						pendingHasTrailingNewLine = true
+					}
+					pos += size
+					continue
+				}
+				break scan
+			}
+		}
+
+		if hasPendingCommentRange {
+			yield(ast.NewCommentRange(pendingKind, pendingPos, pendingEnd, pendingHasTrailingNewLine))
+		}
+	}
 }

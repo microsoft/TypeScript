@@ -607,7 +607,7 @@ func NewChecker(program *Program) *Checker {
 	c := &Checker{}
 	c.program = program
 	c.host = program.host
-	c.compilerOptions = program.options
+	c.compilerOptions = program.compilerOptions
 	c.files = program.files
 	c.languageVersion = c.compilerOptions.GetEmitScriptTarget()
 	c.moduleKind = c.compilerOptions.GetEmitModuleKind()

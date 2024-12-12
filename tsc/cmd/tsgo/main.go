@@ -24,6 +24,7 @@ var singleThreaded = false
 var parseAndBindOnly = false
 var printTypes = false
 var pretty = true
+var listFiles = false
 var pprofDir = ""
 
 func printDiagnostic(d *ast.Diagnostic, level int, comparePathOptions tspath.ComparePathsOptions) {
@@ -54,6 +55,7 @@ func main() {
 	flag.BoolVar(&parseAndBindOnly, "p", false, "Parse and bind only")
 	flag.BoolVar(&printTypes, "t", false, "Print types defined in main.ts")
 	flag.BoolVar(&pretty, "pretty", true, "Get prettier errors")
+	flag.BoolVar(&listFiles, "listfiles", false, "List files in the program")
 	flag.StringVar(&pprofDir, "pprofdir", "", "Generate pprof CPU/memory profiles to the given directory")
 	flag.Parse()
 
@@ -66,7 +68,7 @@ func main() {
 	}
 	fs := vfs.FromOS()
 	useCaseSensitiveFileNames := fs.UseCaseSensitiveFileNames()
-	host := ts.NewCompilerHost(compilerOptions, singleThreaded, currentDirectory, fs)
+	host := ts.NewCompilerHost(compilerOptions, currentDirectory, fs)
 
 	normalizedRootPath := tspath.ResolvePath(currentDirectory, rootPath)
 	if !fs.DirectoryExists(normalizedRootPath) {
@@ -119,6 +121,12 @@ func main() {
 			for _, diagnostic := range diagnostics {
 				printDiagnostic(diagnostic, 0, comparePathOptions)
 			}
+		}
+	}
+
+	if listFiles {
+		for _, file := range program.SourceFiles() {
+			fmt.Println(file.FileName())
 		}
 	}
 
