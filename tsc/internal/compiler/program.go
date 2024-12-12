@@ -1,7 +1,6 @@
 package compiler
 
 import (
-	"encoding/json"
 	"fmt"
 	"slices"
 	"strings"
@@ -179,11 +178,8 @@ func (p *Program) startParseTask(fileName string, wg *core.WorkGroup) {
 }
 
 func (p *Program) getResolvedModule(currentSourceFile *ast.SourceFile, moduleReference string) *ast.SourceFile {
-	directory := tspath.GetDirectoryPath(currentSourceFile.FileName())
-	if tspath.IsExternalModuleNameRelative(moduleReference) {
-		return p.findSourceFile(tspath.CombinePaths(directory, moduleReference), FileIncludeReason{FileIncludeKindImport, 0})
-	}
-	return p.findNodeModule(moduleReference)
+	resolved := p.resolver.ResolveModuleName(moduleReference, currentSourceFile.FileName(), core.ModuleKindNodeNext, nil)
+	return p.findSourceFile(resolved.ResolvedFileName, FileIncludeReason{FileIncludeKindImport, 0})
 }
 
 func (p *Program) findSourceFile(candidate string, reason FileIncludeReason) *ast.SourceFile {
@@ -260,38 +256,6 @@ func (p *Program) resolveImportsAndModuleAugmentations(file *ast.SourceFile) []s
 		}
 	}
 	return toParse
-}
-
-func (p *Program) findNodeModule(moduleReference string) *ast.SourceFile {
-	if p.nodeModules == nil {
-		p.nodeModules = make(map[string]*ast.SourceFile)
-	}
-	if sourceFile, ok := p.nodeModules[moduleReference]; ok {
-		return sourceFile
-	}
-	sourceFile := p.tryLoadNodeModule(tspath.CombinePaths(p.rootPath, "node_modules", moduleReference))
-	if sourceFile == nil {
-		sourceFile = p.tryLoadNodeModule(tspath.CombinePaths(p.rootPath, "node_modules/@types", moduleReference))
-	}
-	p.nodeModules[moduleReference] = sourceFile
-	return sourceFile
-}
-
-func (p *Program) tryLoadNodeModule(modulePath string) *ast.SourceFile {
-	if packageJson, ok := p.host.FS().ReadFile(tspath.CombinePaths(modulePath, "package.json")); ok {
-		var jsonMap map[string]any
-		if json.Unmarshal([]byte(packageJson), &jsonMap) == nil {
-			typesValue := jsonMap["types"]
-			if typesValue == nil {
-				typesValue = jsonMap["typings"]
-			}
-			if fileName, ok := typesValue.(string); ok {
-				path := tspath.CombinePaths(modulePath, fileName)
-				return p.filesByPath[tspath.ToPath(path, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())]
-			}
-		}
-	}
-	return nil
 }
 
 func (p *Program) GetSyntacticDiagnostics(sourceFile *ast.SourceFile) []*ast.Diagnostic {
