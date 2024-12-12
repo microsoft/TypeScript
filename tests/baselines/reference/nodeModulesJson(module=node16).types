@@ -64,6 +64,16 @@ import config2 from "./config.json"; // Error in nodenext, no attribute
 >config2 : { version: number; }
 >        : ^^^^^^^^^^^^^^^^^^^^
 
+import type config2Type from "./config.json"; // Ok, type-only
+>config2Type : any
+>            : ^^^
+
+import type config2Type2 from "./config.json" with { type: "json" }; // Error, import attributes not allowed on type-only imports
+>config2Type2 : any
+>             : ^^^
+>type : any
+>     : ^^^
+
 import { version } from "./config.json" with { type: "json" }; // Error, named import
 >version : number
 >        : ^^^^^^

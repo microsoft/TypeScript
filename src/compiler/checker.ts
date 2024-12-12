@@ -30016,6 +30016,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.This_JSX_tag_requires_0_to_be_in_scope_but_it_could_not_be_found : undefined;
             const jsxFactoryNamespace = getJsxNamespace(node);
             const jsxFactoryLocation = isJsxOpeningLikeElement(node) ? node.tagName : node;
+            const shouldFactoryRefErr = compilerOptions.jsx !== JsxEmit.Preserve && compilerOptions.jsx !== JsxEmit.ReactNative;
 
             // #38720/60122, allow null as jsxFragmentFactory
             let jsxFactorySym: Symbol | undefined;
@@ -30023,7 +30024,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 jsxFactorySym = resolveName(
                     jsxFactoryLocation,
                     jsxFactoryNamespace,
-                    (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value,
+                    shouldFactoryRefErr ? SymbolFlags.Value : SymbolFlags.Value & ~SymbolFlags.Enum,
                     jsxFactoryRefErr,
                     /*isUse*/ true,
                 );
@@ -30049,7 +30050,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     resolveName(
                         jsxFactoryLocation,
                         localJsxNamespace,
-                        (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value,
+                        shouldFactoryRefErr ? SymbolFlags.Value : SymbolFlags.Value & ~SymbolFlags.Enum,
                         jsxFactoryRefErr,
                         /*isUse*/ true,
                     );
@@ -36842,15 +36843,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (sourceFileLinks.jsxFragmentType !== undefined) return sourceFileLinks.jsxFragmentType;
 
         const jsxFragmentFactoryName = getJsxNamespace(node);
-        // #38720/60122, allow null as jsxFragmentFactory
-        if (jsxFragmentFactoryName === "null") return sourceFileLinks.jsxFragmentType = anyType;
 
+        // #38720/60122, allow null as jsxFragmentFactory
+        const shouldResolveFactoryReference = (compilerOptions.jsx === JsxEmit.React || compilerOptions.jsxFragmentFactory !== undefined) && jsxFragmentFactoryName !== "null";
+        if (!shouldResolveFactoryReference) return sourceFileLinks.jsxFragmentType = anyType;
+
+        const shouldModuleRefErr = compilerOptions.jsx !== JsxEmit.Preserve && compilerOptions.jsx !== JsxEmit.ReactNative;
         const jsxFactoryRefErr = diagnostics ? Diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found : undefined;
         const jsxFactorySymbol = getJsxNamespaceContainerForImplicitImport(node) ??
             resolveName(
                 node,
                 jsxFragmentFactoryName,
-                (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value,
+                shouldModuleRefErr ? SymbolFlags.Value : SymbolFlags.Value & ~SymbolFlags.Enum,
                 /*nameNotFoundMessage*/ jsxFactoryRefErr,
                 /*isUse*/ true,
             );
@@ -48126,7 +48130,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
 
-                if (ModuleKind.Node18 <= moduleKind && moduleKind <= ModuleKind.NodeNext && isOnlyImportableAsDefault(node.moduleSpecifier, resolvedModule) && !hasTypeJsonImportAttribute(node)) {
+                if (!importClause.isTypeOnly && ModuleKind.Node18 <= moduleKind && moduleKind <= ModuleKind.NodeNext && isOnlyImportableAsDefault(node.moduleSpecifier, resolvedModule) && !hasTypeJsonImportAttribute(node)) {
                     // Import attributes/assertions are not allowed in --module node16, so don't suggest adding one
                     error(node.moduleSpecifier, Diagnostics.Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_import_attribute_when_module_is_set_to_0, ModuleKind[moduleKind]);
                 }
