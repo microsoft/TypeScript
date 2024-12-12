@@ -12,6 +12,8 @@ import which from "which";
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 
+const isCI = !!process.env.CI;
+
 const $pipe = _$({ verbose: "short" });
 const $ = _$({ verbose: "short", stdio: "inherit" });
 
@@ -134,7 +136,7 @@ export const lint = task({
         if (!isInstalled(customLinterPath)) {
             await buildCustomLinter();
         }
-        await $`${customLinterPath} run ${options.fix ? ["--fix"] : []}`;
+        await $`${customLinterPath} run ${options.fix ? ["--fix"] : []} ${isCI ? ["--timeout=5m"] : []}`;
     },
 });
 
