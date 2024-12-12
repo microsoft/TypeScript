@@ -307,6 +307,49 @@ func TestToFileNameLowerCase(t *testing.T) {
 	assert.Equal(t, toFileNameLowerCase("/user/UserName/projects/ı/file.ts"), "/user/username/projects/ı/file.ts")
 }
 
+var toFileNameLowerCaseTests = []string{
+	"/path/to/file.ext",
+	"/PATH/TO/FILE.EXT",
+	"/path/to/FILE.EXT",
+	"/user/UserName/projects/Project/file.ts",
+	"/user/UserName/projects/projectß/file.ts",
+	"/user/UserName/projects/İproject/file.ts",
+	"/user/UserName/projects/ı/file.ts",
+	strings.Repeat("FoO/", 100),
+}
+
+// See [toFileNameLowerCase] for more info.
+//
+// To avoid having to do string building for most common cases, also ignore
+// a-z, 0-9, \u0131, \u00DF, \, /, ., : and space
+var fileNameLowerCaseRegExp = regexp.MustCompile(`[^\x{0130}\x{0131}\x{00DF}a-z0-9\\/:\-_. ]+`)
+
+func oldToFileNameLowerCase(fileName string) string {
+	return fileNameLowerCaseRegExp.ReplaceAllStringFunc(fileName, strings.ToLower)
+}
+
+func BenchmarkToFileNameLowerCase(b *testing.B) {
+	for _, test := range toFileNameLowerCaseTests {
+		name := shortenName(test)
+		b.Run(name, func(b *testing.B) {
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				toFileNameLowerCase(test)
+			}
+		})
+	}
+}
+
+func FuzzToFileNameLowerCase(f *testing.F) {
+	for _, test := range toFileNameLowerCaseTests {
+		f.Add(test)
+	}
+
+	f.Fuzz(func(t *testing.T, p string) {
+		assert.Equal(t, oldToFileNameLowerCase(p), toFileNameLowerCase(p))
+	})
+}
+
 func TestToPath(t *testing.T) {
 	t.Parallel()
 	assert.Equal(t, string(ToPath("file.ext", "path/to", false /*useCaseSensitiveFileNames*/)), "path/to/file.ext")
@@ -340,11 +383,7 @@ func BenchmarkHasRelativePathSegment(b *testing.B) {
 		if !tt.bench {
 			continue
 		}
-		name := tt.p
-		if len(name) > 20 {
-			name = name[:20] + "...etc"
-		}
-
+		name := shortenName(tt.p)
 		b.Run(name, func(b *testing.B) {
 			b.ReportAllocs()
 			for i := 0; i < b.N; i++ {
@@ -362,4 +401,67 @@ func FuzzHasRelativePathSegment(f *testing.F) {
 	f.Fuzz(func(t *testing.T, p string) {
 		assert.Equal(t, oldHasRelativePathSegment(p), hasRelativePathSegment(p))
 	})
+}
+
+var pathIsRelativeTests = []struct {
+	p          string
+	isRelative bool
+	benchmark  bool
+}{
+	// relative
+	{".", true, false},
+	{"..", true, false},
+	{"./", true, false},
+	{"../", true, false},
+	{"./foo/bar", true, true},
+	{"../foo/bar", true, true},
+	{"../" + strings.Repeat("foo/", 100), true, true},
+	// non-relative
+	{"", false, false},
+	{"foo", false, false},
+	{"foo/bar", false, false},
+	{"/foo/bar", false, false},
+	{"c:/foo/bar", false, false},
+}
+
+func init() {
+	old := pathIsRelativeTests
+
+	for _, t := range old {
+		t.p = strings.ReplaceAll(t.p, "/", "\\")
+		pathIsRelativeTests = append(pathIsRelativeTests, t)
+	}
+}
+
+func TestPathIsRelative(t *testing.T) {
+	t.Parallel()
+	for _, tt := range pathIsRelativeTests {
+		name := shortenName(tt.p)
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			assert.Equal(t, PathIsRelative(tt.p), tt.isRelative)
+		})
+	}
+}
+
+func BenchmarkPathIsRelative(b *testing.B) {
+	for _, tt := range pathIsRelativeTests {
+		if !tt.benchmark {
+			continue
+		}
+		name := shortenName(tt.p)
+		b.Run(name, func(b *testing.B) {
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				PathIsRelative(tt.p)
+			}
+		})
+	}
+}
+
+func shortenName(name string) string {
+	if len(name) > 20 {
+		return name[:20] + "...etc"
+	}
+	return name
 }
