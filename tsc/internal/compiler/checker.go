@@ -2847,7 +2847,7 @@ func (c *Checker) checkElementAccessExpression(node *ast.Node, exprType *Type, c
 	if c.isErrorType(objectType) || objectType == c.silentNeverType {
 		return objectType
 	}
-	if isConstEnumObjectType(objectType) && !isStringLiteralLike(indexExpression) {
+	if isConstEnumObjectType(objectType) && !ast.IsStringLiteralLike(indexExpression) {
 		c.error(indexExpression, diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal)
 		return c.errorType
 	}
