@@ -15,9 +15,13 @@ func FromNumber(f float64) string {
 // numeric strings
 func ToNumber(s string) float64 {
 	// !!! verify that this is actually the same as JS.
-	value, err := strconv.ParseFloat(s, 64)
-	if err != nil {
-		return math.NaN()
+	floatValue, err := strconv.ParseFloat(s, 64)
+	if err == nil {
+		return floatValue
 	}
-	return value
+	intValue, err := strconv.ParseInt(s, 0, 64)
+	if err == nil {
+		return float64(intValue)
+	}
+	return math.NaN()
 }

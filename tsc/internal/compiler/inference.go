@@ -810,6 +810,10 @@ func (c *Checker) newInferenceContextWorker(inferences []*InferenceInfo, signatu
 	return n
 }
 
+func (c *Checker) addIntraExpressionInferenceSite(context *InferenceContext, node *ast.Node, t *Type) {
+	// !!!
+}
+
 // We collect intra-expression inference sites within object and array literals to handle cases where
 // inferred types flow between context sensitive element expressions. For example:
 //
@@ -1124,4 +1128,19 @@ func clearCachedInferences(inferences []*InferenceInfo) {
 
 func hasInferenceCandidates(info *InferenceInfo) bool {
 	return len(info.candidates) != 0 || len(info.contraCandidates) != 0
+}
+
+func hasInferenceCandidatesOrDefault(info *InferenceInfo) bool {
+	return info.candidates != nil || info.contraCandidates != nil || hasTypeParameterDefault(info.typeParameter)
+}
+
+func hasTypeParameterDefault(tp *Type) bool {
+	if tp.symbol != nil {
+		for _, d := range tp.symbol.Declarations {
+			if ast.IsTypeParameterDeclaration(d) && d.AsTypeParameter().DefaultType != nil {
+				return true
+			}
+		}
+	}
+	return false
 }

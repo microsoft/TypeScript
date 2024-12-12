@@ -1086,11 +1086,7 @@ func isConstAssertion(node *ast.Node) bool {
 }
 
 func isConstTypeReference(node *ast.Node) bool {
-	if node.Kind == ast.KindTypeReference {
-		ref := node.AsTypeReference()
-		return ref.TypeArguments != nil && ast.IsIdentifier(ref.TypeName) && ref.TypeName.AsIdentifier().Text == "const"
-	}
-	return false
+	return ast.IsTypeReferenceNode(node) && len(node.TypeArguments()) == 0 && ast.IsIdentifier(node.AsTypeReferenceNode().TypeName) && node.AsTypeReferenceNode().TypeName.Text() == "const"
 }
 
 func isModuleOrEnumDeclaration(node *ast.Node) bool {

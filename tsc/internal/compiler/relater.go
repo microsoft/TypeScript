@@ -133,6 +133,13 @@ func (c *Checker) compareTypesAssignable(source *Type, target *Type, reportError
 	return TernaryFalse
 }
 
+func (c *Checker) compareTypesSubtypeOf(source *Type, target *Type) Ternary {
+	if c.isTypeRelatedTo(source, target, c.subtypeRelation) {
+		return TernaryTrue
+	}
+	return TernaryFalse
+}
+
 func (c *Checker) isTypeAssignableTo(source *Type, target *Type) bool {
 	return c.isTypeRelatedTo(source, target, c.assignableRelation)
 }
@@ -1243,7 +1250,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 			if callbacks {
 				related = c.compareSignaturesRelated(targetSig, sourceSig, checkMode&SignatureCheckModeStrictArity|core.IfElse(strictVariance, SignatureCheckModeStrictCallback, SignatureCheckModeBivariantCallback), reportErrors, errorReporter, compareTypes, reportUnreliableMarkers)
 			} else {
-				if checkMode&SignatureCheckModeCallback != 0 && !strictVariance {
+				if checkMode&SignatureCheckModeCallback == 0 && !strictVariance {
 					related = compareTypes(sourceType, targetType, false /*reportErrors*/)
 				}
 				if related == TernaryFalse {
@@ -1732,6 +1739,51 @@ func (c *Checker) isResolvingReturnTypeOfSignature(signature *Signature) bool {
 	return signature.resolvedReturnType == nil && c.findResolutionCycleStartIndex(signature, TypeSystemPropertyNameResolvedReturnType) >= 0
 }
 
+func (c *Checker) findMatchingSignatures(signatureLists [][]*Signature, signature *Signature, listIndex int) []*Signature {
+	if signature.typeParameters != nil {
+		// We require an exact match for generic signatures, so we only return signatures from the first
+		// signature list and only if they have exact matches in the other signature lists.
+		if listIndex > 0 {
+			return nil
+		}
+		for i := 1; i < len(signatureLists); i++ {
+			if c.findMatchingSignature(signatureLists[i], signature, false /*partialMatch*/, false /*ignoreThisTypes*/, false /*ignoreReturnTypes*/) == nil {
+				return nil
+			}
+		}
+		return []*Signature{signature}
+	}
+	var result []*Signature
+	for i := range signatureLists {
+		// Allow matching non-generic signatures to have excess parameters (as a fallback if exact parameter match is not found) and different return types.
+		// Prefer matching this types if possible.
+		var match *Signature
+		if i == listIndex {
+			match = signature
+		} else {
+			match = c.findMatchingSignature(signatureLists[i], signature, false /*partialMatch*/, false /*ignoreThisTypes*/, true /*ignoreReturnTypes*/)
+			if match == nil {
+				match = c.findMatchingSignature(signatureLists[i], signature, true /*partialMatch*/, false /*ignoreThisTypes*/, true /*ignoreReturnTypes*/)
+			}
+		}
+		if match == nil {
+			return nil
+		}
+		result = core.AppendIfUnique(result, match)
+	}
+	return result
+}
+
+func (c *Checker) findMatchingSignature(signatureList []*Signature, signature *Signature, partialMatch bool, ignoreThisTypes bool, ignoreReturnTypes bool) *Signature {
+	compareTypes := core.IfElse(partialMatch, c.compareTypesSubtypeOf, c.compareTypesIdentical)
+	for _, s := range signatureList {
+		if c.compareSignaturesIdentical(s, signature, partialMatch, ignoreThisTypes, ignoreReturnTypes, compareTypes) != 0 {
+			return s
+		}
+	}
+	return nil
+}
+
 /**
  * See signatureRelatedTo, compareSignaturesIdentical
  */
@@ -1813,6 +1865,29 @@ func (c *Checker) isMatchingSignature(source *Signature, target *Signature, part
 		return true
 	}
 	return false
+}
+
+func (c *Checker) compareTypeParametersIdentical(sourceParams []*Type, targetParams []*Type) bool {
+	if len(sourceParams) != len(targetParams) {
+		return false
+	}
+	mapper := newTypeMapper(targetParams, sourceParams)
+	for i := range sourceParams {
+		source := sourceParams[i]
+		target := targetParams[i]
+		if source == target {
+			continue
+		}
+		// We instantiate the target type parameter constraints into the source types so we can recognize `<T, U extends T>` as the same as `<A, B extends A>`
+		if !c.isTypeIdenticalTo(core.OrElse(c.getConstraintFromTypeParameter(source), c.unknownType), c.instantiateType(core.OrElse(c.getConstraintFromTypeParameter(target), c.unknownType), mapper)) {
+			return false
+		}
+		// We don't compare defaults - we just use the type parameter defaults from the first signature that seems to match.
+		// It might make sense to combine these defaults in the future, but doing so intelligently requires knowing
+		// if the parameter is used covariantly or contravariantly (so we intersect if it's used like a parameter or union if used like a return type)
+		// and, since it's just an inference _default_, just picking one arbitrarily works OK.
+	}
+	return true
 }
 
 func (c *Checker) compareTypePredicatesIdentical(source *TypePredicate, target *TypePredicate, compareTypes func(s *Type, t *Type) Ternary) Ternary {
