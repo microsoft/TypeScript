@@ -17761,6 +17761,7 @@ func (c *Checker) getSpreadIndices(node *ast.Node) (int, int) {
 			}
 		}
 		links.firstSpreadIndex, links.lastSpreadIndex = first, last
+		links.indicesComputed = true
 	}
 	return links.firstSpreadIndex, links.lastSpreadIndex
 }
