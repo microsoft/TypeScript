@@ -239,6 +239,9 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 	result.SetDiagnostics(attachFileToDiagnostics(p.diagnostics, result))
 	result.ExternalModuleIndicator = isFileProbablyExternalModule(result)
 	result.IsDeclarationFile = isDeclarationFile
+	result.LanguageVersion = p.languageVersion
+	result.LanguageVariant = p.languageVariant
+	result.ScriptKind = p.scriptKind
 	return result
 }
 

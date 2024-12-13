@@ -18,6 +18,7 @@ func TestEmit(t *testing.T) {
 		title  string
 		input  string
 		output string
+		jsx    bool
 	}{
 		{title: "StringLiteral#1", input: `;"test"`, output: ";\n\"test\";"},
 		{title: "StringLiteral#2", input: `;'test'`, output: ";\n'test';"},
@@ -528,12 +529,44 @@ func TestEmit(t *testing.T) {
 		{title: "TypeParameterDeclaration#5", input: "function f<T extends U = V>();", output: "function f<T extends U = V>();"},
 		{title: "TypeParameterDeclaration#6", input: "function f<T, U>();", output: "function f<T, U>();"},
 		{title: "TypeParameterDeclaration#7", input: "function f<T,>();", output: "function f<T,>();"},
+		{title: "JsxElement1", input: "<a></a>", output: "<a></a>;", jsx: true},
+		{title: "JsxElement2", input: "<this></this>", output: "<this></this>;", jsx: true},
+		{title: "JsxElement3", input: "<a:b></a:b>", output: "<a:b></a:b>;", jsx: true},
+		{title: "JsxElement4", input: "<a.b></a.b>", output: "<a.b></a.b>;", jsx: true},
+		{title: "JsxElement5", input: "<a<b>></a>", output: "<a<b>></a>;", jsx: true},
+		{title: "JsxElement6", input: "<a b></a>", output: "<a b></a>;", jsx: true},
+		{title: "JsxElement7", input: "<a>b</a>", output: "<a>b</a>;", jsx: true},
+		{title: "JsxElement8", input: "<a>{b}</a>", output: "<a>{b}</a>;", jsx: true},
+		{title: "JsxElement9", input: "<a><b></b></a>", output: "<a><b></b></a>;", jsx: true},
+		{title: "JsxElement10", input: "<a><b /></a>", output: "<a><b /></a>;", jsx: true},
+		{title: "JsxElement11", input: "<a><></></a>", output: "<a><></></a>;", jsx: true},
+		{title: "JsxSelfClosingElement1", input: "<a />", output: "<a />;", jsx: true},
+		{title: "JsxSelfClosingElement2", input: "<this />", output: "<this />;", jsx: true},
+		{title: "JsxSelfClosingElement3", input: "<a:b />", output: "<a:b />;", jsx: true},
+		{title: "JsxSelfClosingElement4", input: "<a.b />", output: "<a.b />;", jsx: true},
+		{title: "JsxSelfClosingElement5", input: "<a<b> />", output: "<a<b> />;", jsx: true},
+		{title: "JsxSelfClosingElement6", input: "<a b/>", output: "<a b/>;", jsx: true},
+		{title: "JsxFragment1", input: "<></>", output: "<></>;", jsx: true},
+		{title: "JsxFragment2", input: "<>b</>", output: "<>b</>;", jsx: true},
+		{title: "JsxFragment3", input: "<>{b}</>", output: "<>{b}</>;", jsx: true},
+		{title: "JsxFragment4", input: "<><b></b></>", output: "<><b></b></>;", jsx: true},
+		{title: "JsxFragment5", input: "<><b /></>", output: "<><b /></>;", jsx: true},
+		{title: "JsxFragment6", input: "<><></></>", output: "<><></></>;", jsx: true},
+		{title: "JsxAttribute1", input: "<a b/>", output: "<a b/>;", jsx: true},
+		{title: "JsxAttribute2", input: "<a b:c/>", output: "<a b:c/>;", jsx: true},
+		{title: "JsxAttribute3", input: "<a b=\"c\"/>", output: "<a b=\"c\"/>;", jsx: true},
+		{title: "JsxAttribute4", input: "<a b='c'/>", output: "<a b='c'/>;", jsx: true},
+		{title: "JsxAttribute5", input: "<a b={c}/>", output: "<a b={c}/>;", jsx: true},
+		{title: "JsxAttribute6", input: "<a b=<c></c>/>", output: "<a b=<c></c>/>;", jsx: true},
+		{title: "JsxAttribute7", input: "<a b=<c />/>", output: "<a b=<c />/>;", jsx: true},
+		{title: "JsxAttribute8", input: "<a b=<></>/>", output: "<a b=<></>/>;", jsx: true},
+		{title: "JsxSpreadAttribute", input: "<a {...b}/>", output: "<a {...b}/>;", jsx: true},
 	}
 
 	for _, rec := range data {
 		t.Run(rec.title, func(t *testing.T) {
 			t.Parallel()
-			file := parseJavaScript(rec.input)
+			file := parseJavaScript(rec.input, rec.jsx)
 			checkDiagnostics(t, file)
 			checkEmit(t, file, rec.output)
 		})
@@ -553,7 +586,10 @@ func checkEmit(t *testing.T, file *ast.SourceFile, expected string) {
 	text := printer.EmitSourceFile(file)
 	actual := strings.TrimSuffix(text, "\n")
 	assert.Equal(t, expected, actual)
-	checkDiagnostics(t, parseJavaScript(text))
+	file2 := parseJavaScript(text, file.LanguageVariant == core.LanguageVariantJSX)
+	if len(file2.Diagnostics()) > 0 {
+		t.Error("error on reparse: " + formatDiagnostics(file2.Diagnostics()))
+	}
 }
 
 func setParentRecursive(node *ast.Node, parent *ast.Node) {
@@ -564,8 +600,8 @@ func setParentRecursive(node *ast.Node, parent *ast.Node) {
 	})
 }
 
-func parseJavaScript(text string) *ast.SourceFile {
-	file := parser.ParseSourceFile("main.ts", text, core.ScriptTargetESNext)
+func parseJavaScript(text string, jsx bool) *ast.SourceFile {
+	file := parser.ParseSourceFile(core.IfElse(jsx, "main.tsx", "main.ts"), text, core.ScriptTargetESNext)
 	setParentRecursive(file.AsNode(), nil)
 	return file
 }

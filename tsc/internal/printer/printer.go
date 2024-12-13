@@ -601,6 +601,11 @@ func (p *Printer) shouldEmitNestedComments(node *ast.Node) bool {
 	return true
 }
 
+func (p *Printer) hasCommentsAtPosition(pos int) bool {
+	// !!!
+	return false
+}
+
 func (p *Printer) shouldEmitIndirectCall(node *ast.Node) bool {
 	// !!! return getInternalEmitFlags(node)&InternalEmitFlagsIndirectCall != 0
 	return false
@@ -3626,68 +3631,192 @@ func (p *Printer) emitExternalModuleReference(node *ast.ExternalModuleReference)
 //
 
 func (p *Printer) emitJsxElement(node *ast.JsxElement) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	p.emitJsxOpeningElement(node.OpeningElement.AsJsxOpeningElement())
+	p.emitList((*Printer).emitJsxChild, node.AsNode(), node.Children, LFJsxElementOrFragmentChildren)
+	p.emitJsxClosingElement(node.ClosingElement.AsJsxClosingElement())
+	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitJsxSelfClosingElement(node *ast.JsxSelfClosingElement) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	p.writePunctuation("<")
+	p.emitJsxTagName(node.TagName)
+	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	p.writeSpace()
+	p.emitJsxAttributes(node.Attributes.AsJsxAttributes())
+	p.writePunctuation("/>")
+	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitJsxFragment(node *ast.JsxFragment) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	p.emitJsxOpeningFragment(node.OpeningFragment.AsJsxOpeningFragment())
+	p.emitList((*Printer).emitJsxChild, node.AsNode(), node.Children, LFJsxElementOrFragmentChildren)
+	p.emitJsxClosingFragment(node.ClosingFragment.AsJsxClosingFragment())
+	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitJsxOpeningElement(node *ast.JsxOpeningElement) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	p.writePunctuation("<")
+	indented := p.writeLineSeparatorsAndIndentBefore(node.TagName, node.AsNode())
+	p.emitJsxTagName(node.TagName)
+	p.emitTypeArguments(node.AsNode(), node.TypeArguments)
+	if attributes := node.Attributes.AsJsxAttributes(); len(attributes.Properties.Nodes) > 0 {
+		p.writeSpace()
+	}
+	p.emitJsxAttributes(node.Attributes.AsJsxAttributes())
+	p.writeLineSeparatorsAfter(node.Attributes, node.AsNode())
+	p.decreaseIndentIf(indented)
+	p.writePunctuation(">")
+	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitJsxClosingElement(node *ast.JsxClosingElement) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	p.writePunctuation("</")
+	p.emitJsxTagName(node.TagName)
+	p.writePunctuation(">")
+	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitJsxOpeningFragment(node *ast.JsxOpeningFragment) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	p.writePunctuation("<")
+	p.writePunctuation(">")
+	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitJsxClosingFragment(node *ast.JsxClosingFragment) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	p.writePunctuation("</")
+	p.writePunctuation(">")
+	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitJsxText(node *ast.JsxText) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	// TODO(rbuckton): Should this be using `getLiteralTextOfNode` instead?
+	p.writeLiteral(node.Text)
+	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitJsxAttributes(node *ast.JsxAttributes) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	p.emitList((*Printer).emitJsxAttributeLike, node.AsNode(), node.Properties, LFJsxElementAttributes)
+	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitJsxAttribute(node *ast.JsxAttribute) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	p.emitJsxAttributeName(node.Name())
+	if node.Initializer != nil {
+		p.writePunctuation("=")
+		p.emitJsxAttributeValue(node.Initializer)
+	}
+	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitJsxSpreadAttribute(node *ast.JsxSpreadAttribute) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	p.writePunctuation("{...")
+	p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceLowest)
+	p.writePunctuation("}")
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitJsxAttributeLike(node *ast.JsxAttributeLike) {
+	switch node.Kind {
+	case ast.KindJsxAttribute:
+		p.emitJsxAttribute(node.AsJsxAttribute())
+	case ast.KindJsxSpreadAttribute:
+		p.emitJsxSpreadAttribute(node.AsJsxSpreadAttribute())
+	default:
+		panic(fmt.Sprintf("unhandled JsxAttributeLike: %v", node.Kind))
+	}
 }
 
 func (p *Printer) emitJsxExpression(node *ast.JsxExpression) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	if node.Expression != nil || !p.commentsDisabled && !ast.NodeIsSynthesized(node.AsNode()) && p.hasCommentsAtPosition(node.Pos()) { // preserve empty expressions if they contain comments!
+		indented := p.currentSourceFile != nil && !ast.NodeIsSynthesized(node.AsNode()) && getLinesBetweenPositions(p.currentSourceFile, node.Pos(), node.End()) != 0
+		p.increaseIndentIf(indented)
+		end := p.emitTokenWithComment(ast.KindOpenBraceToken, node.Pos(), WriteKindPunctuation, node.AsNode())
+		p.emitTokenNode(node.DotDotDotToken)
+		p.emitExpressionEx(node.Expression, ast.OperatorPrecedenceDisallowComma)
+		p.emitTokenWithComment(ast.KindCloseBraceToken, greatestEnd(end, node.Expression, node.DotDotDotToken), WriteKindPunctuation, node.AsNode())
+		p.decreaseIndentIf(indented)
+	}
+	p.exitNode(node.AsNode())
 }
 
 func (p *Printer) emitJsxNamespacedName(node *ast.JsxNamespacedName) {
-	// !!!
-	panic("not implemented")
+	p.enterNode(node.AsNode())
+	p.emitIdentifierName(node.Namespace.AsIdentifier())
+	p.writePunctuation(":")
+	p.emitIdentifierName(node.Name().AsIdentifier())
+	p.exitNode(node.AsNode())
+}
+
+func (p *Printer) emitJsxChild(node *ast.JsxChild) {
+	switch node.Kind {
+	case ast.KindJsxText:
+		p.emitJsxText(node.AsJsxText())
+	case ast.KindJsxExpression:
+		p.emitJsxExpression(node.AsJsxExpression())
+	case ast.KindJsxElement:
+		p.emitJsxElement(node.AsJsxElement())
+	case ast.KindJsxSelfClosingElement:
+		p.emitJsxSelfClosingElement(node.AsJsxSelfClosingElement())
+	case ast.KindJsxFragment:
+		p.emitJsxFragment(node.AsJsxFragment())
+	default:
+		panic(fmt.Sprintf("unhandled JsxChild: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitJsxTagName(node *ast.JsxTagNameExpression) {
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitIdentifierReference(node.AsIdentifier())
+	case ast.KindThisKeyword:
+		p.emitKeywordExpression(node.AsKeywordExpression())
+	case ast.KindJsxNamespacedName:
+		p.emitJsxNamespacedName(node.AsJsxNamespacedName())
+	case ast.KindPropertyAccessExpression:
+		p.emitPropertyAccessExpression(node.AsPropertyAccessExpression())
+	default:
+		panic(fmt.Sprintf("unhandled JsxTagName: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitJsxAttributeName(node *ast.JsxAttributeName) {
+	switch node.Kind {
+	case ast.KindIdentifier:
+		p.emitIdentifierName(node.AsIdentifier())
+	case ast.KindJsxNamespacedName:
+		p.emitJsxNamespacedName(node.AsJsxNamespacedName())
+	default:
+		panic(fmt.Sprintf("unhandled JsxAttributeName: %v", node.Kind))
+	}
+}
+
+func (p *Printer) emitJsxAttributeValue(node *ast.JsxAttributeValue) {
+	switch node.Kind {
+	case ast.KindStringLiteral:
+		p.emitStringLiteral(node.AsStringLiteral())
+	case ast.KindJsxExpression:
+		p.emitJsxExpression(node.AsJsxExpression())
+	case ast.KindJsxElement:
+		p.emitJsxElement(node.AsJsxElement())
+	case ast.KindJsxSelfClosingElement:
+		p.emitJsxSelfClosingElement(node.AsJsxSelfClosingElement())
+	case ast.KindJsxFragment:
+		p.emitJsxFragment(node.AsJsxFragment())
+	default:
+		panic(fmt.Sprintf("unhandled JsxAttributeValue: %v", node.Kind))
+	}
 }
 
 //
