@@ -626,7 +626,7 @@ export function getNormalizedPathComponents(path: string, currentDirectory: stri
 /** @internal */
 export function getNormalizedAbsolutePath(fileName: string, currentDirectory: string | undefined): string {
     if (isNotNormalizedOrAbsolute(fileName)) {
-    return getPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
+        return getPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
     }
 
     return fileName;
