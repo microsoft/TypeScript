@@ -16,6 +16,8 @@ type mapFS struct {
 	useCaseSensitiveFileNames bool
 }
 
+var _ vfs.RealpathFS = (*mapFS)(nil)
+
 type sys struct {
 	original any
 	realpath string
