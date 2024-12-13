@@ -57,6 +57,7 @@ import {
     DiagnosticArguments,
     DiagnosticCategory,
     diagnosticCategoryName,
+    DiagnosticCollection,
     DiagnosticMessage,
     DiagnosticMessageChain,
     DiagnosticReporter,
@@ -246,6 +247,7 @@ import {
     noTransformers,
     ObjectLiteralExpression,
     OperationCanceledException,
+    optionDeclarations,
     optionsHaveChanges,
     PackageId,
     packageIdToPackageName,
@@ -1666,7 +1668,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
      * Only add diagnostics directly if it always would be done irrespective of program structure reuse.
      * Otherwise fileProcessingDiagnostics is correct locations so that the diagnostics can be reported in all structure use scenarios
      */
-    const programDiagnostics = createDiagnosticCollection();
+    let programDiagnostics: DiagnosticCollection | undefined;
+    let reuseConfigDiagnostics = false;
+    let configDiagnostics: DiagnosticCollection | undefined;
     let lazyProgramDiagnosticExplainingFile: LazyProgramDiagnosticExplainingFile[] | undefined = [];
     const currentDirectory = host.getCurrentDirectory();
     const supportedExtensions = getSupportedExtensions(options);
@@ -2006,6 +2010,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         resolvedModules,
         resolvedTypeReferenceDirectiveNames,
         resolvedLibReferences,
+        getConfigDiagnostics: () => configDiagnostics,
         getResolvedModule,
         getResolvedModuleFromModuleSpecifier,
         getResolvedTypeReferenceDirective,
@@ -2046,7 +2051,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     onProgramCreateComplete();
 
-    verifyCompilerOptions();
+    if (!reuseConfigDiagnostics) {
+        verifyCompilerOptions();
+    }
     performance.mark("afterProgram");
     performance.measure("Program", "beforeProgram", "afterProgram");
     tracing?.pop();
@@ -2054,12 +2061,18 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     return program;
 
     function updateAndGetProgramDiagnostics() {
+        if (programDiagnostics) {
+            return programDiagnostics;
+        }
+
+        programDiagnostics = createDiagnosticCollection();
+        configDiagnostics?.getDiagnostics().forEach(d => programDiagnostics!.add(d));
         if (lazyProgramDiagnosticExplainingFile) {
             // Add file processingDiagnostics
             fileProcessingDiagnostics?.forEach(diagnostic => {
                 switch (diagnostic.kind) {
                     case FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic:
-                        return programDiagnostics.add(
+                        return programDiagnostics!.add(
                             createDiagnosticExplainingFile(
                                 diagnostic.file && getSourceFileByPath(diagnostic.file),
                                 diagnostic.fileProcessingReason,
@@ -2068,15 +2081,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                             ),
                         );
                     case FilePreprocessingDiagnosticsKind.FilePreprocessingLibReferenceDiagnostic:
-                        return programDiagnostics.add(filePreprocessingLibreferenceDiagnostic(diagnostic));
+                        return programDiagnostics!.add(filePreprocessingLibreferenceDiagnostic(diagnostic));
                     case FilePreprocessingDiagnosticsKind.ResolutionDiagnostics:
-                        return diagnostic.diagnostics.forEach(d => programDiagnostics.add(d));
+                        return diagnostic.diagnostics.forEach(d => programDiagnostics!.add(d));
                     default:
                         Debug.assertNever(diagnostic);
                 }
             });
             lazyProgramDiagnosticExplainingFile.forEach(({ file, diagnostic, args }) =>
-                programDiagnostics.add(
+                programDiagnostics!.add(
                     createDiagnosticExplainingFile(file, /*fileProcessingReason*/ undefined, diagnostic, args),
                 )
             );
@@ -2721,6 +2734,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
             filesByName.set(path, filesByName.get(oldFile.path));
         });
+
+        if (
+            oldOptions.configFile && oldOptions.configFile === options.configFile ||
+            !oldOptions.configFile && !options.configFile && !optionsHaveChanges(oldOptions, options, optionDeclarations)
+        ) {
+            oldProgram.getProgramDiagnostics(oldOptions.configFile!);
+            configDiagnostics = oldProgram.getConfigDiagnostics();
+            reuseConfigDiagnostics = true;
+        }
 
         files = newSourceFiles;
         fileReasons = oldProgram.getFileIncludeReasons();
@@ -4308,7 +4330,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         const outputFile = options.outFile;
         if (!options.tsBuildInfoFile && options.incremental && !outputFile && !options.configFilePath) {
-            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
+            addConfigDiagnostic(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
         }
 
         verifyDeprecatedCompilerOptions();
@@ -4410,7 +4432,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {
             // We cannot use createDiagnosticFromNode because nodes do not have parents yet
             const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!);
-            programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none));
+            addConfigDiagnostic(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none));
         }
 
         // Cannot specify module gen that isn't amd or system with --out
@@ -4420,7 +4442,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
             else if (options.module === undefined && firstNonAmbientExternalModuleSourceFile) {
                 const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!);
-                programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, "outFile"));
+                addConfigDiagnostic(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, "outFile"));
             }
         }
 
@@ -4965,7 +4987,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 forEachPropertyAssignment(pathProp.initializer, key, keyProps => {
                     const initializer = keyProps.initializer;
                     if (isArrayLiteralExpression(initializer) && initializer.elements.length > valueIndex) {
-                        programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, initializer.elements[valueIndex], message, ...args));
+                        addConfigDiagnostic(createDiagnosticForNodeInSourceFile(options.configFile!, initializer.elements[valueIndex], message, ...args));
                         needCompilerDiagnostic = false;
                     }
                 });
@@ -5027,10 +5049,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, ...args: DiagnosticArguments) {
         const referencesSyntax = forEachTsConfigPropArray(sourceFile || options.configFile, "references", property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
         if (referencesSyntax && referencesSyntax.elements.length > index) {
-            programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, ...args));
+            addConfigDiagnostic(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, ...args));
         }
         else {
-            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
+            addConfigDiagnostic(createCompilerDiagnostic(message, ...args));
         }
     }
 
@@ -5054,18 +5076,18 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (compilerOptionsProperty) {
             // eslint-disable-next-line local/no-in-operator
             if ("messageText" in message) {
-                programDiagnostics.add(createDiagnosticForNodeFromMessageChain(options.configFile!, compilerOptionsProperty.name, message));
+                addConfigDiagnostic(createDiagnosticForNodeFromMessageChain(options.configFile!, compilerOptionsProperty.name, message));
             }
             else {
-                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, compilerOptionsProperty.name, message, ...args));
+                addConfigDiagnostic(createDiagnosticForNodeInSourceFile(options.configFile!, compilerOptionsProperty.name, message, ...args));
             }
         }
         // eslint-disable-next-line local/no-in-operator
         else if ("messageText" in message) {
-            programDiagnostics.add(createCompilerDiagnosticFromMessageChain(message));
+            addConfigDiagnostic(createCompilerDiagnosticFromMessageChain(message));
         }
         else {
-            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
+            addConfigDiagnostic(createCompilerDiagnostic(message, ...args));
         }
     }
 
@@ -5096,10 +5118,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         forEachPropertyAssignment(objectLiteral, key1, prop => {
             // eslint-disable-next-line local/no-in-operator
             if ("messageText" in message) {
-                programDiagnostics.add(createDiagnosticForNodeFromMessageChain(options.configFile!, onKey ? prop.name : prop.initializer, message));
+                addConfigDiagnostic(createDiagnosticForNodeFromMessageChain(options.configFile!, onKey ? prop.name : prop.initializer, message));
             }
             else {
-                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, ...args));
+                addConfigDiagnostic(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, ...args));
             }
             needsCompilerDiagnostic = true;
         }, key2);
@@ -5108,7 +5130,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {
         hasEmitBlockingDiagnostics.set(toPath(emitFileName), true);
-        programDiagnostics.add(diag);
+        addConfigDiagnostic(diag);
+    }
+
+    function addConfigDiagnostic(diag: Diagnostic) {
+        (configDiagnostics ??= createDiagnosticCollection()).add(diag);
     }
 
     function isEmittedFile(file: string): boolean {
