@@ -1,17 +1,17 @@
-index.mts(1,34): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
-index.mts(3,38): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
-index.ts(1,34): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
-index.ts(3,38): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+index.mts(1,34): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+index.mts(3,38): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+index.ts(1,34): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+index.ts(3,38): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
 
 
 ==== index.ts (2 errors) ====
     import pkg from "./package.json" with { type: "json" };
                                      ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     export const name = pkg.name;
     import * as ns from "./package.json" with { type: "json" };
                                          ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     export const thing = ns;
     export const name2 = ns.default.name;
 ==== index.cts (0 errors) ====
@@ -23,11 +23,11 @@ index.ts(3,38): error TS2823: Import attributes are only supported when the '--m
 ==== index.mts (2 errors) ====
     import pkg from "./package.json" with { type: "json" };
                                      ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     export const name = pkg.name;
     import * as ns from "./package.json" with { type: "json" };
                                          ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
     export const thing = ns;
     export const name2 = ns.default.name;
 ==== package.json (0 errors) ====

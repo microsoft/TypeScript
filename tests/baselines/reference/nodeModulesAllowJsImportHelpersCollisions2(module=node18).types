@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsImportHelpersCollisions2.ts] ////
+
+=== subfolder/index.ts ===
+// cjs format file
+export * from "fs";
+export * as fs from "fs";
+>fs : any
+>   : ^^^
+
+=== index.js ===
+// esm format file
+export * from "fs";
+export * as fs from "fs";
+>fs : any
+>   : ^^^
+
+=== types.d.ts ===
+declare module "fs";
+>"fs" : any
+>     : ^^^
+
+declare module "tslib" {
+>"tslib" : typeof import("tslib")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
+
+    export {};
+    // intentionally missing all helpers
+}

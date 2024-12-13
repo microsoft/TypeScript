@@ -1,4 +1,4 @@
-// @module: node16,nodenext
+// @module: node16,node18,nodenext
 // @filename: mod.cts
 declare function fun(): void;
 export default fun;
