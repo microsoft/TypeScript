@@ -2739,7 +2739,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             oldOptions.configFile && oldOptions.configFile === options.configFile ||
             !oldOptions.configFile && !options.configFile && !optionsHaveChanges(oldOptions, options, optionDeclarations)
         ) {
-            oldProgram.getProgramDiagnostics(oldOptions.configFile!);
             configDiagnostics = oldProgram.getConfigDiagnostics();
             reuseConfigDiagnostics = true;
         }
