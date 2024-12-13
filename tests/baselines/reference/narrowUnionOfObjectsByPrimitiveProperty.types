@@ -59,9 +59,9 @@ if (typeof nameState.value === "string") {
 >"string" : "string"
 >         : ^^^^^^^^
 
-  nameState.state satisfies  State<string>;
->nameState.state satisfies  State<string> : State<string>
->                                         : ^^^^^^^^^^^^^
+  nameState.state satisfies State<string>;
+>nameState.state satisfies State<string> : State<string>
+>                                        : ^^^^^^^^^^^^^
 >nameState.state : State<string>
 >                : ^^^^^^^^^^^^^
 >nameState : { value: string; state: State<string>; }
@@ -152,18 +152,18 @@ function aStringOrANumber<T extends { a: string } | { a: number }>(param: T): T 
 >         : ^^^^^^^^
 
     return param.a.repeat(3);
->param.a.repeat(3) : any
->                  : ^^^
->param.a.repeat : any
->               : ^^^
+>param.a.repeat(3) : string
+>                  : ^^^^^^
+>param.a.repeat : (count: number) => string
+>               : ^     ^^      ^^^^^      
 >param.a : string
 >        : ^^^^^^
 >param : { a: string; }
 >      : ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
->repeat : any
->       : ^^^
+>repeat : (count: number) => string
+>       : ^     ^^      ^^^^^      
 >3 : 3
 >  : ^
   }
@@ -261,18 +261,18 @@ if(typeof obj.prop === "string") {
 >         : ^^^^^^^^
 
   obj.other.repeat(3);
->obj.other.repeat(3) : any
->                    : ^^^
->obj.other.repeat : any
->                 : ^^^
+>obj.other.repeat(3) : string
+>                    : ^^^^^^
+>obj.other.repeat : (count: number) => string
+>                 : ^     ^^      ^^^^^      
 >obj.other : string
 >          : ^^^^^^
 >obj : { prop: string; other: string; }
 >    : ^^^^^^^^      ^^^^^^^^^      ^^^
 >other : string
 >      : ^^^^^^
->repeat : any
->       : ^^^
+>repeat : (count: number) => string
+>       : ^     ^^      ^^^^^      
 >3 : 3
 >  : ^
 
@@ -393,18 +393,18 @@ if(typeof obj2.prop === "string") {
 >         : ^^^^^^^^
 
   obj2.other.repeat(3);
->obj2.other.repeat(3) : any
->                     : ^^^
->obj2.other.repeat : any
->                  : ^^^
+>obj2.other.repeat(3) : string
+>                     : ^^^^^^
+>obj2.other.repeat : (count: number) => string
+>                  : ^     ^^      ^^^^^      
 >obj2.other : string
 >           : ^^^^^^
 >obj2 : { prop: string; other: string; }
 >     : ^^^^^^^^      ^^^^^^^^^      ^^^
 >other : string
 >      : ^^^^^^
->repeat : any
->       : ^^^
+>repeat : (count: number) => string
+>       : ^     ^^      ^^^^^      
 >3 : 3
 >  : ^
 

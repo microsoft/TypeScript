@@ -21,7 +21,7 @@ const nameState = {} as {
 }
 
 if (typeof nameState.value === "string") {
-  nameState.state satisfies  State<string>;
+  nameState.state satisfies State<string>;
 } else {
   nameState.state satisfies State<UserName>;
 }
@@ -103,10 +103,7 @@ if (typeof opt.label === 'string') {
 }
 
 //// [narrowUnionOfObjectsByPrimitiveProperty.js]
-"use strict";
-var _a, _b;
-Object.defineProperty(exports, "__esModule", { value: true });
-var nameState = {};
+const nameState = {};
 if (typeof nameState.value === "string") {
     nameState.state;
 }
@@ -151,10 +148,11 @@ else {
     Math.exp(obj2.other);
 }
 if (typeof opt.label === 'string') {
-    var l = opt.label;
-    var a = (_a = opt.alias) !== null && _a !== void 0 ? _a : opt.label;
+    const l = opt.label;
+    const a = opt.alias ?? opt.label;
 }
 else {
-    var l = opt.label;
-    var a = (_b = opt.alias) !== null && _b !== void 0 ? _b : opt.label.original;
+    const l = opt.label;
+    const a = opt.alias ?? opt.label.original;
 }
+export {};

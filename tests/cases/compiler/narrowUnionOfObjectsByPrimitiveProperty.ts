@@ -1,4 +1,6 @@
 // @strict: true
+// @lib: esnext
+// @target: esnext
 
 export {}
 
@@ -20,7 +22,7 @@ const nameState = {} as {
 }
 
 if (typeof nameState.value === "string") {
-  nameState.state satisfies  State<string>;
+  nameState.state satisfies State<string>;
 } else {
   nameState.state satisfies State<UserName>;
 }

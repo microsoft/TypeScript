@@ -1,5 +1,3 @@
-narrowUnionOfObjectsByPrimitiveProperty.ts(37,20): error TS2550: Property 'repeat' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-narrowUnionOfObjectsByPrimitiveProperty.ts(57,13): error TS2550: Property 'repeat' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 narrowUnionOfObjectsByPrimitiveProperty.ts(62,1): error TS2322: Type '{ prop: string | number; other: never; }' is not assignable to type '{ prop: string; other: string; } | { prop: number; other: number; }'.
   Type '{ prop: string | number; other: never; }' is not assignable to type '{ prop: number; other: number; }'.
     Types of property 'prop' are incompatible.
@@ -10,11 +8,10 @@ narrowUnionOfObjectsByPrimitiveProperty.ts(70,1): error TS2322: Type '{ prop: st
     Types of property 'prop' are incompatible.
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
-narrowUnionOfObjectsByPrimitiveProperty.ts(73,14): error TS2550: Property 'repeat' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 narrowUnionOfObjectsByPrimitiveProperty.ts(96,32): error TS2339: Property 'label' does not exist on type 'never'.
 
 
-==== narrowUnionOfObjectsByPrimitiveProperty.ts (6 errors) ====
+==== narrowUnionOfObjectsByPrimitiveProperty.ts (3 errors) ====
     export {}
     
     interface State<Type> {
@@ -35,7 +32,7 @@ narrowUnionOfObjectsByPrimitiveProperty.ts(96,32): error TS2339: Property 'label
     }
     
     if (typeof nameState.value === "string") {
-      nameState.state satisfies  State<string>;
+      nameState.state satisfies State<string>;
     } else {
       nameState.state satisfies State<UserName>;
     }
@@ -52,8 +49,6 @@ narrowUnionOfObjectsByPrimitiveProperty.ts(96,32): error TS2339: Property 'label
     function aStringOrANumber<T extends { a: string } | { a: number }>(param: T): T extends { a: string } ? string : T extends { a: number } ? number : never {
       if (typeof param.a === "string") {
         return param.a.repeat(3);
-                       ~~~~~~
-!!! error TS2550: Property 'repeat' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
       }
       if (typeof param.a === "number") {
         return Math.exp(param.a);
@@ -74,8 +69,6 @@ narrowUnionOfObjectsByPrimitiveProperty.ts(96,32): error TS2339: Property 'label
     // See contextualTypeWithUnionTypeObjectLiteral.ts
     if(typeof obj.prop === "string") {
       obj.other.repeat(3);
-                ~~~~~~
-!!! error TS2550: Property 'repeat' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
     } else {
       Math.exp(obj.other);
     }
@@ -104,8 +97,6 @@ narrowUnionOfObjectsByPrimitiveProperty.ts(96,32): error TS2339: Property 'label
     
     if(typeof obj2.prop === "string") {
       obj2.other.repeat(3);
-                 ~~~~~~
-!!! error TS2550: Property 'repeat' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
     } else {
       Math.exp(obj2.other);
     }

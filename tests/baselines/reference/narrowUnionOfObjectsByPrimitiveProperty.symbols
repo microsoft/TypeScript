@@ -48,7 +48,7 @@ if (typeof nameState.value === "string") {
 >nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 11, 5))
 >value : Symbol(value, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 11, 25), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 14, 5))
 
-  nameState.state satisfies  State<string>;
+  nameState.state satisfies State<string>;
 >nameState.state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 12, 16))
 >nameState : Symbol(nameState, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 11, 5))
 >state : Symbol(state, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 12, 16))
@@ -100,9 +100,11 @@ function aStringOrANumber<T extends { a: string } | { a: number }>(param: T): T 
 >a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 34, 37), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 34, 53))
 
     return param.a.repeat(3);
+>param.a.repeat : Symbol(String.repeat, Decl(lib.es2015.core.d.ts, --, --))
 >param.a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 34, 37))
 >param : Symbol(param, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 34, 67))
 >a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 34, 37))
+>repeat : Symbol(String.repeat, Decl(lib.es2015.core.d.ts, --, --))
   }
   if (typeof param.a === "number") {
 >param.a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 34, 53))
@@ -111,14 +113,14 @@ function aStringOrANumber<T extends { a: string } | { a: number }>(param: T): T 
 
     return Math.exp(param.a);
 >Math.exp : Symbol(Math.exp, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >exp : Symbol(Math.exp, Decl(lib.es5.d.ts, --, --))
 >param.a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 34, 53))
 >param : Symbol(param, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 34, 67))
 >a : Symbol(a, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 34, 53))
   }
   throw new Error()
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 }
 
 aStringOrANumber({ a: "string" })
@@ -148,14 +150,16 @@ if(typeof obj.prop === "string") {
 >prop : Symbol(prop, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 50, 18), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 50, 52))
 
   obj.other.repeat(3);
+>obj.other.repeat : Symbol(String.repeat, Decl(lib.es2015.core.d.ts, --, --))
 >obj.other : Symbol(other, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 50, 32))
 >obj : Symbol(obj, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 50, 11))
 >other : Symbol(other, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 50, 32))
+>repeat : Symbol(String.repeat, Decl(lib.es2015.core.d.ts, --, --))
 
 } else {
   Math.exp(obj.other);
 >Math.exp : Symbol(Math.exp, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >exp : Symbol(Math.exp, Decl(lib.es5.d.ts, --, --))
 >obj.other : Symbol(other, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 50, 66))
 >obj : Symbol(obj, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 50, 11))
@@ -166,7 +170,7 @@ obj = { prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" as neve
 >obj : Symbol(obj, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 50, 11))
 >prop : Symbol(prop, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 61, 7))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >other : Symbol(other, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 61, 52))
 
@@ -185,7 +189,7 @@ obj2 = { prop: Math.random() > 0.5 ? "whatever" : 42, other: "irrelevant" as nev
 >obj2 : Symbol(obj2, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 64, 11))
 >prop : Symbol(prop, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 69, 8))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >other : Symbol(other, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 69, 53))
 
@@ -195,14 +199,16 @@ if(typeof obj2.prop === "string") {
 >prop : Symbol(prop, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 64, 19), Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 64, 53))
 
   obj2.other.repeat(3);
+>obj2.other.repeat : Symbol(String.repeat, Decl(lib.es2015.core.d.ts, --, --))
 >obj2.other : Symbol(other, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 64, 33))
 >obj2 : Symbol(obj2, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 64, 11))
 >other : Symbol(other, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 64, 33))
+>repeat : Symbol(String.repeat, Decl(lib.es2015.core.d.ts, --, --))
 
 } else {
   Math.exp(obj2.other);
 >Math.exp : Symbol(Math.exp, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >exp : Symbol(Math.exp, Decl(lib.es5.d.ts, --, --))
 >obj2.other : Symbol(other, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 64, 67))
 >obj2 : Symbol(obj2, Decl(narrowUnionOfObjectsByPrimitiveProperty.ts, 64, 11))
