@@ -87,6 +87,11 @@ func NewProgram(options ProgramOptions) *Program {
 
 	p.processRootFiles(fileInfos)
 
+	// Sort files by path so we get a stable ordering between runs
+	slices.SortFunc(p.files, func(f1 *ast.SourceFile, f2 *ast.SourceFile) int {
+		return strings.Compare(string(f1.Path()), string(f2.Path()))
+	})
+
 	return p
 }
 

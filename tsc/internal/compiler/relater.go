@@ -340,10 +340,6 @@ func (c *Checker) checkTypeRelatedToEx(
 			}
 		}
 	}
-	// !!!
-	// if errorNode != nil && errorOutputContainer != nil && errorOutputContainer.skipLogging && result == TernaryFalse {
-	// 	Debug.assert(!!errorOutputContainer.errors, "missed opportunity to interact with error.")
-	// }
 	return result != TernaryFalse
 }
 
@@ -3149,7 +3145,75 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		}
 	case r.c.isGenericMappedType(target) && r.relation != r.c.identityRelation:
-		return TernaryTrue // !!!
+		// Check if source type `S` is related to target type `{ [P in Q]: T }` or `{ [P in Q as R]: T}`.
+		keysRemapped := target.AsMappedType().declaration.NameType != nil
+		templateType := r.c.getTemplateTypeFromMappedType(target)
+		modifiers := getMappedTypeModifiers(target)
+		if modifiers&MappedTypeModifiersExcludeOptional == 0 {
+			// If the mapped type has shape `{ [P in Q]: T[P] }`,
+			// source `S` is related to target if `T` = `S`, i.e. `S` is related to `{ [P in Q]: S[P] }`.
+			if !keysRemapped && templateType.flags&TypeFlagsIndexedAccess != 0 && templateType.AsIndexedAccessType().objectType == source && templateType.AsIndexedAccessType().indexType == r.c.getTypeParameterFromMappedType(target) {
+				return TernaryTrue
+			}
+			if !r.c.isGenericMappedType(source) {
+				// If target has shape `{ [P in Q as R]: T}`, then its keys have type `R`.
+				// If target has shape `{ [P in Q]: T }`, then its keys have type `Q`.
+				var targetKeys *Type
+				if keysRemapped {
+					targetKeys = r.c.getNameTypeFromMappedType(target)
+				} else {
+					targetKeys = r.c.getConstraintTypeFromMappedType(target)
+				}
+				// Type of the keys of source type `S`, i.e. `keyof S`.
+				sourceKeys := r.c.getIndexTypeEx(source, IndexFlagsNoIndexSignatures)
+				includeOptional := modifiers&MappedTypeModifiersIncludeOptional != 0
+				var filteredByApplicability *Type
+				if includeOptional {
+					filteredByApplicability = r.c.intersectTypes(targetKeys, sourceKeys)
+				}
+				// A source type `S` is related to a target type `{ [P in Q]: T }` if `Q` is related to `keyof S` and `S[Q]` is related to `T`.
+				// A source type `S` is related to a target type `{ [P in Q as R]: T }` if `R` is related to `keyof S` and `S[R]` is related to `T.
+				// A source type `S` is related to a target type `{ [P in Q]?: T }` if some constituent `Q'` of `Q` is related to `keyof S` and `S[Q']` is related to `T`.
+				// A source type `S` is related to a target type `{ [P in Q as R]?: T }` if some constituent `R'` of `R` is related to `keyof S` and `S[R']` is related to `T`.
+				if includeOptional && filteredByApplicability.flags&TypeFlagsNever == 0 || !includeOptional && r.isRelatedTo(targetKeys, sourceKeys, RecursionFlagsBoth, false) != TernaryFalse {
+					templateType := r.c.getTemplateTypeFromMappedType(target)
+					typeParameter := r.c.getTypeParameterFromMappedType(target)
+					// Fastpath: When the template type has the form `Obj[P]` where `P` is the mapped type parameter, directly compare source `S` with `Obj`
+					// to avoid creating the (potentially very large) number of new intermediate types made by manufacturing `S[P]`.
+					nonNullComponent := r.c.extractTypesOfKind(templateType, ^TypeFlagsNullable)
+					if !keysRemapped && nonNullComponent.flags&TypeFlagsIndexedAccess != 0 && nonNullComponent.AsIndexedAccessType().indexType == typeParameter {
+						result = r.isRelatedTo(source, nonNullComponent.AsIndexedAccessType().objectType, RecursionFlagsTarget, reportErrors)
+						if result != TernaryFalse {
+							return result
+						}
+					} else {
+						// We need to compare the type of a property on the source type `S` to the type of the same property on the target type,
+						// so we need to construct an indexing type representing a property, and then use indexing type to index the source type for comparison.
+						// If the target type has shape `{ [P in Q]: T }`, then a property of the target has type `P`.
+						// If the target type has shape `{ [P in Q]?: T }`, then a property of the target has type `P`,
+						// but the property is optional, so we only want to compare properties `P` that are common between `keyof S` and `Q`.
+						// If the target type has shape `{ [P in Q as R]: T }`, then a property of the target has type `R`.
+						// If the target type has shape `{ [P in Q as R]?: T }`, then a property of the target has type `R`,
+						// but the property is optional, so we only want to compare properties `R` that are common between `keyof S` and `R`.
+						indexingType := typeParameter
+						switch {
+						case keysRemapped:
+							indexingType = core.OrElse(filteredByApplicability, targetKeys)
+						case filteredByApplicability != nil:
+							indexingType = r.c.getIntersectionType([]*Type{filteredByApplicability, typeParameter})
+						}
+						indexedAccessType := r.c.getIndexedAccessType(source, indexingType)
+						// Compare `S[indexingType]` to `T`, where `T` is the type of a property of the target type.
+						result = r.isRelatedTo(indexedAccessType, templateType, RecursionFlagsBoth, reportErrors)
+						if result != TernaryFalse {
+							return result
+						}
+					}
+				}
+				originalErrorChain = r.errorChain
+				r.restoreErrorState(saveErrorState)
+			}
+		}
 	}
 	switch {
 	case source.flags&TypeFlagsTypeVariable != 0:

@@ -31,10 +31,7 @@ func (c *Checker) symbolToString(s *ast.Symbol) string {
 	if s.ValueDeclaration != nil {
 		name := getNameOfDeclaration(s.ValueDeclaration)
 		if name != nil {
-			if ast.IsIdentifier(name) {
-				return getTextOfNode(name)
-			}
-			return "[" + getTextOfNode(name) + "]"
+			return getTextOfNode(name)
 		}
 	}
 	return s.Name
@@ -91,6 +88,10 @@ func (p *Printer) print(s string) {
 	p.sb.WriteString(s)
 }
 
+func (p *Printer) printName(symbol *ast.Symbol) {
+	p.print(p.c.symbolToString(symbol))
+}
+
 func (p *Printer) printTypeEx(t *Type, precedence ast.TypePrecedence) {
 	if p.c.getTypePrecedence(t) < precedence {
 		p.print("(")
@@ -103,7 +104,7 @@ func (p *Printer) printTypeEx(t *Type, precedence ast.TypePrecedence) {
 
 func (p *Printer) printType(t *Type) {
 	if t.alias != nil && (p.flags&TypeFormatFlagsInTypeAlias == 0 || p.depth > 0) {
-		p.print(t.alias.symbol.Name)
+		p.printName(t.alias.symbol)
 		p.printTypeArguments(t.alias.typeArguments)
 	} else {
 		p.printTypeNoAlias(t)
@@ -116,6 +117,8 @@ func (p *Printer) printTypeNoAlias(t *Type) {
 		p.print(t.AsIntrinsicType().intrinsicName)
 	case t.flags&TypeFlagsLiteral != 0:
 		p.printLiteralType(t)
+	case t.flags&TypeFlagsUniqueESSymbol != 0:
+		p.printUniqueESSymbolType(t)
 	case t.flags&TypeFlagsUnion != 0:
 		p.printUnionType(t)
 	case t.flags&TypeFlagsIntersection != 0:
@@ -189,6 +192,10 @@ func (p *Printer) printBigIntLiteral(b PseudoBigInt) {
 	p.print(b.base10Value)
 }
 
+func (p *Printer) printUniqueESSymbolType(t *Type) {
+	p.print("unique symbol")
+}
+
 func (p *Printer) printTemplateLiteralType(t *Type) {
 	texts := t.AsTemplateLiteralType().texts
 	types := t.AsTemplateLiteralType().types
@@ -204,16 +211,16 @@ func (p *Printer) printTemplateLiteralType(t *Type) {
 }
 
 func (p *Printer) printStringMappingType(t *Type) {
-	p.print(t.symbol.Name)
+	p.printName(t.symbol)
 	p.print("<")
 	p.printType(t.AsStringMappingType().target)
 	p.print(">")
 }
 
 func (p *Printer) printEnumLiteral(t *Type) {
-	p.print(p.c.getParentOfSymbol(t.symbol).Name)
+	p.printName(p.c.getParentOfSymbol(t.symbol))
 	p.print(".")
-	p.print(t.symbol.Name)
+	p.printName(t.symbol)
 }
 
 func (p *Printer) printObjectType(t *Type) {
@@ -221,7 +228,9 @@ func (p *Printer) printObjectType(t *Type) {
 	case t.objectFlags&ObjectFlagsReference != 0:
 		p.printParameterizedType(t)
 	case t.objectFlags&ObjectFlagsClassOrInterface != 0:
-		p.print(t.symbol.Name)
+		p.printName(t.symbol)
+	case p.c.isGenericMappedType(t):
+		p.printMappedType(t)
 	default:
 		p.printAnonymousType(t)
 	}
@@ -239,7 +248,7 @@ func (p *Printer) printParameterizedType(t *Type) {
 }
 
 func (p *Printer) printTypeReference(t *Type) {
-	p.print(t.symbol.Name)
+	p.printName(t.symbol)
 	p.printTypeArguments(p.c.getTypeArguments(t)[:p.c.getTypeReferenceArity(t)])
 }
 
@@ -330,6 +339,9 @@ func (p *Printer) printAnonymousType(t *Type) {
 		if tail {
 			p.print(",")
 		}
+		if info.isReadonly {
+			p.print(" readonly")
+		}
 		p.print(" [")
 		p.print(getNameFromIndexInfo(info))
 		p.print(": ")
@@ -342,8 +354,14 @@ func (p *Printer) printAnonymousType(t *Type) {
 		if tail {
 			p.print(",")
 		}
+		if p.c.isReadonlySymbol(prop) {
+			p.print(" readonly")
+		}
 		p.print(" ")
-		p.print(prop.Name)
+		p.printName(prop)
+		if prop.Flags&ast.SymbolFlagsOptional != 0 {
+			p.print("?")
+		}
 		p.print(": ")
 		p.printType(p.c.getTypeOfSymbol(prop))
 		tail = true
@@ -362,7 +380,7 @@ func (p *Printer) printSignature(sig *Signature, returnSeparator string) {
 			if tail {
 				p.print(", ")
 			}
-			p.print(tp.symbol.Name)
+			p.printName(tp.symbol)
 			tail = true
 		}
 		p.print(">")
@@ -375,9 +393,9 @@ func (p *Printer) printSignature(sig *Signature, returnSeparator string) {
 		}
 		if sig.flags&SignatureFlagsHasRestParameter != 0 && i == len(sig.parameters)-1 {
 			p.print("...")
-			p.print(param.Name)
+			p.printName(param)
 		} else {
-			p.print(param.Name)
+			p.printName(param)
 			if i >= int(sig.minArgumentCount) {
 				p.print("?")
 			}
@@ -414,7 +432,7 @@ func (p *Printer) printTypeParameter(t *Type) {
 	if t.AsTypeParameter().isThisType {
 		p.print("this")
 	} else if t.symbol != nil {
-		p.print(t.symbol.Name)
+		p.printName(t.symbol)
 	} else {
 		p.print("???")
 	}
@@ -425,7 +443,7 @@ func (p *Printer) printUnionType(t *Type) {
 	case t.flags&TypeFlagsBoolean != 0:
 		p.print("boolean")
 	case t.flags&TypeFlagsEnumLiteral != 0:
-		p.print(t.symbol.Name)
+		p.printName(t.symbol)
 	default:
 		u := t.AsUnionType()
 		if u.origin != nil {
@@ -464,6 +482,36 @@ func (p *Printer) printIndexedAccessType(t *Type) {
 	p.print("[")
 	p.printType(t.AsIndexedAccessType().indexType)
 	p.print("]")
+}
+
+func (p *Printer) printMappedType(t *Type) {
+	d := t.AsMappedType().declaration
+	p.print("{ ")
+	if d.ReadonlyToken != nil {
+		if d.ReadonlyToken.Kind != ast.KindReadonlyKeyword {
+			p.print(scanner.TokenToString(d.ReadonlyToken.Kind))
+		}
+		p.print("readonly ")
+	}
+	p.print("[")
+	p.printName(p.c.getTypeParameterFromMappedType(t).symbol)
+	p.print(" in ")
+	p.printType(p.c.getConstraintTypeFromMappedType(t))
+	nameType := p.c.getNameTypeFromMappedType(t)
+	if nameType != nil {
+		p.print(" as ")
+		p.printType(nameType)
+	}
+	p.print("]")
+	if d.QuestionToken != nil {
+		if d.QuestionToken.Kind != ast.KindQuestionToken {
+			p.print(scanner.TokenToString(d.QuestionToken.Kind))
+		}
+		p.print("?")
+	}
+	p.print(": ")
+	p.printType(p.c.getTemplateTypeFromMappedType(t))
+	p.print(" }")
 }
 
 func (p *Printer) printSourceFileWithTypes(sourceFile *ast.SourceFile) {
@@ -514,10 +562,10 @@ func (c *Checker) getTextAndTypeOfNode(node *ast.Node) (string, *Type, bool) {
 		symbol := node.Symbol()
 		if symbol != nil && !isReservedMemberName(symbol.Name) {
 			if symbol.Flags&ast.SymbolFlagsValue != 0 {
-				return symbol.Name, c.getTypeOfSymbol(symbol), true
+				return c.symbolToString(symbol), c.getTypeOfSymbol(symbol), true
 			}
 			if symbol.Flags&ast.SymbolFlagsTypeAlias != 0 {
-				return symbol.Name, c.getDeclaredTypeOfTypeAlias(symbol), true
+				return c.symbolToString(symbol), c.getDeclaredTypeOfTypeAlias(symbol), true
 			}
 		}
 	}

@@ -73,7 +73,7 @@ func NewDiagnostic(file *SourceFile, loc core.TextRange, message *diagnostics.Me
 
 func NewDiagnosticChain(chain *Diagnostic, message *diagnostics.Message, args ...any) *Diagnostic {
 	if chain != nil {
-		return NewDiagnostic(chain.file, chain.loc, message, args...).SetRelatedInfo(chain.relatedInformation)
+		return NewDiagnostic(chain.file, chain.loc, message, args...).AddMessageChain(chain).SetRelatedInfo(chain.relatedInformation)
 	}
 	return NewDiagnostic(nil, core.TextRange{}, message, args...)
 }

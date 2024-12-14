@@ -1245,11 +1245,8 @@ func (b *Binder) lookupName(name string, container *ast.Node) *ast.Symbol {
 		}
 	}
 	declaration := container.DeclarationData()
-	if declaration != nil {
-		symbol := declaration.Symbol
-		if symbol != nil {
-			return symbol.Exports[name]
-		}
+	if declaration != nil && declaration.Symbol != nil {
+		return declaration.Symbol.Exports[name]
 	}
 	return nil
 }

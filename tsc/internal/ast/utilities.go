@@ -113,6 +113,10 @@ func IsLiteralKind(kind Kind) bool {
 	return KindFirstLiteralToken <= kind && kind <= KindLastLiteralToken
 }
 
+func IsLiteralExpression(node *Node) bool {
+	return IsLiteralKind(node.Kind)
+}
+
 func IsStringLiteralLike(node *Node) bool {
 	switch node.Kind {
 	case KindStringLiteral, KindNoSubstitutionTemplateLiteral:
