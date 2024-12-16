@@ -104,19 +104,6 @@ func (f *file) Stat() (fs.FileInfo, error) {
 	return f.fileInfo, nil
 }
 
-type dirEntry struct {
-	fs.DirEntry
-	fileInfo *fileInfo
-}
-
-func (e *dirEntry) Name() string {
-	return path.Base(e.fileInfo.realpath)
-}
-
-func (e *dirEntry) Info() (fs.FileInfo, error) {
-	return e.fileInfo, nil
-}
-
 type readDirFile struct {
 	fs.ReadDirFile
 	fileInfo *fileInfo
@@ -139,11 +126,7 @@ func (f *readDirFile) ReadDir(n int) ([]fs.DirEntry, error) {
 		if !ok {
 			panic(fmt.Sprintf("unexpected synthesized dir: %q", info.Name()))
 		}
-
-		entries[i] = &dirEntry{
-			DirEntry: entry,
-			fileInfo: newInfo,
-		}
+		entries[i] = fs.FileInfoToDirEntry(newInfo)
 	}
 
 	return entries, nil
