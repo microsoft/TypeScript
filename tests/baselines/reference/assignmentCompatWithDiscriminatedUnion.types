@@ -435,7 +435,7 @@ namespace GH30170 {
 >    : ^^^^^^^^^^^^^
 
     function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
->drawWithColor : (currentColor: 'blue' | 'yellow' | undefined) => void
+>drawWithColor : (currentColor: "blue" | "yellow" | undefined) => void
 >              : ^            ^^                             ^^^^^^^^^
 >currentColor : "blue" | "yellow"
 >             : ^^^^^^^^^^^^^^^^^

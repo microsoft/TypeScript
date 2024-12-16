@@ -660,13 +660,13 @@ declare function doesValueAtDeepPathSatisfy<
 type Foo = {value: {type: 'A'}; a?: number} | {value: {type: 'B'}; b?: number};
 >Foo : Foo
 >    : ^^^
->value : { type: 'A'; }
+>value : { type: "A"; }
 >      : ^^^^^^^^   ^^^
 >type : "A"
 >     : ^^^
 >a : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->value : { type: 'B'; }
+>value : { type: "B"; }
 >      : ^^^^^^^^   ^^^
 >type : "B"
 >     : ^^^
@@ -674,13 +674,13 @@ type Foo = {value: {type: 'A'}; a?: number} | {value: {type: 'B'}; b?: number};
 >  : ^^^^^^^^^^^^^^^^^^
 
 declare function isA(arg: unknown): arg is 'A';
->isA : (arg: unknown) => arg is 'A'
+>isA : (arg: unknown) => arg is "A"
 >    : ^   ^^       ^^^^^          
 >arg : unknown
 >    : ^^^^^^^
 
 declare function isB(arg: unknown): arg is 'B';
->isB : (arg: unknown) => arg is 'B'
+>isB : (arg: unknown) => arg is "B"
 >    : ^   ^^       ^^^^^          
 >arg : unknown
 >    : ^^^^^^^
@@ -692,11 +692,11 @@ declare function assert(condition: boolean): asserts condition;
 >          : ^^^^^^^
 
 function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
->test1 : (foo: Foo) => { value: { type: 'A'; }; a?: number; }
+>test1 : (foo: Foo) => { value: { type: "A"; }; a?: number; }
 >      : ^   ^^   ^^^^^                                      
 >foo : Foo
 >    : ^^^
->value : { type: 'A'; }
+>value : { type: "A"; }
 >      : ^^^^^^^^   ^^^
 >type : "A"
 >     : ^^^
@@ -720,20 +720,20 @@ function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
 >        : ^^^^^^^
 >'type' : "type"
 >       : ^^^^^^
->isA : (arg: unknown) => arg is 'A'
+>isA : (arg: unknown) => arg is "A"
 >    : ^   ^^       ^^^^^          
 
     return foo;
->foo : { value: { type: 'A'; }; a?: number; }
+>foo : { value: { type: "A"; }; a?: number; }
 >    : ^^^^^^^^^              ^^^^^^      ^^^
 }
 
 function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
->test2 : (foo: Foo) => { value: { type: 'A'; }; a?: number; }
+>test2 : (foo: Foo) => { value: { type: "A"; }; a?: number; }
 >      : ^   ^^   ^^^^^                                      
 >foo : Foo
 >    : ^^^
->value : { type: 'A'; }
+>value : { type: "A"; }
 >      : ^^^^^^^^   ^^^
 >type : "A"
 >     : ^^^
@@ -759,11 +759,11 @@ function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
 >        : ^^^^^^^
 >'type' : "type"
 >       : ^^^^^^
->isB : (arg: unknown) => arg is 'B'
+>isB : (arg: unknown) => arg is "B"
 >    : ^   ^^       ^^^^^          
 
     return foo;
->foo : { value: { type: 'A'; }; a?: number; }
+>foo : { value: { type: "A"; }; a?: number; }
 >    : ^^^^^^^^^              ^^^^^^      ^^^
 }
 

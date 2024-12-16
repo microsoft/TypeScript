@@ -4,7 +4,7 @@
 // explicit type annotation should cause `method` to have type 'x' | 'y'
 // both inside and outside `test`.
 function test({
->test : ({ method, nested: { p } }: { method?: 'x' | 'y'; nested?: { p: 'a' | 'b'; }; }) => void
+>test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
 >     : ^                         ^^                                                   ^^^^^^^^^
 
     method = 'z',
@@ -27,7 +27,7 @@ function test({
 >       : ^^^^^^^^^
 
     nested?: { p: 'a' | 'b' }
->nested : { p: 'a' | 'b'; }
+>nested : { p: "a" | "b"; }
 >       : ^^^^^         ^^^
 >p : "a" | "b"
 >  : ^^^^^^^^^
@@ -46,7 +46,7 @@ function test({
 test({});
 >test({}) : void
 >         : ^^^^
->test : ({ method, nested: { p } }: { method?: 'x' | 'y'; nested?: { p: 'a' | 'b'; }; }) => void
+>test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
 >     : ^                         ^^                                                   ^^^^^^^^^
 >{} : {}
 >   : ^^
@@ -54,7 +54,7 @@ test({});
 test({ method: 'x', nested: { p: 'a' } })
 >test({ method: 'x', nested: { p: 'a' } }) : void
 >                                          : ^^^^
->test : ({ method, nested: { p } }: { method?: 'x' | 'y'; nested?: { p: 'a' | 'b'; }; }) => void
+>test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
 >     : ^                         ^^                                                   ^^^^^^^^^
 >{ method: 'x', nested: { p: 'a' } } : { method: "x"; nested: { p: "a"; }; }
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -74,7 +74,7 @@ test({ method: 'x', nested: { p: 'a' } })
 test({ method: 'z', nested: { p: 'b' } })
 >test({ method: 'z', nested: { p: 'b' } }) : void
 >                                          : ^^^^
->test : ({ method, nested: { p } }: { method?: 'x' | 'y'; nested?: { p: 'a' | 'b'; }; }) => void
+>test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
 >     : ^                         ^^                                                   ^^^^^^^^^
 >{ method: 'z', nested: { p: 'b' } } : { method: "z"; nested: { p: "b"; }; }
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -94,7 +94,7 @@ test({ method: 'z', nested: { p: 'b' } })
 test({ method: 'one', nested: { p: 'a' } })
 >test({ method: 'one', nested: { p: 'a' } }) : void
 >                                            : ^^^^
->test : ({ method, nested: { p } }: { method?: 'x' | 'y'; nested?: { p: 'a' | 'b'; }; }) => void
+>test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
 >     : ^                         ^^                                                   ^^^^^^^^^
 >{ method: 'one', nested: { p: 'a' } } : { method: "one"; nested: { p: "a"; }; }
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

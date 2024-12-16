@@ -24,9 +24,9 @@ type I = {
 }
 
 export const fn = (v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {};
->fn : (v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => void
+>fn : (v: O["prop"], p: Omit<O, "prop">, key: keyof O, p2: Omit<O, keyof I>) => void
 >   : ^ ^^         ^^ ^^               ^^   ^^       ^^  ^^                ^^^^^^^^^
->(v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {} : (v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => void
+>(v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {} : (v: O["prop"], p: Omit<O, "prop">, key: keyof O, p2: Omit<O, keyof I>) => void
 >                                                                             : ^ ^^         ^^ ^^               ^^   ^^       ^^  ^^                ^^^^^^^^^
 >v : string
 >  : ^^^^^^
@@ -61,9 +61,9 @@ export type I = {
 }
 
 export const fnExp = (v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {};
->fnExp : (v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => void
+>fnExp : (v: O["prop"], p: Omit<O, "prop">, key: keyof O, p2: Omit<O, keyof I>) => void
 >      : ^ ^^         ^^ ^^               ^^   ^^       ^^  ^^                ^^^^^^^^^
->(v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {} : (v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => void
+>(v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {} : (v: O["prop"], p: Omit<O, "prop">, key: keyof O, p2: Omit<O, keyof I>) => void
 >                                                                             : ^ ^^         ^^ ^^               ^^   ^^       ^^  ^^                ^^^^^^^^^
 >v : string
 >  : ^^^^^^
@@ -76,22 +76,22 @@ export const fnExp = (v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O
 
 === b.ts ===
 import {fn} from './a'
->fn : (v: string, p: Omit<{ prop: string; prop2: string; }, 'prop'>, key: keyof { prop: string; prop2: string; }, p2: Omit<{ prop: string; prop2: string; }, "prop">) => void
+>fn : (v: string, p: Omit<{ prop: string; prop2: string; }, "prop">, key: keyof { prop: string; prop2: string; }, p2: Omit<{ prop: string; prop2: string; }, "prop">) => void
 >   : ^ ^^^^^^^^^^ ^^     ^^^^^^^^      ^^^^^^^^^      ^^^         ^^   ^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^  ^^     ^^^^^^^^      ^^^^^^^^^      ^^^  ^^^^^^ ^^^^^^^^^
 
 import {fnExp} from './aExp'
->fnExp : (v: import("aExp").O['prop'], p: Omit<import("aExp").O, 'prop'>, key: keyof import("aExp").O, p2: Omit<import("aExp").O, keyof import("aExp").I>) => void
+>fnExp : (v: import("aExp").O["prop"], p: Omit<import("aExp").O, "prop">, key: keyof import("aExp").O, p2: Omit<import("aExp").O, keyof import("aExp").I>) => void
 >      : ^ ^^       ^^^^^^  ^        ^^ ^^            ^^^^^^  ^         ^^   ^^             ^^^^^^  ^^^  ^^            ^^^^^^  ^               ^^^^^^  ^ ^^^^^^^^^
 
 export const f = fn;
->f : (v: string, p: Omit<{ prop: string; prop2: string; }, 'prop'>, key: keyof { prop: string; prop2: string; }, p2: Omit<{ prop: string; prop2: string; }, "prop">) => void
+>f : (v: string, p: Omit<{ prop: string; prop2: string; }, "prop">, key: keyof { prop: string; prop2: string; }, p2: Omit<{ prop: string; prop2: string; }, "prop">) => void
 >  : ^ ^^^^^^^^^^ ^^     ^^^^^^^^      ^^^^^^^^^      ^^^         ^^   ^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^  ^^     ^^^^^^^^      ^^^^^^^^^      ^^^  ^^^^^^ ^^^^^^^^^
->fn : (v: string, p: Omit<{ prop: string; prop2: string; }, 'prop'>, key: keyof { prop: string; prop2: string; }, p2: Omit<{ prop: string; prop2: string; }, "prop">) => void
+>fn : (v: string, p: Omit<{ prop: string; prop2: string; }, "prop">, key: keyof { prop: string; prop2: string; }, p2: Omit<{ prop: string; prop2: string; }, "prop">) => void
 >   : ^ ^^^^^^^^^^ ^^     ^^^^^^^^      ^^^^^^^^^      ^^^         ^^   ^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^  ^^     ^^^^^^^^      ^^^^^^^^^      ^^^  ^^^^^^ ^^^^^^^^^
 
 export const fExp = fnExp;
->fExp : (v: import("aExp").O['prop'], p: Omit<import("aExp").O, 'prop'>, key: keyof import("aExp").O, p2: Omit<import("aExp").O, keyof import("aExp").I>) => void
+>fExp : (v: import("aExp").O["prop"], p: Omit<import("aExp").O, "prop">, key: keyof import("aExp").O, p2: Omit<import("aExp").O, keyof import("aExp").I>) => void
 >     : ^ ^^       ^^^^^^  ^        ^^ ^^            ^^^^^^  ^         ^^   ^^             ^^^^^^  ^^^  ^^            ^^^^^^  ^               ^^^^^^  ^ ^^^^^^^^^
->fnExp : (v: import("aExp").O['prop'], p: Omit<import("aExp").O, 'prop'>, key: keyof import("aExp").O, p2: Omit<import("aExp").O, keyof import("aExp").I>) => void
+>fnExp : (v: import("aExp").O["prop"], p: Omit<import("aExp").O, "prop">, key: keyof import("aExp").O, p2: Omit<import("aExp").O, keyof import("aExp").I>) => void
 >      : ^ ^^       ^^^^^^  ^        ^^ ^^            ^^^^^^  ^         ^^   ^^             ^^^^^^  ^^^  ^^            ^^^^^^  ^               ^^^^^^  ^ ^^^^^^^^^
 

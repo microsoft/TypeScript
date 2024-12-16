@@ -37,7 +37,7 @@ function foo (id: string) {
 }
 
 function bar (id: 'a' | 'b') {
->bar : (id: 'a' | 'b') => string | number
+>bar : (id: "a" | "b") => string | number
 >    : ^  ^^         ^^^^^^^^^^^^^^^^^^^^
 >id : "a" | "b"
 >   : ^^^^^^^^^
@@ -72,7 +72,7 @@ function bar (id: 'a' | 'b') {
 }
 
 function baz (id: '1' | '2') {
->baz : (id: '1' | '2') => string | number
+>baz : (id: "1" | "2") => string | number
 >    : ^  ^^         ^^^^^^^^^^^^^^^^^^^^
 >id : "1" | "2"
 >   : ^^^^^^^^^
@@ -142,7 +142,7 @@ function qux (id: 1 | 2) {
 }
 
 function quux (id: 'a' | 'b' | 'z') {
->quux : (id: 'a' | 'b' | 'z') => string | number | undefined
+>quux : (id: "a" | "b" | "z") => string | number | undefined
 >     : ^  ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : "a" | "b" | "z"
 >   : ^^^^^^^^^^^^^^^

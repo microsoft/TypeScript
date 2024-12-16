@@ -3051,7 +3051,7 @@ function getArea(shape?: Shape) {
 >                  : ^^^^^^
 >shape.radius : number
 >             : ^^^^^^
->shape : { type: 'circle'; radius: number; }
+>shape : { type: "circle"; radius: number; }
 >      : ^^^^^^^^        ^^^^^^^^^^      ^^^
 >radius : number
 >       : ^^^^^^
@@ -3067,13 +3067,13 @@ function getArea(shape?: Shape) {
 >                           : ^^^^^^
 >shape.width : number
 >            : ^^^^^^
->shape : { type: 'rectangle'; width: number; height: number; }
+>shape : { type: "rectangle"; width: number; height: number; }
 >      : ^^^^^^^^           ^^^^^^^^^      ^^^^^^^^^^      ^^^
 >width : number
 >      : ^^^^^^
 >shape.height : number
 >             : ^^^^^^
->shape : { type: 'rectangle'; width: number; height: number; }
+>shape : { type: "rectangle"; width: number; height: number; }
 >      : ^^^^^^^^           ^^^^^^^^^      ^^^^^^^^^^      ^^^
 >height : number
 >       : ^^^^^^

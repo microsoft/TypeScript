@@ -526,7 +526,7 @@ type Nested = {
 >               : ^^^^^^
 >resp.resp : { data: string; }
 >          : ^^^^^^^^      ^^^
->resp : { type: 'string'; resp: { data: string; }; }
+>resp : { type: "string"; resp: { data: string; }; }
 >     : ^^^^^^^^        ^^^^^^^^                 ^^^
 >resp : { data: string; }
 >     : ^^^^^^^^      ^^^
@@ -586,7 +586,7 @@ type Nested = {
 >               : ^^^^^^
 >resp.resp : { data: string; }
 >          : ^^^^^^^^      ^^^
->resp : { type: 'string'; resp: { data: string; }; }
+>resp : { type: "string"; resp: { data: string; }; }
 >     : ^^^^^^^^        ^^^^^^^^                 ^^^
 >resp : { data: string; }
 >     : ^^^^^^^^      ^^^

@@ -4,7 +4,7 @@
 export const f = (<T>(arg: {[K in keyof T]: T[K] | string}) => arg)({'0': 0}); // Original prop uses string syntax
 >f : { '0': string | number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
->(<T>(arg: {[K in keyof T]: T[K] | string}) => arg)({'0': 0}) : { "0": string | number; }
+>(<T>(arg: {[K in keyof T]: T[K] | string}) => arg)({'0': 0}) : { '0': string | number; }
 >                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(<T>(arg: {[K in keyof T]: T[K] | string}) => arg) : <T>(arg: { [K in keyof T]: T[K] | string; }) => { [K in keyof T]: string | T[K]; }
 >                                                   : ^ ^^   ^^                                  ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

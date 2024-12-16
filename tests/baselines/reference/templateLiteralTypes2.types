@@ -2,7 +2,7 @@
 
 === templateLiteralTypes2.ts ===
 function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
->ft1 : <T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) => void
+>ft1 : <T extends string>(s: string, n: number, u: "foo" | "bar" | "baz", t: T) => void
 >    : ^ ^^^^^^^^^      ^^ ^^      ^^ ^^      ^^ ^^                     ^^ ^^ ^^^^^^^^^
 >s : string
 >  : ^^^^^^

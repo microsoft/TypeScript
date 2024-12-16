@@ -41,7 +41,7 @@
    * @returns {string}
    */
   getTypeName() {
->getTypeName : { (this: Example<number>): 'number'; (this: Example<string>): 'string'; }
+>getTypeName : { (this: Example<number>): "number"; (this: Example<string>): "string"; }
 >            : ^^^    ^^               ^^^        ^^^    ^^               ^^^        ^^^
 
     return typeof this.value;

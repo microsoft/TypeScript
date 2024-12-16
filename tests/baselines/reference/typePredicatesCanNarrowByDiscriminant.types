@@ -3,7 +3,7 @@
 === typePredicatesCanNarrowByDiscriminant.ts ===
 // #45770
 declare const fruit: { kind: 'apple'} | { kind: 'banana' } | { kind: 'cherry' }
->fruit : { kind: 'apple'; } | { kind: 'banana'; } | { kind: 'cherry'; }
+>fruit : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
 >      : ^^^^^^^^       ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^        ^^^
 >kind : "apple"
 >     : ^^^^^^^
@@ -27,7 +27,7 @@ if (isOneOf(fruit.kind, ['apple', 'banana'] as const)) {
 >        : ^ ^^ ^^^^^^^^^ ^^    ^^ ^^     ^^            ^^^^^         
 >fruit.kind : "apple" | "banana" | "cherry"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->fruit : { kind: 'apple'; } | { kind: 'banana'; } | { kind: 'cherry'; }
+>fruit : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
 >      : ^^^^^^^^       ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^        ^^^
 >kind : "apple" | "banana" | "cherry"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -43,18 +43,18 @@ if (isOneOf(fruit.kind, ['apple', 'banana'] as const)) {
     fruit.kind
 >fruit.kind : "apple" | "banana"
 >           : ^^^^^^^^^^^^^^^^^^
->fruit : { kind: 'apple'; } | { kind: 'banana'; } | { kind: 'cherry'; }
+>fruit : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
 >      : ^^^^^^^^       ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^        ^^^
 >kind : "apple" | "banana"
 >     : ^^^^^^^^^^^^^^^^^^
 
     fruit
->fruit : { kind: 'apple'; } | { kind: 'banana'; } | { kind: 'cherry'; }
+>fruit : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
 >      : ^^^^^^^^       ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^        ^^^
 }
 
 declare const fruit2: { kind: 'apple'} | { kind: 'banana' } | { kind: 'cherry' }
->fruit2 : { kind: 'apple'; } | { kind: 'banana'; } | { kind: 'cherry'; }
+>fruit2 : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
 >       : ^^^^^^^^       ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^        ^^^
 >kind : "apple"
 >     : ^^^^^^^
@@ -68,7 +68,7 @@ const kind = fruit2.kind;
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fruit2.kind : "apple" | "banana" | "cherry"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->fruit2 : { kind: 'apple'; } | { kind: 'banana'; } | { kind: 'cherry'; }
+>fruit2 : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
 >       : ^^^^^^^^       ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^        ^^^
 >kind : "apple" | "banana" | "cherry"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -92,12 +92,12 @@ if (isOneOf(kind, ['apple', 'banana'] as const)) {
     fruit2.kind
 >fruit2.kind : "apple" | "banana" | "cherry"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->fruit2 : { kind: 'apple'; } | { kind: 'banana'; } | { kind: 'cherry'; }
+>fruit2 : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
 >       : ^^^^^^^^       ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^        ^^^
 >kind : "apple" | "banana" | "cherry"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     fruit2
->fruit2 : { kind: 'apple'; } | { kind: 'banana'; } | { kind: 'cherry'; }
+>fruit2 : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
 >       : ^^^^^^^^       ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^        ^^^
 }

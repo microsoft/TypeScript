@@ -4,7 +4,7 @@
 // #35995
 
 function* f1(): Generator<any, { x: 'x' }, any> {
->f1 : () => Generator<any, { x: 'x'; }, any>
+>f1 : () => Generator<any, { x: "x"; }, any>
 >   : ^^^^^^                                
 >x : "x"
 >  : ^^^
@@ -19,7 +19,7 @@ function* f1(): Generator<any, { x: 'x' }, any> {
 }
 
 function* g1(): Iterator<any, { x: 'x' }, any> {
->g1 : () => Iterator<any, { x: 'x'; }, any>
+>g1 : () => Iterator<any, { x: "x"; }, any>
 >   : ^^^^^^                               
 >x : "x"
 >  : ^^^
@@ -34,7 +34,7 @@ function* g1(): Iterator<any, { x: 'x' }, any> {
 }
 
 async function* f2(): AsyncGenerator<any, { x: 'x' }, any> {
->f2 : () => AsyncGenerator<any, { x: 'x'; }, any>
+>f2 : () => AsyncGenerator<any, { x: "x"; }, any>
 >   : ^^^^^^                                     
 >x : "x"
 >  : ^^^
@@ -49,7 +49,7 @@ async function* f2(): AsyncGenerator<any, { x: 'x' }, any> {
 }
 
 async function* g2(): AsyncIterator<any, { x: 'x' }, any> {
->g2 : () => AsyncIterator<any, { x: 'x'; }, any>
+>g2 : () => AsyncIterator<any, { x: "x"; }, any>
 >   : ^^^^^^                                    
 >x : "x"
 >  : ^^^
@@ -64,7 +64,7 @@ async function* g2(): AsyncIterator<any, { x: 'x' }, any> {
 }
 
 async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
->f3 : () => AsyncGenerator<any, { x: 'x'; }, any>
+>f3 : () => AsyncGenerator<any, { x: "x"; }, any>
 >   : ^^^^^^                                     
 >x : "x"
 >  : ^^^
@@ -87,7 +87,7 @@ async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
 }
 
 async function* g3(): AsyncIterator<any, { x: 'x' }, any> {
->g3 : () => AsyncIterator<any, { x: 'x'; }, any>
+>g3 : () => AsyncIterator<any, { x: "x"; }, any>
 >   : ^^^^^^                                    
 >x : "x"
 >  : ^^^
@@ -110,7 +110,7 @@ async function* g3(): AsyncIterator<any, { x: 'x' }, any> {
 }
 
 async function* f4(): AsyncGenerator<any, { x: 'x' }, any> {
->f4 : () => AsyncGenerator<any, { x: 'x'; }, any>
+>f4 : () => AsyncGenerator<any, { x: "x"; }, any>
 >   : ^^^^^^                                     
 >x : "x"
 >  : ^^^
@@ -139,7 +139,7 @@ async function* f4(): AsyncGenerator<any, { x: 'x' }, any> {
 }
 
 async function* g4(): AsyncIterator<any, { x: 'x' }, any> {
->g4 : () => AsyncIterator<any, { x: 'x'; }, any>
+>g4 : () => AsyncIterator<any, { x: "x"; }, any>
 >   : ^^^^^^                                    
 >x : "x"
 >  : ^^^

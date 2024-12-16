@@ -252,13 +252,13 @@ function g4<T extends Box<T> | undefined>(x: T) {
 // Repro from #13995
 
 declare function takeA(val: 'A'): void;
->takeA : (val: 'A') => void
+>takeA : (val: "A") => void
 >      : ^   ^^   ^^^^^    
 >val : "A"
 >    : ^^^
 
 export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
->bounceAndTakeIfA : <AB extends 'A' | 'B'>(value: AB) => AB
+>bounceAndTakeIfA : <AB extends "A" | "B">(value: AB) => AB
 >                 : ^  ^^^^^^^^^         ^^     ^^  ^^^^^  
 >value : AB
 >      : ^^
@@ -274,7 +274,7 @@ export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
         takeA(value);
 >takeA(value) : void
 >             : ^^^^
->takeA : (val: 'A') => void
+>takeA : (val: "A") => void
 >      : ^   ^^   ^^^^^    
 >value : "A"
 >      : ^^^

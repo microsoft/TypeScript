@@ -4,7 +4,7 @@
 // Repro from #20840
 
 function function1<T extends 'a' | 'b'>(key: T) {
->function1 : <T extends 'a' | 'b'>(key: T) => void
+>function1 : <T extends "a" | "b">(key: T) => void
 >          : ^ ^^^^^^^^^         ^^   ^^ ^^^^^^^^^
 >key : T
 >    : ^

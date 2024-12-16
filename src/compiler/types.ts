@@ -5490,6 +5490,7 @@ export const enum NodeBuilderFlags {
     OmitParameterModifiers                  = 1 << 13,  // Omit modifiers on parameters
     UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
     UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
+    PreserveQuotesForStringLiteralType      = 1 << 30, // Preserve source quote types for string literal type
     NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
     OmitThisParameter                       = 1 << 25,
 
@@ -5544,6 +5545,7 @@ export const enum TypeFormatFlags {
 
     UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value, even though `T` can't be accessed in the current scope.
     UseSingleQuotesForStringLiteralType     = 1 << 28, // Use single quotes for string literal type
+    PreserveQuotesForStringLiteralType      = 1 << 30, // Preserve source quote types for string literal type
     NoTypeReduction                         = 1 << 29, // Don't call getReducedType
     OmitThisParameter                       = 1 << 25,
 

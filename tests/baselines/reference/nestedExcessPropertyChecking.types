@@ -169,7 +169,7 @@ type T1 = {
 >   : ^^
 
     primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
->primary : { __typename?: 'Feature'; } & { colors: { light: number; dark: number; }; }
+>primary : { __typename?: "Feature"; } & { colors: { light: number; dark: number; }; }
 >        : ^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^                                ^^^
 >__typename : "Feature" | undefined
 >           : ^^^^^^^^^^^^^^^^^^^^^
@@ -187,7 +187,7 @@ type T2 = {
 >   : ^^
 
     primary: { __typename?: 'Feature' } & { colors: { light: number } },
->primary : { __typename?: 'Feature'; } & { colors: { light: number; }; }
+>primary : { __typename?: "Feature"; } & { colors: { light: number; }; }
 >        : ^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^                  ^^^
 >__typename : "Feature" | undefined
 >           : ^^^^^^^^^^^^^^^^^^^^^

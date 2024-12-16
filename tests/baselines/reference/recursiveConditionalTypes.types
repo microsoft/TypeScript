@@ -547,7 +547,7 @@ type Enumerate<N extends number> = number extends N
     : never;
 
 function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
->foo2 : <T extends unknown[]>(value: T) => Enumerate<T['length']>
+>foo2 : <T extends unknown[]>(value: T) => Enumerate<T["length"]>
 >     : ^ ^^^^^^^^^         ^^     ^^ ^^^^^                      
 >value : T
 >      : ^

@@ -1358,7 +1358,7 @@ function narrowingNarrows(x: {} | undefined) {
 }
 
 function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
->narrowingNarrows2 : (x: true | 3 | 'hello' | undefined) => void
+>narrowingNarrows2 : (x: true | 3 | "hello" | undefined) => void
 >                  : ^ ^^                              ^^^^^^^^^
 >x : true | 3 | "hello" | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

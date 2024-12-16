@@ -1676,7 +1676,7 @@ function f80<T extends { a: { x: any } }>(obj: T) {
 }
 
 function f81<T extends { a: { x: any } }>(obj: T) {
->f81 : <T extends { a: { x: any; }; }>(obj: T) => T['a']['x']
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
 >    : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^           
 >a : { x: any; }
 >  : ^^^^^   ^^^
@@ -1709,7 +1709,7 @@ function f82() {
 >   : ^^^^^^
 >f81({ a: { x: "hello" } }) : string
 >                           : ^^^^^^
->f81 : <T extends { a: { x: any; }; }>(obj: T) => T['a']['x']
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
 >    : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^           
 >{ a: { x: "hello" } } : { a: { x: string; }; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
@@ -1727,7 +1727,7 @@ function f82() {
 >   : ^^^^^^
 >f81({ a: { x: 42 } }) : number
 >                      : ^^^^^^
->f81 : <T extends { a: { x: any; }; }>(obj: T) => T['a']['x']
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
 >    : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^           
 >{ a: { x: 42 } } : { a: { x: number; }; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
@@ -1742,7 +1742,7 @@ function f82() {
 }
 
 function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
->f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]['x']
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
 >    : ^ ^^^^^^^^^                             ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^         
 >x : string
 >  : ^^^^^^
@@ -1777,7 +1777,7 @@ function f84() {
 >   : ^^^^^^
 >f83({ foo: { x: "hello" } }, "foo") : string
 >                                    : ^^^^^^
->f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]['x']
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
 >    : ^ ^^^^^^^^^                             ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^         
 >{ foo: { x: "hello" } } : { foo: { x: string; }; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1797,7 +1797,7 @@ function f84() {
 >   : ^^^^^^
 >f83({ bar: { x: 42 } }, "bar") : number
 >                               : ^^^^^^
->f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]['x']
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
 >    : ^ ^^^^^^^^^                             ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^         
 >{ bar: { x: 42 } } : { bar: { x: number; }; }
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2662,7 +2662,7 @@ type MethodDescriptor = {
 }
 
 declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
->dispatchMethod : <M extends MethodDescriptor>(name: M['name'], args: M['args']) => M['returnValue']
+>dispatchMethod : <M extends MethodDescriptor>(name: M["name"], args: M["args"]) => M["returnValue"]
 >               : ^ ^^^^^^^^^                ^^    ^^         ^^    ^^         ^^^^^                
 >name : M["name"]
 >     : ^^^^^^^^^
@@ -2691,7 +2691,7 @@ let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
 >       : ^^^^^^^^
 >dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]) : string[]
 >                                                                  : ^^^^^^^^
->dispatchMethod : <M extends MethodDescriptor>(name: M['name'], args: M['args']) => M['returnValue']
+>dispatchMethod : <M extends MethodDescriptor>(name: M["name"], args: M["args"]) => M["returnValue"]
 >               : ^ ^^^^^^^^^                ^^    ^^         ^^    ^^         ^^^^^                
 >"someMethod" : "someMethod"
 >             : ^^^^^^^^^^^^

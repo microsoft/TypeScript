@@ -827,7 +827,7 @@ class NewAgenda {
      * @returns {Promise<Job>}
      */
     async _createIntervalJob(interval, name, data, options) {
->_createIntervalJob : (interval: string | number, name: string, data: IJob['data'], options: RepeatOptions) => Promise<Job>
+>_createIntervalJob : (interval: string | number, name: string, data: IJob["data"], options: RepeatOptions) => Promise<Job>
 >                   : ^        ^^               ^^    ^^      ^^    ^^            ^^       ^^             ^^^^^            
 >interval : string | number
 >         : ^^^^^^^^^^^^^^^
@@ -853,7 +853,7 @@ class NewAgenda {
      * @returns {Promise<Job[]> | undefined}
      */
     _createIntervalJobs(interval, names, data, options) {
->_createIntervalJobs : (interval: string | number, names: string[], data: IJob['data'], options: RepeatOptions) => Promise<Job[]> | undefined
+>_createIntervalJobs : (interval: string | number, names: string[], data: IJob["data"], options: RepeatOptions) => Promise<Job[]> | undefined
 >                    : ^        ^^               ^^     ^^        ^^    ^^            ^^       ^^             ^^^^^                          
 >interval : string | number
 >         : ^^^^^^^^^^^^^^^
@@ -878,7 +878,7 @@ class NewAgenda {
      * @returns {Promise<HelperCond<T, string, Job, string[], Job[] | undefined>>}
      */
     async newEvery(interval, name, data, options) {
->newEvery : <T extends string | string[]>(interval: string | number, name: T, data: IJob['data'], options: RepeatOptions) => Promise<HelperCond<T, string, Job, string[], Job[] | undefined>>
+>newEvery : <T extends string | string[]>(interval: string | number, name: T, data: IJob["data"], options: RepeatOptions) => Promise<HelperCond<T, string, Job, string[], Job[] | undefined>>
 >         : ^ ^^^^^^^^^                 ^^        ^^               ^^    ^^ ^^    ^^            ^^       ^^             ^^^^^                                                                
 >interval : string | number
 >         : ^^^^^^^^^^^^^^^
@@ -902,11 +902,11 @@ class NewAgenda {
             return this._createIntervalJob(interval, name, data, options); // Ok
 >this._createIntervalJob(interval, name, data, options) : Promise<MyObj>
 >                                                       : ^^^^^^^^^^^^^^
->this._createIntervalJob : (interval: string | number, name: string, data: IJob['data'], options: RepeatOptions) => Promise<Job>
+>this._createIntervalJob : (interval: string | number, name: string, data: IJob["data"], options: RepeatOptions) => Promise<Job>
 >                        : ^        ^^               ^^    ^^      ^^    ^^            ^^       ^^             ^^^^^            
 >this : this
 >     : ^^^^
->_createIntervalJob : (interval: string | number, name: string, data: IJob['data'], options: RepeatOptions) => Promise<Job>
+>_createIntervalJob : (interval: string | number, name: string, data: IJob["data"], options: RepeatOptions) => Promise<Job>
 >                   : ^        ^^               ^^    ^^      ^^    ^^            ^^       ^^             ^^^^^            
 >interval : string | number
 >         : ^^^^^^^^^^^^^^^
@@ -933,11 +933,11 @@ class NewAgenda {
             return this._createIntervalJobs(interval, name, data, options); // Ok
 >this._createIntervalJobs(interval, name, data, options) : Promise<MyObj[]> | undefined
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->this._createIntervalJobs : (interval: string | number, names: string[], data: IJob['data'], options: RepeatOptions) => Promise<Job[]> | undefined
+>this._createIntervalJobs : (interval: string | number, names: string[], data: IJob["data"], options: RepeatOptions) => Promise<Job[]> | undefined
 >                         : ^        ^^               ^^     ^^        ^^    ^^            ^^       ^^             ^^^^^                          
 >this : this
 >     : ^^^^
->_createIntervalJobs : (interval: string | number, names: string[], data: IJob['data'], options: RepeatOptions) => Promise<Job[]> | undefined
+>_createIntervalJobs : (interval: string | number, names: string[], data: IJob["data"], options: RepeatOptions) => Promise<Job[]> | undefined
 >                    : ^        ^^               ^^     ^^        ^^    ^^            ^^       ^^             ^^^^^                          
 >interval : string | number
 >         : ^^^^^^^^^^^^^^^
