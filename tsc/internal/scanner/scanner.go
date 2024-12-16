@@ -805,6 +805,7 @@ func (s *Scanner) ReScanTemplateToken(isTaggedTemplate bool) ast.Kind {
 func (s *Scanner) ReScanSlashToken() ast.Kind {
 	if s.token == ast.KindSlashToken || s.token == ast.KindSlashEqualsToken {
 		s.pos = s.tokenStart + 1
+		startOfRegExpBody := s.pos
 		inEscape := false
 		inCharacterClass := false
 	loop:
@@ -824,7 +825,6 @@ func (s *Scanner) ReScanSlashToken() ast.Kind {
 			case ch == '/' && !inCharacterClass:
 				// A slash within a character class is permissible,
 				// but in general it signals the end of the regexp literal.
-				s.pos++
 				break loop
 			case ch == '[':
 				inCharacterClass = true
@@ -835,12 +835,63 @@ func (s *Scanner) ReScanSlashToken() ast.Kind {
 			}
 			s.pos += size
 		}
-		for {
-			ch, size := s.charAndSize()
-			if size == 0 || !isIdentifierPart(ch, s.languageVersion) {
-				break
+		if s.tokenFlags&ast.TokenFlagsUnterminated != 0 {
+			// Search for the nearest unbalanced bracket for better recovery. Since the expression is
+			// invalid anyways, we take nested square brackets into consideration for the best guess.
+			endOfRegExpBody := s.pos
+			s.pos = startOfRegExpBody
+			inEscape = false
+			characterClassDepth := 0
+			inDecimalQuantifier := false
+			groupDepth := 0
+			for s.pos < endOfRegExpBody {
+				ch, size := s.charAndSize()
+				if inEscape {
+					inEscape = false
+				} else if ch == '\\' {
+					inEscape = true
+				} else if ch == '[' {
+					characterClassDepth++
+				} else if ch == ']' && characterClassDepth != 0 {
+					characterClassDepth--
+				} else if characterClassDepth == 0 {
+					if ch == '{' {
+						inDecimalQuantifier = true
+					} else if ch == '}' && inDecimalQuantifier {
+						inDecimalQuantifier = false
+					} else if !inDecimalQuantifier {
+						if ch == '(' {
+							groupDepth++
+						} else if ch == ')' && groupDepth != 0 {
+							groupDepth--
+						} else if ch == ')' || ch == ']' || ch == '}' {
+							// We encountered an unbalanced bracket outside a character class. Treat this position as the end of regex.
+							break
+						}
+					}
+				}
+				s.pos += size
 			}
-			s.pos += size
+			// Whitespaces and semicolons at the end are not likely to be part of the regex
+			for {
+				ch, size := utf8.DecodeLastRuneInString(s.text[:s.pos])
+				if stringutil.IsWhiteSpaceLike(ch) || ch == ';' {
+					s.pos -= size
+				} else {
+					break
+				}
+			}
+			s.errorAt(diagnostics.Unterminated_regular_expression_literal, s.tokenStart, s.pos-s.tokenStart)
+		} else {
+			// Consume the slash character
+			s.pos++
+			for {
+				ch, size := s.charAndSize()
+				if size == 0 || !isIdentifierPart(ch, s.languageVersion) {
+					break
+				}
+				s.pos += size
+			}
 		}
 		s.tokenValue = s.text[s.tokenStart:s.pos]
 		s.token = ast.KindRegularExpressionLiteral
