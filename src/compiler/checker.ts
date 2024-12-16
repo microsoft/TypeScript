@@ -27312,7 +27312,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function findDiscriminantProperties(sourceProperties: Symbol[], target: Type): Symbol[] | undefined {
         let result: Symbol[] | undefined;
         for (const sourceProperty of sourceProperties) {
-            if (isDiscriminantProperty(target, sourceProperty.escapedName, /*considerNonUniformPrimitivePropDiscriminant*/ true)) {
+            if (isDiscriminantProperty(target, sourceProperty.escapedName, /*considerNonUniformPrimitivePropDiscriminant*/ false)) {
                 if (result) {
                     result.push(sourceProperty);
                     continue;
