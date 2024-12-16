@@ -27287,7 +27287,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // The flag `considerNonUniformPrimitivePropDiscriminant`, when enabled, introduces a new criterion for a property to be considered discriminant:
     // 1 The property must be non-uniform
     // 2 The property must include at least one primitive type as a possible type
-    function isDiscriminantProperty(type: Type | undefined, name: __String, considerNonUniformPrimitivePropDiscriminant: boolean = true) {
+    function isDiscriminantProperty(type: Type | undefined, name: __String, considerNonUniformPrimitivePropDiscriminant: boolean = false) {
         if (type && type.flags & TypeFlags.Union) {
             const prop = getUnionOrIntersectionProperty(type as UnionType, name);
             if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
@@ -27315,7 +27315,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function findDiscriminantProperties(sourceProperties: Symbol[], target: Type): Symbol[] | undefined {
         let result: Symbol[] | undefined;
         for (const sourceProperty of sourceProperties) {
-            if (isDiscriminantProperty(target, sourceProperty.escapedName, /*considerNonUniformPrimitivePropDiscriminant*/ false)) {
+            if (isDiscriminantProperty(target, sourceProperty.escapedName)) {
                 if (result) {
                     result.push(sourceProperty);
                     continue;
@@ -28874,7 +28874,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const name = getAccessedPropertyName(access);
                     if (name) {
                         const type = declaredType.flags & TypeFlags.Union && isTypeSubsetOf(computedType, declaredType) ? declaredType : computedType;
-                        if (isDiscriminantProperty(type, name)) {
+                        if (isDiscriminantProperty(type, name, /*considerNonUniformPrimitivePropDiscriminant*/ true)) {
                             return access;
                         }
                     }
