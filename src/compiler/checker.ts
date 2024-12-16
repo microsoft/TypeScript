@@ -15050,7 +15050,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isLiteralType(type) || isPatternLiteralType(type)) {
                 checkFlags |= CheckFlags.HasLiteralType;
             }
-            if (isUnion && (type.flags & TypeFlags.Primitive)) {
+            if (type.flags & TypeFlags.Primitive) {
                 checkFlags |= CheckFlags.HasPrimitiveType;
             }
             if (type.flags & TypeFlags.Never && type !== uniqueLiteralType) {
