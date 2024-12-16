@@ -27,7 +27,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-          - macos-14
+          - macos-latest
         node-version:
           - '22'
           - '20'
@@ -43,7 +43,7 @@ jobs:
         exclude:
           # No Node 14 on ARM macOS
           - node-version: '14'
-            os: macos-14
+            os: macos-latest
 
     runs-on: ${{ matrix.os }}
     name: Test Node ${{ matrix.node-version }} on ${{ matrix.os }}${{ (!matrix.bundle && ' with --no-bundle') || '' }}
