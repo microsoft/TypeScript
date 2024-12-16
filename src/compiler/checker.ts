@@ -15050,6 +15050,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isLiteralType(type) || isPatternLiteralType(type)) {
                 checkFlags |= CheckFlags.HasLiteralType;
             }
+            if (isUnion && (type.flags & TypeFlags.Primitive)) {
+                checkFlags |= CheckFlags.HasPrimitiveType;
+            }
             if (type.flags & TypeFlags.Never && type !== uniqueLiteralType) {
                 checkFlags |= CheckFlags.HasNeverType;
             }
@@ -27297,7 +27300,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 if (isDiscriminant === undefined) {
                     isDiscriminant = (((transientSymbol.links.checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant)
-                        || !!(considerNonUniformPrimitivePropDiscriminant && (transientSymbol.links.checkFlags & CheckFlags.HasNonUniformType) && someType(propType, t => !!(t.flags & TypeFlags.Primitive))))
+                        || !!(considerNonUniformPrimitivePropDiscriminant && (transientSymbol.links.checkFlags & (CheckFlags.HasNonUniformType | CheckFlags.HasPrimitiveType))))
                         && !isGenericType(propType);
 
                     transientSymbol.links.isDiscriminantProperty.set(considerNonUniformPrimitivePropDiscriminant, isDiscriminant);
