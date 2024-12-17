@@ -120,6 +120,10 @@ func (options *CompilerOptions) GetResolveJsonModule() bool {
 	return options.GetModuleResolutionKind() == ModuleResolutionKindBundler
 }
 
+func (options *CompilerOptions) ShouldPreserveConstEnums() bool {
+	return options.PreserveConstEnums == TSTrue || options.IsolatedModules == TSTrue
+}
+
 func (options *CompilerOptions) GetAllowJs() bool {
 	if options.AllowJs != TSUnknown {
 		return options.AllowJs == TSTrue

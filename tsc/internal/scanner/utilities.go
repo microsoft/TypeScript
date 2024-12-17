@@ -29,3 +29,14 @@ func GetTextOfNodeFromSourceText(sourceText string, node *ast.Node, includeTrivi
 	// }
 	return text
 }
+
+func GetTextOfNode(node *ast.Node) string {
+	return GetSourceTextOfNodeFromSourceFile(ast.GetSourceFileOfNode(node), node, false /*includeTrivia*/)
+}
+
+func DeclarationNameToString(name *ast.Node) string {
+	if name == nil || name.Pos() == name.End() {
+		return "(Missing)"
+	}
+	return GetTextOfNode(name)
+}

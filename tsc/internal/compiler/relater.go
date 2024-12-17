@@ -7,8 +7,10 @@ import (
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
 type SignatureCheckMode uint32
@@ -541,12 +543,12 @@ func getRecursionIdentity(t *Type) RecursionId {
 			// Deferred type references are tracked through their associated AST node. This gives us finer
 			// granularity than using their associated target because each manifest type reference has a
 			// unique AST node.
-			return RecursionId{kind: RecursionIdKindNode, id: uint32(getNodeId(t.AsTypeReference().node))}
+			return RecursionId{kind: RecursionIdKindNode, id: uint32(ast.GetNodeId(t.AsTypeReference().node))}
 		}
 		if t.symbol != nil && !(t.objectFlags&ObjectFlagsAnonymous != 0 && t.symbol.Flags&ast.SymbolFlagsClass != 0) {
 			// We track object types that have a symbol by that symbol (representing the origin of the type), but
 			// exclude the static side of a class since it shares its symbol with the instance side.
-			return RecursionId{kind: RecursionIdKindSymbol, id: uint32(getSymbolId(t.symbol))}
+			return RecursionId{kind: RecursionIdKindSymbol, id: uint32(ast.GetSymbolId(t.symbol))}
 		}
 		if isTupleType(t) {
 			return RecursionId{kind: RecursionIdKindType, id: uint32(t.Target().id)}
@@ -555,7 +557,7 @@ func getRecursionIdentity(t *Type) RecursionId {
 	if t.flags&TypeFlagsTypeParameter != 0 && t.symbol != nil {
 		// We use the symbol of the type parameter such that all "fresh" instantiations of that type parameter
 		// have the same recursion identity.
-		return RecursionId{kind: RecursionIdKindSymbol, id: uint32(getSymbolId(t.symbol))}
+		return RecursionId{kind: RecursionIdKindSymbol, id: uint32(ast.GetSymbolId(t.symbol))}
 	}
 	if t.flags&TypeFlagsIndexedAccess != 0 {
 		// Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P1][P2][P3] it is A.
@@ -567,7 +569,7 @@ func getRecursionIdentity(t *Type) RecursionId {
 	}
 	if t.flags&TypeFlagsConditional != 0 {
 		// The root object represents the origin of the conditional type
-		return RecursionId{kind: RecursionIdKindNode, id: uint32(getNodeId(t.AsConditionalType().root.node.AsNode()))}
+		return RecursionId{kind: RecursionIdKindNode, id: uint32(ast.GetNodeId(t.AsConditionalType().root.node.AsNode()))}
 	}
 	return RecursionId{kind: RecursionIdKindType, id: uint32(t.id)}
 }
@@ -808,7 +810,7 @@ func (c *Checker) getKeyPropertyName(t *Type) string {
 	if u.keyPropertyName == "" {
 		u.keyPropertyName, u.constituentMap = c.computeKeyPropertyNameAndMap(t)
 	}
-	if u.keyPropertyName == InternalSymbolNameMissing {
+	if u.keyPropertyName == ast.InternalSymbolNameMissing {
 		return ""
 	}
 	return u.keyPropertyName
@@ -827,15 +829,15 @@ func (c *Checker) getConstituentTypeForKeyType(t *Type, keyType *Type) *Type {
 func (c *Checker) computeKeyPropertyNameAndMap(t *Type) (string, map[*Type]*Type) {
 	types := t.Types()
 	if len(types) < 10 || t.objectFlags&ObjectFlagsPrimitiveUnion != 0 || core.CountWhere(types, isObjectOrInstantiableNonPrimitive) < 10 {
-		return InternalSymbolNameMissing, nil
+		return ast.InternalSymbolNameMissing, nil
 	}
 	keyPropertyName := c.getKeyPropertyCandidateName(types)
 	if keyPropertyName == "" {
-		return InternalSymbolNameMissing, nil
+		return ast.InternalSymbolNameMissing, nil
 	}
 	mapByKeyProperty := c.mapTypesByKeyProperty(types, keyPropertyName)
 	if mapByKeyProperty == nil {
-		return InternalSymbolNameMissing, nil
+		return ast.InternalSymbolNameMissing, nil
 	}
 	return keyPropertyName, mapByKeyProperty
 }
@@ -3921,10 +3923,10 @@ func (r *Relater) reportUnmatchedProperty(source *Type, target *Type, unmatchedP
 		source.symbol != nil &&
 		source.symbol.Flags&ast.SymbolFlagsClass != 0 {
 		privateIdentifierDescription := unmatchedProperty.ValueDeclaration.Name().Text()
-		symbolTableKey := getSymbolNameForPrivateIdentifier(source.symbol, privateIdentifierDescription)
+		symbolTableKey := binder.GetSymbolNameForPrivateIdentifier(source.symbol, privateIdentifierDescription)
 		if r.c.getPropertyOfType(source, symbolTableKey) != nil {
-			sourceName := declarationNameToString(getNameOfDeclaration(source.symbol.ValueDeclaration))
-			targetName := declarationNameToString(getNameOfDeclaration(target.symbol.ValueDeclaration))
+			sourceName := scanner.DeclarationNameToString(ast.GetNameOfDeclaration(source.symbol.ValueDeclaration))
+			targetName := scanner.DeclarationNameToString(ast.GetNameOfDeclaration(target.symbol.ValueDeclaration))
 			r.reportError(diagnostics.Property_0_in_type_1_refers_to_a_different_member_that_cannot_be_accessed_from_within_type_2, privateIdentifierDescription, sourceName, targetName)
 			return
 		}

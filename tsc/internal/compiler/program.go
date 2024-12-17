@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/compiler/module"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
@@ -132,7 +133,7 @@ func (p *Program) bindSourceFiles() {
 	for _, file := range p.files {
 		if !file.IsBound {
 			wg.Run(func() {
-				bindSourceFile(file, p.compilerOptions)
+				binder.BindSourceFile(file, p.compilerOptions)
 			})
 		}
 	}
@@ -313,7 +314,7 @@ func (p *Program) getSemanticDiagnosticsForFile(sourceFile *ast.SourceFile) []*a
 func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound bool, getDiagnostics func(*ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
 	if sourceFile != nil {
 		if ensureBound {
-			bindSourceFile(sourceFile, p.compilerOptions)
+			binder.BindSourceFile(sourceFile, p.compilerOptions)
 		}
 		return sortAndDeduplicateDiagnostics(getDiagnostics(sourceFile))
 	}
@@ -486,7 +487,7 @@ func (p *Program) collectModuleReferences(file *ast.SourceFile, node *ast.Statem
 		if moduleNameExpr != nil && ast.IsStringLiteral(moduleNameExpr) {
 			moduleName := moduleNameExpr.AsStringLiteral().Text
 			if moduleName != "" && (!inAmbientModule || !tspath.IsExternalModuleNameRelative(moduleName)) {
-				setParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
+				binder.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
 				file.Imports = append(file.Imports, moduleNameExpr)
 				if file.UsesUriStyleNodeCoreModules != core.TSTrue && p.currentNodeModulesDepth == 0 && !file.IsDeclarationFile {
 					if strings.HasPrefix(moduleName, "node:") && !exclusivelyPrefixedNodeCoreModules[moduleName] {
@@ -501,15 +502,15 @@ func (p *Program) collectModuleReferences(file *ast.SourceFile, node *ast.Statem
 		}
 		return
 	}
-	if ast.IsModuleDeclaration(node) && isAmbientModule(node) && (inAmbientModule || ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient) || file.IsDeclarationFile) {
-		setParentInChildren(node)
+	if ast.IsModuleDeclaration(node) && ast.IsAmbientModule(node) && (inAmbientModule || ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient) || file.IsDeclarationFile) {
+		binder.SetParentInChildren(node)
 		nameText := node.AsModuleDeclaration().Name().Text()
 		// Ambient module declarations can be interpreted as augmentations for some existing external modules.
 		// This will happen in two cases:
 		// - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
 		// - if current file is not external module then module augmentation is an ambient module declaration with non-relative module name
 		//   immediately nested in top level ambient module declaration .
-		if isExternalModule(file) || (inAmbientModule && !tspath.IsExternalModuleNameRelative(nameText)) {
+		if ast.IsExternalModule(file) || (inAmbientModule && !tspath.IsExternalModuleNameRelative(nameText)) {
 			file.ModuleAugmentations = append(file.ModuleAugmentations, node.AsModuleDeclaration().Name())
 		} else if !inAmbientModule {
 			if file.IsDeclarationFile {

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -917,7 +918,7 @@ func (c *Checker) narrowTypeByPrivateIdentifierInInExpression(f *FlowState, t *T
 	}
 	classSymbol := symbol.Parent
 	var targetType *Type
-	if hasStaticModifier(symbol.ValueDeclaration) {
+	if ast.HasStaticModifier(symbol.ValueDeclaration) {
 		targetType = c.getTypeOfSymbol(classSymbol)
 	} else {
 		targetType = c.getDeclaredTypeOfSymbol(classSymbol)
@@ -1367,7 +1368,7 @@ func (c *Checker) getDiscriminantPropertyAccess(f *FlowState, expr *ast.Node, co
 
 func (c *Checker) getCandidateDiscriminantPropertyAccess(f *FlowState, expr *ast.Node) *ast.Node {
 	switch {
-	case ast.IsBindingPattern(f.reference) || ast.IsFunctionExpressionOrArrowFunction(f.reference) || isObjectLiteralMethod(f.reference):
+	case ast.IsBindingPattern(f.reference) || ast.IsFunctionExpressionOrArrowFunction(f.reference) || ast.IsObjectLiteralMethod(f.reference):
 		// When the reference is a binding pattern or function or arrow expression, we are narrowing a pesudo-reference in
 		// getNarrowedTypeOfSymbol. An identifier for a destructuring variable declared in the same binding pattern or
 		// parameter declared in the same parameter list is a candidate.
@@ -1448,10 +1449,10 @@ func (c *Checker) isEvolvingArrayOperationTarget(node *ast.Node) bool {
 	root := c.getReferenceRoot(node)
 	parent := root.Parent
 	isLengthPushOrUnshift := ast.IsPropertyAccessExpression(parent) && (parent.Name().Text() == "length" ||
-		ast.IsCallExpression(parent.Parent) && ast.IsIdentifier(parent.Name()) && isPushOrUnshiftIdentifier(parent.Name()))
+		ast.IsCallExpression(parent.Parent) && ast.IsIdentifier(parent.Name()) && ast.IsPushOrUnshiftIdentifier(parent.Name()))
 	isElementAssignment := ast.IsElementAccessExpression(parent) && parent.Expression() == root &&
 		ast.IsBinaryExpression(parent.Parent) && parent.Parent.AsBinaryExpression().OperatorToken.Kind == ast.KindEqualsToken &&
-		parent.Parent.AsBinaryExpression().Left == parent && !isAssignmentTarget(parent.Parent) &&
+		parent.Parent.AsBinaryExpression().Left == parent && !ast.IsAssignmentTarget(parent.Parent) &&
 		c.isTypeAssignableToKind(c.getTypeOfExpression(parent.AsElementAccessExpression().ArgumentExpression), TypeFlagsNumberLike)
 	return isLengthPushOrUnshift || isElementAssignment
 }
@@ -1495,7 +1496,7 @@ func (c *Checker) createFinalArrayType(elementType *Type) *Type {
 func (c *Checker) reportFlowControlError(node *ast.Node) {
 	block := ast.FindAncestor(node, ast.IsFunctionOrModuleBlock)
 	sourceFile := ast.GetSourceFileOfNode(node)
-	span := scanner.GetRangeOfTokenAtPosition(sourceFile, getStatementsOfBlock(block).Pos())
+	span := scanner.GetRangeOfTokenAtPosition(sourceFile, ast.GetStatementsOfBlock(block).Pos())
 	c.diagnostics.add(ast.NewDiagnostic(sourceFile, span, diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis))
 }
 
@@ -1581,7 +1582,7 @@ func (c *Checker) writeFlowCacheKey(b *KeyBuilder, node *ast.Node, declaredType 
 		}
 		if flowContainer != nil {
 			b.WriteByte('@')
-			b.WriteInt(int(getNodeId(flowContainer)))
+			b.WriteInt(int(ast.GetNodeId(flowContainer)))
 		}
 		return true
 	case ast.KindNonNullExpression, ast.KindParenthesizedExpression:
@@ -1615,7 +1616,7 @@ func (c *Checker) writeFlowCacheKey(b *KeyBuilder, node *ast.Node, declaredType 
 		}
 	case ast.KindObjectBindingPattern, ast.KindArrayBindingPattern, ast.KindFunctionDeclaration,
 		ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindMethodDeclaration:
-		b.WriteInt(int(getNodeId(node)))
+		b.WriteInt(int(ast.GetNodeId(node)))
 		b.WriteByte('#')
 		b.WriteType(declaredType)
 		return true
@@ -2038,7 +2039,7 @@ func (c *Checker) getPropertyNameForKnownSymbolName(symbolName string) string {
 			return getPropertyNameFromType(uniqueType)
 		}
 	}
-	return InternalSymbolNamePrefix + "@" + symbolName
+	return ast.InternalSymbolNamePrefix + "@" + symbolName
 }
 
 // We require the dotted function name in an assertion expression to be comprised of identifiers
@@ -2062,7 +2063,7 @@ func (c *Checker) getTypeOfDottedName(node *ast.Node, diagnostic *ast.Diagnostic
 				var prop *ast.Symbol
 				if ast.IsPrivateIdentifier(name) {
 					if t.symbol != nil {
-						prop = c.getPropertyOfType(t, getSymbolNameForPrivateIdentifier(t.symbol, name.Text()))
+						prop = c.getPropertyOfType(t, binder.GetSymbolNameForPrivateIdentifier(t.symbol, name.Text()))
 					}
 				} else {
 					prop = c.getPropertyOfType(t, name.Text())
@@ -2126,7 +2127,7 @@ func (c *Checker) hasTypePredicateOrNeverReturnType(sig *Signature) bool {
 }
 
 func (c *Checker) getExplicitThisType(node *ast.Node) *Type {
-	container := getThisContainer(node, false /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/)
+	container := ast.GetThisContainer(node, false /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/)
 	if ast.IsFunctionLike(container) {
 		signature := c.getSignatureFromDeclaration(container)
 		if signature.thisParameter != nil {
@@ -2135,7 +2136,7 @@ func (c *Checker) getExplicitThisType(node *ast.Node) *Type {
 	}
 	if ast.IsClassLike(container.Parent) {
 		symbol := c.getSymbolOfDeclaration(container.Parent)
-		if isStatic(container) {
+		if ast.IsStatic(container) {
 			return c.getTypeOfSymbol(symbol)
 		} else {
 			return c.getDeclaredTypeOfSymbol(symbol).AsInterfaceType().thisType
@@ -2370,7 +2371,7 @@ func (c *Checker) getTypePredicateArgument(predicate *TypePredicate, callExpress
 
 func (c *Checker) getFlowTypeInConstructor(symbol *ast.Symbol, constructor *ast.Node) *Type {
 	var accessName *ast.Node
-	if strings.HasPrefix(symbol.Name, InternalSymbolNamePrefix+"#") {
+	if strings.HasPrefix(symbol.Name, ast.InternalSymbolNamePrefix+"#") {
 		accessName = c.factory.NewPrivateIdentifier(symbol.Name[strings.Index(symbol.Name, "@")+1:])
 	} else {
 		accessName = c.factory.NewIdentifier(symbol.Name)
@@ -2392,7 +2393,7 @@ func (c *Checker) getFlowTypeInConstructor(symbol *ast.Symbol, constructor *ast.
 
 func (c *Checker) getFlowTypeInStaticBlocks(symbol *ast.Symbol, staticBlocks []*ast.Node) *Type {
 	var accessName *ast.Node
-	if strings.HasPrefix(symbol.Name, InternalSymbolNamePrefix+"#") {
+	if strings.HasPrefix(symbol.Name, ast.InternalSymbolNamePrefix+"#") {
 		accessName = c.factory.NewPrivateIdentifier(symbol.Name[strings.Index(symbol.Name, "@")+1:])
 	} else {
 		accessName = c.factory.NewIdentifier(symbol.Name)

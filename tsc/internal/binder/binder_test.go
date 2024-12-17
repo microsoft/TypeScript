@@ -1,4 +1,4 @@
-package compiler
+package binder
 
 import (
 	"runtime"
@@ -31,7 +31,7 @@ func BenchmarkBind(b *testing.B) {
 
 			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
-				bindSourceFile(sourceFiles[i], compilerOptions)
+				BindSourceFile(sourceFiles[i], compilerOptions)
 			}
 		})
 	}
