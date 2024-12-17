@@ -644,10 +644,9 @@ function isNotNormalizedOrAbsolute(s: string) {
 
     for (let i = 0, n = s.length - 1; i < n; i++) {
         const curr = s.charCodeAt(i);
-        const next = s.charCodeAt(i + 1);
         if (curr === CharacterCodes.dot) {
             // A ./ or ../ must be reduced - not normalized.
-            if (next === CharacterCodes.slash) {
+            if (s.charCodeAt(i + 1) === CharacterCodes.slash) {
                 return true;
             }
         }
@@ -655,7 +654,7 @@ function isNotNormalizedOrAbsolute(s: string) {
             // Multiple slashes in a row (outside of the root,
             // and there is no root) must be reduced to a single slash.
             // So the path is not normalized.
-            if (next === CharacterCodes.slash) {
+            if (s.charCodeAt(i + 1) === CharacterCodes.slash) {
                 return true;
             }
         }
