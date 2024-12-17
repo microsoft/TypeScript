@@ -4,6 +4,8 @@
 $ go run github.com/microsoft/typescript-go/cmd/tsgo@latest
 ```
 
+For a list of intentional changes with respect to Typescript 5.7, see CHANGES.md.
+
 ## Local development
 
 This repo uses Go and TypeScript. For a full development experience, you'll need to have both installed.
