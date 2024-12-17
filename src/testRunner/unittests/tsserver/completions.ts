@@ -141,7 +141,7 @@ export class Component {}
             path: `${localAtTypes}/prop-types/package.json`,
             content: jsonToReadableText({
                 name: "@types/prop-types",
-                version: "15.7.3",
+                version: "14.7.3",
             }),
         };
         const localPropTypes: File = {
