@@ -22,6 +22,8 @@ type FS interface {
 	// If the file fails to be read, ok will be false.
 	ReadFile(path string) (contents string, ok bool)
 
+	WriteFile(path string, data string, writeByteOrderMark bool) error
+
 	// DirectoryExists returns true if the path is a directory.
 	DirectoryExists(path string) bool
 

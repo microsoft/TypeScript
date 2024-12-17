@@ -10,6 +10,8 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler/module"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
+	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
@@ -48,6 +50,9 @@ type Program struct {
 	currentNodeModulesDepth int
 
 	usesUriStyleNodeCoreModules core.Tristate
+
+	commonSourceDirectory     string
+	commonSourceDirectoryOnce sync.Once
 }
 
 var extensions = []string{".ts", ".tsx"}
@@ -545,4 +550,159 @@ func (p *Program) getEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.Mod
 	// 	mode = options.GetEmitModuleKind()
 	// }
 	return p.compilerOptions.GetEmitModuleKind()
+}
+
+func (p *Program) CommonSourceDirectory() string {
+	p.commonSourceDirectoryOnce.Do(func() {
+		var files []string
+		host := &emitHost{program: p}
+		for _, file := range p.files {
+			if sourceFileMayBeEmitted(file, host, false /*forceDtsEmit*/) {
+				files = append(files, file.FileName())
+			}
+		}
+		p.commonSourceDirectory = getCommonSourceDirectory(
+			p.compilerOptions,
+			files,
+			p.host.GetCurrentDirectory(),
+			p.host.FS().UseCaseSensitiveFileNames(),
+		)
+	})
+	return p.commonSourceDirectory
+}
+
+func computeCommonSourceDirectoryOfFilenames(fileNames []string, currentDirectory string, useCaseSensitiveFileNames bool) string {
+	var commonPathComponents []string
+	for _, sourceFile := range fileNames {
+		// Each file contributes into common source file path
+		sourcePathComponents := tspath.GetNormalizedPathComponents(sourceFile, currentDirectory)
+
+		// The base file name is not part of the common directory path
+		sourcePathComponents = sourcePathComponents[:len(sourcePathComponents)-1]
+
+		if commonPathComponents == nil {
+			// first file
+			commonPathComponents = sourcePathComponents
+			continue
+		}
+
+		n := min(len(commonPathComponents), len(sourcePathComponents))
+		for i := range n {
+			if tspath.GetCanonicalFileName(commonPathComponents[i], useCaseSensitiveFileNames) != tspath.GetCanonicalFileName(sourcePathComponents[i], useCaseSensitiveFileNames) {
+				if i == 0 {
+					// Failed to find any common path component
+					return ""
+				}
+
+				// New common path found that is 0 -> i-1
+				commonPathComponents = commonPathComponents[:i]
+				break
+			}
+		}
+
+		// If the sourcePathComponents was shorter than the commonPathComponents, truncate to the sourcePathComponents
+		if len(sourcePathComponents) < len(commonPathComponents) {
+			commonPathComponents = commonPathComponents[:len(sourcePathComponents)]
+		}
+	}
+
+	if len(commonPathComponents) == 0 {
+		// Can happen when all input files are .d.ts files
+		return currentDirectory
+	}
+
+	return tspath.GetPathFromPathComponents(commonPathComponents)
+}
+
+func getCommonSourceDirectory(options *core.CompilerOptions, files []string, currentDirectory string, useCaseSensitiveFileNames bool) string {
+	var commonSourceDirectory string
+	// !!! If a rootDir is specified use it as the commonSourceDirectory
+	// !!! Project compilations never infer their root from the input source paths
+
+	commonSourceDirectory = computeCommonSourceDirectoryOfFilenames(files, currentDirectory, useCaseSensitiveFileNames)
+
+	if len(commonSourceDirectory) > 0 {
+		// Make sure directory path ends with directory separator so this string can directly
+		// used to replace with "" to get the relative path of the source file and the relative path doesn't
+		// start with / making it rooted path
+		commonSourceDirectory = tspath.EnsureTrailingDirectorySeparator(commonSourceDirectory)
+	}
+
+	return commonSourceDirectory
+}
+
+type EmitOptions struct {
+	TargetSourceFile *ast.SourceFile // Single file to emit. If `nil`, emits all files
+	forceDtsEmit     bool
+}
+
+type EmitResult struct {
+	EmitSkipped  bool
+	Diagnostics  []*ast.Diagnostic      // Contains declaration emit diagnostics
+	EmittedFiles []string               // Array of files the compiler wrote to disk
+	sourceMaps   []*sourceMapEmitResult // Array of sourceMapData if compiler emitted sourcemaps
+}
+
+type sourceMapEmitResult struct {
+	inputSourceFileNames []string // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMap.sources list
+	sourceMap            *sourcemap.RawSourceMap
+}
+
+func (p *Program) Emit(options *EmitOptions) *EmitResult {
+	// !!! performance measurement
+
+	host := &emitHost{program: p}
+
+	writerPool := &sync.Pool{
+		New: func() any {
+			return printer.NewTextWriter(host.Options().NewLine.GetNewLineCharacter())
+		},
+	}
+	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
+
+	var emitters []*emitter
+	sourceFiles := getSourceFilesToEmit(host, options.TargetSourceFile, options.forceDtsEmit)
+	for _, sourceFile := range sourceFiles {
+		emitter := &emitter{
+			host:              host,
+			emittedFilesList:  nil,
+			sourceMapDataList: nil,
+			writer:            nil,
+			sourceFile:        sourceFile,
+		}
+		emitters = append(emitters, emitter)
+		wg.Run(func() {
+			// take an unused writer
+			writer := writerPool.Get().(printer.EmitTextWriter)
+			writer.Clear()
+
+			// attach writer and perform emit
+			emitter.writer = writer
+			emitter.paths = getOutputPathsFor(sourceFile, host, options.forceDtsEmit)
+			emitter.emit()
+			emitter.writer = nil
+
+			// put the writer back in the pool
+			writerPool.Put(writer)
+		})
+	}
+
+	// wait for emit to complete
+	wg.Wait()
+
+	// collect results from emit, preserving input order
+	result := &EmitResult{}
+	for _, emitter := range emitters {
+		if emitter.emitSkipped {
+			result.EmitSkipped = true
+		}
+		result.Diagnostics = append(result.Diagnostics, emitter.emitterDiagnostics.GetDiagnostics()...)
+		if emitter.emittedFilesList != nil {
+			result.EmittedFiles = append(result.EmittedFiles, emitter.emittedFilesList...)
+		}
+		if emitter.sourceMapDataList != nil {
+			result.sourceMaps = append(result.sourceMaps, emitter.sourceMapDataList...)
+		}
+	}
+	return result
 }

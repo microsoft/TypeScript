@@ -22,42 +22,42 @@ type textWriter struct {
 	hasTrailingCommentState bool
 }
 
-func (w *textWriter) clear() {
+func (w *textWriter) Clear() {
 	*w = textWriter{newLine: w.newLine, lineStart: true}
 }
 
-func (w *textWriter) decreaseIndent() {
+func (w *textWriter) DecreaseIndent() {
 	w.indent--
 }
 
-func (w *textWriter) getColumn() int {
+func (w *textWriter) GetColumn() int {
 	if w.lineStart {
 		return w.indent * 4
 	}
 	return w.builder.Len() - w.linePos
 }
 
-func (w *textWriter) getIndent() int {
+func (w *textWriter) GetIndent() int {
 	return w.indent
 }
 
-func (w *textWriter) getLine() int {
+func (w *textWriter) GetLine() int {
 	return w.lineCount
 }
 
-func (w *textWriter) getText() string {
+func (w *textWriter) String() string {
 	return w.builder.String()
 }
 
-func (w *textWriter) getTextPos() int {
+func (w *textWriter) GetTextPos() int {
 	return w.builder.Len()
 }
 
-func (w textWriter) hasTrailingComment() bool {
+func (w textWriter) HasTrailingComment() bool {
 	return w.hasTrailingCommentState
 }
 
-func (w *textWriter) hasTrailingWhitespace() bool {
+func (w *textWriter) HasTrailingWhitespace() bool {
 	if w.builder.Len() == 0 {
 		return false
 	}
@@ -68,15 +68,15 @@ func (w *textWriter) hasTrailingWhitespace() bool {
 	return stringutil.IsWhiteSpaceLike(ch)
 }
 
-func (w *textWriter) increaseIndent() {
+func (w *textWriter) IncreaseIndent() {
 	w.indent++
 }
 
-func (w *textWriter) isAtStartOfLine() bool {
+func (w *textWriter) IsAtStartOfLine() bool {
 	return w.lineStart
 }
 
-func (w *textWriter) rawWrite(s string) {
+func (w *textWriter) RawWrite(s string) {
 	if s != "" {
 		w.builder.WriteString(s)
 		w.lastWritten = s
@@ -121,22 +121,22 @@ func (w *textWriter) writeText(s string) {
 	}
 }
 
-func (w *textWriter) write(s string) {
+func (w *textWriter) Write(s string) {
 	if s != "" {
 		w.hasTrailingCommentState = false
 	}
 	w.writeText(s)
 }
 
-func (w *textWriter) writeComment(text string) {
+func (w *textWriter) WriteComment(text string) {
 	if text != "" {
 		w.hasTrailingCommentState = true
 	}
 	w.writeText(text)
 }
 
-func (w *textWriter) writeKeyword(text string) {
-	w.write(text)
+func (w *textWriter) WriteKeyword(text string) {
+	w.Write(text)
 }
 
 func (w *textWriter) writeLineRaw() {
@@ -148,57 +148,57 @@ func (w *textWriter) writeLineRaw() {
 	w.hasTrailingCommentState = false
 }
 
-func (w *textWriter) writeLine() {
+func (w *textWriter) WriteLine() {
 	if !w.lineStart {
 		w.writeLineRaw()
 	}
 }
 
-func (w *textWriter) writeLineForce(force bool) {
+func (w *textWriter) WriteLineForce(force bool) {
 	if !w.lineStart || force {
 		w.writeLineRaw()
 	}
 }
 
-func (w *textWriter) writeLiteral(s string) {
-	w.write(s)
+func (w *textWriter) WriteLiteral(s string) {
+	w.Write(s)
 }
 
-func (w *textWriter) writeOperator(text string) {
-	w.write(text)
+func (w *textWriter) WriteOperator(text string) {
+	w.Write(text)
 }
 
-func (w *textWriter) writeParameter(text string) {
-	w.write(text)
+func (w *textWriter) WriteParameter(text string) {
+	w.Write(text)
 }
 
-func (w *textWriter) writeProperty(text string) {
-	w.write(text)
+func (w *textWriter) WriteProperty(text string) {
+	w.Write(text)
 }
 
-func (w *textWriter) writePunctuation(text string) {
-	w.write(text)
+func (w *textWriter) WritePunctuation(text string) {
+	w.Write(text)
 }
 
-func (w *textWriter) writeSpace(text string) {
-	w.write(text)
+func (w *textWriter) WriteSpace(text string) {
+	w.Write(text)
 }
 
-func (w *textWriter) writeStringLiteral(text string) {
-	w.write(text)
+func (w *textWriter) WriteStringLiteral(text string) {
+	w.Write(text)
 }
 
-func (w *textWriter) writeSymbol(text string, symbol *ast.Symbol) {
-	w.write(text)
+func (w *textWriter) WriteSymbol(text string, symbol *ast.Symbol) {
+	w.Write(text)
 }
 
-func (w *textWriter) writeTrailingSemicolon(text string) {
-	w.write(text)
+func (w *textWriter) WriteTrailingSemicolon(text string) {
+	w.Write(text)
 }
 
 func NewTextWriter(newLine string) EmitTextWriter {
 	var w textWriter
 	w.newLine = newLine
-	w.clear()
+	w.Clear()
 	return &w
 }

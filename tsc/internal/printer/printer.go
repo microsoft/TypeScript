@@ -42,7 +42,7 @@ type Printer struct {
 
 type PrinterOptions struct {
 	// RemoveComments                bool
-	NewLine string
+	NewLine core.NewLineKind
 	// OmitTrailingSemicolon         bool
 	// NoEmitHelpers                 bool
 	// Module                        core.ModuleKind
@@ -180,7 +180,7 @@ const (
 func (p *Printer) writeAs(text string, writeKind WriteKind) {
 	switch writeKind {
 	case WriteKindNone:
-		p.writer.write(text)
+		p.writer.Write(text)
 	case WriteKindParameter:
 		p.writeParameter(text)
 	case WriteKindKeyword:
@@ -192,7 +192,7 @@ func (p *Printer) writeAs(text string, writeKind WriteKind) {
 	case WriteKindPunctuation:
 		p.writePunctuation(text)
 	case WriteKindStringLiteral:
-		p.writer.writeStringLiteral(text)
+		p.writer.WriteStringLiteral(text)
 	case WriteKindComment:
 		p.writeComment(text)
 	case WriteKindLiteral:
@@ -216,44 +216,44 @@ func (p *Printer) writeSymbol(text string, optSymbol *ast.Symbol) {
 	if optSymbol == nil {
 		p.write(text)
 	} else {
-		p.writer.writeSymbol(text, optSymbol)
+		p.writer.WriteSymbol(text, optSymbol)
 	}
 }
 
 func (p *Printer) writeLiteral(text string) {
-	p.writer.writeLiteral(text)
+	p.writer.WriteLiteral(text)
 }
 
 func (p *Printer) writePunctuation(text string) {
-	p.writer.writePunctuation(text)
+	p.writer.WritePunctuation(text)
 }
 
 func (p *Printer) writeOperator(text string) {
-	p.writer.writeOperator(text)
+	p.writer.WriteOperator(text)
 }
 
 func (p *Printer) writeKeyword(text string) {
-	p.writer.writeKeyword(text)
+	p.writer.WriteKeyword(text)
 }
 
 func (p *Printer) writeProperty(text string) {
-	p.writer.writeProperty(text)
+	p.writer.WriteProperty(text)
 }
 
 func (p *Printer) writeParameter(text string) {
-	p.writer.writeParameter(text)
+	p.writer.WriteParameter(text)
 }
 
 func (p *Printer) writeComment(text string) {
-	p.writer.writeComment(text)
+	p.writer.WriteComment(text)
 }
 
 func (p *Printer) writeSpace() {
-	p.writer.writeSpace(" ")
+	p.writer.WriteSpace(" ")
 }
 
 func (p *Printer) writeLine() {
-	p.writer.writeLine()
+	p.writer.WriteLine()
 }
 
 func (p *Printer) writeLineRepeat(count int) {
@@ -263,15 +263,15 @@ func (p *Printer) writeLineRepeat(count int) {
 }
 
 func (p *Printer) writeTrailingSemicolon() {
-	p.writer.writeTrailingSemicolon(";")
+	p.writer.WriteTrailingSemicolon(";")
 }
 
 func (p *Printer) increaseIndent() {
-	p.writer.increaseIndent()
+	p.writer.IncreaseIndent()
 }
 
 func (p *Printer) decreaseIndent() {
-	p.writer.decreaseIndent()
+	p.writer.DecreaseIndent()
 }
 
 func (p *Printer) increaseIndentIf(indentRequested bool) {
@@ -767,7 +767,7 @@ func (p *Printer) emitLiteral(node *ast.LiteralLikeNode, flags getLiteralTextFla
 
 	// Quick info expects all literals to be called with writeStringLiteral, as there's no specific type for
 	// numberLiterals
-	p.writer.writeStringLiteral(text)
+	p.writer.WriteStringLiteral(text)
 
 	// }
 }
@@ -1290,10 +1290,10 @@ func (p *Printer) emitFunctionBody(body *ast.Block) {
 	// !!! Emit detached comments of body
 
 	statementOffset := p.emitPrologueDirectives(body.Statements)
-	pos := p.writer.getTextPos()
+	pos := p.writer.GetTextPos()
 	p.emitHelpers(body.AsNode())
 
-	if p.shouldEmitBlockFunctionBodyOnSingleLine(body) && statementOffset == 0 && pos == p.writer.getTextPos() {
+	if p.shouldEmitBlockFunctionBodyOnSingleLine(body) && statementOffset == 0 && pos == p.writer.GetTextPos() {
 		p.decreaseIndent()
 		p.emitList((*Printer).emitStatement, body.AsNode(), body.Statements, LFSingleLineFunctionBodyStatements)
 		p.increaseIndent()
@@ -2138,8 +2138,8 @@ func (p *Printer) emitPropertyAccessExpression(node *ast.PropertyAccessExpressio
 	p.increaseIndentIf(linesBeforeDot > 0)
 	shouldEmitDotDot := token.Kind != ast.KindQuestionDotToken &&
 		p.mayNeedDotDotForPropertyAccess(node.Expression) &&
-		!p.writer.hasTrailingComment() &&
-		!p.writer.hasTrailingWhitespace()
+		!p.writer.HasTrailingComment() &&
+		!p.writer.HasTrailingWhitespace()
 	if shouldEmitDotDot {
 		p.writePunctuation(".")
 	}
@@ -4254,13 +4254,13 @@ func (p *Printer) emitListItems(
 func (p *Printer) Emit(node *ast.Node, sourceFile *ast.SourceFile) string {
 	// ensure a reusable writer
 	if p.ownWriter == nil {
-		p.ownWriter = NewTextWriter(core.IfElse(len(p.Options.NewLine) > 0, p.Options.NewLine, "\n"))
+		p.ownWriter = NewTextWriter(p.Options.NewLine.GetNewLineCharacter())
 	}
 
 	p.Write(node, sourceFile, p.ownWriter)
-	text := p.ownWriter.getText()
+	text := p.ownWriter.String()
 
-	p.ownWriter.clear()
+	p.ownWriter.Clear()
 	return text
 }
 
@@ -4279,7 +4279,7 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 
 	p.setSourceFile(sourceFile)
 	p.writer = writer
-	p.writer.clear()
+	p.writer.Clear()
 
 	switch node.Kind {
 	// Pseudo-literals

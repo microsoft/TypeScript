@@ -382,7 +382,7 @@ func getLinesBetweenPositions(sourceFile *ast.SourceFile, pos1 int, pos2 int) in
 	isNegative := lower == pos2
 	upper := core.IfElse(isNegative, pos1, pos2)
 	lowerLine := scanner.ComputeLineOfPosition(lineStarts, lower)
-	upperLine := scanner.ComputeLineOfPosition(lineStarts[lowerLine:], upper)
+	upperLine := lowerLine + scanner.ComputeLineOfPosition(lineStarts[lowerLine:], upper)
 	if isNegative {
 		return lowerLine - upperLine
 	} else {

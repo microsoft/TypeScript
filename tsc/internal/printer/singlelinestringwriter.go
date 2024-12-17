@@ -15,40 +15,40 @@ type singleLineStringWriter struct {
 	lastWritten string
 }
 
-func (w *singleLineStringWriter) clear() {
+func (w *singleLineStringWriter) Clear() {
 	w.lastWritten = ""
 	w.builder.Reset()
 }
 
-func (w singleLineStringWriter) decreaseIndent() {
+func (w singleLineStringWriter) DecreaseIndent() {
 	// Do Nothing
 }
 
-func (w singleLineStringWriter) getColumn() int {
+func (w singleLineStringWriter) GetColumn() int {
 	return 0
 }
 
-func (w singleLineStringWriter) getIndent() int {
+func (w singleLineStringWriter) GetIndent() int {
 	return 0
 }
 
-func (w singleLineStringWriter) getLine() int {
+func (w singleLineStringWriter) GetLine() int {
 	return 0
 }
 
-func (w singleLineStringWriter) getText() string {
+func (w singleLineStringWriter) String() string {
 	return w.builder.String()
 }
 
-func (w singleLineStringWriter) getTextPos() int {
+func (w singleLineStringWriter) GetTextPos() int {
 	return w.builder.Len()
 }
 
-func (w singleLineStringWriter) hasTrailingComment() bool {
+func (w singleLineStringWriter) HasTrailingComment() bool {
 	return false
 }
 
-func (w singleLineStringWriter) hasTrailingWhitespace() bool {
+func (w singleLineStringWriter) HasTrailingWhitespace() bool {
 	if w.builder.Len() == 0 {
 		return false
 	}
@@ -59,85 +59,85 @@ func (w singleLineStringWriter) hasTrailingWhitespace() bool {
 	return stringutil.IsWhiteSpaceLike(ch)
 }
 
-func (w singleLineStringWriter) increaseIndent() {
+func (w singleLineStringWriter) IncreaseIndent() {
 	// Do Nothing
 }
 
-func (w singleLineStringWriter) isAtStartOfLine() bool {
+func (w singleLineStringWriter) IsAtStartOfLine() bool {
 	return false
 }
 
-func (w *singleLineStringWriter) rawWrite(s string) {
+func (w *singleLineStringWriter) RawWrite(s string) {
 	w.lastWritten = s
 	w.builder.WriteString(s)
 }
 
-func (w *singleLineStringWriter) write(s string) {
+func (w *singleLineStringWriter) Write(s string) {
 	w.lastWritten = s
 	w.builder.WriteString(s)
 }
 
-func (w *singleLineStringWriter) writeComment(text string) {
+func (w *singleLineStringWriter) WriteComment(text string) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }
 
-func (w *singleLineStringWriter) writeKeyword(text string) {
+func (w *singleLineStringWriter) WriteKeyword(text string) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }
 
-func (w *singleLineStringWriter) writeLine() {
+func (w *singleLineStringWriter) WriteLine() {
 	w.lastWritten = " "
 	w.builder.WriteString(" ")
 }
 
-func (w *singleLineStringWriter) writeLineForce(force bool) {
+func (w *singleLineStringWriter) WriteLineForce(force bool) {
 	w.lastWritten = " "
 	w.builder.WriteString(" ")
 }
 
-func (w *singleLineStringWriter) writeLiteral(s string) {
+func (w *singleLineStringWriter) WriteLiteral(s string) {
 	w.lastWritten = s
 	w.builder.WriteString(s)
 }
 
-func (w *singleLineStringWriter) writeOperator(text string) {
+func (w *singleLineStringWriter) WriteOperator(text string) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }
 
-func (w *singleLineStringWriter) writeParameter(text string) {
+func (w *singleLineStringWriter) WriteParameter(text string) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }
 
-func (w *singleLineStringWriter) writeProperty(text string) {
+func (w *singleLineStringWriter) WriteProperty(text string) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }
 
-func (w *singleLineStringWriter) writePunctuation(text string) {
+func (w *singleLineStringWriter) WritePunctuation(text string) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }
 
-func (w *singleLineStringWriter) writeSpace(text string) {
+func (w *singleLineStringWriter) WriteSpace(text string) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }
 
-func (w *singleLineStringWriter) writeStringLiteral(text string) {
+func (w *singleLineStringWriter) WriteStringLiteral(text string) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }
 
-func (w *singleLineStringWriter) writeSymbol(text string, symbol *ast.Symbol) {
+func (w *singleLineStringWriter) WriteSymbol(text string, symbol *ast.Symbol) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }
 
-func (w *singleLineStringWriter) writeTrailingSemicolon(text string) {
+func (w *singleLineStringWriter) WriteTrailingSemicolon(text string) {
 	w.lastWritten = text
 	w.builder.WriteString(text)
 }

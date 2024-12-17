@@ -16,6 +16,8 @@ type CompilerOptions struct {
 	AllowUnusedLabels                  Tristate             `json:"allowUnusedLabels"`
 	CheckJs                            Tristate             `json:"checkJs"`
 	CustomConditions                   []string             `json:"customConditions"`
+	EmitDeclarationOnly                Tristate             `json:"emitDeclarationOnly"`
+	EmitBOM                            Tristate             `json:"emitBOM"`
 	DownlevelIteration                 Tristate             `json:"downlevelIteration"`
 	ESModuleInterop                    Tristate             `json:"esModuleInterop"`
 	ExactOptionalPropertyTypes         Tristate             `json:"exactOptionalPropertyTypes"`
@@ -28,11 +30,14 @@ type CompilerOptions struct {
 	ModuleResolution                   ModuleResolutionKind `json:"moduleResolution"`
 	ModuleSuffixes                     []string             `json:"moduleSuffixes"`
 	ModuleDetection                    ModuleDetectionKind  `json:"moduleDetectionKind"`
+	NewLine                            NewLineKind          `json:"newLine"`
+	NoEmit                             Tristate             `json:"noEmit"`
 	NoFallthroughCasesInSwitch         Tristate             `json:"noFallthroughCasesInSwitch"`
 	NoImplicitAny                      Tristate             `json:"noImplicitAny"`
 	NoImplicitThis                     Tristate             `json:"noImplicitThis"`
 	NoPropertyAccessFromIndexSignature Tristate             `json:"noPropertyAccessFromIndexSignature"`
 	NoUncheckedIndexedAccess           Tristate             `json:"noUncheckedIndexedAccess"`
+	OutDir                             string               `json:"outDir"`
 	Paths                              map[string][]string  `json:"paths"`
 	PreserveConstEnums                 Tristate             `json:"preserveConstEnums"`
 	PreserveSymlinks                   Tristate             `json:"preserveSymlinks"`
@@ -151,6 +156,16 @@ func (options *CompilerOptions) GetEffectiveTypeRoots(currentDirectory string) (
 	return typeRoots, false
 }
 
+func (options *CompilerOptions) GetEmitDeclarations() bool {
+	// !!!
+	return false
+}
+
+func (options *CompilerOptions) GetAreDeclarationMapsEnabled() bool {
+	// !!!
+	return false
+}
+
 type ModuleDetectionKind int32
 
 const (
@@ -232,6 +247,15 @@ const (
 	NewLineKindCRLF NewLineKind = 0
 	NewLineKindLF   NewLineKind = 1
 )
+
+func (newLine NewLineKind) GetNewLineCharacter() string {
+	switch newLine {
+	case NewLineKindCRLF:
+		return "\r\n"
+	default:
+		return "\n"
+	}
+}
 
 type ScriptTarget int32
 

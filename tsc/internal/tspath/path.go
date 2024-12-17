@@ -233,7 +233,7 @@ func (p Path) GetDirectoryPath() Path {
 	return Path(GetDirectoryPath(string(p)))
 }
 
-func getPathFromPathComponents(pathComponents []string) string {
+func GetPathFromPathComponents(pathComponents []string) string {
 	if len(pathComponents) == 0 {
 		return ""
 	}
@@ -296,12 +296,12 @@ func ResolvePath(path string, paths ...string) string {
 	return NormalizePath(combinedPath)
 }
 
-func getNormalizedPathComponents(path string, currentDirectory string) []string {
+func GetNormalizedPathComponents(path string, currentDirectory string) []string {
 	return reducePathComponents(GetPathComponents(path, currentDirectory))
 }
 
 func GetNormalizedAbsolutePath(fileName string, currentDirectory string) string {
-	return getPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory))
+	return GetPathFromPathComponents(GetNormalizedPathComponents(fileName, currentDirectory))
 }
 
 func hasRelativePathSegment(p string) bool {
@@ -342,7 +342,7 @@ func NormalizePath(path string) string {
 		return path
 	}
 	// Other paths require full normalization
-	normalized := getPathFromPathComponents(reducePathComponents(GetPathComponents(path, "")))
+	normalized := GetPathFromPathComponents(reducePathComponents(GetPathComponents(path, "")))
 	if normalized != "" && HasTrailingDirectorySeparator(path) {
 		normalized = EnsureTrailingDirectorySeparator(normalized)
 	}
@@ -467,7 +467,7 @@ func GetRelativePathFromDirectory(fromDirectory string, to string, options Compa
 		panic("paths must either both be absolute or both be relative")
 	}
 	pathComponents := GetPathComponentsRelativeTo(fromDirectory, to, options)
-	return getPathFromPathComponents(pathComponents)
+	return GetPathFromPathComponents(pathComponents)
 }
 
 func ConvertToRelativePath(absoluteOrRelativePath string, options ComparePathsOptions) string {
@@ -496,7 +496,7 @@ func GetRelativePathToDirectoryOrUrl(directoryPathOrUrl string, relativeOrAbsolu
 		pathComponents[0] = prefix + firstComponent
 	}
 
-	return getPathFromPathComponents(pathComponents)
+	return GetPathFromPathComponents(pathComponents)
 }
 
 // Gets the portion of a path following the last (non-terminal) separator (`/`).
