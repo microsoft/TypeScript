@@ -248,6 +248,7 @@ const libEntries: [string, string][] = [
     ["esnext.string", "lib.es2024.string.d.ts"],
     ["esnext.iterator", "lib.esnext.iterator.d.ts"],
     ["esnext.promise", "lib.esnext.promise.d.ts"],
+    ["esnext.error", "lib.esnext.error.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
