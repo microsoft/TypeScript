@@ -636,6 +636,7 @@ function isNotNormalizedOrAbsolute(s: string) {
     // The path is not absolute.
     if (getEncodedRootLength(s) === 0) return true;
 
+    // Apart from the root segment, paths should not have a trailing slash.
     if (s.length > 0) {
         const lastChar = s.charCodeAt(s.length - 1);
         if (lastChar === CharacterCodes.slash || lastChar === CharacterCodes.backslash) return true;
@@ -645,16 +646,22 @@ function isNotNormalizedOrAbsolute(s: string) {
         const curr = s.charCodeAt(i);
         const next = s.charCodeAt(i + 1);
         if (curr === CharacterCodes.dot) {
+            // A ./ or ../ must be reduced - not normalized.
             if (next === CharacterCodes.slash) {
                 return true;
             }
         }
         else if (curr === CharacterCodes.slash) {
+            // Multiple slashes in a row (outside of the root,
+            // and there is no root) must be reduced to a single slash.
+            // So the path is not normalized.
             if (next === CharacterCodes.slash) {
                 return true;
             }
         }
         else if (curr === CharacterCodes.backslash) {
+            // A backslash anywhere must be normalized to
+            // a regular slash.
             return true;
         }
     }
