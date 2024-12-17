@@ -66,7 +66,7 @@ export function foo() {}
 //// [e:/solution/myproject/node_modules/@types/prop-types/package.json]
 {
   "name": "@types/prop-types",
-  "version": "15.7.3"
+  "version": "14.7.3"
 }
 
 //// [c:/typescript/node_modules/@types/react-router-dom/package.json]
@@ -182,8 +182,8 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	c:/home/src/tslibs/TS/Lib/lib.d.ts
 	  Default library for target 'es5'
 	../node_modules/@types/prop-types/index.d.ts
-	  Imported via 'prop-types' from file '../node_modules/@types/react/index.d.ts' with packageId '@types/prop-types/index.d.ts@15.7.3'
-	  Entry point for implicit type library 'prop-types' with packageId '@types/prop-types/index.d.ts@15.7.3'
+	  Imported via 'prop-types' from file '../node_modules/@types/react/index.d.ts' with packageId '@types/prop-types/index.d.ts@14.7.3'
+	  Entry point for implicit type library 'prop-types' with packageId '@types/prop-types/index.d.ts@14.7.3'
 	../node_modules/@types/react/index.d.ts
 	  Imported via 'react' from file 'app.js' with packageId '@types/react/index.d.ts@16.9.14'
 	  Entry point for implicit type library 'react' with packageId '@types/react/index.d.ts@16.9.14'
