@@ -29404,8 +29404,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (checkDerived) {
                     return filterType(type, t => !isTypeDerivedFrom(t, candidate));
                 }
+                const originalType = type;
+                type = type.flags & TypeFlags.Unknown ? unknownUnionType : type;
                 const trueType = getNarrowedType(type, candidate, /*assumeTrue*/ true, /*checkDerived*/ false);
-                return filterType(type, t => !isTypeSubsetOf(t, trueType));
+                const filtered = filterType(type, t => !isTypeSubsetOf(t, trueType));
+                return originalType.flags & TypeFlags.Unknown && filtered === type ? originalType : filtered;
             }
             if (type.flags & TypeFlags.AnyOrUnknown) {
                 return candidate;
