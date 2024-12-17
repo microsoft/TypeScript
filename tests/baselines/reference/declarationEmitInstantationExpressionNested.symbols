@@ -1,0 +1,209 @@
+//// [tests/cases/compiler/declarationEmitInstantationExpressionNested.ts] ////
+
+=== declarationEmitInstantationExpressionNested.ts ===
+function outerFnExpression<K>(n: K) {
+>outerFnExpression : Symbol(outerFnExpression, Decl(declarationEmitInstantationExpressionNested.ts, 0, 0))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 0, 27))
+>n : Symbol(n, Decl(declarationEmitInstantationExpressionNested.ts, 0, 30))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 0, 27))
+
+    return function <T>(a: [T, K]): a is [T, K] {
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 1, 21))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 1, 24))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 1, 21))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 0, 27))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 1, 24))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 1, 21))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 0, 27))
+
+        return null!
+    }
+}
+
+export let nrFnFromFnExpression = outerFnExpression(1)<number>
+>nrFnFromFnExpression : Symbol(nrFnFromFnExpression, Decl(declarationEmitInstantationExpressionNested.ts, 6, 10))
+>outerFnExpression : Symbol(outerFnExpression, Decl(declarationEmitInstantationExpressionNested.ts, 0, 0))
+
+
+function outerArrowFn<K>(n: K) {
+>outerArrowFn : Symbol(outerArrowFn, Decl(declarationEmitInstantationExpressionNested.ts, 6, 62))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 9, 22))
+>n : Symbol(n, Decl(declarationEmitInstantationExpressionNested.ts, 9, 25))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 9, 22))
+
+    return function <T>(a: [T, K]): a is [T, K] {
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 10, 21))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 10, 24))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 10, 21))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 9, 22))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 10, 24))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 10, 21))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 9, 22))
+
+        return null!
+    }
+}
+
+export let nrFnFromArrowFn = outerArrowFn(1)<number>
+>nrFnFromArrowFn : Symbol(nrFnFromArrowFn, Decl(declarationEmitInstantationExpressionNested.ts, 15, 10))
+>outerArrowFn : Symbol(outerArrowFn, Decl(declarationEmitInstantationExpressionNested.ts, 6, 62))
+
+function outerObjectMethod<K>(n: K) {
+>outerObjectMethod : Symbol(outerObjectMethod, Decl(declarationEmitInstantationExpressionNested.ts, 15, 52))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 17, 27))
+>n : Symbol(n, Decl(declarationEmitInstantationExpressionNested.ts, 17, 30))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 17, 27))
+
+    return {
+        inner<T>(a: [T, K]): a is [T, K] {
+>inner : Symbol(inner, Decl(declarationEmitInstantationExpressionNested.ts, 18, 12))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 19, 14))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 19, 17))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 19, 14))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 17, 27))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 19, 17))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 19, 14))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 17, 27))
+
+            return null!
+        }
+    }
+}
+
+export let nrFnFromObjectMethod = outerObjectMethod(1).inner<number>
+>nrFnFromObjectMethod : Symbol(nrFnFromObjectMethod, Decl(declarationEmitInstantationExpressionNested.ts, 25, 10))
+>outerObjectMethod(1).inner : Symbol(inner, Decl(declarationEmitInstantationExpressionNested.ts, 18, 12))
+>outerObjectMethod : Symbol(outerObjectMethod, Decl(declarationEmitInstantationExpressionNested.ts, 15, 52))
+>inner : Symbol(inner, Decl(declarationEmitInstantationExpressionNested.ts, 18, 12))
+
+
+function outerStaticClassMember<K>(n: K) {
+>outerStaticClassMember : Symbol(outerStaticClassMember, Decl(declarationEmitInstantationExpressionNested.ts, 25, 68))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 28, 32))
+>n : Symbol(n, Decl(declarationEmitInstantationExpressionNested.ts, 28, 35))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 28, 32))
+
+    return class {
+        static inner<T>(a: [T, K]): a is [T, K] {
+>inner : Symbol((Anonymous class).inner, Decl(declarationEmitInstantationExpressionNested.ts, 29, 18))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 30, 21))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 30, 24))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 30, 21))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 28, 32))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 30, 24))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 30, 21))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 28, 32))
+
+            return null!
+        }
+    }
+}
+
+export let nrFnFromStaticClassMember = outerStaticClassMember(1).inner<number>
+>nrFnFromStaticClassMember : Symbol(nrFnFromStaticClassMember, Decl(declarationEmitInstantationExpressionNested.ts, 36, 10))
+>outerStaticClassMember(1).inner : Symbol((Anonymous class).inner, Decl(declarationEmitInstantationExpressionNested.ts, 29, 18))
+>outerStaticClassMember : Symbol(outerStaticClassMember, Decl(declarationEmitInstantationExpressionNested.ts, 25, 68))
+>inner : Symbol((Anonymous class).inner, Decl(declarationEmitInstantationExpressionNested.ts, 29, 18))
+
+
+function outerClassMethod<K>(n: K) {
+>outerClassMethod : Symbol(outerClassMethod, Decl(declarationEmitInstantationExpressionNested.ts, 36, 78))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 39, 26))
+>n : Symbol(n, Decl(declarationEmitInstantationExpressionNested.ts, 39, 29))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 39, 26))
+
+    return class {
+        inner<T>(a: [T, K]): a is [T, K] {
+>inner : Symbol((Anonymous class).inner, Decl(declarationEmitInstantationExpressionNested.ts, 40, 18))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 41, 14))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 41, 17))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 41, 14))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 39, 26))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 41, 17))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 41, 14))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 39, 26))
+
+            return null!
+        }
+    }
+}
+
+export let nrFnFromClassMethod = new (outerClassMethod(1))().inner<number>
+>nrFnFromClassMethod : Symbol(nrFnFromClassMethod, Decl(declarationEmitInstantationExpressionNested.ts, 47, 10))
+>new (outerClassMethod(1))().inner : Symbol((Anonymous class).inner, Decl(declarationEmitInstantationExpressionNested.ts, 40, 18))
+>outerClassMethod : Symbol(outerClassMethod, Decl(declarationEmitInstantationExpressionNested.ts, 36, 78))
+>inner : Symbol((Anonymous class).inner, Decl(declarationEmitInstantationExpressionNested.ts, 40, 18))
+
+function outerMethodSignature<K>(n: K) : {
+>outerMethodSignature : Symbol(outerMethodSignature, Decl(declarationEmitInstantationExpressionNested.ts, 47, 74))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 49, 30))
+>n : Symbol(n, Decl(declarationEmitInstantationExpressionNested.ts, 49, 33))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 49, 30))
+
+    inner<T>(a: [T, K]): a is [T, K]
+>inner : Symbol(inner, Decl(declarationEmitInstantationExpressionNested.ts, 49, 42))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 50, 10))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 50, 13))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 50, 10))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 49, 30))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 50, 13))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 50, 10))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 49, 30))
+
+} {
+    return null!
+}
+
+export let nrFnFromMethodSignature = outerMethodSignature(1).inner<number>
+>nrFnFromMethodSignature : Symbol(nrFnFromMethodSignature, Decl(declarationEmitInstantationExpressionNested.ts, 55, 10))
+>outerMethodSignature(1).inner : Symbol(inner, Decl(declarationEmitInstantationExpressionNested.ts, 49, 42))
+>outerMethodSignature : Symbol(outerMethodSignature, Decl(declarationEmitInstantationExpressionNested.ts, 47, 74))
+>inner : Symbol(inner, Decl(declarationEmitInstantationExpressionNested.ts, 49, 42))
+
+
+
+function outerFnSignature<K>(n: K) : {
+>outerFnSignature : Symbol(outerFnSignature, Decl(declarationEmitInstantationExpressionNested.ts, 55, 74))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 59, 26))
+>n : Symbol(n, Decl(declarationEmitInstantationExpressionNested.ts, 59, 29))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 59, 26))
+
+    <T>(a: [T, K]): a is [T, K]
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 60, 5))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 60, 8))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 60, 5))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 59, 26))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 60, 8))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 60, 5))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 59, 26))
+
+} {
+    return null!
+}
+
+export let nrFnFromFnSignature = outerFnSignature(1)<number>
+>nrFnFromFnSignature : Symbol(nrFnFromFnSignature, Decl(declarationEmitInstantationExpressionNested.ts, 65, 10))
+>outerFnSignature : Symbol(outerFnSignature, Decl(declarationEmitInstantationExpressionNested.ts, 55, 74))
+
+
+
+function outerFnType<K>(n: K) : <T>(a: [T, K]) => a is [T, K] {
+>outerFnType : Symbol(outerFnType, Decl(declarationEmitInstantationExpressionNested.ts, 65, 60))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 69, 21))
+>n : Symbol(n, Decl(declarationEmitInstantationExpressionNested.ts, 69, 24))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 69, 21))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 69, 33))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 69, 36))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 69, 33))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 69, 21))
+>a : Symbol(a, Decl(declarationEmitInstantationExpressionNested.ts, 69, 36))
+>T : Symbol(T, Decl(declarationEmitInstantationExpressionNested.ts, 69, 33))
+>K : Symbol(K, Decl(declarationEmitInstantationExpressionNested.ts, 69, 21))
+
+    return null!
+}
+
+export let nrFnFromFnType = outerFnType(1)<number>
+>nrFnFromFnType : Symbol(nrFnFromFnType, Decl(declarationEmitInstantationExpressionNested.ts, 73, 10))
+>outerFnType : Symbol(outerFnType, Decl(declarationEmitInstantationExpressionNested.ts, 65, 60))
+
