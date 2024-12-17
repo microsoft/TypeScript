@@ -39783,7 +39783,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (node.kind) {
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.CallExpression:
+            case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ElementAccessExpression:
+            case SyntaxKind.MetaProperty:
             case SyntaxKind.NewExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.YieldExpression:
@@ -39801,6 +39803,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.AmpersandAmpersandToken:
                     case SyntaxKind.AmpersandAmpersandEqualsToken:
                         return PredicateSemantics.Sometimes;
+                    case SyntaxKind.CommaToken:
+                        return getSyntacticNullishnessSemantics((node as BinaryExpression).right);
                 }
                 return PredicateSemantics.Never;
             case SyntaxKind.ConditionalExpression:
