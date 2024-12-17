@@ -634,12 +634,16 @@ export function getNormalizedAbsolutePath(fileName: string, currentDirectory: st
 
 function isNotNormalizedOrAbsolute(s: string) {
     // The path is not absolute.
-    if (getEncodedRootLength(s) === 0) return true;
+    if (getEncodedRootLength(s) === 0) {
+        return true;
+    }
 
     // Apart from the root segment, paths should not have a trailing slash.
     if (s.length > 0) {
         const lastChar = s.charCodeAt(s.length - 1);
-        if (lastChar === CharacterCodes.slash || lastChar === CharacterCodes.backslash) return true;
+        if (lastChar === CharacterCodes.slash || lastChar === CharacterCodes.backslash) {
+            return true;
+        }
     }
 
     for (let i = 0, n = s.length - 1; i < n; i++) {
@@ -659,8 +663,7 @@ function isNotNormalizedOrAbsolute(s: string) {
             }
         }
         else if (curr === CharacterCodes.backslash) {
-            // A backslash anywhere must be normalized to
-            // a regular slash.
+            // A backslash anywhere must be normalized to a regular slash.
             return true;
         }
     }
