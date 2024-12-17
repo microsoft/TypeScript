@@ -1158,7 +1158,7 @@ func (c *Checker) onSuccessfullyResolvedSymbol(errorLocation *ast.Node, result *
 }
 
 func (c *Checker) checkResolvedBlockScopedVariable(result *ast.Symbol, errorLocation *ast.Node) {
-	//Debug.assert(!!(result.flags&ast.SymbolFlagsBlockScopedVariable || result.flags&ast.SymbolFlagsClass || result.flags&ast.SymbolFlagsEnum))
+	// Debug.assert(!!(result.flags&ast.SymbolFlagsBlockScopedVariable || result.flags&ast.SymbolFlagsClass || result.flags&ast.SymbolFlagsEnum))
 	if result.Flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsFunctionScopedVariable|ast.SymbolFlagsAssignment) != 0 && result.Flags&ast.SymbolFlagsClass != 0 {
 		// constructor functions aren't block scoped
 		return
@@ -1180,7 +1180,7 @@ func (c *Checker) checkResolvedBlockScopedVariable(result *ast.Symbol, errorLoca
 		} else if result.Flags&ast.SymbolFlagsRegularEnum != 0 {
 			diagnostic = c.error(errorLocation, diagnostics.Enum_0_used_before_its_declaration, declarationName)
 		} else {
-			//Debug.assert(!!(result.flags & ast.SymbolFlagsConstEnum))
+			// Debug.assert(!!(result.flags & ast.SymbolFlagsConstEnum))
 			if getIsolatedModules(c.compilerOptions) {
 				diagnostic = c.error(errorLocation, diagnostics.Enum_0_used_before_its_declaration, declarationName)
 			}
@@ -7554,6 +7554,7 @@ func (c *Checker) errorSkippedOn(_ /*key*/ string, location *ast.Node, message *
 	// diagnostic.skippedOn = key
 	return diagnostic
 }
+
 func (c *Checker) isDeprecatedDeclaration(declaration *ast.Node) bool {
 	return c.getCombinedNodeFlagsCached(declaration)&ast.NodeFlagsDeprecated != 0
 }
@@ -8045,7 +8046,7 @@ func (c *Checker) getSymbolOfPartOfRightHandSideOfImportEquals(entityName *ast.N
 	}
 	// Case 2 in above example
 	// entityName.kind could be a QualifiedName or a Missing identifier
-	//Debug.assert(entityName.parent.kind == ast.KindImportEqualsDeclaration)
+	// Debug.assert(entityName.parent.kind == ast.KindImportEqualsDeclaration)
 	return c.resolveEntityName(entityName, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace, false /*ignoreErrors*/, dontResolveAlias, nil /*location*/)
 }
 
@@ -8279,7 +8280,7 @@ func (c *Checker) combineValueAndTypeSymbols(valueSymbol *ast.Symbol, typeSymbol
 		return valueSymbol
 	}
 	result := c.newSymbol(valueSymbol.Flags|typeSymbol.Flags, valueSymbol.Name)
-	//Debug.assert(valueSymbol.declarations || typeSymbol.declarations)
+	// Debug.assert(valueSymbol.declarations || typeSymbol.declarations)
 	result.Declarations = slices.Compact(slices.Concat(valueSymbol.Declarations, typeSymbol.Declarations))
 	result.Parent = valueSymbol.Parent
 	if result.Parent == nil {
@@ -9103,7 +9104,7 @@ func (c *Checker) lateBindIndexSignature(parent *ast.Symbol, earlySymbols ast.Sy
 // late-bound members that `addDeclarationToSymbol` in binder.ts performs for early-bound
 // members.
 func (c *Checker) addDeclarationToLateBoundSymbol(symbol *ast.Symbol, member *ast.Node, symbolFlags ast.SymbolFlags) {
-	//Debug.assert(getCheckFlags(symbol)&ast.CheckFlagsLate != 0, "Expected a late-bound symbol.")
+	// Debug.assert(getCheckFlags(symbol)&ast.CheckFlagsLate != 0, "Expected a late-bound symbol.")
 	symbol.Flags |= symbolFlags
 	c.lateBoundLinks.get(member.Symbol()).lateSymbol = symbol
 	if len(symbol.Declarations) == 0 || !member.Symbol().IsReplaceableByMethod {
@@ -10105,7 +10106,8 @@ var base64chars = []byte{
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
 	'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
 	'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-	'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '$', '%'}
+	'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '$', '%',
+}
 
 func (b *KeyBuilder) WriteInt(value int) {
 	for value != 0 {
@@ -15338,7 +15340,7 @@ func (c *Checker) computeEnumMemberValues(node *ast.Node) {
 	nodeLinks := c.nodeLinks.get(node)
 	if !(nodeLinks.flags&NodeCheckFlagsEnumValuesComputed != 0) {
 		nodeLinks.flags |= NodeCheckFlagsEnumValuesComputed
-		var autoValue = 0.0
+		autoValue := 0.0
 		var previous *ast.Node
 		for _, member := range node.AsEnumDeclaration().Members.Nodes {
 			result := c.computeEnumMemberValue(member, autoValue, previous)
@@ -16117,7 +16119,7 @@ func (c *Checker) createTupleTargetType(elementInfos []TupleElementInfo, readonl
 			if combinedFlags&ElementFlagsVariable == 0 {
 				property := c.newSymbolEx(ast.SymbolFlagsProperty|(core.IfElse(flags&ElementFlagsOptional != 0, ast.SymbolFlagsOptional, 0)), strconv.Itoa(i), core.IfElse(readonly, ast.CheckFlagsReadonly, 0))
 				c.valueSymbolLinks.get(property).resolvedType = typeParameter
-				//c.valueSymbolLinks.get(property).tupleLabelDeclaration = elementInfos[i].labeledDeclaration
+				// c.valueSymbolLinks.get(property).tupleLabelDeclaration = elementInfos[i].labeledDeclaration
 				members[property.Name] = property
 			}
 		}
@@ -17395,7 +17397,8 @@ func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, 
 				middle := len(typeSet) / 2
 				result = c.getIntersectionTypeEx([]*Type{
 					c.getIntersectionTypeEx(typeSet[:middle], flags, nil /*alias*/),
-					c.getIntersectionTypeEx(typeSet[middle:], flags, nil /*alias*/)},
+					c.getIntersectionTypeEx(typeSet[middle:], flags, nil /*alias*/),
+				},
 					flags, alias)
 			default:
 				// We are attempting to construct a type of the form X & (A | B) & (C | D). Transform this into a type of

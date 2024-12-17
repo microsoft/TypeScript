@@ -7,9 +7,11 @@ import (
 	"sync"
 )
 
-var RootPath string
-var TypeScriptSubmodulePath string
-var TestDataPath string
+var (
+	RootPath                string
+	TypeScriptSubmodulePath string
+	TestDataPath            string
+)
 
 func init() {
 	_, filename, _, ok := runtime.Caller(0)

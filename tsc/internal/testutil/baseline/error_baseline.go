@@ -35,8 +35,10 @@ type TestFile struct {
 	fileOptions map[string]string
 }
 
-var diagnosticsLocationPrefix = regexp.MustCompile(`(?im)^(lib.*\.d\.ts)\(\d+,\d+\)`)
-var diagnosticsLocationPattern = regexp.MustCompile(`(?i)(lib.*\.d\.ts):\d+:\d+`)
+var (
+	diagnosticsLocationPrefix  = regexp.MustCompile(`(?im)^(lib.*\.d\.ts)\(\d+,\d+\)`)
+	diagnosticsLocationPattern = regexp.MustCompile(`(?i)(lib.*\.d\.ts):\d+:\d+`)
+)
 
 func DoErrorBaseline(t testing.TB, baselinePath string, inputFiles []*TestFile, errors []*ast.Diagnostic, pretty bool) {
 	baselinePath = tsExtension.ReplaceAllString(baselinePath, ".errors.txt")

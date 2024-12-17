@@ -38,8 +38,10 @@ type FlowList struct {
 
 type FlowLabel = FlowNode
 
-var UnreachableFlow = &FlowNode{Flags: FlowFlagsUnreachable}
-var ReportedUnreachableFlow = &FlowNode{Flags: FlowFlagsUnreachable}
+var (
+	UnreachableFlow         = &FlowNode{Flags: FlowFlagsUnreachable}
+	ReportedUnreachableFlow = &FlowNode{Flags: FlowFlagsUnreachable}
+)
 
 // FlowSwitchClauseData (synthetic AST node for FlowFlagsSwitchClause)
 

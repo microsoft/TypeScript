@@ -53,7 +53,7 @@ func convertMapFS(m fstest.MapFS, useCaseSensitiveFileNames bool) *mapFS {
 
 			if _, ok := m[curr]; !ok {
 				newM[curr] = &fstest.MapFile{
-					Mode: fs.ModeDir | 0555,
+					Mode: fs.ModeDir | 0o555,
 				}
 			}
 		}

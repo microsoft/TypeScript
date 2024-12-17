@@ -39,8 +39,9 @@
     },
     "exec": {
         "cwd": "${configDir}",
+        "cacheKey": "3",
         "commands": [
-            { "command": "gofmt -s", "exts": ["go"] }
+            { "command": "gofumpt {{file_path}}", "exts": ["go"], "stdin": false }
         ]
     },
     "excludes": [
@@ -48,7 +49,8 @@
         "**/node_modules",
         "**/*-lock.json",
         "**/testdata",
-        "_submodules/**"
+        "_submodules/**",
+        "**/*_generated.go"
     ],
     // Note: if adding new languages, make sure settings.template.json is updated too.
     // Also, if updating typescript, update the one in package.json.

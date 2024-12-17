@@ -11,8 +11,7 @@ import (
 func TestGetSymbolAtLocation(t *testing.T) {
 	t.Parallel()
 
-	content :=
-		`interface Foo {
+	content := `interface Foo {
   bar: string;
 }
 declare const foo: Foo;

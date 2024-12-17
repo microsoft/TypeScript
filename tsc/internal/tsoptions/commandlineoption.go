@@ -69,12 +69,14 @@ func (o *CommandLineOption) DeprecatedKeys() *core.Set[string] {
 	}
 	return commandLineOptionDeprecated[o.Name]
 }
+
 func (o *CommandLineOption) EnumMap() *collections.OrderedMap[string, any] {
 	if o.Kind != CommandLineOptionTypeEnum {
 		return nil
 	}
 	return commandLineOptionEnumMap[o.Name]
 }
+
 func (o *CommandLineOption) Elements() *CommandLineOption {
 	if o.Kind != CommandLineOptionTypeList && o.Kind != CommandLineOptionTypeListOrElement {
 		return nil

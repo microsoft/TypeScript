@@ -109,12 +109,14 @@ func (c *Checker) checkGrammarPrivateIdentifierExpression(privId *ast.PrivateIde
 
 	return false
 }
+
 func (c *Checker) checkGrammarMappedType(node *ast.MappedTypeNode) bool {
 	if len(node.Members.Nodes) > 0 {
 		return c.grammarErrorOnNode(node.Members.Nodes[0], diagnostics.A_mapped_type_may_not_declare_properties_or_methods)
 	}
 	return false
 }
+
 func (c *Checker) checkGrammarDecorator(decorator *ast.Decorator) bool {
 	sourceFile := ast.GetSourceFileOfNode(decorator.AsNode())
 	if !c.hasParseDiagnostics(sourceFile) {
@@ -186,12 +188,14 @@ func (c *Checker) checkGrammarDecorator(decorator *ast.Decorator) bool {
 
 	return false
 }
+
 func (c *Checker) checkGrammarExportDeclaration(node *ast.ExportDeclaration) bool {
 	if node.IsTypeOnly && node.ExportClause != nil && node.ExportClause.Kind == ast.KindNamedExports {
 		return c.checkGrammarTypeOnlyNamedImportsOrExports(node.ExportClause)
 	}
 	return false
 }
+
 func (c *Checker) checkGrammarModuleElementContext(node *ast.Statement, errorMessage *diagnostics.Message) bool {
 	isInAppropriateContext := node.Parent.Kind == ast.KindSourceFile || node.Parent.Kind == ast.KindModuleBlock || node.Parent.Kind == ast.KindModuleDeclaration
 	if !isInAppropriateContext {
@@ -977,6 +981,7 @@ func (c *Checker) checkGrammarInterfaceDeclaration(node *ast.InterfaceDeclaratio
 
 	return false
 }
+
 func (c *Checker) checkGrammarComputedPropertyName(node *ast.Node) bool {
 	// If node is not a computedPropertyName, just skip the grammar checking
 	if node.Kind != ast.KindComputedPropertyName {
@@ -1158,7 +1163,8 @@ func (c *Checker) checkGrammarJsxElement(node *ast.Node, jsxCommon struct {
 	tagName       *ast.JsxTagNameExpression
 	typeArguments *ast.NodeList
 	attributes    *ast.JsxAttributesNode
-}) bool {
+},
+) bool {
 	c.checkGrammarJsxName(jsxCommon.tagName)
 	c.checkGrammarTypeArguments(node, jsxCommon.typeArguments)
 	var seen core.Set[string]
@@ -2049,6 +2055,7 @@ func (c *Checker) checkGrammarTopLevelElementsForRequiredDeclareModifier(file *a
 	}
 	return false
 }
+
 func (c *Checker) checkGrammarSourceFile(node *ast.SourceFile) bool {
 	return node.Flags&ast.NodeFlagsAmbient != 0 && c.checkGrammarTopLevelElementsForRequiredDeclareModifier(node)
 }
@@ -2082,6 +2089,7 @@ func (c *Checker) checkGrammarStatementInAmbientContext(node *ast.Node) bool {
 	}
 	return false
 }
+
 func (c *Checker) checkGrammarNumericLiteral(node *ast.NumericLiteral) {
 	nodeText := scanner.GetTextOfNode(node.AsNode())
 

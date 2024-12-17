@@ -19,6 +19,7 @@
         }
     },
     "gopls": {
+        "formatting.gofumpt": true,
         "ui.diagnostic.analyses": {
             "unusedparams": false
         }

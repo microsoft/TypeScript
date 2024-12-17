@@ -38,10 +38,12 @@ func (host *emitHost) CommonSourceDirectory() string  { return host.program.Comm
 func (host *emitHost) UseCaseSensitiveFileNames() bool {
 	return host.program.host.FS().UseCaseSensitiveFileNames()
 }
+
 func (host *emitHost) IsEmitBlocked(file string) bool {
 	// !!!
 	return false
 }
+
 func (host *emitHost) WriteFile(fileName string, text string, writeByteOrderMark bool, _ []*ast.SourceFile, _ *WriteFileData) error {
 	return host.program.host.FS().WriteFile(fileName, text, writeByteOrderMark)
 }

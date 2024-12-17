@@ -13,8 +13,10 @@ type Path string
 // Internally, we represent paths as strings with '/' as the directory separator.
 // When we make system calls (eg: LanguageServiceHost.getDirectory()),
 // we expect the host to correctly handle paths in our specified format.
-const directorySeparator = '/'
-const urlSchemeSeparator = "://"
+const (
+	directorySeparator = '/'
+	urlSchemeSeparator = "://"
+)
 
 //// Path Tests
 
@@ -229,6 +231,7 @@ func GetDirectoryPath(path string) string {
 	path = RemoveTrailingDirectorySeparator(path)
 	return path[:max(rootLength, strings.LastIndex(path, "/"))]
 }
+
 func (p Path) GetDirectoryPath() Path {
 	return Path(GetDirectoryPath(string(p)))
 }
@@ -401,6 +404,7 @@ func RemoveTrailingDirectorySeparator(path string) string {
 	}
 	return path
 }
+
 func (p Path) RemoveTrailingDirectorySeparator() Path {
 	return Path(RemoveTrailingDirectorySeparator(string(p)))
 }
@@ -412,6 +416,7 @@ func EnsureTrailingDirectorySeparator(path string) string {
 
 	return path
 }
+
 func (p Path) EnsureTrailingDirectorySeparator() Path {
 	return Path(EnsureTrailingDirectorySeparator(string(p)))
 }

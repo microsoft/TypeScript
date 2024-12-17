@@ -105,6 +105,7 @@ jobs:
 
       - run: npm ci
 
+      - run: npx hereby install-tools
       - run: npx hereby check:format
 
   generate:

@@ -8,7 +8,7 @@ import (
 
 func TestTryParseSemver(t *testing.T) {
 	t.Parallel()
-	var tests = []struct {
+	tests := []struct {
 		in  string
 		out Version
 	}{
@@ -30,7 +30,7 @@ func TestTryParseSemver(t *testing.T) {
 
 func TestVersionString(t *testing.T) {
 	t.Parallel()
-	var tests = []struct {
+	tests := []struct {
 		in  Version
 		out string
 	}{
@@ -52,7 +52,7 @@ func TestVersionString(t *testing.T) {
 
 func TestVersionCompare(t *testing.T) {
 	t.Parallel()
-	var tests = []struct {
+	tests := []struct {
 		v1, v2 string
 		want   int
 	}{

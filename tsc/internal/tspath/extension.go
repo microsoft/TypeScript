@@ -22,9 +22,11 @@ const (
 	ExtensionDcts        = ".d.cts"
 )
 
-var supportedDeclarationExtensions = []string{ExtensionDts, ExtensionDcts, ExtensionDmts}
-var supportedTSImplementationExtensions = []string{ExtensionTs, ExtensionTsx, ExtensionMts, ExtensionCts}
-var supportedTSExtensionsForExtractExtension = []string{ExtensionDts, ExtensionDcts, ExtensionDmts, ExtensionTs, ExtensionTsx, ExtensionMts, ExtensionCts}
+var (
+	supportedDeclarationExtensions           = []string{ExtensionDts, ExtensionDcts, ExtensionDmts}
+	supportedTSImplementationExtensions      = []string{ExtensionTs, ExtensionTsx, ExtensionMts, ExtensionCts}
+	supportedTSExtensionsForExtractExtension = []string{ExtensionDts, ExtensionDcts, ExtensionDmts, ExtensionTs, ExtensionTsx, ExtensionMts, ExtensionCts}
+)
 
 func ExtensionIsTs(ext string) bool {
 	return ext == ExtensionTs || ext == ExtensionTsx || ext == ExtensionDts || ext == ExtensionMts || ext == ExtensionDmts || ext == ExtensionCts || ext == ExtensionDcts || len(ext) >= 7 && ext[:3] == ".d." && ext[len(ext)-3:] == ".ts"

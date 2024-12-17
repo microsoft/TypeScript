@@ -1,5 +1,7 @@
 package ast
 
-type NodeId uint32
-type SymbolId uint32
-type MergeId uint32
+type (
+	NodeId   uint32
+	SymbolId uint32
+	MergeId  uint32
+)

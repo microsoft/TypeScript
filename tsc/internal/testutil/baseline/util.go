@@ -7,12 +7,16 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-var testPathPrefix = regexp.MustCompile(`(?:(file:\/{3})|\/)\.(?:ts|lib|src)\/`)
-var testPathCharacters = regexp.MustCompile(`[\^<>:"|?*%]`)
-var testPathDotDot = regexp.MustCompile(`\.\.\/`)
+var (
+	testPathPrefix     = regexp.MustCompile(`(?:(file:\/{3})|\/)\.(?:ts|lib|src)\/`)
+	testPathCharacters = regexp.MustCompile(`[\^<>:"|?*%]`)
+	testPathDotDot     = regexp.MustCompile(`\.\.\/`)
+)
 
-var libFolder = "built/local/"
-var builtFolder = "/.ts"
+var (
+	libFolder   = "built/local/"
+	builtFolder = "/.ts"
+)
 
 func removeTestPathPrefixes(text string, retainTrailingDirectorySeparator bool) string {
 	testPathPrefix.ReplaceAllStringFunc(text, func(scheme string) string {

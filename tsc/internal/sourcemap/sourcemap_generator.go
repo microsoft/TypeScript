@@ -9,8 +9,10 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-type SourceIndex int
-type NameIndex int
+type (
+	SourceIndex int
+	NameIndex   int
+)
 
 const (
 	sourceIndexNotSet SourceIndex = -1

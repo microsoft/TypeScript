@@ -104,6 +104,7 @@ func (options *CompilerOptions) GetESModuleInterop() bool {
 	}
 	return false
 }
+
 func (options *CompilerOptions) GetAllowSyntheticDefaultImports() bool {
 	if options.AllowSyntheticDefaultImports != TSUnknown {
 		return options.AllowSyntheticDefaultImports == TSTrue

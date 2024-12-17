@@ -19,14 +19,16 @@ import (
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
-var quiet = false
-var singleThreaded = false
-var parseAndBindOnly = false
-var printTypes = false
-var pretty = true
-var listFiles = false
-var pprofDir = ""
-var outDir = ""
+var (
+	quiet            = false
+	singleThreaded   = false
+	parseAndBindOnly = false
+	printTypes       = false
+	pretty           = true
+	listFiles        = false
+	pprofDir         = ""
+	outDir           = ""
+)
 
 func printDiagnostic(d *ast.Diagnostic, level int, comparePathOptions tspath.ComparePathsOptions) {
 	file := d.File()
@@ -161,7 +163,7 @@ type profileSession struct {
 }
 
 func beginProfiling(profileDir string) *profileSession {
-	if err := os.MkdirAll(profileDir, 0755); err != nil {
+	if err := os.MkdirAll(profileDir, 0o755); err != nil {
 		panic(err)
 	}
 

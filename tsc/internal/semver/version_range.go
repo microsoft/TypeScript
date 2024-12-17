@@ -10,8 +10,10 @@ import (
 // range-set    ::= range ( logical-or range ) *
 // range        ::= hyphen | simple ( ' ' simple ) * | ”
 // logical-or   ::= ( ' ' ) * '||' ( ' ' ) *
-var logicalOrRegExp = regexp.MustCompile(`\|\|`)
-var whitespaceRegExp = regexp.MustCompile(`\s+`)
+var (
+	logicalOrRegExp  = regexp.MustCompile(`\|\|`)
+	whitespaceRegExp = regexp.MustCompile(`\s+`)
+)
 
 // https://github.com/npm/node-semver#range-grammar
 //

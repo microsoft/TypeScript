@@ -23,15 +23,19 @@ var versionRegexp = regexp.MustCompile(`(?i)^(0|[1-9]\d*)(?:\.(0|[1-9]\d*)(?:\.(
 // > identifiers immediately following the patch version. Identifiers MUST comprise only ASCII
 // > alphanumerics and hyphen [0-9A-Za-z-]. Identifiers MUST NOT be empty. Numeric identifiers
 // > MUST NOT include leading zeroes.
-var prereleaseRegexp = regexp.MustCompile(`(?i)^(?:0|[1-9]\d*|[a-z-][a-z0-9-]*)(?:\.(?:0|[1-9]\d*|[a-zA-Z-][a-zA-Z0-9-]*))*$`)
-var prereleasePartRegexp = regexp.MustCompile(`(?i)^(?:0|[1-9]\d*|[a-z-][a-z0-9-]*)$`)
+var (
+	prereleaseRegexp     = regexp.MustCompile(`(?i)^(?:0|[1-9]\d*|[a-z-][a-z0-9-]*)(?:\.(?:0|[1-9]\d*|[a-zA-Z-][a-zA-Z0-9-]*))*$`)
+	prereleasePartRegexp = regexp.MustCompile(`(?i)^(?:0|[1-9]\d*|[a-z-][a-z0-9-]*)$`)
+)
 
 // https://semver.org/#spec-item-10
 // > Build metadata MAY be denoted by appending a plus sign and a series of dot separated
 // > identifiers immediately following the patch or pre-release version. Identifiers MUST
 // > comprise only ASCII alphanumerics and hyphen [0-9A-Za-z-]. Identifiers MUST NOT be empty.
-var buildRegExp = regexp.MustCompile(`(?i)^[a-z0-9-]+(?:\.[a-z0-9-]+)*$`)
-var buildPartRegExp = regexp.MustCompile(`(?i)^[a-z0-9-]+$`)
+var (
+	buildRegExp     = regexp.MustCompile(`(?i)^[a-z0-9-]+(?:\.[a-z0-9-]+)*$`)
+	buildPartRegExp = regexp.MustCompile(`(?i)^[a-z0-9-]+$`)
+)
 
 // https://semver.org/#spec-item-9
 // > Numeric identifiers MUST NOT include leading zeroes.
@@ -70,9 +74,11 @@ func (v *Version) incrementPatch() Version {
 	}
 }
 
-const comparisonLessThan = -1
-const comparisonEqualTo = 0
-const comparisonGreaterThan = 1
+const (
+	comparisonLessThan    = -1
+	comparisonEqualTo     = 0
+	comparisonGreaterThan = 1
+)
 
 func (a *Version) Compare(b *Version) int {
 	// https://semver.org/#spec-item-11

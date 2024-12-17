@@ -47,7 +47,7 @@ type Program struct {
 	// - This calls resolveModuleNames, and then calls findSourceFile for each resolved module.
 	// As all these operations happen - and are nested - within the createProgram call, they close over the below variables.
 	// The current resolution depth is tracked by incrementing/decrementing as the depth first search progresses.
-	//maxNodeModuleJsDepth      int
+	// maxNodeModuleJsDepth      int
 	currentNodeModulesDepth int
 
 	usesUriStyleNodeCoreModules core.Tristate
@@ -67,7 +67,7 @@ func NewProgram(options ProgramOptions) *Program {
 	}
 	p.filesByPath = make(map[tspath.Path]*ast.SourceFile)
 
-	//p.maxNodeModuleJsDepth = p.options.MaxNodeModuleJsDepth
+	// p.maxNodeModuleJsDepth = p.options.MaxNodeModuleJsDepth
 
 	// TODO(ercornel): !!! tracing?
 	// tracing?.push(tracing.Phase.Program, "createProgram", { configFilePath: options.configFilePath, rootDir: options.rootDir }, /*separateBeginAndEnd*/ true);
@@ -252,7 +252,7 @@ func (p *Program) resolveImportsAndModuleAugmentations(file *ast.SourceFile) []s
 			// - module name comes from the list of imports
 			// - it's not a top level JavaScript module that exceeded the search max
 
-			//const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
+			// const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
 
 			// Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
 			// This may still end up being an untyped module -- the file won't be included but imports will be allowed.
@@ -261,7 +261,7 @@ func (p *Program) resolveImportsAndModuleAugmentations(file *ast.SourceFile) []s
 			// TODO(ercornel): !!!: other checks on whether or not to add the file
 
 			if shouldAddFile {
-				//p.findSourceFile(resolvedFileName, FileIncludeReason{Import, 0})
+				// p.findSourceFile(resolvedFileName, FileIncludeReason{Import, 0})
 				toParse = append(toParse, resolvedFileName)
 			}
 		}

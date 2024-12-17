@@ -58,6 +58,7 @@ function assertTypeScriptCloned() {
 
 const tools = new Map([
     ["gotest.tools/gotestsum", "latest"],
+    ["mvdan.cc/gofumpt", "v0.7.0"],
 ]);
 
 /**
@@ -144,7 +145,7 @@ export const installTools = task({
     name: "install-tools",
     run: async () => {
         await Promise.all([
-            ...[...tools].map(([tool, version]) => $`go install ${tool}@${version}`),
+            ...[...tools].map(([tool, version]) => $`go install ${tool}${version ? `@${version}` : ""}`),
             buildCustomLinter(),
         ]);
     },

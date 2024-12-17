@@ -7,8 +7,10 @@ import (
 
 // Atomic ids
 
-var nextNodeId atomic.Uint32
-var nextSymbolId atomic.Uint32
+var (
+	nextNodeId   atomic.Uint32
+	nextSymbolId atomic.Uint32
+)
 
 func GetNodeId(node *Node) NodeId {
 	if node.Id == 0 {
