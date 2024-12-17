@@ -553,6 +553,13 @@ func SkipParentheses(node *Expression) *Expression {
 	return SkipOuterExpressions(node, OEKParentheses)
 }
 
+func SkipTypeParentheses(node *Node) *Node {
+	for IsParenthesizedTypeNode(node) {
+		node = node.AsParenthesizedTypeNode().Type
+	}
+	return node
+}
+
 func SkipPartiallyEmittedExpressions(node *Expression) *Expression {
 	return SkipOuterExpressions(node, OEKPartiallyEmittedExpressions)
 }
@@ -841,6 +848,14 @@ func IsImportMeta(node *Node) bool {
 		return node.AsMetaProperty().KeywordToken == KindImportKeyword && node.AsMetaProperty().Name().AsIdentifier().Text == "meta"
 	}
 	return false
+}
+
+func WalkUpBindingElementsAndPatterns(binding *Node) *Node {
+	node := binding.Parent
+	for IsBindingElement(node.Parent) {
+		node = node.Parent.Parent
+	}
+	return node.Parent
 }
 
 func IsInJSFile(node *Node) bool {

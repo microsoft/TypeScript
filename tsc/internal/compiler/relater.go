@@ -567,7 +567,7 @@ func getRecursionIdentity(t *Type) RecursionId {
 	}
 	if t.flags&TypeFlagsConditional != 0 {
 		// The root object represents the origin of the conditional type
-		return RecursionId{kind: RecursionIdKindNode, id: uint32(getNodeId(t.AsConditionalType().root.node))}
+		return RecursionId{kind: RecursionIdKindNode, id: uint32(getNodeId(t.AsConditionalType().root.node.AsNode()))}
 	}
 	return RecursionId{kind: RecursionIdKindType, id: uint32(t.id)}
 }
@@ -1642,7 +1642,7 @@ func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
 				sig.resolvedTypePredicate = c.instantiateTypePredicate(targetTypePredicate, sig.mapper)
 			}
 		case sig.composite != nil:
-			sig.resolvedTypePredicate = c.getUnionOrIntersectionTypePredicate(sig.composite.signatures, sig.composite.flags)
+			sig.resolvedTypePredicate = c.getUnionOrIntersectionTypePredicate(sig.composite.signatures, sig.composite.isUnion)
 		default:
 			var typeNode *ast.TypeNode
 			if sig.declaration != nil {
@@ -1666,7 +1666,7 @@ func (c *Checker) getTypePredicateOfSignature(sig *Signature) *TypePredicate {
 	return sig.resolvedTypePredicate
 }
 
-func (c *Checker) getUnionOrIntersectionTypePredicate(signatures []*Signature, flags TypeFlags) *TypePredicate {
+func (c *Checker) getUnionOrIntersectionTypePredicate(signatures []*Signature, isUnion bool) *TypePredicate {
 	var last *TypePredicate
 	var types []*Type
 	for _, sig := range signatures {
@@ -1681,7 +1681,7 @@ func (c *Checker) getUnionOrIntersectionTypePredicate(signatures []*Signature, f
 		} else {
 			// In composite union signatures we permit and ignore signatures with a return type `false`.
 			var returnType *Type
-			if flags&TypeFlagsUnion != 0 {
+			if isUnion {
 				returnType = c.getReturnTypeOfSignature(sig)
 			}
 			if returnType != c.falseType && returnType != c.regularFalseType {
@@ -1692,7 +1692,7 @@ func (c *Checker) getUnionOrIntersectionTypePredicate(signatures []*Signature, f
 	if last == nil {
 		return nil
 	}
-	compositeType := c.getUnionOrIntersectionType(types, flags, UnionReductionLiteral)
+	compositeType := c.getUnionOrIntersectionType(types, isUnion, UnionReductionLiteral)
 	return c.newTypePredicate(last.kind, last.parameterName, last.parameterIndex, compositeType)
 }
 
@@ -2166,6 +2166,10 @@ type Relater struct {
 
 func (r *Relater) isRelatedToSimple(source *Type, target *Type) Ternary {
 	return r.isRelatedToEx(source, target, RecursionFlagsNone, false /*reportErrors*/, nil /*headMessage*/, IntersectionStateNone)
+}
+
+func (r *Relater) isRelatedToWorker(source *Type, target *Type, reportErrors bool) Ternary {
+	return r.isRelatedToEx(source, target, RecursionFlagsBoth, reportErrors, nil, IntersectionStateNone)
 }
 
 func (r *Relater) isRelatedTo(source *Type, target *Type, recursionFlags RecursionFlags, reportErrors bool) Ternary {
@@ -3122,7 +3126,37 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		}
 	case target.flags&TypeFlagsConditional != 0:
-		return TernaryTrue // !!!
+		// If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
+		// conditional type and bail out with a Ternary.Maybe result.
+		if r.c.isDeeplyNestedType(target, r.targetStack, 10) {
+			return TernaryMaybe
+		}
+		c := target.AsConditionalType()
+		// We check for a relationship to a conditional type target only when the conditional type has no
+		// 'infer' positions, is not distributive or is distributive but doesn't reference the check type
+		// parameter in either of the result types, and the source isn't an instantiation of the same
+		// conditional type (as happens when computing variance).
+		if c.root.inferTypeParameters == nil && !r.c.isDistributionDependent(c.root) && !(source.flags&TypeFlagsConditional != 0 && source.AsConditionalType().root == c.root) {
+			// Check if the conditional is always true or always false but still deferred for distribution purposes.
+			skipTrue := !r.c.isTypeAssignableTo(r.c.getPermissiveInstantiation(c.checkType), r.c.getPermissiveInstantiation(c.extendsType))
+			skipFalse := !skipTrue && r.c.isTypeAssignableTo(r.c.getRestrictiveInstantiation(c.checkType), r.c.getRestrictiveInstantiation(c.extendsType))
+			// TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
+			if skipTrue {
+				result = TernaryTrue
+			} else {
+				result = r.isRelatedToEx(source, r.c.getTrueTypeFromConditionalType(target), RecursionFlagsTarget, false /*reportErrors*/, nil /*headMessage*/, intersectionState)
+			}
+			if result != TernaryFalse {
+				if skipFalse {
+					result &= TernaryTrue
+				} else {
+					result &= r.isRelatedToEx(source, r.c.getFalseTypeFromConditionalType(target), RecursionFlagsTarget, false /*reportErrors*/, nil /*headMessage*/, intersectionState)
+				}
+				if result != TernaryFalse {
+					return result
+				}
+			}
+		}
 	case target.flags&TypeFlagsTemplateLiteral != 0:
 		if source.flags&TypeFlagsTemplateLiteral != 0 {
 			if r.relation == r.c.comparableRelation {
@@ -3273,7 +3307,56 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			}
 		}
 	case source.flags&TypeFlagsConditional != 0:
-		return TernaryTrue // !!!
+		// If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
+		// conditional type and bail out with a Ternary.Maybe result.
+		if r.c.isDeeplyNestedType(source, r.sourceStack, 10) {
+			return TernaryMaybe
+		}
+		if target.flags&TypeFlagsConditional != 0 {
+			// Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
+			// one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
+			// and Y1 is related to Y2.
+			sourceParams := source.AsConditionalType().root.inferTypeParameters
+			sourceExtends := source.AsConditionalType().extendsType
+			var mapper *TypeMapper
+			if len(sourceParams) != 0 {
+				// If the source has infer type parameters, we instantiate them in the context of the target
+				ctx := r.c.newInferenceContext(sourceParams, nil /*signature*/, InferenceFlagsNone, r.isRelatedToWorker)
+				r.c.inferTypes(ctx.inferences, target.AsConditionalType().extendsType, sourceExtends, InferencePriorityNoConstraints|InferencePriorityAlwaysStrict, false)
+				sourceExtends = r.c.instantiateType(sourceExtends, ctx.mapper)
+				mapper = ctx.mapper
+			}
+			if r.c.isTypeIdenticalTo(sourceExtends, target.AsConditionalType().extendsType) && (r.isRelatedTo(source.AsConditionalType().checkType, target.AsConditionalType().checkType, RecursionFlagsBoth, false) != 0 || r.isRelatedTo(target.AsConditionalType().checkType, source.AsConditionalType().checkType, RecursionFlagsBoth, false) != 0) {
+				result = r.isRelatedTo(r.c.instantiateType(r.c.getTrueTypeFromConditionalType(source), mapper), r.c.getTrueTypeFromConditionalType(target), RecursionFlagsBoth, reportErrors)
+				if result != TernaryFalse {
+					result &= r.isRelatedTo(r.c.getFalseTypeFromConditionalType(source), r.c.getFalseTypeFromConditionalType(target), RecursionFlagsBoth, reportErrors)
+				}
+				if result != TernaryFalse {
+					return result
+				}
+			}
+		}
+		// conditionals can be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
+		// when `O` is a conditional (`never` is trivially assignable to `O`, as is `O`!).
+		defaultConstraint := r.c.getDefaultConstraintOfConditionalType(source)
+		if defaultConstraint != nil {
+			result = r.isRelatedTo(defaultConstraint, target, RecursionFlagsSource, reportErrors)
+			if result != TernaryFalse {
+				return result
+			}
+		}
+		// conditionals aren't related to one another via distributive constraint as it is much too inaccurate and allows way
+		// more assignments than are desirable (since it maps the source check type to its constraint, it loses information).
+		if target.flags&TypeFlagsConditional == 0 && r.c.hasNonCircularBaseConstraint(source) {
+			distributiveConstraint := r.c.getConstraintOfDistributiveConditionalType(source)
+			if distributiveConstraint != nil {
+				r.restoreErrorState(saveErrorState)
+				result = r.isRelatedTo(distributiveConstraint, target, RecursionFlagsSource, reportErrors)
+				if result != TernaryFalse {
+					return result
+				}
+			}
+		}
 	case source.flags&TypeFlagsTemplateLiteral != 0 && target.flags&TypeFlagsObject == 0:
 		if target.flags&TypeFlagsTemplateLiteral == 0 {
 			constraint := r.c.getBaseConstraintOfType(source)
@@ -4442,4 +4525,8 @@ func (c *Checker) isTypeDerivedFrom(source *Type, target *Type) bool {
 	default:
 		return c.hasBaseType(source, c.getTargetType(target)) || (c.isArrayType(target) && !c.isReadonlyArrayType(target) && c.isTypeDerivedFrom(source, c.globalReadonlyArrayType))
 	}
+}
+
+func (c *Checker) isDistributionDependent(root *ConditionalRoot) bool {
+	return root.isDistributive && (c.isTypeParameterPossiblyReferenced(root.checkType, root.node.TrueType) || c.isTypeParameterPossiblyReferenced(root.checkType, root.node.FalseType))
 }

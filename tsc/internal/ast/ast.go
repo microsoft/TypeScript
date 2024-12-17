@@ -4260,6 +4260,10 @@ func (node *TupleTypeNode) ForEachChild(v Visitor) bool {
 	return visitNodeList(v, node.Elements)
 }
 
+func IsTupleTypeNode(node *Node) bool {
+	return node.Kind == KindTupleType
+}
+
 // NamedTupleTypeMember
 
 type NamedTupleMember struct {
@@ -4287,6 +4291,7 @@ func (node *NamedTupleMember) ForEachChild(v Visitor) bool {
 func (node *NamedTupleMember) Name() *DeclarationName {
 	return node.name
 }
+
 func IsNamedTupleMember(node *Node) bool {
 	return node.Kind == KindNamedTupleMember
 }
@@ -4308,6 +4313,10 @@ func (node *OptionalTypeNode) ForEachChild(v Visitor) bool {
 	return visit(v, node.Type)
 }
 
+func IsOptionalTypeNode(node *Node) bool {
+	return node.Kind == KindOptionalType
+}
+
 // RestTypeNode
 
 type RestTypeNode struct {
@@ -4323,6 +4332,10 @@ func (f *NodeFactory) NewRestTypeNode(typeNode *TypeNode) *Node {
 
 func (node *RestTypeNode) ForEachChild(v Visitor) bool {
 	return visit(v, node.Type)
+}
+
+func IsRestTypeNode(node *Node) bool {
+	return node.Kind == KindRestType
 }
 
 // ParenthesizedTypeNode

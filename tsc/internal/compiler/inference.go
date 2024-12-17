@@ -53,7 +53,7 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 		return
 	}
 	if source.alias != nil && target.alias != nil && source.alias.symbol == target.alias.symbol {
-		if len(source.alias.typeArguments) != 0 {
+		if len(source.alias.typeArguments) != 0 || len(target.alias.typeArguments) != 0 {
 			// Source and target are types originating in the same generic type alias declaration.
 			// Simply infer from source type arguments to target type arguments, with defaults applied.
 			params := c.typeAliasLinks.get(source.alias.symbol).typeParameters
@@ -449,8 +449,23 @@ func getSingleTypeVariableFromIntersectionTypes(n *InferenceState, types []*Type
 	return typeVariable
 }
 
+func (c *Checker) inferToMultipleTypesWithPriority(n *InferenceState, source *Type, targets []*Type, targetFlags TypeFlags, newPriority InferencePriority) {
+	savePriority := n.priority
+	n.priority |= newPriority
+	c.inferToMultipleTypes(n, source, targets, targetFlags)
+	n.priority = savePriority
+}
+
 func (c *Checker) inferToConditionalType(n *InferenceState, source *Type, target *Type) {
-	// !!!
+	if source.flags&TypeFlagsConditional != 0 {
+		c.inferFromTypes(n, source.AsConditionalType().checkType, target.AsConditionalType().checkType)
+		c.inferFromTypes(n, source.AsConditionalType().extendsType, target.AsConditionalType().extendsType)
+		c.inferFromTypes(n, c.getTrueTypeFromConditionalType(source), c.getTrueTypeFromConditionalType(target))
+		c.inferFromTypes(n, c.getFalseTypeFromConditionalType(source), c.getFalseTypeFromConditionalType(target))
+	} else {
+		targetTypes := []*Type{c.getTrueTypeFromConditionalType(target), c.getFalseTypeFromConditionalType(target)}
+		c.inferToMultipleTypesWithPriority(n, source, targetTypes, target.flags, core.IfElse(n.contravariant, InferencePriorityContravariantConditional, 0))
+	}
 }
 
 func (c *Checker) inferToTemplateLiteralType(n *InferenceState, source *Type, target *Type) {
@@ -1151,4 +1166,21 @@ func hasTypeParameterDefault(tp *Type) bool {
 		}
 	}
 	return false
+}
+
+func hasOverlappingInferences(a []*InferenceInfo, b []*InferenceInfo) bool {
+	for i := range a {
+		if hasInferenceCandidates(a[i]) && hasInferenceCandidates(b[i]) {
+			return true
+		}
+	}
+	return false
+}
+
+func (c *Checker) mergeInferences(target []*InferenceInfo, source []*InferenceInfo) {
+	for i := range target {
+		if !hasInferenceCandidates(target[i]) && hasInferenceCandidates(source[i]) {
+			target[i] = source[i]
+		}
+	}
 }

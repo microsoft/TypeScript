@@ -972,7 +972,7 @@ type SubstitutionType struct {
 }
 
 type ConditionalRoot struct {
-	node                *ast.Node // ConditionalTypeNode
+	node                *ast.ConditionalTypeNode
 	checkType           *Type
 	extendsType         *Type
 	isDistributive      bool
@@ -1045,8 +1045,8 @@ type Signature struct {
 }
 
 type CompositeSignature struct {
-	flags      TypeFlags // TypeFlagsUnion | TypeFlagsIntersection
-	signatures []*Signature
+	isUnion    bool         // True for union, false for intersection
+	signatures []*Signature // Individual signatures
 }
 
 type TypePredicateKind int32

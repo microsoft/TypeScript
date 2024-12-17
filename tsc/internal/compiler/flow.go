@@ -309,6 +309,9 @@ func (c *Checker) getTypeAtFlowCondition(f *FlowState, flow *ast.FlowNode) FlowT
 	assumeTrue := flow.Flags&ast.FlowFlagsTrueCondition != 0
 	nonEvolvingType := c.finalizeEvolvingArrayType(flowType.t)
 	narrowedType := c.narrowType(f, nonEvolvingType, flow.Node, assumeTrue)
+	if narrowedType == nonEvolvingType {
+		return flowType
+	}
 	return FlowType{t: narrowedType, incomplete: flowType.incomplete}
 }
 
@@ -1310,7 +1313,7 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 }
 
 func (c *Checker) getTypeAtFlowArrayMutation(f *FlowState, flow *ast.FlowNode) FlowType {
-	if f.declaredType != c.autoType || f.declaredType == c.autoArrayType {
+	if f.declaredType == c.autoType || f.declaredType == c.autoArrayType {
 		node := flow.Node
 		var expr *ast.Node
 		if ast.IsCallExpression(node) {
