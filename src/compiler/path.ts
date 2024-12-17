@@ -625,7 +625,41 @@ export function getNormalizedPathComponents(path: string, currentDirectory: stri
 
 /** @internal */
 export function getNormalizedAbsolutePath(fileName: string, currentDirectory: string | undefined): string {
-    return getPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
+    if (isNotNormalizedOrAbsolute(fileName)) {
+        return getPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
+    }
+
+    return fileName;
+}
+
+function isNotNormalizedOrAbsolute(s: string) {
+    // The path is not absolute.
+    if (getEncodedRootLength(s) === 0) return true;
+
+    if (s.length > 0) {
+        const lastChar = s.charCodeAt(s.length - 1);
+        if (lastChar === CharacterCodes.slash || lastChar === CharacterCodes.backslash) return true;
+    }
+
+    for (let i = 0, n = s.length - 1; i < n; i++) {
+        const curr = s.charCodeAt(i);
+        const next = s.charCodeAt(i + 1);
+        if (curr === CharacterCodes.dot) {
+            if (next === CharacterCodes.slash) {
+                return true;
+            }
+        }
+        else if (curr === CharacterCodes.slash) {
+            if (next === CharacterCodes.slash) {
+                return true;
+            }
+        }
+        else if (curr === CharacterCodes.backslash) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /** @internal */
