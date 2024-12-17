@@ -112,14 +112,6 @@ func isCompoundAssignment(token ast.Kind) bool {
 	return token >= ast.KindFirstCompoundAssignment && token <= ast.KindLastCompoundAssignment
 }
 
-func isSignedNumericLiteral(node *ast.Node) bool {
-	if node.Kind == ast.KindPrefixUnaryExpression {
-		node := node.AsPrefixUnaryExpression()
-		return (node.Operator == ast.KindPlusToken || node.Operator == ast.KindMinusToken) && ast.IsNumericLiteral(node.Operand)
-	}
-	return false
-}
-
 func tokenIsIdentifierOrKeyword(token ast.Kind) bool {
 	return token >= ast.KindIdentifier
 }
@@ -134,10 +126,6 @@ func getTextOfNode(node *ast.Node) string {
 
 func isAssignmentDeclaration(decl *ast.Node) bool {
 	return ast.IsBinaryExpression(decl) || ast.IsAccessExpression(decl) || ast.IsIdentifier(decl) || ast.IsCallExpression(decl)
-}
-
-func isInJSFile(node *ast.Node) bool {
-	return node != nil && node.Flags&ast.NodeFlagsJavaScriptFile != 0
 }
 
 func isEffectiveModuleDeclaration(node *ast.Node) bool {
@@ -370,22 +358,6 @@ func getImmediatelyInvokedFunctionExpression(fn *ast.Node) *ast.Node {
 	return nil
 }
 
-// Does not handle signed numeric names like `a[+0]` - handling those would require handling prefix unary expressions
-// throughout late binding handling as well, which is awkward (but ultimately probably doable if there is demand)
-func getElementOrPropertyAccessArgumentExpressionOrName(node *ast.Node) *ast.Node {
-	switch node.Kind {
-	case ast.KindPropertyAccessExpression:
-		return node.Name()
-	case ast.KindElementAccessExpression:
-		arg := ast.SkipParentheses(node.AsElementAccessExpression().ArgumentExpression)
-		if ast.IsStringOrNumericLiteralLike(arg) {
-			return arg
-		}
-		return node
-	}
-	panic("Unhandled case in getElementOrPropertyAccessArgumentExpressionOrName")
-}
-
 /**
  * A declaration has a dynamic name if all of the following are true:
  *   1. The declaration has a computed property name.
@@ -396,20 +368,7 @@ func getElementOrPropertyAccessArgumentExpressionOrName(node *ast.Node) *ast.Nod
  */
 func hasDynamicName(declaration *ast.Node) bool {
 	name := getNameOfDeclaration(declaration)
-	return name != nil && isDynamicName(name)
-}
-
-func isDynamicName(name *ast.Node) bool {
-	var expr *ast.Node
-	switch name.Kind {
-	case ast.KindComputedPropertyName:
-		expr = name.AsComputedPropertyName().Expression
-	case ast.KindElementAccessExpression:
-		expr = ast.SkipParentheses(name.AsElementAccessExpression().ArgumentExpression)
-	default:
-		return false
-	}
-	return !ast.IsStringOrNumericLiteralLike(expr) && !isSignedNumericLiteral(expr)
+	return name != nil && ast.IsDynamicName(name)
 }
 
 func getNameOfDeclaration(declaration *ast.Node) *ast.Node {
@@ -430,7 +389,7 @@ func getNonAssignedNameOfDeclaration(declaration *ast.Node) *ast.Node {
 	switch declaration.Kind {
 	case ast.KindBinaryExpression:
 		if isFunctionPropertyAssignment(declaration) {
-			return getElementOrPropertyAccessArgumentExpressionOrName(declaration.AsBinaryExpression().Left)
+			return ast.GetElementOrPropertyAccessArgumentExpressionOrName(declaration.AsBinaryExpression().Left)
 		}
 		return nil
 	case ast.KindExportAssignment:
@@ -489,15 +448,6 @@ func isFunctionPropertyAssignment(node *ast.Node) bool {
 				return ast.IsIdentifier(expr.Left.Expression())
 			}
 		}
-	}
-	return false
-}
-
-func isAssignmentExpression(node *ast.Node, excludeCompoundAssignment bool) bool {
-	if node.Kind == ast.KindBinaryExpression {
-		expr := node.AsBinaryExpression()
-		return (expr.OperatorToken.Kind == ast.KindEqualsToken || !excludeCompoundAssignment && ast.IsAssignmentOperator(expr.OperatorToken.Kind)) &&
-			ast.IsLeftHandSideExpression(expr.Left)
 	}
 	return false
 }
@@ -670,7 +620,7 @@ func getExportAssignmentExpression(node *ast.Node) *ast.Node {
 }
 
 func isAliasableExpression(e *ast.Node) bool {
-	return isEntityNameExpression(e) || ast.IsClassExpression(e)
+	return ast.IsEntityNameExpression(e) || ast.IsClassExpression(e)
 }
 
 func isEmptyObjectLiteral(expression *ast.Node) bool {
@@ -736,7 +686,7 @@ func unreachableCodeIsError(options *core.CompilerOptions) bool {
 }
 
 func isDestructuringAssignment(node *ast.Node) bool {
-	if isAssignmentExpression(node, true /*excludeCompoundAssignment*/) {
+	if ast.IsAssignmentExpression(node, true /*excludeCompoundAssignment*/) {
 		kind := node.AsBinaryExpression().Left.Kind
 		return kind == ast.KindObjectLiteralExpression || kind == ast.KindArrayLiteralExpression
 	}
@@ -860,7 +810,7 @@ func isDeleteTarget(node *ast.Node) bool {
 
 func isInCompoundLikeAssignment(node *ast.Node) bool {
 	target := getAssignmentTarget(node)
-	return target != nil && isAssignmentExpression(target /*excludeCompoundAssignment*/, true) && isCompoundLikeAssignment(target)
+	return target != nil && ast.IsAssignmentExpression(target /*excludeCompoundAssignment*/, true) && isCompoundLikeAssignment(target)
 }
 
 func isCompoundLikeAssignment(assignment *ast.Node) bool {
@@ -871,18 +821,6 @@ func isCompoundLikeAssignment(assignment *ast.Node) bool {
 func isPushOrUnshiftIdentifier(node *ast.Node) bool {
 	text := node.Text()
 	return text == "push" || text == "unshift"
-}
-
-func isEntityNameExpression(node *ast.Node) bool {
-	return node.Kind == ast.KindIdentifier || isPropertyAccessEntityNameExpression(node)
-}
-
-func isPropertyAccessEntityNameExpression(node *ast.Node) bool {
-	if node.Kind == ast.KindPropertyAccessExpression {
-		expr := node.AsPropertyAccessExpression()
-		return expr.Name().Kind == ast.KindIdentifier && isEntityNameExpression(expr.Expression)
-	}
-	return false
 }
 
 func isPrologueDirective(node *ast.Node) bool {
@@ -2149,10 +2087,6 @@ func hasExportAssignmentSymbol(moduleSymbol *ast.Symbol) bool {
 	return moduleSymbol.Exports[InternalSymbolNameExportEquals] != nil
 }
 
-func isImportOrExportSpecifier(node *ast.Node) bool {
-	return ast.IsImportSpecifier(node) || ast.IsExportSpecifier(node)
-}
-
 func parsePseudoBigInt(stringValue string) string {
 	return stringValue // !!!
 }
@@ -2565,7 +2499,7 @@ func getPropertyNameForPropertyNameNode(name *ast.Node) string {
 		if ast.IsStringOrNumericLiteralLike(nameExpression) {
 			return nameExpression.Text()
 		}
-		if isSignedNumericLiteral(nameExpression) {
+		if ast.IsSignedNumericLiteral(nameExpression) {
 			text := nameExpression.AsPrefixUnaryExpression().Operand.Text()
 			if nameExpression.AsPrefixUnaryExpression().Operator == ast.KindMinusToken {
 				text = "-" + text
@@ -2964,7 +2898,7 @@ func createEvaluator(evaluateEntity Evaluator) Evaluator {
 		case ast.KindIdentifier, ast.KindElementAccessExpression:
 			return evaluateEntity(expr, location)
 		case ast.KindPropertyAccessExpression:
-			if isEntityNameExpression(expr) {
+			if ast.IsEntityNameExpression(expr) {
 				return evaluateEntity(expr, location)
 			}
 		}
@@ -3163,4 +3097,90 @@ func getFunctionFlags(node *ast.Node) FunctionFlags {
 		flags |= FunctionFlagsInvalid
 	}
 	return flags
+}
+
+func getLeftSideOfImportEqualsOrExportAssignment(nodeOnRightSide *ast.EntityName) *ast.Node {
+	for nodeOnRightSide.Parent.Kind == ast.KindQualifiedName {
+		nodeOnRightSide = nodeOnRightSide.Parent
+	}
+
+	if nodeOnRightSide.Parent.Kind == ast.KindImportEqualsDeclaration {
+		if nodeOnRightSide.Parent.AsImportEqualsDeclaration().ModuleReference == nodeOnRightSide {
+			return nodeOnRightSide.Parent
+		}
+		return nil
+	}
+
+	if nodeOnRightSide.Parent.Kind == ast.KindExportAssignment {
+		if nodeOnRightSide.Parent.AsExportAssignment().Expression == nodeOnRightSide {
+			return nodeOnRightSide.Parent
+		}
+		return nil
+	}
+
+	return nil
+}
+
+func isInRightSideOfImportOrExportAssignment(node *ast.EntityName) bool {
+	return getLeftSideOfImportEqualsOrExportAssignment(node) != nil
+}
+
+func isJsxIntrinsicTagName(tagName *ast.Node) bool {
+	return ast.IsIdentifier(tagName) && isIntrinsicJsxName(tagName.Text()) || ast.IsJsxNamespacedName(tagName)
+}
+
+func getContainingObjectLiteral(f *ast.SignatureDeclaration) *ast.Node {
+	if (f.Kind == ast.KindMethodDeclaration ||
+		f.Kind == ast.KindGetAccessor ||
+		f.Kind == ast.KindSetAccessor) && f.Parent.Kind == ast.KindObjectLiteralExpression {
+		return f.Parent
+	} else if f.Kind == ast.KindFunctionExpression && f.Parent.Kind == ast.KindPropertyAssignment {
+		return f.Parent.Parent
+	}
+	return nil
+}
+
+func isImportTypeQualifierPart(node *ast.Node) *ast.Node {
+	parent := node.Parent
+	for ast.IsQualifiedName(parent) {
+		node = parent
+		parent = parent.Parent
+	}
+
+	if parent != nil && parent.Kind == ast.KindImportType && parent.AsImportTypeNode().Qualifier == node {
+		return parent
+	}
+
+	return nil
+}
+
+func isInNameOfExpressionWithTypeArguments(node *ast.Node) bool {
+	for node.Parent.Kind == ast.KindPropertyAccessExpression {
+		node = node.Parent
+	}
+
+	return node.Parent.Kind == ast.KindExpressionWithTypeArguments
+}
+
+func getSymbolPath(symbol *ast.Symbol) string {
+	if symbol.Parent != nil {
+		return getSymbolPath(symbol.Parent) + "." + symbol.Name
+	}
+	return symbol.Name
+}
+
+func getTypeParameterFromJsDoc(node *ast.Node) *ast.Node {
+	name := node.Name().Text()
+	typeParameters := node.Parent.Parent.Parent.TypeParameters()
+	return core.Find(typeParameters, func(p *ast.Node) bool { return p.Name().Text() == name })
+}
+
+func isTypeDeclarationName(name *ast.Node) bool {
+	return name.Kind == ast.KindIdentifier &&
+		isTypeDeclaration(name.Parent) &&
+		getNameOfDeclaration(name.Parent) == name
+}
+
+func getIndexSymbolFromSymbolTable(symbolTable ast.SymbolTable) *ast.Symbol {
+	return symbolTable[InternalSymbolNameIndex]
 }

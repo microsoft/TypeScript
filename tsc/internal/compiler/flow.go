@@ -1501,7 +1501,7 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 	case ast.KindParenthesizedExpression, ast.KindNonNullExpression:
 		return c.isMatchingReference(source, target.Expression())
 	case ast.KindBinaryExpression:
-		return isAssignmentExpression(target, false) && c.isMatchingReference(source, target.AsBinaryExpression().Left) ||
+		return ast.IsAssignmentExpression(target, false) && c.isMatchingReference(source, target.AsBinaryExpression().Left) ||
 			ast.IsBinaryExpression(target) && target.AsBinaryExpression().OperatorToken.Kind == ast.KindCommaToken &&
 				c.isMatchingReference(source, target.AsBinaryExpression().Right)
 	}
@@ -1640,7 +1640,7 @@ func (c *Checker) tryGetElementAccessExpressionName(node *ast.ElementAccessExpre
 	switch {
 	case ast.IsStringOrNumericLiteralLike(node.ArgumentExpression):
 		return node.ArgumentExpression.Text(), true
-	case isEntityNameExpression(node.ArgumentExpression):
+	case ast.IsEntityNameExpression(node.ArgumentExpression):
 		return c.tryGetNameFromEntityNameExpression(node.ArgumentExpression)
 	}
 	return "", false

@@ -301,7 +301,7 @@ func (b *Binder) getDeclarationName(node *ast.Node) string {
 			if ast.IsStringOrNumericLiteralLike(nameExpression) {
 				return nameExpression.Text()
 			}
-			if isSignedNumericLiteral(nameExpression) {
+			if ast.IsSignedNumericLiteral(nameExpression) {
 				unaryExpression := nameExpression.AsPrefixUnaryExpression()
 				return scanner.TokenToString(unaryExpression.Operator) + unaryExpression.Operand.Text()
 			}
@@ -2673,7 +2673,7 @@ func isNarrowableReference(node *ast.Node) bool {
 	case ast.KindElementAccessExpression:
 		expr := node.AsElementAccessExpression()
 		return ast.IsStringOrNumericLiteralLike(expr.ArgumentExpression) ||
-			isEntityNameExpression(expr.ArgumentExpression) && isNarrowableReference(expr.Expression)
+			ast.IsEntityNameExpression(expr.ArgumentExpression) && isNarrowableReference(expr.Expression)
 	case ast.KindBinaryExpression:
 		expr := node.AsBinaryExpression()
 		return expr.OperatorToken.Kind == ast.KindCommaToken && isNarrowableReference(expr.Right) ||

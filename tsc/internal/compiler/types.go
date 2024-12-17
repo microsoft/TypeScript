@@ -198,6 +198,10 @@ const (
 	VarianceFlagsAllowsStructuralFallback               = VarianceFlagsUnmeasurable | VarianceFlagsUnreliable
 )
 
+type IndexSymbolLinks struct {
+	filteredIndexSymbolCache map[string]*ast.Symbol // Symbol with applicable declarations
+}
+
 type AccessFlags uint32
 
 const (
