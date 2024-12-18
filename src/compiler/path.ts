@@ -645,7 +645,7 @@ function isNotNormalizedOrAbsolute(s: string) {
         // A normalized path cannot end in a trailing separator.
         return true;
     }
-    
+
     return relativePathSegmentRegExp.test(s);
 }
 

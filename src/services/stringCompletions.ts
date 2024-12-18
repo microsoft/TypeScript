@@ -986,7 +986,7 @@ function getCompletionEntriesForNonRelativeModules(
     }
 
     if (paths) {
-        const absolute = getPathsBasePath(compilerOptions, host)!;  // Always defined when 'paths' is defined
+        const absolute = getPathsBasePath(compilerOptions, host)!; // Always defined when 'paths' is defined
         addCompletionEntriesFromPaths(result, fragment, absolute, extensionOptions, program, host, moduleSpecifierResolutionHost, paths);
     }
 
