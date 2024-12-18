@@ -2,8 +2,8 @@ arrowFunctionReturnTypeErrorSpan.ts(2,7): error TS2451: Cannot redeclare block-s
 arrowFunctionReturnTypeErrorSpan.ts(3,3): error TS2322: Type 'string' is not assignable to type 'number'.
 arrowFunctionReturnTypeErrorSpan.ts(6,7): error TS2451: Cannot redeclare block-scoped variable 'a'.
 arrowFunctionReturnTypeErrorSpan.ts(7,10): error TS2304: Cannot find name 'missing'.
-arrowFunctionReturnTypeErrorSpan.ts(11,25): error TS2322: Type 'string' is not assignable to type 'number'.
-arrowFunctionReturnTypeErrorSpan.ts(14,28): error TS2322: Type 'string' is not assignable to type 'number'.
+arrowFunctionReturnTypeErrorSpan.ts(11,15): error TS2322: Type 'string' is not assignable to type 'number'.
+arrowFunctionReturnTypeErrorSpan.ts(14,15): error TS2322: Type 'string' is not assignable to type 'number'.
 arrowFunctionReturnTypeErrorSpan.ts(16,25): error TS2304: Cannot find name 'missing'.
 
 
@@ -27,12 +27,12 @@ arrowFunctionReturnTypeErrorSpan.ts(16,25): error TS2304: Cannot find name 'miss
     
     // expression body
     const b = (): number => "foo";
-                            ~~~~~
+                  ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     type F<T> = T;
     const c = (): F<number> => "foo";
-                               ~~~~~
+                  ~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     const d = (): number => missing;

@@ -45798,7 +45798,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             : exprType;
 
         const effectiveExpr = expr && getEffectiveCheckNode(expr); // The effective expression for diagnostics purposes.
-        const errorNode = inReturnStatement && !inConditionalExpression ? node : effectiveExpr;
+        const errorNode = inConditionalExpression ? effectiveExpr :
+            inReturnStatement ? node :
+            isArrowFunction(node.parent) && node.parent.type !== undefined ? node.parent.type :
+            effectiveExpr;
 
         // If the return type is not narrowable, we simply check if the return expression type is assignable to the return type.
         if (!(unwrappedReturnType.flags & (TypeFlags.IndexedAccess | TypeFlags.Conditional)) || !couldContainTypeVariables(unwrappedReturnType)) {
