@@ -3021,14 +3021,6 @@ export function forEachPropertyAssignment<T>(objectLiteral: ObjectLiteralExpress
 }
 
 /** @internal */
-export function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
-    return forEachPropertyAssignment(objectLiteral, propKey, property =>
-        isArrayLiteralExpression(property.initializer) ?
-            find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
-            undefined);
-}
-
-/** @internal */
 export function getTsConfigObjectLiteralExpression(tsConfigSourceFile: TsConfigSourceFile | undefined): ObjectLiteralExpression | undefined {
     if (tsConfigSourceFile && tsConfigSourceFile.statements.length) {
         const expression = tsConfigSourceFile.statements[0].expression;
@@ -12170,6 +12162,13 @@ export function forEachProjectReference<T>(
 /** @internal */
 export function getOptionsSyntaxByArrayElementValue(optionsObject: ObjectLiteralExpression | undefined, name: string, value: string): StringLiteral | undefined {
     return optionsObject && getPropertyArrayElementValue(optionsObject, name, value);
+}
+
+function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
+    return forEachPropertyAssignment(objectLiteral, propKey, property =>
+        isArrayLiteralExpression(property.initializer) ?
+            find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+            undefined);
 }
 
 /** @internal */
