@@ -62,7 +62,7 @@ const (
 	OperatorPrecedenceLogicalAND
 	// BitwiseORExpression:
 	//     BitwiseXORExpression
-	//     BitwiseORExpression `^` BitwiseXORExpression
+	//     BitwiseORExpression `|` BitwiseXORExpression
 	OperatorPrecedenceBitwiseOR
 	// BitwiseXORExpression:
 	//     BitwiseANDExpression
@@ -70,7 +70,7 @@ const (
 	OperatorPrecedenceBitwiseXOR
 	// BitwiseANDExpression:
 	//     EqualityExpression
-	//     BitwiseANDExpression `^` EqualityExpression
+	//     BitwiseANDExpression `&` EqualityExpression
 	OperatorPrecedenceBitwiseAND
 	// EqualityExpression:
 	//     RelationalExpression
@@ -174,10 +174,12 @@ const (
 	//     AsyncGeneratorExpression
 	//     RegularExpressionLiteral
 	//     TemplateLiteral
-	//     CoverParenthesizedExpressionAndArrowParameterList
 	OperatorPrecedencePrimary
+	// PrimaryExpression:
+	//     CoverParenthesizedExpressionAndArrowParameterList
+	OperatorPrecedenceParentheses
 	OperatorPrecedenceLowest        = OperatorPrecedenceComma
-	OperatorPrecedenceHighest       = OperatorPrecedencePrimary
+	OperatorPrecedenceHighest       = OperatorPrecedenceParentheses
 	OperatorPrecedenceDisallowComma = OperatorPrecedenceYield
 	// -1 is lower than all other precedences. Returning it will cause binary expression
 	// parsing to stop.
@@ -316,12 +318,15 @@ func GetOperatorPrecedence(nodeKind Kind, operatorKind Kind, flags OperatorPrece
 		KindRegularExpressionLiteral,
 		KindNoSubstitutionTemplateLiteral,
 		KindTemplateExpression,
-		KindParenthesizedExpression,
 		KindOmittedExpression,
 		KindJsxElement,
 		KindJsxSelfClosingElement,
 		KindJsxFragment:
 		return OperatorPrecedencePrimary
+
+	// !!! By necessity, this differs from the old compiler to support emit. consider backporting
+	case KindParenthesizedExpression:
+		return OperatorPrecedenceParentheses
 
 	default:
 		return OperatorPrecedenceInvalid
