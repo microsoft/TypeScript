@@ -244,8 +244,7 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     NodeBuilderFlags.UseStructuralFallback |
     NodeBuilderFlags.AllowEmptyTuple |
     NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
-    NodeBuilderFlags.NoTruncation |
-    NodeBuilderFlags.PreserveQuotesForStringLiteralType;
+    NodeBuilderFlags.NoTruncation;
 
 const declarationEmitInternalNodeBuilderFlags = InternalNodeBuilderFlags.AllowUnresolvedNames;
 

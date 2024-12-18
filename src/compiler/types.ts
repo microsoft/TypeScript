@@ -5489,8 +5489,8 @@ export const enum NodeBuilderFlags {
     UseTypeOfFunction                       = 1 << 12,  // Build using typeof instead of function type literal
     OmitParameterModifiers                  = 1 << 13,  // Omit modifiers on parameters
     UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
-    UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
-    PreserveQuotesForStringLiteralType      = 1 << 30, // Preserve source quote types for string literal type
+    UseSingleQuotesForStringLiteralType     = 1 << 28,  // Force single quotes for string literal type or preserve source delimiters
+    UseDoubleQuotesForStringLiteralType     = 1 << 30,  // Force double quotes for string literal type or preserve source delimiters
     NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
     OmitThisParameter                       = 1 << 25,
 
@@ -5545,7 +5545,7 @@ export const enum TypeFormatFlags {
 
     UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value, even though `T` can't be accessed in the current scope.
     UseSingleQuotesForStringLiteralType     = 1 << 28, // Use single quotes for string literal type
-    PreserveQuotesForStringLiteralType      = 1 << 30, // Preserve source quote types for string literal type
+    UseDoubleQuotesForStringLiteralType     = 1 << 30, // Preserve source quote types for string literal type
     NoTypeReduction                         = 1 << 29, // Don't call getReducedType
     OmitThisParameter                       = 1 << 25,
 
@@ -5565,7 +5565,7 @@ export const enum TypeFormatFlags {
     NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | GenerateNamesForShadowedTypeParams | UseStructuralFallback | WriteTypeArgumentsOfSignature |
         UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
         UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
-        UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter,
+        UseSingleQuotesForStringLiteralType | UseDoubleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter,
 }
 
 // dprint-ignore

@@ -6365,7 +6365,7 @@ declare namespace ts {
         OmitParameterModifiers = 8192,
         UseAliasDefinedOutsideCurrentScope = 16384,
         UseSingleQuotesForStringLiteralType = 268435456,
-        PreserveQuotesForStringLiteralType = 1073741824,
+        UseDoubleQuotesForStringLiteralType = 1073741824,
         NoTypeReduction = 536870912,
         OmitThisParameter = 33554432,
         AllowThisInObjectLiteral = 32768,
@@ -6396,7 +6396,7 @@ declare namespace ts {
         OmitParameterModifiers = 8192,
         UseAliasDefinedOutsideCurrentScope = 16384,
         UseSingleQuotesForStringLiteralType = 268435456,
-        PreserveQuotesForStringLiteralType = 1073741824,
+        UseDoubleQuotesForStringLiteralType = 1073741824,
         NoTypeReduction = 536870912,
         OmitThisParameter = 33554432,
         AllowUniqueESSymbolType = 1048576,
@@ -6406,7 +6406,7 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
-        NodeBuilderFlagsMask = 848330095,
+        NodeBuilderFlagsMask = 1922071919,
     }
     enum SymbolFormatFlags {
         None = 0,

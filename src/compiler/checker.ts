@@ -1707,7 +1707,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
         },
         typeToString: (type, enclosingDeclaration, flags) => {
-            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags);
+            return typeToStringWorker(type, getParseTreeNode(enclosingDeclaration), flags);
         },
         symbolToString: (symbol, enclosingDeclaration, meaning, flags) => {
             return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags);
@@ -1719,7 +1719,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer);
         },
         writeType: (type, enclosingDeclaration, flags, writer, verbosityLevel, out) => {
-            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer, verbosityLevel, out);
+            return typeToStringWorker(type, getParseTreeNode(enclosingDeclaration), flags, writer, verbosityLevel, out);
         },
         writeSymbol: (symbol, enclosingDeclaration, meaning, flags, writer) => {
             return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
@@ -5988,7 +5988,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.AllowAnyNodeKind, writer?: EmitTextWriter): string {
-        let nodeFlags = NodeBuilderFlags.IgnoreErrors;
+        let nodeFlags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseDoubleQuotesForStringLiteralType;
         let internalNodeFlags = InternalNodeBuilderFlags.None;
         if (flags & SymbolFormatFlags.UseOnlyExternalAliasing) {
             nodeFlags |= NodeBuilderFlags.UseOnlyExternalAliasing;
@@ -6039,7 +6039,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    /**
+     * Prints a type, forcing the conversion of string delimiters to "
+     * This should usually be used for errors, since in errors printed types are inclosed in '
+     */
     function typeToString(
+        type: Type,
+        enclosingDeclaration?: Node,
+        flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
+        writer: EmitTextWriter = createTextWriter(""),
+        verbosityLevel?: number,
+        out?: WriterContextOut,
+    ): string {
+        return typeToStringWorker(type, enclosingDeclaration, flags | TypeFormatFlags.UseDoubleQuotesForStringLiteralType, writer, verbosityLevel, out);
+    }
+
+    function typeToStringWorker(
         type: Type,
         enclosingDeclaration?: Node,
         flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
@@ -6311,9 +6326,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function setTextRange<T extends Node>(context: NodeBuilderContext, range: T, location: Node | undefined): T {
             const nodeSourceFile = getSourceFileOfNode(getOriginalNode(range));
             if (!nodeIsSynthesized(range) || !(range.flags & NodeFlags.Synthesized) || !context.enclosingFile || context.enclosingFile !== nodeSourceFile) {
-                if (context.flags & NodeBuilderFlags.PreserveQuotesForStringLiteralType && range.kind === SyntaxKind.StringLiteral) {
-                    const stringLiteral = range as Node as StringLiteral;
-                    range = factory.createStringLiteralFromNode(stringLiteral) as Node as T;
+                if (range.kind === SyntaxKind.StringLiteral) {
+                    const node = range as Node as StringLiteral;
+                    return setOriginalNode(
+                        context.flags & (NodeBuilderFlags.UseSingleQuotesForStringLiteralType | NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) ?
+                            factory.createStringLiteral(node.text, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)):
+                            factory.createStringLiteralFromNode(node), 
+                        node
+                    ) as Node as T;
                 }
                 else {
                     range = factory.cloneNode(range); // if `range` is synthesized or originates in another file, copy it so it definitely has synthetic positions
@@ -8579,7 +8599,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
             const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
-            const singleQuote = !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
+            const singleQuote = context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType ? true:
+                context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType ? false :
+                !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
             const isMethod = !!(symbol.flags & SymbolFlags.Method);
             const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote, stringNamed, isMethod);
             if (fromNameType) {

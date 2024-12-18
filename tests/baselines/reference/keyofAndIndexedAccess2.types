@@ -5,7 +5,7 @@ Type Count: 1,000
 
 === keyofAndIndexedAccess2.ts ===
 function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
->f1 : (obj: { a: number; b: 0 | 1; c: string; }, k0: "a", k1: "a" | "b", k2: "a" | "b" | "c") => void
+>f1 : (obj: { a: number; b: 0 | 1; c: string; }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') => void
 >   : ^   ^^                                   ^^  ^^   ^^  ^^         ^^  ^^               ^^^^^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
 >    : ^^^^^      ^^^^^     ^^^^^      ^^^
@@ -714,7 +714,7 @@ type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
 // Repros from #30938
 
 function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
->fn : <T extends { elements: Array<string>; } | { elements: Array<number>; }>(param: T, cb: (element: T["elements"][number]) => void) => void
+>fn : <T extends { elements: Array<string>; } | { elements: Array<number>; }>(param: T, cb: (element: T['elements'][number]) => void) => void
 >   : ^ ^^^^^^^^^                                                           ^^     ^^ ^^  ^^                                        ^^^^^^^^^
 >elements : string[]
 >         : ^^^^^^^^
@@ -722,7 +722,7 @@ function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(par
 >         : ^^^^^^^^
 >param : T
 >      : ^
->cb : (element: T["elements"][number]) => void
+>cb : (element: T['elements'][number]) => void
 >   : ^       ^^                     ^^^^^    
 >element : T["elements"][number]
 >        : ^^^^^^^^^^^^^^^^^^^^^
@@ -730,7 +730,7 @@ function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(par
     cb(param.elements[0]);
 >cb(param.elements[0]) : void
 >                      : ^^^^
->cb : (element: T["elements"][number]) => void
+>cb : (element: T['elements'][number]) => void
 >   : ^       ^^                     ^^^^^    
 >param.elements[0] : string | number
 >                  : ^^^^^^^^^^^^^^^

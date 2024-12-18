@@ -531,10 +531,13 @@ export function createSyntacticTypeNodeBuilder(
                 setEmitFlags(clone, flags | (context.flags & NodeBuilderFlags.MultilineObjectLiterals && isTypeLiteralNode(node) ? 0 : EmitFlags.SingleLine));
                 return clone;
             }
-            if (isStringLiteral(node) && !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) && !node.singleQuote) {
-                const clone = factory.cloneNode(node);
-                (clone as Mutable<typeof clone>).singleQuote = true;
-                return clone;
+            if (isStringLiteral(node)) {
+                return setOriginalNode(
+                    context.flags & (NodeBuilderFlags.UseSingleQuotesForStringLiteralType | NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) ?
+                        factory.createStringLiteral(node.text, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)):
+                        factory.createStringLiteralFromNode(node), 
+                    node
+                );
             }
             if (isConditionalTypeNode(node)) {
                 const checkType = visitNode(node.checkType, visitExistingNodeTreeSymbols, isTypeNode)!;

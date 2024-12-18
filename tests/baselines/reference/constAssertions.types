@@ -650,7 +650,7 @@ let t4 = `${`(${t1})`}-${`(${t2})`}` as const;
 >   : ^^^^^
 
 function ff1(x: 'foo' | 'bar', y: 1 | 2) {
->ff1 : (x: "foo" | "bar", y: 1 | 2) => "foo-1" | "foo-2" | "bar-1" | "bar-2"
+>ff1 : (x: 'foo' | 'bar', y: 1 | 2) => "foo-1" | "foo-2" | "bar-1" | "bar-2"
 >    : ^ ^^             ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : "foo" | "bar"
 >  : ^^^^^^^^^^^^^
@@ -754,7 +754,7 @@ const ts3 = ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right');
 >        : ^^^^^^^
 
 function ff3(x: 'foo' | 'bar', y: object) {
->ff3 : (x: "foo" | "bar", y: object) => `foo${string}` | `bar${string}`
+>ff3 : (x: 'foo' | 'bar', y: object) => `foo${string}` | `bar${string}`
 >    : ^ ^^             ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : "foo" | "bar"
 >  : ^^^^^^^^^^^^^

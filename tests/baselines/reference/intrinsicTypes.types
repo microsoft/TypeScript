@@ -181,7 +181,7 @@ function foo1<T extends string, U extends T>(s: string, x: Uppercase<T>, y: Uppe
 }
 
 function foo2<T extends 'foo' | 'bar'>(x: Uppercase<T>) {
->foo2 : <T extends "foo" | "bar">(x: Uppercase<T>) => void
+>foo2 : <T extends 'foo' | 'bar'>(x: Uppercase<T>) => void
 >     : ^ ^^^^^^^^^             ^^ ^^            ^^^^^^^^^
 >x : Uppercase<T>
 >  : ^^^^^^^^^^^^

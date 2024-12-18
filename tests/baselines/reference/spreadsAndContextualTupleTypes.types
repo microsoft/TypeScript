@@ -2,13 +2,13 @@
 
 === spreadsAndContextualTupleTypes.ts ===
 declare function fx1<T extends [string, string, string, 'a' | 'b']>(x: T): T;
->fx1 : <T extends [string, string, string, "a" | "b"]>(x: T) => T
+>fx1 : <T extends [string, string, string, 'a' | 'b']>(x: T) => T
 >    : ^ ^^^^^^^^^                                   ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function fx2<T extends [...string[], 'a' | 'b']>(x: T): T;
->fx2 : <T extends [...string[], "a" | "b"]>(x: T) => T
+>fx2 : <T extends [...string[], 'a' | 'b']>(x: T) => T
 >    : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
@@ -30,7 +30,7 @@ const t3 = ['x', 'y', 'z'] as const;
 fx1(['x', 'y', 'z', 'a']);
 >fx1(['x', 'y', 'z', 'a']) : [string, string, string, "a"]
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->fx1 : <T extends [string, string, string, "a" | "b"]>(x: T) => T
+>fx1 : <T extends [string, string, string, 'a' | 'b']>(x: T) => T
 >    : ^ ^^^^^^^^^                                   ^^ ^^ ^^^^^ 
 >['x', 'y', 'z', 'a'] : [string, string, string, "a"]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -46,7 +46,7 @@ fx1(['x', 'y', 'z', 'a']);
 fx1([...t3, 'a']);
 >fx1([...t3, 'a']) : ["x", "y", "z", "a"]
 >                  : ^^^^^^^^^^^^^^^^^^^^
->fx1 : <T extends [string, string, string, "a" | "b"]>(x: T) => T
+>fx1 : <T extends [string, string, string, 'a' | 'b']>(x: T) => T
 >    : ^ ^^^^^^^^^                                   ^^ ^^ ^^^^^ 
 >[...t3, 'a'] : ["x", "y", "z", "a"]
 >             : ^^^^^^^^^^^^^^^^^^^^
@@ -60,7 +60,7 @@ fx1([...t3, 'a']);
 fx2(['x', 'y', 'z', 'a']);
 >fx2(['x', 'y', 'z', 'a']) : [string, string, string, "a"]
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->fx2 : <T extends [...string[], "a" | "b"]>(x: T) => T
+>fx2 : <T extends [...string[], 'a' | 'b']>(x: T) => T
 >    : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >['x', 'y', 'z', 'a'] : [string, string, string, "a"]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -76,7 +76,7 @@ fx2(['x', 'y', 'z', 'a']);
 fx2([...t3, 'a']);
 >fx2([...t3, 'a']) : ["x", "y", "z", "a"]
 >                  : ^^^^^^^^^^^^^^^^^^^^
->fx2 : <T extends [...string[], "a" | "b"]>(x: T) => T
+>fx2 : <T extends [...string[], 'a' | 'b']>(x: T) => T
 >    : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >[...t3, 'a'] : ["x", "y", "z", "a"]
 >             : ^^^^^^^^^^^^^^^^^^^^
