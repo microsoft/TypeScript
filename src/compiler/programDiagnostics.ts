@@ -60,7 +60,8 @@ interface FileReasonToChainCache {
     details?: DiagnosticMessageChain[];
 }
 
-interface LazyConfigDiagnostic {
+/** @internal */
+export interface LazyConfigDiagnostic {
     file: SourceFile;
     diagnostic: DiagnosticMessage;
     args: DiagnosticArguments;
