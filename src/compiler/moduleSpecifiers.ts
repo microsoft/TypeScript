@@ -594,7 +594,9 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
         return pathsOnly ? undefined : relativePath;
     }
 
-    const baseDirectory = getNormalizedAbsolutePath(getPathsBasePath(compilerOptions, host) || baseUrl!, host.getCurrentDirectory());
+    const currentDirectory = host.getCurrentDirectory();
+    const basePath = getPathsBasePath(compilerOptions, host) ?? baseUrl ?? currentDirectory;
+    const baseDirectory = getNormalizedAbsolutePath(basePath, currentDirectory);
     const relativeToBaseUrl = getRelativePathIfInSameVolume(moduleFileName, baseDirectory, getCanonicalFileName);
     if (!relativeToBaseUrl) {
         return pathsOnly ? undefined : relativePath;

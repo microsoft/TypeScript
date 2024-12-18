@@ -62,6 +62,7 @@ import {
     isNumber,
     isString,
     map,
+    mapDefined,
     mapDefinedIterator,
     maybeBind,
     noop,
@@ -1236,7 +1237,7 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
     const currentDirectory = state.program.getCurrentDirectory();
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
     // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
-    const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
+    const latestChangedDtsFile = state.latestChangedDtsFile ? relativePathToBuildInfo(state.latestChangedDtsFile) : undefined;
     const fileNames: string[] = [];
     const fileNameToFileId = new Map<string, IncrementalBuildInfoFileId>();
     const rootFileNames = new Set(state.program.getRootFileNames().map(f => toPath(f, currentDirectory, state.program.getCanonicalFileName)));
@@ -1377,8 +1378,15 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
     };
     return buildInfo;
 
-    function relativeToBuildInfoEnsuringAbsolutePath(path: string) {
+    function relativePathToBuildInfo(path: string) {
         return relativeToBuildInfo(getNormalizedAbsolutePath(path, currentDirectory));
+    }
+
+    function relativePathToBuildInfoOrOriginalValue(path: unknown): string | undefined {
+        if (typeof path === "string") {
+            return relativePathToBuildInfo(path);
+        }
+        return undefined;
     }
 
     function relativeToBuildInfo(path: string) {
@@ -1457,13 +1465,13 @@ function getBuildInfo(state: BuilderProgramStateWithDefinedProgram): BuildInfo {
         if (option) {
             Debug.assert(option.type !== "listOrElement");
             if (option.type === "list") {
-                const values = value as readonly string[];
+                const values = value as readonly unknown[];
                 if (option.element.isFilePath && values.length) {
-                    return values.map(relativeToBuildInfoEnsuringAbsolutePath);
+                    return mapDefined(values, relativePathToBuildInfoOrOriginalValue);
                 }
             }
             else if (option.isFilePath) {
-                return relativeToBuildInfoEnsuringAbsolutePath(value as string);
+                return relativePathToBuildInfoOrOriginalValue(value);
             }
         }
         return value;
