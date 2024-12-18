@@ -76,7 +76,7 @@
             },
             {
               "text": "\"resolution-mode\"",
-              "kind": "stringLiteral"
+              "kind": "propertyName"
             },
             {
               "text": "]",
@@ -238,7 +238,7 @@
             },
             {
               "text": "\"resolution-mode\"",
-              "kind": "stringLiteral"
+              "kind": "propertyName"
             },
             {
               "text": "]",
@@ -324,7 +324,7 @@
             },
             {
               "text": "\"resolution-mode\"",
-              "kind": "stringLiteral"
+              "kind": "propertyName"
             },
             {
               "text": "]",

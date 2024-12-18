@@ -534,9 +534,9 @@ export function createSyntacticTypeNodeBuilder(
             if (isStringLiteral(node)) {
                 return setOriginalNode(
                     context.flags & (NodeBuilderFlags.UseSingleQuotesForStringLiteralType | NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) ?
-                        factory.createStringLiteral(node.text, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)):
-                        factory.createStringLiteralFromNode(node), 
-                    node
+                        factory.createStringLiteral(node.text, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)) :
+                        factory.createStringLiteralFromNode(node),
+                    node,
                 );
             }
             if (isConditionalTypeNode(node)) {

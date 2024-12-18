@@ -1710,7 +1710,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return typeToStringWorker(type, getParseTreeNode(enclosingDeclaration), flags);
         },
         symbolToString: (symbol, enclosingDeclaration, meaning, flags) => {
-            return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags);
+            return symbolToStringWorker(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags);
         },
         typePredicateToString: (predicate, enclosingDeclaration, flags) => {
             return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags);
@@ -1722,7 +1722,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return typeToStringWorker(type, getParseTreeNode(enclosingDeclaration), flags, writer, verbosityLevel, out);
         },
         writeSymbol: (symbol, enclosingDeclaration, meaning, flags, writer) => {
-            return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
+            return symbolToStringWorker(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
         },
         writeTypePredicate: (predicate, enclosingDeclaration, flags, writer) => {
             return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags, writer);
@@ -5988,8 +5988,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.AllowAnyNodeKind, writer?: EmitTextWriter): string {
-        let nodeFlags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseDoubleQuotesForStringLiteralType;
+        return symbolToStringWorker(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.UseDoubleQuotesForStringLiteralType, writer);
+    }
+    function symbolToStringWorker(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.AllowAnyNodeKind, writer?: EmitTextWriter): string {
+        let nodeFlags = NodeBuilderFlags.IgnoreErrors;
         let internalNodeFlags = InternalNodeBuilderFlags.None;
+        if (flags & SymbolFormatFlags.UseSingleQuotesForStringLiteralType) {
+            nodeFlags |= NodeBuilderFlags.UseSingleQuotesForStringLiteralType;
+        }
+        if (flags & SymbolFormatFlags.UseDoubleQuotesForStringLiteralType) {
+            nodeFlags |= NodeBuilderFlags.UseDoubleQuotesForStringLiteralType;
+        }
         if (flags & SymbolFormatFlags.UseOnlyExternalAliasing) {
             nodeFlags |= NodeBuilderFlags.UseOnlyExternalAliasing;
         }
@@ -6330,9 +6339,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const node = range as Node as StringLiteral;
                     return setOriginalNode(
                         context.flags & (NodeBuilderFlags.UseSingleQuotesForStringLiteralType | NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) ?
-                            factory.createStringLiteral(node.text, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)):
-                            factory.createStringLiteralFromNode(node), 
-                        node
+                            factory.createStringLiteral(node.text, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)) :
+                            factory.createStringLiteralFromNode(node),
+                        node,
                     ) as Node as T;
                 }
                 else {
@@ -8543,10 +8552,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 let firstChar = symbolName.charCodeAt(0);
 
+                let useSingleQuote = !(context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) &&
+                    (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || firstChar === CharacterCodes.singleQuote);
+
                 if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
-                    return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
+                    return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context), useSingleQuote);
                 }
-                if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
+                if (canUsePropertyAccess(symbolName, languageVersion) || (index === 0 && firstChar === CharacterCodes.openBracket)) {
                     const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
                     if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                     identifier.symbol = symbol;
@@ -8557,13 +8569,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (firstChar === CharacterCodes.openBracket) {
                         symbolName = symbolName.substring(1, symbolName.length - 1);
                         firstChar = symbolName.charCodeAt(0);
+                        useSingleQuote = !(context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) &&
+                            (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || firstChar === CharacterCodes.singleQuote);
                     }
                     let expression: Expression | undefined;
                     if (isSingleOrDoubleQuote(firstChar) && !(symbol.flags & SymbolFlags.EnumMember)) {
-                        expression = factory.createStringLiteral(stripQuotes(symbolName).replace(/\\./g, s => s.substring(1)), firstChar === CharacterCodes.singleQuote);
+                        const stringLiteralName = factory.createStringLiteral(stripQuotes(symbolName).replace(/\\./g, s => s.substring(1)), useSingleQuote);
+                        stringLiteralName.symbol = symbol;
+                        expression = stringLiteralName;
                     }
                     else if (("" + +symbolName) === symbolName) {
-                        expression = factory.createNumericLiteral(+symbolName);
+                        const numberLiteralName = factory.createNumericLiteral(+symbolName);
+                        numberLiteralName.symbol = symbol;
+                        expression = numberLiteralName;
                     }
                     if (!expression) {
                         const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
@@ -8571,7 +8589,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         identifier.symbol = symbol;
                         expression = identifier;
                     }
-                    return factory.createElementAccessExpression(createExpressionFromSymbolChain(chain, index - 1), expression);
+                    return index === 0 ? expression : factory.createElementAccessExpression(createExpressionFromSymbolChain(chain, index - 1), expression);
                 }
             }
         }
@@ -8599,7 +8617,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
             const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
-            const singleQuote = context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType ? true:
+            const singleQuote = context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType ? true :
                 context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType ? false :
                 !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
             const isMethod = !!(symbol.flags & SymbolFlags.Method);

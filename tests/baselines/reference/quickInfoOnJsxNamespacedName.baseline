@@ -57,7 +57,7 @@
         },
         {
           "text": "'a:b'",
-          "kind": "stringLiteral"
+          "kind": "propertyName"
         },
         {
           "text": "]",

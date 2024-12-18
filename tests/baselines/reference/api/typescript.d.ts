@@ -6414,6 +6414,8 @@ declare namespace ts {
         UseOnlyExternalAliasing = 2,
         AllowAnyNodeKind = 4,
         UseAliasDefinedOutsideCurrentScope = 8,
+        UseSingleQuotesForStringLiteralType = 64,
+        UseDoubleQuotesForStringLiteralType = 128,
     }
     enum TypePredicateKind {
         This = 0,

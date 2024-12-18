@@ -52,7 +52,7 @@
      },
      {
       "text": "\"42\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",
@@ -130,7 +130,7 @@
      },
      {
       "text": "\"42\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",
@@ -208,7 +208,7 @@
      },
      {
       "text": "\"42\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",
@@ -286,7 +286,7 @@
      },
      {
       "text": "\"42\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",
@@ -364,7 +364,7 @@
      },
      {
       "text": "\"42\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",

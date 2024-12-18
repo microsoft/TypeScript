@@ -50,7 +50,7 @@
      },
      {
       "text": "\"blah\"",
-      "kind": "stringLiteral"
+      "kind": "methodName"
      },
      {
       "text": "]",
@@ -134,7 +134,7 @@
      },
      {
       "text": "\"blah\"",
-      "kind": "stringLiteral"
+      "kind": "methodName"
      },
      {
       "text": "]",
@@ -218,7 +218,7 @@
      },
      {
       "text": "\"blah\"",
-      "kind": "stringLiteral"
+      "kind": "methodName"
      },
      {
       "text": "]",

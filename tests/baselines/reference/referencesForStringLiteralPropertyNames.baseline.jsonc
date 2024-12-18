@@ -53,7 +53,7 @@
      },
      {
       "text": "\"ss\"",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",

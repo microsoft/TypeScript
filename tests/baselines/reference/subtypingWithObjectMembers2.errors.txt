@@ -5,7 +5,7 @@ subtypingWithObjectMembers2.ts(27,15): error TS2430: Interface 'B2' incorrectly 
   Types of property '2.0' are incompatible.
     Type 'string' is not assignable to type 'Base'.
 subtypingWithObjectMembers2.ts(37,15): error TS2430: Interface 'B3' incorrectly extends interface 'A3'.
-  Types of property ''2.0'' are incompatible.
+  Types of property '"2.0"' are incompatible.
     Type 'string' is not assignable to type 'Base'.
 subtypingWithObjectMembers2.ts(50,15): error TS2430: Interface 'B' incorrectly extends interface 'A'.
   Types of property 'bar' are incompatible.
@@ -14,7 +14,7 @@ subtypingWithObjectMembers2.ts(60,15): error TS2430: Interface 'B2' incorrectly 
   Types of property '2.0' are incompatible.
     Type 'string' is not assignable to type 'Base'.
 subtypingWithObjectMembers2.ts(70,15): error TS2430: Interface 'B3' incorrectly extends interface 'A3'.
-  Types of property ''2.0'' are incompatible.
+  Types of property '"2.0"' are incompatible.
     Type 'string' is not assignable to type 'Base'.
 
 
@@ -66,7 +66,7 @@ subtypingWithObjectMembers2.ts(70,15): error TS2430: Interface 'B3' incorrectly 
         interface B3 extends A3 {
                   ~~
 !!! error TS2430: Interface 'B3' incorrectly extends interface 'A3'.
-!!! error TS2430:   Types of property ''2.0'' are incompatible.
+!!! error TS2430:   Types of property '"2.0"' are incompatible.
 !!! error TS2430:     Type 'string' is not assignable to type 'Base'.
             '1': Derived; // ok
             '2.0': string; // error
@@ -111,7 +111,7 @@ subtypingWithObjectMembers2.ts(70,15): error TS2430: Interface 'B3' incorrectly 
         interface B3 extends A3 {
                   ~~
 !!! error TS2430: Interface 'B3' incorrectly extends interface 'A3'.
-!!! error TS2430:   Types of property ''2.0'' are incompatible.
+!!! error TS2430:   Types of property '"2.0"' are incompatible.
 !!! error TS2430:     Type 'string' is not assignable to type 'Base'.
             '1'?: Derived; // ok
             '2.0'?: string; // error

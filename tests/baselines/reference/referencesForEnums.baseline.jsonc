@@ -387,7 +387,7 @@
      },
      {
       "text": "111",
-      "kind": "stringLiteral"
+      "kind": "enumMemberName"
      },
      {
       "text": "]",
@@ -735,7 +735,7 @@
      },
      {
       "text": "111",
-      "kind": "stringLiteral"
+      "kind": "enumMemberName"
      },
      {
       "text": "]",

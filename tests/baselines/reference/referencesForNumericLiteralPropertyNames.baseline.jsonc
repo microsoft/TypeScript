@@ -52,7 +52,7 @@
      },
      {
       "text": "12",
-      "kind": "stringLiteral"
+      "kind": "propertyName"
      },
      {
       "text": "]",
