@@ -625,6 +625,8 @@ export function getNormalizedPathComponents(path: string, currentDirectory: stri
 
 /** @internal */
 export function getNormalizedAbsolutePath(fileName: string, currentDirectory: string | undefined): string {
+    fileName = normalizeSlashes(fileName);
+
     if (isNotNormalizedOrAbsolute(fileName)) {
         return getPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
     }
@@ -633,42 +635,18 @@ export function getNormalizedAbsolutePath(fileName: string, currentDirectory: st
 }
 
 function isNotNormalizedOrAbsolute(s: string) {
-    // The path is not absolute.
     if (getEncodedRootLength(s) === 0) {
+        // An absolute path must have a root component.
         return true;
     }
 
-    // Apart from the root segment, paths should not have a trailing slash.
-    if (s.length > 0) {
-        const lastChar = s.charCodeAt(s.length - 1);
-        if (lastChar === CharacterCodes.slash || lastChar === CharacterCodes.backslash) {
-            return true;
-        }
+    const lastChar = s.charCodeAt(s.length - 1);
+    if (lastChar === CharacterCodes.slash) {
+        // A normalized path cannot end in a trailing separator.
+        return true;
     }
-
-    for (let i = 0, n = s.length - 1; i < n; i++) {
-        const curr = s.charCodeAt(i);
-        if (curr === CharacterCodes.dot) {
-            // A ./ or ../ must be reduced - not normalized.
-            if (s.charCodeAt(i + 1) === CharacterCodes.slash) {
-                return true;
-            }
-        }
-        else if (curr === CharacterCodes.slash) {
-            // Multiple slashes in a row (outside of the root,
-            // and there is no root) must be reduced to a single slash.
-            // So the path is not normalized.
-            if (s.charCodeAt(i + 1) === CharacterCodes.slash) {
-                return true;
-            }
-        }
-        else if (curr === CharacterCodes.backslash) {
-            // A backslash anywhere must be normalized to a regular slash.
-            return true;
-        }
-    }
-
-    return false;
+    
+    return relativePathSegmentRegExp.test(s);
 }
 
 /** @internal */
