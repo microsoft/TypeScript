@@ -292,7 +292,7 @@ describe("unittests:: core paths", () => {
         assert.strictEqual(ts.getNormalizedAbsolutePath("/a/..", "/b"), "/");
         assert.strictEqual(ts.getNormalizedAbsolutePath("/a/.", "b"), "/a");
         assert.strictEqual(ts.getNormalizedAbsolutePath("/a/.", "."), "/a");
-        
+
         // Tests as above, but with backslashes.
         assert.strictEqual(ts.getNormalizedAbsolutePath("\\", ""), "/");
         assert.strictEqual(ts.getNormalizedAbsolutePath("\\.", ""), "/");
