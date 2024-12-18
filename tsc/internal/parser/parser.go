@@ -4279,10 +4279,13 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 			// when an unclosed JsxOpeningElement incorrectly parses its parent's JsxClosingElement,
 			// restructure (<div>(...<span>...</div>)) --> (<div>(...<span>...</>)</div>)
 			// (no need to error; the parent will error)
-			newClosingElement := p.factory.NewJsxClosingElement(p.createMissingIdentifier())
-			p.finishNode(newClosingElement, p.nodePos())
+			end := lastChild.AsJsxElement().OpeningElement.End()
+			missingIdentifier := p.newIdentifier("")
+			p.finishNodeWithEnd(missingIdentifier, end, end)
+			newClosingElement := p.factory.NewJsxClosingElement(missingIdentifier)
+			p.finishNodeWithEnd(newClosingElement, end, end)
 			newLast := p.factory.NewJsxElement(lastChild.AsJsxElement().OpeningElement, lastChild.AsJsxElement().Children, newClosingElement)
-			p.finishNode(newLast, lastChild.AsJsxElement().OpeningElement.Pos())
+			p.finishNodeWithEnd(newLast, lastChild.AsJsxElement().OpeningElement.Pos(), end)
 			children = p.factory.NewNodeList(core.NewTextRange(children.Pos(), newLast.End()), append(children.Nodes[0:len(children.Nodes)-1], newLast))
 			closingElement = lastChild.AsJsxElement().ClosingElement
 		} else {
@@ -5426,7 +5429,11 @@ func (p *Parser) internIdentifier(text string) {
 }
 
 func (p *Parser) finishNode(node *ast.Node, pos int) {
-	node.Loc = core.NewTextRange(pos, p.nodePos())
+	p.finishNodeWithEnd(node, pos, p.nodePos())
+}
+
+func (p *Parser) finishNodeWithEnd(node *ast.Node, pos int, end int) {
+	node.Loc = core.NewTextRange(pos, end)
 	node.Flags |= p.contextFlags
 }
 
