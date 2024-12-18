@@ -272,6 +272,113 @@ func TestResolvePath(t *testing.T) {
 	assert.Equal(t, ResolvePath("a", "b", "../c"), "a/c")
 }
 
+func TestGetNormalizedAbsolutePath(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, GetNormalizedAbsolutePath("/", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/.", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/./", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/../", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a", ""), "/a")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/", ""), "/a")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/.", ""), "/a")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/foo.", ""), "/a/foo.")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/./", ""), "/a")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/./b", ""), "/a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/./b/", ""), "/a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/..", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/../", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/../", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/../b", ""), "/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/../b/", ""), "/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/..", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/..", "/"), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/..", "b/"), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/..", "/b"), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/.", "b"), "/a")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/.", "."), "/a")
+
+	// Tests as above, but with backslashes.
+	assert.Equal(t, GetNormalizedAbsolutePath("\\", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\.", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\.\\", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\..\\", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\.\\", ""), "/a")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\.\\b", ""), "/a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\.\\b\\", ""), "/a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\..", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\..\\", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\..\\", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\..\\b", ""), "/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\..\\b\\", ""), "/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\..", ""), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\..", "\\"), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\..", "b\\"), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\..", "\\b"), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\.", "b"), "/a")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\.", "."), "/a")
+
+	// Relative paths on an empty currentDirectory.
+	assert.Equal(t, GetNormalizedAbsolutePath("", ""), "")
+	assert.Equal(t, GetNormalizedAbsolutePath(".", ""), "")
+	assert.Equal(t, GetNormalizedAbsolutePath("./", ""), "")
+	// Strangely, these do not normalize to the empty string.
+	assert.Equal(t, GetNormalizedAbsolutePath("..", ""), "..")
+	assert.Equal(t, GetNormalizedAbsolutePath("../", ""), "..")
+
+	// Interaction between relative paths and currentDirectory.
+	assert.Equal(t, GetNormalizedAbsolutePath("", "/home"), "/home")
+	assert.Equal(t, GetNormalizedAbsolutePath(".", "/home"), "/home")
+	assert.Equal(t, GetNormalizedAbsolutePath("./", "/home"), "/home")
+	assert.Equal(t, GetNormalizedAbsolutePath("..", "/home"), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("../", "/home"), "/")
+	assert.Equal(t, GetNormalizedAbsolutePath("a", "b"), "b/a")
+	assert.Equal(t, GetNormalizedAbsolutePath("a", "b/c"), "b/c/a")
+
+	// Base names starting or ending with a dot do not affect normalization.
+	assert.Equal(t, GetNormalizedAbsolutePath(".a", ""), ".a")
+	assert.Equal(t, GetNormalizedAbsolutePath("..a", ""), "..a")
+	assert.Equal(t, GetNormalizedAbsolutePath("a.", ""), "a.")
+	assert.Equal(t, GetNormalizedAbsolutePath("a..", ""), "a..")
+
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/./.a", ""), "/base/.a")
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/../.a", ""), "/.a")
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/./..a", ""), "/base/..a")
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/../..a", ""), "/..a")
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/./..a/b", ""), "/base/..a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/../..a/b", ""), "/..a/b")
+
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/./a.", ""), "/base/a.")
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/../a.", ""), "/a.")
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/./a..", ""), "/base/a..")
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/../a..", ""), "/a..")
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/./a../b", ""), "/base/a../b")
+	assert.Equal(t, GetNormalizedAbsolutePath("/base/../a../b", ""), "/a../b")
+
+	// Consecutive intermediate slashes are normalized to a single slash.
+	assert.Equal(t, GetNormalizedAbsolutePath("a//b", ""), "a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("a///b", ""), "a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("a/b//c", ""), "a/b/c")
+	assert.Equal(t, GetNormalizedAbsolutePath("/a/b//c", ""), "/a/b/c")
+	assert.Equal(t, GetNormalizedAbsolutePath("//a/b//c", ""), "//a/b/c")
+
+	// Backslashes are converted to slashes,
+	// and then consecutive intermediate slashes are normalized to a single slash
+	assert.Equal(t, GetNormalizedAbsolutePath("a\\\\b", ""), "a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("a\\\\\\b", ""), "a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("a\\b\\\\c", ""), "a/b/c")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\b\\\\c", ""), "/a/b/c")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\\\a\\b\\\\c", ""), "//a/b/c")
+
+	// The same occurs for mixed slashes.
+	assert.Equal(t, GetNormalizedAbsolutePath("a/\\b", ""), "a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("a\\/b", ""), "a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("a\\/\\b", ""), "a/b")
+	assert.Equal(t, GetNormalizedAbsolutePath("a\\b//c", ""), "a/b/c")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\a\\b\\\\c", ""), "/a/b/c")
+	assert.Equal(t, GetNormalizedAbsolutePath("\\\\a\\b\\\\c", ""), "//a/b/c")
+}
+
 func TestGetRelativePathToDirectoryOrUrl(t *testing.T) {
 	t.Parallel()
 	// !!!
