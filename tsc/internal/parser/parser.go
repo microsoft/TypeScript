@@ -768,19 +768,19 @@ func (p *Parser) parseBlock(ignoreMissingOpenBrace bool, diagnosticMessage *diag
 	openBracePosition := p.scanner.TokenStart()
 	openBraceParsed := p.parseExpectedWithDiagnostic(ast.KindOpenBraceToken, diagnosticMessage, true /*shouldAdvance*/)
 	multiline := false
-	var statements *ast.NodeList
 	if openBraceParsed || ignoreMissingOpenBrace {
 		multiline = p.hasPrecedingLineBreak()
-		statements = p.parseList(PCBlockStatements, (*Parser).parseStatement)
+		statements := p.parseList(PCBlockStatements, (*Parser).parseStatement)
 		p.parseExpectedMatchingBrackets(ast.KindOpenBraceToken, ast.KindCloseBraceToken, openBraceParsed, openBracePosition)
+		result := p.factory.NewBlock(statements, multiline)
+		p.finishNode(result, pos)
 		if p.token == ast.KindEqualsToken {
 			p.parseErrorAtCurrentToken(diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_whole_assignment_in_parentheses)
 			p.nextToken()
 		}
-	} else {
-		statements = p.parseEmptyNodeList()
+		return result
 	}
-	result := p.factory.NewBlock(statements, multiline)
+	result := p.factory.NewBlock(p.parseEmptyNodeList(), multiline)
 	p.finishNode(result, pos)
 	return result
 }
