@@ -280,6 +280,28 @@ if (foobarPred(foobar)) {
   foobar.foo;
 }
 
+// https://github.com/microsoft/TypeScript/issues/58996
+type Animal = {
+  breath: true,
+};
+
+type Rock = {
+  breath: false,
+};
+
+type Something = Animal | Rock;
+
+function isAnimal(something: Something): something is Animal {
+  return something.breath
+}
+
+function positive(t: Something) {
+  return isAnimal(t)
+}
+
+function negative(t: Something) { 
+  return !isAnimal(t)
+}
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -538,6 +560,15 @@ var foobarPred = function (fb) { return fb.type === "foo"; };
 if (foobarPred(foobar)) {
     foobar.foo;
 }
+function isAnimal(something) {
+    return something.breath;
+}
+function positive(t) {
+    return isAnimal(t);
+}
+function negative(t) {
+    return !isAnimal(t);
+}
 
 
 //// [inferTypePredicates.d.ts]
@@ -630,3 +661,13 @@ declare const foobarPred: (fb: typeof foobar) => fb is {
     type: "foo";
     foo: number;
 };
+type Animal = {
+    breath: true;
+};
+type Rock = {
+    breath: false;
+};
+type Something = Animal | Rock;
+declare function isAnimal(something: Something): something is Animal;
+declare function positive(t: Something): t is Animal;
+declare function negative(t: Something): t is Rock;
