@@ -44,20 +44,16 @@ file.tsx(39,15): error TS2322: Type '(user: IUser) => Element' is not assignable
                 
                 { user => (
                   ~~~~~~~~~
-                    <h1>{ user.Name }</h1>
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                ) }
-    ~~~~~~~~~~~~~
 !!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 !!! related TS6212 file.tsx:36:15: Did you mean to call this expression?
+                    <h1>{ user.Name }</h1>
+                ) }
                 { user => (
                   ~~~~~~~~~
-                    <h1>{ user.Name }</h1>
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                ) }
-    ~~~~~~~~~~~~~
 !!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 !!! related TS6212 file.tsx:39:15: Did you mean to call this expression?
+                    <h1>{ user.Name }</h1>
+                ) }
             </FetchUser>
         );
     }
