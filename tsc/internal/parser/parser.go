@@ -6021,7 +6021,7 @@ func attachFileToDiagnostics(diagnostics []*ast.Diagnostic, file *ast.SourceFile
 func getCommentPragmas(sourceText string) (pragmas []ast.Pragma) {
 	for commentRange := range scanner.GetLeadingCommentRanges(sourceText, 0) {
 		comment := sourceText[commentRange.Pos():commentRange.End()]
-		pragmas = extractPragmas(commentRange, comment)
+		pragmas = append(pragmas, extractPragmas(commentRange, comment)...)
 	}
 
 	return pragmas
