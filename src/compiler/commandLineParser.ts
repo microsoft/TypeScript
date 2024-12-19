@@ -856,6 +856,14 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         affectsSemanticDiagnostics: true,
     },
+    {
+        name: "libReplacement",
+        type: "boolean",
+        affectsProgramStructure: true,
+        category: Diagnostics.Language_and_Environment,
+        description: Diagnostics.Enable_lib_replacement,
+        defaultValueDescription: true,
+    },
 
     // Strict Type Checks
     {

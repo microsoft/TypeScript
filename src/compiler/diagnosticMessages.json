@@ -6492,6 +6492,10 @@
         "category": "Error",
         "code": 6807
     },
+    "Enable lib replacement.": {
+        "category": "Message",
+        "code": 6808
+    },
 
     "one of:": {
         "category": "Message",
