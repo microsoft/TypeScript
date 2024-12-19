@@ -46053,7 +46053,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         let constraintType = getConstraintOfTypeParameter(type.checkType as TypeParameter)!;
         constraintType = constraintType.flags & TypeFlags.Unknown ? unknownUnionType : constraintType;
-
+        if (!(constraintType.flags & TypeFlags.Union)) {
+            // the constraint could be a nullable type
+            return false;
+        }
         // (3)
         if (
             !everyType(type.extendsType, extendsType =>
