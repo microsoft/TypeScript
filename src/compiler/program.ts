@@ -3933,6 +3933,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const existing = resolvedLibProcessing?.get(libFileName);
         if (existing) return existing;
 
+        if (options.libReplacement === false) {
+            const result: LibResolution = {
+                resolution: {
+                    resolvedModule: undefined,
+                },
+                actual: combinePaths(defaultLibraryPath, libFileName),
+            };
+            (resolvedLibProcessing ??= new Map()).set(libFileName, result);
+            return result;
+        }
+
         if (structureIsReused !== StructureIsReused.Not && oldProgram && !hasInvalidatedLibResolutions(libFileName)) {
             const oldResolution = oldProgram.resolvedLibReferences?.get(libFileName);
             if (oldResolution) {
