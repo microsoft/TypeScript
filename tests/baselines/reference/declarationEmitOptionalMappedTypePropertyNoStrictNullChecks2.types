@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/declarationEmitOptionalMappedTypePropertyNoStrictNullChecks2.ts] ////
+
+=== createApi.ts ===
+type Id<T> = {
+>Id : { [K in keyof T]: T[K]; }
+>   : ^^^ ^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T]: T[K];
+} & {};
+
+export declare function createApi<Definitions>(_: { endpoints: Definitions }): {
+>createApi : <Definitions>(_: { endpoints: Definitions; }) => { [K in keyof Definitions as `use${Capitalize<K & string>}Query`]: () => Id<{ status: "uninitialized"; originalArgs?: any[]; }>; }
+>          : ^           ^^ ^^                           ^^^^^                                                                                                                                  
+>_ : { endpoints: Definitions; }
+>  : ^^^^^^^^^^^^^           ^^^
+>endpoints : Definitions
+>          : ^^^^^^^^^^^
+
+  [K in keyof Definitions as `use${Capitalize<K & string>}Query`]: () => Id<{
+    status: "uninitialized";
+>status : "uninitialized"
+>       : ^^^^^^^^^^^^^^^
+
+    originalArgs?: any[];
+>originalArgs : any[]
+>             : ^^^^^
+
+  }>;
+};
+
+=== index.ts ===
+import { createApi } from "./createApi";
+>createApi : <Definitions>(_: { endpoints: Definitions; }) => { [K in keyof Definitions as `use${Capitalize<K & string>}Query`]: () => { status: "uninitialized"; originalArgs?: any[]; }; }
+>          : ^           ^^ ^^                           ^^^^^                                                                         ^^^^^^^^^^               ^^^^^^^^^^^^^^^^^     ^^^   
+
+const slice = createApi({
+>slice : { useTestQuery: () => { status: "uninitialized"; originalArgs?: any[]; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^     ^^^^^^
+>createApi({  endpoints: {    test: {      url: `/user`,    },  },}) : { useTestQuery: () => { status: "uninitialized"; originalArgs?: any[]; }; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^     ^^^^^^
+>createApi : <Definitions>(_: { endpoints: Definitions; }) => { [K in keyof Definitions as `use${Capitalize<K & string>}Query`]: () => { status: "uninitialized"; originalArgs?: any[]; }; }
+>          : ^           ^^ ^^                           ^^^^^                                                                         ^^^^^^^^^^               ^^^^^^^^^^^^^^^^^     ^^^   
+>{  endpoints: {    test: {      url: `/user`,    },  },} : { endpoints: { test: { url: string; }; }; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  endpoints: {
+>endpoints : { test: { url: string; }; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    test: {      url: `/user`,    },  } : { test: { url: string; }; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    test: {
+>test : { url: string; }
+>     : ^^^^^^^^^^^^^^^^
+>{      url: `/user`,    } : { url: string; }
+>                          : ^^^^^^^^^^^^^^^^
+
+      url: `/user`,
+>url : string
+>    : ^^^^^^
+>`/user` : "/user"
+>        : ^^^^^^^
+
+    },
+  },
+});
+
+export const { useTestQuery } = slice;
+>useTestQuery : () => { status: "uninitialized"; originalArgs?: any[]; }
+>             : ^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^     ^^^
+>slice : { useTestQuery: () => { status: "uninitialized"; originalArgs?: any[]; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^     ^^^^^^
+
