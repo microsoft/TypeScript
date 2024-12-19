@@ -8390,7 +8390,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let symbolName: string | undefined;
                 if (index === 0) {
                     context.flags |= NodeBuilderFlags.InInitialEntityName;
-                    symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    symbolName = getNameOfSymbolAsWritten(symbol, context).symbolName;
                     context.approximateLength += (symbolName ? symbolName.length : 0) + 1;
                     context.flags ^= NodeBuilderFlags.InInitialEntityName;
                 }
@@ -8415,7 +8415,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         return LHS;
                     }
-                    symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    symbolName = getNameOfSymbolAsWritten(symbol, context).symbolName;
                 }
                 context.approximateLength += symbolName.length + 1;
 
@@ -8521,7 +8521,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (index === 0) {
                     context.flags |= NodeBuilderFlags.InInitialEntityName;
                 }
-                const symbolName = getNameOfSymbolAsWritten(symbol, context);
+                const { symbolName } = getNameOfSymbolAsWritten(symbol, context);
                 if (index === 0) {
                     context.flags ^= NodeBuilderFlags.InInitialEntityName;
                 }
@@ -8546,12 +8546,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (index === 0) {
                     context.flags |= NodeBuilderFlags.InInitialEntityName;
                 }
-                let symbolName = getNameOfSymbolAsWritten(symbol, context);
+                let { symbolName, symbolNameSource } = getNameOfSymbolAsWritten(symbol, context);
                 if (index === 0) {
                     context.flags ^= NodeBuilderFlags.InInitialEntityName;
                 }
                 let firstChar = symbolName.charCodeAt(0);
 
+                const overrideSourceStringDelimiter = context.flags & (NodeBuilderFlags.UseDoubleQuotesForStringLiteralType | NodeBuilderFlags.UseSingleQuotesForStringLiteralType);
                 let useSingleQuote = !(context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) &&
                     (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || firstChar === CharacterCodes.singleQuote);
 
@@ -8569,12 +8570,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (firstChar === CharacterCodes.openBracket) {
                         symbolName = symbolName.substring(1, symbolName.length - 1);
                         firstChar = symbolName.charCodeAt(0);
+                        symbolNameSource = symbolNameSource && isComputedPropertyName(symbolNameSource) && isPropertyNameLiteral(symbolNameSource.expression) ? symbolNameSource.expression : undefined;
                         useSingleQuote = !(context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) &&
                             (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || firstChar === CharacterCodes.singleQuote);
                     }
                     let expression: Expression | undefined;
-                    if (isSingleOrDoubleQuote(firstChar) && !(symbol.flags & SymbolFlags.EnumMember)) {
-                        const stringLiteralName = factory.createStringLiteral(stripQuotes(symbolName).replace(/\\./g, s => s.substring(1)), useSingleQuote);
+                    if (isSingleOrDoubleQuote(firstChar) && !(symbol.flags & SymbolFlags.EnumMember) && symbolNameSource && isPropertyNameLiteral(symbolNameSource)) {
+                        const stringLiteralName = !overrideSourceStringDelimiter ? factory.createStringLiteralFromNode(symbolNameSource) :
+                            factory.createStringLiteral(getTextOfIdentifierOrLiteral(symbolNameSource), useSingleQuote);
                         stringLiteralName.symbol = symbol;
                         expression = stringLiteralName;
                     }
@@ -10547,7 +10550,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (localName === InternalSymbolName.Default || localName === InternalSymbolName.Class || localName === InternalSymbolName.Function) {
                     const restoreFlags = saveRestoreFlags(context);
                     context.flags |= NodeBuilderFlags.InInitialEntityName;
-                    const nameCandidate = getNameOfSymbolAsWritten(symbol, context);
+                    const nameCandidate = getNameOfSymbolAsWritten(symbol, context).symbolName;
                     restoreFlags();
                     localName = nameCandidate.length > 0 && isSingleOrDoubleQuote(nameCandidate.charCodeAt(0)) ? stripQuotes(nameCandidate) : nameCandidate;
                 }
@@ -10657,7 +10660,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return name;
             }
             if (nameType.flags & TypeFlags.UniqueESSymbol) {
-                return `[${getNameOfSymbolAsWritten((nameType as UniqueESSymbolType).symbol, context)}]`;
+                return `[${getNameOfSymbolAsWritten((nameType as UniqueESSymbolType).symbol, context).symbolName}]`;
             }
         }
     }
@@ -10669,7 +10672,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Unlike `symbolName(symbol)`, this will include quotes if the name is from a string literal.
      * It will also use a representation of a number as written instead of a decimal form, e.g. `0o11` instead of `9`.
      */
-    function getNameOfSymbolAsWritten(symbol: Symbol, context?: NodeBuilderContext): string {
+    function getNameOfSymbolAsWritten(symbol: Symbol, context?: NodeBuilderContext): { symbolName: string; symbolNameSource?: DeclarationName; } {
         if (context?.remappedSymbolReferences?.has(getSymbolId(symbol))) {
             symbol = context.remappedSymbolReferences.get(getSymbolId(symbol))!;
         }
@@ -10682,14 +10685,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // if not in the same binding context (source file, module declaration), it must print as `default`
                 (context.enclosingDeclaration && findAncestor(symbol.declarations[0], isDefaultBindingContext) !== findAncestor(context.enclosingDeclaration, isDefaultBindingContext)))
         ) {
-            return "default";
+            return { symbolName: "default", symbolNameSource: undefined };
         }
         if (symbol.declarations && symbol.declarations.length) {
             let declaration = firstDefined(symbol.declarations, d => getNameOfDeclaration(d) ? d : undefined); // Try using a declaration with a name, first
             const name = declaration && getNameOfDeclaration(declaration);
             if (declaration && name) {
                 if (isCallExpression(declaration) && isBindableObjectDefinePropertyCall(declaration)) {
-                    return symbolName(symbol);
+                    return { symbolName: symbolName(symbol), symbolNameSource: name };
                 }
                 if (isComputedPropertyName(name) && !(getCheckFlags(symbol) & CheckFlags.Late)) {
                     const nameType = getSymbolLinks(symbol).nameType;
@@ -10697,17 +10700,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // Computed property name isn't late bound, but has a well-known name type - use name type to generate a symbol name
                         const result = getNameOfSymbolFromNameType(symbol, context);
                         if (result !== undefined) {
-                            return result;
+                            return { symbolName: result, symbolNameSource: name };
                         }
                     }
                 }
-                return declarationNameToString(name);
+                return { symbolName: declarationNameToString(name), symbolNameSource: name };
             }
             if (!declaration) {
                 declaration = symbol.declarations[0]; // Declaration may be nameless, but we'll try anyway
             }
             if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
-                return declarationNameToString((declaration.parent as VariableDeclaration).name);
+                const name = (declaration.parent as VariableDeclaration).name;
+                return { symbolName: declarationNameToString(name), symbolNameSource: name };
             }
             switch (declaration.kind) {
                 case SyntaxKind.ClassExpression:
@@ -10716,11 +10720,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (context && !context.encounteredError && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
                         context.encounteredError = true;
                     }
-                    return declaration.kind === SyntaxKind.ClassExpression ? "(Anonymous class)" : "(Anonymous function)";
+                    return {
+                        symbolName: declaration.kind === SyntaxKind.ClassExpression ? "(Anonymous class)" : "(Anonymous function)",
+                        symbolNameSource: undefined,
+                    };
             }
         }
         const name = getNameOfSymbolFromNameType(symbol, context);
-        return name !== undefined ? name : symbolName(symbol);
+        return {
+            symbolName: name !== undefined ? name : symbolName(symbol),
+            symbolNameSource: undefined,
+        };
     }
 
     function isDeclarationVisible(node: Node): boolean {
@@ -41672,7 +41682,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // fall through
                     case "prototype":
                         const message = Diagnostics.Static_property_0_conflicts_with_built_in_property_Function_0_of_constructor_function_1;
-                        const className = getNameOfSymbolAsWritten(getSymbolOfDeclaration(node));
+                        const className = getNameOfSymbolAsWritten(getSymbolOfDeclaration(node)).symbolName;
                         error(memberNameNode, message, memberName, className);
                         break;
                 }

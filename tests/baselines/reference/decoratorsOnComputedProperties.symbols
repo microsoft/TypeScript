@@ -252,7 +252,7 @@ class C {
 >fieldNameC : Symbol(fieldNameC, Decl(decoratorsOnComputedProperties.ts, 6, 5))
 
     ["some" + "method"]() {}
->["some" + "method"] : Symbol(C["some\" + \"method"], Decl(decoratorsOnComputedProperties.ts, 56, 32))
+>["some" + "method"] : Symbol(C["some" + "method"], Decl(decoratorsOnComputedProperties.ts, 56, 32))
 }
 
 void class D {
@@ -331,7 +331,7 @@ void class D {
 >fieldNameC : Symbol(fieldNameC, Decl(decoratorsOnComputedProperties.ts, 6, 5))
 
     ["some" + "method"]() {}
->["some" + "method"] : Symbol(D["some\" + \"method"], Decl(decoratorsOnComputedProperties.ts, 74, 32))
+>["some" + "method"] : Symbol(D["some" + "method"], Decl(decoratorsOnComputedProperties.ts, 74, 32))
 
 };
 
@@ -397,7 +397,7 @@ class E {
 >foo : Symbol(foo, Decl(decoratorsOnComputedProperties.ts, 1, 10))
 
     ["some" + "method"]() {}
->["some" + "method"] : Symbol(E["some\" + \"method"], Decl(decoratorsOnComputedProperties.ts, 89, 27))
+>["some" + "method"] : Symbol(E["some" + "method"], Decl(decoratorsOnComputedProperties.ts, 89, 27))
 
     [fieldNameA]: any;
 >[fieldNameA] : Symbol(E[fieldNameA], Decl(decoratorsOnComputedProperties.ts, 90, 28))
@@ -476,7 +476,7 @@ void class F {
 >foo : Symbol(foo, Decl(decoratorsOnComputedProperties.ts, 1, 10))
 
     ["some" + "method"]() {}
->["some" + "method"] : Symbol(F["some\" + \"method"], Decl(decoratorsOnComputedProperties.ts, 107, 27))
+>["some" + "method"] : Symbol(F["some" + "method"], Decl(decoratorsOnComputedProperties.ts, 107, 27))
 
     [fieldNameA]: any;
 >[fieldNameA] : Symbol(F[fieldNameA], Decl(decoratorsOnComputedProperties.ts, 108, 28))
@@ -556,7 +556,7 @@ class G {
 >foo : Symbol(foo, Decl(decoratorsOnComputedProperties.ts, 1, 10))
 
     ["some" + "method"]() {}
->["some" + "method"] : Symbol(G["some\" + \"method"], Decl(decoratorsOnComputedProperties.ts, 125, 27))
+>["some" + "method"] : Symbol(G["some" + "method"], Decl(decoratorsOnComputedProperties.ts, 125, 27))
 
     [fieldNameA]: any;
 >[fieldNameA] : Symbol(G[fieldNameA], Decl(decoratorsOnComputedProperties.ts, 126, 28))
@@ -568,7 +568,7 @@ class G {
 >fieldNameB : Symbol(fieldNameB, Decl(decoratorsOnComputedProperties.ts, 5, 5))
 
     ["some" + "method2"]() {}
->["some" + "method2"] : Symbol(G["some\" + \"method2"], Decl(decoratorsOnComputedProperties.ts, 128, 25))
+>["some" + "method2"] : Symbol(G["some" + "method2"], Decl(decoratorsOnComputedProperties.ts, 128, 25))
 
     @x [fieldNameC]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -638,7 +638,7 @@ void class H {
 >foo : Symbol(foo, Decl(decoratorsOnComputedProperties.ts, 1, 10))
 
     ["some" + "method"]() {}
->["some" + "method"] : Symbol(H["some\" + \"method"], Decl(decoratorsOnComputedProperties.ts, 144, 27))
+>["some" + "method"] : Symbol(H["some" + "method"], Decl(decoratorsOnComputedProperties.ts, 144, 27))
 
     [fieldNameA]: any;
 >[fieldNameA] : Symbol(H[fieldNameA], Decl(decoratorsOnComputedProperties.ts, 145, 28))
@@ -650,7 +650,7 @@ void class H {
 >fieldNameB : Symbol(fieldNameB, Decl(decoratorsOnComputedProperties.ts, 5, 5))
 
     ["some" + "method2"]() {}
->["some" + "method2"] : Symbol(H["some\" + \"method2"], Decl(decoratorsOnComputedProperties.ts, 147, 25))
+>["some" + "method2"] : Symbol(H["some" + "method2"], Decl(decoratorsOnComputedProperties.ts, 147, 25))
 
     @x [fieldNameC]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -722,7 +722,7 @@ class I {
 
     @x ["some" + "method"]() {}
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["some" + "method"] : Symbol(I["some\" + \"method"], Decl(decoratorsOnComputedProperties.ts, 163, 27))
+>["some" + "method"] : Symbol(I["some" + "method"], Decl(decoratorsOnComputedProperties.ts, 163, 27))
 
     [fieldNameA]: any;
 >[fieldNameA] : Symbol(I[fieldNameA], Decl(decoratorsOnComputedProperties.ts, 164, 31))
@@ -734,7 +734,7 @@ class I {
 >fieldNameB : Symbol(fieldNameB, Decl(decoratorsOnComputedProperties.ts, 5, 5))
 
     ["some" + "method2"]() {}
->["some" + "method2"] : Symbol(I["some\" + \"method2"], Decl(decoratorsOnComputedProperties.ts, 166, 25))
+>["some" + "method2"] : Symbol(I["some" + "method2"], Decl(decoratorsOnComputedProperties.ts, 166, 25))
 
     @x [fieldNameC]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -805,7 +805,7 @@ void class J {
 
     @x ["some" + "method"]() {}
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["some" + "method"] : Symbol(J["some\" + \"method"], Decl(decoratorsOnComputedProperties.ts, 182, 27))
+>["some" + "method"] : Symbol(J["some" + "method"], Decl(decoratorsOnComputedProperties.ts, 182, 27))
 
     [fieldNameA]: any;
 >[fieldNameA] : Symbol(J[fieldNameA], Decl(decoratorsOnComputedProperties.ts, 183, 31))
@@ -817,7 +817,7 @@ void class J {
 >fieldNameB : Symbol(fieldNameB, Decl(decoratorsOnComputedProperties.ts, 5, 5))
 
     ["some" + "method2"]() {}
->["some" + "method2"] : Symbol(J["some\" + \"method2"], Decl(decoratorsOnComputedProperties.ts, 185, 25))
+>["some" + "method2"] : Symbol(J["some" + "method2"], Decl(decoratorsOnComputedProperties.ts, 185, 25))
 
     @x [fieldNameC]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))

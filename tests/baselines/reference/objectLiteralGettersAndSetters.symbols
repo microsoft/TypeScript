@@ -40,8 +40,8 @@ var sameName4a = { get ''() { return ''; }, set ""(n) { var p = n; var p: string
 
 var sameName5a = { get '\t'() { return ''; }, set '\t'(n) { var p = n; var p: string; } };
 >sameName5a : Symbol(sameName5a, Decl(objectLiteralGettersAndSetters.ts, 5, 3))
->'\t' : Symbol('t', Decl(objectLiteralGettersAndSetters.ts, 5, 18), Decl(objectLiteralGettersAndSetters.ts, 5, 45))
->'\t' : Symbol('t', Decl(objectLiteralGettersAndSetters.ts, 5, 18), Decl(objectLiteralGettersAndSetters.ts, 5, 45))
+>'\t' : Symbol('\t', Decl(objectLiteralGettersAndSetters.ts, 5, 18), Decl(objectLiteralGettersAndSetters.ts, 5, 45))
+>'\t' : Symbol('\t', Decl(objectLiteralGettersAndSetters.ts, 5, 18), Decl(objectLiteralGettersAndSetters.ts, 5, 45))
 >n : Symbol(n, Decl(objectLiteralGettersAndSetters.ts, 5, 55))
 >p : Symbol(p, Decl(objectLiteralGettersAndSetters.ts, 5, 63), Decl(objectLiteralGettersAndSetters.ts, 5, 74))
 >n : Symbol(n, Decl(objectLiteralGettersAndSetters.ts, 5, 55))
