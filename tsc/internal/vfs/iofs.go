@@ -13,13 +13,9 @@ type RealpathFS interface {
 	Realpath(path string) (string, error)
 }
 
-type WriteFileFS interface {
+type WritableFS interface {
 	fs.FS
 	WriteFile(path string, data []byte, perm fs.FileMode) error
-}
-
-type MkdirAllFS interface {
-	fs.FS
 	MkdirAll(path string, perm fs.FileMode) error
 }
 
@@ -28,8 +24,7 @@ type MkdirAllFS interface {
 // For paths like `c:/foo/bar`, fsys will be used as though it's rooted at `/` and the path is `/c:/foo/bar`.
 //
 // If the provided [fs.FS] implements [RealpathFS], it will be used to implement the Realpath method.
-// If the provided [fs.FS] implements [WriteFileFS], it will be used to implement the WriteFile method.
-// If the provided [fs.FS] implements [MkdirAllFS], it will be used to implement the WriteFile method.
+// If the provided [fs.FS] implements [WritableFS], it will be used to implement the WriteFile method.
 //
 // Deprecated: FromIOFS does not actually handle case-insensitivity; ensure the passed in [fs.FS]
 // respects case-insensitive file names if needed. Consider using [vfstest.FromMapFS] for testing.
@@ -54,25 +49,23 @@ func FromIOFS(fsys fs.FS, useCaseSensitiveFileNames bool) FS {
 	}
 
 	var writeFile func(path string, content string, writeByteOrderMark bool) error
-	if fsys, ok := fsys.(WriteFileFS); ok {
+	var mkdirAll func(path string) error
+	if fsys, ok := fsys.(WritableFS); ok {
 		writeFile = func(path string, content string, writeByteOrderMark bool) error {
+			rest, _ := strings.CutPrefix(path, "/")
 			if writeByteOrderMark {
 				content = "\uFEFF" + content
 			}
-			return fsys.WriteFile(path, []byte(content), 0o666)
+			return fsys.WriteFile(rest, []byte(content), 0o666)
+		}
+		mkdirAll = func(path string) error {
+			rest, _ := strings.CutPrefix(path, "/")
+			return fsys.MkdirAll(rest, 0o777)
 		}
 	} else {
 		writeFile = func(string, string, bool) error {
 			panic("writeFile not supported")
 		}
-	}
-
-	var mkdirAll func(path string) error
-	if fsys, ok := fsys.(MkdirAllFS); ok {
-		mkdirAll = func(path string) error {
-			return fsys.MkdirAll(path, 0o777)
-		}
-	} else {
 		mkdirAll = func(string) error {
 			panic("mkdirAll not supported")
 		}
