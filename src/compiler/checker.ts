@@ -6267,7 +6267,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return true;
                 }
                 if (requiresAddingUndefined && annotationType) {
-                    annotationType = getOptionalType(annotationType, !isParameter(node));
+                    annotationType = addOptionality(annotationType, !isParameter(node));
                 }
                 return !!annotationType && typeNodeIsEquivalentToType(node, type, annotationType) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type);
             },
