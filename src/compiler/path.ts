@@ -630,6 +630,10 @@ export function getNormalizedAbsolutePath(path: string, currentDirectory: string
         path = combinePaths(currentDirectory, path);
         rootLength = getRootLength(path);
     }
+    const simple = simpleNormalizePath(path);
+    if (simple !== undefined) {
+        return simple;
+    }
     const root = path.substring(0, rootLength);
     const normalizedRoot = root && normalizeSlashes(root);
     // `normalized` is only initialized once `path` is determined to be non-normalized
@@ -720,8 +724,29 @@ export function getNormalizedAbsolutePath(path: string, currentDirectory: string
 
 /** @internal */
 export function normalizePath(path: string): string {
-    const normalized = getNormalizedAbsolutePath(path, "");
+    let normalized = simpleNormalizePath(path);
+    if (normalized !== undefined) {
+        return normalized;
+    }
+    normalized = getNormalizedAbsolutePath(path, "");
     return normalized && hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalized) : normalized;
+}
+
+function simpleNormalizePath(path: string): string | undefined {
+    path = normalizeSlashes(path);
+    // Most paths don't require normalization
+    if (!relativePathSegmentRegExp.test(path)) {
+        return path;
+    }
+    // Some paths only require cleanup of `/./` or leading `./`
+    const simplified = path.replace(/\/\.\//g, "/").replace(/^\.\//, "");
+    if (simplified !== path) {
+        path = simplified;
+        if (!relativePathSegmentRegExp.test(path)) {
+            return path;
+        }
+    }
+    return undefined;
 }
 
 function getPathWithoutRoot(pathComponents: readonly string[]) {
