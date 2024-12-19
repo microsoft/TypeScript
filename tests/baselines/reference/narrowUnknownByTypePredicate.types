@@ -133,3 +133,61 @@ if (!isA(value6)) {
 >       : ^^^^^^^
 }
 
+function fn1<T>(x: T): void {
+>fn1 : <T>(x: T) => void
+>    : ^ ^^ ^^ ^^^^^    
+>x : T
+>  : ^
+
+  if (x != undefined) {
+>x != undefined : boolean
+>               : ^^^^^^^
+>x : T
+>  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    const y: {} = x; // ok
+>y : {}
+>  : ^^
+>x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
+
+  } else {
+    const y: null | undefined = x; // ok
+>y : null | undefined
+>  : ^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+  }
+}
+
+function fn2<T extends unknown>(x: T): void {
+>fn2 : <T extends unknown>(x: T) => void
+>    : ^ ^^^^^^^^^       ^^ ^^ ^^^^^    
+>x : T
+>  : ^
+
+  if (x != undefined) {
+>x != undefined : boolean
+>               : ^^^^^^^
+>x : T
+>  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    const y: {} = x; // ok
+>y : {}
+>  : ^^
+>x : {}
+>  : ^^
+
+  } else {
+    const y: null | undefined = x; // ok
+>y : null | undefined
+>  : ^^^^^^^^^^^^^^^^
+>x : null | undefined
+>  : ^^^^^^^^^^^^^^^^
+  }
+}
+

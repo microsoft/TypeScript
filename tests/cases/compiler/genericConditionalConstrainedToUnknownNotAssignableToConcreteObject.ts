@@ -20,7 +20,6 @@ function g2<
     M extends keyof T
 >(a2: ReturnType<T[M]>) {
     if (isA(a2)) {
-        // a2 is not narrowed
-        a2.x // error, but should be ok
+        a2.x // ok
     }
 }

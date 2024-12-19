@@ -36,3 +36,19 @@ declare const value6: unknown;
 if (!isA(value6)) {
   value6;
 }
+
+function fn1<T>(x: T): void {
+  if (x != undefined) {
+    const y: {} = x; // ok
+  } else {
+    const y: null | undefined = x; // ok
+  }
+}
+
+function fn2<T extends unknown>(x: T): void {
+  if (x != undefined) {
+    const y: {} = x; // ok
+  } else {
+    const y: null | undefined = x; // ok
+  }
+}

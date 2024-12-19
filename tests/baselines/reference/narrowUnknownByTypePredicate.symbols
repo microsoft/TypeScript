@@ -87,3 +87,45 @@ if (!isA(value6)) {
 >value6 : Symbol(value6, Decl(narrowUnknownByTypePredicate.ts, 31, 13))
 }
 
+function fn1<T>(x: T): void {
+>fn1 : Symbol(fn1, Decl(narrowUnknownByTypePredicate.ts, 34, 1))
+>T : Symbol(T, Decl(narrowUnknownByTypePredicate.ts, 36, 13))
+>x : Symbol(x, Decl(narrowUnknownByTypePredicate.ts, 36, 16))
+>T : Symbol(T, Decl(narrowUnknownByTypePredicate.ts, 36, 13))
+
+  if (x != undefined) {
+>x : Symbol(x, Decl(narrowUnknownByTypePredicate.ts, 36, 16))
+>undefined : Symbol(undefined)
+
+    const y: {} = x; // ok
+>y : Symbol(y, Decl(narrowUnknownByTypePredicate.ts, 38, 9))
+>x : Symbol(x, Decl(narrowUnknownByTypePredicate.ts, 36, 16))
+
+  } else {
+    const y: null | undefined = x; // ok
+>y : Symbol(y, Decl(narrowUnknownByTypePredicate.ts, 40, 9))
+>x : Symbol(x, Decl(narrowUnknownByTypePredicate.ts, 36, 16))
+  }
+}
+
+function fn2<T extends unknown>(x: T): void {
+>fn2 : Symbol(fn2, Decl(narrowUnknownByTypePredicate.ts, 42, 1))
+>T : Symbol(T, Decl(narrowUnknownByTypePredicate.ts, 44, 13))
+>x : Symbol(x, Decl(narrowUnknownByTypePredicate.ts, 44, 32))
+>T : Symbol(T, Decl(narrowUnknownByTypePredicate.ts, 44, 13))
+
+  if (x != undefined) {
+>x : Symbol(x, Decl(narrowUnknownByTypePredicate.ts, 44, 32))
+>undefined : Symbol(undefined)
+
+    const y: {} = x; // ok
+>y : Symbol(y, Decl(narrowUnknownByTypePredicate.ts, 46, 9))
+>x : Symbol(x, Decl(narrowUnknownByTypePredicate.ts, 44, 32))
+
+  } else {
+    const y: null | undefined = x; // ok
+>y : Symbol(y, Decl(narrowUnknownByTypePredicate.ts, 48, 9))
+>x : Symbol(x, Decl(narrowUnknownByTypePredicate.ts, 44, 32))
+  }
+}
+
