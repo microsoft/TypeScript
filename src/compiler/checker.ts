@@ -29830,7 +29830,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             someType(type, isGenericTypeWithUnionConstraint) &&
             (forReturnTypeNarrowing || isConstraintPosition(type, reference) || hasContextualTypeWithNoGenericTypes(reference, checkMode));
         return substituteConstraints
-            ? mapType(type, (t) => {
+            ? mapType(type, t => {
                 const c = getBaseConstraintOrType(t);
                 return c.flags & TypeFlags.Unknown ? unknownUnionType : c;
             })
@@ -34383,7 +34383,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const flowType = recombineUnknownType(
             getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType),
-            originalPropType
+            originalPropType,
         );
         if (assumeUninitialized && !containsUndefinedType(propType) && containsUndefinedType(flowType)) {
             error(errorNode, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
@@ -45929,8 +45929,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getNarrowableTypeParameters(candidates: TypeParameter[]): [TypeParameter, Symbol, Identifier][] {
         const narrowableParams: [TypeParameter, Symbol, Identifier][] = [];
         for (const typeParam of candidates) {
-            const constraint = getConstraintOfTypeParameter(typeParam);
-            if (!constraint || !(constraint.flags & TypeFlags.Union)) continue;
+            if (!isGenericTypeWithUnionConstraint(typeParam)) continue;
+            const constraint = getConstraintOfTypeParameter(typeParam)!;
             if (typeParam.symbol && typeParam.symbol.declarations && typeParam.symbol.declarations.length === 1) {
                 const declaration = typeParam.symbol.declarations[0];
                 const container = isJSDocTemplateTag(declaration.parent) ? getJSDocHost(declaration.parent) : declaration.parent;
@@ -46048,10 +46048,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // (2)
-        const constraintType = getConstraintOfTypeParameter(type.checkType as TypeParameter);
-        if (!constraintType || !(constraintType.flags & TypeFlags.Union)) {
+        if (!isGenericTypeWithUnionConstraint(type.checkType)) {
             return false;
         }
+        let constraintType = getConstraintOfTypeParameter(type.checkType as TypeParameter)!;
+        constraintType = constraintType.flags & TypeFlags.Unknown ? unknownUnionType : constraintType;
 
         // (3)
         if (

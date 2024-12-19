@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/dependentReturnType10.ts] ////
+
+=== dependentReturnType10.ts ===
+type Nullable = null | undefined;
+>Nullable : Nullable
+>         : ^^^^^^^^
+
+function test1<T extends unknown>(
+>test1 : <T extends unknown>(x: T) => T extends {} ? {} : T extends Nullable ? Nullable : never
+>      : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                         
+
+  x: T,
+>x : T
+>  : ^
+
+): T extends {} ? {} : T extends Nullable ? Nullable : never {
+  if (x == undefined) {
+>x == undefined : boolean
+>               : ^^^^^^^
+>x : T
+>  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    return x;
+>x : null | undefined
+>  : ^^^^^^^^^^^^^^^^
+
+  } else {
+    return x;
+>x : {}
+>  : ^^
+  }
+}
+
