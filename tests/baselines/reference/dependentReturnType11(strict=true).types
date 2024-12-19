@@ -1,6 +1,8 @@
 //// [tests/cases/compiler/dependentReturnType11.ts] ////
 
 === dependentReturnType11.ts ===
+// shouldn't crash
+
 type Nullable = null | undefined;
 >Nullable : Nullable
 >         : ^^^^^^^^

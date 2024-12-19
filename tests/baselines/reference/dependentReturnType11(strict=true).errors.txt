@@ -1,8 +1,10 @@
-dependentReturnType11.ts(7,5): error TS2322: Type 'T' is not assignable to type 'T extends Nullable ? Nullable : never'.
+dependentReturnType11.ts(9,5): error TS2322: Type 'T' is not assignable to type 'T extends Nullable ? Nullable : never'.
   Type 'null' is not assignable to type 'T extends Nullable ? Nullable : never'.
 
 
 ==== dependentReturnType11.ts (1 errors) ====
+    // shouldn't crash
+    
     type Nullable = null | undefined;
     
     function test1<T extends null>(
