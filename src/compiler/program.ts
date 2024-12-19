@@ -4539,7 +4539,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             !(ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext)
         ) {
             const moduleKindName = ModuleKind[moduleKind];
-            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_moduleResolution_must_be_set_to_0_or_left_unspecified_when_option_module_is_set_to_1, moduleKindName, moduleKindName);
+            const moduleResolutionName = ModuleResolutionKind[moduleKindName as any] ? moduleKindName : "Node16";
+            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_moduleResolution_must_be_set_to_0_or_left_unspecified_when_option_module_is_set_to_1, moduleResolutionName, moduleKindName);
         }
         else if (
             ModuleResolutionKind[moduleResolution] &&

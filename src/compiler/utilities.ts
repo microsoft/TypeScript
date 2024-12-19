@@ -2074,7 +2074,7 @@ export function getNonAugmentationDeclaration(symbol: Symbol): Declaration | und
 }
 
 function isCommonJSContainingModuleKind(kind: ModuleKind) {
-    return kind === ModuleKind.CommonJS || kind === ModuleKind.Node16 || kind === ModuleKind.NodeNext;
+    return kind === ModuleKind.CommonJS || ModuleKind.Node16 <= kind && kind <= ModuleKind.NodeNext;
 }
 
 /** @internal */
@@ -8940,6 +8940,7 @@ const _computedOptions = createComputedCompilerOptions({
             const target = compilerOptions.target === ScriptTarget.ES3 ? undefined : compilerOptions.target;
             return target ??
                 ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
+                    (compilerOptions.module === ModuleKind.Node18 && ScriptTarget.ES2022) ||
                     (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
                     ScriptTarget.ES5);
         },
@@ -8962,6 +8963,7 @@ const _computedOptions = createComputedCompilerOptions({
                         moduleResolution = ModuleResolutionKind.Node10;
                         break;
                     case ModuleKind.Node16:
+                    case ModuleKind.Node18:
                         moduleResolution = ModuleResolutionKind.Node16;
                         break;
                     case ModuleKind.NodeNext:
@@ -8981,9 +8983,13 @@ const _computedOptions = createComputedCompilerOptions({
     moduleDetection: {
         dependencies: ["module", "target"],
         computeValue: (compilerOptions): ModuleDetectionKind => {
-            return compilerOptions.moduleDetection ||
-                (_computedOptions.module.computeValue(compilerOptions) === ModuleKind.Node16 ||
-                        _computedOptions.module.computeValue(compilerOptions) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
+            if (compilerOptions.moduleDetection !== undefined) {
+                return compilerOptions.moduleDetection;
+            }
+            const moduleKind = _computedOptions.module.computeValue(compilerOptions);
+            return ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext
+                ? ModuleDetectionKind.Force
+                : ModuleDetectionKind.Auto;
         },
     },
     isolatedModules: {
@@ -9000,6 +9006,7 @@ const _computedOptions = createComputedCompilerOptions({
             }
             switch (_computedOptions.module.computeValue(compilerOptions)) {
                 case ModuleKind.Node16:
+                case ModuleKind.Node18:
                 case ModuleKind.NodeNext:
                 case ModuleKind.Preserve:
                     return true;
@@ -9227,6 +9234,16 @@ export function unusedLabelIsError(options: CompilerOptions): boolean {
 export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution: ModuleResolutionKind): boolean {
     return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
         || moduleResolution === ModuleResolutionKind.Bundler;
+}
+
+/**
+ * @internal
+ * The same set of options also support import assertions.
+ */
+export function moduleSupportsImportAttributes(moduleKind: ModuleKind): boolean {
+    return ModuleKind.Node18 <= moduleKind && moduleKind <= ModuleKind.NodeNext
+        || moduleKind === ModuleKind.Preserve
+        || moduleKind === ModuleKind.ESNext;
 }
 
 /** @internal */

@@ -1558,6 +1558,7 @@ function getUmdImportKind(importingFile: SourceFile | FutureSourceFile, program:
             // Fall back to the `import * as ns` style import.
             return ImportKind.Namespace;
         case ModuleKind.Node16:
+        case ModuleKind.Node18:
         case ModuleKind.NodeNext:
             return getImpliedNodeFormatForEmit(importingFile, program) === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
         default:

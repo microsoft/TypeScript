@@ -1028,11 +1028,11 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.": {
         "category": "Error",
         "code": 1323
     },
-    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 1324
     },
@@ -1100,7 +1100,7 @@
         "category": "Error",
         "code": 1341
     },
-    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.": {
         "category": "Error",
         "code": 1343
     },
@@ -1220,7 +1220,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1378
     },
@@ -1424,7 +1424,7 @@
         "category": "Error",
         "code": 1431
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1432
     },
@@ -3788,7 +3788,7 @@
         "category": "Error",
         "code": 2820
     },
-    "Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
+    "Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2821
     },
@@ -3796,7 +3796,7 @@
         "category": "Error",
         "code": 2822
     },
-    "Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
+    "Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2823
     },
@@ -3876,7 +3876,7 @@
         "category": "Error",
         "code": 2853
     },
-    "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 2854
     },
@@ -4416,6 +4416,14 @@
     "One value of '{0}.{1}' is the string '{2}', and the other is assumed to be an unknown numeric value.": {
         "category": "Error",
         "code": 4126
+    },
+    "This member cannot have an 'override' modifier because its name is dynamic.": {
+        "category": "Error",
+        "code": 4127
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because its name is dynamic.": {
+        "category": "Error",
+        "code": 4128
     },
 
     "The current host does not support the '{0}' option.": {

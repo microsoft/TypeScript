@@ -1,0 +1,40 @@
+//// [tests/cases/conformance/node/nodeModulesImportAttributesModeDeclarationEmit1.ts] ////
+
+=== /index.ts ===
+import type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+>RequireInterface : Symbol(RequireInterface, Decl(index.ts, 0, 13))
+
+import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+>ImportInterface : Symbol(ImportInterface, Decl(index.ts, 1, 13))
+
+export interface LocalInterface extends RequireInterface, ImportInterface {}
+>LocalInterface : Symbol(LocalInterface, Decl(index.ts, 1, 80))
+>RequireInterface : Symbol(RequireInterface, Decl(index.ts, 0, 13))
+>ImportInterface : Symbol(ImportInterface, Decl(index.ts, 1, 13))
+
+import {type RequireInterface as Req} from "pkg" with { "resolution-mode": "require" };
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+>Req : Symbol(Req, Decl(index.ts, 5, 8))
+
+import {type ImportInterface as Imp} from "pkg" with { "resolution-mode": "import" };
+>Imp : Symbol(Imp, Decl(index.ts, 6, 8))
+
+export interface Loc extends Req, Imp {}
+>Loc : Symbol(Loc, Decl(index.ts, 6, 85))
+>Req : Symbol(Req, Decl(index.ts, 5, 8))
+>Imp : Symbol(Imp, Decl(index.ts, 6, 8))
+
+export type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+>RequireInterface : Symbol(RequireInterface, Decl(index.ts, 9, 13))
+
+export type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+>ImportInterface : Symbol(ImportInterface, Decl(index.ts, 10, 13))
+
+=== /node_modules/pkg/import.d.ts ===
+export interface ImportInterface {}
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+
+=== /node_modules/pkg/require.d.ts ===
+export interface RequireInterface {}
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+

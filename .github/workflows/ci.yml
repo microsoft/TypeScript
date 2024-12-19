@@ -27,7 +27,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-          - macos-14
+          - macos-latest
         node-version:
           - '22'
           - '20'
@@ -43,7 +43,7 @@ jobs:
         exclude:
           # No Node 14 on ARM macOS
           - node-version: '14'
-            os: macos-14
+            os: macos-latest
 
     runs-on: ${{ matrix.os }}
     name: Test Node ${{ matrix.node-version }} on ${{ matrix.os }}${{ (!matrix.bundle && ' with --no-bundle') || '' }}
@@ -73,7 +73,7 @@ jobs:
     runs-on:
       - 'self-hosted'
       - '1ES.Pool=TypeScript-1ES-GitHub-Large'
-      - '1ES.ImageOverride=ubuntu-22.04'
+      - '1ES.ImageOverride=mariner-2.0'
 
     permissions:
       id-token: write
@@ -95,7 +95,7 @@ jobs:
           name: coverage
           path: coverage
 
-      - uses: codecov/codecov-action@015f24e6818733317a2da2edd6290ab26238649a # v5.0.7
+      - uses: codecov/codecov-action@7f8b4b4bde536c465e797be725718b88c5d95e0e # v5.1.1
         with:
           use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
           disable_search: true
@@ -137,7 +137,7 @@ jobs:
           node-version: 'lts/*'
       - run: npm ci
 
-      - uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
         with:
           path: ~/.cache/dprint
           key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
