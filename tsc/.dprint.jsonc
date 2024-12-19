@@ -39,9 +39,9 @@
     },
     "exec": {
         "cwd": "${configDir}",
-        "cacheKey": "3",
+        "cacheKey": "4",
         "commands": [
-            { "command": "gofumpt {{file_path}}", "exts": ["go"], "stdin": false }
+            { "command": "gofumpt -lang=go1.23", "exts": ["go"] }
         ]
     },
     "excludes": [
