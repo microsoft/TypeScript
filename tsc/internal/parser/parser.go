@@ -206,6 +206,11 @@ func (p *Parser) nextToken() ast.Kind {
 	return p.token
 }
 
+func (p *Parser) nextTokenJSDoc() ast.Kind {
+	p.token = p.scanner.ScanJSDocToken()
+	return p.token
+}
+
 func (p *Parser) nodePos() int {
 	return p.scanner.TokenFullStart()
 }
@@ -2290,23 +2295,20 @@ func (p *Parser) parseNonArrayType() *ast.Node {
 		}
 		p.rewind(state)
 		return p.parseTypeReference()
-		// !!!
-		// case KindAsteriskEqualsToken:
-		// 	// If there is '*=', treat it as * followed by postfix =
-		// 	p.scanner.reScanAsteriskEqualsToken()
-		// 	fallthrough
-		// case KindAsteriskToken:
-		// 	return p.parseJSDocAllType()
-		// case KindQuestionQuestionToken:
-		// 	// If there is '??', treat it as prefix-'?' in JSDoc type.
-		// 	p.scanner.reScanQuestionToken()
-		// 	fallthrough
-		// case KindQuestionToken:
-		// 	return p.parseJSDocUnknownOrNullableType()
-		// case KindFunctionKeyword:
-		// 	return p.parseJSDocFunctionType()
-		// case KindExclamationToken:
-		// 	return p.parseJSDocNonNullableType()
+	case ast.KindAsteriskEqualsToken:
+		// If there is '*=', treat it as * followed by postfix =
+		p.scanner.ReScanAsteriskEqualsToken()
+		fallthrough
+	case ast.KindAsteriskToken:
+		return p.parseJSDocAllType()
+	case ast.KindQuestionQuestionToken:
+		// If there is '??', treat it as prefix-'?' in JSDoc type.
+		p.scanner.ReScanQuestionToken()
+		fallthrough
+	case ast.KindQuestionToken:
+		return p.parseJSDocNullableType()
+	case ast.KindExclamationToken:
+		return p.parseJSDocNonNullableType()
 	case ast.KindNoSubstitutionTemplateLiteral, ast.KindStringLiteral, ast.KindNumericLiteral, ast.KindBigIntLiteral, ast.KindTrueKeyword,
 		ast.KindFalseKeyword, ast.KindNullKeyword:
 		return p.parseLiteralTypeNode(false /*negative*/)
@@ -2372,6 +2374,51 @@ func (p *Parser) parseThisTypePredicate(lhs *ast.Node) *ast.Node {
 	result := p.factory.NewTypePredicateNode(nil /*assertsModifier*/, lhs, p.parseType())
 	p.finishNode(result, lhs.Pos())
 	return result
+}
+
+func (p *Parser) parseJSDocAllType() *ast.Node {
+	pos := p.nodePos()
+	p.nextToken()
+	result := p.factory.NewJSDocAllType()
+	p.finishNode(result, pos)
+	return result
+}
+
+func (p *Parser) parseJSDocNonNullableType() *ast.TypeNode {
+	pos := p.nodePos()
+	p.nextToken()
+	result := p.factory.NewJSDocNonNullableType(p.parseNonArrayType())
+	p.finishNode(result, pos)
+	return result
+}
+
+func (p *Parser) parseJSDocNullableType() *ast.Node {
+	pos := p.nodePos()
+	// skip the ?
+	p.nextToken()
+	result := p.factory.NewJSDocNullableType(p.parseType())
+	p.finishNode(result, pos)
+	return result
+}
+
+func (p *Parser) parseJSDocType() *ast.TypeNode {
+	p.scanner.SetSkipJsDocLeadingAsterisks(true)
+	pos := p.nodePos()
+
+	hasDotDotDot := p.parseOptional(ast.KindDotDotDotToken)
+	t := p.parseTypeOrTypePredicate()
+	p.scanner.SetSkipJsDocLeadingAsterisks(false)
+	if hasDotDotDot {
+		t = p.factory.NewJSDocVariadicType(t)
+		p.finishNode(t, pos)
+	}
+	if p.token == ast.KindEqualsToken {
+		p.nextToken()
+		result := p.factory.NewJSDocOptionalType(t)
+		p.finishNode(result, pos)
+		return result
+	}
+	return t
 }
 
 func (p *Parser) parseLiteralTypeNode(negative bool) *ast.Node {
@@ -3919,8 +3966,7 @@ func (p *Parser) parseParenthesizedArrowFunctionExpression(allowAmbiguity bool, 
 	for unwrappedType != nil && unwrappedType.Kind == ast.KindParenthesizedType {
 		unwrappedType = unwrappedType.AsParenthesizedTypeNode().Type // Skip parens if need be
 	}
-	hasJSDocFunctionType := unwrappedType != nil && unwrappedType.Kind == ast.KindJSDocFunctionType
-	if !allowAmbiguity && p.token != ast.KindEqualsGreaterThanToken && (hasJSDocFunctionType || p.token != ast.KindOpenBraceToken) {
+	if !allowAmbiguity && p.token != ast.KindEqualsGreaterThanToken && p.token != ast.KindOpenBraceToken {
 		// Returning undefined here will cause our caller to rewind to where we started from.
 		return nil
 	}
