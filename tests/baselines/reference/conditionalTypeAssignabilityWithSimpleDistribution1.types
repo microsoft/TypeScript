@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/conditionalTypeAssignabilityWithSimpleDistribution1.ts] ////
+
+=== conditionalTypeAssignabilityWithSimpleDistribution1.ts ===
+type AllKeys<T> = T extends unknown ? keyof T : never;
+>AllKeys : AllKeys<T>
+>        : ^^^^^^^^^^
+
+type WithKeyOfConstraint<T, K extends keyof T> = unknown;
+>WithKeyOfConstraint : unknown
+>                    : ^^^^^^^
+
+type Test1<T> = WithKeyOfConstraint<T, AllKeys<T>>; // ok
+>Test1 : unknown
+>      : ^^^^^^^
+
+type WithAllKeysConstraint<T, K extends AllKeys<T>> = unknown;
+>WithAllKeysConstraint : unknown
+>                      : ^^^^^^^
+
+type Test2<T> = WithAllKeysConstraint<T, keyof T>; // ok
+>Test2 : unknown
+>      : ^^^^^^^
+
+declare function test3<T>(
+>test3 : <T>(p1: T, p2: T extends unknown ? T & { css?: unknown; } : never) => void
+>      : ^ ^^  ^^ ^^  ^^                                                  ^^^^^    
+
+  p1: T,
+>p1 : T
+>   : ^
+
+  p2: T extends unknown ? T & { css?: unknown } : never,
+>p2 : T extends unknown ? T & { css?: unknown; } : never
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^
+>css : unknown
+>    : ^^^^^^^
+
+): void;
+
+const wrapper = <P extends object>(props: P) => {
+>wrapper : <P extends object>(props: P) => void
+>        : ^ ^^^^^^^^^      ^^     ^^ ^^^^^^^^^
+><P extends object>(props: P) => {  test3(    props,    props, // ok  );} : <P extends object>(props: P) => void
+>                                                                         : ^ ^^^^^^^^^      ^^     ^^ ^^^^^^^^^
+>props : P
+>      : ^
+
+  test3(
+>test3(    props,    props, // ok  ) : void
+>                                    : ^^^^
+>test3 : <T>(p1: T, p2: T extends unknown ? T & { css?: unknown; } : never) => void
+>      : ^ ^^  ^^ ^^  ^^                                                  ^^^^^    
+
+    props,
+>props : P
+>      : ^
+
+    props, // ok
+>props : P
+>      : ^
+
+  );
+};
+

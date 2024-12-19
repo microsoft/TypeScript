@@ -19321,7 +19321,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isDistributionDependent(root: ConditionalRoot) {
-        return root.isDistributive && (
+        return root.isDistributive && !(root.extendsType.flags & TypeFlags.AnyOrUnknown) && (
             isTypeParameterPossiblyReferenced(root.checkType as TypeParameter, root.node.trueType) ||
             isTypeParameterPossiblyReferenced(root.checkType as TypeParameter, root.node.falseType)
         );
@@ -23206,7 +23206,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const c = target as ConditionalType;
                 // We check for a relationship to a conditional type target only when the conditional type has no
                 // 'infer' positions, is not distributive or is distributive but doesn't reference the check type
-                // parameter in either of the result types, and the source isn't an instantiation of the same
+                // parameter in either of the result types, and extends type is other than unknown or any, and the source isn't an instantiation of the same
                 // conditional type (as happens when computing variance).
                 if (!c.root.inferTypeParameters && !isDistributionDependent(c.root) && !(source.flags & TypeFlags.Conditional && (source as ConditionalType).root === c.root)) {
                     // Check if the conditional is always true or always false but still deferred for distribution purposes.

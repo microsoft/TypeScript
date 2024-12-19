@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/conditionalTypeAssignabilityWithSimpleDistribution2.ts] ////
+
+=== conditionalTypeAssignabilityWithSimpleDistribution2.ts ===
+type AllKeys<T> = T extends any ? keyof T : never;
+>AllKeys : Symbol(AllKeys, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 0, 13))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 0, 13))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 0, 13))
+
+type WithKeyOfConstraint<T, K extends keyof T> = unknown;
+>WithKeyOfConstraint : Symbol(WithKeyOfConstraint, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 0, 50))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 2, 25))
+>K : Symbol(K, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 2, 27))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 2, 25))
+
+type Test1<T> = WithKeyOfConstraint<T, AllKeys<T>>; // ok
+>Test1 : Symbol(Test1, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 2, 57))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 3, 11))
+>WithKeyOfConstraint : Symbol(WithKeyOfConstraint, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 0, 50))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 3, 11))
+>AllKeys : Symbol(AllKeys, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 3, 11))
+
+type WithAllKeysConstraint<T, K extends AllKeys<T>> = unknown;
+>WithAllKeysConstraint : Symbol(WithAllKeysConstraint, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 3, 51))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 5, 27))
+>K : Symbol(K, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 5, 29))
+>AllKeys : Symbol(AllKeys, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 5, 27))
+
+type Test2<T> = WithAllKeysConstraint<T, keyof T>; // ok
+>Test2 : Symbol(Test2, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 5, 62))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 6, 11))
+>WithAllKeysConstraint : Symbol(WithAllKeysConstraint, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 3, 51))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 6, 11))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 6, 11))
+
+declare function test3<T>(
+>test3 : Symbol(test3, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 6, 50))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 8, 23))
+
+  p1: T,
+>p1 : Symbol(p1, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 8, 26))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 8, 23))
+
+  p2: T extends any ? T & { css?: unknown } : never,
+>p2 : Symbol(p2, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 9, 8))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 8, 23))
+>T : Symbol(T, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 8, 23))
+>css : Symbol(css, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 10, 27))
+
+): void;
+
+const wrapper = <P extends object>(props: P) => {
+>wrapper : Symbol(wrapper, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 13, 5))
+>P : Symbol(P, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 13, 17))
+>props : Symbol(props, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 13, 35))
+>P : Symbol(P, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 13, 17))
+
+  test3(
+>test3 : Symbol(test3, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 6, 50))
+
+    props,
+>props : Symbol(props, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 13, 35))
+
+    props, // ok
+>props : Symbol(props, Decl(conditionalTypeAssignabilityWithSimpleDistribution2.ts, 13, 35))
+
+  );
+};
+
