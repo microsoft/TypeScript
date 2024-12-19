@@ -2282,11 +2282,11 @@ export function transformTypeScript(context: TransformationContext): Transformer
      * @param node The import clause node.
      */
     function visitImportClause(node: ImportClause): VisitResult<ImportClause> | undefined {
-        Debug.assert(!node.isTypeOnly);
+        Debug.assert(node.phaseModifier !== SyntaxKind.TypeKeyword);
         // Elide the import clause if we elide both its name and its named bindings.
         const name = shouldEmitAliasDeclaration(node) ? node.name : undefined;
         const namedBindings = visitNode(node.namedBindings, visitNamedImportBindings, isNamedImportBindings);
-        return (name || namedBindings) ? factory.updateImportClause(node, /*isTypeOnly*/ false, name, namedBindings, node.phase) : undefined;
+        return (name || namedBindings) ? factory.updateImportClause(node, node.phaseModifier, name, namedBindings) : undefined;
     }
 
     /**

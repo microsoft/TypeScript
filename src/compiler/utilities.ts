@@ -10939,10 +10939,11 @@ export function isTypeDeclaration(node: Node): node is TypeParameterDeclaration 
         case SyntaxKind.JSDocEnumTag:
             return true;
         case SyntaxKind.ImportClause:
-            return (node as ImportClause).isTypeOnly;
+            return (node as ImportClause).phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ImportSpecifier:
+            return (node as ImportSpecifier).parent.parent.phaseModifier === SyntaxKind.TypeKeyword;
         case SyntaxKind.ExportSpecifier:
-            return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+            return (node as ExportSpecifier).parent.parent.isTypeOnly;
         default:
             return false;
     }

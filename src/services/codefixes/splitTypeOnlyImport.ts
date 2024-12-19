@@ -51,7 +51,7 @@ function splitTypeOnlyImport(changes: textChanges.ChangeTracker, importDeclarati
         factory.updateImportDeclaration(
             importDeclaration,
             importDeclaration.modifiers,
-            factory.updateImportClause(importClause, importClause.isTypeOnly, importClause.name, /*namedBindings*/ undefined, importClause.phase),
+            factory.updateImportClause(importClause, importClause.phaseModifier, importClause.name, /*namedBindings*/ undefined),
             importDeclaration.moduleSpecifier,
             importDeclaration.attributes,
         ),
@@ -62,7 +62,7 @@ function splitTypeOnlyImport(changes: textChanges.ChangeTracker, importDeclarati
         importDeclaration,
         factory.createImportDeclaration(
             /*modifiers*/ undefined,
-            factory.updateImportClause(importClause, importClause.isTypeOnly, /*name*/ undefined, importClause.namedBindings, importClause.phase),
+            factory.updateImportClause(importClause, importClause.phaseModifier, /*name*/ undefined, importClause.namedBindings),
             importDeclaration.moduleSpecifier,
             importDeclaration.attributes,
         ),

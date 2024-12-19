@@ -13,7 +13,6 @@ import {
     getQuotePreference,
     getTokenAtPosition,
     Identifier,
-    ImportPhase,
     ImportSpecifier,
     isIdentifier,
     isNoSubstitutionTemplateLiteral,
@@ -62,7 +61,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, in
         statement,
         defaultImportName && !allowSyntheticDefaults
             ? factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, factory.createExternalModuleReference(moduleSpecifier))
-            : factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports, ImportPhase.Evaluation), moduleSpecifier, /*attributes*/ undefined),
+            : factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*phaseModifier*/ undefined, defaultImportName, namedImports), moduleSpecifier, /*attributes*/ undefined),
     );
 }
 

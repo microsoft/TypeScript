@@ -182,7 +182,6 @@ import {
     ImportDeclaration,
     ImportEqualsDeclaration,
     ImportOrExportSpecifier,
-    ImportPhase,
     ImportSpecifier,
     ImportTypeNode,
     IndexedAccessTypeNode,
@@ -3687,12 +3686,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitImportClause(node: ImportClause) {
-        if (node.isTypeOnly) {
-            emitTokenWithComment(SyntaxKind.TypeKeyword, node.pos, writeKeyword, node);
+        if (node.phaseModifier !== undefined) {
+            emitTokenWithComment(node.phaseModifier, node.pos, writeKeyword, node);
             writeSpace();
         }
-        else if (node.phase !== ImportPhase.Evaluation) {
-            emitTokenWithComment(SyntaxKind.DeferKeyword, node.pos, writeKeyword, node);
+        else if (node.isTypeOnly) {
+            emitTokenWithComment(SyntaxKind.TypeKeyword, node.pos, writeKeyword, node);
             writeSpace();
         }
         emit(node.name);

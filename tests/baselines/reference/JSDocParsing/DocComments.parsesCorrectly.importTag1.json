@@ -26,14 +26,14 @@
                 "modifierFlagsCache": 0,
                 "transformFlags": 1,
                 "isTypeOnly": true,
+                "phaseModifier": 156,
                 "name": {
                     "kind": "Identifier",
                     "pos": 16,
                     "end": 19,
                     "transformFlags": 0,
                     "escapedText": "foo"
-                },
-                "phase": 0
+                }
             },
             "moduleSpecifier": {
                 "kind": "StringLiteral",

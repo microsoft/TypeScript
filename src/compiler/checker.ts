@@ -434,7 +434,6 @@ import {
     ImportDeclaration,
     ImportEqualsDeclaration,
     ImportOrExportSpecifier,
-    ImportPhase,
     ImportSpecifier,
     ImportTypeNode,
     IndexedAccessType,
@@ -10247,14 +10246,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 factory.createImportDeclaration(
                                     /*modifiers*/ undefined,
                                     factory.createImportClause(
-                                        /*isTypeOnly*/ false,
+                                        /*phaseModifier*/ undefined,
                                         /*name*/ undefined,
                                         factory.createNamedImports([factory.createImportSpecifier(
                                             /*isTypeOnly*/ false,
                                             propertyNameText ? factory.createIdentifier(propertyNameText) : undefined,
                                             factory.createIdentifier(localName),
                                         )]),
-                                        ImportPhase.Evaluation,
                                     ),
                                     factory.createStringLiteral(specifier),
                                     /*attributes*/ undefined,
@@ -10345,7 +10343,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(isTypeOnly, factory.createIdentifier(localName), /*namedBindings*/ undefined, ImportPhase.Evaluation),
+                                factory.createImportClause(
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
+                                    factory.createIdentifier(localName),
+                                    /*namedBindings*/ undefined,
+                                ),
                                 specifier,
                                 attributes,
                             ),
@@ -10361,7 +10363,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(isTypeOnly, /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName)), ImportPhase.Evaluation),
+                                factory.createImportClause(
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
+                                    /*name*/ undefined,
+                                    factory.createNamespaceImport(factory.createIdentifier(localName)),
+                                ),
                                 specifier,
                                 (node as ImportClause).parent.attributes,
                             ),
@@ -10390,7 +10396,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(
-                                    isTypeOnly,
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
                                     /*name*/ undefined,
                                     factory.createNamedImports([
                                         factory.createImportSpecifier(
@@ -10399,7 +10405,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                             factory.createIdentifier(localName),
                                         ),
                                     ]),
-                                    ImportPhase.Evaluation,
                                 ),
                                 specifier,
                                 (node as ImportSpecifier).parent.parent.parent.attributes,
@@ -53115,7 +53120,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node.isTypeOnly && node.namedBindings?.kind === SyntaxKind.NamedImports) {
             return checkGrammarNamedImportsOrExports(node.namedBindings);
         }
-        if (node.phase !== ImportPhase.Evaluation && moduleKind !== ModuleKind.ESNext) {
+        if (node.phaseModifier === SyntaxKind.DeferKeyword && moduleKind !== ModuleKind.ESNext) {
             return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext);
         }
         return false;

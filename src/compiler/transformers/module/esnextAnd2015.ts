@@ -28,7 +28,6 @@ import {
     idText,
     ImportDeclaration,
     ImportEqualsDeclaration,
-    ImportPhase,
     insertStatementsAfterCustomPrologue,
     isExportNamespaceAsDefaultDeclaration,
     isExternalModule,
@@ -220,12 +219,11 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             const importStatement = factory.createImportDeclaration(
                 /*modifiers*/ undefined,
                 factory.createImportClause(
-                    /*isTypeOnly*/ false,
+                    /*phaseModifier*/ undefined,
                     /*name*/ undefined,
                     factory.createNamedImports([
                         factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("createRequire"), createRequireName),
                     ]),
-                    ImportPhase.Evaluation,
                 ),
                 factory.createStringLiteral("module"),
                 /*attributes*/ undefined,
@@ -353,12 +351,11 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         const importDecl = factory.createImportDeclaration(
             /*modifiers*/ undefined,
             factory.createImportClause(
-                /*isTypeOnly*/ false,
+                /*phaseModifier*/ undefined,
                 /*name*/ undefined,
                 factory.createNamespaceImport(
                     synthName,
                 ),
-                ImportPhase.Evaluation,
             ),
             updatedModuleSpecifier!,
             node.attributes,

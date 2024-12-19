@@ -26,6 +26,7 @@
                 "modifierFlagsCache": 0,
                 "transformFlags": 1,
                 "isTypeOnly": true,
+                "phaseModifier": 156,
                 "namedBindings": {
                     "kind": "NamedImports",
                     "pos": 16,
@@ -54,8 +55,7 @@
                         "hasTrailingComma": false,
                         "transformFlags": 0
                     }
-                },
-                "phase": 0
+                }
             },
             "moduleSpecifier": {
                 "kind": "StringLiteral",

@@ -13,7 +13,6 @@ import {
     getTokenAtPosition,
     ImportClause,
     ImportDeclaration,
-    ImportPhase,
     ImportSpecifier,
     isImportDeclaration,
     isImportSpecifier,
@@ -126,13 +125,13 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
             changes.replaceNodeWithNodes(sourceFile, declaration, [
                 factory.createImportDeclaration(
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
-                    factory.createImportClause(/*isTypeOnly*/ true, getSynthesizedDeepClone(importClause.name, /*includeTrivia*/ true), /*namedBindings*/ undefined, ImportPhase.Evaluation),
+                    factory.createImportClause(SyntaxKind.TypeKeyword, getSynthesizedDeepClone(importClause.name, /*includeTrivia*/ true), /*namedBindings*/ undefined),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
                     getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),
                 factory.createImportDeclaration(
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
-                    factory.createImportClause(/*isTypeOnly*/ true, /*name*/ undefined, getSynthesizedDeepClone(importClause.namedBindings, /*includeTrivia*/ true), ImportPhase.Evaluation),
+                    factory.createImportClause(SyntaxKind.TypeKeyword, /*name*/ undefined, getSynthesizedDeepClone(importClause.namedBindings, /*includeTrivia*/ true)),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
                     getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),
@@ -145,7 +144,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
                     sameMap(importClause.namedBindings.elements, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ false, e.propertyName, e.name)),
                 )
                 : importClause.namedBindings;
-            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers, factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings, ImportPhase.Evaluation), declaration.moduleSpecifier, declaration.attributes);
+            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers, factory.updateImportClause(importClause, SyntaxKind.TypeKeyword, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.attributes);
             changes.replaceNode(sourceFile, declaration, importDeclaration);
         }
     }

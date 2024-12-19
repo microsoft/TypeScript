@@ -5519,15 +5519,12 @@ declare namespace ts {
     interface ImportClause extends NamedDeclaration {
         readonly kind: SyntaxKind.ImportClause;
         readonly parent: ImportDeclaration | JSDocImportTag;
-        readonly isTypeOnly: boolean;
+        /** @deprecated */ readonly isTypeOnly: boolean | "hello";
+        readonly phaseModifier: undefined | ImportPhaseModifier;
         readonly name?: Identifier;
         readonly namedBindings?: NamedImportBindings;
-        readonly phase: ImportPhase;
     }
-    enum ImportPhase {
-        Evaluation = 0,
-        Defer = 1,
-    }
+    type ImportPhaseModifier = SyntaxKind.TypeKeyword | SyntaxKind.DeferKeyword;
     /** @deprecated */
     type AssertionKey = ImportAttributeName;
     /** @deprecated */
@@ -7735,8 +7732,10 @@ declare namespace ts {
         updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
         createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes): ImportDeclaration;
         updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined): ImportDeclaration;
-        createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, phase: ImportPhase): ImportClause;
-        updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, phase: ImportPhase): ImportClause;
+        createImportClause(phaseModifier: ImportPhaseModifier | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
+        /** @deprecated */ createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
+        updateImportClause(node: ImportClause, phaseModifier: ImportPhaseModifier | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
+        /** @deprecated */ updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
         /** @deprecated */ createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
         /** @deprecated */ updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
         /** @deprecated */ createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;

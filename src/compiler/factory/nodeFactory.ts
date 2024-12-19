@@ -135,7 +135,7 @@ import {
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
-    ImportPhase,
+    ImportPhaseModifier,
     ImportSpecifier,
     ImportTypeAssertionContainer,
     ImportTypeNode,
@@ -4724,15 +4724,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, phase: ImportPhase): ImportClause {
+    function createImportClause(phaseModifier: ImportPhaseModifier | boolean | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
         const node = createBaseDeclaration<ImportClause>(SyntaxKind.ImportClause);
-        node.isTypeOnly = isTypeOnly;
+        if (typeof phaseModifier === "boolean") {
+            phaseModifier = phaseModifier ? SyntaxKind.TypeKeyword : undefined;
+        }
+        node.isTypeOnly = phaseModifier === SyntaxKind.TypeKeyword;
+        node.phaseModifier = phaseModifier;
         node.name = name;
         node.namedBindings = namedBindings;
-        node.phase = phase;
         node.transformFlags |= propagateChildFlags(node.name) |
             propagateChildFlags(node.namedBindings);
-        if (isTypeOnly) {
+        if (phaseModifier === SyntaxKind.TypeKeyword) {
             node.transformFlags |= TransformFlags.ContainsTypeScript;
         }
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
@@ -4740,12 +4743,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, phase: ImportPhase) {
-        return node.isTypeOnly !== isTypeOnly
+    function updateImportClause(node: ImportClause, phaseModifier: ImportPhaseModifier | boolean | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
+        if (typeof phaseModifier === "boolean") {
+            phaseModifier = phaseModifier ? SyntaxKind.TypeKeyword : undefined;
+        }
+        return node.phaseModifier !== phaseModifier
                 || node.name !== name
                 || node.namedBindings !== namedBindings
-                || node.phase !== phase
-            ? update(createImportClause(isTypeOnly, name, namedBindings, phase), node)
+            ? update(createImportClause(phaseModifier, name, namedBindings), node)
             : node;
     }
 
