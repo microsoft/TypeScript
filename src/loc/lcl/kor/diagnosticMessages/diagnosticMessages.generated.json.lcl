@@ -15363,6 +15363,9 @@
       <Item ItemId=";This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic_4128" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This member cannot have a JSDoc comment with an '@override' tag because its name is dynamic.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 멤버는 이름이 동적이기 때문에 '@override' 태그가 포함된 JSDoc 주석을 가질 수 없습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
