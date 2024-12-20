@@ -14,9 +14,10 @@ predicateSemantics.ts(52,14): error TS2695: Left side of comma operator is unuse
 predicateSemantics.ts(52,14): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
 predicateSemantics.ts(70,1): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
 predicateSemantics.ts(71,1): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(75,5): error TS2872: This kind of expression is always truthy.
 
 
-==== predicateSemantics.ts (16 errors) ====
+==== predicateSemantics.ts (17 errors) ====
     declare let cond: any;
     
     // OK: One or other operand is possibly nullish
@@ -120,4 +121,11 @@ predicateSemantics.ts(71,1): error TS2869: Right operand of ?? is unreachable be
     `foo` ?? 32; // error
     ~~~~~
 !!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    
+    // https://github.com/microsoft/TypeScript/issues/60822
+    declare function test60822(arg: string, arg2?: string): string | null;
+    if (test60822("foo"), "bar") {} // error
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    if (test60822("foo"), test60822("bar")) {} // ok
     

@@ -73,6 +73,11 @@ tag`foo${1}` ?? 32; // ok
 `foo${1}` ?? 32; // error
 `foo` ?? 32; // error
 
+// https://github.com/microsoft/TypeScript/issues/60822
+declare function test60822(arg: string, arg2?: string): string | null;
+if (test60822("foo"), "bar") {} // error
+if (test60822("foo"), test60822("bar")) {} // ok
+
 
 //// [predicateSemantics.js]
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
@@ -140,3 +145,5 @@ var X = /** @class */ (function () {
 (_k = tag(__makeTemplateObject(["foo", ""], ["foo", ""]), 1)) !== null && _k !== void 0 ? _k : 32; // ok
 (_l = "foo".concat(1)) !== null && _l !== void 0 ? _l : 32; // error
 "foo" !== null && "foo" !== void 0 ? "foo" : 32; // error
+if (test60822("foo"), "bar") { } // error
+if (test60822("foo"), test60822("bar")) { } // ok

@@ -137,3 +137,16 @@ tag`foo${1}` ?? 32; // ok
 `foo${1}` ?? 32; // error
 `foo` ?? 32; // error
 
+// https://github.com/microsoft/TypeScript/issues/60822
+declare function test60822(arg: string, arg2?: string): string | null;
+>test60822 : Symbol(test60822, Decl(predicateSemantics.ts, 70, 12))
+>arg : Symbol(arg, Decl(predicateSemantics.ts, 73, 27))
+>arg2 : Symbol(arg2, Decl(predicateSemantics.ts, 73, 39))
+
+if (test60822("foo"), "bar") {} // error
+>test60822 : Symbol(test60822, Decl(predicateSemantics.ts, 70, 12))
+
+if (test60822("foo"), test60822("bar")) {} // ok
+>test60822 : Symbol(test60822, Decl(predicateSemantics.ts, 70, 12))
+>test60822 : Symbol(test60822, Decl(predicateSemantics.ts, 70, 12))
+

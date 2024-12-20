@@ -375,3 +375,40 @@ tag`foo${1}` ?? 32; // ok
 >32 : 32
 >   : ^^
 
+// https://github.com/microsoft/TypeScript/issues/60822
+declare function test60822(arg: string, arg2?: string): string | null;
+>test60822 : (arg: string, arg2?: string) => string | null
+>          : ^   ^^      ^^    ^^^      ^^^^^             
+>arg : string
+>    : ^^^^^^
+>arg2 : string
+>     : ^^^^^^
+
+if (test60822("foo"), "bar") {} // error
+>test60822("foo"), "bar" : "bar"
+>                        : ^^^^^
+>test60822("foo") : string
+>                 : ^^^^^^
+>test60822 : (arg: string, arg2?: string) => string | null
+>          : ^   ^^      ^^    ^^^      ^^^^^             
+>"foo" : "foo"
+>      : ^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+if (test60822("foo"), test60822("bar")) {} // ok
+>test60822("foo"), test60822("bar") : string
+>                                   : ^^^^^^
+>test60822("foo") : string
+>                 : ^^^^^^
+>test60822 : (arg: string, arg2?: string) => string | null
+>          : ^   ^^      ^^    ^^^      ^^^^^             
+>"foo" : "foo"
+>      : ^^^^^
+>test60822("bar") : string
+>                 : ^^^^^^
+>test60822 : (arg: string, arg2?: string) => string | null
+>          : ^   ^^      ^^    ^^^      ^^^^^             
+>"bar" : "bar"
+>      : ^^^^^
+
