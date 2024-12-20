@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/inferContextualTypePredicates1.ts] ////
+
+=== inferContextualTypePredicates1.ts ===
+type Foo = { type: "foo"; foo: number };
+>Foo : Symbol(Foo, Decl(inferContextualTypePredicates1.ts, 0, 0))
+>type : Symbol(type, Decl(inferContextualTypePredicates1.ts, 0, 12))
+>foo : Symbol(foo, Decl(inferContextualTypePredicates1.ts, 0, 25))
+
+type Bar = { type: "bar"; bar: string };
+>Bar : Symbol(Bar, Decl(inferContextualTypePredicates1.ts, 0, 40))
+>type : Symbol(type, Decl(inferContextualTypePredicates1.ts, 1, 12))
+>bar : Symbol(bar, Decl(inferContextualTypePredicates1.ts, 1, 25))
+
+declare function skipIf<A, B extends A>(
+>skipIf : Symbol(skipIf, Decl(inferContextualTypePredicates1.ts, 1, 40))
+>A : Symbol(A, Decl(inferContextualTypePredicates1.ts, 3, 24))
+>B : Symbol(B, Decl(inferContextualTypePredicates1.ts, 3, 26))
+>A : Symbol(A, Decl(inferContextualTypePredicates1.ts, 3, 24))
+
+  as: A[],
+>as : Symbol(as, Decl(inferContextualTypePredicates1.ts, 3, 40))
+>A : Symbol(A, Decl(inferContextualTypePredicates1.ts, 3, 24))
+
+  predicate: (a: A) => a is B,
+>predicate : Symbol(predicate, Decl(inferContextualTypePredicates1.ts, 4, 10))
+>a : Symbol(a, Decl(inferContextualTypePredicates1.ts, 5, 14))
+>A : Symbol(A, Decl(inferContextualTypePredicates1.ts, 3, 24))
+>a : Symbol(a, Decl(inferContextualTypePredicates1.ts, 5, 14))
+>B : Symbol(B, Decl(inferContextualTypePredicates1.ts, 3, 26))
+
+): Exclude<A, B>[];
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(inferContextualTypePredicates1.ts, 3, 24))
+>B : Symbol(B, Decl(inferContextualTypePredicates1.ts, 3, 26))
+
+declare const items: (Foo | Bar)[];
+>items : Symbol(items, Decl(inferContextualTypePredicates1.ts, 8, 13))
+>Foo : Symbol(Foo, Decl(inferContextualTypePredicates1.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(inferContextualTypePredicates1.ts, 0, 40))
+
+const r1 = skipIf(items, (item) => item.type === "foo"); // ok
+>r1 : Symbol(r1, Decl(inferContextualTypePredicates1.ts, 10, 5))
+>skipIf : Symbol(skipIf, Decl(inferContextualTypePredicates1.ts, 1, 40))
+>items : Symbol(items, Decl(inferContextualTypePredicates1.ts, 8, 13))
+>item : Symbol(item, Decl(inferContextualTypePredicates1.ts, 10, 26))
+>item.type : Symbol(type, Decl(inferContextualTypePredicates1.ts, 0, 12), Decl(inferContextualTypePredicates1.ts, 1, 12))
+>item : Symbol(item, Decl(inferContextualTypePredicates1.ts, 10, 26))
+>type : Symbol(type, Decl(inferContextualTypePredicates1.ts, 0, 12), Decl(inferContextualTypePredicates1.ts, 1, 12))
+
+const r2 = skipIf(items, (item) => item.type === "foo" || item.type === "bar"); // ok
+>r2 : Symbol(r2, Decl(inferContextualTypePredicates1.ts, 11, 5))
+>skipIf : Symbol(skipIf, Decl(inferContextualTypePredicates1.ts, 1, 40))
+>items : Symbol(items, Decl(inferContextualTypePredicates1.ts, 8, 13))
+>item : Symbol(item, Decl(inferContextualTypePredicates1.ts, 11, 26))
+>item.type : Symbol(type, Decl(inferContextualTypePredicates1.ts, 0, 12), Decl(inferContextualTypePredicates1.ts, 1, 12))
+>item : Symbol(item, Decl(inferContextualTypePredicates1.ts, 11, 26))
+>type : Symbol(type, Decl(inferContextualTypePredicates1.ts, 0, 12), Decl(inferContextualTypePredicates1.ts, 1, 12))
+>item.type : Symbol(type, Decl(inferContextualTypePredicates1.ts, 1, 12))
+>item : Symbol(item, Decl(inferContextualTypePredicates1.ts, 11, 26))
+>type : Symbol(type, Decl(inferContextualTypePredicates1.ts, 1, 12))
+
+const r3 = skipIf(items, (item) => false); // error
+>r3 : Symbol(r3, Decl(inferContextualTypePredicates1.ts, 12, 5))
+>skipIf : Symbol(skipIf, Decl(inferContextualTypePredicates1.ts, 1, 40))
+>items : Symbol(items, Decl(inferContextualTypePredicates1.ts, 8, 13))
+>item : Symbol(item, Decl(inferContextualTypePredicates1.ts, 12, 26))
+
+const r4 = skipIf(items, (item) => true); // error
+>r4 : Symbol(r4, Decl(inferContextualTypePredicates1.ts, 13, 5))
+>skipIf : Symbol(skipIf, Decl(inferContextualTypePredicates1.ts, 1, 40))
+>items : Symbol(items, Decl(inferContextualTypePredicates1.ts, 8, 13))
+>item : Symbol(item, Decl(inferContextualTypePredicates1.ts, 13, 26))
+
+const pred1: (a: string | null, b: string | null) => b is string = (a, b) => typeof b === 'string'; // ok
+>pred1 : Symbol(pred1, Decl(inferContextualTypePredicates1.ts, 15, 5))
+>a : Symbol(a, Decl(inferContextualTypePredicates1.ts, 15, 14))
+>b : Symbol(b, Decl(inferContextualTypePredicates1.ts, 15, 31))
+>b : Symbol(b, Decl(inferContextualTypePredicates1.ts, 15, 31))
+>a : Symbol(a, Decl(inferContextualTypePredicates1.ts, 15, 68))
+>b : Symbol(b, Decl(inferContextualTypePredicates1.ts, 15, 70))
+>b : Symbol(b, Decl(inferContextualTypePredicates1.ts, 15, 70))
+
+const pred2: (a: string | null, b: string | null) => b is string = (a, b) => typeof a === 'string'; // error
+>pred2 : Symbol(pred2, Decl(inferContextualTypePredicates1.ts, 16, 5))
+>a : Symbol(a, Decl(inferContextualTypePredicates1.ts, 16, 14))
+>b : Symbol(b, Decl(inferContextualTypePredicates1.ts, 16, 31))
+>b : Symbol(b, Decl(inferContextualTypePredicates1.ts, 16, 31))
+>a : Symbol(a, Decl(inferContextualTypePredicates1.ts, 16, 68))
+>b : Symbol(b, Decl(inferContextualTypePredicates1.ts, 16, 70))
+>a : Symbol(a, Decl(inferContextualTypePredicates1.ts, 16, 68))
+

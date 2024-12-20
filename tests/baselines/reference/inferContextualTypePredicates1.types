@@ -1,0 +1,175 @@
+//// [tests/cases/compiler/inferContextualTypePredicates1.ts] ////
+
+=== inferContextualTypePredicates1.ts ===
+type Foo = { type: "foo"; foo: number };
+>Foo : Foo
+>    : ^^^
+>type : "foo"
+>     : ^^^^^
+>foo : number
+>    : ^^^^^^
+
+type Bar = { type: "bar"; bar: string };
+>Bar : Bar
+>    : ^^^
+>type : "bar"
+>     : ^^^^^
+>bar : string
+>    : ^^^^^^
+
+declare function skipIf<A, B extends A>(
+>skipIf : <A, B extends A>(as: A[], predicate: (a: A) => a is B) => Exclude<A, B>[]
+>       : ^ ^^ ^^^^^^^^^ ^^  ^^   ^^         ^^                ^^^^^               
+
+  as: A[],
+>as : A[]
+>   : ^^^
+
+  predicate: (a: A) => a is B,
+>predicate : (a: A) => a is B
+>          : ^ ^^ ^^^^^      
+>a : A
+>  : ^
+
+): Exclude<A, B>[];
+
+declare const items: (Foo | Bar)[];
+>items : (Foo | Bar)[]
+>      : ^^^^^^^^^^^^^
+
+const r1 = skipIf(items, (item) => item.type === "foo"); // ok
+>r1 : Bar[]
+>   : ^^^^^
+>skipIf(items, (item) => item.type === "foo") : Bar[]
+>                                             : ^^^^^
+>skipIf : <A, B extends A>(as: A[], predicate: (a: A) => a is B) => Exclude<A, B>[]
+>       : ^ ^^ ^^^^^^^^^ ^^  ^^   ^^         ^^                ^^^^^               
+>items : (Foo | Bar)[]
+>      : ^^^^^^^^^^^^^
+>(item) => item.type === "foo" : (item: Foo | Bar) => item is Foo
+>                              : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>item.type === "foo" : boolean
+>                    : ^^^^^^^
+>item.type : "foo" | "bar"
+>          : ^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>type : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const r2 = skipIf(items, (item) => item.type === "foo" || item.type === "bar"); // ok
+>r2 : never[]
+>   : ^^^^^^^
+>skipIf(items, (item) => item.type === "foo" || item.type === "bar") : never[]
+>                                                                    : ^^^^^^^
+>skipIf : <A, B extends A>(as: A[], predicate: (a: A) => a is B) => Exclude<A, B>[]
+>       : ^ ^^ ^^^^^^^^^ ^^  ^^   ^^         ^^                ^^^^^               
+>items : (Foo | Bar)[]
+>      : ^^^^^^^^^^^^^
+>(item) => item.type === "foo" || item.type === "bar" : (item: Foo | Bar) => item is Foo | Bar
+>                                                     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>item.type === "foo" || item.type === "bar" : boolean
+>                                           : ^^^^^^^
+>item.type === "foo" : boolean
+>                    : ^^^^^^^
+>item.type : "foo" | "bar"
+>          : ^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>type : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>item.type === "bar" : boolean
+>                    : ^^^^^^^
+>item.type : "bar"
+>          : ^^^^^
+>item : Bar
+>     : ^^^
+>type : "bar"
+>     : ^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+const r3 = skipIf(items, (item) => false); // error
+>r3 : never[]
+>   : ^^^^^^^
+>skipIf(items, (item) => false) : never[]
+>                               : ^^^^^^^
+>skipIf : <A, B extends A>(as: A[], predicate: (a: A) => a is B) => Exclude<A, B>[]
+>       : ^ ^^ ^^^^^^^^^ ^^  ^^   ^^         ^^                ^^^^^               
+>items : (Foo | Bar)[]
+>      : ^^^^^^^^^^^^^
+>(item) => false : (item: Foo | Bar) => false
+>                : ^    ^^^^^^^^^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+const r4 = skipIf(items, (item) => true); // error
+>r4 : never[]
+>   : ^^^^^^^
+>skipIf(items, (item) => true) : never[]
+>                              : ^^^^^^^
+>skipIf : <A, B extends A>(as: A[], predicate: (a: A) => a is B) => Exclude<A, B>[]
+>       : ^ ^^ ^^^^^^^^^ ^^  ^^   ^^         ^^                ^^^^^               
+>items : (Foo | Bar)[]
+>      : ^^^^^^^^^^^^^
+>(item) => true : (item: Foo | Bar) => true
+>               : ^    ^^^^^^^^^^^^^^^^^^^^
+>item : Foo | Bar
+>     : ^^^^^^^^^
+>true : true
+>     : ^^^^
+
+const pred1: (a: string | null, b: string | null) => b is string = (a, b) => typeof b === 'string'; // ok
+>pred1 : (a: string | null, b: string | null) => b is string
+>      : ^ ^^             ^^ ^^             ^^^^^           
+>a : string | null
+>  : ^^^^^^^^^^^^^
+>b : string | null
+>  : ^^^^^^^^^^^^^
+>(a, b) => typeof b === 'string' : (a: string | null, b: string | null) => b is string
+>                                : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | null
+>  : ^^^^^^^^^^^^^
+>b : string | null
+>  : ^^^^^^^^^^^^^
+>typeof b === 'string' : boolean
+>                      : ^^^^^^^
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : string | null
+>  : ^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+const pred2: (a: string | null, b: string | null) => b is string = (a, b) => typeof a === 'string'; // error
+>pred2 : (a: string | null, b: string | null) => b is string
+>      : ^ ^^             ^^ ^^             ^^^^^           
+>a : string | null
+>  : ^^^^^^^^^^^^^
+>b : string | null
+>  : ^^^^^^^^^^^^^
+>(a, b) => typeof a === 'string' : (a: string | null, b: string | null) => boolean
+>                                : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | null
+>  : ^^^^^^^^^^^^^
+>b : string | null
+>  : ^^^^^^^^^^^^^
+>typeof a === 'string' : boolean
+>                      : ^^^^^^^
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | null
+>  : ^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+

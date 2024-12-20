@@ -38778,7 +38778,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getTypePredicateFromBody(func: FunctionLikeDeclaration): TypePredicate | undefined {
+    function getTypePredicateFromBody(func: FunctionLikeDeclaration, contextualTypePredicate?: IdentifierTypePredicate): TypePredicate | undefined {
         switch (func.kind) {
             case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
@@ -38800,41 +38800,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             });
             if (bailedEarly || !singleReturn || functionHasImplicitReturn(func)) return undefined;
         }
-        return checkIfExpressionRefinesAnyParameter(func, singleReturn);
-    }
-
-    function checkIfExpressionRefinesAnyParameter(func: FunctionLikeDeclaration, expr: Expression): TypePredicate | undefined {
-        expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
+        const expr = skipParentheses(singleReturn, /*excludeJSDocTypeAssertions*/ true);
         const returnType = checkExpressionCached(expr);
         if (!(returnType.flags & TypeFlags.Boolean)) return undefined;
-
-        return forEach(func.parameters, (param, i) => {
-            const initType = getTypeOfSymbol(param.symbol);
-            if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol) || isRestParameter(param)) {
-                // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
-                return;
-            }
-            const trueType = checkIfExpressionRefinesParameter(func, expr, param, initType);
-            if (trueType) {
-                return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, trueType);
-            }
-        });
+        return contextualTypePredicate ?
+            getTypePredicateIfRefinesParameterAtIndex(func, expr, contextualTypePredicate, contextualTypePredicate.parameterIndex) :
+            forEach(func.parameters, (_, i) => getTypePredicateIfRefinesParameterAtIndex(func, expr, contextualTypePredicate, i));
     }
 
-    function checkIfExpressionRefinesParameter(func: FunctionLikeDeclaration, expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
+    function getTypePredicateIfRefinesParameterAtIndex(func: FunctionLikeDeclaration, expr: Expression, contextualTypePredicate: IdentifierTypePredicate | undefined, parameterIndex: number): TypePredicate | undefined {
+        const param = func.parameters[parameterIndex];
+        const initType = getTypeOfSymbol(param.symbol);
+        if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol) || isRestParameter(param)) {
+            // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
+            return;
+        }
         const antecedent = canHaveFlowNode(expr) && expr.flowNode ||
             expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
             createFlowNode(FlowFlags.Start, /*node*/ undefined, /*antecedent*/ undefined);
         const trueCondition = createFlowNode(FlowFlags.TrueCondition, expr, antecedent);
 
         const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
-        if (trueType === initType) return undefined;
-
+        if (!contextualTypePredicate && trueType === initType) {
+            return undefined;
+        }
         // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
         // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
         const falseCondition = createFlowNode(FlowFlags.FalseCondition, expr, antecedent);
         const falseSubtype = getFlowTypeOfReference(param.name, initType, trueType, func, falseCondition);
-        return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
+        return falseSubtype.flags & TypeFlags.Never ? createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), parameterIndex, trueType) : undefined;
     }
 
     /**
@@ -38978,10 +38972,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
                     }
                 }
-                if (contextualSignature && !getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
-                    const returnType = getReturnTypeFromBody(node, checkMode);
-                    if (!signature.resolvedReturnType) {
-                        signature.resolvedReturnType = returnType;
+                if (contextualSignature && !getReturnTypeFromAnnotation(node)) {
+                    const returnType = signature.resolvedReturnType ?? getReturnTypeFromBody(node, checkMode);
+                    signature.resolvedReturnType ??= returnType;
+                    if (signature.resolvedReturnType.flags && TypeFlags.Boolean && contextualSignature.resolvedTypePredicate && contextualSignature.resolvedTypePredicate !== noTypePredicate && contextualSignature.resolvedTypePredicate.kind === TypePredicateKind.Identifier) {
+                        signature.resolvedTypePredicate ??= getTypePredicateFromBody(node, contextualSignature.resolvedTypePredicate) ?? noTypePredicate;
                     }
                 }
                 checkSignatureDeclaration(node);
