@@ -1760,6 +1760,10 @@ func (node *ReturnStatement) ForEachChild(v Visitor) bool {
 	return visit(v, node.Expression)
 }
 
+func IsReturnStatement(node *Node) bool {
+	return node.Kind == KindReturnStatement
+}
+
 // WithStatement
 
 type WithStatement struct {

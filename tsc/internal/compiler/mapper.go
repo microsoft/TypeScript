@@ -246,6 +246,7 @@ func (c *Checker) newInferenceTypeMapper(n *InferenceContext, fixing bool) *Type
 	m.data = m
 	m.c = c
 	m.n = n
+	m.fixing = fixing
 	return &m.TypeMapper
 }
 

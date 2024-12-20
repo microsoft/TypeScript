@@ -108,6 +108,12 @@ type ModuleSymbolLinks struct {
 	typeOnlyExportStarMap map[string]*ast.Node // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
 }
 
+type ReverseMappedSymbolLinks struct {
+	propertyType   *Type
+	mappedType     *Type // References a mapped type
+	constraintType *Type // References an index type
+}
+
 // Links for late-bound symbols
 
 type LateBoundLinks struct {

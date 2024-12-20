@@ -3797,7 +3797,7 @@ func (r *Relater) propertiesRelatedTo(source *Type, target *Type, reportErrors b
 			return TernaryFalse
 		}
 	}
-	requireOptionalProperties := (r.relation == r.c.subtypeRelation || r.relation == r.c.strictSubtypeRelation) && isObjectLiteralType(source) && !r.c.isEmptyArrayLiteralType(source) && !isTupleType(source)
+	requireOptionalProperties := (r.relation == r.c.subtypeRelation || r.relation == r.c.strictSubtypeRelation) && !isObjectLiteralType(source) && !r.c.isEmptyArrayLiteralType(source) && !isTupleType(source)
 	unmatchedProperty := r.c.getUnmatchedProperty(source, target, requireOptionalProperties, false /*matchDiscriminantProperties*/)
 	if unmatchedProperty != nil {
 		if reportErrors && r.c.shouldReportUnmatchedPropertyError(source, target) {

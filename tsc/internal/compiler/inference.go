@@ -728,7 +728,242 @@ func (c *Checker) inferFromIndexTypes(n *InferenceState, source *Type, target *T
 }
 
 func (c *Checker) inferToMappedType(n *InferenceState, source *Type, target *Type, constraintType *Type) bool {
-	return false // !!!
+	if constraintType.flags&TypeFlagsUnion != 0 || constraintType.flags&TypeFlagsIntersection != 0 {
+		result := false
+		for _, t := range constraintType.Types() {
+			result = core.OrElse(c.inferToMappedType(n, source, target, t), result)
+		}
+		return result
+	}
+	if constraintType.flags&TypeFlagsIndex != 0 {
+		// We're inferring from some source type S to a homomorphic mapped type { [P in keyof T]: X },
+		// where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
+		// type and then make a secondary inference from that type to T. We make a secondary inference
+		// such that direct inferences to T get priority over inferences to Partial<T>, for example.
+		inference := getInferenceInfoForType(n, constraintType.AsIndexType().target)
+		if inference != nil && !inference.isFixed && !c.isFromInferenceBlockedSource(source) {
+			inferredType := c.inferTypeForHomomorphicMappedType(source, target, constraintType)
+			if inferredType != nil {
+				// We assign a lower priority to inferences made from types containing non-inferrable
+				// types because we may only have a partial result (i.e. we may have failed to make
+				// reverse inferences for some properties).
+				c.inferWithPriority(n, inferredType, inference.typeParameter, core.IfElse(source.objectFlags&ObjectFlagsNonInferrableType != 0, InferencePriorityPartialHomomorphicMappedType, InferencePriorityHomomorphicMappedType))
+			}
+		}
+		return true
+	}
+	if constraintType.flags&TypeFlagsTypeParameter != 0 {
+		// We're inferring from some source type S to a mapped type { [P in K]: X }, where K is a type
+		// parameter. First infer from 'keyof S' to K.
+		// !!!
+		// c.inferWithPriority(n, c.getIndexTypeEx(source, core.IfElse(source.pattern != nil, IndexFlagsNoIndexSignatures, IndexFlagsNone)), constraintType, InferencePriorityMappedTypeConstraint)
+		c.inferWithPriority(n, c.getIndexTypeEx(source, IndexFlagsNone), constraintType, InferencePriorityMappedTypeConstraint)
+		// If K is constrained to a type C, also infer to C. Thus, for a mapped type { [P in K]: X },
+		// where K extends keyof T, we make the same inferences as for a homomorphic mapped type
+		// { [P in keyof T]: X }. This enables us to make meaningful inferences when the target is a
+		// Pick<T, K>.
+		extendedConstraint := c.getConstraintOfType(constraintType)
+		if extendedConstraint != nil && c.inferToMappedType(n, source, target, extendedConstraint) {
+			return true
+		}
+		// If no inferences can be made to K's constraint, infer from a union of the property types
+		// in the source to the template type X.
+		propTypes := core.Map(c.getPropertiesOfType(source), c.getTypeOfSymbol)
+		indexTypes := core.Map(c.getIndexInfosOfType(source), func(info *IndexInfo) *Type {
+			if info != c.enumNumberIndexInfo {
+				return info.valueType
+			}
+			return c.neverType
+		})
+		c.inferFromTypes(n, c.getUnionType(core.Concatenate(propTypes, indexTypes)), c.getTemplateTypeFromMappedType(target))
+		return true
+	}
+	return false
+}
+
+// Infer a suitable input type for a homomorphic mapped type { [P in keyof T]: X }. We construct
+// an object type with the same set of properties as the source type, where the type of each
+// property is computed by inferring from the source property type to X for the type
+// variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
+func (c *Checker) inferTypeForHomomorphicMappedType(source *Type, target *Type, constraint *Type) *Type {
+	key := ReverseMappedTypeKey{sourceId: source.id, targetId: target.id, constraintId: constraint.id}
+	if cached := c.reverseHomomorphicMappedCache[key]; cached != nil {
+		return cached
+	}
+	t := c.createReverseMappedType(source, target, constraint)
+	c.reverseHomomorphicMappedCache[key] = t
+	return t
+}
+
+func (c *Checker) createReverseMappedType(source *Type, target *Type, constraint *Type) *Type {
+	// We consider a source type reverse mappable if it has a string index signature or if
+	// it has one or more properties and is of a partially inferable type.
+	if !(c.getIndexInfoOfType(source, c.stringType) != nil || len(c.getPropertiesOfType(source)) != 0 && c.isPartiallyInferableType(source)) {
+		return nil
+	}
+	// For arrays and tuples we infer new arrays and tuples where the reverse mapping has been
+	// applied to the element type(s).
+	if c.isArrayType(source) {
+		elementType := c.inferReverseMappedType(c.getTypeArguments(source)[0], target, constraint)
+		if elementType == nil {
+			return nil
+		}
+		return c.createArrayTypeEx(elementType, c.isReadonlyArrayType(source))
+	}
+	if isTupleType(source) {
+		elementTypes := core.Map(c.getElementTypes(source), func(t *Type) *Type {
+			return c.inferReverseMappedType(t, target, constraint)
+		})
+		if !core.Every(elementTypes, func(t *Type) bool { return t != nil }) {
+			return nil
+		}
+		elementInfos := source.TargetTupleType().elementInfos
+		if getMappedTypeModifiers(target)&MappedTypeModifiersIncludeOptional != 0 {
+			elementInfos = core.SameMap(elementInfos, func(info TupleElementInfo) TupleElementInfo {
+				if info.flags&ElementFlagsOptional != 0 {
+					return TupleElementInfo{flags: ElementFlagsRequired, labeledDeclaration: info.labeledDeclaration}
+				}
+				return info
+			})
+		}
+		return c.createTupleTypeEx(elementTypes, elementInfos, source.TargetTupleType().readonly)
+	}
+	// For all other object types we infer a new object type where the reverse mapping has been
+	// applied to the type of each property.
+	reversed := c.newObjectType(ObjectFlagsReverseMapped|ObjectFlagsAnonymous, nil /*symbol*/)
+	reversed.AsReverseMappedType().source = source
+	reversed.AsReverseMappedType().mappedType = target
+	reversed.AsReverseMappedType().constraintType = constraint
+	return reversed
+}
+
+// We consider a type to be partially inferable if it isn't marked non-inferable or if it is
+// an object literal type with at least one property of an inferable type. For example, an object
+// literal { a: 123, b: x => true } is marked non-inferable because it contains a context sensitive
+// arrow function, but is considered partially inferable because property 'a' has an inferable type.
+func (c *Checker) isPartiallyInferableType(t *Type) bool {
+	return t.objectFlags&ObjectFlagsNonInferrableType == 0 || isObjectLiteralType(t) && core.Some(c.getPropertiesOfType(t), func(prop *ast.Symbol) bool {
+		return c.isPartiallyInferableType(c.getTypeOfSymbol(prop))
+	}) || isTupleType(t) && core.Some(c.getElementTypes(t), c.isPartiallyInferableType)
+}
+
+func (c *Checker) inferReverseMappedType(source *Type, target *Type, constraint *Type) *Type {
+	key := ReverseMappedTypeKey{sourceId: source.id, targetId: target.id, constraintId: constraint.id}
+	if cached, ok := c.reverseMappedCache[key]; ok {
+		return core.OrElse(cached, c.unknownType)
+	}
+	c.reverseMappedSourceStack = append(c.reverseMappedSourceStack, source)
+	c.reverseMappedTargetStack = append(c.reverseMappedTargetStack, target)
+	saveExpandingFlags := c.reverseExpandingFlags
+	if c.isDeeplyNestedType(source, c.reverseMappedSourceStack, 2) {
+		c.reverseExpandingFlags |= ExpandingFlagsSource
+	}
+	if c.isDeeplyNestedType(target, c.reverseMappedTargetStack, 2) {
+		c.reverseExpandingFlags |= ExpandingFlagsTarget
+	}
+	var t *Type
+	if c.reverseExpandingFlags != ExpandingFlagsBoth {
+		t = c.inferReverseMappedTypeWorker(source, target, constraint)
+	}
+	c.reverseMappedSourceStack = c.reverseMappedSourceStack[:len(c.reverseMappedSourceStack)-1]
+	c.reverseMappedTargetStack = c.reverseMappedTargetStack[:len(c.reverseMappedTargetStack)-1]
+	c.reverseExpandingFlags = saveExpandingFlags
+	c.reverseMappedCache[key] = t
+	return t
+}
+
+func (c *Checker) inferReverseMappedTypeWorker(source *Type, target *Type, constraint *Type) *Type {
+	typeParameter := c.getIndexedAccessType(constraint.AsIndexType().target, c.getTypeParameterFromMappedType(target))
+	templateType := c.getTemplateTypeFromMappedType(target)
+	inference := newInferenceInfo(typeParameter)
+	c.inferTypes([]*InferenceInfo{inference}, source, templateType, InferencePriorityNone, false)
+	return core.OrElse(c.getTypeFromInference(inference), c.unknownType)
+}
+
+func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {
+	r := t.AsReverseMappedType()
+	indexInfo := c.getIndexInfoOfType(r.source, c.stringType)
+	modifiers := getMappedTypeModifiers(r.mappedType)
+	readonlyMask := modifiers&MappedTypeModifiersIncludeReadonly == 0
+	optionalMask := core.IfElse(modifiers&MappedTypeModifiersIncludeOptional != 0, 0, ast.SymbolFlagsOptional)
+	var indexInfos []*IndexInfo
+	if indexInfo != nil {
+		indexInfos = []*IndexInfo{c.newIndexInfo(c.stringType, core.OrElse(c.inferReverseMappedType(indexInfo.valueType, r.mappedType, r.constraintType), c.unknownType), readonlyMask && indexInfo.isReadonly, nil)}
+	}
+	members := make(ast.SymbolTable)
+	limitedConstraint := c.getLimitedConstraint(t)
+	for _, prop := range c.getPropertiesOfType(r.source) {
+		// In case of a reverse mapped type with an intersection constraint, if we were able to
+		// extract the filtering type literals we skip those properties that are not assignable to them,
+		// because the extra properties wouldn't get through the application of the mapped type anyway
+		if limitedConstraint != nil {
+			propertyNameType := c.getLiteralTypeFromProperty(prop, TypeFlagsStringOrNumberLiteralOrUnique, false)
+			if !c.isTypeAssignableTo(propertyNameType, limitedConstraint) {
+				continue
+			}
+		}
+		checkFlags := ast.CheckFlagsReverseMapped | core.IfElse(readonlyMask && c.isReadonlySymbol(prop), ast.CheckFlagsReadonly, 0)
+		inferredProp := c.newSymbolEx(ast.SymbolFlagsProperty|prop.Flags&optionalMask, prop.Name, checkFlags)
+		inferredProp.Declarations = prop.Declarations
+		c.valueSymbolLinks.get(inferredProp).nameType = c.valueSymbolLinks.get(prop).nameType
+		links := c.ReverseMappedSymbolLinks.get(inferredProp)
+		links.propertyType = c.getTypeOfSymbol(prop)
+		constraintTarget := r.constraintType.AsIndexType().target
+		if constraintTarget.flags&TypeFlagsIndexedAccess != 0 && constraintTarget.AsIndexedAccessType().objectType.flags&TypeFlagsTypeParameter != 0 && constraintTarget.AsIndexedAccessType().indexType.flags&TypeFlagsTypeParameter != 0 {
+			// A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
+			// inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
+			// type identities produced, we simplify such indexed access occurences
+			newTypeParam := constraintTarget.AsIndexedAccessType().objectType
+			newMappedType := c.replaceIndexedAccess(r.mappedType, constraintTarget, newTypeParam)
+			links.mappedType = newMappedType
+			links.constraintType = c.getIndexType(newTypeParam)
+		} else {
+			links.mappedType = r.mappedType
+			links.constraintType = r.constraintType
+		}
+		members[prop.Name] = inferredProp
+	}
+	c.setStructuredTypeMembers(t, members, nil, nil, indexInfos)
+}
+
+func (c *Checker) getTypeOfReverseMappedSymbol(symbol *ast.Symbol) *Type {
+	links := c.valueSymbolLinks.get(symbol)
+	if links.resolvedType == nil {
+		reverseLinks := c.ReverseMappedSymbolLinks.get(symbol)
+		links.resolvedType = core.OrElse(c.inferReverseMappedType(reverseLinks.propertyType, reverseLinks.mappedType, reverseLinks.constraintType), c.unknownType)
+	}
+	return links.resolvedType
+}
+
+// If the original mapped type had an intersection constraint we extract its components,
+// and we make an attempt to do so even if the intersection has been reduced to a union.
+// This entire process allows us to possibly retrieve the filtering type literals.
+// e.g. { [K in keyof U & ("a" | "b") ] } -> "a" | "b"
+func (c *Checker) getLimitedConstraint(t *Type) *Type {
+	constraint := c.getConstraintTypeFromMappedType(t.AsReverseMappedType().mappedType)
+	if !(constraint.flags&TypeFlagsUnion != 0 || constraint.flags&TypeFlagsIntersection != 0) {
+		return nil
+	}
+	origin := constraint
+	if constraint.flags&TypeFlagsUnion != 0 {
+		origin = constraint.AsUnionType().origin
+	}
+	if origin == nil || origin.flags&TypeFlagsIntersection == 0 {
+		return nil
+	}
+	constraintType := t.AsReverseMappedType().constraintType
+	limitedConstraint := c.getIntersectionType(core.Filter(origin.Types(), func(t *Type) bool { return t != constraintType }))
+	if limitedConstraint != c.neverType {
+		return limitedConstraint
+	}
+	return nil
+}
+
+func (c *Checker) replaceIndexedAccess(instantiable *Type, t *Type, replacement *Type) *Type {
+	// map type.indexType to 0
+	// map type.objectType to `[TReplacement]`
+	// thus making the indexed access `[TReplacement][0]` or `TReplacement`
+	return c.instantiateType(instantiable, newTypeMapper([]*Type{t.AsIndexedAccessType().indexType, t.AsIndexedAccessType().objectType}, []*Type{c.getNumberLiteralType(0), c.createTupleType([]*Type{replacement})}))
 }
 
 func (c *Checker) typesDefinitelyUnrelated(source *Type, target *Type) bool {
@@ -833,8 +1068,8 @@ func (c *Checker) newInferenceContextWorker(inferences []*InferenceInfo, signatu
 	return n
 }
 
-func (c *Checker) addIntraExpressionInferenceSite(context *InferenceContext, node *ast.Node, t *Type) {
-	// !!!
+func (c *Checker) addIntraExpressionInferenceSite(n *InferenceContext, node *ast.Node, t *Type) {
+	n.intraExpressionInferenceSites = append(n.intraExpressionInferenceSites, IntraExpressionInferenceSite{node: node, t: t})
 }
 
 // We collect intra-expression inference sites within object and array literals to handle cases where
@@ -851,7 +1086,18 @@ func (c *Checker) addIntraExpressionInferenceSite(context *InferenceContext, nod
 // infer from each argument before processing the next), but when the arrow functions are elements of an
 // object or array literal, we need to perform intra-expression inferences early.
 func (c *Checker) inferFromIntraExpressionSites(n *InferenceContext) {
-	// !!!
+	for _, site := range n.intraExpressionInferenceSites {
+		var contextualType *Type
+		if ast.IsMethodDeclaration(site.node) {
+			contextualType = c.getContextualTypeForObjectLiteralMethod(site.node, ContextFlagsNoConstraints)
+		} else {
+			contextualType = c.getContextualType(site.node, ContextFlagsNoConstraints)
+		}
+		if contextualType != nil {
+			c.inferTypes(n.inferences, site.t, contextualType, InferencePriorityNone, false)
+		}
+	}
+	n.intraExpressionInferenceSites = nil
 }
 
 func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
