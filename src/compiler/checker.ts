@@ -38802,6 +38802,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const expr = skipParentheses(singleReturn, /*excludeJSDocTypeAssertions*/ true);
         const returnType = checkExpressionCached(expr);
+        if (contextualTypePredicate && returnType.flags & TypeFlags.BooleanLiteral) {
+            const param = func.parameters[contextualTypePredicate.parameterIndex];
+            if (!isIdentifier(param.name)) {
+                return undefined;
+            }
+            const refinedType = (returnType as IntrinsicType).intrinsicName === "true" ? getTypeOfSymbol(param.symbol) : neverType;
+            return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), contextualTypePredicate.parameterIndex, refinedType);
+        }
         if (!(returnType.flags & TypeFlags.Boolean)) return undefined;
         return contextualTypePredicate ?
             getTypePredicateIfRefinesParameterAtIndex(func, expr, contextualTypePredicate, contextualTypePredicate.parameterIndex) :

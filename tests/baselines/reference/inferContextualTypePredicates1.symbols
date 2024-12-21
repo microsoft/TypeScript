@@ -59,13 +59,13 @@ const r2 = skipIf(items, (item) => item.type === "foo" || item.type === "bar"); 
 >item : Symbol(item, Decl(inferContextualTypePredicates1.ts, 11, 26))
 >type : Symbol(type, Decl(inferContextualTypePredicates1.ts, 1, 12))
 
-const r3 = skipIf(items, (item) => false); // error
+const r3 = skipIf(items, (item) => false); // ok
 >r3 : Symbol(r3, Decl(inferContextualTypePredicates1.ts, 12, 5))
 >skipIf : Symbol(skipIf, Decl(inferContextualTypePredicates1.ts, 1, 40))
 >items : Symbol(items, Decl(inferContextualTypePredicates1.ts, 8, 13))
 >item : Symbol(item, Decl(inferContextualTypePredicates1.ts, 12, 26))
 
-const r4 = skipIf(items, (item) => true); // error
+const r4 = skipIf(items, (item) => true); // ok
 >r4 : Symbol(r4, Decl(inferContextualTypePredicates1.ts, 13, 5))
 >skipIf : Symbol(skipIf, Decl(inferContextualTypePredicates1.ts, 1, 40))
 >items : Symbol(items, Decl(inferContextualTypePredicates1.ts, 8, 13))
@@ -88,4 +88,85 @@ const pred2: (a: string | null, b: string | null) => b is string = (a, b) => typ
 >a : Symbol(a, Decl(inferContextualTypePredicates1.ts, 16, 68))
 >b : Symbol(b, Decl(inferContextualTypePredicates1.ts, 16, 70))
 >a : Symbol(a, Decl(inferContextualTypePredicates1.ts, 16, 68))
+
+export declare function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
+>every : Symbol(every, Decl(inferContextualTypePredicates1.ts, 16, 99), Decl(inferContextualTypePredicates1.ts, 18, 145), Decl(inferContextualTypePredicates1.ts, 19, 169))
+>T : Symbol(T, Decl(inferContextualTypePredicates1.ts, 18, 30))
+>U : Symbol(U, Decl(inferContextualTypePredicates1.ts, 18, 32))
+>T : Symbol(T, Decl(inferContextualTypePredicates1.ts, 18, 30))
+>array : Symbol(array, Decl(inferContextualTypePredicates1.ts, 18, 46))
+>T : Symbol(T, Decl(inferContextualTypePredicates1.ts, 18, 30))
+>callback : Symbol(callback, Decl(inferContextualTypePredicates1.ts, 18, 66))
+>element : Symbol(element, Decl(inferContextualTypePredicates1.ts, 18, 78))
+>T : Symbol(T, Decl(inferContextualTypePredicates1.ts, 18, 30))
+>index : Symbol(index, Decl(inferContextualTypePredicates1.ts, 18, 89))
+>element : Symbol(element, Decl(inferContextualTypePredicates1.ts, 18, 78))
+>U : Symbol(U, Decl(inferContextualTypePredicates1.ts, 18, 32))
+>array : Symbol(array, Decl(inferContextualTypePredicates1.ts, 18, 46))
+>U : Symbol(U, Decl(inferContextualTypePredicates1.ts, 18, 32))
+
+export declare function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
+>every : Symbol(every, Decl(inferContextualTypePredicates1.ts, 16, 99), Decl(inferContextualTypePredicates1.ts, 18, 145), Decl(inferContextualTypePredicates1.ts, 19, 169))
+>T : Symbol(T, Decl(inferContextualTypePredicates1.ts, 19, 30))
+>U : Symbol(U, Decl(inferContextualTypePredicates1.ts, 19, 32))
+>T : Symbol(T, Decl(inferContextualTypePredicates1.ts, 19, 30))
+>array : Symbol(array, Decl(inferContextualTypePredicates1.ts, 19, 46))
+>T : Symbol(T, Decl(inferContextualTypePredicates1.ts, 19, 30))
+>callback : Symbol(callback, Decl(inferContextualTypePredicates1.ts, 19, 78))
+>element : Symbol(element, Decl(inferContextualTypePredicates1.ts, 19, 90))
+>T : Symbol(T, Decl(inferContextualTypePredicates1.ts, 19, 30))
+>index : Symbol(index, Decl(inferContextualTypePredicates1.ts, 19, 101))
+>element : Symbol(element, Decl(inferContextualTypePredicates1.ts, 19, 90))
+>U : Symbol(U, Decl(inferContextualTypePredicates1.ts, 19, 32))
+>array : Symbol(array, Decl(inferContextualTypePredicates1.ts, 19, 46))
+>U : Symbol(U, Decl(inferContextualTypePredicates1.ts, 19, 32))
+
+export declare function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
+>every : Symbol(every, Decl(inferContextualTypePredicates1.ts, 16, 99), Decl(inferContextualTypePredicates1.ts, 18, 145), Decl(inferContextualTypePredicates1.ts, 19, 169))
+>T : Symbol(T, Decl(inferContextualTypePredicates1.ts, 20, 30))
+>array : Symbol(array, Decl(inferContextualTypePredicates1.ts, 20, 33))
+>T : Symbol(T, Decl(inferContextualTypePredicates1.ts, 20, 30))
+>callback : Symbol(callback, Decl(inferContextualTypePredicates1.ts, 20, 65))
+>element : Symbol(element, Decl(inferContextualTypePredicates1.ts, 20, 77))
+>T : Symbol(T, Decl(inferContextualTypePredicates1.ts, 20, 30))
+>index : Symbol(index, Decl(inferContextualTypePredicates1.ts, 20, 88))
+
+type Type = {
+>Type : Symbol(Type, Decl(inferContextualTypePredicates1.ts, 20, 125))
+
+  kind: number;
+>kind : Symbol(kind, Decl(inferContextualTypePredicates1.ts, 22, 13))
+
+  flags: number;
+>flags : Symbol(flags, Decl(inferContextualTypePredicates1.ts, 23, 15))
+
+};
+
+function testEvery(typeSet: Type[]) {
+>testEvery : Symbol(testEvery, Decl(inferContextualTypePredicates1.ts, 25, 2))
+>typeSet : Symbol(typeSet, Decl(inferContextualTypePredicates1.ts, 27, 19))
+>Type : Symbol(Type, Decl(inferContextualTypePredicates1.ts, 20, 125))
+
+  if (every(typeSet, (t) => t.kind === 1)) {
+>every : Symbol(every, Decl(inferContextualTypePredicates1.ts, 16, 99), Decl(inferContextualTypePredicates1.ts, 18, 145), Decl(inferContextualTypePredicates1.ts, 19, 169))
+>typeSet : Symbol(typeSet, Decl(inferContextualTypePredicates1.ts, 27, 19))
+>t : Symbol(t, Decl(inferContextualTypePredicates1.ts, 28, 22))
+>t.kind : Symbol(kind, Decl(inferContextualTypePredicates1.ts, 22, 13))
+>t : Symbol(t, Decl(inferContextualTypePredicates1.ts, 28, 22))
+>kind : Symbol(kind, Decl(inferContextualTypePredicates1.ts, 22, 13))
+
+    return 1;
+  }
+  if (every(typeSet, (t) => t.kind === 2)) {
+>every : Symbol(every, Decl(inferContextualTypePredicates1.ts, 16, 99), Decl(inferContextualTypePredicates1.ts, 18, 145), Decl(inferContextualTypePredicates1.ts, 19, 169))
+>typeSet : Symbol(typeSet, Decl(inferContextualTypePredicates1.ts, 27, 19))
+>t : Symbol(t, Decl(inferContextualTypePredicates1.ts, 31, 22))
+>t.kind : Symbol(kind, Decl(inferContextualTypePredicates1.ts, 22, 13))
+>t : Symbol(t, Decl(inferContextualTypePredicates1.ts, 31, 22))
+>kind : Symbol(kind, Decl(inferContextualTypePredicates1.ts, 22, 13))
+
+    return 2;
+  }
+  return -1;
+}
 
