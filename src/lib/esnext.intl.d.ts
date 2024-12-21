@@ -1,5 +1,5 @@
 declare namespace Intl {
-
+    type DurationTimeFormatLocaleMatcher = "lookup" | "best fit";
     /**
      * Value of the `unit` property in duration objects
      *
@@ -44,7 +44,7 @@ declare namespace Intl {
 
 
 
-    type DurationFormatOptions = "long"|"short"|"narrow"|"numeric"|"2-digit"
+    type DurationFormatOption = "long"|"short"|"narrow"|"numeric"|"2-digit"
 
 
     type DurationFormatDisplayOption = "always"|"auto";    
@@ -84,28 +84,28 @@ declare namespace Intl {
     }
 
     interface DurationFormatOptions {
-        localeMatcher?: LocaleMatcher
+        localeMatcher?: DurationTimeFormatLocaleMatcher
         numberingSystem?: DateTimeFormatOptions["numberingSystem"]
         style?: DurationFormatStyle
-        years?: Omit<DurationFormatOptions,"numeric"|"2-digit">
+        years?: Omit<DurationFormatOption,"numeric"|"2-digit">
         yearsDisplay?:DurationFormatDisplayOption
-        months?: Omit<DurationFormatOptions,"numeric"|"2-digit">
+        months?: Omit<DurationFormatOption,"numeric"|"2-digit">
         monthsDisplay?: DurationFormatDisplayOption
-        weeks?: Omit<DurationFormatOptions,"numeric"|"2-digit">
+        weeks?: Omit<DurationFormatOption,"numeric"|"2-digit">
         weeksDisplay?: DurationFormatDisplayOption
-        days?: Omit<DurationFormatOptions,"numeric"|"2-digit">
+        days?: Omit<DurationFormatOption,"numeric"|"2-digit">
         daysDisplay?: DurationFormatDisplayOption
-        hours?: DurationFormatOptions
+        hours?: DurationFormatOption
         hoursDisplay?: DurationFormatDisplayOption
-        minutes?: DurationFormatOptions
+        minutes?: DurationFormatOption
         minutesDisplay?: DurationFormatDisplayOption
-        seconds?: DurationFormatOptions
+        seconds?: DurationFormatOption
         secondsDisplay?: DurationFormatDisplayOption
-        milliseconds?: DurationFormatOptions
+        milliseconds?: DurationFormatOption
         millisecondsDisplay?: DurationFormatDisplayOption
-        microseconds?: DurationFormatOptions
+        microseconds?: DurationFormatOption
         microsecondsDisplay?: DurationFormatDisplayOption
-        nanosecond?: DurationFormatOptions
+        nanosecond?: DurationFormatOption
         nanosecondDisplay?: DurationFormatDisplayOption
         fractionalDigits?: fractionalDigitsOption
     }
@@ -163,6 +163,6 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/supportedLocalesOf).
          */
-        supportedLocalesOf(locales?: LocalesArgument, options?: { localeMatcher?: LocaleMatcher; }): UnicodeBCP47LocaleIdentifier[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: { localeMatcher?: DurationTimeFormatLocaleMatcher; }): UnicodeBCP47LocaleIdentifier[];
     };
 }
