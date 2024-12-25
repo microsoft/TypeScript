@@ -465,6 +465,7 @@ import {
     IntroducesNewScopeNode,
     isAccessExpression,
     isAccessor,
+    isAccessorModifier,
     isAliasableExpression,
     isAmbientModule,
     isArray,
@@ -7412,26 +7413,50 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (propertySymbol.flags & SymbolFlags.Accessor) {
                 const writeType = getWriteTypeOfSymbol(propertySymbol);
-                if (propertyType !== writeType && !isErrorType(propertyType) && !isErrorType(writeType)) {
-                    const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor)!;
-                    const getterSignature = getSignatureFromDeclaration(getterDeclaration);
-                    typeElements.push(
-                        setCommentRange(
-                            context,
-                            signatureToSignatureDeclarationHelper(getterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
-                            getterDeclaration,
-                        ),
-                    );
-                    const setterDeclaration = getDeclarationOfKind<SetAccessorDeclaration>(propertySymbol, SyntaxKind.SetAccessor)!;
-                    const setterSignature = getSignatureFromDeclaration(setterDeclaration);
-                    typeElements.push(
-                        setCommentRange(
-                            context,
-                            signatureToSignatureDeclarationHelper(setterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
-                            setterDeclaration,
-                        ),
-                    );
-                    return;
+                if (!isErrorType(propertyType) && !isErrorType(writeType)) {
+                    const propDeclaration = getDeclarationOfKind<PropertyDeclaration>(propertySymbol, SyntaxKind.PropertyDeclaration);
+                    if (propertyType !== writeType || propertySymbol.parent!.flags & SymbolFlags.Class && !propDeclaration) {
+                        const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor);
+                        if (getterDeclaration) {
+                            const getterSignature = getSignatureFromDeclaration(getterDeclaration);
+                            typeElements.push(
+                                setCommentRange(
+                                    context,
+                                    signatureToSignatureDeclarationHelper(getterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
+                                    getterDeclaration,
+                                ),
+                            );
+                        }
+                        const setterDeclaration = getDeclarationOfKind<SetAccessorDeclaration>(propertySymbol, SyntaxKind.SetAccessor);
+                        if (setterDeclaration) {
+                            const setterSignature = getSignatureFromDeclaration(setterDeclaration);
+                            typeElements.push(
+                                setCommentRange(
+                                    context,
+                                    signatureToSignatureDeclarationHelper(setterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
+                                    setterDeclaration,
+                                ),
+                            );
+                        }
+                        return;
+                    }
+                    if (propertySymbol.parent!.flags & SymbolFlags.Class && propDeclaration && find(propDeclaration.modifiers, isAccessorModifier)) {
+                        const fakeGetterSignature = createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, emptyArray, propertyType, /*resolvedTypePredicate*/ undefined, 0, SignatureFlags.None);
+                        typeElements.push(
+                            setCommentRange(
+                                context,
+                                signatureToSignatureDeclarationHelper(fakeGetterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
+                                propDeclaration,
+                            ),
+                        );
+                        const setterParam = createSymbol(SymbolFlags.FunctionScopedVariable, "arg" as __String);
+                        setterParam.links.type = writeType;
+                        const fakeSetterSignature = createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, [setterParam], voidType, /*resolvedTypePredicate*/ undefined, 0, SignatureFlags.None);
+                        typeElements.push(
+                            signatureToSignatureDeclarationHelper(fakeSetterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
+                        );
+                        return;
+                    }
                 }
             }
 
