@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/namespaceJsxPreserve1.tsx] ////
+
+=== namespaceJsxPreserve1.tsx ===
+/// <reference path="react16.d.ts" />
+
+export namespace form {
+>form : Symbol(form, Decl(namespaceJsxPreserve1.tsx, 0, 0))
+
+  export const input = null;
+>input : Symbol(input, Decl(namespaceJsxPreserve1.tsx, 3, 14))
+
+  export const HiddenInput = () => null;
+>HiddenInput : Symbol(HiddenInput, Decl(namespaceJsxPreserve1.tsx, 5, 14))
+
+  export const test1 = <input />;
+>test1 : Symbol(test1, Decl(namespaceJsxPreserve1.tsx, 7, 14))
+>input : Symbol(JSX.IntrinsicElements.input, Decl(react16.d.ts, 2570, 106))
+
+  export const test2 = <HiddenInput />;
+>test2 : Symbol(test2, Decl(namespaceJsxPreserve1.tsx, 8, 14))
+>HiddenInput : Symbol(HiddenInput, Decl(namespaceJsxPreserve1.tsx, 5, 14))
+}
+
