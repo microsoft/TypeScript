@@ -13197,10 +13197,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else if (!member.symbol.isReplaceableByMethod) {
             symbol.declarations.push(member);
         }
-        if (symbolFlags & SymbolFlags.Value) {
-            if (!symbol.valueDeclaration || symbol.valueDeclaration.kind !== member.kind) {
-                symbol.valueDeclaration = member;
-            }
+        if (symbolFlags & SymbolFlags.Value && !symbol.valueDeclaration) {
+            symbol.valueDeclaration = member;
         }
     }
 
@@ -13232,7 +13230,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param lateSymbols The late-bound symbols of the parent.
      * @param decl The member to bind.
      */
-    function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: Map<__String, TransientSymbol>, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
+    function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: Map<__String, TransientSymbol>, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration, isFromAssignmentDeclarationMember = false) {
         Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
         const links = getNodeLinks(decl);
         if (!links.resolvedSymbol) {
@@ -13247,10 +13245,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 // Get or add a late-bound symbol for the member. This allows us to merge late-bound accessor declarations.
                 let lateSymbol = lateSymbols.get(memberName);
+                if (isFromAssignmentDeclarationMember && lateSymbol) {
+                    return links.resolvedSymbol = lateSymbol;
+                }
                 if (!lateSymbol) lateSymbols.set(memberName, lateSymbol = createSymbol(SymbolFlags.None, memberName, CheckFlags.Late));
 
                 // Report an error if there's a symbol declaration with the same name and conflicting flags.
-                const earlySymbol = earlySymbols && earlySymbols.get(memberName);
+                const earlySymbol = earlySymbols?.get(memberName);
                 // Duplicate property declarations of classes are checked in checkClassForDuplicateDeclarations.
                 if (!(parent.flags & SymbolFlags.Class) && lateSymbol.flags & getExcludedSymbolFlags(symbolFlags)) {
                     // If we have an existing early-bound member, combine its declarations so that we can
@@ -13342,7 +13343,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         || assignmentKind === AssignmentDeclarationKind.Prototype; // A straight `Prototype` assignment probably can never have a computed name
                     if (isStatic === !isInstanceMember) {
                         if (hasLateBindableName(member)) {
-                            lateBindMember(symbol, earlySymbols, lateSymbols, member);
+                            lateBindMember(symbol, earlySymbols, lateSymbols, member, /*isFromAssignmentDeclarationMember*/ true);
                         }
                     }
                 }
