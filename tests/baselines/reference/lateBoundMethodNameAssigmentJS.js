@@ -14,7 +14,7 @@ export class MyClass {
 
 //// [lateBoundMethodNameAssigmentJS.d.ts]
 export class MyClass {
-    [_symbol](): Promise<void>;
+    [_symbol]: () => Promise<void>;
 }
 declare const _symbol: unique symbol;
 export {};
