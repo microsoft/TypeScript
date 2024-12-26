@@ -834,7 +834,6 @@ import {
     JsxExpression,
     JsxFlags,
     JsxFragment,
-    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxOpeningLikeElement,
