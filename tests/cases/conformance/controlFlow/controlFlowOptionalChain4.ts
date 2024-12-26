@@ -31,3 +31,19 @@ function fn2(t1: Type, t2: Type) {
     info.impliedArity;
   }
 }
+
+// https://github.com/microsoft/TypeScript/issues/60855
+
+type Option = { type: "Some"; value: number } | { type: "None" };
+
+declare function someOptionalOption(): Option | undefined;
+
+function test60855(): number | undefined {
+  let option: Option | undefined;
+
+  if ((option = someOptionalOption())?.type === "Some") {
+    return option.value;
+  }
+
+  return undefined;
+}

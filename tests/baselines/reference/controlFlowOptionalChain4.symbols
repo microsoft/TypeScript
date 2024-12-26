@@ -104,3 +104,38 @@ function fn2(t1: Type, t2: Type) {
   }
 }
 
+// https://github.com/microsoft/TypeScript/issues/60855
+
+type Option = { type: "Some"; value: number } | { type: "None" };
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 29, 1))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 33, 15))
+>value : Symbol(value, Decl(controlFlowOptionalChain4.ts, 33, 29))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 33, 49))
+
+declare function someOptionalOption(): Option | undefined;
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 33, 65))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 29, 1))
+
+function test60855(): number | undefined {
+>test60855 : Symbol(test60855, Decl(controlFlowOptionalChain4.ts, 35, 58))
+
+  let option: Option | undefined;
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 38, 5))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(controlFlowOptionalChain4.ts, 29, 1))
+
+  if ((option = someOptionalOption())?.type === "Some") {
+>(option = someOptionalOption())?.type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 33, 15), Decl(controlFlowOptionalChain4.ts, 33, 49))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 38, 5))
+>someOptionalOption : Symbol(someOptionalOption, Decl(controlFlowOptionalChain4.ts, 33, 65))
+>type : Symbol(type, Decl(controlFlowOptionalChain4.ts, 33, 15), Decl(controlFlowOptionalChain4.ts, 33, 49))
+
+    return option.value;
+>option.value : Symbol(value, Decl(controlFlowOptionalChain4.ts, 33, 29))
+>option : Symbol(option, Decl(controlFlowOptionalChain4.ts, 38, 5))
+>value : Symbol(value, Decl(controlFlowOptionalChain4.ts, 33, 29))
+  }
+
+  return undefined;
+>undefined : Symbol(undefined)
+}
+
