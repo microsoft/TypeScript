@@ -8,6 +8,7 @@ import {
     BuilderProgramHost,
     BuilderState,
     BuildInfo,
+    BuildInfoFileVersionMap,
     CancellationToken,
     CommandLineOption,
     compareStringsCaseSensitive,
@@ -21,6 +22,7 @@ import {
     concatenate,
     convertToOptionsWithAbsolutePaths,
     createGetCanonicalFileName,
+    createModeMismatchDetails,
     createModuleNotFoundChain,
     createProgram,
     CustomTransformers,
@@ -70,7 +72,6 @@ import {
     ReadBuildProgramHost,
     ReadonlyCollection,
     RepopulateDiagnosticChainInfo,
-    RepopulateModuleNotFoundDiagnosticChain,
     returnFalse,
     returnUndefined,
     sameMap,
@@ -111,8 +112,8 @@ export interface ReusableDiagnosticRelatedInformation {
 }
 
 /** @internal */
-export interface ReusableRepopulateModuleNotFoundChain {
-    info: RepopulateModuleNotFoundDiagnosticChain;
+export interface ReusableRepopulateInfoChain {
+    info: RepopulateDiagnosticChainInfo;
     next?: ReusableDiagnosticMessageChain[];
 }
 
@@ -122,7 +123,7 @@ export type SerializedDiagnosticMessageChain = Omit<DiagnosticMessageChain, "nex
 };
 
 /** @internal */
-export type ReusableDiagnosticMessageChain = SerializedDiagnosticMessageChain | ReusableRepopulateModuleNotFoundChain;
+export type ReusableDiagnosticMessageChain = SerializedDiagnosticMessageChain | ReusableRepopulateInfoChain;
 
 /**
  * Signature (Hash of d.ts emitted), is string if it was emitted using same d.ts.map option as what compilerOptions indicate, otherwise tuple of string
@@ -277,7 +278,7 @@ function toBuilderProgramStateWithDefinedProgram(state: ReusableBuilderProgramSt
  *
  * @internal
  */
-export function getBuilderFileEmit(options: CompilerOptions) {
+export function getBuilderFileEmit(options: CompilerOptions): BuilderFileEmit {
     let result = BuilderFileEmit.Js;
     if (options.sourceMap) result = result | BuilderFileEmit.JsMap;
     if (options.inlineSourceMap) result = result | BuilderFileEmit.JsInlineMap;
@@ -538,7 +539,13 @@ function convertOrRepopulateDiagnosticMessageChain<T extends DiagnosticMessageCh
     repopulateInfo: (chain: T) => RepopulateDiagnosticChainInfo | undefined,
 ): DiagnosticMessageChain {
     const info = repopulateInfo(chain);
-    if (info) {
+    if (info === true) {
+        return {
+            ...createModeMismatchDetails(sourceFile!),
+            next: convertOrRepopulateDiagnosticMessageChainArray(chain.next as T[], sourceFile, newProgram, repopulateInfo),
+        };
+    }
+    else if (info) {
         return {
             ...createModuleNotFoundChain(sourceFile!, newProgram, info.moduleReference, info.mode, info.packageName || info.moduleReference),
             next: convertOrRepopulateDiagnosticMessageChainArray(chain.next as T[], sourceFile, newProgram, repopulateInfo),
@@ -600,7 +607,7 @@ function convertToDiagnosticRelatedInformation(
         file: sourceFile,
         messageText: isString(diagnostic.messageText) ?
             diagnostic.messageText :
-            convertOrRepopulateDiagnosticMessageChain(diagnostic.messageText, sourceFile, newProgram, chain => (chain as ReusableRepopulateModuleNotFoundChain).info),
+            convertOrRepopulateDiagnosticMessageChain(diagnostic.messageText, sourceFile, newProgram, chain => (chain as ReusableRepopulateInfoChain).info),
     };
 }
 
@@ -727,7 +734,7 @@ export function getPendingEmitKindWithSeen(
     seenOldOptionsOrEmitKind: CompilerOptions | BuilderFileEmit | undefined,
     emitOnlyDtsFiles: boolean | undefined,
     isForDtsErrors: boolean,
-) {
+): BuilderFileEmit {
     let pendingKind = getPendingEmitKind(optionsOrEmitKind, seenOldOptionsOrEmitKind);
     if (emitOnlyDtsFiles) pendingKind = pendingKind & BuilderFileEmit.AllDts;
     if (isForDtsErrors) pendingKind = pendingKind & BuilderFileEmit.DtsErrors;
@@ -1617,7 +1624,7 @@ export function computeSignatureWithDiagnostics(
     text: string,
     host: HostForComputeHash,
     data: WriteFileCallbackData | undefined,
-) {
+): string {
     text = getTextHandlingSourceMapForSignature(text, data);
     let sourceFileDirectory: string | undefined;
     if (data?.diagnostics?.length) {
@@ -2389,7 +2396,7 @@ export function getBuildInfoFileVersionMap(
     program: IncrementalBuildInfo,
     buildInfoPath: string,
     host: Pick<ReadBuildProgramHost, "useCaseSensitiveFileNames" | "getCurrentDirectory">,
-) {
+): BuildInfoFileVersionMap {
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     const fileInfos = new Map<Path, string>();
@@ -2434,7 +2441,7 @@ export function getNonIncrementalBuildInfoRoots(
     buildInfo: BuildInfo,
     buildInfoPath: string,
     host: Pick<ReadBuildProgramHost, "useCaseSensitiveFileNames" | "getCurrentDirectory">,
-) {
+): Path[] | undefined {
     if (!isNonIncrementalBuildInfo(buildInfo)) return undefined;
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());

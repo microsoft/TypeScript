@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/unusedLocalsInRecursiveReturn.ts] ////
+
+=== unusedLocalsInRecursiveReturn.ts ===
+// Test that we unconditionally check return expression, even if we don't need its type.
+function recursive(arg: string, other: string) {
+>recursive : Symbol(recursive, Decl(unusedLocalsInRecursiveReturn.ts, 0, 0))
+>arg : Symbol(arg, Decl(unusedLocalsInRecursiveReturn.ts, 1, 19))
+>other : Symbol(other, Decl(unusedLocalsInRecursiveReturn.ts, 1, 31))
+
+    const someLocalVar = arg + other;
+>someLocalVar : Symbol(someLocalVar, Decl(unusedLocalsInRecursiveReturn.ts, 2, 9))
+>arg : Symbol(arg, Decl(unusedLocalsInRecursiveReturn.ts, 1, 19))
+>other : Symbol(other, Decl(unusedLocalsInRecursiveReturn.ts, 1, 31))
+
+    return recursive(someLocalVar, arg);
+>recursive : Symbol(recursive, Decl(unusedLocalsInRecursiveReturn.ts, 0, 0))
+>someLocalVar : Symbol(someLocalVar, Decl(unusedLocalsInRecursiveReturn.ts, 2, 9))
+>arg : Symbol(arg, Decl(unusedLocalsInRecursiveReturn.ts, 1, 19))
+}

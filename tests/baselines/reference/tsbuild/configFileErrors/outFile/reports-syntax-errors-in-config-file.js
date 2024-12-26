@@ -1,6 +1,26 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/project useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/workspaces/project/a.ts]
+export function foo() { }
+
+//// [/home/src/workspaces/project/b.ts]
+export function bar() { }
+
+//// [/home/src/workspaces/project/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true,
+  "outFile": "../outFile.js",
+  "module": "amd"
+
+    },
+    "files": [
+        "a.ts"
+        "b.ts"
+    ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,31 +35,10 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/a.ts]
-export function foo() { }
 
-//// [/src/b.ts]
-export function bar() { }
-
-//// [/src/tsconfig.json]
-{
-    "compilerOptions": {
-        "composite": true,
-  "outFile": "../outFile.js",
-  "module": "amd"
-
-    },
-    "files": [
-        "a.ts"
-        "b.ts"
-    ]
-}
-
-
-
+/home/src/tslibs/TS/Lib/tsc.js --b
 Output::
-/lib/tsc --b /src/tsconfig.json
-[96msrc/tsconfig.json[0m:[93m10[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
+[96mtsconfig.json[0m:[93m10[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m10[0m         "b.ts"
 [7m  [0m [91m        ~~~~~~[0m
@@ -47,19 +46,9 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
-//// [/outFile.d.ts]
-declare module "a" {
-    export function foo(): void;
-}
-declare module "b" {
-    export function bar(): void;
-}
-
-
-//// [/outFile.js]
+//// [/home/src/workspaces/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -74,29 +63,38 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 
 
-//// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4646078106-export function foo() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","errors":true,"version":"FakeTSVersion"}
+//// [/home/src/workspaces/outFile.d.ts]
+declare module "a" {
+    export function foo(): void;
+}
+declare module "b" {
+    export function bar(): void;
+}
 
-//// [/outFile.tsbuildinfo.readable.baseline.txt]
+
+//// [/home/src/workspaces/outFile.tsbuildinfo]
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4646078106-export function foo() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","errors":true,"version":"FakeTSVersion"}
+
+//// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "./lib/lib.d.ts",
-    "./src/a.ts",
-    "./src/b.ts"
+    "../tslibs/ts/lib/lib.d.ts",
+    "./project/a.ts",
+    "./project/b.ts"
   ],
   "fileInfos": {
-    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./src/a.ts": "4646078106-export function foo() { }",
-    "./src/b.ts": "1045484683-export function bar() { }"
+    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "4646078106-export function foo() { }",
+    "./project/b.ts": "1045484683-export function bar() { }"
   },
   "root": [
     [
       2,
-      "./src/a.ts"
+      "./project/a.ts"
     ],
     [
       3,
-      "./src/b.ts"
+      "./project/b.ts"
     ]
   ],
   "options": {
@@ -108,14 +106,16 @@ define("b", ["require", "exports"], function (require, exports) {
   "latestChangedDtsFile": "./outFile.d.ts",
   "errors": true,
   "version": "FakeTSVersion",
-  "size": 901
+  "size": 920
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: reports syntax errors after change to config file
+
 Input::
-//// [/src/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
     "compilerOptions": {
         "composite": true,
@@ -131,10 +131,9 @@ Input::
 }
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js --b
 Output::
-/lib/tsc --b /src/tsconfig.json
-[96msrc/tsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
+[96mtsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m11[0m         "b.ts"
 [7m  [0m [91m        ~~~~~~[0m
@@ -142,21 +141,21 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
-
-
 Change:: reports syntax errors after change to ts file
+
 Input::
-//// [/src/a.ts]
+//// [/home/src/workspaces/project/a.ts]
 export function foo() { }export function fooBar() { }
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js --b
 Output::
-/lib/tsc --b /src/tsconfig.json
-[96msrc/tsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
+[96mtsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m11[0m         "b.ts"
 [7m  [0m [91m        ~~~~~~[0m
@@ -164,20 +163,9 @@ Output::
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
-//// [/outFile.d.ts]
-declare module "a" {
-    export function foo(): void;
-    export function fooBar(): void;
-}
-declare module "b" {
-    export function bar(): void;
-}
-
-
-//// [/outFile.js]
+//// [/home/src/workspaces/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -194,29 +182,39 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 
 
-//// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9819159940-export function foo() { }export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","errors":true,"version":"FakeTSVersion"}
+//// [/home/src/workspaces/outFile.d.ts]
+declare module "a" {
+    export function foo(): void;
+    export function fooBar(): void;
+}
+declare module "b" {
+    export function bar(): void;
+}
 
-//// [/outFile.tsbuildinfo.readable.baseline.txt]
+
+//// [/home/src/workspaces/outFile.tsbuildinfo]
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9819159940-export function foo() { }export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","errors":true,"version":"FakeTSVersion"}
+
+//// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "./lib/lib.d.ts",
-    "./src/a.ts",
-    "./src/b.ts"
+    "../tslibs/ts/lib/lib.d.ts",
+    "./project/a.ts",
+    "./project/b.ts"
   ],
   "fileInfos": {
-    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./src/a.ts": "9819159940-export function foo() { }export function fooBar() { }",
-    "./src/b.ts": "1045484683-export function bar() { }"
+    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "9819159940-export function foo() { }export function fooBar() { }",
+    "./project/b.ts": "1045484683-export function bar() { }"
   },
   "root": [
     [
       2,
-      "./src/a.ts"
+      "./project/a.ts"
     ],
     [
       3,
-      "./src/b.ts"
+      "./project/b.ts"
     ]
   ],
   "options": {
@@ -229,18 +227,19 @@ define("b", ["require", "exports"], function (require, exports) {
   "latestChangedDtsFile": "./outFile.d.ts",
   "errors": true,
   "version": "FakeTSVersion",
-  "size": 986
+  "size": 1005
 }
 
 
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: no-change-run
+
 Input::
 
-
+/home/src/tslibs/TS/Lib/tsc.js --b
 Output::
-/lib/tsc --b /src/tsconfig.json
-[96msrc/tsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
+[96mtsconfig.json[0m:[93m11[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m11[0m         "b.ts"
 [7m  [0m [91m        ~~~~~~[0m
@@ -248,14 +247,15 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
-
-
 Change:: builds after fixing config file errors
+
 Input::
-//// [/src/tsconfig.json]
+//// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
     "composite": true,
@@ -270,35 +270,33 @@ Input::
 }
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js --b
 Output::
-/lib/tsc --b /src/tsconfig.json
-exitCode:: ExitStatus.Success
 
 
-//// [/outFile.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./src/a.ts","./src/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9819159940-export function foo() { }export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
+//// [/home/src/workspaces/outFile.tsbuildinfo]
+{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","9819159940-export function foo() { }export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
 
-//// [/outFile.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "./lib/lib.d.ts",
-    "./src/a.ts",
-    "./src/b.ts"
+    "../tslibs/ts/lib/lib.d.ts",
+    "./project/a.ts",
+    "./project/b.ts"
   ],
   "fileInfos": {
-    "./lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "./src/a.ts": "9819159940-export function foo() { }export function fooBar() { }",
-    "./src/b.ts": "1045484683-export function bar() { }"
+    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./project/a.ts": "9819159940-export function foo() { }export function fooBar() { }",
+    "./project/b.ts": "1045484683-export function bar() { }"
   },
   "root": [
     [
       2,
-      "./src/a.ts"
+      "./project/a.ts"
     ],
     [
       3,
-      "./src/b.ts"
+      "./project/b.ts"
     ]
   ],
   "options": {
@@ -310,6 +308,8 @@ exitCode:: ExitStatus.Success
   "outSignature": "-12543119676-declare module \"a\" {\n    export function foo(): void;\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
   "latestChangedDtsFile": "./outFile.d.ts",
   "version": "FakeTSVersion",
-  "size": 972
+  "size": 991
 }
 
+
+exitCode:: ExitStatus.Success

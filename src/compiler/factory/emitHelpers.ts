@@ -23,6 +23,7 @@ import {
     isCallExpression,
     isComputedPropertyName,
     isIdentifier,
+    JsxEmit,
     memoize,
     ObjectLiteralElementLike,
     ParameterDeclaration,
@@ -139,6 +140,8 @@ export interface EmitHelperFactory {
     // 'using' helpers
     createAddDisposableResourceHelper(envBinding: Expression, value: Expression, async: boolean): Expression;
     createDisposeResourcesHelper(envBinding: Expression): Expression;
+    // --rewriteRelativeImportExtensions helpers
+    createRewriteRelativeImportExtensionsHelper(expression: Expression): Expression;
 }
 
 /** @internal */
@@ -189,6 +192,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         // 'using' helpers
         createAddDisposableResourceHelper,
         createDisposeResourcesHelper,
+        // --rewriteRelativeImportExtensions helpers
+        createRewriteRelativeImportExtensionsHelper,
     };
 
     /**
@@ -682,10 +687,21 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         context.requestEmitHelper(disposeResourcesHelper);
         return factory.createCallExpression(getUnscopedHelperName("__disposeResources"), /*typeArguments*/ undefined, [envBinding]);
     }
+
+    function createRewriteRelativeImportExtensionsHelper(expression: Expression) {
+        context.requestEmitHelper(rewriteRelativeImportExtensionsHelper);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__rewriteRelativeImportExtension"),
+            /*typeArguments*/ undefined,
+            context.getCompilerOptions().jsx === JsxEmit.Preserve
+                ? [expression, factory.createTrue()]
+                : [expression],
+        );
+    }
 }
 
 /** @internal */
-export function compareEmitHelpers(x: EmitHelper, y: EmitHelper) {
+export function compareEmitHelpers(x: EmitHelper, y: EmitHelper): Comparison {
     if (x === y) return Comparison.EqualTo;
     if (x.priority === y.priority) return Comparison.EqualTo;
     if (x.priority === undefined) return Comparison.GreaterThan;
@@ -836,7 +852,7 @@ const asyncGeneratorHelper: UnscopedEmitHelper = {
         var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
             if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
             var g = generator.apply(thisArg, _arguments || []), i, q = [];
-            return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+            return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
             function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
             function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
             function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
@@ -1102,8 +1118,8 @@ const generatorHelper: UnscopedEmitHelper = {
     priority: 6,
     text: `
             var __generator = (this && this.__generator) || function (thisArg, body) {
-                var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-                return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+                var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+                return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
                 function verb(n) { return function (v) { return step([n, v]); }; }
                 function step(op) {
                     if (f) throw new TypeError("Generator is already executing.");
@@ -1172,13 +1188,23 @@ const importStarHelper: UnscopedEmitHelper = {
     dependencies: [createBindingHelper, setModuleDefaultHelper],
     priority: 2,
     text: `
-            var __importStar = (this && this.__importStar) || function (mod) {
-                if (mod && mod.__esModule) return mod;
-                var result = {};
-                if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-                __setModuleDefault(result, mod);
-                return result;
-            };`,
+            var __importStar = (this && this.__importStar) || (function () {
+                var ownKeys = function(o) {
+                    ownKeys = Object.getOwnPropertyNames || function (o) {
+                        var ar = [];
+                        for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+                        return ar;
+                    };
+                    return ownKeys(o);
+                };
+                return function (mod) {
+                    if (mod && mod.__esModule) return mod;
+                    var result = {};
+                    if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+                    __setModuleDefault(result, mod);
+                    return result;
+                };
+            })();`,
 };
 
 // emit helper for `import Name from "foo"`
@@ -1420,6 +1446,21 @@ const disposeResourcesHelper: UnscopedEmitHelper = {
             var e = new Error(message);
             return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
         });`,
+};
+
+const rewriteRelativeImportExtensionsHelper: UnscopedEmitHelper = {
+    name: "typescript:rewriteRelativeImportExtensions",
+    importName: "__rewriteRelativeImportExtension",
+    scoped: false,
+    text: `
+        var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExtension) || function (path, preserveJsx) {
+            if (typeof path === "string" && /^\\.\\.?\\//.test(path)) {
+                return path.replace(/\\.(tsx)$|((?:\\.d)?)((?:\\.[^./]+?)?)\\.([cm]?)ts$/i, function (m, tsx, d, ext, cm) {
+                    return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : (d + ext + "." + cm.toLowerCase() + "js");
+                });
+            }
+            return path;
+        };`,
 };
 
 /** @internal */

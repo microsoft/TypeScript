@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/declarationEmitClassInherritsAny.ts] ////
+
+=== declarationEmitClassInherritsAny.ts ===
+const anyThing = class {} as any;
+>anyThing : any
+>class {} as any : any
+>class {} : typeof (Anonymous class)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+export class Foo extends anyThing {}
+>Foo : Foo
+>    : ^^^
+>anyThing : any
+

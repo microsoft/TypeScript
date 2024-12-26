@@ -46,8 +46,8 @@ const v = chain({a: 1, b: 2}).mapValues(square).value();
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chain({a: 1, b: 2}).mapValues(square) : Chainable<{ a: number; b: number; }>
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->chain({a: 1, b: 2}).mapValues : <U>(func: (v: number) => U) => Chainable<{ [k in "a" | "b"]: U; }>
->                              : ^ ^^    ^^^ ^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^   ^    
+>chain({a: 1, b: 2}).mapValues : <U>(func: (v: number) => U) => Chainable<{ a: U; b: U; }>
+>                              : ^ ^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chain({a: 1, b: 2}) : Chainable<{ a: number; b: number; }>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chain : <T>(t: T) => Chainable<T>
@@ -62,8 +62,8 @@ const v = chain({a: 1, b: 2}).mapValues(square).value();
 >  : ^^^^^^
 >2 : 2
 >  : ^
->mapValues : <U>(func: (v: number) => U) => Chainable<{ [k in "a" | "b"]: U; }>
->          : ^ ^^    ^^^ ^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^   ^    
+>mapValues : <U>(func: (v: number) => U) => Chainable<{ a: U; b: U; }>
+>          : ^ ^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >square : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >value : () => { a: number; b: number; }

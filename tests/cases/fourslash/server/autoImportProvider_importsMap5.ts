@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
 ////     "module": "nodenext",
@@ -10,7 +10,7 @@
 ////   }
 //// }
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// {
 ////   "type": "module",
 ////   "imports": {
@@ -21,10 +21,10 @@
 ////   }
 //// }
 
-// @Filename: /src/env/browser.ts
+// @Filename: /home/src/workspaces/project/src/env/browser.ts
 //// export const isBrowser = true;
 
-// @Filename: /src/a.ts
+// @Filename: /home/src/workspaces/project/src/a.ts
 //// isBrowser/**/
 
 verify.importFixModuleSpecifiers("", ["#is-browser"]);

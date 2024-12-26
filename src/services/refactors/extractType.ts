@@ -247,7 +247,7 @@ function flattenTypeLiteralNodeReference(checker: TypeChecker, selection: TypeNo
     }
     if (isIntersectionTypeNode(selection)) {
         const result: TypeElement[] = [];
-        const seen = new Map<string, true>();
+        const seen = new Set<string>();
         for (const type of selection.types) {
             const flattenedTypeMembers = flattenTypeLiteralNodeReference(checker, type);
             if (!flattenedTypeMembers || !flattenedTypeMembers.every(type => type.name && addToSeen(seen, getNameFromPropertyName(type.name) as string))) {
