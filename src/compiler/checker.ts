@@ -913,6 +913,7 @@ import {
     NoSubstitutionTemplateLiteral,
     not,
     noTruncationMaximumTruncationLength,
+    NullishCoalesceExpression,
     NumberLiteralType,
     NumericLiteral,
     objectAllocator,
@@ -1333,7 +1334,6 @@ export const enum CheckMode {
     RestBindingElement = 1 << 5,                    // Checking a type that is going to be used to determine the type of a rest binding element
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
-    TypeOnly = 1 << 6,                              // Called from getTypeOfExpression, diagnostics may be omitted
 }
 
 /** @internal */
@@ -39809,15 +39809,39 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return state;
             }
 
-            checkNullishCoalesceOperands(node);
-
-            const operator = node.operatorToken.kind;
-            if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
-                state.skip = true;
-                setLastResult(state, checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword));
-                return state;
+            switch (node.operatorToken.kind) {
+                case SyntaxKind.EqualsToken:
+                    if (node.left.kind !== SyntaxKind.ObjectLiteralExpression && node.left.kind !== SyntaxKind.ArrayLiteralExpression) {
+                        break;
+                    }
+                    state.skip = true;
+                    setLastResult(state, checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword));
+                    break;
+                case SyntaxKind.LessThanToken:
+                case SyntaxKind.GreaterThanToken:
+                case SyntaxKind.LessThanEqualsToken:
+                case SyntaxKind.GreaterThanEqualsToken:
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsEqualsToken:
+                    // During control flow analysis:
+                    // - it is possible for operands to temporarily have narrower types, and those narrower
+                    // types may cause the operands to not be comparable. We don't want such errors reported (see #46475).
+                    // - it's possible to run into circularities when resolving types of both type operands,
+                    // we defer checking those subexpressions as the resulting type of their binary expression parent is known ahead of time (it's boolean).
+                    // This can happen, for example, when inferring signatures with arguments depending (even indirectly) on such binary expressions.
+                    // Those boolean arguments wouldn't even have to be viable sources for type arguments being inferred.
+                    //
+                    // For those reasons, we defer obtaining the operand types here and checking the related errors.
+                    checkNodeDeferred(node);
+                    state.skip = true;
+                    setLastResult(state, booleanType);
+                    break;
+                case SyntaxKind.QuestionQuestionToken:
+                    checkNullishCoalesceOperands(node as NullishCoalesceExpression);
+                    break;
             }
-
             return state;
         }
 
@@ -39910,29 +39934,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function checkNullishCoalesceOperands(node: BinaryExpression) {
+    function checkNullishCoalesceOperands(node: NullishCoalesceExpression) {
         const { left, operatorToken, right } = node;
-        if (operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
-            if (isBinaryExpression(left) && (left.operatorToken.kind === SyntaxKind.BarBarToken || left.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
-                grammarErrorOnNode(left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(left.operatorToken.kind), tokenToString(operatorToken.kind));
-            }
-            if (isBinaryExpression(right) && (right.operatorToken.kind === SyntaxKind.BarBarToken || right.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
-                grammarErrorOnNode(right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(right.operatorToken.kind), tokenToString(operatorToken.kind));
-            }
+        if (isBinaryExpression(left) && (left.operatorToken.kind === SyntaxKind.BarBarToken || left.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
+            grammarErrorOnNode(left, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(left.operatorToken.kind), tokenToString(operatorToken.kind));
+        }
+        if (isBinaryExpression(right) && (right.operatorToken.kind === SyntaxKind.BarBarToken || right.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)) {
+            grammarErrorOnNode(right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(right.operatorToken.kind), tokenToString(operatorToken.kind));
+        }
 
-            const leftTarget = skipOuterExpressions(left, OuterExpressionKinds.All);
-            const nullishSemantics = getSyntacticNullishnessSemantics(leftTarget);
-            if (nullishSemantics !== PredicateSemantics.Sometimes) {
-                if (node.parent.kind === SyntaxKind.BinaryExpression) {
-                    error(leftTarget, Diagnostics.This_binary_expression_is_never_nullish_Are_you_missing_parentheses);
+        const leftTarget = skipOuterExpressions(left, OuterExpressionKinds.All);
+        const nullishSemantics = getSyntacticNullishnessSemantics(leftTarget);
+        if (nullishSemantics !== PredicateSemantics.Sometimes) {
+            if (node.parent.kind === SyntaxKind.BinaryExpression) {
+                error(leftTarget, Diagnostics.This_binary_expression_is_never_nullish_Are_you_missing_parentheses);
+            }
+            else {
+                if (nullishSemantics === PredicateSemantics.Always) {
+                    error(leftTarget, Diagnostics.This_expression_is_always_nullish);
                 }
                 else {
-                    if (nullishSemantics === PredicateSemantics.Always) {
-                        error(leftTarget, Diagnostics.This_expression_is_always_nullish);
-                    }
-                    else {
-                        error(leftTarget, Diagnostics.Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish);
-                    }
+                    error(leftTarget, Diagnostics.Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish);
                 }
             }
         }
@@ -40068,7 +40090,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         switch (operator) {
                             case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
                             case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                                reportOperatorError();
+                                reportBinaryLikeExpressionOperatorError(leftType, operatorToken, rightType, errorNode);
                                 break;
                             case SyntaxKind.AsteriskAsteriskToken:
                             case SyntaxKind.AsteriskAsteriskEqualsToken:
@@ -40080,7 +40102,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     // Exactly one of leftType/rightType is assignable to bigint
                     else {
-                        reportOperatorError(bothAreBigIntLike);
+                        reportBinaryLikeExpressionOperatorError(leftType, operatorToken, rightType, errorNode, bothAreBigIntLike);
                         resultType = errorType;
                     }
                     if (leftOk && rightOk) {
@@ -40142,7 +40164,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 // Symbols are not allowed at all in arithmetic expressions
-                if (resultType && !checkForDisallowedESSymbolOperand(operator)) {
+                if (resultType && !checkForDisallowedESSymbolOperand(left, operator, right, leftType, rightType)) {
                     return resultType;
                 }
 
@@ -40152,10 +40174,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // might be missing an await without doing an exhaustive check that inserting
                     // await(s) will actually be a completely valid binary expression.
                     const closeEnoughKind = TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.AnyOrUnknown;
-                    reportOperatorError((left, right) =>
+                    reportBinaryLikeExpressionOperatorError(leftType, operatorToken, rightType, errorNode, (left, right) =>
                         isTypeAssignableToKind(left, closeEnoughKind) &&
-                        isTypeAssignableToKind(right, closeEnoughKind)
-                    );
+                        isTypeAssignableToKind(right, closeEnoughKind));
                     return anyType;
                 }
 
@@ -40163,44 +40184,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkAssignmentOperator(resultType);
                 }
                 return resultType;
-            case SyntaxKind.LessThanToken:
-            case SyntaxKind.GreaterThanToken:
-            case SyntaxKind.LessThanEqualsToken:
-            case SyntaxKind.GreaterThanEqualsToken:
-                if (checkForDisallowedESSymbolOperand(operator)) {
-                    leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(leftType, left));
-                    rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(rightType, right));
-                    reportOperatorErrorUnless((left, right) => {
-                        if (isTypeAny(left) || isTypeAny(right)) {
-                            return true;
-                        }
-                        const leftAssignableToNumber = isTypeAssignableTo(left, numberOrBigIntType);
-                        const rightAssignableToNumber = isTypeAssignableTo(right, numberOrBigIntType);
-                        return leftAssignableToNumber && rightAssignableToNumber ||
-                            !leftAssignableToNumber && !rightAssignableToNumber && areTypesComparable(left, right);
-                    });
-                }
-                return booleanType;
-            case SyntaxKind.EqualsEqualsToken:
-            case SyntaxKind.ExclamationEqualsToken:
-            case SyntaxKind.EqualsEqualsEqualsToken:
-            case SyntaxKind.ExclamationEqualsEqualsToken:
-                // We suppress errors in CheckMode.TypeOnly (meaning the invocation came from getTypeOfExpression). During
-                // control flow analysis it is possible for operands to temporarily have narrower types, and those narrower
-                // types may cause the operands to not be comparable. We don't want such errors reported (see #46475).
-                if (!(checkMode && checkMode & CheckMode.TypeOnly)) {
-                    if (
-                        (isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right)) &&
-                        // only report for === and !== in JS, not == or !=
-                        (!isInJSFile(left) || (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken))
-                    ) {
-                        const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
-                        error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
-                    }
-                    checkNaNEquality(errorNode, operator, left, right);
-                    reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
-                }
-                return booleanType;
             case SyntaxKind.InstanceOfKeyword:
                 return checkInstanceOfExpression(left, right, leftType, rightType, checkMode);
             case SyntaxKind.InKeyword:
@@ -40303,20 +40286,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (isAccessExpression(node.right) || isIdentifier(node.right) && node.right.escapedText === "eval");
         }
 
-        // Return true if there was no error, false if there was an error.
-        function checkForDisallowedESSymbolOperand(operator: PunctuationSyntaxKind): boolean {
-            const offendingSymbolOperand = maybeTypeOfKindConsideringBaseConstraint(leftType, TypeFlags.ESSymbolLike) ? left :
-                maybeTypeOfKindConsideringBaseConstraint(rightType, TypeFlags.ESSymbolLike) ? right :
-                undefined;
-
-            if (offendingSymbolOperand) {
-                error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(operator));
-                return false;
-            }
-
-            return true;
-        }
-
         function getSuggestedBooleanOperator(operator: SyntaxKind): PunctuationSyntaxKind | undefined {
             switch (operator) {
                 case SyntaxKind.BarToken:
@@ -40384,63 +40353,65 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return false;
             }
         }
+    }
+
+    function checkBinaryExpressionDeferred(node: BinaryExpression) {
+        const { left, operatorToken, right } = node;
+        const operator = operatorToken.kind;
+        let leftType = checkExpression(node.left);
+        let rightType = checkExpression(node.right);
+        switch (operator) {
+            case SyntaxKind.InstanceOfKeyword:
+                resolveUntypedCall(node as InstanceofExpression);
+                break;
+            case SyntaxKind.LessThanToken:
+            case SyntaxKind.GreaterThanToken:
+            case SyntaxKind.LessThanEqualsToken:
+            case SyntaxKind.GreaterThanEqualsToken: {
+                if (checkForDisallowedESSymbolOperand(left, operator, right, leftType, rightType)) {
+                    leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(leftType, left));
+                    rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(rightType, right));
+                    reportOperatorErrorUnless((left, right) => {
+                        if (isTypeAny(left) || isTypeAny(right)) {
+                            return true;
+                        }
+                        const leftAssignableToNumber = isTypeAssignableTo(left, numberOrBigIntType);
+                        const rightAssignableToNumber = isTypeAssignableTo(right, numberOrBigIntType);
+                        return leftAssignableToNumber && rightAssignableToNumber ||
+                            !leftAssignableToNumber && !rightAssignableToNumber && areTypesComparable(left, right);
+                    });
+                }
+                break;
+            }
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken: {
+                if (
+                    (isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right)) &&
+                    // only report for === and !== in JS, not == or !=
+                    (!isInJSFile(left) || (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken))
+                ) {
+                    const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
+                    error(node, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
+                }
+                checkNaNEquality(node, operator, left, right);
+                reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
+                break;
+            }
+            default:
+                return Debug.fail();
+        }
 
         /**
          * Returns true if an error is reported
          */
         function reportOperatorErrorUnless(typesAreCompatible: (left: Type, right: Type) => boolean): boolean {
             if (!typesAreCompatible(leftType, rightType)) {
-                reportOperatorError(typesAreCompatible);
+                reportBinaryLikeExpressionOperatorError(leftType, operatorToken, rightType, node, typesAreCompatible);
                 return true;
             }
             return false;
-        }
-
-        function reportOperatorError(isRelated?: (left: Type, right: Type) => boolean) {
-            let wouldWorkWithAwait = false;
-            const errNode = errorNode || operatorToken;
-            if (isRelated) {
-                const awaitedLeftType = getAwaitedTypeNoAlias(leftType);
-                const awaitedRightType = getAwaitedTypeNoAlias(rightType);
-                wouldWorkWithAwait = !(awaitedLeftType === leftType && awaitedRightType === rightType)
-                    && !!(awaitedLeftType && awaitedRightType)
-                    && isRelated(awaitedLeftType, awaitedRightType);
-            }
-
-            let effectiveLeft = leftType;
-            let effectiveRight = rightType;
-            if (!wouldWorkWithAwait && isRelated) {
-                [effectiveLeft, effectiveRight] = getBaseTypesIfUnrelated(leftType, rightType, isRelated);
-            }
-            const [leftStr, rightStr] = getTypeNamesForErrorDisplay(effectiveLeft, effectiveRight);
-            if (!tryGiveBetterPrimaryError(errNode, wouldWorkWithAwait, leftStr, rightStr)) {
-                errorAndMaybeSuggestAwait(
-                    errNode,
-                    wouldWorkWithAwait,
-                    Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
-                    tokenToString(operatorToken.kind),
-                    leftStr,
-                    rightStr,
-                );
-            }
-        }
-
-        function tryGiveBetterPrimaryError(errNode: Node, maybeMissingAwait: boolean, leftStr: string, rightStr: string) {
-            switch (operatorToken.kind) {
-                case SyntaxKind.EqualsEqualsEqualsToken:
-                case SyntaxKind.EqualsEqualsToken:
-                case SyntaxKind.ExclamationEqualsEqualsToken:
-                case SyntaxKind.ExclamationEqualsToken:
-                    return errorAndMaybeSuggestAwait(
-                        errNode,
-                        maybeMissingAwait,
-                        Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap,
-                        leftStr,
-                        rightStr,
-                    );
-                default:
-                    return undefined;
-            }
         }
 
         function checkNaNEquality(errorNode: Node | undefined, operator: SyntaxKind, left: Expression, right: Expression) {
@@ -40463,6 +40434,67 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return false;
         }
+    }
+
+    function reportBinaryLikeExpressionOperatorError(leftType: Type, operatorToken: BinaryOperatorToken, rightType: Type, errorNode?: Node, isRelated?: (left: Type, right: Type) => boolean) {
+        let wouldWorkWithAwait = false;
+        const errNode = errorNode || operatorToken;
+        if (isRelated) {
+            const awaitedLeftType = getAwaitedTypeNoAlias(leftType);
+            const awaitedRightType = getAwaitedTypeNoAlias(rightType);
+            wouldWorkWithAwait = !(awaitedLeftType === leftType && awaitedRightType === rightType)
+                && !!(awaitedLeftType && awaitedRightType)
+                && isRelated(awaitedLeftType, awaitedRightType);
+        }
+
+        let effectiveLeft = leftType;
+        let effectiveRight = rightType;
+        if (!wouldWorkWithAwait && isRelated) {
+            [effectiveLeft, effectiveRight] = getBaseTypesIfUnrelated(leftType, rightType, isRelated);
+        }
+        const [leftStr, rightStr] = getTypeNamesForErrorDisplay(effectiveLeft, effectiveRight);
+        if (!tryGiveBetterPrimaryError(errNode, wouldWorkWithAwait, leftStr, rightStr)) {
+            errorAndMaybeSuggestAwait(
+                errNode,
+                wouldWorkWithAwait,
+                Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
+                tokenToString(operatorToken.kind),
+                leftStr,
+                rightStr,
+            );
+        }
+
+        function tryGiveBetterPrimaryError(errNode: Node, maybeMissingAwait: boolean, leftStr: string, rightStr: string) {
+            switch (operatorToken.kind) {
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                    return errorAndMaybeSuggestAwait(
+                        errNode,
+                        maybeMissingAwait,
+                        Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap,
+                        leftStr,
+                        rightStr,
+                    );
+                default:
+                    return undefined;
+            }
+        }
+    }
+
+    // Return true if there was no error, false if there was an error.
+    function checkForDisallowedESSymbolOperand(left: Expression, operator: PunctuationSyntaxKind, right: Expression, leftType: Type, rightType: Type): boolean {
+        const offendingSymbolOperand = maybeTypeOfKindConsideringBaseConstraint(leftType, TypeFlags.ESSymbolLike) ? left :
+            maybeTypeOfKindConsideringBaseConstraint(rightType, TypeFlags.ESSymbolLike) ? right :
+            undefined;
+
+        if (offendingSymbolOperand) {
+            error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(operator));
+            return false;
+        }
+
+        return true;
     }
 
     function getBaseTypesIfUnrelated(leftType: Type, rightType: Type, isRelated: (left: Type, right: Type) => boolean): [Type, Type] {
@@ -40985,7 +41017,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         const startInvocationCount = flowInvocationCount;
-        const type = checkExpression(node, CheckMode.TypeOnly);
+        const type = checkExpression(node);
         // If control flow analysis was required to determine the type, it is worth caching.
         if (flowInvocationCount !== startInvocationCount) {
             const cache = flowTypeCache || (flowTypeCache = []);
@@ -48883,9 +48915,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 checkExpression((node as VoidExpression).expression);
                 break;
             case SyntaxKind.BinaryExpression:
-                if (isInstanceOfExpression(node)) {
-                    resolveUntypedCall(node);
-                }
+                checkBinaryExpressionDeferred(node as BinaryExpression);
                 break;
         }
         currentNode = saveCurrentNode;

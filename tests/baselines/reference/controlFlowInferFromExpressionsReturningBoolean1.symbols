@@ -1,0 +1,149 @@
+//// [tests/cases/conformance/controlFlow/controlFlowInferFromExpressionsReturningBoolean1.ts] ////
+
+=== controlFlowInferFromExpressionsReturningBoolean1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60130
+
+function assert<C>(c: C): asserts c {
+>assert : Symbol(assert, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 0, 0))
+>C : Symbol(C, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 2, 16))
+>c : Symbol(c, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 2, 19))
+>C : Symbol(C, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 2, 16))
+>c : Symbol(c, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 2, 19))
+
+  if (!c) {
+>c : Symbol(c, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 2, 19))
+
+    throw new TypeError("Assertion failed");
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+export function test1(lines: string[]): string[] {
+>test1 : Symbol(test1, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 6, 1))
+>lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 8, 22))
+
+  let func: {
+>func : Symbol(func, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 9, 5))
+
+    name: string;
+>name : Symbol(name, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 9, 13))
+
+    lines: string[];
+>lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 10, 17))
+
+  } | null = null;
+
+  for (const line of lines) {
+>line : Symbol(line, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 14, 12))
+>lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 8, 22))
+
+    if (Math.random() < 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+      func = {
+>func : Symbol(func, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 9, 5))
+
+        name: "qwer",
+>name : Symbol(name, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 16, 14))
+
+        lines: [line],
+>lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 17, 21))
+>line : Symbol(line, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 14, 12))
+
+      };
+    } else {
+      assert(func);
+>assert : Symbol(assert, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 0, 0))
+>func : Symbol(func, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 9, 5))
+
+      const { name, lines } = func;
+>name : Symbol(name, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 22, 13))
+>lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 22, 19))
+>func : Symbol(func, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 9, 5))
+
+      lines.push(line);
+>lines.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 22, 19))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>line : Symbol(line, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 14, 12))
+
+      assert(name !== "abc");
+>assert : Symbol(assert, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 0, 0))
+>name : Symbol(name, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 22, 13))
+    }
+  }
+  if (func) return func.lines;
+>func : Symbol(func, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 9, 5))
+>func.lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 10, 17))
+>func : Symbol(func, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 9, 5))
+>lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 10, 17))
+
+  return lines;
+>lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 8, 22))
+}
+
+declare function inferStuff<T>(arg: T, checkStuff?: boolean): T;
+>inferStuff : Symbol(inferStuff, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 29, 1))
+>T : Symbol(T, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 31, 28))
+>arg : Symbol(arg, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 31, 31))
+>T : Symbol(T, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 31, 28))
+>checkStuff : Symbol(checkStuff, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 31, 38))
+>T : Symbol(T, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 31, 28))
+
+export function test2(lines: string[]): string[] {
+>test2 : Symbol(test2, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 31, 64))
+>lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 33, 22))
+
+  let func: {
+>func : Symbol(func, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 34, 5))
+
+    name: string;
+>name : Symbol(name, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 34, 13))
+
+  } | null = null;
+
+  for (const _ of lines) {
+>_ : Symbol(_, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 38, 12))
+>lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 33, 22))
+
+    if (Math.random() < 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+      func = {
+>func : Symbol(func, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 34, 5))
+
+        name: "qwer",
+>name : Symbol(name, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 40, 14))
+
+      };
+    } else {
+      if (func) {
+>func : Symbol(func, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 34, 5))
+
+        const { name } = func;
+>name : Symbol(name, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 45, 15))
+>func : Symbol(func, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 34, 5))
+
+        func = inferStuff(
+>func : Symbol(func, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 34, 5))
+>inferStuff : Symbol(inferStuff, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 29, 1))
+          {
+            name: "other",
+>name : Symbol(name, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 47, 11))
+
+          },
+          name === "abc",
+>name : Symbol(name, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 45, 15))
+
+        );
+      }
+    }
+  }
+
+  return lines;
+>lines : Symbol(lines, Decl(controlFlowInferFromExpressionsReturningBoolean1.ts, 33, 22))
+}
