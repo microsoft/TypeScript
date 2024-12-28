@@ -17723,7 +17723,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (typeSet.length === 0) {
                 return includes & TypeFlags.Null ? includes & TypeFlags.IncludesNonWideningType ? nullType : nullWideningType :
                     includes & TypeFlags.Undefined ? includes & TypeFlags.IncludesNonWideningType ? undefinedType : undefinedWideningType :
-                    neverType;
+                    contains(types, silentNeverType) ? silentNeverType : neverType;
             }
         }
         if (!origin && includes & TypeFlags.Union) {

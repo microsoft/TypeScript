@@ -84,3 +84,34 @@ breaks.foo()
 >breaks : Symbol(breaks, Decl(silentNeverPropagation.ts, 18, 5))
 >foo : Symbol(foo, Decl(silentNeverPropagation.ts, 19, 29))
 
+declare function inner<T1, t2>(t1: T1, t2: t2): T1 | t2;
+>inner : Symbol(inner, Decl(silentNeverPropagation.ts, 24, 12))
+>T1 : Symbol(T1, Decl(silentNeverPropagation.ts, 26, 23))
+>t2 : Symbol(t2, Decl(silentNeverPropagation.ts, 26, 26), Decl(silentNeverPropagation.ts, 26, 38))
+>t1 : Symbol(t1, Decl(silentNeverPropagation.ts, 26, 31))
+>T1 : Symbol(T1, Decl(silentNeverPropagation.ts, 26, 23))
+>t2 : Symbol(t2, Decl(silentNeverPropagation.ts, 26, 26), Decl(silentNeverPropagation.ts, 26, 38))
+>t2 : Symbol(t2, Decl(silentNeverPropagation.ts, 26, 26), Decl(silentNeverPropagation.ts, 26, 38))
+>T1 : Symbol(T1, Decl(silentNeverPropagation.ts, 26, 23))
+>t2 : Symbol(t2, Decl(silentNeverPropagation.ts, 26, 26), Decl(silentNeverPropagation.ts, 26, 38))
+
+declare function outer<T1, T2>(m: T1 | T2): [T1, T2];
+>outer : Symbol(outer, Decl(silentNeverPropagation.ts, 26, 56))
+>T1 : Symbol(T1, Decl(silentNeverPropagation.ts, 27, 23))
+>T2 : Symbol(T2, Decl(silentNeverPropagation.ts, 27, 26))
+>m : Symbol(m, Decl(silentNeverPropagation.ts, 27, 31))
+>T1 : Symbol(T1, Decl(silentNeverPropagation.ts, 27, 23))
+>T2 : Symbol(T2, Decl(silentNeverPropagation.ts, 27, 26))
+>T1 : Symbol(T1, Decl(silentNeverPropagation.ts, 27, 23))
+>T2 : Symbol(T2, Decl(silentNeverPropagation.ts, 27, 26))
+
+const outerResult = outer(
+>outerResult : Symbol(outerResult, Decl(silentNeverPropagation.ts, 29, 5))
+>outer : Symbol(outer, Decl(silentNeverPropagation.ts, 26, 56))
+
+    inner({ a: 12 }, { foo() { return true } })
+>inner : Symbol(inner, Decl(silentNeverPropagation.ts, 24, 12))
+>a : Symbol(a, Decl(silentNeverPropagation.ts, 30, 11))
+>foo : Symbol(foo, Decl(silentNeverPropagation.ts, 30, 22))
+
+);
