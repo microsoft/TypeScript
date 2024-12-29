@@ -1051,11 +1051,16 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
     const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
     if (!classOrInterfaceDeclaration) return;
 
-    const isStaticMember = hasStaticModifier(declaration);
+    if (hasStaticModifier(declaration)) {
+        const classType = checker.getTypeAtLocation(classOrInterfaceDeclaration);
+        Debug.assert(classType.isClassOrInterface());
+        const staticBaseType = checker.getBaseConstructorTypeOfClass(classType);
+        const symbol = checker.getPropertyOfType(staticBaseType, declaration.symbol.name);
+        return symbol ? cb(symbol) : undefined;
+    }
     return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
         const baseType = checker.getTypeAtLocation(superTypeNode);
-        const type = isStaticMember && baseType.symbol ? checker.getTypeOfSymbol(baseType.symbol) : baseType;
-        const symbol = checker.getPropertyOfType(type, declaration.symbol.name);
+        const symbol = checker.getPropertyOfType(baseType, declaration.symbol.name);
         return symbol ? cb(symbol) : undefined;
     });
 }
