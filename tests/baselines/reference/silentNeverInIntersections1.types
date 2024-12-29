@@ -1,0 +1,89 @@
+//// [tests/cases/compiler/silentNeverInIntersections1.ts] ////
+
+=== silentNeverInIntersections1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60864
+
+class Variable<U, S extends string> {
+>Variable : Variable<U, S>
+>         : ^^^^^^^^^^^^^^
+
+  constructor(public s: S) {}
+>s : S
+>  : ^
+
+  u!: U;
+>u : U
+>  : ^
+}
+
+function mkGeneric<U, S extends string>(s: S) {
+>mkGeneric : <U, S extends string>(s: S) => Variable<U, S>
+>          : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^^^^^^^^^
+>s : S
+>  : ^
+
+  return new Variable<U, S>(s);
+>new Variable<U, S>(s) : Variable<U, S>
+>                      : ^^^^^^^^^^^^^^
+>Variable : typeof Variable
+>         : ^^^^^^^^^^^^^^^
+>s : S
+>  : ^
+}
+
+type ExactArgNames<GenericType, Constraint> = GenericType & {
+>ExactArgNames : ExactArgNames<GenericType, Constraint>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof GenericType]: K extends keyof Constraint ? GenericType[K] : never;
+};
+
+type AllowVariables<T> =
+>AllowVariables : AllowVariables<T>
+>               : ^^^^^^^^^^^^^^^^^
+
+  | Variable<T, any>
+  | { [K in keyof T]: Variable<T[K], any> | T[K] };
+
+type TestArgs = {
+>TestArgs : TestArgs
+>         : ^^^^^^^^
+
+  someArg: number;
+>someArg : number
+>        : ^^^^^^
+
+};
+
+type TestArgsWithVars = AllowVariables<TestArgs>;
+>TestArgsWithVars : TestArgsWithVars
+>                 : ^^^^^^^^^^^^^^^^
+
+function takesGeneric<V extends AllowVariables<TestArgs>>(
+>takesGeneric : <V extends AllowVariables<TestArgs>>(a: ExactArgNames<V, TestArgs>) => void
+>             : ^ ^^^^^^^^^                        ^^ ^^                          ^^^^^    
+
+  a: ExactArgNames<V, TestArgs>,
+>a : ExactArgNames<V, TestArgs>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): void {}
+
+let v = takesGeneric({ someArg: mkGeneric("x") });
+>v : void
+>  : ^^^^
+>takesGeneric({ someArg: mkGeneric("x") }) : void
+>                                          : ^^^^
+>takesGeneric : <V extends AllowVariables<TestArgs>>(a: ExactArgNames<V, TestArgs>) => void
+>             : ^ ^^^^^^^^^                        ^^ ^^                          ^^^^^    
+>{ someArg: mkGeneric("x") } : { someArg: Variable<number, "x">; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someArg : Variable<number, "x">
+>        : ^^^^^^^^^^^^^^^^^^^^^
+>mkGeneric("x") : Variable<number, "x">
+>               : ^^^^^^^^^^^^^^^^^^^^^
+>mkGeneric : <U, S extends string>(s: S) => Variable<U, S>
+>          : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^^^^^^^^^
+>"x" : "x"
+>    : ^^^
+
