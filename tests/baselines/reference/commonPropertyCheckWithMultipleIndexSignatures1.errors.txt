@@ -1,0 +1,57 @@
+commonPropertyCheckWithMultipleIndexSignatures1.ts(21,8): error TS2353: Object literal may only specify known properties, and 'notCommon' does not exist in type 'ISubType'.
+commonPropertyCheckWithMultipleIndexSignatures1.ts(44,12): error TS2353: Object literal may only specify known properties, and 'notCommon' does not exist in type 'ISubType_2'.
+
+
+==== commonPropertyCheckWithMultipleIndexSignatures1.ts (2 errors) ====
+    interface ITopType {
+      tKey?: string;
+    }
+    
+    interface ISubType extends ITopType {
+      sKey?: string;
+    }
+    
+    interface ITestInteface {
+      [pA: string]: ITopType;
+      [pB: number]: ISubType;
+    }
+    
+    const testObj1: ITestInteface = {
+      a: { tKey: "tVal" },
+      1: { tKey: "tVal", sKey: "sVal" },
+    };
+    
+    const testObj1_2: ITestInteface = {
+      a: { tKey: "tVal" },
+      1: { notCommon: "val3" },
+           ~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'notCommon' does not exist in type 'ISubType'.
+!!! related TS6501 commonPropertyCheckWithMultipleIndexSignatures1.ts:11:3: The expected type comes from this index signature.
+    };
+    
+    interface ITopType_2 {
+      tKey_2?: string;
+    }
+    
+    interface ISubType_2 extends ITopType_2 {
+      sKey_2?: string;
+    }
+    
+    interface ITestInteface_2 {
+      [pA_2: string]: ITopType_2;
+      [pB_2: `sub_${string}`]: ISubType_2;
+    }
+    
+    const testObj2: ITestInteface_2 = {
+      a: { tKey_2: "tVal_2 " },
+      sub_b: { tKey_2: "tVal_2 ", sKey_2: "sVal_2" },
+    };
+    
+    const testObj2_2: ITestInteface_2 = {
+      a: { tKey_2: "tVal_2 " },
+      sub_b: { notCommon: "val3" },
+               ~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'notCommon' does not exist in type 'ISubType_2'.
+!!! related TS6501 commonPropertyCheckWithMultipleIndexSignatures1.ts:34:3: The expected type comes from this index signature.
+    };
+    
