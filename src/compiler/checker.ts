@@ -44593,7 +44593,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return;
             }
 
-            const isUsedInBody = inverted && isIfStatement(condExpr.parent) ? testedSymbol && isSymbolUsedInConditionBody(condExpr, condExpr.parent.parent, testedNode, testedSymbol, /*checkForAssignment*/ true) : testedSymbol && body && isSymbolUsedInConditionBody(condExpr, body, testedNode, testedSymbol, /*checkForAssignment*/ false);
+            const isUsedInBody = inverted && isIfStatement(condExpr.parent) ? testedSymbol && isSymbolUsedInConditionBody(location, condExpr.parent.parent, testedNode, testedSymbol, /*checkForAssignment*/ true) : testedSymbol && body && isSymbolUsedInConditionBody(condExpr, body, testedNode, testedSymbol, /*checkForAssignment*/ false);
             const isUsed = testedSymbol && isBinaryExpression(condExpr.parent) && isSymbolUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
                 || isUsedInBody;
 
