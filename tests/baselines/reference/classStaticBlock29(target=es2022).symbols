@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock29.ts] ////
+
+=== classStaticBlock29.ts ===
+// https://github.com/microsoft/TypeScript/issues/60879
+
+export default class {
+  static demo: number;
+>demo : Symbol(default.demo, Decl(classStaticBlock29.ts, 2, 22))
+
+  static {
+    this.demo = 1;
+>this.demo : Symbol(default.demo, Decl(classStaticBlock29.ts, 2, 22))
+>this : Symbol(default, Decl(classStaticBlock29.ts, 0, 0))
+>demo : Symbol(default.demo, Decl(classStaticBlock29.ts, 2, 22))
+  }
+}
+
+export function makeCls() {
+>makeCls : Symbol(makeCls, Decl(classStaticBlock29.ts, 7, 1))
+
+  return class {
+    static demo: number;
+>demo : Symbol((Anonymous class).demo, Decl(classStaticBlock29.ts, 10, 16))
+
+    static {
+      this.demo = 1;
+>this.demo : Symbol((Anonymous class).demo, Decl(classStaticBlock29.ts, 10, 16))
+>this : Symbol((Anonymous class), Decl(classStaticBlock29.ts, 10, 8))
+>demo : Symbol((Anonymous class).demo, Decl(classStaticBlock29.ts, 10, 16))
+    }
+  };
+}
+
