@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/declarationEmitMixinPrivateField1.ts] ////
+
+=== first.ts ===
+declare function mix<TMix>(mixin: TMix): TMix;
+>mix : Symbol(mix, Decl(first.ts, 0, 0))
+>TMix : Symbol(TMix, Decl(first.ts, 0, 21))
+>mixin : Symbol(mixin, Decl(first.ts, 0, 27))
+>TMix : Symbol(TMix, Decl(first.ts, 0, 21))
+>TMix : Symbol(TMix, Decl(first.ts, 0, 21))
+
+const DisposableMixin = class {
+>DisposableMixin : Symbol(DisposableMixin, Decl(first.ts, 2, 5))
+
+    #onDispose() {}
+>#onDispose : Symbol(DisposableMixin.#onDispose, Decl(first.ts, 2, 31))
+
+};
+
+export default mix(DisposableMixin);
+>mix : Symbol(mix, Decl(first.ts, 0, 0))
+>DisposableMixin : Symbol(DisposableMixin, Decl(first.ts, 2, 5))
+
+export class Monitor extends mix(DisposableMixin) {}
+>Monitor : Symbol(Monitor, Decl(first.ts, 6, 36))
+>mix : Symbol(mix, Decl(first.ts, 0, 0))
+>DisposableMixin : Symbol(DisposableMixin, Decl(first.ts, 2, 5))
+
+=== another.ts ===
+declare function mix<TMix>(mixin: TMix): TMix;
+>mix : Symbol(mix, Decl(another.ts, 0, 0))
+>TMix : Symbol(TMix, Decl(another.ts, 0, 21))
+>mixin : Symbol(mixin, Decl(another.ts, 0, 27))
+>TMix : Symbol(TMix, Decl(another.ts, 0, 21))
+>TMix : Symbol(TMix, Decl(another.ts, 0, 21))
+
+const DisposableMixin = class {
+>DisposableMixin : Symbol(DisposableMixin, Decl(another.ts, 2, 5))
+
+    #onDispose() {}
+>#onDispose : Symbol(DisposableMixin.#onDispose, Decl(another.ts, 2, 31))
+
+};
+
+export default class extends mix(DisposableMixin) {}
+>mix : Symbol(mix, Decl(another.ts, 0, 0))
+>DisposableMixin : Symbol(DisposableMixin, Decl(another.ts, 2, 5))
+
