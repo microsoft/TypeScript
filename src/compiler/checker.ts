@@ -44553,9 +44553,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function helper(condExpr: Expression, body: Expression | Statement | undefined) {
             let location = condExpr;
             let inverted = false;
-            while (isPrefixUnaryExpression(location)) {
+            if (isPrefixUnaryExpression(location)) {
                 location = skipParentheses(location.operand);
-                inverted = !inverted;
+                inverted = true;
             }
             location = isLogicalOrCoalescingBinaryExpression(location) ? skipParentheses(location.right) : location;
             if (isModuleExportsAccessExpression(location)) {
