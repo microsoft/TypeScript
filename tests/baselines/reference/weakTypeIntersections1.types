@@ -9,6 +9,11 @@ interface Foo {
 >a : string
 >  : ^^^^^^
 }
+interface Bar {
+  b: string;
+>b : string
+>  : ^^^^^^
+}
 
 const m1: Partial<Foo> & ThisType<{ x: string }> = () => null; // error
 >m1 : Partial<Foo> & ThisType<{ x: string; }>
@@ -33,6 +38,12 @@ const m3: Partial<Foo> & EmptyInterface = () => null; // error
 const m4: EmptyInterface & EmptyInterface2 = () => null; // ok
 >m4 : EmptyInterface & EmptyInterface2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
+
+const m5: Partial<Foo> & Partial<Bar> = () => null; // error
+>m5 : Partial<Foo> & Partial<Bar>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => null : () => null
 >           : ^^^^^^^^^^
 
