@@ -75,16 +75,18 @@ let obj = {
     this.x = 1
 >this.x = 1 : 1
 >           : ^
->this.x : any
->this : any
->     : ^^^
->x : any
->  : ^^^
+>this.x : number
+>       : ^^^^^^
+>this : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
 >1 : 1
 >  : ^
 
     this/*3*/
->this : any
+>this : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   }),
 }

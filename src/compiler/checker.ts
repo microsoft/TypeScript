@@ -31184,12 +31184,51 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function getContainingPropertyAssignment(node: Node): PropertyAssignment | undefined {
+        const parent = node.parent;
+        switch (parent.kind) {
+            case SyntaxKind.PropertyAssignment:
+                return parent as PropertyAssignment;
+            case SyntaxKind.ParenthesizedExpression:
+            case SyntaxKind.ConditionalExpression:
+                return getContainingPropertyAssignment(parent);
+            case SyntaxKind.BinaryExpression: {
+                const binaryExpression = parent as BinaryExpression;
+                switch (binaryExpression.operatorToken.kind) {
+                    case SyntaxKind.AmpersandAmpersandToken:
+                    case SyntaxKind.BarBarToken:
+                    case SyntaxKind.QuestionQuestionToken:
+                        return getContainingPropertyAssignment(parent);
+                    case SyntaxKind.EqualsToken:
+                    case SyntaxKind.AmpersandAmpersandEqualsToken:
+                    case SyntaxKind.BarBarEqualsToken:
+                    case SyntaxKind.QuestionQuestionEqualsToken:
+                    case SyntaxKind.CommaToken:
+                        if (node === binaryExpression.left) {
+                            return;
+                        }
+                        return getContainingPropertyAssignment(parent);
+                }
+            }
+        }
+    }
+
     function getContainingObjectLiteral(func: SignatureDeclaration): ObjectLiteralExpression | undefined {
-        return (func.kind === SyntaxKind.MethodDeclaration ||
-                func.kind === SyntaxKind.GetAccessor ||
-                func.kind === SyntaxKind.SetAccessor) && func.parent.kind === SyntaxKind.ObjectLiteralExpression ? func.parent :
-            func.kind === SyntaxKind.FunctionExpression && func.parent.kind === SyntaxKind.PropertyAssignment ? func.parent.parent as ObjectLiteralExpression :
-            undefined;
+        switch (func.kind) {
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                if (func.parent.kind !== SyntaxKind.ObjectLiteralExpression) {
+                    return;
+                }
+                return func.parent;
+            case SyntaxKind.FunctionExpression:
+                const prop = getContainingPropertyAssignment(func);
+                if (!prop) {
+                    return;
+                }
+                return prop.parent;
+        }
     }
 
     function getThisTypeArgument(type: Type): Type | undefined {
