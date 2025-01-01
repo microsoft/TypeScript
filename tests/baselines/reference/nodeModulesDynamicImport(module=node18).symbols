@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/node/nodeModulesDynamicImport.ts] ////
+
+=== subfolder/index.ts ===
+// cjs format file
+export async function main() {
+>main : Symbol(main, Decl(index.ts, 0, 0))
+
+    const { readFile } = await import("fs");
+>readFile : Symbol(readFile, Decl(index.ts, 2, 11))
+>"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
+}
+=== index.ts ===
+// esm format file
+export async function main() {
+>main : Symbol(main, Decl(index.ts, 0, 0))
+
+    const { readFile } = await import("fs");
+>readFile : Symbol(readFile, Decl(index.ts, 2, 11))
+>"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
+}
+=== types.d.ts ===
+declare module "fs";
+>"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
+

@@ -1,18 +1,18 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 //// { "dependencies": { "react-hook-form": "*" } }
 
-// @Filename: /node_modules/react-hook-form/package.json
+// @Filename: /home/src/workspaces/project/node_modules/react-hook-form/package.json
 //// { "types": "dist/index.d.ts" }
 
-// @Filename: /node_modules/react-hook-form/dist/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/react-hook-form/dist/index.d.ts
 //// export * from "./useForm";
 
-// @Filename: /node_modules/react-hook-form/dist/useForm.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/react-hook-form/dist/useForm.d.ts
 //// export declare function useForm(): void;
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// useForm/**/
 
 goTo.marker("");

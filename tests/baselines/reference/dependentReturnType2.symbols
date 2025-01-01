@@ -1,0 +1,594 @@
+//// [tests/cases/compiler/dependentReturnType2.ts] ////
+
+=== file.js ===
+// Adapted from ts-error-deltas repos
+
+/**
+ * @template T
+ * @template A
+ * @template R1
+ * @template B
+ * @template R2
+ * @typedef {T extends A ? R1 : T extends B ? R2 : never} HelperCond
+ */
+
+/**
+ * @typedef IMessage
+ * @property {string} [html]
+ * @property {Object[]} [tokens]
+ */
+
+class NewKatex {
+>NewKatex : Symbol(NewKatex, Decl(file.js, 0, 0))
+
+    /**
+     * @param {string} s
+     * @returns {string}
+     */
+    render(s) {
+>render : Symbol(NewKatex.render, Decl(file.js, 17, 16))
+>s : Symbol(s, Decl(file.js, 22, 11))
+
+        return "";
+    }
+
+    /**
+     * @template {string | IMessage} T
+     * @param {T} message
+     * @returns {T extends string ? string : T extends IMessage ? IMessage : never}
+     */
+    renderMessage(message) {
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(file.js, 24, 5))
+>message : Symbol(message, Decl(file.js, 31, 18))
+
+        if (typeof message === 'string') {
+>message : Symbol(message, Decl(file.js, 31, 18))
+
+            return this.render(message); // Ok
+>this.render : Symbol(NewKatex.render, Decl(file.js, 17, 16))
+>this : Symbol(NewKatex, Decl(file.js, 0, 0))
+>render : Symbol(NewKatex.render, Decl(file.js, 17, 16))
+>message : Symbol(message, Decl(file.js, 31, 18))
+        }
+
+        if (!message.html?.trim()) {
+>message.html?.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+>message.html : Symbol(html, Decl(file.js, 13, 3))
+>message : Symbol(message, Decl(file.js, 31, 18))
+>html : Symbol(html, Decl(file.js, 13, 3))
+>trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+
+            return message; // Ok
+>message : Symbol(message, Decl(file.js, 31, 18))
+        }
+
+        if (!message.tokens) {
+>message.tokens : Symbol(tokens, Decl(file.js, 14, 3))
+>message : Symbol(message, Decl(file.js, 31, 18))
+>tokens : Symbol(tokens, Decl(file.js, 14, 3))
+
+            message.tokens = [];
+>message.tokens : Symbol(tokens, Decl(file.js, 14, 3))
+>message : Symbol(message, Decl(file.js, 31, 18))
+>tokens : Symbol(tokens, Decl(file.js, 14, 3))
+        }
+
+        message.html = this.render(message.html);
+>message.html : Symbol(html, Decl(file.js, 13, 3))
+>message : Symbol(message, Decl(file.js, 31, 18))
+>html : Symbol(html, Decl(file.js, 13, 3))
+>this.render : Symbol(NewKatex.render, Decl(file.js, 17, 16))
+>this : Symbol(NewKatex, Decl(file.js, 0, 0))
+>render : Symbol(NewKatex.render, Decl(file.js, 17, 16))
+>message.html : Symbol(html, Decl(file.js, 13, 3))
+>message : Symbol(message, Decl(file.js, 31, 18))
+>html : Symbol(html, Decl(file.js, 13, 3))
+
+        return message; // Ok
+>message : Symbol(message, Decl(file.js, 31, 18))
+    }
+}
+
+/**
+ * @template {true | false} T
+ * @param {{ dollarSyntax: boolean; parenthesisSyntax: boolean; }} options
+ * @param {T} _isMessage
+ * @returns {T extends true ? (message: IMessage) => IMessage : T extends false ? (message: string) => string : never}
+ */
+function createKatexMessageRendering(options, _isMessage) {
+>createKatexMessageRendering : Symbol(createKatexMessageRendering, Decl(file.js, 47, 1))
+>options : Symbol(options, Decl(file.js, 55, 37))
+>_isMessage : Symbol(_isMessage, Decl(file.js, 55, 45))
+
+    const instance = new NewKatex();
+>instance : Symbol(instance, Decl(file.js, 56, 9))
+>NewKatex : Symbol(NewKatex, Decl(file.js, 0, 0))
+
+    if (_isMessage) {
+>_isMessage : Symbol(_isMessage, Decl(file.js, 55, 45))
+
+        return (/** @type {IMessage} */ message) => instance.renderMessage(message); // Ok
+>message : Symbol(message, Decl(file.js, 58, 16))
+>instance.renderMessage : Symbol(NewKatex.renderMessage, Decl(file.js, 24, 5))
+>instance : Symbol(instance, Decl(file.js, 56, 9))
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(file.js, 24, 5))
+>message : Symbol(message, Decl(file.js, 58, 16))
+    }
+    return (/** @type {string} */ message) => instance.renderMessage(message); // Ok
+>message : Symbol(message, Decl(file.js, 60, 12))
+>instance.renderMessage : Symbol(NewKatex.renderMessage, Decl(file.js, 24, 5))
+>instance : Symbol(instance, Decl(file.js, 56, 9))
+>renderMessage : Symbol(NewKatex.renderMessage, Decl(file.js, 24, 5))
+>message : Symbol(message, Decl(file.js, 60, 12))
+}
+
+// File: Rocket.Chat/apps/meteor/app/settings/lib/settings.ts
+
+/**
+ * @typedef {Record<any, any>} MyObj
+ */
+
+
+/**
+ * @typedef {MyObj} SettingValue
+ */
+ 
+/**
+ * @template {SettingValue} T
+ * @typedef {Object} SettingComposedValue
+ * @property {string} key
+ * @property {SettingValue} value
+ */
+
+/**
+ * @callback SettingCallback
+ * @param {string} key
+ * @param {SettingValue} value
+ * @param {boolean} [initialLoad]
+ * @returns {void}
+ */
+
+/** @type {{ settings: { [s: string]: any } }} */
+const Meteor = /** @type {any} */ (undefined);
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>undefined : Symbol(undefined)
+
+/** @type {{ isRegExp(x: unknown): x is RegExp; }} */
+const _ = /** @type {any} */ (undefined);
+>_ : Symbol(_, Decl(file.js, 92, 5))
+>undefined : Symbol(undefined)
+
+/**
+ * @param {RegExp} x
+ * @returns {void}
+ */
+function takesRegExp(x) {
+>takesRegExp : Symbol(takesRegExp, Decl(file.js, 92, 41))
+>x : Symbol(x, Decl(file.js, 98, 21))
+
+    return /** @type {any} */ undefined;
+>undefined : Symbol(undefined)
+}
+/**
+ * @param {string} x
+ * @returns {void}
+ */
+function takesString(x) {
+>takesString : Symbol(takesString, Decl(file.js, 100, 1))
+>x : Symbol(x, Decl(file.js, 105, 21))
+
+    return /** @type {any} */ undefined;
+>undefined : Symbol(undefined)
+}
+
+/**
+ * @class NewSettingsBase
+ */
+class NewSettingsBase {
+>NewSettingsBase : Symbol(NewSettingsBase, Decl(file.js, 107, 1))
+
+    /**
+     * @template {SettingCallback | undefined} C
+     * @template {string | RegExp} I
+     * @template {SettingValue} T
+     * @param {I} _id
+     * @param {C} [callback]
+     * @returns {HelperCond<C, SettingCallback, void, undefined, HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>>}
+     */
+    newGet(_id, callback) {
+>newGet : Symbol(NewSettingsBase.newGet, Decl(file.js, 112, 23))
+>_id : Symbol(_id, Decl(file.js, 121, 11))
+>callback : Symbol(callback, Decl(file.js, 121, 15))
+
+        if (callback !== undefined) {
+>callback : Symbol(callback, Decl(file.js, 121, 15))
+>undefined : Symbol(undefined)
+
+            if (!Meteor.settings) {
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+
+                return; // Ok
+            }
+            if (_id === '*') {
+>_id : Symbol(_id, Decl(file.js, 121, 11))
+
+                return Object.keys(Meteor.settings).forEach((key) => {
+>Object.keys(Meteor.settings).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(file.js, 127, 61))
+
+                    const value = Meteor.settings[key];
+>value : Symbol(value, Decl(file.js, 128, 25))
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+>key : Symbol(key, Decl(file.js, 127, 61))
+
+                    callback(key, value);
+>callback : Symbol(callback, Decl(file.js, 121, 15))
+>key : Symbol(key, Decl(file.js, 127, 61))
+>value : Symbol(value, Decl(file.js, 128, 25))
+
+                });
+            }
+            if (_.isRegExp(_id) && Meteor.settings) {
+>_.isRegExp : Symbol(isRegExp, Decl(file.js, 91, 12))
+>_ : Symbol(_, Decl(file.js, 92, 5))
+>isRegExp : Symbol(isRegExp, Decl(file.js, 91, 12))
+>_id : Symbol(_id, Decl(file.js, 121, 11))
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+
+                return Object.keys(Meteor.settings).forEach((key) => {
+>Object.keys(Meteor.settings).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(file.js, 133, 61))
+
+                    if (!_id.test(key)) {
+>_id.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>_id : Symbol(_id, Decl(file.js, 121, 11))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(file.js, 133, 61))
+
+                        return;
+                    }
+                    const value = Meteor.settings[key];
+>value : Symbol(value, Decl(file.js, 137, 25))
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+>key : Symbol(key, Decl(file.js, 133, 61))
+
+                    callback(key, value);
+>callback : Symbol(callback, Decl(file.js, 121, 15))
+>key : Symbol(key, Decl(file.js, 133, 61))
+>value : Symbol(value, Decl(file.js, 137, 25))
+
+                });
+            }
+
+            if (typeof _id === 'string') {
+>_id : Symbol(_id, Decl(file.js, 121, 11))
+
+                const value = Meteor.settings[_id];
+>value : Symbol(value, Decl(file.js, 143, 21))
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+>_id : Symbol(_id, Decl(file.js, 121, 11))
+
+                if (value != null) {
+>value : Symbol(value, Decl(file.js, 143, 21))
+
+                    callback(_id, Meteor.settings[_id]);
+>callback : Symbol(callback, Decl(file.js, 121, 15))
+>_id : Symbol(_id, Decl(file.js, 121, 11))
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+>_id : Symbol(_id, Decl(file.js, 121, 11))
+                }
+                return; // Ok
+            }
+
+            return; // Ok, needed for exhaustiveness check
+        }
+
+        if (!Meteor.settings) {
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+
+            return undefined; // Error
+>undefined : Symbol(undefined)
+        }
+
+        if (_.isRegExp(_id)) {
+>_.isRegExp : Symbol(isRegExp, Decl(file.js, 91, 12))
+>_ : Symbol(_, Decl(file.js, 92, 5))
+>isRegExp : Symbol(isRegExp, Decl(file.js, 91, 12))
+>_id : Symbol(_id, Decl(file.js, 121, 11))
+
+            return Object.keys(Meteor.settings).reduce((/** @type {SettingComposedValue<T>[]} */ items, key) => {
+>Object.keys(Meteor.settings).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(file.js, 158, 56))
+>key : Symbol(key, Decl(file.js, 158, 103))
+
+                const value = Meteor.settings[key];
+>value : Symbol(value, Decl(file.js, 159, 21))
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+>key : Symbol(key, Decl(file.js, 158, 103))
+
+                if (_id.test(key)) {
+>_id.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>_id : Symbol(_id, Decl(file.js, 121, 11))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(file.js, 158, 103))
+
+                    items.push({ key, value });
+>items.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(file.js, 158, 56))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(file.js, 161, 32))
+>value : Symbol(value, Decl(file.js, 161, 37))
+                }
+                return items;
+>items : Symbol(items, Decl(file.js, 158, 56))
+
+            }, []); // Ok
+        }
+
+        return Meteor.settings?.[_id]; // Error
+>Meteor.settings : Symbol(settings, Decl(file.js, 89, 12))
+>Meteor : Symbol(Meteor, Decl(file.js, 90, 5))
+>settings : Symbol(settings, Decl(file.js, 89, 12))
+>_id : Symbol(_id, Decl(file.js, 121, 11))
+    }
+}
+
+// File: Rocket.Chat/apps/meteor/app/ui-utils/client/lib/messageBox.ts
+
+/**
+ * @typedef {MyObj} MessageBoxAction
+ */
+
+/**
+ * @template {string | undefined} T
+ * @param {T} group
+ * @returns {HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>>}
+ */
+function getWithBug(group) {
+>getWithBug : Symbol(getWithBug, Decl(file.js, 169, 1))
+>group : Symbol(group, Decl(file.js, 182, 20))
+
+    if (!group) {
+>group : Symbol(group, Decl(file.js, 182, 20))
+
+        return /** @type {Record<string, MessageBoxAction[]>} */({}); // Error
+    }
+    return /** @type {MessageBoxAction[]} */([]); // Ok
+}
+
+/**
+ * @template {string | undefined} T
+ * @param {T} group
+ * @returns {HelperCond<T, string, MessageBoxAction[], undefined, Record<string, MessageBoxAction[]>>}
+ */
+function getWithoutBug(group) {
+>getWithoutBug : Symbol(getWithoutBug, Decl(file.js, 187, 1))
+>group : Symbol(group, Decl(file.js, 194, 23))
+
+    if (group === undefined) {
+>group : Symbol(group, Decl(file.js, 194, 23))
+>undefined : Symbol(undefined)
+
+        return /** @type {Record<string, MessageBoxAction[]>} */({}); // Ok
+    }
+    return /** @type {MessageBoxAction[]} */([]); // Ok
+}
+
+// File: Rocket.Chat/apps/meteor/ee/server/lib/engagementDashboard/date.ts
+
+/**
+ * @param {string} x
+ * @returns {Date}
+ */
+function mapDateForAPI(x) {
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(file.js, 199, 1))
+>x : Symbol(x, Decl(file.js, 207, 23))
+
+    return /** @type {any} */ (undefined);
+>undefined : Symbol(undefined)
+}
+
+/**
+ * @template {string | undefined} T
+ * @param {string} start
+ * @param {T} [end]
+ * @returns {HelperCond<T, string, { start: Date, end: Date }, undefined, { start: Date, end: undefined }>}
+ */
+function transformDatesForAPI(start, end) {
+>transformDatesForAPI : Symbol(transformDatesForAPI, Decl(file.js, 209, 1))
+>start : Symbol(start, Decl(file.js, 217, 30))
+>end : Symbol(end, Decl(file.js, 217, 36))
+
+    return end !== undefined ?
+>end : Symbol(end, Decl(file.js, 217, 36))
+>undefined : Symbol(undefined)
+        {
+            start: mapDateForAPI(start),
+>start : Symbol(start, Decl(file.js, 219, 9))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(file.js, 199, 1))
+>start : Symbol(start, Decl(file.js, 217, 30))
+
+            end: mapDateForAPI(end),
+>end : Symbol(end, Decl(file.js, 220, 40))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(file.js, 199, 1))
+>end : Symbol(end, Decl(file.js, 217, 36))
+
+        } :
+        {
+            start: mapDateForAPI(start),
+>start : Symbol(start, Decl(file.js, 223, 9))
+>mapDateForAPI : Symbol(mapDateForAPI, Decl(file.js, 199, 1))
+>start : Symbol(start, Decl(file.js, 217, 30))
+
+            end: undefined
+>end : Symbol(end, Decl(file.js, 224, 40))
+>undefined : Symbol(undefined)
+
+        };
+}
+
+// File: Rocket.Chat/packages/agenda/src/Agenda.ts
+
+/**
+ * @typedef {MyObj} RepeatOptions
+ */
+
+/**
+ * @typedef {MyObj} Job
+ */
+
+/**
+ * @typedef {Object} IJob
+ * @property {MyObj} data
+ */
+class NewAgenda {
+>NewAgenda : Symbol(NewAgenda, Decl(file.js, 227, 1))
+
+    /**
+     * @param {string | number} interval
+     * @param {string} name
+     * @param {IJob['data']} data
+     * @param {RepeatOptions} options
+     * @returns {Promise<Job>}
+     */
+    async _createIntervalJob(interval, name, data, options) {
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(file.js, 243, 17))
+>interval : Symbol(interval, Decl(file.js, 251, 29))
+>name : Symbol(name, Decl(file.js, 251, 38))
+>data : Symbol(data, Decl(file.js, 251, 44))
+>options : Symbol(options, Decl(file.js, 251, 50))
+
+        return /** @type {any} */ (undefined);
+>undefined : Symbol(undefined)
+    }
+
+    /**
+     * @param {string | number} interval
+     * @param {string[]} names
+     * @param {IJob['data']} data
+     * @param {RepeatOptions} options
+     * @returns {Promise<Job[]> | undefined}
+     */
+    _createIntervalJobs(interval, names, data, options) {
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(file.js, 253, 5))
+>interval : Symbol(interval, Decl(file.js, 262, 24))
+>names : Symbol(names, Decl(file.js, 262, 33))
+>data : Symbol(data, Decl(file.js, 262, 40))
+>options : Symbol(options, Decl(file.js, 262, 46))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+
+    /**
+     * @template {string | string[]} T
+     * @param {string | number} interval
+     * @param {T} name
+     * @param {IJob['data']} data
+     * @param {RepeatOptions} options
+     * @returns {Promise<HelperCond<T, string, Job, string[], Job[] | undefined>>}
+     */
+    async newEvery(interval, name, data, options) {
+>newEvery : Symbol(NewAgenda.newEvery, Decl(file.js, 264, 5))
+>interval : Symbol(interval, Decl(file.js, 274, 19))
+>name : Symbol(name, Decl(file.js, 274, 28))
+>data : Symbol(data, Decl(file.js, 274, 34))
+>options : Symbol(options, Decl(file.js, 274, 40))
+
+        if (typeof name === 'string') {
+>name : Symbol(name, Decl(file.js, 274, 28))
+
+            return this._createIntervalJob(interval, name, data, options); // Ok
+>this._createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(file.js, 243, 17))
+>this : Symbol(NewAgenda, Decl(file.js, 227, 1))
+>_createIntervalJob : Symbol(NewAgenda._createIntervalJob, Decl(file.js, 243, 17))
+>interval : Symbol(interval, Decl(file.js, 274, 19))
+>name : Symbol(name, Decl(file.js, 274, 28))
+>data : Symbol(data, Decl(file.js, 274, 34))
+>options : Symbol(options, Decl(file.js, 274, 40))
+        }
+
+        if (Array.isArray(name)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>name : Symbol(name, Decl(file.js, 274, 28))
+
+            return this._createIntervalJobs(interval, name, data, options); // Ok
+>this._createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(file.js, 253, 5))
+>this : Symbol(NewAgenda, Decl(file.js, 227, 1))
+>_createIntervalJobs : Symbol(NewAgenda._createIntervalJobs, Decl(file.js, 253, 5))
+>interval : Symbol(interval, Decl(file.js, 274, 19))
+>name : Symbol(name, Decl(file.js, 274, 28))
+>data : Symbol(data, Decl(file.js, 274, 34))
+>options : Symbol(options, Decl(file.js, 274, 40))
+        }
+
+        throw new Error('Unexpected error: Invalid job name(s)');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+    }
+}
+
+// File: angular/packages/common/src/pipes/case_conversion_pipes.ts
+
+/**
+ * @template {string | null | undefined} T
+ * @param {T} value
+ * @returns {HelperCond<T, string, string, null | undefined, null>}
+ */
+function transform1(value) {
+>transform1 : Symbol(transform1, Decl(file.js, 285, 1))
+>value : Symbol(value, Decl(file.js, 294, 20))
+
+    if (value == null) return null; // Ok
+>value : Symbol(value, Decl(file.js, 294, 20))
+
+    if (typeof value !== 'string') {
+>value : Symbol(value, Decl(file.js, 294, 20))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+    }
+    return value.toLowerCase(); // Ok
+>value.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(file.js, 294, 20))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+

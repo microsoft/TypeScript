@@ -269,6 +269,110 @@ describe("unittests:: core paths", () => {
         assert.strictEqual(ts.resolvePath("a", "b", "/c"), "/c");
         assert.strictEqual(ts.resolvePath("a", "b", "../c"), "a/c");
     });
+    it("getNormalizedAbsolutePath", () => {
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/.", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/./", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/../", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a", ""), "/a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/", ""), "/a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/.", ""), "/a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/foo.", ""), "/a/foo.");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/./", ""), "/a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/./b", ""), "/a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/./b/", ""), "/a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/..", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/../", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/../", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/../b", ""), "/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/../b/", ""), "/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/..", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/..", "/"), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/..", "b/"), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/..", "/b"), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/.", "b"), "/a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/.", "."), "/a");
+
+        // Tests as above, but with backslashes.
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\.", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\.\\", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\..\\", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\.\\", ""), "/a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\.\\b", ""), "/a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\.\\b\\", ""), "/a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\..", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\..\\", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\..\\", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\..\\b", ""), "/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\..\\b\\", ""), "/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\..", ""), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\..", "\\"), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\..", "b\\"), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\..", "\\b"), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\.", "b"), "/a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\.", "."), "/a");
+
+        // Relative paths on an empty currentDirectory.
+        assert.strictEqual(ts.getNormalizedAbsolutePath("", ""), "");
+        assert.strictEqual(ts.getNormalizedAbsolutePath(".", ""), "");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("./", ""), "");
+        // Strangely, these do not normalize to the empty string.
+        assert.strictEqual(ts.getNormalizedAbsolutePath("..", ""), "..");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("../", ""), "..");
+
+        // Interaction between relative paths and currentDirectory.
+        assert.strictEqual(ts.getNormalizedAbsolutePath("", "/home"), "/home");
+        assert.strictEqual(ts.getNormalizedAbsolutePath(".", "/home"), "/home");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("./", "/home"), "/home");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("..", "/home"), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("../", "/home"), "/");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a", "b"), "b/a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a", "b/c"), "b/c/a");
+
+        // Base names starting or ending with a dot do not affect normalization.
+        assert.strictEqual(ts.getNormalizedAbsolutePath(".a", ""), ".a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("..a", ""), "..a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a.", ""), "a.");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a..", ""), "a..");
+
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/./.a", ""), "/base/.a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/../.a", ""), "/.a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/./..a", ""), "/base/..a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/../..a", ""), "/..a");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/./..a/b", ""), "/base/..a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/../..a/b", ""), "/..a/b");
+
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/./a.", ""), "/base/a.");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/../a.", ""), "/a.");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/./a..", ""), "/base/a..");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/../a..", ""), "/a..");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/./a../b", ""), "/base/a../b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/base/../a../b", ""), "/a../b");
+
+        // Consecutive intermediate slashes are normalized to a single slash.
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a//b", ""), "a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a///b", ""), "a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a/b//c", ""), "a/b/c");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("/a/b//c", ""), "/a/b/c");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("//a/b//c", ""), "//a/b/c");
+
+        // Backslashes are converted to slashes,
+        // and then consecutive intermediate slashes are normalized to a single slash
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a\\\\b", ""), "a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a\\\\\\b", ""), "a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a\\b\\\\c", ""), "a/b/c");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\b\\\\c", ""), "/a/b/c");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\\\a\\b\\\\c", ""), "//a/b/c");
+
+        // The same occurs for mixed slashes.
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a/\\b", ""), "a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a\\/b", ""), "a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a\\/\\b", ""), "a/b");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("a\\b//c", ""), "a/b/c");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\a\\b\\\\c", ""), "/a/b/c");
+        assert.strictEqual(ts.getNormalizedAbsolutePath("\\\\a\\b\\\\c", ""), "//a/b/c");
+    });
     it("getPathRelativeTo", () => {
         assert.strictEqual(ts.getRelativePathFromDirectory("/", "/", /*ignoreCase*/ false), "");
         assert.strictEqual(ts.getRelativePathFromDirectory("/a", "/a", /*ignoreCase*/ false), "");

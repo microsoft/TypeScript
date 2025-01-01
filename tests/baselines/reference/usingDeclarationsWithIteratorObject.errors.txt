@@ -1,0 +1,31 @@
+usingDeclarationsWithIteratorObject.ts(20,17): error TS2850: The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+  Property '[Symbol.dispose]' is missing in type 'Iterator<string, undefined, any>' but required in type 'Disposable'.
+
+
+==== usingDeclarationsWithIteratorObject.ts (1 errors) ====
+    declare const i: Iterator<string, undefined>;
+    declare const io: IteratorObject<string, undefined, unknown>;
+    declare const g: Generator<string, void>;
+    
+    class MyIterator extends Iterator<string> {
+        next() { return { done: true, value: undefined }; }
+    }
+    
+    function f() {
+        // should pass
+        using it0 = io;
+        using it1 = g;
+        using it2 = Iterator.from(i)
+        using it3 = new MyIterator();
+        using it4 = [].values();
+        using it5 = new Map<string, string>().entries();
+        using it6 = new Set<string>().keys();
+    
+        // should fail
+        using it7 = i;
+                    ~
+!!! error TS2850: The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+!!! error TS2850:   Property '[Symbol.dispose]' is missing in type 'Iterator<string, undefined, any>' but required in type 'Disposable'.
+!!! related TS2728 lib.esnext.disposable.d.ts:--:--: '[Symbol.dispose]' is declared here.
+    }
+    

@@ -1,20 +1,17 @@
-import * as Harness from "../../_namespaces/Harness.js";
+import { Baseline } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
-import * as Utils from "../../_namespaces/Utils.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
+    applyEdit,
     baselineBuildInfo,
     CommandLineProgram,
-} from "../helpers/baseline.js";
-import {
-    applyEdit,
     createBaseline,
-    watchBaseline,
-} from "../helpers/tscWatch.js";
+} from "../helpers/baseline.js";
+import { watchBaseline } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: builder cancellationToken::", () => {
@@ -24,7 +21,7 @@ describe("unittests:: tsc:: builder cancellationToken::", () => {
         it(scenario, () => {
             const aFile: File = {
                 path: `/user/username/projects/myproject/a.ts`,
-                content: Utils.dedent`
+                content: dedent`
                     import {B} from './b';
                     declare var console: any;
                     let b = new B();
@@ -32,7 +29,7 @@ describe("unittests:: tsc:: builder cancellationToken::", () => {
             };
             const bFile: File = {
                 path: `/user/username/projects/myproject/b.ts`,
-                content: Utils.dedent`
+                content: dedent`
                     import {C} from './c';
                     export class B {
                         c = new C();
@@ -40,7 +37,7 @@ describe("unittests:: tsc:: builder cancellationToken::", () => {
             };
             const cFile: File = {
                 path: `/user/username/projects/myproject/c.ts`,
-                content: Utils.dedent`
+                content: dedent`
                     export var C = class CReal {
                         d = 1;
                     };`,
@@ -53,8 +50,8 @@ describe("unittests:: tsc:: builder cancellationToken::", () => {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { incremental: true, declaration: true } }),
             };
-            const { sys, baseline } = createBaseline(createWatchedSystem(
-                [aFile, bFile, cFile, dFile, config, libFile],
+            const { sys, baseline } = createBaseline(TestServerHost.createWatchedSystem(
+                [aFile, bFile, cFile, dFile, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             ));
             sys.exit = exitCode => sys.exitCode = exitCode;
@@ -121,7 +118,7 @@ describe("unittests:: tsc:: builder cancellationToken::", () => {
             noChange("Clean build");
             baselineCleanBuild();
 
-            Harness.Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
+            Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
 
             function noChange(caption: string) {
                 applyEdit(sys, baseline, ts.noop, caption);
