@@ -12313,13 +12313,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getWriteTypeOfSymbol(symbol: Symbol): Type {
         const checkFlags = getCheckFlags(symbol);
+        if (checkFlags & CheckFlags.SyntheticProperty) {
+            return checkFlags & CheckFlags.DeferredType ?
+                getWriteTypeOfSymbolWithDeferredType(symbol) || getTypeOfSymbolWithDeferredType(symbol) :
+                // NOTE: cast to TransientSymbol should be safe because only TransientSymbols can have CheckFlags.SyntheticProperty
+                (symbol as TransientSymbol).links.writeType || (symbol as TransientSymbol).links.type!;
+        }
         if (symbol.flags & SymbolFlags.Property) {
-            return checkFlags & CheckFlags.SyntheticProperty ?
-                checkFlags & CheckFlags.DeferredType ?
-                    getWriteTypeOfSymbolWithDeferredType(symbol) || getTypeOfSymbolWithDeferredType(symbol) :
-                    // NOTE: cast to TransientSymbol should be safe because only TransientSymbols can have CheckFlags.SyntheticProperty
-                    (symbol as TransientSymbol).links.writeType || (symbol as TransientSymbol).links.type! :
-                removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
+            return removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
         }
         if (symbol.flags & SymbolFlags.Accessor) {
             return checkFlags & CheckFlags.Instantiated ?
