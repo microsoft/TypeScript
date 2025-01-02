@@ -48,8 +48,10 @@ jobs:
             no-submodules: true
           - os: ubuntu-latest
             race: true
+          - os: ubuntu-latest
+            noembed: true
 
-    name: test (${{ matrix.os }}${{ (matrix.no-submodules && ' without submodules') || '' }}${{ (matrix.race && ' in race mode') || '' }})
+    name: test (${{ matrix.os }}${{ (matrix.no-submodules && ' without submodules') || '' }}${{ (matrix.race && ' in race mode') || '' }}${{ (matrix.noembed && ' with noembed') || '' }})
 
     runs-on: ${{ matrix.os }}
 
@@ -71,11 +73,10 @@ jobs:
         # Installing gotestsum is super slow on Windows.
         if: ${{ matrix.os != 'windows-latest' }}
 
-      - run: npx hereby test:all
-        if: ${{ !matrix.race }}
-
-      - run: npx hereby test:all --race
-        if: ${{ matrix.race }}
+      - run: npx hereby test:all ${RACE_FLAG:+"$RACE_FLAG"} ${NOEMBED_FLAG:+"$NOEMBED_FLAG"}
+        env:
+          RACE_FLAG: ${{ (matrix.race && '--race') || '' }}
+          NOEMBED_FLAG: ${{ (matrix.noembed && '--noembed') || '' }}
 
       - run: git add .
       - run: git diff --staged --exit-code --stat

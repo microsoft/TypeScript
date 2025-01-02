@@ -356,7 +356,7 @@ func GetCanonicalFileName(fileName string, useCaseSensitiveFileNames bool) strin
 	if useCaseSensitiveFileNames {
 		return fileName
 	}
-	return toFileNameLowerCase(fileName)
+	return ToFileNameLowerCase(fileName)
 }
 
 // We convert the file names to lower case as key for file name on case insensitive file system
@@ -379,7 +379,7 @@ func GetCanonicalFileName(fileName string, useCaseSensitiveFileNames bool) strin
 // Rest special characters are either already in lower case format or
 // they have corresponding upper case character so they dont need special handling
 
-func toFileNameLowerCase(fileName string) string {
+func ToFileNameLowerCase(fileName string) string {
 	return strings.Map(func(r rune) rune {
 		if r == '\u0130' {
 			return r

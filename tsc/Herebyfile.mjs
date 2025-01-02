@@ -22,10 +22,12 @@ const { values: options } = parseArgs({
     options: {
         race: { type: "boolean" },
         fix: { type: "boolean" },
+        noembed: { type: "boolean" },
     },
     strict: false,
     allowPositionals: true,
     allowNegative: true,
+    noembed: false,
 });
 
 /**
@@ -68,11 +70,50 @@ function isInstalled(tool) {
     return !!which.sync(tool, { nothrow: true });
 }
 
+export const generateLibs = task({
+    name: "lib",
+    run: async () => {
+        await fs.promises.mkdir("./built/local", { recursive: true });
+
+        const libsDir = "./internal/bundled/libs";
+        const libs = await fs.promises.readdir(libsDir);
+
+        await Promise.all(libs.map(async lib => {
+            fs.promises.copyFile(`${libsDir}/${lib}`, `./built/local/${lib}`);
+        }));
+    },
+});
+
+function buildExecutableToBuilt(packagePath) {
+    return $`go build ${options.race ? ["-race"] : []} -tags=noembed -o ./built/local/ ${packagePath}`;
+}
+
+export const tsgoBuild = task({
+    name: "tsgo:build",
+    run: async () => {
+        await buildExecutableToBuilt("./cmd/tsgo");
+    },
+});
+
+export const tsgo = task({
+    name: "tsgo",
+    dependencies: [generateLibs, tsgoBuild],
+});
+
+export const local = task({
+    name: "local",
+    dependencies: [tsgo],
+});
+
 export const build = task({
     name: "build",
-    run: async () => {
-        await $`go build ${options.race ? ["-race"] : []} -o ./bin/ ./cmd/...`;
-    },
+    dependencies: [local],
+});
+
+export const cleanBuilt = task({
+    name: "clean:built",
+    hiddenFromTaskList: true,
+    run: () => fs.promises.rm("built", { recursive: true, force: true }),
 });
 
 export const generate = task({
@@ -83,10 +124,22 @@ export const generate = task({
     },
 });
 
-const goTest = memoize(() => isInstalled("gotestsum") ? ["gotestsum", "--format-hide-empty-pkg", "--"] : ["go", "test"]);
+const goTestFlags = [
+    ...(options.race ? ["-race"] : []),
+    ...(options.noembed ? ["-tags=noembed"] : []),
+];
+
+const gotestsum = memoize(() => {
+    const args = isInstalled("gotestsum") ? ["gotestsum", "--format-hide-empty-pkg", "--"] : ["go", "test"];
+    return args.concat(goTestFlags);
+});
+
+const goTest = memoize(() => {
+    return ["go", "test"].concat(goTestFlags);
+});
 
 async function runTests() {
-    await $`${goTest()} ${options.race ? ["-race"] : []} ./...`;
+    await $`${gotestsum()} ./...`;
 }
 
 export const test = task({
@@ -96,7 +149,7 @@ export const test = task({
 
 async function runTestBenchmarks() {
     // Run the benchmarks once to ensure they compile and run without errors.
-    await $`go test ${options.race ? ["-race"] : []} -run=- -bench=. -benchtime=1x ./...`;
+    await $`${goTest()} -run=- -bench=. -benchtime=1x ./...`;
 }
 
 export const testBenchmarks = task({
@@ -105,7 +158,7 @@ export const testBenchmarks = task({
 });
 
 async function runTestTools() {
-    await $({ cwd: path.join(__dirname, "_tools") })`${goTest()} ${options.race ? ["-race"] : []} ./...`;
+    await $({ cwd: path.join(__dirname, "_tools") })`${gotestsum()} ./...`;
 }
 
 export const testTools = task({

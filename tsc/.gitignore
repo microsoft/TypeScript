@@ -178,3 +178,5 @@ testdata/baselines/local
 
 custom-gcl
 custom-gcl.exe
+
+/built

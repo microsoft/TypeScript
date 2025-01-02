@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/bundled"
 	ts "github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -26,6 +27,7 @@ var (
 	printTypes       = false
 	pretty           = true
 	listFiles        = false
+	noLib            = false
 	pprofDir         = ""
 	outDir           = ""
 )
@@ -59,12 +61,16 @@ func main() {
 	flag.BoolVar(&printTypes, "t", false, "Print types defined in main.ts")
 	flag.BoolVar(&pretty, "pretty", true, "Get prettier errors")
 	flag.BoolVar(&listFiles, "listfiles", false, "List files in the program")
+	flag.BoolVar(&noLib, "nolib", false, "Do not load lib.d.ts files")
 	flag.StringVar(&pprofDir, "pprofdir", "", "Generate pprof CPU/memory profiles to the given directory")
 	flag.StringVar(&outDir, "outdir", "", "Emit to the given directory")
 	flag.Parse()
 
 	rootPath := flag.Arg(0)
 	compilerOptions := &core.CompilerOptions{Strict: core.TSTrue, Target: core.ScriptTargetESNext, ModuleKind: core.ModuleKindNodeNext, NoEmit: core.TSTrue}
+	if noLib {
+		compilerOptions.NoLib = core.TSTrue
+	}
 
 	currentDirectory, err := os.Getwd()
 	if err != nil {
@@ -77,7 +83,7 @@ func main() {
 		compilerOptions.OutDir = tspath.ResolvePath(currentDirectory, outDir)
 	}
 
-	fs := vfs.FromOS()
+	fs := bundled.WrapFS(vfs.FromOS())
 	useCaseSensitiveFileNames := fs.UseCaseSensitiveFileNames()
 	host := ts.NewCompilerHost(compilerOptions, currentDirectory, fs)
 
@@ -87,7 +93,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	programOptions := ts.ProgramOptions{RootPath: normalizedRootPath, Options: compilerOptions, SingleThreaded: singleThreaded, Host: host}
+	programOptions := ts.ProgramOptions{
+		RootPath:           normalizedRootPath,
+		Options:            compilerOptions,
+		SingleThreaded:     singleThreaded,
+		Host:               host,
+		DefaultLibraryPath: bundled.LibPath(),
+	}
 
 	if pprofDir != "" {
 		profileSession := beginProfiling(pprofDir)

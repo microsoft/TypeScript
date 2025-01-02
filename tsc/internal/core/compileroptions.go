@@ -35,6 +35,7 @@ type CompilerOptions struct {
 	NoFallthroughCasesInSwitch         Tristate             `json:"noFallthroughCasesInSwitch"`
 	NoImplicitAny                      Tristate             `json:"noImplicitAny"`
 	NoImplicitThis                     Tristate             `json:"noImplicitThis"`
+	NoLib                              Tristate             `json:"noLib"`
 	NoPropertyAccessFromIndexSignature Tristate             `json:"noPropertyAccessFromIndexSignature"`
 	NoUncheckedIndexedAccess           Tristate             `json:"noUncheckedIndexedAccess"`
 	OutDir                             string               `json:"outDir"`
