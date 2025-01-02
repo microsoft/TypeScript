@@ -440,7 +440,7 @@ func BenchmarkToFileNameLowerCase(b *testing.B) {
 		name := shortenName(test)
 		b.Run(name, func(b *testing.B) {
 			b.ReportAllocs()
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				ToFileNameLowerCase(test)
 			}
 		})
@@ -493,7 +493,7 @@ func BenchmarkHasRelativePathSegment(b *testing.B) {
 		name := shortenName(tt.p)
 		b.Run(name, func(b *testing.B) {
 			b.ReportAllocs()
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				hasRelativePathSegment(tt.p)
 			}
 		})
@@ -559,7 +559,7 @@ func BenchmarkPathIsRelative(b *testing.B) {
 		name := shortenName(tt.p)
 		b.Run(name, func(b *testing.B) {
 			b.ReportAllocs()
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				PathIsRelative(tt.p)
 			}
 		})

@@ -178,5 +178,6 @@ testdata/baselines/local
 
 custom-gcl
 custom-gcl.exe
+custom-gcl.hash
 
 /built

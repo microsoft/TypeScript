@@ -23,7 +23,7 @@ func BenchmarkPackageJSON(b *testing.B) {
 		content := []byte(f.ReadFile(b))
 		b.Run("UnmarshalJSON", func(b *testing.B) {
 			b.Run(f.Name(), func(b *testing.B) {
-				for i := 0; i < b.N; i++ {
+				for range b.N {
 					var p packagejson.Fields
 					if err := json.Unmarshal(content, &p); err != nil {
 						b.Fatal(err)
@@ -34,7 +34,7 @@ func BenchmarkPackageJSON(b *testing.B) {
 
 		b.Run("UnmarshalJSONV2", func(b *testing.B) {
 			b.Run(f.Name(), func(b *testing.B) {
-				for i := 0; i < b.N; i++ {
+				for range b.N {
 					var p packagejson.Fields
 					if err := json2.Unmarshal(content, &p); err != nil {
 						b.Fatal(err)
@@ -45,7 +45,7 @@ func BenchmarkPackageJSON(b *testing.B) {
 
 		b.Run("ParseJSONText", func(b *testing.B) {
 			b.Run(f.Name(), func(b *testing.B) {
-				for i := 0; i < b.N; i++ {
+				for range b.N {
 					parser.ParseJSONText(f.Name(), string(content))
 				}
 			})

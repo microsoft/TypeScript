@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://golangci-lint.run/jsonschema/custom-gcl.jsonschema.json
 
-version: v1.62.2 # NOTE: this must match golangciLintVersion in Herebyfile.mjs
+version: v1.63.1
 
 destination: ./_tools
 

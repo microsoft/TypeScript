@@ -24,7 +24,7 @@ func BenchmarkParse(b *testing.B) {
 			fileName := f.Path()
 			sourceText := f.ReadFile(b)
 
-			for i := 0; i < b.N; i++ {
+			for range b.N {
 				ParseSourceFile(fileName, sourceText, core.ScriptTargetESNext)
 			}
 		})

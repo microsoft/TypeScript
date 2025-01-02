@@ -3,6 +3,7 @@
 import { $ as _$ } from "execa";
 import { glob } from "glob";
 import { task } from "hereby";
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
@@ -177,19 +178,60 @@ export const testAll = task({
 });
 
 const customLinterPath = "./_tools/custom-gcl";
-const golangciLintVersion = "v1.62.2"; // NOTE: this must match the version in .custom-gcl.yml
+const customLinterHashPath = customLinterPath + ".hash";
 
-async function buildCustomLinter() {
-    await $`go run github.com/golangci/golangci-lint/cmd/golangci-lint@${golangciLintVersion} custom`;
+const golangciLintVersion = memoize(() => {
+    const golangciLintYml = fs.readFileSync(".custom-gcl.yml", "utf8");
+    const pattern = /^version:\s*(v\d+\.\d+\.\d+).*$/m;
+    const match = pattern.exec(golangciLintYml);
+    if (!match) {
+        throw new Error("Expected version in .custom-gcl.yml");
+    }
+    return match[1];
+});
+
+const customlintHash = memoize(() => {
+    const files = glob.sync([
+        "./_tools/go.mod",
+        "./_tools/customlint/**/*",
+        "./.custom-gcl.yml",
+    ], {
+        ignore: "**/testdata/**",
+        nodir: true,
+        absolute: true,
+    });
+    files.sort();
+
+    const hash = crypto.createHash("sha256");
+
+    for (const file of files) {
+        hash.update(file);
+        hash.update(fs.readFileSync(file));
+    }
+
+    return hash.digest("hex") + "\n";
+});
+
+const buildCustomLinter = memoize(async () => {
+    const hash = customlintHash();
+    if (
+        isInstalled(customLinterPath)
+        && fs.existsSync(customLinterHashPath)
+        && fs.readFileSync(customLinterHashPath, "utf8") === hash
+    ) {
+        return;
+    }
+
+    await $`go run github.com/golangci/golangci-lint/cmd/golangci-lint@${golangciLintVersion()} custom`;
     await $`${customLinterPath} cache clean`;
-}
+
+    fs.writeFileSync(customLinterHashPath, hash);
+});
 
 export const lint = task({
     name: "lint",
     run: async () => {
-        if (!isInstalled(customLinterPath)) {
-            await buildCustomLinter();
-        }
+        await buildCustomLinter();
         await $`${customLinterPath} run ${options.fix ? ["--fix"] : []} ${isCI ? ["--timeout=5m"] : []}`;
     },
 });
