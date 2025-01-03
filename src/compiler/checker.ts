@@ -38981,7 +38981,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (contextualSignature && !getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
                     let contextualReturnType: Type;
                     let returnType: Type;
-                    
+
                     if (checkMode & CheckMode.Inferential && couldContainTypeVariables(contextualReturnType = getReturnTypeOfSignature(contextualSignature))) {
                         const inferenceContext = getInferenceContext(node);
                         const isReturnContextSensitive = !!node.body && (node.body.kind === SyntaxKind.Block ? forEachReturnStatement(node.body as Block, statement => !!statement.expression && isContextSensitive(statement.expression)) : isContextSensitive(node.body));
@@ -38990,10 +38990,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (isReturnContextSensitive) {
                             returnType = getReturnTypeFromBody(node, checkMode);
                         }
-                    } else {
+                    }
+                    else {
                         returnType = getReturnTypeFromBody(node, checkMode);
                     }
-                    
+
                     if (!signature.resolvedReturnType) {
                         signature.resolvedReturnType = returnType;
                     }
