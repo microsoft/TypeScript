@@ -38952,7 +38952,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!signature) {
                     return;
                 }
-                if (isContextSensitive(node)) {
+                const isNodeContextSensitive = isContextSensitive(node);
+                if (isNodeContextSensitive) {
                     if (contextualSignature) {
                         const inferenceContext = getInferenceContext(node);
                         let instantiatedContextualSignature: Signature | undefined;
@@ -38982,7 +38983,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let contextualReturnType: Type;
                     let returnType: Type;
 
-                    if (checkMode & CheckMode.Inferential && couldContainTypeVariables(contextualReturnType = getReturnTypeOfSignature(contextualSignature))) {
+                    if (isNodeContextSensitive && checkMode & CheckMode.Inferential && couldContainTypeVariables(contextualReturnType = getReturnTypeOfSignature(contextualSignature))) {
                         const inferenceContext = getInferenceContext(node);
                         const isReturnContextSensitive = !!node.body && (node.body.kind === SyntaxKind.Block ? forEachReturnStatement(node.body as Block, statement => !!statement.expression && isContextSensitive(statement.expression)) : isContextSensitive(node.body));
                         returnType = getReturnTypeFromBody(node, checkMode | (isReturnContextSensitive ? CheckMode.SkipContextSensitive : 0));
@@ -38994,10 +38995,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else {
                         returnType = getReturnTypeFromBody(node, checkMode);
                     }
-
-                    if (!signature.resolvedReturnType) {
-                        signature.resolvedReturnType = returnType;
-                    }
+                    signature.resolvedReturnType ??= returnType;
                 }
                 checkSignatureDeclaration(node);
             }
