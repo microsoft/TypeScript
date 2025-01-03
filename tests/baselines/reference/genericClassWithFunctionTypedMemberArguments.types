@@ -37,10 +37,10 @@ module ImmediatelyFix {
 >  : ^^^^^^^^
 
     var r = c.foo(<U>(x: U) => ''); // {}
->r : string
->  : ^^^^^^
->c.foo(<U>(x: U) => '') : string
->                       : ^^^^^^
+>r : unknown
+>  : ^^^^^^^
+>c.foo(<U>(x: U) => '') : unknown
+>                       : ^^^^^^^
 >c.foo : <T>(x: (a: T) => T) => T
 >      : ^ ^^ ^^^ ^^^^^^^^^^^^^^^
 >c : C<number>
