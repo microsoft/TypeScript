@@ -32,6 +32,6 @@ pkgRequire;
 >           : ^^^^^
 
 pkgImport;
->pkgImport : "cjs"
+>pkgImport : "esm"
 >          : ^^^^^
 
