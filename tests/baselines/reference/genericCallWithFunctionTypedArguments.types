@@ -20,10 +20,10 @@ function foo<T>(x: (a: T) => T) {
 }
 
 var r = foo(<U>(x: U) => ''); // {}
->r : unknown
->  : ^^^^^^^
->foo(<U>(x: U) => '') : unknown
->                     : ^^^^^^^
+>r : string
+>  : ^^^^^^
+>foo(<U>(x: U) => '') : string
+>                     : ^^^^^^
 >foo : <T>(x: (a: T) => T) => T
 >    : ^ ^^ ^^           ^^^^^^
 ><U>(x: U) => '' : <U>(x: U) => string
