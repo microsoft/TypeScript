@@ -22,12 +22,8 @@ type ModeAwareCacheKey struct {
 	mode core.ResolutionMode
 }
 
-type ParsedCommandLine struct {
-	Options *core.CompilerOptions
-}
-
 type ResolvedProjectReference struct {
-	CommandLine ParsedCommandLine
+	CommandLine core.ParsedOptions
 	SourceFile  *ast.SourceFile
 	References  []*ResolvedProjectReference
 }
