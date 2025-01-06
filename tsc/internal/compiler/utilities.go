@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
@@ -2172,7 +2173,7 @@ func createEvaluator(evaluateEntity Evaluator) Evaluator {
 				case ast.KindMinusToken:
 					return evaluatorResult(-value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				case ast.KindTildeToken:
-					return evaluatorResult(float64(^int32(value)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+					return evaluatorResult(jsnum.BitwiseNOT(value), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				}
 			}
 		case ast.KindBinaryExpression:
@@ -2187,17 +2188,17 @@ func createEvaluator(evaluateEntity Evaluator) Evaluator {
 			if leftIsNum && rightIsNum {
 				switch operator {
 				case ast.KindBarToken:
-					return evaluatorResult(float64(int32(leftNum)|int32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+					return evaluatorResult(jsnum.BitwiseOR(leftNum, rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				case ast.KindAmpersandToken:
-					return evaluatorResult(float64(int32(leftNum)&int32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+					return evaluatorResult(jsnum.BitwiseAND(leftNum, rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				case ast.KindGreaterThanGreaterThanToken:
-					return evaluatorResult(float64(int32(leftNum)>>int32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+					return evaluatorResult(jsnum.SignedRightShift(leftNum, rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				case ast.KindGreaterThanGreaterThanGreaterThanToken:
-					return evaluatorResult(float64(uint32(leftNum)>>uint32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+					return evaluatorResult(jsnum.UnsignedRightShift(leftNum, rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				case ast.KindLessThanLessThanToken:
-					return evaluatorResult(float64(int32(leftNum)<<int32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+					return evaluatorResult(jsnum.LeftShift(leftNum, rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				case ast.KindCaretToken:
-					return evaluatorResult(float64(int32(leftNum)^int32(rightNum)), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+					return evaluatorResult(jsnum.BitwiseXOR(leftNum, rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				case ast.KindAsteriskToken:
 					return evaluatorResult(leftNum*rightNum, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				case ast.KindSlashToken:
@@ -2207,9 +2208,9 @@ func createEvaluator(evaluateEntity Evaluator) Evaluator {
 				case ast.KindMinusToken:
 					return evaluatorResult(leftNum-rightNum, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				case ast.KindPercentToken:
-					return evaluatorResult(leftNum-rightNum*math.Floor(leftNum/rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+					return evaluatorResult(jsnum.Remainder(leftNum, rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				case ast.KindAsteriskAsteriskToken:
-					return evaluatorResult(math.Pow(leftNum, rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
+					return evaluatorResult(jsnum.Exponentiate(leftNum, rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
 				}
 			}
 			leftStr, leftIsStr := left.value.(string)
