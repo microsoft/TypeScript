@@ -176,6 +176,7 @@ import {
     isInTopLevelContext,
     isJSDocConstructSignature,
     isJSDocEnumTag,
+    isJSDocImportTag,
     isJSDocTemplateTag,
     isJSDocTypeAlias,
     isJSDocTypeAssertion,
@@ -1107,6 +1108,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (checkUnreachable(node)) {
             if (canHaveFlowNode(node) && node.flowNode) {
                 node.flowNode = undefined;
+            }
+            if (isJSDocImportTag(node)) {
+                return;
             }
             bindEachChild(node);
             bindJSDoc(node);
