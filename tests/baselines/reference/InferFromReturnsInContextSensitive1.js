@@ -1,8 +1,10 @@
-//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesInContextSensitive1.ts] ////
+//// [tests/cases/conformance/types/typeRelationships/typeInference/InferFromReturnsInContextSensitive1.ts] ////
 
-//// [intraExpressionInferencesInContextSensitive1.ts]
+//// [InferFromReturnsInContextSensitive1.ts]
+// https://github.com/microsoft/TypeScript/issues/60720
+
 type Options<TContext> = {
-  onStart?: (arg: number) => TContext;
+  onStart?: () => TContext;
   onEnd?: (context: TContext) => void;
 };
 
@@ -11,27 +13,29 @@ function create<TContext>(builder: (arg: boolean) => Options<TContext>) {
 }
 
 create((arg) => ({
-  onStart: (arg) => ({ time: new Date() }),
+  onStart: () => ({ time: new Date() }),
   onEnd: (context) => {},
 }));
+
+// https://github.com/microsoft/TypeScript/issues/57021
 
 type Schema = Record<string, unknown>;
 
 type StepFunction<TSchema extends Schema = Schema> = (anything: unknown) => {
-  readonly schema: (thing: number) => TSchema;
+  readonly schema: TSchema;
   readonly toAnswers?: (keys: keyof TSchema) => unknown;
 };
 
-function step<TSchema extends Schema = Schema>(
+function step1<TSchema extends Schema = Schema>(
   stepVal: StepFunction<TSchema>,
 ): StepFunction<TSchema> {
   return stepVal;
 }
 
-const stepResult = step((_something) => ({
-  schema: (thing) => ({
+const stepResult1 = step1((_something) => ({
+  schema: {
     attribute: "anything",
-  }),
+  },
   toAnswers: (keys) => {
     type Test = string extends typeof keys ? never : "true";
     const test: Test = "true"; // ok
@@ -40,22 +44,23 @@ const stepResult = step((_something) => ({
 }));
 
 
-//// [intraExpressionInferencesInContextSensitive1.js]
+//// [InferFromReturnsInContextSensitive1.js]
 "use strict";
+// https://github.com/microsoft/TypeScript/issues/60720
 function create(builder) {
     return builder(true);
 }
 create(function (arg) { return ({
-    onStart: function (arg) { return ({ time: new Date() }); },
+    onStart: function () { return ({ time: new Date() }); },
     onEnd: function (context) { },
 }); });
-function step(stepVal) {
+function step1(stepVal) {
     return stepVal;
 }
-var stepResult = step(function (_something) { return ({
-    schema: function (thing) { return ({
+var stepResult1 = step1(function (_something) { return ({
+    schema: {
         attribute: "anything",
-    }); },
+    },
     toAnswers: function (keys) {
         var test = "true"; // ok
         return { test: test };
@@ -63,18 +68,18 @@ var stepResult = step(function (_something) { return ({
 }); });
 
 
-//// [intraExpressionInferencesInContextSensitive1.d.ts]
+//// [InferFromReturnsInContextSensitive1.d.ts]
 type Options<TContext> = {
-    onStart?: (arg: number) => TContext;
+    onStart?: () => TContext;
     onEnd?: (context: TContext) => void;
 };
 declare function create<TContext>(builder: (arg: boolean) => Options<TContext>): Options<TContext>;
 type Schema = Record<string, unknown>;
 type StepFunction<TSchema extends Schema = Schema> = (anything: unknown) => {
-    readonly schema: (thing: number) => TSchema;
+    readonly schema: TSchema;
     readonly toAnswers?: (keys: keyof TSchema) => unknown;
 };
-declare function step<TSchema extends Schema = Schema>(stepVal: StepFunction<TSchema>): StepFunction<TSchema>;
-declare const stepResult: StepFunction<{
+declare function step1<TSchema extends Schema = Schema>(stepVal: StepFunction<TSchema>): StepFunction<TSchema>;
+declare const stepResult1: StepFunction<{
     attribute: string;
 }>;

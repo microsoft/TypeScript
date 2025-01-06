@@ -1,0 +1,120 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/InferFromReturnsInContextSensitive1.ts] ////
+
+=== InferFromReturnsInContextSensitive1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60720
+
+type Options<TContext> = {
+>Options : Symbol(Options, Decl(InferFromReturnsInContextSensitive1.ts, 0, 0))
+>TContext : Symbol(TContext, Decl(InferFromReturnsInContextSensitive1.ts, 2, 13))
+
+  onStart?: () => TContext;
+>onStart : Symbol(onStart, Decl(InferFromReturnsInContextSensitive1.ts, 2, 26))
+>TContext : Symbol(TContext, Decl(InferFromReturnsInContextSensitive1.ts, 2, 13))
+
+  onEnd?: (context: TContext) => void;
+>onEnd : Symbol(onEnd, Decl(InferFromReturnsInContextSensitive1.ts, 3, 27))
+>context : Symbol(context, Decl(InferFromReturnsInContextSensitive1.ts, 4, 11))
+>TContext : Symbol(TContext, Decl(InferFromReturnsInContextSensitive1.ts, 2, 13))
+
+};
+
+function create<TContext>(builder: (arg: boolean) => Options<TContext>) {
+>create : Symbol(create, Decl(InferFromReturnsInContextSensitive1.ts, 5, 2))
+>TContext : Symbol(TContext, Decl(InferFromReturnsInContextSensitive1.ts, 7, 16))
+>builder : Symbol(builder, Decl(InferFromReturnsInContextSensitive1.ts, 7, 26))
+>arg : Symbol(arg, Decl(InferFromReturnsInContextSensitive1.ts, 7, 36))
+>Options : Symbol(Options, Decl(InferFromReturnsInContextSensitive1.ts, 0, 0))
+>TContext : Symbol(TContext, Decl(InferFromReturnsInContextSensitive1.ts, 7, 16))
+
+  return builder(true);
+>builder : Symbol(builder, Decl(InferFromReturnsInContextSensitive1.ts, 7, 26))
+}
+
+create((arg) => ({
+>create : Symbol(create, Decl(InferFromReturnsInContextSensitive1.ts, 5, 2))
+>arg : Symbol(arg, Decl(InferFromReturnsInContextSensitive1.ts, 11, 8))
+
+  onStart: () => ({ time: new Date() }),
+>onStart : Symbol(onStart, Decl(InferFromReturnsInContextSensitive1.ts, 11, 18))
+>time : Symbol(time, Decl(InferFromReturnsInContextSensitive1.ts, 12, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  onEnd: (context) => {},
+>onEnd : Symbol(onEnd, Decl(InferFromReturnsInContextSensitive1.ts, 12, 40))
+>context : Symbol(context, Decl(InferFromReturnsInContextSensitive1.ts, 13, 10))
+
+}));
+
+// https://github.com/microsoft/TypeScript/issues/57021
+
+type Schema = Record<string, unknown>;
+>Schema : Symbol(Schema, Decl(InferFromReturnsInContextSensitive1.ts, 14, 4))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type StepFunction<TSchema extends Schema = Schema> = (anything: unknown) => {
+>StepFunction : Symbol(StepFunction, Decl(InferFromReturnsInContextSensitive1.ts, 18, 38))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 20, 18))
+>Schema : Symbol(Schema, Decl(InferFromReturnsInContextSensitive1.ts, 14, 4))
+>Schema : Symbol(Schema, Decl(InferFromReturnsInContextSensitive1.ts, 14, 4))
+>anything : Symbol(anything, Decl(InferFromReturnsInContextSensitive1.ts, 20, 54))
+
+  readonly schema: TSchema;
+>schema : Symbol(schema, Decl(InferFromReturnsInContextSensitive1.ts, 20, 77))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 20, 18))
+
+  readonly toAnswers?: (keys: keyof TSchema) => unknown;
+>toAnswers : Symbol(toAnswers, Decl(InferFromReturnsInContextSensitive1.ts, 21, 27))
+>keys : Symbol(keys, Decl(InferFromReturnsInContextSensitive1.ts, 22, 24))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 20, 18))
+
+};
+
+function step1<TSchema extends Schema = Schema>(
+>step1 : Symbol(step1, Decl(InferFromReturnsInContextSensitive1.ts, 23, 2))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 25, 15))
+>Schema : Symbol(Schema, Decl(InferFromReturnsInContextSensitive1.ts, 14, 4))
+>Schema : Symbol(Schema, Decl(InferFromReturnsInContextSensitive1.ts, 14, 4))
+
+  stepVal: StepFunction<TSchema>,
+>stepVal : Symbol(stepVal, Decl(InferFromReturnsInContextSensitive1.ts, 25, 48))
+>StepFunction : Symbol(StepFunction, Decl(InferFromReturnsInContextSensitive1.ts, 18, 38))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 25, 15))
+
+): StepFunction<TSchema> {
+>StepFunction : Symbol(StepFunction, Decl(InferFromReturnsInContextSensitive1.ts, 18, 38))
+>TSchema : Symbol(TSchema, Decl(InferFromReturnsInContextSensitive1.ts, 25, 15))
+
+  return stepVal;
+>stepVal : Symbol(stepVal, Decl(InferFromReturnsInContextSensitive1.ts, 25, 48))
+}
+
+const stepResult1 = step1((_something) => ({
+>stepResult1 : Symbol(stepResult1, Decl(InferFromReturnsInContextSensitive1.ts, 31, 5))
+>step1 : Symbol(step1, Decl(InferFromReturnsInContextSensitive1.ts, 23, 2))
+>_something : Symbol(_something, Decl(InferFromReturnsInContextSensitive1.ts, 31, 27))
+
+  schema: {
+>schema : Symbol(schema, Decl(InferFromReturnsInContextSensitive1.ts, 31, 44))
+
+    attribute: "anything",
+>attribute : Symbol(attribute, Decl(InferFromReturnsInContextSensitive1.ts, 32, 11))
+
+  },
+  toAnswers: (keys) => {
+>toAnswers : Symbol(toAnswers, Decl(InferFromReturnsInContextSensitive1.ts, 34, 4))
+>keys : Symbol(keys, Decl(InferFromReturnsInContextSensitive1.ts, 35, 14))
+
+    type Test = string extends typeof keys ? never : "true";
+>Test : Symbol(Test, Decl(InferFromReturnsInContextSensitive1.ts, 35, 24))
+>keys : Symbol(keys, Decl(InferFromReturnsInContextSensitive1.ts, 35, 14))
+
+    const test: Test = "true"; // ok
+>test : Symbol(test, Decl(InferFromReturnsInContextSensitive1.ts, 37, 9))
+>Test : Symbol(Test, Decl(InferFromReturnsInContextSensitive1.ts, 35, 24))
+
+    return { test };
+>test : Symbol(test, Decl(InferFromReturnsInContextSensitive1.ts, 38, 12))
+
+  },
+}));
+

@@ -1,0 +1,174 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/InferFromReturnsInContextSensitive1.ts] ////
+
+=== InferFromReturnsInContextSensitive1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60720
+
+type Options<TContext> = {
+>Options : Options<TContext>
+>        : ^^^^^^^^^^^^^^^^^
+
+  onStart?: () => TContext;
+>onStart : (() => TContext) | undefined
+>        : ^^^^^^^        ^^^^^^^^^^^^^
+
+  onEnd?: (context: TContext) => void;
+>onEnd : ((context: TContext) => void) | undefined
+>      : ^^       ^^        ^^^^^    ^^^^^^^^^^^^^
+>context : TContext
+>        : ^^^^^^^^
+
+};
+
+function create<TContext>(builder: (arg: boolean) => Options<TContext>) {
+>create : <TContext>(builder: (arg: boolean) => Options<TContext>) => Options<TContext>
+>       : ^        ^^       ^^                                   ^^^^^^^^^^^^^^^^^^^^^^
+>builder : (arg: boolean) => Options<TContext>
+>        : ^   ^^       ^^^^^                 
+>arg : boolean
+>    : ^^^^^^^
+
+  return builder(true);
+>builder(true) : Options<TContext>
+>              : ^^^^^^^^^^^^^^^^^
+>builder : (arg: boolean) => Options<TContext>
+>        : ^   ^^       ^^^^^                 
+>true : true
+>     : ^^^^
+}
+
+create((arg) => ({
+>create((arg) => ({  onStart: () => ({ time: new Date() }),  onEnd: (context) => {},})) : Options<{ time: Date; }>
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>create : <TContext>(builder: (arg: boolean) => Options<TContext>) => Options<TContext>
+>       : ^        ^^       ^^                                   ^^^^^^^^^^^^^^^^^^^^^^
+>(arg) => ({  onStart: () => ({ time: new Date() }),  onEnd: (context) => {},}) : (arg: boolean) => { onStart: () => { time: Date; }; onEnd: (context: { time: Date; }) => void; }
+>                                                                               : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : boolean
+>    : ^^^^^^^
+>({  onStart: () => ({ time: new Date() }),  onEnd: (context) => {},}) : { onStart: () => { time: Date; }; onEnd: (context: { time: Date; }) => void; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  onStart: () => ({ time: new Date() }),  onEnd: (context) => {},} : { onStart: () => { time: Date; }; onEnd: (context: { time: Date; }) => void; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  onStart: () => ({ time: new Date() }),
+>onStart : () => { time: Date; }
+>        : ^^^^^^^^^^^^^^^^^^^^^
+>() => ({ time: new Date() }) : () => { time: Date; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^
+>({ time: new Date() }) : { time: Date; }
+>                       : ^^^^^^^^^^^^^^^
+>{ time: new Date() } : { time: Date; }
+>                     : ^^^^^^^^^^^^^^^
+>time : Date
+>     : ^^^^
+>new Date() : Date
+>           : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+
+  onEnd: (context) => {},
+>onEnd : (context: { time: Date; }) => void
+>      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(context) => {} : (context: { time: Date; }) => void
+>                : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>context : { time: Date; }
+>        : ^^^^^^^^^^^^^^^
+
+}));
+
+// https://github.com/microsoft/TypeScript/issues/57021
+
+type Schema = Record<string, unknown>;
+>Schema : Schema
+>       : ^^^^^^
+
+type StepFunction<TSchema extends Schema = Schema> = (anything: unknown) => {
+>StepFunction : StepFunction<TSchema>
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>anything : unknown
+>         : ^^^^^^^
+
+  readonly schema: TSchema;
+>schema : TSchema
+>       : ^^^^^^^
+
+  readonly toAnswers?: (keys: keyof TSchema) => unknown;
+>toAnswers : ((keys: keyof TSchema) => unknown) | undefined
+>          : ^^    ^^             ^^^^^       ^^^^^^^^^^^^^
+>keys : keyof TSchema
+>     : ^^^^^^^^^^^^^
+
+};
+
+function step1<TSchema extends Schema = Schema>(
+>step1 : <TSchema extends Schema = Schema>(stepVal: StepFunction<TSchema>) => StepFunction<TSchema>
+>      : ^       ^^^^^^^^^      ^^^^^^^^^^^       ^^                     ^^^^^                     
+
+  stepVal: StepFunction<TSchema>,
+>stepVal : StepFunction<TSchema>
+>        : ^^^^^^^^^^^^^^^^^^^^^
+
+): StepFunction<TSchema> {
+  return stepVal;
+>stepVal : StepFunction<TSchema>
+>        : ^^^^^^^^^^^^^^^^^^^^^
+}
+
+const stepResult1 = step1((_something) => ({
+>stepResult1 : StepFunction<{ attribute: string; }>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>step1((_something) => ({  schema: {    attribute: "anything",  },  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },})) : StepFunction<{ attribute: string; }>
+>                                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>step1 : <TSchema extends Schema = Schema>(stepVal: StepFunction<TSchema>) => StepFunction<TSchema>
+>      : ^       ^^^^^^^^^      ^^^^^^^^^^^       ^^                     ^^^^^                     
+>(_something) => ({  schema: {    attribute: "anything",  },  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },}) : (_something: unknown) => { schema: { attribute: string; }; toAnswers: (keys: "attribute") => { test: "true"; }; }
+>                                                                                                                                                                                                              : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  schema: {    attribute: "anything",  },  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },}) : { schema: { attribute: string; }; toAnswers: (keys: "attribute") => { test: "true"; }; }
+>                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  schema: {    attribute: "anything",  },  toAnswers: (keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  },} : { schema: { attribute: string; }; toAnswers: (keys: "attribute") => { test: "true"; }; }
+>                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  schema: {
+>schema : { attribute: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>{    attribute: "anything",  } : { attribute: string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^
+
+    attribute: "anything",
+>attribute : string
+>          : ^^^^^^
+>"anything" : "anything"
+>           : ^^^^^^^^^^
+
+  },
+  toAnswers: (keys) => {
+>toAnswers : (keys: "attribute") => { test: "true"; }
+>          : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(keys) => {    type Test = string extends typeof keys ? never : "true";    const test: Test = "true"; // ok    return { test };  } : (keys: "attribute") => { test: "true"; }
+>                                                                                                                                   : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>keys : "attribute"
+>     : ^^^^^^^^^^^
+
+    type Test = string extends typeof keys ? never : "true";
+>Test : "true"
+>     : ^^^^^^
+>keys : "attribute"
+>     : ^^^^^^^^^^^
+
+    const test: Test = "true"; // ok
+>test : "true"
+>     : ^^^^^^
+>"true" : "true"
+>       : ^^^^^^
+
+    return { test };
+>{ test } : { test: "true"; }
+>         : ^^^^^^^^^^^^^^^^^
+>test : "true"
+>     : ^^^^^^
+
+  },
+}));
+
