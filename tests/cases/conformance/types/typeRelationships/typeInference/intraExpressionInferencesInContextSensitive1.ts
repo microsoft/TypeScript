@@ -38,3 +38,33 @@ const stepResult = step((_something) => ({
     return { test };
   },
 }));
+
+type Fn1<T, T2> = (anything: unknown) => {
+  produce: (arg: number) => T;
+  consume: (arg: T) => (anything: unknown) => {
+    produce2: (arg: number) => T2;
+    consume2: (arg: T2) => void;
+  };
+};
+
+declare function test1<T, T2>(fn: Fn1<T, T2>): [T, T2];
+
+const res1 = test1((_something) => ({
+  produce: (input) => "foo",
+  consume: (arg) => {
+    return (_something) => ({
+      produce2: (input) => 42,
+      consume2: (arg2) => {},
+    });
+  },
+}));
+
+const res2 = test1((_something) => ({
+  produce: (input) => "foo",
+  consume: (arg) => {
+    return () => ({
+      produce2: (input) => 42,
+      consume2: (arg2) => {},
+    });
+  },
+}));

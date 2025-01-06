@@ -180,3 +180,174 @@ const stepResult = step((_something) => ({
   },
 }));
 
+type Fn1<T, T2> = (anything: unknown) => {
+>Fn1 : Fn1<T, T2>
+>    : ^^^^^^^^^^
+>anything : unknown
+>         : ^^^^^^^
+
+  produce: (arg: number) => T;
+>produce : (arg: number) => T
+>        : ^   ^^      ^^^^^ 
+>arg : number
+>    : ^^^^^^
+
+  consume: (arg: T) => (anything: unknown) => {
+>consume : (arg: T) => (anything: unknown) => { produce2: (arg: number) => T2; consume2: (arg: T2) => void; }
+>        : ^   ^^ ^^^^^                                                                                      
+>arg : T
+>    : ^
+>anything : unknown
+>         : ^^^^^^^
+
+    produce2: (arg: number) => T2;
+>produce2 : (arg: number) => T2
+>         : ^   ^^      ^^^^^  
+>arg : number
+>    : ^^^^^^
+
+    consume2: (arg: T2) => void;
+>consume2 : (arg: T2) => void
+>         : ^   ^^  ^^^^^    
+>arg : T2
+>    : ^^
+
+  };
+};
+
+declare function test1<T, T2>(fn: Fn1<T, T2>): [T, T2];
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>fn : Fn1<T, T2>
+>   : ^^^^^^^^^^
+
+const res1 = test1((_something) => ({
+>res1 : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+>test1((_something) => ({  produce: (input) => "foo",  consume: (arg) => {    return (_something) => ({      produce2: (input) => 42,      consume2: (arg2) => {},    });  },})) : [string, number]
+>                                                                                                                                                                                : ^^^^^^^^^^^^^^^^
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>(_something) => ({  produce: (input) => "foo",  consume: (arg) => {    return (_something) => ({      produce2: (input) => 42,      consume2: (arg2) => {},    });  },}) : (_something: unknown) => { produce: (input: number) => string; consume: (arg: string) => (_something: unknown) => { produce2: (input: number) => number; consume2: (arg2: number) => void; }; }
+>                                                                                                                                                                         : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  produce: (input) => "foo",  consume: (arg) => {    return (_something) => ({      produce2: (input) => 42,      consume2: (arg2) => {},    });  },}) : { produce: (input: number) => string; consume: (arg: string) => (_something: unknown) => { produce2: (input: number) => number; consume2: (arg2: number) => void; }; }
+>                                                                                                                                                         : ^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>{  produce: (input) => "foo",  consume: (arg) => {    return (_something) => ({      produce2: (input) => 42,      consume2: (arg2) => {},    });  },} : { produce: (input: number) => string; consume: (arg: string) => (_something: unknown) => { produce2: (input: number) => number; consume2: (arg2: number) => void; }; }
+>                                                                                                                                                       : ^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+
+  produce: (input) => "foo",
+>produce : (input: number) => string
+>        : ^     ^^^^^^^^^^^^^^^^^^^
+>(input) => "foo" : (input: number) => string
+>                 : ^     ^^^^^^^^^^^^^^^^^^^
+>input : number
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+  consume: (arg) => {
+>consume : (arg: string) => (_something: unknown) => { produce2: (input: number) => number; consume2: (arg2: number) => void; }
+>        : ^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>(arg) => {    return (_something) => ({      produce2: (input) => 42,      consume2: (arg2) => {},    });  } : (arg: string) => (_something: unknown) => { produce2: (input: number) => number; consume2: (arg2: number) => void; }
+>                                                                                                             : ^   ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+    return (_something) => ({
+>(_something) => ({      produce2: (input) => 42,      consume2: (arg2) => {},    }) : (_something: unknown) => { produce2: (input: number) => number; consume2: (arg2: number) => void; }
+>                                                                                    : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({      produce2: (input) => 42,      consume2: (arg2) => {},    }) : { produce2: (input: number) => number; consume2: (arg2: number) => void; }
+>                                                                    : ^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>{      produce2: (input) => 42,      consume2: (arg2) => {},    } : { produce2: (input: number) => number; consume2: (arg2: number) => void; }
+>                                                                  : ^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+
+      produce2: (input) => 42,
+>produce2 : (input: number) => number
+>         : ^     ^^^^^^^^^^^^^^^^^^^
+>(input) => 42 : (input: number) => number
+>              : ^     ^^^^^^^^^^^^^^^^^^^
+>input : number
+>      : ^^^^^^
+>42 : 42
+>   : ^^
+
+      consume2: (arg2) => {},
+>consume2 : (arg2: number) => void
+>         : ^    ^^^^^^^^^^^^^^^^^
+>(arg2) => {} : (arg2: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>arg2 : number
+>     : ^^^^^^
+
+    });
+  },
+}));
+
+const res2 = test1((_something) => ({
+>res2 : [string, number]
+>     : ^^^^^^^^^^^^^^^^
+>test1((_something) => ({  produce: (input) => "foo",  consume: (arg) => {    return () => ({      produce2: (input) => 42,      consume2: (arg2) => {},    });  },})) : [string, number]
+>                                                                                                                                                                      : ^^^^^^^^^^^^^^^^
+>test1 : <T, T2>(fn: Fn1<T, T2>) => [T, T2]
+>      : ^ ^^  ^^  ^^          ^^^^^       
+>(_something) => ({  produce: (input) => "foo",  consume: (arg) => {    return () => ({      produce2: (input) => 42,      consume2: (arg2) => {},    });  },}) : (_something: unknown) => { produce: (input: number) => string; consume: (arg: string) => () => { produce2: (input: number) => number; consume2: (arg2: number) => void; }; }
+>                                                                                                                                                               : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>_something : unknown
+>           : ^^^^^^^
+>({  produce: (input) => "foo",  consume: (arg) => {    return () => ({      produce2: (input) => 42,      consume2: (arg2) => {},    });  },}) : { produce: (input: number) => string; consume: (arg: string) => () => { produce2: (input: number) => number; consume2: (arg2: number) => void; }; }
+>                                                                                                                                               : ^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>{  produce: (input) => "foo",  consume: (arg) => {    return () => ({      produce2: (input) => 42,      consume2: (arg2) => {},    });  },} : { produce: (input: number) => string; consume: (arg: string) => () => { produce2: (input: number) => number; consume2: (arg2: number) => void; }; }
+>                                                                                                                                             : ^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+
+  produce: (input) => "foo",
+>produce : (input: number) => string
+>        : ^     ^^^^^^^^^^^^^^^^^^^
+>(input) => "foo" : (input: number) => string
+>                 : ^     ^^^^^^^^^^^^^^^^^^^
+>input : number
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+  consume: (arg) => {
+>consume : (arg: string) => () => { produce2: (input: number) => number; consume2: (arg2: number) => void; }
+>        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>(arg) => {    return () => ({      produce2: (input) => 42,      consume2: (arg2) => {},    });  } : (arg: string) => () => { produce2: (input: number) => number; consume2: (arg2: number) => void; }
+>                                                                                                   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+    return () => ({
+>() => ({      produce2: (input) => 42,      consume2: (arg2) => {},    }) : () => { produce2: (input: number) => number; consume2: (arg2: number) => void; }
+>                                                                          : ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>({      produce2: (input) => 42,      consume2: (arg2) => {},    }) : { produce2: (input: number) => number; consume2: (arg2: number) => void; }
+>                                                                    : ^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+>{      produce2: (input) => 42,      consume2: (arg2) => {},    } : { produce2: (input: number) => number; consume2: (arg2: number) => void; }
+>                                                                  : ^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
+
+      produce2: (input) => 42,
+>produce2 : (input: number) => number
+>         : ^     ^^^^^^^^^^^^^^^^^^^
+>(input) => 42 : (input: number) => number
+>              : ^     ^^^^^^^^^^^^^^^^^^^
+>input : number
+>      : ^^^^^^
+>42 : 42
+>   : ^^
+
+      consume2: (arg2) => {},
+>consume2 : (arg2: number) => void
+>         : ^    ^^^^^^^^^^^^^^^^^
+>(arg2) => {} : (arg2: number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^
+>arg2 : number
+>     : ^^^^^^
+
+    });
+  },
+}));
+

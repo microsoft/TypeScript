@@ -118,3 +118,98 @@ const stepResult = step((_something) => ({
   },
 }));
 
+type Fn1<T, T2> = (anything: unknown) => {
+>Fn1 : Symbol(Fn1, Decl(intraExpressionInferencesInContextSensitive1.ts, 36, 4))
+>T : Symbol(T, Decl(intraExpressionInferencesInContextSensitive1.ts, 38, 9))
+>T2 : Symbol(T2, Decl(intraExpressionInferencesInContextSensitive1.ts, 38, 11))
+>anything : Symbol(anything, Decl(intraExpressionInferencesInContextSensitive1.ts, 38, 19))
+
+  produce: (arg: number) => T;
+>produce : Symbol(produce, Decl(intraExpressionInferencesInContextSensitive1.ts, 38, 42))
+>arg : Symbol(arg, Decl(intraExpressionInferencesInContextSensitive1.ts, 39, 12))
+>T : Symbol(T, Decl(intraExpressionInferencesInContextSensitive1.ts, 38, 9))
+
+  consume: (arg: T) => (anything: unknown) => {
+>consume : Symbol(consume, Decl(intraExpressionInferencesInContextSensitive1.ts, 39, 30))
+>arg : Symbol(arg, Decl(intraExpressionInferencesInContextSensitive1.ts, 40, 12))
+>T : Symbol(T, Decl(intraExpressionInferencesInContextSensitive1.ts, 38, 9))
+>anything : Symbol(anything, Decl(intraExpressionInferencesInContextSensitive1.ts, 40, 24))
+
+    produce2: (arg: number) => T2;
+>produce2 : Symbol(produce2, Decl(intraExpressionInferencesInContextSensitive1.ts, 40, 47))
+>arg : Symbol(arg, Decl(intraExpressionInferencesInContextSensitive1.ts, 41, 15))
+>T2 : Symbol(T2, Decl(intraExpressionInferencesInContextSensitive1.ts, 38, 11))
+
+    consume2: (arg: T2) => void;
+>consume2 : Symbol(consume2, Decl(intraExpressionInferencesInContextSensitive1.ts, 41, 34))
+>arg : Symbol(arg, Decl(intraExpressionInferencesInContextSensitive1.ts, 42, 15))
+>T2 : Symbol(T2, Decl(intraExpressionInferencesInContextSensitive1.ts, 38, 11))
+
+  };
+};
+
+declare function test1<T, T2>(fn: Fn1<T, T2>): [T, T2];
+>test1 : Symbol(test1, Decl(intraExpressionInferencesInContextSensitive1.ts, 44, 2))
+>T : Symbol(T, Decl(intraExpressionInferencesInContextSensitive1.ts, 46, 23))
+>T2 : Symbol(T2, Decl(intraExpressionInferencesInContextSensitive1.ts, 46, 25))
+>fn : Symbol(fn, Decl(intraExpressionInferencesInContextSensitive1.ts, 46, 30))
+>Fn1 : Symbol(Fn1, Decl(intraExpressionInferencesInContextSensitive1.ts, 36, 4))
+>T : Symbol(T, Decl(intraExpressionInferencesInContextSensitive1.ts, 46, 23))
+>T2 : Symbol(T2, Decl(intraExpressionInferencesInContextSensitive1.ts, 46, 25))
+>T : Symbol(T, Decl(intraExpressionInferencesInContextSensitive1.ts, 46, 23))
+>T2 : Symbol(T2, Decl(intraExpressionInferencesInContextSensitive1.ts, 46, 25))
+
+const res1 = test1((_something) => ({
+>res1 : Symbol(res1, Decl(intraExpressionInferencesInContextSensitive1.ts, 48, 5))
+>test1 : Symbol(test1, Decl(intraExpressionInferencesInContextSensitive1.ts, 44, 2))
+>_something : Symbol(_something, Decl(intraExpressionInferencesInContextSensitive1.ts, 48, 20))
+
+  produce: (input) => "foo",
+>produce : Symbol(produce, Decl(intraExpressionInferencesInContextSensitive1.ts, 48, 37))
+>input : Symbol(input, Decl(intraExpressionInferencesInContextSensitive1.ts, 49, 12))
+
+  consume: (arg) => {
+>consume : Symbol(consume, Decl(intraExpressionInferencesInContextSensitive1.ts, 49, 28))
+>arg : Symbol(arg, Decl(intraExpressionInferencesInContextSensitive1.ts, 50, 12))
+
+    return (_something) => ({
+>_something : Symbol(_something, Decl(intraExpressionInferencesInContextSensitive1.ts, 51, 12))
+
+      produce2: (input) => 42,
+>produce2 : Symbol(produce2, Decl(intraExpressionInferencesInContextSensitive1.ts, 51, 29))
+>input : Symbol(input, Decl(intraExpressionInferencesInContextSensitive1.ts, 52, 17))
+
+      consume2: (arg2) => {},
+>consume2 : Symbol(consume2, Decl(intraExpressionInferencesInContextSensitive1.ts, 52, 30))
+>arg2 : Symbol(arg2, Decl(intraExpressionInferencesInContextSensitive1.ts, 53, 17))
+
+    });
+  },
+}));
+
+const res2 = test1((_something) => ({
+>res2 : Symbol(res2, Decl(intraExpressionInferencesInContextSensitive1.ts, 58, 5))
+>test1 : Symbol(test1, Decl(intraExpressionInferencesInContextSensitive1.ts, 44, 2))
+>_something : Symbol(_something, Decl(intraExpressionInferencesInContextSensitive1.ts, 58, 20))
+
+  produce: (input) => "foo",
+>produce : Symbol(produce, Decl(intraExpressionInferencesInContextSensitive1.ts, 58, 37))
+>input : Symbol(input, Decl(intraExpressionInferencesInContextSensitive1.ts, 59, 12))
+
+  consume: (arg) => {
+>consume : Symbol(consume, Decl(intraExpressionInferencesInContextSensitive1.ts, 59, 28))
+>arg : Symbol(arg, Decl(intraExpressionInferencesInContextSensitive1.ts, 60, 12))
+
+    return () => ({
+      produce2: (input) => 42,
+>produce2 : Symbol(produce2, Decl(intraExpressionInferencesInContextSensitive1.ts, 61, 19))
+>input : Symbol(input, Decl(intraExpressionInferencesInContextSensitive1.ts, 62, 17))
+
+      consume2: (arg2) => {},
+>consume2 : Symbol(consume2, Decl(intraExpressionInferencesInContextSensitive1.ts, 62, 30))
+>arg2 : Symbol(arg2, Decl(intraExpressionInferencesInContextSensitive1.ts, 63, 17))
+
+    });
+  },
+}));
+

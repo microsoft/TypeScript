@@ -39,6 +39,36 @@ const stepResult = step((_something) => ({
   },
 }));
 
+type Fn1<T, T2> = (anything: unknown) => {
+  produce: (arg: number) => T;
+  consume: (arg: T) => (anything: unknown) => {
+    produce2: (arg: number) => T2;
+    consume2: (arg: T2) => void;
+  };
+};
+
+declare function test1<T, T2>(fn: Fn1<T, T2>): [T, T2];
+
+const res1 = test1((_something) => ({
+  produce: (input) => "foo",
+  consume: (arg) => {
+    return (_something) => ({
+      produce2: (input) => 42,
+      consume2: (arg2) => {},
+    });
+  },
+}));
+
+const res2 = test1((_something) => ({
+  produce: (input) => "foo",
+  consume: (arg) => {
+    return () => ({
+      produce2: (input) => 42,
+      consume2: (arg2) => {},
+    });
+  },
+}));
+
 
 //// [intraExpressionInferencesInContextSensitive1.js]
 "use strict";
@@ -61,6 +91,24 @@ var stepResult = step(function (_something) { return ({
         return { test: test };
     },
 }); });
+var res1 = test1(function (_something) { return ({
+    produce: function (input) { return "foo"; },
+    consume: function (arg) {
+        return function (_something) { return ({
+            produce2: function (input) { return 42; },
+            consume2: function (arg2) { },
+        }); };
+    },
+}); });
+var res2 = test1(function (_something) { return ({
+    produce: function (input) { return "foo"; },
+    consume: function (arg) {
+        return function () { return ({
+            produce2: function (input) { return 42; },
+            consume2: function (arg2) { },
+        }); };
+    },
+}); });
 
 
 //// [intraExpressionInferencesInContextSensitive1.d.ts]
@@ -78,3 +126,13 @@ declare function step<TSchema extends Schema = Schema>(stepVal: StepFunction<TSc
 declare const stepResult: StepFunction<{
     attribute: string;
 }>;
+type Fn1<T, T2> = (anything: unknown) => {
+    produce: (arg: number) => T;
+    consume: (arg: T) => (anything: unknown) => {
+        produce2: (arg: number) => T2;
+        consume2: (arg: T2) => void;
+    };
+};
+declare function test1<T, T2>(fn: Fn1<T, T2>): [T, T2];
+declare const res1: [string, number];
+declare const res2: [string, number];
