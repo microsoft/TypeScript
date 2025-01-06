@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://golangci-lint.run/jsonschema/custom-gcl.jsonschema.json
 
-version: v1.63.1
+version: v1.63.4
 
 destination: ./_tools
 
