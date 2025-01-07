@@ -284,6 +284,20 @@ func (s *Scanner) Rewind(state ScannerState) {
 	s.ScannerState = state
 }
 
+func (s *Scanner) ResetTokenState(pos int) {
+	if pos < 0 {
+		panic("Cannot reset token state to negative position")
+	}
+	s.Rewind(ScannerState{
+		pos:          pos,
+		fullStartPos: pos,
+		tokenStart:   pos,
+		token:        ast.KindUnknown,
+		tokenValue:   "",
+		tokenFlags:   ast.TokenFlagsNone,
+	})
+}
+
 func (scanner *Scanner) SetSkipJsDocLeadingAsterisks(skip bool) {
 	if skip {
 		scanner.skipJSDocLeadingAsterisks += 1
