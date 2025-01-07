@@ -135,6 +135,8 @@ func (p *Printer) printTypeNoAlias(t *Type) {
 		p.printTemplateLiteralType(t)
 	case t.flags&TypeFlagsStringMapping != 0:
 		p.printStringMappingType(t)
+	case t.flags&TypeFlagsSubstitution != 0:
+		p.printType(t.AsSubstitutionType().baseType)
 	}
 }
 

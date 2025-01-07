@@ -105,8 +105,10 @@ func (m *OrderedMap[K, V]) Delete(key K) (V, bool) {
 // A slice of the keys can be obtained by calling `slices.Collect`.
 func (m *OrderedMap[K, V]) Keys() iter.Seq[K] {
 	return func(yield func(K) bool) {
-		for _, key := range m.keys {
-			if !yield(key) {
+		// We use a for loop here to ensure we enumerate new items added during iteration.
+		//nolint:intrange
+		for i := 0; i < len(m.keys); i++ {
+			if !yield(m.keys[i]) {
 				break
 			}
 		}
@@ -117,8 +119,10 @@ func (m *OrderedMap[K, V]) Keys() iter.Seq[K] {
 // A slice of the values can be obtained by calling `slices.Collect`.
 func (m *OrderedMap[K, V]) Values() iter.Seq[V] {
 	return func(yield func(V) bool) {
-		for _, key := range m.keys {
-			if !yield(m.mp[key]) {
+		// We use a for loop here to ensure we enumerate new items added during iteration.
+		//nolint:intrange
+		for i := 0; i < len(m.keys); i++ {
+			if !yield(m.mp[m.keys[i]]) {
 				break
 			}
 		}
@@ -128,7 +132,10 @@ func (m *OrderedMap[K, V]) Values() iter.Seq[V] {
 // Entries returns an iterator over the key-value pairs in the map.
 func (m *OrderedMap[K, V]) Entries() iter.Seq2[K, V] {
 	return func(yield func(K, V) bool) {
-		for _, key := range m.keys {
+		// We use a for loop here to ensure we enumerate new items added during iteration.
+		//nolint:intrange
+		for i := 0; i < len(m.keys); i++ {
+			key := m.keys[i]
 			if !yield(key, m.mp[key]) {
 				break
 			}

@@ -1496,3 +1496,7 @@ func getExportAssignmentExpression(node *Node) *Node {
 func isAliasableExpression(e *Node) bool {
 	return IsEntityNameExpression(e) || IsClassExpression(e)
 }
+
+func IsInstanceOfExpression(node *Node) bool {
+	return IsBinaryExpression(node) && node.AsBinaryExpression().OperatorToken.Kind == KindInstanceOfKeyword
+}

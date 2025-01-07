@@ -47,6 +47,7 @@ type CompilerOptions struct {
 	ResolvePackageJsonImports          Tristate             `json:"resolvePackageJsonImports"`
 	Strict                             Tristate             `json:"strict"`
 	StrictBindCallApply                Tristate             `json:"strictBindCallApply"`
+	StrictBuiltinIteratorReturn        Tristate             `json:"strictBuiltinIteratorReturn"`
 	StrictFunctionTypes                Tristate             `json:"strictFunctionTypes"`
 	StrictNullChecks                   Tristate             `json:"strictNullChecks"`
 	StrictPropertyInitialization       Tristate             `json:"strictPropertyInitialization"`

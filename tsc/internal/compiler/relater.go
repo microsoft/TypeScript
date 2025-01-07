@@ -285,6 +285,10 @@ func (c *Checker) checkTypeAssignableToEx(source *Type, target *Type, errorNode 
 	return c.checkTypeRelatedToEx(source, target, c.assignableRelation, errorNode, headMessage, diagnosticOutput)
 }
 
+func (c *Checker) checkTypeComparableTo(source *Type, target *Type, errorNode *ast.Node, headMessage *diagnostics.Message) bool {
+	return c.checkTypeRelatedToEx(source, target, c.comparableRelation, errorNode, headMessage, nil)
+}
+
 func (c *Checker) checkTypeRelatedTo(source *Type, target *Type, relation *Relation, errorNode *ast.Node) bool {
 	return c.checkTypeRelatedToEx(source, target, relation, errorNode, nil, nil)
 }
@@ -1485,18 +1489,18 @@ func (c *Checker) getRestTypeAtPosition(source *Signature, pos int, readonly boo
 			return c.createArrayType(c.getIndexedAccessType(restType, c.numberType))
 		}
 	}
-	types := make([]*Type, parameterCount)
-	infos := make([]TupleElementInfo, parameterCount)
-	for i := range parameterCount {
+	types := make([]*Type, parameterCount-pos)
+	infos := make([]TupleElementInfo, parameterCount-pos)
+	for i := range types {
 		var flags ElementFlags
-		if restType == nil || i < parameterCount-1 {
-			types[i] = c.getTypeAtPosition(source, i)
-			flags = core.IfElse(i < minArgumentCount, ElementFlagsRequired, ElementFlagsOptional)
+		if restType == nil || i < len(types)-1 {
+			types[i] = c.getTypeAtPosition(source, i+pos)
+			flags = core.IfElse(i+pos < minArgumentCount, ElementFlagsRequired, ElementFlagsOptional)
 		} else {
 			types[i] = restType
 			flags = ElementFlagsVariadic
 		}
-		infos[i] = TupleElementInfo{flags: flags, labeledDeclaration: c.getNameableDeclarationAtPosition(source, i)}
+		infos[i] = TupleElementInfo{flags: flags, labeledDeclaration: c.getNameableDeclarationAtPosition(source, i+pos)}
 	}
 	return c.createTupleTypeEx(types, infos, readonly)
 }
@@ -2420,7 +2424,7 @@ func (c *Checker) isTypeSubsetOf(source *Type, target *Type) bool {
 func (c *Checker) isTypeSubsetOfUnion(source *Type, target *Type) bool {
 	if source.flags&TypeFlagsUnion != 0 {
 		for _, t := range source.Types() {
-			if containsType(target.Types(), t) {
+			if !containsType(target.Types(), t) {
 				return false
 			}
 		}
@@ -3554,20 +3558,20 @@ func (r *Relater) typeArgumentsRelatedTo(sources []*Type, targets []*Type, varia
 // related to Y, where X' is an instantiation of X in which P is replaced with Q. Notice
 // that S and T are contra-variant whereas X and Y are co-variant.
 func (r *Relater) mappedTypeRelatedTo(source *Type, target *Type, reportErrors bool) Ternary {
-	// !!!
-	// modifiersRelated := relation == c.comparableRelation || (core.Ifelse(relation == c.identityRelation, c.getMappedTypeModifiers(source) == c.getMappedTypeModifiers(target), c.getCombinedMappedTypeOptionality(source) <= c.getCombinedMappedTypeOptionality(target)))
-	// if modifiersRelated {
-	// 	var result Ternary
-	// 	targetConstraint := c.getConstraintTypeFromMappedType(target)
-	// 	sourceConstraint := c.instantiateType(c.getConstraintTypeFromMappedType(source), core.Ifelse(c.getCombinedMappedTypeOptionality(source) < 0, c.reportUnmeasurableMapper, c.reportUnreliableMapper))
-	// 	if /* TODO(TS-TO-GO) EqualsToken BinaryExpression: result = isRelatedTo(targetConstraint, sourceConstraint, RecursionFlags.Both, reportErrors) */ TODO {
-	// 		mapper := c.createTypeMapper([]TypeParameter{c.getTypeParameterFromMappedType(source)}, []TypeParameter{c.getTypeParameterFromMappedType(target)})
-	// 		if c.instantiateType(c.getNameTypeFromMappedType(source), mapper) == c.instantiateType(c.getNameTypeFromMappedType(target), mapper) {
-	// 			return result & isRelatedTo(c.instantiateType(c.getTemplateTypeFromMappedType(source), mapper), c.getTemplateTypeFromMappedType(target), RecursionFlagsBoth, reportErrors)
-	// 		}
-	// 	}
-	// }
-	return TernaryTrue
+	modifiersRelated := r.relation == r.c.comparableRelation ||
+		r.relation == r.c.identityRelation && getMappedTypeModifiers(source) == getMappedTypeModifiers(target) ||
+		r.relation != r.c.identityRelation && r.c.getCombinedMappedTypeOptionality(source) <= r.c.getCombinedMappedTypeOptionality(target)
+	if modifiersRelated {
+		targetConstraint := r.c.getConstraintTypeFromMappedType(target)
+		sourceConstraint := r.c.instantiateType(r.c.getConstraintTypeFromMappedType(source), core.IfElse(r.c.getCombinedMappedTypeOptionality(source) < 0, r.c.reportUnmeasurableMapper, r.c.reportUnreliableMapper))
+		if result := r.isRelatedTo(targetConstraint, sourceConstraint, RecursionFlagsBoth, reportErrors); result != TernaryFalse {
+			mapper := newSimpleTypeMapper(r.c.getTypeParameterFromMappedType(source), r.c.getTypeParameterFromMappedType(target))
+			if r.c.instantiateType(r.c.getNameTypeFromMappedType(source), mapper) == r.c.instantiateType(r.c.getNameTypeFromMappedType(target), mapper) {
+				return result & r.isRelatedTo(r.c.instantiateType(r.c.getTemplateTypeFromMappedType(source), mapper), r.c.getTemplateTypeFromMappedType(target), RecursionFlagsBoth, reportErrors)
+			}
+		}
+	}
+	return TernaryFalse
 }
 
 func (r *Relater) typeRelatedToDiscriminatedType(source *Type, target *Type) Ternary {
