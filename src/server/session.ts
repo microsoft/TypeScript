@@ -3068,8 +3068,8 @@ export class Session<TMessage = string> implements EventSender {
                 ...ls.getSemanticDiagnostics(file),
                 ...ls.getSuggestionDiagnostics(file),
             ]
-            .filter(d => decodedTextSpanIntersectsWith(startPosition, endPosition - startPosition, d.start!, d.length!))
-            .map(d => d.code);
+                .filter(d => decodedTextSpanIntersectsWith(startPosition, endPosition - startPosition, d.start!, d.length!))
+                .map(d => d.code);
             const badCode = args.errorCodes.find(c => !existingDiagCodes.includes(c));
             if (badCode !== undefined) {
                 e.message += `\nAdditional information: BADCLIENT: Bad error code, ${badCode} not found in range ${startPosition}..${endPosition} (found: ${existingDiagCodes.join(", ")})`;
