@@ -47,8 +47,10 @@ func testJSONValue(t *testing.T, unmarshal func([]byte, any) error) {
 			},
 			"./test": [
 				"./test1.ts",
-				"./test2.ts"
-			]
+				"./test2.ts",
+				null
+			],
+			"./null": null
 		},
 		"imports": null
 	}`
@@ -66,14 +68,17 @@ func testJSONValue(t *testing.T, unmarshal func([]byte, any) error) {
 	assert.Equal(t, p.Version.Value, float64(2))
 
 	assert.Equal(t, p.Exports.Type, packagejson.JSONValueTypeObject)
-	assert.Equal(t, p.Exports.AsObject().Size(), 2)
+	assert.Equal(t, p.Exports.AsObject().Size(), 3)
 	assert.Equal(t, p.Exports.AsObject().GetOrZero(".").Type, packagejson.JSONValueTypeObject)
 	assert.Equal(t, p.Exports.AsObject().GetOrZero(".").AsObject().GetOrZero("import").Value, "./test.ts")
 
 	assert.Equal(t, p.Exports.AsObject().GetOrZero("./test").Type, packagejson.JSONValueTypeArray)
-	assert.Equal(t, len(p.Exports.AsObject().GetOrZero("./test").AsArray()), 2)
+	assert.Equal(t, len(p.Exports.AsObject().GetOrZero("./test").AsArray()), 3)
 	assert.Equal(t, p.Exports.AsObject().GetOrZero("./test").AsArray()[0].Value, "./test1.ts")
 	assert.Equal(t, p.Exports.AsObject().GetOrZero("./test").AsArray()[1].Value, "./test2.ts")
+	assert.Equal(t, p.Exports.AsObject().GetOrZero("./test").AsArray()[2].Type, packagejson.JSONValueTypeNull)
+
+	assert.Equal(t, p.Exports.AsObject().GetOrZero("./null").Type, packagejson.JSONValueTypeNull)
 
 	assert.Equal(t, p.Imports.Type, packagejson.JSONValueTypeNull)
 	assert.Equal(t, p.Imports.Value, nil)

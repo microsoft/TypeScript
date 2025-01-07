@@ -28,26 +28,26 @@ func (e *Exports) UnmarshalJSONV2(dec *jsontext.Decoder, opts json2.Options) err
 	return unmarshalJSONValueV2[Exports](&e.JSONValue, dec, opts)
 }
 
-func (e *Exports) AsObject() *collections.OrderedMap[string, *Exports] {
+func (e Exports) AsObject() *collections.OrderedMap[string, Exports] {
 	if e.Type != JSONValueTypeObject {
 		panic("expected object")
 	}
-	return e.Value.(*collections.OrderedMap[string, *Exports])
+	return e.Value.(*collections.OrderedMap[string, Exports])
 }
 
-func (e *Exports) AsArray() []*Exports {
+func (e Exports) AsArray() []Exports {
 	if e.Type != JSONValueTypeArray {
 		panic("expected array")
 	}
-	return e.Value.([]*Exports)
+	return e.Value.([]Exports)
 }
 
-func (e *Exports) IsSubpaths() bool {
+func (e Exports) IsSubpaths() bool {
 	e.initObjectKind()
 	return e.objectKind == exportsObjectKindSubpaths
 }
 
-func (e *Exports) IsConditions() bool {
+func (e Exports) IsConditions() bool {
 	e.initObjectKind()
 	return e.objectKind == exportsObjectKindConditions
 }

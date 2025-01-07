@@ -69,7 +69,7 @@ func (p *PackageJson) GetVersionPaths(trace func(string)) VersionPaths {
 
 type VersionPaths struct {
 	Version   string
-	pathsJSON *collections.OrderedMap[string, *JSONValue]
+	pathsJSON *collections.OrderedMap[string, JSONValue]
 	paths     map[string][]string
 }
 
