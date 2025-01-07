@@ -1318,9 +1318,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.ExclamationEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
-                return isNarrowableOperand(expr.left) || isNarrowableOperand(expr.right) ||
-                    isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right) ||
-                    (isBooleanLiteral(expr.right) && isNarrowingExpression(expr.left) || isBooleanLiteral(expr.left) && isNarrowingExpression(expr.right));
+                const left = skipParentheses(expr.left);
+                const right = skipParentheses(expr.right);
+                return isNarrowableOperand(left) || isNarrowableOperand(right) ||
+                    isNarrowingTypeofOperands(right, left) || isNarrowingTypeofOperands(left, right) ||
+                    (isBooleanLiteral(right) && isNarrowingExpression(left) || isBooleanLiteral(left) && isNarrowingExpression(right));
             case SyntaxKind.InstanceOfKeyword:
                 return isNarrowableOperand(expr.left);
             case SyntaxKind.InKeyword:
