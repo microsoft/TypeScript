@@ -77,7 +77,7 @@ func newResolutionState(
 	}
 
 	if redirectedReference != nil {
-		state.compilerOptions = redirectedReference.CommandLine.Options
+		state.compilerOptions = redirectedReference.CommandLine.CompilerOptions
 	}
 
 	if isTypeReferenceDirective {
@@ -147,7 +147,7 @@ func (r *Resolver) ResolveTypeReferenceDirective(typeReferenceDirectiveName stri
 
 	compilerOptions := r.compilerOptions
 	if redirectedReference != nil {
-		compilerOptions = redirectedReference.CommandLine.Options
+		compilerOptions = redirectedReference.CommandLine.CompilerOptions
 	}
 
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
@@ -195,7 +195,7 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 
 	compilerOptions := r.compilerOptions
 	if redirectedReference != nil {
-		compilerOptions = redirectedReference.CommandLine.Options
+		compilerOptions = redirectedReference.CommandLine.CompilerOptions
 	}
 
 	if traceEnabled {

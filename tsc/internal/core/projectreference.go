@@ -1,7 +1,7 @@
 package core
 
 type ProjectReference struct {
-	path         string
-	originalPath string
-	circular     bool
+	Path         string
+	OriginalPath string
+	Circular     bool
 }

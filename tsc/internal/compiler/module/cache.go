@@ -292,14 +292,14 @@ func (c *cacheWithRedirects[K, V]) getMapOfCacheRedirects(redirectedReference *R
 	if redirectedReference == nil {
 		return c.ownMap
 	}
-	return c.getOrCreateMap(redirectedReference.CommandLine.Options, false /*create*/)
+	return c.getOrCreateMap(redirectedReference.CommandLine.CompilerOptions, false /*create*/)
 }
 
 func (c *cacheWithRedirects[K, V]) getOrCreateMapOfCacheRedirects(redirectedReference *ResolvedProjectReference) map[K]V {
 	if redirectedReference == nil {
 		return c.ownMap
 	}
-	return c.getOrCreateMap(redirectedReference.CommandLine.Options, true /*create*/)
+	return c.getOrCreateMap(redirectedReference.CommandLine.CompilerOptions, true /*create*/)
 }
 
 func (c *cacheWithRedirects[K, V]) getOrCreateMap(redirectOptions *core.CompilerOptions, create bool) map[K]V {
