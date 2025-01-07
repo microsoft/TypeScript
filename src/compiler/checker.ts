@@ -13197,8 +13197,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else if (!member.symbol.isReplaceableByMethod) {
             symbol.declarations.push(member);
         }
-        if (symbolFlags & SymbolFlags.Value && !symbol.valueDeclaration) {
-            symbol.valueDeclaration = member;
+        if (symbolFlags & SymbolFlags.Value) {
+            setValueDeclaration(symbol, member);
         }
     }
 
