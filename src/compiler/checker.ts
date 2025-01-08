@@ -44491,6 +44491,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Grammar checking
         checkGrammarStatementInAmbientContext(node);
 
+        if (isSideEffectFree(node.expression)) {
+            error(node, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
+        }
+
         checkExpression(node.expression);
     }
 
