@@ -19,12 +19,6 @@ import (
 // IO
 const harnessNewLine = "\r\n"
 
-var (
-	lineDelimiter = regexp.MustCompile("\r?\n")
-	nonWhitespace = regexp.MustCompile(`\S`)
-	tsExtension   = regexp.MustCompile(`\.tsx?$`)
-)
-
 var formatOpts = &compiler.DiagnosticsFormattingOptions{
 	NewLine: harnessNewLine,
 }
@@ -40,7 +34,7 @@ var (
 	diagnosticsLocationPattern = regexp.MustCompile(`(?i)(lib.*\.d\.ts):\d+:\d+`)
 )
 
-func DoErrorBaseline(t testing.TB, baselinePath string, inputFiles []*TestFile, errors []*ast.Diagnostic, pretty bool) {
+func DoErrorBaseline(t *testing.T, baselinePath string, inputFiles []*TestFile, errors []*ast.Diagnostic, pretty bool) {
 	baselinePath = tsExtension.ReplaceAllString(baselinePath, ".errors.txt")
 	var errorBaseline string
 	if len(errors) > 0 {
@@ -61,7 +55,7 @@ func minimalDiagnosticsToString(diagnostics []*ast.Diagnostic, pretty bool) stri
 	return output.String()
 }
 
-func getErrorBaseline(t testing.TB, inputFiles []*TestFile, diagnostics []*ast.Diagnostic, pretty bool) string {
+func getErrorBaseline(t *testing.T, inputFiles []*TestFile, diagnostics []*ast.Diagnostic, pretty bool) string {
 	t.Helper()
 	outputLines := iterateErrorBaseline(t, inputFiles, diagnostics, pretty)
 
@@ -77,7 +71,7 @@ func getErrorBaseline(t testing.TB, inputFiles []*TestFile, diagnostics []*ast.D
 	return strings.Join(outputLines, "")
 }
 
-func iterateErrorBaseline(t testing.TB, inputFiles []*TestFile, inputDiagnostics []*ast.Diagnostic, pretty bool) []string {
+func iterateErrorBaseline(t *testing.T, inputFiles []*TestFile, inputDiagnostics []*ast.Diagnostic, pretty bool) []string {
 	t.Helper()
 	diagnostics := slices.Clone(inputDiagnostics)
 	slices.SortFunc(diagnostics, compiler.CompareDiagnostics)
@@ -225,7 +219,6 @@ func iterateErrorBaseline(t testing.TB, inputFiles []*TestFile, inputDiagnostics
 		// Verify we didn't miss any errors in this file
 		assert.Check(t, cmp.Equal(markedErrorCount, len(fileErrors)), "count of errors in "+inputFile.unitName)
 		_, isDupe := dupeCase[sanitizeTestFilePath(inputFile.unitName)]
-		checkDuplicatedFileName(inputFile.unitName, dupeCase)
 		result = append(result, outputLines.String())
 		if isDupe {
 			// Case-duplicated files on a case-insensitive build will have errors reported in both the dupe and the original
@@ -251,19 +244,6 @@ func iterateErrorBaseline(t testing.TB, inputFiles []*TestFile, inputDiagnostics
 	// Verify we didn't miss any errors in total
 	assert.Check(t, cmp.Equal(totalErrorsReportedInNonLibraryNonTsconfigFiles+numLibraryDiagnostics+numTsconfigDiagnostics, len(diagnostics)), "total number of errors")
 	return result
-}
-
-func checkDuplicatedFileName(resultName string, dupeCase map[string]int) string {
-	resultName = sanitizeTestFilePath(resultName)
-	if _, ok := dupeCase[resultName]; ok {
-		// A different baseline filename should be manufactured if the names differ only in case, for windows compat
-		count := 1 + dupeCase[resultName]
-		dupeCase[resultName] = count
-		resultName = fmt.Sprintf("%s.dupe%d", resultName, count)
-	} else {
-		dupeCase[resultName] = 0
-	}
-	return resultName
 }
 
 func flattenDiagnosticMessage(d *ast.Diagnostic, newLine string) string {

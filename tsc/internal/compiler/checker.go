@@ -8073,7 +8073,7 @@ func (c *Checker) isInPropertyInitializerOrClassStaticBlock(node *ast.Node) bool
 			}
 			return ast.FindAncestorQuit
 		default:
-			if isExpressionNode(node) {
+			if IsExpressionNode(node) {
 				return ast.FindAncestorFalse
 			}
 			return ast.FindAncestorQuit
@@ -22736,6 +22736,14 @@ func (c *Checker) getActualTypeVariable(t *Type) *Type {
 	return t
 }
 
+func (c *Checker) GetSymbolAtLocation(node *ast.Node) *ast.Symbol {
+	// !!!
+	// const node = getParseTreeNode(nodeIn);
+
+	// set ignoreErrors: true because any lookups invoked by the API shouldn't cause any new errors
+	return c.getSymbolAtLocation(node, true /*ignoreErrors*/)
+}
+
 func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Symbol {
 	if ast.IsSourceFile(node) {
 		if ast.IsExternalModule(node.AsSourceFile()) {
@@ -22963,7 +22971,7 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 		}
 	}
 
-	if isExpressionNode(name) {
+	if IsExpressionNode(name) {
 		if ast.NodeIsMissing(name) {
 			// Missing entity name.
 			return nil
@@ -23066,7 +23074,7 @@ func (c *Checker) getTypeOfNode(node *ast.Node) *Type {
 		return typeFromTypeNode
 	}
 
-	if isExpressionNode(node) {
+	if IsExpressionNode(node) {
 		return c.getRegularTypeOfExpression(node)
 	}
 

@@ -8,6 +8,9 @@ import (
 )
 
 var (
+	lineDelimiter      = regexp.MustCompile("\r?\n")
+	nonWhitespace      = regexp.MustCompile(`\S`)
+	tsExtension        = regexp.MustCompile(`\.tsx?$`)
 	testPathPrefix     = regexp.MustCompile(`(?:(file:\/{3})|\/)\.(?:ts|lib|src)\/`)
 	testPathCharacters = regexp.MustCompile(`[\^<>:"|?*%]`)
 	testPathDotDot     = regexp.MustCompile(`\.\.\/`)

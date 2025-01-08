@@ -33,14 +33,14 @@ foo.bar;`
 	}
 	p := NewProgram(opts)
 	p.bindSourceFiles()
-	c := p.getTypeChecker()
+	c := p.GetTypeChecker()
 	file := p.filesByPath["/foo.ts"]
 	interfaceId := file.Statements.Nodes[0].Name()
 	varId := file.Statements.Nodes[1].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].Name()
 	propAccess := file.Statements.Nodes[2].AsExpressionStatement().Expression
 	nodes := []*ast.Node{interfaceId, varId, propAccess}
 	for _, node := range nodes {
-		symbol := c.getSymbolAtLocation(node, true /*ignoreErrors*/)
+		symbol := c.GetSymbolAtLocation(node)
 		if symbol == nil {
 			t.Fatalf("Expected symbol to be non-nil")
 		}

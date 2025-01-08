@@ -360,7 +360,7 @@ func (p *Program) GetSemanticDiagnostics(sourceFile *ast.SourceFile) []*ast.Diag
 }
 
 func (p *Program) GetGlobalDiagnostics() []*ast.Diagnostic {
-	return sortAndDeduplicateDiagnostics(p.getTypeChecker().GetGlobalDiagnostics())
+	return sortAndDeduplicateDiagnostics(p.GetTypeChecker().GetGlobalDiagnostics())
 }
 
 func (p *Program) TypeCount() int {
@@ -370,7 +370,7 @@ func (p *Program) TypeCount() int {
 	return int(p.checker.typeCount)
 }
 
-func (p *Program) getTypeChecker() *Checker {
+func (p *Program) GetTypeChecker() *Checker {
 	if p.checker == nil {
 		p.checker = NewChecker(p)
 	}
@@ -386,7 +386,7 @@ func (p *Program) getBindDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.D
 }
 
 func (p *Program) getSemanticDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return core.Concatenate(sourceFile.BindDiagnostics(), p.getTypeChecker().GetDiagnostics(sourceFile))
+	return core.Concatenate(sourceFile.BindDiagnostics(), p.GetTypeChecker().GetDiagnostics(sourceFile))
 }
 
 func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound bool, getDiagnostics func(*ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
@@ -414,7 +414,7 @@ type NodeCount struct {
 func (p *Program) PrintSourceFileWithTypes() {
 	for _, file := range p.files {
 		if tspath.GetBaseFileName(file.FileName()) == "main.ts" {
-			fmt.Print(p.getTypeChecker().sourceFileWithTypes(file))
+			fmt.Print(p.GetTypeChecker().sourceFileWithTypes(file))
 		}
 	}
 }
@@ -784,4 +784,9 @@ func (p *Program) Emit(options *EmitOptions) *EmitResult {
 		}
 	}
 	return result
+}
+
+func (p *Program) GetSourceFile(filename string) *ast.SourceFile {
+	path := tspath.ToPath(filename, p.host.GetCurrentDirectory(), p.host.FS().UseCaseSensitiveFileNames())
+	return p.filesByPath[path]
 }
