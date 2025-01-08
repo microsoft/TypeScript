@@ -678,7 +678,7 @@ type IntrinsicType struct {
 
 type LiteralType struct {
 	TypeBase
-	value       any   // string | float64 | bool | PseudoBigInt | nil (computed enum)
+	value       any   // string | jsnum.Number | bool | PseudoBigInt | nil (computed enum)
 	freshType   *Type // Fresh version of type
 	regularType *Type // Regular version of type
 }

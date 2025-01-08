@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
@@ -1561,14 +1562,14 @@ func (s *Scanner) scanNumber() ast.Kind {
 	}
 	if s.tokenFlags&ast.TokenFlagsContainsLeadingZero != 0 {
 		s.errorAt(diagnostics.Decimals_with_leading_zeros_are_not_allowed, start, s.pos-start)
-		s.tokenValue = stringutil.FromNumber(stringutil.ToNumber(s.tokenValue))
+		s.tokenValue = jsnum.FromString(s.tokenValue).String()
 		return ast.KindNumericLiteral
 	}
 	var result ast.Kind
 	if fixedPartEnd == s.pos {
 		result = s.scanBigIntSuffix()
 	} else {
-		s.tokenValue = stringutil.FromNumber(stringutil.ToNumber(s.tokenValue))
+		s.tokenValue = jsnum.FromString(s.tokenValue).String()
 		result = ast.KindNumericLiteral
 	}
 	ch, _ := s.charAndSize()
@@ -1726,7 +1727,7 @@ func (s *Scanner) scanBigIntSuffix() ast.Kind {
 			return ast.KindNumericLiteral
 		}
 	}
-	s.tokenValue = stringutil.FromNumber(stringutil.ToNumber(s.tokenValue))
+	s.tokenValue = jsnum.FromString(s.tokenValue).String()
 	return ast.KindNumericLiteral
 }
 

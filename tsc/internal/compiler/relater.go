@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
@@ -1459,7 +1460,7 @@ func (c *Checker) tryGetTypeAtPosition(signature *Signature, pos int) *Type {
 		restType := c.getTypeOfSymbol(signature.parameters[paramCount])
 		index := pos - paramCount
 		if !isTupleType(restType) || restType.TargetTupleType().combinedFlags&ElementFlagsVariable != 0 || index < restType.TargetTupleType().fixedLength {
-			return c.getIndexedAccessType(restType, c.getNumberLiteralType(float64(index)))
+			return c.getIndexedAccessType(restType, c.getNumberLiteralType(jsnum.Number(index)))
 		}
 	}
 	return nil

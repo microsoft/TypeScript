@@ -19,11 +19,11 @@ package printer
 
 import (
 	"fmt"
-	"math"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
@@ -2111,8 +2111,8 @@ func (p *Printer) mayNeedDotDotForPropertyAccess(expression *ast.Expression) boo
 			!strings.Contains(text, "e")
 	} else if ast.IsAccessExpression(expression) {
 		// check if constant enum value is a non-negative integer
-		if constantValue, ok := p.getConstantValue(expression).(float64); ok {
-			return !math.IsInf(constantValue, 0 /*sign*/) && constantValue >= 0 && math.Floor(constantValue) == constantValue
+		if constantValue, ok := p.getConstantValue(expression).(jsnum.Number); ok {
+			return !constantValue.IsInf() && constantValue >= 0 && constantValue.Floor() == constantValue
 		}
 		return false
 	}

@@ -5,8 +5,8 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/scanner"
-	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 func (c *Checker) getTypePrecedence(t *Type) ast.TypePrecedence {
@@ -168,7 +168,7 @@ func (p *Printer) printLiteralTypeValue(t *Type) {
 	switch value := t.AsLiteralType().value.(type) {
 	case string:
 		p.printStringLiteral(value)
-	case float64:
+	case jsnum.Number:
 		p.printNumberLiteral(value)
 	case bool:
 		p.printBooleanLiteral(value)
@@ -183,8 +183,8 @@ func (p *Printer) printStringLiteral(s string) {
 	p.print("\"")
 }
 
-func (p *Printer) printNumberLiteral(f float64) {
-	p.print(stringutil.FromNumber(f))
+func (p *Printer) printNumberLiteral(f jsnum.Number) {
+	p.print(f.String())
 }
 
 func (p *Printer) printBooleanLiteral(b bool) {
