@@ -1,0 +1,5 @@
+name: CodeQL Configuration
+
+paths-ignore:
+  - _submodules/**
+  - '**/testdata/**'
