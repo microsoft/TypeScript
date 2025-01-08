@@ -487,6 +487,8 @@ type Checker struct {
 	host                                    CompilerHost
 	compilerOptions                         *core.CompilerOptions
 	files                                   []*ast.SourceFile
+	fileIndexMap                            map[*ast.SourceFile]int
+	compareSymbols                          func(*ast.Symbol, *ast.Symbol) int
 	typeCount                               uint32
 	symbolCount                             uint32
 	totalInstantiationCount                 uint32
@@ -733,6 +735,8 @@ func NewChecker(program *Program) *Checker {
 	c.host = program.host
 	c.compilerOptions = program.compilerOptions
 	c.files = program.files
+	c.fileIndexMap = createFileIndexMap(c.files)
+	c.compareSymbols = c.compareSymbolsWorker // Closure optimization
 	c.languageVersion = c.compilerOptions.GetEmitScriptTarget()
 	c.moduleKind = c.compilerOptions.GetEmitModuleKind()
 	c.legacyDecorators = c.compilerOptions.ExperimentalDecorators == core.TSTrue
@@ -863,7 +867,7 @@ func NewChecker(program *Program) *Checker {
 	c.emptyStringType = c.getStringLiteralType("")
 	c.zeroType = c.getNumberLiteralType(0)
 	c.zeroBigIntType = c.getBigIntLiteralType(PseudoBigInt{negative: false, base10Value: "0"})
-	c.typeofType = c.getUnionType(core.Map(slices.Collect(maps.Keys(typeofNEFacts)), c.getStringLiteralType))
+	c.typeofType = c.getUnionType(core.Map(slices.Sorted(maps.Keys(typeofNEFacts)), c.getStringLiteralType))
 	c.flowLoopCache = make(map[FlowLoopKey]*Type)
 	c.flowNodeReachable = make(map[*ast.FlowNode]bool)
 	c.flowNodePostSuper = make(map[*ast.FlowNode]bool)
@@ -902,6 +906,14 @@ func NewChecker(program *Program) *Checker {
 	c.initializeIterationResolvers()
 	c.initializeChecker()
 	return c
+}
+
+func createFileIndexMap(files []*ast.SourceFile) map[*ast.SourceFile]int {
+	result := make(map[*ast.SourceFile]int, len(files))
+	for i, file := range files {
+		result[file] = i
+	}
+	return result
 }
 
 func (c *Checker) reportUnreliableWorker(t *Type) *Type {
@@ -15110,7 +15122,7 @@ func (c *Checker) getNamedMembers(members ast.SymbolTable) []*ast.Symbol {
 			result = append(result, symbol)
 		}
 	}
-	sortSymbols(result)
+	c.sortSymbols(result)
 	return result
 }
 
@@ -17862,6 +17874,7 @@ func (c *Checker) newType(flags TypeFlags, objectFlags ObjectFlags, data TypeDat
 	t.flags = flags
 	t.objectFlags = objectFlags &^ (ObjectFlagsCouldContainTypeVariablesComputed | ObjectFlagsCouldContainTypeVariables | ObjectFlagsMembersResolved)
 	t.id = TypeId(c.typeCount)
+	t.checker = c
 	t.data = data
 	return t
 }
@@ -18602,14 +18615,7 @@ func (c *Checker) addTypeToUnion(typeSet []*Type, includes TypeFlags, t *Type) (
 				includes |= TypeFlagsIncludesNonWideningType
 			}
 		} else {
-			var index int
-			var ok bool
-			if len(typeSet) != 0 && t.id > typeSet[len(typeSet)-1].id {
-				index = len(typeSet)
-			} else {
-				index, ok = slices.BinarySearchFunc(typeSet, t, compareTypeIds)
-			}
-			if !ok {
+			if index, ok := slices.BinarySearchFunc(typeSet, t, compareTypes); !ok {
 				typeSet = slices.Insert(typeSet, index, t)
 			}
 		}
@@ -19351,12 +19357,12 @@ func (c *Checker) removeType(t *Type, targetType *Type) *Type {
 }
 
 func containsType(types []*Type, t *Type) bool {
-	_, ok := slices.BinarySearchFunc(types, t, compareTypeIds)
+	_, ok := slices.BinarySearchFunc(types, t, compareTypes)
 	return ok
 }
 
 func insertType(types []*Type, t *Type) ([]*Type, bool) {
-	if i, ok := slices.BinarySearchFunc(types, t, compareTypeIds); !ok {
+	if i, ok := slices.BinarySearchFunc(types, t, compareTypes); !ok {
 		return slices.Insert(types, i, t), true
 	}
 	return types, false

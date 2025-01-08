@@ -2,18 +2,31 @@ package compiler
 
 import "github.com/microsoft/typescript-go/internal/core"
 
+// TypeMapperKind
+
+type TypeMapperKind int32
+
+const (
+	TypeMapperKindUnknown TypeMapperKind = iota
+	TypeMapperKindSimple
+	TypeMapperKindArray
+	TypeMapperKindMerged
+)
+
 // TypeMapper
 
 type TypeMapper struct {
 	data TypeMapperData
 }
 
-func (m *TypeMapper) Map(t *Type) *Type { return m.data.Map(t) }
+func (m *TypeMapper) Map(t *Type) *Type    { return m.data.Map(t) }
+func (m *TypeMapper) Kind() TypeMapperKind { return m.data.Kind() }
 
 // TypeMapperData
 
 type TypeMapperData interface {
 	Map(t *Type) *Type
+	Kind() TypeMapperKind
 }
 
 // Factory functions
@@ -70,10 +83,19 @@ func (c *Checker) newBackreferenceMapper(context *InferenceContext, index int) *
 	return newArrayToSingleTypeMapper(typeParameters, c.unknownType)
 }
 
+// TypeMapperBase
+
+type TypeMapperBase struct {
+	TypeMapper
+}
+
+func (m *TypeMapperBase) Map(t *Type) *Type    { return t }
+func (m *TypeMapperBase) Kind() TypeMapperKind { return TypeMapperKindUnknown }
+
 // SimpleTypeMapper
 
 type SimpleTypeMapper struct {
-	TypeMapper
+	TypeMapperBase
 	source *Type
 	target *Type
 }
@@ -93,10 +115,14 @@ func (m *SimpleTypeMapper) Map(t *Type) *Type {
 	return t
 }
 
+func (m *SimpleTypeMapper) Kind() TypeMapperKind {
+	return TypeMapperKindSimple
+}
+
 // ArrayTypeMapper
 
 type ArrayTypeMapper struct {
-	TypeMapper
+	TypeMapperBase
 	sources []*Type
 	targets []*Type
 }
@@ -118,10 +144,14 @@ func (m *ArrayTypeMapper) Map(t *Type) *Type {
 	return t
 }
 
+func (m *ArrayTypeMapper) Kind() TypeMapperKind {
+	return TypeMapperKindArray
+}
+
 // ArrayToSingleTypeMapper
 
 type ArrayToSingleTypeMapper struct {
-	TypeMapper
+	TypeMapperBase
 	sources []*Type
 	target  *Type
 }
@@ -146,7 +176,7 @@ func (m *ArrayToSingleTypeMapper) Map(t *Type) *Type {
 // DeferredTypeMapper
 
 type DeferredTypeMapper struct {
-	TypeMapper
+	TypeMapperBase
 	sources []*Type
 	targets []func() *Type
 }
@@ -171,7 +201,7 @@ func (m *DeferredTypeMapper) Map(t *Type) *Type {
 // FunctionTypeMapper
 
 type FunctionTypeMapper struct {
-	TypeMapper
+	TypeMapperBase
 	fn func(*Type) *Type
 }
 
@@ -189,7 +219,7 @@ func (m *FunctionTypeMapper) Map(t *Type) *Type {
 // MergedTypeMapper
 
 type MergedTypeMapper struct {
-	TypeMapper
+	TypeMapperBase
 	m1 *TypeMapper
 	m2 *TypeMapper
 }
@@ -206,10 +236,14 @@ func (m *MergedTypeMapper) Map(t *Type) *Type {
 	return m.m2.Map(m.m1.Map(t))
 }
 
+func (m *MergedTypeMapper) Kind() TypeMapperKind {
+	return TypeMapperKindMerged
+}
+
 // CompositeTypeMapper
 
 type CompositeTypeMapper struct {
-	TypeMapper
+	TypeMapperBase
 	c  *Checker
 	m1 *TypeMapper
 	m2 *TypeMapper
@@ -235,7 +269,7 @@ func (m *CompositeTypeMapper) Map(t *Type) *Type {
 // InferenceTypeMapper
 
 type InferenceTypeMapper struct {
-	TypeMapper
+	TypeMapperBase
 	c      *Checker
 	n      *InferenceContext
 	fixing bool

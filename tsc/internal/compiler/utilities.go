@@ -1,6 +1,7 @@
 package compiler
 
 import (
+	"cmp"
 	"maps"
 	"slices"
 	"strings"
@@ -1576,43 +1577,351 @@ func createSymbolTable(symbols []*ast.Symbol) ast.SymbolTable {
 	return result
 }
 
-func sortSymbols(symbols []*ast.Symbol) {
-	slices.SortFunc(symbols, compareSymbols)
+func (c *Checker) sortSymbols(symbols []*ast.Symbol) {
+	slices.SortFunc(symbols, c.compareSymbols)
 }
 
-func compareSymbols(s1, s2 *ast.Symbol) int {
+func (c *Checker) compareSymbolsWorker(s1, s2 *ast.Symbol) int {
 	if s1 == s2 {
 		return 0
 	}
-	if s1.ValueDeclaration != nil && s2.ValueDeclaration != nil {
-		// Symbols with the same unmerged parent are always in the same file
-		if s1.Parent != s2.Parent {
-			f1 := ast.GetSourceFileOfNode(s1.ValueDeclaration)
-			f2 := ast.GetSourceFileOfNode(s2.ValueDeclaration)
-			if f1 != f2 {
-				// Compare the full paths (no two files should have the same full path)
-				return strings.Compare(string(f1.Path()), string(f2.Path()))
-			}
-			// In the same file, compare source positions
-		}
-		r := s1.ValueDeclaration.Pos() - s2.ValueDeclaration.Pos()
-		if r != 0 {
-			return r
-		}
-	}
-	// Symbols with value declarations sort before symbols without
-	if s1.ValueDeclaration != nil && s2.ValueDeclaration == nil {
-		return -1
-	}
-	if s1.ValueDeclaration == nil && s2.ValueDeclaration != nil {
+	if s1 == nil {
 		return 1
 	}
-	// Sort by name
-	r := strings.Compare(s1.Name, s2.Name)
-	if r != 0 {
+	if s2 == nil {
+		return -1
+	}
+	if len(s1.Declarations) != 0 && len(s2.Declarations) != 0 {
+		if r := c.compareNodes(s1.Declarations[0], s2.Declarations[0]); r != 0 {
+			return r
+		}
+	} else if len(s1.Declarations) != 0 {
+		return -1
+	} else if len(s2.Declarations) != 0 {
+		return 1
+	}
+	if r := strings.Compare(s1.Name, s2.Name); r != 0 {
 		return r
 	}
-	panic("Symbols must have unique names to be sorted")
+	// Fall back to symbol IDs. This is a last resort that should happen only when symbols have
+	// no declaration and duplicate names.
+	return int(ast.GetSymbolId(s1)) - int(ast.GetSymbolId(s2))
+}
+
+func (c *Checker) compareNodes(n1, n2 *ast.Node) int {
+	if n1 == n2 {
+		return 0
+	}
+	if n1 == nil {
+		return 1
+	}
+	if n2 == nil {
+		return -1
+	}
+	f1 := c.fileIndexMap[ast.GetSourceFileOfNode(n1)]
+	f2 := c.fileIndexMap[ast.GetSourceFileOfNode(n2)]
+	if f1 != f2 {
+		// Order by index of file in the containing program
+		return f1 - f2
+	}
+	// In the same file, order by source position
+	return n1.Pos() - n2.Pos()
+}
+
+func compareTypes(t1, t2 *Type) int {
+	if t1 == t2 {
+		return 0
+	}
+	if t1 == nil {
+		return -1
+	}
+	if t2 == nil {
+		return 1
+	}
+	if t1.checker != t2.checker {
+		panic("Cannot compare types from different checkers")
+	}
+	// First sort in order of increasing type flags values.
+	if c := getSortOrderFlags(t1) - getSortOrderFlags(t2); c != 0 {
+		return c
+	}
+	// Order named types by name and, in the case of aliased types, by alias type arguments.
+	if c := compareTypeNames(t1, t2); c != 0 {
+		return c
+	}
+	// We have unnamed types or types with identical names. Now sort by data specific to the type.
+	switch {
+	case t1.flags&(TypeFlagsAny|TypeFlagsUnknown|TypeFlagsString|TypeFlagsNumber|TypeFlagsBoolean|TypeFlagsBigInt|TypeFlagsESSymbol|TypeFlagsVoid|TypeFlagsUndefined|TypeFlagsNull|TypeFlagsNever|TypeFlagsNonPrimitive) != 0:
+		// Only distinguished by type IDs, handled below.
+	case t1.flags&TypeFlagsObject != 0:
+		// Order unnamed or identically named object types by symbol.
+		if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
+			return c
+		}
+		// When object types have the same or no symbol, order by kind. We order type references before other kinds.
+		if t1.objectFlags&ObjectFlagsReference != 0 && t2.objectFlags&ObjectFlagsReference != 0 {
+			r1 := t1.AsTypeReference()
+			r2 := t2.AsTypeReference()
+			if r1.target.objectFlags&ObjectFlagsTuple != 0 && r2.target.objectFlags&ObjectFlagsTuple != 0 {
+				// Tuple types have no associated symbol, instead we order by tuple element information.
+				if c := compareTupleTypes(r1.target.AsTupleType(), r2.target.AsTupleType()); c != 0 {
+					return c
+				}
+			}
+			// Here we know we have references to instantiations of the same type because we have matching targets.
+			if r1.node == nil && r2.node == nil {
+				// Non-deferred type references with the same target are sorted by their type argument lists.
+				if c := compareTypeLists(t1.AsTypeReference().resolvedTypeArguments, t2.AsTypeReference().resolvedTypeArguments); c != 0 {
+					return c
+				}
+			} else {
+				// Deferred type references with the same target are ordered by the source location of the reference.
+				if c := t1.checker.compareNodes(r1.node, r2.node); c != 0 {
+					return c
+				}
+				// Instantiations of the same deferred type reference are ordered by their associated type mappers
+				// (which reflect the mapping of in-scope type parameters to type arguments).
+				if c := compareTypeMappers(t1.AsObjectType().mapper, t2.AsObjectType().mapper); c != 0 {
+					return c
+				}
+			}
+		} else if t1.objectFlags&ObjectFlagsReference != 0 {
+			return -1
+		} else if t2.objectFlags&ObjectFlagsReference != 0 {
+			return 1
+		} else {
+			// Order unnamed non-reference object types by kind associated type mappers. Reverse mapped types have
+			// neither symbols nor mappers so they're ultimately ordered by unstable type IDs, but given their rarity
+			// this should be fine.
+			if c := int(t1.objectFlags&ObjectFlagsObjectTypeKindMask) - int(t2.objectFlags&ObjectFlagsObjectTypeKindMask); c != 0 {
+				return c
+			}
+			if c := compareTypeMappers(t1.AsObjectType().mapper, t2.AsObjectType().mapper); c != 0 {
+				return c
+			}
+		}
+	case t1.flags&TypeFlagsUnion != 0:
+		// Unions are ordered by origin and then constituent type lists.
+		o1 := t1.AsUnionType().origin
+		o2 := t2.AsUnionType().origin
+		if o1 == nil && o2 == nil {
+			if c := compareTypeLists(t1.Types(), t2.Types()); c != 0 {
+				return c
+			}
+		} else if o1 == nil {
+			return 1
+		} else if o2 == nil {
+			return -1
+		} else {
+			if c := compareTypes(o1, o2); c != 0 {
+				return c
+			}
+		}
+	case t1.flags&TypeFlagsIntersection != 0:
+		// Intersections are ordered by their constituent type lists.
+		if c := compareTypeLists(t1.Types(), t2.Types()); c != 0 {
+			return c
+		}
+	case t1.flags&(TypeFlagsEnumLiteral|TypeFlagsUniqueESSymbol) != 0:
+		// Enum members are ordered by their symbol (and thus their declaration order).
+		if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsStringLiteral != 0:
+		// String literal types are ordered by their values.
+		if c := strings.Compare(t1.AsLiteralType().value.(string), t2.AsLiteralType().value.(string)); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsNumberLiteral != 0:
+		// Numeric literal types are ordered by their values.
+		if c := cmp.Compare(t1.AsLiteralType().value.(float64), t2.AsLiteralType().value.(float64)); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsBooleanLiteral != 0:
+		b1 := t1.AsLiteralType().value.(bool)
+		b2 := t2.AsLiteralType().value.(bool)
+		if b1 != b2 {
+			if b1 {
+				return 1
+			}
+			return -1
+		}
+	case t1.flags&TypeFlagsTypeParameter != 0:
+		if c := t1.checker.compareSymbols(t1.symbol, t2.symbol); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsIndex != 0:
+		if c := compareTypes(t1.AsIndexType().target, t2.AsIndexType().target); c != 0 {
+			return c
+		}
+		if c := int(t1.AsIndexType().flags) - int(t2.AsIndexType().flags); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsIndexedAccess != 0:
+		if c := compareTypes(t1.AsIndexedAccessType().objectType, t2.AsIndexedAccessType().objectType); c != 0 {
+			return c
+		}
+		if c := compareTypes(t1.AsIndexedAccessType().indexType, t2.AsIndexedAccessType().indexType); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsConditional != 0:
+		if c := t1.checker.compareNodes(t1.AsConditionalType().root.node.AsNode(), t2.AsConditionalType().root.node.AsNode()); c != 0 {
+			return c
+		}
+		if c := compareTypeMappers(t1.AsConditionalType().mapper, t2.AsConditionalType().mapper); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsSubstitution != 0:
+		if c := compareTypes(t1.AsSubstitutionType().baseType, t2.AsSubstitutionType().baseType); c != 0 {
+			return c
+		}
+		if c := compareTypes(t1.AsSubstitutionType().constraint, t2.AsSubstitutionType().constraint); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsTemplateLiteral != 0:
+		if c := slices.Compare(t1.AsTemplateLiteralType().texts, t2.AsTemplateLiteralType().texts); c != 0 {
+			return c
+		}
+		if c := compareTypeLists(t1.AsTemplateLiteralType().types, t2.AsTemplateLiteralType().types); c != 0 {
+			return c
+		}
+	case t1.flags&TypeFlagsStringMapping != 0:
+		if c := compareTypes(t1.AsStringMappingType().target, t2.AsStringMappingType().target); c != 0 {
+			return c
+		}
+	}
+	// Fall back to type IDs. This results in type creation order for built-in types.
+	return int(t1.id) - int(t2.id)
+}
+
+func getSortOrderFlags(t *Type) int {
+	// We want enum literal and computed values to be ordered by their declarations, so we merge TypeFlagsEnum into
+	// TypeFlagsEnumLiteral and clear TypeFlagsEnum.
+	return int((t.flags&TypeFlagsEnum)>>1 | t.flags&^TypeFlagsEnum)
+}
+
+func compareTypeNames(t1, t2 *Type) int {
+	s1 := getTypeNameSymbol(t1)
+	s2 := getTypeNameSymbol(t2)
+	if s1 == s2 {
+		if t1.alias != nil {
+			return compareTypeLists(t1.alias.typeArguments, t2.alias.typeArguments)
+		}
+		return 0
+	}
+	if s1 == nil {
+		return 1
+	}
+	if s2 == nil {
+		return -1
+	}
+	return strings.Compare(s1.Name, s2.Name)
+}
+
+func getTypeNameSymbol(t *Type) *ast.Symbol {
+	if t.alias != nil {
+		return t.alias.symbol
+	}
+	if t.flags&(TypeFlagsTypeParameter|TypeFlagsStringMapping) != 0 || t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0 {
+		return t.symbol
+	}
+	return nil
+}
+
+func getObjectTypeName(t *Type) *ast.Symbol {
+	if t.objectFlags&(ObjectFlagsClassOrInterface|ObjectFlagsReference) != 0 {
+		return t.symbol
+	}
+	return nil
+}
+
+func compareTupleTypes(t1, t2 *TupleType) int {
+	if t1 == t2 {
+		return 0
+	}
+	if t1.readonly != t2.readonly {
+		return core.IfElse(t1.readonly, 1, -1)
+	}
+	if len(t1.elementInfos) != len(t2.elementInfos) {
+		return len(t1.elementInfos) - len(t2.elementInfos)
+	}
+	for i := range t1.elementInfos {
+		if c := int(t1.elementInfos[i].flags) - int(t2.elementInfos[i].flags); c != 0 {
+			return c
+		}
+	}
+	for i := range t1.elementInfos {
+		if c := compareElementLabels(t1.elementInfos[i].labeledDeclaration, t2.elementInfos[i].labeledDeclaration); c != 0 {
+			return c
+		}
+	}
+	return 0
+}
+
+func compareElementLabels(n1, n2 *ast.Node) int {
+	if n1 == n2 {
+		return 0
+	}
+	if n1 == nil {
+		return -1
+	}
+	if n2 == nil {
+		return 1
+	}
+	return strings.Compare(n1.Name().Text(), n2.Name().Text())
+}
+
+func compareTypeLists(s1, s2 []*Type) int {
+	if len(s1) != len(s2) {
+		return len(s1) - len(s2)
+	}
+	for i, t1 := range s1 {
+		if c := compareTypes(t1, s2[i]); c != 0 {
+			return c
+		}
+	}
+	return 0
+}
+
+func compareTypeMappers(m1, m2 *TypeMapper) int {
+	if m1 == m2 {
+		return 0
+	}
+	if m1 == nil {
+		return 1
+	}
+	if m2 == nil {
+		return -1
+	}
+	kind1 := m1.Kind()
+	kind2 := m2.Kind()
+	if kind1 != kind2 {
+		return int(kind1) - int(kind2)
+	}
+	switch kind1 {
+	case TypeMapperKindSimple:
+		m1 := m1.data.(*SimpleTypeMapper)
+		m2 := m2.data.(*SimpleTypeMapper)
+		if c := compareTypes(m1.source, m2.source); c != 0 {
+			return c
+		}
+		return compareTypes(m1.target, m2.target)
+	case TypeMapperKindArray:
+		m1 := m1.data.(*ArrayTypeMapper)
+		m2 := m2.data.(*ArrayTypeMapper)
+		if c := compareTypeLists(m1.sources, m2.sources); c != 0 {
+			return c
+		}
+		return compareTypeLists(m1.targets, m2.targets)
+	case TypeMapperKindMerged:
+		m1 := m1.data.(*MergedTypeMapper)
+		m2 := m2.data.(*MergedTypeMapper)
+		if c := compareTypeMappers(m1.m1, m2.m1); c != 0 {
+			return c
+		}
+		return compareTypeMappers(m1.m2, m2.m2)
+	}
+	return 0
 }
 
 func getClassLikeDeclarationOfSymbol(symbol *ast.Symbol) *ast.Node {

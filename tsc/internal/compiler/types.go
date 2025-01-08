@@ -381,21 +381,21 @@ const (
 	TypeFlagsNone            TypeFlags = 0
 	TypeFlagsAny             TypeFlags = 1 << 0
 	TypeFlagsUnknown         TypeFlags = 1 << 1
-	TypeFlagsString          TypeFlags = 1 << 2
-	TypeFlagsNumber          TypeFlags = 1 << 3
-	TypeFlagsBoolean         TypeFlags = 1 << 4
-	TypeFlagsEnum            TypeFlags = 1 << 5 // Numeric computed enum member value
-	TypeFlagsBigInt          TypeFlags = 1 << 6
-	TypeFlagsStringLiteral   TypeFlags = 1 << 7
-	TypeFlagsNumberLiteral   TypeFlags = 1 << 8
-	TypeFlagsBooleanLiteral  TypeFlags = 1 << 9
-	TypeFlagsEnumLiteral     TypeFlags = 1 << 10 // Always combined with StringLiteral, NumberLiteral, or Union
-	TypeFlagsBigIntLiteral   TypeFlags = 1 << 11
-	TypeFlagsESSymbol        TypeFlags = 1 << 12 // Type of symbol primitive introduced in ES6
-	TypeFlagsUniqueESSymbol  TypeFlags = 1 << 13 // unique symbol
-	TypeFlagsVoid            TypeFlags = 1 << 14
-	TypeFlagsUndefined       TypeFlags = 1 << 15
-	TypeFlagsNull            TypeFlags = 1 << 16
+	TypeFlagsUndefined       TypeFlags = 1 << 2
+	TypeFlagsNull            TypeFlags = 1 << 3
+	TypeFlagsVoid            TypeFlags = 1 << 4
+	TypeFlagsString          TypeFlags = 1 << 5
+	TypeFlagsNumber          TypeFlags = 1 << 6
+	TypeFlagsBigInt          TypeFlags = 1 << 7
+	TypeFlagsBoolean         TypeFlags = 1 << 8
+	TypeFlagsESSymbol        TypeFlags = 1 << 9 // Type of symbol primitive introduced in ES6
+	TypeFlagsStringLiteral   TypeFlags = 1 << 10
+	TypeFlagsNumberLiteral   TypeFlags = 1 << 11
+	TypeFlagsBigIntLiteral   TypeFlags = 1 << 12
+	TypeFlagsBooleanLiteral  TypeFlags = 1 << 13
+	TypeFlagsUniqueESSymbol  TypeFlags = 1 << 14 // unique symbol
+	TypeFlagsEnumLiteral     TypeFlags = 1 << 15 // Always combined with StringLiteral, NumberLiteral, or Union
+	TypeFlagsEnum            TypeFlags = 1 << 16 // Numeric computed enum member value (must be right after EnumLiteral, see getSortOrderFlags)
 	TypeFlagsNever           TypeFlags = 1 << 17 // Never type
 	TypeFlagsTypeParameter   TypeFlags = 1 << 18 // Type parameter
 	TypeFlagsObject          TypeFlags = 1 << 19 // Object type
@@ -494,7 +494,7 @@ const (
 	ObjectFlagsPropagatingFlags   = ObjectFlagsContainsWideningType | ObjectFlagsContainsObjectOrArrayLiteral | ObjectFlagsNonInferrableType
 	ObjectFlagsInstantiatedMapped = ObjectFlagsMapped | ObjectFlagsInstantiated
 	// Object flags that uniquely identify the kind of ObjectType
-	ObjectFlagsObjectTypeKindMask = ObjectFlagsClassOrInterface | ObjectFlagsReference | ObjectFlagsTuple | ObjectFlagsAnonymous | ObjectFlagsMapped | ObjectFlagsReverseMapped | ObjectFlagsEvolvingArray
+	ObjectFlagsObjectTypeKindMask = ObjectFlagsClassOrInterface | ObjectFlagsReference | ObjectFlagsTuple | ObjectFlagsAnonymous | ObjectFlagsMapped | ObjectFlagsReverseMapped | ObjectFlagsEvolvingArray | ObjectFlagsInstantiationExpressionType | ObjectFlagsSingleSignatureType
 	// Flags that require TypeFlags.Object
 	ObjectFlagsContainsSpread              = 1 << 22 // Object literal contains spread operation
 	ObjectFlagsObjectRestType              = 1 << 23 // Originates in object rest declaration
@@ -548,6 +548,7 @@ type Type struct {
 	id          TypeId
 	symbol      *ast.Symbol
 	alias       *TypeAlias
+	checker     *Checker
 	data        TypeData // Type specific data
 }
 
@@ -725,17 +726,42 @@ func (t *StructuredType) ConstructSignatures() []*Signature {
 	return slices.Clip(t.signatures[t.callSignatureCount:])
 }
 
-// ObjectType (base of all instantiable object types)
-// Instances of ObjectType or derived types have the following ObjectFlags:
-// ObjectType (ObjectFlagsAnonymous)
-//   TypeReference (ObjectFlagsReference)
-//     InterfaceType (ObjectFlagsReference | (ObjectFlagsClass|ObjectFlagsInterface))
-//       TupleType (ObjectFlagsReference | ObjectFlagsTuple)
-//   SingleSignatureType (ObjectFlagsAnonymous|ObjectFlagsSingleSignatureType)
-//   InstantiationExpressionType (ObjectFlagsAnonymous|ObjectFlagsInstantiationExpressionType)
-//   MappedType (ObjectFlagsAnonymous|ObjectFlagsMapped)
-//   ReverseMapped (ObjectFlagsReverseMapped)
-//   EvolvingArray (ObjectFlagsEvolvingArray)
+// Except for tuple type references and reverse mapped types, all object types have an associated symbol.
+// Possible object type instances are listed in the following.
+
+// InterfaceType:
+// ObjectFlagsClass: Originating non-generic class type
+// ObjectFlagsClass|ObjectFlagsReference: Originating generic class type
+// ObjectFlagsInterface: Originating non-generic interface type
+// ObjectFlagsInterface|ObjectFlagsReference: Originating generic interface type
+
+// TupleType:
+// ObjectFlagsReference|ObjectFlagsTuple: Originating generic tuple type (synthesized)
+
+// TypeReference
+// ObjectFlagsReference: Instantiated generic class, interface, or tuple type
+
+// ObjectType:
+// ObjectFlagsAnonymous: Originating anonymous object type
+// ObjectFlagsAnonymous|ObjectFlagsInstantiated: Instantiated anonymous object type
+
+// MappedType:
+// ObjectFlagsMapped: Originating mapped type
+// ObjectFlagsMapped|ObjectFlagsInstantiated: Instantiated mapped type
+
+// InstantiationExpressionType:
+// ObjectFlagsAnonymous|ObjectFlagsInstantiationExpression: Originating instantiation expression type
+// ObjectFlagsAnonymous|ObjectFlagsInstantiated|ObjectFlagsInstantiationExpression: Instantiated instantiation expression type
+
+// SingleSignatureType:
+// ObjectFlagsAnonymous|ObjectFlagsSingleSignatureType: Originating single signature type
+// ObjectFlagsAnonymous|ObjectFlagsInstantiated|ObjectFlagsSingleSignatureType: Instantiated single signature type
+
+// ReverseMappedType:
+// ObjectFlagsAnonymous|ObjectFlagsReverseMapped: Reverse mapped type
+
+// EvolvingArrayType:
+// ObjectFlagsEvolvingArray: Evolving array type
 
 type ObjectType struct {
 	StructuredType
@@ -879,7 +905,6 @@ type UnionOrIntersectionType struct {
 	propertyCache                               ast.SymbolTable
 	propertyCacheWithoutFunctionPropertyAugment ast.SymbolTable
 	resolvedProperties                          []*ast.Symbol
-	resolvedBaseConstraint                      *Type
 }
 
 func (t *UnionOrIntersectionType) AsUnionOrIntersectionType() *UnionOrIntersectionType { return t }
