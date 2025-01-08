@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/inferenceFromGenericSignatureTypeParamConstraints1.ts] ////
+
+=== inferenceFromGenericSignatureTypeParamConstraints1.ts ===
+// https://github.com/microsoft/TypeScript/issues/41040
+
+type InferGenericConstraint<Fn> = 
+>InferGenericConstraint : InferGenericConstraint<Fn>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Fn extends <T extends infer Constraint>(arg: T) => any
+>arg : T
+>    : ^
+
+        ? Constraint
+        : never;
+
+type GenericFunctionExample = <T extends number>(arg: T) => void;
+>GenericFunctionExample : GenericFunctionExample
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
+>arg : T
+>    : ^
+
+type InferredConstraint = InferGenericConstraint<GenericFunctionExample>;
+>InferredConstraint : number
+>                   : ^^^^^^
+

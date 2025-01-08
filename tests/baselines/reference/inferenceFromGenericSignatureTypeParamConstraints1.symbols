@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/inferenceFromGenericSignatureTypeParamConstraints1.ts] ////
+
+=== inferenceFromGenericSignatureTypeParamConstraints1.ts ===
+// https://github.com/microsoft/TypeScript/issues/41040
+
+type InferGenericConstraint<Fn> = 
+>InferGenericConstraint : Symbol(InferGenericConstraint, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 0, 0))
+>Fn : Symbol(Fn, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 2, 28))
+
+    Fn extends <T extends infer Constraint>(arg: T) => any
+>Fn : Symbol(Fn, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 2, 28))
+>T : Symbol(T, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 3, 16))
+>Constraint : Symbol(Constraint, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 3, 31))
+>arg : Symbol(arg, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 3, 44))
+>T : Symbol(T, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 3, 16))
+
+        ? Constraint
+>Constraint : Symbol(Constraint, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 3, 31))
+
+        : never;
+
+type GenericFunctionExample = <T extends number>(arg: T) => void;
+>GenericFunctionExample : Symbol(GenericFunctionExample, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 5, 16))
+>T : Symbol(T, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 7, 31))
+>arg : Symbol(arg, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 7, 49))
+>T : Symbol(T, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 7, 31))
+
+type InferredConstraint = InferGenericConstraint<GenericFunctionExample>;
+>InferredConstraint : Symbol(InferredConstraint, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 7, 65))
+>InferGenericConstraint : Symbol(InferGenericConstraint, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 0, 0))
+>GenericFunctionExample : Symbol(GenericFunctionExample, Decl(inferenceFromGenericSignatureTypeParamConstraints1.ts, 5, 16))
+
