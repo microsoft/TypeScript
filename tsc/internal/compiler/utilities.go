@@ -1734,7 +1734,7 @@ func compareTypes(t1, t2 *Type) int {
 		}
 	case t1.flags&TypeFlagsNumberLiteral != 0:
 		// Numeric literal types are ordered by their values.
-		if c := cmp.Compare(t1.AsLiteralType().value.(float64), t2.AsLiteralType().value.(float64)); c != 0 {
+		if c := cmp.Compare(t1.AsLiteralType().value.(jsnum.Number), t2.AsLiteralType().value.(jsnum.Number)); c != 0 {
 			return c
 		}
 	case t1.flags&TypeFlagsBooleanLiteral != 0:
