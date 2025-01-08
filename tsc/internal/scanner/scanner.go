@@ -1203,7 +1203,7 @@ func (s *Scanner) scanIdentifier(prefixLength int) bool {
 			s.tokenValue = s.text[start:s.pos]
 			return true
 		}
-		s.pos = start
+		s.pos = start + prefixLength
 	}
 	ch, size := s.charAndSize()
 	if isIdentifierStart(ch, s.languageVersion) {
