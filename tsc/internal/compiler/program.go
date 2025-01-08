@@ -34,7 +34,8 @@ type Program struct {
 	compilerOptions  *core.CompilerOptions
 	rootPath         string
 	nodeModules      map[string]*ast.SourceFile
-	checker          *Checker
+	checkers         []*Checker
+	checkersByFile   map[*ast.SourceFile]*Checker
 	resolver         *module.Resolver
 	currentDirectory string
 
@@ -190,6 +191,50 @@ func (p *Program) bindSourceFiles() {
 		}
 	}
 	wg.Wait()
+}
+
+func (p *Program) checkSourceFiles() {
+	p.createCheckers()
+	wg := core.NewWorkGroup(false)
+	for index, checker := range p.checkers {
+		wg.Run(func() {
+			for i := index; i < len(p.files); i += len(p.checkers) {
+				checker.checkSourceFile(p.files[i])
+			}
+		})
+	}
+	wg.Wait()
+}
+
+func (p *Program) createCheckers() {
+	if len(p.checkers) == 0 {
+		p.checkers = make([]*Checker, core.IfElse(p.programOptions.SingleThreaded, 1, 4))
+		for i := range p.checkers {
+			p.checkers[i] = NewChecker(p)
+		}
+		p.checkersByFile = make(map[*ast.SourceFile]*Checker)
+		for i, file := range p.files {
+			p.checkersByFile[file] = p.checkers[i%len(p.checkers)]
+		}
+	}
+}
+
+// Return the type checker associated with the program.
+func (p *Program) GetTypeChecker() *Checker {
+	p.createCheckers()
+	// Just use the first (and possibly only) checker for checker requests. Such requests are likely
+	// to obtain types through multiple API calls and we want to ensure that those types are created
+	// by the same checker so they can interoperate.
+	return p.checkers[0]
+}
+
+// Return a checker for the given file. We may have multiple checkers in concurrent scenarios and this
+// method returns the checker that was tasked with checking the file. Note that it isn't possible to mix
+// types obtained from different checkers, so only non-type data (such as diagnostics or string
+// representations of types) should be obtained from checkers returned by this method.
+func (p *Program) getTypeCheckerForFile(file *ast.SourceFile) *Checker {
+	p.createCheckers()
+	return p.checkersByFile[file]
 }
 
 func (p *Program) processRootFiles(rootFiles []string, isLib bool) {
@@ -348,33 +393,24 @@ func (p *Program) resolveImportsAndModuleAugmentations(file *ast.SourceFile) []s
 }
 
 func (p *Program) GetSyntacticDiagnostics(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return p.getDiagnosticsHelper(sourceFile, false /*ensureBound*/, p.getSyntaticDiagnosticsForFile)
+	return p.getDiagnosticsHelper(sourceFile, false /*ensureBound*/, false /*ensureChecked*/, p.getSyntaticDiagnosticsForFile)
 }
 
 func (p *Program) GetBindDiagnostics(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return p.getDiagnosticsHelper(sourceFile, true /*ensureBound*/, p.getBindDiagnosticsForFile)
+	return p.getDiagnosticsHelper(sourceFile, true /*ensureBound*/, false /*ensureChecked*/, p.getBindDiagnosticsForFile)
 }
 
 func (p *Program) GetSemanticDiagnostics(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return p.getDiagnosticsHelper(sourceFile, true /*ensureBound*/, p.getSemanticDiagnosticsForFile)
+	return p.getDiagnosticsHelper(sourceFile, true /*ensureBound*/, true /*ensureChecked*/, p.getSemanticDiagnosticsForFile)
 }
 
 func (p *Program) GetGlobalDiagnostics() []*ast.Diagnostic {
-	return sortAndDeduplicateDiagnostics(p.GetTypeChecker().GetGlobalDiagnostics())
-}
-
-func (p *Program) TypeCount() int {
-	if p.checker == nil {
-		return 0
+	p.createCheckers()
+	var globalDiagnostics []*ast.Diagnostic
+	for _, checker := range p.checkers {
+		globalDiagnostics = append(globalDiagnostics, checker.GetGlobalDiagnostics()...)
 	}
-	return int(p.checker.typeCount)
-}
-
-func (p *Program) GetTypeChecker() *Checker {
-	if p.checker == nil {
-		p.checker = NewChecker(p)
-	}
-	return p.checker
+	return sortAndDeduplicateDiagnostics(globalDiagnostics)
 }
 
 func (p *Program) getSyntaticDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {
@@ -386,10 +422,10 @@ func (p *Program) getBindDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.D
 }
 
 func (p *Program) getSemanticDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return core.Concatenate(sourceFile.BindDiagnostics(), p.GetTypeChecker().GetDiagnostics(sourceFile))
+	return core.Concatenate(sourceFile.BindDiagnostics(), p.getTypeCheckerForFile(sourceFile).GetDiagnostics(sourceFile))
 }
 
-func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound bool, getDiagnostics func(*ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
+func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound bool, ensureChecked bool, getDiagnostics func(*ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
 	if sourceFile != nil {
 		if ensureBound {
 			binder.BindSourceFile(sourceFile, p.compilerOptions)
@@ -399,6 +435,9 @@ func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound b
 	if ensureBound {
 		p.bindSourceFiles()
 	}
+	if ensureChecked {
+		p.checkSourceFiles()
+	}
 	var result []*ast.Diagnostic
 	for _, file := range p.files {
 		result = append(result, getDiagnostics(file)...)
@@ -406,9 +445,12 @@ func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound b
 	return sortAndDeduplicateDiagnostics(result)
 }
 
-type NodeCount struct {
-	kind  ast.Kind
-	count int
+func (p *Program) TypeCount() int {
+	var count int
+	for _, checker := range p.checkers {
+		count += int(checker.typeCount)
+	}
+	return count
 }
 
 func (p *Program) PrintSourceFileWithTypes() {

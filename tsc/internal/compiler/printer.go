@@ -38,7 +38,10 @@ func (c *Checker) symbolToString(s *ast.Symbol) string {
 			return scanner.GetTextOfNode(name)
 		}
 	}
-	return s.Name
+	if len(s.Name) >= 1 && s.Name[0] != '\xFE' {
+		return s.Name
+	}
+	return "###"
 }
 
 func (c *Checker) typeToString(t *Type) string {
