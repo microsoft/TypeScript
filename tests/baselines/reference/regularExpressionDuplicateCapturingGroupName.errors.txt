@@ -1,0 +1,106 @@
+regularExpressionDuplicateCapturingGroupName.ts(2,13): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(3,14): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(4,15): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(5,16): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(6,16): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(7,18): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(8,16): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(9,18): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(11,19): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(12,21): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(14,20): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(15,20): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(16,20): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(19,12): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(20,13): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(23,50): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(23,57): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(23,64): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(24,35): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(24,42): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(24,66): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(24,74): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(24,81): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionDuplicateCapturingGroupName.ts(24,89): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+
+
+==== regularExpressionDuplicateCapturingGroupName.ts (24 errors) ====
+    // Adjacent homonymous capturing groups
+    /(?<foo>)(?<foo>)/;
+                ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /(?<foo>)((?<foo>))/;
+                 ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /((?<foo>))(?<foo>)/;
+                  ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /((?<foo>))((?<foo>))/;
+                   ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /(?<foo>)(?=(?<foo>))/;
+                   ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /(?<=(?<foo>))(?<foo>)/;
+                     ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /(?<foo>)(?!(?<foo>))/;
+                   ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /(?<!(?<foo>))(?<foo>)/;
+                     ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    
+    /((?<foo>))((?=(?<foo>)))/;
+                      ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /((?<!(?<foo>)))((?<foo>))/;
+                        ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    
+    /(?=(?<foo>))(?=(?<foo>))/;
+                       ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /(?!(?<foo>))(?!(?<foo>))/;
+                       ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /(?=(?<foo>))(?!(?<foo>))/;
+                       ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    
+    // Nested homonymous capturing groups
+    /(?<foo>(?<foo>))/;
+               ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /(?<foo>((?<foo>)))/;
+                ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    
+    // Complicated cases
+    /(?<a>)((?<b>)((?<c>)|(?<d>))|(?<b>)|((?<c>)))(?<c>)((?<b>)|(?<d>))/;
+                                                     ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                                                            ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                                                                   ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    /(?<a>)(((?<b>)|(?<c>))((?<d>)|(?<a>)|(?<b>))|(?<c>)|((?<d>)))(?<a>)(((?<b>)|(?<c>))|(?<d>))/;
+                                      ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                                             ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                                                                     ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                                                                             ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                                                                                    ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+                                                                                            ~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    
+    // Should not error
+    /(?<foo>)|(?<foo>)/;
+    /(?<foo>)|((?<foo>))/;
+    /((?<foo>))|(?<foo>)/;
+    /((?<foo>))|((?<foo>))/;
+    

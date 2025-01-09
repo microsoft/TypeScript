@@ -133,7 +133,7 @@ function addMissingConstraint(changes: textChanges.ChangeTracker, program: Progr
 
 function tryGetConstraintFromDiagnosticMessage(messageText: string | DiagnosticMessageChain) {
     const [, constraint] = flattenDiagnosticMessageText(messageText, "\n", 0).match(/`extends (.*)`/) || [];
-    return constraint;
+    return constraint || "";
 }
 
 function tryGetConstraintType(checker: TypeChecker, node: Node) {

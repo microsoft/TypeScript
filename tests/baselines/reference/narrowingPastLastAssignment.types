@@ -755,11 +755,11 @@ function f13() {
         foo.toLocaleLowerCase();
 >foo.toLocaleLowerCase() : string
 >                        : ^^^^^^
->foo.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
->                      : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>foo.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: string | string[] | Intl.LocalesArgument): string; }
+>                      : ^^^       ^^^                 ^^^      ^^^       ^^^                                        ^^^      ^^^
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
->                  : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: string | string[] | Intl.LocalesArgument): string; }
+>                  : ^^^       ^^^                 ^^^      ^^^       ^^^                                        ^^^      ^^^
     }
 }

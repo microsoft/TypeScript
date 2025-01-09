@@ -619,7 +619,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
      * See https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
      */
     function decodeEntities(text: string): string {
-        return text.replace(/&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
+        return text.replace(/&(?:#(?:(\d+)|x([\da-fA-F]+))|(\w+));/g, (match, decimal, hex, word) => {
             if (decimal) {
                 return utf16EncodeAsString(parseInt(decimal, 10));
             }
@@ -627,7 +627,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                 return utf16EncodeAsString(parseInt(hex, 16));
             }
             else {
-                const ch = entities.get(word);
+                const ch = entities.get(word || "");
                 // If this is not a valid entity, then just use `match` (replace it with itself, i.e. don't replace)
                 return ch ? utf16EncodeAsString(ch) : match;
             }

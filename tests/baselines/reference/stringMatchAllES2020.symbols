@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/es2020/stringMatchAllES2020.ts] ////
+
+=== stringMatchAllES2020.ts ===
+"foo".matchAll("bar"); // OK
+>"foo".matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+>matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+
+"foo".matchAll(/foo/g); // OK
+>"foo".matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+>matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+
+"foo".matchAll(Math.random() >= 0.5 ? /foo/g : "bar"); // OK
+>"foo".matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+>matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+"foo".matchAll(/foo/); // should error
+>"foo".matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+>matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+
+"foo".matchAll(Math.random() >= 0.5 ? /foo/g : /foo/); // should error
+>"foo".matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+>matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+"foo".matchAll(Math.random() >= 0.5 ? "bar" : /foo/); // should error
+>"foo".matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+>matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+

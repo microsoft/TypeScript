@@ -3150,7 +3150,8 @@ export function createLanguageService(
                 const firstDescriptorCaptureIndex = 3;
                 Debug.assert(matchArray.length === descriptors.length + firstDescriptorCaptureIndex);
 
-                const preamble = matchArray[1];
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249
+                const preamble = matchArray[1]!;
                 const matchPosition = matchArray.index + preamble.length;
 
                 // OK, we have found a match in the file.  This is only an acceptable match if
@@ -3173,7 +3174,8 @@ export function createLanguageService(
                     continue;
                 }
 
-                const message = matchArray[2];
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249
+                const message = matchArray[2]!;
                 result.push({ descriptor, message, position: matchPosition });
             }
         }

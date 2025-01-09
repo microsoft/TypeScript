@@ -1,5 +1,5 @@
 typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'never'.
-  The intersection 'I & RegExp' was reduced to 'never' because property 'global' has conflicting types in some constituents.
+  The intersection 'I & _RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags> & { readonly global: boolean; readonly ignoreCase: boolean; readonly multiline: boolean; }' was reduced to 'never' because property 'global' has conflicting types in some constituents.
 typeGuardsWithInstanceOf.ts(36,11): error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
   Property 'onChanges' does not exist on type 'C'.
 typeGuardsWithInstanceOf.ts(37,11): error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
@@ -16,7 +16,7 @@ typeGuardsWithInstanceOf.ts(37,11): error TS2339: Property 'onChanges' does not 
     } else if (!result.global) {
                        ~~~~~~
 !!! error TS2339: Property 'global' does not exist on type 'never'.
-!!! error TS2339:   The intersection 'I & RegExp' was reduced to 'never' because property 'global' has conflicting types in some constituents.
+!!! error TS2339:   The intersection 'I & _RegExp<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags> & { readonly global: boolean; readonly ignoreCase: boolean; readonly multiline: boolean; }' was reduced to 'never' because property 'global' has conflicting types in some constituents.
     }
     
     // Repro from #31155

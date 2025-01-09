@@ -1290,7 +1290,8 @@ export namespace TestCaseParser {
 
         let match: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
         while ((match = optionRegex.exec(content)) !== null) { // eslint-disable-line no-restricted-syntax
-            opts[match[1]] = match[2].trim();
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249
+            opts[match[1]!] = match[2]!.trim();
         }
 
         return opts;
@@ -1327,8 +1328,9 @@ export namespace TestCaseParser {
             else if (testMetaData = optionRegex.exec(line)) {
                 // Comment line, check for global/file @options and record them
                 optionRegex.lastIndex = 0;
-                const metaDataName = testMetaData[1].toLowerCase();
-                currentFileOptions[testMetaData[1]] = testMetaData[2].trim();
+                /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249 */
+                const metaDataName = testMetaData[1]!.toLowerCase();
+                currentFileOptions[testMetaData[1]!] = testMetaData[2]!.trim();
                 if (metaDataName !== "filename") {
                     continue;
                 }
@@ -1348,12 +1350,13 @@ export namespace TestCaseParser {
                     // Reset local data
                     currentFileContent = undefined;
                     currentFileOptions = {};
-                    currentFileName = testMetaData[2].trim();
+                    currentFileName = testMetaData[2]!.trim();
                     refs = [];
                 }
                 else {
                     // First metadata marker in the file
-                    currentFileName = testMetaData[2].trim();
+                    currentFileName = testMetaData[2]!.trim();
+                    /* eslint-enable @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249 */
                     if (currentFileContent && ts.skipTrivia(currentFileContent, 0, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false) !== currentFileContent.length) {
                         throw new Error("Non-comment test content appears before the first '// @Filename' directive");
                     }

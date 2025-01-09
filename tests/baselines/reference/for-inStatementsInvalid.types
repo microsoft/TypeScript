@@ -22,12 +22,12 @@ for (aBoolean in {}) { }
 >   : ^^
 
 var aRegExp: RegExp;
->aRegExp : RegExp
->        : ^^^^^^
+>aRegExp : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 for (aRegExp in {}) { }
->aRegExp : RegExp
->        : ^^^^^^
+>aRegExp : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 

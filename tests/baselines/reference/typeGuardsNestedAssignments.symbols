@@ -99,9 +99,9 @@ let match: RegExpExecArray | null
 
 while ((match = re.exec("xxx")) != null) {
 >match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
->re.exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>re.exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
 >re : Symbol(re, Decl(typeGuardsNestedAssignments.ts, 39, 5))
->exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
 
     const length = match[1].length + match[2].length
 >length : Symbol(length, Decl(typeGuardsNestedAssignments.ts, 43, 9))

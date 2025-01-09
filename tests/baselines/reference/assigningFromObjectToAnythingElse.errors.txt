@@ -1,5 +1,7 @@
-assigningFromObjectToAnythingElse.ts(3,1): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
-  Type 'Object' is missing the following properties from type 'RegExp': exec, test, source, global, and 4 more.
+assigningFromObjectToAnythingElse.ts(3,1): error TS2322: Type 'Object' is not assignable to type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
+  The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+    The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+      Type 'Object' is missing the following properties from type '_RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>': exec, test, source, lastIndex, compile
 assigningFromObjectToAnythingElse.ts(5,31): error TS2558: Expected 0 type arguments, but got 1.
 assigningFromObjectToAnythingElse.ts(6,31): error TS2558: Expected 0 type arguments, but got 1.
 assigningFromObjectToAnythingElse.ts(8,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
@@ -11,8 +13,10 @@ assigningFromObjectToAnythingElse.ts(8,5): error TS2696: The 'Object' type is as
     var y: RegExp;
     y = x;
     ~
-!!! error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
-!!! error TS2696:   Type 'Object' is missing the following properties from type 'RegExp': exec, test, source, global, and 4 more.
+!!! error TS2322: Type 'Object' is not assignable to type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
+!!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2322:     The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2322:       Type 'Object' is missing the following properties from type '_RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>': exec, test, source, lastIndex, compile
     
     var a: String = Object.create<Object>("");
                                   ~~~~~~

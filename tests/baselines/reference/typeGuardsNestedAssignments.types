@@ -155,32 +155,32 @@ function f4() {
 // Repro from #8851
 
 const re = /./g
->re : RegExp
->   : ^^^^^^
->/./g : RegExp
->     : ^^^^^^
+>re : RegExp<[string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/./g : RegExp<[string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let match: RegExpExecArray | null
->match : RegExpExecArray | null
->      : ^^^^^^^^^^^^^^^^^^^^^^
+>match : RegExpExecArray<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags> | null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 while ((match = re.exec("xxx")) != null) {
 >(match = re.exec("xxx")) != null : boolean
 >                                 : ^^^^^^^
->(match = re.exec("xxx")) : RegExpExecArray | null
->                         : ^^^^^^^^^^^^^^^^^^^^^^
->match = re.exec("xxx") : RegExpExecArray | null
->                       : ^^^^^^^^^^^^^^^^^^^^^^
->match : RegExpExecArray | null
->      : ^^^^^^^^^^^^^^^^^^^^^^
->re.exec("xxx") : RegExpExecArray | null
->               : ^^^^^^^^^^^^^^^^^^^^^^
->re.exec : (string: string) => RegExpExecArray | null
->        : ^      ^^      ^^^^^                      
->re : RegExp
->   : ^^^^^^
->exec : (string: string) => RegExpExecArray | null
->     : ^      ^^      ^^^^^                      
+>(match = re.exec("xxx")) : RegExpExecArray<[string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match = re.exec("xxx") : RegExpExecArray<[string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match : RegExpExecArray<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags> | null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>re.exec("xxx") : RegExpExecArray<[string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>re.exec : (string: string) => RegExpExecArray<[string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>        : ^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>re : RegExp<[string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exec : (string: string) => RegExpExecArray<[string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | null
+>     : ^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"xxx" : "xxx"
 >      : ^^^^^
 
@@ -191,20 +191,20 @@ while ((match = re.exec("xxx")) != null) {
 >                                  : ^^^^^^
 >match[1].length : number
 >                : ^^^^^^
->match[1] : string
->         : ^^^^^^
->match : RegExpExecArray
->      : ^^^^^^^^^^^^^^^
+>match[1] : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>match : RegExpExecArray<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >length : number
 >       : ^^^^^^
 >match[2].length : number
 >                : ^^^^^^
->match[2] : string
->         : ^^^^^^
->match : RegExpExecArray
->      : ^^^^^^^^^^^^^^^
+>match[2] : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>match : RegExpExecArray<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 >length : number

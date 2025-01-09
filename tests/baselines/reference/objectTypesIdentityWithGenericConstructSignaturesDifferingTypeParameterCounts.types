@@ -253,8 +253,8 @@ function foo12b(x: any) { }
 function foo13(x: I<string, Date, RegExp, Date>);
 >foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: typeof a): any; }
 >      : ^^^ ^^                             ^^^^^^^^^ ^^        ^^^^^^^^^
->x : I<string, Date, RegExp, Date>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : I<string, Date, RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>, Date>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo13(x: typeof a); // ok
 >foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: typeof a): any; }
@@ -272,8 +272,8 @@ function foo13(x: any) { }
 function foo14(x: I<string, Date, RegExp, boolean>);
 >foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: typeof b): any; }
 >      : ^^^ ^^                                ^^^^^^^^^ ^^        ^^^^^^^^^
->x : I<string, Date, RegExp, boolean>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : I<string, Date, RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>, boolean>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function foo14(x: typeof b); // ok
 >foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: typeof b): any; }

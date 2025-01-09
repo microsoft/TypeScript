@@ -6063,10 +6063,10 @@ export function hasInvalidEscape(template: TemplateLiteral): boolean {
 // the language service. These characters should be escaped when printing, and if any characters are added,
 // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
 // There is no reason for this other than that JSON.stringify does not handle it either.
-const doubleQuoteEscapedCharsRegExp = /[\\"\u0000-\u001f\u2028\u2029\u0085]/g;
-const singleQuoteEscapedCharsRegExp = /[\\'\u0000-\u001f\u2028\u2029\u0085]/g;
+const doubleQuoteEscapedCharsRegExp: RegExp = /[\\"\u0000-\u001f\u2028\u2029\u0085]/g;
+const singleQuoteEscapedCharsRegExp: RegExp = /[\\'\u0000-\u001f\u2028\u2029\u0085]/g;
 // Template strings preserve simple LF newlines, still encode CRLF (or CR)
-const backtickQuoteEscapedCharsRegExp = /\r\n|[\\`\u0000-\u0009\u000b-\u001f\u2028\u2029\u0085]/g;
+const backtickQuoteEscapedCharsRegExp: RegExp = /\r\n|[\\`\u0000-\u0009\u000b-\u001f\u2028\u2029\u0085]/g;
 const escapedCharsMap = new Map(Object.entries({
     "\t": "\\t",
     "\v": "\\v",
@@ -6114,7 +6114,7 @@ export function escapeString(s: string, quoteChar?: CharacterCodes.doubleQuote |
     const escapedCharsRegExp = quoteChar === CharacterCodes.backtick ? backtickQuoteEscapedCharsRegExp :
         quoteChar === CharacterCodes.singleQuote ? singleQuoteEscapedCharsRegExp :
         doubleQuoteEscapedCharsRegExp;
-    return s.replace(escapedCharsRegExp, getReplacement);
+    return s.replace(escapedCharsRegExp, getReplacement as (...args: any[]) => string);
 }
 
 const nonAsciiCharacters = /[^\u0000-\u007F]/g;
@@ -6132,8 +6132,8 @@ export function escapeNonAsciiString(s: string, quoteChar?: CharacterCodes.doubl
 // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
 // the language service. These characters should be escaped when printing, and if any characters are added,
 // the map below must be updated.
-const jsxDoubleQuoteEscapedCharsRegExp = /["\u0000-\u001f\u2028\u2029\u0085]/g;
-const jsxSingleQuoteEscapedCharsRegExp = /['\u0000-\u001f\u2028\u2029\u0085]/g;
+const jsxDoubleQuoteEscapedCharsRegExp: RegExp = /["\u0000-\u001f\u2028\u2029\u0085]/g;
+const jsxSingleQuoteEscapedCharsRegExp: RegExp = /['\u0000-\u001f\u2028\u2029\u0085]/g;
 const jsxEscapedCharsMap = new Map(Object.entries({
     '"': "&quot;",
     "'": "&apos;",
@@ -6155,7 +6155,7 @@ function getJsxAttributeStringReplacement(c: string) {
 export function escapeJsxAttributeString(s: string, quoteChar?: CharacterCodes.doubleQuote | CharacterCodes.singleQuote): string {
     const escapedCharsRegExp = quoteChar === CharacterCodes.singleQuote ? jsxSingleQuoteEscapedCharsRegExp :
         jsxDoubleQuoteEscapedCharsRegExp;
-    return s.replace(escapedCharsRegExp, getJsxAttributeStringReplacement);
+    return s.replace(escapedCharsRegExp, getJsxAttributeStringReplacement as (...args: any[]) => string);
 }
 
 /**

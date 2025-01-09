@@ -90,8 +90,8 @@ var r3 = foo3(a); // any
 declare function foo6(x: RegExp): RegExp;
 >foo6 : { (x: RegExp): RegExp; (x: any): any; }
 >     : ^^^ ^^      ^^^      ^^^ ^^   ^^^   ^^^
->x : RegExp
->  : ^^^^^^
+>x : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function foo6(x: any): any;
 >foo6 : { (x: RegExp): RegExp; (x: any): any; }

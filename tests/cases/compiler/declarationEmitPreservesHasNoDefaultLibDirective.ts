@@ -9,5 +9,4 @@ interface Function {}
 interface IArguments {}
 interface Number {}
 interface Object {}
-interface RegExp {}
 interface String {}

@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts] ////
+
+=== regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts ===
+// a very loose Temporal (Zoned)DateTime format regex, identical to the one in `tests/cases/conformance/types/literal/regularExpressionLiteralTypes.ts`
+const globalDateTimeRegex = /(?<date>(?<year>\d{4}|(?!-000000)[+-]\d{6})(?<dateSeparator>-)?(?!(?:0[2469]|11)\k<dateSeparator>31|02\k<dateSeparator>30)(?<month>0[1-9]|1[0-2])\k<dateSeparator>(?<day>0[1-9]|[12]\d|3[01]))(?:[ T](?<time>(?<hour>[01]\d|2[0-3])(?:(?<timeSeparator>:)?(?<minute>[0-5]\d)(?:\k<timeSeparator>(?<second>(?:[0-5]\d|60)(?:[.,]\d{1,9})?))?)?)(?<timeZone>Z|(?<timeZoneSign>[+-])(?:(?<timeZoneHour>[01]\d|2[0-3])(?:(?<timeZoneTimeSeparator>:)?(?<timeZoneMinute>[0-5]\d)(?:\k<timeZoneTimeSeparator>(?<timeZoneSecond>[0-5]\d(?:[.,]\d{1,9})?))?)?))?)?/ig;
+>globalDateTimeRegex : Symbol(globalDateTimeRegex, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 1, 5))
+
+const dateTimeString = "2048-10-24 12:34:56";
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 2, 5))
+
+let match = dateTimeString.match(globalDateTimeRegex)!; // RegExpMatchArray
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 4, 3))
+>dateTimeString.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 2, 5))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>globalDateTimeRegex : Symbol(globalDateTimeRegex, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 1, 5))
+
+match.index; // error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 4, 3))
+
+match.input; // error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 4, 3))
+
+match.length; // number
+>match.length : Symbol(length)
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 4, 3))
+>length : Symbol(length)
+
+match[0].length; // number
+>match[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 4, 3))
+>0 : Symbol(0)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+match[1]?.length; // number | undefined
+>match[1]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 4, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+match[99]?.length; // number | undefined
+>match[99]?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 4, 3))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+match.groups; // error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 4, 3))
+
+match.indices; // error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 4, 3))
+
+let execResult = globalDateTimeRegex.exec(dateTimeString)!;
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 14, 3))
+>globalDateTimeRegex.exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>globalDateTimeRegex : Symbol(globalDateTimeRegex, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 1, 5))
+>exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>dateTimeString : Symbol(dateTimeString, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 2, 5))
+
+match = execResult; // should error
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 4, 3))
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 14, 3))
+
+execResult = match; // should error
+>execResult : Symbol(execResult, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 14, 3))
+>match : Symbol(match, Decl(regularExpressionTypeCheckingMatchExecWithGlobalFlag.ts, 4, 3))
+

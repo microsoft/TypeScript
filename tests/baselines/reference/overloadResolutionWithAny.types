@@ -93,8 +93,8 @@ func2(x, ""); // boolean
 >   : ^^
 
 func2("", x); // RegExp
->func2("", x) : RegExp
->             : ^^^^^^
+>func2("", x) : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
 >      : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^   ^^ ^^      ^^^       ^^^ ^^      ^^ ^^   ^^^      ^^^ ^^   ^^ ^^   ^^^      ^^^
 >"" : ""

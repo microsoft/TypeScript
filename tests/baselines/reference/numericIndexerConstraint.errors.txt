@@ -1,10 +1,10 @@
-numericIndexerConstraint.ts(2,5): error TS2411: Property '0' of type 'number' is not assignable to 'number' index type 'RegExp'.
+numericIndexerConstraint.ts(2,5): error TS2411: Property '0' of type 'number' is not assignable to 'number' index type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
 
 
 ==== numericIndexerConstraint.ts (1 errors) ====
     class C {
         0: number;
         ~
-!!! error TS2411: Property '0' of type 'number' is not assignable to 'number' index type 'RegExp'.
+!!! error TS2411: Property '0' of type 'number' is not assignable to 'number' index type 'RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>'.
         [x: number]: RegExp;
     }

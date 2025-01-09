@@ -10689,9 +10689,11 @@ function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, te
                     return; // Missing required argument, don't parse
                 }
                 else if (matchResult) {
-                    const value = matchResult[2] || matchResult[3];
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249
+                    const value = (matchResult[2] || matchResult[3])!;
                     if (arg.captureSpan) {
-                        const startPos = range.pos + matchResult.index + matchResult[1].length + 1;
+                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249
+                        const startPos = range.pos + matchResult.index + matchResult[1]!.length + 1;
                         argument[arg.name] = {
                             value,
                             pos: startPos,
@@ -10720,14 +10722,16 @@ function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, te
         const multiLinePragmaRegEx = /@(\S+)(\s+(?:\S.*)?)?$/gm; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
         let multiLineMatch: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
         while (multiLineMatch = multiLinePragmaRegEx.exec(text)) {
-            addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch);
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249
+            addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch!);
         }
     }
 }
 
 function addPragmaForMatch(pragmas: PragmaPseudoMapEntry[], range: CommentRange, kind: PragmaKindFlags, match: RegExpExecArray) {
     if (!match) return;
-    const name = match[1].toLowerCase() as keyof PragmaPseudoMap; // Technically unsafe cast, but we do it so they below check to make it safe typechecks
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- TODO: Remove this line after #60249
+    const name = match[1]!.toLowerCase() as keyof PragmaPseudoMap; // Technically unsafe cast, but we do it so they below check to make it safe typechecks
     const pragma = commentPragmas[name] as PragmaDefinition;
     if (!pragma || !(pragma.kind! & kind)) {
         return;

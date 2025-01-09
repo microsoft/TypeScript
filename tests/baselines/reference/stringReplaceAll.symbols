@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/es2021/stringReplaceAll.ts] ////
+
+=== stringReplaceAll.ts ===
+// The signatures of String.prototype.{replace,replaceAll} should be identical
+let { replace, replaceAll } = "";
+>replace : Symbol(replace, Decl(stringReplaceAll.ts, 1, 5))
+>replaceAll : Symbol(replaceAll, Decl(stringReplaceAll.ts, 1, 14))
+
+replace = replaceAll;
+>replace : Symbol(replace, Decl(stringReplaceAll.ts, 1, 5))
+>replaceAll : Symbol(replaceAll, Decl(stringReplaceAll.ts, 1, 14))
+
+replaceAll = replace;
+>replaceAll : Symbol(replaceAll, Decl(stringReplaceAll.ts, 1, 14))
+>replace : Symbol(replace, Decl(stringReplaceAll.ts, 1, 5))
+

@@ -203,12 +203,12 @@ declare const _: { isRegExp(x: unknown): x is RegExp; };
 >isRegExp : Symbol(isRegExp, Decl(dependentReturnType3.ts, 68, 18))
 >x : Symbol(x, Decl(dependentReturnType3.ts, 68, 28))
 >x : Symbol(x, Decl(dependentReturnType3.ts, 68, 28))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare function takesRegExp(x: RegExp): void;
 >takesRegExp : Symbol(takesRegExp, Decl(dependentReturnType3.ts, 68, 56))
 >x : Symbol(x, Decl(dependentReturnType3.ts, 69, 29))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare function takesString(x: string): void;
 >takesString : Symbol(takesString, Decl(dependentReturnType3.ts, 69, 46))
@@ -222,7 +222,7 @@ class NewSettingsBase {
 >C : Symbol(C, Decl(dependentReturnType3.ts, 73, 18))
 >SettingCallback : Symbol(SettingCallback, Decl(dependentReturnType3.ts, 63, 93))
 >I : Symbol(I, Decl(dependentReturnType3.ts, 73, 56))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(dependentReturnType3.ts, 73, 83))
 >SettingValue : Symbol(SettingValue, Decl(dependentReturnType3.ts, 64, 89))
 >SettingValue : Symbol(SettingValue, Decl(dependentReturnType3.ts, 64, 89))
@@ -250,7 +250,7 @@ class NewSettingsBase {
 >T : Symbol(T, Decl(dependentReturnType3.ts, 73, 83))
 
             RegExp, SettingComposedValue<T>[]>> {
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >SettingComposedValue : Symbol(SettingComposedValue, Decl(dependentReturnType3.ts, 60, 1))
 >T : Symbol(T, Decl(dependentReturnType3.ts, 73, 83))
 
@@ -314,9 +314,9 @@ class NewSettingsBase {
 >key : Symbol(key, Decl(dependentReturnType3.ts, 92, 61))
 
                     if (!_id.test(key)) {
->_id.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>_id.test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(dependentReturnType3.ts, 92, 61))
 
                         return;
@@ -400,9 +400,9 @@ class NewSettingsBase {
 >key : Symbol(key, Decl(dependentReturnType3.ts, 117, 89))
 
 				if (_id.test(key)) {
->_id.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>_id.test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >_id : Symbol(_id, Decl(dependentReturnType3.ts, 73, 123))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(_RegExp.test, Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(dependentReturnType3.ts, 117, 89))
 
 					items.push({

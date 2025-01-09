@@ -44,13 +44,13 @@ const testPromiseFinally = new Promise(() => {}).finally();
 
 const testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups;
 >testRegExpMatchArrayGroups : Symbol(testRegExpMatchArrayGroups, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 15, 5))
->"2019-04-30".match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>"2019-04-30".match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 
 const testRegExpExecArrayGroups = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups;
 >testRegExpExecArrayGroups : Symbol(testRegExpExecArrayGroups, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 16, 5))
->/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
->exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>exec : Symbol(_RegExp.exec, Decl(lib.es5.d.ts, --, --))
 
 const testRegExpDotAll = /foo/g.dotAll;
 >testRegExpDotAll : Symbol(testRegExpDotAll, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 17, 5))

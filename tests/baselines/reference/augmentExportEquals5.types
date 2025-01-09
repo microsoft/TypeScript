@@ -31,8 +31,8 @@ declare module "express" {
 
         interface IRouterMatcher<T> {
             (name: string|RegExp, ...handlers: RequestHandler[]): T;
->name : string | RegExp
->     : ^^^^^^^^^^^^^^^
+>name : string | RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >handlers : RequestHandler[]
 >         : ^^^^^^^^^^^^^^^^
         }

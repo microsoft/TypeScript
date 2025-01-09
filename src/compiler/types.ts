@@ -13,6 +13,7 @@ import {
     PackageJsonInfo,
     PackageJsonInfoCache,
     Pattern,
+    RegExpAnyString,
     SymlinkCache,
     ThisContainer,
 } from "./_namespaces/ts.js";
@@ -2799,6 +2800,52 @@ export const enum RegularExpressionFlags {
     Sticky         = 1 << 7, // y
     AnyUnicodeMode = Unicode | UnicodeSets,
     Modifiers      = IgnoreCase | Multiline | DotAll,
+}
+
+/** @internal */
+export interface RegularExpressionDisjunction {
+    patternUnion?: RegularExpressionPatternUnion;
+    groupNumber?: number;
+    groupName?: string;
+    isInNegativeAssertion?: boolean;
+}
+
+/** @internal */
+export interface RegularExpressionDisjunctionsScope extends Array<RegularExpressionDisjunction> {
+    /** All disjunctions after this index are the ones need to be considered */
+    currentAlternativeIndex: number;
+}
+
+/** @internal */
+export type RegularExpressionAnyString = typeof RegExpAnyString;
+
+/** @internal */
+export type RegularExpressionPatternContent = string | RegularExpressionAnyString | RegularExpressionPatternUnion;
+
+/** @internal */
+export interface RegularExpressionPattern extends Array<RegularExpressionPatternContent> {
+    _regularExpressionPatternBrand: any;
+}
+
+/** @internal */
+export interface RegularExpressionPatternUnion extends Set<string | RegularExpressionPattern> {
+    _regularExpressionPatternUnionBrand: any;
+    isPossiblyUndefined?: boolean;
+    isCharacterClass?: boolean; // For fast path in the checker
+    isCharacterEquivalents?: boolean;
+}
+
+/** @internal */
+export type RegularExpressionReducedContent = string | RegularExpressionAnyString | RegularExpressionReducedUnion | RegularExpressionReducedPattern;
+
+/** @internal */
+export interface RegularExpressionReducedUnion extends Set<string | RegularExpressionReducedPattern> {
+    _regularExpressionReducedUnionBrand: any;
+}
+
+/** @internal */
+export interface RegularExpressionReducedPattern extends Array<string | RegularExpressionAnyString> {
+    _regularExpressionReducedPatternBrand: any;
 }
 
 export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {

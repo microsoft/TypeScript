@@ -1,0 +1,242 @@
+//// [tests/cases/compiler/regularExpressionTypeCheckingReplace.ts] ////
+
+=== Performance Stats ===
+Subtype cache: 1,000
+Assignability cache: 1,000
+Type Count: 10,000
+Instantiation count: 25,000
+Symbol count: 50,000
+
+=== regularExpressionTypeCheckingReplace.ts ===
+"foo_foo_bar".replace(/foo/g, (match, index, input, ...args) => {
+>"foo_foo_bar".replace(/foo/g, (match, index, input, ...args) => {    match; // "foo"    index; // number    input; // `${string}foo${string}`    args; // []    return match;}) : string
+>                                                                                                                                                                                : ^^^^^^
+>"foo_foo_bar".replace : { <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; <This, T, R>(this: This, replacer: { [Symbol.replace](string: This, replaceValue: T): R; }, replaceValue: T): R; <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; }
+>                      : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^    ^^ ^^ ^^    ^^    ^^        ^^                                                       ^^            ^^ ^^^ ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
+>"foo_foo_bar" : "foo_foo_bar"
+>              : ^^^^^^^^^^^^^
+>replace : { <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; <This, T, R>(this: This, replacer: { [Symbol.replace](string: This, replaceValue: T): R; }, replaceValue: T): R; <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; }
+>        : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^    ^^ ^^ ^^    ^^    ^^        ^^                                                       ^^            ^^ ^^^ ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
+>/foo/g : RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(match, index, input, ...args) => {    match; // "foo"    index; // number    input; // `${string}foo${string}`    args; // []    return match;} : (match: "foo", index: number, input: `${string}foo${string}`) => "foo"
+>                                                                                                                                                 : ^     ^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match : "foo"
+>      : ^^^^^
+>index : number
+>      : ^^^^^^
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+>args : []
+>     : ^^
+
+    match; // "foo"
+>match : "foo"
+>      : ^^^^^
+
+    index; // number
+>index : number
+>      : ^^^^^^
+
+    input; // `${string}foo${string}`
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    args; // []
+>args : []
+>     : ^^
+
+    return match;
+>match : "foo"
+>      : ^^^^^
+
+});
+
+"foo42_foo24_bar".replace(/foo(\d+)/g, (match, id, index, input, ...args) => {
+>"foo42_foo24_bar".replace(/foo(\d+)/g, (match, id, index, input, ...args) => {    match; // `foo${string}`    id; // string    index; // number    input; // `${string}foo${string}`    args; // []    return match;}) : string
+>                                                                                                                                                                                                                       : ^^^^^^
+>"foo42_foo24_bar".replace : { <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; <This, T, R>(this: This, replacer: { [Symbol.replace](string: This, replaceValue: T): R; }, replaceValue: T): R; <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; }
+>                          : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^    ^^ ^^ ^^    ^^    ^^        ^^                                                       ^^            ^^ ^^^ ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
+>"foo42_foo24_bar" : "foo42_foo24_bar"
+>                  : ^^^^^^^^^^^^^^^^^
+>replace : { <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; <This, T, R>(this: This, replacer: { [Symbol.replace](string: This, replaceValue: T): R; }, replaceValue: T): R; <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; }
+>        : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^    ^^ ^^ ^^    ^^    ^^        ^^                                                       ^^            ^^ ^^^ ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
+>/foo(\d+)/g : RegExp<[`foo${string}`, string], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(match, id, index, input, ...args) => {    match; // `foo${string}`    id; // string    index; // number    input; // `${string}foo${string}`    args; // []    return match;} : (match: `foo${string}`, id: string, index: number, input: `${string}foo${string}`) => `foo${string}`
+>                                                                                                                                                                               : ^     ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match : `foo${string}`
+>      : ^^^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+>index : number
+>      : ^^^^^^
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+>args : []
+>     : ^^
+
+    match; // `foo${string}`
+>match : `foo${string}`
+>      : ^^^^^^^^^^^^^^
+
+    id; // string
+>id : string
+>   : ^^^^^^
+
+    index; // number
+>index : number
+>      : ^^^^^^
+
+    input; // `${string}foo${string}`
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    args; // []
+>args : []
+>     : ^^
+
+    return match;
+>match : `foo${string}`
+>      : ^^^^^^^^^^^^^^
+
+});
+
+"foo42_foo24_bar".replace(/foo(?<id>\d+)/g, (match, id, index, input, capturingGroups, ...args) => {
+>"foo42_foo24_bar".replace(/foo(?<id>\d+)/g, (match, id, index, input, capturingGroups, ...args) => {    match; // `foo${string}`    id; // string    index; // number    input; // `${string}foo${string}`    // for target ≥ ES2018    capturingGroups.id; // string    capturingGroups.foo; // error    args; // []    return match;}) : string
+>                                                                                                                                                                                                                                                                                                                                         : ^^^^^^
+>"foo42_foo24_bar".replace : { <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; <This, T, R>(this: This, replacer: { [Symbol.replace](string: This, replaceValue: T): R; }, replaceValue: T): R; <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; }
+>                          : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^    ^^ ^^ ^^    ^^    ^^        ^^                                                       ^^            ^^ ^^^ ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
+>"foo42_foo24_bar" : "foo42_foo24_bar"
+>                  : ^^^^^^^^^^^^^^^^^
+>replace : { <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; <This, T, R>(this: This, replacer: { [Symbol.replace](string: This, replaceValue: T): R; }, replaceValue: T): R; <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; }
+>        : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^    ^^ ^^ ^^    ^^    ^^        ^^                                                       ^^            ^^ ^^^ ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
+>/foo(?<id>\d+)/g : RegExp<[`foo${string}`, string], { id: string; }, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(match, id, index, input, capturingGroups, ...args) => {    match; // `foo${string}`    id; // string    index; // number    input; // `${string}foo${string}`    // for target ≥ ES2018    capturingGroups.id; // string    capturingGroups.foo; // error    args; // []    return match;} : (match: `foo${string}`, id: string, index: number, input: `${string}foo${string}`, capturingGroups: { id: string; }) => `foo${string}`
+>                                                                                                                                                                                                                                                                                            : ^     ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match : `foo${string}`
+>      : ^^^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+>index : number
+>      : ^^^^^^
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+>capturingGroups : { id: string; }
+>                : ^^^^^^^^^^^^^^^
+>args : []
+>     : ^^
+
+    match; // `foo${string}`
+>match : `foo${string}`
+>      : ^^^^^^^^^^^^^^
+
+    id; // string
+>id : string
+>   : ^^^^^^
+
+    index; // number
+>index : number
+>      : ^^^^^^
+
+    input; // `${string}foo${string}`
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    // for target ≥ ES2018
+    capturingGroups.id; // string
+>capturingGroups.id : string
+>                   : ^^^^^^
+>capturingGroups : { id: string; }
+>                : ^^^^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+
+    capturingGroups.foo; // error
+>capturingGroups.foo : any
+>                    : ^^^
+>capturingGroups : { id: string; }
+>                : ^^^^^^^^^^^^^^^
+>foo : any
+>    : ^^^
+
+    args; // []
+>args : []
+>     : ^^
+
+    return match;
+>match : `foo${string}`
+>      : ^^^^^^^^^^^^^^
+
+});
+
+"foo_foo_bar".replace(/foo(?<empty>){0}/g, (match, empty, index, input, capturingGroups, ...args) => {
+>"foo_foo_bar".replace(/foo(?<empty>){0}/g, (match, empty, index, input, capturingGroups, ...args) => {    match; // "foo"    empty; // "" | undefined    index; // number    input; // `${string}foo${string}`    // for target ≥ ES2018    capturingGroups.empty; // "" | undefined    capturingGroups.foo; // error    args; // []    return match;}) : string
+>                                                                                                                                                                                                                                                                                                                                                        : ^^^^^^
+>"foo_foo_bar".replace : { <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; <This, T, R>(this: This, replacer: { [Symbol.replace](string: This, replaceValue: T): R; }, replaceValue: T): R; <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; }
+>                      : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^    ^^ ^^ ^^    ^^    ^^        ^^                                                       ^^            ^^ ^^^ ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
+>"foo_foo_bar" : "foo_foo_bar"
+>              : ^^^^^^^^^^^^^
+>replace : { <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; <This, T, R>(this: This, replacer: { [Symbol.replace](string: This, replaceValue: T): R; }, replaceValue: T): R; <T extends string>(searchValue: T, replaceValue: string | StringReplaceCallbackSignature<[searchValue: T], undefined>): string; <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject>(searchValue: string | RegExp<CapturingGroups, NamedCapturingGroups>, replaceValue: string | StringReplaceCallbackSignature<CapturingGroups, NamedCapturingGroups>): string; }
+>        : ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^    ^^ ^^ ^^    ^^    ^^        ^^                                                       ^^            ^^ ^^^ ^^^ ^^^^^^^^^      ^^           ^^ ^^            ^^                                                                    ^^^      ^^^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^                                                      ^^            ^^                                                                              ^^^      ^^^
+>/foo(?<empty>){0}/g : RegExp<["foo", "" | undefined], { empty: "" | undefined; }, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(match, empty, index, input, capturingGroups, ...args) => {    match; // "foo"    empty; // "" | undefined    index; // number    input; // `${string}foo${string}`    // for target ≥ ES2018    capturingGroups.empty; // "" | undefined    capturingGroups.foo; // error    args; // []    return match;} : (match: "foo", empty: "" | undefined, index: number, input: `${string}foo${string}`, capturingGroups: { empty: "" | undefined; }) => "foo"
+>                                                                                                                                                                                                                                                                                                            : ^     ^^^^^^^^^     ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>match : "foo"
+>      : ^^^^^
+>empty : "" | undefined
+>      : ^^^^^^^^^^^^^^
+>index : number
+>      : ^^^^^^
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+>capturingGroups : { empty: "" | undefined; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : []
+>     : ^^
+
+    match; // "foo"
+>match : "foo"
+>      : ^^^^^
+
+    empty; // "" | undefined
+>empty : "" | undefined
+>      : ^^^^^^^^^^^^^^
+
+    index; // number
+>index : number
+>      : ^^^^^^
+
+    input; // `${string}foo${string}`
+>input : `${string}foo${string}`
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    // for target ≥ ES2018
+    capturingGroups.empty; // "" | undefined
+>capturingGroups.empty : "" | undefined
+>                      : ^^^^^^^^^^^^^^
+>capturingGroups : { empty: "" | undefined; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>empty : "" | undefined
+>      : ^^^^^^^^^^^^^^
+
+    capturingGroups.foo; // error
+>capturingGroups.foo : any
+>                    : ^^^
+>capturingGroups : { empty: "" | undefined; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : any
+>    : ^^^
+
+    args; // []
+>args : []
+>     : ^^
+
+    return match;
+>match : "foo"
+>      : ^^^^^
+
+});
+

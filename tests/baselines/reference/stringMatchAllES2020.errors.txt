@@ -1,0 +1,47 @@
+stringMatchAllES2020.ts(4,16): error TS2345: Argument of type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to parameter of type 'string | RegExp<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>'.
+  Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'RegExp<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>'.
+    Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type '{ readonly global: true; readonly ignoreCase: boolean; readonly multiline: boolean; readonly sticky: boolean; readonly unicode: boolean; readonly dotAll: boolean; }'.
+      Types of property 'global' are incompatible.
+        Type 'false' is not assignable to type 'true'.
+stringMatchAllES2020.ts(5,16): error TS2345: Argument of type 'RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to parameter of type 'string | RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
+  Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'string | RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
+    Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
+      Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type '{ readonly global: true; readonly ignoreCase: false; readonly multiline: false; readonly sticky: false; readonly unicode: false; readonly dotAll: false; }'.
+        Types of property 'global' are incompatible.
+          Type 'false' is not assignable to type 'true'.
+stringMatchAllES2020.ts(6,16): error TS2345: Argument of type '"bar" | RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to parameter of type 'string | RegExp<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>'.
+  Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'string | RegExp<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>'.
+    Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'RegExp<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>'.
+      Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type '{ readonly global: true; readonly ignoreCase: boolean; readonly multiline: boolean; readonly sticky: boolean; readonly unicode: boolean; readonly dotAll: boolean; }'.
+        Types of property 'global' are incompatible.
+          Type 'false' is not assignable to type 'true'.
+
+
+==== stringMatchAllES2020.ts (3 errors) ====
+    "foo".matchAll("bar"); // OK
+    "foo".matchAll(/foo/g); // OK
+    "foo".matchAll(Math.random() >= 0.5 ? /foo/g : "bar"); // OK
+    "foo".matchAll(/foo/); // should error
+                   ~~~~~
+!!! error TS2345: Argument of type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to parameter of type 'string | RegExp<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>'.
+!!! error TS2345:   Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'RegExp<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>'.
+!!! error TS2345:     Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type '{ readonly global: true; readonly ignoreCase: boolean; readonly multiline: boolean; readonly sticky: boolean; readonly unicode: boolean; readonly dotAll: boolean; }'.
+!!! error TS2345:       Types of property 'global' are incompatible.
+!!! error TS2345:         Type 'false' is not assignable to type 'true'.
+    "foo".matchAll(Math.random() >= 0.5 ? /foo/g : /foo/); // should error
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to parameter of type 'string | RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
+!!! error TS2345:   Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'string | RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
+!!! error TS2345:     Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>'.
+!!! error TS2345:       Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type '{ readonly global: true; readonly ignoreCase: false; readonly multiline: false; readonly sticky: false; readonly unicode: false; readonly dotAll: false; }'.
+!!! error TS2345:         Types of property 'global' are incompatible.
+!!! error TS2345:           Type 'false' is not assignable to type 'true'.
+    "foo".matchAll(Math.random() >= 0.5 ? "bar" : /foo/); // should error
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '"bar" | RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to parameter of type 'string | RegExp<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>'.
+!!! error TS2345:   Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'string | RegExp<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>'.
+!!! error TS2345:     Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'RegExp<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>'.
+!!! error TS2345:       Type 'RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type '{ readonly global: true; readonly ignoreCase: boolean; readonly multiline: boolean; readonly sticky: boolean; readonly unicode: boolean; readonly dotAll: boolean; }'.
+!!! error TS2345:         Types of property 'global' are incompatible.
+!!! error TS2345:           Type 'false' is not assignable to type 'true'.
+    

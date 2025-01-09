@@ -6,14 +6,14 @@ var x: Object;
 >  : ^^^^^^
 
 var y: RegExp;
->y : RegExp
->  : ^^^^^^
+>y : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 y = x;
 >y = x : Object
 >      : ^^^^^^
->y : RegExp
->  : ^^^^^^
+>y : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Object
 >  : ^^^^^^
 

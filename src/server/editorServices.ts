@@ -5249,18 +5249,18 @@ export class ProjectService {
 
                     if (rule.exclude) {
                         for (const exclude of rule.exclude) {
-                            const processedRule = root.replace(rule.match, (...groups: string[]) => {
+                            const processedRule = root.replace(rule.match, (...groups) => {
                                 return exclude.map(groupNumberOrString => {
                                     // RegExp group numbers are 1-based, but the first element in groups
                                     // is actually the original string, so it all works out in the end.
                                     if (typeof groupNumberOrString === "number") {
-                                        if (!isString(groups[groupNumberOrString])) {
+                                        if (!isString((groups as string[])[groupNumberOrString])) {
                                             // Specification was wrong - exclude nothing!
                                             this.logger.info(`Incorrect RegExp specification in safelist rule ${name} - not enough groups`);
                                             // * can't appear in a filename; escape it because it's feeding into a RegExp
                                             return "\\*";
                                         }
-                                        return ProjectService.escapeFilenameForRegex(groups[groupNumberOrString]);
+                                        return ProjectService.escapeFilenameForRegex((groups as string[])[groupNumberOrString]);
                                     }
                                     return groupNumberOrString;
                                 }).join("");

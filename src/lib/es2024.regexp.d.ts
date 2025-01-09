@@ -1,7 +1,4 @@
-interface RegExp {
-    /**
-     * Returns a Boolean value indicating the state of the unicodeSets flag (v) used with a regular expression.
-     * Default is false. Read-only.
-     */
+interface RegExpFlags {
+    /** A Boolean value indicating the state of the unicodeSets flag (v) on the regular expression. Read-only. */
     readonly unicodeSets: boolean;
 }

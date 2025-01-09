@@ -134,8 +134,8 @@ function f8(x: 'a');
 function f8(x: RegExp);
 >f8 : { (x: "a"): any; (x: RegExp): any; }
 >   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
->x : RegExp
->  : ^^^^^^
+>x : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function f8(x: any) { }
 >f8 : { (x: "a"): any; (x: RegExp): any; }

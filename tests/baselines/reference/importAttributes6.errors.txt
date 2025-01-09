@@ -3,9 +3,9 @@ mod.mts(1,37): error TS2322: Type '{ field: 0; }' is not assignable to type 'Imp
     Type 'number' is not assignable to type 'string'.
 mod.mts(1,51): error TS2858: Import attribute values must be string literal expressions.
 mod.mts(2,51): error TS2858: Import attribute values must be string literal expressions.
-mod.mts(3,37): error TS2322: Type '{ field: RegExp; }' is not assignable to type 'ImportAttributes'.
+mod.mts(3,37): error TS2322: Type '{ field: RegExp<["a"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>; }' is not assignable to type 'ImportAttributes'.
   Property 'field' is incompatible with index signature.
-    Type 'RegExp' is not assignable to type 'string'.
+    Type 'RegExp<["a"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'string'.
 mod.mts(3,51): error TS2858: Import attribute values must be string literal expressions.
 mod.mts(4,37): error TS2322: Type '{ field: string[]; }' is not assignable to type 'ImportAttributes'.
   Property 'field' is incompatible with index signature.
@@ -31,9 +31,9 @@ mod.mts(6,65): error TS2858: Import attribute values must be string literal expr
 !!! error TS2858: Import attribute values must be string literal expressions.
     import * as thing3 from "./mod.mjs" with { field: /a/g };
                                         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ field: RegExp; }' is not assignable to type 'ImportAttributes'.
+!!! error TS2322: Type '{ field: RegExp<["a"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>; }' is not assignable to type 'ImportAttributes'.
 !!! error TS2322:   Property 'field' is incompatible with index signature.
-!!! error TS2322:     Type 'RegExp' is not assignable to type 'string'.
+!!! error TS2322:     Type 'RegExp<["a"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>' is not assignable to type 'string'.
                                                       ~~~~
 !!! error TS2858: Import attribute values must be string literal expressions.
     import * as thing4 from "./mod.mjs" with { field: ["a"] };

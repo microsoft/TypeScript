@@ -1,0 +1,128 @@
+//// [tests/cases/conformance/es2020/stringMatchAllES2020.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 1,000
+Type Count: 2,500
+Instantiation count: 10,000
+
+=== stringMatchAllES2020.ts ===
+"foo".matchAll("bar"); // OK
+>"foo".matchAll("bar") : RegExpStringIterator<RegExpExecArray<CapturingGroupsArray, NamedCapturingGroupsObject, RegExpFlags & { readonly global: true; }>>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^
+>"foo".matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>               : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>"foo" : "foo"
+>      : ^^^^^
+>matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>         : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>"bar" : "bar"
+>      : ^^^^^
+
+"foo".matchAll(/foo/g); // OK
+>"foo".matchAll(/foo/g) : RegExpStringIterator<RegExpExecArray<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"foo".matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>               : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>"foo" : "foo"
+>      : ^^^^^
+>matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>         : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>/foo/g : RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+"foo".matchAll(Math.random() >= 0.5 ? /foo/g : "bar"); // OK
+>"foo".matchAll(Math.random() >= 0.5 ? /foo/g : "bar") : RegExpStringIterator<RegExpExecArray<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>>
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"foo".matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>               : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>"foo" : "foo"
+>      : ^^^^^
+>matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>         : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>Math.random() >= 0.5 ? /foo/g : "bar" : "bar" | RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() >= 0.5 : boolean
+>                     : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>/foo/g : RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+"foo".matchAll(/foo/); // should error
+>"foo".matchAll(/foo/) : RegExpStringIterator<RegExpExecArray<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^
+>"foo".matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>               : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>"foo" : "foo"
+>      : ^^^^^
+>matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>         : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>/foo/ : RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+"foo".matchAll(Math.random() >= 0.5 ? /foo/g : /foo/); // should error
+>"foo".matchAll(Math.random() >= 0.5 ? /foo/g : /foo/) : RegExpStringIterator<RegExpExecArray<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>>
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"foo".matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>               : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>"foo" : "foo"
+>      : ^^^^^
+>matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>         : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>Math.random() >= 0.5 ? /foo/g : /foo/ : RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }> | RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() >= 0.5 : boolean
+>                     : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>/foo/g : RegExp<["foo"], undefined, { hasIndices: false; global: true; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/foo/ : RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+"foo".matchAll(Math.random() >= 0.5 ? "bar" : /foo/); // should error
+>"foo".matchAll(Math.random() >= 0.5 ? "bar" : /foo/) : RegExpStringIterator<RegExpExecArray<["foo"], undefined, Partial<RegExpFlags> & { readonly global: true; }>>
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^
+>"foo".matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>               : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>"foo" : "foo"
+>      : ^^^^^
+>matchAll : <CapturingGroups extends CapturingGroupsArray = CapturingGroupsArray, NamedCapturingGroups extends NamedCapturingGroupsObject = NamedCapturingGroupsObject, Flags extends Partial<RegExpFlags> & { readonly global: true; } = RegExpFlags & { readonly global: true; }>(regexp: RegExp<CapturingGroups, NamedCapturingGroups, Flags> | string) => RegExpStringIterator<RegExpExecArray<CapturingGroups, NamedCapturingGroups, Flags>>
+>         : ^               ^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^      ^^                                                             ^^^^^                                                                                   
+>Math.random() >= 0.5 ? "bar" : /foo/ : "bar" | RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() >= 0.5 : boolean
+>                     : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"bar" : "bar"
+>      : ^^^^^
+>/foo/ : RegExp<["foo"], undefined, { hasIndices: false; global: false; ignoreCase: false; multiline: false; dotAll: false; unicode: false; unicodeSets: false; sticky: false; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

@@ -7,10 +7,10 @@ class Rule {
 >     : ^^^^
 
     public regex: RegExp = new RegExp('');
->regex : RegExp
->      : ^^^^^^
->new RegExp('') : RegExp
->               : ^^^^^^
+>regex : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new RegExp('') : RegExp<CapturingGroupsArray, { [name: string]: string; }, RegExpFlags>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >RegExp : RegExpConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >'' : ""
