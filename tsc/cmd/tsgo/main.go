@@ -92,6 +92,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error: The directory %v does not exist.\n", normalizedRootPath)
 		os.Exit(1)
 	}
+	compilerOptions.ConfigFilePath = normalizedRootPath // This matters for type reference directive resolution
 
 	programOptions := ts.ProgramOptions{
 		RootPath:           normalizedRootPath,
