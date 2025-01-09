@@ -204,14 +204,15 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
 
     function createDiagnosticExplainingFile(program: Program, file: SourceFile | undefined, fileProcessingReason: FileIncludeReason | undefined, diagnostic: DiagnosticMessage, args: DiagnosticArguments): Diagnostic {
         let seenReasons: Set<FileIncludeReason> | undefined;
-        const reasons = file && fileReasons.get(file.path);
         let fileIncludeReasons: DiagnosticMessageChain[] | undefined;
         let relatedInfo: DiagnosticWithLocation[] | undefined;
-        let locationReason = isReferencedFile(fileProcessingReason) ? fileProcessingReason : undefined;
         let fileIncludeReasonDetails: DiagnosticMessageChain | undefined;
         let redirectInfo: DiagnosticMessageChain[] | undefined;
-        let cachedChain = file && fileReasonsToChain?.get(file.path);
         let chain: DiagnosticMessageChain | undefined;
+        
+        const reasons = file && fileReasons.get(file.path);
+        let locationReason = isReferencedFile(fileProcessingReason) ? fileProcessingReason : undefined;
+        let cachedChain = file && fileReasonsToChain?.get(file.path);
         if (cachedChain) {
             if (cachedChain.fileIncludeReasonDetails) {
                 seenReasons = new Set(reasons);
@@ -235,7 +236,7 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
 
         if (seenReasons && cachedChain) {
             if (cachedChain.details && !processedExtraReason) {
-                chain = chainDiagnosticMessages(cachedChain.details, diagnostic, ...args || emptyArray);
+                chain = chainDiagnosticMessages(cachedChain.details, diagnostic, ...args ?? emptyArray);
             }
             else if (cachedChain.fileIncludeReasonDetails) {
                 if (!processedExtraReason) {
