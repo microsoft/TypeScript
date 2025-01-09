@@ -43942,7 +43942,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkBlock(node: Block) {
-        // Grammar checking for SyntaxKind.Block
+        if (node.statements.length === 1 && node.statements[0].kind === SyntaxKind.ExpressionStatement) {
+            if (isSideEffectFree((node.statements[0] as ExpressionStatement).expression)) {
+                error(node, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
+            }
+        }
         if (node.kind === SyntaxKind.Block) {
             checkGrammarStatementInAmbientContext(node);
         }
@@ -44490,10 +44494,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkExpressionStatement(node: ExpressionStatement) {
         // Grammar checking
         checkGrammarStatementInAmbientContext(node);
-
-        if (isSideEffectFree(node.expression)) {
-            error(node, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
-        }
 
         checkExpression(node.expression);
     }
