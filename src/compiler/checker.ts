@@ -306,6 +306,7 @@ import {
     getExternalModuleRequireArgument,
     getFirstConstructorWithBody,
     getFirstIdentifier,
+    getFullWidth,
     getFunctionFlags,
     getHostSignatureFromJSDoc,
     getIdentifierGeneratedImportReference,
@@ -5988,7 +5989,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.AllowAnyNodeKind, writer?: EmitTextWriter): string {
-        return symbolToStringWorker(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.UseDoubleQuotesForStringLiteralType, writer);
+        return symbolToStringWorker(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.UseDoubleQuotesForStringLiteralType | SymbolFormatFlags.WriteComputedProps, writer);
     }
     function symbolToStringWorker(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.AllowAnyNodeKind, writer?: EmitTextWriter): string {
         let nodeFlags = NodeBuilderFlags.IgnoreErrors;
@@ -6011,7 +6012,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (flags & SymbolFormatFlags.DoNotIncludeSymbolChain) {
             internalNodeFlags |= InternalNodeBuilderFlags.DoNotIncludeSymbolChain;
         }
-        if (flags & SymbolFormatFlags.WriteComputedProps) {
+        if (flags & SymbolFormatFlags.WriteComputedProps || flags & SymbolFormatFlags.AllowAnyNodeKind) {
             internalNodeFlags |= InternalNodeBuilderFlags.WriteComputedProps;
         }
         const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder.symbolToNode : nodeBuilder.symbolToEntityName;
@@ -6368,18 +6369,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function symbolToNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
-            if (context.internalFlags & InternalNodeBuilderFlags.WriteComputedProps) {
-                if (symbol.valueDeclaration) {
-                    const name = getNameOfDeclaration(symbol.valueDeclaration);
-                    if (name && isComputedPropertyName(name)) return name;
-                }
-                const nameType = getSymbolLinks(symbol).nameType;
-                if (nameType && nameType.flags & (TypeFlags.EnumLiteral | TypeFlags.UniqueESSymbol)) {
-                    context.enclosingDeclaration = nameType.symbol.valueDeclaration;
-                    return factory.createComputedPropertyName(symbolToExpression(nameType.symbol, context, meaning));
-                }
-            }
-            return symbolToExpression(symbol, context, meaning);
+            return symbolToExpression(symbol, context, meaning, !!(context.internalFlags & InternalNodeBuilderFlags.WriteComputedProps));
         }
 
         function withContext<T>(
@@ -8534,12 +8524,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function symbolToExpression(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
+        function symbolToExpression(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, allowComputedProperty?: false): Expression;
+        function symbolToExpression(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, allowComputedProperty: boolean): Expression | ComputedPropertyName;
+        function symbolToExpression(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, allowComputedProperty = false) {
             const chain = lookupSymbolChain(symbol, context, meaning);
 
-            return createExpressionFromSymbolChain(chain, chain.length - 1);
+            return createExpressionFromSymbolChain(chain, chain.length - 1, allowComputedProperty && chain.length === 1);
 
-            function createExpressionFromSymbolChain(chain: Symbol[], index: number): Expression {
+            function createExpressionFromSymbolChain(chain: Symbol[], index: number, allowComputedProperty?: false): Expression;
+            function createExpressionFromSymbolChain(chain: Symbol[], index: number, allowComputedProperty: boolean): Expression | ComputedPropertyName;
+            function createExpressionFromSymbolChain(chain: Symbol[], index: number, allowComputedProperty = false): Expression | ComputedPropertyName {
                 const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                 const symbol = chain[index];
 
@@ -8550,16 +8544,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (index === 0) {
                     context.flags ^= NodeBuilderFlags.InInitialEntityName;
                 }
-                let firstChar = symbolName.charCodeAt(0);
 
                 const overrideSourceStringDelimiter = context.flags & (NodeBuilderFlags.UseDoubleQuotesForStringLiteralType | NodeBuilderFlags.UseSingleQuotesForStringLiteralType);
                 let useSingleQuote = !(context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) &&
-                    (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || firstChar === CharacterCodes.singleQuote);
+                    (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || symbolName.charCodeAt(0) === CharacterCodes.singleQuote);
 
-                if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
+                if (isSingleOrDoubleQuote(symbolName.charCodeAt(0)) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
                     return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context), useSingleQuote);
                 }
-                if (canUsePropertyAccess(symbolName, languageVersion) || (index === 0 && firstChar === CharacterCodes.openBracket)) {
+                if ((symbolNameSource && isIdentifier(symbolNameSource)) || canUsePropertyAccess(symbolName, languageVersion)) {
                     const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
                     if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                     identifier.symbol = symbol;
@@ -8567,32 +8560,61 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return index > 0 ? factory.createPropertyAccessExpression(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
                 }
                 else {
-                    if (firstChar === CharacterCodes.openBracket) {
-                        symbolName = symbolName.substring(1, symbolName.length - 1);
-                        firstChar = symbolName.charCodeAt(0);
-                        symbolNameSource = symbolNameSource && isComputedPropertyName(symbolNameSource) && isPropertyNameLiteral(symbolNameSource.expression) ? symbolNameSource.expression : undefined;
+                    let hasComputedProperty = false;
+                    if (symbolNameSource && isComputedPropertyName(symbolNameSource)) {
+                        hasComputedProperty = true;
+                        symbolNameSource = symbolNameSource && isComputedPropertyName(symbolNameSource) && (isPropertyNameLiteral(symbolNameSource.expression) || isEntityNameExpression(symbolNameSource.expression)) ? symbolNameSource.expression : undefined;
+                        symbolName = symbolNameSource && isIdentifier(symbolNameSource) ? declarationNameToString(symbolNameSource) : symbolName.substring(1, symbolName.length - 1);
                         useSingleQuote = !(context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) &&
-                            (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || firstChar === CharacterCodes.singleQuote);
+                            (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || isSingleOrDoubleQuote(symbolName.charCodeAt(0)));
                     }
                     let expression: Expression | undefined;
-                    if (isSingleOrDoubleQuote(firstChar) && !(symbol.flags & SymbolFlags.EnumMember) && symbolNameSource && isPropertyNameLiteral(symbolNameSource)) {
-                        const stringLiteralName = !overrideSourceStringDelimiter ? factory.createStringLiteralFromNode(symbolNameSource) :
-                            factory.createStringLiteral(getTextOfIdentifierOrLiteral(symbolNameSource), useSingleQuote);
-                        stringLiteralName.symbol = symbol;
-                        expression = stringLiteralName;
+
+                    const nameType = getSymbolLinks(symbol).nameType;
+                    const hasEnumOrSymbolName = nameType && nameType.flags & (TypeFlags.EnumLiteral | TypeFlags.UniqueESSymbol);
+                    if (symbolNameSource) {
+                        // If we have a source node for the name it might be string number or entity name that we can reuse
+                        if (isStringLiteral(symbolNameSource) && !(symbol.flags & SymbolFlags.EnumMember)) {
+                            const stringLiteralName = !overrideSourceStringDelimiter ? factory.createStringLiteralFromNode(symbolNameSource) :
+                                factory.createStringLiteral(getTextOfIdentifierOrLiteral(symbolNameSource), useSingleQuote);
+                            stringLiteralName.symbol = symbol;
+                            expression = stringLiteralName;
+                        }
+                        else if (("" + +symbolName) === symbolName && !hasEnumOrSymbolName) {
+                            const numericValue = +symbolName;
+                            const numberLiteralName = factory.createNumericLiteral(Math.abs(numericValue));
+                            numberLiteralName.symbol = symbol;
+                            expression = numericValue >= 0 ? numberLiteralName : factory.createPrefixMinus(numberLiteralName);
+                        }
+                        else if (isEntityNameExpression(symbolNameSource) && getFullWidth(symbolNameSource) !== 0) {
+                            const entityName = factory.cloneNode(symbolNameSource);
+                            entityName.symbol = symbol;
+                            expression = entityName;
+                        }
                     }
-                    else if (("" + +symbolName) === symbolName) {
-                        const numberLiteralName = factory.createNumericLiteral(+symbolName);
-                        numberLiteralName.symbol = symbol;
-                        expression = numberLiteralName;
+                    // Use am enum or unique symbol name if we can get one
+                    if (hasEnumOrSymbolName && !expression) {
+                        hasComputedProperty = true;
+                        const oldEnclosingDecl = context.enclosingDeclaration;
+                        context.enclosingDeclaration = nameType.symbol.valueDeclaration;
+                        expression = symbolToExpression(nameType.symbol, context, SymbolFlags.Value);
+                        context.enclosingDeclaration = oldEnclosingDecl;
                     }
+
+                    // If we don't have an expression at this point we can be in one of two cases:
+                    // - we have syntax error, we just reuse the source code text to have something to show.
+                    // - we have a numeric literal that is not written in simple format ie one where ("" + +symbolName) !== symbolName
                     if (!expression) {
+                        // The identifier created here may contain a full expression or a number used as a computed property name and thus might not be valid
                         const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
                         if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                         identifier.symbol = symbol;
                         expression = identifier;
                     }
-                    return index === 0 ? expression : factory.createElementAccessExpression(createExpressionFromSymbolChain(chain, index - 1), expression);
+
+                    return index === 0 && hasComputedProperty && allowComputedProperty ? factory.createComputedPropertyName(expression) :
+                        index === 0 ? expression :
+                        factory.createElementAccessExpression(createExpressionFromSymbolChain(chain, index - 1), expression);
                 }
             }
         }

@@ -304,7 +304,7 @@ export class TypeWriterWalker {
         if (!symbol) {
             return;
         }
-        let symbolString = "Symbol(" + this.checker.symbolToString(symbol, node.parent);
+        let symbolString = "Symbol(" + this.checker.symbolToString(symbol, node.parent, /*meaning*/ undefined, ts.SymbolFormatFlags.AllowAnyNodeKind);
         if (symbol.declarations) {
             let count = 0;
             for (const declaration of symbol.declarations) {
