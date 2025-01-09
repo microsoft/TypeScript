@@ -720,6 +720,7 @@ export function getNormalizedAbsolutePath(path: string, currentDirectory: string
 
 /** @internal */
 export function normalizePath(path: string): string {
+    path = normalizeSlashes(path);
     let normalized = simpleNormalizePath(path);
     if (normalized !== undefined) {
         return normalized;
@@ -729,7 +730,6 @@ export function normalizePath(path: string): string {
 }
 
 function simpleNormalizePath(path: string): string | undefined {
-    path = normalizeSlashes(path);
     // Most paths don't require normalization
     if (!relativePathSegmentRegExp.test(path)) {
         return path;
