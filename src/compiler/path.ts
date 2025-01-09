@@ -735,7 +735,10 @@ function simpleNormalizePath(path: string): string | undefined {
         return path;
     }
     // Some paths only require cleanup of `/./` or leading `./`
-    const simplified = path.replace(/\/\.\//g, "/").replace(/^\.\//, "");
+    let simplified = path.replace(/\/\.\//g, "/");
+    if (simplified.startsWith("./")) {
+        simplified = simplified.slice(2);
+    }
     if (simplified !== path) {
         path = simplified;
         if (!relativePathSegmentRegExp.test(path)) {
