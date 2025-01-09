@@ -630,50 +630,46 @@ export function getNormalizedAbsolutePath(path: string, currentDirectory: string
         path = combinePaths(currentDirectory, path);
         rootLength = getRootLength(path);
     }
-    const simple = simpleNormalizePath(path);
-    if (simple !== undefined) {
-        return simple;
+    else {
+        // combinePaths normalizes slashes, so not necessary in the other branch
+        path = normalizeSlashes(path);
     }
+
+    const simpleNormalized = simpleNormalizePath(path);
+    if (simpleNormalized !== undefined) {
+        return simpleNormalized.length > rootLength ? removeTrailingDirectorySeparator(simpleNormalized) : simpleNormalized;
+    }
+
+    const length = path.length;
     const root = path.substring(0, rootLength);
-    const normalizedRoot = root && normalizeSlashes(root);
     // `normalized` is only initialized once `path` is determined to be non-normalized
-    let normalized = normalizedRoot === root ? undefined : normalizedRoot;
+    let normalized;
     let index = rootLength;
     let segmentStart = index;
     let normalizedUpTo = index;
     let seenNonDotDotSegment = rootLength !== 0;
-    while (index < path.length) {
+    while (index < length) {
         // At beginning of segment
         segmentStart = index;
         let ch = path.charCodeAt(index);
-        while (isAnyDirectorySeparator(ch) && index + 1 < path.length) {
+        while (ch === CharacterCodes.slash && index + 1 < length) {
             index++;
             ch = path.charCodeAt(index);
         }
         if (index > segmentStart) {
-            if (normalized === undefined) {
-                // Seen superfluous separator
-                normalized = path.substring(0, segmentStart - 1);
-            }
+            // Seen superfluous separator
+            normalized ??= path.substring(0, segmentStart - 1);
             segmentStart = index;
         }
         // Past any superfluous separators
-        const sepIndex = path.indexOf(directorySeparator, index + 1);
-        const altSepIndex = path.indexOf(altDirectorySeparator, index + 1);
-        let segmentEnd = sepIndex === -1 ? altSepIndex : altSepIndex === -1 ? sepIndex : Math.min(sepIndex, altSepIndex);
+        let segmentEnd = path.indexOf(directorySeparator, index + 1);
         if (segmentEnd === -1) {
-            segmentEnd = path.length;
-        }
-        if (segmentEnd === altSepIndex && normalized === undefined) {
-            // Seen backslash
-            normalized = path.substring(0, segmentStart);
+            segmentEnd = length;
         }
         const segmentLength = segmentEnd - segmentStart;
         if (segmentLength === 1 && path.charCodeAt(index) === CharacterCodes.dot) {
             // "." segment (skip)
-            if (normalized === undefined) {
-                normalized = path.substring(0, normalizedUpTo);
-            }
+            normalized ??= path.substring(0, normalizedUpTo);
         }
         else if (segmentLength === 2 && path.charCodeAt(index) === CharacterCodes.dot && path.charCodeAt(index + 1) === CharacterCodes.dot) {
             // ".." segment
@@ -699,7 +695,7 @@ export function getNormalizedAbsolutePath(path: string, currentDirectory: string
                     normalized = normalized.substring(0, Math.max(rootLength, lastSlash));
                 }
                 else {
-                    normalized = normalizedRoot;
+                    normalized = root;
                 }
                 if (normalized.length === rootLength) {
                     seenNonDotDotSegment = rootLength !== 0;
@@ -719,7 +715,7 @@ export function getNormalizedAbsolutePath(path: string, currentDirectory: string
         }
         index = segmentEnd + 1;
     }
-    return normalized ?? (path.length > rootLength ? removeTrailingDirectorySeparator(path) : path);
+    return normalized ?? (length > rootLength ? removeTrailingDirectorySeparator(path) : path);
 }
 
 /** @internal */
