@@ -1,4 +1,4 @@
-package compiler
+package diagnosticwriter
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-type DiagnosticsFormattingOptions struct {
+type FormattingOptions struct {
 	tspath.ComparePathsOptions
 	NewLine string
 }
@@ -35,7 +35,7 @@ const (
 	ellipsis            = "..."
 )
 
-func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []*ast.Diagnostic, formatOpts *FormattingOptions) {
 	if len(diags) == 0 {
 		return
 	}
@@ -80,7 +80,7 @@ func FormatDiagnosticsWithColorAndContext(output io.Writer, diags []*ast.Diagnos
 	}
 }
 
-func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, length int, squiggleColor string, formatOpts *DiagnosticsFormattingOptions) {
+func writeCodeSnippet(writer io.Writer, sourceFile *ast.SourceFile, start int, length int, squiggleColor string, formatOpts *FormattingOptions) {
 	firstLine, firstLineChar := scanner.GetLineAndCharacterOfPosition(sourceFile, start)
 	lastLine, lastLineChar := scanner.GetLineAndCharacterOfPosition(sourceFile, start+length)
 
@@ -196,7 +196,7 @@ func writeWithStyleAndReset(output io.Writer, text string, formatStyle string) {
 	fmt.Fprint(output, resetEscapeSequence)
 }
 
-func WriteLocation(output io.Writer, file *ast.SourceFile, pos int, formatOpts *DiagnosticsFormattingOptions, writeWithStyleAndReset FormattedWriter) {
+func WriteLocation(output io.Writer, file *ast.SourceFile, pos int, formatOpts *FormattingOptions, writeWithStyleAndReset FormattedWriter) {
 	firstLine, firstChar := scanner.GetLineAndCharacterOfPosition(file, pos)
 	var relativeFileName string
 	if formatOpts != nil {
@@ -221,7 +221,7 @@ type ErrorSummary struct {
 	SortedFileList  []*ast.SourceFile
 }
 
-func WriteErrorSummaryText(output io.Writer, allDiagnostics []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+func WriteErrorSummaryText(output io.Writer, allDiagnostics []*ast.Diagnostic, formatOpts *FormattingOptions) {
 	// Roughly corresponds to 'getErrorSummaryText' from watch.ts
 
 	errorSummary := getErrorSummary(allDiagnostics)
@@ -299,7 +299,7 @@ func getErrorSummary(diags []*ast.Diagnostic) *ErrorSummary {
 	}
 }
 
-func writeTabularErrorsDisplay(output io.Writer, errorSummary *ErrorSummary, formatOpts *DiagnosticsFormattingOptions) {
+func writeTabularErrorsDisplay(output io.Writer, errorSummary *ErrorSummary, formatOpts *FormattingOptions) {
 	sortedFiles := errorSummary.SortedFileList
 
 	maxErrors := 0
@@ -330,7 +330,7 @@ func writeTabularErrorsDisplay(output io.Writer, errorSummary *ErrorSummary, for
 	}
 }
 
-func prettyPathForFileError(file *ast.SourceFile, fileErrors []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) string {
+func prettyPathForFileError(file *ast.SourceFile, fileErrors []*ast.Diagnostic, formatOpts *FormattingOptions) string {
 	line, _ := scanner.GetLineAndCharacterOfPosition(file, fileErrors[0].Loc().Pos())
 	fileName := file.FileName()
 	if tspath.PathIsAbsolute(fileName) && tspath.PathIsAbsolute(formatOpts.CurrentDirectory) {
@@ -344,13 +344,13 @@ func prettyPathForFileError(file *ast.SourceFile, fileErrors []*ast.Diagnostic, 
 	)
 }
 
-func WriteFormatDiagnostics(output io.Writer, diagnostics []*ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+func WriteFormatDiagnostics(output io.Writer, diagnostics []*ast.Diagnostic, formatOpts *FormattingOptions) {
 	for _, diagnostic := range diagnostics {
 		WriteFormatDiagnostic(output, diagnostic, formatOpts)
 	}
 }
 
-func WriteFormatDiagnostic(output io.Writer, diagnostic *ast.Diagnostic, formatOpts *DiagnosticsFormattingOptions) {
+func WriteFormatDiagnostic(output io.Writer, diagnostic *ast.Diagnostic, formatOpts *FormattingOptions) {
 	if diagnostic.File() != nil {
 		line, character := scanner.GetLineAndCharacterOfPosition(diagnostic.File(), diagnostic.Loc().Pos())
 		fileName := diagnostic.File().FileName()

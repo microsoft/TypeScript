@@ -175,6 +175,7 @@ go.work.sum
 
 # Local baselines
 testdata/baselines/local
+testdata/baselines/tmp
 
 custom-gcl
 custom-gcl.exe
