@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/simpleTestSingleFile.ts] ////
+
+=== /simpleTestSingleFile.ts ===
+const x: number = "";
+>x : Symbol(x, Decl(simpleTestSingleFile.ts, 0, 5))
+

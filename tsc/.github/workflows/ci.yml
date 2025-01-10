@@ -73,13 +73,22 @@ jobs:
         # Installing gotestsum is super slow on Windows.
         if: ${{ matrix.os != 'windows-latest' }}
 
-      - run: npx hereby test:all ${RACE_FLAG:+"$RACE_FLAG"} ${NOEMBED_FLAG:+"$NOEMBED_FLAG"}
+      - name: Tests
+        id: test
+        run: npx hereby test:all ${RACE_FLAG:+"$RACE_FLAG"} ${NOEMBED_FLAG:+"$NOEMBED_FLAG"}
         env:
           RACE_FLAG: ${{ (matrix.race && '--race') || '' }}
           NOEMBED_FLAG: ${{ (matrix.noembed && '--noembed') || '' }}
 
       - run: git add .
       - run: git diff --staged --exit-code --stat
+
+      - name: Print baseline diff on failure
+        if: ${{ failure() && steps.test.conclusion == 'failure' }}
+        run: |
+          npx hereby baseline-accept
+          git add testdata/baselines/reference
+          git diff --staged --exit-code
 
   lint:
     runs-on: ubuntu-latest

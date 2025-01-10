@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
+	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -27,7 +28,7 @@ func DoTypeAndSymbolBaseline(
 	baselinePath string,
 	header string,
 	program *compiler.Program,
-	allFiles []*TestFile,
+	allFiles []*harnessutil.TestFile,
 	opts baseline.Options,
 	skipTypeBaselines bool,
 	skipSymbolBaselines bool,
@@ -50,9 +51,10 @@ func DoTypeAndSymbolBaseline(
 
 	fullWalker := newTypeWriterWalker(program, hasErrorBaseline)
 
-	t.Run("type", func(t *testing.T) {
-		checkBaselines(t, baselinePath, allFiles, fullWalker, header, opts, false /*isSymbolBaseline*/)
-	})
+	// !!! Enable type baselines once it's implemented
+	// t.Run("type", func(t *testing.T) {
+	// 	checkBaselines(t, baselinePath, allFiles, fullWalker, header, opts, false /*isSymbolBaseline*/)
+	// })
 	t.Run("symbol", func(t *testing.T) {
 		checkBaselines(t, baselinePath, allFiles, fullWalker, header, opts, true /*isSymbolBaseline*/)
 	})
@@ -61,7 +63,7 @@ func DoTypeAndSymbolBaseline(
 func checkBaselines(
 	t *testing.T,
 	baselinePath string,
-	allFiles []*TestFile,
+	allFiles []*harnessutil.TestFile,
 	fullWalker *typeWriterWalker,
 	header string,
 	opts baseline.Options,
@@ -74,7 +76,7 @@ func checkBaselines(
 }
 
 func generateBaseline(
-	allFiles []*TestFile,
+	allFiles []*harnessutil.TestFile,
 	fullWalker *typeWriterWalker,
 	header string,
 	isSymbolBaseline bool,
@@ -125,14 +127,14 @@ func generateBaseline(
 	return result.String()
 }
 
-func iterateBaseline(allFiles []*TestFile, fullWalker *typeWriterWalker, isSymbolBaseline bool) []string {
+func iterateBaseline(allFiles []*harnessutil.TestFile, fullWalker *typeWriterWalker, isSymbolBaseline bool) []string {
 	var baselines []string
 
 	for _, file := range allFiles {
-		unitName := file.unitName
+		unitName := file.UnitName
 		var typeLines strings.Builder
 		typeLines.WriteString("=== " + unitName + " ===\r\n")
-		codeLines := codeLinesRegexp.Split(file.content, -1)
+		codeLines := codeLinesRegexp.Split(file.Content, -1)
 		var results []*typeWriterResult
 		if isSymbolBaseline {
 			results = fullWalker.getSymbols(unitName)

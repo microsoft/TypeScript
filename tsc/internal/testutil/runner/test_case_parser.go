@@ -10,19 +10,22 @@ import (
 
 var lineDelimiter = regexp.MustCompile("\r?\n")
 
-// all the necessary information to set the right compiler settings
-type compilerSettings map[string]string
+// This maps a compiler setting to its value as written in the test file. For example, if a test file contains:
+//
+//	// @target: esnext, es2015
+//
+// Then the map will map "target" to "esnext, es2015"
+type rawCompilerSettings map[string]string
 
 // All the necessary information to turn a multi file test into useful units for later compilation
 type testUnit struct {
 	content          string
 	name             string
-	fileOptions      map[string]string
+	fileOptions      rawCompilerSettings
 	originalFilePath string
 }
 
 type testCaseContent struct {
-	settings             compilerSettings
 	testUnitData         []*testUnit
 	tsConfig             any // !!!
 	tsConfigFileUnitData any // !!!
@@ -33,10 +36,7 @@ type testCaseContent struct {
 var optionRegex = regexp.MustCompile(`(?m)^\/{2}\s*@(\w+)\s*:\s*([^\r\n]*)`) // multiple matches on multiple lines
 
 // Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance
-func makeUnitsFromTest(code string, fileName string, settings compilerSettings) testCaseContent {
-	if settings == nil {
-		settings = extractCompilerSettings(code)
-	}
+func makeUnitsFromTest(code string, fileName string) testCaseContent {
 	// List of all the subfiles we've parsed out
 	var testUnits []*testUnit
 
@@ -163,16 +163,15 @@ func makeUnitsFromTest(code string, fileName string, settings compilerSettings) 
 	// }
 
 	return testCaseContent{
-		settings:     settings,
 		testUnitData: testUnits,
 	}
 }
 
-func extractCompilerSettings(content string) compilerSettings {
+func extractCompilerSettings(content string) rawCompilerSettings {
 	opts := make(map[string]string)
 
 	for _, match := range optionRegex.FindAllStringSubmatch(content, -1) {
-		opts[match[1]] = strings.TrimSpace(match[2])
+		opts[strings.ToLower(match[1])] = strings.TrimSpace(match[2])
 	}
 
 	return opts

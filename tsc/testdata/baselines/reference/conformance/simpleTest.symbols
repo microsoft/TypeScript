@@ -1,0 +1,5 @@
+//// [tests/cases/conformance/simpleTest.ts] ////
+
+=== /simpleTest.ts ===
+
+1 + 2;

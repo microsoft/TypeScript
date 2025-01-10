@@ -358,7 +358,7 @@ func WriteFormatDiagnostic(output io.Writer, diagnostic *ast.Diagnostic, formatO
 		fmt.Fprintf(output, "%s(%d,%d): ", relativeFileName, line+1, character+1)
 	}
 
-	fmt.Fprintf(output, "%s TS%d: ", diagnostic.Category().String(), diagnostic.Code())
+	fmt.Fprintf(output, "%s TS%d: ", diagnostic.Category().Name(), diagnostic.Code())
 	WriteFlattenedDiagnosticMessage(output, diagnostic, formatOpts.NewLine)
 	fmt.Fprint(output, formatOpts.NewLine)
 }

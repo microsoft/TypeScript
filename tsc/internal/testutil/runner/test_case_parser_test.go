@@ -35,11 +35,6 @@ function bar() { return "b"; }`,
 		originalFilePath: "simpleTest.ts",
 	}
 	testContent := testCaseContent{
-		settings: map[string]string{
-			"strict":   "true",
-			"noEmit":   "true",
-			"filename": "secondFile.ts",
-		},
 		testUnitData:         []*testUnit{testUnit1, testUnit2},
 		tsConfig:             nil,
 		tsConfigFileUnitData: nil,
@@ -47,7 +42,7 @@ function bar() { return "b"; }`,
 	}
 	assert.DeepEqual(
 		t,
-		makeUnitsFromTest(code, "simpleTest.ts", nil),
+		makeUnitsFromTest(code, "simpleTest.ts"),
 		testContent,
 		cmp.AllowUnexported(testCaseContent{}, testUnit{}))
 }

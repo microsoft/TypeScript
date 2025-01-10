@@ -1,0 +1,13 @@
+/src/bar.ts(1,7): error TS2322: Type '1' is not assignable to type 'string'.
+/src/foo.ts(1,7): error TS2322: Type '""' is not assignable to type 'number'.
+
+
+==== /src/foo.ts (1 errors) ====
+    const x: number = "";
+          ~
+!!! error TS2322: Type '""' is not assignable to type 'number'.
+    
+==== /src/bar.ts (1 errors) ====
+    const y: string = 1;
+          ~
+!!! error TS2322: Type '1' is not assignable to type 'string'.

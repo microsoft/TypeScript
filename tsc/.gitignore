@@ -173,6 +173,9 @@ go.work.sum
 # Benchmarking results
 *.txt
 
+# Re-add baseline references
+!testdata/baselines/reference/**/*.txt
+
 # Local baselines
 testdata/baselines/local
 testdata/baselines/tmp
