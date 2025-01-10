@@ -209,7 +209,7 @@ export function createProgramDiagnostics(getCompilerOptionsObjectLiteralSyntax: 
         let fileIncludeReasonDetails: DiagnosticMessageChain | undefined;
         let redirectInfo: DiagnosticMessageChain[] | undefined;
         let chain: DiagnosticMessageChain | undefined;
-        
+
         const reasons = file && fileReasons.get(file.path);
         let locationReason = isReferencedFile(fileProcessingReason) ? fileProcessingReason : undefined;
         let cachedChain = file && fileReasonsToChain?.get(file.path);
