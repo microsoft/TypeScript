@@ -34,7 +34,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/file1.js] Inode:: 112
+//// [/user/username/projects/myproject/src/file1.js] Inode:: 113
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -187,7 +187,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 112
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 113
 
 PolledWatches::
 /user/username/projects/myproject/node_modules:
@@ -337,7 +337,7 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
-  {"inode":113}
+  {"inode":114}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -365,7 +365,7 @@ exitCode:: ExitStatus.undefined
 Change:: npm install index file in file2
 
 Input::
-//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 115
+//// [/user/username/projects/myproject/node_modules/file2/index.d.ts] Inode:: 116
 export const x = 10;
 
 
@@ -395,9 +395,9 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules:
-  {"inode":113}
-/user/username/projects/myproject/node_modules/file2: *new*
   {"inode":114}
+/user/username/projects/myproject/node_modules/file2: *new*
+  {"inode":115}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -447,7 +447,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 112
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 113
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -473,11 +473,11 @@ FsWatches::
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules:
-  {"inode":113}
-/user/username/projects/myproject/node_modules/file2:
   {"inode":114}
-/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
+/user/username/projects/myproject/node_modules/file2:
   {"inode":115}
+/user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
+  {"inode":116}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:

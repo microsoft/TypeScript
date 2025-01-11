@@ -1,4 +1,4 @@
-// @module: node16,nodenext
+// @module: node16,node18,nodenext
 // @resolveJsonModule: true
 // @filename: index.ts
 import json from "./package.json" assert { type: "json" };
