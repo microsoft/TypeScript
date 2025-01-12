@@ -719,9 +719,8 @@ export const runTestsAndWatch = task({
 
         const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
         const testCaseWatcher = chokidar.watch([
-            "tests/cases/**/*.*",
-            "tests/lib/**/*.*",
-            "tests/projects/**/*.*",
+            "tests/cases",
+            "tests/lib",
         ], {
             ignorePermissionErrors: true,
             alwaysStat: true,
@@ -756,7 +755,7 @@ export const runTestsAndWatch = task({
         }
 
         /**
-         * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir'} eventName
+         * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir' | 'all' | 'ready' | 'raw' | 'error'} eventName
          * @param {string} path
          * @param {fs.Stats | undefined} stats
          */
