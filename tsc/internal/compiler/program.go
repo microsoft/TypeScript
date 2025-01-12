@@ -387,7 +387,7 @@ func (p *Program) resolveImportsAndModuleAugmentations(file *ast.SourceFile) []s
 			// Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
 			// This may still end up being an untyped module -- the file won't be included but imports will be allowed.
 
-			shouldAddFile := resolution.IsResolved()
+			shouldAddFile := resolution.IsResolved() && tspath.FileExtensionIsOneOf(resolvedFileName, []string{".ts", ".tsx", ".mts", ".cts"})
 			// TODO(ercornel): !!!: other checks on whether or not to add the file
 
 			if shouldAddFile {

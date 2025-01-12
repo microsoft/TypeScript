@@ -721,6 +721,7 @@ func excludeProperties(properties []*ast.Symbol, excludedProperties core.Set[str
 			}
 		} else if !excluded {
 			reduced = slices.Clip(properties[:i])
+			excluded = true
 		}
 	}
 	if excluded {
@@ -3861,14 +3862,8 @@ func (r *Relater) propertyRelatedTo(source *Type, target *Type, sourceProp *ast.
 	case targetPropFlags&ast.ModifierFlagsProtected != 0:
 		if !r.c.isValidOverrideOf(sourceProp, targetProp) {
 			if reportErrors {
-				sourceType := r.c.getDeclaringClass(sourceProp)
-				if sourceType == nil {
-					sourceType = source
-				}
-				targetType := r.c.getDeclaringClass(targetProp)
-				if targetType == nil {
-					targetType = target
-				}
+				sourceType := core.OrElse(r.c.getDeclaringClass(sourceProp), source)
+				targetType := core.OrElse(r.c.getDeclaringClass(targetProp), target)
 				r.reportError(diagnostics.Property_0_is_protected_but_type_1_is_not_a_class_derived_from_2, r.c.symbolToString(targetProp), r.c.typeToString(sourceType), r.c.typeToString(targetType))
 			}
 			return TernaryFalse

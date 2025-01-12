@@ -26,7 +26,6 @@ type CompilerOptions struct {
 	IsolatedModules                    Tristate             `json:"isolatedModules"`
 	Jsx                                JsxEmit              `json:"jsx"`
 	Lib                                []string             `json:"lib"`
-	LegacyDecorators                   Tristate             `json:"legacyDecorators"`
 	ModuleKind                         ModuleKind           `json:"module"`
 	ModuleResolution                   ModuleResolutionKind `json:"moduleResolution"`
 	ModuleSuffixes                     []string             `json:"moduleSuffixes"`

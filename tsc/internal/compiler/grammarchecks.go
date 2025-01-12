@@ -234,13 +234,13 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 	}
 	for _, modifier := range modifiers {
 		if ast.IsDecorator(modifier) {
-			if !nodeCanBeDecorated(c.compilerOptions.LegacyDecorators == core.TSTrue, node, node.Parent, node.Parent.Parent) {
+			if !nodeCanBeDecorated(c.legacyDecorators, node, node.Parent, node.Parent.Parent) {
 				if node.Kind == ast.KindMethodDeclaration && !ast.NodeIsPresent(getBodyOfNode(node)) {
 					return c.grammarErrorOnFirstToken(node, diagnostics.A_decorator_can_only_decorate_a_method_implementation_not_an_overload)
 				} else {
 					return c.grammarErrorOnFirstToken(node, diagnostics.Decorators_are_not_valid_here)
 				}
-			} else if c.compilerOptions.LegacyDecorators == core.TSTrue && (node.Kind == ast.KindGetAccessor || node.Kind == ast.KindSetAccessor) {
+			} else if c.legacyDecorators && (node.Kind == ast.KindGetAccessor || node.Kind == ast.KindSetAccessor) {
 				accessors := c.getAllAccessorDeclarationsForDeclaration(node)
 				if hasDecorators(accessors.firstAccessor) && node == accessors.secondAccessor {
 					return c.grammarErrorOnFirstToken(node, diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name)
@@ -1789,6 +1789,19 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 		hasError = true
 	}
 
+	return hasError
+}
+
+func (c *Checker) checkGrammarYieldExpression(node *ast.Node) bool {
+	hasError := false
+	if node.Flags&ast.NodeFlagsYieldContext == 0 {
+		c.grammarErrorOnFirstToken(node, diagnostics.A_yield_expression_is_only_allowed_in_a_generator_body)
+		hasError = true
+	}
+	if c.isInParameterInitializerBeforeContainingFunction(node) {
+		c.error(node, diagnostics.X_yield_expressions_cannot_be_used_in_a_parameter_initializer)
+		hasError = true
+	}
 	return hasError
 }
 
