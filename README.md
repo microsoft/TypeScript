@@ -11,7 +11,7 @@
 
 Find others who are using TypeScript at [our community page](https://www.typescriptlang.org/community/).
 
-## Installing
+## Installation
 
 For the latest stable version:
 
