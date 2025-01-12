@@ -240,18 +240,32 @@ func (p *Program) getTypeCheckerForFile(file *ast.SourceFile) *Checker {
 func (p *Program) processRootFiles(rootFiles []string, isLib bool) {
 	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
 
-	absPaths := make([]string, 0, len(rootFiles))
+	filesToParse := make([]toParse, 0, len(rootFiles))
 	for _, file := range rootFiles {
 		absPath := tspath.GetNormalizedAbsolutePath(file, p.currentDirectory)
-		p.processedFileNames.Add(absPath)
-		absPaths = append(absPaths, absPath)
+		filesToParse = append(filesToParse, toParse{p: absPath, isLib: isLib})
 	}
-
-	for _, absPath := range absPaths {
-		p.startParseTask(absPath, wg, isLib)
-	}
+	p.processFiles(filesToParse, wg)
 
 	wg.Wait()
+}
+
+type toParse struct {
+	p     string
+	isLib bool
+}
+
+func (p *Program) processFiles(filesToParse []toParse, wg *core.WorkGroup) {
+	tasks := make([]toParse, 0, len(filesToParse))
+	for _, f := range filesToParse {
+		if !p.processedFileNames.Has(f.p) {
+			p.processedFileNames.Add(f.p)
+			tasks = append(tasks, f)
+		}
+	}
+	for _, f := range tasks {
+		p.startParseTask(f.p, wg, f.isLib)
+	}
 }
 
 func (p *Program) startParseTask(fileName string, wg *core.WorkGroup, isLib bool) {
@@ -262,11 +276,6 @@ func (p *Program) startParseTask(fileName string, wg *core.WorkGroup, isLib bool
 		// !!! if noResolve, skip all of this
 
 		p.collectExternalModuleReferences(file)
-
-		type toParse struct {
-			p     string
-			isLib bool
-		}
 
 		filesToParse := make([]toParse, 0, len(file.ReferencedFiles)+len(file.Imports)+len(file.ModuleAugmentations))
 
@@ -307,14 +316,7 @@ func (p *Program) startParseTask(fileName string, wg *core.WorkGroup, isLib bool
 
 		p.filesByPath[file.Path()] = file
 
-		if len(filesToParse) > 0 {
-			for _, f := range filesToParse {
-				if !p.processedFileNames.Has(f.p) {
-					p.processedFileNames.Add(f.p)
-					p.startParseTask(f.p, wg, f.isLib)
-				}
-			}
-		}
+		p.processFiles(filesToParse, wg)
 	})
 }
 
