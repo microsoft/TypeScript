@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/inferFromAnnotatedReturn1.ts] ////
+
+=== inferFromAnnotatedReturn1.ts ===
+declare function test<T>(cb: (arg: T) => T): T;
+>test : Symbol(test, Decl(inferFromAnnotatedReturn1.ts, 0, 0))
+>T : Symbol(T, Decl(inferFromAnnotatedReturn1.ts, 0, 22))
+>cb : Symbol(cb, Decl(inferFromAnnotatedReturn1.ts, 0, 25))
+>arg : Symbol(arg, Decl(inferFromAnnotatedReturn1.ts, 0, 30))
+>T : Symbol(T, Decl(inferFromAnnotatedReturn1.ts, 0, 22))
+>T : Symbol(T, Decl(inferFromAnnotatedReturn1.ts, 0, 22))
+>T : Symbol(T, Decl(inferFromAnnotatedReturn1.ts, 0, 22))
+
+const res1 = test((arg): number => 1); // ok
+>res1 : Symbol(res1, Decl(inferFromAnnotatedReturn1.ts, 2, 5))
+>test : Symbol(test, Decl(inferFromAnnotatedReturn1.ts, 0, 0))
+>arg : Symbol(arg, Decl(inferFromAnnotatedReturn1.ts, 2, 19))
+
+const res2 = test((arg): number => 'foo'); // error
+>res2 : Symbol(res2, Decl(inferFromAnnotatedReturn1.ts, 3, 5))
+>test : Symbol(test, Decl(inferFromAnnotatedReturn1.ts, 0, 0))
+>arg : Symbol(arg, Decl(inferFromAnnotatedReturn1.ts, 3, 19))
+
+export declare function linkedSignal<S, D>(options: {
+>linkedSignal : Symbol(linkedSignal, Decl(inferFromAnnotatedReturn1.ts, 3, 42))
+>S : Symbol(S, Decl(inferFromAnnotatedReturn1.ts, 5, 37))
+>D : Symbol(D, Decl(inferFromAnnotatedReturn1.ts, 5, 39))
+>options : Symbol(options, Decl(inferFromAnnotatedReturn1.ts, 5, 43))
+
+  source: () => S;
+>source : Symbol(source, Decl(inferFromAnnotatedReturn1.ts, 5, 53))
+>S : Symbol(S, Decl(inferFromAnnotatedReturn1.ts, 5, 37))
+
+  computation: (source: NoInfer<D>) => D;
+>computation : Symbol(computation, Decl(inferFromAnnotatedReturn1.ts, 6, 18))
+>source : Symbol(source, Decl(inferFromAnnotatedReturn1.ts, 7, 16))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>D : Symbol(D, Decl(inferFromAnnotatedReturn1.ts, 5, 39))
+>D : Symbol(D, Decl(inferFromAnnotatedReturn1.ts, 5, 39))
+
+}): D;
+>D : Symbol(D, Decl(inferFromAnnotatedReturn1.ts, 5, 39))
+
+const signal = linkedSignal({
+>signal : Symbol(signal, Decl(inferFromAnnotatedReturn1.ts, 10, 5))
+>linkedSignal : Symbol(linkedSignal, Decl(inferFromAnnotatedReturn1.ts, 3, 42))
+
+  source: () => 3,
+>source : Symbol(source, Decl(inferFromAnnotatedReturn1.ts, 10, 29))
+
+  computation: (s): number => 3,
+>computation : Symbol(computation, Decl(inferFromAnnotatedReturn1.ts, 11, 18))
+>s : Symbol(s, Decl(inferFromAnnotatedReturn1.ts, 12, 16))
+
+});
+
+class Foo<T, R> {
+>Foo : Symbol(Foo, Decl(inferFromAnnotatedReturn1.ts, 13, 3))
+>T : Symbol(T, Decl(inferFromAnnotatedReturn1.ts, 15, 10))
+>R : Symbol(R, Decl(inferFromAnnotatedReturn1.ts, 15, 12))
+
+  constructor(readonly cb: (t: T, _: { x: number; other: NoInfer<R> }) => R) {}
+>cb : Symbol(Foo.cb, Decl(inferFromAnnotatedReturn1.ts, 16, 14))
+>t : Symbol(t, Decl(inferFromAnnotatedReturn1.ts, 16, 28))
+>T : Symbol(T, Decl(inferFromAnnotatedReturn1.ts, 15, 10))
+>_ : Symbol(_, Decl(inferFromAnnotatedReturn1.ts, 16, 33))
+>x : Symbol(x, Decl(inferFromAnnotatedReturn1.ts, 16, 38))
+>other : Symbol(other, Decl(inferFromAnnotatedReturn1.ts, 16, 49))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>R : Symbol(R, Decl(inferFromAnnotatedReturn1.ts, 15, 12))
+>R : Symbol(R, Decl(inferFromAnnotatedReturn1.ts, 15, 12))
+}
+
+const _1 = new Foo((name: string, { x }): { name: string; x: number } => ({
+>_1 : Symbol(_1, Decl(inferFromAnnotatedReturn1.ts, 19, 5))
+>Foo : Symbol(Foo, Decl(inferFromAnnotatedReturn1.ts, 13, 3))
+>name : Symbol(name, Decl(inferFromAnnotatedReturn1.ts, 19, 20))
+>x : Symbol(x, Decl(inferFromAnnotatedReturn1.ts, 19, 35))
+>name : Symbol(name, Decl(inferFromAnnotatedReturn1.ts, 19, 43))
+>x : Symbol(x, Decl(inferFromAnnotatedReturn1.ts, 19, 57))
+
+  name,
+>name : Symbol(name, Decl(inferFromAnnotatedReturn1.ts, 19, 75))
+
+  x,
+>x : Symbol(x, Decl(inferFromAnnotatedReturn1.ts, 20, 7))
+
+}));
+
