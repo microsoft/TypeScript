@@ -3,3 +3,4 @@ name: CodeQL Configuration
 paths-ignore:
   - _submodules/**
   - '**/testdata/**'
+  - 'internal/bundled/libs/**'
