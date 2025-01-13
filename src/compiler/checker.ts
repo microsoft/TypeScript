@@ -8554,7 +8554,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     moduleName.symbol = symbol;
                     return moduleName;
                 }
-                if ((symbolNameSource && isIdentifier(symbolNameSource)) || canUsePropertyAccess(symbolName, languageVersion)) {
+                if ((symbolNameSource && isIdentifier(symbolNameSource) && getFullWidth(symbolNameSource) !== 0) || canUsePropertyAccess(symbolName, languageVersion)) {
                     const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
                     if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                     identifier.symbol = symbol;
