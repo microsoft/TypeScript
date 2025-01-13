@@ -8540,17 +8540,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (index === 0) {
                     context.flags |= NodeBuilderFlags.InInitialEntityName;
                 }
-                let { symbolName, symbolNameSource } = getNameOfSymbolAsWritten(symbol, context);
+                let { symbolName, symbolNameSource }: { symbolName: string | undefined; symbolNameSource?: Node; } = getNameOfSymbolAsWritten(symbol, context);
                 if (index === 0) {
                     context.flags ^= NodeBuilderFlags.InInitialEntityName;
                 }
 
-                const overrideSourceStringDelimiter = context.flags & (NodeBuilderFlags.UseDoubleQuotesForStringLiteralType | NodeBuilderFlags.UseSingleQuotesForStringLiteralType);
+                const overrideSourceStringDelimiter = !!(context.flags & (NodeBuilderFlags.UseDoubleQuotesForStringLiteralType | NodeBuilderFlags.UseSingleQuotesForStringLiteralType));
                 let useSingleQuote = !(context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) &&
                     (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || symbolName.charCodeAt(0) === CharacterCodes.singleQuote);
 
-                if (isSingleOrDoubleQuote(symbolName.charCodeAt(0)) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
-                    return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context), useSingleQuote);
+                if (isSingleOrDoubleQuote(symbolName.charCodeAt(0)) && some(symbol.declarations, d => hasNonGlobalAugmentationExternalModuleSymbol(d) || (isSourceFile(d) && isJsonSourceFile(d)))) {
+                    const moduleName = factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context), useSingleQuote);
+                    moduleName.symbol = symbol;
+                    return moduleName;
                 }
                 if ((symbolNameSource && isIdentifier(symbolNameSource)) || canUsePropertyAccess(symbolName, languageVersion)) {
                     const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
@@ -8563,7 +8565,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let hasComputedProperty = false;
                     if (symbolNameSource && isComputedPropertyName(symbolNameSource)) {
                         hasComputedProperty = true;
-                        symbolNameSource = symbolNameSource && isComputedPropertyName(symbolNameSource) && (isPropertyNameLiteral(symbolNameSource.expression) || isEntityNameExpression(symbolNameSource.expression)) ? symbolNameSource.expression : undefined;
+                        symbolNameSource = symbolNameSource && isComputedPropertyName(symbolNameSource) ? symbolNameSource.expression : undefined;
                         symbolName = symbolNameSource && isIdentifier(symbolNameSource) ? declarationNameToString(symbolNameSource) : symbolName.substring(1, symbolName.length - 1);
                         useSingleQuote = !(context.flags & NodeBuilderFlags.UseDoubleQuotesForStringLiteralType) &&
                             (!!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType) || isSingleOrDoubleQuote(symbolName.charCodeAt(0)));
@@ -8574,9 +8576,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const hasEnumOrSymbolName = nameType && nameType.flags & (TypeFlags.EnumLiteral | TypeFlags.UniqueESSymbol);
                     if (symbolNameSource) {
                         // If we have a source node for the name it might be string number or entity name that we can reuse
-                        if (isStringLiteral(symbolNameSource) && !(symbol.flags & SymbolFlags.EnumMember)) {
-                            const stringLiteralName = !overrideSourceStringDelimiter ? factory.createStringLiteralFromNode(symbolNameSource) :
-                                factory.createStringLiteral(getTextOfIdentifierOrLiteral(symbolNameSource), useSingleQuote);
+                        if (isStringLiteral(symbolNameSource)) {
+                            const stringLiteralName = cloneStringLiteral(symbolNameSource, overrideSourceStringDelimiter, useSingleQuote);
                             stringLiteralName.symbol = symbol;
                             expression = stringLiteralName;
                         }
@@ -8586,10 +8587,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             numberLiteralName.symbol = symbol;
                             expression = numericValue >= 0 ? numberLiteralName : factory.createPrefixMinus(numberLiteralName);
                         }
-                        else if (isEntityNameExpression(symbolNameSource) && getFullWidth(symbolNameSource) !== 0) {
-                            const entityName = factory.cloneNode(symbolNameSource);
-                            entityName.symbol = symbol;
-                            expression = entityName;
+                        else if (getFullWidth(symbolNameSource) !== 0) {
+                            expression = clonePropertyOrElementAccessChain(symbolNameSource, overrideSourceStringDelimiter, useSingleQuote, symbol);
                         }
                     }
                     // Use am enum or unique symbol name if we can get one
@@ -8615,6 +8614,41 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return index === 0 && hasComputedProperty && allowComputedProperty ? factory.createComputedPropertyName(expression) :
                         index === 0 ? expression :
                         factory.createElementAccessExpression(createExpressionFromSymbolChain(chain, index - 1), expression);
+                }
+            }
+            function cloneStringLiteral(stringLiteral: StringLiteral, overrideSourceStringDelimiter: boolean, useSingleQuote: boolean) {
+                return !overrideSourceStringDelimiter ? factory.createStringLiteralFromNode(stringLiteral) :
+                    factory.createStringLiteral(getTextOfIdentifierOrLiteral(stringLiteral), useSingleQuote);
+            }
+            function clonePropertyOrElementAccessChain(node: Node, overrideDelimiter: boolean, useSingleQuote: boolean, symbol?: Symbol): Expression | undefined {
+                Debug.type<Identifier | PropertyAccessExpression | ElementAccessExpression | NumericLiteral | StringLiteral>(node);
+                switch (node.kind) {
+                    case SyntaxKind.Identifier: {
+                        const identifier = setEmitFlags(factory.createIdentifier(getTextOfNode(node)), EmitFlags.NoAsciiEscaping);
+                        if (symbol) identifier.symbol = symbol;
+                        return identifier;
+                    }
+                    case SyntaxKind.PropertyAccessExpression: {
+                        const target = clonePropertyOrElementAccessChain(node.expression, overrideDelimiter, useSingleQuote);
+                        if (target !== undefined) {
+                            const propertyAccess = factory.createPropertyAccessExpression(target, node.name);
+                            if (symbol) propertyAccess.symbol = symbol;
+                            return propertyAccess;
+                        }
+                        break;
+                    }
+                    case SyntaxKind.ElementAccessExpression: {
+                        const target = clonePropertyOrElementAccessChain(node.expression, overrideDelimiter, useSingleQuote);
+                        if (target !== undefined) {
+                            const argumentExpression = node.argumentExpression.kind === SyntaxKind.StringLiteral ? cloneStringLiteral(node.argumentExpression as StringLiteral, overrideDelimiter, useSingleQuote) : node.argumentExpression;
+                            const elementAccess = factory.createElementAccessExpression(target, argumentExpression);
+                            if (symbol) elementAccess.symbol = symbol;
+                            return elementAccess;
+                        }
+                        break;
+                    }
+                    default:
+                        return undefined;
                 }
             }
         }

@@ -40,7 +40,7 @@
      },
      {
       "text": "\"jquery\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      },
      {
       "text": "\n",
@@ -106,7 +106,7 @@
      },
      {
       "text": "\"jquery\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      },
      {
       "text": "\n",

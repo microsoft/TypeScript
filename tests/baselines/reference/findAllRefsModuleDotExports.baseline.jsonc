@@ -61,7 +61,7 @@
      },
      {
       "text": "\"/b\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -98,7 +98,7 @@
      },
      {
       "text": "\"/b\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }

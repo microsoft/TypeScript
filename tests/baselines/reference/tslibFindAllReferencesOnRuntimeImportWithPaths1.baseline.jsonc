@@ -31,7 +31,7 @@
      },
      {
       "text": "\"/tests/cases/fourslash/project/src/dir/tslib\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }

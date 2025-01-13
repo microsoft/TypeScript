@@ -101,7 +101,7 @@
      },
      {
       "text": "\"/a\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -459,7 +459,7 @@
      },
      {
       "text": "\"/b\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -651,7 +651,7 @@
      },
      {
       "text": "\"/c\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -913,7 +913,7 @@
      },
      {
       "text": "\"/d\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -984,7 +984,7 @@
      },
      {
       "text": "\"/e\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -1120,7 +1120,7 @@
      },
      {
       "text": "\"/f\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -1162,7 +1162,7 @@
      },
      {
       "text": "\"/g\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -1204,7 +1204,7 @@
      },
      {
       "text": "\"/g\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -1246,7 +1246,7 @@
      },
      {
       "text": "\"/g\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -1438,7 +1438,7 @@
      },
      {
       "text": "\"/h\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -1700,7 +1700,7 @@
      },
      {
       "text": "\"/i\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -1774,7 +1774,7 @@
      },
      {
       "text": "\"/j\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }

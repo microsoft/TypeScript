@@ -42,7 +42,7 @@
      },
      {
       "text": "\"/packages/playwright-core/bundles/utils/node_modules/@types/debug/index\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    },

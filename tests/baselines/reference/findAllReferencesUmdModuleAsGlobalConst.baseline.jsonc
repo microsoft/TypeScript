@@ -72,7 +72,7 @@
      },
      {
       "text": "\"/node_modules/@types/three/index\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }

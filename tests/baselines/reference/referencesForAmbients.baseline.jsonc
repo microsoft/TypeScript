@@ -39,7 +39,7 @@
      },
      {
       "text": "\"foo\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -88,7 +88,7 @@
      },
      {
       "text": "\"foo\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -268,7 +268,7 @@
      },
      {
       "text": "\"bar\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -326,7 +326,7 @@
      },
      {
       "text": "\"bar\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -397,7 +397,7 @@
      },
      {
       "text": "\"foo\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      },
      {
       "text": "\n",
@@ -512,7 +512,7 @@
      },
      {
       "text": "\"foo\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      },
      {
       "text": "\n",
@@ -608,7 +608,7 @@
      },
      {
       "text": "\"foo\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -680,7 +680,7 @@
      },
      {
       "text": "\"foo\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      },
      {
       "text": "\n",
@@ -852,7 +852,7 @@
      },
      {
       "text": "\"bar\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      },
      {
       "text": "\n",
@@ -954,7 +954,7 @@
      },
      {
       "text": "\"bar\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      }
     ]
    }
@@ -1028,7 +1028,7 @@
      },
      {
       "text": "\"foo\"",
-      "kind": "stringLiteral"
+      "kind": "moduleName"
      },
      {
       "text": "\n",
