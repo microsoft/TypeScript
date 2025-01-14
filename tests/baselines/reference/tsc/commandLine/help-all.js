@@ -82,7 +82,7 @@ Conditions to set in addition to the resolver-specific defaults when resolving i
 
 [94m--module, -m[39m
 Specify what module code is generated.
-one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node16, nodenext, preserve
+one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node16, node18, nodenext, preserve
 default: undefined
 
 [94m--moduleResolution[39m

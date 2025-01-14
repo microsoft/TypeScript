@@ -1,4 +1,4 @@
-// @module: nodenext
+// @module: node16,node18,nodenext
 // @resolveJsonModule: true
 // @noEmit: true
 
@@ -38,12 +38,14 @@ export default _default;
 
 // @Filename: /main.mts
 import { oops } from "not.json"; // Ok
-import moreOops from "actually-json"; // Error
-import typed from "actually-json/typed"; // Error
+import moreOops from "actually-json"; // Error in nodenext
+import typed from "actually-json/typed"; // Error in nodenext
 
 import config from "./config.json" with { type: "json" }; // Ok
 import { default as config1 } from "./config.json" with { type: "json" }; // Ok
-import config2 from "./config.json"; // Error, no attribute
+import config2 from "./config.json"; // Error in nodenext, no attribute
+import type config2Type from "./config.json"; // Ok, type-only
+import type config2Type2 from "./config.json" with { type: "json" }; // Error, import attributes not allowed on type-only imports
 import { version } from "./config.json" with { type: "json" }; // Error, named import
 import * as config3 from "./config.json" with { type: "json" };
 config3.version; // Error

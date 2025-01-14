@@ -27,7 +27,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-          - macos-14
+          - macos-latest
         node-version:
           - '22'
           - '20'
@@ -43,7 +43,7 @@ jobs:
         exclude:
           # No Node 14 on ARM macOS
           - node-version: '14'
-            os: macos-14
+            os: macos-latest
 
     runs-on: ${{ matrix.os }}
     name: Test Node ${{ matrix.node-version }} on ${{ matrix.os }}${{ (!matrix.bundle && ' with --no-bundle') || '' }}
@@ -73,7 +73,7 @@ jobs:
     runs-on:
       - 'self-hosted'
       - '1ES.Pool=TypeScript-1ES-GitHub-Large'
-      - '1ES.ImageOverride=ubuntu-22.04'
+      - '1ES.ImageOverride=mariner-2.0'
 
     permissions:
       id-token: write
@@ -90,12 +90,12 @@ jobs:
         run: npm test -- --no-lint --coverage
 
       - name: Upload coverage artifact
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: coverage
           path: coverage
 
-      - uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238 # v4.6.0
+      - uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
         with:
           use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
           disable_search: true
@@ -137,7 +137,7 @@ jobs:
           node-version: 'lts/*'
       - run: npm ci
 
-      - uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
         with:
           path: ~/.cache/dprint
           key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
@@ -334,7 +334,7 @@ jobs:
 
       - name: Upload baseline diff artifact
         if: ${{ failure() && steps.check-baselines.conclusion == 'failure' }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: fix_baselines.patch
           path: fix_baselines.patch

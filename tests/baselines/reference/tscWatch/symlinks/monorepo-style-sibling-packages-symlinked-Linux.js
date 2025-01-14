@@ -200,7 +200,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/packag
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Wild card directory
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 30
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 31
 
 //// [/home/src/projects/project/packages/package2/dist/index.js] Inode:: 119
 "use strict";
@@ -250,7 +250,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json: *new*
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts: *new*
-  {"inode":30}
+  {"inode":31}
 
 Program root files: [
   "/home/src/projects/project/packages/package2/src/index.ts"
@@ -371,7 +371,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 Timeout callback:: count: 1
 8: timerToInvalidateFailedLookupResolutions *new*
@@ -483,7 +483,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 
 Program root files: [
@@ -576,7 +576,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 FsWatches *deleted*::
 /home/src/projects/project/packages/package1/dist:
@@ -737,7 +737,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 Timeout callback:: count: 1
 16: timerToInvalidateFailedLookupResolutions *new*
@@ -997,7 +997,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 Timeout callback:: count: 1
 21: timerToInvalidateFailedLookupResolutions *new*
@@ -1109,7 +1109,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":30}
+  {"inode":31}
 
 
 Program root files: [

@@ -62,9 +62,24 @@ class X {
   }
 }
 
+// https://github.com/microsoft/TypeScript/issues/60614
+declare function tag<T>(
+  strings: TemplateStringsArray,
+  ...values: number[]
+): T | null;
+
+tag`foo${1}` ?? 32; // ok
+
+`foo${1}` ?? 32; // error
+`foo` ?? 32; // error
+
 
 //// [predicateSemantics.js]
-var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
 // OK: One or other operand is possibly nullish
 var test1 = (_a = (cond ? undefined : 32)) !== null && _a !== void 0 ? _a : "possibly reached";
 // Not OK: Both operands nullish
@@ -122,3 +137,6 @@ var X = /** @class */ (function () {
     }
     return X;
 }());
+(_k = tag(__makeTemplateObject(["foo", ""], ["foo", ""]), 1)) !== null && _k !== void 0 ? _k : 32; // ok
+(_l = "foo".concat(1)) !== null && _l !== void 0 ? _l : 32; // error
+"foo" !== null && "foo" !== void 0 ? "foo" : 32; // error

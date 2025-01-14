@@ -1,4 +1,4 @@
-// @module: node16,nodenext
+// @module: node16,node18,nodenext
 // @target: es5
 // @declaration: true
 // @importHelpers: true

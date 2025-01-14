@@ -87,12 +87,12 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 11
+//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 12
 
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
-  {"inode":11}
+  {"inode":12}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*

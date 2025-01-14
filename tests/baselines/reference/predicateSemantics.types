@@ -328,3 +328,50 @@ class X {
   }
 }
 
+// https://github.com/microsoft/TypeScript/issues/60614
+declare function tag<T>(
+>tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T | null
+>    : ^ ^^       ^^                    ^^^^^      ^^        ^^^^^        
+
+  strings: TemplateStringsArray,
+>strings : TemplateStringsArray
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+  ...values: number[]
+>values : number[]
+>       : ^^^^^^^^
+
+): T | null;
+
+tag`foo${1}` ?? 32; // ok
+>tag`foo${1}` ?? 32 : unknown
+>                   : ^^^^^^^
+>tag`foo${1}` : unknown
+>             : ^^^^^^^
+>tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T | null
+>    : ^ ^^       ^^                    ^^^^^      ^^        ^^^^^        
+>`foo${1}` : string
+>          : ^^^^^^
+>1 : 1
+>  : ^
+>32 : 32
+>   : ^^
+
+`foo${1}` ?? 32; // error
+>`foo${1}` ?? 32 : 32 | "foo1"
+>                : ^^^^^^^^^^^
+>`foo${1}` : "foo1"
+>          : ^^^^^^
+>1 : 1
+>  : ^
+>32 : 32
+>   : ^^
+
+`foo` ?? 32; // error
+>`foo` ?? 32 : 32 | "foo"
+>            : ^^^^^^^^^^
+>`foo` : "foo"
+>      : ^^^^^
+>32 : 32
+>   : ^^
+
