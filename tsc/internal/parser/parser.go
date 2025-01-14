@@ -2,7 +2,6 @@ package parser
 
 import (
 	"fmt"
-	"path"
 	"regexp"
 	"strings"
 	"sync"
@@ -141,7 +140,7 @@ func ParseJSONText(fileName string, sourceText string) *ast.SourceFile {
 
 func (p *Parser) initializeState(fileName string, sourceText string, languageVersion core.ScriptTarget, scriptKind core.ScriptKind) {
 	p.scanner = scanner.NewScanner()
-	p.fileName = path.Clean(fileName)
+	p.fileName = fileName
 	p.sourceText = sourceText
 	p.languageVersion = languageVersion
 	p.scriptKind = ensureScriptKind(fileName, scriptKind)
