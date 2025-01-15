@@ -5,6 +5,7 @@ go 1.23.3
 require (
 	github.com/go-json-experiment/json v0.0.0-20241127185351-9802db03f36a
 	github.com/google/go-cmp v0.6.0
+	golang.org/x/sys v0.27.0
 	golang.org/x/tools v0.27.0
 	gotest.tools/v3 v3.5.1
 )

@@ -82,7 +82,7 @@ func (vfs *osFS) Realpath(path string) string {
 
 	orig := path
 	path = filepath.FromSlash(path)
-	path, err := filepath.EvalSymlinks(path)
+	path, err := realpath(path)
 	if err != nil {
 		return orig
 	}
