@@ -883,6 +883,7 @@ import {
     ModuleKind,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
+    moduleSupportsImportAttributes,
     Mutable,
     MutableNodeArray,
     NamedDeclaration,
@@ -6267,7 +6268,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return true;
                 }
                 if (requiresAddingUndefined && annotationType) {
-                    annotationType = getOptionalType(annotationType, !isParameter(node));
+                    annotationType = addOptionality(annotationType, !isParameter(node));
                 }
                 return !!annotationType && typeNodeIsEquivalentToType(node, type, annotationType) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type);
             },
@@ -29438,8 +29439,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (checkDerived) {
                     return filterType(type, t => !isTypeDerivedFrom(t, candidate));
                 }
+                type = type.flags & TypeFlags.Unknown ? unknownUnionType : type;
                 const trueType = getNarrowedType(type, candidate, /*assumeTrue*/ true, /*checkDerived*/ false);
-                return filterType(type, t => !isTypeSubsetOf(t, trueType));
+                return recombineUnknownType(filterType(type, t => !isTypeSubsetOf(t, trueType)));
             }
             if (type.flags & TypeFlags.AnyOrUnknown) {
                 return candidate;
@@ -30050,6 +30052,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.This_JSX_tag_requires_0_to_be_in_scope_but_it_could_not_be_found : undefined;
             const jsxFactoryNamespace = getJsxNamespace(node);
             const jsxFactoryLocation = isJsxOpeningLikeElement(node) ? node.tagName : node;
+            const shouldFactoryRefErr = compilerOptions.jsx !== JsxEmit.Preserve && compilerOptions.jsx !== JsxEmit.ReactNative;
 
             // #38720/60122, allow null as jsxFragmentFactory
             let jsxFactorySym: Symbol | undefined;
@@ -30057,7 +30060,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 jsxFactorySym = resolveName(
                     jsxFactoryLocation,
                     jsxFactoryNamespace,
-                    (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value,
+                    shouldFactoryRefErr ? SymbolFlags.Value : SymbolFlags.Value & ~SymbolFlags.Enum,
                     jsxFactoryRefErr,
                     /*isUse*/ true,
                 );
@@ -30083,7 +30086,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     resolveName(
                         jsxFactoryLocation,
                         localJsxNamespace,
-                        (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value,
+                        shouldFactoryRefErr ? SymbolFlags.Value : SymbolFlags.Value & ~SymbolFlags.Enum,
                         jsxFactoryRefErr,
                         /*isUse*/ true,
                     );
@@ -36885,15 +36888,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (sourceFileLinks.jsxFragmentType !== undefined) return sourceFileLinks.jsxFragmentType;
 
         const jsxFragmentFactoryName = getJsxNamespace(node);
-        // #38720/60122, allow null as jsxFragmentFactory
-        if (jsxFragmentFactoryName === "null") return sourceFileLinks.jsxFragmentType = anyType;
 
+        // #38720/60122, allow null as jsxFragmentFactory
+        const shouldResolveFactoryReference = (compilerOptions.jsx === JsxEmit.React || compilerOptions.jsxFragmentFactory !== undefined) && jsxFragmentFactoryName !== "null";
+        if (!shouldResolveFactoryReference) return sourceFileLinks.jsxFragmentType = anyType;
+
+        const shouldModuleRefErr = compilerOptions.jsx !== JsxEmit.Preserve && compilerOptions.jsx !== JsxEmit.ReactNative;
         const jsxFactoryRefErr = diagnostics ? Diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found : undefined;
         const jsxFactorySymbol = getJsxNamespaceContainerForImplicitImport(node) ??
             resolveName(
                 node,
                 jsxFragmentFactoryName,
-                (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) ? SymbolFlags.Value & ~SymbolFlags.Enum : SymbolFlags.Value,
+                shouldModuleRefErr ? SymbolFlags.Value : SymbolFlags.Value & ~SymbolFlags.Enum,
                 /*nameNotFoundMessage*/ jsxFactoryRefErr,
                 /*isUse*/ true,
             );
@@ -37671,13 +37677,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkImportMetaProperty(node: MetaProperty) {
-        if (moduleKind === ModuleKind.Node16 || moduleKind === ModuleKind.NodeNext) {
+        if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
             if (getSourceFileOfNode(node).impliedNodeFormat !== ModuleKind.ESNext) {
                 error(node, Diagnostics.The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output);
             }
         }
         else if (moduleKind < ModuleKind.ES2020 && moduleKind !== ModuleKind.System) {
-            error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_or_nodenext);
+            error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_node18_or_nodenext);
         }
         const file = getSourceFileOfNode(node);
         Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
@@ -39252,6 +39258,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     switch (moduleKind) {
                         case ModuleKind.Node16:
+                        case ModuleKind.Node18:
                         case ModuleKind.NodeNext:
                             if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) {
                                 span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
@@ -39272,8 +39279,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // fallthrough
                         default:
                             span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
-                            const message = isAwaitExpression(node) ? Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher :
-                                Diagnostics.Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher;
+                            const message = isAwaitExpression(node) ? Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher :
+                                Diagnostics.Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher;
                             diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, message));
                             hasError = true;
                             break;
@@ -48108,16 +48115,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return; // Other grammar checks do not apply to type-only imports with resolution mode assertions
             }
 
-            const mode = (moduleKind === ModuleKind.NodeNext) && declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier);
-            if (mode !== ModuleKind.ESNext && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
-                const message = isImportAttributes
-                    ? moduleKind === ModuleKind.NodeNext
+            if (!moduleSupportsImportAttributes(moduleKind)) {
+                return grammarErrorOnNode(
+                    node,
+                    isImportAttributes
+                        ? Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve
+                        : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve,
+                );
+            }
+
+            if (declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier) === ModuleKind.CommonJS) {
+                return grammarErrorOnNode(
+                    node,
+                    isImportAttributes
                         ? Diagnostics.Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
-                        : Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve
-                    : moduleKind === ModuleKind.NodeNext
-                    ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
-                    : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve;
-                return grammarErrorOnNode(node, message);
+                        : Diagnostics.Import_assertions_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls,
+                );
             }
 
             const isTypeOnly = isJSDocImportTag(declaration) || (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly);
@@ -48166,7 +48179,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
 
-                if (moduleKind === ModuleKind.NodeNext && isOnlyImportableAsDefault(node.moduleSpecifier, resolvedModule) && !hasTypeJsonImportAttribute(node)) {
+                if (!importClause.isTypeOnly && ModuleKind.Node18 <= moduleKind && moduleKind <= ModuleKind.NodeNext && isOnlyImportableAsDefault(node.moduleSpecifier, resolvedModule) && !hasTypeJsonImportAttribute(node)) {
                     // Import attributes/assertions are not allowed in --module node16, so don't suggest adding one
                     error(node.moduleSpecifier, Diagnostics.Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_import_attribute_when_module_is_set_to_0, ModuleKind[moduleKind]);
                 }
@@ -52135,6 +52148,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         switch (moduleKind) {
                             case ModuleKind.Node16:
+                            case ModuleKind.Node18:
                             case ModuleKind.NodeNext:
                                 if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) {
                                     diagnostics.add(
@@ -52153,7 +52167,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 // fallthrough
                             default:
                                 diagnostics.add(
-                                    createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher),
+                                    createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher),
                                 );
                                 break;
                         }
@@ -52956,7 +52970,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (moduleKind === ModuleKind.ES2015) {
-            return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_or_nodenext);
+            return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_or_nodenext);
         }
 
         if (node.typeArguments) {
@@ -52964,13 +52978,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const nodeArguments = node.arguments;
-        if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.NodeNext && moduleKind !== ModuleKind.Node16 && moduleKind !== ModuleKind.Preserve) {
+        if (!(ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
             // We are allowed trailing comma after proposal-import-assertions.
             checkGrammarForDisallowedTrailingComma(nodeArguments);
 
             if (nodeArguments.length > 1) {
                 const importAttributesArgument = nodeArguments[1];
-                return grammarErrorOnNode(importAttributesArgument, Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_nodenext_or_preserve);
+                return grammarErrorOnNode(importAttributesArgument, Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_node18_nodenext_or_preserve);
             }
         }
 

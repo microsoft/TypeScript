@@ -1,0 +1,135 @@
+//// [tests/cases/compiler/narrowUnknownByTypePredicate.ts] ////
+
+=== narrowUnknownByTypePredicate.ts ===
+declare function isNotNullish(value: unknown): value is {};
+>isNotNullish : (value: unknown) => value is {}
+>             : ^     ^^       ^^^^^           
+>value : unknown
+>      : ^^^^^^^
+
+declare function isNullish(value: unknown): value is null | undefined;
+>isNullish : (value: unknown) => value is null | undefined
+>          : ^     ^^       ^^^^^                         
+>value : unknown
+>      : ^^^^^^^
+
+declare const value1: unknown;
+>value1 : unknown
+>       : ^^^^^^^
+
+if (isNotNullish(value1)) {
+>isNotNullish(value1) : boolean
+>                     : ^^^^^^^
+>isNotNullish : (value: unknown) => value is {}
+>             : ^     ^^       ^^^^^           
+>value1 : unknown
+>       : ^^^^^^^
+
+  value1;
+>value1 : {}
+>       : ^^
+}
+
+declare const value2: unknown;
+>value2 : unknown
+>       : ^^^^^^^
+
+if (!isNotNullish(value2)) {
+>!isNotNullish(value2) : boolean
+>                      : ^^^^^^^
+>isNotNullish(value2) : boolean
+>                     : ^^^^^^^
+>isNotNullish : (value: unknown) => value is {}
+>             : ^     ^^       ^^^^^           
+>value2 : unknown
+>       : ^^^^^^^
+
+  value2;
+>value2 : null | undefined
+>       : ^^^^^^^^^^^^^^^^
+}
+
+declare const value3: unknown;
+>value3 : unknown
+>       : ^^^^^^^
+
+if (isNullish(value3)) {
+>isNullish(value3) : boolean
+>                  : ^^^^^^^
+>isNullish : (value: unknown) => value is null | undefined
+>          : ^     ^^       ^^^^^                         
+>value3 : unknown
+>       : ^^^^^^^
+
+  value3;
+>value3 : null | undefined
+>       : ^^^^^^^^^^^^^^^^
+}
+
+declare const value4: unknown;
+>value4 : unknown
+>       : ^^^^^^^
+
+if (!isNullish(value4)) {
+>!isNullish(value4) : boolean
+>                   : ^^^^^^^
+>isNullish(value4) : boolean
+>                  : ^^^^^^^
+>isNullish : (value: unknown) => value is null | undefined
+>          : ^     ^^       ^^^^^                         
+>value4 : unknown
+>       : ^^^^^^^
+
+  value4;
+>value4 : {}
+>       : ^^
+}
+
+declare class A { foo: string; }
+>A : A
+>  : ^
+>foo : string
+>    : ^^^^^^
+
+declare function isA(value: unknown): value is A;
+>isA : (value: unknown) => value is A
+>    : ^     ^^       ^^^^^          
+>value : unknown
+>      : ^^^^^^^
+
+declare const value5: unknown;
+>value5 : unknown
+>       : ^^^^^^^
+
+if (isA(value5)) {
+>isA(value5) : boolean
+>            : ^^^^^^^
+>isA : (value: unknown) => value is A
+>    : ^     ^^       ^^^^^          
+>value5 : unknown
+>       : ^^^^^^^
+
+  value5;
+>value5 : A
+>       : ^
+}
+
+declare const value6: unknown;
+>value6 : unknown
+>       : ^^^^^^^
+
+if (!isA(value6)) {
+>!isA(value6) : boolean
+>             : ^^^^^^^
+>isA(value6) : boolean
+>            : ^^^^^^^
+>isA : (value: unknown) => value is A
+>    : ^     ^^       ^^^^^          
+>value6 : unknown
+>       : ^^^^^^^
+
+  value6;
+>value6 : unknown
+>       : ^^^^^^^
+}
+

@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts] ////
+
+=== declarationEmitOptionalMappedTypePropertyNoStrictNullChecks4.ts ===
+type InputType = { enable_member_receipts?: boolean };
+>InputType : InputType
+>          : ^^^^^^^^^
+>enable_member_receipts : boolean
+>                       : ^^^^^^^
+
+type AsEmptyObject<T> = { [K in keyof T]?: undefined };
+>AsEmptyObject : AsEmptyObject<T>
+>              : ^^^^^^^^^^^^^^^^
+
+export const test = {
+>test : { enable_member_receipts?: undefined; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  ...({} as AsEmptyObject<InputType>),} : { enable_member_receipts?: undefined; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ...({} as AsEmptyObject<InputType>),
+>({} as AsEmptyObject<InputType>) : AsEmptyObject<InputType>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{} as AsEmptyObject<InputType> : AsEmptyObject<InputType>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+};
+

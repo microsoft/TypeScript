@@ -13,6 +13,7 @@ import {
     PackageJsonInfo,
     PackageJsonInfoCache,
     Pattern,
+    ProgramDiagnostics,
     SymlinkCache,
     ThisContainer,
 } from "./_namespaces/ts.js";
@@ -4892,6 +4893,7 @@ export interface Program extends ScriptReferenceHost {
      * @internal
      */
     resolvedLibReferences: Map<string, LibResolution> | undefined;
+    /** @internal */ getProgramDiagnosticsContainer: () => ProgramDiagnostics;
     /** @internal */ getCurrentPackagesMap(): Map<string, boolean> | undefined;
     /**
      * Is the file emitted file
@@ -7548,6 +7550,7 @@ export enum ModuleKind {
 
     // Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
     Node16 = 100,
+    Node18 = 101,
     NodeNext = 199,
 
     // Emit as written

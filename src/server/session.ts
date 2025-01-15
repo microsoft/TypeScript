@@ -3058,20 +3058,21 @@ export class Session<TMessage = string> implements EventSender {
             codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, this.getFormatOptions(file), this.getPreferences(file));
         }
         catch (e) {
+            const error = e instanceof Error ? e : new Error(e);
+
             const ls = project.getLanguageService();
             const existingDiagCodes = [
                 ...ls.getSyntacticDiagnostics(file),
                 ...ls.getSemanticDiagnostics(file),
                 ...ls.getSuggestionDiagnostics(file),
-            ].map(d =>
-                decodedTextSpanIntersectsWith(startPosition, endPosition - startPosition, d.start!, d.length!)
-                && d.code
-            );
+            ]
+                .filter(d => decodedTextSpanIntersectsWith(startPosition, endPosition - startPosition, d.start!, d.length!))
+                .map(d => d.code);
             const badCode = args.errorCodes.find(c => !existingDiagCodes.includes(c));
             if (badCode !== undefined) {
-                e.message = `BADCLIENT: Bad error code, ${badCode} not found in range ${startPosition}..${endPosition} (found: ${existingDiagCodes.join(", ")}); could have caused this error:\n${e.message}`;
+                error.message += `\nAdditional information: BADCLIENT: Bad error code, ${badCode} not found in range ${startPosition}..${endPosition} (found: ${existingDiagCodes.join(", ")})`;
             }
-            throw e;
+            throw error;
         }
         return simplifiedResult ? codeActions.map(codeAction => this.mapCodeFixAction(codeAction)) : codeActions;
     }
