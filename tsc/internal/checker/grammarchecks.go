@@ -1,4 +1,4 @@
-package compiler
+package checker
 
 import (
 	"fmt"
@@ -17,7 +17,7 @@ func (c *Checker) grammarErrorOnFirstToken(node *ast.Node, message *diagnostics.
 	sourceFile := ast.GetSourceFileOfNode(node)
 	if !c.hasParseDiagnostics(sourceFile) {
 		span := scanner.GetRangeOfTokenAtPosition(sourceFile, node.Pos())
-		c.diagnostics.add(ast.NewDiagnostic(sourceFile, span, message, args...))
+		c.diagnostics.Add(ast.NewDiagnostic(sourceFile, span, message, args...))
 		return true
 	}
 	return false
@@ -26,7 +26,7 @@ func (c *Checker) grammarErrorOnFirstToken(node *ast.Node, message *diagnostics.
 func (c *Checker) grammarErrorAtPos(nodeForSourceFile *ast.Node, start int, length int, message *diagnostics.Message, args ...any) bool {
 	sourceFile := ast.GetSourceFileOfNode(nodeForSourceFile)
 	if !c.hasParseDiagnostics(sourceFile) {
-		c.diagnostics.add(ast.NewDiagnostic(sourceFile, core.NewTextRange(start, start+length), message, args...))
+		c.diagnostics.Add(ast.NewDiagnostic(sourceFile, core.NewTextRange(start, start+length), message, args...))
 		return true
 	}
 	return false
@@ -44,7 +44,7 @@ func (c *Checker) grammarErrorOnNodeSkippedOn(key string, node *ast.Node, messag
 func (c *Checker) grammarErrorOnNode(node *ast.Node, message *diagnostics.Message, args ...any) bool {
 	sourceFile := ast.GetSourceFileOfNode(node)
 	if !c.hasParseDiagnostics(sourceFile) {
-		c.diagnostics.add(NewDiagnosticForNode(node, message, args...))
+		c.diagnostics.Add(NewDiagnosticForNode(node, message, args...))
 		return true
 	}
 	return false
@@ -76,7 +76,7 @@ func (c *Checker) checkGrammarRegularExpressionLiteral(_ *ast.RegularExpressionL
 	// 			lastError.AddRelatedInfo(err)
 	// 		} else if !(lastError != nil) || start != lastError.Pos() {
 	// 			lastError = ast.NewDiagnostic(sourceFile, core.NewTextRange(start, start+length), message, args)
-	// 			c.diagnostics.add(lastError)
+	// 			c.diagnostics.Add(lastError)
 	// 		}
 	// 	})
 	// 	scanner.SetText(sourceFile.Text[node.Pos():node.Loc.Len()])
@@ -96,7 +96,7 @@ func (c *Checker) checkGrammarPrivateIdentifierExpression(privId *ast.PrivateIde
 	}
 
 	if !ast.IsForInStatement(privId.Parent) {
-		if !IsExpressionNode(privIdAsNode) {
+		if !ast.IsExpressionNode(privIdAsNode) {
 			return c.grammarErrorOnNode(privIdAsNode, diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression)
 		}
 
@@ -398,7 +398,7 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 				}
 				flags |= ast.ModifierFlagsReadonly
 			case ast.KindExportKeyword:
-				if c.compilerOptions.VerbatimModuleSyntax == core.TSTrue && node.Flags&ast.NodeFlagsAmbient == 0 && node.Kind != ast.KindTypeAliasDeclaration && node.Kind != ast.KindInterfaceDeclaration && node.Kind != ast.KindModuleDeclaration && node.Parent.Kind == ast.KindSourceFile && c.program.getEmitModuleFormatOfFile(ast.GetSourceFileOfNode(node)) == core.ModuleKindCommonJS {
+				if c.compilerOptions.VerbatimModuleSyntax == core.TSTrue && node.Flags&ast.NodeFlagsAmbient == 0 && node.Kind != ast.KindTypeAliasDeclaration && node.Kind != ast.KindInterfaceDeclaration && node.Kind != ast.KindModuleDeclaration && node.Parent.Kind == ast.KindSourceFile && c.program.GetEmitModuleFormatOfFile(ast.GetSourceFileOfNode(node)) == core.ModuleKindCommonJS {
 					return c.grammarErrorOnNode(modifier, diagnostics.A_top_level_export_modifier_cannot_be_used_on_value_declarations_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled)
 				}
 				if flags&ast.ModifierFlagsExport != 0 {
@@ -1222,12 +1222,12 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 			if ast.IsInTopLevelContext(asNode) {
 				if !c.hasParseDiagnostics(sourceFile) {
 					if !isEffectiveExternalModule(sourceFile, c.compilerOptions) {
-						c.diagnostics.add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.X_for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module))
+						c.diagnostics.Add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.X_for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module))
 					}
 					switch c.moduleKind {
 					case core.ModuleKindNode16, core.ModuleKindNodeNext:
 						if sourceFile.ImpliedNodeFormat == core.ModuleKindCommonJS {
-							c.diagnostics.add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level))
+							c.diagnostics.Add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level))
 							break
 						}
 						fallthrough
@@ -1240,7 +1240,7 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 						}
 						fallthrough
 					default:
-						c.diagnostics.add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher))
+						c.diagnostics.Add(createDiagnosticForNode(forInOrOfStatement.AwaitModifier, diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher))
 					}
 				}
 			} else {
@@ -1257,7 +1257,7 @@ func (c *Checker) checkGrammarForInOrForOfStatement(forInOrOfStatement *ast.ForI
 						relatedInfo := createDiagnosticForNode(containingFunc, diagnostics.Did_you_mean_to_mark_this_function_as_async)
 						diagnostic.AddRelatedInfo(relatedInfo)
 					}
-					c.diagnostics.add(diagnostic)
+					c.diagnostics.Add(diagnostic)
 					return true
 				}
 			}
@@ -1625,7 +1625,7 @@ func (c *Checker) checkGrammarVariableDeclaration(node *ast.VariableDeclaration)
 		return c.grammarErrorOnNode(node.ExclamationToken, message)
 	}
 
-	if c.program.getEmitModuleFormatOfFile(ast.GetSourceFileOfNode(node.AsNode())) < core.ModuleKindSystem && (node.Parent.Parent.Flags&ast.NodeFlagsAmbient == 0) && ast.HasSyntacticModifier(node.Parent.Parent, ast.ModifierFlagsExport) {
+	if c.program.GetEmitModuleFormatOfFile(ast.GetSourceFileOfNode(node.AsNode())) < core.ModuleKindSystem && (node.Parent.Parent.Flags&ast.NodeFlagsAmbient == 0) && ast.HasSyntacticModifier(node.Parent.Parent, ast.ModifierFlagsExport) {
 		c.checkGrammarForEsModuleMarkerInBindingName(node.Name())
 	}
 
@@ -1724,7 +1724,7 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 						message = diagnostics.X_await_using_statements_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module
 					}
 					diagnostic := ast.NewDiagnostic(sourceFile, span, message)
-					c.diagnostics.add(diagnostic)
+					c.diagnostics.Add(diagnostic)
 					hasError = true
 				}
 				switch c.moduleKind {
@@ -1734,7 +1734,7 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 						if !spanCalculated {
 							span = scanner.GetRangeOfTokenAtPosition(sourceFile, node.Pos())
 						}
-						c.diagnostics.add(ast.NewDiagnostic(sourceFile, span, diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level))
+						c.diagnostics.Add(ast.NewDiagnostic(sourceFile, span, diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level))
 						hasError = true
 						break
 					}
@@ -1757,7 +1757,7 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 					} else {
 						message = diagnostics.Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher
 					}
-					c.diagnostics.add(ast.NewDiagnostic(sourceFile, span, message))
+					c.diagnostics.Add(ast.NewDiagnostic(sourceFile, span, message))
 					hasError = true
 				}
 			}
@@ -1777,7 +1777,7 @@ func (c *Checker) checkGrammarAwaitOrAwaitUsing(node *ast.Node) bool {
 					relatedInfo := NewDiagnosticForNode(container, diagnostics.Did_you_mean_to_mark_this_function_as_async)
 					diagnostic.AddRelatedInfo(relatedInfo)
 				}
-				c.diagnostics.add(diagnostic)
+				c.diagnostics.Add(diagnostic)
 				hasError = true
 			}
 		}

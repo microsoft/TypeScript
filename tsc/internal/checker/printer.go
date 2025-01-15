@@ -1,4 +1,4 @@
-package compiler
+package checker
 
 import (
 	"strings"
@@ -54,7 +54,7 @@ func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags 
 	return p.string()
 }
 
-func (c *Checker) sourceFileWithTypes(sourceFile *ast.SourceFile) string {
+func (c *Checker) SourceFileWithTypes(sourceFile *ast.SourceFile) string {
 	p := c.newPrinter(TypeFormatFlagsInTypeAlias)
 	p.printSourceFileWithTypes(sourceFile)
 	return p.string()
@@ -599,7 +599,7 @@ func (c *Checker) getTextAndTypeOfNode(node *ast.Node) (string, *Type, bool) {
 			}
 		}
 	}
-	if IsExpressionNode(node) && !isRightSideOfQualifiedNameOrPropertyAccess(node) {
+	if ast.IsExpressionNode(node) && !isRightSideOfQualifiedNameOrPropertyAccess(node) {
 		return scanner.GetTextOfNode(node), c.getTypeOfExpression(node), false
 	}
 	return "", nil, false

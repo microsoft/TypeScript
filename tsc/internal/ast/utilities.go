@@ -3,6 +3,8 @@ package ast
 import (
 	"slices"
 	"sync/atomic"
+
+	"github.com/microsoft/typescript-go/internal/core"
 )
 
 // Atomic ids
@@ -1497,4 +1499,231 @@ func isAliasableExpression(e *Node) bool {
 
 func IsInstanceOfExpression(node *Node) bool {
 	return IsBinaryExpression(node) && node.AsBinaryExpression().OperatorToken.Kind == KindInstanceOfKeyword
+}
+
+func IsAnyImportOrReExport(node *Node) bool {
+	return IsAnyImportSyntax(node) || IsExportDeclaration(node)
+}
+
+func IsAnyImportSyntax(node *Node) bool {
+	return NodeKindIs(node, KindImportDeclaration, KindImportEqualsDeclaration)
+}
+
+func IsJsonSourceFile(file *SourceFile) bool {
+	return file.ScriptKind == core.ScriptKindJSON
+}
+
+func GetExternalModuleName(node *Node) *Node {
+	switch node.Kind {
+	case KindImportDeclaration:
+		return node.AsImportDeclaration().ModuleSpecifier
+	case KindExportDeclaration:
+		return node.AsExportDeclaration().ModuleSpecifier
+	case KindImportEqualsDeclaration:
+		if node.AsImportEqualsDeclaration().ModuleReference.Kind == KindExternalModuleReference {
+			return node.AsImportEqualsDeclaration().ModuleReference.AsExternalModuleReference().Expression_
+		}
+		return nil
+	case KindImportType:
+		return getImportTypeNodeLiteral(node)
+	case KindCallExpression:
+		return node.AsCallExpression().Arguments.Nodes[0]
+	case KindModuleDeclaration:
+		if IsStringLiteral(node.AsModuleDeclaration().Name()) {
+			return node.AsModuleDeclaration().Name()
+		}
+		return nil
+	}
+	panic("Unhandled case in getExternalModuleName")
+}
+
+func getImportTypeNodeLiteral(node *Node) *Node {
+	if IsImportTypeNode(node) {
+		importTypeNode := node.AsImportTypeNode()
+		if IsLiteralTypeNode(importTypeNode.Argument) {
+			literalTypeNode := importTypeNode.Argument.AsLiteralTypeNode()
+			if IsStringLiteral(literalTypeNode.Literal) {
+				return literalTypeNode.Literal
+			}
+		}
+	}
+	return nil
+}
+
+func IsExpressionNode(node *Node) bool {
+	switch node.Kind {
+	case KindSuperKeyword, KindNullKeyword, KindTrueKeyword, KindFalseKeyword, KindRegularExpressionLiteral,
+		KindArrayLiteralExpression, KindObjectLiteralExpression, KindPropertyAccessExpression, KindElementAccessExpression,
+		KindCallExpression, KindNewExpression, KindTaggedTemplateExpression, KindAsExpression, KindTypeAssertionExpression,
+		KindSatisfiesExpression, KindNonNullExpression, KindParenthesizedExpression, KindFunctionExpression,
+		KindClassExpression, KindArrowFunction, KindVoidExpression, KindDeleteExpression, KindTypeOfExpression,
+		KindPrefixUnaryExpression, KindPostfixUnaryExpression, KindBinaryExpression, KindConditionalExpression,
+		KindSpreadElement, KindTemplateExpression, KindOmittedExpression, KindJsxElement, KindJsxSelfClosingElement,
+		KindJsxFragment, KindYieldExpression, KindAwaitExpression, KindMetaProperty:
+		return true
+	case KindExpressionWithTypeArguments:
+		return !IsHeritageClause(node.Parent)
+	case KindQualifiedName:
+		for node.Parent.Kind == KindQualifiedName {
+			node = node.Parent
+		}
+		return IsTypeQueryNode(node.Parent) || isJSDocLinkLike(node.Parent) || isJSXTagName(node)
+	case KindJSDocMemberName:
+		return IsTypeQueryNode(node.Parent) || isJSDocLinkLike(node.Parent) || isJSXTagName(node)
+	case KindPrivateIdentifier:
+		return IsBinaryExpression(node.Parent) && node.Parent.AsBinaryExpression().Left == node && node.Parent.AsBinaryExpression().OperatorToken.Kind == KindInKeyword
+	case KindIdentifier:
+		if IsTypeQueryNode(node.Parent) || isJSDocLinkLike(node.Parent) || isJSXTagName(node) {
+			return true
+		}
+		fallthrough
+	case KindNumericLiteral, KindBigIntLiteral, KindStringLiteral, KindNoSubstitutionTemplateLiteral, KindThisKeyword:
+		return IsInExpressionContext(node)
+	default:
+		return false
+	}
+}
+
+func IsInExpressionContext(node *Node) bool {
+	parent := node.Parent
+	switch parent.Kind {
+	case KindVariableDeclaration:
+		return parent.AsVariableDeclaration().Initializer == node
+	case KindParameter:
+		return parent.AsParameterDeclaration().Initializer == node
+	case KindPropertyDeclaration:
+		return parent.AsPropertyDeclaration().Initializer == node
+	case KindPropertySignature:
+		return parent.AsPropertySignatureDeclaration().Initializer == node
+	case KindEnumMember:
+		return parent.AsEnumMember().Initializer == node
+	case KindPropertyAssignment:
+		return parent.AsPropertyAssignment().Initializer == node
+	case KindBindingElement:
+		return parent.AsBindingElement().Initializer == node
+	case KindExpressionStatement:
+		return parent.AsExpressionStatement().Expression == node
+	case KindIfStatement:
+		return parent.AsIfStatement().Expression == node
+	case KindDoStatement:
+		return parent.AsDoStatement().Expression == node
+	case KindWhileStatement:
+		return parent.AsWhileStatement().Expression == node
+	case KindReturnStatement:
+		return parent.AsReturnStatement().Expression == node
+	case KindWithStatement:
+		return parent.AsWithStatement().Expression == node
+	case KindSwitchStatement:
+		return parent.AsSwitchStatement().Expression == node
+	case KindCaseClause, KindDefaultClause:
+		return parent.AsCaseOrDefaultClause().Expression == node
+	case KindThrowStatement:
+		return parent.AsThrowStatement().Expression == node
+	case KindForStatement:
+		s := parent.AsForStatement()
+		return s.Initializer == node && s.Initializer.Kind != KindVariableDeclarationList || s.Condition == node || s.Incrementor == node
+	case KindForInStatement, KindForOfStatement:
+		s := parent.AsForInOrOfStatement()
+		return s.Initializer == node && s.Initializer.Kind != KindVariableDeclarationList || s.Expression == node
+	case KindTypeAssertionExpression:
+		return parent.AsTypeAssertion().Expression == node
+	case KindAsExpression:
+		return parent.AsAsExpression().Expression == node
+	case KindTemplateSpan:
+		return parent.AsTemplateSpan().Expression == node
+	case KindComputedPropertyName:
+		return parent.AsComputedPropertyName().Expression == node
+	case KindDecorator, KindJsxExpression, KindJsxSpreadAttribute, KindSpreadAssignment:
+		return true
+	case KindExpressionWithTypeArguments:
+		return parent.AsExpressionWithTypeArguments().Expression == node && !IsPartOfTypeNode(parent)
+	case KindShorthandPropertyAssignment:
+		return parent.AsShorthandPropertyAssignment().ObjectAssignmentInitializer == node
+	case KindSatisfiesExpression:
+		return parent.AsSatisfiesExpression().Expression == node
+	default:
+		return IsExpressionNode(parent)
+	}
+}
+
+func IsPartOfTypeNode(node *Node) bool {
+	kind := node.Kind
+	if kind >= KindFirstTypeNode && kind <= KindLastTypeNode {
+		return true
+	}
+	switch node.Kind {
+	case KindAnyKeyword, KindUnknownKeyword, KindNumberKeyword, KindBigIntKeyword, KindStringKeyword,
+		KindBooleanKeyword, KindSymbolKeyword, KindObjectKeyword, KindUndefinedKeyword, KindNullKeyword,
+		KindNeverKeyword:
+		return true
+	case KindExpressionWithTypeArguments:
+		return isPartOfTypeExpressionWithTypeArguments(node)
+	case KindTypeParameter:
+		return node.Parent.Kind == KindMappedType || node.Parent.Kind == KindInferType
+	case KindIdentifier:
+		parent := node.Parent
+		if IsQualifiedName(parent) && parent.AsQualifiedName().Right == node {
+			return isPartOfTypeNodeInParent(parent)
+		}
+		if IsPropertyAccessExpression(parent) && parent.AsPropertyAccessExpression().Name() == node {
+			return isPartOfTypeNodeInParent(parent)
+		}
+		return isPartOfTypeNodeInParent(node)
+	case KindQualifiedName, KindPropertyAccessExpression, KindThisKeyword:
+		return isPartOfTypeNodeInParent(node)
+	}
+	return false
+}
+
+func isPartOfTypeNodeInParent(node *Node) bool {
+	parent := node.Parent
+	// Do not recursively call isPartOfTypeNode on the parent. In the example:
+	//
+	//     let a: A.B.C;
+	//
+	// Calling isPartOfTypeNode would consider the qualified name A.B a type node.
+	// Only C and A.B.C are type nodes.
+	if parent.Kind >= KindFirstTypeNode && parent.Kind <= KindLastTypeNode {
+		return true
+	}
+	switch parent.Kind {
+	case KindTypeQuery:
+		return false
+	case KindImportType:
+		return !parent.AsImportTypeNode().IsTypeOf
+	case KindExpressionWithTypeArguments:
+		return isPartOfTypeExpressionWithTypeArguments(parent)
+	case KindTypeParameter:
+		return node == parent.AsTypeParameter().Constraint
+	case KindVariableDeclaration, KindParameter, KindPropertyDeclaration, KindPropertySignature, KindFunctionDeclaration,
+		KindFunctionExpression, KindArrowFunction, KindConstructor, KindMethodDeclaration, KindMethodSignature,
+		KindGetAccessor, KindSetAccessor, KindCallSignature, KindConstructSignature, KindIndexSignature,
+		KindTypeAssertionExpression:
+		return node == parent.Type()
+	case KindCallExpression, KindNewExpression, KindTaggedTemplateExpression:
+		return slices.Contains(parent.TypeArguments(), node)
+	}
+	return false
+}
+
+func isPartOfTypeExpressionWithTypeArguments(node *Node) bool {
+	parent := node.Parent
+	return IsHeritageClause(parent) && (!IsClassLike(parent.Parent) || parent.AsHeritageClause().Token == KindImplementsKeyword)
+}
+
+func isJSDocLinkLike(node *Node) bool {
+	return NodeKindIs(node, KindJSDocLink, KindJSDocLinkCode, KindJSDocLinkPlain)
+}
+
+func isJSXTagName(node *Node) bool {
+	parent := node.Parent
+	switch parent.Kind {
+	case KindJsxOpeningElement:
+		return parent.AsJsxOpeningElement().TagName == node
+	case KindJsxSelfClosingElement:
+		return parent.AsJsxSelfClosingElement().TagName == node
+	case KindJsxClosingElement:
+		return parent.AsJsxClosingElement().TagName == node
+	}
+	return false
 }

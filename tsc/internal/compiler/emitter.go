@@ -21,7 +21,7 @@ type emitter struct {
 	host               EmitHost
 	emitOnly           emitOnly
 	emittedFilesList   []string
-	emitterDiagnostics DiagnosticsCollection
+	emitterDiagnostics ast.DiagnosticsCollection
 	emitSkipped        bool
 	sourceMapDataList  []*sourceMapEmitResult
 	writer             printer.EmitTextWriter
@@ -94,7 +94,7 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 	data := &WriteFileData{} // !!!
 	err := e.host.WriteFile(jsFilePath, text, e.host.Options().EmitBOM == core.TSTrue, sourceFiles, data)
 	if err != nil {
-		e.emitterDiagnostics.add(ast.NewCompilerDiagnostic(diagnostics.Could_not_write_file_0_Colon_1, jsFilePath, err.Error()))
+		e.emitterDiagnostics.Add(ast.NewCompilerDiagnostic(diagnostics.Could_not_write_file_0_Colon_1, jsFilePath, err.Error()))
 	}
 
 	// Reset state
@@ -170,7 +170,7 @@ func getOutputPathsFor(sourceFile *ast.SourceFile, host EmitHost, forceDtsEmit b
 	options := host.Options()
 	// !!! bundle not implemented, may be deprecated
 	ownOutputFilePath := getOwnEmitOutputFilePath(sourceFile.FileName(), host, getOutputExtension(sourceFile.FileName(), options.Jsx))
-	isJsonFile := isJsonSourceFile(sourceFile)
+	isJsonFile := ast.IsJsonSourceFile(sourceFile)
 	// If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
 	isJsonEmittedToSameLocation := isJsonFile &&
 		tspath.ComparePaths(sourceFile.FileName(), ownOutputFilePath, tspath.ComparePathsOptions{
@@ -180,7 +180,7 @@ func getOutputPathsFor(sourceFile *ast.SourceFile, host EmitHost, forceDtsEmit b
 	paths := &outputPaths{}
 	if options.EmitDeclarationOnly != core.TSTrue && !isJsonEmittedToSameLocation {
 		paths.jsFilePath = ownOutputFilePath
-		if !isJsonSourceFile(sourceFile) {
+		if !ast.IsJsonSourceFile(sourceFile) {
 			paths.sourceMapFilePath = getSourceMapFilePath(paths.jsFilePath, options)
 		}
 	}
@@ -221,7 +221,7 @@ func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host EmitHost, forceDtsE
 	// !!! Source files from referenced projects are not emitted
 
 	// Any non json file should be emitted
-	if !isJsonSourceFile(sourceFile) {
+	if !ast.IsJsonSourceFile(sourceFile) {
 		return true
 	}
 

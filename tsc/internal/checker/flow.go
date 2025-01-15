@@ -1,4 +1,4 @@
-package compiler
+package checker
 
 import (
 	"math"
@@ -1507,7 +1507,7 @@ func (c *Checker) reportFlowControlError(node *ast.Node) {
 	block := ast.FindAncestor(node, ast.IsFunctionOrModuleBlock)
 	sourceFile := ast.GetSourceFileOfNode(node)
 	span := scanner.GetRangeOfTokenAtPosition(sourceFile, ast.GetStatementsOfBlock(block).Pos())
-	c.diagnostics.add(ast.NewDiagnostic(sourceFile, span, diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis))
+	c.diagnostics.Add(ast.NewDiagnostic(sourceFile, span, diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis))
 }
 
 func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {

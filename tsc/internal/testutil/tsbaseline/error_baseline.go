@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
@@ -71,7 +70,7 @@ func getErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, diagnost
 func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inputDiagnostics []*ast.Diagnostic, pretty bool) []string {
 	t.Helper()
 	diagnostics := slices.Clone(inputDiagnostics)
-	slices.SortFunc(diagnostics, compiler.CompareDiagnostics)
+	slices.SortFunc(diagnostics, ast.CompareDiagnostics)
 
 	var outputLines strings.Builder
 	// Count up all errors that were found in files other than lib.d.ts so we don't miss any

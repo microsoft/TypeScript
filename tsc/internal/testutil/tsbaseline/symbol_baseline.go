@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -194,7 +195,7 @@ func iterateBaseline(allFiles []*harnessutil.TestFile, fullWalker *typeWriterWal
 
 type typeWriterWalker struct {
 	program              *compiler.Program
-	checker              *compiler.Checker
+	checker              *checker.Checker
 	hadErrorBaseline     bool
 	currentSourceFile    *ast.SourceFile
 	declarationTextCache map[*ast.Node]string
@@ -233,7 +234,7 @@ func (walker *typeWriterWalker) visitNode(node *ast.Node, isSymbolWalk bool) []*
 	nodes := forEachASTNode(node)
 	var results []*typeWriterResult
 	for _, n := range nodes {
-		if compiler.IsExpressionNode(n) || n.Kind == ast.KindIdentifier || ast.IsDeclarationName(n) {
+		if ast.IsExpressionNode(n) || n.Kind == ast.KindIdentifier || ast.IsDeclarationName(n) {
 			result := walker.writeTypeOrSymbol(n, isSymbolWalk)
 			if result != nil {
 				results = append(results, result)

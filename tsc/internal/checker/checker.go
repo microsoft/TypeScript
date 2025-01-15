@@ -1,4 +1,4 @@
-package compiler
+package checker
 
 import (
 	"fmt"
@@ -498,16 +498,27 @@ type WideningContext struct {
 	resolvedProperties []*ast.Symbol    // Properties occurring in sibling object literals
 }
 
+type Program interface {
+	Options() *core.CompilerOptions
+	Files() []*ast.SourceFile
+
+	BindSourceFiles()
+	GetEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.ModuleKind
+	GetResolvedModule(currentSourceFile *ast.SourceFile, moduleReference string) *ast.SourceFile
+}
+
+type Host interface{}
+
 // Checker
 
 type Checker struct {
-	program                                   *Program
-	host                                      CompilerHost
+	program                                   Program
+	host                                      Host
 	compilerOptions                           *core.CompilerOptions
 	files                                     []*ast.SourceFile
 	fileIndexMap                              map[*ast.SourceFile]int
 	compareSymbols                            func(*ast.Symbol, *ast.Symbol) int
-	typeCount                                 uint32
+	TypeCount                                 uint32
 	symbolCount                               uint32
 	totalInstantiationCount                   uint32
 	instantiationCount                        uint32
@@ -566,8 +577,8 @@ type Checker struct {
 	unionTypes                                map[string]*Type
 	unionOfUnionTypes                         map[UnionOfUnionKey]*Type
 	intersectionTypes                         map[string]*Type
-	diagnostics                               DiagnosticsCollection
-	suggestionDiagnostics                     DiagnosticsCollection
+	diagnostics                               ast.DiagnosticsCollection
+	suggestionDiagnostics                     ast.DiagnosticsCollection
 	symbolPool                                core.Pool[ast.Symbol]
 	signaturePool                             core.Pool[Signature]
 	indexInfoPool                             core.Pool[IndexInfo]
@@ -750,12 +761,12 @@ type Checker struct {
 	isStringIndexSignatureOnlyType            func(*Type) bool
 }
 
-func NewChecker(program *Program) *Checker {
+func NewChecker(program Program) *Checker {
 	c := &Checker{}
 	c.program = program
-	c.host = program.host
-	c.compilerOptions = program.compilerOptions
-	c.files = program.files
+	// c.host = program.host
+	c.compilerOptions = program.Options()
+	c.files = program.Files()
 	c.fileIndexMap = createFileIndexMap(c.files)
 	c.compareSymbols = c.compareSymbolsWorker // Closure optimization
 	c.languageVersion = c.compilerOptions.GetEmitScriptTarget()
@@ -810,8 +821,8 @@ func NewChecker(program *Program) *Checker {
 	c.unionTypes = make(map[string]*Type)
 	c.unionOfUnionTypes = make(map[UnionOfUnionKey]*Type)
 	c.intersectionTypes = make(map[string]*Type)
-	c.diagnostics = DiagnosticsCollection{}
-	c.suggestionDiagnostics = DiagnosticsCollection{}
+	c.diagnostics = ast.DiagnosticsCollection{}
+	c.suggestionDiagnostics = ast.DiagnosticsCollection{}
 	c.mergedSymbols = make(map[ast.MergeId]*ast.Symbol)
 	c.patternForType = make(map[*Type]*ast.Node)
 	c.contextFreeTypes = make(map[*ast.Node]*Type)
@@ -1084,7 +1095,7 @@ func (c *Checker) initializeIterationResolvers() {
 }
 
 func (c *Checker) initializeChecker() {
-	c.program.bindSourceFiles()
+	c.program.BindSourceFiles()
 	// Initialize global symbol table
 	augmentations := make([][]*ast.Node, 0, len(c.files))
 	for _, file := range c.files {
@@ -1216,7 +1227,7 @@ func (c *Checker) addUndefinedToGlobalsOrErrorOnRedeclaration() {
 	if targetSymbol != nil {
 		for _, declaration := range targetSymbol.Declarations {
 			if !isTypeDeclaration(declaration) {
-				c.diagnostics.add(createDiagnosticForNode(declaration, diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, name))
+				c.diagnostics.Add(createDiagnosticForNode(declaration, diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, name))
 			}
 		}
 	} else {
@@ -1464,7 +1475,7 @@ func (c *Checker) getSymbol(symbols ast.SymbolTable, name string, meaning ast.Sy
 	return nil
 }
 
-func (c *Checker) checkSourceFile(sourceFile *ast.SourceFile) {
+func (c *Checker) CheckSourceFile(sourceFile *ast.SourceFile) {
 	links := c.sourceFileLinks.get(sourceFile)
 	if !links.typeChecked {
 		// Grammar checking
@@ -3509,7 +3520,7 @@ func (c *Checker) getSymbolForPrivateIdentifierExpression(node *ast.Node) *ast.S
 // !!!
 // Review
 // func (c *Checker) getSymbolForPrivateIdentifierExpression(privId *ast.Node) *ast.Symbol {
-// 	if !isExpressionNode(privId) {
+// 	if !ast.IsExpressionNode(privId) {
 // 		return nil
 // 	}
 
@@ -4855,7 +4866,7 @@ func (c *Checker) checkTypeArguments(signature *Signature, typeArgumentNodes []*
 					if headMessage != nil {
 						diagnostic = ast.NewDiagnosticChain(diagnostic, diagnostics.Type_0_does_not_satisfy_the_constraint_1)
 					}
-					c.diagnostics.add(diagnostic)
+					c.diagnostics.Add(diagnostic)
 				}
 				return nil
 			}
@@ -5220,9 +5231,9 @@ func (c *Checker) reportCallResolutionErrors(s *CallState, signatures []*Signatu
 			diagnostic.AddRelatedInfo(NewDiagnosticForNode(last.declaration, diagnostics.The_last_overload_is_declared_here))
 		}
 		// !!! addImplementationSuccessElaboration(last, d)
-		c.diagnostics.add(diagnostic)
+		c.diagnostics.Add(diagnostic)
 	case s.candidateForArgumentArityError != nil:
-		c.diagnostics.add(c.getArgumentArityError(s.node, []*Signature{s.candidateForArgumentArityError}, s.args, headMessage))
+		c.diagnostics.Add(c.getArgumentArityError(s.node, []*Signature{s.candidateForArgumentArityError}, s.args, headMessage))
 	case s.candidateForTypeArgumentError != nil:
 		c.checkTypeArguments(s.candidateForTypeArgumentError, s.node.TypeArguments(), true /*reportErrors*/, headMessage)
 	default:
@@ -5230,9 +5241,9 @@ func (c *Checker) reportCallResolutionErrors(s *CallState, signatures []*Signatu
 			return c.hasCorrectTypeArgumentArity(sig, s.typeArguments)
 		})
 		if len(signaturesWithCorrectTypeArgumentArity) == 0 {
-			c.diagnostics.add(c.getTypeArgumentArityError(s.node, signatures, s.typeArguments, headMessage))
+			c.diagnostics.Add(c.getTypeArgumentArityError(s.node, signatures, s.typeArguments, headMessage))
 		} else {
-			c.diagnostics.add(c.getArgumentArityError(s.node, signaturesWithCorrectTypeArgumentArity, s.args, headMessage))
+			c.diagnostics.Add(c.getArgumentArityError(s.node, signaturesWithCorrectTypeArgumentArity, s.args, headMessage))
 		}
 	}
 }
@@ -5462,7 +5473,7 @@ func (c *Checker) invocationErrorDetails(errorTarget *ast.Node, apparentType *Ty
 
 func (c *Checker) invocationError(errorTarget *ast.Node, apparentType *Type, kind SignatureKind, relatedInformation *ast.Diagnostic) {
 	diagnostic := c.invocationErrorDetails(errorTarget, apparentType, kind)
-	c.diagnostics.add(diagnostic)
+	c.diagnostics.Add(diagnostic)
 	// !!!
 	// c.invocationErrorRecovery(apparentType, kind, ifElse(relatedInformation != nil, addRelatedInfo(diagnostic, relatedInformation), diagnostic))
 }
@@ -5948,7 +5959,7 @@ func (c *Checker) getInstantiationExpressionType(exprType *Type, node *ast.Node)
 	if errorType != nil {
 		sourceFile := ast.GetSourceFileOfNode(node)
 		loc := core.NewTextRange(scanner.SkipTrivia(sourceFile.Text, typeArguments.Pos()), typeArguments.End())
-		c.diagnostics.add(ast.NewDiagnostic(sourceFile, loc, diagnostics.Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable, c.typeToString(errorType)))
+		c.diagnostics.Add(ast.NewDiagnostic(sourceFile, loc, diagnostics.Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable, c.typeToString(errorType)))
 	}
 	return result
 }
@@ -6778,7 +6789,7 @@ func (c *Checker) reportNonexistentProperty(propNode *ast.Node, containingType *
 			}
 		}
 	}
-	c.diagnostics.add(diagnostic)
+	c.diagnostics.Add(diagnostic)
 }
 
 func (c *Checker) getSuggestedLibForNonExistentProperty(missingProperty string, containingType *Type) string {
@@ -8458,7 +8469,7 @@ func (c *Checker) isInPropertyInitializerOrClassStaticBlock(node *ast.Node) bool
 			}
 			return ast.FindAncestorQuit
 		default:
-			if IsExpressionNode(node) {
+			if ast.IsExpressionNode(node) {
 				return ast.FindAncestorFalse
 			}
 			return ast.FindAncestorQuit
@@ -8568,11 +8579,11 @@ func (c *Checker) getCannotFindNameDiagnosticForName(node *ast.Node) *diagnostic
 
 func (c *Checker) GetDiagnostics(sourceFile *ast.SourceFile) []*ast.Diagnostic {
 	if sourceFile != nil {
-		c.checkSourceFile(sourceFile)
+		c.CheckSourceFile(sourceFile)
 		return c.diagnostics.GetDiagnosticsForFile(sourceFile.FileName())
 	}
 	for _, file := range c.files {
-		c.checkSourceFile(file)
+		c.CheckSourceFile(file)
 	}
 	return c.diagnostics.GetDiagnostics()
 }
@@ -8583,7 +8594,7 @@ func (c *Checker) GetGlobalDiagnostics() []*ast.Diagnostic {
 
 func (c *Checker) error(location *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
 	diagnostic := NewDiagnosticForNode(location, message, args...)
-	c.diagnostics.add(diagnostic)
+	c.diagnostics.Add(diagnostic)
 	return diagnostic
 }
 
@@ -8600,11 +8611,11 @@ func (c *Checker) errorAndMaybeSuggestAwait(location *ast.Node, maybeMissingAwai
 
 func (c *Checker) addErrorOrSuggestion(isError bool, diagnostic *ast.Diagnostic) {
 	if isError {
-		c.diagnostics.add(diagnostic)
+		c.diagnostics.Add(diagnostic)
 	} else {
 		suggestion := *diagnostic
 		suggestion.SetCategory(diagnostics.CategorySuggestion)
-		c.suggestionDiagnostics.add(&suggestion)
+		c.suggestionDiagnostics.Add(&suggestion)
 	}
 }
 
@@ -8636,7 +8647,7 @@ func (c *Checker) addDeprecatedSuggestionWorker(declarations []*ast.Node, diagno
 	// 	addRelatedInfo(diagnostic, createDiagnosticForNode(deprecatedTag, Diagnostics.The_declaration_was_marked_as_deprecated_here))
 	// }
 	// // We call `addRelatedInfo()` before adding the diagnostic to prevent duplicates.
-	c.suggestionDiagnostics.add(diagnostic)
+	c.suggestionDiagnostics.Add(diagnostic)
 	return diagnostic
 }
 
@@ -8844,7 +8855,7 @@ func (c *Checker) addDuplicateDeclarationError(node *ast.Node, message *diagnost
 		leadingMessage := createDiagnosticForNode(adjustedNode, diagnostics.X_0_was_also_declared_here, symbolName)
 		followOnMessage := createDiagnosticForNode(adjustedNode, diagnostics.X_and_here)
 		if len(err.RelatedInformation()) >= 5 || core.Some(err.RelatedInformation(), func(d *ast.Diagnostic) bool {
-			return CompareDiagnostics(d, followOnMessage) == 0 || CompareDiagnostics(d, leadingMessage) == 0
+			return ast.CompareDiagnostics(d, followOnMessage) == 0 || ast.CompareDiagnostics(d, leadingMessage) == 0
 		}) {
 			continue
 		}
@@ -8876,11 +8887,11 @@ func (c *Checker) lookupOrIssueError(location *ast.Node, message *diagnostics.Me
 		loc = location.Loc
 	}
 	diagnostic := ast.NewDiagnostic(file, loc, message, args...)
-	existing := c.diagnostics.lookup(diagnostic)
+	existing := c.diagnostics.Lookup(diagnostic)
 	if existing != nil {
 		return existing
 	}
-	c.diagnostics.add(diagnostic)
+	c.diagnostics.Add(diagnostic)
 	return diagnostic
 }
 
@@ -9247,7 +9258,7 @@ func (c *Checker) getExternalModuleMember(node *ast.Node, specifier *ast.Node, d
 	// specifier is ImportSpecifier | ExportSpecifier | BindingElement | PropertyAccessExpression
 	moduleSpecifier := getExternalModuleRequireArgument(node)
 	if moduleSpecifier == nil {
-		moduleSpecifier = getExternalModuleName(node)
+		moduleSpecifier = ast.GetExternalModuleName(node)
 	}
 	moduleSymbol := c.resolveExternalModuleName(node, moduleSpecifier, false /*ignoreErrors*/)
 	var name *ast.Node
@@ -9382,7 +9393,7 @@ func (c *Checker) isOnlyImportableAsDefault(usage *ast.Node, resolvedModule *ast
 			if resolvedModule != nil {
 				targetFile = getSourceFileOfModule(resolvedModule)
 			}
-			return targetFile != nil && (isJsonSourceFile(targetFile) || tspath.GetDeclarationFileExtension(targetFile.FileName()) == ".d.json.ts")
+			return targetFile != nil && (ast.IsJsonSourceFile(targetFile) || tspath.GetDeclarationFileExtension(targetFile.FileName()) == ".d.json.ts")
 		}
 	}
 	return false
@@ -9727,7 +9738,7 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 		return ambientModule
 	}
 	// !!! The following only implements simple module resoltion
-	sourceFile := c.program.getResolvedModule(ast.GetSourceFileOfNode(location), moduleReference)
+	sourceFile := c.program.GetResolvedModule(ast.GetSourceFileOfNode(location), moduleReference)
 	if sourceFile != nil {
 		if sourceFile.Symbol != nil {
 			return c.getMergedSymbol(sourceFile.Symbol)
@@ -10275,7 +10286,7 @@ func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports as
 					continue
 				}
 				for _, node := range s.exportsWithDuplicate {
-					c.diagnostics.add(createDiagnosticForNode(node, diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity, s.specifierText, id))
+					c.diagnostics.Add(createDiagnosticForNode(node, diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity, s.specifierText, id))
 				}
 			}
 			c.extendExportSymbols(symbols, nestedSymbols, nil, nil)
@@ -12825,7 +12836,7 @@ func (c *Checker) resolveBaseTypesOfClass(t *Type) {
 		errorNode := baseTypeNode.Expression()
 		diagnostic := c.elaborateNeverIntersection(nil, errorNode, baseType)
 		diagnostic = NewDiagnosticChainForNode(diagnostic, errorNode, diagnostics.Base_constructor_return_type_0_is_not_an_object_type_or_intersection_of_object_types_with_statically_known_members, c.typeToString(reducedBaseType))
-		c.diagnostics.add(diagnostic)
+		c.diagnostics.Add(diagnostic)
 		return
 	}
 	if t == reducedBaseType || c.hasBaseType(reducedBaseType, t) {
@@ -16661,7 +16672,7 @@ func (n *TupleNormalizer) normalize(c *Checker, elementTypes []*Type, elementInf
 			} else if isTupleType(t) {
 				spreadTypes := c.getElementTypes(t)
 				if len(spreadTypes)+len(n.types) >= 10_000 {
-					message := core.IfElse(isPartOfTypeNode(c.currentNode),
+					message := core.IfElse(ast.IsPartOfTypeNode(c.currentNode),
 						diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent,
 						diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent)
 					c.error(c.currentNode, message)
@@ -18315,11 +18326,11 @@ func isUnaryTupleTypeNode(node *ast.Node) bool {
 }
 
 func (c *Checker) newType(flags TypeFlags, objectFlags ObjectFlags, data TypeData) *Type {
-	c.typeCount++
+	c.TypeCount++
 	t := data.AsType()
 	t.flags = flags
 	t.objectFlags = objectFlags &^ (ObjectFlagsCouldContainTypeVariablesComputed | ObjectFlagsCouldContainTypeVariables | ObjectFlagsMembersResolved)
-	t.id = TypeId(c.typeCount)
+	t.id = TypeId(c.TypeCount)
 	t.checker = c
 	t.data = data
 	return t
@@ -20325,7 +20336,7 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 		if accessExpression != nil && !isConstEnumObjectType(objectType) {
 			if isObjectLiteralType(objectType) {
 				if c.noImplicitAny && indexType.flags&(TypeFlagsStringLiteral|TypeFlagsNumberLiteral) != 0 {
-					c.diagnostics.add(createDiagnosticForNode(accessExpression, diagnostics.Property_0_does_not_exist_on_type_1, indexType.AsLiteralType().value, c.typeToString(objectType)))
+					c.diagnostics.Add(createDiagnosticForNode(accessExpression, diagnostics.Property_0_does_not_exist_on_type_1, indexType.AsLiteralType().value, c.typeToString(objectType)))
 					return c.undefinedType
 				} else if indexType.flags&(TypeFlagsNumber|TypeFlagsString) != 0 {
 					types := core.Map(objectType.AsStructuredType().properties, func(prop *ast.Symbol) *Type {
@@ -20368,7 +20379,7 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 							case indexType.flags&(TypeFlagsNumber|TypeFlagsString) != 0:
 								diagnostic = NewDiagnosticForNode(accessExpression, diagnostics.No_index_signature_with_a_parameter_of_type_0_was_found_on_type_1, c.typeToString(indexType), c.typeToString(objectType))
 							}
-							c.diagnostics.add(NewDiagnosticChainForNode(diagnostic, accessExpression, diagnostics.Element_implicitly_has_an_any_type_because_expression_of_type_0_can_t_be_used_to_index_type_1, c.typeToString(fullIndexType), c.typeToString(objectType)))
+							c.diagnostics.Add(NewDiagnosticChainForNode(diagnostic, accessExpression, diagnostics.Element_implicitly_has_an_any_type_because_expression_of_type_0_can_t_be_used_to_index_type_1, c.typeToString(fullIndexType), c.typeToString(objectType)))
 						}
 					}
 				}
@@ -23122,7 +23133,7 @@ func (c *Checker) getAwaitedTypeNoAliasEx(t *Type, errorNode *ast.Node, diagnost
 			if thisTypeForError != nil {
 				diagnostic = NewDiagnosticForNode(errorNode, diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1, c.typeToString(t), c.typeToString(thisTypeForError))
 			}
-			c.diagnostics.add(NewDiagnosticChainForNode(diagnostic, errorNode, diagnosticMessage, args...))
+			c.diagnostics.Add(NewDiagnosticChainForNode(diagnostic, errorNode, diagnosticMessage, args...))
 		}
 		return nil
 	}
@@ -23405,7 +23416,7 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 				return sig.thisParameter
 			}
 		}
-		if isInExpressionContext(node) {
+		if ast.IsInExpressionContext(node) {
 			return c.checkExpression(node).symbol
 		}
 		fallthrough
@@ -23542,7 +23553,7 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 		if name.Parent.Kind == ast.KindExpressionWithTypeArguments {
 			// An 'ExpressionWithTypeArguments' may appear in type space (interface Foo extends Bar<T>),
 			// value space (return foo<T>), or both(class Foo extends Bar<T>); ensure the meaning matches.
-			meaning = core.IfElse(isPartOfTypeNode(name), ast.SymbolFlagsType, ast.SymbolFlagsValue)
+			meaning = core.IfElse(ast.IsPartOfTypeNode(name), ast.SymbolFlagsType, ast.SymbolFlagsValue)
 
 			// In a class 'extends' clause we are also looking for a value.
 			if ast.IsExpressionWithTypeArgumentsInClassExtendsClause(name.Parent) {
@@ -23562,7 +23573,7 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 		}
 	}
 
-	if IsExpressionNode(name) {
+	if ast.IsExpressionNode(name) {
 		if ast.NodeIsMissing(name) {
 			// Missing entity name.
 			return nil
@@ -23654,7 +23665,7 @@ func (c *Checker) getTypeOfNode(node *ast.Node) *Type {
 		classType = c.getDeclaredTypeOfClassOrInterface(c.getSymbolOfDeclaration(classDecl))
 	}
 
-	if isPartOfTypeNode(node) {
+	if ast.IsPartOfTypeNode(node) {
 		typeFromTypeNode := c.getTypeFromTypeNode(node)
 		if classType != nil {
 			return c.getTypeWithThisArgument(
@@ -23665,7 +23676,7 @@ func (c *Checker) getTypeOfNode(node *ast.Node) *Type {
 		return typeFromTypeNode
 	}
 
-	if IsExpressionNode(node) {
+	if ast.IsExpressionNode(node) {
 		return c.getRegularTypeOfExpression(node)
 	}
 

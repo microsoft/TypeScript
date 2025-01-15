@@ -1,8 +1,7 @@
-package compiler
+package checker
 
 import (
 	"cmp"
-	"maps"
 	"slices"
 	"strings"
 	"sync"
@@ -250,158 +249,6 @@ func isInCompoundLikeAssignment(node *ast.Node) bool {
 func isCompoundLikeAssignment(assignment *ast.Node) bool {
 	right := ast.SkipParentheses(assignment.AsBinaryExpression().Right)
 	return right.Kind == ast.KindBinaryExpression && isShiftOperatorOrHigher(right.AsBinaryExpression().OperatorToken.Kind)
-}
-
-type DiagnosticsCollection struct {
-	fileDiagnostics    map[string][]*ast.Diagnostic
-	nonFileDiagnostics []*ast.Diagnostic
-}
-
-func (c *DiagnosticsCollection) add(diagnostic *ast.Diagnostic) {
-	if diagnostic.File() != nil {
-		fileName := diagnostic.File().FileName()
-		if c.fileDiagnostics == nil {
-			c.fileDiagnostics = make(map[string][]*ast.Diagnostic)
-		}
-		c.fileDiagnostics[fileName] = core.InsertSorted(c.fileDiagnostics[fileName], diagnostic, CompareDiagnostics)
-	} else {
-		c.nonFileDiagnostics = core.InsertSorted(c.nonFileDiagnostics, diagnostic, CompareDiagnostics)
-	}
-}
-
-func (c *DiagnosticsCollection) lookup(diagnostic *ast.Diagnostic) *ast.Diagnostic {
-	var diagnostics []*ast.Diagnostic
-	if diagnostic.File() != nil {
-		diagnostics = c.fileDiagnostics[diagnostic.File().FileName()]
-	} else {
-		diagnostics = c.nonFileDiagnostics
-	}
-	if i, ok := slices.BinarySearchFunc(diagnostics, diagnostic, CompareDiagnostics); ok {
-		return diagnostics[i]
-	}
-	return nil
-}
-
-func (c *DiagnosticsCollection) GetGlobalDiagnostics() []*ast.Diagnostic {
-	return c.nonFileDiagnostics
-}
-
-func (c *DiagnosticsCollection) GetDiagnosticsForFile(fileName string) []*ast.Diagnostic {
-	return c.fileDiagnostics[fileName]
-}
-
-func (c *DiagnosticsCollection) GetDiagnostics() []*ast.Diagnostic {
-	fileNames := slices.Collect(maps.Keys(c.fileDiagnostics))
-	slices.Sort(fileNames)
-	diagnostics := c.nonFileDiagnostics
-	for _, fileName := range fileNames {
-		diagnostics = append(diagnostics, c.fileDiagnostics[fileName]...)
-	}
-	return diagnostics
-}
-
-func sortAndDeduplicateDiagnostics(diagnostics []*ast.Diagnostic) []*ast.Diagnostic {
-	result := slices.Clone(diagnostics)
-	slices.SortFunc(result, CompareDiagnostics)
-	return slices.CompactFunc(result, equalDiagnostics)
-}
-
-func equalDiagnostics(d1, d2 *ast.Diagnostic) bool {
-	return getDiagnosticPath(d1) == getDiagnosticPath(d2) &&
-		d1.Loc() == d2.Loc() &&
-		d1.Code() == d2.Code() &&
-		d1.Message() == d2.Message() &&
-		slices.EqualFunc(d1.MessageChain(), d2.MessageChain(), equalMessageChain) &&
-		slices.EqualFunc(d1.RelatedInformation(), d2.RelatedInformation(), equalDiagnostics)
-}
-
-func equalMessageChain(c1, c2 *ast.Diagnostic) bool {
-	return c1.Code() == c2.Code() &&
-		c1.Message() == c2.Message() &&
-		slices.EqualFunc(c1.MessageChain(), c2.MessageChain(), equalMessageChain)
-}
-
-func CompareDiagnostics(d1, d2 *ast.Diagnostic) int {
-	c := strings.Compare(getDiagnosticPath(d1), getDiagnosticPath(d2))
-	if c != 0 {
-		return c
-	}
-	c = d1.Loc().Pos() - d2.Loc().Pos()
-	if c != 0 {
-		return c
-	}
-	c = d1.Loc().End() - d2.Loc().End()
-	if c != 0 {
-		return c
-	}
-	c = int(d1.Code()) - int(d2.Code())
-	if c != 0 {
-		return c
-	}
-	c = strings.Compare(d1.Message(), d2.Message())
-	if c != 0 {
-		return c
-	}
-	c = compareMessageChainSize(d1.MessageChain(), d2.MessageChain())
-	if c != 0 {
-		return c
-	}
-	c = compareMessageChainContent(d1.MessageChain(), d2.MessageChain())
-	if c != 0 {
-		return c
-	}
-	return compareRelatedInfo(d1.RelatedInformation(), d2.RelatedInformation())
-}
-
-func compareMessageChainSize(c1, c2 []*ast.Diagnostic) int {
-	c := len(c2) - len(c1)
-	if c != 0 {
-		return c
-	}
-	for i := range c1 {
-		c = compareMessageChainSize(c1[i].MessageChain(), c2[i].MessageChain())
-		if c != 0 {
-			return c
-		}
-	}
-	return 0
-}
-
-func compareMessageChainContent(c1, c2 []*ast.Diagnostic) int {
-	for i := range c1 {
-		c := strings.Compare(c1[i].Message(), c2[i].Message())
-		if c != 0 {
-			return c
-		}
-		if c1[i].MessageChain() != nil {
-			c = compareMessageChainContent(c1[i].MessageChain(), c2[i].MessageChain())
-			if c != 0 {
-				return c
-			}
-		}
-	}
-	return 0
-}
-
-func compareRelatedInfo(r1, r2 []*ast.Diagnostic) int {
-	c := len(r2) - len(r1)
-	if c != 0 {
-		return c
-	}
-	for i := range r1 {
-		c = CompareDiagnostics(r1[i], r2[i])
-		if c != 0 {
-			return c
-		}
-	}
-	return 0
-}
-
-func getDiagnosticPath(d *ast.Diagnostic) string {
-	if d.File() != nil {
-		return d.File().FileName()
-	}
-	return ""
 }
 
 func getAssertedTypeNode(node *ast.Node) *ast.Node {
@@ -1001,7 +848,7 @@ func isValidTypeOnlyAliasUseSite(useSite *ast.Node) bool {
 		ast.IsPartOfTypeQuery(useSite) ||
 		isIdentifierInNonEmittingHeritageClause(useSite) ||
 		isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite) ||
-		!(IsExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite))
+		!(ast.IsExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite))
 }
 
 func isIdentifierInNonEmittingHeritageClause(node *ast.Node) bool {
@@ -1070,184 +917,6 @@ func nodeCanBeDecorated(useLegacyDecorators bool, node *ast.Node, parent *ast.No
 	return false
 }
 
-func IsExpressionNode(node *ast.Node) bool {
-	switch node.Kind {
-	case ast.KindSuperKeyword, ast.KindNullKeyword, ast.KindTrueKeyword, ast.KindFalseKeyword, ast.KindRegularExpressionLiteral,
-		ast.KindArrayLiteralExpression, ast.KindObjectLiteralExpression, ast.KindPropertyAccessExpression, ast.KindElementAccessExpression,
-		ast.KindCallExpression, ast.KindNewExpression, ast.KindTaggedTemplateExpression, ast.KindAsExpression, ast.KindTypeAssertionExpression,
-		ast.KindSatisfiesExpression, ast.KindNonNullExpression, ast.KindParenthesizedExpression, ast.KindFunctionExpression,
-		ast.KindClassExpression, ast.KindArrowFunction, ast.KindVoidExpression, ast.KindDeleteExpression, ast.KindTypeOfExpression,
-		ast.KindPrefixUnaryExpression, ast.KindPostfixUnaryExpression, ast.KindBinaryExpression, ast.KindConditionalExpression,
-		ast.KindSpreadElement, ast.KindTemplateExpression, ast.KindOmittedExpression, ast.KindJsxElement, ast.KindJsxSelfClosingElement,
-		ast.KindJsxFragment, ast.KindYieldExpression, ast.KindAwaitExpression, ast.KindMetaProperty:
-		return true
-	case ast.KindExpressionWithTypeArguments:
-		return !ast.IsHeritageClause(node.Parent)
-	case ast.KindQualifiedName:
-		for node.Parent.Kind == ast.KindQualifiedName {
-			node = node.Parent
-		}
-		return ast.IsTypeQueryNode(node.Parent) || isJSDocLinkLike(node.Parent) || isJSXTagName(node)
-	case ast.KindJSDocMemberName:
-		return ast.IsTypeQueryNode(node.Parent) || isJSDocLinkLike(node.Parent) || isJSXTagName(node)
-	case ast.KindPrivateIdentifier:
-		return ast.IsBinaryExpression(node.Parent) && node.Parent.AsBinaryExpression().Left == node && node.Parent.AsBinaryExpression().OperatorToken.Kind == ast.KindInKeyword
-	case ast.KindIdentifier:
-		if ast.IsTypeQueryNode(node.Parent) || isJSDocLinkLike(node.Parent) || isJSXTagName(node) {
-			return true
-		}
-		fallthrough
-	case ast.KindNumericLiteral, ast.KindBigIntLiteral, ast.KindStringLiteral, ast.KindNoSubstitutionTemplateLiteral, ast.KindThisKeyword:
-		return isInExpressionContext(node)
-	default:
-		return false
-	}
-}
-
-func isInExpressionContext(node *ast.Node) bool {
-	parent := node.Parent
-	switch parent.Kind {
-	case ast.KindVariableDeclaration:
-		return parent.AsVariableDeclaration().Initializer == node
-	case ast.KindParameter:
-		return parent.AsParameterDeclaration().Initializer == node
-	case ast.KindPropertyDeclaration:
-		return parent.AsPropertyDeclaration().Initializer == node
-	case ast.KindPropertySignature:
-		return parent.AsPropertySignatureDeclaration().Initializer == node
-	case ast.KindEnumMember:
-		return parent.AsEnumMember().Initializer == node
-	case ast.KindPropertyAssignment:
-		return parent.AsPropertyAssignment().Initializer == node
-	case ast.KindBindingElement:
-		return parent.AsBindingElement().Initializer == node
-	case ast.KindExpressionStatement:
-		return parent.AsExpressionStatement().Expression == node
-	case ast.KindIfStatement:
-		return parent.AsIfStatement().Expression == node
-	case ast.KindDoStatement:
-		return parent.AsDoStatement().Expression == node
-	case ast.KindWhileStatement:
-		return parent.AsWhileStatement().Expression == node
-	case ast.KindReturnStatement:
-		return parent.AsReturnStatement().Expression == node
-	case ast.KindWithStatement:
-		return parent.AsWithStatement().Expression == node
-	case ast.KindSwitchStatement:
-		return parent.AsSwitchStatement().Expression == node
-	case ast.KindCaseClause, ast.KindDefaultClause:
-		return parent.AsCaseOrDefaultClause().Expression == node
-	case ast.KindThrowStatement:
-		return parent.AsThrowStatement().Expression == node
-	case ast.KindForStatement:
-		s := parent.AsForStatement()
-		return s.Initializer == node && s.Initializer.Kind != ast.KindVariableDeclarationList || s.Condition == node || s.Incrementor == node
-	case ast.KindForInStatement, ast.KindForOfStatement:
-		s := parent.AsForInOrOfStatement()
-		return s.Initializer == node && s.Initializer.Kind != ast.KindVariableDeclarationList || s.Expression == node
-	case ast.KindTypeAssertionExpression:
-		return parent.AsTypeAssertion().Expression == node
-	case ast.KindAsExpression:
-		return parent.AsAsExpression().Expression == node
-	case ast.KindTemplateSpan:
-		return parent.AsTemplateSpan().Expression == node
-	case ast.KindComputedPropertyName:
-		return parent.AsComputedPropertyName().Expression == node
-	case ast.KindDecorator, ast.KindJsxExpression, ast.KindJsxSpreadAttribute, ast.KindSpreadAssignment:
-		return true
-	case ast.KindExpressionWithTypeArguments:
-		return parent.AsExpressionWithTypeArguments().Expression == node && !isPartOfTypeNode(parent)
-	case ast.KindShorthandPropertyAssignment:
-		return parent.AsShorthandPropertyAssignment().ObjectAssignmentInitializer == node
-	case ast.KindSatisfiesExpression:
-		return parent.AsSatisfiesExpression().Expression == node
-	default:
-		return IsExpressionNode(parent)
-	}
-}
-
-func isPartOfTypeNode(node *ast.Node) bool {
-	kind := node.Kind
-	if kind >= ast.KindFirstTypeNode && kind <= ast.KindLastTypeNode {
-		return true
-	}
-	switch node.Kind {
-	case ast.KindAnyKeyword, ast.KindUnknownKeyword, ast.KindNumberKeyword, ast.KindBigIntKeyword, ast.KindStringKeyword,
-		ast.KindBooleanKeyword, ast.KindSymbolKeyword, ast.KindObjectKeyword, ast.KindUndefinedKeyword, ast.KindNullKeyword,
-		ast.KindNeverKeyword:
-		return true
-	case ast.KindExpressionWithTypeArguments:
-		return isPartOfTypeExpressionWithTypeArguments(node)
-	case ast.KindTypeParameter:
-		return node.Parent.Kind == ast.KindMappedType || node.Parent.Kind == ast.KindInferType
-	case ast.KindIdentifier:
-		parent := node.Parent
-		if ast.IsQualifiedName(parent) && parent.AsQualifiedName().Right == node {
-			return isPartOfTypeNodeInParent(parent)
-		}
-		if ast.IsPropertyAccessExpression(parent) && parent.AsPropertyAccessExpression().Name() == node {
-			return isPartOfTypeNodeInParent(parent)
-		}
-		return isPartOfTypeNodeInParent(node)
-	case ast.KindQualifiedName, ast.KindPropertyAccessExpression, ast.KindThisKeyword:
-		return isPartOfTypeNodeInParent(node)
-	}
-	return false
-}
-
-func isPartOfTypeNodeInParent(node *ast.Node) bool {
-	parent := node.Parent
-	// Do not recursively call isPartOfTypeNode on the parent. In the example:
-	//
-	//     let a: A.B.C;
-	//
-	// Calling isPartOfTypeNode would consider the qualified name A.B a type node.
-	// Only C and A.B.C are type nodes.
-	if parent.Kind >= ast.KindFirstTypeNode && parent.Kind <= ast.KindLastTypeNode {
-		return true
-	}
-	switch parent.Kind {
-	case ast.KindTypeQuery:
-		return false
-	case ast.KindImportType:
-		return !parent.AsImportTypeNode().IsTypeOf
-	case ast.KindExpressionWithTypeArguments:
-		return isPartOfTypeExpressionWithTypeArguments(parent)
-	case ast.KindTypeParameter:
-		return node == parent.AsTypeParameter().Constraint
-	case ast.KindVariableDeclaration, ast.KindParameter, ast.KindPropertyDeclaration, ast.KindPropertySignature, ast.KindFunctionDeclaration,
-		ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindConstructor, ast.KindMethodDeclaration, ast.KindMethodSignature,
-		ast.KindGetAccessor, ast.KindSetAccessor, ast.KindCallSignature, ast.KindConstructSignature, ast.KindIndexSignature,
-		ast.KindTypeAssertionExpression:
-		return node == parent.Type()
-	case ast.KindCallExpression, ast.KindNewExpression, ast.KindTaggedTemplateExpression:
-		return slices.Contains(parent.TypeArguments(), node)
-	}
-	return false
-}
-
-func isPartOfTypeExpressionWithTypeArguments(node *ast.Node) bool {
-	parent := node.Parent
-	return ast.IsHeritageClause(parent) && (!ast.IsClassLike(parent.Parent) || parent.AsHeritageClause().Token == ast.KindImplementsKeyword)
-}
-
-func isJSDocLinkLike(node *ast.Node) bool {
-	return ast.NodeKindIs(node, ast.KindJSDocLink, ast.KindJSDocLinkCode, ast.KindJSDocLinkPlain)
-}
-
-func isJSXTagName(node *ast.Node) bool {
-	parent := node.Parent
-	switch parent.Kind {
-	case ast.KindJsxOpeningElement:
-		return parent.AsJsxOpeningElement().TagName == node
-	case ast.KindJsxSelfClosingElement:
-		return parent.AsJsxSelfClosingElement().TagName == node
-	case ast.KindJsxClosingElement:
-		return parent.AsJsxClosingElement().TagName == node
-	}
-	return false
-}
-
 func isShorthandPropertyNameUseSite(useSite *ast.Node) bool {
 	return ast.IsIdentifier(useSite) && ast.IsShorthandPropertyAssignment(useSite.Parent) && useSite.Parent.AsShorthandPropertyAssignment().Name() == useSite
 }
@@ -1299,51 +968,6 @@ func canHaveLocals(node *ast.Node) bool {
 		return true
 	}
 	return false
-}
-
-func isAnyImportOrReExport(node *ast.Node) bool {
-	return isAnyImportSyntax(node) || ast.IsExportDeclaration(node)
-}
-
-func isAnyImportSyntax(node *ast.Node) bool {
-	return ast.NodeKindIs(node, ast.KindImportDeclaration, ast.KindImportEqualsDeclaration)
-}
-
-func getExternalModuleName(node *ast.Node) *ast.Node {
-	switch node.Kind {
-	case ast.KindImportDeclaration:
-		return node.AsImportDeclaration().ModuleSpecifier
-	case ast.KindExportDeclaration:
-		return node.AsExportDeclaration().ModuleSpecifier
-	case ast.KindImportEqualsDeclaration:
-		if node.AsImportEqualsDeclaration().ModuleReference.Kind == ast.KindExternalModuleReference {
-			return node.AsImportEqualsDeclaration().ModuleReference.AsExternalModuleReference().Expression_
-		}
-		return nil
-	case ast.KindImportType:
-		return getImportTypeNodeLiteral(node)
-	case ast.KindCallExpression:
-		return node.AsCallExpression().Arguments.Nodes[0]
-	case ast.KindModuleDeclaration:
-		if ast.IsStringLiteral(node.AsModuleDeclaration().Name()) {
-			return node.AsModuleDeclaration().Name()
-		}
-		return nil
-	}
-	panic("Unhandled case in getExternalModuleName")
-}
-
-func getImportTypeNodeLiteral(node *ast.Node) *ast.Node {
-	if ast.IsImportTypeNode(node) {
-		importTypeNode := node.AsImportTypeNode()
-		if ast.IsLiteralTypeNode(importTypeNode.Argument) {
-			literalTypeNode := importTypeNode.Argument.AsLiteralTypeNode()
-			if ast.IsStringLiteral(literalTypeNode.Literal) {
-				return literalTypeNode.Literal
-			}
-		}
-	}
-	return nil
 }
 
 func isShorthandAmbientModuleSymbol(moduleSymbol *ast.Symbol) bool {
@@ -1471,10 +1095,6 @@ func getNonAugmentationDeclaration(symbol *ast.Symbol) *ast.Node {
 
 func isExternalModuleAugmentation(node *ast.Node) bool {
 	return ast.IsAmbientModule(node) && ast.IsModuleAugmentationExternal(node)
-}
-
-func isJsonSourceFile(file *ast.SourceFile) bool {
-	return file.ScriptKind == core.ScriptKindJSON
 }
 
 func isSyntacticDefault(node *ast.Node) bool {
@@ -2902,15 +2522,6 @@ func getSuperContainer(node *ast.Node, stopOnFunctions bool) *ast.Node {
 	}
 }
 
-func isCommentOrBlankLine(text string, pos int) bool {
-	for pos < len(text) && (text[pos] == ' ' || text[pos] == '\t') {
-		pos++
-	}
-	return pos == len(text) ||
-		pos < len(text) && (text[pos] == '\r' || text[pos] == '\n') ||
-		pos+1 < len(text) && text[pos] == '/' && text[pos+1] == '/'
-}
-
 func forEachYieldExpression(body *ast.Node, visitor func(expr *ast.Node)) {
 	var traverse func(*ast.Node) bool
 	traverse = func(node *ast.Node) bool {
@@ -2931,7 +2542,7 @@ func forEachYieldExpression(body *ast.Node, visitor func(expr *ast.Node)) {
 					// first descending into the class. This is by design.
 					traverse(node.Expression())
 				}
-			} else if !isPartOfTypeNode(node) {
+			} else if !ast.IsPartOfTypeNode(node) {
 				// This is the general case, which should include mostly expressions and statements.
 				// Also includes NodeArrays.
 				node.ForEachChild(traverse)

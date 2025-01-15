@@ -1,4 +1,4 @@
-package compiler
+package checker_test
 
 import (
 	"testing"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/bundled"
+	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
 )
 
@@ -25,16 +26,16 @@ foo.bar;`
 	fs = bundled.WrapFS(fs)
 
 	cd := "/"
-	host := NewCompilerHost(nil, "/", fs)
-	opts := ProgramOptions{
+	host := compiler.NewCompilerHost(nil, "/", fs)
+	opts := compiler.ProgramOptions{
 		Host:               host,
 		RootPath:           cd,
 		DefaultLibraryPath: bundled.LibPath(),
 	}
-	p := NewProgram(opts)
-	p.bindSourceFiles()
+	p := compiler.NewProgram(opts)
+	p.BindSourceFiles()
 	c := p.GetTypeChecker()
-	file := p.filesByPath["/foo.ts"]
+	file := p.GetSourceFile("/foo.ts")
 	interfaceId := file.Statements.Nodes[0].Name()
 	varId := file.Statements.Nodes[1].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].Name()
 	propAccess := file.Statements.Nodes[2].AsExpressionStatement().Expression

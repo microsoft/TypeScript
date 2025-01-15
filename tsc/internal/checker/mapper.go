@@ -1,4 +1,4 @@
-package compiler
+package checker
 
 import "github.com/microsoft/typescript-go/internal/core"
 
