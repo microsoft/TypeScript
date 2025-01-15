@@ -7294,6 +7294,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     });
                     if (allComponentComputedNamesSerializable) {
                         // Only use computed name serialization form if all components are visible and take the `a.b.c` form
+                        const newComponents = filter(indexInfo.components, e => {
+                            // skip late bound props that contribute to the index signature - they'll be created by property creation anyway
+                            return !hasLateBindableName(e);
+                        });
                         return map(indexInfo.components, e => {
                             // Still need to track visibility even if we've already checked it to paint references as used
                             trackComputedName(e.name.expression as EntityNameExpression, context.enclosingDeclaration, context);
@@ -50866,7 +50870,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 return !!(e.name && isComputedPropertyName(e.name) && isEntityNameExpression(e.name.expression) && enclosing && isEntityNameVisible(e.name.expression, enclosing, /*shouldComputeAliasToMakeVisible*/ false)?.accessibility === SymbolAccessibility.Accessible);
                             });
                             if (allComponentComputedNamesSerializable) {
-                                result.push(...map(info.components, e => {
+                                const newComponents = filter(info.components, e => {
+                                    // skip late bound props that contribute to the index signature - they'll be preserved via other means
+                                    return !hasLateBindableName(e);
+                                });
+                                result.push(...map(newComponents, e => {
                                     trackComputedName(e.name.expression as EntityNameExpression);
                                     const mods = infoList === staticInfos ? [factory.createModifier(SyntaxKind.StaticKeyword)] as Modifier[] : undefined;
                                     return factory.createPropertyDeclaration(
