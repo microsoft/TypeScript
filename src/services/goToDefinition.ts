@@ -159,28 +159,13 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
 
     // for keywords related to function or method definitions
     let findFunctionDecl: ((n: Node) => boolean | "quit") | undefined;
-    let checkFunctionDeclaration: ((decl: FunctionLikeDeclaration) => boolean) | undefined;
     switch (node.kind) {
         case SyntaxKind.ReturnKeyword:
-            findFunctionDecl = n => {
-                return isClassStaticBlockDeclaration(n)
-                    ? "quit"
-                    : isFunctionLikeDeclaration(n);
-            };
-            break;
         case SyntaxKind.AwaitKeyword:
-            checkFunctionDeclaration = (functionDeclaration: FunctionLikeDeclaration) => some(functionDeclaration.modifiers, node => node.kind === SyntaxKind.AsyncKeyword);
-            findFunctionDecl = isFunctionLikeDeclaration;
-            break;
         case SyntaxKind.YieldKeyword:
-            checkFunctionDeclaration = functionDeclaration => !!functionDeclaration.asteriskToken;
             findFunctionDecl = isFunctionLikeDeclaration;
-            break;
-    }
-    if (findFunctionDecl) {
-        const functionDeclaration = findAncestor(node, findFunctionDecl) as FunctionLikeDeclaration | undefined;
-        const isCorrectDeclaration = functionDeclaration && (!checkFunctionDeclaration || checkFunctionDeclaration(functionDeclaration));
-        return isCorrectDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+            const functionDeclaration = findAncestor(node, findFunctionDecl) as FunctionLikeDeclaration | undefined;
+            return functionDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
     }
 
     if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
