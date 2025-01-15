@@ -10,11 +10,20 @@ import (
 
 func assertEqualNumber(t *testing.T, got, want Number) {
 	t.Helper()
-	if want.IsNaN() {
-		assert.Assert(t, got.IsNaN())
+
+	if got.IsNaN() || want.IsNaN() {
+		assert.Equal(t, got.IsNaN(), want.IsNaN(), "got: %v, want: %v", got, want)
 	} else {
 		assert.Equal(t, got, want)
 	}
+}
+
+func numberFromBits(b uint64) Number {
+	return Number(math.Float64frombits(b))
+}
+
+func numberToBits(n Number) uint64 {
+	return math.Float64bits(float64(n))
 }
 
 var toInt32Tests = []struct {
@@ -46,8 +55,8 @@ var toInt32Tests = []struct {
 	{"-SmallestNonzeroFloat64", -math.SmallestNonzeroFloat64, 0, false},
 	{"MaxFloat64", math.MaxFloat64, 0, false},
 	{"-MaxFloat64", -math.MaxFloat64, 0, false},
-	{"Largest subnormal number", Number(math.Float64frombits(0x000FFFFFFFFFFFFF)), 0, false},
-	{"Smallest positive normal number", Number(math.Float64frombits(0x0010000000000000)), 0, false},
+	{"Largest subnormal number", numberFromBits(0x000FFFFFFFFFFFFF), 0, false},
+	{"Smallest positive normal number", numberFromBits(0x0010000000000000), 0, false},
 	{"Largest normal number", math.MaxFloat64, 0, false},
 	{"-Largest normal number", -math.MaxFloat64, 0, false},
 	{"1.0", 1.0, 1, false},
@@ -75,7 +84,7 @@ func TestToInt32(t *testing.T) {
 	t.Parallel()
 
 	for _, test := range toInt32Tests {
-		t.Run(fmt.Sprintf("%s (%v)", test.name, test.input), func(t *testing.T) {
+		t.Run(fmt.Sprintf("%s (%v)", test.name, float64(test.input)), func(t *testing.T) {
 			t.Parallel()
 			assert.Equal(t, test.input.toInt32(), test.want)
 		})
@@ -90,7 +99,7 @@ func BenchmarkToInt32(b *testing.B) {
 			continue
 		}
 
-		b.Run(fmt.Sprintf("%s (%v)", test.name, test.input), func(b *testing.B) {
+		b.Run(fmt.Sprintf("%s (%v)", test.name, float64(test.input)), func(b *testing.B) {
 			for range b.N {
 				sink = test.input.toInt32()
 			}

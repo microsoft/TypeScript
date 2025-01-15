@@ -4,3 +4,8 @@ paths-ignore:
   - _submodules/**
   - '**/testdata/**'
   - 'internal/bundled/libs/**'
+
+query-filters:
+  # This query takes too long on complicated string manipulations
+  - exclude:
+      id: go/unsafe-quoting

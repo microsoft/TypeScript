@@ -3,7 +3,6 @@ package jsnum
 
 import (
 	"math"
-	"strconv"
 )
 
 const (
@@ -19,12 +18,6 @@ const (
 // not the "math" package and conversions.
 type Number float64
 
-// https://tc39.es/ecma262/2024/multipage/ecmascript-data-types-and-values.html#sec-numeric-types-number-tostring
-func (n Number) String() string {
-	// !!! verify that this is actually the same as JS.
-	return strconv.FormatFloat(float64(n), 'g', -1, 64)
-}
-
 func NaN() Number {
 	return Number(math.NaN())
 }
@@ -39,20 +32,6 @@ func Inf(sign int) Number {
 
 func (n Number) IsInf() bool {
 	return math.IsInf(float64(n), 0)
-}
-
-// https://tc39.es/ecma262/2024/multipage/abstract-operations.html#sec-stringtonumber
-func FromString(s string) Number {
-	// !!! verify that this is actually the same as JS.
-	floatValue, err := strconv.ParseFloat(s, 64)
-	if err == nil {
-		return Number(floatValue)
-	}
-	intValue, err := strconv.ParseInt(s, 0, 64)
-	if err == nil {
-		return Number(intValue)
-	}
-	return NaN()
 }
 
 func isNonFinite(x float64) bool {
