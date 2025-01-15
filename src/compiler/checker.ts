@@ -7298,7 +7298,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // skip late bound props that contribute to the index signature - they'll be created by property creation anyway
                             return !hasLateBindableName(e);
                         });
-                        return map(indexInfo.components, e => {
+                        return map(newComponents, e => {
                             // Still need to track visibility even if we've already checked it to paint references as used
                             trackComputedName(e.name.expression as EntityNameExpression, context.enclosingDeclaration, context);
                             return setTextRange(
