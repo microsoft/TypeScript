@@ -22,6 +22,13 @@ func (ft *FlowType) isNil() bool {
 	return ft.t == nil
 }
 
+func (c *Checker) newFlowType(t *Type, incomplete bool) FlowType {
+	if incomplete && t.flags&TypeFlagsNever != 0 {
+		t = c.silentNeverType
+	}
+	return FlowType{t: t, incomplete: incomplete}
+}
+
 type SharedFlow struct {
 	flow     *ast.FlowNode
 	flowType FlowType
@@ -181,7 +188,7 @@ func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) Flow
 		}
 		if getAssignmentTargetKind(node) == AssignmentKindCompound {
 			flowType := c.getTypeAtFlowNode(f, flow.Antecedent)
-			return FlowType{t: c.getBaseTypeOfLiteralType(flowType.t), incomplete: flowType.incomplete}
+			return c.newFlowType(c.getBaseTypeOfLiteralType(flowType.t), flowType.incomplete)
 		}
 		if f.declaredType == c.autoType || f.declaredType == c.autoArrayType {
 			if c.isEmptyArrayAssignment(node) {
@@ -248,7 +255,10 @@ func (c *Checker) getTypeAtFlowCall(f *FlowState, flow *ast.FlowNode) FlowType {
 			default:
 				narrowedType = t
 			}
-			return FlowType{t: narrowedType, incomplete: flowType.incomplete}
+			if narrowedType == t {
+				return flowType
+			}
+			return c.newFlowType(narrowedType, flowType.incomplete)
 		}
 		if c.getReturnTypeOfSignature(signature).flags&TypeFlagsNever != 0 {
 			return FlowType{t: c.unreachableNeverType}
@@ -313,7 +323,7 @@ func (c *Checker) getTypeAtFlowCondition(f *FlowState, flow *ast.FlowNode) FlowT
 	if narrowedType == nonEvolvingType {
 		return flowType
 	}
-	return FlowType{t: narrowedType, incomplete: flowType.incomplete}
+	return c.newFlowType(narrowedType, flowType.incomplete)
 }
 
 // Narrow the given type based on the given expression having the assumed boolean value. The returned type
@@ -1013,7 +1023,7 @@ func (c *Checker) getTypeAtSwitchClause(f *FlowState, flow *ast.FlowNode) FlowTy
 			t = c.narrowTypeBySwitchOnDiscriminantProperty(t, access, data)
 		}
 	}
-	return FlowType{t: t, incomplete: flowType.incomplete}
+	return c.newFlowType(t, flowType.incomplete)
 }
 
 func (c *Checker) narrowTypeBySwitchOnDiscriminant(t *Type, data *ast.FlowSwitchClauseData) *Type {
@@ -1217,7 +1227,7 @@ func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode) Flo
 			}
 		}
 	}
-	return FlowType{t: c.getUnionOrEvolvingArrayType(f, antecedentTypes, core.IfElse(subtypeReduction, UnionReductionSubtype, UnionReductionLiteral)), incomplete: seenIncomplete}
+	return c.newFlowType(c.getUnionOrEvolvingArrayType(f, antecedentTypes, core.IfElse(subtypeReduction, UnionReductionSubtype, UnionReductionLiteral)), seenIncomplete)
 }
 
 // At flow control branch or loop junctions, if the type along every antecedent code path
@@ -1258,7 +1268,7 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 	// path that leads to the top.
 	for _, loopInfo := range c.flowLoopStack {
 		if loopInfo.key == key && len(loopInfo.types) != 0 {
-			return FlowType{t: c.getUnionOrEvolvingArrayType(f, loopInfo.types, UnionReductionLiteral), incomplete: true}
+			return c.newFlowType(c.getUnionOrEvolvingArrayType(f, loopInfo.types, UnionReductionLiteral), true /*incomplete*/)
 		}
 	}
 	// Add the flow loop junction and reference to the in-process stack and analyze
@@ -1307,7 +1317,7 @@ func (c *Checker) getTypeAtFlowLoopLabel(f *FlowState, flow *ast.FlowNode) FlowT
 	// is incomplete.
 	result := c.getUnionOrEvolvingArrayType(f, antecedentTypes, core.IfElse(subtypeReduction, UnionReductionSubtype, UnionReductionLiteral))
 	if firstAntecedentType.incomplete {
-		return FlowType{t: result, incomplete: true}
+		return c.newFlowType(result, true /*incomplete*/)
 	}
 	c.flowLoopCache[key] = result
 	return FlowType{t: result}
@@ -1337,7 +1347,7 @@ func (c *Checker) getTypeAtFlowArrayMutation(f *FlowState, flow *ast.FlowNode) F
 						evolvedType = c.addEvolvingArrayElementType(evolvedType, node.AsBinaryExpression().Right)
 					}
 				}
-				return FlowType{t: evolvedType, incomplete: flowType.incomplete}
+				return c.newFlowType(evolvedType, flowType.incomplete)
 			}
 			return flowType
 		}

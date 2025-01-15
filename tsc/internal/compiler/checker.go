@@ -93,6 +93,13 @@ type EnumLiteralKey struct {
 	value      any
 }
 
+// EnumRelationKey
+
+type EnumRelationKey struct {
+	sourceId ast.SymbolId
+	targetId ast.SymbolId
+}
+
 // TypeCacheKind
 
 type CachedTypeKind int32
@@ -149,11 +156,12 @@ type CachedSignatureKey struct {
 }
 
 const (
-	SignatureKeyErased    string = "-"
-	SignatureKeyCanonical string = "*"
-	SignatureKeyBase      string = "#"
-	SignatureKeyInner     string = "<"
-	SignatureKeyOuter     string = ">"
+	SignatureKeyErased         string = "-"
+	SignatureKeyCanonical      string = "*"
+	SignatureKeyBase           string = "#"
+	SignatureKeyInner          string = "<"
+	SignatureKeyOuter          string = ">"
+	SignatureKeyImplementation string = "+"
 )
 
 // StringMappingKey
@@ -705,7 +713,7 @@ type Checker struct {
 	assignableRelation                        *Relation
 	comparableRelation                        *Relation
 	identityRelation                          *Relation
-	enumRelation                              *Relation
+	enumRelation                              map[EnumRelationKey]RelationComparisonResult
 	getGlobalNonNullableTypeAliasOrNil        func() *ast.Symbol
 	getGlobalExtractSymbol                    func() *ast.Symbol
 	getGlobalDisposableType                   func() *Type
@@ -889,7 +897,7 @@ func NewChecker(program *Program) *Checker {
 	c.assignableRelation = &Relation{}
 	c.comparableRelation = &Relation{}
 	c.identityRelation = &Relation{}
-	c.enumRelation = &Relation{}
+	c.enumRelation = make(map[EnumRelationKey]RelationComparisonResult)
 	c.getGlobalNonNullableTypeAliasOrNil = c.getGlobalTypeAliasResolver("NonNullable", 1 /*arity*/, false /*reportErrors*/)
 	c.getGlobalExtractSymbol = c.getGlobalTypeAliasResolver("Extract", 2 /*arity*/, true /*reportErrors*/)
 	c.getGlobalDisposableType = c.getGlobalTypeResolver("Disposable", 0 /*arity*/, true /*reportErrors*/)
@@ -3213,8 +3221,12 @@ func (c *Checker) checkExpressionCachedEx(node *ast.Node, checkMode CheckMode) *
 // and requesting the contextual type might cause a circularity or other bad behaviour.
 // It sets the contextual type of the node to any before calling getTypeOfExpression.
 func (c *Checker) getContextFreeTypeOfExpression(node *ast.Node) *Type {
+	if cached := c.contextFreeTypes[node]; cached != nil {
+		return cached
+	}
 	c.pushContextualType(node, c.anyType, false /*isCache*/)
 	t := c.checkExpressionEx(node, CheckModeSkipContextSensitive)
+	c.contextFreeTypes[node] = t
 	c.popContextualType()
 	return t
 }
@@ -4609,16 +4621,20 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 		var checkCandidate *Signature
 		var inferenceContext *InferenceContext
 		if len(candidate.typeParameters) != 0 {
-			// !!!
-			// // If we are *inside the body of candidate*, we need to create a clone of `candidate` with differing type parameter identities,
-			// // so our inference results for this call doesn't pollute expression types referencing the outer type parameter!
-			// paramLocation := candidate.typeParameters[0].symbol.Declarations[0]. /* ? */ parent
-			// candidateParameterContext := paramLocation || (ifElse(candidate.declaration != nil && isConstructorDeclaration(candidate.declaration), candidate.declaration.Parent, candidate.declaration))
-			// if candidateParameterContext != nil && findAncestor(node, func(a *ast.Node) bool {
-			// 	return a == candidateParameterContext
-			// }) != nil {
-			// 	candidate = c.getImplementationSignature(candidate)
-			// }
+			// If we are *inside the body of candidate*, we need to create a clone of `candidate` with differing type parameter identities,
+			// so our inference results for this call doesn't pollute expression types referencing the outer type parameter!
+			var candidateParameterContext *ast.Node
+			typeParamDeclaration := core.FirstOrNil(candidate.typeParameters[0].symbol.Declarations)
+			if typeParamDeclaration != nil {
+				candidateParameterContext = typeParamDeclaration.Parent
+			} else if candidate.declaration != nil && ast.IsConstructorDeclaration(candidate.declaration) {
+				candidateParameterContext = candidate.declaration.Parent
+			} else {
+				candidateParameterContext = candidate.declaration
+			}
+			if candidateParameterContext != nil && ast.FindAncestor(s.node, func(a *ast.Node) bool { return a == candidateParameterContext }) != nil {
+				candidate = c.getImplementationSignature(candidate)
+			}
 			var typeArgumentTypes []*Type
 			if len(s.typeArguments) != 0 {
 				typeArgumentTypes = c.checkTypeArguments(candidate, s.typeArguments, false /*reportErrors*/, nil)
@@ -4679,6 +4695,16 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 		return checkCandidate
 	}
 	return nil
+}
+
+func (c *Checker) getImplementationSignature(signature *Signature) *Signature {
+	key := CachedSignatureKey{sig: signature, key: SignatureKeyImplementation}
+	if cached := c.cachedSignatures[key]; cached != nil {
+		return cached
+	}
+	result := c.instantiateSignature(signature, newTypeMapper(nil, nil))
+	c.cachedSignatures[key] = result
+	return result
 }
 
 func (c *Checker) hasCorrectArity(node *ast.Node, args []*ast.Node, signature *Signature, signatureHelpTrailingComma bool) bool {
@@ -10599,7 +10625,7 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 	case ast.KindExportAssignment:
 		result = c.widenTypeForVariableLikeDeclaration(c.checkExpressionCached(declaration.AsExportAssignment().Expression), declaration, false /*reportErrors*/)
 	case ast.KindBinaryExpression:
-		result = c.getWidenedTypeForAssignmentDeclaration(symbol, nil)
+		result = c.getWidenedTypeForAssignmentDeclaration(symbol)
 	case ast.KindJsxAttribute:
 		result = c.checkJsxAttribute(declaration.AsJsxAttribute(), CheckModeNormal)
 	case ast.KindEnumMember:
@@ -11842,8 +11868,14 @@ func (c *Checker) getTypeOfPrototypeProperty(prototype *ast.Symbol) *Type {
 	return c.anyType // !!!
 }
 
-func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol, resolvedSymbol *ast.Symbol) *Type {
-	return c.anyType // !!!
+func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Type {
+	var types []*Type
+	for _, declaration := range symbol.Declarations {
+		if ast.IsBinaryExpression(declaration) {
+			types = core.AppendIfUnique(types, c.getWidenedLiteralType(c.checkExpressionCached(declaration.AsBinaryExpression().Right)))
+		}
+	}
+	return c.getWidenedType(c.getUnionType(types))
 }
 
 func (c *Checker) widenTypeForVariableLikeDeclaration(t *Type, declaration *ast.Node, reportErrors bool) *Type {
@@ -13147,7 +13179,7 @@ func (c *Checker) getTypeWithThisArgument(t *Type, thisArgument *Type, needAppar
 func (c *Checker) addInheritedMembers(symbols ast.SymbolTable, baseSymbols []*ast.Symbol) ast.SymbolTable {
 	for _, base := range baseSymbols {
 		if !isStaticPrivateIdentifierProperty(base) {
-			if _, ok := symbols[base.Name]; !ok {
+			if s, ok := symbols[base.Name]; !ok || s.Flags&ast.SymbolFlagsValue == 0 {
 				if symbols == nil {
 					symbols = make(ast.SymbolTable)
 				}
@@ -13655,18 +13687,13 @@ func (c *Checker) getReturnTypeFromBody(fn *ast.Node, checkMode CheckMode) *Type
 		} else if len(returnTypes) != 0 {
 			returnType = c.getUnionTypeEx(returnTypes, UnionReductionSubtype, nil, nil)
 		}
-		// !!!
-		// TODO_IDENTIFIER := c.checkAndAggregateYieldOperandTypes(fn, checkMode)
-		// if core.Some(yieldTypes) {
-		// 	yieldType = c.getUnionType(yieldTypes, UnionReductionSubtype)
-		// } else {
-		// 	yieldType = nil
-		// }
-		// if core.Some(nextTypes) {
-		// 	nextType = c.getIntersectionType(nextTypes)
-		// } else {
-		// 	nextType = nil
-		// }
+		yieldTypes, nextTypes := c.checkAndAggregateYieldOperandTypes(fn, checkMode)
+		if len(yieldTypes) != 0 {
+			yieldType = c.getUnionTypeEx(yieldTypes, UnionReductionSubtype, nil, nil)
+		}
+		if len(nextTypes) != 0 {
+			nextType = c.getIntersectionType(nextTypes)
+		}
 	default:
 		types, isNeverReturning := c.checkAndAggregateReturnExpressionTypes(fn, checkMode)
 		if isNeverReturning {
@@ -13819,6 +13846,28 @@ func mayReturnNever(fn *ast.Node) bool {
 		return ast.IsObjectLiteralExpression(fn.Parent)
 	}
 	return false
+}
+
+func (c *Checker) checkAndAggregateYieldOperandTypes(fn *ast.Node, checkMode CheckMode) (yieldTypes []*Type, nextTypes []*Type) {
+	isAsync := (getFunctionFlags(fn) & FunctionFlagsAsync) != 0
+	forEachYieldExpression(getBodyOfNode(fn), func(yieldExpr *ast.Node) {
+		yieldExprType := c.undefinedWideningType
+		if yieldExpr.Expression() != nil {
+			yieldExprType = c.checkExpressionEx(yieldExpr.Expression(), checkMode)
+		}
+		yieldTypes = core.AppendIfUnique(yieldTypes, c.getYieldedTypeOfYieldExpression(yieldExpr, yieldExprType, c.anyType, isAsync))
+		var nextType *Type
+		if yieldExpr.AsYieldExpression().AsteriskToken != nil {
+			iterationTypes := c.getIterationTypesOfIterable(yieldExprType, core.IfElse(isAsync, IterationUseAsyncYieldStar, IterationUseYieldStar), yieldExpr.Expression())
+			nextType = iterationTypes.nextType
+		} else {
+			nextType = c.getContextualType(yieldExpr, ContextFlagsNone)
+		}
+		if nextType != nil {
+			nextTypes = core.AppendIfUnique(nextTypes, nextType)
+		}
+	})
+	return
 }
 
 func (c *Checker) createPromiseType(promisedType *Type) *Type {
@@ -22011,7 +22060,8 @@ func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags
 	switch binary.OperatorToken.Kind {
 	case ast.KindEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindBarBarEqualsToken, ast.KindQuestionQuestionEqualsToken:
 		// In an assignment expression, the right operand is contextually typed by the type of the left operand.
-		if node == binary.Right {
+		// If the binary operator has a symbol, this is an assignment declaration and there is no contextual type.
+		if node == binary.Right && binary.Symbol == nil {
 			return c.getTypeOfExpression(binary.Left)
 		}
 	case ast.KindBarBarToken, ast.KindQuestionQuestionToken:
@@ -22021,10 +22071,8 @@ func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags
 		// by the type of the left operand, except for the special case of Javascript declarations of the form
 		// `namespace.prop = namespace.prop || {}`.
 		t := c.getContextualType(binary.AsNode(), contextFlags)
-		if t != nil && node == binary.Right {
-			if pattern := c.patternForType[t]; pattern != nil {
-				return c.getTypeOfExpression(binary.Left)
-			}
+		if node == binary.Right && (t == nil || c.patternForType[t] != nil) {
+			return c.getTypeOfExpression(binary.Left)
 		}
 		return t
 	case ast.KindAmpersandAmpersandToken, ast.KindCommaToken:

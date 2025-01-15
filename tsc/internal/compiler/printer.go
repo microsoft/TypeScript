@@ -75,6 +75,12 @@ func (c *Checker) typePredicateToString(t *TypePredicate) string {
 	return p.string()
 }
 
+func (c *Checker) valueToString(value any) string {
+	p := c.newPrinter(TypeFormatFlagsNone)
+	p.printValue(value)
+	return p.string()
+}
+
 type Printer struct {
 	c        *Checker
 	flags    TypeFormatFlags
@@ -163,12 +169,12 @@ func (p *Printer) printLiteralType(t *Type) {
 	if t.flags&TypeFlagsEnumLiteral != 0 {
 		p.printEnumLiteral(t)
 	} else {
-		p.printLiteralTypeValue(t)
+		p.printValue(t.AsLiteralType().value)
 	}
 }
 
-func (p *Printer) printLiteralTypeValue(t *Type) {
-	switch value := t.AsLiteralType().value.(type) {
+func (p *Printer) printValue(value any) {
+	switch value := value.(type) {
 	case string:
 		p.printStringLiteral(value)
 	case jsnum.Number:
@@ -570,7 +576,7 @@ func (p *Printer) printSourceFileWithTypes(sourceFile *ast.SourceFile) {
 			p.printType(t)
 			if isDeclaration && t.flags&TypeFlagsEnumLiteral != 0 && t.flags&(TypeFlagsStringLiteral|TypeFlagsNumberLiteral) != 0 {
 				p.print(" = ")
-				p.printLiteralTypeValue(t)
+				p.printValue(t.AsLiteralType().value)
 			}
 			p.print("\n")
 			typesPrinted = true

@@ -595,7 +595,7 @@ func (b *Binder) bindWorker(node *ast.Node) bool {
 			setFlowNode(node, b.currentFlow)
 		}
 	case ast.KindBinaryExpression:
-		if isFunctionPropertyAssignment(node) {
+		if ast.IsFunctionPropertyAssignment(node) {
 			b.bindFunctionPropertyAssignment(node)
 		}
 		b.checkStrictModeBinaryExpression(node)
@@ -631,7 +631,7 @@ func (b *Binder) bindWorker(node *ast.Node) bool {
 	case ast.KindCallSignature, ast.KindConstructSignature, ast.KindIndexSignature:
 		b.declareSymbolAndAddToSymbolTable(node, ast.SymbolFlagsSignature, ast.SymbolFlagsNone)
 	case ast.KindMethodDeclaration, ast.KindMethodSignature:
-		b.bindPropertyOrMethodOrAccessor(node, ast.SymbolFlagsMethod|core.IfElse(getPostfixTokenFromNode(node) != nil, ast.SymbolFlagsOptional, ast.SymbolFlagsNone), core.IfElse(ast.IsObjectLiteralMethod(node), ast.SymbolFlagsPropertyExcludes, ast.SymbolFlagsMethodExcludes))
+		b.bindPropertyOrMethodOrAccessor(node, ast.SymbolFlagsMethod|getOptionalSymbolFlagForNode(node), core.IfElse(ast.IsObjectLiteralMethod(node), ast.SymbolFlagsPropertyExcludes, ast.SymbolFlagsMethodExcludes))
 	case ast.KindFunctionDeclaration:
 		b.bindFunctionDeclaration(node)
 	case ast.KindConstructor:
@@ -716,7 +716,7 @@ func (b *Binder) bindPropertyWorker(node *ast.Node) {
 	isAutoAccessor := ast.IsAutoAccessorPropertyDeclaration(node)
 	includes := core.IfElse(isAutoAccessor, ast.SymbolFlagsAccessor, ast.SymbolFlagsProperty)
 	excludes := core.IfElse(isAutoAccessor, ast.SymbolFlagsAccessorExcludes, ast.SymbolFlagsPropertyExcludes)
-	b.bindPropertyOrMethodOrAccessor(node, includes|core.IfElse(getPostfixTokenFromNode(node) != nil, ast.SymbolFlagsOptional, ast.SymbolFlagsNone), excludes)
+	b.bindPropertyOrMethodOrAccessor(node, includes|getOptionalSymbolFlagForNode(node), excludes)
 }
 
 func (b *Binder) bindSourceFileIfExternalModule() {
@@ -1082,7 +1082,7 @@ func addLateBoundAssignmentDeclarationToSymbol(node *ast.Node, symbol *ast.Symbo
 
 func (b *Binder) bindFunctionPropertyAssignment(node *ast.Node) {
 	expr := node.AsBinaryExpression()
-	parentName := expr.Left.Expression().AsIdentifier().Text
+	parentName := expr.Left.Expression().Text()
 	parentSymbol := b.lookupName(parentName, b.blockScopeContainer)
 	if parentSymbol == nil {
 		parentSymbol = b.lookupName(parentName, b.container)
@@ -1235,7 +1235,7 @@ func (b *Binder) lookupName(name string, container *ast.Node) *ast.Symbol {
 	if localsContainer != nil {
 		local := localsContainer.Locals[name]
 		if local != nil {
-			return local
+			return core.OrElse(local.ExportSymbol, local)
 		}
 	}
 	if ast.IsSourceFile(container) {
@@ -2792,21 +2792,9 @@ func isSignedNumericLiteral(node *ast.Node) bool {
 	return false
 }
 
-func isFunctionPropertyAssignment(node *ast.Node) bool {
-	if node.Kind == ast.KindBinaryExpression {
-		expr := node.AsBinaryExpression()
-		if expr.OperatorToken.Kind == ast.KindEqualsToken {
-			switch expr.Left.Kind {
-			case ast.KindPropertyAccessExpression:
-				// F.id = expr
-				return ast.IsIdentifier(expr.Left.Expression()) && ast.IsIdentifier(expr.Left.Name())
-			case ast.KindElementAccessExpression:
-				// F[xxx] = expr
-				return ast.IsIdentifier(expr.Left.Expression())
-			}
-		}
-	}
-	return false
+func getOptionalSymbolFlagForNode(node *ast.Node) ast.SymbolFlags {
+	postfixToken := getPostfixTokenFromNode(node)
+	return core.IfElse(postfixToken != nil && postfixToken.Kind == ast.KindQuestionToken, ast.SymbolFlagsOptional, ast.SymbolFlagsNone)
 }
 
 func getPostfixTokenFromNode(node *ast.Node) *ast.Node {

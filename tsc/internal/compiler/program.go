@@ -9,10 +9,12 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
+	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/compiler/module"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -431,7 +433,46 @@ func (p *Program) getBindDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.D
 }
 
 func (p *Program) getSemanticDiagnosticsForFile(sourceFile *ast.SourceFile) []*ast.Diagnostic {
-	return core.Concatenate(sourceFile.BindDiagnostics(), p.getTypeCheckerForFile(sourceFile).GetDiagnostics(sourceFile))
+	diags := core.Concatenate(sourceFile.BindDiagnostics(), p.getTypeCheckerForFile(sourceFile).GetDiagnostics(sourceFile))
+	if len(sourceFile.CommentDirectives) == 0 {
+		return diags
+	}
+	// Build map of directives by line number
+	directivesByLine := make(map[int]ast.CommentDirective)
+	for _, directive := range sourceFile.CommentDirectives {
+		line, _ := scanner.GetLineAndCharacterOfPosition(sourceFile, directive.Loc.Pos())
+		directivesByLine[line] = directive
+	}
+	lineStarts := scanner.GetLineStarts(sourceFile)
+	filtered := make([]*ast.Diagnostic, 0, len(diags))
+	for _, diagnostic := range diags {
+		ignoreDiagnostic := false
+		for line := scanner.ComputeLineOfPosition(lineStarts, diagnostic.Pos()) - 1; line >= 0; line-- {
+			// If line contains a @ts-ignore or @ts-expect-error directive, ignore this diagnostic and change
+			// the directive kind to @ts-ignore to indicate it was used.
+			if directive, ok := directivesByLine[line]; ok {
+				ignoreDiagnostic = true
+				directive.Kind = ast.CommentDirectiveKindIgnore
+				directivesByLine[line] = directive
+				break
+			}
+			// Stop searching backwards when we encounter a line that isn't blank or a comment.
+			if !isCommentOrBlankLine(sourceFile.Text, int(lineStarts[line])) {
+				break
+			}
+		}
+		if !ignoreDiagnostic {
+			filtered = append(filtered, diagnostic)
+		}
+	}
+	for _, directive := range directivesByLine {
+		// Above we changed all used directive kinds to @ts-ignore, so any @ts-expect-error directives that
+		// remain are unused and thus errors.
+		if directive.Kind == ast.CommentDirectiveKindExpectError {
+			filtered = append(filtered, ast.NewDiagnostic(sourceFile, directive.Loc, diagnostics.Unused_ts_expect_error_directive))
+		}
+	}
+	return filtered
 }
 
 func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound bool, ensureChecked bool, getDiagnostics func(*ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {

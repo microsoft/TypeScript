@@ -334,7 +334,7 @@ func (n *Node) Type() *Node {
 		return n.AsJSDocNonNullableType().Type
 	case KindJSDocOptionalType:
 		return n.AsJSDocOptionalType().Type
-	case KindEnumMember, KindBindingElement, KindExportAssignment:
+	case KindEnumMember, KindBindingElement, KindExportAssignment, KindBinaryExpression:
 		return nil
 	default:
 		funcLike := n.FunctionLikeData()
@@ -5637,6 +5637,19 @@ type PatternAmbientModule struct {
 	Symbol  *Symbol
 }
 
+type CommentDirectiveKind int32
+
+const (
+	CommentDirectiveKindUnknown CommentDirectiveKind = iota
+	CommentDirectiveKindExpectError
+	CommentDirectiveKindIgnore
+)
+
+type CommentDirective struct {
+	Loc  core.TextRange
+	Kind CommentDirectiveKind
+}
+
 // SourceFile
 
 type SourceFile struct {
@@ -5670,6 +5683,7 @@ type SourceFile struct {
 	ModuleAugmentations         []*ModuleName      // []ModuleName
 	PatternAmbientModules       []PatternAmbientModule
 	AmbientModuleNames          []string
+	CommentDirectives           []CommentDirective
 	jsdocCache                  map[*Node][]*Node
 	Pragmas                     []Pragma
 	ReferencedFiles             []*FileReference
