@@ -44,7 +44,6 @@ const (
 	NodeFlagsAmbient         NodeFlags = 1 << 26 // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
 	NodeFlagsInWithStatement NodeFlags = 1 << 27 // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
 	NodeFlagsJsonFile        NodeFlags = 1 << 28 // If node was parsed in a Json
-	NodeFlagsTypeCached      NodeFlags = 1 << 29 // If a type was cached for node at any point
 	NodeFlagsDeprecated      NodeFlags = 1 << 30 // If has '@deprecated' JSDoc tag
 
 	NodeFlagsBlockScoped = NodeFlagsLet | NodeFlagsConst | NodeFlagsUsing

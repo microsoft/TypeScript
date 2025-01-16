@@ -7,6 +7,9 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
 )
 
@@ -46,4 +49,23 @@ foo.bar;`
 			t.Fatalf("Expected symbol to be non-nil")
 		}
 	}
+}
+
+func TestCheckSrcCompiler(t *testing.T) {
+	t.Parallel()
+
+	repo.SkipIfNoTypeScriptSubmodule(t)
+	fs := vfs.FromOS()
+	fs = bundled.WrapFS(fs)
+
+	rootPath := tspath.CombinePaths(tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath), "src", "compiler")
+
+	host := compiler.NewCompilerHost(nil, rootPath, fs)
+	opts := compiler.ProgramOptions{
+		Host:               host,
+		RootPath:           rootPath,
+		DefaultLibraryPath: bundled.LibPath(),
+	}
+	p := compiler.NewProgram(opts)
+	p.CheckSourceFiles()
 }

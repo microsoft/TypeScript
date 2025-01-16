@@ -200,7 +200,7 @@ func (p *Program) BindSourceFiles() {
 	wg.Wait()
 }
 
-func (p *Program) checkSourceFiles() {
+func (p *Program) CheckSourceFiles() {
 	p.createCheckers()
 	wg := core.NewWorkGroup(false)
 	for index, checker := range p.checkers {
@@ -506,7 +506,7 @@ func (p *Program) getDiagnosticsHelper(sourceFile *ast.SourceFile, ensureBound b
 		p.BindSourceFiles()
 	}
 	if ensureChecked {
-		p.checkSourceFiles()
+		p.CheckSourceFiles()
 	}
 	var result []*ast.Diagnostic
 	for _, file := range p.files {

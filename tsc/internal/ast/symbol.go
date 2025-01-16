@@ -1,21 +1,20 @@
 package ast
 
+import "sync/atomic"
+
 // Symbol
 
 type Symbol struct {
 	Flags                        SymbolFlags
 	CheckFlags                   CheckFlags // Non-zero only in transient symbols created by Checker
-	LastAssignmentPos            int32
-	HasDefiniteAssignment        bool // Symbol is definitely assigned somewhere
-	ConstEnumOnlyModule          bool // True if module contains only const enums or other modules with only const enums
+	ConstEnumOnlyModule          bool       // True if module contains only const enums or other modules with only const enums
 	IsReplaceableByMethod        bool
 	Name                         string
 	Declarations                 []*Node
 	ValueDeclaration             *Node
 	Members                      SymbolTable
 	Exports                      SymbolTable
-	Id                           SymbolId
-	MergeId                      MergeId // Assigned once symbol is merged somewhere
+	id                           atomic.Uint32
 	Parent                       *Symbol
 	ExportSymbol                 *Symbol
 	AssignmentDeclarationMembers map[NodeId]*Node // Set of detected assignment declarations

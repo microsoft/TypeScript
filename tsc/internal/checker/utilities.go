@@ -4,7 +4,6 @@ import (
 	"cmp"
 	"slices"
 	"strings"
-	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
@@ -37,26 +36,6 @@ func (s *LinkStore[K, V]) get(key K) *V {
 func (s *LinkStore[K, V]) has(key K) bool {
 	_, ok := s.entries[key]
 	return ok
-}
-
-// Atomic ids
-
-var (
-	symbolMergeMutex sync.Mutex
-	nextMergeId      uint32
-)
-
-func getMergeId(symbol *ast.Symbol) ast.MergeId {
-	if symbol.MergeId != 0 {
-		return symbol.MergeId
-	}
-	symbolMergeMutex.Lock()
-	if symbol.MergeId == 0 {
-		nextMergeId++
-		symbol.MergeId = ast.MergeId(nextMergeId)
-	}
-	symbolMergeMutex.Unlock()
-	return symbol.MergeId
 }
 
 func NewDiagnosticForNode(node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {

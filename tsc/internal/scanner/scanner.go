@@ -2067,15 +2067,13 @@ func ComputeLineOfPosition(lineStarts []core.TextPos, pos int) int {
 }
 
 func GetLineStarts(sourceFile *ast.SourceFile) []core.TextPos {
-	if sourceFile.LineMap == nil {
-		sourceFile.LineMap = core.ComputeLineStarts(sourceFile.Text)
-	}
-	return sourceFile.LineMap
+	return sourceFile.LineMap()
 }
 
 func GetLineAndCharacterOfPosition(sourceFile *ast.SourceFile, pos int) (line int, character int) {
-	line = ComputeLineOfPosition(GetLineStarts(sourceFile), pos)
-	character = utf8.RuneCountInString(sourceFile.Text[sourceFile.LineMap[line]:pos])
+	lineMap := GetLineStarts(sourceFile)
+	line = ComputeLineOfPosition(lineMap, pos)
+	character = utf8.RuneCountInString(sourceFile.Text[lineMap[line]:pos])
 	return
 }
 

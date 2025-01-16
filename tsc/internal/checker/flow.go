@@ -2568,24 +2568,25 @@ func (c *Checker) isPostSuperFlowNode(flow *ast.FlowNode, noCacheCheck bool) boo
 // Check if a parameter, catch variable, or mutable local variable is definitely assigned anywhere
 func (c *Checker) isSymbolAssignedDefinitely(symbol *ast.Symbol) bool {
 	c.ensureAssignmentsMarked(symbol)
-	return symbol.HasDefiniteAssignment
+	return c.markedAssignmentSymbolLinks.get(symbol).hasDefiniteAssignment
 }
 
 // Check if a parameter, catch variable, or mutable local variable is assigned anywhere
 func (c *Checker) isSymbolAssigned(symbol *ast.Symbol) bool {
 	c.ensureAssignmentsMarked(symbol)
-	return symbol.LastAssignmentPos != 0
+	return c.markedAssignmentSymbolLinks.get(symbol).lastAssignmentPos != 0
 }
 
 // Return true if there are no assignments to the given symbol or if the given location
 // is past the last assignment to the symbol.
 func (c *Checker) isPastLastAssignment(symbol *ast.Symbol, location *ast.Node) bool {
 	c.ensureAssignmentsMarked(symbol)
-	return symbol.LastAssignmentPos == 0 || location != nil && int(symbol.LastAssignmentPos) < location.Pos()
+	lastAssignmentPos := c.markedAssignmentSymbolLinks.get(symbol).lastAssignmentPos
+	return lastAssignmentPos == 0 || location != nil && int(lastAssignmentPos) < location.Pos()
 }
 
 func (c *Checker) ensureAssignmentsMarked(symbol *ast.Symbol) {
-	if symbol.LastAssignmentPos != 0 {
+	if c.markedAssignmentSymbolLinks.get(symbol).lastAssignmentPos != 0 {
 		return
 	}
 	parent := ast.FindAncestor(symbol.ValueDeclaration, ast.IsFunctionOrSourceFile)
@@ -2620,17 +2621,18 @@ func (c *Checker) markNodeAssignments(node *ast.Node) bool {
 		if assignmentKind != AssignmentKindNone {
 			symbol := c.getResolvedSymbol(node)
 			if c.isParameterOrMutableLocalVariable(symbol) {
-				if symbol.LastAssignmentPos == 0 || symbol.LastAssignmentPos != math.MaxInt32 {
+				links := c.markedAssignmentSymbolLinks.get(symbol)
+				if pos := links.lastAssignmentPos; pos == 0 || pos != math.MaxInt32 {
 					referencingFunction := ast.FindAncestor(node, ast.IsFunctionOrSourceFile)
 					declaringFunction := ast.FindAncestor(symbol.ValueDeclaration, ast.IsFunctionOrSourceFile)
 					if referencingFunction == declaringFunction {
-						symbol.LastAssignmentPos = int32(c.extendAssignmentPosition(node, symbol.ValueDeclaration))
+						links.lastAssignmentPos = int32(c.extendAssignmentPosition(node, symbol.ValueDeclaration))
 					} else {
-						symbol.LastAssignmentPos = math.MaxInt32
+						links.lastAssignmentPos = math.MaxInt32
 					}
 				}
 				if assignmentKind == AssignmentKindDefinite {
-					symbol.HasDefiniteAssignment = true
+					links.hasDefiniteAssignment = true
 				}
 			}
 		}
@@ -2644,7 +2646,8 @@ func (c *Checker) markNodeAssignments(node *ast.Node) bool {
 		if !node.AsExportSpecifier().IsTypeOnly && !exportDeclaration.IsTypeOnly && exportDeclaration.ModuleSpecifier == nil && !ast.IsStringLiteral(name) {
 			symbol := c.resolveEntityName(name, ast.SymbolFlagsValue, true /*ignoreErrors*/, true /*dontResolveAlias*/, nil)
 			if symbol != nil && c.isParameterOrMutableLocalVariable(symbol) {
-				symbol.LastAssignmentPos = math.MaxInt32
+				links := c.markedAssignmentSymbolLinks.get(symbol)
+				links.lastAssignmentPos = math.MaxInt32
 			}
 		}
 		return false

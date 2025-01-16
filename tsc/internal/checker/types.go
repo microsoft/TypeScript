@@ -208,6 +208,11 @@ type IndexSymbolLinks struct {
 	filteredIndexSymbolCache map[string]*ast.Symbol // Symbol with applicable declarations
 }
 
+type MarkedAssignmentSymbolLinks struct {
+	lastAssignmentPos     int32
+	hasDefiniteAssignment bool // Symbol is definitely assigned somewhere
+}
+
 type AccessFlags uint32
 
 const (

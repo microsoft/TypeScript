@@ -15,17 +15,27 @@ var (
 )
 
 func GetNodeId(node *Node) NodeId {
-	if node.Id == 0 {
-		node.Id = NodeId(nextNodeId.Add(1))
+	id := node.id.Load()
+	if id == 0 {
+		// Worst case, we burn a few ids if we have to CAS.
+		id = nextNodeId.Add(1)
+		if !node.id.CompareAndSwap(0, id) {
+			id = node.id.Load()
+		}
 	}
-	return node.Id
+	return NodeId(id)
 }
 
 func GetSymbolId(symbol *Symbol) SymbolId {
-	if symbol.Id == 0 {
-		symbol.Id = SymbolId(nextSymbolId.Add(1))
+	id := symbol.id.Load()
+	if id == 0 {
+		// Worst case, we burn a few ids if we have to CAS.
+		id = nextSymbolId.Add(1)
+		if !symbol.id.CompareAndSwap(0, id) {
+			id = symbol.id.Load()
+		}
 	}
-	return symbol.Id
+	return SymbolId(id)
 }
 
 func GetSymbolTable(data *SymbolTable) SymbolTable {
