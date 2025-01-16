@@ -1,10 +1,8 @@
 package compiler
 
 import (
-	"cmp"
 	"fmt"
 	"slices"
-	"strings"
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -45,12 +43,8 @@ type Program struct {
 	comparePathsOptions tspath.ComparePathsOptions
 	defaultLibraryPath  string
 
-	fileProcessingMutex sync.Mutex
-	libFiles            []*ast.SourceFile
-	otherFiles          []*ast.SourceFile
-	files               []*ast.SourceFile
-	filesByPath         map[tspath.Path]*ast.SourceFile
-	processedFileNames  core.Set[string]
+	files       []*ast.SourceFile
+	filesByPath map[tspath.Path]*ast.SourceFile
 
 	// The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
 	// This works as imported modules are discovered recursively in a depth first manner, specifically:
@@ -90,11 +84,6 @@ func NewProgram(options ProgramOptions) *Program {
 		panic("host required")
 	}
 
-	p.comparePathsOptions = tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: p.host.FS().UseCaseSensitiveFileNames(),
-		CurrentDirectory:          p.host.GetCurrentDirectory(),
-	}
-
 	p.defaultLibraryPath = options.DefaultLibraryPath
 	if p.defaultLibraryPath == "" {
 		panic("default library path required")
@@ -124,45 +113,18 @@ func NewProgram(options ProgramOptions) *Program {
 		}
 	}
 
-	otherFiles := walkFiles(p.host.FS(), p.rootPath, extensions)
-
-	// Process otherFiles first so breakpoints on user code are more likely to be hit first.
-	p.processRootFiles(otherFiles, false)
-	p.processRootFiles(libs, true)
-
-	slices.SortFunc(p.libFiles, func(f1 *ast.SourceFile, f2 *ast.SourceFile) int {
-		return cmp.Compare(p.getDefaultLibFilePriority(f1), p.getDefaultLibFilePriority(f2))
-	})
-
-	// Sort files by path so we get a stable ordering between runs
-	slices.SortFunc(p.otherFiles, func(f1 *ast.SourceFile, f2 *ast.SourceFile) int {
-		return strings.Compare(string(f1.Path()), string(f2.Path()))
-	})
-
-	p.files = slices.Concat(p.libFiles, p.otherFiles)
-	p.libFiles = nil
-	p.otherFiles = nil
+	rootFiles := walkFiles(p.host.FS(), p.rootPath, extensions)
+	p.files = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, rootFiles, libs)
+	p.filesByPath = make(map[tspath.Path]*ast.SourceFile, len(p.files))
+	for _, file := range p.files {
+		p.filesByPath[file.Path()] = file
+	}
 
 	return p
 }
 
 func (p *Program) Files() []*ast.SourceFile {
 	return p.files
-}
-
-func (p *Program) getDefaultLibFilePriority(a *ast.SourceFile) int {
-	if tspath.ContainsPath(p.defaultLibraryPath, a.FileName(), p.comparePathsOptions) {
-		basename := tspath.GetBaseFileName(a.FileName())
-		if basename == "lib.d.ts" || basename == "lib.es6.d.ts" {
-			return 0
-		}
-		name := strings.TrimSuffix(strings.TrimPrefix(basename, "lib."), ".d.ts")
-		index := slices.Index(tsoptions.Libs, name)
-		if index != -1 {
-			return index + 1
-		}
-	}
-	return len(tsoptions.Libs) + 2
 }
 
 func walkFiles(fs vfs.FS, rootPath string, extensions []string) []string {
@@ -244,89 +206,6 @@ func (p *Program) getTypeCheckerForFile(file *ast.SourceFile) *checker.Checker {
 	return p.checkersByFile[file]
 }
 
-func (p *Program) processRootFiles(rootFiles []string, isLib bool) {
-	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)
-
-	filesToParse := make([]toParse, 0, len(rootFiles))
-	for _, file := range rootFiles {
-		absPath := tspath.GetNormalizedAbsolutePath(file, p.currentDirectory)
-		filesToParse = append(filesToParse, toParse{p: absPath, isLib: isLib})
-	}
-	p.processFiles(filesToParse, wg)
-
-	wg.Wait()
-}
-
-type toParse struct {
-	p     string
-	isLib bool
-}
-
-func (p *Program) processFiles(filesToParse []toParse, wg *core.WorkGroup) {
-	tasks := make([]toParse, 0, len(filesToParse))
-	for _, f := range filesToParse {
-		if !p.processedFileNames.Has(f.p) {
-			p.processedFileNames.Add(f.p)
-			tasks = append(tasks, f)
-		}
-	}
-	for _, f := range tasks {
-		p.startParseTask(f.p, wg, f.isLib)
-	}
-}
-
-func (p *Program) startParseTask(fileName string, wg *core.WorkGroup, isLib bool) {
-	wg.Run(func() {
-		normalizedPath := tspath.NormalizePath(fileName)
-		file := p.parseSourceFile(normalizedPath)
-
-		// !!! if noResolve, skip all of this
-
-		p.collectExternalModuleReferences(file)
-
-		filesToParse := make([]toParse, 0, len(file.ReferencedFiles)+len(file.Imports)+len(file.ModuleAugmentations))
-
-		for _, ref := range file.ReferencedFiles {
-			resolvedPath := p.resolveTripleslashPathReference(ref.FileName, file.FileName())
-			filesToParse = append(filesToParse, toParse{p: resolvedPath})
-		}
-
-		for _, ref := range file.TypeReferenceDirectives {
-			resolved := p.resolver.ResolveTypeReferenceDirective(ref.FileName, file.FileName(), core.ModuleKindNodeNext, nil)
-			if resolved.IsResolved() {
-				filesToParse = append(filesToParse, toParse{p: resolved.ResolvedFileName})
-			}
-		}
-
-		if p.compilerOptions.NoLib != core.TSTrue {
-			for _, lib := range file.LibReferenceDirectives {
-				name, ok := tsoptions.GetLibFileName(lib.FileName)
-				if !ok {
-					continue
-				}
-				filesToParse = append(filesToParse, toParse{p: tspath.CombinePaths(p.defaultLibraryPath, name), isLib: true})
-			}
-		}
-
-		for _, imp := range p.resolveImportsAndModuleAugmentations(file) {
-			filesToParse = append(filesToParse, toParse{p: imp})
-		}
-
-		p.fileProcessingMutex.Lock()
-		defer p.fileProcessingMutex.Unlock()
-
-		if isLib {
-			p.libFiles = append(p.libFiles, file)
-		} else {
-			p.otherFiles = append(p.otherFiles, file)
-		}
-
-		p.filesByPath[file.Path()] = file
-
-		p.processFiles(filesToParse, wg)
-	})
-}
-
 func (p *Program) GetResolvedModule(currentSourceFile *ast.SourceFile, moduleReference string) *ast.SourceFile {
 	resolved := p.resolver.ResolveModuleName(moduleReference, currentSourceFile.FileName(), core.ModuleKindNodeNext, nil)
 	return p.findSourceFile(resolved.ResolvedFileName, FileIncludeReason{FileIncludeKindImport, 0})
@@ -354,58 +233,6 @@ func getModuleNames(file *ast.SourceFile) []*ast.Node {
 		// Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
 	}
 	return res
-}
-
-func (p *Program) resolveModuleNames(entries []*ast.Node, file *ast.SourceFile) []*module.ResolvedModule {
-	if len(entries) == 0 {
-		return nil
-	}
-
-	resolvedModules := make([]*module.ResolvedModule, 0, len(entries))
-
-	for _, entry := range entries {
-		moduleName := entry.Text()
-		if moduleName == "" {
-			continue
-		}
-		resolvedModule := p.resolver.ResolveModuleName(moduleName, file.FileName(), core.ModuleKindNodeNext, nil)
-		resolvedModules = append(resolvedModules, resolvedModule)
-	}
-
-	return resolvedModules
-}
-
-func (p *Program) resolveImportsAndModuleAugmentations(file *ast.SourceFile) []string {
-	toParse := make([]string, 0, len(file.Imports))
-	if len(file.Imports) > 0 || len(file.ModuleAugmentations) > 0 {
-		moduleNames := getModuleNames(file)
-		resolutions := p.resolveModuleNames(moduleNames, file)
-
-		for _, resolution := range resolutions {
-			resolvedFileName := resolution.ResolvedFileName
-			// TODO(ercornel): !!!: check if from node modules
-
-			// add file to program only if:
-			// - resolution was successful
-			// - noResolve is falsy
-			// - module name comes from the list of imports
-			// - it's not a top level JavaScript module that exceeded the search max
-
-			// const elideImport = isJsFileFromNodeModules && currentNodeModulesDepth > maxNodeModuleJsDepth;
-
-			// Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
-			// This may still end up being an untyped module -- the file won't be included but imports will be allowed.
-
-			shouldAddFile := resolution.IsResolved() && tspath.FileExtensionIsOneOf(resolvedFileName, []string{".ts", ".tsx", ".mts", ".cts"})
-			// TODO(ercornel): !!!: other checks on whether or not to add the file
-
-			if shouldAddFile {
-				// p.findSourceFile(resolvedFileName, FileIncludeReason{Import, 0})
-				toParse = append(toParse, resolvedFileName)
-			}
-		}
-	}
-	return toParse
 }
 
 func (p *Program) GetSyntacticDiagnostics(sourceFile *ast.SourceFile) []*ast.Diagnostic {
@@ -531,78 +358,6 @@ func (p *Program) PrintSourceFileWithTypes() {
 	}
 }
 
-func (p *Program) collectExternalModuleReferences(file *ast.SourceFile) {
-	if file.ModuleReferencesProcessed {
-		return
-	}
-	file.ModuleReferencesProcessed = true
-	// !!!
-	// If we are importing helpers, we need to add a synthetic reference to resolve the
-	// helpers library. (A JavaScript file without `externalModuleIndicator` set might be
-	// a CommonJS module; `commonJsModuleIndicator` doesn't get set until the binder has
-	// run. We synthesize a helpers import for it just in case; it will never be used if
-	// the binder doesn't find and set a `commonJsModuleIndicator`.)
-	// if (isJavaScriptFile || (!file.isDeclarationFile && (getIsolatedModules(options) || isExternalModule(file)))) {
-	// 	if (options.importHelpers) {
-	// 		// synthesize 'import "tslib"' declaration
-	// 		imports = [createSyntheticImport(externalHelpersModuleNameText, file)];
-	// 	}
-	// 	const jsxImport = getJSXRuntimeImport(getJSXImplicitImportBase(options, file), options);
-	// 	if (jsxImport) {
-	// 		// synthesize `import "base/jsx-runtime"` declaration
-	// 		(imports ||= []).push(createSyntheticImport(jsxImport, file));
-	// 	}
-	// }
-	for _, node := range file.Statements.Nodes {
-		p.collectModuleReferences(file, node, false /*inAmbientModule*/)
-	}
-	// if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
-	// 	collectDynamicImportOrRequireOrJsDocImportCalls(file);
-	// }
-	// function collectDynamicImportOrRequireOrJsDocImportCalls(file: SourceFile) {
-	// 	const r = /import|require/g;
-	// 	while (r.exec(file.text) !== null) { // eslint-disable-line no-restricted-syntax
-	// 		const node = getNodeAtPosition(file, r.lastIndex);
-	// 		if (isJavaScriptFile && isRequireCall(node, /*requireStringLiteralLikeArgument*/ true)) {
-	// 			setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
-	// 			imports = append(imports, node.arguments[0]);
-	// 		}
-	// 		// we have to check the argument list has length of at least 1. We will still have to process these even though we have parsing error.
-	// 		else if (isImportCall(node) && node.arguments.length >= 1 && isStringLiteralLike(node.arguments[0])) {
-	// 			setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
-	// 			imports = append(imports, node.arguments[0]);
-	// 		}
-	// 		else if (isLiteralImportTypeNode(node)) {
-	// 			setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
-	// 			imports = append(imports, node.argument.literal);
-	// 		}
-	// 		else if (isJavaScriptFile && isJSDocImportTag(node)) {
-	// 			const moduleNameExpr = getExternalModuleName(node);
-	// 			if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text) {
-	// 				setParentRecursive(node, /*incremental*/ false);
-	// 				imports = append(imports, moduleNameExpr);
-	// 			}
-	// 		}
-	// 	}
-	// }
-	// /** Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files */
-	// function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
-	// 	let current: Node = sourceFile;
-	// 	const getContainingChild = (child: Node) => {
-	// 		if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === Kind.EndOfFileToken)))) {
-	// 			return child;
-	// 		}
-	// 	};
-	// 	while (true) {
-	// 		const child = isJavaScriptFile && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
-	// 		if (!child) {
-	// 			return current;
-	// 		}
-	// 		current = child;
-	// 	}
-	// }
-}
-
 var unprefixedNodeCoreModules = map[string]bool{
 	"assert":              true,
 	"assert/strict":       true,
@@ -666,69 +421,6 @@ var exclusivelyPrefixedNodeCoreModules = map[string]bool{
 	"node:sqlite":         true,
 	"node:test":           true,
 	"node:test/reporters": true,
-}
-
-func (p *Program) collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbientModule bool) {
-	if ast.IsAnyImportOrReExport(node) {
-		moduleNameExpr := ast.GetExternalModuleName(node)
-		// TypeScript 1.0 spec (April 2014): 12.1.6
-		// An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules
-		// only through top - level external module names. Relative external module names are not permitted.
-		if moduleNameExpr != nil && ast.IsStringLiteral(moduleNameExpr) {
-			moduleName := moduleNameExpr.AsStringLiteral().Text
-			if moduleName != "" && (!inAmbientModule || !tspath.IsExternalModuleNameRelative(moduleName)) {
-				binder.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
-				file.Imports = append(file.Imports, moduleNameExpr)
-				if file.UsesUriStyleNodeCoreModules != core.TSTrue && p.currentNodeModulesDepth == 0 && !file.IsDeclarationFile {
-					if strings.HasPrefix(moduleName, "node:") && !exclusivelyPrefixedNodeCoreModules[moduleName] {
-						// Presence of `node:` prefix takes precedence over unprefixed node core modules
-						file.UsesUriStyleNodeCoreModules = core.TSTrue
-					} else if file.UsesUriStyleNodeCoreModules == core.TSUnknown && unprefixedNodeCoreModules[moduleName] {
-						// Avoid `unprefixedNodeCoreModules.has` for every import
-						file.UsesUriStyleNodeCoreModules = core.TSFalse
-					}
-				}
-			}
-		}
-		return
-	}
-	if ast.IsModuleDeclaration(node) && ast.IsAmbientModule(node) && (inAmbientModule || ast.HasSyntacticModifier(node, ast.ModifierFlagsAmbient) || file.IsDeclarationFile) {
-		binder.SetParentInChildren(node)
-		nameText := node.AsModuleDeclaration().Name().Text()
-		// Ambient module declarations can be interpreted as augmentations for some existing external modules.
-		// This will happen in two cases:
-		// - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
-		// - if current file is not external module then module augmentation is an ambient module declaration with non-relative module name
-		//   immediately nested in top level ambient module declaration .
-		if ast.IsExternalModule(file) || (inAmbientModule && !tspath.IsExternalModuleNameRelative(nameText)) {
-			file.ModuleAugmentations = append(file.ModuleAugmentations, node.AsModuleDeclaration().Name())
-		} else if !inAmbientModule {
-			if file.IsDeclarationFile {
-				// for global .d.ts files record name of ambient module
-				file.AmbientModuleNames = append(file.AmbientModuleNames, nameText)
-			}
-			// An AmbientExternalModuleDeclaration declares an external module.
-			// This type of declaration is permitted only in the global module.
-			// The StringLiteral must specify a top - level external module name.
-			// Relative external module names are not permitted
-			// NOTE: body of ambient module is always a module block, if it exists
-			if node.AsModuleDeclaration().Body != nil {
-				for _, statement := range node.AsModuleDeclaration().Body.AsModuleBlock().Statements.Nodes {
-					p.collectModuleReferences(file, statement, true /*inAmbientModule*/)
-				}
-			}
-		}
-	}
-}
-
-func (p *Program) resolveTripleslashPathReference(moduleName string, containingFile string) string {
-	basePath := tspath.GetDirectoryPath(containingFile)
-	referencedFileName := moduleName
-
-	if !tspath.IsRootedDiskPath(moduleName) {
-		referencedFileName = tspath.CombinePaths(basePath, moduleName)
-	}
-	return tspath.NormalizePath(referencedFileName)
 }
 
 func (p *Program) GetEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.ModuleKind {
