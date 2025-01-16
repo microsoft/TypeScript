@@ -55,21 +55,21 @@ function foo(x: number | string | boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : boolean
 >  : ^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
                 : x.toString(); // number
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
         } ();
 }
@@ -127,21 +127,21 @@ function foo2(x: number | string | boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : boolean
 >  : ^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
                 : x.toString(); // number
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
         } (x); // x here is narrowed to number | boolean
 >x : number | boolean
@@ -199,21 +199,21 @@ function foo3(x: number | string | boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : boolean
 >  : ^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
                 : x.toString(); // number
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
         })();
 }
@@ -271,21 +271,21 @@ function foo4(x: number | string | boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : boolean
 >  : ^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
                 : x.toString(); // number
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
         })(x); // x here is narrowed to number | boolean
 >x : number | boolean
@@ -387,21 +387,21 @@ module m {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : boolean
 >  : ^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
             : x.toString(); // number
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
         }
     }
 }
@@ -468,21 +468,21 @@ module m1 {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : boolean
 >  : ^^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
             : x.toString(); // number
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
         }
     }
 }

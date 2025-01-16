@@ -29,7 +29,7 @@ greet("Hello");
 >greet("Hello") : number
 >               : ^^^^^^
 >greet : (greeting: string) => number
->      : ^        ^^      ^^^^^^^^^^^
+>      : ^        ^^      ^^^^^      
 >"Hello" : "Hello"
 >        : ^^^^^^^
 

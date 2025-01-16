@@ -31,13 +31,13 @@ async function fn1(): Promise<Obj> {
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve => resolve({ key: "value" }) : (resolve: (value: Obj | PromiseLike<Obj>) => void) => void
->                                     : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >resolve : (value: Obj | PromiseLike<Obj>) => void
->        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >resolve({ key: "value" }) : void
 >                          : ^^^^
 >resolve : (value: Obj | PromiseLike<Obj>) => void
->        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >{ key: "value" } : { key: "value"; }
 >                 : ^^^^^^^^^^^^^^^^^
 >key : "value"

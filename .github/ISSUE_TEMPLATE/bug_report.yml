@@ -38,7 +38,6 @@ body:
 
         Please keep and fill in the line that best applies.
       value: |
-        - This is a crash
         - This changed between versions ______ and _______
         - This changed in commit or PR _______
         - This is the behavior in every version I tried, and I reviewed the FAQ for entries about _________

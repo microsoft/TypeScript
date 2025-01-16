@@ -13,12 +13,12 @@ export declare function pkg(): "pkg";
 === /packages/shared/utils.js ===
 export { pkg } from "pkg";
 >pkg : () => "pkg"
->    : ^^^^^^^^^^^
+>    : ^^^^^^     
 
 === /packages/shared/index.js ===
 import { pkg } from "./utils.js";
 >pkg : () => "pkg"
->    : ^^^^^^^^^^^
+>    : ^^^^^^     
 
 export const x = pkg();
 >x : "pkg"
@@ -26,5 +26,5 @@ export const x = pkg();
 >pkg() : "pkg"
 >      : ^^^^^
 >pkg : () => "pkg"
->    : ^^^^^^^^^^^
+>    : ^^^^^^     
 

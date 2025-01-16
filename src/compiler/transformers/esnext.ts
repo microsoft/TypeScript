@@ -14,6 +14,7 @@ import {
     ExportAssignment,
     ExportSpecifier,
     Expression,
+    firstOrUndefined,
     ForOfStatement,
     ForStatement,
     GeneratedIdentifierFlags,
@@ -73,7 +74,8 @@ const enum UsingKind {
 export function transformESNext(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
     //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-    //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
+    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+    //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 
     const {
         factory,
@@ -305,11 +307,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             //
             // before handing the shallow transformation back to the visitor for an in-depth transformation.
             const forInitializer = node.initializer;
-            Debug.assertNode(forInitializer, isUsingVariableDeclarationList);
-            Debug.assert(forInitializer.declarations.length === 1, "ForInitializer may only have one declaration");
-
-            const forDecl = forInitializer.declarations[0];
-            Debug.assert(!forDecl.initializer, "ForInitializer may not have an initializer");
+            const forDecl = firstOrUndefined(forInitializer.declarations) || factory.createVariableDeclaration(factory.createTempVariable(/*recordTempVariable*/ undefined));
 
             const isAwaitUsing = getUsingKindOfVariableDeclarationList(forInitializer) === UsingKind.Async;
             const temp = factory.getGeneratedNameForNode(forDecl.name);

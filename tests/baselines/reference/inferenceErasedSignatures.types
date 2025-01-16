@@ -9,7 +9,7 @@ declare class SomeBaseClass {
 
     set<K extends keyof this>(key: K, value: this[K]): this[K];
 >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^       ^^^^^       
+>    : ^ ^^^^^^^^^          ^^   ^^ ^^     ^^       ^^^^^       
 >key : K
 >    : ^
 >value : this[K]
@@ -89,7 +89,7 @@ type SomeClassR = RType<SomeClass>; // boolean
 interface BaseType<T1, T2>  {
     set<K extends keyof this>(key: K, value: this[K]): this[K];
 >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^       ^^^^^       
+>    : ^ ^^^^^^^^^          ^^   ^^ ^^     ^^       ^^^^^       
 >key : K
 >    : ^
 >value : this[K]
@@ -126,7 +126,7 @@ interface InheritedType extends BaseType<number, boolean> {
 interface StructuralVersion  {
     set<K extends keyof this>(key: K, value: this[K]): this[K];
 >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^       ^^^^^       
+>    : ^ ^^^^^^^^^          ^^   ^^ ^^     ^^       ^^^^^       
 >key : K
 >    : ^
 >value : this[K]

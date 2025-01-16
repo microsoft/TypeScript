@@ -22,7 +22,7 @@ module MyModule {
 
         @inject leftLeg: Leg;
 >inject : (target: any, key: string) => void
->       : ^      ^^   ^^   ^^      ^^^^^^^^^
+>       : ^      ^^   ^^   ^^      ^^^^^    
 >leftLeg : Leg
 >        : ^^^
     }

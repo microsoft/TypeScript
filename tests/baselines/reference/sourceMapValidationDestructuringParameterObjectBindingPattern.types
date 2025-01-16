@@ -52,11 +52,11 @@ function foo1({ name: nameA }: Robot) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
->        : ^^^^^^   ^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
->    : ^   ^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^    
 >nameA : string
 >      : ^^^^^^
 }
@@ -76,11 +76,11 @@ function foo2({ name: nameB, skill: skillB }: Robot) {
 >console.log(nameB) : void
 >                   : ^^^^
 >console.log : (msg: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
->        : ^^^^^^   ^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
->    : ^   ^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^    
 >nameB : string
 >      : ^^^^^^
 }
@@ -94,11 +94,11 @@ function foo3({ name }: Robot) {
 >console.log(name) : void
 >                  : ^^^^
 >console.log : (msg: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
->        : ^^^^^^   ^^      ^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
->    : ^   ^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^    
 >name : string
 >     : ^^^^^^
 }

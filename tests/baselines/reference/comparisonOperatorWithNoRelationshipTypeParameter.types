@@ -188,7 +188,7 @@ function foo<T, U>(t: T, u: U) {
 >t : T
 >  : ^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
     var r1a7 = t < g;
 >r1a7 : boolean
@@ -256,7 +256,7 @@ function foo<T, U>(t: T, u: U) {
 >f < t : boolean
 >      : ^^^^^^^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : T
 >  : ^
 
@@ -329,7 +329,7 @@ function foo<T, U>(t: T, u: U) {
 >t : T
 >  : ^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
     var r2a7 = t < g;
 >r2a7 : boolean
@@ -397,7 +397,7 @@ function foo<T, U>(t: T, u: U) {
 >f < t : boolean
 >      : ^^^^^^^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : T
 >  : ^
 
@@ -470,7 +470,7 @@ function foo<T, U>(t: T, u: U) {
 >t : T
 >  : ^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
     var r3a7 = t < g;
 >r3a7 : boolean
@@ -538,7 +538,7 @@ function foo<T, U>(t: T, u: U) {
 >f < t : boolean
 >      : ^^^^^^^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : T
 >  : ^
 
@@ -611,7 +611,7 @@ function foo<T, U>(t: T, u: U) {
 >t : T
 >  : ^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
     var r4a7 = t < g;
 >r4a7 : boolean
@@ -679,7 +679,7 @@ function foo<T, U>(t: T, u: U) {
 >f < t : boolean
 >      : ^^^^^^^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : T
 >  : ^
 
@@ -752,7 +752,7 @@ function foo<T, U>(t: T, u: U) {
 >t : T
 >  : ^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
     var r5a7 = t < g;
 >r5a7 : boolean
@@ -820,7 +820,7 @@ function foo<T, U>(t: T, u: U) {
 >f < t : boolean
 >      : ^^^^^^^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : T
 >  : ^
 
@@ -893,7 +893,7 @@ function foo<T, U>(t: T, u: U) {
 >t : T
 >  : ^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
     var r6a7 = t < g;
 >r6a7 : boolean
@@ -961,7 +961,7 @@ function foo<T, U>(t: T, u: U) {
 >f < t : boolean
 >      : ^^^^^^^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : T
 >  : ^
 
@@ -1034,7 +1034,7 @@ function foo<T, U>(t: T, u: U) {
 >t : T
 >  : ^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
     var r7a7 = t < g;
 >r7a7 : boolean
@@ -1102,7 +1102,7 @@ function foo<T, U>(t: T, u: U) {
 >f < t : boolean
 >      : ^^^^^^^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : T
 >  : ^
 
@@ -1175,7 +1175,7 @@ function foo<T, U>(t: T, u: U) {
 >t : T
 >  : ^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
     var r8a7 = t < g;
 >r8a7 : boolean
@@ -1243,7 +1243,7 @@ function foo<T, U>(t: T, u: U) {
 >f < t : boolean
 >      : ^^^^^^^
 >f : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >t : T
 >  : ^
 

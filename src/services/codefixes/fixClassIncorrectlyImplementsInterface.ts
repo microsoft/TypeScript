@@ -55,7 +55,7 @@ registerCodeFix({
     },
     fixIds: [fixId],
     getAllCodeActions(context) {
-        const seenClassDeclarations = new Map<number, true>();
+        const seenClassDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const classDeclaration = getClass(diag.file, diag.start);
             if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
@@ -108,7 +108,7 @@ function addMissingDeclarations(
     function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
         const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
         if (indexInfoOfKind) {
-            insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
+            insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, classDeclaration, /*flags*/ undefined, /*internalFlags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
         }
     }
 

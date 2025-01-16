@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/declarationEmitEnumReferenceViaImportEquals.ts] ////
+
+=== translation.ts ===
+export interface Translation {
+>Translation : Symbol(Translation, Decl(translation.ts, 0, 0), Decl(translation.ts, 2, 1))
+
+  translationKey: Translation.TranslationKeyEnum;
+>translationKey : Symbol(Translation.translationKey, Decl(translation.ts, 0, 30))
+>Translation : Symbol(Translation, Decl(translation.ts, 0, 0), Decl(translation.ts, 2, 1))
+>TranslationKeyEnum : Symbol(Translation.TranslationKeyEnum, Decl(translation.ts, 4, 30), Decl(translation.ts, 6, 14))
+}
+
+export namespace Translation {
+>Translation : Symbol(Translation, Decl(translation.ts, 0, 0), Decl(translation.ts, 2, 1))
+
+  export type TranslationKeyEnum = 'translation1' | 'translation2';
+>TranslationKeyEnum : Symbol(TranslationKeyEnum, Decl(translation.ts, 4, 30), Decl(translation.ts, 6, 14))
+
+  export const TranslationKeyEnum = {
+>TranslationKeyEnum : Symbol(TranslationKeyEnum, Decl(translation.ts, 4, 30), Decl(translation.ts, 6, 14))
+
+    Translation1: 'translation1' as TranslationKeyEnum,
+>Translation1 : Symbol(Translation1, Decl(translation.ts, 6, 37))
+>TranslationKeyEnum : Symbol(TranslationKeyEnum, Decl(translation.ts, 4, 30), Decl(translation.ts, 6, 14))
+
+    Translation2: 'translation2' as TranslationKeyEnum,
+>Translation2 : Symbol(Translation2, Decl(translation.ts, 7, 55))
+>TranslationKeyEnum : Symbol(TranslationKeyEnum, Decl(translation.ts, 4, 30), Decl(translation.ts, 6, 14))
+  }
+}
+
+
+=== test.ts ===
+import { Translation } from "./translation";
+>Translation : Symbol(Translation, Decl(test.ts, 0, 8))
+
+import TranslationKeyEnum = Translation.TranslationKeyEnum;
+>TranslationKeyEnum : Symbol(TranslationKeyEnum, Decl(test.ts, 0, 44))
+>Translation : Symbol(Translation, Decl(test.ts, 0, 8))
+>TranslationKeyEnum : Symbol(Translation.TranslationKeyEnum, Decl(translation.ts, 4, 30), Decl(translation.ts, 6, 14))
+
+export class Test {
+>Test : Symbol(Test, Decl(test.ts, 1, 59))
+
+  TranslationKeyEnum = TranslationKeyEnum;
+>TranslationKeyEnum : Symbol(Test.TranslationKeyEnum, Decl(test.ts, 3, 19))
+>TranslationKeyEnum : Symbol(TranslationKeyEnum, Decl(test.ts, 0, 44))
+
+  print() {
+>print : Symbol(Test.print, Decl(test.ts, 4, 42))
+
+    console.log(TranslationKeyEnum.Translation1);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>TranslationKeyEnum.Translation1 : Symbol(Translation1, Decl(translation.ts, 6, 37))
+>TranslationKeyEnum : Symbol(TranslationKeyEnum, Decl(test.ts, 0, 44))
+>Translation1 : Symbol(Translation1, Decl(translation.ts, 6, 37))
+  }
+}
+
+=== index.ts ===
+import { Test } from "./test";
+>Test : Symbol(Test, Decl(index.ts, 0, 8))
+
+new Test().print();
+>new Test().print : Symbol(Test.print, Decl(test.ts, 4, 42))
+>Test : Symbol(Test, Decl(index.ts, 0, 8))
+>print : Symbol(Test.print, Decl(test.ts, 4, 42))
+

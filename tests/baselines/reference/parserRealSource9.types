@@ -903,11 +903,11 @@ module TypeScript {
 >this.bindType(scope, instanceType, null) : void
 >                                         : ^^^^
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->              : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^^^^^
+>              : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^    
 >this : this
 >     : ^^^^
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->         : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^^^^^
+>         : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^    
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >instanceType : Type
@@ -1345,11 +1345,11 @@ module TypeScript {
 >this.bindType(scope, type.elementType, null) : void
 >                                             : ^^^^
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->              : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^^^^^
+>              : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^    
 >this : this
 >     : ^^^^
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->         : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^^^^^
+>         : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^    
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >type.elementType : any
@@ -1715,11 +1715,11 @@ module TypeScript {
 >this.bindType(scope, typeSymbol.type, typeSymbol.instanceType) : void
 >                                                               : ^^^^
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->              : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^^^^^
+>              : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^    
 >this : this
 >     : ^^^^
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->         : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^^^^^
+>         : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^    
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >typeSymbol.type : any
@@ -1778,11 +1778,11 @@ module TypeScript {
 >this.bindType(scope, typeSymbol.expansions[i], typeSymbol.instanceType) : void
 >                                                                        : ^^^^
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->              : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^^^^^
+>              : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^    
 >this : this
 >     : ^^^^
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->         : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^^^^^
+>         : ^     ^^           ^^    ^^    ^^            ^^    ^^^^^    
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >typeSymbol.expansions[i] : any

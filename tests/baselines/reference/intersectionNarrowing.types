@@ -101,7 +101,7 @@ function f4<T>(x: T & 1 | T & 2) {
 
 function f5<T extends string | number>(x: T & number) {
 >f5 : <T extends string | number>(x: T & number) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^          ^^^^^^^^^
+>   : ^ ^^^^^^^^^               ^^ ^^          ^^^^^^^^^
 >x : T & number
 >  : ^^^^^^^^^^
 

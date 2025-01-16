@@ -1,0 +1,46 @@
+typeInterfaceDeclarationsInBlockStatements1.ts(4,18): error TS1156: 'type' declarations can only be declared inside a block.
+typeInterfaceDeclarationsInBlockStatements1.ts(12,21): error TS2304: Cannot find name 's'.
+typeInterfaceDeclarationsInBlockStatements1.ts(17,15): error TS1156: 'interface' declarations can only be declared inside a block.
+typeInterfaceDeclarationsInBlockStatements1.ts(29,21): error TS2304: Cannot find name 's'.
+
+
+==== typeInterfaceDeclarationsInBlockStatements1.ts (4 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/60175
+    
+    function f1() {
+      if (true) type s = string;
+                     ~
+!!! error TS1156: 'type' declarations can only be declared inside a block.
+      console.log("" as s);
+    }
+    
+    function f2() {
+      if (true) {
+        type s = string;
+      }
+      console.log("" as s);
+                        ~
+!!! error TS2304: Cannot find name 's'.
+    }
+    
+    function f3() {
+      if (true)
+        interface s {
+                  ~
+!!! error TS1156: 'interface' declarations can only be declared inside a block.
+          length: number;
+        }
+      console.log("" as s);
+    }
+    
+    function f4() {
+      if (true) {
+        interface s {
+          length: number;
+        }
+      }
+      console.log("" as s);
+                        ~
+!!! error TS2304: Cannot find name 's'.
+    }
+    

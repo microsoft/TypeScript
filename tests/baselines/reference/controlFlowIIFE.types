@@ -15,7 +15,7 @@ function f1() {
 >getStringOrNumber() : string | number
 >                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
->                  : ^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^               
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
@@ -57,7 +57,7 @@ function f2() {
 >getStringOrNumber() : string | number
 >                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
->                  : ^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^               
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
@@ -101,7 +101,7 @@ function f3() {
 >getStringOrNumber() : string | number
 >                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
->                  : ^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^               
 
     let y: number;
 >y : number
@@ -225,11 +225,11 @@ if (!test) {
 >test.slice(1) : string
 >              : ^^^^^^
 >test.slice : (start?: number, end?: number) => string
->           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^   ^^^      ^^^^^      
 >test : string
 >     : ^^^^^^
 >slice : (start?: number, end?: number) => string
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 >1 : 1
 >  : ^
 

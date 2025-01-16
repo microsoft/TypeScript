@@ -13,7 +13,7 @@ export declare class A {
 === index.d.ts ===
 export const foo: typeof import("./a").A.foo;
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 >A : any
 >  : ^^^
 >foo : any

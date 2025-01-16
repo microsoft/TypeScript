@@ -45,7 +45,7 @@ export var { a, ...x } : Foo;
 >a : number
 >  : ^^^^^^
 >x : { b: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
 === b.ts ===
 export {};
@@ -95,7 +95,7 @@ declare namespace N {
 >a : number
 >  : ^^^^^^
 >x : { b: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 }
 
 === tslib.d.ts ===

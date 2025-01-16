@@ -48,8 +48,8 @@ function getUserName(obj: Obj) {
     if (isUser(obj)) {
 >isUser(obj) : boolean
 >            : ^^^^^^^
->isUser : (obj: Obj) => obj is Partial<User>
->       : ^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>isUser : (obj: Obj) => obj is PartialUser
+>       : ^   ^^   ^^^^^                  
 >obj : Obj
 >    : ^^^
 

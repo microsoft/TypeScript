@@ -21,11 +21,11 @@ console.log(value)
 >console.log(value) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >value : error
 
 === mod.js ===

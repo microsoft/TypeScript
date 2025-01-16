@@ -36,7 +36,7 @@ Foo.prototype.bar = function (a, b) { }
 >bar : any
 >    : ^^^
 >function (a, b) { } : { (a: string): void; (a: number, b: string): void; }
->                    : ^^^ ^^      ^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^
+>                    : ^^^ ^^      ^^^    ^^^ ^^      ^^ ^^      ^^^    ^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
 >b : string

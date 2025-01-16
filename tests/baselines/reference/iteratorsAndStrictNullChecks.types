@@ -14,11 +14,11 @@ for (const x of ["a", "b"]) {
 
     x.substring;
 >x.substring : (start: number, end?: number) => string
->            : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>            : ^     ^^      ^^   ^^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 }
 
 // Spread
@@ -48,11 +48,11 @@ xs.push(...ys);
 >xs.push(...ys) : number
 >               : ^^^^^^
 >xs.push : (...items: number[]) => number
->        : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^^^^      
 >xs : number[]
 >   : ^^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >...ys : number
 >      : ^^^^^^
 >ys : number[]

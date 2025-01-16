@@ -16,7 +16,7 @@ Function.prototype.now = function () {
 >Function.prototype.now = function () {    return "now"} : () => string
 >                                                        : ^^^^^^^^^^^^
 >Function.prototype.now : () => string
->                       : ^^^^^^^^^^^^
+>                       : ^^^^^^      
 >Function.prototype : Function
 >                   : ^^^^^^^^
 >Function : FunctionConstructor
@@ -24,7 +24,7 @@ Function.prototype.now = function () {
 >prototype : Function
 >          : ^^^^^^^^
 >now : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >function () {    return "now"} : () => string
 >                               : ^^^^^^^^^^^^
 
@@ -63,11 +63,11 @@ console.log(X.now()) // works as expected
 >console.log(X.now()) : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >X.now() : {}
 >        : ^^
 >X.now : () => {}
@@ -81,19 +81,19 @@ console.log(Y.now()) // works as expected
 >console.log(Y.now()) : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >Y.now() : string
 >        : ^^^^^^
 >Y.now : () => string
->      : ^^^^^^^^^^^^
+>      : ^^^^^^      
 >Y : typeof Y
 >  : ^^^^^^^^
 >now : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 export const x: X | number = Math.random() > 0.5 ? new X() : 1
 >x : number | X
@@ -105,11 +105,11 @@ export const x: X | number = Math.random() > 0.5 ? new X() : 1
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >0.5 : 0.5
 >    : ^^^
 >new X() : X

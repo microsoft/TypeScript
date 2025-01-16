@@ -1,0 +1,10 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringPropertyNames2.ts ===
+// type Props = {
+//   <|[|fooRENAME|]: boolean;|>
+// }
+// 
+// <|let { [|fooRENAME|]: foo/*END SUFFIX*/ }: Props = null as any;|>
+// foo;
+// 
+// let asd: Props = { <|"[|fooRENAME|]"/*RENAME*/: true|> }; // rename foo here

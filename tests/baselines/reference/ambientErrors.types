@@ -11,39 +11,39 @@ declare var x = 4;
 // Ambient functions with invalid overloads
 declare function fn(x: number): string;
 >fn : { (x: number): string; (x: "foo"): number; }
->   : ^^^ ^^      ^^^      ^^^ ^^     ^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^     ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
 declare function fn(x: 'foo'): number;
 >fn : { (x: number): string; (x: "foo"): number; }
->   : ^^^ ^^      ^^^^^^^^^^^^ ^^     ^^^      ^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^     ^^^      ^^^
 >x : "foo"
 >  : ^^^^^
 
 // Ambient functions with duplicate signatures
 declare function fn1(x: number): string;
 >fn1 : { (x: number): string; (x: number): string; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
 declare function fn1(x: number): string;
 >fn1 : { (x: number): string; (x: number): string; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
 // Ambient function overloads that differ only by return type
 declare function fn2(x: number): string;
 >fn2 : { (x: number): string; (x: number): number; }
->    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
 declare function fn2(x: number): number;
 >fn2 : { (x: number): string; (x: number): number; }
->    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 

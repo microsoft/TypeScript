@@ -146,6 +146,7 @@ import {
     MissingDeclaration,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleExportName,
     NamedExports,
     NamedImports,
     NamedTupleMember,
@@ -896,6 +897,10 @@ export function isNamedExports(node: Node): node is NamedExports {
 
 export function isExportSpecifier(node: Node): node is ExportSpecifier {
     return node.kind === SyntaxKind.ExportSpecifier;
+}
+
+export function isModuleExportName(node: Node): node is ModuleExportName {
+    return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral;
 }
 
 export function isMissingDeclaration(node: Node): node is MissingDeclaration {

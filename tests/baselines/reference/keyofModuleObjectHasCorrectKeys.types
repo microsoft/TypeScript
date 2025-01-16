@@ -35,7 +35,7 @@ test(example, "default");
 >test(example, "default") : void
 >                         : ^^^^
 >test : <T>(object: T, method: keyof T) => void
->     : ^ ^^      ^^ ^^      ^^       ^^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^       ^^^^^    
 >example : typeof example
 >        : ^^^^^^^^^^^^^^
 >"default" : "default"

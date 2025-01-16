@@ -11,11 +11,11 @@ function ExpandoDecl(n: number) {
 >n.toString() : string
 >             : ^^^^^^
 >n.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 ExpandoDecl.prop = 2
 >ExpandoDecl.prop = 2 : 2
@@ -97,11 +97,11 @@ const ExpandoExpr = function (n: number) {
 >n.toString() : string
 >             : ^^^^^^
 >n.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 ExpandoExpr.prop = { x: 2 }
 >ExpandoExpr.prop = { x: 2 } : { x: number; }
@@ -211,11 +211,11 @@ const ExpandoArrow = (n: number) => n.toString();
 >n.toString() : string
 >             : ^^^^^^
 >n.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 ExpandoArrow.prop = 2
 >ExpandoArrow.prop = 2 : 2
@@ -404,7 +404,7 @@ namespace Ns {
 >ExpandoNamespace.p6 : number
 >                    : ^^^^^^
 >ExpandoNamespace : { (): void; p6: number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^    ^^^^^^^^^^^^^^^
 >p6 : number
 >   : ^^^^^^
 >42 : 42
@@ -412,11 +412,11 @@ namespace Ns {
 
     export function foo() {
 >foo : () => { (): void; p6: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
 
         return ExpandoNamespace;
 >ExpandoNamespace : { (): void; p6: number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^    ^^^^^^^^^^^^^^^
     }
 }
 
@@ -433,11 +433,11 @@ var ExpandoExpr2 = function (n: number) {
 >n.toString() : string
 >             : ^^^^^^
 >n.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 ExpandoExpr2.prop = 2
 >ExpandoExpr2.prop = 2 : 2

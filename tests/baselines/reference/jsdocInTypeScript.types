@@ -96,7 +96,7 @@ interface I<T extends number = 0> {}
 /** @template T */
 function tem<T extends number>(t: T): I<T> { return {}; }
 >tem : <T extends number>(t: T) => I<T>
->    : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^    
+>    : ^ ^^^^^^^^^      ^^ ^^ ^^^^^    
 >t : T
 >  : ^
 >{} : {}

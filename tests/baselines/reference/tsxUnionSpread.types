@@ -61,13 +61,13 @@ var props:AnimalInfo = getProps();
 >getProps() : AnimalInfo
 >           : ^^^^^^^^^^
 >getProps : () => AnimalInfo
->         : ^^^^^^^^^^^^^^^^
+>         : ^^^^^^          
 
 var component = <AnimalComponent {...props} />
 >component : error
 ><AnimalComponent {...props} /> : error
 >AnimalComponent : (info: AnimalInfo) => JSX.Element
->                : ^    ^^          ^^^^^^^^^^^^^^^^
+>                : ^    ^^          ^^^^^           
 >props : AnimalInfo
 >      : ^^^^^^^^^^
 
@@ -89,7 +89,7 @@ var component2 = <AnimalComponent {...props2} />
 >component2 : error
 ><AnimalComponent {...props2} /> : error
 >AnimalComponent : (info: AnimalInfo) => JSX.Element
->                : ^    ^^          ^^^^^^^^^^^^^^^^
+>                : ^    ^^          ^^^^^           
 >props2 : CatInfo
 >       : ^^^^^^^
 

@@ -823,7 +823,7 @@ declare function getOrgUser(id: string, orgId: number, options?: {
     y?: number;
     z?: boolean;
 }): void;
-declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args_0: T) => U;
+declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args: [...T]) => U;
 type Numbers = number[];
 type Unbounded = [...Numbers, boolean];
 declare const data: Unbounded;
@@ -846,7 +846,7 @@ type AnyArr = [...any];
  declare const tc4: [...string[], number, number, number];
  declare function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U): (T[number] | U[number])[];
 -declare const tc5: (2 | 4 | 1 | 3 | 6 | 5)[];
-+declare const tc5: (1 | 2 | 3 | 6 | 4 | 5)[];
++declare const tc5: (3 | 2 | 1 | 6 | 4 | 5)[];
  declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
  declare function foo2(t1: [number, string], t2: [boolean], a1: number[]): void;
  declare function foo3<T extends unknown[]>(x: number, ...args: [...T, number]): T;

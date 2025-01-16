@@ -24,7 +24,7 @@ class Table<S extends Schema>  {
     // Removing this line, removes the error 
     getRows<C extends keyof S>(): Array<UnrollOnHover<Pick<S, C>>> {
 >getRows : <C extends keyof S>() => Array<UnrollOnHover<Pick<S, C>>>
->        : ^ ^^^^^^^^^^^^^^^^^^^^^^^                                
+>        : ^ ^^^^^^^^^       ^^^^^^^                                
 
         return null!
 >null! : null
@@ -41,13 +41,13 @@ class ColumnSelectViewImp<S extends Schema> extends Table<S> { }
 
 const ColumnSelectView1: new <S extends Schema>() => Table<UnrollOnHover<S>> = ColumnSelectViewImp;
 >ColumnSelectView1 : new <S extends Schema>() => Table<UnrollOnHover<S>>
->                  : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^                       
+>                  : ^^^^^ ^^^^^^^^^      ^^^^^^^                       
 >ColumnSelectViewImp : typeof ColumnSelectViewImp
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const ColumnSelectView2: new <S extends Schema>() => Table<UnrollOnHover<S>> = Table;
 >ColumnSelectView2 : new <S extends Schema>() => Table<UnrollOnHover<S>>
->                  : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^                       
+>                  : ^^^^^ ^^^^^^^^^      ^^^^^^^                       
 >Table : typeof Table
 >      : ^^^^^^^^^^^^
 

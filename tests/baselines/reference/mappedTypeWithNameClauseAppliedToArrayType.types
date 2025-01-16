@@ -23,7 +23,7 @@ doArrayStuff(x);
 >doArrayStuff(x) : void
 >                : ^^^^
 >doArrayStuff : (x: unknown[]) => void
->             : ^ ^^         ^^^^^^^^^
+>             : ^ ^^         ^^^^^    
 >x : Mappy<number[]>
 >  : ^^^^^^^^^^^^^^^
 

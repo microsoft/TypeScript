@@ -1,10 +1,9 @@
+import * as Diff from "diff";
 import * as Harness from "../_namespaces/Harness.js";
 import * as ts from "../_namespaces/ts.js";
 import * as Utils from "../_namespaces/Utils.js";
 
 describe("unittests:: skipJSDocParsing", () => {
-    const Diff = require("diff");
-
     const kinds = [
         ts.JSDocParsingMode.ParseAll,
         ts.JSDocParsingMode.ParseForTypeErrors,

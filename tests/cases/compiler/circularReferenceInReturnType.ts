@@ -10,3 +10,13 @@ const res2 = fn2()(() => res2);
 
 declare function fn3<T>(): <T2>(cb: (arg: T2) => any) => (a: T) => void;
 const res3 = fn3()(() => res3);
+
+// https://github.com/microsoft/TypeScript/issues/58616
+
+function foo(arg: Parameters<typeof bar>[0]) {
+    return arg;
+}
+
+function bar(arg: string) {
+    return foo(arg);
+}

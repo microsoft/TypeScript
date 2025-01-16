@@ -9,11 +9,11 @@ a.toString();
 >a.toString() : string
 >             : ^^^^^^
 >a.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >a : object
 >  : ^^^^^^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 a.nonExist(); // error
 >a.nonExist() : any

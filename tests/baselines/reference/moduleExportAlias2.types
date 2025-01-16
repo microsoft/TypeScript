@@ -8,7 +8,7 @@ const C = require("./semver")
 >require("./semver") : typeof C
 >                    : ^^^^^^^^
 >require : (name: string) => any
->        : ^    ^^      ^^^^^^^^
+>        : ^    ^^      ^^^^^   
 >"./semver" : "./semver"
 >           : ^^^^^^^^^^
 

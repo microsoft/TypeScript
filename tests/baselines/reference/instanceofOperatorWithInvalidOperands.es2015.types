@@ -290,9 +290,9 @@ var ra10 = o5 instanceof o4;
 >o5 instanceof o4 : boolean
 >                 : ^^^^^^^
 >o5 : { y: string; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >o4 : { [Symbol.hasInstance](value: { x: number; }): boolean; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^     ^^              ^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^     ^^              ^^^       ^^^
 
 // invalid @@hasInstance method return type on RHS
 var o6: {[Symbol.hasInstance](value: unknown): number;};
@@ -317,5 +317,5 @@ var rb11 = x instanceof o6;
 >x : any
 >  : ^^^
 >o6 : { [Symbol.hasInstance](value: unknown): number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^      ^^^
 

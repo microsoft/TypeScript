@@ -18,11 +18,11 @@ function test(thing: Thing) {
 >thing.thunk("str") : void
 >                   : ^^^^
 >thing.thunk : (str: string) => void
->            : ^   ^^      ^^^^^^^^^
+>            : ^   ^^      ^^^^^    
 >thing : Thing
 >      : ^^^^^
 >thunk : (str: string) => void
->      : ^   ^^      ^^^^^^^^^
+>      : ^   ^^      ^^^^^    
 >"str" : "str"
 >      : ^^^^^
 }

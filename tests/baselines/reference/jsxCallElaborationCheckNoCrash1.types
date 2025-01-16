@@ -19,9 +19,9 @@ type Tags = "span" | "div";
 
 export const Hoc = <Tag extends Tags>(
 >Hoc : <Tag extends Tags>(TagElement: Tag) => React.SFC
->    : ^   ^^^^^^^^^^^^^^^          ^^   ^^^^^         
+>    : ^   ^^^^^^^^^    ^^          ^^   ^^^^^         
 ><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => React.SFC
->                                                                                                                       : ^   ^^^^^^^^^^^^^^^          ^^   ^^^^^         
+>                                                                                                                       : ^   ^^^^^^^^^    ^^          ^^   ^^^^^         
 
    TagElement: Tag,
 >TagElement : Tag

@@ -55,11 +55,11 @@ export const MyComp = Ctor.extends({foo: "bar"});
 >Ctor.extends({foo: "bar"}) : import("node_modules/mod/ctor").ExtendedCtor<import("node_modules/mod/ctor").Ctor>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Ctor.extends : <T>(x: T) => import("node_modules/mod/ctor").ExtendedCtor<T extends unknown ? import("node_modules/mod/ctor").Ctor : undefined>
->             : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^ ^^ ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^                            ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^             
 >Ctor : import("node_modules/mod/ctor").CtorConstructor
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extends : <T>(x: T) => import("node_modules/mod/ctor").ExtendedCtor<T extends unknown ? import("node_modules/mod/ctor").Ctor : undefined>
->        : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^ ^^ ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^                            ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^             
 >{foo: "bar"} : { foo: string; }
 >             : ^^^^^^^^^^^^^^^^
 >foo : string

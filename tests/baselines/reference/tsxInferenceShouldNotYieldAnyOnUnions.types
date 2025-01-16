@@ -43,7 +43,7 @@ ShouldInferFromData({ data: "1" });
 >ShouldInferFromData({ data: "1" }) : JSX.Element
 >                                   : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
->                    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
+>                    : ^ ^^     ^^        ^^^^^           
 >{ data: "1" } : { data: string; }
 >              : ^^^^^^^^^^^^^^^^^
 >data : string
@@ -55,7 +55,7 @@ ShouldInferFromData({ data: "1", convert: n => "" + n });
 >ShouldInferFromData({ data: "1", convert: n => "" + n }) : JSX.Element
 >                                                         : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
->                    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
+>                    : ^ ^^     ^^        ^^^^^           
 >{ data: "1", convert: n => "" + n } : { data: string; convert: (n: string) => string; }
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >data : string
@@ -79,7 +79,7 @@ ShouldInferFromData({ data: 2, convert: n => "" + n });
 >ShouldInferFromData({ data: 2, convert: n => "" + n }) : JSX.Element
 >                                                       : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
->                    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
+>                    : ^ ^^     ^^        ^^^^^           
 >{ data: 2, convert: n => "" + n } : { data: number; convert: (n: number) => string; }
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >data : number
@@ -106,7 +106,7 @@ const f1 = <ShouldInferFromData data={"1"} />;
 ><ShouldInferFromData data={"1"} /> : JSX.Element
 >                                   : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
->                    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
+>                    : ^ ^^     ^^        ^^^^^           
 >data : string
 >     : ^^^^^^
 >"1" : "1"
@@ -118,7 +118,7 @@ const f2 = <ShouldInferFromData data={"1"} convert={n => "" + n} />;
 ><ShouldInferFromData data={"1"} convert={n => "" + n} /> : JSX.Element
 >                                                         : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
->                    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
+>                    : ^ ^^     ^^        ^^^^^           
 >data : string
 >     : ^^^^^^
 >"1" : "1"
@@ -142,7 +142,7 @@ const f3 = <ShouldInferFromData data={2} convert={n => "" + n} />;
 ><ShouldInferFromData data={2} convert={n => "" + n} /> : JSX.Element
 >                                                       : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
->                    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
+>                    : ^ ^^     ^^        ^^^^^           
 >data : number
 >     : ^^^^^^
 >2 : 2

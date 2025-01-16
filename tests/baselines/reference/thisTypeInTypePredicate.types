@@ -16,7 +16,7 @@ const numbers = filter<number>((x): x is number => 'number' == typeof x)
 >filter<number>((x): x is number => 'number' == typeof x) : number[]
 >                                                         : ^^^^^^^^
 >filter : <S>(f: (this: void, x: any) => x is S) => S[]
->       : ^ ^^ ^^                              ^^^^^^^^
+>       : ^ ^^ ^^                              ^^^^^   
 >(x): x is number => 'number' == typeof x : (this: void, x: any) => x is number
 >                                         : ^    ^^    ^^ ^^^^^^^^^^           
 >x : any

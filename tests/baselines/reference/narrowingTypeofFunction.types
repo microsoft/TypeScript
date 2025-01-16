@@ -77,7 +77,7 @@ function f3(x: { _foo: number } & number) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { _foo: number; } & number
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^^^^^^^^^^
 >"function" : "function"
 >           : ^^^^^^^^^^
 

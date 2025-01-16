@@ -173,11 +173,11 @@ null, true, 1;
 >STRING.charAt(0) : string
 >                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
->              : ^   ^^      ^^^^^^^^^^^
+>              : ^   ^^      ^^^^^      
 >STRING : string
 >       : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >0 : 0
 >  : ^
 >new Object() : Object
@@ -215,11 +215,11 @@ var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
 >STRING.charAt(0) : string
 >                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
->              : ^   ^^      ^^^^^^^^^^^
+>              : ^   ^^      ^^^^^      
 >STRING : string
 >       : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >0 : 0
 >  : ^
 >new Object() : Object

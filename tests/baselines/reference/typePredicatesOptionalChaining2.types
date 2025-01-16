@@ -73,7 +73,7 @@ const getName2 = (person?: Person): string => {
 >isString(person?.name) : boolean
 >                       : ^^^^^^^
 >isString : (value: any) => value is string
->         : ^     ^^   ^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^   ^^^^^               
 >person?.name : string | undefined
 >             : ^^^^^^^^^^^^^^^^^^
 >person : Person | undefined

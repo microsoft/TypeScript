@@ -41,7 +41,7 @@ class C implements I {
 >callback('hi') : number
 >               : ^^^^^^
 >callback : (x: any) => number
->         : ^ ^^   ^^^^^^^^^^^
+>         : ^ ^^   ^^^^^      
 >'hi' : "hi"
 >     : ^^^^
 
@@ -49,7 +49,7 @@ class C implements I {
 >callback('bye') : number
 >                : ^^^^^^
 >callback : (x: any) => number
->         : ^ ^^   ^^^^^^^^^^^
+>         : ^ ^^   ^^^^^      
 >'bye' : "bye"
 >      : ^^^^^
 
@@ -63,7 +63,7 @@ class C implements I {
 >callback(hm) : number
 >             : ^^^^^^
 >callback : (x: any) => number
->         : ^ ^^   ^^^^^^^^^^^
+>         : ^ ^^   ^^^^^      
 >hm : string
 >   : ^^^^^^
 
@@ -71,7 +71,7 @@ class C implements I {
 >callback(1) : number
 >            : ^^^^^^
 >callback : (x: any) => number
->         : ^ ^^   ^^^^^^^^^^^
+>         : ^ ^^   ^^^^^      
 >1 : 1
 >  : ^
     }

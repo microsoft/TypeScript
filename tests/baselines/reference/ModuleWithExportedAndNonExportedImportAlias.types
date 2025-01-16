@@ -110,7 +110,7 @@ var p: { x: number; y: number };
 
 var p: Geometry.Points.Point;
 >p : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >Geometry : any
 >         : ^^^
 >Points : any
@@ -118,7 +118,7 @@ var p: Geometry.Points.Point;
 
 var p = Geometry.Origin;
 >p : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >Geometry.Origin : A.Point
 >                : ^^^^^^^
 >Geometry : typeof Geometry
@@ -144,7 +144,7 @@ var line: { start: { x: number; y: number }; end: { x: number; y: number; } };
 
 var line = Geometry.Unit;
 >line : { start: { x: number; y: number; }; end: { x: number; y: number; }; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^                         ^^^^^^^                         ^^^
 >Geometry.Unit : B.Line
 >              : ^^^^^^
 >Geometry : typeof Geometry
@@ -155,7 +155,7 @@ var line = Geometry.Unit;
 // not expected to work since non are exported
 var line = Geometry.Lines.Line;
 >line : { start: { x: number; y: number; }; end: { x: number; y: number; }; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^                         ^^^^^^^                         ^^^
 >Geometry.Lines.Line : any
 >                    : ^^^
 >Geometry.Lines : any

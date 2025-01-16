@@ -25,11 +25,11 @@ class A {
 >console.log("gotcha!") : void
 >                       : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"gotcha!" : "gotcha!"
 >          : ^^^^^^^^^
     }
@@ -45,11 +45,11 @@ class Baz {
 >console.log(FOO) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >FOO : "FOO"
 >    : ^^^^^
     }
@@ -70,11 +70,11 @@ class Bar {
 >console.log(FOO) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >FOO : "FOO"
 >    : ^^^^^
     }

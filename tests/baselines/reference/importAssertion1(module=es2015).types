@@ -180,7 +180,7 @@ const e = import('./0', foo())
 >foo() : any
 >      : ^^^
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 const f = import()
 >f : Promise<any>

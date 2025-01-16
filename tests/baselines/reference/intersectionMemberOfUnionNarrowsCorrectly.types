@@ -19,7 +19,7 @@ type Ex<T, U> = T extends U ? T : never;
 
 declare let x: Ex<U, { kind?: 'A' }>
 >x : { kind?: "A"; a: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^   ^^^^^      ^^^
 >kind : "A"
 >     : ^^^
 
@@ -27,7 +27,7 @@ x.a
 >x.a : string
 >    : ^^^^^^
 >x : { kind?: "A"; a: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^   ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 

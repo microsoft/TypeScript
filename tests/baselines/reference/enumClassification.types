@@ -270,11 +270,11 @@ enum E20 {
 >Math.sin(1) : number
 >            : ^^^^^^
 >Math.sin : (x: number) => number
->         : ^ ^^      ^^^^^^^^^^^
+>         : ^ ^^      ^^^^^      
 >Math : Math
 >     : ^^^^
 >sin : (x: number) => number
->    : ^ ^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >1 : 1
 >  : ^
 }

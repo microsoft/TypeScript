@@ -5,7 +5,7 @@
 
 function foo<T extends Record<string | symbol, any>>(target: T, p: string | symbol) {
 >foo : <T extends Record<string | symbol, any>>(target: T, p: string | symbol) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^ ^^               ^^^^^^^^^
+>    : ^ ^^^^^^^^^                            ^^      ^^ ^^ ^^               ^^^^^^^^^
 >target : T
 >       : ^
 >p : string | symbol
@@ -25,8 +25,8 @@ function foo<T extends Record<string | symbol, any>>(target: T, p: string | symb
 }
 
 function foo2<T extends number[] & { [s: string]: number | string }>(target: T, p: string | number) {
->foo2 : <T extends number[] & { [s: string]: string | number; }>(target: T, p: string | number) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^ ^^               ^^^^^^^^^
+>foo2 : <T extends number[] & { [s: string]: number | string; }>(target: T, p: string | number) => void
+>     : ^ ^^^^^^^^^                                            ^^      ^^ ^^ ^^               ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >target : T

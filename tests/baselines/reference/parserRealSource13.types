@@ -904,7 +904,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 >AstWalkerCallback(true, cur, callback) : boolean
 >                                       : ^^^^^^^
 >AstWalkerCallback : (pre: boolean, ast: AST, callback: AstWalkerDetailCallback) => boolean
->                  : ^   ^^       ^^   ^^   ^^        ^^                       ^^^^^^^^^^^^
+>                  : ^   ^^       ^^   ^^   ^^        ^^                       ^^^^^       
 >true : true
 >     : ^^^^
 >cur : AST
@@ -931,7 +931,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 >AstWalkerCallback(false, cur, callback) : boolean
 >                                        : ^^^^^^^
 >AstWalkerCallback : (pre: boolean, ast: AST, callback: AstWalkerDetailCallback) => boolean
->                  : ^   ^^       ^^   ^^   ^^        ^^                       ^^^^^^^^^^^^
+>                  : ^   ^^       ^^   ^^   ^^        ^^                       ^^^^^       
 >false : false
 >      : ^^^^^
 >cur : AST
@@ -1047,21 +1047,21 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         if (callback.DefaultCallback) {
 >callback.DefaultCallback : (pre: any, ast: AST) => boolean
->                         : ^   ^^^^^^^   ^^   ^^^^^^^^^^^^
+>                         : ^   ^^^^^^^   ^^   ^^^^^       
 >callback : AstWalkerDetailCallback
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >DefaultCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^   ^^^^^^^^^^^^
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 
             return callback.DefaultCallback(pre, ast);
 >callback.DefaultCallback(pre, ast) : boolean
 >                                   : ^^^^^^^
 >callback.DefaultCallback : (pre: any, ast: AST) => boolean
->                         : ^   ^^^^^^^   ^^   ^^^^^^^^^^^^
+>                         : ^   ^^^^^^^   ^^   ^^^^^       
 >callback : AstWalkerDetailCallback
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >DefaultCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^   ^^^^^^^^^^^^
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : boolean
 >    : ^^^^^^^
 >ast : AST

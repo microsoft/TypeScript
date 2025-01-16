@@ -24,30 +24,30 @@ export function foo(): string;
 export {}
 React.foo;
 >React.foo : () => string
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >React : typeof import("module")
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 === emits.ts ===
 console.log("hello");
 >console.log("hello") : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"hello" : "hello"
 >        : ^^^^^^^
 
 React.foo;
 >React.foo : () => string
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >React : typeof import("module")
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 

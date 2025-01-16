@@ -51,11 +51,11 @@ var x: IWithNoCallSignatures | IWithCallSignatures = a => a.toString();
 >a.toString() : string
 >             : ^^^^^^
 >a.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 // With call signatures with different return type
 var x2: IWithCallSignatures | IWithCallSignatures2 = a => a.toString(); // Like iWithCallSignatures
@@ -68,11 +68,11 @@ var x2: IWithCallSignatures | IWithCallSignatures2 = a => a.toString(); // Like 
 >a.toString() : string
 >             : ^^^^^^
 >a.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 var x2: IWithCallSignatures | IWithCallSignatures2 = a => a; // Like iWithCallSignatures2
 >x2 : IWithCallSignatures | IWithCallSignatures2
@@ -109,9 +109,9 @@ var x4: IWithCallSignatures | IWithCallSignatures4 = a => /*here a should be any
 >a.toString() : string
 >             : ^^^^^^
 >a.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 

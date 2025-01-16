@@ -19,7 +19,7 @@ declare module "m" {
 
     export function bar(): X.bar; // error
 >bar : () => X.bar
->    : ^^^^^^^^^^^
+>    : ^^^^^^     
 >X : any
 >  : ^^^
 }

@@ -32,7 +32,7 @@ export class ClassA {
 >annotation() : PropertyDecorator
 >             : ^^^^^^^^^^^^^^^^^
 >annotation : () => PropertyDecorator
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^                 
 >array : SomeClass
 >      : ^^^^^^^^^
 }

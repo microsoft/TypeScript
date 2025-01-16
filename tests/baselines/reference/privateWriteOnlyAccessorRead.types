@@ -51,13 +51,13 @@ class Test {
 >console.log(this.#value) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >this.#value : { foo: { bar: number; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^                ^^^
 >this : this
 >     : ^^^^
 
@@ -65,7 +65,7 @@ class Test {
 >this.#value = { foo } : { foo: { bar: number; }; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#value : { foo: { bar: number; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^                ^^^
 >this : this
 >     : ^^^^
 >{ foo } : { foo: { bar: number; }; }
@@ -77,7 +77,7 @@ class Test {
 >this.#value = { foo } : { foo: { bar: number; }; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.#value : { foo: { bar: number; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^                ^^^
 >this : this
 >     : ^^^^
 >{ foo } : { foo: { bar: number; }; }
@@ -89,13 +89,13 @@ class Test {
 >this.#value.foo = foo : { bar: number; }
 >                      : ^^^^^^^^^^^^^^^^
 >this.#value.foo : { bar: number; }
->                : ^^^^^^^^^^^^^^^^
+>                : ^^^^^^^      ^^^
 >this.#value : { foo: { bar: number; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^                ^^^
 >this : this
 >     : ^^^^
 >foo : { bar: number; }
->    : ^^^^^^^^^^^^^^^^
+>    : ^^^^^^^      ^^^
 >foo : { bar: number; }
 >    : ^^^^^^^^^^^^^^^^
 
@@ -105,11 +105,11 @@ class Test {
 >{ o: this.#value } = { o: { foo } } : { o: { foo: { bar: number; }; }; }
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ o: this.#value } : { o: { foo: { bar: number; }; }; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^^^^^^                ^^^^^^
 >o : { foo: { bar: number; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^                ^^^
 >this.#value : { foo: { bar: number; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^                ^^^
 >this : this
 >     : ^^^^
 >{ o: { foo } } : { o: { foo: { bar: number; }; }; }
@@ -127,9 +127,9 @@ class Test {
 >{ ...this.#value } = { foo } : { foo: { bar: number; }; }
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...this.#value } : { foo: { bar: number; }; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^                ^^^
 >this.#value : { foo: { bar: number; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^                ^^^
 >this : this
 >     : ^^^^
 >{ foo } : { foo: { bar: number; }; }
@@ -143,17 +143,17 @@ class Test {
 >{ foo: this.#value.foo } = { foo } : { foo: { bar: number; }; }
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ foo: this.#value.foo } : { foo: { bar: number; }; }
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^^^^^^^^^      ^^^^^^
 >foo : { bar: number; }
->    : ^^^^^^^^^^^^^^^^
+>    : ^^^^^^^      ^^^
 >this.#value.foo : { bar: number; }
->                : ^^^^^^^^^^^^^^^^
+>                : ^^^^^^^      ^^^
 >this.#value : { foo: { bar: number; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^                ^^^
 >this : this
 >     : ^^^^
 >foo : { bar: number; }
->    : ^^^^^^^^^^^^^^^^
+>    : ^^^^^^^      ^^^
 >{ foo } : { foo: { bar: number; }; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bar: number; }
@@ -165,21 +165,21 @@ class Test {
 >{      foo: { ...this.#value.foo },    } = { foo } : { foo: { bar: number; }; }
 >                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      foo: { ...this.#value.foo },    } : { foo: { bar: number; }; }
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^^^^^^^^^^^^^^      ^^^^^^
 
       foo: { ...this.#value.foo },
 >foo : { bar: number; }
->    : ^^^^^^^^^^^^^^^^
+>    : ^^^^^^^      ^^^
 >{ ...this.#value.foo } : { bar: number; }
->                       : ^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^      ^^^
 >this.#value.foo : { bar: number; }
->                : ^^^^^^^^^^^^^^^^
+>                : ^^^^^^^      ^^^
 >this.#value : { foo: { bar: number; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^                ^^^
 >this : this
 >     : ^^^^
 >foo : { bar: number; }
->    : ^^^^^^^^^^^^^^^^
+>    : ^^^^^^^      ^^^
 
     } = { foo }); //error
 >{ foo } : { foo: { bar: number; }; }
@@ -189,13 +189,13 @@ class Test {
 
     let r = { o: this.#value }; //error
 >r : { o: { foo: { bar: number; }; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^                ^^^^^^
 >{ o: this.#value } : { o: { foo: { bar: number; }; }; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^^^^^^                ^^^^^^
 >o : { foo: { bar: number; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^                ^^^
 >this.#value : { foo: { bar: number; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^                ^^^
 >this : this
 >     : ^^^^
 

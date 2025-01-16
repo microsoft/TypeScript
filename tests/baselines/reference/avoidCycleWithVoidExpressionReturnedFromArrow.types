@@ -35,15 +35,15 @@ class Howl {
 >console.log(name, fn) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >name : "unlock"
 >     : ^^^^^^^^
 >fn : () => void
->   : ^^^^^^^^^^
+>   : ^^^^^^    
   }
 }
 

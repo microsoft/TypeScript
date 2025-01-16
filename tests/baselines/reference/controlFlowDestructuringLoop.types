@@ -52,7 +52,7 @@ function foo(things: Val[]): void {
 >isNumVal(thing) : boolean
 >                : ^^^^^^^
 >isNumVal : (x: Val) => x is NumVal
->         : ^ ^^   ^^^^^^^^^^^^^^^^
+>         : ^ ^^   ^^^^^           
 >thing : Val
 >      : ^^^
 
@@ -66,11 +66,11 @@ function foo(things: Val[]): void {
 >val.toFixed(2) : string
 >               : ^^^^^^
 >val.toFixed : (fractionDigits?: number) => string
->            : ^              ^^^      ^^^^^^^^^^^
+>            : ^              ^^^      ^^^^^      
 >val : number
 >    : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 >2 : 2
 >  : ^
         }

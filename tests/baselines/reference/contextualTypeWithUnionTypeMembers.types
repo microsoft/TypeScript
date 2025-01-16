@@ -478,11 +478,11 @@ var i11Ori21: I11 | I21 = {
 >a.charAt(b) : string
 >            : ^^^^^^
 >a.charAt : (pos: number) => string
->         : ^   ^^      ^^^^^^^^^^^
+>         : ^   ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >b : number
 >  : ^^^^^^
 
@@ -521,11 +521,11 @@ var i11Ori21: I11 | I21 = {
 >a.charCodeAt(b) : number
 >                : ^^^^^^
 >a.charCodeAt : (index: number) => number
->             : ^     ^^      ^^^^^^^^^^^
+>             : ^     ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
->           : ^     ^^      ^^^^^^^^^^^
+>           : ^     ^^      ^^^^^      
 >b : number
 >  : ^^^^^^
 
@@ -576,11 +576,11 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 >a.charAt(b) : string
 >            : ^^^^^^
 >a.charAt : (pos: number) => string
->         : ^   ^^      ^^^^^^^^^^^
+>         : ^   ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >b : number
 >  : ^^^^^^
 
@@ -616,11 +616,11 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 >a.charCodeAt(b) : number
 >                : ^^^^^^
 >a.charCodeAt : (index: number) => number
->             : ^     ^^      ^^^^^^^^^^^
+>             : ^     ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
->           : ^     ^^      ^^^^^^^^^^^
+>           : ^     ^^      ^^^^^      
 >b : number
 >  : ^^^^^^
 

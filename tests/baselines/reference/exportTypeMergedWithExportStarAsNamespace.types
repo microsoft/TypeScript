@@ -11,11 +11,11 @@ export const myValue: Something<string> = Something.of("abc")
 >Something.of("abc") : import("Something").Something<string>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Something.of : <A>(value: A) => import("Something").Something<A>
->             : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^     ^^ ^^^^^       ^^^^^^^^^^^^^^^^^  ^^^^^^^^^   
 >Something : typeof import("Something")
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >of : <A>(value: A) => import("Something").Something<A>
->   : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^     ^^ ^^^^^       ^^^^^^^^^^^^^^^^^  ^^^^^^^^^   
 >"abc" : "abc"
 >      : ^^^^^
 

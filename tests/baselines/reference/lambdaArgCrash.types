@@ -43,7 +43,7 @@ class Event {
 >this._listeners.push(listener) : number
 >                               : ^^^^^^
 >this._listeners.push : (...items: any[]) => number
->                     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^     ^^^^^^^^^^^^      
 >this._listeners : any[]
 >                : ^^^^^
 >this : this
@@ -51,9 +51,9 @@ class Event {
 >_listeners : any[]
 >           : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >listener : () => any
->         : ^^^^^^^^^
+>         : ^^^^^^   
 
 	}
 
@@ -77,13 +77,13 @@ class ItemSetEvent extends Event {
 >super.add(listener) : void
 >                    : ^^^^
 >super.add : (listener: () => any) => void
->          : ^        ^^         ^^^^^^^^^
+>          : ^        ^^         ^^^^^    
 >super : Event
 >      : ^^^^^
 >add : (listener: () => any) => void
->    : ^        ^^         ^^^^^^^^^
+>    : ^        ^^         ^^^^^    
 >listener : (items: ItemSet) => void
->         : ^     ^^       ^^^^^^^^^
+>         : ^     ^^       ^^^^^    
 
 	}
 

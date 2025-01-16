@@ -6563,11 +6563,11 @@ module TypeScript {
 >this.getText() : string
 >               : ^^^^^^
 >this.getText : () => string
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 >this : this
 >     : ^^^^
 >getText : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >" (" : " ("
 >     : ^^^^
 >(<any>TokenID)._map[this.tokenId] : any
@@ -6683,7 +6683,7 @@ module TypeScript {
 >lookupToken(this.tokenId) : TokenInfo
 >                          : ^^^^^^^^^
 >lookupToken : (tokenId: TokenID) => TokenInfo
->            : ^       ^^       ^^^^^^^^^^^^^^
+>            : ^       ^^       ^^^^^         
 >this.tokenId : TokenID
 >             : ^^^^^^^
 >this : this
@@ -6801,7 +6801,7 @@ module TypeScript {
 >this.value.toString() : string
 >                      : ^^^^^^
 >this.value.toString : (radix?: number) => string
->                    : ^     ^^^      ^^^^^^^^^^^
+>                    : ^     ^^^      ^^^^^      
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -6809,13 +6809,13 @@ module TypeScript {
 >value : number
 >      : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 >".0" : ".0"
 >     : ^^^^
 >this.value.toString() : string
 >                      : ^^^^^^
 >this.value.toString : (radix?: number) => string
->                    : ^     ^^^      ^^^^^^^^^^^
+>                    : ^     ^^^      ^^^^^      
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -6823,7 +6823,7 @@ module TypeScript {
 >value : number
 >      : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
         }
 
         public classification(): TokenClass {

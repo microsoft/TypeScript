@@ -28,11 +28,11 @@ var z2 = foo.y() + 10; // Should resolve
 >foo.y() : number
 >        : ^^^^^^
 >foo.y : () => number
->      : ^^^^^^^^^^^^
+>      : ^^^^^^      
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >y : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 >10 : 10
 >   : ^^
 

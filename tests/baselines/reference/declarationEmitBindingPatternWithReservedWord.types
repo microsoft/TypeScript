@@ -36,9 +36,9 @@ export interface GetLocalesOptions<T extends LocaleData> {
 
 export const getLocales = <T extends LocaleData>({
 >getLocales : <T extends LocaleData>({ app, name, default: defaultLocalesConfig, config: userLocalesConfig, }: GetLocalesOptions<T>) => ConvertLocaleConfig<T>
->           : ^ ^^^^^^^^^^^^^^^^^^^^^                                                                        ^^                    ^^^^^                      
+>           : ^ ^^^^^^^^^          ^^                                                                        ^^                    ^^^^^                      
 ><T extends LocaleData>({    app,    name,    default: defaultLocalesConfig,    config: userLocalesConfig = {},}: GetLocalesOptions<T>): ConvertLocaleConfig<T> => {    return defaultLocalesConfig;} : <T extends LocaleData>({ app, name, default: defaultLocalesConfig, config: userLocalesConfig, }: GetLocalesOptions<T>) => ConvertLocaleConfig<T>
->                                                                                                                                                                                                     : ^ ^^^^^^^^^^^^^^^^^^^^^                                                                        ^^                    ^^^^^                      
+>                                                                                                                                                                                                     : ^ ^^^^^^^^^          ^^                                                                        ^^                    ^^^^^                      
 
     app,
 >app : unknown

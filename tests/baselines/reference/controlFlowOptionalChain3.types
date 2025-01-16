@@ -149,22 +149,22 @@ function test4(options?: { a?: boolean; b?: boolean }) {
 >                     : ^^^^^^^
 >options?.a : boolean | undefined
 >           : ^^^^^^^^^^^^^^^^^^^
->options : { a?: boolean | undefined; b?: boolean | undefined; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>options : { a?: boolean; b?: boolean; } | undefined
+>        : ^^^^^^       ^^^^^^       ^^^^^^^^^^^^^^^
 >a : boolean | undefined
 >  : ^^^^^^^^^^^^^^^^^^^
 >false : false
 >      : ^^^^^
 >options.b : boolean | undefined
 >          : ^^^^^^^^^^^^^^^^^^^
->options : { a?: boolean | undefined; b?: boolean | undefined; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>options : { a?: boolean; b?: boolean; } | undefined
+>        : ^^^^^^       ^^^^^^       ^^^^^^^^^^^^^^^
 >b : boolean | undefined
 >  : ^^^^^^^^^^^^^^^^^^^
 
     options;
->options : { a?: boolean | undefined; b?: boolean | undefined; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>options : { a?: boolean; b?: boolean; } | undefined
+>        : ^^^^^^       ^^^^^^       ^^^^^^^^^^^^^^^
   }
 }
 

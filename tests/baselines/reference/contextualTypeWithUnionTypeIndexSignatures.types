@@ -108,11 +108,11 @@ var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a.to
 >a.toString() : string
 >             : ^^^^^^
 >a.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a }; // a should be number
 >x2 : IWithStringIndexSignature1 | IWithStringIndexSignature2
@@ -184,11 +184,11 @@ var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a.to
 >a.toString() : string
 >             : ^^^^^^
 >a.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a }; // a should be number
 >x4 : IWithNumberIndexSignature1 | IWithNumberIndexSignature2

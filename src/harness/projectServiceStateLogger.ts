@@ -9,6 +9,7 @@ import {
     isString,
     noop,
     SourceMapper,
+    toSorted,
 } from "./_namespaces/ts.js";
 import {
     AutoImportProviderProject,
@@ -30,6 +31,7 @@ interface ProjectData {
     projectStateVersion: Project["projectStateVersion"];
     projectProgramVersion: Project["projectProgramVersion"];
     dirty: Project["dirty"];
+    initialLoadPending: Project["initialLoadPending"];
     isClosed: ReturnType<Project["isClosed"]>;
     isOrphan: ReturnType<Project["isOrphan"]>;
     noOpenRef: boolean;
@@ -66,7 +68,7 @@ enum Diff {
 type StatePropertyLog = string | string[];
 type StateItemLog = [string, StatePropertyLog[]];
 
-export function patchServiceForStateBaseline(service: ProjectService) {
+export function patchServiceForStateBaseline(service: ProjectService): void {
     if (!service.logger.isTestLogger || !service.logger.hasLevel(LogLevel.verbose)) return;
     if (service.baseline !== noop) return; // Already patched
 
@@ -93,7 +95,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
     function sendLogsToLogger(title: string, logs: StateItemLog[] | undefined) {
         if (!logs) return;
         logger.log(title);
-        logs.sort((a, b) => compareStringsCaseSensitive(a[0], b[0]))
+        toSorted(logs, (a, b) => compareStringsCaseSensitive(a[0], b[0]))
             .forEach(([title, propertyLogs]) => {
                 logger.log(title);
                 propertyLogs.forEach(p => isString(p) ? logger.log(p) : p.forEach(s => logger.log(s)));
@@ -104,7 +106,11 @@ export function patchServiceForStateBaseline(service: ProjectService) {
     function baselineProjects(currentMappers: Set<DocumentPositionMapper>) {
         const autoImportProviderProjects = [] as AutoImportProviderProject[];
         const auxiliaryProjects = [] as AuxiliaryProject[];
-        const orphanConfiguredProjects = service.getOrphanConfiguredProjects(/*toRetainConfiguredProjects*/ undefined);
+        const orphanConfiguredProjects = service.getOrphanConfiguredProjects(
+            /*toRetainConfiguredProjects*/ undefined,
+            /*openFilesWithRetainedConfiguredProject*/ undefined,
+            /*externalProjectsRetainingConfiguredProjects*/ undefined,
+        );
         const noOpenRef = (project: Project) => isConfiguredProject(project) && (project.isClosed() || orphanConfiguredProjects.has(project));
         return baselineState(
             [service.externalProjects, service.configuredProjects, service.inferredProjects, autoImportProviderProjects, auxiliaryProjects],
@@ -118,6 +124,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectStateVersion", project.projectStateVersion, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectProgramVersion", project.projectProgramVersion, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "dirty", project.dirty, projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "initialLoadPending", project.initialLoadPending, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isClosed", project.isClosed(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isOrphan", !isBackgroundProject(project) && project.isOrphan(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", noOpenRef(project), projectDiff, projectPropertyLogs);
@@ -149,6 +156,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 projectStateVersion: project.projectStateVersion,
                 projectProgramVersion: project.projectProgramVersion,
                 dirty: project.dirty,
+                initialLoadPending: project.initialLoadPending,
                 isClosed: project.isClosed(),
                 isOrphan: !isBackgroundProject(project) && project.isOrphan(),
                 noOpenRef: noOpenRef(project),

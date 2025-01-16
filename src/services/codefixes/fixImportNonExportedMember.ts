@@ -119,7 +119,7 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         const moduleSpecifier = isStringLiteral(importDeclaration.moduleSpecifier) ? importDeclaration.moduleSpecifier : undefined;
         if (moduleSpecifier === undefined) return undefined;
 
-        const resolvedModule = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
+        const resolvedModule = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier, sourceFile)?.resolvedModule;
         if (resolvedModule === undefined) return undefined;
 
         const moduleSourceFile = program.getSourceFile(resolvedModule.resolvedFileName);

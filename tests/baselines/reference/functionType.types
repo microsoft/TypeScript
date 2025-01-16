@@ -8,11 +8,11 @@ function salt() {}
 salt.apply("hello", []);
 >salt.apply("hello", []) : any
 >salt.apply : (this: Function, thisArg: any, argArray?: any) => any
->           : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>           : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >salt : () => void
 >     : ^^^^^^^^^^
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
 >"hello" : "hello"
 >        : ^^^^^^^
 >[] : undefined[]

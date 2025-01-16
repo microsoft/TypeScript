@@ -3,7 +3,7 @@
 === collisionThisExpressionAndLocalVarInLambda.ts ===
 declare function alert(message?: any): void;
 >alert : { (message?: any): void; (message?: any): void; }
->      : ^^^       ^^^   ^^^^^^^^^^       ^^^   ^^^    ^^^
+>      : ^^^       ^^^   ^^^    ^^^       ^^^   ^^^    ^^^
 >message : any
 
 var x = {
@@ -38,7 +38,7 @@ alert(x.doStuff(x => alert(x)));
 >alert(x.doStuff(x => alert(x))) : void
 >                                : ^^^^
 >alert : { (message?: any): void; (message?: any): void; }
->      : ^^^       ^^^   ^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>      : ^^^       ^^^   ^^^    ^^^       ^^^   ^^^    ^^^
 >x.doStuff(x => alert(x)) : () => any
 >                         : ^^^^^^^^^
 >x.doStuff : (callback: any) => () => any
@@ -53,6 +53,6 @@ alert(x.doStuff(x => alert(x)));
 >alert(x) : void
 >         : ^^^^
 >alert : { (message?: any): void; (message?: any): void; }
->      : ^^^       ^^^   ^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>      : ^^^       ^^^   ^^^    ^^^       ^^^   ^^^    ^^^
 >x : any
 

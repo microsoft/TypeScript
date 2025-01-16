@@ -3,13 +3,13 @@
 === noUnusedLocals_typeParameterMergedWithParameter.ts ===
 function useNone<T>(T: number) {}
 >useNone : <T>(T: number) => void
->        : ^^^^ ^^      ^^^^^^^^^
+>        : ^ ^^ ^^      ^^^^^^^^^
 >T : number
 >  : ^^^^^^
 
 function useParam<T>(T: number) {
 >useParam : <T>(T: number) => number
->         : ^^^^ ^^      ^^^^^^^^^^^
+>         : ^ ^^ ^^      ^^^^^^^^^^^
 >T : number
 >  : ^^^^^^
 
