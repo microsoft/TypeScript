@@ -1,0 +1,53 @@
+//// [tests/cases/conformance/importDefer/dynamicImportDefer.ts] ////
+
+=== a.ts ===
+export function foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+  console.log("foo from a");
+>console.log("foo from a") : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"foo from a" : "foo from a"
+>             : ^^^^^^^^^^^^
+}
+
+=== b.ts ===
+import.defer("a").then(ns => {
+>import.defer("a").then(ns => {  ns.foo();}) : Promise<void>
+>                                            : ^^^^^^^^^^^^^
+>import.defer("a").then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                       : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import.defer("a") : Promise<any>
+>                  : ^^^^^^^^^^^^
+>import.defer : any
+>             : ^^^
+>defer : any
+>      : ^^^
+>"a" : "a"
+>    : ^^^
+>then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ns => {  ns.foo();} : (ns: any) => void
+>                    : ^  ^^^^^^^^^^^^^^
+>ns : any
+>   : ^^^
+
+  ns.foo();
+>ns.foo() : any
+>         : ^^^
+>ns.foo : any
+>       : ^^^
+>ns : any
+>   : ^^^
+>foo : any
+>    : ^^^
+
+});
+

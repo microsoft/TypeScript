@@ -5130,7 +5130,7 @@ declare namespace ts {
         readonly expression: SuperExpression;
     }
     interface ImportCall extends CallExpression {
-        readonly expression: ImportExpression;
+        readonly expression: ImportExpression | ImportDeferProperty;
     }
     interface ExpressionWithTypeArguments extends MemberExpression, NodeWithTypeArguments {
         readonly kind: SyntaxKind.ExpressionWithTypeArguments;
@@ -5179,6 +5179,12 @@ declare namespace ts {
         readonly kind: SyntaxKind.MetaProperty;
         readonly keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword;
         readonly name: Identifier;
+    }
+    interface ImportDeferProperty extends MetaProperty {
+        readonly keywordToken: SyntaxKind.ImportKeyword;
+        readonly name: Identifier & {
+            readonly escapedText: __String & "defer";
+        };
     }
     interface JsxElement extends PrimaryExpression {
         readonly kind: SyntaxKind.JsxElement;

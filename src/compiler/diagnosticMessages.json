@@ -8463,5 +8463,9 @@
     "Deferred imports are only supported when the '--module' flag is set to 'esnext'.": {
         "category": "Error",
         "code": 18060
+    },
+    "'import.defer' must be followed by '('": {
+        "category": "Error",
+        "code": 18061
     }
 }

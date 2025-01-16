@@ -38065,7 +38065,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_node18_or_nodenext);
         }
         const file = getSourceFileOfNode(node);
-        Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
+        Debug.assert(node.name.escapedText === "defer" || !!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
         return node.name.escapedText === "meta" ? getGlobalImportMetaType() : errorType;
     }
 
@@ -41613,8 +41613,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ElementAccessExpression:
                 return checkIndexedAccess(node as ElementAccessExpression, checkMode);
             case SyntaxKind.CallExpression:
-                if ((node as CallExpression).expression.kind === SyntaxKind.ImportKeyword) {
-                    return checkImportCallExpression(node as ImportCall);
+                if (isImportCall(node)) {
+                    return checkImportCallExpression(node);
                 }
                 // falls through
             case SyntaxKind.NewExpression:
@@ -52854,8 +52854,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 break;
             case SyntaxKind.ImportKeyword:
-                if (escapedText !== "meta") {
-                    return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), "meta");
+                if (escapedText !== "meta" && escapedText !== "defer") {
+                    const suggestion = node.parent.kind === SyntaxKind.CallExpression && (node.parent as CallExpression).expression === node
+                        ? "meta' or 'defer"
+                        : "meta";
+                    return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), suggestion);
                 }
                 break;
         }
@@ -53144,6 +53147,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return grammarErrorOnNode(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
         }
 
+        if (node.expression.kind === SyntaxKind.MetaProperty) {
+            if (moduleKind !== ModuleKind.ESNext) {
+                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext);
+            }
+        }
         if (moduleKind === ModuleKind.ES2015) {
             return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_or_nodenext);
         }

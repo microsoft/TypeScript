@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/importDefer/dynamicImportDeferMissingModuleESNext.ts] ////
+
+=== b.ts ===
+import.defer("a").then(ns => {
+>import.defer("a").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>ns : Symbol(ns, Decl(b.ts, 0, 23))
+
+  ns.foo();
+>ns : Symbol(ns, Decl(b.ts, 0, 23))
+
+});
+

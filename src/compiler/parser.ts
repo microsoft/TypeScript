@@ -5939,7 +5939,18 @@ namespace Parser {
                 nextToken(); // advance past the 'import'
                 nextToken(); // advance past the dot
                 expression = finishNode(factory.createMetaProperty(SyntaxKind.ImportKeyword, parseIdentifierName()), pos);
-                sourceFlags |= NodeFlags.PossiblyContainsImportMeta;
+
+                if ((expression as MetaProperty).name.escapedText === "defer") {
+                    if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
+                        sourceFlags |= NodeFlags.PossiblyContainsDynamicImport;
+                    }
+                    else {
+                        parseErrorAt(pos, getNodePos(), Diagnostics.import_defer_must_be_followed_by);
+                    }
+                }
+                else {
+                    sourceFlags |= NodeFlags.PossiblyContainsImportMeta;
+                }
             }
             else {
                 expression = parseMemberExpressionOrHigher();
