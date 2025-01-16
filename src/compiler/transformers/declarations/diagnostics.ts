@@ -767,7 +767,7 @@ export function createGetIsolatedDeclarationErrors(resolver: EmitResolver): (nod
         if (isSetAccessor(node.parent)) {
             return createAccessorTypeError(node.parent);
         }
-        const addUndefined = resolver.requiresAddingImplicitUndefined(node, findAncestor(node, isFunctionLikeDeclaration));
+        const addUndefined = resolver.requiresAddingImplicitUndefined(node, node.parent);
         if (!addUndefined && node.initializer) {
             return createExpressionError(node.initializer);
         }
