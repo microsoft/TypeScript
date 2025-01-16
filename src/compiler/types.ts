@@ -3713,7 +3713,7 @@ export type NamedExportBindings =
 export interface ImportClause extends NamedDeclaration {
     readonly kind: SyntaxKind.ImportClause;
     readonly parent: ImportDeclaration | JSDocImportTag;
-    /** @deprecated */ readonly isTypeOnly: boolean | "hello";
+    /** @deprecated */ readonly isTypeOnly: boolean;
     readonly phaseModifier: undefined | ImportPhaseModifier;
     readonly name?: Identifier; // Default binding
     readonly namedBindings?: NamedImportBindings;

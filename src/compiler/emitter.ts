@@ -3690,10 +3690,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             emitTokenWithComment(node.phaseModifier, node.pos, writeKeyword, node);
             writeSpace();
         }
-        else if (node.isTypeOnly) {
-            emitTokenWithComment(SyntaxKind.TypeKeyword, node.pos, writeKeyword, node);
-            writeSpace();
-        }
         emit(node.name);
         if (node.name && node.namedBindings) {
             emitTokenWithComment(SyntaxKind.CommaToken, node.name.end, writePunctuation, node);

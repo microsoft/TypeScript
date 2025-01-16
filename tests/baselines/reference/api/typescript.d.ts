@@ -5519,7 +5519,7 @@ declare namespace ts {
     interface ImportClause extends NamedDeclaration {
         readonly kind: SyntaxKind.ImportClause;
         readonly parent: ImportDeclaration | JSDocImportTag;
-        /** @deprecated */ readonly isTypeOnly: boolean | "hello";
+        /** @deprecated */ readonly isTypeOnly: boolean;
         readonly phaseModifier: undefined | ImportPhaseModifier;
         readonly name?: Identifier;
         readonly namedBindings?: NamedImportBindings;
