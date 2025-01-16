@@ -1,0 +1,183 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardWeakTypes1.ts] ////
+
+=== typeGuardWeakTypes1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60979
+
+export interface FilesCleanupCliFlags {
+  readonly dryRun?: boolean;
+>dryRun : boolean | undefined
+>       : ^^^^^^^^^^^^^^^^^^^
+
+  readonly outputPath?: string;
+>outputPath : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+}
+
+function checkCliFlags(
+>checkCliFlags : (flags: FilesCleanupCliFlags) => flags is { readonly dryRun: true; readonly outputPath: string; } | { readonly dryRun?: false; }
+>              : ^     ^^                    ^^^^^                                                                                               
+
+  flags: FilesCleanupCliFlags,
+>flags : FilesCleanupCliFlags
+>      : ^^^^^^^^^^^^^^^^^^^^
+
+): flags is
+  | { readonly dryRun: true; readonly outputPath: string }
+>dryRun : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+>outputPath : string
+>           : ^^^^^^
+
+  | { readonly dryRun?: false } {
+>dryRun : false | undefined
+>       : ^^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+  if (flags.dryRun && !flags.outputPath) {
+>flags.dryRun && !flags.outputPath : boolean | undefined
+>                                  : ^^^^^^^^^^^^^^^^^^^
+>flags.dryRun : boolean | undefined
+>             : ^^^^^^^^^^^^^^^^^^^
+>flags : FilesCleanupCliFlags
+>      : ^^^^^^^^^^^^^^^^^^^^
+>dryRun : boolean | undefined
+>       : ^^^^^^^^^^^^^^^^^^^
+>!flags.outputPath : boolean
+>                  : ^^^^^^^
+>flags.outputPath : string | undefined
+>                 : ^^^^^^^^^^^^^^^^^^
+>flags : FilesCleanupCliFlags
+>      : ^^^^^^^^^^^^^^^^^^^^
+>outputPath : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+
+    throw new Error(
+>new Error(      "The --outputPath option is required in dry-run mode and must specify the full file path.",    ) : Error
+>                                                                                                                 : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+
+      "The --outputPath option is required in dry-run mode and must specify the full file path.",
+>"The --outputPath option is required in dry-run mode and must specify the full file path." : "The --outputPath option is required in dry-run mode and must specify the full file path."
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    );
+  }
+  return true;
+>true : true
+>     : ^^^^
+}
+
+function main() {
+>main : () => void
+>     : ^^^^^^^^^^
+
+  const options: FilesCleanupCliFlags = {};
+>options : FilesCleanupCliFlags
+>        : ^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+  if (checkCliFlags(options)) {
+>checkCliFlags(options) : boolean
+>                       : ^^^^^^^
+>checkCliFlags : (flags: FilesCleanupCliFlags) => flags is { readonly dryRun: true; readonly outputPath: string; } | { readonly dryRun?: false; }
+>              : ^     ^^                    ^^^^^                                                                                               
+>options : FilesCleanupCliFlags
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+    const { dryRun, outputPath } = options;
+>dryRun : boolean | undefined
+>       : ^^^^^^^^^^^^^^^^^^^
+>outputPath : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+>options : { readonly dryRun: true; readonly outputPath: string; } | (FilesCleanupCliFlags & { readonly dryRun?: false; })
+>        : ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^
+  }
+}
+
+function checkCliFlagsWithAsserts(
+>checkCliFlagsWithAsserts : (flags: FilesCleanupCliFlags) => asserts flags is { readonly dryRun: true; readonly outputPath: string; } | { readonly dryRun?: false; }
+>                         : ^     ^^                    ^^^^^                                                                                                       
+
+  flags: FilesCleanupCliFlags,
+>flags : FilesCleanupCliFlags
+>      : ^^^^^^^^^^^^^^^^^^^^
+
+): asserts flags is
+  | { readonly dryRun: true; readonly outputPath: string }
+>dryRun : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+>outputPath : string
+>           : ^^^^^^
+
+  | { readonly dryRun?: false } {
+>dryRun : false | undefined
+>       : ^^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+
+  if (flags.dryRun && !flags.outputPath) {
+>flags.dryRun && !flags.outputPath : boolean | undefined
+>                                  : ^^^^^^^^^^^^^^^^^^^
+>flags.dryRun : boolean | undefined
+>             : ^^^^^^^^^^^^^^^^^^^
+>flags : FilesCleanupCliFlags
+>      : ^^^^^^^^^^^^^^^^^^^^
+>dryRun : boolean | undefined
+>       : ^^^^^^^^^^^^^^^^^^^
+>!flags.outputPath : boolean
+>                  : ^^^^^^^
+>flags.outputPath : string | undefined
+>                 : ^^^^^^^^^^^^^^^^^^
+>flags : FilesCleanupCliFlags
+>      : ^^^^^^^^^^^^^^^^^^^^
+>outputPath : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+
+    throw new Error(
+>new Error(      "The --outputPath option is required in dry-run mode and must specify the full file path.",    ) : Error
+>                                                                                                                 : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+
+      "The --outputPath option is required in dry-run mode and must specify the full file path.",
+>"The --outputPath option is required in dry-run mode and must specify the full file path." : "The --outputPath option is required in dry-run mode and must specify the full file path."
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    );
+  }
+}
+
+function mainWithAsserts() {
+>mainWithAsserts : () => void
+>                : ^^^^^^^^^^
+
+  const options: FilesCleanupCliFlags = {};
+>options : FilesCleanupCliFlags
+>        : ^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+  checkCliFlagsWithAsserts(options);
+>checkCliFlagsWithAsserts(options) : void
+>                                  : ^^^^
+>checkCliFlagsWithAsserts : (flags: FilesCleanupCliFlags) => asserts flags is { readonly dryRun: true; readonly outputPath: string; } | { readonly dryRun?: false; }
+>                         : ^     ^^                    ^^^^^                                                                                                       
+>options : FilesCleanupCliFlags
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+  const { dryRun, outputPath } = options;
+>dryRun : boolean | undefined
+>       : ^^^^^^^^^^^^^^^^^^^
+>outputPath : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
+>options : { readonly dryRun: true; readonly outputPath: string; } | (FilesCleanupCliFlags & { readonly dryRun?: false; })
+>        : ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^
+}
+
