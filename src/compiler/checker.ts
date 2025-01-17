@@ -38024,9 +38024,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (node.name.escapedText === "defer") {
                 Debug.assert(!isCallExpression(node.parent) || node.parent.expression !== node, "Trying to get the type of `import.defer` in `import.defer(...)`");
                 return errorType;
-            } else {
-                return checkImportMetaProperty(node);
             }
+            return checkImportMetaProperty(node);
         }
 
         return Debug.assertNever(node.keywordToken);
@@ -49963,9 +49962,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (isExpressionNode(node)) {
             try {
-            return getRegularTypeOfExpression(node as Expression);
-            } catch (e) {
-                console.error("Error while getting the type of", isExpressionNode(node), node.kind, (node as MetaProperty).keywordToken !== SyntaxKind.ImportKeyword, (node as MetaProperty).name?.escapedText)
+                return getRegularTypeOfExpression(node as Expression);
+            }
+            catch (e) {
+                console.error("Error while getting the type of", isExpressionNode(node), node.kind, (node as MetaProperty).keywordToken !== SyntaxKind.ImportKeyword, (node as MetaProperty).name?.escapedText);
                 throw e;
             }
         }
