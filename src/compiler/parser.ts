@@ -8390,11 +8390,7 @@ namespace Parser {
         }
         else if (identifier?.escapedText === "defer" && token() !== SyntaxKind.FromKeyword) {
             phaseModifier = SyntaxKind.DeferKeyword;
-            identifier = undefined;
-            if (isIdentifier()) {
-                parseErrorAtCurrentToken(Diagnostics.Default_imports_are_not_allowed_in_a_deferred_import);
-                identifier = parseIdentifier();
-            }
+            identifier = isIdentifier() ? parseIdentifier() : undefined;
         }
 
         if (identifier && !tokenAfterImportedIdentifierDefinitelyProducesImportDeclaration() && phaseModifier !== SyntaxKind.DeferKeyword) {
@@ -8506,9 +8502,6 @@ namespace Parser {
                 namedBindings = parseNamespaceImport();
             }
             else {
-                if (phaseModifier === SyntaxKind.DeferKeyword) {
-                    parseErrorAtCurrentToken(Diagnostics.Named_imports_are_not_allowed_in_a_deferred_import);
-                }
                 namedBindings = parseNamedImportsOrExports(SyntaxKind.NamedImports);
             }
             if (skipJsDocLeadingAsterisks) scanner.setSkipJsDocLeadingAsterisks(false);

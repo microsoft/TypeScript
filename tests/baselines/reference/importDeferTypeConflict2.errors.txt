@@ -1,4 +1,3 @@
-b.ts(1,14): error TS18058: Default imports are not allowed in a deferred import.
 b.ts(1,19): error TS1005: 'from' expected.
 b.ts(1,19): error TS1141: String literal expected.
 b.ts(1,24): error TS1005: ';' expected.
@@ -12,10 +11,8 @@ b.ts(1,28): error TS2304: Cannot find name 'from'.
       console.log("foo from a");
     }
     
-==== b.ts (7 errors) ====
+==== b.ts (6 errors) ====
     import defer type * as ns1 from "a";
-                 ~~~~
-!!! error TS18058: Default imports are not allowed in a deferred import.
                       ~
 !!! error TS1005: 'from' expected.
                       ~~~~
