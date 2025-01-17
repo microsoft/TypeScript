@@ -442,9 +442,9 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         for (const param of node.parameters) {
             if (isHintableDeclaration(param)) {
                 addParameterTypeHint(param, parameterIsThisKeyword(param) ? signature.thisParameter : signature.parameters[pos]);
-                if (parameterIsThisKeyword(param)) {
-                    continue;
-                }
+            }
+            if (parameterIsThisKeyword(param)) {
+                continue;
             }
             pos++;
         }
