@@ -179,6 +179,7 @@ import {
     isReferencedFile,
     isReferenceFileLocation,
     isRightSideOfPropertyAccess,
+    isSatisfiesExpression,
     isShorthandPropertyAssignment,
     isSourceFile,
     isStatement,
@@ -2282,7 +2283,7 @@ export namespace Core {
                     addIfImplementation(body);
                 }
             }
-            else if (isAssertionExpression(typeHavingNode)) {
+            else if (isAssertionExpression(typeHavingNode) || isSatisfiesExpression(typeHavingNode)) {
                 addIfImplementation(typeHavingNode.expression);
             }
         }
