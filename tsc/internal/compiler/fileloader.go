@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"cmp"
+	"iter"
 	"slices"
 	"strings"
 	"sync"
@@ -62,7 +63,14 @@ func processAllProgramFiles(
 
 	loader.wg.Wait()
 
-	files, libFiles := collectFiles(loader.rootTasks)
+	files, libFiles := []*ast.SourceFile{}, []*ast.SourceFile{}
+	for task := range iterTasks(loader.rootTasks) {
+		if task.isLib {
+			libFiles = append(libFiles, task.file)
+		} else {
+			files = append(files, task.file)
+		}
+	}
 	loader.sortLibs(libFiles)
 
 	return append(libFiles, files...), loader.resolvedModules
@@ -88,27 +96,27 @@ func (p *fileLoader) startTasks(tasks []*parseTask) {
 	}
 }
 
-func collectFiles(tasks []*parseTask) (files []*ast.SourceFile, libFiles []*ast.SourceFile) {
-	files = make([]*ast.SourceFile, 0)
-	libFiles = make([]*ast.SourceFile, 0)
+func iterTasks(tasks []*parseTask) iter.Seq[*parseTask] {
+	return func(yield func(*parseTask) bool) {
+		iterTasksWorker(tasks, yield)
+	}
+}
+
+func iterTasksWorker(tasks []*parseTask, yield func(*parseTask) bool) bool {
 	for _, task := range tasks {
 		if len(task.subTasks) > 0 {
-			subFiles, subLibs := collectFiles(task.subTasks)
-
-			files = append(files, subFiles...)
-			libFiles = append(libFiles, subLibs...)
+			if !iterTasksWorker(task.subTasks, yield) {
+				return false
+			}
 		}
 
 		if task.file != nil {
-			// yield the task
-			if task.isLib {
-				libFiles = append(libFiles, task.file)
-			} else {
-				files = append(files, task.file)
+			if !yield(task) {
+				return false
 			}
 		}
 	}
-	return files, libFiles
+	return true
 }
 
 func (p *fileLoader) sortLibs(libFiles []*ast.SourceFile) {
