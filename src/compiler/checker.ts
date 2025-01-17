@@ -52855,10 +52855,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
             case SyntaxKind.ImportKeyword:
                 if (escapedText !== "meta" && escapedText !== "defer") {
-                    const suggestion = node.parent.kind === SyntaxKind.CallExpression && (node.parent as CallExpression).expression === node
-                        ? "meta' or 'defer"
-                        : "meta";
-                    return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), suggestion);
+                    if (isCallExpression(node.parent) && node.parent.expression === node) {
+                        return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer, unescapeLeadingUnderscores(node.name.escapedText));
+                    }
+                    return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), "meta");
                 }
                 break;
         }

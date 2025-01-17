@@ -8463,5 +8463,9 @@
     "Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'nodenext'.": {
         "category": "Error",
         "code": 18060
+    },
+    "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
+        "category": "Error",
+        "code": 18061
     }
 }
