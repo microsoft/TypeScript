@@ -1,0 +1,45 @@
+// === Inlay Hints ===
+fn(function (this, a, b) { });
+                 ^
+{
+  "text": ": any",
+  "position": 126,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+fn(function (this, a, b) { });
+                    ^
+{
+  "text": ": number",
+  "position": 129,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+fn(function (this, a, b) { });
+                       ^
+{
+  "text": ": string",
+  "position": 132,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+fn(function (this: I, a, b) { });
+                       ^
+{
+  "text": ": number",
+  "position": 163,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+fn(function (this: I, a, b) { });
+                          ^
+{
+  "text": ": string",
+  "position": 166,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
