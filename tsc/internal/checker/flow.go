@@ -42,6 +42,7 @@ type FlowState struct {
 	refKey          string
 	depth           int
 	sharedFlowStart int
+	reduceLabels    []*ast.FlowReduceLabelData
 }
 
 func getFlowNodeOfNode(node *ast.Node) *ast.FlowNode {
@@ -133,16 +134,19 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 			t = c.getTypeAtFlowCondition(f, flow)
 		case flags&ast.FlowFlagsSwitchClause != 0:
 			t = c.getTypeAtSwitchClause(f, flow)
-		case flags&ast.FlowFlagsLabel != 0:
+		case flags&ast.FlowFlagsBranchLabel != 0:
+			antecedents := getBranchLabelAntecedents(flow, f.reduceLabels)
+			if antecedents.Next == nil {
+				flow = antecedents.Flow
+				continue
+			}
+			t = c.getTypeAtFlowBranchLabel(f, flow, antecedents)
+		case flags&ast.FlowFlagsLoopLabel != 0:
 			if flow.Antecedents.Next == nil {
 				flow = flow.Antecedents.Flow
 				continue
 			}
-			if flags&ast.FlowFlagsBranchLabel != 0 {
-				t = c.getTypeAtFlowBranchLabel(f, flow)
-			} else {
-				t = c.getTypeAtFlowLoopLabel(f, flow)
-			}
+			t = c.getTypeAtFlowLoopLabel(f, flow)
 		case flags&ast.FlowFlagsArrayMutation != 0:
 			t = c.getTypeAtFlowArrayMutation(f, flow)
 			if t.isNil() {
@@ -150,11 +154,9 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 				continue
 			}
 		case flags&ast.FlowFlagsReduceLabel != 0:
-			data := flow.Node.AsFlowReduceLabelData()
-			saveAntecedents := data.Target.Antecedents
-			data.Target.Antecedents = data.Antecedents
+			f.reduceLabels = append(f.reduceLabels, flow.Node.AsFlowReduceLabelData())
 			t = c.getTypeAtFlowNode(f, flow.Antecedent)
-			data.Target.Antecedents = saveAntecedents
+			f.reduceLabels = f.reduceLabels[:len(f.reduceLabels)-1]
 		case flags&ast.FlowFlagsStart != 0:
 			// Check if we should continue with the control flow of the containing function.
 			container := flow.Node
@@ -176,6 +178,18 @@ func (c *Checker) getTypeAtFlowNode(f *FlowState, flow *ast.FlowNode) FlowType {
 		f.depth--
 		return t
 	}
+}
+
+func getBranchLabelAntecedents(flow *ast.FlowNode, reduceLabels []*ast.FlowReduceLabelData) *ast.FlowList {
+	i := len(reduceLabels)
+	for i != 0 {
+		i--
+		data := reduceLabels[i]
+		if data.Target == flow {
+			return data.Antecedents
+		}
+	}
+	return flow.Antecedents
 }
 
 func (c *Checker) getTypeAtFlowAssignment(f *FlowState, flow *ast.FlowNode) FlowType {
@@ -1178,12 +1192,12 @@ func (c *Checker) narrowTypeBySwitchOnDiscriminantProperty(t *Type, access *ast.
 	})
 }
 
-func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode) FlowType {
+func (c *Checker) getTypeAtFlowBranchLabel(f *FlowState, flow *ast.FlowNode, antecedents *ast.FlowList) FlowType {
 	var antecedentTypes []*Type
 	subtypeReduction := false
 	seenIncomplete := false
 	var bypassFlow *ast.FlowNode
-	for list := flow.Antecedents; list != nil; list = list.Next {
+	for list := antecedents; list != nil; list = list.Next {
 		antecedent := list.Flow
 		if bypassFlow == nil && antecedent.Flags&ast.FlowFlagsSwitchClause != 0 && antecedent.Node.AsFlowSwitchClauseData().IsEmpty() {
 			// The antecedent is the bypass branch of a potentially exhaustive switch statement.
@@ -2434,6 +2448,7 @@ func (c *Checker) isReachableFlowNode(flow *ast.FlowNode) bool {
 }
 
 func (c *Checker) isReachableFlowNodeWorker(flow *ast.FlowNode, noCacheCheck bool) bool {
+	var reduceLabels []*ast.FlowReduceLabelData
 	for {
 		if flow == c.lastFlowNode {
 			return c.lastFlowNodeReachable
@@ -2470,7 +2485,7 @@ func (c *Checker) isReachableFlowNodeWorker(flow *ast.FlowNode, noCacheCheck boo
 			flow = flow.Antecedent
 		case flags&ast.FlowFlagsBranchLabel != 0:
 			// A branching point is reachable if any branch is reachable.
-			for list := flow.Antecedents; list != nil; list = list.Next {
+			for list := getBranchLabelAntecedents(flow, reduceLabels); list != nil; list = list.Next {
 				if c.isReachableFlowNodeWorker(list.Flow, false /*noCacheCheck*/) {
 					return true
 				}
@@ -2493,11 +2508,9 @@ func (c *Checker) isReachableFlowNodeWorker(flow *ast.FlowNode, noCacheCheck boo
 		case flags&ast.FlowFlagsReduceLabel != 0:
 			// Cache is unreliable once we start adjusting labels
 			c.lastFlowNode = nil
-			data := flow.Node.AsFlowReduceLabelData()
-			saveAntecedents := data.Target.Antecedents
-			data.Target.Antecedents = data.Antecedents
+			reduceLabels = append(reduceLabels, flow.Node.AsFlowReduceLabelData())
 			result := c.isReachableFlowNodeWorker(flow.Antecedent, false /*noCacheCheck*/)
-			data.Target.Antecedents = saveAntecedents
+			reduceLabels = reduceLabels[:len(reduceLabels)-1]
 			return result
 		default:
 			return flags&ast.FlowFlagsUnreachable == 0
@@ -2521,6 +2534,7 @@ func (c *Checker) isFalseExpression(expr *ast.Node) bool {
 // Return true if the given flow node is preceded by a 'super(...)' call in every possible code path
 // leading to the node.
 func (c *Checker) isPostSuperFlowNode(flow *ast.FlowNode, noCacheCheck bool) bool {
+	var reduceLabels []*ast.FlowReduceLabelData
 	for {
 		flags := flow.Flags
 		if flags&ast.FlowFlagsShared != 0 {
@@ -2542,7 +2556,7 @@ func (c *Checker) isPostSuperFlowNode(flow *ast.FlowNode, noCacheCheck bool) boo
 			}
 			flow = flow.Antecedent
 		case flags&ast.FlowFlagsBranchLabel != 0:
-			for list := flow.Antecedents; list != nil; list = list.Next {
+			for list := getBranchLabelAntecedents(flow, reduceLabels); list != nil; list = list.Next {
 				if !c.isPostSuperFlowNode(list.Flow, false /*noCacheCheck*/) {
 					return false
 				}
@@ -2552,11 +2566,9 @@ func (c *Checker) isPostSuperFlowNode(flow *ast.FlowNode, noCacheCheck bool) boo
 			// A loop is post-super if the control flow path that leads to the top is post-super.
 			flow = flow.Antecedents.Flow
 		case flags&ast.FlowFlagsReduceLabel != 0:
-			data := flow.Node.AsFlowReduceLabelData()
-			saveAntecedents := data.Target.Antecedents
-			data.Target.Antecedents = data.Antecedents
+			reduceLabels = append(reduceLabels, flow.Node.AsFlowReduceLabelData())
 			result := c.isPostSuperFlowNode(flow.Antecedent, false /*noCacheCheck*/)
-			data.Target.Antecedents = saveAntecedents
+			reduceLabels = reduceLabels[:len(reduceLabels)-1]
 			return result
 		default:
 			// Unreachable nodes are considered post-super to silence errors
