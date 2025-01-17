@@ -38022,7 +38022,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (node.keywordToken === SyntaxKind.ImportKeyword) {
             if (node.name.escapedText === "defer") {
-                // 'checkGrammarMetaProperty' already reported the error for the standalone import.defer.
+                Debug.assert(!isCallExpression(node.parent) || node.parent.expression !== node, "Trying to get the type of `import.defer` in `import.defer(...)`");
                 return errorType;
             } else {
                 return checkImportMetaProperty(node);
@@ -41464,7 +41464,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // Optimize for the common case of a call to a function with a single non-generic call
         // signature where we can just fetch the return type without checking the arguments.
-        if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !isSymbolOrSymbolForCall(expr)) {
+        if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !isSymbolOrSymbolForCall(expr) && !isImportCall(expr)) {
             return isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
                 getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
         }
@@ -49886,6 +49886,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return isExportAssignment(node.parent) ? Debug.checkDefined(node.parent.symbol) : undefined;
 
             case SyntaxKind.ImportKeyword:
+                if (isMetaProperty(node.parent) && node.parent.name.escapedText === "defer") {
+                    return undefined;
+                }
+                // falls through
             case SyntaxKind.NewKeyword:
                 return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
             case SyntaxKind.InstanceOfKeyword:
@@ -49958,7 +49962,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (isExpressionNode(node)) {
+            try {
             return getRegularTypeOfExpression(node as Expression);
+            } catch (e) {
+                console.error("Error while getting the type of", isExpressionNode(node), node.kind, (node as MetaProperty).keywordToken !== SyntaxKind.ImportKeyword, (node as MetaProperty).name?.escapedText)
+                throw e;
+            }
         }
 
         if (classType && !classDecl.isImplements) {
