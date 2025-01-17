@@ -10454,6 +10454,7 @@ export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean 
 /** @internal */
 export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
     return !!(useSite.flags & NodeFlags.Ambient)
+        || isInJSDoc(useSite)
         || isPartOfTypeQuery(useSite)
         || isIdentifierInNonEmittingHeritageClause(useSite)
         || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
@@ -10483,7 +10484,6 @@ function isIdentifierInNonEmittingHeritageClause(node: Node): boolean {
     if (node.kind !== SyntaxKind.Identifier) return false;
     const heritageClause = findAncestor(node.parent, parent => {
         switch (parent.kind) {
-            case SyntaxKind.JSDocImplementsTag:
             case SyntaxKind.HeritageClause:
                 return true;
             case SyntaxKind.PropertyAccessExpression:
@@ -10493,8 +10493,7 @@ function isIdentifierInNonEmittingHeritageClause(node: Node): boolean {
                 return "quit";
         }
     }) as HeritageClause | undefined;
-    if (heritageClause === undefined) return false;
-    return isJSDocImplementsTag(heritageClause) || heritageClause.token === SyntaxKind.ImplementsKeyword || heritageClause.parent.kind === SyntaxKind.InterfaceDeclaration;
+    return heritageClause?.token === SyntaxKind.ImplementsKeyword || heritageClause?.parent.kind === SyntaxKind.InterfaceDeclaration;
 }
 
 /** @internal */
