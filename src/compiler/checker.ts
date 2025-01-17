@@ -1824,6 +1824,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getNumberLiteralType,
         getBigIntType: () => bigintType,
         getBigIntLiteralType,
+        getUnknownType: () => unknownType,
         createPromiseType,
         createArrayType,
         getElementTypeOfArrayType,
