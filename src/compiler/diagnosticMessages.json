@@ -8452,11 +8452,11 @@
         "category": "Error",
         "code": 18057
     },
-    "Default imports aren't allowed for deferred imports.": {
+    "Default imports are not allowed in a deferred import.": {
         "category": "Error",
         "code": 18058
     },
-    "Named imports aren't allowed for deferred imports.": {
+    "Named imports are not allowed in a deferred import.": {
         "category": "Error",
         "code": 18059
     },

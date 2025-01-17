@@ -8392,7 +8392,7 @@ namespace Parser {
             phaseModifier = SyntaxKind.DeferKeyword;
             identifier = undefined;
             if (isIdentifier()) {
-                parseErrorAtCurrentToken(Diagnostics.Default_imports_aren_t_allowed_for_deferred_imports);
+                parseErrorAtCurrentToken(Diagnostics.Default_imports_are_not_allowed_in_a_deferred_import);
                 identifier = parseIdentifier();
             }
         }
@@ -8507,7 +8507,7 @@ namespace Parser {
             }
             else {
                 if (phaseModifier === SyntaxKind.DeferKeyword) {
-                    parseErrorAtCurrentToken(Diagnostics.Named_imports_aren_t_allowed_for_deferred_imports);
+                    parseErrorAtCurrentToken(Diagnostics.Named_imports_are_not_allowed_in_a_deferred_import);
                 }
                 namedBindings = parseNamedImportsOrExports(SyntaxKind.NamedImports);
             }
