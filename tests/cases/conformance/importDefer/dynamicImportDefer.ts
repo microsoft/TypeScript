@@ -1,10 +1,14 @@
-// @module: esnext
+// @module: esnext,nodenext,es2020,es2015,commonjs
+// @target: es2020
+
 // @filename: a.ts
 export function foo() {
   console.log("foo from a");
 }
 
 // @filename: b.ts
-import.defer("./a").then(ns => {
+import.defer("./a.js").then(ns => {
   ns.foo();
 });
+
+import("./a.js"); // TODO: Without this the import.defer cannot resolve ./a

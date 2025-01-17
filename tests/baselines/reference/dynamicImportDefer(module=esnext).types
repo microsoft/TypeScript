@@ -1,0 +1,58 @@
+//// [tests/cases/conformance/importDefer/dynamicImportDefer.ts] ////
+
+=== a.ts ===
+export function foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+  console.log("foo from a");
+>console.log("foo from a") : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"foo from a" : "foo from a"
+>             : ^^^^^^^^^^^^
+}
+
+=== b.ts ===
+import.defer("./a.js").then(ns => {
+>import.defer("./a.js").then(ns => {  ns.foo();}) : Promise<void>
+>                                                 : ^^^^^^^^^^^^^
+>import.defer("./a.js").then : <TResult1 = typeof import("a"), TResult2 = never>(onfulfilled?: (value: typeof import("a")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                            : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import.defer("./a.js") : Promise<typeof import("a")>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import.defer : error
+>defer : any
+>      : ^^^
+>"./a.js" : "./a.js"
+>         : ^^^^^^^^
+>then : <TResult1 = typeof import("a"), TResult2 = never>(onfulfilled?: (value: typeof import("a")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ns => {  ns.foo();} : (ns: typeof import("a")) => void
+>                    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ns : typeof import("a")
+>   : ^^^^^^^^^^^^^^^^^^
+
+  ns.foo();
+>ns.foo() : void
+>         : ^^^^
+>ns.foo : () => void
+>       : ^^^^^^^^^^
+>ns : typeof import("a")
+>   : ^^^^^^^^^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+
+});
+
+import("./a.js"); // TODO: Without this the import.defer cannot resolve ./a
+>import("./a.js") : Promise<typeof import("a")>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./a.js" : "./a.js"
+>         : ^^^^^^^^
+
