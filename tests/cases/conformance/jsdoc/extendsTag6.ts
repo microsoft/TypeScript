@@ -1,7 +1,7 @@
 // @allowJs: true
 // @checkJs: true
 // @target: esnext
-// @outDir: out
+// @noEmit: true
 // @Filename: foo.js
 
 /**
@@ -12,20 +12,10 @@ class A {
 }
 
 /**
- * @extends {A}
- * @constructor
- */
-class B extends A {
-    constructor() {
-        super();
-    }
-}
-
-/**
  * @extends { A }
  * @constructor
  */
-class C extends A {
+class B extends A {
     constructor() {
         super();
     }
