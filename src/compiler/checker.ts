@@ -53123,8 +53123,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node.isTypeOnly && node.namedBindings?.kind === SyntaxKind.NamedImports) {
             return checkGrammarNamedImportsOrExports(node.namedBindings);
         }
-        if (node.phaseModifier === SyntaxKind.DeferKeyword && moduleKind !== ModuleKind.ESNext) {
-            return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext);
+        if (node.phaseModifier === SyntaxKind.DeferKeyword && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.NodeNext) {
+            return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_nodenext);
         }
         return false;
     }
@@ -53148,11 +53148,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (node.expression.kind === SyntaxKind.MetaProperty) {
-            if (moduleKind !== ModuleKind.ESNext) {
-                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext);
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.NodeNext) {
+                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_nodenext);
             }
-        }
-        if (moduleKind === ModuleKind.ES2015) {
+        } else if (moduleKind === ModuleKind.ES2015) {
             return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_or_nodenext);
         }
 

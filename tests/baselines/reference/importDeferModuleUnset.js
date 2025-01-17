@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/importDefer/importDeferMissingModuleESNext.ts] ////
+//// [tests/cases/conformance/importDefer/importDeferModuleUnset.ts] ////
 
 //// [a.ts]
 export function foo() {
@@ -6,7 +6,7 @@ export function foo() {
 }
 
 //// [b.ts]
-import defer * as aNs from "a";
+import defer * as aNs from "./a";
 
 aNs.foo();
 
@@ -21,5 +21,5 @@ function foo() {
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var aNs = require("a");
+var aNs = require("./a");
 aNs.foo();

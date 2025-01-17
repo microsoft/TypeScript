@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/importDefer/importDeferMissingModuleESNext.ts] ////
+//// [tests/cases/conformance/importDefer/importDeferModuleNodeNext.ts] ////
 
 === a.ts ===
 export function foo() {
@@ -11,9 +11,11 @@ export function foo() {
 }
 
 === b.ts ===
-import defer * as aNs from "a";
+import defer * as aNs from "./a";
 >aNs : Symbol(aNs, Decl(b.ts, 0, 12))
 
 aNs.foo();
+>aNs.foo : Symbol(aNs.foo, Decl(a.ts, 0, 0))
 >aNs : Symbol(aNs, Decl(b.ts, 0, 12))
+>foo : Symbol(aNs.foo, Decl(a.ts, 0, 0))
 

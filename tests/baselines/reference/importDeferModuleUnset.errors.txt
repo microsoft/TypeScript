@@ -1,0 +1,15 @@
+b.ts(1,8): error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'nodenext'.
+
+
+==== a.ts (0 errors) ====
+    export function foo() {
+        console.log("foo from a");
+    }
+    
+==== b.ts (1 errors) ====
+    import defer * as aNs from "./a";
+           ~~~~~~~~~~~~~~
+!!! error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'nodenext'.
+    
+    aNs.foo();
+    

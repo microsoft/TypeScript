@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/importDefer/importDeferMissingModuleESNext.ts] ////
+//// [tests/cases/conformance/importDefer/importDeferModuleES2020.ts] ////
 
 === a.ts ===
 export function foo() {
@@ -19,17 +19,17 @@ export function foo() {
 }
 
 === b.ts ===
-import defer * as aNs from "a";
->aNs : any
->    : ^^^
+import defer * as aNs from "./a";
+>aNs : typeof aNs
+>    : ^^^^^^^^^^
 
 aNs.foo();
->aNs.foo() : any
->          : ^^^
->aNs.foo : any
->        : ^^^
->aNs : any
->    : ^^^
->foo : any
->    : ^^^
+>aNs.foo() : void
+>          : ^^^^
+>aNs.foo : () => void
+>        : ^^^^^^^^^^
+>aNs : typeof aNs
+>    : ^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
 

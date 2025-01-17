@@ -1,0 +1,20 @@
+b.ts(1,1): error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'nodenext'.
+b.ts(5,1): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
+
+
+==== a.ts (0 errors) ====
+    export function foo() {
+      console.log("foo from a");
+    }
+    
+==== b.ts (2 errors) ====
+    import.defer("./a").then(ns => {
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS18060: Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'nodenext'.
+      ns.foo();
+    });
+    
+    import("./a"); // TODO: Removing this makes the `import.defer` call complain about module not found
+    ~~~~~~~~~~~~~
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.
+    

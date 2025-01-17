@@ -2,11 +2,6 @@ b.ts(1,1): error TS18061: 'import.defer' must be followed by '('
 b.ts(3,2): error TS18061: 'import.defer' must be followed by '('
 
 
-==== a.ts (0 errors) ====
-    export function foo() {
-      console.log("foo from a");
-    }
-    
 ==== b.ts (2 errors) ====
     import.defer;
     ~~~~~~~~~~~~

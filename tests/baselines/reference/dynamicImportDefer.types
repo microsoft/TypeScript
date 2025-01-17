@@ -19,19 +19,19 @@ export function foo() {
 }
 
 === b.ts ===
-import.defer("a").then(ns => {
->import.defer("a").then(ns => {  ns.foo();}) : Promise<void>
->                                            : ^^^^^^^^^^^^^
->import.defer("a").then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->                       : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->import.defer("a") : Promise<any>
->                  : ^^^^^^^^^^^^
+import.defer("./a").then(ns => {
+>import.defer("./a").then(ns => {  ns.foo();}) : Promise<void>
+>                                              : ^^^^^^^^^^^^^
+>import.defer("./a").then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                         : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import.defer("./a") : Promise<any>
+>                    : ^^^^^^^^^^^^
 >import.defer : any
 >             : ^^^
 >defer : any
 >      : ^^^
->"a" : "a"
->    : ^^^
+>"./a" : "./a"
+>      : ^^^^^
 >then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >     : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ns => {  ns.foo();} : (ns: any) => void

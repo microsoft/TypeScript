@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/importDefer/dynamicImportDefer.ts] ////
+//// [tests/cases/conformance/importDefer/dynamicImportDeferModuleUnset.ts] ////
 
 === a.ts ===
 export function foo() {
@@ -13,11 +13,17 @@ export function foo() {
 === b.ts ===
 import.defer("./a").then(ns => {
 >import.defer("./a").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>"./a" : Symbol("a", Decl(a.ts, 0, 0))
 >then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >ns : Symbol(ns, Decl(b.ts, 0, 25))
 
   ns.foo();
+>ns.foo : Symbol(foo, Decl(a.ts, 0, 0))
 >ns : Symbol(ns, Decl(b.ts, 0, 25))
+>foo : Symbol(foo, Decl(a.ts, 0, 0))
 
 });
+
+import("./a"); // TODO: Removing this makes the `import.defer` call complain about module not found
+>"./a" : Symbol("a", Decl(a.ts, 0, 0))
 
