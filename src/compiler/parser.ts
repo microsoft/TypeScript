@@ -5945,7 +5945,7 @@ namespace Parser {
                         sourceFlags |= NodeFlags.PossiblyContainsDynamicImport;
                     }
                     else {
-                        parseErrorAt(pos, getNodePos(), Diagnostics.import_defer_must_be_followed_by);
+                        parseErrorAtCurrentToken(Diagnostics._0_expected, '(');
                     }
                 }
                 else {

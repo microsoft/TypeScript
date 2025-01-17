@@ -1,13 +1,13 @@
-b.ts(1,1): error TS18061: 'import.defer' must be followed by '('
-b.ts(3,2): error TS18061: 'import.defer' must be followed by '('
+b.ts(1,13): error TS1005: '(' expected.
+b.ts(3,14): error TS1005: '(' expected.
 
 
 ==== b.ts (2 errors) ====
     import.defer;
-    ~~~~~~~~~~~~
-!!! error TS18061: 'import.defer' must be followed by '('
+                ~
+!!! error TS1005: '(' expected.
     
     (import.defer)("a");
-     ~~~~~~~~~~~~
-!!! error TS18061: 'import.defer' must be followed by '('
+                 ~
+!!! error TS1005: '(' expected.
     
