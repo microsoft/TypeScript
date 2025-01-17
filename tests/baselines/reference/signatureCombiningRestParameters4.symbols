@@ -1,0 +1,167 @@
+//// [tests/cases/compiler/signatureCombiningRestParameters4.ts] ////
+
+=== signatureCombiningRestParameters4.ts ===
+declare class Node<Options = any> {
+>Node : Symbol(Node, Decl(signatureCombiningRestParameters4.ts, 0, 0))
+>Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 0, 19))
+
+  type: string;
+>type : Symbol(Node.type, Decl(signatureCombiningRestParameters4.ts, 0, 35))
+
+  name: string;
+>name : Symbol(Node.name, Decl(signatureCombiningRestParameters4.ts, 1, 15))
+
+  parent: Node | null;
+>parent : Symbol(Node.parent, Decl(signatureCombiningRestParameters4.ts, 2, 15))
+>Node : Symbol(Node, Decl(signatureCombiningRestParameters4.ts, 0, 0))
+
+  child: Node | null;
+>child : Symbol(Node.child, Decl(signatureCombiningRestParameters4.ts, 3, 22))
+>Node : Symbol(Node, Decl(signatureCombiningRestParameters4.ts, 0, 0))
+
+  options: Options;
+>options : Symbol(Node.options, Decl(signatureCombiningRestParameters4.ts, 4, 21))
+>Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 0, 19))
+}
+
+interface NodeConfig<Options = any> {
+>NodeConfig : Symbol(NodeConfig, Decl(signatureCombiningRestParameters4.ts, 6, 1))
+>Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 8, 21))
+
+  extendMarkSchema?:
+>extendMarkSchema : Symbol(NodeConfig.extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 8, 37))
+
+    | ((
+        this: {
+>this : Symbol(this, Decl(signatureCombiningRestParameters4.ts, 10, 8))
+
+          name: string;
+>name : Symbol(name, Decl(signatureCombiningRestParameters4.ts, 11, 15))
+
+          options: Options;
+>options : Symbol(options, Decl(signatureCombiningRestParameters4.ts, 12, 23))
+>Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 8, 21))
+
+        },
+        extension: Node,
+>extension : Symbol(extension, Decl(signatureCombiningRestParameters4.ts, 14, 10))
+>Node : Symbol(Node, Decl(signatureCombiningRestParameters4.ts, 0, 0))
+
+      ) => Record<string, any>)
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    | null;
+}
+
+declare class Mark<Options = any> {
+>Mark : Symbol(Mark, Decl(signatureCombiningRestParameters4.ts, 18, 1))
+>Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 20, 19))
+
+  options: Options;
+>options : Symbol(Mark.options, Decl(signatureCombiningRestParameters4.ts, 20, 35))
+>Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 20, 19))
+
+  config: MarkConfig;
+>config : Symbol(Mark.config, Decl(signatureCombiningRestParameters4.ts, 21, 19))
+>MarkConfig : Symbol(MarkConfig, Decl(signatureCombiningRestParameters4.ts, 23, 1))
+}
+
+interface MarkConfig<Options = any> {
+>MarkConfig : Symbol(MarkConfig, Decl(signatureCombiningRestParameters4.ts, 23, 1))
+>Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 25, 21))
+
+  extendMarkSchema?:
+>extendMarkSchema : Symbol(MarkConfig.extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 25, 37))
+
+    | ((
+        this: {
+>this : Symbol(this, Decl(signatureCombiningRestParameters4.ts, 27, 8))
+
+          name: string;
+>name : Symbol(name, Decl(signatureCombiningRestParameters4.ts, 28, 15))
+
+          options: Options;
+>options : Symbol(options, Decl(signatureCombiningRestParameters4.ts, 29, 23))
+>Options : Symbol(Options, Decl(signatureCombiningRestParameters4.ts, 25, 21))
+
+        },
+        extension: Mark,
+>extension : Symbol(extension, Decl(signatureCombiningRestParameters4.ts, 31, 10))
+>Mark : Symbol(Mark, Decl(signatureCombiningRestParameters4.ts, 18, 1))
+
+      ) => Record<string, any>)
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    | null;
+}
+
+type AnyConfig = NodeConfig | MarkConfig;
+>AnyConfig : Symbol(AnyConfig, Decl(signatureCombiningRestParameters4.ts, 35, 1))
+>NodeConfig : Symbol(NodeConfig, Decl(signatureCombiningRestParameters4.ts, 6, 1))
+>MarkConfig : Symbol(MarkConfig, Decl(signatureCombiningRestParameters4.ts, 23, 1))
+
+type AnyExtension = Node | Mark;
+>AnyExtension : Symbol(AnyExtension, Decl(signatureCombiningRestParameters4.ts, 37, 41))
+>Node : Symbol(Node, Decl(signatureCombiningRestParameters4.ts, 0, 0))
+>Mark : Symbol(Mark, Decl(signatureCombiningRestParameters4.ts, 18, 1))
+
+declare const e: AnyExtension;
+>e : Symbol(e, Decl(signatureCombiningRestParameters4.ts, 40, 13))
+>AnyExtension : Symbol(AnyExtension, Decl(signatureCombiningRestParameters4.ts, 37, 41))
+
+type RemoveThis<T> = T extends (...args: any) => any
+>RemoveThis : Symbol(RemoveThis, Decl(signatureCombiningRestParameters4.ts, 40, 30))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 42, 16))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 42, 16))
+>args : Symbol(args, Decl(signatureCombiningRestParameters4.ts, 42, 32))
+
+  ? (...args: Parameters<T>) => ReturnType<T>
+>args : Symbol(args, Decl(signatureCombiningRestParameters4.ts, 43, 5))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 42, 16))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 42, 16))
+
+  : T;
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 42, 16))
+
+declare function getExtensionField<T = any>(
+>getExtensionField : Symbol(getExtensionField, Decl(signatureCombiningRestParameters4.ts, 44, 6))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 46, 35))
+
+  extension: AnyExtension,
+>extension : Symbol(extension, Decl(signatureCombiningRestParameters4.ts, 46, 44))
+>AnyExtension : Symbol(AnyExtension, Decl(signatureCombiningRestParameters4.ts, 37, 41))
+
+  field: string,
+>field : Symbol(field, Decl(signatureCombiningRestParameters4.ts, 47, 26))
+
+): RemoveThis<T>;
+>RemoveThis : Symbol(RemoveThis, Decl(signatureCombiningRestParameters4.ts, 40, 30))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 46, 35))
+
+const extendMarkSchema = getExtensionField<AnyConfig["extendMarkSchema"]>(
+>extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 51, 5))
+>getExtensionField : Symbol(getExtensionField, Decl(signatureCombiningRestParameters4.ts, 44, 6))
+>AnyConfig : Symbol(AnyConfig, Decl(signatureCombiningRestParameters4.ts, 35, 1))
+
+  e,
+>e : Symbol(e, Decl(signatureCombiningRestParameters4.ts, 40, 13))
+
+  "extendMarkSchema",
+);
+
+declare const extension: Mark<any>;
+>extension : Symbol(extension, Decl(signatureCombiningRestParameters4.ts, 56, 13))
+>Mark : Symbol(Mark, Decl(signatureCombiningRestParameters4.ts, 18, 1))
+
+if (extendMarkSchema) {
+>extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 51, 5))
+
+  extendMarkSchema(extension); // error
+>extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 51, 5))
+>extension : Symbol(extension, Decl(signatureCombiningRestParameters4.ts, 56, 13))
+}
+
+export {};
+

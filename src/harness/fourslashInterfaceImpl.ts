@@ -449,8 +449,8 @@ export class Verify extends VerifyNegatable {
         this.state.baselineGetEmitOutput();
     }
 
-    public baselineQuickInfo(): void {
-        this.state.baselineQuickInfo();
+    public baselineQuickInfo(verbosityLevels?: FourSlash.VerbosityLevels): void {
+        this.state.baselineQuickInfo(verbosityLevels);
     }
 
     public baselineSignatureHelp(): void {
@@ -657,6 +657,9 @@ export class Verify extends VerifyNegatable {
         this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
 
+    public preparePasteEdits(options: PreparePasteEditsOptions): void {
+        this.state.verifyPreparePasteEdits(options);
+    }
     public pasteEdits(options: PasteEditsOptions): void {
         this.state.verifyPasteEdits(options);
     }
@@ -2017,6 +2020,11 @@ export interface MoveToFileOptions {
     readonly preferences?: ts.UserPreferences;
 }
 
+export interface PreparePasteEditsOptions {
+    readonly providePasteEdits: boolean;
+    readonly copiedTextRange: ts.TextRange[];
+    readonly copiedFromFile: string;
+}
 export interface PasteEditsOptions {
     readonly newFileContents: { readonly [fileName: string]: string; };
     args: ts.PasteEditsArgs;

@@ -254,8 +254,8 @@ export class SessionClient implements LanguageService {
         return { line, character: offset };
     }
 
-    getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
-        const args = this.createFileLocationRequestArgs(fileName, position);
+    getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel?: number | undefined): QuickInfo {
+        const args = { ...this.createFileLocationRequestArgs(fileName, position), verbosityLevel };
 
         const request = this.processRequest<protocol.QuickInfoRequest>(protocol.CommandTypes.Quickinfo, args);
         const response = this.processResponse<protocol.QuickInfoResponse>(request);
@@ -268,6 +268,7 @@ export class SessionClient implements LanguageService {
             displayParts: [{ kind: "text", text: body.displayString }],
             documentation: typeof body.documentation === "string" ? [{ kind: "text", text: body.documentation }] : body.documentation,
             tags: this.decodeLinkDisplayParts(body.tags),
+            canIncreaseVerbosityLevel: body.canIncreaseVerbosityLevel,
         };
     }
 
@@ -1018,6 +1019,16 @@ export class SessionClient implements LanguageService {
 
     getSupportedCodeFixes(): readonly string[] {
         return getSupportedCodeFixes();
+    }
+
+    preparePasteEditsForFile(copiedFromFile: string, copiedTextSpan: TextRange[]): boolean {
+        const args: protocol.PreparePasteEditsRequestArgs = {
+            file: copiedFromFile,
+            copiedTextSpan: copiedTextSpan.map(span => ({ start: this.positionToOneBasedLineOffset(copiedFromFile, span.pos), end: this.positionToOneBasedLineOffset(copiedFromFile, span.end) })),
+        };
+        const request = this.processRequest<protocol.PreparePasteEditsRequest>(protocol.CommandTypes.PreparePasteEdits, args);
+        const response = this.processResponse<protocol.PreparePasteEditsResponse>(request);
+        return response.body;
     }
 
     getPasteEdits(

@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/signatureOverloadsWithComments.ts] ////
+
+=== signatureOverloadsWithComments.ts ===
+/**
+ * Docs
+ */
+function Foo() {
+>Foo : Symbol(Foo, Decl(signatureOverloadsWithComments.ts, 0, 0))
+
+    return class Bar {
+>Bar : Symbol(Bar, Decl(signatureOverloadsWithComments.ts, 4, 10))
+
+        /**
+         * comment 1
+         */
+        foo(bar: string): void;
+>foo : Symbol(Bar.foo, Decl(signatureOverloadsWithComments.ts, 4, 22), Decl(signatureOverloadsWithComments.ts, 8, 31), Decl(signatureOverloadsWithComments.ts, 14, 22))
+>bar : Symbol(bar, Decl(signatureOverloadsWithComments.ts, 8, 12))
+
+        /**
+         * @deprecated This signature is deprecated
+         *
+         * comment 2
+         */
+        foo(): string;
+>foo : Symbol(Bar.foo, Decl(signatureOverloadsWithComments.ts, 4, 22), Decl(signatureOverloadsWithComments.ts, 8, 31), Decl(signatureOverloadsWithComments.ts, 14, 22))
+
+        foo(bar?: string): string | void {
+>foo : Symbol(Bar.foo, Decl(signatureOverloadsWithComments.ts, 4, 22), Decl(signatureOverloadsWithComments.ts, 8, 31), Decl(signatureOverloadsWithComments.ts, 14, 22))
+>bar : Symbol(bar, Decl(signatureOverloadsWithComments.ts, 15, 12))
+
+            return 'hi'
+        }
+    }
+}
+

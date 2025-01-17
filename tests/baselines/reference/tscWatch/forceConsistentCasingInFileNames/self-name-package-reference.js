@@ -55,7 +55,6 @@ Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/Users/name/projects/web/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath '.' with target './dist/index.js'.
 File '/Users/name/projects/web/index.ts' exists - use it as a name resolution result.
-Resolving real path for '/Users/name/projects/web/index.ts', result '/Users/name/projects/web/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/Users/name/projects/web/index.ts'. ========
 File '/home/src/tslibs/TS/Lib/package.json' does not exist.
 File '/home/src/tslibs/TS/package.json' does not exist.
