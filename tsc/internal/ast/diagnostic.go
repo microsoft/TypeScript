@@ -7,7 +7,6 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 // Diagnostic
@@ -62,16 +61,12 @@ func (d *Diagnostic) AddRelatedInfo(relatedInformation *Diagnostic) *Diagnostic 
 }
 
 func NewDiagnostic(file *SourceFile, loc core.TextRange, message *diagnostics.Message, args ...any) *Diagnostic {
-	text := message.Message()
-	if len(args) != 0 {
-		text = stringutil.Format(text, args)
-	}
 	return &Diagnostic{
 		file:     file,
 		loc:      loc,
 		code:     message.Code(),
 		category: message.Category(),
-		message:  text,
+		message:  message.Format(args...),
 	}
 }
 
