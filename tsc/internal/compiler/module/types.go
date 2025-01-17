@@ -18,8 +18,8 @@ type ResolutionHost interface {
 }
 
 type ModeAwareCacheKey struct {
-	name string
-	mode core.ResolutionMode
+	Name string
+	Mode core.ResolutionMode
 }
 
 type ResolvedProjectReference struct {

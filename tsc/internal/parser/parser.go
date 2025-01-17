@@ -256,6 +256,7 @@ func (p *Parser) parseSourceFileWorker() *ast.SourceFile {
 	result.LanguageVersion = p.languageVersion
 	result.LanguageVariant = p.languageVariant
 	result.ScriptKind = p.scriptKind
+	result.Flags |= p.sourceFlags
 	if !result.IsDeclarationFile && result.ExternalModuleIndicator != nil && len(p.possibleAwaitSpans) > 0 {
 		reparse := p.reparseTopLevelAwait(result)
 		if node != reparse {

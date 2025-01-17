@@ -1737,3 +1737,7 @@ func isJSXTagName(node *Node) bool {
 	}
 	return false
 }
+
+func IsImportCall(node *Node) bool {
+	return IsCallExpression(node) && node.AsCallExpression().Expression.Kind == KindImportKeyword
+}

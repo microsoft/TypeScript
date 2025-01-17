@@ -611,7 +611,7 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 func (r *resolutionState) tryFindNonRelativeModuleNameInCache(nameAndMode ModeAwareCacheKey, directory string) searchResult[resolved] {
 	if result, ok := r.resolver.moduleNameCache.getFromNonRelativeNameCache(nameAndMode, directory, r.redirectedReference); ok {
 		if r.resolver.traceEnabled() {
-			r.resolver.host.Trace(diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1.Format(nameAndMode.name, directory))
+			r.resolver.host.Trace(diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1.Format(nameAndMode.Name, directory))
 		}
 		r.resultFromCache = result
 		if result.IsResolved() {

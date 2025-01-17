@@ -9821,9 +9821,9 @@ func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, referencingLoc
 			return symbol
 		}
 		referenceParent := referencingLocation.Parent
-		if ast.IsImportDeclaration(referenceParent) && getNamespaceDeclarationNode(referenceParent) != nil || isImportCall(referenceParent) {
+		if ast.IsImportDeclaration(referenceParent) && getNamespaceDeclarationNode(referenceParent) != nil || ast.IsImportCall(referenceParent) {
 			var reference *ast.Node
-			if isImportCall(referenceParent) {
+			if ast.IsImportCall(referenceParent) {
 				reference = referenceParent.AsCallExpression().Arguments.Nodes[0]
 			} else {
 				reference = referenceParent.AsImportDeclaration().ModuleSpecifier
@@ -13905,13 +13905,13 @@ func (c *Checker) createPromiseLikeType(promisedType *Type) *Type {
 func (c *Checker) createPromiseReturnType(fn *ast.Node, promisedType *Type) *Type {
 	promiseType := c.createPromiseType(promisedType)
 	if promiseType == c.unknownType {
-		c.error(fn, core.IfElse(isImportCall(fn),
+		c.error(fn, core.IfElse(ast.IsImportCall(fn),
 			diagnostics.A_dynamic_import_call_returns_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option,
 			diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option))
 		return c.errorType
 	}
 	if c.getGlobalPromiseConstructorSymbol() == nil {
-		c.error(fn, core.IfElse(isImportCall(fn),
+		c.error(fn, core.IfElse(ast.IsImportCall(fn),
 			diagnostics.A_dynamic_import_call_in_ES5_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option,
 			diagnostics.An_async_function_or_method_in_ES5_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option))
 	}
@@ -22030,7 +22030,7 @@ func (c *Checker) getContextualTypeForArgument(callTarget *ast.Node, arg *ast.No
 }
 
 func (c *Checker) getContextualTypeForArgumentAtIndex(callTarget *ast.Node, argIndex int) *Type {
-	if isImportCall(callTarget) {
+	if ast.IsImportCall(callTarget) {
 		switch {
 		case argIndex == 0:
 			return c.stringType

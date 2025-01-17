@@ -1054,10 +1054,6 @@ func getNamespaceDeclarationNode(node *ast.Node) *ast.Node {
 	return nil
 }
 
-func isImportCall(node *ast.Node) bool {
-	return ast.IsCallExpression(node) && node.AsCallExpression().Expression.Kind == ast.KindImportKeyword
-}
-
 func getSourceFileOfModule(module *ast.Symbol) *ast.SourceFile {
 	declaration := module.ValueDeclaration
 	if declaration == nil {

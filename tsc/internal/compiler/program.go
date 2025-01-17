@@ -37,8 +37,10 @@ type Program struct {
 	nodeModules      map[string]*ast.SourceFile
 	checkers         []*checker.Checker
 	checkersByFile   map[*ast.SourceFile]*checker.Checker
-	resolver         *module.Resolver
 	currentDirectory string
+
+	resolver        *module.Resolver
+	resolvedModules map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
 
 	comparePathsOptions tspath.ComparePathsOptions
 	defaultLibraryPath  string
@@ -114,7 +116,7 @@ func NewProgram(options ProgramOptions) *Program {
 	}
 
 	rootFiles := walkFiles(p.host.FS(), p.rootPath, extensions)
-	p.files = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, rootFiles, libs)
+	p.files, p.resolvedModules = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, rootFiles, libs)
 	p.filesByPath = make(map[tspath.Path]*ast.SourceFile, len(p.files))
 	for _, file := range p.files {
 		p.filesByPath[file.Path()] = file
@@ -206,9 +208,13 @@ func (p *Program) getTypeCheckerForFile(file *ast.SourceFile) *checker.Checker {
 	return p.checkersByFile[file]
 }
 
-func (p *Program) GetResolvedModule(currentSourceFile *ast.SourceFile, moduleReference string) *ast.SourceFile {
-	resolved := p.resolver.ResolveModuleName(moduleReference, currentSourceFile.FileName(), core.ModuleKindNodeNext, nil)
-	return p.findSourceFile(resolved.ResolvedFileName, FileIncludeReason{FileIncludeKindImport, 0})
+func (p *Program) GetResolvedModule(file *ast.SourceFile, moduleReference string) *ast.SourceFile {
+	if resolutions, ok := p.resolvedModules[file.Path()]; ok {
+		if resolved, ok := resolutions[module.ModeAwareCacheKey{Name: moduleReference, Mode: core.ModuleKindCommonJS}]; ok {
+			return p.findSourceFile(resolved.ResolvedFileName, FileIncludeReason{FileIncludeKindImport, 0})
+		}
+	}
+	return nil
 }
 
 func (p *Program) findSourceFile(candidate string, reason FileIncludeReason) *ast.SourceFile {
