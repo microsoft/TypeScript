@@ -2,7 +2,7 @@
 package main
 
 import (
-	"flag"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jessevdk/go-flags"
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/bundled"
 	ts "github.com/microsoft/typescript-go/internal/compiler"
@@ -19,18 +20,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
-)
-
-var (
-	quiet            = false
-	singleThreaded   = false
-	parseAndBindOnly = false
-	printTypes       = false
-	pretty           = true
-	listFiles        = false
-	noLib            = false
-	pprofDir         = ""
-	outDir           = ""
 )
 
 func printDiagnostic(d *ast.Diagnostic, level int, comparePathOptions tspath.ComparePathsOptions) {
@@ -55,21 +44,52 @@ func printMessageChain(messageChain []*ast.Diagnostic, level int) {
 	}
 }
 
-func main() {
-	flag.BoolVar(&quiet, "q", false, "Quiet output")
-	flag.BoolVar(&singleThreaded, "s", false, "Single threaded")
-	flag.BoolVar(&parseAndBindOnly, "p", false, "Parse and bind only")
-	flag.BoolVar(&printTypes, "t", false, "Print types defined in main.ts")
-	flag.BoolVar(&pretty, "pretty", true, "Get prettier errors")
-	flag.BoolVar(&listFiles, "listfiles", false, "List files in the program")
-	flag.BoolVar(&noLib, "nolib", false, "Do not load lib.d.ts files")
-	flag.StringVar(&pprofDir, "pprofdir", "", "Generate pprof CPU/memory profiles to the given directory")
-	flag.StringVar(&outDir, "outdir", "", "Emit to the given directory")
-	flag.Parse()
+type cliOptions struct {
+	Tsc struct {
+		Pretty    bool   `long:"pretty" description:"Get prettier errors (default: true)"`
+		ListFiles bool   `long:"listFiles" description:"List files in the program"`
+		NoLib     bool   `long:"noLib" description:"Do not load lib.d.ts files"`
+		OutDir    string `long:"outDir" description:"Emit to the given directory"`
+	} `group:"tsc options"`
 
-	rootPath := flag.Arg(0)
+	Devel struct {
+		Quiet            bool   `short:"q" long:"quiet" description:"Do not print diagnostics"`
+		SingleThreaded   bool   `long:"singleThreaded" description:"Run in single threaded mode"`
+		ParseAndBindOnly bool   `long:"parseAndBindOnly" description:"Parse and bind only"`
+		PrintTypes       bool   `long:"printTypes" description:"Print types defined in main.ts"`
+		PprofDir         string `long:"pprofDir" description:"Generate pprof CPU/memory profiles to the given directory"`
+	} `group:"tsgo development options"`
+
+	Args struct {
+		Root string `positional-arg-name:"project root"`
+	} `positional-args:"yes"`
+}
+
+func parseArgs() *cliOptions {
+	opts := &cliOptions{}
+	opts.Tsc.Pretty = true
+
+	parser := flags.NewParser(opts, flags.HelpFlag)
+	if _, err := parser.Parse(); err != nil {
+		var parseErr *flags.Error
+		if errors.As(err, &parseErr) && parseErr.Type == flags.ErrHelp {
+			fmt.Fprintln(os.Stdout, err)
+			os.Exit(0)
+		} else {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+	}
+
+	return opts
+}
+
+func main() {
+	opts := parseArgs()
+
+	rootPath := opts.Args.Root
 	compilerOptions := &core.CompilerOptions{Strict: core.TSTrue, Target: core.ScriptTargetESNext, ModuleKind: core.ModuleKindNodeNext, NoEmit: core.TSTrue}
-	if noLib {
+	if opts.Tsc.NoLib {
 		compilerOptions.NoLib = core.TSTrue
 	}
 
@@ -79,9 +99,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	if len(outDir) > 0 {
+	if len(opts.Tsc.OutDir) > 0 {
 		compilerOptions.NoEmit = core.TSFalse
-		compilerOptions.OutDir = tspath.ResolvePath(currentDirectory, outDir)
+		compilerOptions.OutDir = tspath.ResolvePath(currentDirectory, opts.Tsc.OutDir)
 	}
 
 	fs := bundled.WrapFS(vfs.FromOS())
@@ -98,13 +118,13 @@ func main() {
 	programOptions := ts.ProgramOptions{
 		RootPath:           normalizedRootPath,
 		Options:            compilerOptions,
-		SingleThreaded:     singleThreaded,
+		SingleThreaded:     opts.Devel.SingleThreaded,
 		Host:               host,
 		DefaultLibraryPath: bundled.LibPath(),
 	}
 
-	if pprofDir != "" {
-		profileSession := beginProfiling(pprofDir)
+	if opts.Devel.PprofDir != "" {
+		profileSession := beginProfiling(opts.Devel.PprofDir)
 		defer profileSession.stop()
 	}
 
@@ -112,10 +132,10 @@ func main() {
 	program := ts.NewProgram(programOptions)
 	diagnostics := program.GetSyntacticDiagnostics(nil)
 	if len(diagnostics) == 0 {
-		if parseAndBindOnly {
+		if opts.Devel.ParseAndBindOnly {
 			diagnostics = program.GetBindDiagnostics(nil)
 		} else {
-			if printTypes {
+			if opts.Devel.PrintTypes {
 				program.PrintSourceFileWithTypes()
 			} else {
 				diagnostics = program.GetSemanticDiagnostics(nil)
@@ -125,7 +145,7 @@ func main() {
 	compileTime := time.Since(startTime)
 
 	startTime = time.Now()
-	if len(outDir) > 0 {
+	if len(opts.Tsc.OutDir) > 0 {
 		result := program.Emit(&ts.EmitOptions{})
 		diagnostics = append(diagnostics, result.Diagnostics...)
 	}
@@ -136,12 +156,12 @@ func main() {
 	runtime.GC()
 	runtime.ReadMemStats(&memStats)
 
-	if !quiet && len(diagnostics) != 0 {
+	if !opts.Devel.Quiet && len(diagnostics) != 0 {
 		comparePathOptions := tspath.ComparePathsOptions{
 			CurrentDirectory:          currentDirectory,
 			UseCaseSensitiveFileNames: useCaseSensitiveFileNames,
 		}
-		if pretty {
+		if opts.Tsc.Pretty {
 			formatOpts := diagnosticwriter.FormattingOptions{
 				NewLine:             "\n",
 				ComparePathsOptions: comparePathOptions,
@@ -156,7 +176,7 @@ func main() {
 		}
 	}
 
-	if listFiles {
+	if opts.Tsc.ListFiles {
 		for _, file := range program.SourceFiles() {
 			fmt.Println(file.FileName())
 		}
