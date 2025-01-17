@@ -38021,7 +38021,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (node.keywordToken === SyntaxKind.ImportKeyword) {
-            return checkImportMetaProperty(node);
+            if (node.name.escapedText === "defer") {
+                // 'checkGrammarMetaProperty' already reported the error for the standalone import.defer.
+                return errorType;
+            } else {
+                return checkImportMetaProperty(node);
+            }
         }
 
         return Debug.assertNever(node.keywordToken);
@@ -38065,7 +38070,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_node18_or_nodenext);
         }
         const file = getSourceFileOfNode(node);
-        Debug.assert(node.name.escapedText === "defer" || !!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
+        Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
         return node.name.escapedText === "meta" ? getGlobalImportMetaType() : errorType;
     }
 
