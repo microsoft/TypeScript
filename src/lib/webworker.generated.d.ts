@@ -4329,15 +4329,15 @@ declare var MessageEvent: {
 };
 
 interface MessageEventTargetEventMap {
-    "message": Event;
-    "messageerror": Event;
+    "message": MessageEvent;
+    "messageerror": MessageEvent;
 }
 
 interface MessageEventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DedicatedWorkerGlobalScope/message_event) */
-    onmessage: ((this: MessageEventTarget, ev: Event) => any) | null;
+    onmessage: ((this: MessageEventTarget, ev: MessageEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DedicatedWorkerGlobalScope/messageerror_event) */
-    onmessageerror: ((this: MessageEventTarget, ev: Event) => any) | null;
+    onmessageerror: ((this: MessageEventTarget, ev: MessageEvent) => any) | null;
     addEventListener<K extends keyof MessageEventTargetEventMap>(type: K, listener: (this: MessageEventTarget, ev: MessageEventTargetEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof MessageEventTargetEventMap>(type: K, listener: (this: MessageEventTarget, ev: MessageEventTargetEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -9732,9 +9732,9 @@ declare function cancelAnimationFrame(handle: number): void;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DedicatedWorkerGlobalScope/requestAnimationFrame) */
 declare function requestAnimationFrame(callback: FrameRequestCallback): number;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DedicatedWorkerGlobalScope/message_event) */
-declare var onmessage: ((this: DedicatedWorkerGlobalScope, ev: Event) => any) | null;
+declare var onmessage: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DedicatedWorkerGlobalScope/messageerror_event) */
-declare var onmessageerror: ((this: DedicatedWorkerGlobalScope, ev: Event) => any) | null;
+declare var onmessageerror: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
 declare function addEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
 declare function removeEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
