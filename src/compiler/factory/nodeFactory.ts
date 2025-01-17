@@ -135,7 +135,7 @@ import {
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
-    ImportPhaseModifier,
+    ImportPhaseModifierSyntaxKind,
     ImportSpecifier,
     ImportTypeAssertionContainer,
     ImportTypeNode,
@@ -4724,7 +4724,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createImportClause(phaseModifier: ImportPhaseModifier | boolean | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
+    function createImportClause(phaseModifier: ImportPhaseModifierSyntaxKind | boolean | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
         const node = createBaseDeclaration<ImportClause>(SyntaxKind.ImportClause);
         if (typeof phaseModifier === "boolean") {
             phaseModifier = phaseModifier ? SyntaxKind.TypeKeyword : undefined;
@@ -4743,7 +4743,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateImportClause(node: ImportClause, phaseModifier: ImportPhaseModifier | boolean | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
+    function updateImportClause(node: ImportClause, phaseModifier: ImportPhaseModifierSyntaxKind | boolean | undefined, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
         if (typeof phaseModifier === "boolean") {
             phaseModifier = phaseModifier ? SyntaxKind.TypeKeyword : undefined;
         }
