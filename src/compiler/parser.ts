@@ -5944,9 +5944,6 @@ namespace Parser {
                     if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
                         sourceFlags |= NodeFlags.PossiblyContainsDynamicImport;
                     }
-                    else {
-                        parseErrorAtCurrentToken(Diagnostics._0_expected, '(');
-                    }
                 }
                 else {
                     sourceFlags |= NodeFlags.PossiblyContainsImportMeta;

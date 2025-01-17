@@ -19,3 +19,19 @@ import.defer;
 >"a" : "a"
 >    : ^^^
 
+Function(import.defer);
+>Function(import.defer) : Function
+>                       : ^^^^^^^^
+>Function : FunctionConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+>import.defer : any
+>             : ^^^
+>defer : any
+>      : ^^^
+
+import.defer
+>import.defer : any
+>             : ^^^
+>defer : any
+>      : ^^^
+

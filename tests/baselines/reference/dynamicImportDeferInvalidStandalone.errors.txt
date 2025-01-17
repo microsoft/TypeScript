@@ -1,13 +1,22 @@
 b.ts(1,13): error TS1005: '(' expected.
 b.ts(3,14): error TS1005: '(' expected.
+b.ts(5,22): error TS1005: '(' expected.
+b.ts(7,13): error TS1005: '(' expected.
 
 
-==== b.ts (2 errors) ====
+==== b.ts (4 errors) ====
     import.defer;
-                ~
+                
 !!! error TS1005: '(' expected.
     
     (import.defer)("a");
-                 ~
+                 
 !!! error TS1005: '(' expected.
     
+    Function(import.defer);
+                         
+!!! error TS1005: '(' expected.
+    
+    import.defer
+                
+!!! error TS1005: '(' expected.

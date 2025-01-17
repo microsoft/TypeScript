@@ -52854,11 +52854,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 break;
             case SyntaxKind.ImportKeyword:
-                if (escapedText !== "meta" && escapedText !== "defer") {
-                    if (isCallExpression(node.parent) && node.parent.expression === node) {
-                        return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer, unescapeLeadingUnderscores(node.name.escapedText));
+                if (escapedText !== "meta") {
+                    const isCallee = isCallExpression(node.parent) && node.parent.expression === node;
+                    if (escapedText === "defer") {
+                        if (!isCallee) {
+                            return grammarErrorAtPos(node, node.end, 0, Diagnostics._0_expected, "(");
+                        }
                     }
-                    return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), "meta");
+                    else {
+                        if (isCallee) {
+                            return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer, unescapeLeadingUnderscores(node.name.escapedText));
+                        }
+                        return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), "meta");
+                    }
                 }
                 break;
         }
@@ -53124,12 +53132,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (node.namedBindings?.kind === SyntaxKind.NamedImports) {
                 return checkGrammarNamedImportsOrExports(node.namedBindings);
             }
-        } else if (node.phaseModifier === SyntaxKind.DeferKeyword) {
+        }
+        else if (node.phaseModifier === SyntaxKind.DeferKeyword) {
             if (node.name) {
                 return grammarErrorOnNode(node, Diagnostics.Default_imports_are_not_allowed_in_a_deferred_import);
             }
             if (node.namedBindings?.kind === SyntaxKind.NamedImports) {
-                return grammarErrorOnNode(node, Diagnostics.Named_imports_are_not_allowed_in_a_deferred_import)
+                return grammarErrorOnNode(node, Diagnostics.Named_imports_are_not_allowed_in_a_deferred_import);
             }
             if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.NodeNext) {
                 return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_nodenext);
