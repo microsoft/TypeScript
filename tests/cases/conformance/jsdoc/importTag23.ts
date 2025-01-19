@@ -1,18 +1,16 @@
-// @noUnusedLocals: true
-// @allowJs: true
 // @checkJs: true
+// @allowJs: true
 // @noEmit: true
 
-// @filename: types.d.ts
-export type T = {
-    a: number;
-};
-
-// @filename: foo.js
-/** @import { T } from "./types.d.ts" */
-
-export default async function f() {
-	/** @type {T[]} */
-	const types = [];
-	return types;
+// @filename: /a.ts
+export interface I {
+    foo(): void;
 }
+
+// @filename: /b.js
+/**
+ * @import * as NS from './a'
+ */
+
+/** @implements {NS.I} */
+export class C {}
