@@ -5,7 +5,7 @@ export type Foo = string;
 >Foo : Symbol(Foo, Decl(types.d.ts, 0, 0))
 
 === a.js ===
-/** @import { Foo } from './types.d.ts') */
+/** @import { Foo } from './types.d.ts' */
 
 function f1() { return undefined; }
 >f1 : Symbol(f1, Decl(a.js, 0, 0))

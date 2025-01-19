@@ -12,7 +12,7 @@
 export type Foo = string;
 
 // @filename: a.js
-/** @import { Foo } from './types.d.ts') */
+/** @import { Foo } from './types.d.ts' */
 
 function f1() { return undefined; }
 

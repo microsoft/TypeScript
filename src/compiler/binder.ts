@@ -1110,10 +1110,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 node.flowNode = undefined;
             }
             if (isJSDocImportTag(node)) {
-                return;
+                bindJSDocImportTag(node);
             }
-            bindEachChild(node);
-            bindJSDoc(node);
+            else {
+                bindEachChild(node);
+                bindJSDoc(node);
+            }
             inAssignmentPattern = saveInAssignmentPattern;
             return;
         }
