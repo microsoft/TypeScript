@@ -17,8 +17,8 @@ function fail(message?: string): never {
 }
 
 function f01(x: string | undefined) {
->f01 : (x: string | undefined) => void
->    : ^ ^^                  ^^^^^^^^^
+>f01 : (x: string | undefined) => asserts x is string
+>    : ^ ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -96,8 +96,8 @@ function f03(x: string) {
 }
 
 function f11(x: string | undefined, fail: (message?: string) => never) {
->f11 : (x: string | undefined, fail: (message?: string) => never) => void
->    : ^ ^^                  ^^    ^^                           ^^^^^^^^^
+>f11 : (x: string | undefined, fail: (message?: string) => never) => asserts x is string
+>    : ^ ^^                  ^^    ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >fail : (message?: string) => never
@@ -198,8 +198,8 @@ namespace Debug {
 }
 
 function f21(x: string | undefined) {
->f21 : (x: string | undefined) => void
->    : ^ ^^                  ^^^^^^^^^
+>f21 : (x: string | undefined) => asserts x is string
+>    : ^ ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 

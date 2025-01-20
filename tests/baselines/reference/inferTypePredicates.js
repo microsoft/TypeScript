@@ -280,6 +280,175 @@ if (foobarPred(foobar)) {
   foobar.foo;
 }
 
+function assertIsNumber(x: unknown) {
+  if (typeof x !== 'number') {
+    throw new Error();
+  }
+}
+
+function assertIsSmallNumber(x: unknown) {
+  if (typeof x === 'number' && x < 10) {
+    return;
+  }
+  throw new Error();
+}
+
+function assertMultipleReturns(x: unknown) {
+  if (x instanceof Date) {
+    return;
+  } else if (x instanceof RegExp) {
+    return;
+  } else {
+    throw new Error();
+  }
+}
+
+function assertChained(x: number | string) {
+  assertIsNumber(x);
+}
+
+function assertOneParam(a: unknown, b: unknown) {
+  assertIsSmallNumber(b);
+}
+
+function nonAssertion(a: number | string) {
+  if (typeof a === 'number') {
+    return;
+  } else if (typeof a === 'string') {
+    return;
+  }
+  throw new Error();
+}
+
+function justAssert(x: unknown) {
+  throw new Error();
+}
+
+function assertMultiple(a: unknown, b: unknown) {
+  assertIsNumber(a);
+  assertIsNumber(b);
+}
+
+// should not return "asserts x is Date | undefined".
+function assertOptional(x?: Date) {
+  if (x) {
+    return;
+  }
+}
+
+// should not return "asserts x is {} | null | undefined".
+function splitUnknown(x: unknown) {
+  if (x === null) {
+    return;
+  } else if (x === undefined) {
+    return;
+  }
+}
+
+function assertionViaInfiniteLoop(x: string | number) {
+  if (typeof x === 'string') {
+    for (;;) {}
+  }
+}
+
+function booleanOrVoid(a: boolean | void) {
+  if (typeof a === "undefined") {
+    a
+  }
+  a
+}
+
+function assertTrue(x: boolean) {
+  if (!x) throw new Error();
+}
+
+function assertNonNullish<T>(x: T) {
+  if (x != null) {
+    return;
+  }
+  throw new Error();
+}
+
+function assertIsShortString(x: unknown) {
+  if (typeof x !== 'string') {
+    throw new Error('Expected string');
+  } else if (x.length > 10) {
+    throw new Error('Expected short string');
+  }
+}
+
+function assertABC(x: 'A' | 'B' | 'C' | 'D' | 'E') {
+  if (x === 'A') {
+    return;  // type of x here is 'A'
+  } else if (x === 'B' || x === 'C') {
+    throw new Error();
+  }
+  // implicit return; type of x here is 'D' | E'
+}
+
+// this is not expected to be inferred as an assertion type predicate
+// due to https://github.com/microsoft/TypeScript/issues/34523
+const assertNumberArrow = (base: string | number) => {
+  if (typeof base !== 'number') {
+    throw new Error();
+  }
+};
+
+assertNumberArrow('hello'); // should ok
+
+class Test {
+  // Methods are not inferred as assertion type predicates becasue you
+  // can easily run into TS2776 (https://github.com/microsoft/TypeScript/pull/33622).
+  assert(value: unknown) {
+    if (typeof value === 'number') {
+      return;
+    }
+    throw new Error();
+  }
+}
+
+function fTest(x: unknown) {
+  const t1 = new Test();
+  t1.assert(typeof x === "string"); // should ok
+
+  const t2: Test = new Test();
+  t2.assert(typeof x === "string"); // should ok
+}
+
+interface Named {
+  name: string;
+}
+
+declare function assertName(x: any): asserts x is Named;
+declare function isNamed(x: any): x is Named;
+
+function inferFromTypePred(x: unknown) {
+  if (!isNamed(x)) {
+    throw new Error();
+  }
+}
+
+function inferFromTypePredAny(x: any) {
+  if (!isNamed(x)) {
+    throw new Error();
+  }
+}
+
+// should return void, not "asserts pattern is string"
+const assertWithFuncExpr = function (pattern: unknown) {
+  if (typeof pattern !== 'string') {
+    throw new TypeError('invalid pattern')
+  }
+
+  if (pattern.length > 1024) {
+    throw new TypeError('pattern is too long')
+  }
+}
+
+function useAssertWithFuncExpr(pattern: string) {
+  assertWithFuncExpr(pattern);
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -538,6 +707,152 @@ var foobarPred = function (fb) { return fb.type === "foo"; };
 if (foobarPred(foobar)) {
     foobar.foo;
 }
+function assertIsNumber(x) {
+    if (typeof x !== 'number') {
+        throw new Error();
+    }
+}
+function assertIsSmallNumber(x) {
+    if (typeof x === 'number' && x < 10) {
+        return;
+    }
+    throw new Error();
+}
+function assertMultipleReturns(x) {
+    if (x instanceof Date) {
+        return;
+    }
+    else if (x instanceof RegExp) {
+        return;
+    }
+    else {
+        throw new Error();
+    }
+}
+function assertChained(x) {
+    assertIsNumber(x);
+}
+function assertOneParam(a, b) {
+    assertIsSmallNumber(b);
+}
+function nonAssertion(a) {
+    if (typeof a === 'number') {
+        return;
+    }
+    else if (typeof a === 'string') {
+        return;
+    }
+    throw new Error();
+}
+function justAssert(x) {
+    throw new Error();
+}
+function assertMultiple(a, b) {
+    assertIsNumber(a);
+    assertIsNumber(b);
+}
+// should not return "asserts x is Date | undefined".
+function assertOptional(x) {
+    if (x) {
+        return;
+    }
+}
+// should not return "asserts x is {} | null | undefined".
+function splitUnknown(x) {
+    if (x === null) {
+        return;
+    }
+    else if (x === undefined) {
+        return;
+    }
+}
+function assertionViaInfiniteLoop(x) {
+    if (typeof x === 'string') {
+        for (;;) { }
+    }
+}
+function booleanOrVoid(a) {
+    if (typeof a === "undefined") {
+        a;
+    }
+    a;
+}
+function assertTrue(x) {
+    if (!x)
+        throw new Error();
+}
+function assertNonNullish(x) {
+    if (x != null) {
+        return;
+    }
+    throw new Error();
+}
+function assertIsShortString(x) {
+    if (typeof x !== 'string') {
+        throw new Error('Expected string');
+    }
+    else if (x.length > 10) {
+        throw new Error('Expected short string');
+    }
+}
+function assertABC(x) {
+    if (x === 'A') {
+        return; // type of x here is 'A'
+    }
+    else if (x === 'B' || x === 'C') {
+        throw new Error();
+    }
+    // implicit return; type of x here is 'D' | E'
+}
+// this is not expected to be inferred as an assertion type predicate
+// due to https://github.com/microsoft/TypeScript/issues/34523
+var assertNumberArrow = function (base) {
+    if (typeof base !== 'number') {
+        throw new Error();
+    }
+};
+assertNumberArrow('hello'); // should ok
+var Test = /** @class */ (function () {
+    function Test() {
+    }
+    // Methods are not inferred as assertion type predicates becasue you
+    // can easily run into TS2776 (https://github.com/microsoft/TypeScript/pull/33622).
+    Test.prototype.assert = function (value) {
+        if (typeof value === 'number') {
+            return;
+        }
+        throw new Error();
+    };
+    return Test;
+}());
+function fTest(x) {
+    var t1 = new Test();
+    t1.assert(typeof x === "string"); // should ok
+    var t2 = new Test();
+    t2.assert(typeof x === "string"); // should ok
+}
+function inferFromTypePred(x) {
+    if (!isNamed(x)) {
+        throw new Error();
+    }
+}
+function inferFromTypePredAny(x) {
+    if (!isNamed(x)) {
+        throw new Error();
+    }
+}
+// should return void, not "asserts pattern is string"
+var assertWithFuncExpr = function (pattern) {
+    if (typeof pattern !== 'string') {
+        throw new TypeError('invalid pattern');
+    }
+    if (pattern.length > 1024) {
+        throw new TypeError('pattern is too long');
+    }
+};
+function useAssertWithFuncExpr(pattern) {
+    assertWithFuncExpr(pattern);
+}
 
 
 //// [inferTypePredicates.d.ts]
@@ -630,3 +945,33 @@ declare const foobarPred: (fb: typeof foobar) => fb is {
     type: "foo";
     foo: number;
 };
+declare function assertIsNumber(x: unknown): asserts x is number;
+declare function assertIsSmallNumber(x: unknown): asserts x is number;
+declare function assertMultipleReturns(x: unknown): asserts x is RegExp | Date;
+declare function assertChained(x: number | string): asserts x is number;
+declare function assertOneParam(a: unknown, b: unknown): asserts b is number;
+declare function nonAssertion(a: number | string): void;
+declare function justAssert(x: unknown): void;
+declare function assertMultiple(a: unknown, b: unknown): asserts a is number;
+declare function assertOptional(x?: Date): void;
+declare function splitUnknown(x: unknown): void;
+declare function assertionViaInfiniteLoop(x: string | number): asserts x is number;
+declare function booleanOrVoid(a: boolean | void): void;
+declare function assertTrue(x: boolean): asserts x is true;
+declare function assertNonNullish<T>(x: T): asserts x is NonNullable<T>;
+declare function assertIsShortString(x: unknown): asserts x is string;
+declare function assertABC(x: 'A' | 'B' | 'C' | 'D' | 'E'): asserts x is "A" | "D" | "E";
+declare const assertNumberArrow: (base: string | number) => void;
+declare class Test {
+    assert(value: unknown): void;
+}
+declare function fTest(x: unknown): void;
+interface Named {
+    name: string;
+}
+declare function assertName(x: any): asserts x is Named;
+declare function isNamed(x: any): x is Named;
+declare function inferFromTypePred(x: unknown): asserts x is Named;
+declare function inferFromTypePredAny(x: any): asserts x is Named;
+declare const assertWithFuncExpr: (pattern: unknown) => void;
+declare function useAssertWithFuncExpr(pattern: string): void;

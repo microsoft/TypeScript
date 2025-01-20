@@ -15781,10 +15781,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         createTypePredicateFromTypePredicateNode(type, signature) :
                         jsdocPredicate || noTypePredicate;
                 }
-                else if (signature.declaration && isFunctionLikeDeclaration(signature.declaration) && (!signature.resolvedReturnType || signature.resolvedReturnType.flags & TypeFlags.Boolean) && getParameterCount(signature) > 0) {
+                else if (signature.declaration && isFunctionLikeDeclaration(signature.declaration) && (!signature.resolvedReturnType || signature.resolvedReturnType.flags & (TypeFlags.Boolean | TypeFlags.VoidLike)) && getParameterCount(signature) > 0) {
                     const { declaration } = signature;
                     signature.resolvedTypePredicate = noTypePredicate; // avoid infinite loop
-                    signature.resolvedTypePredicate = getTypePredicateFromBody(declaration) || noTypePredicate;
+                    if (!signature.resolvedReturnType || signature.resolvedReturnType.flags & TypeFlags.Boolean) {
+                        signature.resolvedTypePredicate = getTypePredicateFromBody(declaration) || noTypePredicate;
+                    }
+                    else if (!signature.resolvedReturnType || signature.resolvedReturnType.flags & TypeFlags.VoidLike) {
+                        signature.resolvedTypePredicate = getTypeAssertionFromBody(declaration) || noTypePredicate;
+                    }
                 }
                 else {
                     signature.resolvedTypePredicate = noTypePredicate;
@@ -38836,6 +38841,54 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const falseCondition = createFlowNode(FlowFlags.FalseCondition, expr, antecedent);
         const falseSubtype = getFlowTypeOfReference(param.name, initType, trueType, func, falseCondition);
         return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
+    }
+
+    function getTypeAssertionFromBody(func: FunctionLikeDeclaration): TypePredicate | undefined {
+        switch (func.kind) {
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.MethodDeclaration:
+                return undefined;
+        }
+        const functionFlags = getFunctionFlags(func);
+        if (functionFlags !== FunctionFlags.Normal || !func.body) return undefined;
+
+        const returnFlowNodes: FlowNode[] = [];
+        const bailedEarly = forEachReturnStatement(func.body, returnStatement => {
+            if (!returnStatement.flowNode) {
+                return true;
+            }
+            returnFlowNodes.push(returnStatement.flowNode);
+        });
+        if (bailedEarly) return undefined;
+        if (functionHasImplicitReturn(func)) {
+            returnFlowNodes.push(func.endFlowNode!);
+        }
+        if (!returnFlowNodes.length) return undefined;
+
+        return forEach(func.parameters, (param, i) => {
+            const initType = getTypeOfSymbol(param.symbol);
+            if (!initType || !isIdentifier(param.name) || isSymbolAssigned(param.symbol) || isRestParameter(param)) {
+                return;
+            }
+            const typesAtReturn: Type[] = [];
+            const bailedEarly = forEach(returnFlowNodes, flowNode => {
+                const type = getFlowTypeOfReference(param.name, initType, initType, func, flowNode);
+                if (type === initType) return true;
+                typesAtReturn.push(type);
+            });
+            if (bailedEarly) return;
+            // The asserted type might union back to be the same as the initType, which would not be a useful assertion.
+            // An assignability check covers this, but a void initType can become an undefined type through control flow analysis.
+            // Since void is not assignable to undefined, we patch initType to handle this, too.
+            const assertedType = getUnionType(typesAtReturn, UnionReduction.Subtype);
+            const patchedInitType = mapType(initType, t => t.flags & TypeFlags.Void ? undefinedType : t.flags & TypeFlags.Any ? unknownType : t);
+            if (isTypeAssignableTo(patchedInitType, assertedType)) return;
+            return createTypePredicate(TypePredicateKind.AssertsIdentifier, unescapeLeadingUnderscores(param.name.escapedText), i, assertedType);
+        });
     }
 
     /**
