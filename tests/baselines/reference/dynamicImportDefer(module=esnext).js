@@ -10,8 +10,6 @@ import.defer("./a.js").then(ns => {
   ns.foo();
 });
 
-import("./a.js"); // TODO: Without this the import.defer cannot resolve ./a
-
 
 //// [a.js]
 export function foo() {
@@ -21,4 +19,3 @@ export function foo() {
 import.defer("./a.js").then(ns => {
     ns.foo();
 });
-import("./a.js"); // TODO: Without this the import.defer cannot resolve ./a

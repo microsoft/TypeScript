@@ -24,6 +24,3 @@ import.defer("./a.js").then(ns => {
 
 });
 
-import("./a.js"); // TODO: Without this the import.defer cannot resolve ./a
->"./a.js" : Symbol("a", Decl(a.ts, 0, 0))
-

@@ -49,9 +49,3 @@ import.defer("./a.js").then(ns => {
 
 });
 
-import("./a.js"); // TODO: Without this the import.defer cannot resolve ./a
->import("./a.js") : Promise<typeof import("a")>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./a.js" : "./a.js"
->         : ^^^^^^^^
-

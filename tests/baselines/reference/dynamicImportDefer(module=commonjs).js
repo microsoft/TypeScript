@@ -10,8 +10,6 @@ import.defer("./a.js").then(ns => {
   ns.foo();
 });
 
-import("./a.js"); // TODO: Without this the import.defer cannot resolve ./a
-
 
 //// [a.js]
 "use strict";
@@ -24,4 +22,3 @@ function foo() {
 import.defer("./a.js").then(ns => {
     ns.foo();
 });
-Promise.resolve().then(() => require("./a.js")); // TODO: Without this the import.defer cannot resolve ./a

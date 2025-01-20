@@ -13,5 +13,3 @@ b.ts(1,1): error TS18060: Deferred imports are only supported when the '--module
       ns.foo();
     });
     
-    import("./a.js"); // TODO: Without this the import.defer cannot resolve ./a
-    
