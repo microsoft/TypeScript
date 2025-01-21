@@ -2,7 +2,7 @@
 package main
 
 import (
-	"errors"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jessevdk/go-flags"
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/bundled"
 	ts "github.com/microsoft/typescript-go/internal/compiler"
@@ -46,40 +45,40 @@ func printMessageChain(messageChain []*ast.Diagnostic, level int) {
 
 type cliOptions struct {
 	Tsc struct {
-		Pretty    bool   `long:"pretty" description:"Get prettier errors (default: true)"`
-		ListFiles bool   `long:"listFiles" description:"List files in the program"`
-		NoLib     bool   `long:"noLib" description:"Do not load lib.d.ts files"`
-		OutDir    string `long:"outDir" description:"Emit to the given directory"`
-	} `group:"tsc options"`
+		Pretty    bool
+		ListFiles bool
+		NoLib     bool
+		OutDir    string
+	}
 
 	Devel struct {
-		Quiet            bool   `short:"q" long:"quiet" description:"Do not print diagnostics"`
-		SingleThreaded   bool   `long:"singleThreaded" description:"Run in single threaded mode"`
-		ParseAndBindOnly bool   `long:"parseAndBindOnly" description:"Parse and bind only"`
-		PrintTypes       bool   `long:"printTypes" description:"Print types defined in main.ts"`
-		PprofDir         string `long:"pprofDir" description:"Generate pprof CPU/memory profiles to the given directory"`
-	} `group:"tsgo development options"`
+		Quiet            bool
+		SingleThreaded   bool
+		ParseAndBindOnly bool
+		PrintTypes       bool
+		PprofDir         string
+	}
 
 	Args struct {
-		Root string `positional-arg-name:"project root"`
-	} `positional-args:"yes"`
+		Root string
+	}
 }
 
 func parseArgs() *cliOptions {
 	opts := &cliOptions{}
-	opts.Tsc.Pretty = true
+	flag.BoolVar(&opts.Tsc.Pretty, "pretty", true, "Get prettier errors")
+	flag.BoolVar(&opts.Tsc.ListFiles, "listFiles", false, "List files in the program")
+	flag.BoolVar(&opts.Tsc.NoLib, "noLib", false, "Do not load lib.d.ts files")
+	flag.StringVar(&opts.Tsc.OutDir, "outDir", "", "Emit to the given directory")
 
-	parser := flags.NewParser(opts, flags.HelpFlag)
-	if _, err := parser.Parse(); err != nil {
-		var parseErr *flags.Error
-		if errors.As(err, &parseErr) && parseErr.Type == flags.ErrHelp {
-			fmt.Fprintln(os.Stdout, err)
-			os.Exit(0)
-		} else {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(1)
-		}
-	}
+	flag.BoolVar(&opts.Devel.Quiet, "q", false, "Do not print diagnostics")
+	flag.BoolVar(&opts.Devel.SingleThreaded, "singleThreaded", false, "Run in single threaded mode")
+	flag.BoolVar(&opts.Devel.ParseAndBindOnly, "parseAndBindOnly", false, "Parse and bind only")
+	flag.BoolVar(&opts.Devel.PrintTypes, "printTypes", false, "Print types defined in main.ts")
+	flag.StringVar(&opts.Devel.PprofDir, "pprofDir", "", "Generate pprof CPU/memory profiles to the given directory")
+	flag.Parse()
+
+	opts.Args.Root = flag.Arg(0)
 
 	return opts
 }
