@@ -790,7 +790,7 @@ func (c *Checker) applyToParameterTypes(source *Signature, target *Signature, ca
 		callback(c.getTypeAtPosition(source, i), c.getTypeAtPosition(target, i))
 	}
 	if targetRestType != nil {
-		callback(c.getRestTypeAtPosition(source, paramCount, c.isConstTypeVariable(targetRestType, 0) && someType(targetRestType, c.isMutableArrayLikeType) /*readonly*/), targetRestType)
+		callback(c.getRestTypeAtPosition(source, paramCount, c.isConstTypeVariable(targetRestType, 0) && !someType(targetRestType, c.isMutableArrayLikeType) /*readonly*/), targetRestType)
 	}
 }
 
@@ -1175,12 +1175,10 @@ func (c *Checker) cloneInferredPartOfContext(n *InferenceContext) *InferenceCont
 
 func (c *Checker) newInferenceContextWorker(inferences []*InferenceInfo, signature *Signature, flags InferenceFlags, compareTypes TypeComparer) *InferenceContext {
 	n := &InferenceContext{
-		inferences:      inferences,
-		signature:       signature,
-		flags:           flags,
-		compareTypes:    compareTypes,
-		mapper:          c.reportUnmeasurableMapper,
-		nonFixingMapper: c.reportUnmeasurableMapper,
+		inferences:   inferences,
+		signature:    signature,
+		flags:        flags,
+		compareTypes: compareTypes,
 	}
 	n.mapper = c.newInferenceTypeMapper(n, true /*fixing*/)
 	n.nonFixingMapper = c.newInferenceTypeMapper(n, false /*fixing*/)
@@ -1280,14 +1278,25 @@ func (c *Checker) getInferredType(n *InferenceContext, index int) *Type {
 		constraint := c.getConstraintOfTypeParameter(inference.typeParameter)
 		if constraint != nil {
 			instantiatedConstraint := c.instantiateType(constraint, n.nonFixingMapper)
-			if inferredType == nil || n.compareTypes(inferredType, c.getTypeWithThisArgument(instantiatedConstraint, inferredType, false), false) == 0 {
-				// If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
-				if fallbackType != nil && n.compareTypes(fallbackType, c.getTypeWithThisArgument(instantiatedConstraint, fallbackType, false), false) != 0 {
-					inference.inferredType = fallbackType
-				} else {
-					inference.inferredType = instantiatedConstraint
+			if inferredType != nil {
+				constraintWithThis := c.getTypeWithThisArgument(instantiatedConstraint, inferredType, false)
+				if n.compareTypes(inferredType, constraintWithThis, false) == TernaryFalse {
+					var filteredByConstraint *Type
+					if inference.priority == InferencePriorityReturnType {
+						// If we have a pure return type inference, we may succeed by removing constituents of the inferred type
+						// that aren't assignable to the constraint type (pure return type inferences are speculation anyway).
+						filteredByConstraint = c.mapType(inferredType, func(t *Type) *Type {
+							return core.IfElse(n.compareTypes(t, constraintWithThis, false) != TernaryFalse, t, c.neverType)
+						})
+					}
+					inferredType = core.IfElse(filteredByConstraint != nil && filteredByConstraint.flags&TypeFlagsNever == 0, filteredByConstraint, nil)
 				}
 			}
+			if inferredType == nil {
+				// If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
+				inferredType = core.IfElse(fallbackType != nil && n.compareTypes(fallbackType, c.getTypeWithThisArgument(instantiatedConstraint, fallbackType, false), false) != TernaryFalse, fallbackType, instantiatedConstraint)
+			}
+			inference.inferredType = inferredType
 		}
 	}
 	return inference.inferredType

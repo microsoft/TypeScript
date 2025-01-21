@@ -356,7 +356,9 @@ func (c *Checker) checkTypeRelatedToEx(
 	headMessage *diagnostics.Message,
 	diagnosticOutput **ast.Diagnostic,
 ) bool {
-	r := Relater{}
+	relaterCount := len(c.relaters)
+	c.relaters = slices.Grow(c.relaters, 1)[:relaterCount+1]
+	r := &c.relaters[relaterCount]
 	r.c = c
 	r.relation = relation
 	r.errorNode = errorNode
@@ -401,6 +403,8 @@ func (c *Checker) checkTypeRelatedToEx(
 			}
 		}
 	}
+	c.relaters[relaterCount] = Relater{}
+	c.relaters = c.relaters[:relaterCount]
 	return result != TernaryFalse
 }
 
@@ -1237,7 +1241,7 @@ func (c *Checker) compareSignaturesRelated(source *Signature, target *Signature,
 	if target.declaration != nil {
 		kind = target.declaration.Kind
 	}
-	strictVariance := checkMode&SignatureCheckModeCallback != 0 && c.strictFunctionTypes && kind != ast.KindMethodDeclaration && kind != ast.KindMethodSignature && kind != ast.KindConstructor
+	strictVariance := checkMode&SignatureCheckModeCallback == 0 && c.strictFunctionTypes && kind != ast.KindMethodDeclaration && kind != ast.KindMethodSignature && kind != ast.KindConstructor
 	result := TernaryTrue
 	sourceThisType := c.getThisTypeOfSignature(source)
 	if sourceThisType != nil && sourceThisType != c.voidType {
@@ -1594,7 +1598,7 @@ func (c *Checker) isValidDeclarationForTupleLabel(d *ast.Node) bool {
 
 func (c *Checker) getNonArrayRestType(signature *Signature) *Type {
 	restType := c.getEffectiveRestType(signature)
-	if restType != nil && !c.isArrayType(restType) && isTypeAny(restType) {
+	if restType != nil && !c.isArrayType(restType) && !isTypeAny(restType) {
 		return restType
 	}
 	return nil

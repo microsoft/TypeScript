@@ -6045,6 +6045,10 @@ func (node *TemplateLiteralTypeNode) VisitEachChild(v *NodeVisitor) *Node {
 	return v.Factory.UpdateTemplateLiteralTypeNode(node, v.VisitNode(node.Head), v.VisitNodes(node.TemplateSpans))
 }
 
+func IsTemplateLiteralTypeSpan(node *Node) bool {
+	return node.Kind == KindTemplateLiteralTypeSpan
+}
+
 // SyntheticExpression
 
 type SyntheticExpression struct {

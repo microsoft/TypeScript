@@ -429,5 +429,5 @@ func getNodeAtPosition(file *ast.SourceFile, position int, isJavaScriptFile bool
 }
 
 func nodeContainsPosition(node *ast.Node, position int) bool {
-	return node.Pos() <= position && (position < node.End() || (position == node.End() && (node.Kind == ast.KindEndOfFile)))
+	return node.Kind >= ast.KindFirstNode && node.Pos() <= position && (position < node.End() || position == node.End() && node.Kind == ast.KindEndOfFile)
 }

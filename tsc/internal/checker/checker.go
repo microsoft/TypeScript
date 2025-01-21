@@ -121,6 +121,8 @@ const (
 	CachedTypeKindWidened
 	CachedTypeKindRegularObjectLiteral
 	CachedTypeKindPromisedTypeOfPromise
+	CachedTypeKindDefaultOnlyType
+	CachedTypeKindSyntheticType
 )
 
 // CachedTypeKey
@@ -486,9 +488,9 @@ type IterationTypesResolver struct {
 	getGlobalGeneratorType               func() *Type
 	getGlobalBuiltinIteratorTypes        func() []*Type
 	resolveIterationType                 func(t *Type, errorNode *ast.Node) *Type
-	// mustHaveANextMethodDiagnostic DiagnosticMessage
-	// mustBeAMethodDiagnostic       DiagnosticMessage
-	// mustHaveAValueDiagnostic      DiagnosticMessage
+	mustHaveANextMethodDiagnostic        *diagnostics.Message
+	mustBeAMethodDiagnostic              *diagnostics.Message
+	mustHaveAValueDiagnostic             *diagnostics.Message
 }
 
 type WideningContext struct {
@@ -704,6 +706,7 @@ type Checker struct {
 	lastGetCombinedNodeFlagsResult            ast.NodeFlags
 	lastGetCombinedModifierFlagsNode          *ast.Node
 	lastGetCombinedModifierFlagsResult        ast.ModifierFlags
+	flowStates                                []FlowState
 	flowLoopCache                             map[FlowLoopKey]*Type
 	flowLoopStack                             []FlowLoopInfo
 	sharedFlows                               []SharedFlow
@@ -720,6 +723,7 @@ type Checker struct {
 	reverseMappedSourceStack                  []*Type
 	reverseMappedTargetStack                  []*Type
 	reverseExpandingFlags                     ExpandingFlags
+	relaters                                  []Relater
 	subtypeRelation                           *Relation
 	strictSubtypeRelation                     *Relation
 	assignableRelation                        *Relation
@@ -737,6 +741,7 @@ type Checker struct {
 	getGlobalTemplateStringsArrayType         func() *Type
 	getGlobalESSymbolConstructorSymbolOrNil   func() *ast.Symbol
 	getGlobalImportCallOptionsType            func() *Type
+	getGlobalImportCallOptionsTypeChecked     func() *Type
 	getGlobalPromiseType                      func() *Type
 	getGlobalPromiseTypeChecked               func() *Type
 	getGlobalPromiseLikeType                  func() *Type
@@ -744,6 +749,7 @@ type Checker struct {
 	getGlobalOmitSymbol                       func() *ast.Symbol
 	getGlobalIteratorType                     func() *Type
 	getGlobalIterableType                     func() *Type
+	getGlobalIterableTypeChecked              func() *Type
 	getGlobalIterableIteratorType             func() *Type
 	getGlobalIterableIteratorTypeChecked      func() *Type
 	getGlobalIteratorObjectType               func() *Type
@@ -754,6 +760,8 @@ type Checker struct {
 	getGlobalAsyncIterableIteratorTypeChecked func() *Type
 	getGlobalAsyncIteratorObjectType          func() *Type
 	getGlobalAsyncGeneratorType               func() *Type
+	getGlobalIteratorYieldResultType          func() *Type
+	getGlobalIteratorReturnResultType         func() *Type
 	syncIterationTypesResolver                *IterationTypesResolver
 	asyncIterationTypesResolver               *IterationTypesResolver
 	isPrimitiveOrObjectOrEmptyType            func(*Type) bool
@@ -921,6 +929,7 @@ func NewChecker(program Program) *Checker {
 	c.getGlobalTemplateStringsArrayType = c.getGlobalTypeResolver("TemplateStringsArray", 0 /*arity*/, true /*reportErrors*/)
 	c.getGlobalESSymbolConstructorSymbolOrNil = c.getGlobalValueSymbolResolver("Symbol", false /*reportErrors*/)
 	c.getGlobalImportCallOptionsType = c.getGlobalTypeResolver("ImportCallOptions", 0 /*arity*/, false /*reportErrors*/)
+	c.getGlobalImportCallOptionsTypeChecked = c.getGlobalTypeResolver("ImportCallOptions", 0 /*arity*/, true /*reportErrors*/)
 	c.getGlobalPromiseType = c.getGlobalTypeResolver("Promise", 1 /*arity*/, false /*reportErrors*/)
 	c.getGlobalPromiseTypeChecked = c.getGlobalTypeResolver("Promise", 1 /*arity*/, true /*reportErrors*/)
 	c.getGlobalPromiseLikeType = c.getGlobalTypeResolver("PromiseLike", 1 /*arity*/, true /*reportErrors*/)
@@ -928,6 +937,7 @@ func NewChecker(program Program) *Checker {
 	c.getGlobalOmitSymbol = c.getGlobalTypeAliasResolver("Omit", 2 /*arity*/, true /*reportErrors*/)
 	c.getGlobalIteratorType = c.getGlobalTypeResolver("Iterator", 3 /*arity*/, false /*reportErrors*/)
 	c.getGlobalIterableType = c.getGlobalTypeResolver("Iterable", 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalIterableTypeChecked = c.getGlobalTypeResolver("Iterable", 3 /*arity*/, true /*reportErrors*/)
 	c.getGlobalIterableIteratorType = c.getGlobalTypeResolver("IterableIterator", 3 /*arity*/, false /*reportErrors*/)
 	c.getGlobalIterableIteratorTypeChecked = c.getGlobalTypeResolver("IterableIterator", 3 /*arity*/, true /*reportErrors*/)
 	c.getGlobalIteratorObjectType = c.getGlobalTypeResolver("IteratorObject", 3 /*arity*/, false /*reportErrors*/)
@@ -938,6 +948,8 @@ func NewChecker(program Program) *Checker {
 	c.getGlobalAsyncIterableIteratorTypeChecked = c.getGlobalTypeResolver("AsyncIterableIterator", 3 /*arity*/, true /*reportErrors*/)
 	c.getGlobalAsyncIteratorObjectType = c.getGlobalTypeResolver("AsyncIteratorObject", 3 /*arity*/, false /*reportErrors*/)
 	c.getGlobalAsyncGeneratorType = c.getGlobalTypeResolver("AsyncGenerator", 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalIteratorYieldResultType = c.getGlobalTypeResolver("IteratorYieldResult", 1 /*arity*/, false /*reportErrors*/)
+	c.getGlobalIteratorReturnResultType = c.getGlobalTypeResolver("IteratorReturnResult", 1 /*arity*/, false /*reportErrors*/)
 	c.initializeClosures()
 	c.initializeIterationResolvers()
 	c.initializeChecker()
@@ -1079,6 +1091,9 @@ func (c *Checker) initializeIterationResolvers() {
 		resolveIterationType: func(t *Type, errorNode *ast.Node) *Type {
 			return t
 		},
+		mustHaveANextMethodDiagnostic: diagnostics.An_iterator_must_have_a_next_method,
+		mustBeAMethodDiagnostic:       diagnostics.The_0_property_of_an_iterator_must_be_a_method,
+		mustHaveAValueDiagnostic:      diagnostics.The_type_returned_by_the_0_method_of_an_iterator_must_have_a_value_property,
 	}
 	c.asyncIterationTypesResolver = &IterationTypesResolver{
 		iteratorSymbolName:                   "asyncIterator",
@@ -1092,6 +1107,9 @@ func (c *Checker) initializeIterationResolvers() {
 		resolveIterationType: func(t *Type, errorNode *ast.Node) *Type {
 			return c.getAwaitedTypeEx(t, errorNode, diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
 		},
+		mustHaveANextMethodDiagnostic: diagnostics.An_async_iterator_must_have_a_next_method,
+		mustBeAMethodDiagnostic:       diagnostics.The_0_property_of_an_async_iterator_must_be_a_method,
+		mustHaveAValueDiagnostic:      diagnostics.The_type_returned_by_the_0_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_property,
 	}
 }
 
@@ -1415,7 +1433,7 @@ func (c *Checker) getTypeOnlyAliasDeclarationEx(symbol *ast.Symbol, include ast.
 		if c.getDeclarationOfAliasSymbol(symbol) != nil {
 			immediateTarget = c.getImmediateAliasedSymbol(symbol)
 		}
-		c.markSymbolOfAliasDeclarationIfTypeOnly(symbol.Declarations[0], immediateTarget, resolved, true /*overwriteEmpty*/, nil, "")
+		c.markSymbolOfAliasDeclarationIfTypeOnly(core.FirstOrNil(symbol.Declarations), immediateTarget, resolved, true /*overwriteEmpty*/, nil, "")
 	}
 	if include == ast.SymbolFlagsNone {
 		return links.typeOnlyDeclaration
@@ -2884,8 +2902,11 @@ func (c *Checker) getIterationTypesOfIteratorWorker(t *Type, r *IterationTypesRe
 	if isTypeAny(t) {
 		return IterationTypes{c.anyType, c.anyType, c.anyType}
 	}
-	return c.getIterationTypesOfIteratorFast(t, r)
-	// !!! Incorporate getIterationTypesOfIteratorSlow
+	iterationTypes := c.getIterationTypesOfIteratorFast(t, r)
+	if iterationTypes.hasTypes() {
+		return iterationTypes
+	}
+	return c.getIterationTypesOfIteratorSlow(t, r, errorNode)
 }
 
 func (c *Checker) getIterationTypesOfIteratorFast(t *Type, r *IterationTypesResolver) IterationTypes {
@@ -2913,6 +2934,167 @@ func (c *Checker) getIterationTypesOfIteratorFast(t *Type, r *IterationTypesReso
 		return r.getResolvedIterationTypes(c.getTypeArguments(t)[0], c.getBuiltinIteratorReturnType(), c.unknownType)
 	}
 	return IterationTypes{}
+}
+
+func (c *Checker) getIterationTypesOfIteratorSlow(t *Type, r *IterationTypesResolver, errorNode *ast.Node) IterationTypes {
+	return c.combineIterationTypes([]IterationTypes{
+		c.getIterationTypesOfMethod(t, r, "next", errorNode),
+		c.getIterationTypesOfMethod(t, r, "return", errorNode),
+		c.getIterationTypesOfMethod(t, r, "throw", errorNode),
+	})
+}
+
+func (c *Checker) getIterationTypesOfMethod(t *Type, resolver *IterationTypesResolver, methodName string, errorNode *ast.Node) IterationTypes {
+	method := c.getPropertyOfType(t, methodName)
+	// Ignore 'return' or 'throw' if they are missing.
+	if method == nil && methodName != "next" {
+		return IterationTypes{}
+	}
+	var methodType *Type
+	if method != nil && !(methodName == "next" && method.Flags&ast.SymbolFlagsOptional != 0) {
+		if methodName == "next" {
+			methodType = c.getTypeOfSymbol(method)
+		} else {
+			methodType = c.getTypeWithFacts(c.getTypeOfSymbol(method), TypeFactsNEUndefinedOrNull)
+		}
+	}
+	if isTypeAny(methodType) {
+		return IterationTypes{c.anyType, c.anyType, c.anyType}
+	}
+	// Both async and non-async iterators *must* have a `next` method.
+	var methodSignatures []*Signature
+	if methodType != nil {
+		methodSignatures = c.getSignaturesOfType(methodType, SignatureKindCall)
+	}
+	if len(methodSignatures) == 0 {
+		if errorNode != nil {
+			diagnostic := core.IfElse(methodName == "next", resolver.mustHaveANextMethodDiagnostic, resolver.mustBeAMethodDiagnostic)
+			c.error(errorNode, diagnostic, methodName)
+		}
+		return IterationTypes{}
+	}
+	// If the method signature comes exclusively from the global iterator or generator type,
+	// create iteration types from its type arguments like `getIterationTypesOfIteratorFast`
+	// does (so as to remove `undefined` from the next and return types). We arrive here when
+	// a contextual type for a generator was not a direct reference to one of those global types,
+	// but looking up `methodType` referred to one of them (and nothing else). E.g., in
+	// `interface SpecialIterator extends Iterator<number> {}`, `SpecialIterator` is not a
+	// reference to `Iterator`, but its `next` member derives exclusively from `Iterator`.
+	if len(methodSignatures) == 1 && methodType.symbol != nil {
+		globalGeneratorType := resolver.getGlobalGeneratorType()
+		globalIteratorType := resolver.getGlobalIteratorType()
+		isGeneratorMethod := globalGeneratorType.symbol != nil && globalGeneratorType.symbol.Members[methodName] == methodType.symbol
+		isIteratorMethod := !isGeneratorMethod && globalIteratorType.symbol != nil && globalIteratorType.symbol.Members[methodName] == methodType.symbol
+		if isGeneratorMethod || isIteratorMethod {
+			typeParameters := core.IfElse(isGeneratorMethod, globalGeneratorType, globalIteratorType).AsInterfaceType().TypeParameters()
+			mapper := methodType.Mapper()
+			var nextType *Type
+			if methodName == "next" {
+				nextType = mapper.Map(typeParameters[2])
+			}
+			return IterationTypes{mapper.Map(typeParameters[0]), mapper.Map(typeParameters[1]), nextType}
+		}
+	}
+	// Extract the first parameter and return type of each signature.
+	var methodParameterTypes []*Type
+	var methodReturnTypes []*Type
+	for _, signature := range methodSignatures {
+		if methodName != "throw" && len(signature.parameters) != 0 {
+			methodParameterTypes = append(methodParameterTypes, c.getTypeAtPosition(signature, 0))
+		}
+		methodReturnTypes = append(methodReturnTypes, c.getReturnTypeOfSignature(signature))
+	}
+	// Resolve the *next* or *return* type from the first parameter of a `next()` or
+	// `return()` method, respectively.
+	var returnTypes []*Type
+	var nextType *Type
+	if methodName != "throw" {
+		var methodParameterType *Type
+		if methodParameterTypes != nil {
+			methodParameterType = c.getUnionType(methodParameterTypes)
+		} else {
+			methodParameterType = c.unknownType
+		}
+		if methodName == "next" {
+			// The value of `next(value)` is *not* awaited by async generators
+			nextType = methodParameterType
+		} else if methodName == "return" {
+			// The value of `return(value)` *is* awaited by async generators
+			resolvedMethodParameterType := core.OrElse(resolver.resolveIterationType(methodParameterType, errorNode), c.anyType)
+			returnTypes = append(returnTypes, resolvedMethodParameterType)
+		}
+	}
+	// Resolve the *yield* and *return* types from the return type of the method (i.e. `IteratorResult`)
+	var yieldType *Type
+	var methodReturnType *Type
+	if methodReturnTypes != nil {
+		methodReturnType = c.getIntersectionType(methodReturnTypes)
+	} else {
+		methodReturnType = c.neverType
+	}
+	resolvedMethodReturnType := core.OrElse(resolver.resolveIterationType(methodReturnType, errorNode), c.anyType)
+	iterationTypes := c.getIterationTypesOfIteratorResult(resolvedMethodReturnType)
+	if !iterationTypes.hasTypes() {
+		if errorNode != nil {
+			c.error(errorNode, resolver.mustHaveAValueDiagnostic, methodName)
+		}
+		yieldType = c.anyType
+		returnTypes = append(returnTypes, c.anyType)
+	} else {
+		yieldType = iterationTypes.yieldType
+		returnTypes = append(returnTypes, iterationTypes.returnType)
+	}
+	return IterationTypes{yieldType, c.getUnionType(returnTypes), nextType}
+}
+
+func (c *Checker) getIterationTypesOfIteratorResult(t *Type) IterationTypes {
+	if isTypeAny(t) {
+		return IterationTypes{c.anyType, c.anyType, c.anyType}
+	}
+	// As an optimization, if the type is an instantiation of one of the global `IteratorYieldResult<T>`
+	// or `IteratorReturnResult<TReturn>` types, then just grab its type argument.
+	if c.isReferenceToType(t, c.getGlobalIteratorYieldResultType()) {
+		return IterationTypes{c.getTypeArguments(t)[0], nil, nil}
+	}
+	if c.isReferenceToType(t, c.getGlobalIteratorReturnResultType()) {
+		return IterationTypes{nil, c.getTypeArguments(t)[0], nil}
+	}
+	// Choose any constituents that can produce the requested iteration type.
+	yieldIteratorResult := c.filterType(t, c.isYieldIteratorResult)
+	var yieldType *Type
+	if yieldIteratorResult != c.neverType {
+		yieldType = c.getTypeOfPropertyOfType(yieldIteratorResult, "value" /* as __String */)
+	}
+	returnIteratorResult := c.filterType(t, c.isReturnIteratorResult)
+	var returnType *Type
+	if returnIteratorResult != c.neverType {
+		returnType = c.getTypeOfPropertyOfType(returnIteratorResult, "value" /* as __String */)
+	}
+	if yieldType == nil && returnType == nil {
+		return IterationTypes{}
+	}
+	// From https://tc39.github.io/ecma262/#sec-iteratorresult-interface
+	// > ... If the iterator does not have a return value, `value` is `undefined`. In that case, the
+	// > `value` property may be absent from the conforming object if it does not inherit an explicit
+	// > `value` property.
+	return IterationTypes{yieldType, core.OrElse(returnType, c.voidType), nil}
+}
+
+func (c *Checker) isYieldIteratorResult(t *Type) bool {
+	return c.isIteratorResult(t, IterationTypeKindYield)
+}
+
+func (c *Checker) isReturnIteratorResult(t *Type) bool {
+	return c.isIteratorResult(t, IterationTypeKindReturn)
+}
+
+func (c *Checker) isIteratorResult(t *Type, kind IterationTypeKind) bool {
+	// From https://tc39.github.io/ecma262/#sec-iteratorresult-interface:
+	// > [done] is the result status of an iterator `next` method call. If the end of the iterator was reached `done` is `true`.
+	// > If the end was not reached `done` is `false` and a value is available.
+	// > If a `done` property (either own or inherited) does not exist, it is consider to have the value `false`.
+	doneType := core.OrElse(c.getTypeOfPropertyOfType(t, "done"), c.falseType)
+	return c.isTypeAssignableTo(core.IfElse(kind == IterationTypeKindYield, c.falseType, c.trueType), doneType)
 }
 
 func (c *Checker) reportTypeNotIterableError(errorNode *ast.Node, t *Type, allowAsyncIterables bool) {
@@ -4015,8 +4197,44 @@ func (c *Checker) getConstituentProperty(objectType *Type, propertyName string) 
 }
 
 func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
-	// !!!!
-	return c.errorType
+	// Check grammar of dynamic import
+	c.checkGrammarImportCallExpression(node)
+	args := node.Arguments()
+	if len(args) == 0 {
+		return c.createPromiseReturnType(node, c.anyType)
+	}
+	specifier := args[0]
+	specifierType := c.checkExpressionCached(specifier)
+	var optionsType *Type
+	if len(args) > 1 {
+		optionsType = c.checkExpressionCached(args[1])
+	}
+	// Even though multiple arguments is grammatically incorrect, type-check extra arguments for completion
+	for i := 2; i < len(args); i++ {
+		c.checkExpressionCached(args[i])
+	}
+	if specifierType.flags&TypeFlagsNullable != 0 || !c.isTypeAssignableTo(specifierType, c.stringType) {
+		c.error(specifier, diagnostics.Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0, c.typeToString(specifierType))
+	}
+	if optionsType != nil {
+		importCallOptionsType := c.getGlobalImportCallOptionsTypeChecked()
+		if importCallOptionsType != c.emptyObjectType {
+			c.checkTypeAssignableTo(optionsType, c.getNullableType(importCallOptionsType, TypeFlagsUndefined), args[1], nil)
+		}
+	}
+	// resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
+	moduleSymbol := c.resolveExternalModuleName(node, specifier, false /*ignoreErrors*/)
+	if moduleSymbol != nil {
+		esModuleSymbol := c.resolveESModuleSymbol(moduleSymbol, specifier, true /*dontResolveAlias*/, false /*suppressInteropError*/)
+		if esModuleSymbol != nil {
+			syntheticType := c.getTypeWithSyntheticDefaultOnly(c.getTypeOfSymbol(esModuleSymbol), esModuleSymbol, moduleSymbol, specifier)
+			if syntheticType == nil {
+				syntheticType = c.getTypeWithSyntheticDefaultImportType(c.getTypeOfSymbol(esModuleSymbol), esModuleSymbol, moduleSymbol, specifier)
+			}
+			return c.createPromiseReturnType(node, syntheticType)
+		}
+	}
+	return c.createPromiseReturnType(node, c.anyType)
 }
 
 /**
@@ -4405,7 +4623,7 @@ func someSignature(signatures []*Signature, f func(s *Signature) bool) bool {
 }
 
 func (c *Checker) resolveTaggedTemplateExpression(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
-	return c.unknownSignature // !!!
+	return c.unknownSignature // !!!!
 }
 
 func (c *Checker) resolveDecorator(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
@@ -9543,10 +9761,6 @@ func getNameFromSpecifier(node *ast.Node) *ast.Node {
 	panic("Unhandled case in getSpecifierPropertyName")
 }
 
-func (c *Checker) getTargetOfBindingElement(node *ast.Node, dontResolveAlias bool) *ast.Symbol {
-	panic("getTargetOfBindingElement") // !!!
-}
-
 func (c *Checker) getTargetOfExportSpecifier(node *ast.Node, meaning ast.SymbolFlags, dontResolveAlias bool) *ast.Symbol {
 	name := node.AsExportSpecifier().PropertyName
 	if name == nil {
@@ -9856,8 +10070,55 @@ func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, referencingLoc
 	return symbol
 }
 
-func (c *Checker) getTypeWithSyntheticDefaultOnly(typ *Type, symbol *ast.Symbol, originalSymbol *ast.Symbol, moduleSpecifier *ast.Node) *Type {
-	return nil // !!!
+func (c *Checker) getTypeWithSyntheticDefaultOnly(t *Type, symbol *ast.Symbol, originalSymbol *ast.Symbol, moduleSpecifier *ast.Node) *Type {
+	hasDefaultOnly := c.isOnlyImportableAsDefault(moduleSpecifier, nil)
+	if hasDefaultOnly && t != nil && !c.isErrorType(t) {
+		key := CachedTypeKey{kind: CachedTypeKindDefaultOnlyType, typeId: t.id}
+		if cached := c.cachedTypes[key]; cached != nil {
+			return cached
+		}
+		result := c.createDefaultPropertyWrapperForModule(symbol, originalSymbol, nil)
+		c.cachedTypes[key] = result
+		return result
+	}
+	return nil
+}
+
+func (c *Checker) getTypeWithSyntheticDefaultImportType(t *Type, symbol *ast.Symbol, originalSymbol *ast.Symbol, moduleSpecifier *ast.Node) *Type {
+	if c.allowSyntheticDefaultImports && t != nil && !c.isErrorType(t) {
+		key := CachedTypeKey{kind: CachedTypeKindSyntheticType, typeId: t.id}
+		if cached := c.cachedTypes[key]; cached != nil {
+			return cached
+		}
+		file := core.Find(originalSymbol.Declarations, ast.IsSourceFile)
+		hasSyntheticDefault := c.canHaveSyntheticDefault(file, originalSymbol, false /*dontResolveAlias*/, moduleSpecifier)
+		var syntheticType *Type
+		if hasSyntheticDefault {
+			anonymousSymbol := c.newSymbol(ast.SymbolFlagsTypeLiteral, ast.InternalSymbolNameType)
+			defaultContainingObject := c.createDefaultPropertyWrapperForModule(symbol, originalSymbol, anonymousSymbol)
+			c.valueSymbolLinks.get(anonymousSymbol).resolvedType = defaultContainingObject
+			if c.isValidSpreadType(t) {
+				syntheticType = c.getSpreadType(t, defaultContainingObject, anonymousSymbol, 0 /*objectFlags*/, false /*readonly*/)
+			} else {
+				syntheticType = defaultContainingObject
+			}
+		} else {
+			syntheticType = t
+		}
+		c.cachedTypes[key] = syntheticType
+		return syntheticType
+	}
+	return t
+}
+
+func (c *Checker) createDefaultPropertyWrapperForModule(symbol *ast.Symbol, originalSymbol *ast.Symbol, anonymousSymbol *ast.Symbol) *Type {
+	memberTable := make(ast.SymbolTable)
+	newSymbol := c.newSymbol(ast.SymbolFlagsAlias, ast.InternalSymbolNameDefault)
+	newSymbol.Parent = originalSymbol
+	c.valueSymbolLinks.get(newSymbol).nameType = c.getStringLiteralType("default")
+	c.aliasSymbolLinks.get(newSymbol).aliasTarget = c.resolveSymbol(symbol)
+	memberTable[ast.InternalSymbolNameDefault] = newSymbol
+	return c.newAnonymousType(anonymousSymbol, memberTable, nil, nil, nil)
 }
 
 func (c *Checker) cloneTypeAsModuleType(symbol *ast.Symbol, moduleType *Type, referenceParent *ast.Node) *ast.Symbol {
@@ -9876,7 +10137,10 @@ func (c *Checker) cloneTypeAsModuleType(symbol *ast.Symbol, moduleType *Type, re
 	return result
 }
 
-func (c *Checker) getTargetOfAliasDeclaration(node *ast.Node, dontRecursivelyResolve bool /*  = false */) *ast.Symbol {
+func (c *Checker) getTargetOfAliasDeclaration(node *ast.Node, dontRecursivelyResolve bool) *ast.Symbol {
+	if node == nil {
+		return nil
+	}
 	switch node.Kind {
 	case ast.KindImportEqualsDeclaration, ast.KindVariableDeclaration:
 		return c.getTargetOfImportEqualsDeclaration(node, dontRecursivelyResolve)
@@ -9888,8 +10152,6 @@ func (c *Checker) getTargetOfAliasDeclaration(node *ast.Node, dontRecursivelyRes
 		return c.getTargetOfNamespaceExport(node, dontRecursivelyResolve)
 	case ast.KindImportSpecifier:
 		return c.getTargetOfImportSpecifier(node, dontRecursivelyResolve)
-	case ast.KindBindingElement:
-		return c.getTargetOfBindingElement(node, dontRecursivelyResolve)
 	case ast.KindExportSpecifier:
 		return c.getTargetOfExportSpecifier(node, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace, dontRecursivelyResolve)
 	case ast.KindExportAssignment:
@@ -10347,9 +10609,6 @@ func isNonLocalAlias(symbol *ast.Symbol, excludes ast.SymbolFlags) bool {
 }
 
 func (c *Checker) resolveAlias(symbol *ast.Symbol) *ast.Symbol {
-	if symbol == c.unknownSymbol {
-		return symbol // !!! Remove once all symbols are properly resolved
-	}
 	if symbol.Flags&ast.SymbolFlagsAlias == 0 {
 		panic("Should only get alias here")
 	}
@@ -10508,13 +10767,27 @@ func (c *Checker) isAliasSymbolDeclaration(node *ast.Node) bool {
 	return false
 }
 
-/**
- * Distinct write types come only from set accessors, but synthetic union and intersection
- * properties deriving from set accessors will either pre-compute or defer the union or
- * intersection of the writeTypes of their constituents.
- */
+// Distinct write types come only from set accessors, but synthetic union and intersection
+// properties deriving from set accessors will either pre-compute or defer the union or
+// intersection of the writeTypes of their constituents.
 func (c *Checker) getWriteTypeOfSymbol(symbol *ast.Symbol) *Type {
-	return c.getTypeOfSymbol(symbol) // !!!
+	if symbol.Flags&ast.SymbolFlagsProperty != 0 {
+		if symbol.CheckFlags&ast.CheckFlagsSyntheticProperty != 0 {
+			// if symbol.CheckFlags&ast.CheckFlagsDeferredType != 0 {
+			// 	return c.getWriteTypeOfSymbolWithDeferredType(symbol) || c.getTypeOfSymbolWithDeferredType(symbol)
+			// }
+			links := c.valueSymbolLinks.get(symbol)
+			return core.OrElse(links.writeType, links.resolvedType)
+		}
+		return c.removeMissingType(c.getTypeOfSymbol(symbol), symbol.Flags&ast.SymbolFlagsOptional != 0)
+	}
+	if symbol.Flags&ast.SymbolFlagsAccessor != 0 {
+		if symbol.CheckFlags&ast.CheckFlagsInstantiated != 0 {
+			return c.getWriteTypeOfInstantiatedSymbol(symbol)
+		}
+		return c.getWriteTypeOfAccessors(symbol)
+	}
+	return c.getTypeOfSymbol(symbol)
 }
 
 func (c *Checker) getTypeOfSymbol(symbol *ast.Symbol) *Type {
@@ -10560,6 +10833,14 @@ func (c *Checker) getTypeOfInstantiatedSymbol(symbol *ast.Symbol) *Type {
 		links.resolvedType = c.instantiateType(c.getTypeOfSymbol(links.target), links.mapper)
 	}
 	return links.resolvedType
+}
+
+func (c *Checker) getWriteTypeOfInstantiatedSymbol(symbol *ast.Symbol) *Type {
+	links := c.valueSymbolLinks.get(symbol)
+	if links.writeType == nil {
+		links.writeType = c.instantiateType(c.getWriteTypeOfSymbol(links.target), links.mapper)
+	}
+	return links.writeType
 }
 
 func (c *Checker) getTypeOfVariableOrParameterOrProperty(symbol *ast.Symbol) *Type {
@@ -10826,11 +11107,11 @@ func (c *Checker) checkDeclarationInitializer(declaration *ast.Node, checkMode C
 }
 
 func (c *Checker) padObjectLiteralType(t *Type, pattern *ast.Node) *Type {
-	return t // !!!
+	return t // !!!!
 }
 
 func (c *Checker) padTupleType(t *Type, pattern *ast.Node) *Type {
-	return t // !!!
+	return t // !!!!
 }
 
 func (c *Checker) widenTypeInferredFromInitializer(declaration *ast.Node, t *Type) *Type {
@@ -11041,7 +11322,110 @@ func (c *Checker) getConstraintOrUnknownFromTypeParameter(t *Type) *Type {
 }
 
 func (c *Checker) getInferredTypeParameterConstraint(t *Type, omitTypeReferences bool) *Type {
-	return nil // !!!
+	var inferences []*Type
+	if t.symbol != nil && len(t.symbol.Declarations) != 0 {
+		for _, declaration := range t.symbol.Declarations {
+			if ast.IsInferTypeNode(declaration.Parent) {
+				// When an 'infer T' declaration is immediately contained in a type reference node
+				// (such as 'Foo<infer T>'), T's constraint is inferred from the constraint of the
+				// corresponding type parameter in 'Foo'. When multiple 'infer T' declarations are
+				// present, we form an intersection of the inferred constraint types.
+				child := declaration.Parent
+				parent := child.Parent
+				for parent != nil && ast.IsParenthesizedExpression(parent) {
+					child = parent
+					parent = child.Parent
+				}
+				switch {
+				case ast.IsTypeReferenceNode(parent) && !omitTypeReferences:
+					typeParameters := c.getTypeParametersForTypeReferenceOrImport(parent)
+					if typeParameters != nil {
+						index := slices.Index(parent.TypeArguments(), child)
+						if index >= 0 && index < len(typeParameters) {
+							declaredConstraint := c.getConstraintOfTypeParameter(typeParameters[index])
+							if declaredConstraint != nil {
+								// Type parameter constraints can reference other type parameters so
+								// constraints need to be instantiated. If instantiation produces the
+								// type parameter itself, we discard that inference. For example, in
+								//   type Foo<T extends string, U extends T> = [T, U];
+								//   type Bar<T> = T extends Foo<infer X, infer X> ? Foo<X, X> : T;
+								// the instantiated constraint for U is X, so we discard that inference.
+								mapper := newDeferredTypeMapper(typeParameters, core.MapIndex(typeParameters, func(_ *Type, index int) func() *Type {
+									return func() *Type {
+										return c.getEffectiveTypeArgumentAtIndex(parent, typeParameters, index)
+									}
+								}))
+								constraint := c.instantiateType(declaredConstraint, mapper)
+								if constraint != t {
+									inferences = append(inferences, constraint)
+								}
+							}
+						}
+					}
+				case ast.IsParameter(parent) && parent.AsParameterDeclaration().DotDotDotToken != nil ||
+					ast.IsRestTypeNode(parent) &&
+						ast.IsNamedTupleMember(parent) && parent.AsNamedTupleMember().DotDotDotToken != nil:
+					inferences = append(inferences, c.createArrayType(c.unknownType))
+				case ast.IsTemplateLiteralTypeSpan(parent):
+					inferences = append(inferences, c.stringType)
+				case ast.IsTypeParameterDeclaration(parent) && ast.IsMappedTypeNode(parent.Parent):
+					inferences = append(inferences, c.stringNumberSymbolType)
+				case ast.IsMappedTypeNode(parent) && parent.AsMappedTypeNode().Type != nil &&
+					ast.SkipParentheses(parent.AsMappedTypeNode().Type) == declaration.Parent &&
+					ast.IsConditionalTypeNode(parent.Parent) &&
+					parent.Parent.AsConditionalTypeNode().ExtendsType == parent &&
+					ast.IsMappedTypeNode(parent.Parent.AsConditionalTypeNode().CheckType) &&
+					parent.Parent.AsConditionalTypeNode().CheckType.AsMappedTypeNode().Type != nil:
+					checkMappedType := parent.Parent.AsConditionalTypeNode().CheckType
+					nodeType := c.getTypeFromTypeNode(checkMappedType.AsMappedTypeNode().Type)
+					checkMappedTypeParameter := checkMappedType.AsMappedTypeNode().TypeParameter
+					mapper := newSimpleTypeMapper(c.getDeclaredTypeOfTypeParameter(c.getSymbolOfDeclaration(checkMappedTypeParameter)),
+						core.IfElse(checkMappedTypeParameter.AsTypeParameter().Constraint != nil,
+							c.getTypeFromTypeNode(checkMappedTypeParameter.AsTypeParameter().Constraint),
+							c.stringNumberSymbolType))
+					inferences = append(inferences, c.instantiateType(nodeType, mapper))
+				}
+			}
+		}
+	}
+	if len(inferences) != 0 {
+		return c.getIntersectionType(inferences)
+	}
+	return nil
+}
+
+func (c *Checker) getTypeParametersForTypeReferenceOrImport(node *ast.Node) []*Type {
+	t := c.getTypeFromTypeNode(node)
+	if !c.isErrorType(t) {
+		symbol := c.typeNodeLinks.get(node).resolvedSymbol
+		if symbol != nil {
+			return c.getTypeParametersForTypeAndSymbol(t, symbol)
+		}
+	}
+	return nil
+}
+
+func (c *Checker) getTypeParametersForTypeAndSymbol(t *Type, symbol *ast.Symbol) []*Type {
+	if !c.isErrorType(t) {
+		if symbol.Flags&ast.SymbolFlagsTypeAlias != 0 {
+			typeParameters := c.typeAliasLinks.get(symbol).typeParameters
+			if len(typeParameters) != 0 {
+				return typeParameters
+			}
+		}
+		if t.objectFlags&ObjectFlagsReference != 0 {
+			return t.Target().AsInterfaceType().LocalTypeParameters()
+		}
+	}
+	return nil
+}
+
+func (c *Checker) getEffectiveTypeArgumentAtIndex(node *ast.Node, typeParameters []*Type, index int) *Type {
+	typeArguments := node.TypeArguments()
+	if index < len(typeArguments) {
+		return c.getTypeFromTypeNode(typeArguments[index])
+	}
+	return c.getEffectiveTypeArguments(node, typeParameters)[index]
 }
 
 func (c *Checker) getConstraintOfIndexedAccess(t *Type) *Type {
@@ -11873,7 +12257,16 @@ func (c *Checker) declarationBelongsToPrivateAmbientMember(declaration *ast.Node
 }
 
 func (c *Checker) getTypeOfPrototypeProperty(prototype *ast.Symbol) *Type {
-	return c.anyType // !!!
+	// TypeScript 1.0 spec (April 2014): 8.4
+	// Every class automatically contains a static property member named 'prototype',
+	// the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
+	// It is an error to explicitly declare a static property member with the name 'prototype'.
+	classType := c.getDeclaredTypeOfSymbol(c.getParentOfSymbol(prototype))
+	typeParameters := classType.AsInterfaceType().TypeParameters()
+	if len(typeParameters) != 0 {
+		return c.createTypeReference(classType, core.Map(typeParameters, func(*Type) *Type { return c.anyType }))
+	}
+	return classType
 }
 
 func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Type {
@@ -12181,6 +12574,38 @@ func (c *Checker) getTypeOfAccessors(symbol *ast.Symbol) *Type {
 	return links.resolvedType
 }
 
+func (c *Checker) getWriteTypeOfAccessors(symbol *ast.Symbol) *Type {
+	links := c.valueSymbolLinks.get(symbol)
+	if links.writeType == nil {
+		if !c.pushTypeResolution(symbol, TypeSystemPropertyNameWriteType) {
+			return c.errorType
+		}
+		setter := getDeclarationOfKind(symbol, ast.KindSetAccessor)
+		if setter == nil {
+			propDeclaration := getDeclarationOfKind(symbol, ast.KindPropertyDeclaration)
+			if propDeclaration != nil && ast.IsAutoAccessorPropertyDeclaration(propDeclaration) {
+				setter = propDeclaration
+			}
+		}
+		writeType := c.getAnnotatedAccessorType(setter)
+		if !c.popTypeResolution() {
+			if c.getAnnotatedAccessorTypeNode(setter) != nil {
+				c.error(setter, diagnostics.X_0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, c.symbolToString(symbol))
+			}
+			writeType = c.anyType
+		}
+		// Absent an explicit setter type annotation we use the read type of the accessor.
+		if links.writeType == nil {
+			if writeType != nil {
+				links.writeType = writeType
+			} else {
+				links.writeType = c.getTypeOfAccessors(symbol)
+			}
+		}
+	}
+	return links.writeType
+}
+
 func (c *Checker) getTypeOfAlias(symbol *ast.Symbol) *Type {
 	links := c.valueSymbolLinks.get(symbol)
 	if links.resolvedType == nil {
@@ -12405,9 +12830,8 @@ func (c *Checker) typeResolutionHasProperty(r *TypeResolution) bool {
 		return r.target.(*Type).AsConstrainedType().resolvedBaseConstraint != nil
 	case TypeSystemPropertyNameInitializerIsUndefined:
 		return c.nodeLinks.get(r.target.(*ast.Node)).flags&NodeCheckFlagsInitializerIsUndefinedComputed != 0
-		// !!!
-		// case TypeSystemPropertyNameWriteType:
-		// 	return !!c.getSymbolLinks(target.(Symbol)).writeType
+	case TypeSystemPropertyNameWriteType:
+		return c.valueSymbolLinks.get(r.target.(*ast.Symbol)).writeType != nil
 	}
 	panic("Unhandled case in typeResolutionHasProperty")
 }
@@ -18015,9 +18439,7 @@ func (c *Checker) getGlobalImportAttributesType(reportErrors bool) *Type {
 }
 
 func (c *Checker) createIterableType(iteratedType *Type) *Type {
-	return c.createArrayType(iteratedType)
-	// !!!
-	// return c.createTypeFromGenericGlobalType(c.getGlobalIterableType(true), []*Type{iteratedType, c.voidType, c.undefinedType})
+	return c.createTypeFromGenericGlobalType(c.getGlobalIterableTypeChecked(), []*Type{iteratedType, c.voidType, c.undefinedType})
 }
 
 func (c *Checker) createArrayType(elementType *Type) *Type {
@@ -18174,14 +18596,14 @@ func (c *Checker) getRestTypeOfTupleType(t *Type) *Type {
 	return c.getElementTypeOfSliceOfTupleType(t, t.TargetTupleType().fixedLength, 0, false, false)
 }
 
-func (c *Checker) getTupleElementTypeOutOfStartCount(t *Type, index jsnum.Number, undefinedOrMissingType *Type) *Type {
+func (c *Checker) getTupleElementTypeOutOfStartCount(t *Type, index jsnum.Number, undefinedLikeType *Type) *Type {
 	return c.mapType(t, func(t *Type) *Type {
 		restType := c.getRestTypeOfTupleType(t)
 		if restType == nil {
 			return c.undefinedType
 		}
-		if c.undefinedOrMissingType != nil && index >= jsnum.Number(getTotalFixedElementCount(t.TargetTupleType())) {
-			return c.getUnionType([]*Type{restType, c.undefinedOrMissingType})
+		if undefinedLikeType != nil && index >= jsnum.Number(getTotalFixedElementCount(t.TargetTupleType())) {
+			return c.getUnionType([]*Type{restType, undefinedLikeType})
 		}
 		return restType
 	})
@@ -19332,8 +19754,12 @@ func (c *Checker) getIntersectionTypeEx(types []*Type, flags IntersectionFlags, 
 		includes&TypeFlagsVoidLike != 0 && includes&(TypeFlagsDisjointDomains&^TypeFlagsVoidLike) != 0 {
 		return c.neverType
 	}
-	if includes&(TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 && includes&TypeFlagsStringLiteral != 0 && c.extractRedundantTemplateLiterals(typeSet) {
-		return c.neverType
+	if includes&(TypeFlagsTemplateLiteral|TypeFlagsStringMapping) != 0 && includes&TypeFlagsStringLiteral != 0 {
+		var isEmptySet bool
+		typeSet, isEmptySet = c.extractRedundantTemplateLiterals(typeSet)
+		if isEmptySet {
+			return c.neverType
+		}
 	}
 	if includes&TypeFlagsAny != 0 {
 		switch {
@@ -19559,9 +19985,27 @@ func (c *Checker) removeRedundantSupertypes(types []*Type, includes TypeFlags) [
  * Returns true if the intersection of the template literals and string literals is the empty set,
  * for example `get${string}` & "setX", and should reduce to never.
  */
-func (c *Checker) extractRedundantTemplateLiterals(types []*Type) bool {
-	// !!!
-	return false
+func (c *Checker) extractRedundantTemplateLiterals(types []*Type) ([]*Type, bool) {
+	literals := core.Filter(types, func(t *Type) bool { return t.flags&TypeFlagsStringLiteral != 0 })
+	i := len(types)
+	for i > 0 {
+		i--
+		t := types[i]
+		if t.flags&(TypeFlagsTemplateLiteral|TypeFlagsStringMapping) == 0 {
+			continue
+		}
+		for _, t2 := range literals {
+			if c.isTypeSubtypeOf(t2, t) {
+				// For example, `get${T}` & "getX" is just "getX", and Lowercase<string> & "foo" is just "foo"
+				types = slices.Delete(types, i, i+1)
+				break
+			}
+			if c.isPatternLiteralType(t) {
+				return types, true
+			}
+		}
+	}
+	return types, false
 }
 
 // If the given list of types contains more than one union of primitive types, replace the
@@ -21759,7 +22203,7 @@ func (c *Checker) isContextSensitiveFunctionOrObjectLiteralMethod(fn *ast.Node) 
 
 func (c *Checker) getSpreadArgumentType(args []*ast.Node, index int, argCount int, restType *Type, context *InferenceContext, checkMode CheckMode) *Type {
 	inConstContext := c.isConstTypeVariable(restType, 0)
-	if index >= argCount-1 {
+	if argCount > 0 && index >= argCount-1 {
 		arg := args[argCount-1]
 		if isSpreadArgument(arg) {
 			// We are inferring from a spread expression in the last argument position, i.e. both the parameter
