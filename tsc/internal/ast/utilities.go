@@ -1189,6 +1189,14 @@ func IsModuleIdentifier(node *Node) bool {
 	return IsIdentifier(node) && node.Text() == "module"
 }
 
+func IsThisIdentifier(node *Node) bool {
+	return IsIdentifier(node) && node.Text() == "this"
+}
+
+func IsThisParameter(node *Node) bool {
+	return IsParameter(node) && node.Name() != nil && IsThisIdentifier(node.Name())
+}
+
 // Does not handle signed numeric names like `a[+0]` - handling those would require handling prefix unary expressions
 // throughout late binding handling as well, which is awkward (but ultimately probably doable if there is demand)
 func GetElementOrPropertyAccessArgumentExpressionOrName(node *Node) *Node {

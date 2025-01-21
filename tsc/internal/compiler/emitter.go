@@ -5,6 +5,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/typescript-go/internal/transformers"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -47,7 +48,10 @@ func (e *emitter) emitJsFile(sourceFile *ast.SourceFile, jsFilePath string, sour
 	}
 
 	// !!! mark linked references
+
 	// !!! transform the source files?
+	typeEraser := transformers.NewTypeEraserTransformer()
+	sourceFile = typeEraser.VisitSourceFile(sourceFile)
 
 	printerOptions := printer.PrinterOptions{
 		NewLine: options.NewLine,

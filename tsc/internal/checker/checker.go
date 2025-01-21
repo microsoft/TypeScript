@@ -3875,7 +3875,7 @@ func isSpreadIntoCallOrNew(node *ast.Node) bool {
 func (c *Checker) checkQualifiedName(node *ast.Node, checkMode CheckMode) *Type {
 	left := node.AsQualifiedName().Left
 	var leftType *Type
-	if ast.IsPartOfTypeQuery(node) && isThisIdentifier(left) {
+	if ast.IsPartOfTypeQuery(node) && ast.IsThisIdentifier(left) {
 		leftType = c.checkNonNullType(c.checkThisExpression(left), left)
 	} else {
 		leftType = c.checkNonNullExpression(left)
@@ -5872,7 +5872,7 @@ func (c *Checker) checkExpressionWithTypeArguments(node *ast.Node) *Type {
 		exprType = c.checkExpression(node.Expression())
 	} else {
 		exprName := node.AsTypeQueryNode().ExprName
-		if isThisIdentifier(exprName) {
+		if ast.IsThisIdentifier(exprName) {
 			exprType = c.checkThisExpression(node.AsTypeQueryNode().ExprName)
 		} else {
 			exprType = c.checkExpression(node.AsTypeQueryNode().ExprName)
@@ -15849,7 +15849,7 @@ func (c *Checker) isTypeParameterPossiblyReferenced(tp *Type, node *ast.Node) bo
 		case ast.KindTypeQuery:
 			entityName := node.AsTypeQueryNode().ExprName
 			firstIdentifier := getFirstIdentifier(entityName)
-			if !isThisIdentifier(firstIdentifier) {
+			if !ast.IsThisIdentifier(firstIdentifier) {
 				firstIdentifierSymbol := c.getResolvedSymbol(firstIdentifier)
 				tpDeclaration := tp.symbol.Declarations[0] // There is exactly one declaration, otherwise `containsReference` is not called
 				var tpScope *ast.Node

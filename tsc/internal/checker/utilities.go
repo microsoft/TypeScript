@@ -1533,21 +1533,13 @@ func getClassLikeDeclarationOfSymbol(symbol *ast.Symbol) *ast.Node {
 }
 
 func isThisInTypeQuery(node *ast.Node) bool {
-	if !isThisIdentifier(node) {
+	if !ast.IsThisIdentifier(node) {
 		return false
 	}
 	for ast.IsQualifiedName(node.Parent) && node.Parent.AsQualifiedName().Left == node {
 		node = node.Parent
 	}
 	return node.Parent.Kind == ast.KindTypeQuery
-}
-
-func isThisIdentifier(node *ast.Node) bool {
-	return node != nil && node.Kind == ast.KindIdentifier && identifierIsThisKeyword(node)
-}
-
-func identifierIsThisKeyword(id *ast.Node) bool {
-	return id.AsIdentifier().Text == "this"
 }
 
 func getDeclarationModifierFlagsFromSymbol(s *ast.Symbol) ast.ModifierFlags {
@@ -1844,8 +1836,9 @@ func getThisParameter(signature *ast.Node) *ast.Node {
 	return nil
 }
 
+// Deprecated: use ast.IsThisParameter
 func parameterIsThisKeyword(parameter *ast.Node) bool {
-	return isThisIdentifier(parameter.Name())
+	return ast.IsThisParameter(parameter)
 }
 
 func getInterfaceBaseTypeNodes(node *ast.Node) []*ast.Node {

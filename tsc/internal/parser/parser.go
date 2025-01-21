@@ -124,14 +124,14 @@ func ParseJSONText(fileName string, sourceText string) *ast.SourceFile {
 	if len(expressions) == 1 {
 		statement = p.factory.NewExpressionStatement(expressions[0])
 	} else {
-		arr := p.factory.NewArrayLiteralExpression(p.factory.NewNodeList(core.NewTextRange(pos, p.nodePos()), expressions), false)
+		arr := p.factory.NewArrayLiteralExpression(p.newNodeList(core.NewTextRange(pos, p.nodePos()), expressions), false)
 		p.finishNode(arr, pos)
 		statement = p.factory.NewExpressionStatement(arr)
 	}
 
 	p.finishNode(statement, pos)
 	p.parseExpectedToken(ast.KindEndOfFile)
-	node := p.factory.NewSourceFile(p.sourceText, p.fileName, p.factory.NewNodeList(statement.Loc, []*ast.Node{statement}))
+	node := p.factory.NewSourceFile(p.sourceText, p.fileName, p.newNodeList(statement.Loc, []*ast.Node{statement}))
 	p.finishNode(node, pos)
 	result := node.AsSourceFile()
 	result.SetDiagnostics(attachFileToDiagnostics(p.diagnostics, result))
@@ -376,7 +376,7 @@ func (p *Parser) reparseTopLevelAwait(sourceFile *ast.SourceFile) *ast.Node {
 		}
 	}
 
-	return p.factory.NewSourceFile(sourceFile.Text, sourceFile.FileName(), p.factory.NewNodeList(sourceFile.Statements.Loc, statements))
+	return p.factory.NewSourceFile(sourceFile.Text, sourceFile.FileName(), p.newNodeList(sourceFile.Statements.Loc, statements))
 }
 
 func (p *Parser) parseListIndex(kind ParsingContext, parseElement func(p *Parser, index int) *ast.Node) *ast.NodeList {
@@ -396,7 +396,7 @@ func (p *Parser) parseListIndex(kind ParsingContext, parseElement func(p *Parser
 	p.parsingContexts = saveParsingContexts
 	slice := p.nodeSlicePool.NewSlice(len(list))
 	copy(slice, list)
-	return p.factory.NewNodeList(core.NewTextRange(pos, p.nodePos()), slice)
+	return p.newNodeList(core.NewTextRange(pos, p.nodePos()), slice)
 }
 
 func (p *Parser) parseList(kind ParsingContext, parseElement func(p *Parser) *ast.Node) *ast.NodeList {
@@ -460,7 +460,7 @@ func (p *Parser) parseDelimitedList(kind ParsingContext, parseElement func(p *Pa
 	p.parsingContexts = saveParsingContexts
 	slice := p.nodeSlicePool.NewSlice(len(list))
 	copy(slice, list)
-	return p.factory.NewNodeList(core.NewTextRange(pos, p.nodePos()), slice)
+	return p.newNodeList(core.NewTextRange(pos, p.nodePos()), slice)
 }
 
 // Return a non-nil (but possibly empty) NodeList if parsing was successful, or nil if opening token wasn't found
@@ -475,7 +475,7 @@ func (p *Parser) parseBracketedList(kind ParsingContext, parseElement func(p *Pa
 }
 
 func (p *Parser) parseEmptyNodeList() *ast.NodeList {
-	return p.factory.NewNodeList(core.NewTextRange(p.nodePos(), p.nodePos()), nil)
+	return p.newNodeList(core.NewTextRange(p.nodePos(), p.nodePos()), nil)
 }
 
 // Returns true if we should abort parsing.
@@ -2349,7 +2349,7 @@ func (p *Parser) parseUnionOrIntersectionType(operator ast.Kind, parseConstituen
 		for p.parseOptional(operator) {
 			types = append(types, p.parseFunctionOrConstructorTypeToError(isUnionType, parseConstituentType))
 		}
-		typeNode = p.createUnionOrIntersectionTypeNode(operator, p.factory.NewNodeList(core.NewTextRange(pos, p.nodePos()), types))
+		typeNode = p.createUnionOrIntersectionTypeNode(operator, p.newNodeList(core.NewTextRange(pos, p.nodePos()), types))
 		p.finishNode(typeNode, pos)
 	}
 	return typeNode
@@ -3357,7 +3357,7 @@ func (p *Parser) parseTupleElementNameOrTupleElementType() *ast.Node {
 		questionToken := p.parseOptionalToken(ast.KindQuestionToken)
 		p.parseExpected(ast.KindColonToken)
 		typeNode := p.parseTupleElementType()
-		result := p.factory.NewNamedTupleTypeMember(dotDotDotToken, name, questionToken, typeNode)
+		result := p.factory.NewNamedTupleMember(dotDotDotToken, name, questionToken, typeNode)
 		p.finishNode(result, pos)
 		return result
 	}
@@ -3456,7 +3456,7 @@ func (p *Parser) parseTemplateTypeSpans() *ast.NodeList {
 			break
 		}
 	}
-	return p.factory.NewNodeList(core.NewTextRange(pos, p.nodePos()), list)
+	return p.newNodeList(core.NewTextRange(pos, p.nodePos()), list)
 }
 
 func (p *Parser) parseTemplateTypeSpan() *ast.Node {
@@ -3546,7 +3546,7 @@ func (p *Parser) parseModifiersForConstructorType() *ast.ModifierList {
 		p.finishNode(modifier, pos)
 		nodes := p.nodeSlicePool.NewSlice(1)
 		nodes[0] = modifier
-		return p.factory.NewModifierList(modifier.Loc, nodes)
+		return p.newModifierList(modifier.Loc, nodes)
 	}
 	return nil
 }
@@ -3640,7 +3640,7 @@ func (p *Parser) parseModifiersEx(allowDecorators bool, permitConstAsModifier bo
 	if len(list) != 0 {
 		nodes := p.nodeSlicePool.NewSlice(len(list))
 		copy(nodes, list)
-		return p.factory.NewModifierList(core.NewTextRange(pos, p.nodePos()), nodes)
+		return p.newModifierList(core.NewTextRange(pos, p.nodePos()), nodes)
 	}
 	return nil
 }
@@ -4189,7 +4189,7 @@ func (p *Parser) parseModifiersForArrowFunction() *ast.ModifierList {
 		p.finishNode(modifier, pos)
 		nodes := p.nodeSlicePool.NewSlice(1)
 		nodes[0] = modifier
-		return p.factory.NewModifierList(modifier.Loc, nodes)
+		return p.newModifierList(modifier.Loc, nodes)
 	}
 	return nil
 }
@@ -4288,7 +4288,7 @@ func (p *Parser) parseSimpleArrowFunctionExpression(pos int, identifier *ast.Nod
 	// Debug.assert(token() == ast.KindEqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
 	parameter := p.factory.NewParameterDeclaration(nil /*modifiers*/, nil /*dotDotDotToken*/, identifier, nil /*questionToken*/, nil /*typeNode*/, nil /*initializer*/)
 	p.finishNode(parameter, identifier.Pos())
-	parameters := p.factory.NewNodeList(parameter.Loc, []*ast.Node{parameter})
+	parameters := p.newNodeList(parameter.Loc, []*ast.Node{parameter})
 	equalsGreaterThanToken := p.parseExpectedToken(ast.KindEqualsGreaterThanToken)
 	body := p.parseArrowFunctionExpressionBody(asyncModifier != nil /*isAsync*/, allowReturnTypeInArrowFunction)
 	result := p.factory.NewArrowFunction(asyncModifier, nil /*typeParameters*/, parameters, nil /*returnType*/, equalsGreaterThanToken, body)
@@ -4503,7 +4503,7 @@ func (p *Parser) parseJsxElementOrSelfClosingElementOrFragment(inExpressionConte
 			p.finishNodeWithEnd(newClosingElement, end, end)
 			newLast := p.factory.NewJsxElement(lastChild.AsJsxElement().OpeningElement, lastChild.AsJsxElement().Children, newClosingElement)
 			p.finishNodeWithEnd(newLast, lastChild.AsJsxElement().OpeningElement.Pos(), end)
-			children = p.factory.NewNodeList(core.NewTextRange(children.Pos(), newLast.End()), append(children.Nodes[0:len(children.Nodes)-1], newLast))
+			children = p.newNodeList(core.NewTextRange(children.Pos(), newLast.End()), append(children.Nodes[0:len(children.Nodes)-1], newLast))
 			closingElement = lastChild.AsJsxElement().ClosingElement
 		} else {
 			closingElement = p.parseJsxClosingElement(opening, inExpressionContext)
@@ -4572,7 +4572,7 @@ func (p *Parser) parseJsxChildren(openingTag *ast.Expression) *ast.NodeList {
 		}
 	}
 	p.parsingContexts = saveParsingContexts
-	return p.factory.NewNodeList(core.NewTextRange(pos, p.nodePos()), list)
+	return p.newNodeList(core.NewTextRange(pos, p.nodePos()), list)
 }
 
 func (p *Parser) parseJsxChild(openingTag *ast.Node, token ast.Kind) *ast.Expression {
@@ -5136,7 +5136,7 @@ func (p *Parser) parseMemberExpressionRest(pos int, expression *ast.Expression, 
 		if questionDotToken == nil {
 			if p.token == ast.KindExclamationToken && !p.hasPrecedingLineBreak() {
 				p.nextToken()
-				expression = p.factory.NewNonNullExpression(expression)
+				expression = p.factory.NewNonNullExpression(expression, ast.NodeFlagsNone)
 				p.finishNode(expression, pos)
 				continue
 			}
@@ -5314,7 +5314,7 @@ func (p *Parser) parseTemplateSpans(isTaggedTemplate bool) *ast.NodeList {
 			break
 		}
 	}
-	return p.factory.NewNodeList(core.NewTextRange(pos, p.nodePos()), list)
+	return p.newNodeList(core.NewTextRange(pos, p.nodePos()), list)
 }
 
 func (p *Parser) parseTemplateSpan(isTaggedTemplate bool) *ast.Node {
@@ -5646,6 +5646,18 @@ func (p *Parser) createIdentifierWithDiagnostic(isIdentifier bool, diagnosticMes
 
 func (p *Parser) internIdentifier(text string) {
 	p.identifiers.Add(text)
+}
+
+func (p *Parser) newNodeList(loc core.TextRange, nodes []*ast.Node) *ast.NodeList {
+	list := p.factory.NewNodeList(nodes)
+	list.Loc = loc
+	return list
+}
+
+func (p *Parser) newModifierList(loc core.TextRange, nodes []*ast.Node) *ast.ModifierList {
+	list := p.factory.NewModifierList(nodes)
+	list.Loc = loc
+	return list
 }
 
 func (p *Parser) finishNode(node *ast.Node, pos int) {
