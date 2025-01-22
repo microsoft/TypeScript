@@ -46,8 +46,40 @@ function foo(this: Object | undefined) {
     return this ?? 0;
 }
 
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+  const maybe = null as true | null;
+  let i = 0;
+  const d = (i++, maybe) ?? true; // ok
+  const e = (i++, i++) ?? true; // error
+  const f = (maybe, i++) ?? true; // error
+}
+
+// https://github.com/microsoft/TypeScript/issues/60439
+class X {
+  constructor() {
+    const p = new.target ?? 32;
+  }
+}
+
+// https://github.com/microsoft/TypeScript/issues/60614
+declare function tag<T>(
+  strings: TemplateStringsArray,
+  ...values: number[]
+): T | null;
+
+tag`foo${1}` ?? 32; // ok
+
+`foo${1}` ?? 32; // error
+`foo` ?? 32; // error
+
+
 //// [predicateSemantics.js]
-var _a, _b, _c, _d, _e, _f;
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
 // OK: One or other operand is possibly nullish
 var test1 = (_a = (cond ? undefined : 32)) !== null && _a !== void 0 ? _a : "possibly reached";
 // Not OK: Both operands nullish
@@ -88,3 +120,23 @@ function foo() {
     // Should be OK
     return this !== null && this !== void 0 ? this : 0;
 }
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+    var maybe = null;
+    var i = 0;
+    var d = (_g = (i++, maybe)) !== null && _g !== void 0 ? _g : true; // ok
+    var e = (_h = (i++, i++)) !== null && _h !== void 0 ? _h : true; // error
+    var f = (_j = (maybe, i++)) !== null && _j !== void 0 ? _j : true; // error
+}
+// https://github.com/microsoft/TypeScript/issues/60439
+var X = /** @class */ (function () {
+    function X() {
+        var _newTarget = this.constructor;
+        var _a;
+        var p = (_a = _newTarget) !== null && _a !== void 0 ? _a : 32;
+    }
+    return X;
+}());
+(_k = tag(__makeTemplateObject(["foo", ""], ["foo", ""]), 1)) !== null && _k !== void 0 ? _k : 32; // ok
+(_l = "foo".concat(1)) !== null && _l !== void 0 ? _l : 32; // error
+"foo" !== null && "foo" !== void 0 ? "foo" : 32; // error

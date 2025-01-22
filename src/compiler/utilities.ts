@@ -138,6 +138,7 @@ import {
     FileExtensionInfo,
     fileExtensionIs,
     fileExtensionIsOneOf,
+    FileReference,
     FileWatcher,
     filter,
     find,
@@ -201,6 +202,7 @@ import {
     getParseTreeNode,
     getPathComponents,
     getPathFromPathComponents,
+    getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
     getResolutionModeOverride,
     getRootLength,
@@ -407,6 +409,7 @@ import {
     lastOrUndefined,
     LateVisibilityPaintedStatement,
     length,
+    libMap,
     LiteralImportTypeNode,
     LiteralLikeElementAccessExpression,
     LiteralLikeNode,
@@ -496,8 +499,10 @@ import {
     ResolutionMode,
     ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations,
+    ResolvedProjectReference,
     ResolvedTypeReferenceDirective,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    resolvePath,
     returnFalse,
     ReturnStatement,
     returnUndefined,
@@ -547,6 +552,7 @@ import {
     TextRange,
     TextSpan,
     ThisTypePredicate,
+    toFileNameLowerCase,
     Token,
     TokenFlags,
     tokenToString,
@@ -1372,8 +1378,8 @@ export type ScriptTargetFeatures = ReadonlyMap<string, ReadonlyMap<string, strin
 
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
-//       lib/esnext.*.d.ts file.
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 /** @internal */
 export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetFeatures =>
     new Map(Object.entries({
@@ -2072,7 +2078,7 @@ export function getNonAugmentationDeclaration(symbol: Symbol): Declaration | und
 }
 
 function isCommonJSContainingModuleKind(kind: ModuleKind) {
-    return kind === ModuleKind.CommonJS || kind === ModuleKind.Node16 || kind === ModuleKind.NodeNext;
+    return kind === ModuleKind.CommonJS || ModuleKind.Node16 <= kind && kind <= ModuleKind.NodeNext;
 }
 
 /** @internal */
@@ -3012,14 +3018,6 @@ export function forEachPropertyAssignment<T>(objectLiteral: ObjectLiteralExpress
             callback(property) :
             undefined;
     });
-}
-
-/** @internal */
-export function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
-    return forEachPropertyAssignment(objectLiteral, propKey, property =>
-        isArrayLiteralExpression(property.initializer) ?
-            find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
-            undefined);
 }
 
 /** @internal */
@@ -4304,7 +4302,7 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
 
 /** @internal */
 export function shouldRewriteModuleSpecifier(specifier: string, compilerOptions: CompilerOptions): boolean {
-    return !!compilerOptions.rewriteRelativeImportExtensions && pathIsRelative(specifier) && !isDeclarationFileName(specifier);
+    return !!compilerOptions.rewriteRelativeImportExtensions && pathIsRelative(specifier) && !isDeclarationFileName(specifier) && hasTSFileExtension(specifier);
 }
 
 /** @internal */
@@ -6064,7 +6062,7 @@ export function hasInvalidEscape(template: TemplateLiteral): boolean {
 const doubleQuoteEscapedCharsRegExp = /[\\"\u0000-\u001f\u2028\u2029\u0085]/g;
 const singleQuoteEscapedCharsRegExp = /[\\'\u0000-\u001f\u2028\u2029\u0085]/g;
 // Template strings preserve simple LF newlines, still encode CRLF (or CR)
-const backtickQuoteEscapedCharsRegExp = /\r\n|[\\`\u0000-\u001f\u2028\u2029\u0085]/g;
+const backtickQuoteEscapedCharsRegExp = /\r\n|[\\`\u0000-\u0009\u000b-\u001f\u2028\u2029\u0085]/g;
 const escapedCharsMap = new Map(Object.entries({
     "\t": "\\t",
     "\v": "\\v",
@@ -6488,6 +6486,21 @@ export function getPossibleOriginalInputExtensionForExtension(path: string): Ext
         fileExtensionIsOneOf(path, [Extension.Dcts, Extension.Cjs, Extension.Cts]) ? [Extension.Cts, Extension.Cjs] :
         fileExtensionIsOneOf(path, [`.d.json.ts`]) ? [Extension.Json] :
         [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
+}
+
+/** @internal */
+export function getPossibleOriginalInputPathWithoutChangingExt(
+    filePath: string,
+    ignoreCase: boolean,
+    outputDir: string | undefined,
+    getCommonSourceDirectory: () => string,
+): string {
+    return outputDir ?
+        resolvePath(
+            getCommonSourceDirectory(),
+            getRelativePathFromDirectory(outputDir, filePath, ignoreCase),
+        ) :
+        filePath;
 }
 
 /**
@@ -8193,15 +8206,11 @@ export function getLastChild(node: Node): Node | undefined {
  *
  * @internal
  */
-export function addToSeen<K>(seen: Map<K, true>, key: K): boolean;
-/** @internal */
-export function addToSeen<K, T>(seen: Map<K, T>, key: K, value: T): boolean;
-/** @internal */
-export function addToSeen<K, T>(seen: Map<K, T>, key: K, value: T = true as any): boolean {
+export function addToSeen<K>(seen: Set<K>, key: K): boolean {
     if (seen.has(key)) {
         return false;
     }
-    seen.set(key, value);
+    seen.add(key);
     return true;
 }
 
@@ -8927,6 +8936,7 @@ const _computedOptions = createComputedCompilerOptions({
             const target = compilerOptions.target === ScriptTarget.ES3 ? undefined : compilerOptions.target;
             return target ??
                 ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
+                    (compilerOptions.module === ModuleKind.Node18 && ScriptTarget.ES2022) ||
                     (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
                     ScriptTarget.ES5);
         },
@@ -8949,6 +8959,7 @@ const _computedOptions = createComputedCompilerOptions({
                         moduleResolution = ModuleResolutionKind.Node10;
                         break;
                     case ModuleKind.Node16:
+                    case ModuleKind.Node18:
                         moduleResolution = ModuleResolutionKind.Node16;
                         break;
                     case ModuleKind.NodeNext:
@@ -8968,9 +8979,13 @@ const _computedOptions = createComputedCompilerOptions({
     moduleDetection: {
         dependencies: ["module", "target"],
         computeValue: (compilerOptions): ModuleDetectionKind => {
-            return compilerOptions.moduleDetection ||
-                (_computedOptions.module.computeValue(compilerOptions) === ModuleKind.Node16 ||
-                        _computedOptions.module.computeValue(compilerOptions) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
+            if (compilerOptions.moduleDetection !== undefined) {
+                return compilerOptions.moduleDetection;
+            }
+            const moduleKind = _computedOptions.module.computeValue(compilerOptions);
+            return ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext
+                ? ModuleDetectionKind.Force
+                : ModuleDetectionKind.Auto;
         },
     },
     isolatedModules: {
@@ -8987,6 +9002,7 @@ const _computedOptions = createComputedCompilerOptions({
             }
             switch (_computedOptions.module.computeValue(compilerOptions)) {
                 case ModuleKind.Node16:
+                case ModuleKind.Node18:
                 case ModuleKind.NodeNext:
                 case ModuleKind.Preserve:
                     return true;
@@ -9214,6 +9230,16 @@ export function unusedLabelIsError(options: CompilerOptions): boolean {
 export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution: ModuleResolutionKind): boolean {
     return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
         || moduleResolution === ModuleResolutionKind.Bundler;
+}
+
+/**
+ * @internal
+ * The same set of options also support import assertions.
+ */
+export function moduleSupportsImportAttributes(moduleKind: ModuleKind): boolean {
+    return ModuleKind.Node18 <= moduleKind && moduleKind <= ModuleKind.NodeNext
+        || moduleKind === ModuleKind.Preserve
+        || moduleKind === ModuleKind.ESNext;
 }
 
 /** @internal */
@@ -10441,6 +10467,7 @@ export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean 
 /** @internal */
 export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
     return !!(useSite.flags & NodeFlags.Ambient)
+        || isInJSDoc(useSite)
         || isPartOfTypeQuery(useSite)
         || isIdentifierInNonEmittingHeritageClause(useSite)
         || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
@@ -12082,4 +12109,92 @@ export function isNewScopeNode(node: Node): node is IntroducesNewScopeNode {
     return isFunctionLike(node)
         || isJSDocSignature(node)
         || isMappedTypeNode(node);
+}
+
+/** @internal */
+export function getLibNameFromLibReference(libReference: FileReference): string {
+    return toFileNameLowerCase(libReference.fileName);
+}
+
+/** @internal */
+export function getLibFileNameFromLibReference(libReference: FileReference): string | undefined {
+    const libName = getLibNameFromLibReference(libReference);
+    return libMap.get(libName);
+}
+
+/** @internal */
+export function forEachResolvedProjectReference<T>(
+    resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+    cb: (resolvedProjectReference: ResolvedProjectReference, parent: ResolvedProjectReference | undefined) => T | undefined,
+): T | undefined {
+    return forEachProjectReference(
+        /*projectReferences*/ undefined,
+        resolvedProjectReferences,
+        (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent),
+    );
+}
+
+/** @internal */
+export function forEachProjectReference<T>(
+    projectReferences: readonly ProjectReference[] | undefined,
+    resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+    cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, parent: ResolvedProjectReference | undefined, index: number) => T | undefined,
+    cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined,
+): T | undefined {
+    let seenResolvedRefs: Set<Path> | undefined;
+    return worker(projectReferences, resolvedProjectReferences, /*parent*/ undefined);
+
+    function worker(
+        projectReferences: readonly ProjectReference[] | undefined,
+        resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+        parent: ResolvedProjectReference | undefined,
+    ): T | undefined {
+        // Visit project references first
+        if (cbRef) {
+            const result = cbRef(projectReferences, parent);
+            if (result) return result;
+        }
+        let skipChildren: Set<ResolvedProjectReference> | undefined;
+        return forEach(
+            resolvedProjectReferences,
+            (resolvedRef, index) => {
+                if (resolvedRef && seenResolvedRefs?.has(resolvedRef.sourceFile.path)) {
+                    (skipChildren ??= new Set()).add(resolvedRef);
+                    // ignore recursives
+                    return undefined;
+                }
+                const result = cbResolvedRef(resolvedRef, parent, index);
+                if (result || !resolvedRef) return result;
+                (seenResolvedRefs ||= new Set()).add(resolvedRef.sourceFile.path);
+            },
+        ) || forEach(
+            resolvedProjectReferences,
+            resolvedRef =>
+                resolvedRef && !skipChildren?.has(resolvedRef) ?
+                    worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef) :
+                    undefined,
+        );
+    }
+}
+
+/** @internal */
+export function getOptionsSyntaxByArrayElementValue(optionsObject: ObjectLiteralExpression | undefined, name: string, value: string): StringLiteral | undefined {
+    return optionsObject && getPropertyArrayElementValue(optionsObject, name, value);
+}
+
+function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
+    return forEachPropertyAssignment(objectLiteral, propKey, property =>
+        isArrayLiteralExpression(property.initializer) ?
+            find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+            undefined);
+}
+
+/** @internal */
+export function getOptionsSyntaxByValue(optionsObject: ObjectLiteralExpression | undefined, name: string, value: string): StringLiteral | undefined {
+    return forEachOptionsSyntaxByName(optionsObject, name, property => isStringLiteral(property.initializer) && property.initializer.text === value ? property.initializer : undefined);
+}
+
+/** @internal */
+export function forEachOptionsSyntaxByName<T>(optionsObject: ObjectLiteralExpression | undefined, name: string, callback: (prop: PropertyAssignment) => T | undefined): T | undefined {
+    return forEachPropertyAssignment(optionsObject, name, callback);
 }
