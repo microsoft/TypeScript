@@ -1,0 +1,67 @@
+erasableSyntaxOnly.ts(3,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+erasableSyntaxOnly.ts(6,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+erasableSyntaxOnly.ts(10,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+erasableSyntaxOnly.ts(16,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+erasableSyntaxOnly.ts(20,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== erasableSyntaxOnly.ts (5 errors) ====
+    class MyClassErr {
+        // No parameter properties
+        constructor(public foo: string) { }
+                    ~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    }
+    
+    namespace IllegalBecauseInstantiated {
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export const m = 1;
+    }
+    
+    namespace AlsoIllegalBecauseInstantiated {
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class PrivateClass {
+    
+        }
+    }
+    
+    enum NotLegalEnum {
+         ~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        B = 1
+    }
+    
+    const enum NotLegalConstEnum {
+               ~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        C = 2
+    }
+    
+    // No errors after this point
+    class MyClassOk {
+        // Not a parameter property, ok
+        constructor(foo: string) { }
+    }
+    namespace NotInstantiated {
+        export interface JustAType { }
+        export type ATypeInANamespace = {};
+    }
+    declare namespace AmbientIsNotInstantiated {
+        export const stillOk = 12;
+    }
+    
+    declare enum LegalEnum {
+        A = 1
+    }
+    
+    declare namespace AmbientStuff {
+        namespace Nested {
+            export const stillOk = 12;
+        }
+        enum EnumInAmbientContext {
+            B = 1
+        }
+    }
+    
