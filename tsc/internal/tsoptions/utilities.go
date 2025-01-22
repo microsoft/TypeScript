@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"sync"
 
 	"github.com/dlclark/regexp2"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -323,12 +324,52 @@ func getFileMatcherPatterns(path string, excludes []string, includes []string, u
 	}
 }
 
+type regexp2CacheKey struct {
+	pattern string
+	opts    regexp2.RegexOptions
+}
+
+var (
+	regexp2CacheMu sync.RWMutex
+	regexp2Cache   = make(map[regexp2CacheKey]*regexp2.Regexp)
+)
+
 func getRegexFromPattern(pattern string, useCaseSensitiveFileNames bool) *regexp2.Regexp {
 	flags := regexp2.ECMAScript
 	if !useCaseSensitiveFileNames {
 		flags |= regexp2.IgnoreCase
 	}
-	return regexp2.MustCompile(pattern, regexp2.RegexOptions(flags))
+	opts := regexp2.RegexOptions(flags)
+
+	key := regexp2CacheKey{pattern, opts}
+
+	regexp2CacheMu.RLock()
+	re, ok := regexp2Cache[key]
+	regexp2CacheMu.RUnlock()
+	if ok {
+		return re
+	}
+
+	regexp2CacheMu.Lock()
+	defer regexp2CacheMu.Unlock()
+
+	re, ok = regexp2Cache[key]
+	if ok {
+		return re
+	}
+
+	// Avoid infinite growth; may cause thrashing but no worse than not caching at all.
+	if len(regexp2Cache) > 1000 {
+		clear(regexp2Cache)
+	}
+
+	// Avoid holding onto the pattern string, since this may pin a full config file in memory.
+	pattern = strings.Clone(pattern)
+	key.pattern = pattern
+
+	re = regexp2.MustCompile(pattern, opts)
+	regexp2Cache[key] = re
+	return re
 }
 
 type visitor struct {

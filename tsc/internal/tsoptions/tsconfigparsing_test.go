@@ -780,3 +780,38 @@ func TestParseSrcCompiler(t *testing.T) {
 		"transformers/module/system.ts",
 	})
 }
+
+func BenchmarkParseSrcCompiler(b *testing.B) {
+	repo.SkipIfNoTypeScriptSubmodule(b)
+
+	compilerDir := tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath, "src", "compiler"))
+	tsconfigPath := tspath.CombinePaths(compilerDir, "tsconfig.json")
+
+	fs := vfs.FromOS()
+	host := &vfsParseConfigHost{
+		fs:               fs,
+		currentDirectory: compilerDir,
+	}
+
+	jsonText, ok := fs.ReadFile(tsconfigPath)
+	assert.Assert(b, ok)
+	parsed := parser.ParseJSONText(tsconfigPath, jsonText)
+
+	b.ReportAllocs()
+	b.ResetTimer()
+
+	for range b.N {
+		ParseJsonSourceFileConfigFileContent(
+			&TsConfigSourceFile{
+				SourceFile: parsed,
+			},
+			host,
+			host.GetCurrentDirectory(),
+			nil,
+			tsconfigPath,
+			/*resolutionStack*/ nil,
+			/*extraFileExtensions*/ nil,
+			/*extendedConfigCache*/ nil,
+		)
+	}
+}
