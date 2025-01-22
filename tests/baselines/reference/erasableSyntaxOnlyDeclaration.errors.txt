@@ -1,21 +1,13 @@
-decl.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
-decl.d.ts(3,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-decl.d.ts(3,17): error TS2369: A parameter property is only allowed in a constructor implementation.
+decl.d.ts(4,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
 
 
-==== decl.d.ts (3 errors) ====
-    class MyClassErr {
-    ~~~~~
-!!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
-        // No parameter properties
-        constructor(public foo: string);
-                    ~~~~~~~~~~~~~~~~~~
-!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-                    ~~~~~~~~~~~~~~~~~~
-!!! error TS2369: A parameter property is only allowed in a constructor implementation.
-    }
+==== decl.d.ts (1 errors) ====
+    // Diffs from the other test:
+    // - Parameter properties are already banned in .d.ts files
     
     namespace IllegalBecauseInstantiated {
+    ~~~~~~~~~
+!!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
         export const m = 1;
     }
     

@@ -2,10 +2,11 @@ erasableSyntaxOnly.ts(3,17): error TS1294: This syntax is not allowed when 'eras
 erasableSyntaxOnly.ts(6,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 erasableSyntaxOnly.ts(10,11): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 erasableSyntaxOnly.ts(16,6): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
-erasableSyntaxOnly.ts(20,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+erasableSyntaxOnly.ts(20,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+erasableSyntaxOnly.ts(22,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== erasableSyntaxOnly.ts (5 errors) ====
+==== erasableSyntaxOnly.ts (6 errors) ====
     class MyClassErr {
         // No parameter properties
         constructor(public foo: string) { }
@@ -32,6 +33,10 @@ erasableSyntaxOnly.ts(20,12): error TS1294: This syntax is not allowed when 'era
 !!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         B = 1
     }
+    
+    import NoGoodAlias = NotLegalEnum.B;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     const enum NotLegalConstEnum {
                ~~~~~~~~~~~~~~~~~
@@ -63,5 +68,7 @@ erasableSyntaxOnly.ts(20,12): error TS1294: This syntax is not allowed when 'era
         enum EnumInAmbientContext {
             B = 1
         }
+    
+        import FineAlias = EnumInAmbientContext.B;
     }
     

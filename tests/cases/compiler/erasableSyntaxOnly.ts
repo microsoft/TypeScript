@@ -20,6 +20,8 @@ enum NotLegalEnum {
     B = 1
 }
 
+import NoGoodAlias = NotLegalEnum.B;
+
 const enum NotLegalConstEnum {
     C = 2
 }
@@ -48,4 +50,6 @@ declare namespace AmbientStuff {
     enum EnumInAmbientContext {
         B = 1
     }
+
+    import FineAlias = EnumInAmbientContext.B;
 }

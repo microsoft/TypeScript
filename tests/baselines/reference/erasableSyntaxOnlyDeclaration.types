@@ -1,15 +1,8 @@
 //// [tests/cases/compiler/erasableSyntaxOnlyDeclaration.ts] ////
 
 === decl.d.ts ===
-class MyClassErr {
->MyClassErr : MyClassErr
->           : ^^^^^^^^^^
-
-    // No parameter properties
-    constructor(public foo: string);
->foo : string
->    : ^^^^^^
-}
+// Diffs from the other test:
+// - Parameter properties are already banned in .d.ts files
 
 namespace IllegalBecauseInstantiated {
 >IllegalBecauseInstantiated : typeof IllegalBecauseInstantiated
