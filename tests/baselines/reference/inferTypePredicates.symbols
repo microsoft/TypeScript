@@ -777,3 +777,28 @@ if (foobarPred(foobar)) {
 >foo : Symbol(foo, Decl(inferTypePredicates.ts, 271, 18))
 }
 
+// https://github.com/microsoft/TypeScript/issues/60778
+const arrTest: Array<number> = [1, 2, null, 3].filter(
+>arrTest : Symbol(arrTest, Decl(inferTypePredicates.ts, 280, 5))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>[1, 2, null, 3].filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  (x) => (x != null) satisfies boolean,
+>x : Symbol(x, Decl(inferTypePredicates.ts, 281, 3))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 281, 3))
+
+);
+
+function isEmptyString(x: unknown) {
+>isEmptyString : Symbol(isEmptyString, Decl(inferTypePredicates.ts, 282, 2))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 284, 23))
+
+  const rv = x === "";
+>rv : Symbol(rv, Decl(inferTypePredicates.ts, 285, 7))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 284, 23))
+
+  return rv satisfies boolean;
+>rv : Symbol(rv, Decl(inferTypePredicates.ts, 285, 7))
+}
+
