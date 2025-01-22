@@ -16217,14 +16217,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return typeParameter.constraint === noConstraintType ? undefined : typeParameter.constraint;
     }
 
-    function getSignatureTypeParameterHost(typeParameter: TypeParameter) {
+    function getEffectiveTypeParameterHost(typeParameter: TypeParameter) {
         const tp = getDeclarationOfKind<TypeParameterDeclaration>(typeParameter.symbol, SyntaxKind.TypeParameter)!;
         return isJSDocTemplateTag(tp.parent) ? getEffectiveJSDocHost(tp.parent) : tp.parent;
     }
 
     function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol | undefined {
-        const tp = getDeclarationOfKind<TypeParameterDeclaration>(typeParameter.symbol, SyntaxKind.TypeParameter)!;
-        const host = isJSDocTemplateTag(tp.parent) ? getEffectiveContainerForJSDocTemplateTag(tp.parent) : tp.parent;
+        const host = getEffectiveTypeParameterHost(typeParameter);
         return host && getSymbolOfNode(host);
     }
 
@@ -36143,7 +36142,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (candidate.typeParameters) {
                     // If we are *inside the body of candidate*, we need to create a clone of `candidate` with differing type parameter identities,
                     // so our inference results for this call doesn't pollute expression types referencing the outer type parameter!
-                    const paramHost = getSignatureTypeParameterHost(candidate.typeParameters[0]);
+                    const paramHost = getEffectiveTypeParameterHost(candidate.typeParameters[0]);
                     const candidateParameterContext = paramHost || (candidate.declaration && isConstructorDeclaration(candidate.declaration) ? candidate.declaration.parent : candidate.declaration);
                     if (candidateParameterContext && findAncestor(node, a => a === candidateParameterContext)) {
                         candidate = getImplementationSignature(candidate);
