@@ -1215,6 +1215,7 @@ export namespace Completion {
         interfaceEntry("ObjectConstructor"),
         varEntry("Function"),
         interfaceEntry("FunctionConstructor"),
+        interfaceEntry("VoidFunction"),
         typeEntry("ThisParameterType"),
         typeEntry("OmitThisParameter"),
         interfaceEntry("CallableFunction"),

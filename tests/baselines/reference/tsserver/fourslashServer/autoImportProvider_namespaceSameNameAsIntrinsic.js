@@ -1295,6 +1295,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "VoidFunction",
+            "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "WeakKey",
             "kind": "type",
             "kindModifiers": "declare",

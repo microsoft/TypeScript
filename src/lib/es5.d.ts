@@ -288,6 +288,10 @@ interface Function {
     caller: Function;
 }
 
+interface VoidFunction {
+    (): void;
+}
+
 interface FunctionConstructor {
     /**
      * Creates a new function.

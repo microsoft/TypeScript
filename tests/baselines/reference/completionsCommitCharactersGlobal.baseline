@@ -2756,6 +2756,7 @@
 // | var URIError: URIErrorConstructor
 // | interface URIErrorConstructor
 // | void
+// | interface VoidFunction
 // | type WeakKey = object
 // | interface WeakKeyTypes
 // | interface ImportAssertions
@@ -2936,6 +2937,7 @@
 // | var URIError: URIErrorConstructor
 // | interface URIErrorConstructor
 // | void
+// | interface VoidFunction
 // | type WeakKey = object
 // | interface WeakKeyTypes
 // | interface ImportAssertions
@@ -83542,6 +83544,27 @@
           ]
         },
         {
+          "name": "VoidFunction",
+          "kind": "interface",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "VoidFunction",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "WeakKey",
           "kind": "type",
           "kindModifiers": "declare",
@@ -93011,6 +93034,27 @@
               "kind": "keyword"
             }
           ]
+        },
+        {
+          "name": "VoidFunction",
+          "kind": "interface",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "VoidFunction",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
         },
         {
           "name": "WeakKey",
