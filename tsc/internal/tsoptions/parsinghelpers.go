@@ -365,7 +365,7 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 	return nil
 }
 
-// mergeCompilerOptions merges the source compiler options into the target compiler options.
+// MergeCompilerOptions merges the source compiler options into the target compiler options.
 // Fields in the source options will overwrite the corresponding fields in the target options.
 func MergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions) *core.CompilerOptions {
 	if sourceOptions == nil {

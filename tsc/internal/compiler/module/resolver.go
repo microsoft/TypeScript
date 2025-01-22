@@ -1767,3 +1767,35 @@ func ResolveConfig(moduleName string, containingFile string, host ResolutionHost
 	resolver := NewResolver(host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext})
 	return resolver.resolveConfig(moduleName, containingFile)
 }
+
+func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, host ResolutionHost) []string {
+	if options.Types != nil {
+		return options.Types
+	}
+
+	var result []string
+	typeRoots, _ := options.GetEffectiveTypeRoots(host.GetCurrentDirectory())
+	for _, root := range typeRoots {
+		if host.FS().DirectoryExists(root) {
+			for _, typeDirectivePath := range host.FS().GetDirectories(root) {
+				normalized := tspath.NormalizePath(typeDirectivePath)
+				packageJsonPath := tspath.CombinePaths(root, normalized, "package.json")
+				isNotNeededPackage := false
+				if host.FS().FileExists(packageJsonPath) {
+					contents, _ := host.FS().ReadFile(packageJsonPath)
+					packageJsonContent, _ := packagejson.Parse([]byte(contents))
+					// `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
+					// See `createNotNeededPackageJSON` in the types-publisher` repo.
+					isNotNeededPackage = packageJsonContent.Typings.Null
+				}
+				if !isNotNeededPackage {
+					baseFileName := tspath.GetBaseFileName(normalized)
+					if !strings.HasPrefix(baseFileName, ".") {
+						result = append(result, baseFileName)
+					}
+				}
+			}
+		}
+	}
+	return result
+}

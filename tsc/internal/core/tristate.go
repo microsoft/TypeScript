@@ -12,6 +12,22 @@ const (
 	TSTrue
 )
 
+func (t Tristate) IsTrue() bool {
+	return t == TSTrue
+}
+
+func (t Tristate) IsTrueOrUnknown() bool {
+	return t == TSTrue || t == TSUnknown
+}
+
+func (t Tristate) IsFalse() bool {
+	return t == TSFalse
+}
+
+func (t Tristate) IsFalseOrUnknown() bool {
+	return t == TSFalse || t == TSUnknown
+}
+
 func (t *Tristate) UnmarshalJSON(data []byte) error {
 	switch string(data) {
 	case "true":
@@ -22,4 +38,15 @@ func (t *Tristate) UnmarshalJSON(data []byte) error {
 		*t = TSUnknown
 	}
 	return nil
+}
+
+func (t Tristate) MarshalJSON() ([]byte, error) {
+	switch t {
+	case TSTrue:
+		return []byte("true"), nil
+	case TSFalse:
+		return []byte("false"), nil
+	default:
+		return []byte("null"), nil
+	}
 }

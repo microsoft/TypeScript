@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 // Links store
@@ -2511,4 +2512,10 @@ func forEachYieldExpression(body *ast.Node, visitor func(expr *ast.Node)) {
 		return false
 	}
 	traverse(body)
+}
+
+func skipTypeChecking(sourceFile *ast.SourceFile, options *core.CompilerOptions) bool {
+	return options.NoCheck == core.TSTrue ||
+		options.SkipLibCheck == core.TSTrue && tspath.IsDeclarationFileName(sourceFile.FileName()) ||
+		options.SkipDefaultLibCheck == core.TSTrue && sourceFile.HasNoDefaultLib
 }

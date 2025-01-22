@@ -247,7 +247,7 @@ func compileFilesWithHost(
 	//         ...ts.filter(longerErrors!, p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo)),
 	//     ),
 	// ] : postErrors;
-	program := createProgram(host, options)
+	program := createProgram(host, options, rootFiles)
 	var diagnostics []*ast.Diagnostic
 	diagnostics = append(diagnostics, program.GetSyntacticDiagnostics(nil)...)
 	diagnostics = append(diagnostics, program.GetBindDiagnostics(nil)...)
@@ -260,9 +260,9 @@ func compileFilesWithHost(
 }
 
 // !!! Temporary while we don't have the real `createProgram`
-func createProgram(host compiler.CompilerHost, options *core.CompilerOptions) *compiler.Program {
+func createProgram(host compiler.CompilerHost, options *core.CompilerOptions, rootFiles []string) *compiler.Program {
 	programOptions := compiler.ProgramOptions{
-		RootPath:           "/", // Include all files while we don't have a way to specify root files
+		RootFiles:          rootFiles,
 		Host:               host,
 		Options:            options,
 		DefaultLibraryPath: bundled.LibPath(),

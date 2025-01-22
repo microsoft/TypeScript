@@ -17,11 +17,11 @@ import (
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
-	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
 type ProgramOptions struct {
-	RootPath           string
+	ConfigFilePath     string
+	RootFiles          []string
 	Host               CompilerHost
 	Options            *core.CompilerOptions
 	SingleThreaded     bool
@@ -33,7 +33,7 @@ type Program struct {
 	host             CompilerHost
 	programOptions   ProgramOptions
 	compilerOptions  *core.CompilerOptions
-	rootPath         string
+	configFilePath   string
 	nodeModules      map[string]*ast.SourceFile
 	checkers         []*checker.Checker
 	checkersByFile   map[*ast.SourceFile]*checker.Checker
@@ -44,6 +44,8 @@ type Program struct {
 
 	comparePathsOptions tspath.ComparePathsOptions
 	defaultLibraryPath  string
+
+	optionsDiagnostics []*ast.Diagnostic
 
 	files       []*ast.SourceFile
 	filesByPath map[tspath.Path]*ast.SourceFile
@@ -73,7 +75,6 @@ func NewProgram(options ProgramOptions) *Program {
 	if p.compilerOptions == nil {
 		p.compilerOptions = &core.CompilerOptions{}
 	}
-	p.filesByPath = make(map[tspath.Path]*ast.SourceFile)
 
 	// p.maxNodeModuleJsDepth = p.options.MaxNodeModuleJsDepth
 
@@ -91,12 +92,50 @@ func NewProgram(options ProgramOptions) *Program {
 		panic("default library path required")
 	}
 
-	p.resolver = module.NewResolver(p.host, p.compilerOptions)
+	rootFiles := options.RootFiles
 
-	p.rootPath = options.RootPath
-	if p.rootPath == "" {
-		panic("root path required")
+	p.configFilePath = options.ConfigFilePath
+	if p.configFilePath != "" {
+		jsonText, ok := p.host.FS().ReadFile(p.configFilePath)
+		if !ok {
+			panic("config file not found")
+		}
+		parsedConfig := parser.ParseJSONText(p.configFilePath, jsonText)
+		if len(parsedConfig.Diagnostics()) > 0 {
+			p.optionsDiagnostics = append(p.optionsDiagnostics, parsedConfig.Diagnostics()...)
+			return p
+		}
+
+		tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
+			SourceFile: parsedConfig,
+		}
+
+		parseConfigFileContent := tsoptions.ParseJsonSourceFileConfigFileContent(
+			tsConfigSourceFile,
+			p.host,
+			p.host.GetCurrentDirectory(),
+			nil,
+			p.configFilePath,
+			/*resolutionStack*/ nil,
+			/*extraFileExtensions*/ nil,
+			/*extendedConfigCache*/ nil,
+		)
+
+		if len(parseConfigFileContent.Errors) > 0 {
+			p.optionsDiagnostics = append(p.optionsDiagnostics, parseConfigFileContent.Errors...)
+			return p
+		}
+
+		// !!! this modifies p.compilerOptions
+		tsoptions.MergeCompilerOptions(p.compilerOptions, parseConfigFileContent.CompilerOptions())
+
+		if rootFiles == nil {
+			// !!! merge? override? this?
+			rootFiles = parseConfigFileContent.FileNames()
+		}
 	}
+
+	p.resolver = module.NewResolver(p.host, p.compilerOptions)
 
 	var libs []string
 
@@ -115,7 +154,6 @@ func NewProgram(options ProgramOptions) *Program {
 		}
 	}
 
-	rootFiles := walkFiles(p.host.FS(), p.rootPath, extensions)
 	p.files, p.resolvedModules = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, rootFiles, libs)
 	p.filesByPath = make(map[tspath.Path]*ast.SourceFile, len(p.files))
 	for _, file := range p.files {
@@ -129,28 +167,13 @@ func (p *Program) Files() []*ast.SourceFile {
 	return p.files
 }
 
-func walkFiles(fs vfs.FS, rootPath string, extensions []string) []string {
-	var files []string
-
-	err := fs.WalkDir(rootPath, func(path string, d vfs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if !d.IsDir() && slices.ContainsFunc(extensions, func(ext string) bool { return tspath.FileExtensionIs(path, ext) }) {
-			files = append(files, path)
-		}
-		return nil
-	})
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	return files
-}
-
 func (p *Program) SourceFiles() []*ast.SourceFile { return p.files }
 func (p *Program) Options() *core.CompilerOptions { return p.compilerOptions }
 func (p *Program) Host() CompilerHost             { return p.host }
+
+func (p *Program) GetOptionsDiagnostics() []*ast.Diagnostic {
+	return p.optionsDiagnostics
+}
 
 func (p *Program) BindSourceFiles() {
 	wg := core.NewWorkGroup(p.programOptions.SingleThreaded)

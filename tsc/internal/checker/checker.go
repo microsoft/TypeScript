@@ -1495,6 +1495,10 @@ func (c *Checker) getSymbol(symbols ast.SymbolTable, name string, meaning ast.Sy
 }
 
 func (c *Checker) CheckSourceFile(sourceFile *ast.SourceFile) {
+	if skipTypeChecking(sourceFile, c.compilerOptions) {
+		return
+	}
+
 	links := c.sourceFileLinks.get(sourceFile)
 	if !links.typeChecked {
 		// Grammar checking
