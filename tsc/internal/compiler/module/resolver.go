@@ -753,7 +753,7 @@ func (r *resolutionState) tryLoadInputFileForPath(finalPath string, entry string
 
 func (r *resolutionState) loadModuleFromNearestNodeModulesDirectory(typesScopeOnly bool) *resolved {
 	mode := core.ResolutionModeCommonJS
-	if r.esmMode {
+	if r.esmMode || r.conditionMatches("import") {
 		mode = core.ResolutionModeESM
 	}
 	// Do (up to) two passes through node_modules:
