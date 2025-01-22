@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResultJsDoc1.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/60988
+
+/**
+ * @template [T = any]
+ */
+class S {
+>S : S<T>
+>  : ^^^^
+
+	/**
+	 * @type {Set<T>}
+	 */
+	set;
+>set : Set<T>
+>    : ^^^^^^
+
+	/**
+	 * @param {Set<T>} set
+	 */
+	constructor(set) {
+>set : Set<T>
+>    : ^^^^^^
+
+		this.set = set;
+>this.set = set : Set<T>
+>               : ^^^^^^
+>this.set : Set<T>
+>         : ^^^^^^
+>this : this
+>     : ^^^^
+>set : Set<T>
+>    : ^^^^^^
+>set : Set<T>
+>    : ^^^^^^
+	}
+
+	array() {
+>array : () => S<T[]>
+>      : ^^^^^^^^^^^^
+
+		return new S(new Set([...this.set].map(item => [item])));
+>new S(new Set([...this.set].map(item => [item]))) : S<T[]>
+>                                                  : ^^^^^^
+>S : typeof S
+>  : ^^^^^^^^
+>new Set([...this.set].map(item => [item])) : Set<T[]>
+>                                           : ^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+>[...this.set].map(item => [item]) : T[][]
+>                                  : ^^^^^
+>[...this.set].map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>                  : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>[...this.set] : T[]
+>              : ^^^
+>...this.set : T
+>            : ^
+>this.set : Set<T>
+>         : ^^^^^^
+>this : this
+>     : ^^^^
+>set : Set<T>
+>    : ^^^^^^
+>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>item => [item] : (item: T) => T[]
+>               : ^    ^^^^^^^^^^^
+>item : T
+>     : ^
+>[item] : T[]
+>       : ^^^
+>item : T
+>     : ^
+	}
+}
+
+/**
+ * @template [T = any]
+ * @param {Set<T>} set
+ */
+const sArray = (set) => {
+>sArray : <T = any>(set: Set<T>) => S<T[]>
+>       : ^ ^^^^^^^^   ^^      ^^^^^^^^^^^
+>(set) => {	return new S(new Set([...set].map(item => [item])));} : <T = any>(set: Set<T>) => S<T[]>
+>                                                                 : ^ ^^^^^^^^   ^^      ^^^^^^^^^^^
+>set : Set<T>
+>    : ^^^^^^
+
+	return new S(new Set([...set].map(item => [item])));
+>new S(new Set([...set].map(item => [item]))) : S<T[]>
+>                                             : ^^^^^^
+>S : typeof S
+>  : ^^^^^^^^
+>new Set([...set].map(item => [item])) : Set<T[]>
+>                                      : ^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+>[...set].map(item => [item]) : T[][]
+>                             : ^^^^^
+>[...set].map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>             : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>[...set] : T[]
+>         : ^^^
+>...set : T
+>       : ^
+>set : Set<T>
+>    : ^^^^^^
+>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>item => [item] : (item: T) => T[]
+>               : ^    ^^^^^^^^^^^
+>item : T
+>     : ^
+>[item] : T[]
+>       : ^^^
+>item : T
+>     : ^
+
+};
+
