@@ -2517,5 +2517,39 @@ func forEachYieldExpression(body *ast.Node, visitor func(expr *ast.Node)) {
 func skipTypeChecking(sourceFile *ast.SourceFile, options *core.CompilerOptions) bool {
 	return options.NoCheck == core.TSTrue ||
 		options.SkipLibCheck == core.TSTrue && tspath.IsDeclarationFileName(sourceFile.FileName()) ||
-		options.SkipDefaultLibCheck == core.TSTrue && sourceFile.HasNoDefaultLib
+		options.SkipDefaultLibCheck == core.TSTrue && sourceFile.HasNoDefaultLib ||
+		!canIncludeBindAndCheckDiagnostics(sourceFile, options)
+}
+
+func canIncludeBindAndCheckDiagnostics(sourceFile *ast.SourceFile, options *core.CompilerOptions) bool {
+	// !!!
+	// if (!!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false) return false;
+
+	if sourceFile.ScriptKind == core.ScriptKindTS || sourceFile.ScriptKind == core.ScriptKindTSX || sourceFile.ScriptKind == core.ScriptKindExternal {
+		return true
+	}
+
+	isJs := sourceFile.ScriptKind == core.ScriptKindJS || sourceFile.ScriptKind == core.ScriptKindJSX
+	isCheckJs := isJs && isCheckJsEnabledForFile(sourceFile, options)
+	isPlainJs := isPlainJsFile(sourceFile, options.CheckJs)
+
+	// By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
+	// - plain JS: .js files with no // ts-check and checkJs: undefined
+	// - check JS: .js files with either // ts-check or checkJs: true
+	// - external: files that are added by plugins
+	return isPlainJs || isCheckJs || sourceFile.ScriptKind == core.ScriptKindDeferred
+}
+
+func isCheckJsEnabledForFile(sourceFile *ast.SourceFile, compilerOptions *core.CompilerOptions) bool {
+	// !!!
+	// if sourceFile.CheckJsDirective != nil {
+	// 	return sourceFile.CheckJsDirective.Enabled
+	// }
+	return compilerOptions.CheckJs == core.TSTrue
+}
+
+func isPlainJsFile(file *ast.SourceFile, checkJs core.Tristate) bool {
+	// !!!
+	// return file != nil && (file.ScriptKind == core.ScriptKindJS || file.ScriptKind == core.ScriptKindJSX) && file.CheckJsDirective == nil && checkJs == core.TSUnknown
+	return file != nil && (file.ScriptKind == core.ScriptKindJS || file.ScriptKind == core.ScriptKindJSX) && checkJs == core.TSUnknown
 }

@@ -1461,15 +1461,15 @@ func getFileNamesFromConfigSpecs(
 					} else {
 						jsonOnlyIncludeRegexes = nil
 					}
-					includeIndex := core.FindIndex(jsonOnlyIncludeRegexes, func(re *regexp2.Regexp) bool { return core.Must(re.MatchString(file)) })
-					if includeIndex != -1 {
-						key := keyMappper(file)
-						if !literalFileMap.Has(key) && !wildCardJsonFileMap.Has(key) {
-							wildCardJsonFileMap.Set(key, file)
-						}
-					}
-					continue
 				}
+				includeIndex := core.FindIndex(jsonOnlyIncludeRegexes, func(re *regexp2.Regexp) bool { return core.Must(re.MatchString(file)) })
+				if includeIndex != -1 {
+					key := keyMappper(file)
+					if !literalFileMap.Has(key) && !wildCardJsonFileMap.Has(key) {
+						wildCardJsonFileMap.Set(key, file)
+					}
+				}
+				continue
 			}
 			// If we have already included a literal or wildcard path with a
 			// higher priority extension, we should skip this file.

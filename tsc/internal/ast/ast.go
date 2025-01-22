@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"fmt"
 	"sync"
 	"sync/atomic"
 
@@ -160,8 +161,10 @@ func (n *Node) Text() string {
 		return n.AsTemplateTail().Text
 	case KindJsxNamespacedName:
 		return n.AsJsxNamespacedName().Namespace.Text() + ":" + n.AsJsxNamespacedName().Name().Text()
+	case KindRegularExpressionLiteral:
+		return n.AsRegularExpressionLiteral().Text
 	}
-	panic("Unhandled case in Node.Text")
+	panic(fmt.Sprintf("Unhandled case in Node.Text: %T", n.data))
 }
 
 func (n *Node) Expression() *Node {
