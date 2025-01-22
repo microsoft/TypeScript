@@ -47507,7 +47507,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkExportsOnMergedDeclarations(node);
         node.members.forEach(checkEnumMember);
 
-        if (compilerOptions.erasableSyntaxOnly && (node.flags & NodeFlags.Ambient) === 0) {
+        if (compilerOptions.erasableSyntaxOnly && !(node.flags & NodeFlags.Ambient)) {
             error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
         }
 
@@ -48166,7 +48166,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         checkGrammarModifiers(node);
-        if (isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
+        const isImportEquals = isInternalModuleImportEqualsDeclaration(node);
+        if (compilerOptions.erasableSyntaxOnly && isImportEquals && !(node.flags & NodeFlags.Ambient)) {
+            error(node, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
+        }
+        if (isImportEquals || checkExternalImportOrExportDeclaration(node)) {
             checkImportBinding(node);
             markLinkedReferences(node, ReferenceHint.ExportImportEquals);
             if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
