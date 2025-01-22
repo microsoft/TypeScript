@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/selfCallGenericJsDoc1.ts] ////
+
+=== index.js ===
+/**
+ * @template T
+ * @typedef {T & { children: Children<T>[] | undefined }} Children
+ */
+
+/**
+ * @template T
+ * @param {Children<T>[]} groups item and groups
+ */
+export const spaceLimited = (groups) => {
+>spaceLimited : Symbol(spaceLimited, Decl(index.js, 9, 12))
+>groups : Symbol(groups, Decl(index.js, 9, 29))
+
+	for (let i = 0; i < groups.length; i++) {
+>i : Symbol(i, Decl(index.js, 10, 9))
+>i : Symbol(i, Decl(index.js, 10, 9))
+>groups.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>groups : Symbol(groups, Decl(index.js, 9, 29))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(index.js, 10, 9))
+
+		const group = groups[i];
+>group : Symbol(group, Decl(index.js, 11, 7))
+>groups : Symbol(groups, Decl(index.js, 9, 29))
+>i : Symbol(i, Decl(index.js, 10, 9))
+
+		spaceLimited(/** @type {Children<T>} */(group.children)); // should error
+>spaceLimited : Symbol(spaceLimited, Decl(index.js, 9, 12))
+>group.children : Symbol(children, Decl(index.js, 2, 18))
+>group : Symbol(group, Decl(index.js, 11, 7))
+>children : Symbol(children, Decl(index.js, 2, 18))
+	}
+};
+
