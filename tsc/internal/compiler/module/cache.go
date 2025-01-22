@@ -74,7 +74,7 @@ func (c *resolutionCache[T]) getLookupLocations(resolved T) *LookupLocations {
 	return c.lookupLocations[resolved]
 }
 
-func (c *resolutionCache[T]) initializeLookupLocations(resolved T, failedLookupLocations []string, affectingLocations []string, resolutionDiagnostics []ast.Diagnostic) {
+func (c *resolutionCache[T]) setLookupLocations(resolved T, failedLookupLocations []string, affectingLocations []string, resolutionDiagnostics []ast.Diagnostic) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	if c.lookupLocations == nil {
@@ -87,7 +87,7 @@ func (c *resolutionCache[T]) initializeLookupLocations(resolved T, failedLookupL
 	}
 }
 
-func (c *resolutionCache[T]) updateLookupLocations(resolved T, failedLookupLocations []string, affectingLocations []string, resolutionDiagnostics []ast.Diagnostic) {
+func (c *resolutionCache[T]) appendLookupLocations(resolved T, failedLookupLocations []string, affectingLocations []string, resolutionDiagnostics []ast.Diagnostic) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	lookupLocations := c.lookupLocations[resolved]

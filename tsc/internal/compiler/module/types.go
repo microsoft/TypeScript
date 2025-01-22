@@ -74,6 +74,7 @@ type ResolvedModule struct {
 	ResolvedUsingTsExtension bool
 	PackageId                PackageId
 	IsExternalLibraryImport  bool
+	AlternateResult          string
 }
 
 func (r *ResolvedModule) IsResolved() bool {

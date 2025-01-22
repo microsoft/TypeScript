@@ -3,8 +3,12 @@ package module
 import (
 	"strings"
 
+	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/semver"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
+
+var typeScriptVersion = semver.MustParse(core.Version)
 
 const InferredTypesContainingFile = "__inferred type names__.ts"
 
@@ -55,4 +59,37 @@ func UnmangleScopedPackageName(packageName string) string {
 		return "@" + packageName[:idx] + "/" + packageName[idx+2:]
 	}
 	return packageName
+}
+
+func ComparePatternKeys(a, b string) int {
+	aPatternIndex := strings.Index(a, "*")
+	bPatternIndex := strings.Index(b, "*")
+	baseLenA := len(a)
+	if aPatternIndex != -1 {
+		baseLenA = aPatternIndex + 1
+	}
+	baseLenB := len(b)
+	if bPatternIndex != -1 {
+		baseLenB = bPatternIndex + 1
+	}
+
+	if baseLenA > baseLenB {
+		return -1
+	}
+	if baseLenB > baseLenA {
+		return 1
+	}
+	if aPatternIndex == -1 {
+		return 1
+	}
+	if bPatternIndex == -1 {
+		return -1
+	}
+	if len(a) > len(b) {
+		return -1
+	}
+	if len(b) > len(a) {
+		return 1
+	}
+	return 0
 }

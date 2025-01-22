@@ -24,12 +24,18 @@ func TestExports(t *testing.T) {
 
 func testExports(t *testing.T, unmarshal func([]byte, any) error) {
 	type Exports struct {
-		Exports packagejson.Exports `json:"exports"`
+		Imports packagejson.ExportsOrImports `json:"imports"`
+		Exports packagejson.ExportsOrImports `json:"exports"`
 	}
 
 	var e Exports
 
 	jsonString := `{
+		"imports": {
+			"#foo": {
+				"import": "./foo.ts"
+			}
+		},
 		"exports": {
 			".": {
 				"import": "./test.ts",
@@ -53,4 +59,9 @@ func testExports(t *testing.T, unmarshal func([]byte, any) error) {
 	assert.Assert(t, e.Exports.AsObject().GetOrZero(".").AsObject().GetOrZero("import").Type == packagejson.JSONValueTypeString)
 	assert.Equal(t, e.Exports.AsObject().GetOrZero("./test").AsArray()[2].Type, packagejson.JSONValueTypeNull)
 	assert.Assert(t, e.Exports.AsObject().GetOrZero("./null").Type == packagejson.JSONValueTypeNull)
+
+	assert.Assert(t, e.Imports.IsImports())
+	assert.Equal(t, e.Imports.AsObject().Size(), 1)
+	assert.Assert(t, e.Imports.AsObject().GetOrZero("#foo").IsConditions())
+	assert.Assert(t, e.Imports.AsObject().GetOrZero("#foo").AsObject().GetOrZero("import").Type == packagejson.JSONValueTypeString)
 }
