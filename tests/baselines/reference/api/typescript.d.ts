@@ -9557,6 +9557,22 @@ declare namespace ts {
      */
     function getImpliedNodeFormatForFile(fileName: string, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ResolutionMode;
     /**
+     * Determines if the provided compiler configuration is ambiguous.
+     *
+     * A configuration is considered ambiguous if:
+     * - `rootNames` is an empty array
+     * - `options.composite` is false
+     * - `projectReferences` is undefined or an empty array
+     * - `options.include` is undefined or an empty array
+     * - `options.files` is undefined or an empty array
+     *
+     * @param options - The compiler options to check.
+     * @param rootNames - The root file names for the program.
+     * @param projectReferences - The project references for the program.
+     * @returns `true` if the configuration is ambiguous, otherwise `false`.
+     */
+    function isAmbiguousConfiguration(options: CompilerOptions, rootNames: readonly string[], projectReferences: readonly ProjectReference[] | undefined): boolean;
+    /**
      * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
      * that represent a compilation unit.
      *

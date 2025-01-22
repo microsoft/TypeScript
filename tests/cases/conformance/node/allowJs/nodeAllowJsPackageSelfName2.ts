@@ -1,6 +1,6 @@
 // @Filename: /tsconfig.json
 {
-  "compilerOptions": {
+"compilerOptions": {
     "module": "nodenext",
     "target": "esnext",
     "emitDeclarationOnly": true,
@@ -9,6 +9,7 @@
     "checkJs": true,
     "rootDir": ".",
     "strict": true,
+    "moduleResolution": "node16" // Ensures compatibility with Node's module resolution rules
   },
   "include": ["src", "test"]
 }
@@ -18,11 +19,15 @@
   "name": "js-self-name-import",
   "type": "module",
   "exports": {
-    "./*": {
-      "types": "./types/src/*",
-      "default": "./src/*"
-    }
+  "./src/*": {
+    "types": "./types/src/*",
+    "default": "./src/*"
+  },
+  "./test/*": {
+    "types": "./types/test/*",
+    "default": "./test/*"
   }
+}
 }
 
 // @Filename: /types/src/foo.d.ts

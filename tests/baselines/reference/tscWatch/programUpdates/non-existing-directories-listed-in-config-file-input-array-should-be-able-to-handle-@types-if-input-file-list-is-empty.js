@@ -36,6 +36,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
+[94mmessage[0m[90m TS6042: [0mNo actionable task. Add 'composite': true, valid 'references', or use 'tsc -b'.
+
 [96mtsconfig.json[0m:[93m3[0m:[93m12[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/user/username/workspace/solution/projects/project/tsconfig.json' is empty.
 
 [7m3[0m   "files": []

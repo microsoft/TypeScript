@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/containerProjectNoEmit.ts] ////
+
+=== containerProjectNoEmit.ts ===
+export const tsconfig = {
+>tsconfig : Symbol(tsconfig, Decl(containerProjectNoEmit.ts, 0, 12))
+
+    "files": []
+>"files" : Symbol("files", Decl(containerProjectNoEmit.ts, 0, 25))
+}
+

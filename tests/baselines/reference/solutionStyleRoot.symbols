@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/solutionStyleRoot.ts] ////
+
+=== solutionStyleRoot.ts ===
+export const tsconfig = {
+>tsconfig : Symbol(tsconfig, Decl(solutionStyleRoot.ts, 0, 12))
+
+    "references": [
+>"references" : Symbol("references", Decl(solutionStyleRoot.ts, 0, 25))
+
+        { "path": "./lib" },
+>"path" : Symbol("path", Decl(solutionStyleRoot.ts, 2, 9))
+
+        { "path": "./app" }
+>"path" : Symbol("path", Decl(solutionStyleRoot.ts, 3, 9))
+
+    ]
+}
+

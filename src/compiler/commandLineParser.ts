@@ -2951,8 +2951,45 @@ function convertToOptionValueWithAbsolutePaths(option: CommandLineOption | undef
  * @param basePath A root directory to resolve relative path entries in the config
  *    file to. e.g. outDir
  */
-export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
-    return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+export function parseJsonConfigFileContent(
+    json: any,
+    host: ParseConfigHost,
+    basePath: string,
+    existingOptions?: CompilerOptions,
+    configFileName?: string,
+    resolutionStack?: Path[],
+    extraFileExtensions?: readonly FileExtensionInfo[],
+    extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>,
+    existingWatchOptions?: WatchOptions,
+): ParsedCommandLine {
+    const parsed = parseJsonConfigFileContentWorker(
+        json,
+        /*sourceFile*/ undefined,
+        host,
+        basePath,
+        existingOptions,
+        existingWatchOptions,
+        configFileName,
+        resolutionStack,
+        extraFileExtensions,
+        extendedConfigCache,
+    );
+
+    const { files, references, composite } = parsed.options;
+
+    // Detect ambiguous configurations
+    if (Array.isArray(files) && files.length === 0 && !references && !composite) {
+        parsed.errors.push(
+            createCompilerDiagnostic(
+                Diagnostics.No_actionable_task_Add_composite_Colon_true_valid_references_or_use_tsc_b,
+            ),
+        );
+
+        // Default to build mode to prevent silent failure
+        parsed.options.build = true;
+    }
+
+    return parsed;
 }
 
 /**

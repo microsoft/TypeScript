@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/solutionStyleRoot.ts] ////
+
+=== solutionStyleRoot.ts ===
+export const tsconfig = {
+>tsconfig : { references: { path: string; }[]; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    "references": [        { "path": "./lib" },        { "path": "./app" }    ]} : { references: { path: string; }[]; }
+>                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    "references": [
+>"references" : { path: string; }[]
+>             : ^^^^^^^^^^^^^^^^^^^
+>[        { "path": "./lib" },        { "path": "./app" }    ] : { path: string; }[]
+>                                                              : ^^^^^^^^^^^^^^^^^^^
+
+        { "path": "./lib" },
+>{ "path": "./lib" } : { path: string; }
+>                    : ^^^^^^^^^^^^^^^^^
+>"path" : string
+>       : ^^^^^^
+>"./lib" : "./lib"
+>        : ^^^^^^^
+
+        { "path": "./app" }
+>{ "path": "./app" } : { path: string; }
+>                    : ^^^^^^^^^^^^^^^^^
+>"path" : string
+>       : ^^^^^^
+>"./app" : "./app"
+>        : ^^^^^^^
+
+    ]
+}
+

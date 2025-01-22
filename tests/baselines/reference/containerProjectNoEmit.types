@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/containerProjectNoEmit.ts] ////
+
+=== containerProjectNoEmit.ts ===
+export const tsconfig = {
+>tsconfig : { files: any[]; }
+>         : ^^^^^^^^^^^^^^^^^
+>{    "files": []} : { files: undefined[]; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    "files": []
+>"files" : undefined[]
+>        : ^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+}
+

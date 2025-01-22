@@ -5,11 +5,15 @@
   "name": "js-self-name-import",
   "type": "module",
   "exports": {
-    "./*": {
-      "types": "./types/src/*",
-      "default": "./src/*"
-    }
+  "./src/*": {
+    "types": "./types/src/*",
+    "default": "./src/*"
+  },
+  "./test/*": {
+    "types": "./types/test/*",
+    "default": "./test/*"
   }
+}
 }
 
 //// [foo.d.ts]

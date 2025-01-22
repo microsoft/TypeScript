@@ -9,6 +9,6 @@ export const foo = 1;
 
 === /test/foo.js ===
 import { foo } from "js-self-name-import/foo.js";
->foo : 1
->    : ^
+>foo : any
+>    : ^^^
 

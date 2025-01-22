@@ -1,0 +1,49 @@
+/test/foo.js(1,21): error TS2307: Cannot find module 'js-self-name-import/foo.js' or its corresponding type declarations.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+    "compilerOptions": {
+        "module": "nodenext",
+        "target": "esnext",
+        "emitDeclarationOnly": true,
+        "declaration": true,
+        "declarationDir": "./types",
+        "checkJs": true,
+        "rootDir": ".",
+        "strict": true,
+        "moduleResolution": "node16" // Ensures compatibility with Node's module resolution rules
+      },
+      "include": ["src", "test"]
+    }
+    
+==== /src/foo.js (0 errors) ====
+    export const foo = 1;
+    
+==== /test/foo.js (1 errors) ====
+    import { foo } from "js-self-name-import/foo.js";
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'js-self-name-import/foo.js' or its corresponding type declarations.
+    
+==== /package.json (0 errors) ====
+    {
+      "name": "js-self-name-import",
+      "type": "module",
+      "exports": {
+      "./src/*": {
+        "types": "./types/src/*",
+        "default": "./src/*"
+      },
+      "./test/*": {
+        "types": "./types/test/*",
+        "default": "./test/*"
+      }
+    }
+    }
+    
+==== /types/src/foo.d.ts (0 errors) ====
+    export const foo: 1;
+    
+==== /types/test/foo.d.ts (0 errors) ====
+    export {};
+    

@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/validCompositeProject.ts] ////
+
+=== validCompositeProject.ts ===
+export const tsconfig = {
+>tsconfig : Symbol(tsconfig, Decl(validCompositeProject.ts, 0, 12))
+
+    "files": [],
+>"files" : Symbol("files", Decl(validCompositeProject.ts, 0, 25))
+
+    "composite": true
+>"composite" : Symbol("composite", Decl(validCompositeProject.ts, 1, 16))
+
+};

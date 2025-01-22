@@ -1340,6 +1340,25 @@ export function getImpliedNodeFormatForFile(fileName: string, packageJsonInfoCac
     return typeof result === "object" ? result.impliedNodeFormat : result;
 }
 
+/**
+ * Determines if the provided compiler configuration is ambiguous.
+ *
+ * A configuration is considered ambiguous if:
+ * - `rootNames` is an empty array
+ * - `options.composite` is false
+ * - `projectReferences` is undefined or an empty array
+ * - `options.include` is undefined or an empty array
+ * - `options.files` is undefined or an empty array
+ *
+ * @param options - The compiler options to check.
+ * @param rootNames - The root file names for the program.
+ * @param projectReferences - The project references for the program.
+ * @returns `true` if the configuration is ambiguous, otherwise `false`.
+ */
+export function isAmbiguousConfiguration(options: CompilerOptions, rootNames: readonly string[], projectReferences: readonly ProjectReference[] | undefined): boolean {
+    return (rootNames.length === 0 && !options.composite && (!projectReferences || projectReferences.length === 0) && (!options.include || (Array.isArray(options.include) && options.include.length === 0)) && (!options.files || (Array.isArray(options.files) && options.files.length === 0)));
+}
+
 /** @internal */
 export function getImpliedNodeFormatForFileWorker(
     fileName: string,
@@ -1513,13 +1532,31 @@ export function createProgram(createProgramOptions: CreateProgramOptions): Progr
 export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
 export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
     const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
-    const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
+    const { rootNames, options, projectReferences, typeScriptVersion } = createProgramOptions;
+    let configFileParsingDiagnostics = createProgramOptions.configFileParsingDiagnostics;
     let { oldProgram } = createProgramOptions;
     for (const option of commandLineOptionOfCustomType) {
         if (hasProperty(options, option.name)) {
             if (typeof options[option.name] === "string") {
                 throw new Error(`${option.name} is a string value; tsconfig JSON must be parsed with parseJsonSourceFileConfigFileContent or getParsedCommandLineOfConfigFile before passing to createProgram`);
             }
+        }
+    }
+
+    // Validate ambiguous configurations
+    if (options.configFilePath) {
+        const configPath = options.configFilePath;
+        if (isAmbiguousConfiguration(options, rootNames, projectReferences)) {
+            // Ensure diagnostics array is initialized
+            if (!configFileParsingDiagnostics) {
+                configFileParsingDiagnostics = [];
+            }
+            (configFileParsingDiagnostics as Diagnostic[]).push(
+                createCompilerDiagnostic(
+                    Diagnostics.No_actionable_task_Add_composite_Colon_true_valid_references_or_use_tsc_b,
+                    configPath,
+                ),
+            );
         }
     }
 
