@@ -32,8 +32,6 @@ class Foo {
 
     constructor() {
         this.\u{102A7} = " world";
->u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 5))
->A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 7))
     }
     methodA() {
         return this.𐊧;
@@ -43,8 +41,6 @@ class Foo {
 export var _𐊧 = new Foo().\u{102A7} + new Foo().methodA();
 >_ : Symbol(_, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 21, 10))
 >Foo : Symbol(Foo, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 9, 1))
->u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 5))
->A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 7))
 >Foo : Symbol(Foo, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 9, 1))
 
 _\u{102A7} += "!";

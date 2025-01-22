@@ -7,7 +7,7 @@ invalidUnicodeEscapeSequance3.ts(1,3): error TS2304: Cannot find name 'u'.
     a\u
     ~
 !!! error TS2304: Cannot find name 'a'.
-     
+     ~
 !!! error TS1127: Invalid character.
       ~
 !!! error TS2304: Cannot find name 'u'.

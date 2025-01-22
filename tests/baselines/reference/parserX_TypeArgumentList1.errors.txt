@@ -21,7 +21,7 @@ parserX_TypeArgumentList1.ts(1,14): error TS2695: Left side of comma operator is
 !!! error TS2304: Cannot find name 'A'.
           ~
 !!! error TS2304: Cannot find name 'B'.
-            
+            ~
 !!! error TS1127: Invalid character.
               ~
 !!! error TS2304: Cannot find name 'C'.

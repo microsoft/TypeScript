@@ -59,18 +59,14 @@ class Foo {
 >            : ^^^
 
         this.\u{102A7} = " world";
->this. : any
->      : ^^^
+>this.\u{102A7} = " world" : " world"
+>                          : ^^^^^^^^
+>this.\u{102A7} : any
+>               : ^^^
 >this : undefined
 >     : ^^^^^^^^^
-> : any
-> : ^^^
->u : any
->  : ^^^
->102 : 102
->    : ^^^
->A7 : string
->   : ^^^^^^
+>\u{102A7} : any
+>          : ^^^
 >" world" : " world"
 >         : ^^^^^^^^
     }
@@ -93,22 +89,16 @@ class Foo {
 export var _𐊧 = new Foo().\u{102A7} + new Foo().methodA();
 >_ : any
 >  : ^^^
->new Foo(). : any
->           : ^^^
+>new Foo().\u{102A7} + new Foo().methodA() : any
+>                                          : ^^^
+>new Foo().\u{102A7} : any
+>                    : ^^^
 >new Foo() : Foo
 >          : ^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
-> : any
-> : ^^^
->u : any
->  : ^^^
->102 : 102
->    : ^^^
->A7 : string
->   : ^^^^^^
->+ new Foo().methodA() : number
->                      : ^^^^^^
+>\u{102A7} : any
+>          : ^^^
 >new Foo().methodA() : any
 >                    : ^^^
 >new Foo().methodA : any

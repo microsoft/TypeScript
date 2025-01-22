@@ -976,8 +976,8 @@ export function isIdentifierStart(ch: number, languageVersion: ScriptTarget | un
 
 export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean {
     return isWordCharacter(ch) || ch === CharacterCodes.$ ||
-        // "-" and ":" are valid in JSX Identifiers
-        (identifierVariant === LanguageVariant.JSX ? (ch === CharacterCodes.minus || ch === CharacterCodes.colon) : false) ||
+        // "-" is valid in JSX Identifiers. ":" is part of JSXNamespacedName but not JSXIdentifier.
+        identifierVariant === LanguageVariant.JSX && ch === CharacterCodes.minus ||
         ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
 }
 
@@ -1328,9 +1328,9 @@ export function createScanner(
         }
 
         const identifierStart = pos;
-        const { length } = scanIdentifierParts();
+        const { length } = scanIdentifierParts(languageVersion);
 
-        if (length === 1 && text[identifierStart] === "n") {
+        if (length === 1 && codePointUnchecked(identifierStart) === CharacterCodes.n) {
             if (isScientific) {
                 error(Diagnostics.A_bigint_literal_cannot_use_exponential_notation, numericStart, identifierStart - numericStart + 1);
             }
@@ -1777,35 +1777,36 @@ export function createScanner(
         return -1;
     }
 
-    function scanIdentifierParts(): string {
+    function scanIdentifierParts(languageVersion: ScriptTarget, identifierVariant?: LanguageVariant): string {
         let result = "";
         let start = pos;
         while (pos < end) {
             let ch = codePointUnchecked(pos);
-            if (isIdentifierPart(ch, languageVersion)) {
+            if (isIdentifierPart(ch, languageVersion, identifierVariant)) {
                 pos += charSize(ch);
+                continue;
             }
-            else if (ch === CharacterCodes.backslash) {
+
+            if (ch === CharacterCodes.backslash) {
                 ch = peekExtendedUnicodeEscape();
-                if (ch >= 0 && isIdentifierPart(ch, languageVersion)) {
+                if (ch >= 0 && isIdentifierPart(ch, languageVersion, identifierVariant)) {
+                    result += text.substring(start, pos);
                     result += scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true);
                     start = pos;
                     continue;
                 }
+
                 ch = peekUnicodeEscape();
-                if (!(ch >= 0 && isIdentifierPart(ch, languageVersion))) {
-                    break;
+                if (ch >= 0 && isIdentifierPart(ch, languageVersion, identifierVariant)) {
+                    tokenFlags |= TokenFlags.UnicodeEscape;
+                    result += text.substring(start, pos);
+                    result += String.fromCharCode(ch);
+                    pos += 6; // Valid Unicode escape is always six characters
+                    start = pos;
+                    continue;
                 }
-                tokenFlags |= TokenFlags.UnicodeEscape;
-                result += text.substring(start, pos);
-                result += utf16EncodeAsString(ch);
-                // Valid Unicode escape is always six characters
-                pos += 6;
-                start = pos;
             }
-            else {
-                break;
-            }
+            break;
         }
         result += text.substring(start, pos);
         return result;
@@ -2302,72 +2303,26 @@ export function createScanner(
                 case CharacterCodes.at:
                     pos++;
                     return token = SyntaxKind.AtToken;
-                case CharacterCodes.backslash:
-                    const extendedCookedChar = peekExtendedUnicodeEscape();
-                    if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
-                        tokenValue = scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
-                        return token = getIdentifierToken();
-                    }
-
-                    const cookedChar = peekUnicodeEscape();
-                    if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
-                        pos += 6;
-                        tokenFlags |= TokenFlags.UnicodeEscape;
-                        tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
-                        return token = getIdentifierToken();
-                    }
-
-                    error(Diagnostics.Invalid_character);
-                    pos++;
-                    return token = SyntaxKind.Unknown;
                 case CharacterCodes.hash:
-                    if (pos !== 0 && text[pos + 1] === "!") {
-                        error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos, 2);
+                    pos++;
+                    if (pos !== 1 && codePointUnchecked(pos) === CharacterCodes.exclamation) {
                         pos++;
+                        error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos - 2, 2);
                         return token = SyntaxKind.Unknown;
                     }
 
-                    const charAfterHash = codePointUnchecked(pos + 1);
-                    if (charAfterHash === CharacterCodes.backslash) {
-                        pos++;
-                        const extendedCookedChar = peekExtendedUnicodeEscape();
-                        if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
-                            tokenValue = "#" + scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
-                            return token = SyntaxKind.PrivateIdentifier;
-                        }
-
-                        const cookedChar = peekUnicodeEscape();
-                        if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
-                            pos += 6;
-                            tokenFlags |= TokenFlags.UnicodeEscape;
-                            tokenValue = "#" + String.fromCharCode(cookedChar) + scanIdentifierParts();
-                            return token = SyntaxKind.PrivateIdentifier;
-                        }
-                        pos--;
+                    if (!scanIdentifier(languageVersion)) {
+                        error(Diagnostics.Invalid_character, pos - 1, 1);
                     }
-
-                    if (isIdentifierStart(charAfterHash, languageVersion)) {
-                        pos++;
-                        // We're relying on scanIdentifier's behavior and adjusting the token kind after the fact.
-                        // Notably absent from this block is the fact that calling a function named "scanIdentifier",
-                        // but identifiers don't include '#', and that function doesn't deal with it at all.
-                        // This works because 'scanIdentifier' tries to reuse source characters and builds up substrings;
-                        // however, it starts at the 'tokenPos' which includes the '#', and will "accidentally" prepend the '#' for us.
-                        scanIdentifier(charAfterHash, languageVersion);
-                    }
-                    else {
-                        tokenValue = "#";
-                        error(Diagnostics.Invalid_character, pos++, charSize(ch));
-                    }
+                    tokenValue = "#" + tokenValue;
                     return token = SyntaxKind.PrivateIdentifier;
                 case CharacterCodes.replacementCharacter:
                     error(Diagnostics.File_appears_to_be_binary, 0, 0);
                     pos = end;
                     return token = SyntaxKind.NonTextFileMarkerTrivia;
                 default:
-                    const identifierKind = scanIdentifier(ch, languageVersion);
-                    if (identifierKind) {
-                        return token = identifierKind;
+                    if (scanIdentifier(languageVersion)) {
+                        return token;
                     }
                     else if (isWhiteSpaceSingleLine(ch)) {
                         pos += charSize(ch);
@@ -2411,27 +2366,39 @@ export function createScanner(
     function reScanInvalidIdentifier(): SyntaxKind {
         Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
         pos = tokenStart = fullStartPos;
-        tokenFlags = 0;
-        const ch = codePointUnchecked(pos);
-        const identifierKind = scanIdentifier(ch, ScriptTarget.ESNext);
-        if (identifierKind) {
-            return token = identifierKind;
-        }
-        pos += charSize(ch);
-        return token; // Still `SyntaxKind.Unknown`
+        tokenFlags = TokenFlags.None;
+        return scanIdentifier(ScriptTarget.ESNext);
     }
 
-    function scanIdentifier(startCharacter: number, languageVersion: ScriptTarget) {
-        let ch = startCharacter;
-        if (isIdentifierStart(ch, languageVersion)) {
-            pos += charSize(ch);
-            while (pos < end && isIdentifierPart(ch = codePointUnchecked(pos), languageVersion)) pos += charSize(ch);
-            tokenValue = text.substring(tokenStart, pos);
-            if (ch === CharacterCodes.backslash) {
-                tokenValue += scanIdentifierParts();
+    function scanIdentifierStart(languageVersion: ScriptTarget): string {
+        const ch = codePointChecked(pos);
+        if (ch === CharacterCodes.backslash) {
+            const extendedCookedChar = peekExtendedUnicodeEscape();
+            if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
+                return scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true);
             }
-            return getIdentifierToken();
+
+            const cookedChar = peekUnicodeEscape();
+            if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
+                pos += 6; // Valid Unicode escape is always six characters
+                tokenFlags |= TokenFlags.UnicodeEscape;
+                return String.fromCharCode(cookedChar);
+            }
         }
+        else if (isIdentifierStart(ch, languageVersion)) {
+            pos += charSize(ch);
+            return utf16EncodeAsString(ch);
+        }
+        return "";
+    }
+
+    function scanIdentifier(languageVersion: ScriptTarget, identifierVariant?: LanguageVariant) {
+        tokenValue = scanIdentifierStart(languageVersion);
+        if (tokenValue) {
+            tokenValue += scanIdentifierParts(languageVersion, identifierVariant);
+            return token = getIdentifierToken();
+        }
+        return token = SyntaxKind.Unknown;
     }
 
     function reScanGreaterToken(): SyntaxKind {
@@ -2996,8 +2963,7 @@ export function createScanner(
         function scanGroupName(isReference: boolean) {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.lessThan);
             tokenStart = pos;
-            scanIdentifier(codePointChecked(pos), languageVersion);
-            if (pos === tokenStart) {
+            if (!scanIdentifier(languageVersion)) {
                 error(Diagnostics.Expected_a_capturing_group_name);
             }
             else if (isReference) {
@@ -3772,19 +3738,8 @@ export function createScanner(
             // everything after it to the token
             // Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
             // Any caller should be expecting this behavior and should only read the pos or token value after calling it.
-            while (pos < end) {
-                const ch = charCodeUnchecked(pos);
-                if (ch === CharacterCodes.minus) {
-                    tokenValue += "-";
-                    pos++;
-                    continue;
-                }
-                const oldPos = pos;
-                tokenValue += scanIdentifierParts(); // reuse `scanIdentifierParts` so unicode escapes are handled
-                if (pos === oldPos) {
-                    break;
-                }
-            }
+            // Here `scanIdentifierParts` is reused to ensure unicode escapes are handled.
+            tokenValue += scanIdentifierParts(languageVersion, LanguageVariant.JSX);
             return getIdentifierToken();
         }
         return token;
@@ -3893,36 +3848,11 @@ export function createScanner(
                 return token = SyntaxKind.BacktickToken;
             case CharacterCodes.hash:
                 return token = SyntaxKind.HashToken;
-            case CharacterCodes.backslash:
-                pos--;
-                const extendedCookedChar = peekExtendedUnicodeEscape();
-                if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
-                    tokenValue = scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
-                    return token = getIdentifierToken();
-                }
-
-                const cookedChar = peekUnicodeEscape();
-                if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
-                    pos += 6;
-                    tokenFlags |= TokenFlags.UnicodeEscape;
-                    tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
-                    return token = getIdentifierToken();
-                }
-                pos++;
-                return token = SyntaxKind.Unknown;
-        }
-
-        if (isIdentifierStart(ch, languageVersion)) {
-            let char = ch;
-            while (pos < end && isIdentifierPart(char = codePointUnchecked(pos), languageVersion) || char === CharacterCodes.minus) pos += charSize(char);
-            tokenValue = text.substring(tokenStart, pos);
-            if (char === CharacterCodes.backslash) {
-                tokenValue += scanIdentifierParts();
-            }
-            return token = getIdentifierToken();
-        }
-        else {
-            return token = SyntaxKind.Unknown;
+            default:
+                pos = tokenStart;
+                const identifierKind = scanIdentifier(languageVersion, LanguageVariant.JSX);
+                if (!identifierKind) pos += charSize(ch); // skip the character
+                return identifierKind;
         }
     }
 
