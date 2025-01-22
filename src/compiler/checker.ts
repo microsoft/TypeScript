@@ -276,7 +276,6 @@ import {
     getDirectoryPath,
     getEffectiveBaseTypeNode,
     getEffectiveConstraintOfTypeParameter,
-    getEffectiveContainerForJSDocTemplateTag,
     getEffectiveImplementsTypeNodes,
     getEffectiveInitializer,
     getEffectiveJSDocHost,
