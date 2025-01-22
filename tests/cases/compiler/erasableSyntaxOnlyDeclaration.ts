@@ -1,10 +1,9 @@
 // @erasableSyntaxOnly: true
 // @noEmit: true
+// @filename: decl.d.ts
 
-class MyClassErr {
-    // No parameter properties
-    constructor(public foo: string) { }
-}
+// Diffs from the other test:
+// - Parameter properties are already banned in .d.ts files
 
 namespace IllegalBecauseInstantiated {
     export const m = 1;
@@ -27,7 +26,7 @@ const enum NotLegalConstEnum {
 // No errors after this point
 class MyClassOk {
     // Not a parameter property, ok
-    constructor(foo: string) { }
+    constructor(foo: string);
 }
 namespace NotInstantiated {
     export interface JustAType { }
