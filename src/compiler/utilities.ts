@@ -10477,6 +10477,7 @@ export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean 
 /** @internal */
 export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
     return !!(useSite.flags & NodeFlags.Ambient)
+        || isInJSDoc(useSite)
         || isPartOfTypeQuery(useSite)
         || isIdentifierInNonEmittingHeritageClause(useSite)
         || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)

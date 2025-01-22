@@ -5263,6 +5263,7 @@ export interface TypeChecker {
     getBigIntType(): Type;
     getBigIntLiteralType(value: PseudoBigInt): BigIntLiteralType;
     getBooleanType(): Type;
+    getUnknownType(): Type;
     /* eslint-disable @typescript-eslint/unified-signatures */
     /** @internal */
     getFalseType(fresh?: boolean): Type;
