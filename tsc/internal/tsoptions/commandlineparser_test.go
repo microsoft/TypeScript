@@ -137,7 +137,7 @@ func TestParseCommandLineVerifyNull(t *testing.T) {
 }
 
 func createVerifyNullForNonNullIncluded(subScenario string, kind CommandLineOptionKind, nonNullValue string) verifyNull {
-	workerDiagnostics := GetCompilerOptionsDidYouMeanDiagnostics(append(optionsDeclarations, CommandLineOption{
+	workerDiagnostics := GetCompilerOptionsDidYouMeanDiagnostics(append(optionsDeclarations, &CommandLineOption{
 		Name:                    "optionName",
 		Kind:                    kind,
 		isTSConfigOnly:          true,
@@ -245,7 +245,7 @@ func parseExistingCompilerBaseline(t *testing.T, baseline string) *TestCommandLi
 
 var compilerOptionsDidYouMeanDiagnostics = GetCompilerOptionsDidYouMeanDiagnostics(optionsDeclarations)
 
-func GetCompilerOptionsDidYouMeanDiagnostics(decls []CommandLineOption) *ParseCommandLineWorkerDiagnostics {
+func GetCompilerOptionsDidYouMeanDiagnostics(decls []*CommandLineOption) *ParseCommandLineWorkerDiagnostics {
 	return &ParseCommandLineWorkerDiagnostics{
 		didYouMean: DidYouMeanOptionsDiagnostics{
 			alternateMode: &AlternateModeDiagnostics{

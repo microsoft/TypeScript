@@ -88,50 +88,64 @@ func ParseJSONText(fileName string, sourceText string) *ast.SourceFile {
 	p.initializeState(fileName, sourceText, core.ScriptTargetES2015, core.ScriptKindJSON)
 	p.nextToken()
 	pos := p.nodePos()
-	var expressions []*ast.Node
+	var statements *ast.NodeList
 
-	for p.token != ast.KindEndOfFile {
-		var expression *ast.Node
-		switch p.token {
-		case ast.KindOpenBracketToken:
-			expression = p.parseArrayLiteralExpression()
-		case ast.KindTrueKeyword, ast.KindFalseKeyword, ast.KindNullKeyword:
-			expression = p.parseTokenNode()
-		case ast.KindMinusToken:
-			if p.lookAhead(func() bool { return p.nextToken() == ast.KindNumericLiteral && p.nextToken() != ast.KindColonToken }) {
-				expression = p.parsePrefixUnaryExpression()
-			} else {
+	if p.token == ast.KindEndOfFile {
+		statements = p.newNodeList(core.NewTextRange(pos, p.nodePos()), nil)
+		p.parseTokenNode()
+	} else {
+		var expressions any // []*ast.Expression | *ast.Expression
+
+		for p.token != ast.KindEndOfFile {
+			var expression *ast.Expression
+			switch p.token {
+			case ast.KindOpenBracketToken:
+				expression = p.parseArrayLiteralExpression()
+			case ast.KindTrueKeyword, ast.KindFalseKeyword, ast.KindNullKeyword:
+				expression = p.parseTokenNode()
+			case ast.KindMinusToken:
+				if p.lookAhead(func() bool { return p.nextToken() == ast.KindNumericLiteral && p.nextToken() != ast.KindColonToken }) {
+					expression = p.parsePrefixUnaryExpression()
+				} else {
+					expression = p.parseObjectLiteralExpression()
+				}
+			case ast.KindNumericLiteral, ast.KindStringLiteral:
+				if p.lookAhead(func() bool { return p.nextToken() != ast.KindColonToken }) {
+					expression = p.parseLiteralExpression()
+					break
+				}
+				fallthrough
+			default:
 				expression = p.parseObjectLiteralExpression()
 			}
-		case ast.KindNumericLiteral, ast.KindStringLiteral:
-			if p.lookAhead(func() bool { return p.nextToken() != ast.KindColonToken }) {
-				expression = p.parseLiteralExpression()
-				break
+
+			// Error recovery: collect multiple top-level expressions
+			if expressions != nil {
+				if es, ok := expressions.([]*ast.Expression); ok {
+					expressions = append(es, expression)
+				} else {
+					expressions = []*ast.Expression{expressions.(*ast.Expression), expression}
+				}
+			} else {
+				expressions = expression
+				if p.token != ast.KindEndOfFile {
+					p.parseErrorAtCurrentToken(diagnostics.Unexpected_token)
+				}
 			}
-			fallthrough
-		default:
-			expression = p.parseObjectLiteralExpression()
 		}
 
-		// Error recovery: collect multiple top-level expressions
-		expressions = append(expressions, expression)
-		if p.token != ast.KindEndOfFile {
-			p.parseErrorAtCurrentToken(diagnostics.Unexpected_token)
+		var expression *ast.Expression
+		if es, ok := expressions.([]*ast.Expression); ok {
+			expression = p.factory.NewArrayLiteralExpression(p.newNodeList(core.NewTextRange(pos, p.nodePos()), es), false)
+		} else {
+			expression = expressions.(*ast.Expression)
 		}
+		statement := p.factory.NewExpressionStatement(expression)
+		p.finishNode(statement, pos)
+		statements = p.newNodeList(core.NewTextRange(pos, p.nodePos()), []*ast.Node{statement})
+		p.parseExpectedToken(ast.KindEndOfFile)
 	}
-
-	var statement *ast.Node
-	if len(expressions) == 1 {
-		statement = p.factory.NewExpressionStatement(expressions[0])
-	} else {
-		arr := p.factory.NewArrayLiteralExpression(p.newNodeList(core.NewTextRange(pos, p.nodePos()), expressions), false)
-		p.finishNode(arr, pos)
-		statement = p.factory.NewExpressionStatement(arr)
-	}
-
-	p.finishNode(statement, pos)
-	p.parseExpectedToken(ast.KindEndOfFile)
-	node := p.factory.NewSourceFile(p.sourceText, p.fileName, p.newNodeList(statement.Loc, []*ast.Node{statement}))
+	node := p.factory.NewSourceFile(p.sourceText, p.fileName, statements)
 	p.finishNode(node, pos)
 	result := node.AsSourceFile()
 	result.SetDiagnostics(attachFileToDiagnostics(p.diagnostics, result))

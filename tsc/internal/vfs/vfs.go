@@ -30,6 +30,9 @@ type FS interface {
 	// GetDirectories returns the names of the directories in the specified directory.
 	GetDirectories(path string) []string
 
+	// GetEntries returns the entries in the specified directory.
+	GetEntries(path string) []fs.DirEntry
+
 	// WalkDir walks the file tree rooted at root, calling walkFn for each file or directory in the tree.
 	// It is has the same behavior as [fs.WalkDir], but with paths as [string].
 	WalkDir(root string, walkFn WalkDirFunc) error
@@ -112,6 +115,18 @@ func (vfs *common) DirectoryExists(path string) bool {
 }
 
 func (vfs *common) GetDirectories(path string) []string {
+	entries := vfs.GetEntries(path)
+	// TODO: should this really exist? ReadDir with manual filtering seems like a better idea.
+	var dirs []string
+	for _, entry := range entries {
+		if entry.IsDir() {
+			dirs = append(dirs, entry.Name())
+		}
+	}
+	return dirs
+}
+
+func (vfs *common) GetEntries(path string) []fs.DirEntry {
 	fsys, _, rest := vfs.rootAndPath(path)
 	if fsys == nil {
 		return nil
@@ -122,14 +137,7 @@ func (vfs *common) GetDirectories(path string) []string {
 		return nil
 	}
 
-	// TODO: should this really exist? ReadDir with manual filtering seems like a better idea.
-	var dirs []string
-	for _, entry := range entries {
-		if entry.IsDir() {
-			dirs = append(dirs, entry.Name())
-		}
-	}
-	return dirs
+	return entries
 }
 
 func (vfs *common) WalkDir(root string, walkFn WalkDirFunc) error {

@@ -17671,7 +17671,7 @@ func (c *Checker) computeEnumMemberValues(node *ast.Node) {
 }
 
 func (c *Checker) computeEnumMemberValue(member *ast.Node, autoValue jsnum.Number, previous *ast.Node) EvaluatorResult {
-	if isComputedNonLiteralName(member.Name()) {
+	if ast.IsComputedNonLiteralName(member.Name()) {
 		c.error(member.Name(), diagnostics.Computed_property_names_are_not_allowed_in_enums)
 	} else {
 		text := member.Name().Text()
@@ -22289,7 +22289,7 @@ func (c *Checker) getContextualTypeForBindingElement(declaration *ast.Node, cont
 	if name == nil {
 		name = declaration.Name()
 	}
-	if ast.IsBindingPattern(name) || isComputedNonLiteralName(name) {
+	if ast.IsBindingPattern(name) || ast.IsComputedNonLiteralName(name) {
 		return nil
 	}
 	parent := declaration.Parent.Parent

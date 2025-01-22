@@ -1749,3 +1749,26 @@ func isJSXTagName(node *Node) bool {
 func IsImportCall(node *Node) bool {
 	return IsCallExpression(node) && node.AsCallExpression().Expression.Kind == KindImportKeyword
 }
+
+func IsComputedNonLiteralName(name *Node) bool {
+	return IsComputedPropertyName(name) && !IsStringOrNumericLiteralLike(name.Expression())
+}
+
+func IsQuestionToken(node *Node) bool {
+	return node != nil && node.Kind == KindQuestionToken
+}
+
+func TryGetTextOfPropertyName(name *Node) (string, bool) {
+	switch name.Kind {
+	case KindIdentifier, KindPrivateIdentifier, KindStringLiteral, KindNumericLiteral, KindBigIntLiteral,
+		KindNoSubstitutionTemplateLiteral:
+		return name.Text(), true
+	case KindComputedPropertyName:
+		if IsStringOrNumericLiteralLike(name.Expression()) {
+			return name.Expression().Text(), true
+		}
+	case KindJsxNamespacedName:
+		return name.AsJsxNamespacedName().Namespace.Text() + ":" + name.Name().Text(), true
+	}
+	return "", false
+}

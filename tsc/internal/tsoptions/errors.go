@@ -8,6 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
 func createDiagnosticForInvalidEnumType(opt *CommandLineOption) *ast.Diagnostic {
@@ -82,4 +83,11 @@ func (parser *CommandLineParser) createUnknownOptionError(
 	}
 	// TODO: possibleOption := spelling suggestion
 	return ast.NewDiagnostic(sourceFile, errorLoc, parser.UnknownOptionDiagnostic(), unknownOptionErrorText)
+}
+
+func createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile *ast.SourceFile, node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
+	if sourceFile != nil && node != nil {
+		return ast.NewDiagnostic(sourceFile, core.NewTextRange(scanner.SkipTrivia(sourceFile.Text, node.Loc.Pos()), node.End()), message, args...)
+	}
+	return ast.NewCompilerDiagnostic(message, args...)
 }

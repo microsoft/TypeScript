@@ -7,9 +7,8 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 )
 
-// todo: used in executeCommandLine
 type ParsedCommandLine struct {
-	options *core.ParsedOptions
+	ParsedConfig *core.ParsedOptions
 	// WatchOptions WatchOptions
 
 	ConfigFile *ast.SourceFile // TsConfigSourceFile, used in Program and ExecuteCommandLine
@@ -28,7 +27,7 @@ func NewParsedCommandLine(
 	compileOnSave *bool,
 ) ParsedCommandLine {
 	return ParsedCommandLine{
-		options:       options,
+		ParsedConfig:  options,
 		ConfigFile:    configFile,
 		Errors:        errors,
 		Raw:           raw,
@@ -37,23 +36,23 @@ func NewParsedCommandLine(
 }
 
 func (p *ParsedCommandLine) SetParsedOptions(o *core.ParsedOptions) {
-	p.options = o
+	p.ParsedConfig = o
 }
 
 func (p *ParsedCommandLine) SetCompilerOptions(o *core.CompilerOptions) {
-	p.options.CompilerOptions = o
+	p.ParsedConfig.CompilerOptions = o
 }
 
 func (p *ParsedCommandLine) CompilerOptions() *core.CompilerOptions {
-	return p.options.CompilerOptions
+	return p.ParsedConfig.CompilerOptions
 }
 
 func (p *ParsedCommandLine) FileNames() []string {
-	return p.options.FileNames
+	return p.ParsedConfig.FileNames
 }
 
 func (p *ParsedCommandLine) ProjectReferences() []core.ProjectReference {
-	return p.options.ProjectReferences
+	return p.ParsedConfig.ProjectReferences
 }
 
 func (p *ParsedCommandLine) GetConfigFileParsingDiagnostics() []*ast.Diagnostic {

@@ -3,6 +3,7 @@ package tspath
 import (
 	"path"
 	"path/filepath"
+	"slices"
 	"strings"
 )
 
@@ -26,6 +27,10 @@ var (
 	supportedDeclarationExtensions           = []string{ExtensionDts, ExtensionDcts, ExtensionDmts}
 	supportedTSImplementationExtensions      = []string{ExtensionTs, ExtensionTsx, ExtensionMts, ExtensionCts}
 	supportedTSExtensionsForExtractExtension = []string{ExtensionDts, ExtensionDcts, ExtensionDmts, ExtensionTs, ExtensionTsx, ExtensionMts, ExtensionCts}
+	AllSupportedExtensions                   = [][]string{{ExtensionTs, ExtensionTsx, ExtensionDts, ExtensionJs, ExtensionJsx}, {ExtensionCts, ExtensionDcts, ExtensionCjs}, {ExtensionMts, ExtensionDmts, ExtensionMjs}}
+	SupportedTSExtensions                    = [][]string{{ExtensionTs, ExtensionTsx, ExtensionDts}, {ExtensionCts, ExtensionDcts}, {ExtensionMts, ExtensionDmts}}
+	AllSupportedExtensionsWithJson           = slices.Concat(AllSupportedExtensions, [][]string{{ExtensionJson}})
+	SupportedTSExtensionsWithJson            = slices.Concat(SupportedTSExtensions, [][]string{{ExtensionJson}})
 )
 
 func ExtensionIsTs(ext string) bool {
@@ -98,4 +103,26 @@ func GetDeclarationFileExtension(fileName string) string {
 		}
 	}
 	return ""
+}
+
+// changeAnyExtension changes the extension of a path to the provided extension if it has one of the provided extensions.
+//
+// changeAnyExtension("/path/to/file.ext", ".js", ".ext") === "/path/to/file.js"
+// changeAnyExtension("/path/to/file.ext", ".js", ".ts") === "/path/to/file.ext"
+// changeAnyExtension("/path/to/file.ext", ".js", [".ext", ".ts"]) === "/path/to/file.js"
+func changeAnyExtension(path string, ext string, extensions []string, ignoreCase bool) string {
+	pathext := GetAnyExtensionFromPath(path, extensions, ignoreCase)
+	if pathext != "" {
+		result := path[:len(path)-len(pathext)]
+		if strings.HasPrefix(ext, ".") {
+			return result + ext
+		} else {
+			return result + "." + ext
+		}
+	}
+	return path
+}
+
+func ChangeExtension(path string, newExtension string) string {
+	return changeAnyExtension(path, newExtension, extensionsToRemove /*ignoreCase*/, false)
 }

@@ -73,6 +73,13 @@ func (vfs *wrappedFS) GetDirectories(path string) []string {
 	return vfs.fs.GetDirectories(path)
 }
 
+func (vfs *wrappedFS) GetEntries(path string) []fs.DirEntry {
+	if _, path, ok := splitPath(path); ok {
+		return embeddedVFS.GetEntries("/" + path)
+	}
+	return vfs.fs.GetEntries(path)
+}
+
 func (vfs *wrappedFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 	if root, path, ok := splitPath(root); ok {
 		return embeddedVFS.WalkDir("/"+path, func(path string, d fs.DirEntry, err error) error {

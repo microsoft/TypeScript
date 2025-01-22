@@ -1708,7 +1708,7 @@ func (c *Checker) tryGetNameFromEntityNameExpression(node *ast.Node) (string, bo
 				return tryGetNameFromType(initializerType)
 			}
 		} else if ast.IsEnumMember(declaration) {
-			return tryGetTextOfPropertyName(declaration.Name())
+			return ast.TryGetTextOfPropertyName(declaration.Name())
 		}
 	}
 	return "", false
@@ -1720,21 +1720,6 @@ func tryGetNameFromType(t *Type) (string, bool) {
 		return t.AsUniqueESSymbolType().name, true
 	case t.flags&TypeFlagsStringOrNumberLiteral != 0:
 		return anyToString(t.AsLiteralType().value), true
-	}
-	return "", false
-}
-
-func tryGetTextOfPropertyName(name *ast.Node) (string, bool) {
-	switch name.Kind {
-	case ast.KindIdentifier, ast.KindPrivateIdentifier, ast.KindStringLiteral, ast.KindNumericLiteral, ast.KindBigIntLiteral,
-		ast.KindNoSubstitutionTemplateLiteral:
-		return name.Text(), true
-	case ast.KindComputedPropertyName:
-		if ast.IsStringOrNumericLiteralLike(name.Expression()) {
-			return name.Expression().Text(), true
-		}
-	case ast.KindJsxNamespacedName:
-		return name.AsJsxNamespacedName().Namespace.Text() + ":" + name.Name().Text(), true
 	}
 	return "", false
 }

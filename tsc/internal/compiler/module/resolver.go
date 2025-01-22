@@ -256,6 +256,14 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 	return result
 }
 
+func (r *Resolver) resolveConfig(moduleName string, containingFile string) *ResolvedModule {
+	containingDirectory := tspath.GetDirectoryPath(containingFile)
+	state := newResolutionState(moduleName, containingDirectory, false /*isTypeReferenceDirective*/, core.ModuleKindCommonJS, r.compilerOptions, nil, r)
+	state.isConfigLookup = true
+	state.extensions = extensionsJson
+	return state.resolveNodeLike()
+}
+
 func (r *Resolver) traceTypeReferenceDirectiveResult(typeReferenceDirectiveName string, result *ResolvedTypeReferenceDirective) {
 	if !result.IsResolved() {
 		r.host.Trace(diagnostics.Type_reference_directive_0_was_not_resolved.Format(typeReferenceDirectiveName))
@@ -351,6 +359,10 @@ func (r *resolutionState) getPackageScopeForPath(directory string) *packagejson.
 		},
 	)
 	return result
+}
+
+func (r *resolutionState) getResolvedPackageDirectory() bool {
+	return r.resolvedPackageDirectory
 }
 
 func (r *resolutionState) resolveNodeLike() *ResolvedModule {
@@ -1749,4 +1761,9 @@ func extensionIsOk(extensions extensions, extension string) bool {
 		(extensions&extensionsTypeScript != 0 && (extension == tspath.ExtensionTs || extension == tspath.ExtensionTsx || extension == tspath.ExtensionMts || extension == tspath.ExtensionCts)) ||
 		(extensions&extensionsDeclaration != 0 && (extension == tspath.ExtensionDts || extension == tspath.ExtensionDmts || extension == tspath.ExtensionDcts)) ||
 		(extensions&extensionsJson != 0 && extension == tspath.ExtensionJson))
+}
+
+func ResolveConfig(moduleName string, containingFile string, host ResolutionHost) *ResolvedModule {
+	resolver := NewResolver(host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext})
+	return resolver.resolveConfig(moduleName, containingFile)
 }

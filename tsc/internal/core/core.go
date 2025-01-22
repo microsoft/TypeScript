@@ -1,8 +1,11 @@
 package core
 
 import (
+	"bytes"
+	"encoding/json"
 	"iter"
 	"slices"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/stringutil"
@@ -298,4 +301,32 @@ func ComputeLineStarts(text string) []TextPos {
 	}
 	result = append(result, TextPos(lineStart))
 	return result
+}
+
+func Flatten[T any](array [][]T) []T {
+	var result []T
+	for _, subArray := range array {
+		result = append(result, subArray...)
+	}
+	return result
+}
+
+func Must[T any](v T, err error) T {
+	if err != nil {
+		panic(err)
+	}
+	return v
+}
+
+func StringifyJson(input any) (string, error) {
+	var buf bytes.Buffer
+	encoder := json.NewEncoder(&buf)
+	encoder.SetEscapeHTML(false)
+	if _, ok := input.([]any); ok && len(input.([]any)) == 0 {
+		return "[]", nil
+	}
+	if err := encoder.Encode(input); err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(buf.String()), nil
 }

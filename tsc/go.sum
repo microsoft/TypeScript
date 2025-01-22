@@ -1,3 +1,5 @@
+github.com/dlclark/regexp2 v1.11.4 h1:rPYF9/LECdNymJufQKmri9gV604RvvABwgOA8un7yAo=
+github.com/dlclark/regexp2 v1.11.4/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
 github.com/go-json-experiment/json v0.0.0-20241127185351-9802db03f36a h1:W/o3DbExdFptoPsZlbGsFnm0f8xDce+C0+Y0u54mJo4=
 github.com/go-json-experiment/json v0.0.0-20241127185351-9802db03f36a/go.mod h1:BWmvoE1Xia34f3l/ibJweyhrT+aROb/FQ6d+37F0e2s=
 github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=
