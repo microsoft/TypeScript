@@ -240,6 +240,28 @@ func TestCombinePaths(t *testing.T) {
 	assert.Equal(t, CombinePaths("/a/..", "/b"), "/b")
 }
 
+func BenchmarkCombinePaths(b *testing.B) {
+	tests := [][]string{
+		{"path", "to", "file.ext"},
+		{"path", "dir", "..", "to", "file.ext"},
+		{"/path", "to", "file.ext"},
+		{"/path", "/to", "file.ext"},
+		{"c:/path", "to", "file.ext"},
+		{"file:///path", "to", "file.ext"},
+	}
+
+	for _, test := range tests {
+		name := shortenName(strings.Join(test, "/"))
+		b.Run(name, func(b *testing.B) {
+			first, rest := test[0], test[1:]
+			b.ReportAllocs()
+			for range b.N {
+				CombinePaths(first, rest...)
+			}
+		})
+	}
+}
+
 func TestResolvePath(t *testing.T) {
 	t.Parallel()
 	assert.Equal(t, ResolvePath(""), "")

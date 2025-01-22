@@ -82,27 +82,44 @@ func HasTrailingDirectorySeparator(path string) bool {
 func CombinePaths(firstPath string, paths ...string) string {
 	// TODO (drosen): There is potential for a fast path here.
 	// In the case where we find the last absolute path and just path.Join from there.
-	result := NormalizeSlashes(firstPath)
+	firstPath = NormalizeSlashes(firstPath)
+
+	var b strings.Builder
+	size := len(firstPath) + len(paths)
+	for _, p := range paths {
+		size += len(p)
+	}
+	b.Grow(size)
+
+	b.WriteString(firstPath)
+
+	// To provide a way to "set" the path, keep track of the start and then slice.
+	// This will waste some memory each time we do it, but saving memory is more common.
+	start := 0
+	result := func() string {
+		return b.String()[start:]
+	}
+	setResult := func(value string) {
+		start = b.Len()
+		b.WriteString(value)
+	}
 
 	for _, trailingPath := range paths {
 		if trailingPath == "" {
 			continue
 		}
 		trailingPath = NormalizeSlashes(trailingPath)
-		if result == "" || GetRootLength(trailingPath) != 0 {
+		if result() == "" || GetRootLength(trailingPath) != 0 {
 			// `trailingPath` is absolute.
-			result = trailingPath
+			setResult(trailingPath)
 		} else {
-			// Could use
-			//  result = path.Join(result, trailingPath)
-			// but that collapses `..` and prior segments,
-			// which is not necessarily compatible with how combinePaths
-			// was originally implemented.
-
-			result = EnsureTrailingDirectorySeparator(result) + trailingPath
+			if !HasTrailingDirectorySeparator(result()) {
+				b.WriteByte(DirectorySeparator)
+			}
+			b.WriteString(trailingPath)
 		}
 	}
-	return result
+	return result()
 }
 
 func GetPathComponents(path string, currentDirectory string) []string {
