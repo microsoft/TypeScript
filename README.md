@@ -41,9 +41,9 @@ with any additional questions or comments.
 
 ## Documentation
 
-*  [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
-*  [Programming handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
-*  [Homepage](https://www.typescriptlang.org/)
+*  [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
+*  [Programming handbook](https://www.typescriptlang.org/docs/handbook/intro.html).
+*  [Homepage](https://www.typescriptlang.org/).
 
 ## Roadmap
 
