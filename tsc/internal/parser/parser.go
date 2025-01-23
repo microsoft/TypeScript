@@ -148,6 +148,9 @@ func ParseJSONText(fileName string, sourceText string) *ast.SourceFile {
 	node := p.factory.NewSourceFile(p.sourceText, p.fileName, statements)
 	p.finishNode(node, pos)
 	result := node.AsSourceFile()
+	result.ScriptKind = core.ScriptKindJSON
+	result.LanguageVersion = core.ScriptTargetES2015
+	result.Flags |= p.sourceFlags
 	result.SetDiagnostics(attachFileToDiagnostics(p.diagnostics, result))
 	return result
 }

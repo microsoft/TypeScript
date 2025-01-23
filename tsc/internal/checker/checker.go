@@ -10894,12 +10894,13 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 	// !!! Debug.assertIsDefined(symbol.valueDeclaration)
 	declaration := symbol.ValueDeclaration
 	// !!! Handle export default expressions
-	// if isSourceFile(declaration) && isJsonSourceFile(declaration) {
-	// 	if !declaration.statements.length {
-	// 		return c.emptyObjectType
-	// 	}
-	// 	return c.getWidenedType(c.getWidenedLiteralType(c.checkExpression(declaration.statements[0].expression)))
-	// }
+	if ast.IsSourceFile(declaration) && ast.IsJsonSourceFile(declaration.AsSourceFile()) {
+		statements := declaration.AsSourceFile().Statements.Nodes
+		if len(statements) == 0 {
+			return c.emptyObjectType
+		}
+		return c.getWidenedType(c.getWidenedLiteralType(c.checkExpression(statements[0].AsExpressionStatement().Expression)))
+	}
 	// Handle variable, parameter or property
 	if !c.pushTypeResolution(symbol, TypeSystemPropertyNameType) {
 		return c.reportCircularityError(symbol)

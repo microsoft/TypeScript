@@ -723,15 +723,13 @@ func (b *Binder) bindSourceFileIfExternalModule() {
 	b.setExportContextFlag(b.file.AsNode())
 	if ast.IsExternalModule(b.file) {
 		b.bindSourceFileAsExternalModule()
+	} else if ast.IsJsonSourceFile(b.file) {
+		b.bindSourceFileAsExternalModule()
+		// Create symbol equivalent for the module.exports = {}
+		originalSymbol := b.file.Symbol
+		b.declareSymbol(ast.GetSymbolTable(&b.file.Symbol.Exports), b.file.Symbol, b.file.AsNode(), ast.SymbolFlagsProperty, ast.SymbolFlagsAll)
+		b.file.Symbol = originalSymbol
 	}
-	// !!!
-	// else if isJsonSourceFile(b.file) {
-	// 	b.bindSourceFileAsExternalModule()
-	// 	// Create symbol equivalent for the module.exports = {}
-	// 	originalSymbol := b.file.symbol
-	// 	b.declareSymbol(b.file.symbol.exports, b.file.symbol, b.file, SymbolFlagsProperty, SymbolFlagsAll)
-	// 	b.file.symbol = originalSymbol
-	// }
 }
 
 func (b *Binder) bindSourceFileAsExternalModule() {
