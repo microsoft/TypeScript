@@ -4715,7 +4715,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (errorNode && resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                     errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
-                if (errorNode && (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext)) {
+                if (errorNode && (moduleKind === ModuleKind.Node16 || moduleKind === ModuleKind.Node18)) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
                     const overrideHost = findAncestor(location, l => isImportTypeNode(l) || isExportDeclaration(l) || isImportDeclaration(l) || isJSDocImportTag(l));
                     // An override clause will take effect for type-only imports and import types, and allows importing the types across formats, regardless of
@@ -16684,6 +16684,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case "Number":
                     checkNoTypeArguments(node);
                     return numberType;
+                case "BigInt":
+                    checkNoTypeArguments(node);
+                    return bigintType;
                 case "Boolean":
                     checkNoTypeArguments(node);
                     return booleanType;
@@ -27182,7 +27185,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return target.kind === SyntaxKind.SuperKeyword;
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ParenthesizedExpression:
-                return isMatchingReference((source as NonNullExpression | ParenthesizedExpression).expression, target);
+            case SyntaxKind.SatisfiesExpression:
+                return isMatchingReference((source as NonNullExpression | ParenthesizedExpression | SatisfiesExpression).expression, target);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 const sourcePropertyName = getAccessedPropertyName(source as AccessExpression);
@@ -29534,7 +29538,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return narrowTypeByCallExpression(type, expr as CallExpression, assumeTrue);
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.NonNullExpression:
-                    return narrowType(type, (expr as ParenthesizedExpression | NonNullExpression).expression, assumeTrue);
+                case SyntaxKind.SatisfiesExpression:
+                    return narrowType(type, (expr as ParenthesizedExpression | NonNullExpression | SatisfiesExpression).expression, assumeTrue);
                 case SyntaxKind.BinaryExpression:
                     return narrowTypeByBinaryExpression(type, expr as BinaryExpression, assumeTrue);
                 case SyntaxKind.PrefixUnaryExpression:
@@ -48086,6 +48091,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         ? Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve
                         : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve,
                 );
+            }
+
+            if (moduleKind === ModuleKind.NodeNext && !isImportAttributes) {
+                return grammarErrorOnFirstToken(node, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_asserts);
             }
 
             if (declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier) === ModuleKind.CommonJS) {

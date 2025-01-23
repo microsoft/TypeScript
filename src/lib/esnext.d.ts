@@ -6,3 +6,4 @@
 /// <reference lib="esnext.array" />
 /// <reference lib="esnext.iterator" />
 /// <reference lib="esnext.promise" />
+/// <reference lib="esnext.float16" />

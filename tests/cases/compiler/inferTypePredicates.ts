@@ -279,3 +279,13 @@ const foobarPred = (fb: typeof foobar) => fb.type === "foo";
 if (foobarPred(foobar)) {
   foobar.foo;
 }
+
+// https://github.com/microsoft/TypeScript/issues/60778
+const arrTest: Array<number> = [1, 2, null, 3].filter(
+  (x) => (x != null) satisfies boolean,
+);
+
+function isEmptyString(x: unknown) {
+  const rv = x === "";
+  return rv satisfies boolean;
+}

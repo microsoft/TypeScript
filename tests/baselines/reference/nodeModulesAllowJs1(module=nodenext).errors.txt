@@ -1,18 +1,5 @@
-index.cjs(2,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.js")' call instead.
-index.cjs(3,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.mjs")' call instead.
-index.cjs(6,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder/index.mjs")' call instead.
-index.cjs(9,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/index.mjs")' call instead.
-index.cjs(11,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.js")' call instead.
-index.cjs(12,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.mjs")' call instead.
-index.cjs(15,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./")' call instead.
-index.cjs(16,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index")' call instead.
-index.cjs(23,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another")' call instead.
-index.cjs(24,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/")' call instead.
-index.cjs(25,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index")' call instead.
 index.cjs(51,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.cjs(51,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.cjs(52,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.cjs(52,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.cjs(53,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.cjs(54,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.cjs(55,1): error TS8002: 'import ... =' can only be used in TypeScript files.
@@ -20,11 +7,8 @@ index.cjs(56,1): error TS8002: 'import ... =' can only be used in TypeScript fil
 index.cjs(57,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.cjs(58,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.cjs(59,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.cjs(59,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.cjs(60,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.cjs(60,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.cjs(61,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.cjs(61,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.cjs(75,21): error TS2307: Cannot find module './' or its corresponding type declarations.
 index.cjs(76,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
 index.cjs(77,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
@@ -48,9 +32,7 @@ index.js(22,22): error TS2834: Relative import paths need explicit file extensio
 index.js(23,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 index.js(24,22): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
 index.js(50,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.js(50,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.js(51,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.js(51,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.js(52,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.js(53,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.js(54,1): error TS8002: 'import ... =' can only be used in TypeScript files.
@@ -58,11 +40,8 @@ index.js(55,1): error TS8002: 'import ... =' can only be used in TypeScript file
 index.js(56,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.js(57,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.js(58,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.js(58,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.js(59,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.js(59,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.js(60,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.js(60,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.js(74,21): error TS2307: Cannot find module './' or its corresponding type declarations.
 index.js(75,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
 index.js(76,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
@@ -86,9 +65,7 @@ index.mjs(22,22): error TS2834: Relative import paths need explicit file extensi
 index.mjs(23,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 index.mjs(24,22): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
 index.mjs(50,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.mjs(50,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.mjs(51,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.mjs(51,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.mjs(52,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.mjs(53,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.mjs(54,1): error TS8002: 'import ... =' can only be used in TypeScript files.
@@ -96,11 +73,8 @@ index.mjs(55,1): error TS8002: 'import ... =' can only be used in TypeScript fil
 index.mjs(56,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.mjs(57,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.mjs(58,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.mjs(58,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.mjs(59,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.mjs(59,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.mjs(60,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-index.mjs(60,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 index.mjs(74,21): error TS2307: Cannot find module './' or its corresponding type declarations.
 index.mjs(75,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
 index.mjs(76,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
@@ -150,7 +124,7 @@ index.mjs(84,21): error TS2835: Relative import paths need explicit file extensi
     // esm format file
     const x = 1;
     export {x};
-==== index.js (38 errors) ====
+==== index.js (33 errors) ====
     import * as m1 from "./index.js";
     import * as m2 from "./index.mjs";
     import * as m3 from "./index.cjs";
@@ -225,13 +199,9 @@ index.mjs(84,21): error TS2835: Relative import paths need explicit file extensi
     import m24 = require("./");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~
-!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m25 = require("./index");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~
-!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m26 = require("./subfolder");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
@@ -253,18 +223,12 @@ index.mjs(84,21): error TS2835: Relative import paths need explicit file extensi
     import m32 = require("./subfolder2/another");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m33 = require("./subfolder2/another/");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m34 = require("./subfolder2/another/index");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     void m24;
     void m25;
     void m26;
@@ -314,39 +278,23 @@ index.mjs(84,21): error TS2835: Relative import paths need explicit file extensi
     // esm format file
     const x = 1;
     export {x};
-==== index.cjs (38 errors) ====
+==== index.cjs (22 errors) ====
     // ESM-format imports below should issue errors
     import * as m1 from "./index.js";
-                        ~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.js")' call instead.
     import * as m2 from "./index.mjs";
-                        ~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.mjs")' call instead.
     import * as m3 from "./index.cjs";
     import * as m4 from "./subfolder/index.js";
     import * as m5 from "./subfolder/index.mjs";
-                        ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder/index.mjs")' call instead.
     import * as m6 from "./subfolder/index.cjs";
     import * as m7 from "./subfolder2/index.js";
     import * as m8 from "./subfolder2/index.mjs";
-                        ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/index.mjs")' call instead.
     import * as m9 from "./subfolder2/index.cjs";
     import * as m10 from "./subfolder2/another/index.js";
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.js")' call instead.
     import * as m11 from "./subfolder2/another/index.mjs";
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.mjs")' call instead.
     import * as m12 from "./subfolder2/another/index.cjs";
     // The next ones should _mostly_ work - cjs format files have index resolution and extension resolution (except for those which resolve to an esm format file)
     import * as m13 from "./";
-                         ~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./")' call instead.
     import * as m14 from "./index";
-                         ~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index")' call instead.
     import * as m15 from "./subfolder";
     import * as m16 from "./subfolder/";
     import * as m17 from "./subfolder/index";
@@ -354,14 +302,8 @@ index.mjs(84,21): error TS2835: Relative import paths need explicit file extensi
     import * as m19 from "./subfolder2/";
     import * as m20 from "./subfolder2/index";
     import * as m21 from "./subfolder2/another";
-                         ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another")' call instead.
     import * as m22 from "./subfolder2/another/";
-                         ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/")' call instead.
     import * as m23 from "./subfolder2/another/index";
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index")' call instead.
     void m1;
     void m2;
     void m3;
@@ -390,13 +332,9 @@ index.mjs(84,21): error TS2835: Relative import paths need explicit file extensi
     import m24 = require("./");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~
-!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m25 = require("./index");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~
-!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m26 = require("./subfolder");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
@@ -418,18 +356,12 @@ index.mjs(84,21): error TS2835: Relative import paths need explicit file extensi
     import m32 = require("./subfolder2/another");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m33 = require("./subfolder2/another/");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m34 = require("./subfolder2/another/index");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     void m24;
     void m25;
     void m26;
@@ -479,7 +411,7 @@ index.mjs(84,21): error TS2835: Relative import paths need explicit file extensi
     // cjs format file
     const x = 1;
     export {x};
-==== index.mjs (38 errors) ====
+==== index.mjs (33 errors) ====
     import * as m1 from "./index.js";
     import * as m2 from "./index.mjs";
     import * as m3 from "./index.cjs";
@@ -554,13 +486,9 @@ index.mjs(84,21): error TS2835: Relative import paths need explicit file extensi
     import m24 = require("./");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~
-!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m25 = require("./index");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~
-!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m26 = require("./subfolder");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
@@ -582,18 +510,12 @@ index.mjs(84,21): error TS2835: Relative import paths need explicit file extensi
     import m32 = require("./subfolder2/another");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m33 = require("./subfolder2/another/");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     import m34 = require("./subfolder2/another/index");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
     void m24;
     void m25;
     void m26;
