@@ -1828,8 +1828,6 @@ export function createLanguageService(
             projectReferences,
         };
         program = createProgram(options);
-        // Workaround for GC bug in JSC; createProgram does not keep a reference to options, so this is safe.
-        options.oldProgram = undefined;
 
         // 'getOrCreateSourceFile' depends on caching but should be used past this point.
         // After this point, the cache needs to be cleared to allow all collected snapshots to be released
