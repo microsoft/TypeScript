@@ -2756,6 +2756,11 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                     traceIfEnabled(state, Diagnostics.Using_0_subpath_1_with_target_2, "imports", key, combinedLookup);
                     traceIfEnabled(state, Diagnostics.Resolving_module_0_from_1, combinedLookup, scope.packageDirectory + "/");
                     const result = nodeModuleNameResolverWorker(state.features, combinedLookup, scope.packageDirectory + "/", state.compilerOptions, state.host, cache, extensions, /*isConfigLookup*/ false, redirectedReference, state.conditions);
+                    // Note: we cannot safely reassign `state.failedLookupLocations` during a request;
+                    // `nodeModuleNameResolverWorker` relies on the `state` property remaining reference-equal
+                    // to the one it initializes.
+                    state.failedLookupLocations?.push(...result.failedLookupLocations ?? emptyArray);
+                    state.affectingLocations?.push(...result.affectingLocations ?? emptyArray);
                     return toSearchResult(
                         result.resolvedModule ? {
                             path: result.resolvedModule.resolvedFileName,
