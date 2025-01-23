@@ -856,6 +856,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         affectsSemanticDiagnostics: true,
     },
+    {
+        name: "erasableSyntaxOnly",
+        type: "boolean",
+        category: Diagnostics.Interop_Constraints,
+        description: Diagnostics.Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript,
+        defaultValueDescription: false,
+        affectsBuildInfo: true,
+        affectsSemanticDiagnostics: true,
+    },
 
     // Strict Type Checks
     {
