@@ -974,7 +974,11 @@ export function isIdentifierStart(ch: number, languageVersion: ScriptTarget | un
         ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
 }
 
-export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean {
+export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean;
+/** @internal separate public and internal signatures so that identifierVariant can be passed directly from scanIdentifierParts */
+// eslint-disable-next-line @typescript-eslint/unified-signatures
+export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant | "RegExpGroupName"): boolean;
+export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant | "RegExpGroupName"): boolean {
     return isWordCharacter(ch) || ch === CharacterCodes.$ ||
         // "-" is valid in JSX Identifiers. ":" is part of JSXNamespacedName but not JSXIdentifier.
         identifierVariant === LanguageVariant.JSX && ch === CharacterCodes.minus ||
@@ -1644,8 +1648,9 @@ export function createScanner(
                 const escapedValue = parseInt(text.substring(start + 2, pos), 16);
                 const escapedValueString = String.fromCharCode(escapedValue);
                 if (
-                    flags & EscapeSequenceScanningFlags.AnyUnicodeMode && escapedValue >= 0xD800 && escapedValue <= 0xDBFF &&
-                    pos + 6 < end && text.substring(pos, pos + 2) === "\\u" && charCodeUnchecked(pos + 2) !== CharacterCodes.openBrace
+                    flags & EscapeSequenceScanningFlags.AnyUnicodeMode && isLeadingSurrogate(escapedValue) &&
+                    pos + 6 < end && codePointUnchecked(pos) === CharacterCodes.backslash &&
+                    codePointUnchecked(pos + 1) === CharacterCodes.u && charCodeUnchecked(pos + 2) !== CharacterCodes.openBrace
                 ) {
                     // For regular expressions in any Unicode mode, \u HexLeadSurrogate \u HexTrailSurrogate is treated as a single character
                     // for the purpose of determining whether a character class range is out of order
@@ -1659,7 +1664,7 @@ export function createScanner(
                         }
                     }
                     const nextEscapedValue = parseInt(text.substring(nextStart + 2, nextPos), 16);
-                    if (nextEscapedValue >= 0xDC00 && nextEscapedValue <= 0xDFFF) {
+                    if (isTrailingSurrogate(nextEscapedValue)) {
                         pos = nextPos;
                         return escapedValueString + String.fromCharCode(nextEscapedValue);
                     }
@@ -1777,33 +1782,55 @@ export function createScanner(
         return -1;
     }
 
-    function scanIdentifierParts(languageVersion: ScriptTarget, identifierVariant?: LanguageVariant): string {
+    function scanIdentifierParts(languageVersion: ScriptTarget, identifierVariant?: LanguageVariant | "RegExpGroupName"): string {
         let result = "";
         let start = pos;
         while (pos < end) {
-            let ch = codePointUnchecked(pos);
+            const ch = codePointUnchecked(pos);
             if (isIdentifierPart(ch, languageVersion, identifierVariant)) {
                 pos += charSize(ch);
                 continue;
             }
 
             if (ch === CharacterCodes.backslash) {
-                ch = peekExtendedUnicodeEscape();
-                if (ch >= 0 && isIdentifierPart(ch, languageVersion, identifierVariant)) {
+                const extendedCookedChar = peekExtendedUnicodeEscape();
+                if (extendedCookedChar >= 0 && isIdentifierPart(extendedCookedChar, languageVersion, identifierVariant)) {
                     result += text.substring(start, pos);
                     result += scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true);
+                    // scanExtendedUnicodeEscape advances pos for us
                     start = pos;
                     continue;
                 }
 
-                ch = peekUnicodeEscape();
-                if (ch >= 0 && isIdentifierPart(ch, languageVersion, identifierVariant)) {
-                    tokenFlags |= TokenFlags.UnicodeEscape;
-                    result += text.substring(start, pos);
-                    result += String.fromCharCode(ch);
-                    pos += 6; // Valid Unicode escape is always six characters
-                    start = pos;
-                    continue;
+                const cookedChar = peekUnicodeEscape();
+                if (cookedChar >= 0) {
+                    if (isIdentifierPart(cookedChar, languageVersion, identifierVariant)) {
+                        tokenFlags |= TokenFlags.UnicodeEscape;
+                        result += text.substring(start, pos);
+                        result += String.fromCharCode(cookedChar);
+                        pos += 6; // Valid Unicode escape is always six characters
+                        start = pos;
+                        continue;
+                    }
+                    else if (identifierVariant === "RegExpGroupName" && isLeadingSurrogate(cookedChar) && codePointChecked(pos + 6) === CharacterCodes.backslash) {
+                        pos += 6;
+                        const nextCookedChar = peekUnicodeEscape();
+                        if (nextCookedChar >= 0 && isTrailingSurrogate(nextCookedChar)) {
+                            const codePoint = utf16SurrogatePairToCodePoint(cookedChar, nextCookedChar);
+                            if (isIdentifierPart(codePoint, languageVersion, identifierVariant)) {
+                                // Unlike normal identifiers, group names in regular expressions, whether in Unicode mode or not,
+                                // accepts \u HexLeadSurrogate \u HexTrailSurrogate as part of RegExpIdentifierName.
+                                // See https://github.com/tc39/ecma262/pull/1869 for the change.
+                                tokenFlags |= TokenFlags.UnicodeEscape;
+                                result += text.substring(start, pos - 6);
+                                result += utf16EncodeAsString(codePoint);
+                                pos += 6;
+                                start = pos;
+                                continue;
+                            }
+                        }
+                        pos -= 6;
+                    }
                 }
             }
             break;
@@ -2370,7 +2397,7 @@ export function createScanner(
         return scanIdentifier(ScriptTarget.ESNext);
     }
 
-    function scanIdentifierStart(languageVersion: ScriptTarget): string {
+    function scanIdentifierStart(languageVersion: ScriptTarget, identifierVariant?: LanguageVariant | "RegExpGroupName"): string {
         const ch = codePointChecked(pos);
         if (ch === CharacterCodes.backslash) {
             const extendedCookedChar = peekExtendedUnicodeEscape();
@@ -2379,10 +2406,28 @@ export function createScanner(
             }
 
             const cookedChar = peekUnicodeEscape();
-            if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
-                pos += 6; // Valid Unicode escape is always six characters
-                tokenFlags |= TokenFlags.UnicodeEscape;
-                return String.fromCharCode(cookedChar);
+            if (cookedChar >= 0) {
+                if (isIdentifierStart(cookedChar, languageVersion)) {
+                    pos += 6; // Valid Unicode escape is always six characters
+                    tokenFlags |= TokenFlags.UnicodeEscape;
+                    return String.fromCharCode(cookedChar);
+                }
+                else if (identifierVariant === "RegExpGroupName" && isLeadingSurrogate(cookedChar) && codePointChecked(pos + 6) === CharacterCodes.backslash) {
+                    pos += 6;
+                    const nextCookedChar = peekUnicodeEscape();
+                    if (nextCookedChar >= 0 && isTrailingSurrogate(nextCookedChar)) {
+                        const codePoint = utf16SurrogatePairToCodePoint(cookedChar, nextCookedChar);
+                        if (isIdentifierStart(codePoint, languageVersion)) {
+                            // Unlike normal identifiers, group names in regular expressions, whether in Unicode mode or not,
+                            // accepts \u HexLeadSurrogate \u HexTrailSurrogate as part of RegExpIdentifierName.
+                            // See https://github.com/tc39/ecma262/pull/1869 for the change.
+                            pos += 6;
+                            tokenFlags |= TokenFlags.UnicodeEscape;
+                            return utf16EncodeAsString(codePoint);
+                        }
+                    }
+                    pos -= 6;
+                }
             }
         }
         else if (isIdentifierStart(ch, languageVersion)) {
@@ -2392,8 +2437,8 @@ export function createScanner(
         return "";
     }
 
-    function scanIdentifier(languageVersion: ScriptTarget, identifierVariant?: LanguageVariant) {
-        tokenValue = scanIdentifierStart(languageVersion);
+    function scanIdentifier(languageVersion: ScriptTarget, identifierVariant?: LanguageVariant | "RegExpGroupName") {
+        tokenValue = scanIdentifierStart(languageVersion, identifierVariant);
         if (tokenValue) {
             tokenValue += scanIdentifierParts(languageVersion, identifierVariant);
             return token = getIdentifierToken();
@@ -2963,7 +3008,7 @@ export function createScanner(
         function scanGroupName(isReference: boolean) {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.lessThan);
             tokenStart = pos;
-            if (!scanIdentifier(languageVersion)) {
+            if (!scanIdentifier(languageVersion, "RegExpGroupName")) {
                 error(Diagnostics.Expected_a_capturing_group_name);
             }
             else if (isReference) {
@@ -3975,16 +4020,16 @@ function charSize(ch: number) {
     return 1;
 }
 
-// Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
+// Derived from Section 11.1.1 UTF16EncodeCodePoint of the spec.
 function utf16EncodeAsStringFallback(codePoint: number) {
     Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
 
-    if (codePoint <= 65535) {
+    if (codePoint <= 0xFFFF) {
         return String.fromCharCode(codePoint);
     }
 
-    const codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
-    const codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
+    const codeUnit1 = Math.floor((codePoint - 0x10000) / 0x400) + 0xD800;
+    const codeUnit2 = ((codePoint - 0x10000) % 0x400) + 0xDC00;
 
     return String.fromCharCode(codeUnit1, codeUnit2);
 }
@@ -3994,6 +4039,20 @@ const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any)
 /** @internal */
 export function utf16EncodeAsString(codePoint: number): string {
     return utf16EncodeAsStringWorker(codePoint);
+}
+
+// Derived from Section 11.1.3 UTF16SurrogatePairToCodePoint of the spec.
+function utf16SurrogatePairToCodePoint(leadingSurrogate: number, trailingSurrogate: number) {
+    Debug.assert(isLeadingSurrogate(leadingSurrogate) && isTrailingSurrogate(trailingSurrogate));
+    return (leadingSurrogate - 0xD800) * 0x400 + (trailingSurrogate - 0xDC00) + 0x10000;
+}
+
+function isLeadingSurrogate(ch: number) {
+    return 0xD800 <= ch && ch <= 0xDBFF;
+}
+
+function isTrailingSurrogate(ch: number) {
+    return 0xDC00 <= ch && ch <= 0xDFFF;
 }
 
 // Table 66: Non-binary Unicode property aliases and their canonical property names
