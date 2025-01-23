@@ -37,6 +37,9 @@ class MyClassOk {
     // Not a parameter property, ok
     constructor(foo: string) { }
 }
+
+// Note for implementors: This should not be an error
+// as this entire namespace block is fully erased
 namespace NotInstantiated {
     export interface JustAType { }
     export type ATypeInANamespace = {};

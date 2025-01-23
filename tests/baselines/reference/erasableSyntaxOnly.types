@@ -33,6 +33,22 @@ namespace AlsoIllegalBecauseInstantiated {
     }
 }
 
+namespace IllegalBecauseNestedInstantiated {
+>IllegalBecauseNestedInstantiated : typeof IllegalBecauseNestedInstantiated
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	namespace Nested {
+>Nested : typeof Nested
+>       : ^^^^^^^^^^^^^
+
+		export const m = 1;
+>m : 1
+>  : ^
+>1 : 1
+>  : ^
+	}
+}
+
 enum NotLegalEnum {
 >NotLegalEnum : NotLegalEnum
 >             : ^^^^^^^^^^^^
@@ -73,11 +89,20 @@ class MyClassOk {
 >foo : string
 >    : ^^^^^^
 }
+
+// Note for implementors: This should not be an error
+// as this entire namespace block is fully erased
 namespace NotInstantiated {
     export interface JustAType { }
     export type ATypeInANamespace = {};
 >ATypeInANamespace : ATypeInANamespace
 >                  : ^^^^^^^^^^^^^^^^^
+
+    namespace Nested {
+        export type ATypeInANamespace = {};
+>ATypeInANamespace : ATypeInANamespace
+>                  : ^^^^^^^^^^^^^^^^^
+    }
 }
 declare namespace AmbientIsNotInstantiated {
 >AmbientIsNotInstantiated : typeof AmbientIsNotInstantiated
